@@ -11,16 +11,24 @@ import com.bumptech.glide.Glide
 import com.gigforce.common_ui.utils.getCircularProgressDrawable
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.core.AppConstants
+import com.gigforce.core.INavigationProvider
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
+import com.gigforce.core.navigation.INavigation
 import com.gigforce.verification.R
 import com.gigforce.verification.mainverification.adapters.ViewPagerAdapter
 import com.google.android.material.tabs.TabLayoutMediator
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.veri_screen_info_component.view.*
 import kotlinx.android.synthetic.main.verification_image_card_component.view.*
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
     FrameLayout(context, attrs) {
+
+    @Inject
+    lateinit var navigation: INavigation
 
     var pageChangeListener: OnCustomPageSelectListener? = null
     var pageClickListener: OnClickListener? = null
@@ -58,6 +66,9 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
             setQueryStr(querytextstr)
             setMissingDocText(missingdoctext)
 
+            missingtext.setOnCheckedChangeListener { buttonView, isChecked ->
+                if (isChecked) navigation.popBackStack()
+            }
         }
 
     }

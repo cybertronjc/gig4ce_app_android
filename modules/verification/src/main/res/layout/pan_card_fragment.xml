@@ -8,7 +8,7 @@
     tools:context=".mainverification.pancard.PanCardFragment">
 
     <com.gigforce.common_ui.components.cells.AppBar
-        android:id="@+id/appBar2"
+        android:id="@+id/appBarPan"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:backgroundType="PinkBar"
@@ -22,7 +22,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appBar2"
+        app:layout_constraintTop_toBottomOf="@id/appBarPan"
         android:layout_marginLeft="@dimen/dp_sm1">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -133,7 +133,7 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/ic_tick_primary"
+                    android:src="@drawable/ic_sharp_event_available_24"
                     android:layout_marginRight="@dimen/dp_xsm1"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toTopOf="parent"

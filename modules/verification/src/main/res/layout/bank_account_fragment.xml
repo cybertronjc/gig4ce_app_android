@@ -9,7 +9,7 @@
         tools:context=".mainverification.bankaccount.BankAccountFragment">
 
         <com.gigforce.common_ui.components.cells.AppBar
-            android:id="@+id/appBar2"
+            android:id="@+id/appBarBank"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:backgroundType="PinkBar"
@@ -24,7 +24,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/appBar2">
+            app:layout_constraintTop_toBottomOf="@id/appBarBank">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -132,7 +132,7 @@
                     android:layout_marginRight="@dimen/dp_sm1"
                     android:layout_marginBottom="@dimen/dp_sm1"
                     android:hint="Account holder name"
-                    app:layout_constraintBottom_toTopOf="@id/submit_button_bank"
+                    app:layout_constraintBottom_toTopOf="@id/reupload_button_bank"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/ifsc_code">
@@ -142,6 +142,22 @@
                         android:layout_height="wrap_content" />
 
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/reupload_button_bank"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:background="@drawable/next_button_outlined"
+                    android:layout_marginStart="@dimen/size_16"
+                    android:layout_marginEnd="@dimen/size_16"
+                    android:layout_marginBottom="@dimen/size_22"
+                    android:gravity="center"
+                    android:minHeight="@dimen/size_36"
+                    android:text="Upload Again"
+                    android:textColor="@color/outlined_button_text"
+                    app:layout_constraintBottom_toTopOf="@id/submit_button_bank"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
 
                 <TextView
                     android:id="@+id/submit_button_bank"

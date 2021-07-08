@@ -4,27 +4,36 @@ import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.ContentResolver
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isGone
+import com.yalantis.ucrop.UCrop
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
+import com.gigforce.common_ui.adapter.DropdownAdapter
+import com.gigforce.common_ui.adapter.GenericSpinnerAdapter
 import com.gigforce.common_ui.ext.getCircularProgressDrawable
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
+import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.DateHelper
 import com.gigforce.verification.R
 import com.gigforce.verification.databinding.DrivingLicenseFragmentBinding
+import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
+import com.gigforce.verification.gigerVerfication.aadharCard.AadharCardSides
 import com.gigforce.verification.gigerVerfication.drivingLicense.AddDrivingLicenseInfoFragment
 import com.gigforce.verification.gigerVerfication.drivingLicense.DrivingLicenseSides
 import com.gigforce.verification.gigerVerfication.panCard.AddPanCardInfoFragment
@@ -33,13 +42,16 @@ import com.gigforce.verification.mainverification.VerificationClickOrSelectImage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.aadhaar_card_image_upload_fragment.*
 import kotlinx.android.synthetic.main.driving_license_fragment.*
-import kotlinx.android.synthetic.main.pan_card_fragment.*
+import kotlinx.android.synthetic.main.driving_license_fragment.stateSpinner
+import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation.*
 import kotlinx.android.synthetic.main.veri_screen_info_component.view.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.net.URI
+import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
@@ -54,6 +66,13 @@ class DrivingLicenseFragment : Fragment(),
         const val INTENT_EXTRA_CLICKED_IMAGE_BACK = "back_image"
         const val INTENT_EXTRA_STATE = "state"
         const val INTENT_EXTRA_DL_NO = "dl_no"
+        private const val REQUEST_CAPTURE_IMAGE = 1012
+        private const val REQUEST_PICK_IMAGE = 1013
+
+        private const val PREFIX: String = "IMG"
+        private const val EXTENSION: String = ".jpg"
+
+        private const val REQUEST_STORAGE_PERMISSION = 102
     }
 
     @Inject
@@ -96,6 +115,20 @@ class DrivingLicenseFragment : Fragment(),
         submit_button_dl.setOnClickListener {
             callKycVerificationApi()
         }
+
+        viewBinding.toplayoutblock.querytext.setOnClickListener {
+            showWhyWeNeedThisDialog()
+        }
+        viewBinding.toplayoutblock.imageView7.setOnClickListener {
+            showWhyWeNeedThisDialog()
+        }
+        appBarDl.apply {
+            setBackButtonListener(View.OnClickListener {
+                navigation.popBackStack()
+            })
+        }
+        val arrayAdapter = context?.let { it1 -> ArrayAdapter.createFromResource(it1,R.array.indian_states, android.R.layout.simple_spinner_dropdown_item) }
+        stateSpinner.adapter = arrayAdapter
     }
 
     private fun observer() {
@@ -108,6 +141,17 @@ class DrivingLicenseFragment : Fragment(),
         viewModel.kycVerifyResult.observe(viewLifecycleOwner, Observer {
             it.let {
                 showToast("Verification " + it.status)
+            }
+        })
+        viewModel.observableStates.observe(viewLifecycleOwner, Observer {
+            it.let {
+                val stateList = arrayListOf<String>()
+                it.forEach {
+                    stateList.add(it.name)
+                }
+                Log.d("states", it.toString())
+//                val arrayAdapter = context?.let { it1 -> ArrayAdapter(it1,android.R.layout.simple_spinner_item, stateList) }
+//                stateSpinner.adapter = arrayAdapter
             }
         })
     }
@@ -208,54 +252,37 @@ class DrivingLicenseFragment : Fragment(),
         datePickerDialog
     }
 
-    private fun openCameraAndGalleryOptionForFrontSideImage() {
-        currentlyClickingImageOfSide = DrivingLicenseSides.FRONT_SIDE
-        val photoCropIntent = Intent()
-        photoCropIntent.putExtra(
-            "purpose",
-            "verification"
-        )
-        photoCropIntent.putExtra("fbDir", "/verification/")
-        photoCropIntent.putExtra("folder", "verification")
-        photoCropIntent.putExtra("detectFace", 0)
-        photoCropIntent.putExtra("file", "aadhar_card_front.jpg")
-        navigation.navigateToPhotoCrop(photoCropIntent,
-            REQUEST_CODE_UPLOAD_DL,requireContext(),this)
-
-
-    }
-
-    private fun openCameraAndGalleryOptionForBackSideImage() {
-        currentlyClickingImageOfSide = DrivingLicenseSides.BACK_SIDE
-        val photoCropIntent = Intent()
-        photoCropIntent.putExtra(
-            "purpose",
-            "verification"
-        )
-        photoCropIntent.putExtra("fbDir", "/verification/")
-        photoCropIntent.putExtra("folder", "verification")
-        photoCropIntent.putExtra("detectFace", 0)
-        photoCropIntent.putExtra("file", "aadhar_card_front.jpg")
-        navigation.navigateToPhotoCrop(photoCropIntent,
-            REQUEST_CODE_UPLOAD_DL,requireContext(),this)
-
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == AddPanCardInfoFragment.REQUEST_CODE_UPLOAD_PAN_IMAGE) {
 
             if (resultCode == Activity.RESULT_OK) {
 
-                if (DrivingLicenseSides.FRONT_SIDE == currentlyClickingImageOfSide) {
-                    dlFrontImagePath =
-                        data?.getParcelableExtra("uri")
-                    showFrontDrivingLicense(dlFrontImagePath!!)
-                } else if (DrivingLicenseSides.BACK_SIDE == currentlyClickingImageOfSide) {
-                    dlBackImagePath =
-                        data?.getParcelableExtra("uri")
-                    showBackDrivingLicense(dlBackImagePath!!)
+                if (requestCode == REQUEST_CAPTURE_IMAGE || requestCode == REQUEST_PICK_IMAGE) {
+                    val outputFileUri = ImagePicker.getImageFromResult(requireContext(), resultCode, data)
+                    if (outputFileUri != null) {
+                        startCrop(outputFileUri)
+                    } else {
+                        showToast(getString(R.string.issue_in_cap_image))
+                    }
+                } else if (requestCode == UCrop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
+                    val imageUriResultCrop: Uri? = UCrop.getOutput(data!!)
+                    Log.d("ImageUri", imageUriResultCrop.toString())
+                    if (DrivingLicenseSides.FRONT_SIDE == currentlyClickingImageOfSide) {
+                        dlFrontImagePath = imageUriResultCrop
+                        showFrontDrivingLicense(dlFrontImagePath!!)
+                    } else if (DrivingLicenseSides.BACK_SIDE == currentlyClickingImageOfSide) {
+                        dlBackImagePath = imageUriResultCrop
+                        showBackDrivingLicense(dlBackImagePath!!)
+                    }
+
+                    val baos = ByteArrayOutputStream()
+                    if (imageUriResultCrop == null) {
+                        val bitmap = data.data as Bitmap
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
+
+                    }
                 }
+
 
 //                if (confirmDLDataCB_client_act.isChecked
 //                    && dlFrontImagePath != null
@@ -269,7 +296,7 @@ class DrivingLicenseFragment : Fragment(),
 //                    confirmDLDataCB_client_act.visible()
 //                }
             }
-        }
+
     }
 
 
@@ -310,7 +337,7 @@ class DrivingLicenseFragment : Fragment(),
 
     private fun callKycVerificationApi(){
         var list = listOf(
-            Data("state", testdropdown_til.editText?.text.toString()),
+            Data("state", stateSpinner.selectedItem.toString()),
             Data("name", name_til_dl.editText?.text.toString()),
             Data("no", dlno_til.editText?.text.toString()),
             Data("issuedate", issueDate.text.toString()),
@@ -327,12 +354,72 @@ class DrivingLicenseFragment : Fragment(),
     private fun showBackDrivingLicense(drivingBackPath: Uri) {
         viewBinding.toplayoutblock.setDocumentImage(1, drivingBackPath)
     }
+
+    private fun showWhyWeNeedThisDialog() {
+        WhyWeNeedThisBottomSheet.launch(
+            childFragmentManager = childFragmentManager,
+            title = getString(R.string.why_do_we_need_this),
+            content = getString(R.string.why_do_we_need_this_dl)
+        )
+    }
     override fun onClickPictureThroughCameraClicked() {
-        if (viewBinding.toplayoutblock.viewPager2.currentItem == 0) openCameraAndGalleryOptionForFrontSideImage() else openCameraAndGalleryOptionForBackSideImage()
+        if (viewBinding.toplayoutblock.viewPager2.currentItem == 0){
+            currentlyClickingImageOfSide = DrivingLicenseSides.FRONT_SIDE
+        } else {
+            currentlyClickingImageOfSide = DrivingLicenseSides.BACK_SIDE
+        }
+        val intents = ImagePicker.getCaptureImageIntentsOnly(requireContext())
+        startActivityForResult(intents, REQUEST_CAPTURE_IMAGE)
     }
 
     override fun onPickImageThroughCameraClicked() {
-        if (viewBinding.toplayoutblock.viewPager2.currentItem == 0) openCameraAndGalleryOptionForFrontSideImage() else openCameraAndGalleryOptionForBackSideImage()
+        if (viewBinding.toplayoutblock.viewPager2.currentItem == 0){
+            currentlyClickingImageOfSide = DrivingLicenseSides.FRONT_SIDE
+        } else {
+            currentlyClickingImageOfSide = DrivingLicenseSides.BACK_SIDE
+        }
+        val intents = ImagePicker.getPickImageIntentsOnly(requireContext())
+        startActivityForResult(intents, REQUEST_PICK_IMAGE)
+    }
+//    override fun onClickPictureThroughCameraClicked() {
+//        if (viewBinding.toplayoutblock.viewPager2.currentItem == 0) openCameraAndGalleryOptionForFrontSideImage() else openCameraAndGalleryOptionForBackSideImage()
+//    }
+//
+//    override fun onPickImageThroughCameraClicked() {
+//        if (viewBinding.toplayoutblock.viewPager2.currentItem == 0) openCameraAndGalleryOptionForFrontSideImage() else openCameraAndGalleryOptionForBackSideImage()
+//    }
+
+    private fun startCrop(uri: Uri): Unit {
+        Log.v("Start Crop", "started")
+        //can use this for a new name every time
+        val timeStamp = SimpleDateFormat(
+            "yyyyMMdd_HHmmss",
+            Locale.getDefault()
+        ).format(Date())
+        val imageFileName = PREFIX + "_" + timeStamp + "_"
+        val uCrop: UCrop = UCrop.of(
+            uri,
+            Uri.fromFile(File(requireContext().cacheDir, imageFileName + EXTENSION))
+        )
+        val resultIntent: Intent = Intent()
+        resultIntent.putExtra("filename", imageFileName + EXTENSION)
+        uCrop.withAspectRatio(1F, 1F)
+        uCrop.withMaxResultSize(1920, 1080)
+        uCrop.withOptions(getCropOptions())
+        uCrop.start(requireContext(), this)
+    }
+
+    private fun getCropOptions(): UCrop.Options {
+        val options: UCrop.Options = UCrop.Options()
+        options.setCompressionQuality(70)
+        options.setCompressionFormat(Bitmap.CompressFormat.PNG)
+//        options.setMaxBitmapSize(1000)
+        options.setHideBottomControls((false))
+        options.setFreeStyleCropEnabled(false)
+        options.setStatusBarColor(ResourcesCompat.getColor(resources, R.color.topBarDark, null))
+        options.setToolbarColor(ResourcesCompat.getColor(resources, R.color.topBarDark, null))
+        options.setToolbarTitle(getString(R.string.crop_and_rotate))
+        return options
     }
 
 }

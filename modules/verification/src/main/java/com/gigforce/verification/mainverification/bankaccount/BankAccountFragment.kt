@@ -3,30 +3,41 @@ package com.gigforce.verification.mainverification.bankaccount
 import android.app.Activity
 import android.content.ContentResolver
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
+import android.provider.ContactsContract.CommonDataKinds.StructuredName.PREFIX
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
+import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.verification.R
 import com.gigforce.verification.databinding.BankAccountFragmentBinding
+import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.gigforce.verification.gigerVerfication.bankDetails.AddBankDetailsInfoFragment
 import com.gigforce.verification.mainverification.Data
 import com.gigforce.verification.mainverification.VerificationClickOrSelectImageBottomSheet
+import com.gigforce.verification.mainverification.pancard.PanCardFragment
+import com.yalantis.ucrop.UCrop
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.bank_account_fragment.*
+import kotlinx.android.synthetic.main.veri_screen_info_component.view.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.net.URI
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -37,6 +48,13 @@ class BankAccountFragment : Fragment(),
         fun newInstance() = BankAccountFragment()
         const val REQUEST_CODE_CAPTURE_BANK_PHOTO = 2333
         const val INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT = "user_came_from_amb_screen"
+        private const val REQUEST_CAPTURE_IMAGE = 1012
+        private const val REQUEST_PICK_IMAGE = 1013
+
+        private const val PREFIX: String = "IMG"
+        private const val EXTENSION: String = ".jpg"
+
+        private const val REQUEST_STORAGE_PERMISSION = 102
     }
 
     @Inject
@@ -90,6 +108,19 @@ class BankAccountFragment : Fragment(),
         submit_button_bank.setOnClickListener {
             callKycVerificationApi()
         }
+
+        viewBinding.toplayoutblock.querytext.setOnClickListener {
+            showWhyWeNeedThisDialog()
+        }
+        viewBinding.toplayoutblock.imageView7.setOnClickListener {
+            showWhyWeNeedThisDialog()
+        }
+
+        appBarBank.apply {
+            setBackButtonListener(View.OnClickListener {
+                navigation.popBackStack()
+            })
+        }
     }
 
     private fun setViews() {
@@ -139,22 +170,42 @@ class BankAccountFragment : Fragment(),
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == AddBankDetailsInfoFragment.REQUEST_CODE_CAPTURE_BANK_PHOTO) {
+        if (requestCode == Activity.RESULT_OK) {
 
-            if (resultCode == Activity.RESULT_OK) {
-                clickedImagePath =
-                    data?.getParcelableExtra("uri")
+            if (requestCode == REQUEST_CAPTURE_IMAGE || requestCode == REQUEST_PICK_IMAGE) {
+                val outputFileUri = ImagePicker.getImageFromResult(requireContext(), resultCode, data)
+                if (outputFileUri != null) {
+                    startCrop(outputFileUri)
+                } else {
+                    showToast(getString(R.string.issue_in_cap_image))
+                }
+            } else if (requestCode == UCrop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
+                val imageUriResultCrop: Uri? = UCrop.getOutput(data!!)
+                Log.d("ImageUri", imageUriResultCrop.toString())
+                clickedImagePath = imageUriResultCrop
                 showPassbookInfoCard(clickedImagePath!!)
+                val baos = ByteArrayOutputStream()
+                if (imageUriResultCrop == null) {
+                    val bitmap = data.data as Bitmap
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
 
-//                if (bankDetailsDataConfirmationCB.isChecked)
-//                    enableSubmitButton()
-//
-//                if (clickedImagePath != null && passbookSubmitSliderBtn.isGone) {
-//                    bankDetailsDataConfirmationCB.visible()
-//                    passbookSubmitSliderBtn.visible()
-//                }
-
+                }
             }
+
+//            if (resultCode == Activity.RESULT_OK) {
+//                clickedImagePath =
+//                    data?.getParcelableExtra("uri")
+//                showPassbookInfoCard(clickedImagePath!!)
+//
+////                if (bankDetailsDataConfirmationCB.isChecked)
+////                    enableSubmitButton()
+////
+////                if (clickedImagePath != null && passbookSubmitSliderBtn.isGone) {
+////                    bankDetailsDataConfirmationCB.visible()
+////                    passbookSubmitSliderBtn.visible()
+////                }
+//
+//            }
         }
     }
 
@@ -188,7 +239,13 @@ class BankAccountFragment : Fragment(),
 //        passbookSubmitSliderBtn.innerColor =
 //            ResourcesCompat.getColor(resources, R.color.lipstick, null)
 //    }
-
+    private fun showWhyWeNeedThisDialog() {
+        WhyWeNeedThisBottomSheet.launch(
+            childFragmentManager = childFragmentManager,
+            title = getString(R.string.why_do_we_need_this),
+            content = getString(R.string.why_do_we_need_this_bank)
+        )
+    }
 
     private fun callKycVerificationApi() {
         var list = listOf(
@@ -206,11 +263,45 @@ class BankAccountFragment : Fragment(),
     }
 
     override fun onClickPictureThroughCameraClicked() {
-        showCameraAndGalleryOption()
+        val intents = ImagePicker.getCaptureImageIntentsOnly(requireContext())
+        startActivityForResult(intents, REQUEST_CAPTURE_IMAGE)
     }
 
     override fun onPickImageThroughCameraClicked() {
-        showCameraAndGalleryOption()
+        val intents = ImagePicker.getPickImageIntentsOnly(requireContext())
+        startActivityForResult(intents, REQUEST_PICK_IMAGE)
+    }
+    private fun startCrop(uri: Uri): Unit {
+        Log.v("Start Crop", "started")
+        //can use this for a new name every time
+        val timeStamp = SimpleDateFormat(
+            "yyyyMMdd_HHmmss",
+            Locale.getDefault()
+        ).format(Date())
+        val imageFileName = PREFIX + "_" + timeStamp + "_"
+        val uCrop: UCrop = UCrop.of(
+            uri,
+            Uri.fromFile(File(requireContext().cacheDir, imageFileName + EXTENSION))
+        )
+        val resultIntent: Intent = Intent()
+        resultIntent.putExtra("filename", imageFileName + EXTENSION)
+        uCrop.withAspectRatio(1F, 1F)
+        uCrop.withMaxResultSize(1920, 1080)
+        uCrop.withOptions(getCropOptions())
+        uCrop.start(requireContext(), this)
+    }
+
+    private fun getCropOptions(): UCrop.Options {
+        val options: UCrop.Options = UCrop.Options()
+        options.setCompressionQuality(70)
+        options.setCompressionFormat(Bitmap.CompressFormat.PNG)
+//        options.setMaxBitmapSize(1000)
+        options.setHideBottomControls((false))
+        options.setFreeStyleCropEnabled(false)
+        options.setStatusBarColor(ResourcesCompat.getColor(resources, R.color.topBarDark, null))
+        options.setToolbarColor(ResourcesCompat.getColor(resources, R.color.topBarDark, null))
+        options.setToolbarTitle(getString(R.string.crop_and_rotate))
+        return options
     }
 
 

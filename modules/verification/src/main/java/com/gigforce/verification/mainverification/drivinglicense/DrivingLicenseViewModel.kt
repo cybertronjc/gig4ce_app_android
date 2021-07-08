@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.core.datamodels.client_activation.States
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.verification.mainverification.Data
 import com.gigforce.verification.mainverification.KycOcrResultModel
@@ -12,6 +13,7 @@ import com.gigforce.verification.mainverification.KycVerifyReqModel
 import com.gigforce.verification.mainverification.VerificationKycRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import okhttp3.MultipartBody
 import javax.inject.Inject
 
@@ -26,6 +28,11 @@ class DrivingLicenseViewModel  @Inject constructor(
     val _kycVerifyResult = MutableLiveData<KycOcrResultModel>()
     val kycVerifyResult: LiveData<KycOcrResultModel> = _kycVerifyResult
 
+    private val _observableStates = MutableLiveData<MutableList<States>>()
+    val observableStates: MutableLiveData<MutableList<States>> = _observableStates
+
+    private val _observableError: MutableLiveData<String> = MutableLiveData()
+    val observableError: MutableLiveData<String> = _observableError
 
     fun getKycOcrResult(type: String, subType: String, image: MultipartBody.Part) =
         viewModelScope.launch {
@@ -45,5 +52,14 @@ class DrivingLicenseViewModel  @Inject constructor(
                 KycOcrResultModel(status = false, message = e.message)
             }
             Log.d("result", kycOcrResultModel.toString())
+        }
+
+    fun getStates() =
+        viewModelScope.launch {
+            try {
+                _observableStates.value = verificationKycRepo.getStatesFromDb()
+            } catch (e: Exception){
+                _observableError.value = e.message
+            }
         }
 }

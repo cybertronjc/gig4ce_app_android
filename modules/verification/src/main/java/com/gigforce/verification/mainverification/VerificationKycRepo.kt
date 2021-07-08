@@ -2,11 +2,13 @@ package com.gigforce.verification.mainverification
 
 import android.util.Log
 import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
+import com.gigforce.core.datamodels.client_activation.States
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.retrofit.RetrofitFactory
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
+import kotlinx.coroutines.tasks.await
 import okhttp3.MultipartBody
 
 class VerificationKycRepo(private val iBuildConfigVM: IBuildConfigVM) :
@@ -34,20 +36,6 @@ class VerificationKycRepo(private val iBuildConfigVM: IBuildConfigVM) :
     suspend fun getKycVerification(type: String, list: List<Data>): KycOcrResultModel{
         Log.d("Here", type + " list "+ list.toString())
         val kycVerifyReqModel = KycVerifyReqModel(type, getUID(), list)
-//        Log.d("requestModel", kycVerifyReqModel.toString())
-//
-//        val jsonArray = JsonArray()
-//        list.forEach {
-//            val listObject = JsonObject()
-//            listObject.addProperty("type", it.type)
-//            listObject.addProperty("value", it.value)
-//            jsonArray.add(listObject)
-//        }
-//        val kycVerifyReqObject = JsonObject()
-//        kycVerifyReqObject.addProperty("type", type)
-//        kycVerifyReqObject.addProperty("uId", getUID())
-//        kycVerifyReqObject.add("data", jsonArray)
-//        Log.d("request", kycVerifyReqObject.toString() + " type " + type + " list : "+ list.toString())
         val kycOcrStatus = kycService.getKycVerificationService(iBuildConfigVM.getKycVerificationUrl(), kycVerifyReqModel)
         if(kycOcrStatus.isSuccessful){
             Log.d("kycResult", kycOcrStatus.toString())
@@ -58,6 +46,23 @@ class VerificationKycRepo(private val iBuildConfigVM: IBuildConfigVM) :
             throw Exception("Issue in KYC Ocr result ${kycOcrStatus.message()}")
             Log.d("kycResult", kycOcrStatus.toString())
         }
+    }
+
+    suspend fun getStatesFromDb(): MutableList<States> {
+        try {
+            val await = db.collection("Mst_States").get().await()
+            if (await.documents.isNullOrEmpty()) {
+                return mutableListOf()
+            }
+            val toObjects = await.toObjects(States::class.java)
+            for (i in 0 until await.documents.size) {
+                toObjects[i].id = await.documents[i].id
+            }
+            return toObjects
+        } catch (e: Exception) {
+            return mutableListOf()
+        }
+
     }
 
     override fun getCollectionName(): String =

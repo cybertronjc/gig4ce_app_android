@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.ContentResolver
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -16,18 +17,24 @@ import android.widget.DatePicker
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.get
 import androidx.core.view.isGone
+import com.yalantis.ucrop.UCrop
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
+import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.DateHelper
 import com.gigforce.verification.R
 import com.gigforce.verification.databinding.AadhaarCardImageUploadFragmentBinding
+import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.gigforce.verification.gigerVerfication.aadharCard.AadharCardSides
 import com.gigforce.verification.gigerVerfication.aadharCard.AddAadharCardInfoFragment
+import com.gigforce.verification.gigerVerfication.drivingLicense.DrivingLicenseSides
 import com.gigforce.verification.mainverification.Data
 import com.gigforce.verification.mainverification.VerificationClickOrSelectImageBottomSheet
+import com.gigforce.verification.mainverification.drivinglicense.DrivingLicenseFragment
+import com.gigforce.verification.mainverification.pancard.PanCardFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.aadhaar_card_image_upload_fragment.*
 import kotlinx.android.synthetic.main.bank_account_fragment.*
@@ -37,8 +44,10 @@ import kotlinx.android.synthetic.main.veri_screen_info_component.view.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.net.URI
+import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
@@ -49,6 +58,14 @@ class AadhaarCardImageUploadFragment : Fragment(),
     companion object {
         fun newInstance() = AadhaarCardImageUploadFragment()
         const val REQUEST_CODE_UPLOAD_AADHAR_IMAGE = 2333
+
+        private const val REQUEST_CAPTURE_IMAGE = 1012
+        private const val REQUEST_PICK_IMAGE = 1013
+
+        private const val PREFIX: String = "IMG"
+        private const val EXTENSION: String = ".jpg"
+
+        private const val REQUEST_STORAGE_PERMISSION = 102
     }
 
     @Inject
@@ -90,6 +107,18 @@ class AadhaarCardImageUploadFragment : Fragment(),
 
         submit_button_aadhar.setOnClickListener {
             callKycVerificationApi()
+        }
+
+        viewBinding.toplayoutblock.querytext.setOnClickListener {
+            showWhyWeNeedThisDialog()
+        }
+        viewBinding.toplayoutblock.imageView7.setOnClickListener {
+            showWhyWeNeedThisDialog()
+        }
+        appBarAadhar.apply {
+            setBackButtonListener(View.OnClickListener {
+                navigation.popBackStack()
+            })
         }
     }
 
@@ -200,19 +229,36 @@ class AadhaarCardImageUploadFragment : Fragment(),
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == AddAadharCardInfoFragment.REQUEST_CODE_UPLOAD_AADHAR_IMAGE) {
+
 
             if (resultCode == Activity.RESULT_OK) {
 
-                if (AadharCardSides.FRONT_SIDE == currentlyClickingImageOfSide) {
-                    aadharFrontImagePath =
-                        data?.getParcelableExtra("uri")
-                    showFrontAadharCard(aadharFrontImagePath!!)
-                } else if (AadharCardSides.BACK_SIDE == currentlyClickingImageOfSide) {
-                    aadharBackImagePath =
-                        data?.getParcelableExtra("uri")
-                    showBackAadharCard(aadharBackImagePath!!)
+                if (requestCode == REQUEST_CAPTURE_IMAGE || requestCode == REQUEST_PICK_IMAGE) {
+                    val outputFileUri = ImagePicker.getImageFromResult(requireContext(), resultCode, data)
+                    if (outputFileUri != null) {
+                        startCrop(outputFileUri)
+                    } else {
+                        showToast(getString(R.string.issue_in_cap_image))
+                    }
+                } else if (requestCode == UCrop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
+                    val imageUriResultCrop: Uri? = UCrop.getOutput(data!!)
+                    Log.d("ImageUri", imageUriResultCrop.toString())
+                    if (AadharCardSides.FRONT_SIDE == currentlyClickingImageOfSide) {
+                        aadharFrontImagePath = imageUriResultCrop
+                        showFrontAadharCard(aadharFrontImagePath!!)
+                    } else if (AadharCardSides.BACK_SIDE == currentlyClickingImageOfSide) {
+                        aadharBackImagePath = imageUriResultCrop
+                        showBackAadharCard(aadharBackImagePath!!)
+                    }
+                    val baos = ByteArrayOutputStream()
+                    if (imageUriResultCrop == null) {
+                        val bitmap = data.data as Bitmap
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
+
+                    }
                 }
+
+
 
 //                if (aadharDataCorrectCB.isChecked
 //                    && aadharFrontImagePath != null
@@ -229,7 +275,7 @@ class AadhaarCardImageUploadFragment : Fragment(),
 //                }
 
             }
-        }
+
     }
 //    private fun showAadharImageAndInfoLayout() {
 //        aadharBackImageHolder.visibility = View.VISIBLE
@@ -284,6 +330,14 @@ class AadhaarCardImageUploadFragment : Fragment(),
 
     }
 
+    private fun showWhyWeNeedThisDialog() {
+        WhyWeNeedThisBottomSheet.launch(
+            childFragmentManager = childFragmentManager,
+            title = getString(R.string.why_do_we_need_this),
+            content = getString(R.string.why_we_need_this_aadhar)
+        )
+    }
+
     private fun callKycVerificationApi() {
         var list = listOf(
             Data("name", name_til_aadhar.editText?.text.toString()),
@@ -294,13 +348,57 @@ class AadhaarCardImageUploadFragment : Fragment(),
     }
 
     override fun onClickPictureThroughCameraClicked() {
-        if (viewBinding.toplayoutblock.viewPager2.currentItem == 0) openCameraAndGalleryOptionForFrontSideImage() else openCameraAndGalleryOptionForBackSideImage()
+        if (viewBinding.toplayoutblock.viewPager2.currentItem == 0){
+            currentlyClickingImageOfSide = AadharCardSides.FRONT_SIDE
+        } else {
+            currentlyClickingImageOfSide = AadharCardSides.BACK_SIDE
+        }
+        val intents = ImagePicker.getCaptureImageIntentsOnly(requireContext())
+        startActivityForResult(intents, REQUEST_CAPTURE_IMAGE)
     }
 
     override fun onPickImageThroughCameraClicked() {
-        if (viewBinding.toplayoutblock.viewPager2.currentItem == 0) openCameraAndGalleryOptionForFrontSideImage() else openCameraAndGalleryOptionForBackSideImage()
+        if (viewBinding.toplayoutblock.viewPager2.currentItem == 0){
+            currentlyClickingImageOfSide = AadharCardSides.FRONT_SIDE
+        } else {
+            currentlyClickingImageOfSide = AadharCardSides.BACK_SIDE
+        }
+        val intents = ImagePicker.getPickImageIntentsOnly(requireContext())
+        startActivityForResult(intents, REQUEST_PICK_IMAGE)
     }
-//
+
+    private fun startCrop(uri: Uri): Unit {
+        Log.v("Start Crop", "started")
+        //can use this for a new name every time
+        val timeStamp = SimpleDateFormat(
+            "yyyyMMdd_HHmmss",
+            Locale.getDefault()
+        ).format(Date())
+        val imageFileName = PREFIX + "_" + timeStamp + "_"
+        val uCrop: UCrop = UCrop.of(
+            uri,
+            Uri.fromFile(File(requireContext().cacheDir, imageFileName + EXTENSION))
+        )
+        val resultIntent: Intent = Intent()
+        resultIntent.putExtra("filename", imageFileName + EXTENSION)
+        uCrop.withAspectRatio(1F, 1F)
+        uCrop.withMaxResultSize(1920, 1080)
+        uCrop.withOptions(getCropOptions())
+        uCrop.start(requireContext(), this)
+    }
+
+    private fun getCropOptions(): UCrop.Options {
+        val options: UCrop.Options = UCrop.Options()
+        options.setCompressionQuality(70)
+        options.setCompressionFormat(Bitmap.CompressFormat.PNG)
+//        options.setMaxBitmapSize(1000)
+        options.setHideBottomControls((false))
+        options.setFreeStyleCropEnabled(false)
+        options.setStatusBarColor(ResourcesCompat.getColor(resources, R.color.topBarDark, null))
+        options.setToolbarColor(ResourcesCompat.getColor(resources, R.color.topBarDark, null))
+        options.setToolbarTitle(getString(R.string.crop_and_rotate))
+        return options
+    }
 
 
 
