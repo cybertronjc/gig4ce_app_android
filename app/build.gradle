@@ -98,6 +98,7 @@ android {
             buildConfigField "String", 'GET_GIGER_UNDER_TL_ATTENDANCE_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/prod/gigs/tlwise"'
             buildConfigField "String", 'GET_USER_REGISTER_INFO_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/prod/auth/check"'
             buildConfigField "String", 'ALL_FEATURES_ICONS_STORAGE_URL','"gs://gig4ce-app.appspot.com/app_assets/feature_icons/ic_"'
+            buildConfigField "String", 'EVENT_BRIDGE_URL','"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/updatestatus/sendToEventBridge"'
         }
 
         /**
@@ -127,6 +128,7 @@ android {
             buildConfigField "String", 'GET_GIGER_UNDER_TL_ATTENDANCE_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/gigs/tlwise"'
             buildConfigField "String", 'GET_USER_REGISTER_INFO_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/auth/check"'
             buildConfigField "String", 'ALL_FEATURES_ICONS_STORAGE_URL','"gs://gigforce-dev.appspot.com/pub/app_icons/ic_"'
+            buildConfigField "String", 'EVENT_BRIDGE_URL','"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/updatestatus/sendToEventBridge"'
         }
 
         staging {
@@ -152,6 +154,7 @@ android {
             buildConfigField "String", 'GET_GIGER_UNDER_TL_ATTENDANCE_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/gigs/tlwise"'
             buildConfigField "String", 'GET_USER_REGISTER_INFO_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/auth/check"'
             buildConfigField "String", 'ALL_FEATURES_ICONS_STORAGE_URL','"gs://gigforce-dev.appspot.com/pub/app_icons/ic_"'
+            buildConfigField "String", 'EVENT_BRIDGE_URL','"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/updatestatus/sendToEventBridge"'
         }
     }
 

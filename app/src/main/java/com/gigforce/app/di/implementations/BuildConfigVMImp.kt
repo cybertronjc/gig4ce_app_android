@@ -16,4 +16,5 @@ class BuildConfigVMImp @Inject constructor() : IBuildConfigVM {
     override fun getSendSMSURL() : String = BuildConfig.SEND_SMS_URL
     override fun getGigersUnderTlUrl(): String  = BuildConfig.GET_GIGER_UNDER_TL_ATTENDANCE_URL
     override fun getUserRegisterInfoUrl(): String = BuildConfig.GET_USER_REGISTER_INFO_URL
+    override fun getEventBridgeUrl(): String = BuildConfig.EVENT_BRIDGE_URL
 }
