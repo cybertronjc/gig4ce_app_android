@@ -98,6 +98,10 @@ class BankAccountFragment : Fragment(),
                 showToast("Verification " + it.status)
             }
         })
+
+        viewModel.beneficiaryName.observe(viewLifecycleOwner, Observer {
+            //observing beneficiary name here
+        })
     }
 
     private fun listeners() {

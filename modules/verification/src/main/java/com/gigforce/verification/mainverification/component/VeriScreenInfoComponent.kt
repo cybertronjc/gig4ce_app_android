@@ -95,6 +95,10 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
         uppercaption.text = uppercaptionstr
     }
 
+    fun disableImageClick(){
+
+    }
+
     fun setImageViewPager(list: List<KYCImageModel>){
         viewPager2.visible()
         tabLayout.visible()

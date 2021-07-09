@@ -3,10 +3,12 @@ package com.gigforce.verification.mainverification
 import android.util.Log
 import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
 import com.gigforce.core.datamodels.client_activation.States
+import com.gigforce.core.datamodels.verification.VerificationBaseModel
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.retrofit.RetrofitFactory
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import kotlinx.coroutines.tasks.await
@@ -66,11 +68,38 @@ class VerificationKycRepo(private val iBuildConfigVM: IBuildConfigVM) :
 
     }
 
+    suspend fun getBeneficiaryName(): String? {
+        try{
+            var beneficiaryName: String? = ""
+            db.collection(getCollectionName()).document(getUID()).get().addOnSuccessListener {
+                it.let {
+                    if (it.contains("bank_details")){
+                         val doc = it.toObject(VerificationBaseModel::class.java)
+                         beneficiaryName = doc?.bank_details?.bankBeneficiaryName
+                    }
+                }
+            }
+            return beneficiaryName
+        } catch (e: Exception){
+            return ""
+        }
+    }
+
+    suspend fun setVerifiedStatus(status: Boolean?) {
+        try {
+            db.collection(getCollectionName()).document(getUID()).update(
+
+            )
+        }catch (e: Exception){
+
+        }
+    }
+
     override fun getCollectionName(): String =
         COLLECTION_NAME
 
 
     companion object {
-        private const val COLLECTION_NAME = "Gigs"
+        private const val COLLECTION_NAME = "Verification"
     }
 }

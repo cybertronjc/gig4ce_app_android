@@ -269,7 +269,7 @@ class DrivingLicenseFragment : Fragment(),
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-            if (resultCode == Activity.RESULT_OK) {
+//            if (resultCode == Activity.RESULT_OK) {
 
                 if (requestCode == REQUEST_CAPTURE_IMAGE || requestCode == REQUEST_PICK_IMAGE) {
                     val outputFileUri = ImagePicker.getImageFromResult(requireContext(), resultCode, data)
@@ -295,7 +295,7 @@ class DrivingLicenseFragment : Fragment(),
                         bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
 
                     }
-                }
+                //}
 
 
 //                if (confirmDLDataCB_client_act.isChecked
