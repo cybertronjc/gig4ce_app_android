@@ -175,7 +175,6 @@ class PanCardFragment : Fragment(),
 
         viewBinding.toplayoutblock.querytext.setOnClickListener {
             showWhyWeNeedThisDialog()
-            viewBinding.toplayoutblock.disableImageClick()
         }
         viewBinding.toplayoutblock.imageView7.setOnClickListener {
             showWhyWeNeedThisDialog()
