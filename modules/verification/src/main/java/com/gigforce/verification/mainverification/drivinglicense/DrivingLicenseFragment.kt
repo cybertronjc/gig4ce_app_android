@@ -39,6 +39,7 @@ import com.gigforce.verification.gigerVerfication.drivingLicense.DrivingLicenseS
 import com.gigforce.verification.gigerVerfication.panCard.AddPanCardInfoFragment
 import com.gigforce.verification.mainverification.Data
 import com.gigforce.verification.mainverification.VerificationClickOrSelectImageBottomSheet
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.aadhaar_card_image_upload_fragment.*
 import kotlinx.android.synthetic.main.driving_license_fragment.*
@@ -113,6 +114,14 @@ class DrivingLicenseFragment : Fragment(),
         }
 
         submit_button_dl.setOnClickListener {
+            if(viewBinding.stateSpinner.selectedItemPosition == 0){
+                MaterialAlertDialogBuilder(requireContext())
+                                .setTitle(getString(R.string.alert))
+                                .setMessage(getString(R.string.select_dl_state))
+                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                                .show()
+                return@setOnClickListener
+            }
             callKycVerificationApi()
         }
 

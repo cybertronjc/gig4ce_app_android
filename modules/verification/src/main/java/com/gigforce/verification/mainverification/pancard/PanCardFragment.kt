@@ -24,6 +24,7 @@ import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.datamodels.verification.PanCardDataModel
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.DateHelper
+import com.gigforce.core.utils.VerificationValidations
 import com.gigforce.verification.R
 import com.gigforce.verification.databinding.PanCardFragmentBinding
 import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
@@ -31,6 +32,7 @@ import com.gigforce.verification.gigerVerfication.panCard.AddPanCardInfoFragment
 import com.gigforce.verification.mainverification.Data
 import com.gigforce.verification.mainverification.VerificationClickOrSelectImageBottomSheet
 import com.gigforce.verification.mainverification.drivinglicense.DrivingLicenseFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_edit_driving_license.*
@@ -125,6 +127,16 @@ class PanCardFragment() : Fragment(),
         }
 
         submit_button_pan.setOnClickListener {
+            val panCardNo = viewBinding.panTil.editText?.text.toString().toUpperCase(Locale.getDefault())
+            if (!VerificationValidations.isPanCardValid(panCardNo)) {
+
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(getString(R.string.alert))
+                    .setMessage(getString(R.string.enter_valid_pan))
+                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                    .show()
+                return@setOnClickListener
+            }
             callKycVerificationApi()
         }
 

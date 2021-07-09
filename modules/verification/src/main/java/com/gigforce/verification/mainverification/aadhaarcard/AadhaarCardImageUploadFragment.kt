@@ -6,18 +6,14 @@ import android.content.ContentResolver
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.view.get
-import androidx.core.view.isGone
-import com.yalantis.ucrop.UCrop
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.common_ui.ext.showToast
@@ -29,17 +25,12 @@ import com.gigforce.verification.R
 import com.gigforce.verification.databinding.AadhaarCardImageUploadFragmentBinding
 import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.gigforce.verification.gigerVerfication.aadharCard.AadharCardSides
-import com.gigforce.verification.gigerVerfication.aadharCard.AddAadharCardInfoFragment
-import com.gigforce.verification.gigerVerfication.drivingLicense.DrivingLicenseSides
 import com.gigforce.verification.mainverification.Data
 import com.gigforce.verification.mainverification.VerificationClickOrSelectImageBottomSheet
-import com.gigforce.verification.mainverification.drivinglicense.DrivingLicenseFragment
-import com.gigforce.verification.mainverification.pancard.PanCardFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.yalantis.ucrop.UCrop
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.aadhaar_card_image_upload_fragment.*
-import kotlinx.android.synthetic.main.bank_account_fragment.*
-import kotlinx.android.synthetic.main.pan_card_fragment.*
-import kotlinx.android.synthetic.main.pan_card_fragment.dateOfBirth
 import kotlinx.android.synthetic.main.veri_screen_info_component.view.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -53,7 +44,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class AadhaarCardImageUploadFragment : Fragment(),
-    VerificationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener{
+    VerificationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener {
 
     companion object {
         fun newInstance() = AadhaarCardImageUploadFragment()
@@ -72,7 +63,7 @@ class AadhaarCardImageUploadFragment : Fragment(),
     lateinit var navigation: INavigation
 
     private val viewModel: AadhaarCardImageUploadViewModel by viewModels()
-    private lateinit var viewBinding : AadhaarCardImageUploadFragmentBinding
+    private lateinit var viewBinding: AadhaarCardImageUploadFragmentBinding
     private var aadharFrontImagePath: Uri? = null
     private var aadharBackImagePath: Uri? = null
     private var currentlyClickingImageOfSide: AadharCardSides? = null
@@ -81,7 +72,7 @@ class AadhaarCardImageUploadFragment : Fragment(),
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewBinding = AadhaarCardImageUploadFragmentBinding.inflate(inflater,container,false)
+        viewBinding = AadhaarCardImageUploadFragmentBinding.inflate(inflater, container, false)
         return viewBinding.root
 //        return inflater.inflate(R.layout.aadhaar_card_image_upload_fragment, container, false)
     }
@@ -97,7 +88,11 @@ class AadhaarCardImageUploadFragment : Fragment(),
     private fun listeners() {
         viewBinding.toplayoutblock.setPrimaryClick(View.OnClickListener {
             //call for bottom sheet
-            VerificationClickOrSelectImageBottomSheet.launch(parentFragmentManager, "Upload Aadhar Card", this)
+            VerificationClickOrSelectImageBottomSheet.launch(
+                parentFragmentManager,
+                "Upload Aadhar Card",
+                this
+            )
             //if (viewBinding.toplayoutblock.viewPager2.currentItem == 0) openCameraAndGalleryOptionForFrontSideImage() else openCameraAndGalleryOptionForBackSideImage()
         })
 
@@ -106,6 +101,15 @@ class AadhaarCardImageUploadFragment : Fragment(),
         }
 
         submit_button_aadhar.setOnClickListener {
+            if(viewBinding.aadharcardTil.editText?.text?.length!=12){
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(getString(R.string.alert))
+                    .setMessage(getString(R.string.enter_valid_aadhar_no))
+                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                    .show()
+                return@setOnClickListener
+            }
+
             callKycVerificationApi()
         }
 
@@ -125,18 +129,21 @@ class AadhaarCardImageUploadFragment : Fragment(),
     private fun observer() {
         viewModel.kycOcrResult.observe(viewLifecycleOwner, Observer {
             it.let {
-                if(it.status) {
+                if (it.status) {
                     viewBinding.aadharcardTil.editText?.setText(it.aadhaarNumber)
                     viewBinding.nameTilAadhar.editText?.setText(it.name)
-                    viewBinding.dateOfBirthAadhar?.setText(it.dateOfBirth)
-                }else
-                showToast("Ocr status "+  it.message)
+                    viewBinding.dateOfBirthAadhar?.text = it.dateOfBirth
+                } else
+                    showToast("Ocr status " + it.message)
             }
         })
 
         viewModel.kycVerifyResult.observe(viewLifecycleOwner, Observer {
             it.let {
-                showToast("Verification status "+ it.status)
+                if (it.status) {
+
+                } else
+                    showToast("Verification status " + it.message)
             }
         })
     }
@@ -154,22 +161,28 @@ class AadhaarCardImageUploadFragment : Fragment(),
             .appendPath(resources.getResourceTypeName(R.drawable.ic_back))
             .appendPath(resources.getResourceEntryName(R.drawable.ic_back))
             .build()
-        val list = listOf(KYCImageModel(getString(R.string.upload_aadhar_card_front_side_new), frontUri, false), KYCImageModel(getString(R.string.upload_aadhar_card_back_side_new), backUri, false))
+        val list = listOf(
+            KYCImageModel(
+                getString(R.string.upload_aadhar_card_front_side_new),
+                frontUri,
+                false
+            ), KYCImageModel(getString(R.string.upload_aadhar_card_back_side_new), backUri, false)
+        )
         viewBinding.toplayoutblock.setImageViewPager(list)
     }
 
-    private fun callKycOcrApi(path: Uri){
+    private fun callKycOcrApi(path: Uri) {
 
         var image: MultipartBody.Part? = null
         if (path != null) {
             val file = File(URI(path.toString()))
-            Log.d("Register", "Nombre del archivo " + file.getName())
+            Log.d("Register", "Nombre del archivo " + file.name)
             // create RequestBody instance from file
             val requestFile: RequestBody =
                 RequestBody.create(MediaType.parse("multipart/form-data"), file)
             // MultipartBody.Part is used to send also the actual file name
             image =
-                MultipartBody.Part.createFormData("imagenPerfil", file.getName(), requestFile)
+                MultipartBody.Part.createFormData("imagenPerfil", file.name, requestFile)
         }
         image?.let { viewModel.getKycOcrResult("aadhar", "kjk", it) }
     }
@@ -184,7 +197,7 @@ class AadhaarCardImageUploadFragment : Fragment(),
                 newCal.set(Calendar.MONTH, month)
                 newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
 
-                viewBinding.dateOfBirthAadhar.setText(DateHelper.getDateInDDMMYYYY(newCal.time))
+                viewBinding.dateOfBirthAadhar.text = DateHelper.getDateInDDMMYYYY(newCal.time)
             },
             1990,
             cal.get(Calendar.MONTH),
@@ -208,8 +221,10 @@ class AadhaarCardImageUploadFragment : Fragment(),
         photoCropIntent.putExtra("folder", "verification")
         photoCropIntent.putExtra("detectFace", 0)
         photoCropIntent.putExtra("file", "aadhar_card_front.jpg")
-        navigation.navigateToPhotoCrop(photoCropIntent,
-            REQUEST_CODE_UPLOAD_AADHAR_IMAGE, requireContext(),this)
+        navigation.navigateToPhotoCrop(
+            photoCropIntent,
+            REQUEST_CODE_UPLOAD_AADHAR_IMAGE, requireContext(), this
+        )
 //        startActivityForResult(photoCropIntent, REQUEST_CODE_UPLOAD_AADHAR_IMAGE)
 
     }
@@ -227,8 +242,10 @@ class AadhaarCardImageUploadFragment : Fragment(),
         photoCropIntent.putExtra("folder", "verification")
         photoCropIntent.putExtra("detectFace", 0)
         photoCropIntent.putExtra("file", "aadhar_card_back.jpg")
-        navigation.navigateToPhotoCrop(photoCropIntent,
-            REQUEST_CODE_UPLOAD_AADHAR_IMAGE, requireContext(),this)
+        navigation.navigateToPhotoCrop(
+            photoCropIntent,
+            REQUEST_CODE_UPLOAD_AADHAR_IMAGE, requireContext(), this
+        )
 //        startActivityForResult(photoCropIntent, REQUEST_CODE_UPLOAD_AADHAR_IMAGE)
     }
 
@@ -236,33 +253,33 @@ class AadhaarCardImageUploadFragment : Fragment(),
         super.onActivityResult(requestCode, resultCode, data)
 
 
-            if (resultCode == Activity.RESULT_OK) {
+        if (resultCode == Activity.RESULT_OK) {
 
-                if (requestCode == REQUEST_CAPTURE_IMAGE || requestCode == REQUEST_PICK_IMAGE) {
-                    val outputFileUri = ImagePicker.getImageFromResult(requireContext(), resultCode, data)
-                    if (outputFileUri != null) {
-                        startCrop(outputFileUri)
-                    } else {
-                        showToast(getString(R.string.issue_in_cap_image))
-                    }
-                } else if (requestCode == UCrop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
-                    val imageUriResultCrop: Uri? = UCrop.getOutput(data!!)
-                    Log.d("ImageUri", imageUriResultCrop.toString())
-                    if (AadharCardSides.FRONT_SIDE == currentlyClickingImageOfSide) {
-                        aadharFrontImagePath = imageUriResultCrop
-                        showFrontAadharCard(aadharFrontImagePath!!)
-                    } else if (AadharCardSides.BACK_SIDE == currentlyClickingImageOfSide) {
-                        aadharBackImagePath = imageUriResultCrop
-                        showBackAadharCard(aadharBackImagePath!!)
-                    }
-                    val baos = ByteArrayOutputStream()
-                    if (imageUriResultCrop == null) {
-                        val bitmap = data.data as Bitmap
-                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
-
-                    }
+            if (requestCode == REQUEST_CAPTURE_IMAGE || requestCode == REQUEST_PICK_IMAGE) {
+                val outputFileUri =
+                    ImagePicker.getImageFromResult(requireContext(), resultCode, data)
+                if (outputFileUri != null) {
+                    startCrop(outputFileUri)
+                } else {
+                    showToast(getString(R.string.issue_in_cap_image))
                 }
+            } else if (requestCode == UCrop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
+                val imageUriResultCrop: Uri? = UCrop.getOutput(data!!)
+                Log.d("ImageUri", imageUriResultCrop.toString())
+                if (AadharCardSides.FRONT_SIDE == currentlyClickingImageOfSide) {
+                    aadharFrontImagePath = imageUriResultCrop
+                    showFrontAadharCard(aadharFrontImagePath!!)
+                } else if (AadharCardSides.BACK_SIDE == currentlyClickingImageOfSide) {
+                    aadharBackImagePath = imageUriResultCrop
+                    showBackAadharCard(aadharBackImagePath!!)
+                }
+                val baos = ByteArrayOutputStream()
+                if (imageUriResultCrop == null) {
+                    val bitmap = data.data as Bitmap
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
 
+                }
+            }
 
 
 //                if (aadharDataCorrectCB.isChecked
@@ -279,7 +296,7 @@ class AadhaarCardImageUploadFragment : Fragment(),
 //                    aadharDataCorrectCB.visible()
 //                }
 
-            }
+        }
 
     }
 //    private fun showAadharImageAndInfoLayout() {
@@ -353,7 +370,7 @@ class AadhaarCardImageUploadFragment : Fragment(),
     }
 
     override fun onClickPictureThroughCameraClicked() {
-        if (viewBinding.toplayoutblock.viewPager2.currentItem == 0){
+        if (viewBinding.toplayoutblock.viewPager2.currentItem == 0) {
             currentlyClickingImageOfSide = AadharCardSides.FRONT_SIDE
         } else {
             currentlyClickingImageOfSide = AadharCardSides.BACK_SIDE
@@ -363,7 +380,7 @@ class AadhaarCardImageUploadFragment : Fragment(),
     }
 
     override fun onPickImageThroughCameraClicked() {
-        if (viewBinding.toplayoutblock.viewPager2.currentItem == 0){
+        if (viewBinding.toplayoutblock.viewPager2.currentItem == 0) {
             currentlyClickingImageOfSide = AadharCardSides.FRONT_SIDE
         } else {
             currentlyClickingImageOfSide = AadharCardSides.BACK_SIDE
@@ -404,7 +421,6 @@ class AadhaarCardImageUploadFragment : Fragment(),
         options.setToolbarTitle(getString(R.string.crop_and_rotate))
         return options
     }
-
 
 
 }

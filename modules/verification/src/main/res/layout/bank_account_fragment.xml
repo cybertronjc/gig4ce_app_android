@@ -66,14 +66,14 @@
                     app:layout_constraintTop_toBottomOf="@+id/grayLine3" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/account_number_itl"
+                    android:id="@+id/bank_acc_number_itl"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_sm1"
                     android:layout_marginTop="@dimen/dp_xl1"
                     android:layout_marginRight="@dimen/dp_sm1"
-                    android:hint="Name"
+                    android:hint="Account Number"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView10">
@@ -92,10 +92,10 @@
                     android:layout_marginLeft="@dimen/dp_sm1"
                     android:layout_marginTop="@dimen/dp_xl1"
                     android:layout_marginRight="@dimen/dp_sm1"
-                    android:hint="Account Number"
+                    android:hint="Bank Name"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/account_number_itl">
+                    app:layout_constraintTop_toBottomOf="@+id/bank_acc_number_itl">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"

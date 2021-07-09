@@ -18,11 +18,13 @@ import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.utils.VerificationValidations
 import com.gigforce.verification.R
 import com.gigforce.verification.databinding.BankAccountFragmentBinding
 import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.gigforce.verification.mainverification.Data
 import com.gigforce.verification.mainverification.VerificationClickOrSelectImageBottomSheet
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.yalantis.ucrop.UCrop
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.bank_account_fragment.*
@@ -83,7 +85,7 @@ class BankAccountFragment : Fragment(),
             it.let {
                 if (it.status) {
                     viewBinding.accountHolderName.editText?.setText(it.beneficiaryName)
-                    viewBinding.accountNumberItl.editText?.setText(it.accountNumber)
+                    viewBinding.bankAccNumberItl.editText?.setText(it.accountNumber)
                     viewBinding.ifscCode.editText?.setText(it.ifscCode)
                     viewBinding.bankNameTil.editText?.setText(it.bankName)
                 } else
@@ -109,6 +111,42 @@ class BankAccountFragment : Fragment(),
             )
         })
         submit_button_bank.setOnClickListener {
+            val ifsc = viewBinding.ifscCode.editText?.text.toString().toUpperCase(Locale.getDefault())
+            if (!VerificationValidations.isIfSCValid(ifsc)) {
+
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(getString(R.string.alert))
+                    .setMessage(getString(R.string.enter_valid_ifsc))
+                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                    .show()
+                return@setOnClickListener
+            }
+
+            if(viewBinding.bankNameTil.editText?.text.toString().isNullOrBlank()){
+                MaterialAlertDialogBuilder(requireContext())
+                                .setTitle(getString(R.string.alert))
+                                .setMessage(getString(R.string.enter_bank_name))
+                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                                .show()
+                return@setOnClickListener
+            }
+            if(viewBinding.bankNameTil.editText?.text.toString().length < 3){
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(getString(R.string.alert))
+                    .setMessage(getString(R.string.bank_name_too_short))
+                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                    .show()
+                return@setOnClickListener
+            }
+
+            if(viewBinding.bankAccNumberItl.editText?.text.toString().length<4){
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(getString(R.string.alert))
+                    .setMessage(getString(R.string.enter_valid_acc_no))
+                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                    .show()
+                return@setOnClickListener
+            }
             callKycVerificationApi()
         }
 
@@ -253,7 +291,7 @@ class BankAccountFragment : Fragment(),
 
     private fun callKycVerificationApi() {
         var list = listOf(
-            Data("name", account_number_itl.editText?.text.toString()),
+            Data("name", viewBinding.bankNameTil.editText?.text.toString()),
             Data("no", bank_name_til.editText?.text.toString()),
             Data("ifsccode", ifsc_code.editText?.text.toString()),
             Data("holdername", account_holder_name.editText?.text.toString())
