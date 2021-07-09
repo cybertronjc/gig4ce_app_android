@@ -109,6 +109,7 @@ class PanCardFragment : Fragment(),
                             "UNABLE TO FETCH DETAILS",
                             "Enter your Pan card details manually or try again to continue the verification process."
                         )
+
                     } else {
                         viewBinding.toplayoutblock.uploadStatusLayout(
                             AppConstants.UPLOAD_SUCCESS,
@@ -134,6 +135,7 @@ class PanCardFragment : Fragment(),
                         "The Pan card Details have been verified successfully."
                     )
                     viewBinding.submitButtonPan.tag = CONFIRM_TAG
+                    viewBinding.toplayoutblock.setVerificationSuccessfulView()
                 } else
                     showToast("Verification " + it.status)
             }

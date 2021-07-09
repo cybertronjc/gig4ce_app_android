@@ -108,7 +108,6 @@
         android:layout_height="wrap_content"
         android:visibility="gone"
         android:layout_marginTop="16dp"
-        android:layout_marginStart="@dimen/size16"
         android:layout_marginEnd="@dimen/size16"
         android:background="@drawable/upload_successfull_layout_bg"
         app:layout_constraintTop_toBottomOf="@+id/tabLayout"

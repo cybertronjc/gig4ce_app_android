@@ -272,4 +272,7 @@
     <string name="submit">Submit</string>
     <string name="upload_driving_license">Upload Driving License</string>
 
+    <string name="veri_done_text">As your documents will get verified, you will be able to start your gigs.</string>
+    <string name="congratulations">Congratulations !</string>
+
 </resources>
