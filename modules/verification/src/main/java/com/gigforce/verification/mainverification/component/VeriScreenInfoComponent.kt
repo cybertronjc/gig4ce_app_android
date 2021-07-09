@@ -159,6 +159,14 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
         }
     }
 
+    fun setVerificationSuccessfulView(){
+        missingtext.gone()
+        title.setText(resources.getString(R.string.congratulations))
+        docdetail.setText(resources.getString(R.string.veri_done_text))
+        uppercaption.setText("Verification")
+        uploadHereText.gone()
+    }
+
     interface OnCustomPageSelectListener {
         fun onPageSelectListener(model: KYCImageModel)
     }
