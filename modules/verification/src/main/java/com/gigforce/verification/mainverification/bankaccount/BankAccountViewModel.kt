@@ -29,6 +29,9 @@ class BankAccountViewModel @Inject constructor(
     val _beneficiaryName = MutableLiveData<String>()
     val beneficiaryName: LiveData<String> = _beneficiaryName
 
+    val _verifiedStatus = MutableLiveData<Boolean>()
+    val verifiedStatus: LiveData<Boolean> = _verifiedStatus
+
     fun getKycOcrResult(type: String, subType: String, image: MultipartBody.Part) =
         viewModelScope.launch {
             try {
@@ -57,10 +60,10 @@ class BankAccountViewModel @Inject constructor(
             }
         }
 
-    fun setVerificationStatusInDB =
+    fun setVerificationStatusInDB(status: Boolean) =
         viewModelScope.launch {
             try {
-
+                _verifiedStatus.value = verificationKycRepo.setVerifiedStatus(status)
             }catch (e: Exception){
 
             }

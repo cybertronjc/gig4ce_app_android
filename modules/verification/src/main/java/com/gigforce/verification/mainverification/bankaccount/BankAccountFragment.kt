@@ -102,6 +102,10 @@ class BankAccountFragment : Fragment(),
         viewModel.beneficiaryName.observe(viewLifecycleOwner, Observer {
             //observing beneficiary name here
         })
+        viewModel.verifiedStatus.observe(viewLifecycleOwner, Observer {
+            //verified entry to firebase
+            showToast("Verified")
+        })
     }
 
     private fun listeners() {
