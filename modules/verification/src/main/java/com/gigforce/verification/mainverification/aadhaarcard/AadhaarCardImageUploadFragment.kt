@@ -59,8 +59,8 @@ class AadhaarCardImageUploadFragment : Fragment(),
         fun newInstance() = AadhaarCardImageUploadFragment()
         const val REQUEST_CODE_UPLOAD_AADHAR_IMAGE = 2333
 
-        private const val REQUEST_CAPTURE_IMAGE = 1012
-        private const val REQUEST_PICK_IMAGE = 1013
+        private const val REQUEST_CAPTURE_IMAGE = 1031
+        private const val REQUEST_PICK_IMAGE = 1032
 
         private const val PREFIX: String = "IMG"
         private const val EXTENSION: String = ".jpg"

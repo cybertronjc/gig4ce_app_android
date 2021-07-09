@@ -57,8 +57,8 @@ class PanCardFragment() : Fragment(),
 
         const val INTENT_EXTRA_CLICKED_IMAGE_PATH = "clicked_image_path"
         const val INTENT_EXTRA_PAN = "pan"
-        private const val REQUEST_CAPTURE_IMAGE = 1012
-        private const val REQUEST_PICK_IMAGE = 1013
+        private const val REQUEST_CAPTURE_IMAGE = 1001
+        private const val REQUEST_PICK_IMAGE = 1002
 
         private const val PREFIX: String = "IMG"
         private const val EXTENSION: String = ".jpg"
@@ -137,6 +137,7 @@ class PanCardFragment() : Fragment(),
     }
 
     private fun setViews() {
+        viewBinding.toplayoutblock.showUploadHere()
         val frontUri = Uri.Builder()
             .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
             .authority(resources.getResourcePackageName(R.drawable.ic_pan_illustration))
@@ -145,6 +146,7 @@ class PanCardFragment() : Fragment(),
             .build()
         val list = listOf(KYCImageModel(getString(R.string.upload_pan_card_new), frontUri, false))
         viewBinding.toplayoutblock.setImageViewPager(list)
+
     }
 
     private fun callKycOcrApi(path: Uri){
@@ -203,6 +205,7 @@ class PanCardFragment() : Fragment(),
                 val outputFileUri = ImagePicker.getImageFromResult(requireContext(), resultCode, data)
                 if (outputFileUri != null) {
                     startCrop(outputFileUri)
+                    Log.d("image", outputFileUri.toString())
                 } else {
                     showToast(getString(R.string.issue_in_cap_image))
                 }

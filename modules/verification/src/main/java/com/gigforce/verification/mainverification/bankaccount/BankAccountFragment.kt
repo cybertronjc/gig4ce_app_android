@@ -48,8 +48,8 @@ class BankAccountFragment : Fragment(),
         fun newInstance() = BankAccountFragment()
         const val REQUEST_CODE_CAPTURE_BANK_PHOTO = 2333
         const val INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT = "user_came_from_amb_screen"
-        private const val REQUEST_CAPTURE_IMAGE = 1012
-        private const val REQUEST_PICK_IMAGE = 1013
+        private const val REQUEST_CAPTURE_IMAGE = 1021
+        private const val REQUEST_PICK_IMAGE = 1022
 
         private const val PREFIX: String = "IMG"
         private const val EXTENSION: String = ".jpg"

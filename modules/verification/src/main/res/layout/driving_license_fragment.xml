@@ -15,12 +15,11 @@
             app:backgroundType="PinkBar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:titleText="Document Verification" />
+            app:titleText="Driving License" />
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginLeft="@dimen/dp_sm1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -35,7 +34,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp_xl1"
-                    app:docinfotext="Please upload your Driving License (FRONT and BACK Side) for Document verification Process."
+                    android:layout_marginStart="@dimen/size_16"
+                    app:docinfotext="Please upload your Driving License (Front and Back Side) for Document verification Process."
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:missingdoctext="I don’t have an Driving License"
@@ -232,6 +232,7 @@
                     android:layout_marginBottom="@dimen/size_22"
                     android:gravity="center"
                     android:minHeight="@dimen/size_36"
+                    android:visibility="gone"
                     android:text="Upload Again"
                     android:textColor="@color/outlined_button_text"
                     app:layout_constraintBottom_toTopOf="@id/submit_button_dl"

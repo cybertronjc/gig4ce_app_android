@@ -66,8 +66,8 @@ class DrivingLicenseFragment : Fragment(),
         const val INTENT_EXTRA_CLICKED_IMAGE_BACK = "back_image"
         const val INTENT_EXTRA_STATE = "state"
         const val INTENT_EXTRA_DL_NO = "dl_no"
-        private const val REQUEST_CAPTURE_IMAGE = 1012
-        private const val REQUEST_PICK_IMAGE = 1013
+        private const val REQUEST_CAPTURE_IMAGE = 1011
+        private const val REQUEST_PICK_IMAGE = 1012
 
         private const val PREFIX: String = "IMG"
         private const val EXTENSION: String = ".jpg"
