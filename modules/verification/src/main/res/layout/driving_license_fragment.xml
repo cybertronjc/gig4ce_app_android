@@ -40,7 +40,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:missingdoctext="I don’t have an Driving License"
                     app:title="Driving License"
-                    app:uppercaption="You need to verify your" />
+                    app:uppercaption="You need to upload" />
 
                 <com.gigforce.common_ui.components.atoms.GrayLine
                     android:id="@+id/grayLine3"
@@ -80,9 +80,8 @@
                     <Spinner
                         android:id="@+id/stateSpinner"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="46dp"
                         android:background="@drawable/rect_border_grey"
-                        android:minHeight="@dimen/size_46"
                         android:paddingStart="@dimen/size_9"
                         android:paddingTop="4dp"
                         android:paddingEnd="@dimen/size_11"

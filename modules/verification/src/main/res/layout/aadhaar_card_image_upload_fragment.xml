@@ -22,8 +22,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appBarAadhar"
-        android:layout_marginStart="@dimen/dp_sm1">
+        app:layout_constraintTop_toBottomOf="@id/appBarAadhar">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -33,12 +32,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_xl1"
+                android:layout_marginStart="@dimen/dp_sm1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:docinfotext="Please upload your Aadhaar Card (FRONT and BACK Side) for Document verification Process"
                 app:missingdoctext="I don’t have an Aadhhar Card"
                 app:title="Aadhaar Card"
-                app:uppercaption="You need to verify your" />
+                app:uppercaption="You need to upload" />
 
             <com.gigforce.common_ui.components.atoms.GrayLine
                 android:id="@+id/grayLine3"

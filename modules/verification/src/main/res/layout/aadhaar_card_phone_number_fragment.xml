@@ -33,18 +33,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_xl1"
+                android:layout_marginStart="@dimen/size_16"
                 app:docinfotext="Please upload your Aadhaar Card (FRONT and BACK Side) for Document verification Process"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:missingdoctext="I don’t have an Aadhhar Card"
                 app:title="Aadhaar Card"
-                app:uppercaption="You need to verify your" />
+                app:uppercaption="You need to upload" />
 
             <TextView
                 android:id="@+id/textView11"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/Title"
+                android:layout_marginStart="@dimen/size_16"
                 android:layout_marginTop="@dimen/dp_xl2"
                 android:text="Verify Aadhar with Phone Number"
                 app:layout_constraintStart_toStartOf="parent"
@@ -73,8 +75,10 @@
             <TextView
                 android:id="@+id/textView12"
                 style="@style/Caption1"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginEnd="@dimen/size_16"
                 android:text="Enter Aadhaar Card number and then verify details with a 6-Digit OTP sent on the registered Phone Number."
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
