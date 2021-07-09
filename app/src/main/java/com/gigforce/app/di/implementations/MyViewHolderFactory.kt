@@ -15,7 +15,6 @@ class MyViewHolderFactory @Inject constructor(): CoreViewHolderFactory() {
         this.registerViewTypeLoader(ChatViewTypeLoader())
         this.registerViewTypeLoader(LandingViewTypeLoader())
         this.registerViewTypeLoader(GigViewTypeLoader())
-
         this.registerViewTypeLoader(ComponentViewLoader())
     }
 }
