@@ -1,9 +1,11 @@
 package com.gigforce.verification.mainverification.pancard
 
+import android.Manifest
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.ContentResolver
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
@@ -12,8 +14,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
-import android.widget.Toast
-import com.yalantis.ucrop.UCrop
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -21,7 +22,9 @@ import androidx.lifecycle.Observer
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
+import com.gigforce.core.AppConstants
 import com.gigforce.core.datamodels.verification.PanCardDataModel
+import com.gigforce.core.extensions.gone
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.DateHelper
 import com.gigforce.core.utils.VerificationValidations
@@ -31,11 +34,9 @@ import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.gigforce.verification.gigerVerfication.panCard.AddPanCardInfoFragment
 import com.gigforce.verification.mainverification.Data
 import com.gigforce.verification.mainverification.VerificationClickOrSelectImageBottomSheet
-import com.gigforce.verification.mainverification.drivinglicense.DrivingLicenseFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.firebase.ml.vision.common.FirebaseVisionImage
+import com.yalantis.ucrop.UCrop
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_edit_driving_license.*
 import kotlinx.android.synthetic.main.pan_card_fragment.*
 import kotlinx.android.synthetic.main.veri_screen_info_component.view.*
 import okhttp3.MediaType
@@ -50,8 +51,8 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class PanCardFragment() : Fragment(),
-    VerificationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener{
+class PanCardFragment : Fragment(),
+    VerificationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener {
 
     companion object {
         fun newInstance() = PanCardFragment()
@@ -59,13 +60,13 @@ class PanCardFragment() : Fragment(),
 
         const val INTENT_EXTRA_CLICKED_IMAGE_PATH = "clicked_image_path"
         const val INTENT_EXTRA_PAN = "pan"
-        private const val REQUEST_CAPTURE_IMAGE = 1012
-        private const val REQUEST_PICK_IMAGE = 1013
+        private const val REQUEST_CAPTURE_IMAGE = 1001
+        private const val REQUEST_PICK_IMAGE = 1002
 
         private const val PREFIX: String = "IMG"
         private const val EXTENSION: String = ".jpg"
 
-        private const val REQUEST_STORAGE_PERMISSION = 102
+        private const val REQUEST_STORAGE_PERMISSION = 104
     }
 
     @Inject
@@ -97,28 +98,46 @@ class PanCardFragment() : Fragment(),
 
 
     }
+
     private fun initViewModel() {
         viewModel.kycOcrResult.observe(viewLifecycleOwner, Observer {
             it.let {
-                if(it.status) {
-                    viewBinding.panTil.editText?.setText(it.panNumber)
-                    viewBinding.nameTil.editText?.setText(it.name)
-                    viewBinding.dateOfBirth.text = it.dateOfBirth
+                if (it.status) {
+                    if (it.panNumber.isNullOrBlank() || it.name.isNullOrBlank() || it.dateOfBirth.isNullOrBlank()) {
+                        viewBinding.toplayoutblock.uploadStatusLayout(
+                            AppConstants.UNABLE_TO_FETCH_DETAILS,
+                            "UNABLE TO FETCH DETAILS",
+                            "Enter your Pan card details manually or try again to continue the verification process."
+                        )
+                    } else {
+                        viewBinding.toplayoutblock.uploadStatusLayout(
+                            AppConstants.UPLOAD_SUCCESS,
+                            "UPLOAD SUCCESSFUL",
+                            "Information of Pan card Captured Successfully."
+                        )
+                        viewBinding.panTil.editText?.setText(it.panNumber)
+                        viewBinding.nameTil.editText?.setText(it.name)
+                        viewBinding.dateOfBirth.text = it.dateOfBirth
+                    }
 
-                }else
-                showToast("Ocr status "+  it.status)
+                } else
+                    showToast("Ocr status " + it.status)
             }
         })
         viewModel.kycVerifyResult.observe(viewLifecycleOwner, Observer {
             it.let {
-                showToast("Verification "+ it.status)
+                if (it.status) {
+                    viewBinding.belowLayout.gone()
+                } else
+                    showToast("Verification " + it.status)
             }
         })
     }
+
     private fun listeners() {
         viewBinding.toplayoutblock.setPrimaryClick(View.OnClickListener {
             //call for bottom sheet
-            VerificationClickOrSelectImageBottomSheet.launch(parentFragmentManager, "Upload Pan Card", this)
+            checkForPermissionElseShowCameraGalleryBottomSheet()
             //launchSelectImageSourceDialog()
         })
 
@@ -127,7 +146,8 @@ class PanCardFragment() : Fragment(),
         }
 
         submit_button_pan.setOnClickListener {
-            val panCardNo = viewBinding.panTil.editText?.text.toString().toUpperCase(Locale.getDefault())
+            val panCardNo =
+                viewBinding.panTil.editText?.text.toString().toUpperCase(Locale.getDefault())
             if (!VerificationValidations.isPanCardValid(panCardNo)) {
 
                 MaterialAlertDialogBuilder(requireContext())
@@ -155,6 +175,7 @@ class PanCardFragment() : Fragment(),
     }
 
     private fun setViews() {
+        viewBinding.toplayoutblock.showUploadHere()
         val frontUri = Uri.Builder()
             .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
             .authority(resources.getResourcePackageName(R.drawable.ic_pan_illustration))
@@ -163,20 +184,57 @@ class PanCardFragment() : Fragment(),
             .build()
         val list = listOf(KYCImageModel(getString(R.string.upload_pan_card_new), frontUri, false))
         viewBinding.toplayoutblock.setImageViewPager(list)
+
     }
 
-    private fun callKycOcrApi(path: Uri){
+    private fun checkForPermissionElseShowCameraGalleryBottomSheet() {
+        if (hasStoragePermissions())
+            VerificationClickOrSelectImageBottomSheet.launch(
+                parentFragmentManager,
+                "Upload Pan Card",
+                this
+            )
+        else
+            requestStoragePermission()
+    }
+
+    private fun requestStoragePermission() {
+
+        requestPermissions(
+            arrayOf(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.CAMERA
+            ),
+            REQUEST_STORAGE_PERMISSION
+        )
+    }
+
+    private fun hasStoragePermissions(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.CAMERA
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun callKycOcrApi(path: Uri) {
 
         var image: MultipartBody.Part? = null
         if (path != null) {
             val file = File(URI(path.toString()))
-            Log.d("Register", "Nombre del archivo " + file.getName())
+            Log.d("Register", "Nombre del archivo " + file.name)
             // create RequestBody instance from file
             val requestFile: RequestBody =
                 RequestBody.create(MediaType.parse("multipart/form-data"), file)
             // MultipartBody.Part is used to send also the actual file name
             image =
-                MultipartBody.Part.createFormData("imagenPerfil", file.getName(), requestFile)
+                MultipartBody.Part.createFormData("imagenPerfil", file.name, requestFile)
         }
         image?.let { viewModel.getKycOcrResult("pan", "dsd", it) }
     }
@@ -191,7 +249,7 @@ class PanCardFragment() : Fragment(),
                 newCal.set(Calendar.MONTH, month)
                 newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
 
-                dateOfBirth.setText(DateHelper.getDateInDDMMYYYY(newCal.time))
+                dateOfBirth.text = DateHelper.getDateInDDMMYYYY(newCal.time)
             },
             1990,
             cal.get(Calendar.MONTH),
@@ -209,32 +267,61 @@ class PanCardFragment() : Fragment(),
         photoCropIntent.putExtra("folder", "verification")
         photoCropIntent.putExtra("detectFace", 0)
         photoCropIntent.putExtra("file", "pan_card.jpg")
-        navigation.navigateToPhotoCrop(photoCropIntent,
-            AddPanCardInfoFragment.REQUEST_CODE_UPLOAD_PAN_IMAGE, requireContext(),this)
+        navigation.navigateToPhotoCrop(
+            photoCropIntent,
+            AddPanCardInfoFragment.REQUEST_CODE_UPLOAD_PAN_IMAGE, requireContext(), this
+        )
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>, grantResults: IntArray
+    ) {
+        when (requestCode) {
+            REQUEST_STORAGE_PERMISSION -> {
+
+                var allPermsGranted = true
+                for (i in grantResults.indices) {
+                    if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                        allPermsGranted = false
+                        break
+                    }
+                }
+
+                if (allPermsGranted)
+                    VerificationClickOrSelectImageBottomSheet.launch(
+                        parentFragmentManager,
+                        "Upload Pan Card",
+                        this
+                    )
+                else {
+                    showToast("Please grant storage permission")
+                }
+            }
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == Activity.RESULT_OK) {
 
-            if (requestCode == REQUEST_CAPTURE_IMAGE || requestCode == REQUEST_PICK_IMAGE) {
-                val outputFileUri = ImagePicker.getImageFromResult(requireContext(), resultCode, data)
-                if (outputFileUri != null) {
-                    startCrop(outputFileUri)
-                } else {
-                    showToast(getString(R.string.issue_in_cap_image))
-                }
-            } else if (requestCode == UCrop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
-                val imageUriResultCrop: Uri? = UCrop.getOutput(data!!)
-                Log.d("ImageUri", imageUriResultCrop.toString())
-                clickedImagePath = imageUriResultCrop
-                showPanInfoCard(clickedImagePath!!)
-                val baos = ByteArrayOutputStream()
-                if (imageUriResultCrop == null) {
-                    val bitmap = data.data as Bitmap
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
+        if (requestCode == REQUEST_CAPTURE_IMAGE || requestCode == REQUEST_PICK_IMAGE) {
+            val outputFileUri = ImagePicker.getImageFromResult(requireContext(), resultCode, data)
+            if (outputFileUri != null) {
+                startCrop(outputFileUri)
+                Log.d("image", outputFileUri.toString())
+            } else {
+                showToast(getString(R.string.issue_in_cap_image))
+            }
+        } else if (requestCode == UCrop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
+            val imageUriResultCrop: Uri? = UCrop.getOutput(data!!)
+            Log.d("ImageUri", imageUriResultCrop.toString())
+            clickedImagePath = imageUriResultCrop
+            showPanInfoCard(clickedImagePath!!)
+            val baos = ByteArrayOutputStream()
+            if (imageUriResultCrop == null) {
+                val bitmap = data.data as Bitmap
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
 
-                }
             }
         }
     }
@@ -270,16 +357,18 @@ class PanCardFragment() : Fragment(),
 //            ResourcesCompat.getColor(resources, R.color.warm_grey, null)
 //    }
 
-//    override fun onImageSourceSelected(source: ImageSource) {
+    //    override fun onImageSourceSelected(source: ImageSource) {
 //        showImageInfoLayout()
 //
 //        if (panDataCorrectCB.isChecked)
 //            enableSubmitButton()
 //    }
-    private fun callKycVerificationApi(){
-        var list = listOf(Data("name", name_til.editText?.text.toString()),
+    private fun callKycVerificationApi() {
+        var list = listOf(
+            Data("name", name_til.editText?.text.toString()),
             Data("no", pan_til.editText?.text.toString()),
-            Data("dob", dateOfBirth.text.toString()))
+            Data("dob", dateOfBirth.text.toString())
+        )
         viewModel.getKycVerificationResult("pan", list)
     }
 
@@ -288,6 +377,7 @@ class PanCardFragment() : Fragment(),
         //call ocr api
         callKycOcrApi(panInfoPath)
     }
+
     override fun onClickPictureThroughCameraClicked() {
         val intents = ImagePicker.getCaptureImageIntentsOnly(requireContext())
         startActivityForResult(intents, REQUEST_CAPTURE_IMAGE)
@@ -297,6 +387,7 @@ class PanCardFragment() : Fragment(),
         val intents = ImagePicker.getPickImageIntentsOnly(requireContext())
         startActivityForResult(intents, REQUEST_PICK_IMAGE)
     }
+
     private fun showWhyWeNeedThisDialog() {
         WhyWeNeedThisBottomSheet.launch(
             childFragmentManager = childFragmentManager,

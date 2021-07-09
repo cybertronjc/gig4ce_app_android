@@ -15,12 +15,11 @@
             app:backgroundType="PinkBar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:titleText="Document Verification" />
+            app:titleText="Bank Account" />
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginLeft="@dimen/dp_sm1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -35,7 +34,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp_xl1"
-                    app:docinfotext="Please upload your Bank Passbook (FRONT Page) for Document verification Process"
+                    android:layout_marginStart="@dimen/size16"
+                    app:docinfotext="Please upload your Bank Passbook (Front Page) for Document verification Process"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:missingdoctext="I don’t have a Bank Account"
@@ -111,7 +111,7 @@
                     android:layout_marginLeft="@dimen/dp_sm1"
                     android:layout_marginTop="@dimen/dp_xl1"
                     android:layout_marginRight="@dimen/dp_sm1"
-                    android:hint="Ifsc Code"
+                    android:hint="IFSC Code"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/bank_name_til">
@@ -154,6 +154,7 @@
                     android:gravity="center"
                     android:minHeight="@dimen/size_36"
                     android:text="Upload Again"
+                    android:visibility="gone"
                     android:textColor="@color/outlined_button_text"
                     app:layout_constraintBottom_toTopOf="@id/submit_button_bank"
                     app:layout_constraintEnd_toEndOf="parent"

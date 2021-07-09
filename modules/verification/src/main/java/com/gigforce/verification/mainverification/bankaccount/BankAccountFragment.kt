@@ -1,8 +1,10 @@
 package com.gigforce.verification.mainverification.bankaccount
 
+import android.Manifest
 import android.app.Activity
 import android.content.ContentResolver
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
@@ -10,6 +12,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -17,6 +20,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
+import com.gigforce.core.AppConstants
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.VerificationValidations
 import com.gigforce.verification.R
@@ -47,13 +51,13 @@ class BankAccountFragment : Fragment(),
         fun newInstance() = BankAccountFragment()
         const val REQUEST_CODE_CAPTURE_BANK_PHOTO = 2333
         const val INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT = "user_came_from_amb_screen"
-        private const val REQUEST_CAPTURE_IMAGE = 1012
-        private const val REQUEST_PICK_IMAGE = 1013
+        private const val REQUEST_CAPTURE_IMAGE = 1021
+        private const val REQUEST_PICK_IMAGE = 1022
 
         private const val PREFIX: String = "IMG"
         private const val EXTENSION: String = ".jpg"
 
-        private const val REQUEST_STORAGE_PERMISSION = 102
+        private const val REQUEST_STORAGE_PERMISSION = 104
     }
 
     @Inject
@@ -84,10 +88,23 @@ class BankAccountFragment : Fragment(),
         viewModel.kycOcrResult.observe(viewLifecycleOwner, Observer {
             it.let {
                 if (it.status) {
-                    viewBinding.accountHolderName.editText?.setText(it.beneficiaryName)
-                    viewBinding.bankAccNumberItl.editText?.setText(it.accountNumber)
-                    viewBinding.ifscCode.editText?.setText(it.ifscCode)
-                    viewBinding.bankNameTil.editText?.setText(it.bankName)
+                    if (it.beneficiaryName.isNullOrBlank() || it.accountNumber.isNullOrBlank() || it.ifscCode.isNullOrBlank() || it.bankName.isNullOrBlank()) {
+                        viewBinding.toplayoutblock.uploadStatusLayout(
+                            AppConstants.UNABLE_TO_FETCH_DETAILS,
+                            "UNABLE TO FETCH DETAILS",
+                            "Enter your Bank details manually or try again to continue the verification process."
+                        )
+                    } else {
+                        viewBinding.toplayoutblock.uploadStatusLayout(
+                            AppConstants.UPLOAD_SUCCESS,
+                            "UPLOAD SUCCESSFUL",
+                            "Information of Bank Captured Successfully."
+                        )
+                        viewBinding.accountHolderName.editText?.setText(it.beneficiaryName)
+                        viewBinding.bankAccNumberItl.editText?.setText(it.accountNumber)
+                        viewBinding.ifscCode.editText?.setText(it.ifscCode)
+                        viewBinding.bankNameTil.editText?.setText(it.bankName)
+                    }
                 } else
                     showToast("Ocr status " + it.status)
             }
@@ -104,14 +121,11 @@ class BankAccountFragment : Fragment(),
         viewBinding.toplayoutblock.setPrimaryClick(View.OnClickListener {
             //call for bottom sheet
             //showCameraAndGalleryOption()
-            VerificationClickOrSelectImageBottomSheet.launch(
-                parentFragmentManager,
-                "Upload Bank Passbook",
-                this
-            )
+            checkForPermissionElseShowCameraGalleryBottomSheet()
         })
         submit_button_bank.setOnClickListener {
-            val ifsc = viewBinding.ifscCode.editText?.text.toString().toUpperCase(Locale.getDefault())
+            val ifsc =
+                viewBinding.ifscCode.editText?.text.toString().toUpperCase(Locale.getDefault())
             if (!VerificationValidations.isIfSCValid(ifsc)) {
 
                 MaterialAlertDialogBuilder(requireContext())
@@ -122,15 +136,15 @@ class BankAccountFragment : Fragment(),
                 return@setOnClickListener
             }
 
-            if(viewBinding.bankNameTil.editText?.text.toString().isNullOrBlank()){
+            if (viewBinding.bankNameTil.editText?.text.toString().isNullOrBlank()) {
                 MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert))
-                                .setMessage(getString(R.string.enter_bank_name))
-                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                                .show()
+                    .setTitle(getString(R.string.alert))
+                    .setMessage(getString(R.string.enter_bank_name))
+                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                    .show()
                 return@setOnClickListener
             }
-            if(viewBinding.bankNameTil.editText?.text.toString().length < 3){
+            if (viewBinding.bankNameTil.editText?.text.toString().length < 3) {
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle(getString(R.string.alert))
                     .setMessage(getString(R.string.bank_name_too_short))
@@ -139,7 +153,7 @@ class BankAccountFragment : Fragment(),
                 return@setOnClickListener
             }
 
-            if(viewBinding.bankAccNumberItl.editText?.text.toString().length<4){
+            if (viewBinding.bankAccNumberItl.editText?.text.toString().length < 4) {
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle(getString(R.string.alert))
                     .setMessage(getString(R.string.enter_valid_acc_no))
@@ -193,6 +207,42 @@ class BankAccountFragment : Fragment(),
     }
 
 
+    private fun checkForPermissionElseShowCameraGalleryBottomSheet() {
+        if (hasStoragePermissions())
+            VerificationClickOrSelectImageBottomSheet.launch(
+                parentFragmentManager,
+                "Upload Bank Passbook",
+                this
+            )
+        else
+            requestStoragePermission()
+    }
+
+    private fun requestStoragePermission() {
+
+        requestPermissions(
+            arrayOf(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.CAMERA
+            ),
+            REQUEST_STORAGE_PERMISSION
+        )
+    }
+
+    private fun hasStoragePermissions(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.CAMERA
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
     private fun showCameraAndGalleryOption() {
         val photoCropIntent = Intent()
         photoCropIntent.putExtra(
@@ -209,30 +259,57 @@ class BankAccountFragment : Fragment(),
         )
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == Activity.RESULT_OK) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>, grantResults: IntArray
+    ) {
+        when (requestCode) {
+            REQUEST_STORAGE_PERMISSION -> {
 
-            if (requestCode == REQUEST_CAPTURE_IMAGE || requestCode == REQUEST_PICK_IMAGE) {
-                val outputFileUri =
-                    ImagePicker.getImageFromResult(requireContext(), resultCode, data)
-                if (outputFileUri != null) {
-                    startCrop(outputFileUri)
-                } else {
-                    showToast(getString(R.string.issue_in_cap_image))
+                var allPermsGranted = true
+                for (i in grantResults.indices) {
+                    if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                        allPermsGranted = false
+                        break
+                    }
                 }
-            } else if (requestCode == UCrop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
-                val imageUriResultCrop: Uri? = UCrop.getOutput(data!!)
-                Log.d("ImageUri", imageUriResultCrop.toString())
-                clickedImagePath = imageUriResultCrop
-                showPassbookInfoCard(clickedImagePath!!)
-                val baos = ByteArrayOutputStream()
-                if (imageUriResultCrop == null) {
-                    val bitmap = data.data as Bitmap
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
 
+                if (allPermsGranted)
+                    VerificationClickOrSelectImageBottomSheet.launch(
+                        parentFragmentManager,
+                        "Upload Bank Passbook",
+                        this
+                    )
+                else {
+                    showToast("Please grant storage permission")
                 }
             }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == REQUEST_CAPTURE_IMAGE || requestCode == REQUEST_PICK_IMAGE) {
+            val outputFileUri =
+                ImagePicker.getImageFromResult(requireContext(), resultCode, data)
+            if (outputFileUri != null) {
+                startCrop(outputFileUri)
+            } else {
+                showToast(getString(R.string.issue_in_cap_image))
+            }
+        } else if (requestCode == UCrop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
+            val imageUriResultCrop: Uri? = UCrop.getOutput(data!!)
+            Log.d("ImageUri", imageUriResultCrop.toString())
+            clickedImagePath = imageUriResultCrop
+            showPassbookInfoCard(clickedImagePath!!)
+            val baos = ByteArrayOutputStream()
+            if (imageUriResultCrop == null) {
+                val bitmap = data.data as Bitmap
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
+
+            }
+        }
 
 //            if (resultCode == Activity.RESULT_OK) {
 //                clickedImagePath =
@@ -248,7 +325,7 @@ class BankAccountFragment : Fragment(),
 ////                }
 //
 //            }
-        }
+
     }
 
     //    private fun disableSubmitButton() {
