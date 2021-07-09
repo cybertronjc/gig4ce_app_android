@@ -17,6 +17,8 @@ interface IEventTracker {
     fun setProfileProperty(args: ProfilePropArgs)
 
     fun setUpAnalyticsTools()
+    fun logoutUserFromAnalytics()
+    fun setUserName(name:String)
 }
 
 data class TrackingEventArgs(

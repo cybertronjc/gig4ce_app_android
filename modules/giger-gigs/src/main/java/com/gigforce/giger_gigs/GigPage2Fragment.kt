@@ -313,6 +313,7 @@ class GigPage2Fragment : Fragment(),
         locationHelper.checkForGpsSettings(object : GpsSettingsCheckCallback {
 
             override fun requiredGpsSettingAreUnAvailable(status: ResolvableApiException) {
+                if (!isAdded) return
 
                 startIntentSenderForResult(
                     status.resolution.intentSender,
@@ -326,6 +327,8 @@ class GigPage2Fragment : Fragment(),
             }
 
             override fun requiredGpsSettingAreAvailable() {
+                if (!isAdded) return
+
                 locationHelper.startLocationUpdates()
             }
 
@@ -470,7 +473,7 @@ class GigPage2Fragment : Fragment(),
                             showFeedbackBottomSheet()
                         } else {
                             showToast("Check-in marked")
-                            plantLocationTrackers()
+                          //  plantLocationTrackers()
                         }
                     }
                     is Lce.Error -> {
@@ -945,8 +948,8 @@ class GigPage2Fragment : Fragment(),
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.CAMERA,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                Manifest.permission.READ_EXTERNAL_STORAGE/*,
+                Manifest.permission.ACCESS_BACKGROUND_LOCATION*/
             )
         }
     }
@@ -1049,8 +1052,8 @@ class GigPage2Fragment : Fragment(),
                 Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.CAMERA,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                Manifest.permission.READ_EXTERNAL_STORAGE/*,
+                Manifest.permission.ACCESS_BACKGROUND_LOCATION*/
             )
         }
     }

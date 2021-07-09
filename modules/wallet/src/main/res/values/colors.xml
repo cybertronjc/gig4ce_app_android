@@ -4,5 +4,6 @@
     <color name="app_red">#E02020</color>
     <color name="gray_color">#6d7278</color>
     <color name="grey_c7">#c7c7c7</color>
+    <color name="status_bar_pink">#e53369</color>
 
 </resources>

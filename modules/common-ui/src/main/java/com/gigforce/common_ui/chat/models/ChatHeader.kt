@@ -40,6 +40,13 @@ data class ChatHeader(
         @set:PropertyName("lastMsgTimestamp")
         var lastMsgTimestamp: com.google.firebase.Timestamp? = null,
 
+
+    @get:PropertyName("lastMessageDeleted")
+    @set:PropertyName("lastMessageDeleted")
+    var lastMessageDeleted: Boolean = false,
+
+
+
     @get:PropertyName("unseenCount")
         @set:PropertyName("unseenCount")
         var unseenCount: Int = 0,

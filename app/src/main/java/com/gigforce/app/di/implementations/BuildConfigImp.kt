@@ -14,4 +14,5 @@ class BuildConfigImp @Inject constructor(): IBuildConfig {
     override fun getGeneratePayslipURL(): String = BuildConfig.GENERATE_PAYSLIP_URL
     override fun getApplicationID(): String = BuildConfig.APPLICATION_ID
     override fun getSendSMSURL() : String = BuildConfig.SEND_SMS_URL
+    override fun getFeaturesIconLocationUrl(): String = BuildConfig.ALL_FEATURES_ICONS_STORAGE_URL
 }

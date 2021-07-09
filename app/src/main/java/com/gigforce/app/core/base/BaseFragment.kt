@@ -15,6 +15,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
@@ -94,7 +95,7 @@ open class BaseFragment : Fragment(),
     private fun initializeDI() {
         // there will be no any requirement further after using DI
         viewsFromViewsInterface = ViewsFromViewsImpl(requireActivity())
-        navigationInterface = NavigationImpl(requireActivity())
+        navigationInterface = NavigationImpl(findNavController())
         sharedDataInterface =
             SharedPreAndCommonUtilDataImp(
                 requireActivity()
@@ -406,28 +407,36 @@ open class BaseFragment : Fragment(),
         return utilAndValidationInterface.getCurrentVersion()
     }
 
+    override fun saveLong(key: String?, value: Long) {
+        sharedDataInterface.saveLong(key, value)
+    }
+
+    override fun getLong(key: String?): Long {
+        return sharedDataInterface.getLong(key)
+    }
+
     override fun saveLoggedInUserName(username: String) {
-        TODO("Not yet implemented")
+
     }
 
     override fun getLoggedInUserName(): String {
-        TODO("Not yet implemented")
+        return ""
     }
 
     override fun saveLoggedInMobileNumber(mobileno: String) {
-        TODO("Not yet implemented")
+
     }
 
     override fun getLoggedInMobileNumber(): String {
-        TODO("Not yet implemented")
+        return ""
     }
 
     override fun saveUserProfilePic(profilePic: String) {
-        TODO("Not yet implemented")
+
     }
 
     override fun getUserProfilePic(): String {
-        TODO("Not yet implemented")
+        return ""
     }
 
 

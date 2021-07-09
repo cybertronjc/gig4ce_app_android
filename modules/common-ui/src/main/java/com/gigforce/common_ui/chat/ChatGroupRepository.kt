@@ -1,20 +1,20 @@
 package com.gigforce.common_ui.chat
 
+//import com.gigforce.modules.feature_chat.models.*
 import android.content.ContentResolver
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
+import android.util.Log
 import android.webkit.MimeTypeMap
 import androidx.core.net.toFile
 import androidx.core.net.toUri
+import com.gigforce.common_ui.chat.models.*
 import com.gigforce.common_ui.viewdatamodels.chat.ChatHeader
-import com.gigforce.common_ui.chat.models.ContactModel
 import com.gigforce.core.date.DateHelper
 import com.gigforce.core.extensions.*
 import com.gigforce.core.file.FileUtils
 import com.gigforce.core.image.ImageUtils
-//import com.gigforce.modules.feature_chat.models.*
-import com.gigforce.common_ui.chat.models.*
 import com.gigforce.modules.feature_chat.repositories.ChatProfileFirebaseRepository
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
@@ -26,6 +26,8 @@ import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import java.io.File
 import java.util.*
 import kotlin.coroutines.resume
@@ -63,6 +65,11 @@ class ChatGroupRepository constructor(
     fun groupMessagesRef(groupId: String) = db.collection(COLLECTION_GROUP_CHATS)
         .document(groupId)
         .collection(COLLECTION_GROUP_MESSAGES)
+
+    fun groupEventsRef(groupId: String) = db.collection(COLLECTION_GROUP_CHATS)
+            .document(groupId)
+            .collection(COLLECTION_GROUP_EVENTS)
+            .whereArrayContains("showEventToUsersWithUid",getUID())
 
     fun userGroupHeaderRef(groupId: String) = db.collection(COLLECTION_CHATS)
         .document(getUID())
@@ -106,48 +113,6 @@ class ChatGroupRepository constructor(
         return group.id
     }
 
-    suspend fun addUserToGroup(groupId: String, members: List<ContactModel>) {
-
-        val groupInfo = getGroupDetails(groupId)
-        val grpMembers = groupInfo.groupMembers.toMutableList()
-
-        //Creating Headers in each users doc
-        val batch = db.batch()
-
-        val filteredMemList = members.filter {
-            grpMembers.find { grpMem -> grpMem.uid == it.uid } == null
-        }
-
-        filteredMemList.forEach {
-            it.name = chatProfileFirebaseRepository.getProfileDataIfExist(it.uid)?.name ?: ""
-        }
-
-        grpMembers.addAll(filteredMemList)
-        groupInfo.groupMembers = grpMembers
-
-        val groupDataRef = db.collection(COLLECTION_GROUP_CHATS).document(groupId)
-        batch.set(groupDataRef, groupInfo)
-
-        filteredMemList.forEach {
-            val headerRef = db.collection(COLLECTION_CHATS)
-                .document(it.uid!!)
-                .collection(COLLECTION_CHAT_HEADERS)
-                .document(groupId)
-
-            batch.set(
-                headerRef, ChatHeader(
-                    forUserId = it.uid!!,
-                    chatType = ChatConstants.CHAT_TYPE_GROUP,
-                    groupId = groupId,
-                    groupName = groupInfo.name,
-                    lastMsgTimestamp = Timestamp.now(),
-                    removedFromGroup = false,
-                    lastMsgFlowType = ChatConstants.FLOW_TYPE_OUT
-                )
-            )
-        }
-        batch.commitOrThrow()
-    }
 
     suspend fun getProfileData(): ChatProfileData = suspendCoroutine { cont ->
 
@@ -471,12 +436,71 @@ class ChatGroupRepository constructor(
         batch.commit()
     }
 
+    suspend fun addUserToGroup(groupId: String, members: List<ContactModel>) {
+
+        val groupInfo = getGroupDetails(groupId)
+        val grpMembers = groupInfo.groupMembers.toMutableList()
+        val deletedGrpMembers = groupInfo.deletedGroupMembers.toMutableList()
+
+        //Creating Headers in each users doc
+        val batch = db.batch()
+
+        val filteredMemList = members.filter {
+            grpMembers.find { grpMem -> grpMem.uid == it.uid } == null
+        }
+
+        filteredMemList.forEach {
+            it.name = chatProfileFirebaseRepository.getProfileDataIfExist(it.uid)?.name ?: ""
+        }
+
+        grpMembers.addAll(filteredMemList)
+        grpMembers.onEach {
+            it.deletedOn = null
+        }
+        groupInfo.groupMembers = grpMembers
+
+        val updatedDeletedMemebers = deletedGrpMembers.filter {
+            members.find { member -> it.uid == member.uid } == null
+        }
+        groupInfo.deletedGroupMembers = updatedDeletedMemebers
+
+        val groupDataRef = db.collection(COLLECTION_GROUP_CHATS).document(groupId)
+        batch.set(groupDataRef, groupInfo)
+
+        filteredMemList.forEach {
+            val headerRef = db.collection(COLLECTION_CHATS)
+                .document(it.uid!!)
+                .collection(COLLECTION_CHAT_HEADERS)
+                .document(groupId)
+
+            batch.set(
+                headerRef, ChatHeader(
+                    forUserId = it.uid!!,
+                    chatType = ChatConstants.CHAT_TYPE_GROUP,
+                    groupId = groupId,
+                    groupName = groupInfo.name,
+                    lastMsgTimestamp = Timestamp.now(),
+                    removedFromGroup = false,
+                    lastMsgFlowType = ChatConstants.FLOW_TYPE_OUT
+                )
+            )
+        }
+        batch.commitOrThrow()
+    }
+
     suspend fun removeUserFromGroup(groupHeaderId: String, userUid: String) {
         val groupDetails = getGroupDetails(groupHeaderId)
         val updatedUserList = groupDetails.groupMembers.filter {
             it.uid != userUid
         }
+        val deletedUser = groupDetails.groupMembers.filter {
+            it.uid == userUid
+        }.onEach {
+            it.deletedOn = Timestamp.now()
+        }
+
         groupDetails.groupMembers = updatedUserList
+        groupDetails.deletedGroupMembers = groupDetails.deletedGroupMembers.plus(deletedUser)
 
         val batch = db.batch()
         val groupRef = db.collection(COLLECTION_GROUP_CHATS)
@@ -488,7 +512,6 @@ class ChatGroupRepository constructor(
             .collection(COLLECTION_CHAT_HEADERS)
             .document(groupHeaderId)
         batch.update(userHeaderRef, "removedFromGroup", true)
-
         batch.commit()
     }
 
@@ -527,15 +550,6 @@ class ChatGroupRepository constructor(
 
         message.attachmentPath = attachmentPathOnServer
         createMessageEntry(groupId, message)
-//        updateMediaInfoInGroupMedia(
-//                groupId,
-//                ChatConstants.ATT,
-//                message.id,
-//                "",
-//                attachmentPathOnServer,
-//                thumbnailPathOnServer,
-//                message.videoLength
-//        )
     }
 
     fun getExtensionFromUri(
@@ -555,13 +569,149 @@ class ChatGroupRepository constructor(
         }
     }
 
+    suspend fun deleteMessage(
+        groupId: String,
+        messageId: String
+    ) = db.collection(COLLECTION_GROUP_CHATS)
+        .document(groupId)
+        .collection(COLLECTION_GROUP_MESSAGES)
+        .document(messageId)
+        .updateOrThrow(
+            mapOf(
+                "isDeleted" to true,
+                "deletedOn" to Timestamp.now()
+            )
+        )
+
+
+    suspend fun makeUserGroupAdmin(
+        groupId: String,
+        uid: String
+    ) {
+        val groupDetails = getGroupDetails(groupId)
+
+        groupDetails.groupMembers.find { contact ->
+            contact.uid == uid
+        }?.isUserGroupManager = true
+
+        db.collection(COLLECTION_GROUP_CHATS)
+            .document(groupId)
+            .updateOrThrow("groupMembers", groupDetails.groupMembers)
+
+        db.collection(COLLECTION_GROUP_CHATS)
+                .document(groupId)
+                .collection(COLLECTION_GROUP_EVENTS)
+                .addOrThrow(EventInfo(
+                        showEventToUsersWithUid = arrayListOf(uid),
+                        eventDoneByUserUid = currentUser.uid,
+                        eventText = "You're now an admin"
+                ))
+    }
+
+    suspend fun dismissUserAsGroupAdmin(
+        groupId: String,
+        uid: String
+    ) {
+        val groupDetails = getGroupDetails(groupId)
+
+        groupDetails.groupMembers.find { contact ->
+            contact.uid == uid
+        }?.isUserGroupManager = false
+
+        db.collection(COLLECTION_GROUP_CHATS)
+            .document(groupId)
+            .updateOrThrow("groupMembers", groupDetails.groupMembers)
+
+        db.collection(COLLECTION_GROUP_CHATS)
+            .document(groupId)
+            .collection(COLLECTION_GROUP_EVENTS)
+            .addOrThrow(EventInfo(
+                    showEventToUsersWithUid = arrayListOf(uid),
+                    eventDoneByUserUid = currentUser.uid,
+                    eventText = "You've been dismissed as admin"
+            ))
+    }
+
+    suspend fun allowEveryoneToPostInThisGroup(
+        groupId: String
+    ) {
+        db.collection(COLLECTION_GROUP_CHATS)
+            .document(groupId)
+            .updateOrThrow("onlyAdminCanPostInGroup", false)
+    }
+
+    suspend fun limitPostingToAdminsInGroup(
+        groupId: String
+    ) {
+        db.collection(COLLECTION_GROUP_CHATS)
+            .document(groupId)
+            .updateOrThrow("onlyAdminCanPostInGroup", true)
+    }
+
+    private var currentBatchSize = 0
+    private val mutex = Mutex()
+    private var batch = db.batch()
+
+    suspend fun markMessagesAsRead(
+        groupId: String,
+        messageWithNotReceivedStatus: List<ChatMessage>
+    ) = mutex.withLock {
+        val groupMessagesCollectionRef = groupMessagesRef(groupId)
+
+        val currentUserModel = createContactModelsForCurrentUser()
+        val receivingObject = MessageReceivingInfo(
+            uid = currentUser.uid,
+            profileName = currentUserModel.name ?: "",
+            profilePicture = currentUserModel.getUserProfileImageUrlOrPath() ?: ""
+        )
+
+        messageWithNotReceivedStatus.forEach {
+            val messageRef = groupMessagesCollectionRef.document(it.id)
+            batch.update(
+                messageRef,
+                mapOf("groupMessageReadBy" to FieldValue.arrayUnion(receivingObject))
+            )
+            checkBatchForOverFlowAndCommit()
+        }
+
+        if (currentBatchSize != 0) {
+            batch.commitOrThrow()
+        }
+    }
+
+    private suspend fun checkBatchForOverFlowAndCommit() {
+        currentBatchSize++
+        Log.d(TAG, "Size updated to $currentBatchSize")
+
+        if (currentBatchSize > 480) {
+            //   batchArray.add(batch)
+            batch.commitOrThrow()
+            currentBatchSize = 0
+
+            batch = db.batch()
+            Log.d(TAG, "New Batch $batch")
+        }
+    }
+
+    suspend fun getChatMessage(
+        groupId: String,
+        messageId: String
+    ) = groupMessagesRef(groupId)
+        .document(messageId)
+        .getOrThrow()
+        .toObject(ChatMessage::class.java)
+
+
     companion object {
+        const val TAG = "ChatGrouprepository"
+
         const val COLLECTION_CHATS = "chats"
         const val COLLECTION_CHATS_CONTACTS = "contacts"
         const val COLLECTION_GROUP_CHATS = "chat_groups"
         const val COLLECTION_GROUP_MESSAGES = "group_messages"
         const val COLLECTION_CHAT_HEADERS = "headers"
         const val COLLECTION_CHAT_REPORTED_USER = "chat_reported_users"
+        const val COLLECTION_GROUP_EVENTS = "group_events"
     }
 
 }

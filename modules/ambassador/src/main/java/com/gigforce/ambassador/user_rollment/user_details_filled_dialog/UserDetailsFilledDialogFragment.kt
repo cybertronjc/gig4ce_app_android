@@ -53,7 +53,7 @@ class UserDetailsFilledDialogFragment : DialogFragment() {
 
     }
 
-    private val gigerVerificationViewModel: GigVerificationViewModel by activityViewModels()
+    private val gigerVerificationViewModel: GigVerificationViewModel by viewModels()
     private val sendSmsViewModel: SendSmsViewModel by viewModels()
 
     private lateinit var userId: String
@@ -147,10 +147,7 @@ class UserDetailsFilledDialogFragment : DialogFragment() {
         gigerVerificationViewModel.gigerVerificationStatus
             .observe(viewLifecycleOwner, Observer {
 
-                if (it.aadharCardDataModel?.aadharCardNo != null ||
-                    it.drivingLicenseDataModel?.frontImage != null ||
-                    it.panCardDetails?.panCardImagePath != null
-                ) {
+                if (it.requiredDocsUploaded) {
                     sendSmsToEnrolledUser()
                 } else {
                     showAtLeastOneDocumentNecessaryCard()

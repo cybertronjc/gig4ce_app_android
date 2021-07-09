@@ -87,7 +87,10 @@ data class ProfileData(
 
     @get:PropertyName("lastLoginDetails")
     @set:PropertyName("lastLoginDetails")
-    var lastLoginDetails: LastLoginDetails? = null
+    var lastLoginDetails: LastLoginDetails? = null,
+    @get:PropertyName("isUserRegistered")
+    @set:PropertyName("isUserRegistered")
+    var isUserRegistered : Boolean = false
 ) {
 
     @Exclude

@@ -261,6 +261,8 @@ class ChatNotificationHandler constructor(
             val url = URL(src)
             val connection: HttpURLConnection = url.openConnection() as HttpURLConnection
             connection.doInput = true
+            connection.connectTimeout = 120 //connect timeout 2 minutes
+            connection.readTimeout = 120    // read timeout 2 minutes
             connection.connect()
             val input: InputStream = connection.getInputStream()
             BitmapFactory.decodeStream(input)

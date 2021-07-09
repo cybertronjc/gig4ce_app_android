@@ -1,8 +1,7 @@
 package com.gigforce.common_ui.viewdatamodels
 
+import com.gigforce.core.datamodels.CommonViewTypes
 import android.os.Bundle
-import com.gigforce.common_ui.core.CommonViewTypes
-import com.gigforce.core.NavArgs
 import com.gigforce.core.SimpleDVM
 
 

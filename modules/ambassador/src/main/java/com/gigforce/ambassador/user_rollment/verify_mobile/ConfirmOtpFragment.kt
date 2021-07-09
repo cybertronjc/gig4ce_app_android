@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import com.gigforce.ambassador.EnrollmentConstants
 import com.gigforce.ambassador.R
 import com.gigforce.common_ui.ext.showToast
@@ -33,7 +34,7 @@ class ConfirmOtpFragment : Fragment(), LocationUpdates.LocationUpdateCallbacks {
     private val locationUpdates: LocationUpdates by lazy {
         LocationUpdates()
     }
-    private val viewModel: VerifyUserMobileViewModel by activityViewModels()
+    private val viewModel: VerifyUserMobileViewModel by viewModels()
 
     private lateinit var verificationToken: String
     private lateinit var mobileNo: String

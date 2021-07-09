@@ -98,6 +98,8 @@ class ContactsFragment : DialogFragment(),
         ContactsRecyclerAdapter(requireContext(), Glide.with(requireContext()), this)
     }
 
+    private var sharedFilesBundle : Bundle? = null
+
     private val onBackPressCallback = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() {
 
@@ -189,10 +191,12 @@ class ContactsFragment : DialogFragment(),
     private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {
 
         arguments?.let {
+            sharedFilesBundle = it.getBundle(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE)
             shouldReturnToPreviousScreen = it.getBoolean(INTENT_EXTRA_RETURN_SELECTED_RESULTS)
         }
 
         savedInstanceState?.let {
+            sharedFilesBundle = it.getBundle(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE)
             shouldReturnToPreviousScreen = it.getBoolean(INTENT_EXTRA_RETURN_SELECTED_RESULTS)
         }
     }
@@ -200,6 +204,7 @@ class ContactsFragment : DialogFragment(),
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean(INTENT_EXTRA_RETURN_SELECTED_RESULTS, shouldReturnToPreviousScreen)
+        outState.putBundle(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE, sharedFilesBundle)
     }
 
     private fun startLoaderForGettingContacts() {
@@ -516,7 +521,8 @@ class ContactsFragment : DialogFragment(),
                     headerId = contact.headerId ?: "",
                     otherUserName = contact.name ?: "",
                     otherUserProfilePicture = contact.getUserProfileImageUrlOrPath() ?: "",
-                    chatType = ChatConstants.CHAT_TYPE_USER
+                    chatType = ChatConstants.CHAT_TYPE_USER,
+                    sharedFileBundle = sharedFilesBundle
             )
         }
     }

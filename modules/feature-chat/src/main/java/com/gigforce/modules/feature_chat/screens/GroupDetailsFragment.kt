@@ -22,16 +22,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.ViewFullScreenImageDialogFragment
 import com.gigforce.common_ui.ViewFullScreenVideoDialogFragment
+import com.gigforce.common_ui.chat.ChatConstants
+import com.gigforce.common_ui.chat.models.ChatGroup
+import com.gigforce.common_ui.chat.models.ContactModel
+import com.gigforce.common_ui.chat.models.GroupMedia
+import com.gigforce.common_ui.ext.showToast
+import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.onTextChanged
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.Lse
 import com.gigforce.modules.feature_chat.*
-import com.gigforce.common_ui.chat.ChatConstants
-import com.gigforce.common_ui.chat.models.ChatGroup
-import com.gigforce.common_ui.chat.models.ContactModel
-import com.gigforce.common_ui.chat.models.GroupMedia
 import com.gigforce.modules.feature_chat.screens.adapters.GroupMediaRecyclerAdapter
 import com.gigforce.modules.feature_chat.screens.adapters.GroupMembersRecyclerAdapter
 import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel
@@ -208,6 +210,11 @@ class GroupDetailsFragment : Fragment(),
                     }
                 })
 
+        if (groupId.isEmpty()) {
+            CrashlyticsLogger.e(TAG, "getting args from arguments", Exception("$groupId <-- String passed as groupId"))
+            throw IllegalArgumentException("$groupId <-- String passed as groupId")
+        }
+
         viewModel.setGroupId(groupId)
         viewModel.startWatchingGroupDetails()
     }
@@ -219,6 +226,15 @@ class GroupDetailsFragment : Fragment(),
 
         media_count_tv.text = content.groupMedia.size.toString()
         gigers_count_tv.text = content.groupMembers.size.toString()
+
+        group_details_divider_0.isVisible = viewModel.isUserGroupAdmin()
+        group_write_controls_layout.isVisible = viewModel.isUserGroupAdmin()
+
+        if (content.onlyAdminCanPostInGroup && only_admins_can_post_switch.isChecked.not()) {
+            only_admins_can_post_switch.isChecked = true
+        } else if (content.onlyAdminCanPostInGroup.not() && only_admins_can_post_switch.isChecked) {
+            only_admins_can_post_switch.isChecked = false
+        }
 
         if (content.groupMedia.isEmpty()) {
             media_recyclerview.gone()
@@ -287,15 +303,13 @@ class GroupDetailsFragment : Fragment(),
 
     override fun onResume() {
         super.onResume()
-        StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(
+        StatusBarUtil.setColorNoTranslucent(
+                requireActivity(), ResourcesCompat.getColor(
                 resources,
                 android.R.color.white,
                 null
-        ))
-    }
-
-    private fun showDownloadingDialog() {
-//        UtilMethods.showLoading(requireContext())
+        )
+        )
     }
 
     private fun openDocument(file: File) {
@@ -304,7 +318,7 @@ class GroupDetailsFragment : Fragment(),
             setDataAndType(
                     FileProvider.getUriForFile(
                             requireContext(),
-                            "com.gigforce.app.provider",
+                            "${requireContext().packageName}.provider",
                             file
                     ), "application/pdf"
             )
@@ -378,13 +392,27 @@ class GroupDetailsFragment : Fragment(),
 
                     }.show()
         }
+
+
+
+        only_admins_can_post_switch.setOnCheckedChangeListener { _, isChecked ->
+            val currentGroup = viewModel.getCurrentChatGroupInfo()
+                    ?: return@setOnCheckedChangeListener
+            if (isChecked && currentGroup.onlyAdminCanPostInGroup.not()) {
+                viewModel.limitPostingToAdminsInGroup()
+                showToast("Post limited to admins")
+            } else if (!isChecked && currentGroup.onlyAdminCanPostInGroup) {
+                viewModel.allowEveryoneToPostInThisGroup()
+                showToast("Everyone can post in group now")
+            }
+        }
     }
+
 
     override fun onMenuItemClick(item: MenuItem?): Boolean = when (item?.itemId) {
         R.id.action_message_user -> {
 
             contactLongPressed?.let {
-
                 val otherUserName = if (it.name.isNullOrBlank()) {
                     it.mobile
                 } else
@@ -395,7 +423,8 @@ class GroupDetailsFragment : Fragment(),
                         otherUserId = it.uid!!,
                         headerId = "",
                         otherUserName = otherUserName,
-                        otherUserProfilePicture = it.imageUrl ?: ""
+                        otherUserProfilePicture = it.imageUrl ?: "",
+                        sharedFileBundle = null
                 )
             }
             contactLongPressed = null
@@ -406,6 +435,18 @@ class GroupDetailsFragment : Fragment(),
                 viewModel.removeUserFromGroup(it.uid!!)
             }
             contactLongPressed = null
+            true
+        }
+        R.id.action_make_admin -> {
+            contactLongPressed?.let {
+
+                if (it.isUserGroupManager)
+                    viewModel.dismissAsGroupAdmin(it.uid!!)
+                else
+                    viewModel.makeUserGroupAdmin(it.uid!!)
+
+                contactLongPressed = null
+            }
             true
         }
         else -> {
@@ -449,10 +490,40 @@ class GroupDetailsFragment : Fragment(),
 
     private var contactLongPressed: ContactModel? = null
     override fun onGroupMemberItemLongPressed(view: View, position: Int, contact: ContactModel) {
+        if (viewModel.isContactModelOfCurrentUser(contact))
+            return
+
         contactLongPressed = contact
         val popUp = PopupMenu(requireContext(), view)
-        popUp.setOnMenuItemClickListener(this)
         popUp.inflate(R.menu.menu_group_members_long_click)
+
+        if (viewModel.isUserGroupAdmin()) {
+            popUp.menu.findItem(R.id.action_remove_user).also { item ->
+                item.isVisible = true
+                item.title = "Remove ${contact.name}"
+            }
+        } else {
+            popUp.menu.findItem(R.id.action_remove_user).also {
+                it.isVisible = false
+            }
+        }
+
+        if (viewModel.isUserGroupAdmin()) {
+            popUp.menu.findItem(R.id.action_make_admin).also {
+                it.isVisible = true
+                it.title = if (contact.isUserGroupManager)
+                    "Dismiss as admin"
+                else
+                    "Make group admin"
+
+            }
+        } else {
+            popUp.menu.findItem(R.id.action_make_admin).also {
+                it.isVisible = false
+            }
+        }
+
+        popUp.setOnMenuItemClickListener(this)
         popUp.show()
     }
 
@@ -463,14 +534,13 @@ class GroupDetailsFragment : Fragment(),
         } else
             contact.name!!
 
-
-
         chatNavigation.navigateToChatPage(
                 chatType = ChatConstants.CHAT_TYPE_USER,
                 otherUserId = contact.uid!!,
                 headerId = "",
                 otherUserName = otherUserName,
-                otherUserProfilePicture = contact.getUserProfileImageUrlOrPath() ?: ""
+                otherUserProfilePicture = contact.getUserProfileImageUrlOrPath() ?: "",
+                sharedFileBundle = null
         )
 
     }

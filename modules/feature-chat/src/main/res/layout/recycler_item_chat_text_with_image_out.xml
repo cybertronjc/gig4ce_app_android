@@ -39,19 +39,18 @@
                 tools:text="Himanshu" />
 
             <FrameLayout
-                android:id="@+id/content_frame"
-                android:layout_width="196dp"
-                android:layout_height="196dp"
+                android:id="@+id/image_container_layout"
+                android:layout_width="230dp"
+                android:layout_height="230dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/iv_image"
-                    android:layout_width="196dp"
-                    android:layout_height="196dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:scaleType="fitXY"
-                    android:src="@drawable/bg_group_wallpaper"
                     app:shapeAppearanceOverlay="@style/chatImageView" />
 
                 <com.google.android.material.imageview.ShapeableImageView
@@ -78,6 +77,20 @@
 
             </FrameLayout>
 
+            <TextView
+                android:id="@+id/messageTV"
+                android:layout_width="220dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginStart="4dp"
+                android:fontFamily="@font/lato"
+                android:letterSpacing="0"
+                android:textColor="@android:color/white"
+                android:textColorLink="@android:color/white"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/image_container_layout"
+                tools:text="How ar mydwedewewwrewrwerewrewr brother" />
 
             <ImageView
                 android:id="@+id/tv_received_status"
@@ -91,7 +104,7 @@
                 android:textColor="@color/dust_grey"
                 android:src="@drawable/ic_msg_sent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/content_frame"
+                app:layout_constraintTop_toBottomOf="@id/messageTV"
                 app:layout_constraintBottom_toBottomOf="parent"
                 />
 
@@ -106,7 +119,7 @@
                 android:textColor="@android:color/white"
                 android:textSize="8sp"
                 app:layout_constraintEnd_toStartOf="@+id/tv_received_status"
-                app:layout_constraintTop_toBottomOf="@id/content_frame"
+                app:layout_constraintTop_toBottomOf="@id/messageTV"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
 

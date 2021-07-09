@@ -249,6 +249,7 @@ class PreferencesFragment : Fragment() {
             )
 
             FirebaseAuth.getInstance().signOut()
+            eventTracker.logoutUserFromAnalytics()
             sharedPreAndCommonUtilInterface.removeIntroComplete()
             navigation.popBackStack("preferences/settingFragment")//popFragmentFromStack(R.id.settingFragment)
             dialog.dismiss()

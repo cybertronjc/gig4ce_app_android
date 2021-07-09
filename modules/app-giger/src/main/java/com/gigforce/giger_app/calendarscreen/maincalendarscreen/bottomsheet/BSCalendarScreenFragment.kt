@@ -13,6 +13,7 @@ import android.text.Html
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -38,6 +39,9 @@ import com.gigforce.common_ui.viewdatamodels.client_activation.JobProfile
 import com.gigforce.common_ui.viewmodels.LearningViewModel
 import com.gigforce.common_ui.viewmodels.gig.GigViewModel
 import com.gigforce.core.AppConstants
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
+import com.gigforce.core.analytics.ClientActivationEvents
 import com.gigforce.core.base.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
@@ -77,6 +81,9 @@ class BSCalendarScreenFragment : Fragment() {
 
     @Inject
     lateinit var navigation: INavigation
+
+    @Inject
+    lateinit var eventTracker: IEventTracker
 
     @Inject
     lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
@@ -375,7 +382,7 @@ class BSCalendarScreenFragment : Fragment() {
         activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
         width = displayMetrics.widthPixels
         initializeVerificationAlert()
-        initializeFeaturesBottomSheet()
+
 //        initializeAssessmentBottomSheet()
         application_version.text =
             getString(R.string.version) + " " + sharedPreAndCommonUtilInterface.getCurrentVersion()
@@ -383,6 +390,8 @@ class BSCalendarScreenFragment : Fragment() {
         initializeExploreByRole()
 //        initializeExploreByIndustry()
         initBottomMenuClicks()
+
+        viewModel.isUserTlCheck.observe(viewLifecycleOwner, {  initializeFeaturesBottomSheet(it)})
     }
 
     private fun initializeVerificationAlert() {
@@ -880,7 +889,9 @@ class BSCalendarScreenFragment : Fragment() {
         return drawable
     }
 
-    private fun initializeFeaturesBottomSheet() {
+    private fun initializeFeaturesBottomSheet(
+            isUserTl : Boolean
+    ) {
         var datalist: ArrayList<FeatureModel> = ArrayList<FeatureModel>()
         datalist.add(FeatureModel("My Gig", R.drawable.mygig, navigationPath = "gig/mygig"))
         datalist.add(
@@ -913,6 +924,24 @@ class BSCalendarScreenFragment : Fragment() {
                 navigationPath = "verification/main"
             )
         )
+        datalist.add(
+            FeatureModel(
+                "Invoices",
+                R.drawable.wallet,
+                navigationPath = "wallet/invoicesList"
+            )
+        )
+
+        if(isUserTl) {
+
+            datalist.add(
+                    FeatureModel(
+                            "Gigers Attendance",
+                            R.drawable.ic_group_black,
+                            navigationPath = "gig/gigerAttendanceUnderManagerFragment"
+                    )
+            )
+        }
 
         val itemWidth = ((width / 7) * 1.6).toInt()
 //        val recyclerGenericAdapter: RecyclerGenericAdapter<FeatureModel> =
@@ -1345,7 +1374,36 @@ class BSCalendarScreenFragment : Fragment() {
             exploreGigsAdapter?.setOnCardSelectedListener(object :
                 ExploreGigsAdapter.OnCardSelectedListener {
                 override fun onCardSelected(any: Any) {
-                    var id = (any as JobProfile).id
+                    var data = (any as JobProfile)
+//                    Log.d("cardId", id)
+//        navigate(
+//                R.id.fragment_client_activation,
+//                bundleOf(StringConstants.JOB_PROFILE_ID.value to id)
+//        )
+                    val id = data?.id ?: ""
+                    val title = data?.cardTitle ?: ""
+                    Log.d("title", data.title)
+
+                    eventTracker.pushEvent(
+                        TrackingEventArgs(
+                        eventName = data.title + "_" + ClientActivationEvents.EVENT_USER_CLICKED,
+                        props = mapOf(
+                            "id" to id,
+                            "title" to title,
+                            "screen_source" to "Calendar Bottom Sheet"
+                        )
+                    )
+                    )
+                    eventTracker.pushEvent(
+                        TrackingEventArgs(
+                        eventName = ClientActivationEvents.EVENT_USER_CLICKED,
+                        props = mapOf(
+                            "id" to id,
+                            "title" to title,
+                            "screen_source" to "Calendar Bottom Sheet"
+                        )
+                    )
+                    )
 //                    Log.d("cardId", id)
 //        navigate(
 //                R.id.fragment_client_activation,
@@ -1358,8 +1416,6 @@ class BSCalendarScreenFragment : Fragment() {
                 }
 
             })
-
-
         }
     }
 }

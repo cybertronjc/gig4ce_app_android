@@ -1,7 +1,14 @@
 package com.gigforce.common_ui.chat.models
 
+import android.os.Bundle
+import com.gigforce.common_ui.chat.ChatHeadersViewModel
 import com.gigforce.core.SimpleDVM
 //import com.gigforce.modules.feature_chat.core.ViewTypes
+
+data class ChatListItemDataWrapper(
+        val chatItem : ChatListItemDataObject,
+        val viewModel  : ChatHeadersViewModel
+): SimpleDVM(ViewTypes.CHAT_HEADER)
 
 data class ChatListItemDataObject(
     val chatType:String,
@@ -24,9 +31,9 @@ data class ChatListItemDataObject(
     val lastMessage: String,
     val lastMessageType: String,
     val lastMsgFlowType: String,
+    val lastMessageDeleted : Boolean,
 
     val senderName : String,
-
     val status : Int
 
-): SimpleDVM(ViewTypes.CHAT_HEADER) {}
+)

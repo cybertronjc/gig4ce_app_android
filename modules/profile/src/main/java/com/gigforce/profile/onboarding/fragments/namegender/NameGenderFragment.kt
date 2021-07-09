@@ -189,8 +189,9 @@ class NameGenderFragment : Fragment(), OnboardingFragmentNew.FragmentSetLastStat
             )
         )
         eventTracker.setUserProperty(props)
-        eventTracker.setProfileProperty(ProfilePropArgs("name", username.text.toString()))
+        eventTracker.setProfileProperty(ProfilePropArgs("\$name", username.text.toString()))
         eventTracker.setProfileProperty(ProfilePropArgs("Gender", gender))
+        eventTracker.setUserName(username.text.toString())
 
         return false
     }

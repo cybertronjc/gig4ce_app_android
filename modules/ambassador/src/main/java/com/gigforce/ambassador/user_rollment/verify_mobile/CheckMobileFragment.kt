@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import com.gigforce.ambassador.R
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.utils.UtilMethods
@@ -21,7 +22,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class CheckMobileFragment : Fragment(), UserAlreadyExistDialogFragmentActionListener {
 
-    private val viewModel: VerifyUserMobileViewModel by activityViewModels()
+    private val viewModel: VerifyUserMobileViewModel by viewModels()
 
     @Inject
     lateinit var navigation: INavigation

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
+import com.gigforce.common_ui.IUserInfo
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.UserInfoImp
 import com.gigforce.common_ui.viewdatamodels.AppProfilePicDVM
@@ -24,7 +25,7 @@ class AppProfilePicComponent(context: Context, attrs: AttributeSet?) : FrameLayo
     IViewHolder,View.OnClickListener {
     private val profileImg: ImageView
     @Inject
-    lateinit var userinfo: UserInfoImp
+    lateinit var userinfo: IUserInfo
     @Inject lateinit var navigation : INavigation
     init {
         this.layoutParams =
@@ -46,11 +47,13 @@ class AppProfilePicComponent(context: Context, attrs: AttributeSet?) : FrameLayo
     }
 
     private fun setImageToProfilePic(image: String) {
-        val profilePicRef: StorageReference =
-            FirebaseStorage.getInstance().reference.child("profile_pics").child(image)
-        GlideApp.with(context)
-            .load(profilePicRef)
-            .into(profileImg)
+        if(image.isNotBlank()) {
+            val profilePicRef: StorageReference =
+                FirebaseStorage.getInstance().reference.child("profile_pics").child(image)
+            GlideApp.with(context)
+                .load(profilePicRef)
+                .into(profileImg)
+        }
     }
 
     override fun onClick(v: View?) {

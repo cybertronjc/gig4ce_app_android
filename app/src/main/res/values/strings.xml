@@ -921,6 +921,8 @@
     <string name="plus_see_less">+ see less</string>
     <string name="new_version_available">New Version Available</string>
     <string name="new_version_available_detail">Please, update app to new version to continue reposting</string>
+    <string name="restart_update">Update is ready to install</string>
+    <string name="restart">Restart</string>
     <string name="you_helped">You helped</string>
     <string name="and">and</string>
     <string name="more_comma">more,</string>
@@ -1415,6 +1417,7 @@
     <string name="select_skills_you_have">Select Skills you have</string>
     <string name="search_skills">Search Skills</string>
     <string name="add_about_me">Add About Me</string>
+    <string name="terms_text">I accept TnC. click here to view policy</string>
 
 
     <string-array name="lang_array">

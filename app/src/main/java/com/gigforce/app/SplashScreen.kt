@@ -124,6 +124,7 @@ class SplashScreen : AppCompatActivity() {
         super.onStart()
         Branch.sessionBuilder(this).withCallback(branchReferralInitListener)
             .withData(if (intent != null) intent.data else null).init()
+
     }
 
     override fun onNewIntent(intent: Intent?) {

@@ -18,7 +18,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class VerifyUserMobileViewModel @Inject constructor(
-
     private val buildConfig: IBuildConfigVM
 ) : ViewModel() {
     private val profileFirebaseRepository: ProfileFirebaseRepository =
@@ -64,42 +63,63 @@ class VerifyUserMobileViewModel @Inject constructor(
         try {
             _createProfile.value = Lce.loading()
 
-            val verifyOtpResponse = userEnrollmentRepository.verifyOtp(token, otp)
-            if (mode == EnrollmentConstants.MODE_EDIT) {
-                if (verifyOtpResponse.isVerified) {
-                    _createProfile.value = Lce.content(
-                        CreateUserResponse(
+            var ambassadorMasterOtp = ""
+            ambassadorMasterOtp = firebaseRemoteConfig.getString("Ambassador_master_otp")
+
+            if (otp == ambassadorMasterOtp && mode == EnrollmentConstants.MODE_EDIT) {
+                //
+                _createProfile.value = Lce.content(CreateUserResponse(
+                    phoneNumber = mobile,
+                    uid = null,
+                    error = null
+                ))
+
+                if (userId != null) {
+                    userEnrollmentRepository.addEditLocationInLocationLogs(
+                        userId = userId,
+                        latitude = latitude,
+                        longitude = longitude,
+                        fullAddress = fullAddress,
+                        editedUsingMasterOtp = true
+                    )
+                }
+
+            } else {
+                val verifyOtpResponse = userEnrollmentRepository.verifyOtp(token, otp)
+                if (mode == EnrollmentConstants.MODE_EDIT) {
+                    if (verifyOtpResponse.isVerified) {
+                        _createProfile.value = Lce.content(CreateUserResponse(
                             phoneNumber = mobile,
                             uid = null,
                             error = null
-                        )
-                    )
+                        ))
 
-                    if (userId != null) {
-                        userEnrollmentRepository.addEditLocationInLocationLogs(
-                            userId = userId,
+                        if (userId != null) {
+                            userEnrollmentRepository.addEditLocationInLocationLogs(
+                                userId = userId,
+                                latitude = latitude,
+                                longitude = longitude,
+                                fullAddress = fullAddress
+                            )
+                        }
+                    } else {
+                        _createProfile.value = Lce.error("Otp does not match")
+                    }
+                } else {
+                    if (verifyOtpResponse.isVerified) {
+                        val profile = profileFirebaseRepository.getProfileData()
+                        val response = userEnrollmentRepository.createUser(
+                            createUserUrl = buildConfig.getCreateUserUrl(),
+                            mobile = mobile,
+                            enrolledByName = profile.name,
                             latitude = latitude,
                             longitude = longitude,
                             fullAddress = fullAddress
                         )
+                        _createProfile.value = Lce.content(response)
+                    } else {
+                        _createProfile.value = Lce.error("Otp does not match")
                     }
-                } else {
-                    _createProfile.value = Lce.error("Otp does not match")
-                }
-            } else {
-                if (verifyOtpResponse.isVerified) {
-                    val profile = profileFirebaseRepository.getProfileData()
-                    val response = userEnrollmentRepository.createUser(
-                        createUserUrl = buildConfig.getCreateUserUrl(),
-                        mobile = mobile,
-                        enrolledByName = profile.name,
-                        latitude = latitude,
-                        longitude = longitude,
-                        fullAddress = fullAddress
-                    )
-                    _createProfile.value = Lce.content(response)
-                } else {
-                    _createProfile.value = Lce.error("Otp does not match")
                 }
             }
 
