@@ -12,7 +12,7 @@
         app:backgroundType="PinkBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:titleText="Aadhaar Card" />
+        app:titleText="Aadhar Card" />
 
     <TextView
         android:id="@+id/textView"

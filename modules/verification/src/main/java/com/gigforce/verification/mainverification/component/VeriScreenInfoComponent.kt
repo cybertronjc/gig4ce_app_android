@@ -57,7 +57,7 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
             val docinfostr =
                 styledAttributeSet.getString(R.styleable.VeriScreenInfoComponent_docinfotext) ?: ""
             val querytextstr =
-                styledAttributeSet.getString(R.styleable.VeriScreenInfoComponent_querytext) ?: ""
+                styledAttributeSet.getString(R.styleable.VeriScreenInfoComponent_querytext) ?: "Why we need this"
             val missingdoctext =
                 styledAttributeSet.getString(R.styleable.VeriScreenInfoComponent_missingdoctext) ?: ""
             setUpperCaption(uppercaptionstr)
@@ -93,6 +93,10 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
 
     private fun setUpperCaption(uppercaptionstr: String) {
         uppercaption.text = uppercaptionstr
+    }
+
+    fun showUploadHere(){
+        uploadHereText.visible()
     }
 
     fun disableImageClick(){

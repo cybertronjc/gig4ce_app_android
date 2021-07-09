@@ -1,9 +1,11 @@
 package com.gigforce.verification.mainverification.drivinglicense
 
+import android.Manifest
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.ContentResolver
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
@@ -14,6 +16,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isGone
 import com.yalantis.ucrop.UCrop
@@ -39,7 +42,7 @@ import com.gigforce.verification.gigerVerfication.drivingLicense.DrivingLicenseS
 import com.gigforce.verification.gigerVerfication.panCard.AddPanCardInfoFragment
 import com.gigforce.verification.mainverification.Data
 import com.gigforce.verification.mainverification.VerificationClickOrSelectImageBottomSheet
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.gigforce.verification.mainverification.aadhaarcard.AadhaarCardImageUploadFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.aadhaar_card_image_upload_fragment.*
 import kotlinx.android.synthetic.main.driving_license_fragment.*
@@ -67,8 +70,8 @@ class DrivingLicenseFragment : Fragment(),
         const val INTENT_EXTRA_CLICKED_IMAGE_BACK = "back_image"
         const val INTENT_EXTRA_STATE = "state"
         const val INTENT_EXTRA_DL_NO = "dl_no"
-        private const val REQUEST_CAPTURE_IMAGE = 1012
-        private const val REQUEST_PICK_IMAGE = 1013
+        private const val REQUEST_CAPTURE_IMAGE = 1011
+        private const val REQUEST_PICK_IMAGE = 1012
 
         private const val PREFIX: String = "IMG"
         private const val EXTENSION: String = ".jpg"
@@ -101,7 +104,7 @@ class DrivingLicenseFragment : Fragment(),
     private fun listeners() {
         viewBinding.toplayoutblock.setPrimaryClick(View.OnClickListener {
             //call for bottom sheet
-            VerificationClickOrSelectImageBottomSheet.launch(parentFragmentManager, "Upload Driving License", this)
+            checkForPermissionElseShowCameraGalleryBottomSheet()
             //if (viewBinding.toplayoutblock.viewPager2.currentItem == 0) openCameraAndGalleryOptionForFrontSideImage() else openCameraAndGalleryOptionForBackSideImage()
         })
 
@@ -224,6 +227,37 @@ class DrivingLicenseFragment : Fragment(),
         datePickerDialog
     }
 
+    private fun checkForPermissionElseShowCameraGalleryBottomSheet() {
+        if (hasStoragePermissions())
+            VerificationClickOrSelectImageBottomSheet.launch(parentFragmentManager, "Upload Driving License", this)
+        else
+            requestStoragePermission()
+    }
+    private fun requestStoragePermission() {
+
+        requestPermissions(
+            arrayOf(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.CAMERA
+            ),
+            REQUEST_STORAGE_PERMISSION
+        )
+    }
+
+    private fun hasStoragePermissions(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.CAMERA
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
     private val expiryDatePicker: DatePickerDialog by lazy {
         val cal = Calendar.getInstance()
         val datePickerDialog = DatePickerDialog(
@@ -266,10 +300,33 @@ class DrivingLicenseFragment : Fragment(),
         datePickerDialog
     }
 
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>, grantResults: IntArray
+    ) {
+        when (requestCode) {
+            REQUEST_STORAGE_PERMISSION -> {
+
+                var allPermsGranted = true
+                for (i in grantResults.indices) {
+                    if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                        allPermsGranted = false
+                        break
+                    }
+                }
+
+                if (allPermsGranted)
+                    VerificationClickOrSelectImageBottomSheet.launch(parentFragmentManager, "Upload Driving License", this)
+                else {
+                    showToast("Please grant storage permission")
+                }
+            }
+        }
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-//            if (resultCode == Activity.RESULT_OK) {
 
                 if (requestCode == REQUEST_CAPTURE_IMAGE || requestCode == REQUEST_PICK_IMAGE) {
                     val outputFileUri = ImagePicker.getImageFromResult(requireContext(), resultCode, data)
@@ -295,8 +352,7 @@ class DrivingLicenseFragment : Fragment(),
                         bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
 
                     }
-                //}
-
+                }
 
 //                if (confirmDLDataCB_client_act.isChecked
 //                    && dlFrontImagePath != null
@@ -309,7 +365,7 @@ class DrivingLicenseFragment : Fragment(),
 //                    dlSubmitSliderBtn_client_act.visible()
 //                    confirmDLDataCB_client_act.visible()
 //                }
-            }
+
 
     }
 
