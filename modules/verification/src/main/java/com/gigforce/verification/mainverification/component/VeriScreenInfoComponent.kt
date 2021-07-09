@@ -100,7 +100,7 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
     }
 
     fun disableImageClick(){
-
+        adapter = ViewPagerAdapter { null }
     }
 
     fun setImageViewPager(list: List<KYCImageModel>){
