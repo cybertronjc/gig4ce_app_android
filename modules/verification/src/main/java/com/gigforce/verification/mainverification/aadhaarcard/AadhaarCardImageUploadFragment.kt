@@ -1,9 +1,11 @@
 package com.gigforce.verification.mainverification.aadhaarcard
 
+import android.Manifest
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.ContentResolver
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
 import androidx.lifecycle.ViewModelProvider
@@ -14,6 +16,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.get
 import androidx.core.view.isGone
@@ -65,7 +68,7 @@ class AadhaarCardImageUploadFragment : Fragment(),
         private const val PREFIX: String = "IMG"
         private const val EXTENSION: String = ".jpg"
 
-        private const val REQUEST_STORAGE_PERMISSION = 102
+        private const val REQUEST_STORAGE_PERMISSION = 103
     }
 
     @Inject
@@ -97,7 +100,7 @@ class AadhaarCardImageUploadFragment : Fragment(),
     private fun listeners() {
         viewBinding.toplayoutblock.setPrimaryClick(View.OnClickListener {
             //call for bottom sheet
-            VerificationClickOrSelectImageBottomSheet.launch(parentFragmentManager, "Upload Aadhar Card", this)
+            checkForPermissionElseShowCameraGalleryBottomSheet()
             //if (viewBinding.toplayoutblock.viewPager2.currentItem == 0) openCameraAndGalleryOptionForFrontSideImage() else openCameraAndGalleryOptionForBackSideImage()
         })
 
@@ -190,6 +193,36 @@ class AadhaarCardImageUploadFragment : Fragment(),
         datePickerDialog
     }
 
+    private fun checkForPermissionElseShowCameraGalleryBottomSheet() {
+        if (hasStoragePermissions())
+            VerificationClickOrSelectImageBottomSheet.launch(parentFragmentManager, "Upload Aadhar Card", this)
+        else
+            requestStoragePermission()
+    }
+    private fun requestStoragePermission() {
+
+        requestPermissions(
+            arrayOf(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.CAMERA
+            ),
+            REQUEST_STORAGE_PERMISSION
+        )
+    }
+
+    private fun hasStoragePermissions(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.CAMERA
+        ) == PackageManager.PERMISSION_GRANTED
+    }
     private fun openCameraAndGalleryOptionForFrontSideImage() {
         currentlyClickingImageOfSide = AadharCardSides.FRONT_SIDE
 
@@ -227,11 +260,33 @@ class AadhaarCardImageUploadFragment : Fragment(),
 //        startActivityForResult(photoCropIntent, REQUEST_CODE_UPLOAD_AADHAR_IMAGE)
     }
 
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>, grantResults: IntArray
+    ) {
+        when (requestCode) {
+            REQUEST_STORAGE_PERMISSION -> {
+
+                var allPermsGranted = true
+                for (i in grantResults.indices) {
+                    if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                        allPermsGranted = false
+                        break
+                    }
+                }
+
+                if (allPermsGranted)
+                    VerificationClickOrSelectImageBottomSheet.launch(parentFragmentManager, "Upload Aadhar Card", this)
+                else {
+                    showToast("Please grant storage permission")
+                }
+            }
+        }
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-
-            if (resultCode == Activity.RESULT_OK) {
 
                 if (requestCode == REQUEST_CAPTURE_IMAGE || requestCode == REQUEST_PICK_IMAGE) {
                     val outputFileUri = ImagePicker.getImageFromResult(requireContext(), resultCode, data)
@@ -274,7 +329,7 @@ class AadhaarCardImageUploadFragment : Fragment(),
 //                    aadharDataCorrectCB.visible()
 //                }
 
-            }
+            
 
     }
 //    private fun showAadharImageAndInfoLayout() {
