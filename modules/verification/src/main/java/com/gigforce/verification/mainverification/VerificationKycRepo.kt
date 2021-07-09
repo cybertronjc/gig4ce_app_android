@@ -5,6 +5,7 @@ import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
 import com.gigforce.core.datamodels.client_activation.States
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.retrofit.RetrofitFactory
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
@@ -19,7 +20,7 @@ class VerificationKycRepo(private val iBuildConfigVM: IBuildConfigVM) :
     suspend fun getVerificationOcrResult(type: String, subType: String, image: MultipartBody.Part): KycOcrResultModel{
         val jsonObject = JsonObject()
         jsonObject.addProperty("type", type)
-        jsonObject.addProperty("uId", getUID())
+        jsonObject.addProperty("uId", FirebaseAuth.getInstance().currentUser?.uid)
         jsonObject.addProperty("subType", subType)
         var kycOcrStatus = kycService.getKycOcrResult(iBuildConfigVM.getVerificationKycOcrResult(),jsonObject.toString(), image)
         if(kycOcrStatus.isSuccessful){

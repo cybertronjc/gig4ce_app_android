@@ -98,6 +98,12 @@ class PanCardFragment() : Fragment(),
     private fun initViewModel() {
         viewModel.kycOcrResult.observe(viewLifecycleOwner, Observer {
             it.let {
+                if(it.status) {
+                    viewBinding.panTil.editText?.setText(it.panNumber)
+                    viewBinding.nameTil.editText?.setText(it.name)
+                    viewBinding.dateOfBirth.text = it.dateOfBirth
+
+                }else
                 showToast("Ocr status "+  it.status)
             }
         })
@@ -160,7 +166,7 @@ class PanCardFragment() : Fragment(),
             image =
                 MultipartBody.Part.createFormData("imagenPerfil", file.getName(), requestFile)
         }
-        image?.let { viewModel.getKycOcrResult("pan", "", it) }
+        image?.let { viewModel.getKycOcrResult("pan", "dsd", it) }
     }
 
     private val dateOfBirthPicker: DatePickerDialog by lazy {

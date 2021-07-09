@@ -125,7 +125,12 @@ class AadhaarCardImageUploadFragment : Fragment(),
     private fun observer() {
         viewModel.kycOcrResult.observe(viewLifecycleOwner, Observer {
             it.let {
-                showToast("Ocr status "+  it.status)
+                if(it.status) {
+                    viewBinding.aadharcardTil.editText?.setText(it.aadhaarNumber)
+                    viewBinding.nameTilAadhar.editText?.setText(it.name)
+                    viewBinding.dateOfBirthAadhar?.setText(it.dateOfBirth)
+                }else
+                showToast("Ocr status "+  it.message)
             }
         })
 
@@ -166,7 +171,7 @@ class AadhaarCardImageUploadFragment : Fragment(),
             image =
                 MultipartBody.Part.createFormData("imagenPerfil", file.getName(), requestFile)
         }
-        image?.let { viewModel.getKycOcrResult("aadhar", "", it) }
+        image?.let { viewModel.getKycOcrResult("aadhar", "kjk", it) }
     }
 
     private val dateOfBirthPicker: DatePickerDialog by lazy {
@@ -179,7 +184,7 @@ class AadhaarCardImageUploadFragment : Fragment(),
                 newCal.set(Calendar.MONTH, month)
                 newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
 
-                dateOfBirthAadhar.setText(DateHelper.getDateInDDMMYYYY(newCal.time))
+                viewBinding.dateOfBirthAadhar.setText(DateHelper.getDateInDDMMYYYY(newCal.time))
             },
             1990,
             cal.get(Calendar.MONTH),
@@ -342,7 +347,7 @@ class AadhaarCardImageUploadFragment : Fragment(),
         var list = listOf(
             Data("name", name_til_aadhar.editText?.text.toString()),
             Data("no", aadharcard_til.editText?.text.toString()),
-            Data("yearofbirth", dateOfBirthAadhar.text.toString())
+            Data("yearofbirth", viewBinding.dateOfBirthAadhar.text.toString())
         )
         viewModel.getKycVerificationResult("aadhar", list)
     }

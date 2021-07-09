@@ -6,7 +6,6 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
-import android.provider.ContactsContract.CommonDataKinds.StructuredName.PREFIX
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -22,10 +21,8 @@ import com.gigforce.core.navigation.INavigation
 import com.gigforce.verification.R
 import com.gigforce.verification.databinding.BankAccountFragmentBinding
 import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
-import com.gigforce.verification.gigerVerfication.bankDetails.AddBankDetailsInfoFragment
 import com.gigforce.verification.mainverification.Data
 import com.gigforce.verification.mainverification.VerificationClickOrSelectImageBottomSheet
-import com.gigforce.verification.mainverification.pancard.PanCardFragment
 import com.yalantis.ucrop.UCrop
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.bank_account_fragment.*
@@ -84,7 +81,13 @@ class BankAccountFragment : Fragment(),
     private fun observer() {
         viewModel.kycOcrResult.observe(viewLifecycleOwner, Observer {
             it.let {
-                showToast("Ocr status " + it.status)
+                if (it.status) {
+                    viewBinding.accountHolderName.editText?.setText(it.beneficiaryName)
+                    viewBinding.accountNumberItl.editText?.setText(it.accountNumber)
+                    viewBinding.ifscCode.editText?.setText(it.ifscCode)
+                    viewBinding.bankNameTil.editText?.setText(it.bankName)
+                } else
+                    showToast("Ocr status " + it.status)
             }
         })
 
@@ -148,7 +151,7 @@ class BankAccountFragment : Fragment(),
             image =
                 MultipartBody.Part.createFormData("imagenPerfil", file.name, requestFile)
         }
-        image?.let { viewModel.getKycOcrResult("bank", "", it) }
+        image?.let { viewModel.getKycOcrResult("bank", "sdsd", it) }
     }
 
 
@@ -173,7 +176,8 @@ class BankAccountFragment : Fragment(),
         if (requestCode == Activity.RESULT_OK) {
 
             if (requestCode == REQUEST_CAPTURE_IMAGE || requestCode == REQUEST_PICK_IMAGE) {
-                val outputFileUri = ImagePicker.getImageFromResult(requireContext(), resultCode, data)
+                val outputFileUri =
+                    ImagePicker.getImageFromResult(requireContext(), resultCode, data)
                 if (outputFileUri != null) {
                     startCrop(outputFileUri)
                 } else {
@@ -209,7 +213,7 @@ class BankAccountFragment : Fragment(),
         }
     }
 
-//    private fun disableSubmitButton() {
+    //    private fun disableSubmitButton() {
 //        passbookSubmitSliderBtn.isEnabled = false
 //
 //        passbookSubmitSliderBtn.outerColor =
@@ -271,6 +275,7 @@ class BankAccountFragment : Fragment(),
         val intents = ImagePicker.getPickImageIntentsOnly(requireContext())
         startActivityForResult(intents, REQUEST_PICK_IMAGE)
     }
+
     private fun startCrop(uri: Uri): Unit {
         Log.v("Start Crop", "started")
         //can use this for a new name every time

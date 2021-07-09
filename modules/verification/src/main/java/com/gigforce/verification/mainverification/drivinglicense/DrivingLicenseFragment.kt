@@ -134,7 +134,12 @@ class DrivingLicenseFragment : Fragment(),
     private fun observer() {
         viewModel.kycOcrResult.observe(viewLifecycleOwner, Observer {
             it.let {
-                showToast("Ocr status "+  it.status)
+                if(it.status) {
+                    viewBinding.nameTilDl.editText?.setText(it.name)
+                    viewBinding.dlnoTil.editText?.setText(it.dlNumber)
+                    viewBinding.expiryDate.text = it.validTill
+                }else
+                showToast("Ocr status "+  it.message)
             }
         })
 
@@ -186,7 +191,7 @@ class DrivingLicenseFragment : Fragment(),
             image =
                 MultipartBody.Part.createFormData("imagenPerfil", file.getName(), requestFile)
         }
-        image?.let { viewModel.getKycOcrResult("dl", "", it) }
+        image?.let { viewModel.getKycOcrResult("dl", "sdsd", it) }
     }
 
     private val issueDatePicker: DatePickerDialog by lazy {
@@ -240,8 +245,8 @@ class DrivingLicenseFragment : Fragment(),
                 newCal.set(Calendar.YEAR, year)
                 newCal.set(Calendar.MONTH, month)
                 newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-
-                dateOfBirthAadhar.setText(DateHelper.getDateInDDMMYYYY(newCal.time))
+                //need to check below code for DOB if there in DL
+//                viewBinding.dateOfBirthAadhar.setText(DateHelper.getDateInDDMMYYYY(newCal.time))
             },
             1990,
             cal.get(Calendar.MONTH),
