@@ -6,16 +6,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import com.gigforce.core.navigation.INavigation
 import com.gigforce.verification.R
 import com.gigforce.verification.databinding.AadhaarCardPhoneNumberFragmentBinding
 import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.veri_screen_info_component.view.*
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class AadhaarCardPhoneNumberFragment : Fragment() {
 
     companion object {
         fun newInstance() = AadhaarCardPhoneNumberFragment()
     }
+    @Inject
+    lateinit var navigation: INavigation
 
     private val viewModel: AadhaarCardPhoneNumberViewModel by viewModels()
     private lateinit var viewBinding : AadhaarCardPhoneNumberFragmentBinding
@@ -40,6 +46,10 @@ class AadhaarCardPhoneNumberFragment : Fragment() {
         viewBinding.toplayoutblock.imageView7.setOnClickListener {
             showWhyWeNeedThisDialog()
         }
+
+        viewBinding.appBar2.setBackButtonListener(View.OnClickListener {
+            navigation.popBackStack()
+        })
     }
 
     private fun showWhyWeNeedThisDialog() {

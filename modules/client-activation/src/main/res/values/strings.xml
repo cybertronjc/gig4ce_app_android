@@ -36,25 +36,25 @@
     <string name="resend_message"><![CDATA[If you didn’t receive the OTP, <font color=\'#d72467\'>RESEND</font>]]></string>
     <string name="explore_gigs">Explore Gigs</string>
     <string name="search_jobs">Search Business/Job profile</string>
-    <string name="no_i_don_t_have_aadhar_card">No, I don\'t have Aadhar Card</string>
-    <string name="yes_i_have_aadhar_card">Yes, I have Aadhar Card</string>
-    <string name="do_you_have_aadhar_card">Do you have Aadhar Card ?</string>
-    <string name="upload_aadhar_card_front_side">Upload Aadhar Card(Front Side)</string>
-    <string name="upload_your_aadhar_card">Please upload your Aadhar Card for\nyour verification</string>
-    <string name="upload_aadhar_card_back_side">Upload Aadhar Card(Back Side)</string>
+    <string name="no_i_don_t_have_aadhar_card">No, I don\'t have Aadhaar Card</string>
+    <string name="yes_i_have_aadhar_card">Yes, I have Aadhaar Card</string>
+    <string name="do_you_have_aadhar_card">Do you have Aadhaar Card ?</string>
+    <string name="upload_aadhar_card_front_side">Upload Aadhaar Card(Front Side)</string>
+    <string name="upload_your_aadhar_card">Please upload your Aadhaar Card for\nyour verification</string>
+    <string name="upload_aadhar_card_back_side">Upload Aadhaar Card(Back Side)</string>
     <string name="reupload"><u>Reupload</u></string>
     <string name="save_all_caps">SAVE</string>
     <string name="yes_i_confirm_the_data_is_correct">Yes, I confirm the data is correct.</string>
     <string name="update">Update</string>
     <string name="unable_to_capture_image">Unable to capture image</string>
     <string name="got_it">Got it</string>
-    <string name="aadhar_card_front_image">Aadhar Card (Front Image)</string>
-    <string name="aadhar_card_back_image">Aadhar Card (Back Image)</string>
-    <string name="why_we_need_this_aadhar">Uploading either Aadhar or Driver’s license is mandatory for profile verification. Aadhar card helps verify your name, date of birth, address, and other details.</string>
+    <string name="aadhar_card_front_image">Aadhaar Card (Front Image)</string>
+    <string name="aadhar_card_back_image">Aadhaar Card (Back Image)</string>
+    <string name="why_we_need_this_aadhar">Uploading either Aadhaar or Driver’s license is mandatory for profile verification. Aadhaar card helps verify your name, date of birth, address, and other details.</string>
     <string name="aadhar_card_details_uploaded">Aadhaar Card Details Uploaded</string>
     <string name="you_are_reuploading_aadhar">You are re-uploading your Aadhar details. They will be verified once again, which may take up to 7 days.</string>
-    <string name="select_or_capture_both_sides_of_aadhar">Select or capture both sides of Aadhar Card</string>
-    <string name="enter_valid_aadhar_no">Enter Valid Aadhar Card No</string>
+    <string name="select_or_capture_both_sides_of_aadhar">Select or capture both sides of Aadhaar Card</string>
+    <string name="enter_valid_aadhar_no">Enter Valid Aadhaar Card No</string>
     <string name="alert">Alert</string>
 
 </resources>

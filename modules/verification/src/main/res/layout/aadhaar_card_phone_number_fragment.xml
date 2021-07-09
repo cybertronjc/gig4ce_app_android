@@ -14,7 +14,7 @@
         app:backgroundType="PinkBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:titleText="Aadhar Card" />
+        app:titleText="Aadhaar Card" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -34,12 +34,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_xl1"
                 android:layout_marginStart="@dimen/size_16"
-                app:docinfotext="@string/upload_aadhar_phone_subtitle_text"
+                app:docinfotext="Please upload your Aadhaar Card (FRONT and BACK Side) for Document verification Process"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:missingdoctext="I don’t have an Aadhhar Card"
                 app:title="Aadhaar Card"
-                app:uppercaption="You need to verify your" />
+                app:uppercaption="You need to upload" />
 
             <TextView
                 android:id="@+id/textView11"
@@ -57,18 +57,18 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp_sm1"
+                android:layout_marginLeft="@dimen/dp_sm1"
                 android:layout_marginTop="@dimen/dp_xl1"
-                android:layout_marginEnd="@dimen/dp_sm1"
-                android:hint="Enter Phone Number"
+                android:layout_marginRight="@dimen/dp_sm1"
+                android:hint="Enter Aadhaar Number"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView11">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"/>
+                    android:layout_height="@dimen/size_46"
+                    android:padding="4dp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -77,13 +77,13 @@
                 style="@style/Caption1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Enter Aadhar Card number and then verify details with a 6-Digit OTP sent on the registered Phone Number."
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginEnd="@dimen/size_16"
+                android:text="Enter Aadhaar Card number and then verify details with a 6-Digit OTP sent on the registered Phone Number."
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginEnd="@dimen/size_16"
                 app:layout_constraintTop_toBottomOf="@+id/aadhaar_number"
                 android:layout_marginTop="@dimen/dp_sm2"
-                android:layout_marginStart="@dimen/size_16"
                 />
 
 

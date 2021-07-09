@@ -34,6 +34,7 @@ import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.gigforce.verification.gigerVerfication.drivingLicense.DrivingLicenseSides
 import com.gigforce.verification.mainverification.Data
 import com.gigforce.verification.mainverification.VerificationClickOrSelectImageBottomSheet
+import com.gigforce.verification.mainverification.aadhaarcard.AadhaarCardImageUploadFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.yalantis.ucrop.UCrop
 import dagger.hilt.android.AndroidEntryPoint
@@ -338,7 +339,6 @@ class DrivingLicenseFragment : Fragment(),
                 newCal.set(Calendar.YEAR, year)
                 newCal.set(Calendar.MONTH, month)
                 newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                //need to check below code for DOB if there in DL
                 viewBinding.dobDate.text = DateHelper.getDateInDDMMYYYYHiphen(newCal.time)
             },
             1990,

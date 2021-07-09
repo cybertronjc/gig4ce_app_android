@@ -99,6 +99,10 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
         uploadHereText.visible()
     }
 
+    fun disableImageClick(){
+        adapter = ViewPagerAdapter { null }
+    }
+
     fun setImageViewPager(list: List<KYCImageModel>){
         viewPager2.visible()
         tabLayout.visible()

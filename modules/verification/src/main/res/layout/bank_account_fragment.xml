@@ -40,7 +40,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:missingdoctext="I don’t have a Bank Account"
                     app:title="Bank Account"
-                    app:uppercaption="You need to verify" />
+                    app:uppercaption="You need to upload" />
 
 
                 <com.gigforce.common_ui.components.atoms.GrayLine
@@ -80,7 +80,8 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="@dimen/size_46"
+                        android:padding="4dp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -99,7 +100,8 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="@dimen/size_46"
+                        android:padding="4dp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -118,7 +120,8 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="@dimen/size_46"
+                        android:padding="4dp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -139,7 +142,8 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="@dimen/size_46"
+                        android:padding="4dp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 

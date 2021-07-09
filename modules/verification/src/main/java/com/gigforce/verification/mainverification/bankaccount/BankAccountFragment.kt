@@ -51,13 +51,13 @@ class BankAccountFragment : Fragment(),
         fun newInstance() = BankAccountFragment()
         const val REQUEST_CODE_CAPTURE_BANK_PHOTO = 2333
         const val INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT = "user_came_from_amb_screen"
-        private const val REQUEST_CAPTURE_IMAGE = 1021
-        private const val REQUEST_PICK_IMAGE = 1022
+        private const val REQUEST_CAPTURE_IMAGE = 1012
+        private const val REQUEST_PICK_IMAGE = 1013
 
         private const val PREFIX: String = "IMG"
         private const val EXTENSION: String = ".jpg"
 
-        private const val REQUEST_STORAGE_PERMISSION = 104
+        private const val REQUEST_STORAGE_PERMISSION = 102
     }
 
     @Inject
@@ -112,8 +112,22 @@ class BankAccountFragment : Fragment(),
 
         viewModel.kycVerifyResult.observe(viewLifecycleOwner, Observer {
             it.let {
-                showToast("Verification " + it.status)
+                if (it.status) {
+                    viewBinding.accountHolderName.editText?.setText(it.beneficiaryName)
+                    viewBinding.bankAccNumberItl.editText?.setText(it.accountNumber)
+                    viewBinding.ifscCode.editText?.setText(it.ifscCode)
+                    viewBinding.bankNameTil.editText?.setText(it.bankName)
+                } else
+                    showToast("Ocr status " + it.status)
             }
+        })
+
+        viewModel.beneficiaryName.observe(viewLifecycleOwner, Observer {
+            //observing beneficiary name here
+        })
+        viewModel.verifiedStatus.observe(viewLifecycleOwner, Observer {
+            //verified entry to firebase
+            showToast("Verified")
         })
     }
 

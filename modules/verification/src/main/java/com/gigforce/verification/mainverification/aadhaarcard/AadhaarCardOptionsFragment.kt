@@ -62,6 +62,9 @@ class AadhaarCardOptionsFragment : Fragment(), View.OnClickListener {
                 navigation.popBackStack()
             })
         }
+
+        viewBinding.uploadAdhaarCard.setLeftImage(R.drawable.ic_account_box_black_24dp)
+        viewBinding.phoneNumberAadhaar.setLeftImage(R.drawable.ic_system_security_update_warning_black_24dp)
     }
 
     override fun onClick(view: View?) {

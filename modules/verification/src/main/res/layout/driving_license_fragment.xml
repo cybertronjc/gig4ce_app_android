@@ -33,14 +33,14 @@
                     android:id="@+id/toplayoutblock"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/size_16"
                     android:layout_marginTop="@dimen/dp_xl1"
+                    android:layout_marginStart="@dimen/size_16"
                     app:docinfotext="Please upload your Driving License (Front and Back Side) for Document verification Process."
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:missingdoctext="I don’t have an Driving License"
                     app:title="Driving License"
-                    app:uppercaption="You need to verify your" />
+                    app:uppercaption="You need to upload" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/below_layout"
@@ -85,17 +85,17 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView10">
 
-                        <Spinner
-                            android:id="@+id/stateSpinner"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/rect_border_grey"
-                            android:minHeight="@dimen/size_46"
-                            android:paddingStart="@dimen/size_9"
-                            android:paddingTop="10dp"
-                            android:paddingEnd="@dimen/size_11"
-                            android:paddingBottom="10dp"
-                            android:textColor="@color/black" />
+                    <Spinner
+                        android:id="@+id/stateSpinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="46dp"
+                        android:background="@drawable/rect_border_grey"
+                        android:paddingStart="@dimen/size_9"
+                        android:paddingTop="4dp"
+                        android:paddingEnd="@dimen/size_11"
+                        android:paddingBottom="4dp"
+                        android:textColor="@color/black"
+                        />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -112,9 +112,10 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/stateLayout">
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size_46"
+                        android:padding="4dp" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -131,9 +132,10 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/name_til_dl">
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size_46"
+                        android:padding="4dp"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -194,18 +196,18 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/dob_date_rl">
 
-                        <TextView
-                            android:id="@+id/issueDate"
-                            android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:layout_marginTop="@dimen/dp_xsm1"
-                            android:background="@drawable/rect_border_grey"
-                            android:gravity="center_vertical|start"
-                            android:paddingLeft="@dimen/dp_sm1"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                    <TextView
+                        android:id="@+id/issueDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="46dp"
+                        android:layout_marginTop="@dimen/dp_xsm1"
+                        android:background="@drawable/rect_border_grey"
+                        android:gravity="center_vertical|start"
+                        android:paddingLeft="@dimen/dp_sm1"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                         <ImageView
                             android:layout_width="20dp"
@@ -241,18 +243,18 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/issue_date_rl">
 
-                        <TextView
-                            android:id="@+id/expiryDate"
-                            android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:layout_marginTop="@dimen/dp_xsm1"
-                            android:background="@drawable/rect_border_grey"
-                            android:gravity="center_vertical|start"
-                            android:paddingLeft="@dimen/dp_sm1"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                    <TextView
+                        android:id="@+id/expiryDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="46dp"
+                        android:layout_marginTop="@dimen/dp_xsm1"
+                        android:background="@drawable/rect_border_grey"
+                        android:gravity="center_vertical|start"
+                        android:paddingLeft="@dimen/dp_sm1"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                         <ImageView
                             android:layout_width="20dp"

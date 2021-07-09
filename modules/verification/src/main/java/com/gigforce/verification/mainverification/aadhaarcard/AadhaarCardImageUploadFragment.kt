@@ -258,7 +258,6 @@ class AadhaarCardImageUploadFragment : Fragment(),
             Manifest.permission.CAMERA
         ) == PackageManager.PERMISSION_GRANTED
     }
-
     private fun openCameraAndGalleryOptionForFrontSideImage() {
         currentlyClickingImageOfSide = AadharCardSides.FRONT_SIDE
 
@@ -332,30 +331,49 @@ class AadhaarCardImageUploadFragment : Fragment(),
         super.onActivityResult(requestCode, resultCode, data)
 
 
-        if (requestCode == REQUEST_CAPTURE_IMAGE || requestCode == REQUEST_PICK_IMAGE) {
-            val outputFileUri = ImagePicker.getImageFromResult(requireContext(), resultCode, data)
-            if (outputFileUri != null) {
-                startCrop(outputFileUri)
-            } else {
-                showToast(getString(R.string.issue_in_cap_image))
-            }
-        } else if (requestCode == UCrop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
-            val imageUriResultCrop: Uri? = UCrop.getOutput(data!!)
-            Log.d("ImageUri", imageUriResultCrop.toString())
-            if (AadharCardSides.FRONT_SIDE == currentlyClickingImageOfSide) {
-                aadharFrontImagePath = imageUriResultCrop
-                showFrontAadharCard(aadharFrontImagePath!!)
-            } else if (AadharCardSides.BACK_SIDE == currentlyClickingImageOfSide) {
-                aadharBackImagePath = imageUriResultCrop
-                showBackAadharCard(aadharBackImagePath!!)
-            }
-            val baos = ByteArrayOutputStream()
-            if (imageUriResultCrop == null) {
-                val bitmap = data.data as Bitmap
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
+                if (requestCode == REQUEST_CAPTURE_IMAGE || requestCode == REQUEST_PICK_IMAGE) {
+                    val outputFileUri = ImagePicker.getImageFromResult(requireContext(), resultCode, data)
+                    if (outputFileUri != null) {
+                        startCrop(outputFileUri)
+                    } else {
+                        showToast(getString(R.string.issue_in_cap_image))
+                    }
+                } else if (requestCode == UCrop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
+                    val imageUriResultCrop: Uri? = UCrop.getOutput(data!!)
+                    Log.d("ImageUri", imageUriResultCrop.toString())
+                    if (AadharCardSides.FRONT_SIDE == currentlyClickingImageOfSide) {
+                        aadharFrontImagePath = imageUriResultCrop
+                        showFrontAadharCard(aadharFrontImagePath!!)
+                    } else if (AadharCardSides.BACK_SIDE == currentlyClickingImageOfSide) {
+                        aadharBackImagePath = imageUriResultCrop
+                        showBackAadharCard(aadharBackImagePath!!)
+                    }
+                    val baos = ByteArrayOutputStream()
+                    if (imageUriResultCrop == null) {
+                        val bitmap = data.data as Bitmap
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
 
+                }
             }
-        }
+
+
+
+//                if (aadharDataCorrectCB.isChecked
+//                    && aadharFrontImagePath != null
+//                    && aadharBackImagePath != null
+//                ) {
+//                    enableSubmitButton()
+//                } else {
+//                    disableSubmitButton()
+//                }
+//
+//                if (aadharFrontImagePath != null && aadharBackImagePath != null && aadharSubmitSliderBtn.isGone) {
+//                    aadharSubmitSliderBtn.visible()
+//                    aadharDataCorrectCB.visible()
+//                }
+
+
+
     }
 //    private fun showAadharImageAndInfoLayout() {
 //        aadharBackImageHolder.visibility = View.VISIBLE

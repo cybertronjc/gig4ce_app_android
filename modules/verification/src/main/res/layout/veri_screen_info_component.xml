@@ -10,7 +10,7 @@
         style="@style/Caption2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="You need to verify your"
+        android:text="You need to upload"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
