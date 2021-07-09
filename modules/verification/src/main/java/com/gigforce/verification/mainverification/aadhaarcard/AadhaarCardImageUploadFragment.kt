@@ -141,7 +141,7 @@ class AadhaarCardImageUploadFragment : Fragment(),
         viewModel.kycVerifyResult.observe(viewLifecycleOwner, Observer {
             it.let {
                 if (it.status) {
-
+                    showToast("Verify Success")
                 } else
                     showToast("Verification status " + it.message)
             }

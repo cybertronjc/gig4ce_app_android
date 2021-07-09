@@ -20,7 +20,7 @@ class VerificationKycRepo(private val iBuildConfigVM: IBuildConfigVM) :
     suspend fun getVerificationOcrResult(type: String, subType: String, image: MultipartBody.Part): KycOcrResultModel{
         val jsonObject = JsonObject()
         jsonObject.addProperty("type", type)
-        jsonObject.addProperty("uId", FirebaseAuth.getInstance().currentUser?.uid)
+        jsonObject.addProperty("uId", "RAjCRVuaqaRhhM8qbwOaO97wo9x2")//FirebaseAuth.getInstance().currentUser?.uid)
         jsonObject.addProperty("subType", subType)
         var kycOcrStatus = kycService.getKycOcrResult(iBuildConfigVM.getVerificationKycOcrResult(),jsonObject.toString(), image)
         if(kycOcrStatus.isSuccessful){
@@ -36,7 +36,7 @@ class VerificationKycRepo(private val iBuildConfigVM: IBuildConfigVM) :
 
     suspend fun getKycVerification(type: String, list: List<Data>): KycOcrResultModel{
         Log.d("Here", type + " list "+ list.toString())
-        val kycVerifyReqModel = KycVerifyReqModel(type, getUID(), list)
+        val kycVerifyReqModel = KycVerifyReqModel(type, "RAjCRVuaqaRhhM8qbwOaO97wo9x2", list)
         val kycOcrStatus = kycService.getKycVerificationService(iBuildConfigVM.getKycVerificationUrl(), kycVerifyReqModel)
         if(kycOcrStatus.isSuccessful){
             Log.d("kycResult", kycOcrStatus.toString())
