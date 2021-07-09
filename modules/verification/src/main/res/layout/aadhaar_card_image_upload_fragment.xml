@@ -14,7 +14,7 @@
         app:backgroundType="PinkBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:titleText="Document Verification" />
+        app:titleText="Aadhaar Card" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -77,7 +77,8 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="@dimen/size_46"
+                    android:padding="4dp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -96,7 +97,8 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="@dimen/size_46"
+                    android:padding="4dp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -117,8 +119,7 @@
                 <TextView
                     android:id="@+id/date_of_birth_aadhar"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:hint="Date of birth"
+                    android:layout_height="46dp"
                     android:gravity="center_vertical|start"
                     android:paddingLeft="@dimen/dp_sm1"
                     android:background="@drawable/rect_border_grey"

@@ -39,7 +39,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:missingdoctext="I don’t have a Pan Card"
                 app:title="Pan Card"
-                app:uppercaption="You need to verify your" />
+                app:uppercaption="You need to upload" />
 
             <com.gigforce.common_ui.components.atoms.GrayLine
                 android:id="@+id/grayLine3"
@@ -78,7 +78,8 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="@dimen/size_46"
+                    android:padding="4dp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -97,7 +98,8 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="@dimen/size_46"
+                    android:padding="4dp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -118,8 +120,7 @@
                 <TextView
                     android:id="@+id/dateOfBirth"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:hint="Date of Birth"
+                    android:layout_height="46dp"
                     android:gravity="center_vertical|start"
                     android:paddingLeft="@dimen/dp_sm1"
                     android:background="@drawable/rect_border_grey"

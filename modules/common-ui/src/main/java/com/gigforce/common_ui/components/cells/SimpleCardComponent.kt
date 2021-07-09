@@ -62,12 +62,16 @@ class SimpleCardComponent(context: Context, attrs: AttributeSet?) : FrameLayout(
     fun setViewSelected(selected : Boolean){
         if(selected) right_image.visible() else right_image.gone()
     }
+    fun setLeftImage(drawable: Int){
+        left_img.setImageDrawable(resources.getDrawable(drawable))
+    }
 
     override fun bind(data: Any?) {
         if(data is SimpleCardDVM){
             setTitle(data.title)
             setSubTitle(data.subtitle)
             setViewSelected(data.isSelected)
+            setLeftImage(data.image)
             view.setOnClickListener(null)
             view.setOnClickListener{
                 customOnclickListner?.onClick(it)
