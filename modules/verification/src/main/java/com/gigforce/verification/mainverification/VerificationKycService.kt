@@ -12,8 +12,8 @@ interface VerificationKycService {
     @POST
     suspend fun getKycOcrResult(
         @Url getKycOcrUrl : String,
-        @Field("data") data: String,
-        @Part("file") file: MultipartBody.Part
+        @Part("data") data: OCRQueryModel,
+        @Part file: MultipartBody.Part
     ): Response<KycOcrResultModel>
 
 

@@ -20,7 +20,7 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/submit_button_dl"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/appBarDl">
@@ -138,7 +138,7 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/issue_date_rl"
+                        android:id="@+id/dob_date_rl"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dp_sm1"
@@ -148,6 +148,51 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/dlno_til">
+
+                        <TextView
+                            android:id="@+id/dobDate"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_marginTop="@dimen/dp_xsm1"
+                            android:background="@drawable/rect_border_grey"
+                            android:gravity="center_vertical|start"
+                            android:paddingLeft="@dimen/dp_sm1"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginRight="@dimen/dp_xsm1"
+                            android:src="@drawable/ic_sharp_event_available_24"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/dp_sm1"
+                            android:background="@color/white"
+                            android:text="   Date of Birth   "
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/issue_date_rl"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_sm1"
+                        android:layout_marginTop="@dimen/dp_xl1"
+                        android:layout_marginRight="@dimen/dp_sm1"
+                        android:clickable="true"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/dob_date_rl">
 
                         <TextView
                             android:id="@+id/issueDate"
@@ -242,40 +287,41 @@
                         android:text="Upload Again"
                         android:textColor="@color/outlined_button_text"
                         android:visibility="gone"
-                        app:layout_constraintBottom_toTopOf="@id/submit_button_dl"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
-
-                    <TextView
-                        android:id="@+id/submit_button_dl"
-                        android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:layout_marginStart="@dimen/size_16"
-                        android:layout_marginEnd="@dimen/size_16"
-                        android:layout_marginBottom="@dimen/size_22"
-                        android:background="@drawable/app_gradient_button"
-                        android:gravity="center"
-                        android:minHeight="@dimen/size_36"
-                        android:text="Next"
-                        android:textColor="@color/white"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent" />
 
-                    <ProgressBar
-                        android:id="@+id/progressBar"
-                        style="?android:attr/progressBarStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="36dp"
-                        android:visibility="gone"
-                        app:layout_constraintBottom_toBottomOf="@+id/submit_button_dl"
-                        app:layout_constraintEnd_toEndOf="@+id/submit_button_dl"
-                        app:layout_constraintStart_toStartOf="@+id/submit_button_dl"
-                        app:layout_constraintTop_toTopOf="@+id/submit_button_dl" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
+
+        <TextView
+            android:id="@+id/submit_button_dl"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginEnd="@dimen/size_16"
+            android:layout_marginBottom="@dimen/size_22"
+            android:background="@drawable/app_gradient_button"
+            android:gravity="center"
+            android:minHeight="@dimen/size_36"
+            android:text="Next"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/submit_button_dl"
+            app:layout_constraintEnd_toEndOf="@+id/submit_button_dl"
+            app:layout_constraintStart_toStartOf="@+id/submit_button_dl"
+            app:layout_constraintTop_toTopOf="@+id/submit_button_dl" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -197,7 +197,7 @@ class AadhaarCardImageUploadFragment : Fragment(),
                 RequestBody.create(MediaType.parse("multipart/form-data"), file)
             // MultipartBody.Part is used to send also the actual file name
             image =
-                MultipartBody.Part.createFormData("imagenPerfil", file.name, requestFile)
+                MultipartBody.Part.createFormData("file", file.name, requestFile)
         }
         image?.let { viewModel.getKycOcrResult("aadhar", "kjk", it) }
     }

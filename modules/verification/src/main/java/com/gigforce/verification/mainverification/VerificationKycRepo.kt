@@ -5,9 +5,7 @@ import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
 import com.gigforce.core.datamodels.client_activation.States
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.retrofit.RetrofitFactory
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import kotlinx.coroutines.tasks.await
 import okhttp3.MultipartBody
@@ -17,33 +15,47 @@ class VerificationKycRepo(private val iBuildConfigVM: IBuildConfigVM) :
     private val kycService: VerificationKycService = RetrofitFactory.createService(
         VerificationKycService::class.java
     )
-    suspend fun getVerificationOcrResult(type: String, subType: String, image: MultipartBody.Part): KycOcrResultModel{
-        val jsonObject = JsonObject()
-        jsonObject.addProperty("type", type)
-        jsonObject.addProperty("uId", "RAjCRVuaqaRhhM8qbwOaO97wo9x2")//FirebaseAuth.getInstance().currentUser?.uid)
-        jsonObject.addProperty("subType", subType)
-        var kycOcrStatus = kycService.getKycOcrResult(iBuildConfigVM.getVerificationKycOcrResult(),jsonObject.toString(), image)
-        if(kycOcrStatus.isSuccessful){
+
+    suspend fun getVerificationOcrResult(
+        type: String,
+        subType: String,
+        image: MultipartBody.Part
+    ): KycOcrResultModel {
+//        val jsonObject = JsonObject()
+//        jsonObject.addProperty("type", type)
+//        jsonObject.addProperty(
+//            "uId",
+//            "RAjCRVuaqaRhhM8qbwOaO97wo9x2"
+//        )//FirebaseAuth.getInstance().currentUser?.uid)
+//        jsonObject.addProperty("subType", subType)
+
+        var model = OCRQueryModel(type, "RAjCRVuaqaRhhM8qbwOaO97wo9x2", subType)
+        var kycOcrStatus =
+            kycService.getKycOcrResult(iBuildConfigVM.getVerificationKycOcrResult(), model, image)
+        if (kycOcrStatus.isSuccessful) {
             Log.d("kycResult", kycOcrStatus.toString())
             return kycOcrStatus.body()!!
-        }
-        else{
-            FirebaseCrashlytics.getInstance().log("Exception : kycOcrVerification Method ${kycOcrStatus.message()}")
+        } else {
+            FirebaseCrashlytics.getInstance()
+                .log("Exception : kycOcrVerification Method ${kycOcrStatus.message()}")
             throw Exception("Issue in KYC Ocr result ${kycOcrStatus.message()}")
             Log.d("kycResult", kycOcrStatus.toString())
         }
     }
 
-    suspend fun getKycVerification(type: String, list: List<Data>): KycOcrResultModel{
-        Log.d("Here", type + " list "+ list.toString())
+    suspend fun getKycVerification(type: String, list: List<Data>): KycOcrResultModel {
+        Log.d("Here", type + " list " + list.toString())
         val kycVerifyReqModel = KycVerifyReqModel(type, "RAjCRVuaqaRhhM8qbwOaO97wo9x2", list)
-        val kycOcrStatus = kycService.getKycVerificationService(iBuildConfigVM.getKycVerificationUrl(), kycVerifyReqModel)
-        if(kycOcrStatus.isSuccessful){
+        val kycOcrStatus = kycService.getKycVerificationService(
+            iBuildConfigVM.getKycVerificationUrl(),
+            kycVerifyReqModel
+        )
+        if (kycOcrStatus.isSuccessful) {
             Log.d("kycResult", kycOcrStatus.toString())
             return kycOcrStatus.body()!!
-        }
-        else{
-            FirebaseCrashlytics.getInstance().log("Exception : kycOcrVerification Method ${kycOcrStatus.message()}")
+        } else {
+            FirebaseCrashlytics.getInstance()
+                .log("Exception : kycOcrVerification Method ${kycOcrStatus.message()}")
             throw Exception("Issue in KYC Ocr result ${kycOcrStatus.message()}")
             Log.d("kycResult", kycOcrStatus.toString())
         }

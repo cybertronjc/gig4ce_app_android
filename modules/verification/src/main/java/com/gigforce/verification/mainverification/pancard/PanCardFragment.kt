@@ -19,6 +19,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
@@ -37,7 +38,6 @@ import com.gigforce.verification.mainverification.VerificationClickOrSelectImage
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.yalantis.ucrop.UCrop
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.pan_card_fragment.*
 import kotlinx.android.synthetic.main.veri_screen_info_component.view.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -128,11 +128,19 @@ class PanCardFragment : Fragment(),
             it.let {
                 if (it.status) {
                     viewBinding.belowLayout.gone()
+                    viewBinding.toplayoutblock.uploadStatusLayout(
+                        AppConstants.UPLOAD_SUCCESS,
+                        "VERIFICATION COMPLETED",
+                        "The Pan card Details have been verified successfully."
+                    )
+                    viewBinding.submitButtonPan.tag = CONFIRM_TAG
                 } else
                     showToast("Verification " + it.status)
             }
         })
     }
+
+    val CONFIRM_TAG :String = "confirm"
 
     private fun listeners() {
         viewBinding.toplayoutblock.setPrimaryClick(View.OnClickListener {
@@ -141,23 +149,28 @@ class PanCardFragment : Fragment(),
             //launchSelectImageSourceDialog()
         })
 
-        date_rl.setOnClickListener {
+        viewBinding.dateRl.setOnClickListener {
             dateOfBirthPicker.show()
         }
 
-        submit_button_pan.setOnClickListener {
-            val panCardNo =
-                viewBinding.panTil.editText?.text.toString().toUpperCase(Locale.getDefault())
-            if (!VerificationValidations.isPanCardValid(panCardNo)) {
+        viewBinding.submitButtonPan.setOnClickListener {
+            hideSoftKeyboard()
+            if(viewBinding.submitButtonPan.getTag()?.toString().equals(CONFIRM_TAG)){
+                activity?.onBackPressed()
+            }else {
+                val panCardNo =
+                    viewBinding.panTil.editText?.text.toString().toUpperCase(Locale.getDefault())
+                if (!VerificationValidations.isPanCardValid(panCardNo)) {
 
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(getString(R.string.alert))
-                    .setMessage(getString(R.string.enter_valid_pan))
-                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                    .show()
-                return@setOnClickListener
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert))
+                        .setMessage(getString(R.string.enter_valid_pan))
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .show()
+                    return@setOnClickListener
+                }
+                callKycVerificationApi()
             }
-            callKycVerificationApi()
         }
 
         viewBinding.toplayoutblock.querytext.setOnClickListener {
@@ -166,7 +179,7 @@ class PanCardFragment : Fragment(),
         viewBinding.toplayoutblock.imageView7.setOnClickListener {
             showWhyWeNeedThisDialog()
         }
-        appBarPan.apply {
+        viewBinding.appBarPan.apply {
             setBackButtonListener(View.OnClickListener {
                 navigation.popBackStack()
             })
@@ -234,7 +247,7 @@ class PanCardFragment : Fragment(),
                 RequestBody.create(MediaType.parse("multipart/form-data"), file)
             // MultipartBody.Part is used to send also the actual file name
             image =
-                MultipartBody.Part.createFormData("imagenPerfil", file.name, requestFile)
+                MultipartBody.Part.createFormData("file", file.name, requestFile)
         }
         image?.let { viewModel.getKycOcrResult("pan", "dsd", it) }
     }
@@ -249,7 +262,7 @@ class PanCardFragment : Fragment(),
                 newCal.set(Calendar.MONTH, month)
                 newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
 
-                dateOfBirth.text = DateHelper.getDateInDDMMYYYY(newCal.time)
+                viewBinding.dateOfBirth.text = DateHelper.getDateInDDMMYYYY(newCal.time)
             },
             1990,
             cal.get(Calendar.MONTH),
@@ -365,9 +378,9 @@ class PanCardFragment : Fragment(),
 //    }
     private fun callKycVerificationApi() {
         var list = listOf(
-            Data("name", name_til.editText?.text.toString()),
-            Data("no", pan_til.editText?.text.toString()),
-            Data("dob", dateOfBirth.text.toString())
+            Data("name", viewBinding.nameTil.editText?.text.toString()),
+            Data("no", viewBinding.panTil.editText?.text.toString()),
+            Data("dob", viewBinding.dateOfBirth.text.toString())
         )
         viewModel.getKycVerificationResult("pan", list)
     }
