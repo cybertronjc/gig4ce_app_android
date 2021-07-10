@@ -57,7 +57,7 @@ class BankAccountViewModel @Inject constructor(
         }
     fun getBeneficiaryName() {
 
-        verificationKycRepo.db.collection("Verification").document("RAjCRVuaqaRhhM8qbwOaO97wo9x2").addSnapshotListener { value, error ->
+        verificationKycRepo.db.collection("Verification").document(verificationKycRepo.getUID()).addSnapshotListener { value, error ->
 
             value?.data?.let {
                     val doc = value.toObject(VerificationBaseModel::class.java)
