@@ -185,14 +185,13 @@ class AadhaarCardImageUploadFragment : Fragment(),
                         "VERIFICATION COMPLETED",
                         "The Aadhaar Card Details have been verified successfully."
                     )
-                    viewBinding.submitButtonAadhar.tag = CONFIRM_TAG
+                    viewBinding.submitButton.tag = CONFIRM_TAG
                     viewBinding.toplayoutblock.setVerificationSuccessfulView()
                 }
             }
         })
     }
 
-    val CONFIRM_TAG: String = "confirm"
 
     private fun setViews() {
         val frontUri = Uri.Builder()

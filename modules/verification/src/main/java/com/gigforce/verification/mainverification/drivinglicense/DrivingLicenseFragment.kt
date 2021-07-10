@@ -204,7 +204,7 @@ class DrivingLicenseFragment : Fragment(),
                         "VERIFICATION COMPLETED",
                         "The Driving License Details have been verified successfully."
                     )
-                    viewBinding.submitButtonDl.tag = CONFIRM_TAG
+                    viewBinding.submitButton.tag = CONFIRM_TAG
                     viewBinding.toplayoutblock.setVerificationSuccessfulView()
                 }
             }
