@@ -113,10 +113,10 @@ class BankAccountFragment : Fragment(),
         viewModel.kycVerifyResult.observe(viewLifecycleOwner, Observer {
             it.let {
                 if (it.status) {
-                    viewBinding.accountHolderName.editText?.setText(it.beneficiaryName)
-                    viewBinding.bankAccNumberItl.editText?.setText(it.accountNumber)
-                    viewBinding.ifscCode.editText?.setText(it.ifscCode)
-                    viewBinding.bankNameTil.editText?.setText(it.bankName)
+//                    viewBinding.accountHolderName.editText?.setText(it.beneficiaryName)
+//                    viewBinding.bankAccNumberItl.editText?.setText(it.accountNumber)
+//                    viewBinding.ifscCode.editText?.setText(it.ifscCode)
+//                    viewBinding.bankNameTil.editText?.setText(it.bankName)
                 } else
                     showToast("Ocr status " + it.status)
             }
