@@ -89,14 +89,8 @@ class PanCardFragment : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setViews()
-        observer()
         listeners()
         initViewModel()
-    }
-
-    private fun observer() {
-
-
     }
 
     private fun initViewModel() {
@@ -138,6 +132,22 @@ class PanCardFragment : Fragment(),
                     viewBinding.toplayoutblock.setVerificationSuccessfulView()
                 } else
                     showToast("Verification " + it.status)
+            }
+        })
+        viewModel.getVerifiedStatus()
+        viewModel.verifiedStatus.observe(viewLifecycleOwner, Observer {
+            it.let {
+                Log.d("Status", it.toString())
+                if (it){
+                    viewBinding.belowLayout.gone()
+                    viewBinding.toplayoutblock.uploadStatusLayout(
+                        AppConstants.UPLOAD_SUCCESS,
+                        "VERIFICATION COMPLETED",
+                        "The Pan card Details have been verified successfully."
+                    )
+                    viewBinding.submitButtonPan.tag = CONFIRM_TAG
+                    viewBinding.toplayoutblock.setVerificationSuccessfulView()
+                }
             }
         })
     }

@@ -26,7 +26,8 @@ class AadhaarCardImageUploadViewModel @Inject constructor(
     val kycOcrResult: LiveData<KycOcrResultModel> = _kycOcrResult
     val _kycVerifyResult = MutableLiveData<KycOcrResultModel>()
     val kycVerifyResult: LiveData<KycOcrResultModel> = _kycVerifyResult
-
+    val _verifiedStatus = MutableLiveData<Boolean>()
+    val verifiedStatus: LiveData<Boolean> = _verifiedStatus
 
     fun getKycOcrResult(type: String, subType: String, image: MultipartBody.Part) =
         viewModelScope.launch {
@@ -47,4 +48,14 @@ class AadhaarCardImageUploadViewModel @Inject constructor(
             }
             Log.d("result", kycOcrResultModel.toString())
         }
+
+    fun getVerifiedStatus(){
+        viewModelScope.launch {
+            try {
+                _verifiedStatus.value = verificationKycRepo.getVerificationStatus()?.aadhar_card?.verified
+            }catch (e: Exception){
+                _verifiedStatus.value = false
+            }
+        }
+    }
 }

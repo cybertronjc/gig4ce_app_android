@@ -112,6 +112,22 @@ class VerificationKycRepo(private val iBuildConfigVM: IBuildConfigVM) :
         }
     }
 
+     suspend fun getVerificationStatus(): VerificationBaseModel? {
+         try {
+            var verifiedResult: VerificationBaseModel? = VerificationBaseModel()
+             val status = db.collection(getCollectionName()).document(getUID()).get().await()
+
+             if (status.exists()) {
+                 verifiedResult = status.toObject(VerificationBaseModel::class.java)
+             }
+             return verifiedResult
+         }catch (e: Exception){
+             return VerificationBaseModel()
+         }
+
+        }
+
+
     override fun getCollectionName(): String =
         COLLECTION_NAME
 

@@ -19,7 +19,6 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginStart="@dimen/dp_sm1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -36,8 +35,8 @@
                 android:layout_marginStart="@dimen/dp_sm1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:docinfotext="Please upload your Aadhaar Card (FRONT and BACK Side) for Document verification Process"
-                app:missingdoctext="I don’t have an Aadhhar Card"
+                app:docinfotext="Please upload your Aadhaar Card (Front and Back Side) for Document verification Process"
+                app:missingdoctext="I don’t have an Aadhaar Card"
                 app:title="Aadhaar Card"
                 app:uppercaption="You need to upload" />
 

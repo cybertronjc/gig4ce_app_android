@@ -37,8 +37,8 @@
                     app:docinfotext="Please upload your Pan Card (Front and Back Side) for Document verification Process"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:missingdoctext="I don’t have a Pan Card"
-                    app:title="Pan Card"
+                    app:missingdoctext="I don’t have a PAN Card"
+                    app:title="PAN Card"
                     app:uppercaption="You need to upload" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout

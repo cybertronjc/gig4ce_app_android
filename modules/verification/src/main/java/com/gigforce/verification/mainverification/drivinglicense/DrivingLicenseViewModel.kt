@@ -28,6 +28,9 @@ class DrivingLicenseViewModel  @Inject constructor(
     val _kycVerifyResult = MutableLiveData<KycOcrResultModel>()
     val kycVerifyResult: LiveData<KycOcrResultModel> = _kycVerifyResult
 
+    val _verifiedStatus = MutableLiveData<Boolean>()
+    val verifiedStatus: LiveData<Boolean> = _verifiedStatus
+
     private val _observableStates = MutableLiveData<MutableList<States>>()
     val observableStates: MutableLiveData<MutableList<States>> = _observableStates
 
@@ -53,6 +56,16 @@ class DrivingLicenseViewModel  @Inject constructor(
             }
             Log.d("result", kycOcrResultModel.toString())
         }
+
+    fun getVerifiedStatus(){
+        viewModelScope.launch {
+            try {
+                _verifiedStatus.value = verificationKycRepo.getVerificationStatus()?.driving_license?.verified
+            }catch (e: Exception){
+                _verifiedStatus.value = false
+            }
+        }
+    }
 
     fun getStates() =
         viewModelScope.launch {

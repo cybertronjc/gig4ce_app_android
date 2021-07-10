@@ -60,6 +60,16 @@ class BankAccountViewModel @Inject constructor(
             }
         }
 
+    fun getVerifiedStatus(){
+        viewModelScope.launch {
+            try {
+                _verifiedStatus.value = verificationKycRepo.getVerificationStatus()?.bank_details?.verified
+            }catch (e: Exception){
+                _verifiedStatus.value = false
+            }
+        }
+    }
+
     fun setVerificationStatusInDB(status: Boolean) =
         viewModelScope.launch {
             try {

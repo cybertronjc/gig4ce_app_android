@@ -21,6 +21,7 @@ import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.AppConstants
+import com.gigforce.core.extensions.gone
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.VerificationValidations
 import com.gigforce.verification.R
@@ -84,6 +85,7 @@ class BankAccountFragment : Fragment(),
         listeners()
     }
 
+
     private fun observer() {
         viewModel.kycOcrResult.observe(viewLifecycleOwner, Observer {
             it.let {
@@ -121,6 +123,21 @@ class BankAccountFragment : Fragment(),
                     showToast("Ocr status " + it.status)
             }
         })
+        viewModel.getVerifiedStatus()
+        viewModel.verifiedStatus.observe(viewLifecycleOwner, Observer {
+            it.let {
+                if (it){
+                    viewBinding.belowLayout.gone()
+                    viewBinding.toplayoutblock.uploadStatusLayout(
+                        AppConstants.UPLOAD_SUCCESS,
+                        "VERIFICATION COMPLETED",
+                        "The Bank Details have been verified successfully."
+                    )
+                    viewBinding.submitButtonBank.tag = CONFIRM_TAG
+                    viewBinding.toplayoutblock.setVerificationSuccessfulView()
+                }
+            }
+        })
 
         viewModel.beneficiaryName.observe(viewLifecycleOwner, Observer {
             //observing beneficiary name here
@@ -130,6 +147,8 @@ class BankAccountFragment : Fragment(),
             showToast("Verified")
         })
     }
+
+    val CONFIRM_TAG :String = "confirm"
 
     private fun listeners() {
         viewBinding.toplayoutblock.setPrimaryClick(View.OnClickListener {
