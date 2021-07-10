@@ -159,9 +159,12 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
         }
     }
 
-    fun setVerificationSuccessfulView(){
+    fun setVerificationSuccessfulView(titleStr : String?=null){
         missingtext.gone()
-        title.setText(resources.getString(R.string.congratulations))
+        titleStr?.let {
+            title.setText(it)
+        }?: run { title.setText(resources.getString(R.string.congratulations)) }
+
         docdetail.setText(resources.getString(R.string.veri_done_text))
         uppercaption.setText("Verification")
         uploadHereText.gone()

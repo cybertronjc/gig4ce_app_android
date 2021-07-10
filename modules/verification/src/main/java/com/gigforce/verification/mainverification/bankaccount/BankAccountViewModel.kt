@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.core.datamodels.verification.VerificationBaseModel
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.verification.mainverification.Data
 import com.gigforce.verification.mainverification.KycOcrResultModel
@@ -32,6 +33,9 @@ class BankAccountViewModel @Inject constructor(
     val _verifiedStatus = MutableLiveData<Boolean>()
     val verifiedStatus: LiveData<Boolean> = _verifiedStatus
 
+    val _verifiedStatusDB = MutableLiveData<Boolean>()
+    val verifiedStatusDB: LiveData<Boolean> = _verifiedStatusDB
+
     fun getKycOcrResult(type: String, subType: String, image: MultipartBody.Part) =
         viewModelScope.launch {
             try {
@@ -49,16 +53,29 @@ class BankAccountViewModel @Inject constructor(
             }catch (e: Exception){
                 KycOcrResultModel(status = false, message = e.message)
             }
-            Log.d("result", kycOcrResultModel.toString())
+            Log.d("result", kycVerifyResult.toString())
         }
-    fun getBeneficiaryName() =
-        viewModelScope.launch {
-            try {
-                _beneficiaryName.value = verificationKycRepo.getBeneficiaryName()
-            } catch (e: Exception){
+    fun getBeneficiaryName() {
 
+        verificationKycRepo.db.collection("Verification").document("RAjCRVuaqaRhhM8qbwOaO97wo9x2").addSnapshotListener { value, error ->
+
+            value?.data?.let {
+                    val doc = value.toObject(VerificationBaseModel::class.java)
+                    doc?.bank_details?.bankBeneficiaryName?.let {
+                        if (it.isNotBlank()){
+                            _beneficiaryName.value = it
+                        }
+                    }
             }
         }
+    }
+//        viewModelScope.launch {
+//            try {
+//                _beneficiaryName.value = verificationKycRepo.getBeneficiaryName()
+//            } catch (e: Exception){
+//
+//            }
+//        }
 
     fun getVerifiedStatus(){
         viewModelScope.launch {
@@ -73,7 +90,7 @@ class BankAccountViewModel @Inject constructor(
     fun setVerificationStatusInDB(status: Boolean) =
         viewModelScope.launch {
             try {
-                _verifiedStatus.value = verificationKycRepo.setVerifiedStatus(status)
+                _verifiedStatusDB.value = verificationKycRepo.setVerifiedStatus(status)
             }catch (e: Exception){
 
             }

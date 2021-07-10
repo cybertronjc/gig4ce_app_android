@@ -85,7 +85,7 @@ class VerificationKycRepo(private val iBuildConfigVM: IBuildConfigVM) :
     suspend fun getBeneficiaryName(): String? {
         try{
             var beneficiaryName: String? = ""
-            db.collection(getCollectionName()).document(getUID()).get().addOnSuccessListener {
+            db.collection(getCollectionName()).document("RAjCRVuaqaRhhM8qbwOaO97wo9x2").get().addOnSuccessListener {
                 it.let {
                     if (it.contains("bank_details")){
                          val doc = it.toObject(VerificationBaseModel::class.java)
@@ -101,7 +101,7 @@ class VerificationKycRepo(private val iBuildConfigVM: IBuildConfigVM) :
 
     suspend fun setVerifiedStatus(status: Boolean?) : Boolean{
         try {
-            db.collection(getCollectionName()).document(getUID()).updateOrThrow(
+            db.collection(getCollectionName()).document("RAjCRVuaqaRhhM8qbwOaO97wo9x2").updateOrThrow(
                 mapOf(
                     "bank_details.verified" to status
                 )
