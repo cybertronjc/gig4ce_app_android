@@ -2,7 +2,6 @@ package com.gigforce.app.notification
 
 import android.app.PendingIntent
 import android.content.Intent
-import android.os.Bundle
 import android.util.Log
 import androidx.core.app.TaskStackBuilder
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -25,11 +24,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     val TAG: String = "Firebase/FCM"
     var fcmToken: String? = null
 
-    private val notificationHelper : NotificationHelper by lazy {
+    private val notificationHelper: NotificationHelper by lazy {
         NotificationHelper(applicationContext)
     }
 
-    private val moEngagePushedHelper : MoEPushHelper by lazy {
+    private val moEngagePushedHelper: MoEPushHelper by lazy {
         MoEPushHelper.getInstance()
     }
 
@@ -46,36 +45,48 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     private fun registerFirebaseToken(token: String) {
-        // doing nothing for now
+        registerTokenOnMoEngage(token)
 
         FirebaseAuth.getInstance().addAuthStateListener {
             it.currentUser?.let {
                 FirebaseFirestore.getInstance().collection("firebase_tokens").document(token)
-                        .set(
-                                hashMapOf(
-                                        "uid" to it.uid,
-                                        "type" to "fcm",
-                                        "timestamp" to Date().time
-                                )
-                        ).addOnSuccessListener {
-                            Log.v(TAG, "Token Updated on Firestore Successfully")
-                        }.addOnFailureListener {
-                            Log.e(TAG, "Token Update Failed on Firestore", it)
-                            CrashlyticsLogger.e("MyFirebaseMessagingService", "Token Update Failed on Firestore", it)
-                        }
+                    .set(
+                        hashMapOf(
+                            "uid" to it.uid,
+                            "type" to "fcm",
+                            "timestamp" to Date().time
+                        )
+                    ).addOnSuccessListener {
+                        Log.v(TAG, "Token Updated on Firestore Successfully")
+                    }.addOnFailureListener {
+                        Log.e(TAG, "Token Update Failed on Firestore", it)
+                        CrashlyticsLogger.e(
+                            "MyFirebaseMessagingService",
+                            "Token Update Failed on Firestore",
+                            it
+                        )
+                    }
 
-                try {
-                    MoEFireBaseHelper.getInstance().passPushToken(applicationContext, token)
-                } catch (e: Exception) {
-                    Log.e(TAG, "Token Update Failed on MoEngage")
-                    CrashlyticsLogger.e("MyFirebaseMessagingService", "Token Update Failed on MoEngage", e)
-                }
+
             } ?: run {
                 Log.v(
-                        TAG,
-                        "User Not Authenticated. Ideally set an Auth Listener and Register when Authenticated"
+                    TAG,
+                    "User Not Authenticated. Ideally set an Auth Listener and Register when Authenticated"
                 )
             }
+        }
+    }
+
+    private fun registerTokenOnMoEngage(token: String) {
+        try {
+            MoEFireBaseHelper.getInstance().passPushToken(applicationContext, token)
+        } catch (e: Exception) {
+            Log.e(TAG, "Token Update Failed on MoEngage")
+            CrashlyticsLogger.e(
+                "MyFirebaseMessagingService",
+                "Token Update Failed on MoEngage",
+                e
+            )
         }
     }
 
@@ -83,16 +94,15 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         super.onMessageReceived(remoteMessage)
 
         if (NotificationHelper.isSilentPush(remoteMessage.data)) {
-            notificationHelper.handleSilentPush(remoteMessage.data)
+            notificationHelper.handleSilentPush(applicationContext, remoteMessage.data)
             return
-        }  else if(moEngagePushedHelper.isFromMoEngagePlatform(remoteMessage.data)){
+        } else if (moEngagePushedHelper.isFromMoEngagePlatform(remoteMessage.data)) {
 
-            if(moEngagePushedHelper.isSilentPush(remoteMessage.data)){
-                //Silent Push fom MoEngage for background task like checking uninstalls
-                return
-            } else {
-                MoEFireBaseHelper.getInstance().passPushPayload(applicationContext, remoteMessage.data)
+            if(!moEngagePushedHelper.isSilentPush(remoteMessage.data)){
+                MoEPushHelper.getInstance().logNotificationReceived(applicationContext,remoteMessage.data)
             }
+
+            MoEFireBaseHelper.getInstance().passPushPayload(applicationContext, remoteMessage.data)
         } else {
             handleNotificationMessageNotFromMoEngage(remoteMessage)
         }
@@ -108,9 +118,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
              * Receiver id is uid of user for whom message was sent,
              * if message was received with delay and logged in user was changed, message is not shown
              */
-            val isForCurrentUserId = remoteMessage.data.getOrDefault(RECEIVER_ID, "") == currentUser?.uid
+            val isForCurrentUserId =
+                remoteMessage.data.getOrDefault(RECEIVER_ID, "") == currentUser?.uid
             if (!isForCurrentUserId) {
-                Log.d(TAG, "Message Notification Received but receiver id did not match with current user id ${remoteMessage.data}")
+                Log.d(
+                    TAG,
+                    "Message Notification Received but receiver id did not match with current user id ${remoteMessage.data}"
+                )
                 return
             }
 
@@ -118,9 +132,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             if (isChatMessage) {
 
                 val intent =
-                        Intent(NotificationConstants.BROADCAST_ACTIONS.SHOW_CHAT_NOTIFICATION).apply {
-                            putExtra(INTENT_EXTRA_REMOTE_MESSAGE, remoteMessage)
-                        }
+                    Intent(NotificationConstants.BROADCAST_ACTIONS.SHOW_CHAT_NOTIFICATION).apply {
+                        putExtra(INTENT_EXTRA_REMOTE_MESSAGE, remoteMessage)
+                    }
                 LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
             } else {
 
@@ -133,19 +147,19 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                     null
 
                 NotificationHelper(applicationContext)
-                        .createUrgentPriorityNotification(
-                                title = it.title ?: "Gigforce",
-                                message = it.body ?: "message",
-                                pendingIntent = pendingIntent
-                        )
+                    .createUrgentPriorityNotification(
+                        title = it.title ?: "Gigforce",
+                        message = it.body ?: "message",
+                        pendingIntent = pendingIntent
+                    )
             }
         }
     }
 
 
     private fun createPendingIntentFromData(
-            clickAction: String,
-            data: Map<String, String>
+        clickAction: String,
+        data: Map<String, String>
     ): PendingIntent? {
 
         val dataBundle = data.toBundle()
@@ -153,12 +167,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         return TaskStackBuilder.create(applicationContext).run {
             addNextIntentWithParentStack(
-                    Intent(
-                            applicationContext,
-                            MainActivity::class.java
-                    ).apply {
-                        putExtras(data.toBundle())
-                    })
+                Intent(
+                    applicationContext,
+                    MainActivity::class.java
+                ).apply {
+                    putExtras(data.toBundle())
+                })
             val reqCode = Random.nextInt(0, 100)
             getPendingIntent(reqCode, PendingIntent.FLAG_ONE_SHOT)
         }

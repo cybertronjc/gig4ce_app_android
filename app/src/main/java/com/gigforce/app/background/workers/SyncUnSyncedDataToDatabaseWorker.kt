@@ -6,6 +6,8 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.ktx.initialize
 import kotlin.coroutines.cancellation.CancellationException
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -20,6 +22,7 @@ class SyncUnSyncedDataToDatabaseWorker(
 ) {
 
     private val firebaseFirestore: FirebaseFirestore by lazy {
+        Firebase.initialize(appContext)
         FirebaseFirestore.getInstance()
     }
 

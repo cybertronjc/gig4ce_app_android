@@ -17,6 +17,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
+import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.user_tracking.R
 import com.gigforce.user_tracking.TrackingConstants
 import com.gigforce.user_tracking.TrackingConstants.NOTIFICATION_CHANNEL_ID
@@ -184,13 +185,22 @@ class TrackingService : LifecycleService() {
             fullAddressFromGps: String
     ) = GlobalScope.launch {
 
-        userLocationRepository.updateUserLocation(
-                location = LatLng(location.latitude, location.longitude),
-                accuracy = location.accuracy,
-                gigId = gigId,
-                couldBeAFakeLocation = location.isFromMockProvider,
-                fullAddressFromGps = fullAddressFromGps
-        )
+        try {
+            userLocationRepository.updateUserLocation(
+                    location = LatLng(location.latitude, location.longitude),
+                    accuracy = location.accuracy,
+                    gigId = gigId,
+                    couldBeAFakeLocation = location.isFromMockProvider,
+                    fullAddressFromGps = fullAddressFromGps
+            )
+        } catch (e: Exception) {
+
+            CrashlyticsLogger.e(
+                TAG,
+                "unable to sync user location",
+                e
+            )
+        }
     }
 
     private fun startForegroundService() {

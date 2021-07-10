@@ -195,6 +195,7 @@ dependencies {
     implementation project(path: ':modules:giger-gigs')
     implementation project(path: ':modules:landing')
     implementation project(path: ':modules:common-image-capture-picker')
+    implementation project(path: ':modules:user-tracking')
 
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.9'
 
@@ -294,7 +295,6 @@ dependencies {
 
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
     implementation 'com.google.firebase:firebase-core:17.4.0'
-    implementation 'com.firebaseui:firebase-ui-auth:4.3.1'
     //ID fy
 
     // LocaleChanger - language
