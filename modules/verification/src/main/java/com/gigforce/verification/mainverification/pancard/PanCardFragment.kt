@@ -146,7 +146,7 @@ class PanCardFragment : Fragment(),
                         "VERIFICATION COMPLETED",
                         "The Pan card Details have been verified successfully."
                     )
-                    viewBinding.submitButtonPan.tag = CONFIRM_TAG
+                    viewBinding.submitButton.tag = CONFIRM_TAG
                     viewBinding.toplayoutblock.setVerificationSuccessfulView()
                 }
             }

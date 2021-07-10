@@ -173,6 +173,7 @@ class BankAccountFragment : Fragment(),
 
         })
         viewModel.verifiedStatusDB.observe(viewLifecycleOwner, Observer {
+            viewBinding.toplayoutblock.setVerificationSuccessfulView("Verified")
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Congratulations, your Bank details are verified.")
                 .setCancelable(false)
