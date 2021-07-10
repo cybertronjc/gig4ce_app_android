@@ -22,6 +22,7 @@ import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.AppConstants
 import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.VerificationValidations
 import com.gigforce.verification.R
@@ -116,7 +117,7 @@ class BankAccountFragment : Fragment(),
                 if (it.status) {
                     viewBinding.belowLayout.gone()
                     viewBinding.toplayoutblock.setVerificationSuccessfulView("Verifying")
-
+                    viewModel.getBeneficiaryName()
 //                    viewBinding.accountHolderName.editText?.setText(it.beneficiaryName)
 //                    viewBinding.bankAccNumberItl.editText?.setText(it.accountNumber)
 //                    viewBinding.ifscCode.editText?.setText(it.ifscCode)
@@ -126,8 +127,17 @@ class BankAccountFragment : Fragment(),
             }
         })
 
+
         viewModel.beneficiaryName.observe(viewLifecycleOwner, Observer {
             //observing beneficiary name here
+            it.let {
+                if (it.isNotEmpty()) {
+                    confirmBeneficiaryLayout.visible()
+                    below_layout.gone()
+                    showToast(it)
+                    beneficiaryName.setText(it)
+                } else { showToast("Empty") }
+            }
         })
         viewModel.verifiedStatus.observe(viewLifecycleOwner, Observer {
             //verified entry to firebase
@@ -193,6 +203,21 @@ class BankAccountFragment : Fragment(),
             setBackButtonListener(View.OnClickListener {
                 navigation.popBackStack()
             })
+        }
+        confirm_button.setOnClickListener {
+            viewModel.setVerificationStatusInDB(true)
+        }
+        not_confirm_button.setOnClickListener {
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Do you want to re-enter Bank details?")
+                .setPositiveButton(getString(R.string.yes)) { _, _ ->
+                        navigation.popBackStack()
+                        navigation.navigateTo("verification/bank_account_fragment")
+                }
+                .setNegativeButton(getString(R.string.no)) { dialog, _ ->
+                        dialog.dismiss()
+                }
+                .show()
         }
     }
 
@@ -386,8 +411,8 @@ class BankAccountFragment : Fragment(),
 
     private fun callKycVerificationApi() {
         var list = listOf(
-            Data("name", viewBinding.bankNameTil.editText?.text.toString()),
-            Data("no", bank_name_til.editText?.text.toString()),
+            Data("name", bank_name_til.editText?.text.toString()),
+            Data("no", bank_acc_number_itl.editText?.text.toString()),
             Data("ifsccode", ifsc_code.editText?.text.toString()),
             Data("holdername", account_holder_name.editText?.text.toString())
         )

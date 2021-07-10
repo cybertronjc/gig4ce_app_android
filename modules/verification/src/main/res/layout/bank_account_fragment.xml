@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".mainverification.bankaccount.BankAccountFragment">
@@ -20,7 +20,7 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/submit_button_bank"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/appBarBank">
@@ -46,47 +46,79 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@+id/toplayoutblock"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:id="@+id/confirmBeneficiaryLayout"
+                    android:visibility="gone"
                     android:layout_marginTop="@dimen/dp_sm1"
-                    >
-                    <TextView
-                        android:id="@+id/confirmation_info"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/toplayoutblock">
+
+                    <com.gigforce.common_ui.components.atoms.GrayLine
+                        android:id="@+id/grayLine1"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="@dimen/dp_xl1"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        android:text="Please confirm the Beneficiary name"
-                        style="@style/Title"/>
-                    <TextView
-                        android:id="@+id/beneficiaryNameLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintTop_toTopOf="@+id/confirmation_info"
-                        app:layout_constraintStart_toStartOf="parent"
-                        android:layout_marginLeft="@dimen/dp_sm1"
-                        style="@style/Caption2"/>
-                    <TextView
-                        android:id="@+id/beneficiaryName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintTop_toTopOf="@+id/beneficiaryNameLabel"
-                        app:layout_constraintBottom_toTopOf="@+id/beneficiaryNameLabel"
-                        app:layout_constraintStart_toStartOf="@+id/beneficiaryNameLabel"
-                        style="@style/Title1"
-                        android:layout_marginLeft="@dimen/dp_sm1"/>
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
+                        android:id="@+id/confirmation_info"
+                        style="@style/Title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@color/grey"
-                        android:textColor="@color/white"
-                        android:gravity="center"
-                        android:text="Not confirm"
+                        android:layout_marginStart="@dimen/size_16"
+                        android:layout_marginTop="@dimen/size_16"
+                        android:text="Please confirm the Beneficiary name"
                         app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/grayLine1" />
+
+                    <TextView
+                        android:id="@+id/beneficiaryName"
+                        style="@style/Title1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/size_16"
+                        android:text="Jagdish Choudhary"
+                        app:layout_constraintBottom_toTopOf="@+id/confirm_button"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/beneficiaryName"/>
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/confirmation_info" />
+
+                    <TextView
+                        android:id="@+id/not_confirm_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/size_36"
+                        android:layout_marginStart="@dimen/size_16"
+                        android:layout_marginTop="@dimen/size_16"
+                        android:background="@drawable/next_button_outlined"
+                        android:gravity="center"
+                        android:minHeight="@dimen/size_36"
+                        android:paddingStart="@dimen/size_16"
+                        android:paddingEnd="@dimen/size_16"
+                        android:text="Cancel"
+                        android:textColor="@color/outlined_button_text"
+                        app:layout_constraintEnd_toStartOf="@+id/confirm_button"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/beneficiaryName" />
+
+                    <TextView
+                        android:id="@+id/confirm_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/size_36"
+                        android:layout_marginEnd="@dimen/size_16"
+                        android:layout_marginTop="@dimen/size_16"
+                        android:background="@drawable/app_gradient_button"
+                        android:gravity="center"
+                        android:paddingStart="@dimen/size_16"
+                        android:paddingEnd="@dimen/size_16"
+                        android:text="Confirm"
+                        android:textColor="@color/white"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/not_confirm_button"
+                        app:layout_constraintTop_toBottomOf="@id/beneficiaryName" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout

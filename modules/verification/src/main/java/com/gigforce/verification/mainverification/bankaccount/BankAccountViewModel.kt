@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.core.datamodels.verification.VerificationBaseModel
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.verification.mainverification.Data
 import com.gigforce.verification.mainverification.KycOcrResultModel
@@ -49,16 +50,26 @@ class BankAccountViewModel @Inject constructor(
             }catch (e: Exception){
                 KycOcrResultModel(status = false, message = e.message)
             }
-            Log.d("result", kycOcrResultModel.toString())
+            Log.d("result", kycVerifyResult.toString())
         }
-    fun getBeneficiaryName() =
-        viewModelScope.launch {
-            try {
-                _beneficiaryName.value = verificationKycRepo.getBeneficiaryName()
-            } catch (e: Exception){
+    fun getBeneficiaryName() {
 
+        verificationKycRepo.db.collection("Verification").document("RAjCRVuaqaRhhM8qbwOaO97wo9x2").get().addOnSuccessListener {
+            it.let {
+                if (it.contains("bank_details")){
+                    val doc = it.toObject(VerificationBaseModel::class.java)
+                    _beneficiaryName.value = doc?.bank_details?.bankBeneficiaryName
+                }
             }
         }
+    }
+//        viewModelScope.launch {
+//            try {
+//                _beneficiaryName.value = verificationKycRepo.getBeneficiaryName()
+//            } catch (e: Exception){
+//
+//            }
+//        }
 
     fun setVerificationStatusInDB(status: Boolean) =
         viewModelScope.launch {
