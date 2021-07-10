@@ -42,6 +42,53 @@
                     app:title="Bank Account"
                     app:uppercaption="You need to upload" />
 
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@+id/toplayoutblock"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="@dimen/dp_sm1"
+                    >
+                    <TextView
+                        android:id="@+id/confirmation_info"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:text="Please confirm the Beneficiary name"
+                        style="@style/Title"/>
+                    <TextView
+                        android:id="@+id/beneficiaryNameLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="@+id/confirmation_info"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginLeft="@dimen/dp_sm1"
+                        style="@style/Caption2"/>
+                    <TextView
+                        android:id="@+id/beneficiaryName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="@+id/beneficiaryNameLabel"
+                        app:layout_constraintBottom_toTopOf="@+id/beneficiaryNameLabel"
+                        app:layout_constraintStart_toStartOf="@+id/beneficiaryNameLabel"
+                        style="@style/Title1"
+                        android:layout_marginLeft="@dimen/dp_sm1"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/grey"
+                        android:textColor="@color/white"
+                        android:gravity="center"
+                        android:text="Not confirm"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/beneficiaryName"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/below_layout"
                 android:layout_width="match_parent"

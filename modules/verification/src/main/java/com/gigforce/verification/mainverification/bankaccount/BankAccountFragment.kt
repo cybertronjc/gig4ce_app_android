@@ -21,6 +21,7 @@ import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.AppConstants
+import com.gigforce.core.extensions.gone
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.VerificationValidations
 import com.gigforce.verification.R
@@ -83,7 +84,7 @@ class BankAccountFragment : Fragment(),
         observer()
         listeners()
     }
-
+    val CONFIRM_TAG: String = "confirm"
     private fun observer() {
         viewModel.kycOcrResult.observe(viewLifecycleOwner, Observer {
             it.let {
@@ -113,6 +114,9 @@ class BankAccountFragment : Fragment(),
         viewModel.kycVerifyResult.observe(viewLifecycleOwner, Observer {
             it.let {
                 if (it.status) {
+                    viewBinding.belowLayout.gone()
+                    viewBinding.toplayoutblock.setVerificationSuccessfulView("Verifying")
+
 //                    viewBinding.accountHolderName.editText?.setText(it.beneficiaryName)
 //                    viewBinding.bankAccNumberItl.editText?.setText(it.accountNumber)
 //                    viewBinding.ifscCode.editText?.setText(it.ifscCode)
