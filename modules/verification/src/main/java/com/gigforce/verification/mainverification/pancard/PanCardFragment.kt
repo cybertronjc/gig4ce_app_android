@@ -97,14 +97,7 @@ class PanCardFragment : Fragment(),
         viewModel.kycOcrResult.observe(viewLifecycleOwner, Observer {
             it.let {
                 if (it.status) {
-                    if (it.panNumber.isNullOrBlank() || it.name.isNullOrBlank() || it.dateOfBirth.isNullOrBlank()) {
-                        viewBinding.toplayoutblock.uploadStatusLayout(
-                            AppConstants.UNABLE_TO_FETCH_DETAILS,
-                            "UNABLE TO FETCH DETAILS",
-                            "Enter your Pan card details manually or try again to continue the verification process."
-                        )
-
-                    } else {
+                    if (!it.panNumber.isNullOrBlank() || !it.name.isNullOrBlank() || !it.dateOfBirth.isNullOrBlank()||!it.fatherName.isNullOrBlank()) {
                         viewBinding.toplayoutblock.uploadStatusLayout(
                             AppConstants.UPLOAD_SUCCESS,
                             "UPLOAD SUCCESSFUL",
@@ -113,10 +106,17 @@ class PanCardFragment : Fragment(),
                         viewBinding.panTil.editText?.setText(it.panNumber)
                         viewBinding.nameTil.editText?.setText(it.name)
                         viewBinding.dateOfBirth.text = it.dateOfBirth
+
+                    } else {
+                        viewBinding.toplayoutblock.uploadStatusLayout(
+                            AppConstants.UNABLE_TO_FETCH_DETAILS,
+                            "UNABLE TO FETCH DETAILS",
+                            "Enter your Pan card details manually or try again to continue the verification process."
+                        )
                     }
 
                 } else
-                    showToast("Ocr status " + it.status)
+                    showToast("Ocr status " + it.message)
             }
         })
         viewModel.kycVerifyResult.observe(viewLifecycleOwner, Observer {
@@ -128,10 +128,11 @@ class PanCardFragment : Fragment(),
                         "VERIFICATION COMPLETED",
                         "The Pan card Details have been verified successfully."
                     )
-                    viewBinding.submitButtonPan.tag = CONFIRM_TAG
+                    viewBinding.submitButton.tag = CONFIRM_TAG
                     viewBinding.toplayoutblock.setVerificationSuccessfulView()
+                    viewBinding.submitButton.text = getString(R.string.submit)
                 } else
-                    showToast("Verification " + it.status)
+                    showToast("Verification " + it.message)
             }
         })
         viewModel.getVerifiedStatus()
@@ -165,9 +166,9 @@ class PanCardFragment : Fragment(),
             dateOfBirthPicker.show()
         }
 
-        viewBinding.submitButtonPan.setOnClickListener {
+        viewBinding.submitButton.setOnClickListener {
             hideSoftKeyboard()
-            if(viewBinding.submitButtonPan.getTag()?.toString().equals(CONFIRM_TAG)){
+            if(viewBinding.submitButton.getTag()?.toString().equals(CONFIRM_TAG)){
                 activity?.onBackPressed()
             }else {
                 val panCardNo =
@@ -257,7 +258,7 @@ class PanCardFragment : Fragment(),
             Log.d("Register", "Nombre del archivo " + file.name)
             // create RequestBody instance from file
             val requestFile: RequestBody =
-                RequestBody.create(MediaType.parse("multipart/form-data"), file)
+                RequestBody.create(MediaType.parse("image/png"), file)
             // MultipartBody.Part is used to send also the actual file name
             image =
                 MultipartBody.Part.createFormData("file", file.name, requestFile)

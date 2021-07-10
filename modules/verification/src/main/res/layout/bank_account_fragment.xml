@@ -255,7 +255,7 @@
         </ScrollView>
 
                 <TextView
-                    android:id="@+id/submit_button_bank"
+                    android:id="@+id/submit_button"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:background="@drawable/app_gradient_button"

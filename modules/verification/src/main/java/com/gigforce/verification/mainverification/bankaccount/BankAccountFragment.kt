@@ -90,13 +90,7 @@ class BankAccountFragment : Fragment(),
         viewModel.kycOcrResult.observe(viewLifecycleOwner, Observer {
             it.let {
                 if (it.status) {
-                    if (it.beneficiaryName.isNullOrBlank() || it.accountNumber.isNullOrBlank() || it.ifscCode.isNullOrBlank() || it.bankName.isNullOrBlank()) {
-                        viewBinding.toplayoutblock.uploadStatusLayout(
-                            AppConstants.UNABLE_TO_FETCH_DETAILS,
-                            "UNABLE TO FETCH DETAILS",
-                            "Enter your Bank details manually or try again to continue the verification process."
-                        )
-                    } else {
+                    if (!it.beneficiaryName.isNullOrBlank() || !it.accountNumber.isNullOrBlank() || !it.ifscCode.isNullOrBlank() || !it.bankName.isNullOrBlank()) {
                         viewBinding.toplayoutblock.uploadStatusLayout(
                             AppConstants.UPLOAD_SUCCESS,
                             "UPLOAD SUCCESSFUL",
@@ -106,9 +100,16 @@ class BankAccountFragment : Fragment(),
                         viewBinding.bankAccNumberItl.editText?.setText(it.accountNumber)
                         viewBinding.ifscCode.editText?.setText(it.ifscCode)
                         viewBinding.bankNameTil.editText?.setText(it.bankName)
+                    } else {
+                        viewBinding.toplayoutblock.uploadStatusLayout(
+                            AppConstants.UNABLE_TO_FETCH_DETAILS,
+                            "UNABLE TO FETCH DETAILS",
+                            "Enter your Bank details manually or try again to continue the verification process."
+                        )
+
                     }
                 } else
-                    showToast("Ocr status " + it.status)
+                    showToast("Ocr status " + it.message)
             }
         })
 
@@ -118,13 +119,13 @@ class BankAccountFragment : Fragment(),
                     viewBinding.belowLayout.gone()
                     viewBinding.toplayoutblock.setVerificationSuccessfulView("Verifying")
                     viewModel.getBeneficiaryName()
-                    viewBinding.submitButtonBank.gone()
+                    viewBinding.submitButton.gone()
 //                    viewBinding.accountHolderName.editText?.setText(it.beneficiaryName)
 //                    viewBinding.bankAccNumberItl.editText?.setText(it.accountNumber)
 //                    viewBinding.ifscCode.editText?.setText(it.ifscCode)
 //                    viewBinding.bankNameTil.editText?.setText(it.bankName)
                 } else
-                    showToast("Ocr status " + it.status)
+                    showToast("Ocr status " + it.message)
             }
         })
         viewModel.getVerifiedStatus()
@@ -137,7 +138,7 @@ class BankAccountFragment : Fragment(),
                         "VERIFICATION COMPLETED",
                         "The Bank Details have been verified successfully."
                     )
-                    viewBinding.submitButtonBank.gone()
+                    viewBinding.submitButton.gone()
                     viewBinding.toplayoutblock.setVerificationSuccessfulView()
                 }
             }
@@ -165,7 +166,7 @@ class BankAccountFragment : Fragment(),
                         "VERIFICATION COMPLETED",
                         "The Bank Details have been verified successfully."
                     )
-                    viewBinding.submitButtonBank.gone()
+                    viewBinding.submitButton.gone()
                     viewBinding.toplayoutblock.setVerificationSuccessfulView()
                 }
             }
@@ -189,7 +190,7 @@ class BankAccountFragment : Fragment(),
             //showCameraAndGalleryOption()
             checkForPermissionElseShowCameraGalleryBottomSheet()
         })
-        viewBinding.submitButtonBank.setOnClickListener {
+        viewBinding.submitButton.setOnClickListener {
             val ifsc =
                 viewBinding.ifscCode.editText?.text.toString().toUpperCase(Locale.getDefault())
             if (!VerificationValidations.isIfSCValid(ifsc)) {
@@ -279,7 +280,7 @@ class BankAccountFragment : Fragment(),
             Log.d("Register", "Nombre del archivo " + file.name)
             // create RequestBody instance from file
             val requestFile: RequestBody =
-                RequestBody.create(MediaType.parse("multipart/form-data"), file)
+                RequestBody.create(MediaType.parse("image/png"), file)
             // MultipartBody.Part is used to send also the actual file name
             image =
                 MultipartBody.Part.createFormData("file", file.name, requestFile)
@@ -450,7 +451,7 @@ class BankAccountFragment : Fragment(),
     private fun callKycVerificationApi() {
         var list = listOf(
             Data("name", viewBinding.bankNameTil.editText?.text.toString()),
-            Data("no", viewBinding.bankAccNumberItl.editText?.text.toString()),
+            Data("no", viewBinding.bankNameTil.editText?.text.toString()),
             Data("ifsccode", viewBinding.ifscCode.editText?.text.toString()),
             Data("holdername", viewBinding.accountHolderName.editText?.text.toString())
         )

@@ -3,37 +3,37 @@ package com.gigforce.verification.mainverification
 import com.google.gson.annotations.SerializedName
 
 data class KycOcrResultModel(
-    @field:SerializedName("status")
+    @SerializedName("status")
     val status: Boolean = false,
-    @field:SerializedName("message")
+    @SerializedName("message")
     val message: String? = "",
-    @field:SerializedName("name")
+    @SerializedName("name")
     val name: String? = "",
-    @field:SerializedName("dateOfBirth")
+    @SerializedName("dateOfBirth")
     val dateOfBirth: String? = "",
     //pancard
-    @field:SerializedName("panNumber")
+    @SerializedName("panNumber")
     val panNumber: String? = "",
-    @field:SerializedName("fatherName")
+    @SerializedName("fatherName")
     val fatherName: String? = "",
     //aadhar
-    @field:SerializedName("aadhaarNumber")
+    @SerializedName("aadhaarNumber")
     val aadhaarNumber: String? = "",
-    @field:SerializedName("gender")
+    @SerializedName("gender")
     val gender: String? = "",
     //dl
-    @field:SerializedName("dlNumber")
+    @SerializedName("dlNumber")
     val dlNumber: String? = "",
-    @field:SerializedName("validTill")
+    @SerializedName("validTill")
     val validTill: String? = "",
     //bank
-    @field:SerializedName("ifscCode")
+    @SerializedName("ifscCode")
     val ifscCode: String? = "",
-    @field:SerializedName("beneficiaryName")
+    @SerializedName("beneficiaryName")
     val beneficiaryName: String? = "",
-    @field:SerializedName("accountNumber")
+    @SerializedName("accountNumber")
     val accountNumber: String? = "",
-    @field:SerializedName("bankName")
+    @SerializedName("bankName")
     val bankName: String? = ""
 
 )

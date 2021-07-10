@@ -34,7 +34,7 @@ class VerificationMainViewModel @Inject constructor (private val iBuildConfigVM:
                 val doc = value.toObject(VerificationBaseModel::class.java)
                 var allDocs = ArrayList<SimpleCardDVM>()
                 allDocs.add(SimpleCardDVM("PAN Card","Takes about 45 seconds", R.drawable.ic_badge_black_24dp,"verification/pancardimageupload", doc?.pan_card?.verified))
-                allDocs.add(SimpleCardDVM("Aadhaar Card","Takes about 45 seconds",R.drawable.ic_account_box_black_24dp, "verification/aadhaarOptionsFragment", doc?.aadhar_card?.verified))
+                allDocs.add(SimpleCardDVM("Aadhaar Card","Takes about 45 seconds",R.drawable.ic_account_box_black_24dp, "verification/aadhaarcardimageupload", doc?.aadhar_card?.verified))
                 allDocs.add(SimpleCardDVM("Driving licence","Takes about 45 seconds",R.drawable.ic_directions_car_black_24dp, "verification/drivinglicenseimageupload", doc?.driving_license?.verified))
                 allDocs.add(SimpleCardDVM("Bank Details","Takes about 45 seconds",R.drawable.ic_account_balance_black_24dp, "verification/bank_account_fragment", doc?.bank_details?.verified))
                 _allDocumentsData.value = allDocs
