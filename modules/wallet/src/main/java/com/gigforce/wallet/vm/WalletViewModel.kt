@@ -48,11 +48,12 @@ class WalletViewModel @Inject constructor(private val profileFirebaseRepository:
 
     private fun getUserWallet() {
         walletRepository.getDBCollection().addSnapshotListener { value, e ->
-            if (value!!.data == null) {
-                walletRepository.setDefaultData(Wallet(balance = 0F))
-            } else {
+            value?.data?.let {
                 userWallet.postValue(value.toObject(Wallet::class.java))
+            }?: run {
+                walletRepository.setDefaultData(Wallet(balance = 0F))
             }
+
         }
     }
 
