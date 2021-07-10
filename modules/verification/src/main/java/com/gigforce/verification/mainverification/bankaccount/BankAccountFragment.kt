@@ -157,12 +157,24 @@ class BankAccountFragment : Fragment(),
         viewModel.verifiedStatus.observe(viewLifecycleOwner, Observer {
             //verified entry to firebase
             //showToast("Verified")
-
+            it.let {
+                if (it){
+                    viewBinding.belowLayout.gone()
+                    viewBinding.toplayoutblock.uploadStatusLayout(
+                        AppConstants.UPLOAD_SUCCESS,
+                        "VERIFICATION COMPLETED",
+                        "The Bank Details have been verified successfully."
+                    )
+                    viewBinding.submitButtonBank.gone()
+                    viewBinding.toplayoutblock.setVerificationSuccessfulView()
+                }
+            }
 
         })
         viewModel.verifiedStatusDB.observe(viewLifecycleOwner, Observer {
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Congratulations, your Bank details are verified.")
+                .setCancelable(false)
                 .setPositiveButton(getString(R.string.okay)) { dialog, _ ->
                     dialog.dismiss()
                     navigation.popBackStack()
