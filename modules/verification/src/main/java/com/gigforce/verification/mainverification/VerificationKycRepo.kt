@@ -33,7 +33,7 @@ class VerificationKycRepo(private val iBuildConfigVM: IBuildConfigVM) :
 //        )//FirebaseAuth.getInstance().currentUser?.uid)
 //        jsonObject.addProperty("subType", subType)
 
-        var model = OCRQueryModel(type, "RAjCRVuaqaRhhM8qbwOaO97wo9x2", subType)
+        var model = OCRQueryModel(type, getUID(), subType)
         var kycOcrStatus =
             kycService.getKycOcrResult(iBuildConfigVM.getVerificationKycOcrResult(), model, image)
         if (kycOcrStatus.isSuccessful) {
@@ -49,7 +49,7 @@ class VerificationKycRepo(private val iBuildConfigVM: IBuildConfigVM) :
 
     suspend fun getKycVerification(type: String, list: List<Data>): KycOcrResultModel {
         Log.d("Here", type + " list " + list.toString())
-        val kycVerifyReqModel = KycVerifyReqModel(type, "RAjCRVuaqaRhhM8qbwOaO97wo9x2", list)
+        val kycVerifyReqModel = KycVerifyReqModel(type, getUID(), list)
         val kycOcrStatus = kycService.getKycVerificationService(
             iBuildConfigVM.getKycVerificationUrl(),
             kycVerifyReqModel
@@ -85,7 +85,7 @@ class VerificationKycRepo(private val iBuildConfigVM: IBuildConfigVM) :
     suspend fun getBeneficiaryName(): String? {
         try{
             var beneficiaryName: String? = ""
-            db.collection(getCollectionName()).document("RAjCRVuaqaRhhM8qbwOaO97wo9x2").get().addOnSuccessListener {
+            db.collection(getCollectionName()).document(getUID()).get().addOnSuccessListener {
                 it.let {
                     if (it.contains("bank_details")){
                          val doc = it.toObject(VerificationBaseModel::class.java)
@@ -101,7 +101,7 @@ class VerificationKycRepo(private val iBuildConfigVM: IBuildConfigVM) :
 
     suspend fun setVerifiedStatus(status: Boolean?) : Boolean{
         try {
-            db.collection(getCollectionName()).document("RAjCRVuaqaRhhM8qbwOaO97wo9x2").updateOrThrow(
+            db.collection(getCollectionName()).document(getUID()).updateOrThrow(
                 mapOf(
                     "bank_details.verified" to status
                 )
