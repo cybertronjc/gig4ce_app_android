@@ -29,6 +29,13 @@ class VerificationMainViewModel @Inject constructor (private val iBuildConfigVM:
 
     private fun getAllDocuments() {
 
+        var allDocs = ArrayList<SimpleCardDVM>()
+        allDocs.add(SimpleCardDVM("PAN Card","Takes about 45 seconds", R.drawable.ic_badge_black_24dp,"verification/pancardimageupload", false))
+        allDocs.add(SimpleCardDVM("Aadhaar Card","Takes about 45 seconds",R.drawable.ic_account_box_black_24dp, "verification/aadhaarcardimageupload", false))
+        allDocs.add(SimpleCardDVM("Driving licence","Takes about 45 seconds",R.drawable.ic_directions_car_black_24dp, "verification/drivinglicenseimageupload", false))
+        allDocs.add(SimpleCardDVM("Bank Details","Takes about 45 seconds",R.drawable.ic_account_balance_black_24dp, "verification/bank_account_fragment", false))
+        _allDocumentsData.value = allDocs
+
         verificationKycRepo.db.collection("Verification").document(verificationKycRepo.getUID()).addSnapshotListener { value, error ->
             value?.data?.let {
                 val doc = value.toObject(VerificationBaseModel::class.java)
