@@ -34,7 +34,6 @@ import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.gigforce.verification.gigerVerfication.drivingLicense.DrivingLicenseSides
 import com.gigforce.verification.mainverification.Data
 import com.gigforce.verification.mainverification.VerificationClickOrSelectImageBottomSheet
-import com.gigforce.verification.mainverification.aadhaarcard.AadhaarCardImageUploadFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.yalantis.ucrop.UCrop
 import dagger.hilt.android.AndroidEntryPoint
@@ -115,9 +114,9 @@ class DrivingLicenseFragment : Fragment(),
             expiryDatePicker.show()
         }
 
-        viewBinding.submitButtonDl.setOnClickListener {
+        viewBinding.submitButton.setOnClickListener {
             hideSoftKeyboard()
-            if (viewBinding.submitButtonDl.tag?.toString().equals(CONFIRM_TAG)) {
+            if (viewBinding.submitButton.tag?.toString().equals(CONFIRM_TAG)) {
                 activity?.onBackPressed()
             } else {
                 if (viewBinding.stateSpinner.selectedItemPosition == 0) {
@@ -157,21 +156,22 @@ class DrivingLicenseFragment : Fragment(),
         viewModel.kycOcrResult.observe(viewLifecycleOwner, Observer {
             it.let {
                 if (it.status) {
-                    if (it.name.isNullOrBlank() || it.dlNumber.isNullOrBlank() || it.validTill.isNullOrBlank()) {
-                        viewBinding.toplayoutblock.uploadStatusLayout(
-                            AppConstants.UNABLE_TO_FETCH_DETAILS,
-                            "UNABLE TO FETCH DETAILS",
-                            "Enter your Driving License details manually or try again to continue the verification process."
-                        )
-                    } else {
+                    if (!it.dateOfBirth.isNullOrBlank() || !it.dlNumber.isNullOrBlank() || !it.validTill.isNullOrBlank()) {
                         viewBinding.toplayoutblock.uploadStatusLayout(
                             AppConstants.UPLOAD_SUCCESS,
                             "UPLOAD SUCCESSFUL",
                             "Information of Driving License Captured Successfully."
                         )
-                        viewBinding.nameTilDl.editText?.setText(it.name)
+                        viewBinding.dobDate.text = it.dateOfBirth
                         viewBinding.dlnoTil.editText?.setText(it.dlNumber)
                         viewBinding.expiryDate.text = it.validTill
+
+                    } else {
+                        viewBinding.toplayoutblock.uploadStatusLayout(
+                            AppConstants.UNABLE_TO_FETCH_DETAILS,
+                            "UNABLE TO FETCH DETAILS",
+                            "Enter your Driving License details manually or try again to continue the verification process."
+                        )
                     }
                 } else
                     showToast("Ocr status " + it.message)
@@ -187,10 +187,11 @@ class DrivingLicenseFragment : Fragment(),
                         "VERIFICATION COMPLETED",
                         "The Driving License Details have been verified successfully."
                     )
-                    viewBinding.submitButtonDl.tag = CONFIRM_TAG
+                    viewBinding.submitButton.tag = CONFIRM_TAG
                     viewBinding.toplayoutblock.setVerificationSuccessfulView()
+                    viewBinding.submitButton.text = getString(R.string.submit)
                 } else
-                    showToast("Verification " + it.status)
+                    showToast("Verification " + it.message)
             }
         })
         viewModel.observableStates.observe(viewLifecycleOwner, Observer {
@@ -238,7 +239,7 @@ class DrivingLicenseFragment : Fragment(),
             Log.d("Register", "Nombre del archivo " + file.name)
             // create RequestBody instance from file
             val requestFile: RequestBody =
-                RequestBody.create(MediaType.parse("multipart/form-data"), file)
+                RequestBody.create(MediaType.parse("image/png"), file)
             // MultipartBody.Part is used to send also the actual file name
             image =
                 MultipartBody.Part.createFormData("file", file.name, requestFile)

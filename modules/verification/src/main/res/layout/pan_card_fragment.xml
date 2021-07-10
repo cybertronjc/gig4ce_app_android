@@ -19,7 +19,7 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/submit_button_pan"
+            app:layout_constraintBottom_toTopOf="@+id/submit_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/appBarPan">
@@ -181,7 +181,7 @@
         </ScrollView>
 
         <TextView
-            android:id="@+id/submit_button_pan"
+            android:id="@+id/submit_button"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginStart="@dimen/size_16"
@@ -202,10 +202,10 @@
             android:layout_width="wrap_content"
             android:layout_height="36dp"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/submit_button_pan"
-            app:layout_constraintEnd_toEndOf="@+id/submit_button_pan"
-            app:layout_constraintStart_toStartOf="@+id/submit_button_pan"
-            app:layout_constraintTop_toTopOf="@+id/submit_button_pan" />
+            app:layout_constraintBottom_toBottomOf="@+id/submit_button"
+            app:layout_constraintEnd_toEndOf="@+id/submit_button"
+            app:layout_constraintStart_toStartOf="@+id/submit_button"
+            app:layout_constraintTop_toTopOf="@+id/submit_button" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

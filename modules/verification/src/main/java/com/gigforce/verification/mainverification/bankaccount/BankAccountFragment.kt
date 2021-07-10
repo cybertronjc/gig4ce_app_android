@@ -32,7 +32,6 @@ import com.gigforce.verification.mainverification.VerificationClickOrSelectImage
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.yalantis.ucrop.UCrop
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.bank_account_fragment.*
 import kotlinx.android.synthetic.main.veri_screen_info_component.view.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -89,13 +88,7 @@ class BankAccountFragment : Fragment(),
         viewModel.kycOcrResult.observe(viewLifecycleOwner, Observer {
             it.let {
                 if (it.status) {
-                    if (it.beneficiaryName.isNullOrBlank() || it.accountNumber.isNullOrBlank() || it.ifscCode.isNullOrBlank() || it.bankName.isNullOrBlank()) {
-                        viewBinding.toplayoutblock.uploadStatusLayout(
-                            AppConstants.UNABLE_TO_FETCH_DETAILS,
-                            "UNABLE TO FETCH DETAILS",
-                            "Enter your Bank details manually or try again to continue the verification process."
-                        )
-                    } else {
+                    if (!it.beneficiaryName.isNullOrBlank() || !it.accountNumber.isNullOrBlank() || !it.ifscCode.isNullOrBlank() || !it.bankName.isNullOrBlank()) {
                         viewBinding.toplayoutblock.uploadStatusLayout(
                             AppConstants.UPLOAD_SUCCESS,
                             "UPLOAD SUCCESSFUL",
@@ -105,9 +98,16 @@ class BankAccountFragment : Fragment(),
                         viewBinding.bankAccNumberItl.editText?.setText(it.accountNumber)
                         viewBinding.ifscCode.editText?.setText(it.ifscCode)
                         viewBinding.bankNameTil.editText?.setText(it.bankName)
+                    } else {
+                        viewBinding.toplayoutblock.uploadStatusLayout(
+                            AppConstants.UNABLE_TO_FETCH_DETAILS,
+                            "UNABLE TO FETCH DETAILS",
+                            "Enter your Bank details manually or try again to continue the verification process."
+                        )
+
                     }
                 } else
-                    showToast("Ocr status " + it.status)
+                    showToast("Ocr status " + it.message)
             }
         })
 
@@ -122,7 +122,7 @@ class BankAccountFragment : Fragment(),
 //                    viewBinding.ifscCode.editText?.setText(it.ifscCode)
 //                    viewBinding.bankNameTil.editText?.setText(it.bankName)
                 } else
-                    showToast("Ocr status " + it.status)
+                    showToast("Ocr status " + it.message)
             }
         })
 
@@ -141,7 +141,7 @@ class BankAccountFragment : Fragment(),
             //showCameraAndGalleryOption()
             checkForPermissionElseShowCameraGalleryBottomSheet()
         })
-        submit_button_bank.setOnClickListener {
+        viewBinding.submitButton.setOnClickListener {
             val ifsc =
                 viewBinding.ifscCode.editText?.text.toString().toUpperCase(Locale.getDefault())
             if (!VerificationValidations.isIfSCValid(ifsc)) {
@@ -189,7 +189,7 @@ class BankAccountFragment : Fragment(),
             showWhyWeNeedThisDialog()
         }
 
-        appBarBank.apply {
+        viewBinding.appBarBank.apply {
             setBackButtonListener(View.OnClickListener {
                 navigation.popBackStack()
             })
@@ -216,7 +216,7 @@ class BankAccountFragment : Fragment(),
             Log.d("Register", "Nombre del archivo " + file.name)
             // create RequestBody instance from file
             val requestFile: RequestBody =
-                RequestBody.create(MediaType.parse("multipart/form-data"), file)
+                RequestBody.create(MediaType.parse("image/png"), file)
             // MultipartBody.Part is used to send also the actual file name
             image =
                 MultipartBody.Part.createFormData("file", file.name, requestFile)
@@ -387,9 +387,9 @@ class BankAccountFragment : Fragment(),
     private fun callKycVerificationApi() {
         var list = listOf(
             Data("name", viewBinding.bankNameTil.editText?.text.toString()),
-            Data("no", bank_name_til.editText?.text.toString()),
-            Data("ifsccode", ifsc_code.editText?.text.toString()),
-            Data("holdername", account_holder_name.editText?.text.toString())
+            Data("no", viewBinding.bankNameTil.editText?.text.toString()),
+            Data("ifsccode", viewBinding.ifscCode.editText?.text.toString()),
+            Data("holdername", viewBinding.accountHolderName.editText?.text.toString())
         )
         viewModel.getKycVerificationResult("bank", list)
     }

@@ -300,7 +300,7 @@
         </ScrollView>
 
         <TextView
-            android:id="@+id/submit_button_dl"
+            android:id="@+id/submit_button"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginStart="@dimen/size_16"
