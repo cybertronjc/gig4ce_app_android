@@ -138,6 +138,35 @@ class ProfileFragment : BaseFragment() {
         val wm = requireContext().getSystemService(Context.WINDOW_SERVICE) as WindowManager
         dWidth = wm.defaultDisplay
         layout = inflateView(R.layout.fragment_profile_main_expanded, inflater, container)!!
+        return layout
+    }
+
+
+
+    private fun setAppBarOffset(offsetPx: Int) {
+        val params = layout.appbar.layoutParams as CoordinatorLayout.LayoutParams
+        val behavior = params.behavior as AppBarLayout.Behavior?
+
+
+        try {
+            behavior!!.onNestedPreScroll(
+                layout.coordinator,
+                layout.appbar,
+                this.requireView(),
+                0,
+                offsetPx,
+                intArrayOf(0, 0),
+                0
+            )
+        } catch (e : Exception){
+            e.printStackTrace()
+        }
+
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         layout.appbar.post(Runnable {
             val heightPx: Int = dWidth.width * 1 / 3
             setAppBarOffset(heightPx)
@@ -149,32 +178,11 @@ class ProfileFragment : BaseFragment() {
         })
 
         layout.profile_avatar.layoutParams.height = dWidth.width
-
         layout.main_expanded_is_verified.setOnClickListener {
             navigate(R.id.gigerVerificationFragment)
         }
 
-        return layout
-    }
 
-    private fun setAppBarOffset(offsetPx: Int) {
-        val params = layout.appbar.layoutParams as CoordinatorLayout.LayoutParams
-        val behavior = params.behavior as AppBarLayout.Behavior?
-
-
-        behavior!!.onNestedPreScroll(
-            layout.coordinator,
-            layout.appbar,
-            this.requireView(),
-            0,
-            offsetPx,
-            intArrayOf(0, 0),
-            0
-        )
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
         gigerVerificationViewModel.gigerVerificationStatus.observe(viewLifecycleOwner, Observer {
 
@@ -517,13 +525,17 @@ class ProfileFragment : BaseFragment() {
 //        })
         appbar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
             override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {
-                if (Math.abs(verticalOffset) - appBarLayout.getTotalScrollRange() == 0) {
-                    main_expanded_user_name.animate().alpha(0.0f).setDuration(100)
-                    main_expanded_user_name.visibility = View.INVISIBLE
-                } else {
-                    main_expanded_user_name.animate().alpha(1.0f).setDuration(0)
-                    main_expanded_user_name.visibility = View.VISIBLE
 
+                try {
+                    if (Math.abs(verticalOffset) - appBarLayout.getTotalScrollRange() == 0) {
+                        main_expanded_user_name.animate().alpha(0.0f).setDuration(100)
+                        main_expanded_user_name.visibility = View.INVISIBLE
+                    } else {
+                        main_expanded_user_name.animate().alpha(1.0f).setDuration(0)
+                        main_expanded_user_name.visibility = View.VISIBLE
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
             }
         })

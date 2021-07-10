@@ -15,6 +15,7 @@ import androidx.annotation.MenuRes
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.isVisible
 import com.gigforce.common_ui.R
+import com.gigforce.core.extensions.getTextChangeAsStateFlow
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.onTextChanged
 import com.gigforce.core.extensions.visible
@@ -286,6 +287,9 @@ class GigforceToolbar(
                 0
         )
     }
+
+    fun getSearchTextChangeAsFlow() = this.searchEditText.getTextChangeAsStateFlow()
+
 
     interface SearchTextChangeListener {
 

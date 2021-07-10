@@ -1,7 +1,11 @@
 package com.gigforce.core.image
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
+import android.provider.MediaStore
+import com.bumptech.glide.Glide
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -23,6 +27,31 @@ object ImageUtils {
         bmOptions.inSampleSize = scaleFactor
         bmOptions.inPurgeable = true //Deprecated API 21
         return BitmapFactory.decodeFile(photoPath, bmOptions)
+
+
+    }
+
+    fun resizeBitmap(context: Context,uri: Uri, targetW: Int, targetH: Int): Bitmap? {
+//        val bmOptions: BitmapFactory.Options = BitmapFactory.Options()
+//        bmOptions.inJustDecodeBounds = true
+//        BitmapFactory.decodeFile(photoPath, bmOptions)
+//        val photoW: Int = bmOptions.outWidth
+//        val photoH: Int = bmOptions.outHeight
+//        var scaleFactor = 1
+//        if (targetW > 0 || targetH > 0) {
+//            scaleFactor = Math.min(photoW / targetW, photoH / targetH)
+//        }
+//        bmOptions.inJustDecodeBounds = false
+//        bmOptions.inSampleSize = scaleFactor
+//        bmOptions.inPurgeable = true //Deprecated API 21
+//        return BitmapFactory.decodeFile(photoPath, bmOptions)
+
+        return Glide
+                .with(context)
+                .asBitmap()
+                .load(uri)
+                .submit(targetW,targetH)
+                .get()
     }
 
 

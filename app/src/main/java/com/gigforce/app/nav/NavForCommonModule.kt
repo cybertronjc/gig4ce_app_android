@@ -11,6 +11,9 @@ class NavForCommonModule(
         baseImplementation.registerRoute("${moduleName}/viewVideoFullScreen", R.id.viewFullScreenVideoDialogFragment)
         baseImplementation.registerRoute("${moduleName}/viewImageFullScreen", R.id.viewFullScreenImageDialogFragment)
         baseImplementation.registerRoute("${moduleName}/invite_friend", R.id.referrals_fragment)
+        baseImplementation.registerRoute("${moduleName}/landingScreen", R.id.landinghomefragment)
+
+
 
 
     }

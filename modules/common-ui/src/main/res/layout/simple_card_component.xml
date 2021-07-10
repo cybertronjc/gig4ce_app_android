@@ -17,10 +17,12 @@
             android:id="@+id/left_img"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginLeft="@dimen/size8"
-            android:layout_marginTop="@dimen/size16"
+            android:padding="4dp"
+            android:background="@drawable/icons_background"
+            android:layout_marginStart="@dimen/size8"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
@@ -28,7 +30,7 @@
             style="@style/CardTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/size16"
+            android:layout_marginStart="@dimen/size16"
             android:text="PAN Card"
             app:layout_constraintStart_toEndOf="@+id/left_img"
             app:layout_constraintTop_toTopOf="@+id/left_img" />

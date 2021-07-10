@@ -4,9 +4,11 @@ import android.content.Context
 import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.gigforce.common_ui.components.cells.FeatureLayoutComponent
+import com.gigforce.common_ui.viewdatamodels.FeatureLayoutDVM
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.giger_app.R
+import com.gigforce.giger_app.dataviewmodel.MainSectionDVM
 import com.gigforce.giger_app.repo.IMainNavDataRepository
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -20,18 +22,17 @@ class MainNavigationComponent(context: Context, attrs: AttributeSet?) :
 
     init {
         this.setOrientationAndRows(0, 2)
+    }
 
-        this.setSectionTitle("All Features")
-        this.setSectionIcon()
-
-        repository.getData().observeForever {
-            if (it.size == 0) {
-                this.findViewById<ConstraintLayout>(R.id.top_cl).gone()
-            } else {
-                this.findViewById<ConstraintLayout>(R.id.top_cl).visible()
-                this.setCollection(it)
+    override fun bind(data: Any?) {
+        if(data is MainSectionDVM){
+            repository.getData().observeForever {
+                try {
+                    super.bind(FeatureLayoutDVM(data.imageUrl, data.title, it))
+                }catch (e:Exception){}
             }
         }
+
     }
 
 }

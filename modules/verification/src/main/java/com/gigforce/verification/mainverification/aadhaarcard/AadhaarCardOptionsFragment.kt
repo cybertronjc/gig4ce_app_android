@@ -9,7 +9,10 @@ import androidx.fragment.app.viewModels
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.verification.R
 import com.gigforce.verification.databinding.AadhaarCardOptionsFragmentBinding
+import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.aadhaar_card_options_fragment.*
+import kotlinx.android.synthetic.main.veri_screen_info_component.view.*
 import javax.inject.Inject
 
 
@@ -46,16 +49,43 @@ class AadhaarCardOptionsFragment : Fragment(), View.OnClickListener {
             if (viewBinding.uploadAdhaarCard.getIsSelected()) navigation.navigateTo("verification/aadhaarcardimageupload")
             else navigation.navigateTo("verification/aadhaarcardphonenumber")
         }
+
+       viewBinding.textView5.setOnClickListener {
+            showWhyWeNeedThisDialog()
+        }
+        viewBinding.imageView7.setOnClickListener {
+            showWhyWeNeedThisDialog()
+        }
+
+        appBarAadharOption.apply {
+            setBackButtonListener(View.OnClickListener {
+                navigation.popBackStack()
+            })
+        }
+
+        viewBinding.uploadAdhaarCard.setLeftImage(R.drawable.ic_account_box_black_24dp)
+        viewBinding.phoneNumberAadhaar.setLeftImage(R.drawable.ic_system_security_update_warning_black_24dp)
     }
 
     override fun onClick(view: View?) {
-        if(view?.id == viewBinding.uploadAdhaarCard.id){
+        viewBinding.uploadAdhaarCard.setViewSelected(false)
+        viewBinding.phoneNumberAadhaar.setViewSelected(false)
+//        if(view?.id == viewBinding.uploadAdhaarCard.id){
+//
+//            viewBinding.uploadAdhaarCard.setViewSelected(true)
+//
+//        }
+//        else{
+//            viewBinding.phoneNumberAadhaar.setViewSelected(true)
+//        }
 
-            viewBinding.phoneNumberAadhaar.setViewSelected(false)
-        }
-        else{
-            viewBinding.uploadAdhaarCard.setViewSelected(false)
-        }
+    }
 
+    private fun showWhyWeNeedThisDialog() {
+        WhyWeNeedThisBottomSheet.launch(
+            childFragmentManager = childFragmentManager,
+            title = getString(R.string.why_do_we_need_this),
+            content = getString(R.string.why_do_we_need_this_aadhar)
+        )
     }
 }

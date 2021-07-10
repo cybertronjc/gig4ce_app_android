@@ -9,22 +9,21 @@
         tools:context=".mainverification.bankaccount.BankAccountFragment">
 
         <com.gigforce.common_ui.components.cells.AppBar
-            android:id="@+id/appBar2"
+            android:id="@+id/appBarBank"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:backgroundType="PinkBar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:titleText="Document Verification" />
+            app:titleText="Bank Account" />
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginLeft="@dimen/dp_sm1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/appBar2">
+            app:layout_constraintTop_toBottomOf="@id/appBarBank">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -35,13 +34,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp_xl1"
-                    app:docinfotext="Please upload your Bank Passbook (FRONT Page) for Document verification Process"
+                    android:layout_marginStart="@dimen/size16"
+                    app:docinfotext="Please upload your Bank Passbook (Front Page) for Document verification Process"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:missingdoctext="I don’t have a Bank Account"
                     app:title="Bank Account"
-                    app:uppercaption="You need to verify" />
+                    app:uppercaption="You need to upload" />
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/below_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/toplayoutblock">
 
                 <com.gigforce.common_ui.components.atoms.GrayLine
                     android:id="@+id/grayLine3"
@@ -50,7 +58,7 @@
                     android:layout_marginTop="@dimen/dp_xl1"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/toplayoutblock" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/textView10"
@@ -66,7 +74,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/grayLine3" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/account_number_itl"
+                    android:id="@+id/bank_acc_number_itl"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -80,7 +88,8 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="@dimen/size_46"
+                        android:padding="4dp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -92,14 +101,15 @@
                     android:layout_marginLeft="@dimen/dp_sm1"
                     android:layout_marginTop="@dimen/dp_xl1"
                     android:layout_marginRight="@dimen/dp_sm1"
-                    android:hint="Bank Number"
+                    android:hint="Bank Name"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/account_number_itl">
+                    app:layout_constraintTop_toBottomOf="@+id/bank_acc_number_itl">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="@dimen/size_46"
+                        android:padding="4dp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -111,14 +121,15 @@
                     android:layout_marginLeft="@dimen/dp_sm1"
                     android:layout_marginTop="@dimen/dp_xl1"
                     android:layout_marginRight="@dimen/dp_sm1"
-                    android:hint="Ifsc Code"
+                    android:hint="IFSC Code"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/bank_name_til">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="@dimen/size_46"
+                        android:padding="4dp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -130,20 +141,66 @@
                     android:layout_marginLeft="@dimen/dp_sm1"
                     android:layout_marginTop="@dimen/dp_xl1"
                     android:layout_marginRight="@dimen/dp_sm1"
+                    android:layout_marginBottom="@dimen/dp_sm1"
                     android:hint="Account holder name"
+                    app:layout_constraintBottom_toTopOf="@id/reupload_button_bank"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/ifsc_code">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="@dimen/size_46"
+                        android:padding="4dp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-
+                <TextView
+                    android:id="@+id/reupload_button_bank"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:background="@drawable/next_button_outlined"
+                    android:layout_marginStart="@dimen/size_16"
+                    android:layout_marginEnd="@dimen/size_16"
+                    android:layout_marginBottom="@dimen/size_22"
+                    android:gravity="center"
+                    android:minHeight="@dimen/size_36"
+                    android:text="Upload Again"
+                    android:visibility="gone"
+                    android:textColor="@color/outlined_button_text"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
+
+                <TextView
+                    android:id="@+id/submit_button_bank"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:background="@drawable/app_gradient_button"
+                    android:layout_marginStart="@dimen/size_16"
+                    android:layout_marginEnd="@dimen/size_16"
+                    android:layout_marginBottom="@dimen/size_22"
+                    android:gravity="center"
+                    android:minHeight="@dimen/size_36"
+                    android:text="Next"
+                    android:textColor="@color/white"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@+id/submit_button_bank"
+                    app:layout_constraintEnd_toEndOf="@+id/submit_button_bank"
+                    app:layout_constraintStart_toStartOf="@+id/submit_button_bank"
+                    app:layout_constraintTop_toTopOf="@+id/submit_button_bank" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

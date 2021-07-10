@@ -10,6 +10,7 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
+import java.util.concurrent.TimeUnit
 
 object RetrofitFactory {
 
@@ -46,6 +47,9 @@ object RetrofitFactory {
     //Not logging the authkey if not debug
     private val client =
         OkHttpClient().newBuilder()
+            .connectTimeout(2, TimeUnit.MINUTES) // connect timeout
+            .readTimeout(2, TimeUnit.MINUTES)    // read timeout
+            .writeTimeout(2, TimeUnit.MINUTES)   // write timeout
             .addInterceptor(loggingInterceptor)
             .addInterceptor(authInterceptor)
             .build()

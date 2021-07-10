@@ -66,7 +66,7 @@ class CameraAndGalleryIntegrator : ClickOrSelectImageBottomSheet.OnPickOrCapture
             activity.supportFragmentManager
         }
 
-        ClickOrSelectImageBottomSheet.launch(fragmentManager, false,this)
+        ClickOrSelectImageBottomSheet.launch(fragmentManager, false, this)
     }
 
     fun startCameraForCapturing() {
@@ -77,8 +77,8 @@ class CameraAndGalleryIntegrator : ClickOrSelectImageBottomSheet.OnPickOrCapture
             activity
         }
 
-        val intents = ImagePicker.getCaptureImageIntentsOnly(context)
-        if(openFrontCamera){
+        val intents = ImagePicker.getCaptureImageIntentsOnly(context) ?: return
+        if (openFrontCamera) {
             when {
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1 && Build.VERSION.SDK_INT < Build.VERSION_CODES.O -> {
                     intents.putExtra("android.intent.extras.CAMERA_FACING", CameraCharacteristics.LENS_FACING_FRONT)  // Tested on API 24 Android version 7.0(Samsung S6)
@@ -106,7 +106,7 @@ class CameraAndGalleryIntegrator : ClickOrSelectImageBottomSheet.OnPickOrCapture
             activity
         }
 
-        val intents = ImagePicker.getPickImageIntentsOnly(context)
+        val intents = ImagePicker.getPickImageIntentsOnly(context) ?: return
         if (fragment != null) {
             fragment!!.startActivityForResult(intents, REQUEST_PICK_IMAGE)
         } else {
@@ -177,7 +177,7 @@ class CameraAndGalleryIntegrator : ClickOrSelectImageBottomSheet.OnPickOrCapture
         callback.imageResult(outputFileUri)
     }
 
-    private fun startImageCropper(uri: Uri, imageCropOptions: ImageCropOptions) {
+    fun startImageCropper(uri: Uri, imageCropOptions: ImageCropOptions) {
         Log.v("Start Crop", "started")
         //can use this for a new name every time
 
@@ -201,7 +201,6 @@ class CameraAndGalleryIntegrator : ClickOrSelectImageBottomSheet.OnPickOrCapture
 
         val size = getImageDimensions(uri)
         uCrop.withAspectRatio(size.width.toFloat(), size.height.toFloat())
-
         uCrop.withOptions(getCropOptions())
 
         if (fragment != null) {

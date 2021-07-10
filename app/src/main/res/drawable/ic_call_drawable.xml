@@ -4,7 +4,7 @@
     android:width="@dimen/size_24"
     android:height="@dimen/size_24"
     android:gravity="center">
-    <shape xmlns:android="http://schemas.android.com/apk/res/android"
+    <shape
         android:shape="oval">
         <solid android:color="#ffd9e6" />
 
@@ -14,7 +14,7 @@
     android:width="@dimen/size_10"
     android:height="@dimen/size_10"
 
-    android:drawable="@drawable/ic_call_doc_scheduler"
+    android:drawable="@drawable/ic_call_doc_scheduler_2"
     android:gravity="center" />
 
 </layer-list>

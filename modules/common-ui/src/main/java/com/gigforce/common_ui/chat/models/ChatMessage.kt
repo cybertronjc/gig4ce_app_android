@@ -1,15 +1,15 @@
 package com.gigforce.common_ui.chat.models
 
 import android.graphics.Bitmap
+import com.gigforce.common_ui.chat.ChatConstants
+import com.gigforce.common_ui.metaDataHelper.ImageMetaData
 import com.gigforce.common_ui.viewdatamodels.chat.UserInfo
-import com.gigforce.core.SimpleDVM
-import com.gigforce.common_ui.core.ChatConstants
 import com.google.firebase.Timestamp
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.PropertyName
+import java.util.*
 
 class ChatMessage(
     @DocumentId
@@ -51,6 +51,10 @@ class ChatMessage(
     @get:PropertyName("content")
     @set:PropertyName("content")
     var content: String = "",
+
+    @get:PropertyName("mentionedUsersInfo")
+    @set:PropertyName("mentionedUsersInfo")
+    var mentionedUsersInfo: List<MentionUser> = emptyList(),
 
     @get:PropertyName("videoLength")
     @set:PropertyName("videoLength")
@@ -107,45 +111,77 @@ class ChatMessage(
     @set:PropertyName("receiverInfo")
     var receiverInfo: UserInfo? = UserInfo(),
 
+    @get:PropertyName("isDeleted")
+    @set:PropertyName("isDeleted")
+    var isDeleted: Boolean = false,
+
+    @get:PropertyName("deletedOn")
+    @set:PropertyName("deletedOn")
+    var deletedOn: Timestamp? = null,
+
+    @get:PropertyName("groupMessageReadBy")
+    @set:PropertyName("groupMessageReadBy")
+    var groupMessageReadBy: List<MessageReceivingInfo> = emptyList(),
+
+    @get:PropertyName("groupId")
+    @set:PropertyName("groupId")
+    var groupId: String = "",
+
+    @get:PropertyName("imageMetaData")
+    @set:PropertyName("imageMetaData")
+    var imageMetaData: ImageMetaData? = null,
+
+    @get:PropertyName("isChatEvent")
+    @set:PropertyName("isChatEvent")
+    var isMessageChatEvent: Boolean = false,
+
+    @get:PropertyName("eventInfo")
+    @set:PropertyName("eventInfo")
+    var eventInfo: EventInfo? = null,
+
     @get:Exclude
     @set:Exclude
     var thumbnailBitmap: Bitmap? = null
 
-) : SimpleDVM(
-        defaultViewType = -1,
-        onClickNavPath = null
-),
-    IMediaMessage {
+) : IMediaMessage
 
-    override fun getViewType(): Int {
 
-        if (this.chatType == ChatConstants.CHAT_TYPE_USER) {
-            return when (this.type) {
-                ChatConstants.MESSAGE_TYPE_TEXT -> if (this.flowType == "in") ViewTypes.IN_TEXT else ViewTypes.OUT_TEXT
-                ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE -> if (this.flowType == "in") ViewTypes.IN_IMAGE else ViewTypes.OUT_IMAGE
-                ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT -> if (this.flowType == "in") ViewTypes.IN_DOCUMENT else ViewTypes.OUT_DOCUMENT
-                ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO -> if (this.flowType == "in") ViewTypes.IN_VIDEO else ViewTypes.OUT_VIDEO
-                ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION -> if (this.flowType == "in") ViewTypes.IN_LOCATION else ViewTypes.OUT_LOCATION
-                else -> -1
-            }
-        } else if (this.chatType == ChatConstants.CHAT_TYPE_GROUP) {
+data class EventInfo(
 
-            val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
+        @get:PropertyName("groupId")
+        @set:PropertyName("groupId")
+        var groupId: String = "",
 
-            return when (this.type) {
-                ChatConstants.MESSAGE_TYPE_TEXT -> if (this.senderInfo.id != currentUserId) ViewTypes.GROUP_IN_TEXT else ViewTypes.GROUP_OUT_TEXT
-                ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE -> if (this.senderInfo.id != currentUserId) ViewTypes.GROUP_IN_IMAGE else ViewTypes.GROUP_OUT_IMAGE
-                ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT -> if (this.senderInfo.id != currentUserId) ViewTypes.GROUP_IN_DOCUMENT else ViewTypes.GROUP_OUT_DOCUMENT
-                ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO -> if (this.senderInfo.id != currentUserId) ViewTypes.GROUP_IN_VIDEO else ViewTypes.GROUP_OUT_VIDEO
-                ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION -> if (this.senderInfo.id != currentUserId) ViewTypes.GROUP_IN_LOCATION else ViewTypes.GROUP_OUT_LOCATION
-                else -> -1
-            }
-        }
+        @get:PropertyName("showEventToUsersWithUid")
+        @set:PropertyName("showEventToUsersWithUid")
+        var showEventToUsersWithUid: List<String> = emptyList(),
 
-        return -1
+        @get:PropertyName("eventDoneByUserUid")
+        @set:PropertyName("eventDoneByUserUid")
+        var eventDoneByUserUid: String = "",
+
+        @get:PropertyName("eventText")
+        @set:PropertyName("eventText")
+        var eventText: String = "",
+
+        @get:PropertyName("eventTime")
+        @set:PropertyName("eventTime")
+        var eventTime: Timestamp =  Timestamp.now()
+){
+
+    fun toChatMessage(): ChatMessage{
+        return ChatMessage(
+                id = UUID.randomUUID().toString(),
+                headerId = groupId,
+                isMessageChatEvent = true,
+                type = ChatConstants.MESSAGE_TYPE_EVENT_ASSIGNED_ADMIN,
+                chatType = ChatConstants.CHAT_TYPE_GROUP,
+                flowType = ChatConstants.FLOW_TYPE_OUT,
+                content = "",
+                timestamp = eventTime,
+                eventInfo = this
+        )
     }
-
-
 }
 
 interface IMediaMessage {

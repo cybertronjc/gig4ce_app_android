@@ -32,7 +32,7 @@ class HelpVideoInfoComponent(context: Context, attrs: AttributeSet?) :
     override fun bind(data: Any?) {
         if (data is HelpVideosSectionDVM) {
             repository.getData().observeForever {
-                if (it.size > data.showVideo) {
+                if (it.isNotEmpty()) {
                     var videoToShow = data.showVideo
                     if (videoToShow == 0) {
                         super.bind(FeatureLayoutDVM("", "", emptyList()))

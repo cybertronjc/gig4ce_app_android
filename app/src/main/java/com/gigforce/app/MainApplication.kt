@@ -1,57 +1,60 @@
 package com.gigforce.app
 
 import android.app.Application
-import android.app.NotificationManager
 import android.util.Log
 import androidx.lifecycle.ProcessLifecycleOwner
-import com.appsflyer.AppsFlyerConversionListener
-import com.appsflyer.AppsFlyerLib
-import com.clevertap.android.sdk.CleverTapAPI
-import com.gigforce.core.IEventTracker
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.gigforce.app.di.implementations.SharedPreAndCommonUtilDataImp
+import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
+import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
-import com.mixpanel.android.mpmetrics.MixpanelAPI
+import com.moe.pushlibrary.MoEHelper
+import com.moengage.core.MoEngage
+import com.moengage.core.config.FcmConfig
+import com.moengage.core.config.NotificationConfig
+import com.moengage.core.model.AppStatus
 import dagger.hilt.android.HiltAndroidApp
 import io.branch.referral.Branch
-import javax.inject.Inject
 
 @HiltAndroidApp
 class MainApplication : Application() {
 
-//    var mixpanel: MixpanelAPI? = null
-//    private var cleverTapAPI: CleverTapAPI? = null
-
-
-//    private val firebaseAnalytics: FirebaseAnalytics by lazy {
-//        FirebaseAnalytics.getInstance(this)
-//    }
-
-//    private val appsFlyerLib: AppsFlyerLib by lazy {
-//        AppsFlyerLib.getInstance()
-//    }
-
+    lateinit var sp: SharedPreAndCommonUtilInterface
+    var moEngage = MoEngage.Builder(this, BuildConfig.MOENGAGE_KEY)
+        .configureNotificationMetaData(NotificationConfig(R.drawable.ic_notification_icon, R.drawable.ic_notification_icon, R.color.colorPrimary, null, true, isBuildingBackStackEnabled = false, isLargeIconDisplayEnabled = true))
+        .configureFcm(FcmConfig(false))
+        .build()
 
     override fun onCreate() {
         super.onCreate()
         setUpBranchTool()
-        //setupCleverTap()
+        setUpMoengage()
         //setupMixpanel()
         //setUpAppsFlyer()
         //setUpUserOnAnalyticsAndCrashlytics()
         ProcessLifecycleOwner.get().lifecycle.addObserver(PresenceManager())
         setUpRemoteConfig()
+        initFirebaseAuthListener()
+    }
+
+    private fun initFirebaseAuthListener() {
+        FirebaseAuthStateListener.getInstance()
     }
 
     private fun setUpBranchTool() {
         // Branch logging for debugging
-        Branch.enableLogging();
+        Branch.enableLogging()
 
         // Branch object initialization
-        Branch.getAutoInstance(this);
+        Branch.getAutoInstance(this)
+        Branch.getAutoInstance(this).enableFacebookAppLinkCheck()
+
     }
 
+    private fun setUpMoengage() {
+        MoEngage.initialise(moEngage)
+        // install update differentiation
+        trackInstallOrUpdate()
+    }
 
 
 
@@ -69,7 +72,23 @@ class MainApplication : Application() {
         }
     }
 
-
+    /**
+     * Tell MoEngage SDK whether the user is a new user of the application or an existing user.
+     */
+    private fun trackInstallOrUpdate() {
+        //keys are just sample keys, use suitable keys for the apps
+        sp = SharedPreAndCommonUtilDataImp(this)
+        var appStatus = AppStatus.INSTALL
+        if (sp.getDataBoolean("has_sent_install") == true) {
+            if (sp.getDataBoolean("existing") == true) {
+                appStatus = AppStatus.UPDATE
+            }
+            // passing install/update to MoEngage SDK
+            MoEHelper.getInstance(this).setAppStatus(appStatus)
+            sp.saveDataBoolean("has_sent_install", true)
+            sp.saveDataBoolean("existing", true)
+        }
+    }
 
 
     companion object {
@@ -96,9 +115,6 @@ class MainApplication : Application() {
 //        FirebaseCrashlytics.getInstance().setUserId(it.uid)
 //
 //        firebaseAnalytics.setUserId(it.uid)
-//        cleverTapAPI?.pushProfile(mapOf(
-//            "user_id" to it.uid
-//        ))
 //
 //        mixpanel?.identify(it.uid);
 //        mixpanel?.getPeople()?.identify(it.uid)
@@ -118,22 +134,7 @@ class MainApplication : Application() {
 //    }
 //}
 //
-//private fun setupCleverTap() {
-//    val clevertapDefaultInstance =
-//        CleverTapAPI.getDefaultInstance(applicationContext)
-//
-//    cleverTapAPI = CleverTapAPI.getDefaultInstance(applicationContext)
-//    CleverTapAPI.createNotificationChannel(
-//        applicationContext,
-//        "gigforce-general",
-//        "Gigforce",
-//        "Gigforce Push Notifications",
-//        NotificationManager.IMPORTANCE_MAX,
-//        true
-//    )
-//
-//    cleverTapAPI?.pushEvent("MAIN_APP_CREATED")
-//}
+
 //
 //private val appsFlyerConversationListener: AppsFlyerConversionListener = object : AppsFlyerConversionListener {
 //

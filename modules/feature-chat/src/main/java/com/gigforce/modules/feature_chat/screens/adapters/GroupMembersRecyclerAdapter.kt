@@ -73,7 +73,10 @@ class GroupMembersRecyclerAdapter(
             val charString = constraint.toString()
 
             if (charString.isEmpty()) {
-                filteredContactsList = originalContactsList
+
+                val filterResults = FilterResults()
+                filterResults.values = originalContactsList
+                return filterResults
             } else {
                 val filteredList: MutableList<ContactModel> = mutableListOf()
                 for (contact in originalContactsList) {
@@ -84,12 +87,13 @@ class GroupMembersRecyclerAdapter(
                     )
                         filteredList.add(contact)
                 }
-                filteredContactsList = filteredList
+
+                val filterResults = FilterResults()
+                filterResults.values = filteredList
+                return filterResults
             }
 
-            val filterResults = FilterResults()
-            filterResults.values = filteredContactsList
-            return filterResults
+
         }
 
         override fun publishResults(constraint: CharSequence?, results: FilterResults?) {

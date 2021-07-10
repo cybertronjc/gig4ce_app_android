@@ -396,6 +396,7 @@ class CalendarHomeScreen : Fragment(),
                 var props = HashMap<String, Any>()
                 props.put("name", profile.name)
                 eventTracker.setProfileProperty(ProfilePropArgs("\$name", profile.name))
+                eventTracker.setUserName(profile.name)
                 Log.d("name", profile.name)
             }
         })

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
+import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.ProfilePropArgs
 import com.gigforce.core.TrackingEventArgs
@@ -170,6 +171,7 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
         val uniqueList = confirmSubCityList.toSet().toList()
         confirmSubCityList.clear()
         uniqueList.forEach { obj -> confirmSubCityList.add(obj) }
+
         if (add) {
             confirmSubCityList.add(text)
             Log.d("added", "text" + " list: " + confirmSubCityList.toString())
@@ -179,8 +181,9 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
                 Log.d("removed", "text" + " list: " + confirmSubCityList.toString())
             }
         }
-
         formCompletionListener?.enableDisableNextButton(confirmSubCityList.isNotEmpty())
+
+
     }
 
     override fun onCitySelected(city: City,isMajorCity : Boolean) {

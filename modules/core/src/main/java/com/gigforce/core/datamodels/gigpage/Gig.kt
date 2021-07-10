@@ -3,6 +3,7 @@ package com.gigforce.core.datamodels.gigpage
 import android.os.Parcelable
 import androidx.annotation.Keep
 import com.gigforce.core.SimpleDVM
+import com.gigforce.core.datamodels.CommonViewTypes
 import com.gigforce.core.extensions.toLocalDateTime
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
@@ -220,7 +221,7 @@ data class Gig(
     @field:Exclude
         var chatInfo: Map<String, Any>? = null
 
-) {
+): SimpleDVM(CommonViewTypes.VIEW_GIG_ITEM_CARD)  {
 
     @get:Exclude
     @set:Exclude
@@ -436,6 +437,10 @@ data class JobProfile(
         @get:PropertyName("id")
         @set:PropertyName("id")
         var id: String? = null,
+
+        @get:PropertyName("activationCode")
+        @set:PropertyName("activationCode")
+        var activationCode: String? = null,
 
         @get:PropertyName("title")
         @set:PropertyName("title")

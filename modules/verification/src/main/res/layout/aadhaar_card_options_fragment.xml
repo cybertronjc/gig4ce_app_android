@@ -6,13 +6,13 @@
     android:layout_height="match_parent">
 
     <com.gigforce.common_ui.components.cells.AppBar
-        android:id="@+id/appBar2"
+        android:id="@+id/appBarAadharOption"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:backgroundType="PinkBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:titleText="Document Verification" />
+        app:titleText="Aadhar Card" />
 
     <TextView
         android:id="@+id/textView"
@@ -21,9 +21,9 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_sm1"
         android:layout_marginTop="@dimen/dp_xl1"
-        android:text="You need to verify your"
+        android:text="You need to upload"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appBar2"/>
+        app:layout_constraintTop_toBottomOf="@id/appBarAadharOption"/>
 
     <TextView
         android:id="@+id/textView2"
@@ -71,7 +71,7 @@
         android:layout_marginLeft="@dimen/dp_sm1"
         android:layout_marginRight="@dimen/dp_sm1"
         android:layout_marginTop="@dimen/dp_large"
-        android:text="Select the method you want for verifying your Aadhar Card"
+        android:text="Select the method you want for verifying your Aadhaar Card"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/grayLine2" />
@@ -81,7 +81,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_sm1"
-        app:title="Upload Aadhar Card Photo"
+        app:title="Upload Aadhaar Card Photo"
         app:caption="Takes about 45 seconds"
         app:layout_constraintEnd_toEndOf="@id/textView8"
         app:layout_constraintStart_toStartOf="@id/textView8"

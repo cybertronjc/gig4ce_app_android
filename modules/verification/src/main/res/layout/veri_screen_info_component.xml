@@ -2,14 +2,15 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <TextView
         android:id="@+id/uppercaption"
         style="@style/Caption2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="You need to verify your"
+        android:text="You need to upload"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -57,23 +58,103 @@
         style="@style/Caption1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_xl1"
+        android:layout_marginTop="@dimen/size_23"
         android:layout_marginRight="@dimen/dp_sm1"
-        android:text="Please upload your PAN Card (FRONT and BACK Side) for Document verification Process"
+        android:text="Please upload your PAN Card (Front and Back Side) for Document verification Process"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/missingtext"
         app:layout_constraintTop_toBottomOf="@+id/missingtext" />
+
+    <TextView
+        android:id="@+id/uploadHereText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/dp_xsm1"
+        android:text="Upload Here"
+        android:visibility="gone"
+        android:textColor="@color/black3"
+        android:fontFamily="@font/lato_bold"
+        android:layout_marginTop="@dimen/size_24"
+        app:layout_constraintStart_toStartOf="@+id/missingtext"
+        app:layout_constraintTop_toBottomOf="@id/docdetail" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager2"
         android:layout_width="match_parent"
         android:layout_height="180dp"
-        android:layout_marginLeft="@dimen/dp_sm1"
+        android:orientation="horizontal"
+        android:visibility="gone"
         android:layout_marginTop="@dimen/dp_large"
-        android:layout_marginRight="@dimen/dp_sm1"
-        android:background="@color/lipstick"
+        android:layout_marginEnd="@dimen/size_16"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/docdetail" />
+        app:layout_constraintTop_toBottomOf="@id/uploadHereText" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabBackground="@drawable/tab_selector"
+        app:tabGravity="center"
+        android:visibility="gone"
+        app:tabIndicatorHeight="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/viewPager2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/uploadLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="@dimen/size16"
+        android:background="@drawable/upload_successfull_layout_bg"
+        app:layout_constraintTop_toBottomOf="@+id/tabLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/uploadIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:src="@drawable/ic_baseline_verified_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <TextView
+            android:id="@+id/uploadTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_20"
+            android:fontFamily="@font/lato"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="@dimen/size_20"
+            android:textSize="14sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/uploadIcon"
+            tools:text="UPLOAD SUCCESSFUL" />
+
+        <TextView
+            android:id="@+id/uploadSubTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_4"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="@dimen/size_20"
+            android:textSize="14sp"
+            app:layout_constraintTop_toBottomOf="@id/uploadTitle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/uploadTitle"
+            tools:text="The DL details provided were uploaded and matched successfully"></TextView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

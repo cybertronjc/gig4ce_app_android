@@ -371,6 +371,9 @@ class AssessmentFragment : Fragment(), IOnBackPressedOverride,
             this.navigation.popBackStack()
         }
         bt_next_assess_frag.setOnClickListener {
+            if(viewModelAssessmentFragment.observableAssessmentData.value?.assessment == null)
+                return@setOnClickListener
+
             if (selectedPosition == viewModelAssessmentFragment.observableAssessmentData.value?.assessment!!.size - 1) {
                 if (viewModelAssessmentFragment.observableAssessmentData.value?.assessment!![selectedPosition].answered) {
                     h_pb_assess_frag.progress = h_pb_assess_frag.max

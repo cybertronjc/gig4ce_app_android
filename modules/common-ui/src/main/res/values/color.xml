@@ -13,7 +13,7 @@
     <color name="brandColor2">#990077</color>
 
     <color name="greyLight">#e5e5e5</color>
-    <color name="grey">#6d7278</color>
+    <color name="grey">#979797</color>
     <color name="greyDark">#e5e5e5</color>
 
 
@@ -27,6 +27,7 @@
 
     <color name="lipstick">#d72467</color>
     <color name="lipstick_2">#e42c64</color>
+    <color name="lipstick_3">#e53369</color>
 
 
     <!-- Theme Colors -->
@@ -64,6 +65,7 @@
     <color name="black_two">#313131</color>
 
     <color name="app_red">#E02020</color>
+    <color name="outlined_button_text">#cd1e6a</color>
 
     <color name="gig_timer_silver_light">#e2dfdf</color>
     <color name="gig_timer_silver_dark">#888888</color>
@@ -96,5 +98,7 @@
     <color name="status_bg_completed">#72a839</color>
 
     <color name="app_card_heading_color1">#292929</color>
+
+    <color name="status_bar_pink">#e53369</color>
 
 </resources>

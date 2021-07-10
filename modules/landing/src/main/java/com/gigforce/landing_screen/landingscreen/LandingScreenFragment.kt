@@ -43,6 +43,8 @@ import com.gigforce.common_ui.viewmodels.ProfileViewModel
 import com.gigforce.core.AppConstants
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.ProfilePropArgs
+import com.gigforce.core.TrackingEventArgs
+import com.gigforce.core.analytics.ClientActivationEvents
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.datamodels.learning.Course
 import com.gigforce.core.datamodels.profile.ProfileData
@@ -66,8 +68,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.landingscreen_fragment.*
 import javax.inject.Inject
 
+
 @AndroidEntryPoint
-class LandingScreenFragment : Fragment(){
+class LandingScreenFragment : Fragment() {
     companion object {
         fun newInstance() = LandingScreenFragment()
         private const val INTENT_EXTRA_SCREEN = "scrren"
@@ -100,6 +103,7 @@ class LandingScreenFragment : Fragment(){
     private val learningViewModel: LearningViewModel by viewModels()
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
     private val chatHeadersViewModel: ChatHeadersViewModel by viewModels()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -136,6 +140,7 @@ class LandingScreenFragment : Fragment(){
         broadcastReceiverForLanguageCahnge()
         checkforForceupdate()
 
+
 //        checkforLanguagedSelectedForLastLogin()
         exploreByIndustryLayout?.let {
             when (comingFromOrGoingToScreen) {
@@ -158,6 +163,7 @@ class LandingScreenFragment : Fragment(){
 //        chat_icon_iv.performClick()
 
     }
+
 
 //    private fun checkForDeepLink() {
 //        if (navFragmentsData?.getData()
@@ -196,7 +202,6 @@ class LandingScreenFragment : Fragment(){
 //
 //        }
 //    }
-
 
     private fun checkforForceupdate() {
         ConfigRepository().getForceUpdateCurrentVersion(object :
@@ -372,13 +377,14 @@ class LandingScreenFragment : Fragment(){
             val profile: ProfileData = profileObs
 
             displayImage(profile.profileAvatarName)
-            if (profile.name != null && !profile.name.equals("")){
+            if (profile.name != null && !profile.name.equals("")) {
                 profile_name.text = profile.name
 
                 //setting user's name to mixpanel
                 var props = HashMap<String, Any>()
                 props.put("name", profile.name)
                 eventTracker.setProfileProperty(ProfilePropArgs("\$name", profile.name))
+                eventTracker.setUserName(profile.name)
                 Log.d("name", profile.name)
             }
         })
@@ -640,8 +646,9 @@ class LandingScreenFragment : Fragment(){
 
             tipsAdapter?.setOnSkipListener(object : TipsViewAdapter.OnSkipListener {
                 override fun onSkipClicked(model: Tip, pos: Int) {
-                    if (pos == -1) return
+                    if (pos == -1 || pos >= tips.size) return
                     sharedPreAndCommonUtilInterface.saveDataBoolean(model.tip_id.toString(), true)
+
                     tips.removeAt(pos)
                     tipsAdapter.notifyItemRemoved(pos)
                     if (tips.isEmpty()) {
@@ -878,17 +885,6 @@ class LandingScreenFragment : Fragment(){
 
 
         learningViewModel.getRoleBasedCourses()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        StatusBarUtil.setColorNoTranslucent(
-            requireActivity(), ResourcesCompat.getColor(
-                resources,
-                android.R.color.white,
-                null
-            )
-        )
     }
 
     private fun showLearningAsLoading() {
@@ -1204,12 +1200,32 @@ class LandingScreenFragment : Fragment(){
             exploreGigsAdapter?.setOnCardSelectedListener(object :
                 ExploreGigsAdapter.OnCardSelectedListener {
                 override fun onCardSelected(any: Any) {
-                    var id = (any as JobProfile).id
+                    var data = (any as JobProfile)
 //                    Log.d("cardId", id)
 //        navigate(
 //                R.id.fragment_client_activation,
 //                bundleOf(StringConstants.JOB_PROFILE_ID.value to id)
 //        )
+                    val id = data?.id ?: ""
+                    val title = data?.cardTitle ?: ""
+                    Log.d("title", data.title)
+
+                    eventTracker.pushEvent(TrackingEventArgs(
+                            eventName = data.title + "_" + ClientActivationEvents.EVENT_USER_CLICKED,
+                            props = mapOf(
+                                    "id" to id,
+                                    "title" to title,
+                                    "screen_source" to "Landing Screen"
+                            )
+                    ))
+                    eventTracker.pushEvent(TrackingEventArgs(
+                            eventName = ClientActivationEvents.EVENT_USER_CLICKED,
+                            props = mapOf(
+                                    "id" to id,
+                                    "title" to title,
+                                    "screen_source" to "Landing Screen"
+                            )
+                    ))
                     navigation.navigateTo(
                         "client_activation",
                         bundleOf(StringConstants.JOB_PROFILE_ID.value to id)
@@ -1221,20 +1237,14 @@ class LandingScreenFragment : Fragment(){
         }
     }
 
-//    override fun onCardSelected(any: Any) {
-//        var id = (any as JobProfile).id
-//        Log.d("cardId", id)
-////        navigate(
-////                R.id.fragment_client_activation,
-////                bundleOf(StringConstants.JOB_PROFILE_ID.value to id)
-////        )
-//        navigation.navigateTo("client_activation",bundleOf(StringConstants.JOB_PROFILE_ID.value to id) )
-//    }
-//
-//    override fun onSeeMoreSelected(any: Any) {
-////        navigate(
-////                R.id.clientActiExploreList,
-////        )
-//        navigation.navigateTo("client_activation/gig_detail")
-//    }
+    override fun onResume() {
+        super.onResume()
+        StatusBarUtil.setColorNoTranslucent(
+            requireActivity(), ResourcesCompat.getColor(
+                resources,
+                android.R.color.white,
+                null
+            )
+        )
+    }
 }

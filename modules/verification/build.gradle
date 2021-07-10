@@ -15,7 +15,7 @@ android {
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
-
+        vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
     }
@@ -139,5 +139,7 @@ dependencies {
     implementation 'com.otaliastudios:cameraview:2.6.2'
     //Transcoder for compressing video files
     implementation 'com.otaliastudios:transcoder:0.9.1'
+
+    implementation 'com.github.yalantis:ucrop:2.2.4'
 
 }

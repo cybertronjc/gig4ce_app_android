@@ -17,6 +17,10 @@ android {
         consumerProguardFiles "consumer-rules.pro"
     }
 
+    buildFeatures {
+        dataBinding true
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -108,9 +112,6 @@ dependencies {
 
     implementation 'com.facebook.shimmer:shimmer:0.5.0@aar'
 
-    // swipe button
-    implementation "com.ncorti:slidetoact:0.8.0"
-
     implementation 'pub.devrel:easypermissions:3.0.0'
 
     implementation 'com.jaeger.statusbarutil:library:1.5.1'
@@ -124,4 +125,5 @@ dependencies {
     implementation 'com.otaliastudios:cameraview:2.6.2'
 
     implementation 'com.github.yalantis:ucrop:2.2.4'
+    implementation 'com.github.prolificinteractive:material-calendarview:2.0.1'
 }

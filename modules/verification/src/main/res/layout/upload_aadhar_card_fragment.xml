@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         app:backgroundType="PinkBar"
         android:visibility="visible"
-        app:titleText="Upload Aadhar Card"
+        app:titleText="Upload Aadhaar Card"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
@@ -50,7 +50,7 @@
                 android:layout_toEndOf="@+id/iv_back_upload_aadhar_card_client_activation"
                 android:fontFamily="@font/lato"
                 android:gravity="center_horizontal"
-                android:text="Upload Aadhar Card"
+                android:text="Upload Aadhaar Card"
                 android:textColor="@color/white"
                 android:textSize="@dimen/font_20"
                 android:textStyle="normal" />
@@ -67,13 +67,13 @@
 
             <include
                 android:id="@+id/aadharMainLayout"
-                layout="@layout/fragment_add_aadhar_card_info_main"
+                layout="@layout/fragment_add_aadhar_card_info_main_2"
                 android:visibility="gone" />
 
             <include
                 android:id="@+id/aadharViewLayout1"
                 android:visibility="gone"
-                layout="@layout/fragment_add_aadhar_card_view" />
+                layout="@layout/fragment_add_aadhar_card_view_2" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

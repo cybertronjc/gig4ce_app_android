@@ -73,4 +73,10 @@ object AppConstants {
     const val BACKGROUND_TYPE_WHITEBAR = 102
     const val BACKGROUND_TYPE_GREYBAR = 103
 
+    //verification image view component constants
+    const val UPLOAD_SUCCESS = 0
+    const val DETAILS_MISMATCH = 1
+    const val UNABLE_TO_FETCH_DETAILS = 2
+    const val VERIFICATION_COMPLETED = 3
+
 }

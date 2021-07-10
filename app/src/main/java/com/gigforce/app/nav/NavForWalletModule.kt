@@ -15,6 +15,7 @@ class NavForWalletModule(
         baseImplementation.registerRoute("${moduleName}/paymentDisputePage", R.id.paymentDisputePage)
         baseImplementation.registerRoute("${moduleName}/monthlyEarningPage", R.id.monthlyEarningPage)
         baseImplementation.registerRoute("${moduleName}/walletExpandedPage", R.id.walletExpandedPage)
+        baseImplementation.registerRoute("${moduleName}/invoicesList", R.id.invoicesListFragment)
 
 
 

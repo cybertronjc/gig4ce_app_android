@@ -53,6 +53,21 @@ class GigerIdRepository : BaseFirestoreDBRepository(), GigerIDCallbacks {
                 .get().await()
         val gigOrder = getGigOrderQuery.toObject(GigOrder::class.java)!!
 
+        gig.profile.activationCode = if(!gig.profile.id.isNullOrBlank()) {
+
+            val getJobProfileActivationQuery = db.collection("Job_Profile_Activations")
+                    .whereEqualTo("user_id", getUID())
+                    .whereEqualTo("profile_id", gig.profile.id)
+                    .get().await()
+
+            if(getJobProfileActivationQuery.size() != 0){
+                getJobProfileActivationQuery.documents.first().getString("activationCode")
+            } else
+                null
+        } else{
+            null
+        }
+
         return GigAndGigOrder(
             gig,
             gigOrder

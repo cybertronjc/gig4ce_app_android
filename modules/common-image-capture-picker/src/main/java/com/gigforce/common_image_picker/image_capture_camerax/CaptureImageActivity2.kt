@@ -121,7 +121,10 @@ class CameraActivity : AppCompatActivity() {
 
                         val intent = Intent()
                         intent.putExtra(INTENT_EXTRA_FINAL_IMAGE_URI, Uri.fromFile(it.image))
-                        intent.putExtra(INTENT_EXTRA_UPLOADED_PATH_IN_FIREBASE_STORAGE, it.uploadedPathInFirebaseStorageIfUploaded)
+                        intent.putExtra(
+                            INTENT_EXTRA_UPLOADED_PATH_IN_FIREBASE_STORAGE,
+                            it.uploadedPathInFirebaseStorageIfUploaded
+                        )
                         setResult(Activity.RESULT_OK, intent)
                         finish()
                     }
@@ -190,9 +193,12 @@ class CameraActivity : AppCompatActivity() {
     private fun openCameraFragment() {
 
         val cameraManager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
+        val cameraIdList = cameraManager.cameraIdList
+        if (cameraIdList.isEmpty()) return
+
 
         val cameraFragment = CameraFragment.getInstance(
-            cameraId = cameraManager.cameraIdList[1],
+            cameraId = cameraIdList[1],
             pixelFormat = ImageFormat.JPEG
         )
 

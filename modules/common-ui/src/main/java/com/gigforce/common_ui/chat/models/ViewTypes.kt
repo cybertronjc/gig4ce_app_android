@@ -28,6 +28,9 @@ class ViewTypes {
         const val IN_LOCATION = 10105
         const val OUT_LOCATION = 10205
 
+        const val IN_DELETED_MESSAGE = 14301
+        const val OUT_DELETED_MESSAGE = 14501
+
         const val GROUP_IN_TEXT = 10501
         const val GROUP_OUT_TEXT = 10601
 
@@ -43,8 +46,14 @@ class ViewTypes {
         const val GROUP_IN_LOCATION = 10505
         const val GROUP_OUT_LOCATION = 10605
 
-
         const val GROUP_DETAILS_MEDIA = 11501
         const val GROUP_DETAILS_GROUP_MEMBER = 11601
+
+        const val GROUP_IN_DELETED_MESSAGE = 18701
+        const val GROUP_OUT_DELETED_MESSAGE = 17801
+
+        const val GROUP_MESSAGE_READ_INFO = 17101
+
+        const val CHAT_EVENT = 17134
     }
 }
