@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.common_ui.viewdatamodels.SimpleCardDVM
+import com.gigforce.core.extensions.gone
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.verification.R
 import dagger.hilt.android.AndroidEntryPoint
@@ -61,6 +62,13 @@ class VerificationMainFragment : Fragment() {
     private fun observer() {
         viewModel.allDocumentsData.observe(viewLifecycleOwner, Observer{
             allDocsRV.collection = it
+        })
+
+        viewModel.allDocumentsVerified.observe(viewLifecycleOwner, Observer {
+            if (it){
+                textView7.gone()
+            }
+
         })
     }
 

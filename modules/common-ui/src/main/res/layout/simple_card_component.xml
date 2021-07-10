@@ -35,6 +35,18 @@
             app:layout_constraintStart_toEndOf="@+id/left_img"
             app:layout_constraintTop_toTopOf="@+id/left_img" />
 
+        <ImageView
+            android:id="@+id/verified_img"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:visibility="gone"
+            android:src="@drawable/ic_baseline_verified_24"
+            android:layout_marginStart="@dimen/size8"
+            app:layout_constraintStart_toEndOf="@+id/title"
+            app:layout_constraintTop_toTopOf="@+id/title"
+            app:layout_constraintBottom_toBottomOf="@+id/title"
+            />
+
         <TextView
             android:id="@+id/subtitle"
             style="@style/CardCaption1"
