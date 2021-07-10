@@ -29,6 +29,8 @@ class PanCardViewModel @Inject constructor(
     val _kycVerifyResult = MutableLiveData<KycOcrResultModel>()
     val kycVerifyResult: LiveData<KycOcrResultModel>  = _kycVerifyResult
 
+    val _verifiedStatus = MutableLiveData<Boolean>()
+    val verifiedStatus: LiveData<Boolean> = _verifiedStatus
 
     fun getKycOcrResult(type: String, subType: String, image: MultipartBody.Part) =
         viewModelScope.launch {
@@ -50,4 +52,16 @@ class PanCardViewModel @Inject constructor(
             }
             Log.d("result", _kycVerifyResult.toString())
         }
+
+    fun getVerifiedStatus(){
+        viewModelScope.launch {
+            try {
+                _verifiedStatus.value = verificationKycRepo.getVerificationStatus()?.pan_card?.verified
+
+            }catch (e: Exception){
+                _verifiedStatus.value = false
+
+            }
+        }
+    }
 }

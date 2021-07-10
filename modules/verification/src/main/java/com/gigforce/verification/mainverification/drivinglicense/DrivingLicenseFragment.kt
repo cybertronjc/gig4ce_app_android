@@ -193,6 +193,21 @@ class DrivingLicenseFragment : Fragment(),
                     showToast("Verification " + it.status)
             }
         })
+        viewModel.getVerifiedStatus()
+        viewModel.verifiedStatus.observe(viewLifecycleOwner, Observer {
+            it.let {
+                if (it){
+                    viewBinding.belowLayout.gone()
+                    viewBinding.toplayoutblock.uploadStatusLayout(
+                        AppConstants.UPLOAD_SUCCESS,
+                        "VERIFICATION COMPLETED",
+                        "The Driving License Details have been verified successfully."
+                    )
+                    viewBinding.submitButtonDl.tag = CONFIRM_TAG
+                    viewBinding.toplayoutblock.setVerificationSuccessfulView()
+                }
+            }
+        })
         viewModel.observableStates.observe(viewLifecycleOwner, Observer {
             it.let {
                 val stateList = arrayListOf<String>()
@@ -204,6 +219,7 @@ class DrivingLicenseFragment : Fragment(),
 //                stateSpinner.adapter = arrayAdapter
             }
         })
+
     }
 
     private fun setViews() {

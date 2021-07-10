@@ -161,7 +161,24 @@ class AadhaarCardImageUploadFragment : Fragment(),
                     showToast("Verification status " + it.message)
             }
         })
+        viewModel.getVerifiedStatus()
+        viewModel.verifiedStatus.observe(viewLifecycleOwner, Observer {
+            it.let {
+                if (it){
+                    viewBinding.belowLayout.gone()
+                    viewBinding.toplayoutblock.uploadStatusLayout(
+                        AppConstants.UPLOAD_SUCCESS,
+                        "VERIFICATION COMPLETED",
+                        "The Aadhaar Card Details have been verified successfully."
+                    )
+                    viewBinding.submitButtonAadhar.tag = CONFIRM_TAG
+                    viewBinding.toplayoutblock.setVerificationSuccessfulView()
+                }
+            }
+        })
     }
+
+    val CONFIRM_TAG: String = "confirm"
 
     private fun setViews() {
         val frontUri = Uri.Builder()
