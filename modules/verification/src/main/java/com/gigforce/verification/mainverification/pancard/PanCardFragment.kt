@@ -131,6 +131,7 @@ class PanCardFragment : Fragment(),
                     viewBinding.submitButton.tag = CONFIRM_TAG
                     viewBinding.toplayoutblock.setVerificationSuccessfulView()
                     viewBinding.submitButton.text = getString(R.string.submit)
+                    viewBinding.toplayoutblock.disableImageClick()
                 } else
                     showToast("Verification " + it.message)
             }

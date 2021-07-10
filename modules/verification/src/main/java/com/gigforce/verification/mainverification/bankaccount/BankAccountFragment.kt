@@ -120,6 +120,7 @@ class BankAccountFragment : Fragment(),
                     viewBinding.toplayoutblock.setVerificationSuccessfulView("Verifying")
                     viewModel.getBeneficiaryName()
                     viewBinding.submitButton.gone()
+                    viewBinding.toplayoutblock.disableImageClick()
 //                    viewBinding.accountHolderName.editText?.setText(it.beneficiaryName)
 //                    viewBinding.bankAccNumberItl.editText?.setText(it.accountNumber)
 //                    viewBinding.ifscCode.editText?.setText(it.ifscCode)
