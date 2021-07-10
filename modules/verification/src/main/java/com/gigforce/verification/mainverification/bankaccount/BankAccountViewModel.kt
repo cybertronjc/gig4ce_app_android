@@ -33,6 +33,9 @@ class BankAccountViewModel @Inject constructor(
     val _verifiedStatus = MutableLiveData<Boolean>()
     val verifiedStatus: LiveData<Boolean> = _verifiedStatus
 
+    val _verifiedStatusDB = MutableLiveData<Boolean>()
+    val verifiedStatusDB: LiveData<Boolean> = _verifiedStatusDB
+
     fun getKycOcrResult(type: String, subType: String, image: MultipartBody.Part) =
         viewModelScope.launch {
             try {
@@ -54,12 +57,15 @@ class BankAccountViewModel @Inject constructor(
         }
     fun getBeneficiaryName() {
 
-        verificationKycRepo.db.collection("Verification").document("RAjCRVuaqaRhhM8qbwOaO97wo9x2").get().addOnSuccessListener {
-            it.let {
-                if (it.contains("bank_details")){
-                    val doc = it.toObject(VerificationBaseModel::class.java)
-                    _beneficiaryName.value = doc?.bank_details?.bankBeneficiaryName
-                }
+        verificationKycRepo.db.collection("Verification").document("RAjCRVuaqaRhhM8qbwOaO97wo9x2").addSnapshotListener { value, error ->
+
+            value?.data?.let {
+                    val doc = value.toObject(VerificationBaseModel::class.java)
+                    doc?.bank_details?.bankBeneficiaryName?.let {
+                        if (it.isNotBlank()){
+                            _beneficiaryName.value = it
+                        }
+                    }
             }
         }
     }
@@ -71,10 +77,20 @@ class BankAccountViewModel @Inject constructor(
 //            }
 //        }
 
+    fun getVerifiedStatus(){
+        viewModelScope.launch {
+            try {
+                _verifiedStatus.value = verificationKycRepo.getVerificationStatus()?.bank_details?.verified
+            }catch (e: Exception){
+                _verifiedStatus.value = false
+            }
+        }
+    }
+
     fun setVerificationStatusInDB(status: Boolean) =
         viewModelScope.launch {
             try {
-                _verifiedStatus.value = verificationKycRepo.setVerifiedStatus(status)
+                _verifiedStatusDB.value = verificationKycRepo.setVerifiedStatus(status)
             }catch (e: Exception){
 
             }

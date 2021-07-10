@@ -33,7 +33,6 @@ import com.gigforce.verification.mainverification.VerificationClickOrSelectImage
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.yalantis.ucrop.UCrop
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.bank_account_fragment.*
 import kotlinx.android.synthetic.main.veri_screen_info_component.view.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -85,7 +84,8 @@ class BankAccountFragment : Fragment(),
         observer()
         listeners()
     }
-    val CONFIRM_TAG: String = "confirm"
+
+
     private fun observer() {
         viewModel.kycOcrResult.observe(viewLifecycleOwner, Observer {
             it.let {
@@ -118,6 +118,7 @@ class BankAccountFragment : Fragment(),
                     viewBinding.belowLayout.gone()
                     viewBinding.toplayoutblock.setVerificationSuccessfulView("Verifying")
                     viewModel.getBeneficiaryName()
+                    viewBinding.submitButtonBank.gone()
 //                    viewBinding.accountHolderName.editText?.setText(it.beneficiaryName)
 //                    viewBinding.bankAccNumberItl.editText?.setText(it.accountNumber)
 //                    viewBinding.ifscCode.editText?.setText(it.ifscCode)
@@ -126,22 +127,47 @@ class BankAccountFragment : Fragment(),
                     showToast("Ocr status " + it.status)
             }
         })
+        viewModel.getVerifiedStatus()
+        viewModel.verifiedStatus.observe(viewLifecycleOwner, Observer {
+            it.let {
+                if (it){
+                    viewBinding.belowLayout.gone()
+                    viewBinding.toplayoutblock.uploadStatusLayout(
+                        AppConstants.UPLOAD_SUCCESS,
+                        "VERIFICATION COMPLETED",
+                        "The Bank Details have been verified successfully."
+                    )
+                    viewBinding.submitButtonBank.gone()
+                    viewBinding.toplayoutblock.setVerificationSuccessfulView()
+                }
+            }
+        })
 
 
         viewModel.beneficiaryName.observe(viewLifecycleOwner, Observer {
             //observing beneficiary name here
             it.let {
                 if (it.isNotEmpty()) {
-                    confirmBeneficiaryLayout.visible()
-                    below_layout.gone()
-                    showToast(it)
-                    beneficiaryName.setText(it)
+                    viewBinding.confirmBeneficiaryLayout.visible()
+                    viewBinding.belowLayout.gone()
+                    viewBinding.beneficiaryName.setText(it)
                 } else { showToast("Empty") }
             }
         })
         viewModel.verifiedStatus.observe(viewLifecycleOwner, Observer {
             //verified entry to firebase
-            showToast("Verified")
+            //showToast("Verified")
+
+
+        })
+        viewModel.verifiedStatusDB.observe(viewLifecycleOwner, Observer {
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Congratulations, your Bank details are verified.")
+                .setPositiveButton(getString(R.string.okay)) { dialog, _ ->
+                    dialog.dismiss()
+                    navigation.popBackStack()
+                }
+                .show()
         })
     }
 
@@ -151,7 +177,7 @@ class BankAccountFragment : Fragment(),
             //showCameraAndGalleryOption()
             checkForPermissionElseShowCameraGalleryBottomSheet()
         })
-        submit_button_bank.setOnClickListener {
+        viewBinding.submitButtonBank.setOnClickListener {
             val ifsc =
                 viewBinding.ifscCode.editText?.text.toString().toUpperCase(Locale.getDefault())
             if (!VerificationValidations.isIfSCValid(ifsc)) {
@@ -199,15 +225,15 @@ class BankAccountFragment : Fragment(),
             showWhyWeNeedThisDialog()
         }
 
-        appBarBank.apply {
+        viewBinding.appBarBank.apply {
             setBackButtonListener(View.OnClickListener {
                 navigation.popBackStack()
             })
         }
-        confirm_button.setOnClickListener {
+        viewBinding.confirmButton.setOnClickListener {
             viewModel.setVerificationStatusInDB(true)
         }
-        not_confirm_button.setOnClickListener {
+        viewBinding.notConfirmButton.setOnClickListener {
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Do you want to re-enter Bank details?")
                 .setPositiveButton(getString(R.string.yes)) { _, _ ->
@@ -411,10 +437,10 @@ class BankAccountFragment : Fragment(),
 
     private fun callKycVerificationApi() {
         var list = listOf(
-            Data("name", bank_name_til.editText?.text.toString()),
-            Data("no", bank_acc_number_itl.editText?.text.toString()),
-            Data("ifsccode", ifsc_code.editText?.text.toString()),
-            Data("holdername", account_holder_name.editText?.text.toString())
+            Data("name", viewBinding.bankNameTil.editText?.text.toString()),
+            Data("no", viewBinding.bankAccNumberItl.editText?.text.toString()),
+            Data("ifsccode", viewBinding.ifscCode.editText?.text.toString()),
+            Data("holdername", viewBinding.accountHolderName.editText?.text.toString())
         )
         viewModel.getKycVerificationResult("bank", list)
     }
