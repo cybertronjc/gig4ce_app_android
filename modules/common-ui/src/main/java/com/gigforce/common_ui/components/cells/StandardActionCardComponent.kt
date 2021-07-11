@@ -109,7 +109,7 @@ open class StandardActionCardComponent(context: Context, attrs: AttributeSet?) :
                 ColorOptions.LightPink -> R.color.light_pink
                 ColorOptions.LightBlue -> R.color.light_blue
                 ColorOptions.Lipstick -> R.color.lipstick
-                ColorOptions.GRAY -> R.color.grey
+                ColorOptions.GRAY -> R.color.greyLight
                 else -> R.color.white
             }
             setBackgroundColor(ContextCompat.getColor(context, selectedColor))
@@ -123,7 +123,7 @@ open class StandardActionCardComponent(context: Context, attrs: AttributeSet?) :
                 TextColorOptions.LightPink -> R.color.light_pink
                 TextColorOptions.LightBlue -> R.color.light_blue
                 TextColorOptions.Lipstick -> R.color.lipstick
-                TextColorOptions.GRAY -> R.color.grey
+                TextColorOptions.GRAY -> R.color.greyLight
                 else -> 0
             }
             if (selectedColor != 0) {

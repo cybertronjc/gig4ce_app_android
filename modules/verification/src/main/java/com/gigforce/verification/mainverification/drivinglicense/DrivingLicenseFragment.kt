@@ -26,6 +26,7 @@ import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.AppConstants
 import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.DateHelper
 import com.gigforce.verification.R
@@ -43,6 +44,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.lang.Exception
 import java.net.URI
 import java.text.SimpleDateFormat
 import java.util.*
@@ -181,9 +183,20 @@ class DrivingLicenseFragment : Fragment(),
         viewBinding.stateSpinner.adapter = arrayAdapter
     }
 
+    private fun activeLoader(activate : Boolean){
+        if(activate) {
+            viewBinding.progressBar.visible()
+            viewBinding.submitButton.isEnabled = false
+        }else{
+            viewBinding.progressBar.gone()
+            viewBinding.submitButton.isEnabled = true
+        }
+    }
+
     var anyImageUploaded = false
     private fun observer() {
         viewModel.kycOcrResult.observe(viewLifecycleOwner, Observer {
+            activeLoader(false)
             it.let {
                 if (it.status) {
                     anyImageUploaded = true
@@ -193,9 +206,19 @@ class DrivingLicenseFragment : Fragment(),
                             "UPLOAD SUCCESSFUL",
                             "Information of Driving License Captured Successfully."
                         )
+                        if(!it.dateOfBirth.isNullOrBlank())
                         viewBinding.dobDate.text = it.dateOfBirth
+                        if(!it.dlNumber.isNullOrBlank())
                         viewBinding.dlnoTil.editText?.setText(it.dlNumber)
-                        viewBinding.expiryDate.text = it.validTill
+
+                        if(!it.validTill.isNullOrBlank()) {
+                            if(it.validTill.contains("-")){
+                                var dateInFormat = getDDMMYYYYFormat(it.validTill)
+                                if(dateInFormat.isNotBlank())
+                                viewBinding.expiryDate.text = dateInFormat
+                            }else
+                            viewBinding.expiryDate.text = it.validTill
+                        }
 
                     } else {
                         viewBinding.toplayoutblock.uploadStatusLayout(
@@ -210,6 +233,7 @@ class DrivingLicenseFragment : Fragment(),
         })
 
         viewModel.kycVerifyResult.observe(viewLifecycleOwner, Observer {
+            activeLoader(false)
             it.let {
                 if (it.status) {
                     viewBinding.belowLayout.gone()
@@ -253,6 +277,19 @@ class DrivingLicenseFragment : Fragment(),
             }
         })
 
+    }
+
+    private fun getDDMMYYYYFormat(str : String): String {
+        try {
+            val sdf = SimpleDateFormat("dd-MM-yyyy")
+            val date = sdf.parse(str)
+            if(Date().after(date)){
+                return ""
+            }
+            return DateHelper.getDateInDDMMYYYY(date)
+        }catch (e:Exception){
+            return ""
+        }
     }
 
     private fun setViews() {
@@ -519,11 +556,13 @@ class DrivingLicenseFragment : Fragment(),
             Data("expirydate", viewBinding.expiryDate.text.toString()),
             Data("dob", viewBinding.dobDate.text.toString())
         )
+        activeLoader(true)
         viewModel.getKycVerificationResult("DL", list)
     }
 
     private fun showFrontDrivingLicense(drivingFrontPath: Uri) {
         viewBinding.toplayoutblock.setDocumentImage(0, drivingFrontPath)
+        activeLoader(true)
         callKycOcrApi(drivingFrontPath)
     }
 

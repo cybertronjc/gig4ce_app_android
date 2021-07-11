@@ -89,6 +89,7 @@ class BankAccountFragment : Fragment(),
 
     private fun observer() {
         viewModel.kycOcrResult.observe(viewLifecycleOwner, Observer {
+            activeLoader(false)
             it.let {
                 if (it.status) {
                     if (!it.beneficiaryName.isNullOrBlank() || !it.accountNumber.isNullOrBlank() || !it.ifscCode.isNullOrBlank() || !it.bankName.isNullOrBlank()) {
@@ -97,8 +98,11 @@ class BankAccountFragment : Fragment(),
                             "UPLOAD SUCCESSFUL",
                             "Information of Bank Captured Successfully."
                         )
+                        if(!it.accountNumber.isNullOrBlank())
                         viewBinding.bankAccNumberItl.editText?.setText(it.accountNumber)
+                        if(!it.ifscCode.isNullOrBlank())
                         viewBinding.ifscCode.editText?.setText(it.ifscCode)
+                        if(!it.bankName.isNullOrBlank())
                         viewBinding.bankNameTil.editText?.setText(it.bankName)
                     } else {
                         viewBinding.toplayoutblock.uploadStatusLayout(
@@ -114,6 +118,7 @@ class BankAccountFragment : Fragment(),
         })
 
         viewModel.kycVerifyResult.observe(viewLifecycleOwner, Observer {
+            activeLoader(false)
             it.let {
                 if (it.status) {
                     viewBinding.belowLayout.gone()
@@ -184,6 +189,16 @@ class BankAccountFragment : Fragment(),
                 }
                 .show()
         })
+    }
+
+    private fun activeLoader(activate : Boolean){
+        if(activate) {
+            viewBinding.progressBar.visible()
+            viewBinding.submitButton.isEnabled = false
+        }else{
+            viewBinding.progressBar.gone()
+            viewBinding.submitButton.isEnabled = true
+        }
     }
 
     private fun listeners() {
@@ -457,11 +472,13 @@ class BankAccountFragment : Fragment(),
             Data("no", viewBinding.bankAccNumberItl.editText?.text.toString()),
             Data("ifsccode", viewBinding.ifscCode.editText?.text.toString())
         )
+        activeLoader(true)
         viewModel.getKycVerificationResult("bank", list)
     }
 
     private fun showPassbookInfoCard(bankInfoPath: Uri) {
         viewBinding.toplayoutblock.setDocumentImage(0, bankInfoPath)
+        activeLoader(true)
         callKycOcrApi(bankInfoPath)
     }
 

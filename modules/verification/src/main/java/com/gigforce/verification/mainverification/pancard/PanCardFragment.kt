@@ -26,6 +26,7 @@ import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.AppConstants
 import com.gigforce.core.datamodels.verification.PanCardDataModel
 import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.DateHelper
 import com.gigforce.core.utils.VerificationValidations
@@ -95,6 +96,7 @@ class PanCardFragment : Fragment(),
 
     private fun initViewModel() {
         viewModel.kycOcrResult.observe(viewLifecycleOwner, Observer {
+            activeLoader(false)
             it.let {
                 if (it.status) {
                     if (!it.panNumber.isNullOrBlank() || !it.name.isNullOrBlank() || !it.dateOfBirth.isNullOrBlank()||!it.fatherName.isNullOrBlank()) {
@@ -103,8 +105,11 @@ class PanCardFragment : Fragment(),
                             "UPLOAD SUCCESSFUL",
                             "Information of Pan card Captured Successfully."
                         )
+                        if(!it.panNumber.isNullOrBlank())
                         viewBinding.panTil.editText?.setText(it.panNumber)
+                        if(!it.name.isNullOrBlank())
                         viewBinding.nameTil.editText?.setText(it.name)
+                        if(!it.dateOfBirth.isNullOrBlank())
                         viewBinding.dateOfBirth.text = it.dateOfBirth
 
                     } else {
@@ -120,6 +125,7 @@ class PanCardFragment : Fragment(),
             }
         })
         viewModel.kycVerifyResult.observe(viewLifecycleOwner, Observer {
+            activeLoader(false)
             it.let {
                 if (it.status) {
                     viewBinding.belowLayout.gone()
@@ -398,12 +404,22 @@ class PanCardFragment : Fragment(),
             Data("fathername",viewBinding.fatherNameTil.editText?.text.toString()),
             Data("dob", viewBinding.dateOfBirth.text.toString())
         )
+        activeLoader(true)
         viewModel.getKycVerificationResult("pan", list)
     }
-
+    private fun activeLoader(activate : Boolean){
+        if(activate) {
+            viewBinding.progressBar.visible()
+            viewBinding.submitButton.isEnabled = false
+        }else{
+            viewBinding.progressBar.gone()
+            viewBinding.submitButton.isEnabled = true
+        }
+    }
     private fun showPanInfoCard(panInfoPath: Uri) {
         viewBinding.toplayoutblock.setDocumentImage(0, panInfoPath)
         //call ocr api
+        activeLoader(true)
         callKycOcrApi(panInfoPath)
     }
 
