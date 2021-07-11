@@ -119,6 +119,16 @@ class DrivingLicenseFragment : Fragment(),
             if (viewBinding.submitButton.tag?.toString().equals(CONFIRM_TAG)) {
                 activity?.onBackPressed()
             } else {
+
+                if (!anyImageUploaded) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert))
+                        .setMessage(getString(R.string.select_dl_image))
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .show()
+                    return@setOnClickListener
+                }
+
                 if (viewBinding.stateSpinner.selectedItemPosition == 0) {
                     MaterialAlertDialogBuilder(requireContext())
                         .setTitle(getString(R.string.alert))
@@ -127,6 +137,25 @@ class DrivingLicenseFragment : Fragment(),
                         .show()
                     return@setOnClickListener
                 }
+
+                if (viewBinding.dlnoTil.editText?.text.toString().isBlank()) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert))
+                        .setMessage(getString(R.string.select_dl_no))
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .show()
+                    return@setOnClickListener
+                }
+
+                if (viewBinding.dobDate.text.toString().isBlank()) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert))
+                        .setMessage(getString(R.string.select_dl_dob))
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .show()
+                    return@setOnClickListener
+                }
+
                 callKycVerificationApi()
             }
         }
@@ -152,10 +181,12 @@ class DrivingLicenseFragment : Fragment(),
         viewBinding.stateSpinner.adapter = arrayAdapter
     }
 
+    var anyImageUploaded = false
     private fun observer() {
         viewModel.kycOcrResult.observe(viewLifecycleOwner, Observer {
             it.let {
                 if (it.status) {
+                    anyImageUploaded = true
                     if (!it.dateOfBirth.isNullOrBlank() || !it.dlNumber.isNullOrBlank() || !it.validTill.isNullOrBlank()) {
                         viewBinding.toplayoutblock.uploadStatusLayout(
                             AppConstants.UPLOAD_SUCCESS,
@@ -198,7 +229,7 @@ class DrivingLicenseFragment : Fragment(),
         viewModel.getVerifiedStatus()
         viewModel.verifiedStatus.observe(viewLifecycleOwner, Observer {
             it.let {
-                if (it){
+                if (it) {
                     viewBinding.belowLayout.gone()
                     viewBinding.toplayoutblock.uploadStatusLayout(
                         AppConstants.UPLOAD_SUCCESS,
@@ -483,6 +514,7 @@ class DrivingLicenseFragment : Fragment(),
             Data("state", viewBinding.stateSpinner.selectedItem.toString()),
             Data("name", viewBinding.nameTilDl.editText?.text.toString()),
             Data("no", viewBinding.dlnoTil.editText?.text.toString()),
+            Data("fathername", viewBinding.fatherNameTil.editText?.text.toString()),
             Data("issuedate", viewBinding.issueDate.text.toString()),
             Data("expirydate", viewBinding.expiryDate.text.toString()),
             Data("dob", viewBinding.dobDate.text.toString())

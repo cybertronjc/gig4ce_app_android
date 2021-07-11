@@ -395,6 +395,7 @@ class PanCardFragment : Fragment(),
         var list = listOf(
             Data("name", viewBinding.nameTil.editText?.text.toString()),
             Data("no", viewBinding.panTil.editText?.text.toString()),
+            Data("fathername",viewBinding.fatherNameTil.editText?.text.toString()),
             Data("dob", viewBinding.dateOfBirth.text.toString())
         )
         viewModel.getKycVerificationResult("pan", list)

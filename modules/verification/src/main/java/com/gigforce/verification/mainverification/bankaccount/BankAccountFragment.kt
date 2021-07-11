@@ -17,6 +17,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
@@ -96,7 +97,6 @@ class BankAccountFragment : Fragment(),
                             "UPLOAD SUCCESSFUL",
                             "Information of Bank Captured Successfully."
                         )
-                        viewBinding.accountHolderName.editText?.setText(it.beneficiaryName)
                         viewBinding.bankAccNumberItl.editText?.setText(it.accountNumber)
                         viewBinding.ifscCode.editText?.setText(it.ifscCode)
                         viewBinding.bankNameTil.editText?.setText(it.bankName)
@@ -193,6 +193,7 @@ class BankAccountFragment : Fragment(),
             checkForPermissionElseShowCameraGalleryBottomSheet()
         })
         viewBinding.submitButton.setOnClickListener {
+            hideSoftKeyboard()
             val ifsc =
                 viewBinding.ifscCode.editText?.text.toString().toUpperCase(Locale.getDefault())
             if (!VerificationValidations.isIfSCValid(ifsc)) {
@@ -453,9 +454,8 @@ class BankAccountFragment : Fragment(),
     private fun callKycVerificationApi() {
         var list = listOf(
             Data("name", viewBinding.bankNameTil.editText?.text.toString()),
-            Data("no", viewBinding.bankNameTil.editText?.text.toString()),
-            Data("ifsccode", viewBinding.ifscCode.editText?.text.toString()),
-            Data("holdername", viewBinding.accountHolderName.editText?.text.toString())
+            Data("no", viewBinding.bankAccNumberItl.editText?.text.toString()),
+            Data("ifsccode", viewBinding.ifscCode.editText?.text.toString())
         )
         viewModel.getKycVerificationResult("bank", list)
     }

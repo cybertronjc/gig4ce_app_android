@@ -111,7 +111,25 @@
                             android:padding="4dp" />
 
                     </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/father_name_til"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_sm1"
+                        android:layout_marginTop="@dimen/dp_xl1"
+                        android:layout_marginRight="@dimen/dp_sm1"
+                        android:hint="Father Name"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/name_til">
 
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/size_46"
+                            android:padding="4dp"/>
+
+                    </com.google.android.material.textfield.TextInputLayout>
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/date_rl"
                         android:layout_width="0dp"
@@ -124,7 +142,7 @@
                         app:layout_constraintBottom_toTopOf="@id/reupload_button_pan"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/name_til">
+                        app:layout_constraintTop_toBottomOf="@+id/father_name_til">
 
                         <TextView
                             android:id="@+id/dateOfBirth"

@@ -47,6 +47,9 @@
     <string name="capture_both_sides_dl">Select or capture both sides of Driving License</string>
     <string name="enter_valid_dl">Enter Valid Driving License</string>
     <string name="select_dl_state">Select Driving License State</string>
+    <string name="select_dl_image">Select Driving License Image</string>
+    <string name="select_dl_no">Select Driving License Number</string>
+    <string name="select_dl_dob">Select Date of Birth</string>
     <string name="why_we_need_this_bank">The bank details are mandatory to approve and send payments from gigs to your account. It also helps verify your name, address, date of birth, and other details.</string>
     <string name="enter_valid_ifsc">Enter Valid IfSC Code</string>
     <string name="enter_bank_name">Enter Bank Name</string>
