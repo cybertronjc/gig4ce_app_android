@@ -204,6 +204,7 @@ class AadhaarCardImageUploadFragment : Fragment(),
                     )
                     viewBinding.submitButton.tag = CONFIRM_TAG
                     viewBinding.toplayoutblock.setVerificationSuccessfulView("Verifying")
+                    viewBinding.toplayoutblock.disableImageClick()
                 }
             }
         })

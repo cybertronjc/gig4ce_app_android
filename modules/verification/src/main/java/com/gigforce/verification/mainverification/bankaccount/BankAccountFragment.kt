@@ -14,9 +14,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
@@ -47,7 +49,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class BankAccountFragment : Fragment(),
-    VerificationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener {
+    VerificationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener,IOnBackPressedOverride {
 
     companion object {
         fun newInstance() = BankAccountFragment()
@@ -121,6 +123,7 @@ class BankAccountFragment : Fragment(),
             activeLoader(false)
             it?.let {
                 if (it.status) {
+                    viewBinding.screenLoader.visible()
                     viewBinding.belowLayout.gone()
                     viewBinding.toplayoutblock.setVerificationSuccessfulView("Verifying")
                     viewModel.getBeneficiaryName()
@@ -146,6 +149,7 @@ class BankAccountFragment : Fragment(),
                     )
                     viewBinding.submitButton.gone()
                     viewBinding.toplayoutblock.setVerificationSuccessfulView()
+                    viewBinding.toplayoutblock.disableImageClick()
                 }
             }
         })
@@ -153,11 +157,12 @@ class BankAccountFragment : Fragment(),
 
         viewModel.beneficiaryName.observe(viewLifecycleOwner, Observer {
             //observing beneficiary name here
+            viewBinding.screenLoader.gone()
             it?.let {
                 if (it.isNotEmpty()) {
                     viewBinding.confirmBeneficiaryLayout.visible()
                     viewBinding.belowLayout.gone()
-                    viewBinding.beneficiaryName.setText(it)
+                    viewBinding.beneficiaryName.text = it
                 } else { showToast("Empty") }
             }
         })
@@ -523,6 +528,10 @@ class BankAccountFragment : Fragment(),
         options.setToolbarColor(ResourcesCompat.getColor(resources, R.color.topBarDark, null))
         options.setToolbarTitle(getString(R.string.crop_and_rotate))
         return options
+    }
+
+    override fun onBackPressed(): Boolean {
+        return viewBinding.screenLoader.isVisible
     }
 
 

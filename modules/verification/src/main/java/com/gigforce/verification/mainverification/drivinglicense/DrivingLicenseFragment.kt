@@ -262,6 +262,7 @@ class DrivingLicenseFragment : Fragment(),
                     )
                     viewBinding.submitButton.tag = CONFIRM_TAG
                     viewBinding.toplayoutblock.setVerificationSuccessfulView()
+                    viewBinding.toplayoutblock.disableImageClick()
                 }
             }
         })

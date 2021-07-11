@@ -56,7 +56,6 @@ class BankAccountViewModel @Inject constructor(
             Log.d("result", kycVerifyResult.toString())
         }
     fun getBeneficiaryName() {
-
         verificationKycRepo.db.collection("Verification").document(verificationKycRepo.getUID()).addSnapshotListener { value, error ->
 
             value?.data?.let {
