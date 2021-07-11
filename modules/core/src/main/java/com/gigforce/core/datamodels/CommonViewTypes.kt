@@ -35,6 +35,10 @@ class CommonViewTypes {
         const val VIEW_VIDEOS_ITEM_CARD2 = 20205
         const val VIEW_ASSESMENT_ITEM_CARD = 20206
 
+        const val VIEW_SIMPLE_CARD = 20301
 
+        //ALL module specific component will be start from 20401. Need to discuss with Himanshu for below layout
+        const val VIEW_GIGER_ATTENDANCE = 12234
+        const val VIEW_ATTENDANCE_BUSINESS_SHIFT_TIME = 12236
     }
 }
