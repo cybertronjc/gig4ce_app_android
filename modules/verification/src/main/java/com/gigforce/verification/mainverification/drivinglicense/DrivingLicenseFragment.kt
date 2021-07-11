@@ -197,7 +197,7 @@ class DrivingLicenseFragment : Fragment(),
     private fun observer() {
         viewModel.kycOcrResult.observe(viewLifecycleOwner, Observer {
             activeLoader(false)
-            it.let {
+            it?.let {
                 if (it.status) {
                     anyImageUploaded = true
                     if (!it.dateOfBirth.isNullOrBlank() || !it.dlNumber.isNullOrBlank() || !it.validTill.isNullOrBlank()) {
@@ -234,7 +234,7 @@ class DrivingLicenseFragment : Fragment(),
 
         viewModel.kycVerifyResult.observe(viewLifecycleOwner, Observer {
             activeLoader(false)
-            it.let {
+            it?.let {
                 if (it.status) {
                     viewBinding.belowLayout.gone()
                     viewBinding.toplayoutblock.uploadStatusLayout(
@@ -252,7 +252,7 @@ class DrivingLicenseFragment : Fragment(),
         })
         viewModel.getVerifiedStatus()
         viewModel.verifiedStatus.observe(viewLifecycleOwner, Observer {
-            it.let {
+            it?.let {
                 if (it) {
                     viewBinding.belowLayout.gone()
                     viewBinding.toplayoutblock.uploadStatusLayout(
@@ -266,7 +266,7 @@ class DrivingLicenseFragment : Fragment(),
             }
         })
         viewModel.observableStates.observe(viewLifecycleOwner, Observer {
-            it.let {
+            it?.let {
                 val stateList = arrayListOf<String>()
                 it.forEach {
                     stateList.add(it.name)

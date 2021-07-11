@@ -52,7 +52,7 @@ class AadhaarCardImageUploadViewModel @Inject constructor(
     fun getVerifiedStatus(){
         viewModelScope.launch {
             try {
-                _verifiedStatus.value = verificationKycRepo.getVerificationStatus()?.aadhar_card?.verified
+                _verifiedStatus.value = verificationKycRepo.getVerificationStatus()?.aadhar_card?.userHasAadharCard
             }catch (e: Exception){
                 _verifiedStatus.value = false
             }

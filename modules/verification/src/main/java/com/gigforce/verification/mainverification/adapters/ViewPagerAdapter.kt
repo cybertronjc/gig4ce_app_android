@@ -41,6 +41,10 @@ class ViewPagerAdapter(private val itemClickListener: (View) -> (Unit)) : Recycl
 
     override fun getItemCount(): Int = list.size
 
+    private var setImageClickable = true
+    fun setImageClickable(enable : Boolean){
+        setImageClickable = enable
+    }
     inner class ViewPagerViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView),
          View.OnClickListener {
 
@@ -56,6 +60,8 @@ class ViewPagerAdapter(private val itemClickListener: (View) -> (Unit)) : Recycl
         private var title: TextView = itemView.findViewById(R.id.title)
         private var backgroundImage: ImageView = itemView.findViewById(R.id.imageBack)
         private var plusIcon: ImageView = itemView.findViewById(R.id.plusIcon)
+
+
 
         fun bind(kYCImageModel: KYCImageModel) {
             title.text = kYCImageModel.text

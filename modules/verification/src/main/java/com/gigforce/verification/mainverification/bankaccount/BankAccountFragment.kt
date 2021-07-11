@@ -90,7 +90,7 @@ class BankAccountFragment : Fragment(),
     private fun observer() {
         viewModel.kycOcrResult.observe(viewLifecycleOwner, Observer {
             activeLoader(false)
-            it.let {
+            it?.let {
                 if (it.status) {
                     if (!it.beneficiaryName.isNullOrBlank() || !it.accountNumber.isNullOrBlank() || !it.ifscCode.isNullOrBlank() || !it.bankName.isNullOrBlank()) {
                         viewBinding.toplayoutblock.uploadStatusLayout(
@@ -119,7 +119,7 @@ class BankAccountFragment : Fragment(),
 
         viewModel.kycVerifyResult.observe(viewLifecycleOwner, Observer {
             activeLoader(false)
-            it.let {
+            it?.let {
                 if (it.status) {
                     viewBinding.belowLayout.gone()
                     viewBinding.toplayoutblock.setVerificationSuccessfulView("Verifying")
@@ -136,7 +136,7 @@ class BankAccountFragment : Fragment(),
         })
         viewModel.getVerifiedStatus()
         viewModel.verifiedStatus.observe(viewLifecycleOwner, Observer {
-            it.let {
+            it?.let {
                 if (it){
                     viewBinding.belowLayout.gone()
                     viewBinding.toplayoutblock.uploadStatusLayout(
@@ -153,7 +153,7 @@ class BankAccountFragment : Fragment(),
 
         viewModel.beneficiaryName.observe(viewLifecycleOwner, Observer {
             //observing beneficiary name here
-            it.let {
+            it?.let {
                 if (it.isNotEmpty()) {
                     viewBinding.confirmBeneficiaryLayout.visible()
                     viewBinding.belowLayout.gone()
@@ -164,7 +164,7 @@ class BankAccountFragment : Fragment(),
         viewModel.verifiedStatus.observe(viewLifecycleOwner, Observer {
             //verified entry to firebase
             //showToast("Verified")
-            it.let {
+            it?.let {
                 if (it){
                     viewBinding.belowLayout.gone()
                     viewBinding.toplayoutblock.uploadStatusLayout(

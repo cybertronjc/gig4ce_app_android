@@ -97,7 +97,7 @@ class PanCardFragment : Fragment(),
     private fun initViewModel() {
         viewModel.kycOcrResult.observe(viewLifecycleOwner, Observer {
             activeLoader(false)
-            it.let {
+            it?.let {
                 if (it.status) {
                     if (!it.panNumber.isNullOrBlank() || !it.name.isNullOrBlank() || !it.dateOfBirth.isNullOrBlank()||!it.fatherName.isNullOrBlank()) {
                         viewBinding.toplayoutblock.uploadStatusLayout(
@@ -126,7 +126,7 @@ class PanCardFragment : Fragment(),
         })
         viewModel.kycVerifyResult.observe(viewLifecycleOwner, Observer {
             activeLoader(false)
-            it.let {
+            it?.let {
                 if (it.status) {
                     viewBinding.belowLayout.gone()
                     viewBinding.toplayoutblock.uploadStatusLayout(
@@ -144,7 +144,7 @@ class PanCardFragment : Fragment(),
         })
         viewModel.getVerifiedStatus()
         viewModel.verifiedStatus.observe(viewLifecycleOwner, Observer {
-            it.let {
+            it?.let {
                 Log.d("Status", it.toString())
                 if (it){
                     viewBinding.belowLayout.gone()
