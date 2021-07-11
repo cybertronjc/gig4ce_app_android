@@ -202,10 +202,12 @@
                     android:layout_marginLeft="@dimen/dp_sm1"
                     android:layout_marginTop="@dimen/dp_xl1"
                     android:layout_marginRight="@dimen/dp_sm1"
+                    android:layout_marginBottom="@dimen/dp_sm1"
                     android:hint="IFSC Code"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/bank_name_til">
+                    app:layout_constraintTop_toBottomOf="@+id/bank_name_til"
+                    app:layout_constraintBottom_toBottomOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"

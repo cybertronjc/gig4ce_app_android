@@ -132,6 +132,7 @@
                     android:paddingLeft="@dimen/dp_sm1"
                     android:background="@drawable/rect_border_grey"
                     android:layout_marginTop="@dimen/dp_xsm1"
+                    android:layout_marginBottom="@dimen/dp_sm1"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"

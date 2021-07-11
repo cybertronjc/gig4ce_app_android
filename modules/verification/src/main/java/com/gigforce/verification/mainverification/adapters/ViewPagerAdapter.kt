@@ -44,6 +44,7 @@ class ViewPagerAdapter(private val itemClickListener: (View) -> (Unit)) : Recycl
     private var setImageClickable = true
     fun setImageClickable(enable : Boolean){
         setImageClickable = enable
+        notifyDataSetChanged()
     }
     inner class ViewPagerViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView),
          View.OnClickListener {
@@ -71,9 +72,9 @@ class ViewPagerAdapter(private val itemClickListener: (View) -> (Unit)) : Recycl
             if (kYCImageModel.imageUploaded) {
                 title.gone()
                 plusIcon.gone()
-                if(!setImageClickable)
-                itemView.isClickable = false
             }
+            if(!setImageClickable)
+                itemView.isClickable = false
         }
 
         override fun onClick(v: View?) {
