@@ -7,6 +7,7 @@ import com.gigforce.core.datamodels.verification.VerificationBaseModel
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.extensions.updateOrThrow
 import com.gigforce.core.retrofit.RetrofitFactory
+import com.google.firebase.Timestamp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.JsonArray
@@ -103,7 +104,8 @@ class VerificationKycRepo(private val iBuildConfigVM: IBuildConfigVM) :
         try {
             db.collection(getCollectionName()).document(getUID()).updateOrThrow(
                 mapOf(
-                    "bank_details.verified" to status
+                    "bank_details.verified" to status,
+                    "bank_details.verifiedOn" to Timestamp.now()
                 )
             )
             return true
