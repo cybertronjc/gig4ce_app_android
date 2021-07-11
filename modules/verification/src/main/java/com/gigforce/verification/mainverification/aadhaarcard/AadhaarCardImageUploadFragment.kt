@@ -487,7 +487,7 @@ class AadhaarCardImageUploadFragment : Fragment(),
         var list = listOf(
                 Data("name", viewBinding.nameTilAadhar.editText?.text.toString()),
                 Data("no", viewBinding.aadharcardTil.editText?.text.toString()),
-                Data("yearofbirth", viewBinding.dateOfBirthAadhar.text.toString())
+                Data("dob", viewBinding.dateOfBirthAadhar.text.toString())
         )
         activeLoader(true)
         viewModel.getKycVerificationResult("aadhar", list)

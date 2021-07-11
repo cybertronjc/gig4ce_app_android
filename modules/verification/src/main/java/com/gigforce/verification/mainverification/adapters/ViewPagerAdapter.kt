@@ -71,7 +71,8 @@ class ViewPagerAdapter(private val itemClickListener: (View) -> (Unit)) : Recycl
             if (kYCImageModel.imageUploaded) {
                 title.gone()
                 plusIcon.gone()
-//                itemView.isClickable = false
+                if(!setImageClickable)
+                itemView.isClickable = false
             }
         }
 
