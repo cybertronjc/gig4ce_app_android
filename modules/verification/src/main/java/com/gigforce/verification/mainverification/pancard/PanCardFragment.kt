@@ -120,8 +120,14 @@ class PanCardFragment : Fragment(),
                         )
                     }
 
-                } else
+                } else {
+                    viewBinding.toplayoutblock.uploadStatusLayout(
+                            AppConstants.UNABLE_TO_FETCH_DETAILS,
+                            "UNABLE TO FETCH DETAILS",
+                            "Enter your Pan card details manually or try again to continue the verification process."
+                    )
                     showToast("Ocr status " + it.message)
+                }
             }
         })
         viewModel.kycVerifyResult.observe(viewLifecycleOwner, Observer {

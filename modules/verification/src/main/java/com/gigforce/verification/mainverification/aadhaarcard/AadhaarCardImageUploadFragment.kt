@@ -169,6 +169,11 @@ class AadhaarCardImageUploadFragment : Fragment(),
                         )
                     }
                 } else {
+                    viewBinding.toplayoutblock.uploadStatusLayout(
+                            AppConstants.UNABLE_TO_FETCH_DETAILS,
+                            "UNABLE TO FETCH DETAILS",
+                            "Enter your Aadhar details manually or try again to continue the verification process."
+                    )
                     showToast("Ocr status " + it.message)
                 }
             }

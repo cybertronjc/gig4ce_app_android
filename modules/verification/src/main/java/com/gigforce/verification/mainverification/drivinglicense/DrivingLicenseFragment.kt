@@ -17,18 +17,22 @@ import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.AppConstants
+import com.gigforce.core.StringConstants
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.DateHelper
+import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.verification.R
 import com.gigforce.verification.databinding.DrivingLicenseFragmentBinding
 import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
@@ -52,7 +56,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class DrivingLicenseFragment : Fragment(),
-    VerificationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener {
+    VerificationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener,IOnBackPressedOverride {
     companion object {
         fun newInstance() = DrivingLicenseFragment()
         const val REQUEST_CODE_UPLOAD_DL = 2333
@@ -90,9 +94,45 @@ class DrivingLicenseFragment : Fragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        getDataFromIntents(savedInstanceState)
         setViews()
         observer()
         listeners()
+    }
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, FROM_CLIENT_ACTIVATON)
+
+
+    }
+    private fun getDataFromIntents(savedInstanceState: Bundle?) {
+        savedInstanceState?.let {
+            FROM_CLIENT_ACTIVATON =
+                    it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
+
+        }
+
+        arguments?.let {
+            FROM_CLIENT_ACTIVATON =
+                    it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
+
+        }
+    }
+
+    override fun onBackPressed(): Boolean {
+        if (FROM_CLIENT_ACTIVATON) {
+            if(isDLVerified) {
+                var navFragmentsData = activity as NavFragmentsData
+                navFragmentsData.setData(
+                        bundleOf(
+                                StringConstants.BACK_PRESSED.value to true
+
+                        )
+                )
+            }
+            return false
+        }
+        return false
     }
 
     val CONFIRM_TAG: String = "confirm"
@@ -122,14 +162,14 @@ class DrivingLicenseFragment : Fragment(),
                 activity?.onBackPressed()
             } else {
 
-                if (!anyImageUploaded) {
-                    MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage(getString(R.string.select_dl_image))
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                        .show()
-                    return@setOnClickListener
-                }
+//                if (!anyImageUploaded) {
+//                    MaterialAlertDialogBuilder(requireContext())
+//                        .setTitle(getString(R.string.alert))
+//                        .setMessage(getString(R.string.select_dl_image))
+//                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+//                        .show()
+//                    return@setOnClickListener
+//                }
 
                 if (viewBinding.stateSpinner.selectedItemPosition == 0) {
                     MaterialAlertDialogBuilder(requireContext())
@@ -193,6 +233,7 @@ class DrivingLicenseFragment : Fragment(),
         }
     }
 
+    var isDLVerified = false
     var anyImageUploaded = false
     private fun observer() {
         viewModel.kycOcrResult.observe(viewLifecycleOwner, Observer {
@@ -227,8 +268,14 @@ class DrivingLicenseFragment : Fragment(),
                             "Enter your Driving License details manually or try again to continue the verification process."
                         )
                     }
-                } else
+                } else {
+                    viewBinding.toplayoutblock.uploadStatusLayout(
+                            AppConstants.UNABLE_TO_FETCH_DETAILS,
+                            "UNABLE TO FETCH DETAILS",
+                            "Enter your Driving License details manually or try again to continue the verification process."
+                    )
                     showToast("Ocr status " + it.message)
+                }
             }
         })
 
@@ -246,6 +293,7 @@ class DrivingLicenseFragment : Fragment(),
                     viewBinding.toplayoutblock.setVerificationSuccessfulView()
                     viewBinding.submitButton.text = getString(R.string.submit)
                     viewBinding.toplayoutblock.disableImageClick()
+                    isDLVerified = true
                 } else
                     showToast("Verification " + it.message)
             }
