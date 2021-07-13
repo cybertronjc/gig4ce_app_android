@@ -92,16 +92,18 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
+        Log.d(TAG, "Notification received")
 
         if (NotificationHelper.isSilentPush(remoteMessage.data)) {
             notificationHelper.handleSilentPush(applicationContext, remoteMessage.data)
             return
         } else if (moEngagePushedHelper.isFromMoEngagePlatform(remoteMessage.data)) {
+            MoEPushHelper.getInstance()
+                .logNotificationReceived(applicationContext, remoteMessage.data)
 
-            if(!moEngagePushedHelper.isSilentPush(remoteMessage.data)){
-                MoEPushHelper.getInstance().logNotificationReceived(applicationContext,remoteMessage.data)
+            if (moEngagePushedHelper.isSilentPush(remoteMessage.data)) {
+                return
             }
-
             MoEFireBaseHelper.getInstance().passPushPayload(applicationContext, remoteMessage.data)
         } else {
             handleNotificationMessageNotFromMoEngage(remoteMessage)

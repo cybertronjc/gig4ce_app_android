@@ -15,6 +15,7 @@ import com.gigforce.app.R
 import com.gigforce.app.notification.NotificationChannels.CHAT_NOTIFICATIONS
 import com.gigforce.app.notification.NotificationChannels.URGENT_NOTIFICATIONS
 import com.gigforce.app.services.SyncUnSyncedDataService
+import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.user_tracking.TrackingConstants
 import com.gigforce.user_tracking.service.TrackingService
 import kotlin.random.Random
@@ -139,7 +140,8 @@ class NotificationHelper(private val mContext: Context) {
                 context
             )
             NotificationConstants.GlobalKeys.TASK_SYNC_CURRENT_LOCATION_FOR_GIG -> startSyncCurrentLocationForGigWorker(
-                context
+                context,
+                data
             )
             else -> {
                 //No Match
@@ -148,15 +150,38 @@ class NotificationHelper(private val mContext: Context) {
     }
 
     private fun startSyncCurrentLocationForGigWorker(
-        context: Context
+        context: Context,
+        data: Map<String, String>
     ) {
-        val intent = Intent(context, TrackingService::class.java).apply {
-            action = TrackingConstants.ACTION_START_OR_RESUME_SERVICE
-            this.putExtra(TrackingConstants.SERVICE_INTENT_EXTRA_GIG_ID, "Kl6vxCAmoISiAqK8uJu8")
-            this.putExtra(TrackingConstants.SERVICE_INTENT_EXTRA_USER_NAME, "SSS")
-            this.putExtra(TrackingConstants.SERVICE_INTENT_EXTRA_TRADING_NAME, "Nammem")
+        try {
+            val intent = Intent(context, TrackingService::class.java).apply {
+                action = TrackingConstants.ACTION_START_OR_RESUME_SERVICE
+                this.putExtra(
+                    TrackingConstants.SERVICE_INTENT_EXTRA_GIG_ID,
+                    data.get(TrackingConstants.SERVICE_INTENT_EXTRA_GIG_ID)
+                )
+                this.putExtra(
+                    TrackingConstants.SERVICE_INTENT_EXTRA_USER_NAME,
+                    data.get(TrackingConstants.SERVICE_INTENT_EXTRA_USER_NAME)
+                )
+                this.putExtra(
+                    TrackingConstants.SERVICE_INTENT_EXTRA_TRADING_NAME,
+                    data.get(TrackingConstants.SERVICE_INTENT_EXTRA_TRADING_NAME)
+                )
+            }
+            context.startService(intent)
+        } catch (e: IllegalStateException) {
+            // App is probably in background hence not able to start Service
+            // Using Work Manager to start service
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            CrashlyticsLogger.e(
+                LOG_TAG,
+                "while starting TrackingService",
+                e
+            )
         }
-        context.startService(intent)
     }
 
     private fun startSyncGeoFenceWorker(
@@ -175,6 +200,8 @@ class NotificationHelper(private val mContext: Context) {
     }
 
     companion object {
+
+        const val LOG_TAG = "NotificationHelper"
 
         fun isSilentPush(
             data: Map<String, String?>?

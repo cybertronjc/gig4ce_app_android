@@ -21,6 +21,10 @@ object NotificationConstants {
         const val GIG_ID = "gig_id"
     }
 
+    object TOPICS{
+        const val TOPIC_SYNC_DATA = "sync_data"
+    }
+
     object GlobalKeys{
         const val IS_SILENT_PUSH = "gigforce_silent_push"
         const val SILENT_PURPOSE = "silent_push_purpose"
