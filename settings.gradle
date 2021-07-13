@@ -17,3 +17,4 @@ include ':modules:core'
 include ':modules:feature-chat'
 include ':app'
 //rootProject.name = "Gigforce1"
+include ':modules:lead-management'
