@@ -14,7 +14,7 @@ import com.gigforce.core.logger.GigforceLogger
 abstract class BaseFragment2<V : ViewDataBinding>(
     private val fragmentName: String,
     @LayoutRes private val layoutId: Int,
-    @ColorRes private val toolbarColor: Int
+    @ColorRes private val statusBarColor: Int
 ) : Fragment() {
 
     val logger: GigforceLogger = GigforceLogger()
