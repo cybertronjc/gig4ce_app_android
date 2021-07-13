@@ -932,6 +932,12 @@
         android:name="com.gigforce.verification.mainverification.drivinglicense.DrivingLicenseFragment"
         android:label="DrivingLicenseFragment" />
 
+    <fragment
+        android:id="@+id/joiningListFragment"
+        android:name="com.gigforce.lead_management.ui.joining_list.JoiningListFragment"
+        android:label="JoiningListFragment" />
+
+
 
 </navigation>
 

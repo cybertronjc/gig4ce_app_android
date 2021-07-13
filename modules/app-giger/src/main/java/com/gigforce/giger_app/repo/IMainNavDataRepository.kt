@@ -6,6 +6,7 @@ import com.gigforce.common_ui.viewdatamodels.FeatureItemCard2DVM
 import com.gigforce.core.extensions.getOrThrow
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.giger_app.R
+import com.gigforce.giger_app.calendarscreen.maincalendarscreen.bottomsheet.FeatureModel
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
@@ -54,6 +55,7 @@ class MainNavDataRepository @Inject constructor() :
                         var data2 = getBussinessContactQueryMeth(data1)
                         if (data2) {
                             _data.add(FeatureItemCard2DVM(title = "Gigers Attendance", image_type = null, navPath = "gig/gigerAttendanceUnderManagerFragment", imageRes = R.drawable.ic_group_black))
+                            _data.add(FeatureItemCard2DVM(title = "Joinings", image_type = null, navPath = "LeadMgmt/joiningListFragment", imageRes = R.drawable.ic_group_black))
                             data.value = _data
                         }
                     }

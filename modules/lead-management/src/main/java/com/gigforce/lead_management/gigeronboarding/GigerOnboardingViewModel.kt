@@ -20,7 +20,6 @@ import javax.inject.Inject
 class GigerOnboardingViewModel @Inject constructor(
     private val leadManagementRepo: LeadManagementRepo,
     private val buildConfig: IBuildConfigVM
-
 ) : ViewModel() {
 
     private val profileFirebaseRepository: ProfileFirebaseRepository =

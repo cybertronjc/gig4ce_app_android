@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.gigforce.app.di.implementations.SharedPreAndCommonUtilDataImp
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
+import com.gigforce.core.logger.TimberReleaseTree
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.moe.pushlibrary.MoEHelper
@@ -14,13 +15,24 @@ import com.moengage.core.config.NotificationConfig
 import com.moengage.core.model.AppStatus
 import dagger.hilt.android.HiltAndroidApp
 import io.branch.referral.Branch
+import timber.log.Timber
 
 @HiltAndroidApp
 class MainApplication : Application() {
 
     lateinit var sp: SharedPreAndCommonUtilInterface
     var moEngage = MoEngage.Builder(this, BuildConfig.MOENGAGE_KEY)
-        .configureNotificationMetaData(NotificationConfig(R.drawable.ic_notification_icon, R.drawable.ic_notification_icon, R.color.colorPrimary, null, true, isBuildingBackStackEnabled = false, isLargeIconDisplayEnabled = true))
+        .configureNotificationMetaData(
+            NotificationConfig(
+                R.drawable.ic_notification_icon,
+                R.drawable.ic_notification_icon,
+                R.color.colorPrimary,
+                null,
+                true,
+                isBuildingBackStackEnabled = false,
+                isLargeIconDisplayEnabled = true
+            )
+        )
         .configureFcm(FcmConfig(false))
         .build()
 
@@ -34,6 +46,14 @@ class MainApplication : Application() {
         ProcessLifecycleOwner.get().lifecycle.addObserver(PresenceManager())
         setUpRemoteConfig()
         initFirebaseAuthListener()
+        initLogger()
+    }
+
+    private fun initLogger() {
+        if (BuildConfig.DEBUG)
+            Timber.plant(Timber.DebugTree())
+        else
+            Timber.plant(TimberReleaseTree())
     }
 
     private fun initFirebaseAuthListener() {
@@ -55,7 +75,6 @@ class MainApplication : Application() {
         // install update differentiation
         trackInstallOrUpdate()
     }
-
 
 
     private fun setUpRemoteConfig() {

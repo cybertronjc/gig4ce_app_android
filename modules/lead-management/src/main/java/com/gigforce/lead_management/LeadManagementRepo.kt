@@ -10,11 +10,15 @@ import com.gigforce.core.retrofit.CreateUserAccEnrollmentAPi
 import com.gigforce.core.retrofit.RetrofitFactory
 import com.gigforce.core.utils.EventLogs.setOrThrow
 import com.google.firebase.Timestamp
+import javax.inject.Inject
 
 
-class LeadManagementRepo(
-    private val createUserApi: CreateUserAccEnrollmentAPi = RetrofitFactory.createUserAccEnrollmentAPi(),
-    private val buildConfig: IBuildConfigVM) : BaseFirestoreDBRepository() {
+class LeadManagementRepo @Inject constructor(
+    private val buildConfig: IBuildConfigVM
+    ) : BaseFirestoreDBRepository() {
+
+    //todo shift to di
+    private val createUserApi: CreateUserAccEnrollmentAPi = RetrofitFactory.createUserAccEnrollmentAPi()
 
     suspend fun checkMobileForExistingRegistrationElseSendOtp(mobile: String): RegisterMobileNoResponse {
         val registerUserRequest = createUserApi.registerMobile(
