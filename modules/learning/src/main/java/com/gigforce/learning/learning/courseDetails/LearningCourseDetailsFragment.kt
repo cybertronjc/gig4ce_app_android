@@ -228,7 +228,7 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
         viewModel.courseLessonsAndAssessments.observe(viewLifecycleOwner, Observer {
             Log.d("list1234", it.toString())
             if (it.size > 0){
-                var sublist = it.subList(0,4)
+                var sublist = it.take(4)
                 learning_all_lesson_rv.visible()
                 learning_details_learning_error.gone()
                 learning_all_lesson_rv.collection = sublist
@@ -642,7 +642,10 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
                 )
             )
         }
-        moduleList.get(0).isSelectedView = true
+
+        if(moduleList.isNotEmpty())
+           moduleList.get(0).isSelectedView = true
+
         return moduleList
     }
 

@@ -39,7 +39,12 @@ class EnterPhoneNumberForReferralDialogFragment : BottomSheetDialogFragment() {
                 INTENT_EXTRA_INVITE_LINK to inviteLink
             )
             frag.inviteLinkSentListener = inviteLinkSentListener
-            frag.show(fragmentManager, TAG)
+
+            try {
+                frag.show(fragmentManager, TAG)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 
