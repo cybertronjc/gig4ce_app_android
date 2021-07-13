@@ -58,7 +58,7 @@ open class FeatureLayoutComponent(context: Context, attrs: AttributeSet?) :
 
     open fun setSectionIcon(iconUrl: String) {
         layout_img.visible()
-        Glide.with(context)
+        Glide.with(context.applicationContext)
             .load(iconUrl)
             .into(image)
     }

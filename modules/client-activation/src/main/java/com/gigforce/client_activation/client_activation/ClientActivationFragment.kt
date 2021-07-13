@@ -959,7 +959,7 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
                     )
                 } else {
                     (fragment as ClientActivationFragment).navigation.navigateToPlayVideoDialogFragment(
-                        fragment, viewModel.observableJobProfile.value?.requiredMedia?.media?.get(
+                        fragment, "",viewModel.observableJobProfile.value?.requiredMedia?.media?.get(
                             position
                         )?.lessonId ?: "", item.shouldShowFeedbackDialog
                     )
