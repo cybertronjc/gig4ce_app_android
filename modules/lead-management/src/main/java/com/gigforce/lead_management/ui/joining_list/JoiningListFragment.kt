@@ -7,7 +7,7 @@ import com.gigforce.lead_management.databinding.FragmentJoiningListBinding
 class JoiningListFragment : BaseFragment2<FragmentJoiningListBinding>(
     fragmentName = "JoiningListFragment",
     layoutId = R.layout.fragment_joining_list,
-    toolbarColor = R.color.lipstick_2
+    statusBarColor = R.color.lipstick_2
 ) {
 
     override fun viewCreated(viewBinding: FragmentJoiningListBinding) {
