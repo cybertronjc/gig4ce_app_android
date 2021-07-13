@@ -7,7 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.gigforce.lead_management.R
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class GigerOnboardingFragment : Fragment() {
 
     companion object {
@@ -26,7 +28,7 @@ class GigerOnboardingFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(GigerOnboardingViewModel::class.java)
-        
+
     }
 
 }

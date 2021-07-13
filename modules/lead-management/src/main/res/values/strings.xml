@@ -1,2 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+
+    <string name="enter_user_s_mobile_number">Giger\'s Mobile Number</string>
+    <string name="we_will_send_an_otp_on_this_number">We will send a Verification code on this number.</string>
+    <string name="country_code">+91-</string>
+    <string name="enter_code_sent_on_mobile">Enter verification code sent to User’s number</string>
+    <string name="new_joining">New Joining</string>
+    <string name="please_enter">Please Enter</string>
+    <string name="registered">Note: Make sure this user is registered on Gigforce App</string>
+
+</resources>
