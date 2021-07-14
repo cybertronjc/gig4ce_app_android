@@ -5,13 +5,13 @@ import com.gigforce.core.retrofit.RetrofitFactory
 import com.google.firebase.auth.FirebaseAuth
 import java.lang.Exception
 
-class EventBridgeRepo(private val iBuildConfigVM: IBuildConfigVM) {
+class EventBridgeRepo(private val event_bridge_url: String) {
     private val eventBridgeService : EventBridgeService =  RetrofitFactory.createService(EventBridgeService::class.java)
     suspend fun setEventToEventBridge( eventName : String,  props : Map<String,Any>?){
         FirebaseAuth.getInstance().currentUser?.let {
             val eventBridgeModel = EventBridgeModel(activityType = eventName,gigerId = it.uid)
             try {
-                eventBridgeService.setStatus(iBuildConfigVM.getUserRegisterInfoUrl(),eventBridgeModel)
+                eventBridgeService.setStatus(event_bridge_url,eventBridgeModel)
             }catch (e : Exception){
 
             }

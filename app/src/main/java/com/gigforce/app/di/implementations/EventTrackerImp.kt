@@ -1,6 +1,5 @@
 package com.gigforce.app.di.implementations
 
-import android.app.NotificationManager
 import android.content.Context
 import android.util.Log
 import com.appsflyer.AppsFlyerConversionListener
@@ -13,7 +12,6 @@ import com.gigforce.core.IEventTracker
 import com.gigforce.core.ProfilePropArgs
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.crashlytics.CrashlyticsLogger
-import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.mixpanel.android.mpmetrics.MixpanelAPI
 import com.moe.pushlibrary.MoEHelper
@@ -27,15 +25,14 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class EventTrackerImp @Inject constructor(
-        @ApplicationContext val context: Context,
-        private val iBuildConfigVM: IBuildConfigVM
+        @ApplicationContext val context: Context
 ) : IEventTracker {
 
     //var mixpanel: MixpanelAPI? = (context as MainApplication).mixpanel
 
     var mixpanel: MixpanelAPI? = MixpanelAPI.getInstance(context, BuildConfig.MIX_PANEL_KEY)
 
-    var eventBridgeRepo = EventBridgeRepo(iBuildConfigVM)
+    var eventBridgeRepo = EventBridgeRepo(BuildConfig.EVENT_BRIDGE_URL)
 
     private var moEngageHelper: MoEHelper? = MoEHelper.getInstance(context)
 
