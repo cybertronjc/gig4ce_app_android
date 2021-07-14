@@ -16,6 +16,7 @@ import android.view.ViewGroup
 import android.widget.DatePicker
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -34,7 +35,9 @@ import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.gigforce.verification.gigerVerfication.aadharCard.AadharCardSides
 import com.gigforce.verification.mainverification.Data
 import com.gigforce.verification.mainverification.VerificationClickOrSelectImageBottomSheet
+import com.gigforce.verification.util.VerificationConstants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.jaeger.library.StatusBarUtil
 import com.yalantis.ucrop.UCrop
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.aadhaar_card_image_upload_fragment.*
@@ -98,12 +101,27 @@ class AadhaarCardImageUploadFragment : Fragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        getDataFromIntent(savedInstanceState)
         setViews()
         observer()
         listeners()
 
     }
+    var allNavigationList = ArrayList<String>()
+    private fun getDataFromIntent(savedInstanceState: Bundle?) {
+        savedInstanceState?.let {
+            it.getStringArrayList(VerificationConstants.NAVIGATION_STRINGS)?.let { arr ->
+                allNavigationList = arr
+            }
+        } ?: run {
+            arguments?.let {
+                it.getStringArrayList(VerificationConstants.NAVIGATION_STRINGS)?.let { arrData ->
+                    allNavigationList = arrData
+                }
+            }
+        }
 
+    }
     private fun listeners() {
         viewBinding.toplayoutblock.setPrimaryClick(View.OnClickListener {
             //call for bottom sheet
@@ -119,10 +137,10 @@ class AadhaarCardImageUploadFragment : Fragment(),
 
             hideSoftKeyboard()
             if (toplayoutblock.isDocDontOptChecked()) {
-                activity?.onBackPressed()
+                checkForNextDoc()
             } else {
                 if (viewBinding.submitButton.tag?.toString().equals(CONFIRM_TAG)) {
-                    activity?.onBackPressed()
+                    checkForNextDoc()
                 } else {
                     if (viewBinding.aadharcardTil.editText?.text?.length != 12) {
                         MaterialAlertDialogBuilder(requireContext())
@@ -149,7 +167,19 @@ class AadhaarCardImageUploadFragment : Fragment(),
             })
         }
     }
+    private fun checkForNextDoc() {
+        if (allNavigationList.size == 0) {
+            activity?.onBackPressed()
+        } else {
+            var navigationsForBundle = emptyList<String>()
+            if (allNavigationList.size > 1) {
+                navigationsForBundle = allNavigationList.slice(IntRange(1, allNavigationList.size - 1)).filter { it.length > 0 }
+            }
+            navigation.popBackStack()
+            navigation.navigateTo(allNavigationList.get(0), bundleOf(VerificationConstants.NAVIGATION_STRINGS to navigationsForBundle))
 
+        }
+    }
     val CONFIRM_TAG: String = "confirm"
     private fun observer() {
         viewModel.kycOcrResult.observe(viewLifecycleOwner, Observer {
@@ -560,6 +590,9 @@ class AadhaarCardImageUploadFragment : Fragment(),
         options.setToolbarTitle(getString(R.string.crop_and_rotate))
         return options
     }
-
+    override fun onResume() {
+        super.onResume()
+        StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(resources, R.color.lipstick_2, null))
+    }
 
 }

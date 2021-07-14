@@ -16,6 +16,7 @@ import android.view.ViewGroup
 import android.widget.DatePicker
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -36,7 +37,9 @@ import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.gigforce.verification.gigerVerfication.panCard.AddPanCardInfoFragment
 import com.gigforce.verification.mainverification.Data
 import com.gigforce.verification.mainverification.VerificationClickOrSelectImageBottomSheet
+import com.gigforce.verification.util.VerificationConstants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.jaeger.library.StatusBarUtil
 import com.yalantis.ucrop.UCrop
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.aadhaar_card_image_upload_fragment.*
@@ -50,11 +53,12 @@ import java.net.URI
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 
 @AndroidEntryPoint
 class PanCardFragment : Fragment(),
-    VerificationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener {
+        VerificationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener {
 
     companion object {
         fun newInstance() = PanCardFragment()
@@ -81,8 +85,8 @@ class PanCardFragment : Fragment(),
 
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         viewBinding = PanCardFragmentBinding.inflate(inflater, container, false)
         return viewBinding.root
@@ -90,9 +94,26 @@ class PanCardFragment : Fragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        getDataFromIntent(savedInstanceState)
         setViews()
         listeners()
         initViewModel()
+    }
+
+    var allNavigationList = ArrayList<String>()
+    private fun getDataFromIntent(savedInstanceState: Bundle?) {
+        savedInstanceState?.let {
+            it.getStringArrayList(VerificationConstants.NAVIGATION_STRINGS)?.let { arr ->
+                allNavigationList = arr
+            }
+        } ?: run {
+            arguments?.let {
+                it.getStringArrayList(VerificationConstants.NAVIGATION_STRINGS)?.let { arrData ->
+                    allNavigationList = arrData
+                }
+            }
+        }
+
     }
 
     private fun initViewModel() {
@@ -100,24 +121,24 @@ class PanCardFragment : Fragment(),
             activeLoader(false)
             it?.let {
                 if (it.status) {
-                    if (!it.panNumber.isNullOrBlank() || !it.name.isNullOrBlank() || !it.dateOfBirth.isNullOrBlank()||!it.fatherName.isNullOrBlank()) {
+                    if (!it.panNumber.isNullOrBlank() || !it.name.isNullOrBlank() || !it.dateOfBirth.isNullOrBlank() || !it.fatherName.isNullOrBlank()) {
                         viewBinding.toplayoutblock.uploadStatusLayout(
-                            AppConstants.UPLOAD_SUCCESS,
-                            "UPLOAD SUCCESSFUL",
-                            "Information of PAN card Captured Successfully."
+                                AppConstants.UPLOAD_SUCCESS,
+                                "UPLOAD SUCCESSFUL",
+                                "Information of PAN card Captured Successfully."
                         )
-                        if(!it.panNumber.isNullOrBlank())
-                        viewBinding.panTil.editText?.setText(it.panNumber)
-                        if(!it.name.isNullOrBlank())
-                        viewBinding.nameTil.editText?.setText(it.name)
-                        if(!it.dateOfBirth.isNullOrBlank())
-                        viewBinding.dateOfBirth.text = it.dateOfBirth
+                        if (!it.panNumber.isNullOrBlank())
+                            viewBinding.panTil.editText?.setText(it.panNumber)
+                        if (!it.name.isNullOrBlank())
+                            viewBinding.nameTil.editText?.setText(it.name)
+                        if (!it.dateOfBirth.isNullOrBlank())
+                            viewBinding.dateOfBirth.text = it.dateOfBirth
 
                     } else {
                         viewBinding.toplayoutblock.uploadStatusLayout(
-                            AppConstants.UNABLE_TO_FETCH_DETAILS,
-                            "UNABLE TO FETCH DETAILS",
-                            "Enter your PAN card details manually or try again to continue the verification process."
+                                AppConstants.UNABLE_TO_FETCH_DETAILS,
+                                "UNABLE TO FETCH DETAILS",
+                                "Enter your PAN card details manually or try again to continue the verification process."
                         )
                     }
 
@@ -137,9 +158,9 @@ class PanCardFragment : Fragment(),
                 if (it.status) {
                     viewBinding.belowLayout.gone()
                     viewBinding.toplayoutblock.uploadStatusLayout(
-                        AppConstants.UPLOAD_SUCCESS,
-                        "VERIFICATION COMPLETED",
-                        "The PAN card Details have been verified successfully."
+                            AppConstants.UPLOAD_SUCCESS,
+                            "VERIFICATION COMPLETED",
+                            "The PAN card Details have been verified successfully."
                     )
                     viewBinding.submitButton.tag = CONFIRM_TAG
                     viewBinding.toplayoutblock.setVerificationSuccessfulView()
@@ -154,12 +175,12 @@ class PanCardFragment : Fragment(),
         viewModel.verifiedStatus.observe(viewLifecycleOwner, Observer {
             it?.let {
                 Log.d("Status", it.toString())
-                if (it){
+                if (it) {
                     viewBinding.belowLayout.gone()
                     viewBinding.toplayoutblock.uploadStatusLayout(
-                        AppConstants.UPLOAD_SUCCESS,
-                        "VERIFICATION COMPLETED",
-                        "The PAN card Details have been verified successfully."
+                            AppConstants.UPLOAD_SUCCESS,
+                            "VERIFICATION COMPLETED",
+                            "The PAN card Details have been verified successfully."
                     )
                     viewBinding.submitButton.tag = CONFIRM_TAG
                     viewBinding.toplayoutblock.setVerificationSuccessfulView()
@@ -170,7 +191,7 @@ class PanCardFragment : Fragment(),
         })
     }
 
-    val CONFIRM_TAG :String = "confirm"
+    val CONFIRM_TAG: String = "confirm"
 
     private fun listeners() {
         viewBinding.toplayoutblock.setPrimaryClick(View.OnClickListener {
@@ -186,10 +207,10 @@ class PanCardFragment : Fragment(),
         viewBinding.submitButton.setOnClickListener {
             hideSoftKeyboard()
             if (toplayoutblock.isDocDontOptChecked()) {
-                activity?.onBackPressed()
+                checkForNextDoc()
             } else {
-                if (viewBinding.submitButton.getTag()?.toString().equals(CONFIRM_TAG)) {
-                    activity?.onBackPressed()
+                if (viewBinding.submitButton.tag?.toString().equals(CONFIRM_TAG)) {
+                    checkForNextDoc()
                 } else {
                     val panCardNo =
                             viewBinding.panTil.editText?.text.toString().toUpperCase(Locale.getDefault())
@@ -222,14 +243,28 @@ class PanCardFragment : Fragment(),
 
     }
 
+    private fun checkForNextDoc() {
+        if (allNavigationList.size == 0) {
+            activity?.onBackPressed()
+        } else {
+            var navigationsForBundle = emptyList<String>()
+            if (allNavigationList.size > 1) {
+                navigationsForBundle = allNavigationList.slice(IntRange(1, allNavigationList.size - 1)).filter { it.length > 0 }
+            }
+            navigation.popBackStack()
+            navigation.navigateTo(allNavigationList.get(0), bundleOf(VerificationConstants.NAVIGATION_STRINGS to navigationsForBundle))
+
+        }
+    }
+
     private fun setViews() {
         viewBinding.toplayoutblock.showUploadHere()
         val frontUri = Uri.Builder()
-            .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
-            .authority(resources.getResourcePackageName(R.drawable.ic_pan_illustration))
-            .appendPath(resources.getResourceTypeName(R.drawable.ic_pan_illustration))
-            .appendPath(resources.getResourceEntryName(R.drawable.ic_pan_illustration))
-            .build()
+                .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
+                .authority(resources.getResourcePackageName(R.drawable.ic_pan_illustration))
+                .appendPath(resources.getResourceTypeName(R.drawable.ic_pan_illustration))
+                .appendPath(resources.getResourceEntryName(R.drawable.ic_pan_illustration))
+                .build()
         val list = listOf(KYCImageModel(getString(R.string.upload_pan_card_new), frontUri, false))
         viewBinding.toplayoutblock.setImageViewPager(list)
 
@@ -238,9 +273,9 @@ class PanCardFragment : Fragment(),
     private fun checkForPermissionElseShowCameraGalleryBottomSheet() {
         if (hasStoragePermissions())
             VerificationClickOrSelectImageBottomSheet.launch(
-                parentFragmentManager,
-                "Upload PAN Card",
-                this
+                    parentFragmentManager,
+                    "Upload PAN Card",
+                    this
             )
         else
             requestStoragePermission()
@@ -249,25 +284,25 @@ class PanCardFragment : Fragment(),
     private fun requestStoragePermission() {
 
         requestPermissions(
-            arrayOf(
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.CAMERA
-            ),
-            REQUEST_STORAGE_PERMISSION
+                arrayOf(
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.CAMERA
+                ),
+                REQUEST_STORAGE_PERMISSION
         )
     }
 
     private fun hasStoragePermissions(): Boolean {
         return ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
+                requireContext(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
         ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.READ_EXTERNAL_STORAGE
+                requireContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE
         ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.CAMERA
+                requireContext(),
+                Manifest.permission.CAMERA
         ) == PackageManager.PERMISSION_GRANTED
     }
 
@@ -279,10 +314,10 @@ class PanCardFragment : Fragment(),
             Log.d("Register", "Nombre del archivo " + file.name)
             // create RequestBody instance from file
             val requestFile: RequestBody =
-                RequestBody.create(MediaType.parse("image/png"), file)
+                    RequestBody.create(MediaType.parse("image/png"), file)
             // MultipartBody.Part is used to send also the actual file name
             image =
-                MultipartBody.Part.createFormData("file", file.name, requestFile)
+                    MultipartBody.Part.createFormData("file", file.name, requestFile)
         }
         image?.let { viewModel.getKycOcrResult("pan", "dsd", it) }
     }
@@ -290,18 +325,18 @@ class PanCardFragment : Fragment(),
     private val dateOfBirthPicker: DatePickerDialog by lazy {
         val cal = Calendar.getInstance()
         val datePickerDialog = DatePickerDialog(
-            requireContext(),
-            DatePickerDialog.OnDateSetListener { _: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
-                val newCal = Calendar.getInstance()
-                newCal.set(Calendar.YEAR, year)
-                newCal.set(Calendar.MONTH, month)
-                newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                requireContext(),
+                DatePickerDialog.OnDateSetListener { _: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
+                    val newCal = Calendar.getInstance()
+                    newCal.set(Calendar.YEAR, year)
+                    newCal.set(Calendar.MONTH, month)
+                    newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
 
-                viewBinding.dateOfBirth.text = DateHelper.getDateInDDMMYYYY(newCal.time)
-            },
-            1990,
-            cal.get(Calendar.MONTH),
-            cal.get(Calendar.DAY_OF_MONTH)
+                    viewBinding.dateOfBirth.text = DateHelper.getDateInDDMMYYYY(newCal.time)
+                },
+                1990,
+                cal.get(Calendar.MONTH),
+                cal.get(Calendar.DAY_OF_MONTH)
         )
 
         datePickerDialog.datePicker.maxDate = Calendar.getInstance().timeInMillis
@@ -316,14 +351,14 @@ class PanCardFragment : Fragment(),
         photoCropIntent.putExtra("detectFace", 0)
         photoCropIntent.putExtra("file", "pan_card.jpg")
         navigation.navigateToPhotoCrop(
-            photoCropIntent,
-            AddPanCardInfoFragment.REQUEST_CODE_UPLOAD_PAN_IMAGE, requireContext(), this
+                photoCropIntent,
+                AddPanCardInfoFragment.REQUEST_CODE_UPLOAD_PAN_IMAGE, requireContext(), this
         )
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>, grantResults: IntArray
+            requestCode: Int,
+            permissions: Array<String>, grantResults: IntArray
     ) {
         when (requestCode) {
             REQUEST_STORAGE_PERMISSION -> {
@@ -338,9 +373,9 @@ class PanCardFragment : Fragment(),
 
                 if (allPermsGranted)
                     VerificationClickOrSelectImageBottomSheet.launch(
-                        parentFragmentManager,
-                        "Upload PAN Card",
-                        this
+                            parentFragmentManager,
+                            "Upload PAN Card",
+                            this
                     )
                 else {
                     showToast("Please grant storage permission")
@@ -413,25 +448,27 @@ class PanCardFragment : Fragment(),
 //    }
     private fun callKycVerificationApi() {
         var list = listOf(
-            Data("name", viewBinding.nameTil.editText?.text.toString()),
-            Data("no", viewBinding.panTil.editText?.text.toString()),
-            Data("fathername",viewBinding.fatherNameTil.editText?.text.toString()),
-            Data("dob", viewBinding.dateOfBirth.text.toString())
+                Data("name", viewBinding.nameTil.editText?.text.toString()),
+                Data("no", viewBinding.panTil.editText?.text.toString()),
+                Data("fathername", viewBinding.fatherNameTil.editText?.text.toString()),
+                Data("dob", viewBinding.dateOfBirth.text.toString())
         )
         activeLoader(true)
         viewModel.getKycVerificationResult("pan", list)
     }
-    private fun activeLoader(activate : Boolean){
-        if(activate) {
+
+    private fun activeLoader(activate: Boolean) {
+        if (activate) {
             viewBinding.progressBar.visible()
             viewBinding.screenLoaderBar.visible()
             viewBinding.submitButton.isEnabled = false
-        }else{
+        } else {
             viewBinding.progressBar.gone()
             viewBinding.screenLoaderBar.gone()
             viewBinding.submitButton.isEnabled = true
         }
     }
+
     private fun showPanInfoCard(panInfoPath: Uri) {
         viewBinding.toplayoutblock.setDocumentImage(0, panInfoPath)
         //call ocr api
@@ -451,9 +488,9 @@ class PanCardFragment : Fragment(),
 
     private fun showWhyWeNeedThisDialog() {
         WhyWeNeedThisBottomSheet.launch(
-            childFragmentManager = childFragmentManager,
-            title = getString(R.string.why_do_we_need_this),
-            content = getString(R.string.why_do_we_need_this_pan)
+                childFragmentManager = childFragmentManager,
+                title = getString(R.string.why_do_we_need_this),
+                content = getString(R.string.why_do_we_need_this_pan)
         )
     }
 
@@ -461,13 +498,13 @@ class PanCardFragment : Fragment(),
         Log.v("Start Crop", "started")
         //can use this for a new name every time
         val timeStamp = SimpleDateFormat(
-            "yyyyMMdd_HHmmss",
-            Locale.getDefault()
+                "yyyyMMdd_HHmmss",
+                Locale.getDefault()
         ).format(Date())
         val imageFileName = PREFIX + "_" + timeStamp + "_"
         val uCrop: UCrop = UCrop.of(
-            uri,
-            Uri.fromFile(File(requireContext().cacheDir, imageFileName + EXTENSION))
+                uri,
+                Uri.fromFile(File(requireContext().cacheDir, imageFileName + EXTENSION))
         )
         val resultIntent: Intent = Intent()
         resultIntent.putExtra("filename", imageFileName + EXTENSION)
@@ -488,5 +525,9 @@ class PanCardFragment : Fragment(),
         options.setToolbarColor(ResourcesCompat.getColor(resources, R.color.topBarDark, null))
         options.setToolbarTitle(getString(R.string.crop_and_rotate))
         return options
+    }
+    override fun onResume() {
+        super.onResume()
+        StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(resources, R.color.lipstick_2, null))
     }
 }

@@ -39,7 +39,9 @@ import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.gigforce.verification.gigerVerfication.drivingLicense.DrivingLicenseSides
 import com.gigforce.verification.mainverification.Data
 import com.gigforce.verification.mainverification.VerificationClickOrSelectImageBottomSheet
+import com.gigforce.verification.util.VerificationConstants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.jaeger.library.StatusBarUtil
 import com.yalantis.ucrop.UCrop
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.aadhaar_card_image_upload_fragment.*
@@ -100,23 +102,46 @@ class DrivingLicenseFragment : Fragment(),
         listeners()
     }
 
+
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, FROM_CLIENT_ACTIVATON)
 
 
     }
-
+    var allNavigationList = ArrayList<String>()
     private fun getDataFromIntents(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
             FROM_CLIENT_ACTIVATON =
                     it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
+            it.getStringArrayList(VerificationConstants.NAVIGATION_STRINGS)?.let { arr ->
+                allNavigationList = arr
+            }
+        }?:run{
+            arguments?.let {
+                FROM_CLIENT_ACTIVATON =
+                        it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
+                it.getStringArrayList(VerificationConstants.NAVIGATION_STRINGS)?.let { arrData ->
+                    allNavigationList = arrData
+                }
 
+            }
         }
 
-        arguments?.let {
-            FROM_CLIENT_ACTIVATON =
-                    it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
+
+    }
+
+    private fun checkForNextDoc() {
+        if (allNavigationList.size == 0) {
+            activity?.onBackPressed()
+        } else {
+            var navigationsForBundle = emptyList<String>()
+            if (allNavigationList.size > 1) {
+                navigationsForBundle = allNavigationList.slice(IntRange(1, allNavigationList.size - 1)).filter { it.length > 0 }
+            }
+            navigation.popBackStack()
+            navigation.navigateTo(allNavigationList.get(0), bundleOf(VerificationConstants.NAVIGATION_STRINGS to navigationsForBundle))
 
         }
     }
@@ -161,10 +186,10 @@ class DrivingLicenseFragment : Fragment(),
         viewBinding.submitButton.setOnClickListener {
             hideSoftKeyboard()
             if (toplayoutblock.isDocDontOptChecked()) {
-                activity?.onBackPressed()
+                checkForNextDoc()
             } else {
                 if (viewBinding.submitButton.tag?.toString().equals(CONFIRM_TAG)) {
-                    activity?.onBackPressed()
+                    checkForNextDoc()
                 } else {
                     if (viewBinding.stateSpinner.selectedItemPosition == 0) {
                         MaterialAlertDialogBuilder(requireContext())
@@ -686,5 +711,8 @@ class DrivingLicenseFragment : Fragment(),
         options.setToolbarTitle(getString(R.string.crop_and_rotate))
         return options
     }
-
+    override fun onResume() {
+        super.onResume()
+        StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(resources, R.color.lipstick_2, null))
+    }
 }
