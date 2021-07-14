@@ -1,4 +1,4 @@
-package com.gigforce.common_ui.viewdatamodels
+package com.gigforce.core.datamodels.auth
 
 import com.google.gson.annotations.SerializedName
 

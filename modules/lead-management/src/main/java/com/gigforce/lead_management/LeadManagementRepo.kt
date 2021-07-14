@@ -1,24 +1,27 @@
 package com.gigforce.lead_management
 
+
+import com.gigforce.core.datamodels.auth.UserAuthStatusModel
 import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
 import com.gigforce.core.datamodels.ambassador.*
 import com.gigforce.core.datamodels.profile.Contact
 import com.gigforce.core.datamodels.profile.EnrollmentInfo
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.di.interfaces.IBuildConfigVM
+import com.gigforce.core.extensions.setOrThrow
 import com.gigforce.core.retrofit.CreateUserAccEnrollmentAPi
 import com.gigforce.core.retrofit.RetrofitFactory
-import com.gigforce.core.utils.EventLogs.setOrThrow
 import com.google.firebase.Timestamp
-import javax.inject.Inject
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 
 
-class LeadManagementRepo @Inject constructor(
+class LeadManagementRepo (
     private val buildConfig: IBuildConfigVM
     ) : BaseFirestoreDBRepository() {
 
-    //todo shift to di
+
     private val createUserApi: CreateUserAccEnrollmentAPi = RetrofitFactory.createUserAccEnrollmentAPi()
+
 
     suspend fun checkMobileForExistingRegistrationElseSendOtp(mobile: String): RegisterMobileNoResponse {
         val registerUserRequest = createUserApi.registerMobile(
@@ -49,13 +52,21 @@ class LeadManagementRepo @Inject constructor(
         }
     }
 
+    suspend fun getUserAuthStatus(mobileNo : String): UserAuthStatusModel {
+        var userAuthStatus = createUserApi.getGigersAuthStatus(buildConfig.getUserRegisterInfoUrl(),mobileNo)
+        if(userAuthStatus.isSuccessful){
+            return userAuthStatus.body()!!
+        }
+        else{
+            FirebaseCrashlytics.getInstance().log("Exception : checkIfSignInOrSignup Method ${userAuthStatus.message()}")
+            throw Exception("Issue in Authentication result ${userAuthStatus.message()}")
+        }
+    }
+
     suspend fun createUser(
         createUserUrl: String,
         mobile: String,
-        enrolledByName: String,
-        latitude: Double,
-        longitude: Double,
-        fullAddress: String
+        enrolledByName: String
     ): CreateUserResponse {
         val createUserResponse = createUserApi.createUser(
             createUserUrl, listOf(
@@ -73,10 +84,7 @@ class LeadManagementRepo @Inject constructor(
                 response.uid?.let {
                     createProfileDataForUser(
                         uid = it,
-                        mobile = mobile,
-                        latitude = latitude,
-                        longitude = longitude,
-                        fullAddress = fullAddress
+                        mobile = mobile
                     )
                 }
 
@@ -89,9 +97,7 @@ class LeadManagementRepo @Inject constructor(
     private suspend fun createProfileDataForUser(
         uid: String,
         mobile: String,
-        latitude: Double,
-        longitude: Double,
-        fullAddress: String
+
 
     ) {
 
@@ -108,10 +114,7 @@ class LeadManagementRepo @Inject constructor(
             createdOn = Timestamp.now(),
             enrolledBy = EnrollmentInfo(
                 id = getUID(),
-                enrolledOn = Timestamp.now(),
-                enrolledLocationLatitude = latitude,
-                enrolledLocationLongitude = longitude,
-                enrolledLocationAddress = fullAddress
+                enrolledOn = Timestamp.now()
             )
         )
 

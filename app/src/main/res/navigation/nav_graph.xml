@@ -940,7 +940,14 @@
         android:id="@+id/joiningListFragment"
         android:name="com.gigforce.lead_management.ui.joining_list.JoiningListFragment"
         android:label="JoiningListFragment" />
-
+    <fragment
+        android:id="@+id/gigerOtpVerification"
+        android:name="com.gigforce.lead_management.gigeronboarding.GigerOtpVerification"
+        android:label="GigerOtpVerification" />
+    <fragment
+        android:id="@+id/selectGigApplicationToActivate"
+        android:name="com.gigforce.lead_management.gigeronboarding.SelectGigApplicationToActivate"
+        android:label="SelectGigApplicationToActivate" />
 
 
 </navigation>

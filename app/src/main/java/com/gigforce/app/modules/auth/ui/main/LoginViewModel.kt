@@ -8,7 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.modules.auth.UserAuthRepo
-import com.gigforce.common_ui.viewdatamodels.UserAuthStatusModel
+import com.gigforce.core.datamodels.auth.UserAuthStatusModel
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.analytics.AuthEvents

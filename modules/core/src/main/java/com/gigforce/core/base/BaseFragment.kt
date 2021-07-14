@@ -46,7 +46,7 @@ abstract class BaseFragment2<V : ViewDataBinding>(
         super.onViewCreated(view, savedInstanceState)
 
         logger.d(fragmentName, "viewCreated()")
-        viewCreated(_viewDataBinding)
+        viewCreated(_viewDataBinding, savedInstanceState)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -70,6 +70,8 @@ abstract class BaseFragment2<V : ViewDataBinding>(
     }
 
     abstract fun viewCreated(
-        viewBinding: V
+        viewBinding: V,
+        savedInstanceState: Bundle?
+
     )
 }

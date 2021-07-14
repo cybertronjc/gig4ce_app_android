@@ -1,12 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="enter_user_s_mobile_number">Giger\'s Mobile Number</string>
+    <string name="gigers_phone">Giger\'s Mobile Number</string>
     <string name="we_will_send_an_otp_on_this_number">We will send a Verification code on this number.</string>
     <string name="country_code">+91-</string>
     <string name="enter_code_sent_on_mobile">Enter verification code sent to User’s number</string>
-    <string name="new_joining">New Joining</string>
-    <string name="please_enter">Please Enter</string>
-    <string name="registered">Note: Make sure this user is registered on Gigforce App</string>
-
+    <string name="new_joining">Mobile Number</string>
+    <string name="please_enter">You need to enter the</string>
+    <string name="registered">Make sure this user is registered on Gigforce App</string>
+    <string name="change_number">Change Number</string>
+    <string name="note">Note</string>
+    <string name="joining_failed">Joining Failed</string>
+    <string name="giger_not_registered">Giger not registered</string>
+    <string name="not_signed_up">The input number has not signed up on Gigforce app yet</string>
+    <string name="not_registered">Giger can only be activated if s/he has created profile on Gigforce app</string>
+    <string name="verification_code">Verification Code</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

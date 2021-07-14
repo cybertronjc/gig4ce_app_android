@@ -1,6 +1,7 @@
 include ':modules:notifications'
 include ':modules:user-tracking'
 include ':modules:landing'
+include ':modules:lead-management'
 include ':modules:user_preferences'
 include ':modules:ambassador'
 include ':modules:verification'
@@ -17,4 +18,4 @@ include ':modules:core'
 include ':modules:feature-chat'
 include ':app'
 //rootProject.name = "Gigforce1"
-include ':modules:lead-management'
+

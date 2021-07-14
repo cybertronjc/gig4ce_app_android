@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -18,7 +19,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginBottom="80dp"
         android:orientation="vertical"
         app:layout_constraintTop_toBottomOf="@id/appBar"
@@ -29,6 +30,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
             android:orientation="vertical">
 
             <TextView
@@ -42,43 +44,25 @@
                 android:letterSpacing="-0.01"
                 android:lineSpacingExtra="3sp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="148dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:text="@string/please_enter"
                 />
-
-            <ImageView
-                android:id="@+id/imageView7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/dp_sm1"
-                android:src="@drawable/ic_baseline_help_24"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/tvPleaseEnter" />
-
-            <TextView
-                android:id="@+id/querytext"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/dp_xsm1"
-                android:text="Why we need this"
-                app:layout_constraintEnd_toStartOf="@+id/imageView7"
-                app:layout_constraintTop_toTopOf="@+id/imageView7" />
 
 
             <TextView
                 android:id="@+id/enter_mobile_label"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="80dp"
-                android:layout_marginEnd="24dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
                 android:fontFamily="@font/lato"
                 android:lineSpacingExtra="7sp"
-                android:text="@string/enter_user_s_mobile_number"
+                android:text="@string/gigers_phone"
                 android:textColor="#131415"
-                android:textSize="32sp"
+                android:textSize="24sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -89,7 +73,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/icons_background"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="24dp"
                 android:padding="4dp"
                 android:src="@drawable/ic_tips_and_updates_black_24dp"
                 app:layout_constraintStart_toStartOf="@id/enter_mobile_label"
@@ -97,36 +81,18 @@
 
             <TextView
                 android:id="@+id/makeSureText"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/lato"
                 android:textStyle="normal"
                 android:textSize="14sp"
                 android:textColor="@color/limeGrey"
-                android:letterSpacing="-0.01"
-                android:lineSpacingExtra="3sp"
                 android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/imageView8"
                 app:layout_constraintTop_toTopOf="@id/imageView8"
-                app:layout_constraintBottom_toBottomOf="@id/imageView8"
                 android:text="@string/registered"
-                />
-
-            <TextView
-                android:id="@+id/we_will_send_otp_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/lato"
-                android:textStyle="normal"
-                android:textSize="14sp"
-                android:textColor="#333333"
-                android:letterSpacing="-0.01"
-                android:lineSpacingExtra="3sp"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="24dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/imageView8"
-                android:text="@string/we_will_send_an_otp_on_this_number"
                 />
 
             <TextView
@@ -141,15 +107,15 @@
                 android:text="@string/country_code"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="40dp"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginTop="48dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/we_will_send_otp_label"
+                app:layout_constraintTop_toBottomOf="@id/makeSureText"
                 />
 
             <EditText
                 android:id="@+id/mobile_no_et"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:minWidth="190dp"
                 android:fontFamily="@font/lato"
@@ -164,14 +130,116 @@
                 android:background="@drawable/rectangle_round_grey_solid"
                 android:maxLength="10"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="40dp"
+                android:layout_marginEnd="@dimen/size_16"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/country_code_label"
-                app:layout_constraintTop_toBottomOf="@id/we_will_send_otp_label"
+                app:layout_constraintTop_toTopOf="@+id/country_code_label"
                 />
+
+            <TextView
+                android:id="@+id/change_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato"
+                android:textStyle="normal"
+                android:textSize="14sp"
+                android:visibility="gone"
+                android:textColor="@color/lipstick"
+                android:letterSpacing="-0.01"
+                android:lineSpacingExtra="3sp"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginTop="@dimen/size_16"
+                app:layout_constraintEnd_toEndOf="@id/mobile_no_et"
+                app:layout_constraintTop_toBottomOf="@id/mobile_no_et"
+                android:text="@string/change_number"
+                />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/notRegisteredLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginTop="@dimen/size_30"
+                android:layout_marginEnd="@dimen/size_16"
+                android:background="@drawable/verify_screen_note_bg"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/change_number">
+
+                <ImageView
+                    android:id="@+id/imageView9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/icons_background"
+                    android:layout_marginTop="@dimen/size_16"
+                    android:padding="4dp"
+                    android:layout_marginStart="@dimen/size_16"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:src="@drawable/ic_baseline_info_24" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/size_12"
+                    android:fontFamily="@font/lato"
+                    android:lineSpacingExtra="3sp"
+                    android:text="@string/note"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toTopOf="@+id/imageView9"
+                    app:layout_constraintStart_toEndOf="@+id/imageView9"
+                    app:layout_constraintBottom_toBottomOf="@id/imageView9"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/size_16"
+                    android:fontFamily="@font/lato"
+                    android:lineSpacingExtra="3sp"
+                    android:text="@string/not_registered"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:layout_marginEnd="@dimen/size_16"
+                    android:layout_marginBottom="@dimen/size_16"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/imageView9"
+                    app:layout_constraintStart_toStartOf="@id/imageView9"/>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+    <TextView
+        android:id="@+id/create_profileBtn"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/bottom_button_outlined"
+        android:layout_marginStart="@dimen/size_16"
+        android:layout_marginEnd="@dimen/size_16"
+        android:layout_marginBottom="@dimen/size_22"
+        android:gravity="center"
+        android:visibility="gone"
+        android:minHeight="@dimen/size_36"
+        android:text="Create Profile Now"
+        android:textColor="@color/colorPrimary"
+        app:layout_constraintBottom_toTopOf="@id/submit_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <TextView
         android:id="@+id/submit_button"
@@ -188,6 +256,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
