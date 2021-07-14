@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_sm1"
         android:layout_marginTop="@dimen/dp_xl3"
-        android:text="Submit Documents"
+        android:text="Submit KYC Documents"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/appBar2" />
 
@@ -44,7 +44,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_sm3"
         android:layout_marginRight="@dimen/dp_xl6"
-        android:text="We need to verify your information. The acceptable documents involve your PAN Card, Aadhar, DL and Bank Details."
+        android:text="We need to verify your information. Select the documents below that are ready to verify"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView3"
         app:layout_constraintTop_toTopOf="@+id/imageView3" />
@@ -109,7 +109,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/button_style"
-        android:text="Next Step"
+        android:text="Next"
         android:padding="@dimen/dp_sm1"
         android:layout_marginBottom="@dimen/dp_xl1"
         app:layout_constraintBottom_toBottomOf="parent"

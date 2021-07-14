@@ -36,6 +36,7 @@ import com.gigforce.verification.mainverification.VerificationClickOrSelectImage
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.yalantis.ucrop.UCrop
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.aadhaar_card_image_upload_fragment.*
 import kotlinx.android.synthetic.main.veri_screen_info_component.view.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -156,6 +157,7 @@ class BankAccountFragment : Fragment(),
                     viewBinding.submitButton.gone()
                     viewBinding.toplayoutblock.setVerificationSuccessfulView()
                     viewBinding.toplayoutblock.disableImageClick()
+                    viewBinding.toplayoutblock.hideWhyWeneedThis()
                 }
             }
         })
@@ -207,9 +209,11 @@ class BankAccountFragment : Fragment(),
     private fun activeLoader(activate: Boolean) {
         if (activate) {
             viewBinding.progressBar.visible()
+            viewBinding.screenLoaderBar.visible()
             viewBinding.submitButton.isEnabled = false
         } else {
             viewBinding.progressBar.gone()
+            viewBinding.screenLoaderBar.gone()
             viewBinding.submitButton.isEnabled = true
         }
     }
@@ -222,44 +226,49 @@ class BankAccountFragment : Fragment(),
         })
         viewBinding.submitButton.setOnClickListener {
             hideSoftKeyboard()
-            val ifsc =
-                    viewBinding.ifscCode.editText?.text.toString().toUpperCase(Locale.getDefault())
-            if (!VerificationValidations.isIfSCValid(ifsc)) {
 
-                MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage(getString(R.string.enter_valid_ifsc))
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                        .show()
-                return@setOnClickListener
-            }
+            if (toplayoutblock.isDocDontOptChecked()) {
+                activity?.onBackPressed()
+            } else {
+                val ifsc =
+                        viewBinding.ifscCode.editText?.text.toString().toUpperCase(Locale.getDefault())
+                if (!VerificationValidations.isIfSCValid(ifsc)) {
 
-            if (viewBinding.bankNameTil.editText?.text.toString().isNullOrBlank()) {
-                MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage(getString(R.string.enter_bank_name))
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                        .show()
-                return@setOnClickListener
-            }
-            if (viewBinding.bankNameTil.editText?.text.toString().length < 3) {
-                MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage(getString(R.string.bank_name_too_short))
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                        .show()
-                return@setOnClickListener
-            }
+                    MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert))
+                            .setMessage(getString(R.string.enter_valid_ifsc))
+                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .show()
+                    return@setOnClickListener
+                }
 
-            if (viewBinding.bankAccNumberItl.editText?.text.toString().length < 4) {
-                MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage(getString(R.string.enter_valid_acc_no))
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                        .show()
-                return@setOnClickListener
+                if (viewBinding.bankNameTil.editText?.text.toString().isNullOrBlank()) {
+                    MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert))
+                            .setMessage(getString(R.string.enter_bank_name))
+                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .show()
+                    return@setOnClickListener
+                }
+                if (viewBinding.bankNameTil.editText?.text.toString().length < 3) {
+                    MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert))
+                            .setMessage(getString(R.string.bank_name_too_short))
+                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .show()
+                    return@setOnClickListener
+                }
+
+                if (viewBinding.bankAccNumberItl.editText?.text.toString().length < 4) {
+                    MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert))
+                            .setMessage(getString(R.string.enter_valid_acc_no))
+                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .show()
+                    return@setOnClickListener
+                }
+                callKycVerificationApi()
             }
-            callKycVerificationApi()
         }
 
         viewBinding.toplayoutblock.querytext.setOnClickListener {
@@ -276,6 +285,7 @@ class BankAccountFragment : Fragment(),
         }
         viewBinding.confirmButton.setOnClickListener {
             viewModel.setVerificationStatusInDB(true)
+            viewBinding.toplayoutblock.hideWhyWeneedThis()
         }
         viewBinding.notConfirmButton.setOnClickListener {
             MaterialAlertDialogBuilder(requireContext())

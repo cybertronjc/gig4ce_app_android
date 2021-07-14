@@ -66,11 +66,18 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
             setQueryStr(querytextstr)
             setMissingDocText(missingdoctext)
 
-            missingtext.setOnCheckedChangeListener { buttonView, isChecked ->
-                if (isChecked) navigation.popBackStack()
-            }
+
         }
 
+    }
+
+    fun hideWhyWeneedThis(){
+        imageView7.gone()
+        querytext.gone()
+    }
+
+    fun isDocDontOptChecked() : Boolean{
+        return missingtext.isChecked
     }
 
     private fun setMissingDocText(missingdoctext: String) {

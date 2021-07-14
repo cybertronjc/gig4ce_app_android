@@ -42,13 +42,13 @@ import com.gigforce.verification.mainverification.VerificationClickOrSelectImage
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.yalantis.ucrop.UCrop
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.aadhaar_card_image_upload_fragment.*
 import kotlinx.android.synthetic.main.veri_screen_info_component.view.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.ByteArrayOutputStream
 import java.io.File
-import java.lang.Exception
 import java.net.URI
 import java.text.SimpleDateFormat
 import java.util.*
@@ -56,7 +56,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class DrivingLicenseFragment : Fragment(),
-    VerificationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener,IOnBackPressedOverride {
+        VerificationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener, IOnBackPressedOverride {
     companion object {
         fun newInstance() = DrivingLicenseFragment()
         const val REQUEST_CODE_UPLOAD_DL = 2333
@@ -85,8 +85,8 @@ class DrivingLicenseFragment : Fragment(),
     private var currentlyClickingImageOfSide: DrivingLicenseSides? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         viewBinding = DrivingLicenseFragmentBinding.inflate(inflater, container, false)
         return viewBinding.root
@@ -99,12 +99,14 @@ class DrivingLicenseFragment : Fragment(),
         observer()
         listeners()
     }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, FROM_CLIENT_ACTIVATON)
 
 
     }
+
     private fun getDataFromIntents(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
             FROM_CLIENT_ACTIVATON =
@@ -121,7 +123,7 @@ class DrivingLicenseFragment : Fragment(),
 
     override fun onBackPressed(): Boolean {
         if (FROM_CLIENT_ACTIVATON) {
-            if(isDLVerified) {
+            if (isDLVerified) {
                 var navFragmentsData = activity as NavFragmentsData
                 navFragmentsData.setData(
                         bundleOf(
@@ -158,47 +160,41 @@ class DrivingLicenseFragment : Fragment(),
 
         viewBinding.submitButton.setOnClickListener {
             hideSoftKeyboard()
-            if (viewBinding.submitButton.tag?.toString().equals(CONFIRM_TAG)) {
+            if (toplayoutblock.isDocDontOptChecked()) {
                 activity?.onBackPressed()
             } else {
+                if (viewBinding.submitButton.tag?.toString().equals(CONFIRM_TAG)) {
+                    activity?.onBackPressed()
+                } else {
+                    if (viewBinding.stateSpinner.selectedItemPosition == 0) {
+                        MaterialAlertDialogBuilder(requireContext())
+                                .setTitle(getString(R.string.alert))
+                                .setMessage(getString(R.string.select_dl_state))
+                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                                .show()
+                        return@setOnClickListener
+                    }
 
-//                if (!anyImageUploaded) {
-//                    MaterialAlertDialogBuilder(requireContext())
-//                        .setTitle(getString(R.string.alert))
-//                        .setMessage(getString(R.string.select_dl_image))
-//                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-//                        .show()
-//                    return@setOnClickListener
-//                }
+                    if (viewBinding.dlnoTil.editText?.text.toString().isBlank()) {
+                        MaterialAlertDialogBuilder(requireContext())
+                                .setTitle(getString(R.string.alert))
+                                .setMessage(getString(R.string.select_dl_no))
+                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                                .show()
+                        return@setOnClickListener
+                    }
 
-                if (viewBinding.stateSpinner.selectedItemPosition == 0) {
-                    MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage(getString(R.string.select_dl_state))
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                        .show()
-                    return@setOnClickListener
+                    if (viewBinding.dobDate.text.toString().isBlank()) {
+                        MaterialAlertDialogBuilder(requireContext())
+                                .setTitle(getString(R.string.alert))
+                                .setMessage(getString(R.string.select_dl_dob))
+                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                                .show()
+                        return@setOnClickListener
+                    }
+
+                    callKycVerificationApi()
                 }
-
-                if (viewBinding.dlnoTil.editText?.text.toString().isBlank()) {
-                    MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage(getString(R.string.select_dl_no))
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                        .show()
-                    return@setOnClickListener
-                }
-
-                if (viewBinding.dobDate.text.toString().isBlank()) {
-                    MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage(getString(R.string.select_dl_dob))
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                        .show()
-                    return@setOnClickListener
-                }
-
-                callKycVerificationApi()
             }
         }
 
@@ -215,20 +211,22 @@ class DrivingLicenseFragment : Fragment(),
         }
         val arrayAdapter = context?.let { it1 ->
             ArrayAdapter.createFromResource(
-                it1,
-                R.array.indian_states,
-                android.R.layout.simple_spinner_dropdown_item
+                    it1,
+                    R.array.indian_states,
+                    android.R.layout.simple_spinner_dropdown_item
             )
         }
         viewBinding.stateSpinner.adapter = arrayAdapter
     }
 
-    private fun activeLoader(activate : Boolean){
-        if(activate) {
+    private fun activeLoader(activate: Boolean) {
+        if (activate) {
             viewBinding.progressBar.visible()
+            viewBinding.screenLoaderBar.visible()
             viewBinding.submitButton.isEnabled = false
-        }else{
+        } else {
             viewBinding.progressBar.gone()
+            viewBinding.screenLoaderBar.gone()
             viewBinding.submitButton.isEnabled = true
         }
     }
@@ -243,29 +241,29 @@ class DrivingLicenseFragment : Fragment(),
                     anyImageUploaded = true
                     if (!it.dateOfBirth.isNullOrBlank() || !it.dlNumber.isNullOrBlank() || !it.validTill.isNullOrBlank()) {
                         viewBinding.toplayoutblock.uploadStatusLayout(
-                            AppConstants.UPLOAD_SUCCESS,
-                            "UPLOAD SUCCESSFUL",
-                            "Information of Driving License Captured Successfully."
+                                AppConstants.UPLOAD_SUCCESS,
+                                "UPLOAD SUCCESSFUL",
+                                "Information of Driving License Captured Successfully."
                         )
-                        if(!it.dateOfBirth.isNullOrBlank())
-                        viewBinding.dobDate.text = it.dateOfBirth
-                        if(!it.dlNumber.isNullOrBlank())
-                        viewBinding.dlnoTil.editText?.setText(it.dlNumber)
+                        if (!it.dateOfBirth.isNullOrBlank())
+                            viewBinding.dobDate.text = it.dateOfBirth
+                        if (!it.dlNumber.isNullOrBlank())
+                            viewBinding.dlnoTil.editText?.setText(it.dlNumber)
 
-                        if(!it.validTill.isNullOrBlank()) {
-                            if(it.validTill.contains("-")){
+                        if (!it.validTill.isNullOrBlank()) {
+                            if (it.validTill.contains("-")) {
                                 var dateInFormat = getDDMMYYYYFormat(it.validTill)
-                                if(dateInFormat.isNotBlank())
-                                viewBinding.expiryDate.text = dateInFormat
-                            }else
-                            viewBinding.expiryDate.text = it.validTill
+                                if (dateInFormat.isNotBlank())
+                                    viewBinding.expiryDate.text = dateInFormat
+                            } else
+                                viewBinding.expiryDate.text = it.validTill
                         }
 
                     } else {
                         viewBinding.toplayoutblock.uploadStatusLayout(
-                            AppConstants.UNABLE_TO_FETCH_DETAILS,
-                            "UNABLE TO FETCH DETAILS",
-                            "Enter your Driving License details manually or try again to continue the verification process."
+                                AppConstants.UNABLE_TO_FETCH_DETAILS,
+                                "UNABLE TO FETCH DETAILS",
+                                "Enter your Driving License details manually or try again to continue the verification process."
                         )
                     }
                 } else {
@@ -285,14 +283,15 @@ class DrivingLicenseFragment : Fragment(),
                 if (it.status) {
                     viewBinding.belowLayout.gone()
                     viewBinding.toplayoutblock.uploadStatusLayout(
-                        AppConstants.UPLOAD_SUCCESS,
-                        "VERIFICATION COMPLETED",
-                        "The Driving License Details have been verified successfully."
+                            AppConstants.UPLOAD_SUCCESS,
+                            "VERIFICATION COMPLETED",
+                            "The Driving License Details have been verified successfully."
                     )
                     viewBinding.submitButton.tag = CONFIRM_TAG
                     viewBinding.toplayoutblock.setVerificationSuccessfulView()
                     viewBinding.submitButton.text = getString(R.string.submit)
                     viewBinding.toplayoutblock.disableImageClick()
+                    viewBinding.toplayoutblock.hideWhyWeneedThis()
                     isDLVerified = true
                 } else
                     showToast("Verification " + it.message)
@@ -304,13 +303,14 @@ class DrivingLicenseFragment : Fragment(),
                 if (it) {
                     viewBinding.belowLayout.gone()
                     viewBinding.toplayoutblock.uploadStatusLayout(
-                        AppConstants.UPLOAD_SUCCESS,
-                        "VERIFICATION COMPLETED",
-                        "The Driving License Details have been verified successfully."
+                            AppConstants.UPLOAD_SUCCESS,
+                            "VERIFICATION COMPLETED",
+                            "The Driving License Details have been verified successfully."
                     )
                     viewBinding.submitButton.tag = CONFIRM_TAG
                     viewBinding.toplayoutblock.setVerificationSuccessfulView()
                     viewBinding.toplayoutblock.disableImageClick()
+                    viewBinding.toplayoutblock.hideWhyWeneedThis()
                 }
             }
         })
@@ -328,39 +328,39 @@ class DrivingLicenseFragment : Fragment(),
 
     }
 
-    private fun getDDMMYYYYFormat(str : String): String {
+    private fun getDDMMYYYYFormat(str: String): String {
         try {
             val sdf = SimpleDateFormat("dd-MM-yyyy")
             val date = sdf.parse(str)
-            if(Date().after(date)){
+            if (Date().after(date)) {
                 return ""
             }
             return DateHelper.getDateInDDMMYYYY(date)
-        }catch (e:Exception){
+        } catch (e: Exception) {
             return ""
         }
     }
 
     private fun setViews() {
         val frontUri = Uri.Builder()
-            .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
-            .authority(resources.getResourcePackageName(R.drawable.ic_dl_front))
-            .appendPath(resources.getResourceTypeName(R.drawable.ic_dl_front))
-            .appendPath(resources.getResourceEntryName(R.drawable.ic_dl_front))
-            .build()
+                .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
+                .authority(resources.getResourcePackageName(R.drawable.ic_dl_front))
+                .appendPath(resources.getResourceTypeName(R.drawable.ic_dl_front))
+                .appendPath(resources.getResourceEntryName(R.drawable.ic_dl_front))
+                .build()
         val backUri = Uri.Builder()
-            .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
-            .authority(resources.getResourcePackageName(R.drawable.ic_dl_back))
-            .appendPath(resources.getResourceTypeName(R.drawable.ic_dl_back))
-            .appendPath(resources.getResourceEntryName(R.drawable.ic_dl_back))
-            .build()
+                .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
+                .authority(resources.getResourcePackageName(R.drawable.ic_dl_back))
+                .appendPath(resources.getResourceTypeName(R.drawable.ic_dl_back))
+                .appendPath(resources.getResourceEntryName(R.drawable.ic_dl_back))
+                .build()
         val list = listOf(
-            KYCImageModel(
-                getString(R.string.upload_driving_license_front_side_new),
-                frontUri,
-                false
-            ),
-            KYCImageModel(getString(R.string.upload_driving_license_back_side_new), backUri, false)
+                KYCImageModel(
+                        getString(R.string.upload_driving_license_front_side_new),
+                        frontUri,
+                        false
+                ),
+                KYCImageModel(getString(R.string.upload_driving_license_back_side_new), backUri, false)
         )
         viewBinding.toplayoutblock.setImageViewPager(list)
     }
@@ -373,16 +373,16 @@ class DrivingLicenseFragment : Fragment(),
             Log.d("Register", "Nombre del archivo " + file.name)
             // create RequestBody instance from file
             val requestFile: RequestBody =
-                RequestBody.create(MediaType.parse("image/png"), file)
+                    RequestBody.create(MediaType.parse("image/png"), file)
             // MultipartBody.Part is used to send also the actual file name
             image =
-                MultipartBody.Part.createFormData("file", file.name, requestFile)
+                    MultipartBody.Part.createFormData("file", file.name, requestFile)
         }
         image?.let {
             viewModel.getKycOcrResult(
-                "DL",
-                if (currentlyClickingImageOfSide == DrivingLicenseSides.FRONT_SIDE) "front" else "back",
-                it
+                    "DL",
+                    if (currentlyClickingImageOfSide == DrivingLicenseSides.FRONT_SIDE) "front" else "back",
+                    it
             )
         }
     }
@@ -390,18 +390,18 @@ class DrivingLicenseFragment : Fragment(),
     private val issueDatePicker: DatePickerDialog by lazy {
         val cal = Calendar.getInstance()
         val datePickerDialog = DatePickerDialog(
-            requireContext(),
-            DatePickerDialog.OnDateSetListener { _: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
-                val newCal = Calendar.getInstance()
-                newCal.set(Calendar.YEAR, year)
-                newCal.set(Calendar.MONTH, month)
-                newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                requireContext(),
+                DatePickerDialog.OnDateSetListener { _: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
+                    val newCal = Calendar.getInstance()
+                    newCal.set(Calendar.YEAR, year)
+                    newCal.set(Calendar.MONTH, month)
+                    newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
 
-                viewBinding.issueDate.text = DateHelper.getDateInDDMMYYYY(newCal.time)
-            },
-            1990,
-            cal.get(Calendar.MONTH),
-            cal.get(Calendar.DAY_OF_MONTH)
+                    viewBinding.issueDate.text = DateHelper.getDateInDDMMYYYY(newCal.time)
+                },
+                1990,
+                cal.get(Calendar.MONTH),
+                cal.get(Calendar.DAY_OF_MONTH)
         )
 
         datePickerDialog.datePicker.maxDate = Calendar.getInstance().timeInMillis
@@ -411,9 +411,9 @@ class DrivingLicenseFragment : Fragment(),
     private fun checkForPermissionElseShowCameraGalleryBottomSheet() {
         if (hasStoragePermissions())
             VerificationClickOrSelectImageBottomSheet.launch(
-                parentFragmentManager,
-                "Upload Driving License",
-                this
+                    parentFragmentManager,
+                    "Upload Driving License",
+                    this
             )
         else
             requestStoragePermission()
@@ -422,43 +422,43 @@ class DrivingLicenseFragment : Fragment(),
     private fun requestStoragePermission() {
 
         requestPermissions(
-            arrayOf(
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.CAMERA
-            ),
-            REQUEST_STORAGE_PERMISSION
+                arrayOf(
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.CAMERA
+                ),
+                REQUEST_STORAGE_PERMISSION
         )
     }
 
     private fun hasStoragePermissions(): Boolean {
         return ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
+                requireContext(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
         ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.READ_EXTERNAL_STORAGE
+                requireContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE
         ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.CAMERA
+                requireContext(),
+                Manifest.permission.CAMERA
         ) == PackageManager.PERMISSION_GRANTED
     }
 
     private val expiryDatePicker: DatePickerDialog by lazy {
         val cal = Calendar.getInstance()
         val datePickerDialog = DatePickerDialog(
-            requireContext(),
-            DatePickerDialog.OnDateSetListener { _: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
-                val newCal = Calendar.getInstance()
-                newCal.set(Calendar.YEAR, year)
-                newCal.set(Calendar.MONTH, month)
-                newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                requireContext(),
+                DatePickerDialog.OnDateSetListener { _: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
+                    val newCal = Calendar.getInstance()
+                    newCal.set(Calendar.YEAR, year)
+                    newCal.set(Calendar.MONTH, month)
+                    newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
 
-                viewBinding.expiryDate.text = DateHelper.getDateInDDMMYYYY(newCal.time)
-            },
-            cal.get(Calendar.YEAR),
-            cal.get(Calendar.MONTH),
-            cal.get(Calendar.DAY_OF_MONTH)
+                    viewBinding.expiryDate.text = DateHelper.getDateInDDMMYYYY(newCal.time)
+                },
+                cal.get(Calendar.YEAR),
+                cal.get(Calendar.MONTH),
+                cal.get(Calendar.DAY_OF_MONTH)
         )
         val maxDate = Calendar.getInstance()
         maxDate.set(Calendar.YEAR, maxDate.get(Calendar.YEAR) + 30)
@@ -469,17 +469,17 @@ class DrivingLicenseFragment : Fragment(),
     private val dateOfBirthPicker: DatePickerDialog by lazy {
         val cal = Calendar.getInstance()
         val datePickerDialog = DatePickerDialog(
-            requireContext(),
-            DatePickerDialog.OnDateSetListener { _: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
-                val newCal = Calendar.getInstance()
-                newCal.set(Calendar.YEAR, year)
-                newCal.set(Calendar.MONTH, month)
-                newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                viewBinding.dobDate.text = DateHelper.getDateInDDMMYYYYHiphen(newCal.time)
-            },
-            1990,
-            cal.get(Calendar.MONTH),
-            cal.get(Calendar.DAY_OF_MONTH)
+                requireContext(),
+                DatePickerDialog.OnDateSetListener { _: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
+                    val newCal = Calendar.getInstance()
+                    newCal.set(Calendar.YEAR, year)
+                    newCal.set(Calendar.MONTH, month)
+                    newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                    viewBinding.dobDate.text = DateHelper.getDateInDDMMYYYYHiphen(newCal.time)
+                },
+                1990,
+                cal.get(Calendar.MONTH),
+                cal.get(Calendar.DAY_OF_MONTH)
         )
 
         datePickerDialog.datePicker.maxDate = Calendar.getInstance().timeInMillis
@@ -487,8 +487,8 @@ class DrivingLicenseFragment : Fragment(),
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>, grantResults: IntArray
+            requestCode: Int,
+            permissions: Array<String>, grantResults: IntArray
     ) {
         when (requestCode) {
             REQUEST_STORAGE_PERMISSION -> {
@@ -503,9 +503,9 @@ class DrivingLicenseFragment : Fragment(),
 
                 if (allPermsGranted)
                     VerificationClickOrSelectImageBottomSheet.launch(
-                        parentFragmentManager,
-                        "Upload Driving License",
-                        this
+                            parentFragmentManager,
+                            "Upload Driving License",
+                            this
                     )
                 else {
                     showToast("Please grant storage permission")
@@ -597,13 +597,13 @@ class DrivingLicenseFragment : Fragment(),
 
     private fun callKycVerificationApi() {
         var list = listOf(
-            Data("state", viewBinding.stateSpinner.selectedItem.toString()),
-            Data("name", viewBinding.nameTilDl.editText?.text.toString()),
-            Data("no", viewBinding.dlnoTil.editText?.text.toString()),
-            Data("fathername", viewBinding.fatherNameTil.editText?.text.toString()),
-            Data("issuedate", viewBinding.issueDate.text.toString()),
-            Data("expirydate", viewBinding.expiryDate.text.toString()),
-            Data("dob", viewBinding.dobDate.text.toString())
+                Data("state", viewBinding.stateSpinner.selectedItem.toString()),
+                Data("name", viewBinding.nameTilDl.editText?.text.toString()),
+                Data("no", viewBinding.dlnoTil.editText?.text.toString()),
+                Data("fathername", viewBinding.fatherNameTil.editText?.text.toString()),
+                Data("issuedate", viewBinding.issueDate.text.toString()),
+                Data("expirydate", viewBinding.expiryDate.text.toString()),
+                Data("dob", viewBinding.dobDate.text.toString())
         )
         activeLoader(true)
         viewModel.getKycVerificationResult("DL", list)
@@ -621,9 +621,9 @@ class DrivingLicenseFragment : Fragment(),
 
     private fun showWhyWeNeedThisDialog() {
         WhyWeNeedThisBottomSheet.launch(
-            childFragmentManager = childFragmentManager,
-            title = getString(R.string.why_do_we_need_this),
-            content = getString(R.string.why_do_we_need_this_dl)
+                childFragmentManager = childFragmentManager,
+                title = getString(R.string.why_do_we_need_this),
+                content = getString(R.string.why_do_we_need_this_dl)
         )
     }
 
@@ -658,13 +658,13 @@ class DrivingLicenseFragment : Fragment(),
         Log.v("Start Crop", "started")
         //can use this for a new name every time
         val timeStamp = SimpleDateFormat(
-            "yyyyMMdd_HHmmss",
-            Locale.getDefault()
+                "yyyyMMdd_HHmmss",
+                Locale.getDefault()
         ).format(Date())
         val imageFileName = PREFIX + "_" + timeStamp + "_"
         val uCrop: UCrop = UCrop.of(
-            uri,
-            Uri.fromFile(File(requireContext().cacheDir, imageFileName + EXTENSION))
+                uri,
+                Uri.fromFile(File(requireContext().cacheDir, imageFileName + EXTENSION))
         )
         val resultIntent: Intent = Intent()
         resultIntent.putExtra("filename", imageFileName + EXTENSION)

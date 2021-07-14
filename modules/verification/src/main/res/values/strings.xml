@@ -60,7 +60,7 @@
     <string name="bank_details_uploaded">Bank details Uploaded</string>
     <string name="cancel">CANCEL</string>
     <string name="why_do_we_need_this">Why we need this ?</string>
-    <string name="why_do_we_need_this_dl">A Driving License is mandatory for profile verification. It helps verify your name and date of birth and also helps with payments to your wallet.</string>
+    <string name="why_do_we_need_this_dl">A driving license is mandatory for driving and delivery gigs</string>
     <string name="why_do_we_need_this_bank">A Bank Passbook is mandatory for profile verification. It helps verify your name and date of birth and also helps with payments to your wallet.</string>
     <string name="license_number_with_colon">License Number :</string>
     <string name="address_with_colon">Address :</string>

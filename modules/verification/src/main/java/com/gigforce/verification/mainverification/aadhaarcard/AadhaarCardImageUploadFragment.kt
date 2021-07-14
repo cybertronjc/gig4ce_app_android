@@ -37,6 +37,7 @@ import com.gigforce.verification.mainverification.VerificationClickOrSelectImage
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.yalantis.ucrop.UCrop
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.aadhaar_card_image_upload_fragment.*
 import kotlinx.android.synthetic.main.veri_screen_info_component.view.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -77,9 +78,11 @@ class AadhaarCardImageUploadFragment : Fragment(),
     private fun activeLoader(activate: Boolean) {
         if (activate) {
             viewBinding.progressBar.visible()
+            viewBinding.screenLoaderBar.visible()
             viewBinding.submitButton.isEnabled = false
         } else {
             viewBinding.progressBar.gone()
+            viewBinding.screenLoaderBar.gone()
             viewBinding.submitButton.isEnabled = true
         }
     }
@@ -115,18 +118,22 @@ class AadhaarCardImageUploadFragment : Fragment(),
         viewBinding.submitButton.setOnClickListener {
 
             hideSoftKeyboard()
-            if (viewBinding.submitButton.tag?.toString().equals(CONFIRM_TAG)) {
+            if (toplayoutblock.isDocDontOptChecked()) {
                 activity?.onBackPressed()
             } else {
-                if (viewBinding.aadharcardTil.editText?.text?.length != 12) {
-                    MaterialAlertDialogBuilder(requireContext())
-                            .setTitle(getString(R.string.alert))
-                            .setMessage(getString(R.string.enter_valid_aadhar_no))
-                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                            .show()
-                    return@setOnClickListener
+                if (viewBinding.submitButton.tag?.toString().equals(CONFIRM_TAG)) {
+                    activity?.onBackPressed()
+                } else {
+                    if (viewBinding.aadharcardTil.editText?.text?.length != 12) {
+                        MaterialAlertDialogBuilder(requireContext())
+                                .setTitle(getString(R.string.alert))
+                                .setMessage(getString(R.string.enter_valid_aadhar_no))
+                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                                .show()
+                        return@setOnClickListener
+                    }
+                    callKycVerificationApi()
                 }
-                callKycVerificationApi()
             }
         }
 
@@ -193,6 +200,7 @@ class AadhaarCardImageUploadFragment : Fragment(),
                     viewBinding.toplayoutblock.setVerificationSuccessfulView()
                     viewBinding.submitButton.text = getString(R.string.submit)
                     viewBinding.toplayoutblock.disableImageClick()
+                    viewBinding.toplayoutblock.hideWhyWeneedThis()
                 } else
                     showToast("Verification status " + it.message)
             }
@@ -210,6 +218,7 @@ class AadhaarCardImageUploadFragment : Fragment(),
                     viewBinding.submitButton.tag = CONFIRM_TAG
                     viewBinding.toplayoutblock.setVerificationSuccessfulView("Verifying")
                     viewBinding.toplayoutblock.disableImageClick()
+                    viewBinding.toplayoutblock.hideWhyWeneedThis()
                 }
             }
         })

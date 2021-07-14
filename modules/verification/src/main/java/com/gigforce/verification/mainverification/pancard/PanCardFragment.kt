@@ -39,6 +39,7 @@ import com.gigforce.verification.mainverification.VerificationClickOrSelectImage
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.yalantis.ucrop.UCrop
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.aadhaar_card_image_upload_fragment.*
 import kotlinx.android.synthetic.main.veri_screen_info_component.view.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -103,7 +104,7 @@ class PanCardFragment : Fragment(),
                         viewBinding.toplayoutblock.uploadStatusLayout(
                             AppConstants.UPLOAD_SUCCESS,
                             "UPLOAD SUCCESSFUL",
-                            "Information of Pan card Captured Successfully."
+                            "Information of PAN card Captured Successfully."
                         )
                         if(!it.panNumber.isNullOrBlank())
                         viewBinding.panTil.editText?.setText(it.panNumber)
@@ -116,7 +117,7 @@ class PanCardFragment : Fragment(),
                         viewBinding.toplayoutblock.uploadStatusLayout(
                             AppConstants.UNABLE_TO_FETCH_DETAILS,
                             "UNABLE TO FETCH DETAILS",
-                            "Enter your Pan card details manually or try again to continue the verification process."
+                            "Enter your PAN card details manually or try again to continue the verification process."
                         )
                     }
 
@@ -124,7 +125,7 @@ class PanCardFragment : Fragment(),
                     viewBinding.toplayoutblock.uploadStatusLayout(
                             AppConstants.UNABLE_TO_FETCH_DETAILS,
                             "UNABLE TO FETCH DETAILS",
-                            "Enter your Pan card details manually or try again to continue the verification process."
+                            "Enter your PAN card details manually or try again to continue the verification process."
                     )
                     showToast("Ocr status " + it.message)
                 }
@@ -138,12 +139,13 @@ class PanCardFragment : Fragment(),
                     viewBinding.toplayoutblock.uploadStatusLayout(
                         AppConstants.UPLOAD_SUCCESS,
                         "VERIFICATION COMPLETED",
-                        "The Pan card Details have been verified successfully."
+                        "The PAN card Details have been verified successfully."
                     )
                     viewBinding.submitButton.tag = CONFIRM_TAG
                     viewBinding.toplayoutblock.setVerificationSuccessfulView()
                     viewBinding.submitButton.text = getString(R.string.submit)
                     viewBinding.toplayoutblock.disableImageClick()
+                    viewBinding.toplayoutblock.hideWhyWeneedThis()
                 } else
                     showToast("Verification " + it.message)
             }
@@ -157,11 +159,12 @@ class PanCardFragment : Fragment(),
                     viewBinding.toplayoutblock.uploadStatusLayout(
                         AppConstants.UPLOAD_SUCCESS,
                         "VERIFICATION COMPLETED",
-                        "The Pan card Details have been verified successfully."
+                        "The PAN card Details have been verified successfully."
                     )
                     viewBinding.submitButton.tag = CONFIRM_TAG
                     viewBinding.toplayoutblock.setVerificationSuccessfulView()
                     viewBinding.toplayoutblock.disableImageClick()
+                    viewBinding.toplayoutblock.hideWhyWeneedThis()
                 }
             }
         })
@@ -182,21 +185,25 @@ class PanCardFragment : Fragment(),
 
         viewBinding.submitButton.setOnClickListener {
             hideSoftKeyboard()
-            if(viewBinding.submitButton.getTag()?.toString().equals(CONFIRM_TAG)){
+            if (toplayoutblock.isDocDontOptChecked()) {
                 activity?.onBackPressed()
-            }else {
-                val panCardNo =
-                    viewBinding.panTil.editText?.text.toString().toUpperCase(Locale.getDefault())
-                if (!VerificationValidations.isPanCardValid(panCardNo)) {
+            } else {
+                if (viewBinding.submitButton.getTag()?.toString().equals(CONFIRM_TAG)) {
+                    activity?.onBackPressed()
+                } else {
+                    val panCardNo =
+                            viewBinding.panTil.editText?.text.toString().toUpperCase(Locale.getDefault())
+                    if (!VerificationValidations.isPanCardValid(panCardNo)) {
 
-                    MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage(getString(R.string.enter_valid_pan))
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                        .show()
-                    return@setOnClickListener
+                        MaterialAlertDialogBuilder(requireContext())
+                                .setTitle(getString(R.string.alert))
+                                .setMessage(getString(R.string.enter_valid_pan))
+                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                                .show()
+                        return@setOnClickListener
+                    }
+                    callKycVerificationApi()
                 }
-                callKycVerificationApi()
             }
         }
 
@@ -232,7 +239,7 @@ class PanCardFragment : Fragment(),
         if (hasStoragePermissions())
             VerificationClickOrSelectImageBottomSheet.launch(
                 parentFragmentManager,
-                "Upload Pan Card",
+                "Upload PAN Card",
                 this
             )
         else
@@ -332,7 +339,7 @@ class PanCardFragment : Fragment(),
                 if (allPermsGranted)
                     VerificationClickOrSelectImageBottomSheet.launch(
                         parentFragmentManager,
-                        "Upload Pan Card",
+                        "Upload PAN Card",
                         this
                     )
                 else {
@@ -417,9 +424,11 @@ class PanCardFragment : Fragment(),
     private fun activeLoader(activate : Boolean){
         if(activate) {
             viewBinding.progressBar.visible()
+            viewBinding.screenLoaderBar.visible()
             viewBinding.submitButton.isEnabled = false
         }else{
             viewBinding.progressBar.gone()
+            viewBinding.screenLoaderBar.gone()
             viewBinding.submitButton.isEnabled = true
         }
     }
