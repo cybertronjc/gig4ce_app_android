@@ -133,7 +133,7 @@ class BankAccountFragment : Fragment(),
                 if (it.status) {
                     viewBinding.screenLoader.visible()
                     viewBinding.belowLayout.gone()
-                    viewBinding.toplayoutblock.setVerificationSuccessfulView("Verifying")
+                    viewBinding.toplayoutblock.setVerificationSuccessfulView("Bank Account pending for verify","Verifying")
                     viewModel.getBeneficiaryName()
                     viewBinding.submitButton.gone()
                     viewBinding.toplayoutblock.disableImageClick()
@@ -156,9 +156,9 @@ class BankAccountFragment : Fragment(),
                             "The Bank Details have been verified successfully."
                     )
                     viewBinding.submitButton.gone()
-                    viewBinding.toplayoutblock.setVerificationSuccessfulView()
+                    viewBinding.toplayoutblock.setVerificationSuccessfulView("Bank Account verified")
                     viewBinding.toplayoutblock.disableImageClick()
-                    viewBinding.toplayoutblock.hideWhyWeneedThis()
+                    viewBinding.toplayoutblock.hideOnVerifiedDocuments()
                 }
             }
         })
@@ -189,7 +189,7 @@ class BankAccountFragment : Fragment(),
                             "The Bank Details have been verified successfully."
                     )
                     viewBinding.submitButton.gone()
-                    viewBinding.toplayoutblock.setVerificationSuccessfulView()
+                    viewBinding.toplayoutblock.setVerificationSuccessfulView("Bank Account verified")
                 }
             }
 
@@ -286,7 +286,7 @@ class BankAccountFragment : Fragment(),
         }
         viewBinding.confirmButton.setOnClickListener {
             viewModel.setVerificationStatusInDB(true)
-            viewBinding.toplayoutblock.hideWhyWeneedThis()
+            viewBinding.toplayoutblock.hideOnVerifiedDocuments()
         }
         viewBinding.notConfirmButton.setOnClickListener {
             MaterialAlertDialogBuilder(requireContext())

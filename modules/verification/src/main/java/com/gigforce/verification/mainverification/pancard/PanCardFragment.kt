@@ -163,10 +163,10 @@ class PanCardFragment : Fragment(),
                             "The PAN card Details have been verified successfully."
                     )
                     viewBinding.submitButton.tag = CONFIRM_TAG
-                    viewBinding.toplayoutblock.setVerificationSuccessfulView()
+                    viewBinding.toplayoutblock.setVerificationSuccessfulView("PAN verified")
                     viewBinding.submitButton.text = getString(R.string.submit)
                     viewBinding.toplayoutblock.disableImageClick()
-                    viewBinding.toplayoutblock.hideWhyWeneedThis()
+                    viewBinding.toplayoutblock.hideOnVerifiedDocuments()
                 } else
                     showToast("Verification " + it.message)
             }
@@ -183,9 +183,10 @@ class PanCardFragment : Fragment(),
                             "The PAN card Details have been verified successfully."
                     )
                     viewBinding.submitButton.tag = CONFIRM_TAG
-                    viewBinding.toplayoutblock.setVerificationSuccessfulView()
+                    viewBinding.toplayoutblock.setVerificationSuccessfulView("PAN verified")
                     viewBinding.toplayoutblock.disableImageClick()
-                    viewBinding.toplayoutblock.hideWhyWeneedThis()
+                    viewBinding.toplayoutblock.hideOnVerifiedDocuments()
+
                 }
             }
         })

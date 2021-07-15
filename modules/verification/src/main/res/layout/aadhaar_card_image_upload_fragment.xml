@@ -35,7 +35,7 @@
                 android:layout_marginStart="@dimen/dp_sm1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:docinfotext="Please upload your Aadhaar card or enter the details maually"
+                app:docinfotext="Please upload your Aadhaar card or enter the details manually"
                 app:missingdoctext="I don’t have an Aadhaar Card"
                 app:title="Aadhaar Card"
                 app:uppercaption="You need to upload" />

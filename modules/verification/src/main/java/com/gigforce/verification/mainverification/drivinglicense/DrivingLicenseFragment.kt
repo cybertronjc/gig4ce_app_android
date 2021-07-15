@@ -103,13 +103,13 @@ class DrivingLicenseFragment : Fragment(),
     }
 
 
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, FROM_CLIENT_ACTIVATON)
 
 
     }
+
     var allNavigationList = ArrayList<String>()
     private fun getDataFromIntents(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
@@ -118,7 +118,7 @@ class DrivingLicenseFragment : Fragment(),
             it.getStringArrayList(VerificationConstants.NAVIGATION_STRINGS)?.let { arr ->
                 allNavigationList = arr
             }
-        }?:run{
+        } ?: run {
             arguments?.let {
                 FROM_CLIENT_ACTIVATON =
                         it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
@@ -165,6 +165,7 @@ class DrivingLicenseFragment : Fragment(),
     val CONFIRM_TAG: String = "confirm"
 
     private fun listeners() {
+        viewBinding.stateSpinner.keyListener = null
         viewBinding.toplayoutblock.setPrimaryClick(View.OnClickListener {
             //call for bottom sheet
             checkForPermissionElseShowCameraGalleryBottomSheet()
@@ -191,7 +192,7 @@ class DrivingLicenseFragment : Fragment(),
                 if (viewBinding.submitButton.tag?.toString().equals(CONFIRM_TAG)) {
                     checkForNextDoc()
                 } else {
-                    if (viewBinding.stateSpinner.selectedItemPosition == 0) {
+                    if (viewBinding.stateSpinner.text.equals( "Select State")) {
                         MaterialAlertDialogBuilder(requireContext())
                                 .setTitle(getString(R.string.alert))
                                 .setMessage(getString(R.string.select_dl_state))
@@ -241,7 +242,7 @@ class DrivingLicenseFragment : Fragment(),
                     android.R.layout.simple_spinner_dropdown_item
             )
         }
-        viewBinding.stateSpinner.adapter = arrayAdapter
+        viewBinding.stateSpinner.setAdapter(arrayAdapter)
     }
 
     private fun activeLoader(activate: Boolean) {
@@ -271,7 +272,7 @@ class DrivingLicenseFragment : Fragment(),
                                 "Information of Driving License Captured Successfully."
                         )
                         if (!it.dateOfBirth.isNullOrBlank())
-                            viewBinding.dobDate.text = it.dateOfBirth
+                            viewBinding.dobDate.setText(it.dateOfBirth)
                         if (!it.dlNumber.isNullOrBlank())
                             viewBinding.dlnoTil.editText?.setText(it.dlNumber)
 
@@ -313,10 +314,10 @@ class DrivingLicenseFragment : Fragment(),
                             "The Driving License Details have been verified successfully."
                     )
                     viewBinding.submitButton.tag = CONFIRM_TAG
-                    viewBinding.toplayoutblock.setVerificationSuccessfulView()
+                    viewBinding.toplayoutblock.setVerificationSuccessfulView("Your Driving License verified")
                     viewBinding.submitButton.text = getString(R.string.submit)
                     viewBinding.toplayoutblock.disableImageClick()
-                    viewBinding.toplayoutblock.hideWhyWeneedThis()
+                    viewBinding.toplayoutblock.hideOnVerifiedDocuments()
                     isDLVerified = true
                 } else
                     showToast("Verification " + it.message)
@@ -333,9 +334,9 @@ class DrivingLicenseFragment : Fragment(),
                             "The Driving License Details have been verified successfully."
                     )
                     viewBinding.submitButton.tag = CONFIRM_TAG
-                    viewBinding.toplayoutblock.setVerificationSuccessfulView()
+                    viewBinding.toplayoutblock.setVerificationSuccessfulView("Your Driving License verified")
                     viewBinding.toplayoutblock.disableImageClick()
-                    viewBinding.toplayoutblock.hideWhyWeneedThis()
+                    viewBinding.toplayoutblock.hideOnVerifiedDocuments()
                 }
             }
         })
@@ -412,26 +413,6 @@ class DrivingLicenseFragment : Fragment(),
         }
     }
 
-    private val issueDatePicker: DatePickerDialog by lazy {
-        val cal = Calendar.getInstance()
-        val datePickerDialog = DatePickerDialog(
-                requireContext(),
-                DatePickerDialog.OnDateSetListener { _: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
-                    val newCal = Calendar.getInstance()
-                    newCal.set(Calendar.YEAR, year)
-                    newCal.set(Calendar.MONTH, month)
-                    newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-
-                    viewBinding.issueDate.text = DateHelper.getDateInDDMMYYYY(newCal.time)
-                },
-                1990,
-                cal.get(Calendar.MONTH),
-                cal.get(Calendar.DAY_OF_MONTH)
-        )
-
-        datePickerDialog.datePicker.maxDate = Calendar.getInstance().timeInMillis
-        datePickerDialog
-    }
 
     private fun checkForPermissionElseShowCameraGalleryBottomSheet() {
         if (hasStoragePermissions())
@@ -469,6 +450,26 @@ class DrivingLicenseFragment : Fragment(),
         ) == PackageManager.PERMISSION_GRANTED
     }
 
+    private val issueDatePicker: DatePickerDialog by lazy {
+        val cal = Calendar.getInstance()
+        val datePickerDialog = DatePickerDialog(
+                requireContext(),
+                DatePickerDialog.OnDateSetListener { _: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
+                    val newCal = Calendar.getInstance()
+                    newCal.set(Calendar.YEAR, year)
+                    newCal.set(Calendar.MONTH, month)
+                    newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                    viewBinding.issueDate.text = DateHelper.getDateInDDMMYYYY(newCal.time)
+                    viewBinding.calendarLabel2.visible()
+                },
+                1990,
+                cal.get(Calendar.MONTH),
+                cal.get(Calendar.DAY_OF_MONTH)
+        )
+
+        datePickerDialog.datePicker.maxDate = Calendar.getInstance().timeInMillis
+        datePickerDialog
+    }
     private val expiryDatePicker: DatePickerDialog by lazy {
         val cal = Calendar.getInstance()
         val datePickerDialog = DatePickerDialog(
@@ -478,8 +479,8 @@ class DrivingLicenseFragment : Fragment(),
                     newCal.set(Calendar.YEAR, year)
                     newCal.set(Calendar.MONTH, month)
                     newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-
                     viewBinding.expiryDate.text = DateHelper.getDateInDDMMYYYY(newCal.time)
+                    viewBinding.calendarLabel1.visible()
                 },
                 cal.get(Calendar.YEAR),
                 cal.get(Calendar.MONTH),
@@ -500,7 +501,8 @@ class DrivingLicenseFragment : Fragment(),
                     newCal.set(Calendar.YEAR, year)
                     newCal.set(Calendar.MONTH, month)
                     newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                    viewBinding.dobDate.text = DateHelper.getDateInDDMMYYYYHiphen(newCal.time)
+                    viewBinding.dobDate.setText(DateHelper.getDateInDDMMYYYYHiphen(newCal.time))
+                    viewBinding.calendarLabel.visible()
                 },
                 1990,
                 cal.get(Calendar.MONTH),
@@ -622,7 +624,7 @@ class DrivingLicenseFragment : Fragment(),
 
     private fun callKycVerificationApi() {
         var list = listOf(
-                Data("state", viewBinding.stateSpinner.selectedItem.toString()),
+                Data("state", viewBinding.stateSpinner.text.toString()),
                 Data("name", viewBinding.nameTilDl.editText?.text.toString()),
                 Data("no", viewBinding.dlnoTil.editText?.text.toString()),
                 Data("fathername", viewBinding.fatherNameTil.editText?.text.toString()),
@@ -711,6 +713,7 @@ class DrivingLicenseFragment : Fragment(),
         options.setToolbarTitle(getString(R.string.crop_and_rotate))
         return options
     }
+
     override fun onResume() {
         super.onResume()
         StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(resources, R.color.lipstick_2, null))

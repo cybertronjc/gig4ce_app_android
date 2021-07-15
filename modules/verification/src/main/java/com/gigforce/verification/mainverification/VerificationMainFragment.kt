@@ -9,6 +9,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.SimpleCardDVM
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.navigation.INavigation
@@ -48,39 +49,27 @@ class VerificationMainFragment : Fragment() {
 
         next.setOnClickListener {
 
-            allDocsRV.collection.let {
+            allDocsRV.collection?.let {
                 (it as ArrayList<SimpleCardDVM>).filter { doc -> doc.isSelected }.let {
-                    var navigationsForBundle = emptyList<String>()
-                    if (it.size > 1) {
-                        navigationsForBundle = it.slice(IntRange(1, it.size - 1)).map { it.navpath }
+
+                    if(it.isNullOrEmpty()){
+                     showToast("Please select minimum one document to upload")
+                    }else {
+                        var navigationsForBundle = emptyList<String>()
+                        if (it.size > 1) {
+                            navigationsForBundle = it.slice(IntRange(1, it.size - 1)).map { it.navpath }
+                        }
+                        navigation.navigateTo(it.get(0).navpath, bundleOf(VerificationConstants.NAVIGATION_STRINGS to navigationsForBundle))
                     }
-                    navigation.navigateTo(it.get(0).navpath, bundleOf(VerificationConstants.NAVIGATION_STRINGS to navigationsForBundle))
                 }
             }
 
-//            allDocsRV.collection?.let {
-//                var firstSelectedDocFound = true
-//                var firstDocNav = ""
-//                var allOthers =
-//                it.forEach {
-//                    if ((it as SimpleCardDVM).isSelected){
-//                        if(firstSelectedDocFound){
-//                            firstDocNav = it.navpath
-//                            firstSelectedDocFound = false
-//                        }
-//                        else{
-//
-//                        }
-//                        navigation.navigateTo(it.navpath,)
-//                        appBar2.titleText.setText(it.title)
-//                    }
-//                }
-//            }
         }
 
         appBar2.setBackButtonListener(View.OnClickListener {
             activity?.onBackPressed()
         })
+
     }
 
     private fun observer() {

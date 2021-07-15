@@ -35,7 +35,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/size16"
                     android:layout_marginTop="@dimen/dp_xl1"
-                    app:docinfotext="Please upload your passbook/cheque  or enter the details maually"
+                    app:docinfotext="Please upload your passbook/cheque  or enter the details manually"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:missingdoctext="I don’t have a Bank Account"

@@ -33,9 +33,9 @@
                     android:id="@+id/toplayoutblock"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_xl1"
                     android:layout_marginStart="@dimen/size_16"
-                    app:docinfotext="Please upload your Driving License or enter the details maually"
+                    android:layout_marginTop="@dimen/dp_xl1"
+                    app:docinfotext="Please upload your Driving License or enter the details manually"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:missingdoctext="I don’t have an Driving License"
@@ -55,10 +55,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_marginTop="@dimen/dp_xl1"
+                        android:visibility="gone"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:visibility="gone"/>
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/textView10"
@@ -75,7 +75,7 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/stateLayout"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dp_sm1"
@@ -86,20 +86,15 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView10">
 
-                    <Spinner
-                        android:id="@+id/stateSpinner"
-                        android:layout_width="match_parent"
-                        android:layout_height="46dp"
-                        android:background="@drawable/rect_border_grey"
-                        android:paddingStart="@dimen/size_9"
-                        android:paddingTop="4dp"
-                        android:paddingEnd="@dimen/size_11"
-                        android:paddingBottom="4dp"
-                        android:textColor="@color/black"
-                        android:spinnerMode="dropdown"
-                        />
-
+                        <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                            android:id="@+id/stateSpinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:inputType="none"
+                            tools:ignore="KeyboardInaccessibleWidget" />
                     </com.google.android.material.textfield.TextInputLayout>
+
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/name_til_dl"
@@ -110,15 +105,16 @@
                         android:layout_marginTop="@dimen/dp_xl1"
                         android:layout_marginRight="@dimen/dp_sm1"
                         android:hint="Name"
+                        android:visibility="visible"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/stateLayout">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/size_46"
-                        android:padding="4dp"
-                        android:singleLine="true"/>
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/size_46"
+                            android:padding="4dp"
+                            android:singleLine="true" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -135,11 +131,11 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/name_til_dl">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/size_46"
-                        android:padding="4dp"
-                        android:singleLine="true"/>
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/size_46"
+                            android:padding="4dp"
+                            android:singleLine="true" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -161,9 +157,12 @@
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/size_46"
                             android:padding="4dp"
-                            android:singleLine="true"/>
+                            android:singleLine="true" />
 
                     </com.google.android.material.textfield.TextInputLayout>
+
+
+
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/dob_date_rl"
@@ -184,7 +183,9 @@
                             android:layout_marginTop="@dimen/dp_xsm1"
                             android:background="@drawable/rect_border_grey"
                             android:gravity="center_vertical|start"
+                            android:hint="Date of Birth"
                             android:paddingLeft="@dimen/dp_sm1"
+                            android:textColor="#333333"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -193,18 +194,20 @@
                         <ImageView
                             android:layout_width="20dp"
                             android:layout_height="20dp"
-                            android:layout_marginRight="@dimen/dp_xsm1"
+                            android:layout_marginRight="@dimen/dp_sm3"
                             android:src="@drawable/ic_sharp_event_available_24"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="@id/dobDate" />
 
                         <TextView
+                            android:id="@+id/calendar_label"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/dp_sm1"
                             android:background="@color/white"
                             android:text="   Date of Birth   "
+                            android:visibility="gone"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -222,18 +225,20 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/dob_date_rl">
 
-                    <TextView
-                        android:id="@+id/issueDate"
-                        android:layout_width="match_parent"
-                        android:layout_height="46dp"
-                        android:layout_marginTop="@dimen/dp_xsm1"
-                        android:background="@drawable/rect_border_grey"
-                        android:gravity="center_vertical|start"
-                        android:paddingLeft="@dimen/dp_sm1"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        <TextView
+                            android:id="@+id/issueDate"
+                            android:layout_width="match_parent"
+                            android:layout_height="46dp"
+                            android:layout_marginTop="@dimen/dp_xsm1"
+                            android:background="@drawable/rect_border_grey"
+                            android:gravity="center_vertical|start"
+                            android:hint="Issue Date"
+                            android:paddingLeft="@dimen/dp_sm1"
+                            android:textColor="#333333"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <ImageView
                             android:layout_width="20dp"
@@ -242,14 +247,16 @@
                             android:src="@drawable/ic_sharp_event_available_24"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="@id/issueDate" />
 
                         <TextView
+                            android:id="@+id/calendar_label2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/dp_sm1"
                             android:background="@color/white"
                             android:text="   Issue Date   "
+                            android:visibility="gone"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -269,18 +276,20 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/issue_date_rl">
 
-                    <TextView
-                        android:id="@+id/expiryDate"
-                        android:layout_width="match_parent"
-                        android:layout_height="46dp"
-                        android:layout_marginTop="@dimen/dp_xsm1"
-                        android:background="@drawable/rect_border_grey"
-                        android:gravity="center_vertical|start"
-                        android:paddingLeft="@dimen/dp_sm1"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        <TextView
+                            android:id="@+id/expiryDate"
+                            android:layout_width="match_parent"
+                            android:layout_height="46dp"
+                            android:layout_marginTop="@dimen/dp_xsm1"
+                            android:background="@drawable/rect_border_grey"
+                            android:gravity="center_vertical|start"
+                            android:hint="Expiry Date"
+                            android:paddingLeft="@dimen/dp_sm1"
+                            android:textColor="#333333"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <ImageView
                             android:layout_width="20dp"
@@ -289,14 +298,16 @@
                             android:src="@drawable/ic_sharp_event_available_24"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="@id/expiryDate" />
 
                         <TextView
+                            android:id="@+id/calendar_label1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/dp_sm1"
                             android:background="@color/white"
                             android:text="   Expiry Date   "
+                            android:visibility="gone"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -356,20 +367,21 @@
             android:id="@+id/screenLoaderBar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:elevation="@dimen/dp_xsm2"
             android:clickable="true"
-            android:visibility="gone">
+            android:elevation="@dimen/dp_xsm2"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
             <ProgressBar
                 android:id="@+id/loader"
                 style="?android:attr/progressBarStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="36dp"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

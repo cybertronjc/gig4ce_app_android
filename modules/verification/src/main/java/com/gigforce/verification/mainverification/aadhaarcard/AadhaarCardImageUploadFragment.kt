@@ -227,10 +227,10 @@ class AadhaarCardImageUploadFragment : Fragment(),
                             "Information of Aadhar Card Captured Successfully pending for verify!"
                     )
                     viewBinding.submitButton.tag = CONFIRM_TAG
-                    viewBinding.toplayoutblock.setVerificationSuccessfulView()
+                    viewBinding.toplayoutblock.setVerificationSuccessfulView("Aadhaar pending for verify", "Verifying")
                     viewBinding.submitButton.text = getString(R.string.submit)
                     viewBinding.toplayoutblock.disableImageClick()
-                    viewBinding.toplayoutblock.hideWhyWeneedThis()
+                    viewBinding.toplayoutblock.hideOnVerifiedDocuments()
                 } else
                     showToast("Verification status " + it.message)
             }
@@ -246,9 +246,9 @@ class AadhaarCardImageUploadFragment : Fragment(),
                             "Information of Aadhar Card Captured Successfully pending for verify!"
                     )
                     viewBinding.submitButton.tag = CONFIRM_TAG
-                    viewBinding.toplayoutblock.setVerificationSuccessfulView("Verifying")
+                    viewBinding.toplayoutblock.setVerificationSuccessfulView("Aadhaar pending for verify", "Verifying")
                     viewBinding.toplayoutblock.disableImageClick()
-                    viewBinding.toplayoutblock.hideWhyWeneedThis()
+                    viewBinding.toplayoutblock.hideOnVerifiedDocuments()
                 }
             }
         })

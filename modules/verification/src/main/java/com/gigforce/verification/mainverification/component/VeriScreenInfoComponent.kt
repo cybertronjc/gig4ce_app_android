@@ -71,12 +71,13 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
 
     }
 
-    fun hideWhyWeneedThis(){
+    fun hideOnVerifiedDocuments() {
         imageView7.gone()
         querytext.gone()
+        docdetail.gone()
     }
 
-    fun isDocDontOptChecked() : Boolean{
+    fun isDocDontOptChecked(): Boolean {
         return missingtext.isChecked
     }
 
@@ -170,14 +171,14 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
         }
     }
 
-    fun setVerificationSuccessfulView(titleStr: String? = null) {
+    fun setVerificationSuccessfulView(titleStr: String, upperCaptionStr: String? = null) {
         missingtext.gone()
-        titleStr?.let {
+        titleStr.let {
             title.text = it
-        } ?: run { title.text = resources.getString(R.string.congratulations) }
+        }
 
         docdetail.text = resources.getString(R.string.veri_done_text)
-        uppercaption.text = "Verification"
+        upperCaptionStr?.let { uppercaption.text } ?: run { uppercaption.text = "Congratulation" }
         uploadHereText.gone()
     }
 
