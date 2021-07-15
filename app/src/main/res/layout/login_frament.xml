@@ -337,6 +337,7 @@
             android:checked="false"
             android:lineSpacingMultiplier="1"
             android:textSize="14sp"
+            android:textColor="@color/black"
             android:text="@string/terms_text"
             android:layout_marginStart="@dimen/size_4"
             android:layout_marginEnd="@dimen/size_16"
