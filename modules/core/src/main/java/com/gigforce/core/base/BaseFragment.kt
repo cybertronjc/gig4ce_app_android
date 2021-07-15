@@ -38,7 +38,6 @@ abstract class BaseFragment2<V : ViewDataBinding>(
             false
         )
 
-
         return _viewDataBinding.root
     }
 

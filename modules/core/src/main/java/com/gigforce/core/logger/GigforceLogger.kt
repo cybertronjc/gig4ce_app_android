@@ -10,35 +10,52 @@ class GigforceLogger @Inject constructor() {
         message: String,
         vararg args: Any
     ) {
-        Timber.tag(tag)
-        Timber.v(message, args)
-    }
+         try {
+             Timber.tag(tag)
+             Timber.v(message, args)
+         } catch (e: Exception) {
+             e.printStackTrace()
+         }
+     }
 
      fun d(
         tag: String,
         message: String,
         vararg args: Any
     ) {
-        Timber.tag(tag)
-        Timber.d(message, args)
-    }
+         try {
+             Timber.tag(tag)
+             Timber.d(message, args)
+         } catch (e: Exception) {
+             e.printStackTrace()
+         }
+     }
 
      fun d(
         tag: String,
         message: String
     ) {
-        Timber.tag(tag)
-        Timber.d(message)
-    }
+
+         try {
+             Timber.tag(tag)
+             Timber.d(message)
+         } catch (e: Exception) {
+             e.printStackTrace()
+         }
+     }
 
      fun e(
         tag: String,
         occurredWhen: String,
         e: Throwable
     ) {
-        Timber.tag(tag)
-        Timber.e(e, occurredWhen)
-    }
+         try {
+             Timber.tag(tag)
+             Timber.e(e, occurredWhen)
+         } catch (e: Exception) {
+             e.printStackTrace()
+         }
+     }
 
      fun e(
         tag: String,
@@ -46,8 +63,12 @@ class GigforceLogger @Inject constructor() {
         e: Throwable,
         vararg args: Any
     ) {
-        Timber.tag(tag)
-        Timber.e(e, occurredWhen,args)
-    }
+         try {
+             Timber.tag(tag)
+             Timber.e(e, occurredWhen,args)
+         } catch (e: Exception) {
+             e.printStackTrace()
+         }
+     }
 
 }
