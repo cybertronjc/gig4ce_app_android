@@ -123,4 +123,6 @@ dependencies {
     //progress button
     implementation 'com.github.razir.progressbutton:progressbutton:2.1.0'
 
+    //timber
+    implementation 'com.jakewharton.timber:timber:4.7.1'
 }

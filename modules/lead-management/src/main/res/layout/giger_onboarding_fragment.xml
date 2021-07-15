@@ -1,13 +1,193 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".gigeronboarding.GigerOnboardingFragment">
+    android:layout_height="match_parent">
+
+    <com.gigforce.common_ui.components.cells.AppBar
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/size_56"
+        app:backgroundType="PinkBar"
+        app:titleText="@string/new_joining"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="80dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/appBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvPleaseEnter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:textColor="@color/text_grey"
+                android:letterSpacing="-0.01"
+                android:lineSpacingExtra="3sp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="@string/please_enter"
+                />
+
+            <ImageView
+                android:id="@+id/imageView7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/dp_sm1"
+                android:src="@drawable/ic_baseline_help_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tvPleaseEnter" />
+
+            <TextView
+                android:id="@+id/querytext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/dp_xsm1"
+                android:text="Why we need this"
+                app:layout_constraintEnd_toStartOf="@+id/imageView7"
+                app:layout_constraintTop_toTopOf="@+id/imageView7" />
+
+
+            <TextView
+                android:id="@+id/enter_mobile_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="80dp"
+                android:layout_marginEnd="24dp"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="7sp"
+                android:text="@string/enter_user_s_mobile_number"
+                android:textColor="#131415"
+                android:textSize="32sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvPleaseEnter" />
+
+            <ImageView
+                android:id="@+id/imageView8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/icons_background"
+                android:layout_marginTop="16dp"
+                android:padding="4dp"
+                android:src="@drawable/ic_tips_and_updates_black_24dp"
+                app:layout_constraintStart_toStartOf="@id/enter_mobile_label"
+                app:layout_constraintTop_toBottomOf="@id/enter_mobile_label" />
+
+            <TextView
+                android:id="@+id/makeSureText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato"
+                android:textStyle="normal"
+                android:textSize="14sp"
+                android:textColor="@color/limeGrey"
+                android:letterSpacing="-0.01"
+                android:lineSpacingExtra="3sp"
+                android:layout_marginStart="16dp"
+                app:layout_constraintStart_toEndOf="@id/imageView8"
+                app:layout_constraintTop_toTopOf="@id/imageView8"
+                app:layout_constraintBottom_toBottomOf="@id/imageView8"
+                android:text="@string/registered"
+                />
+
+            <TextView
+                android:id="@+id/we_will_send_otp_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato"
+                android:textStyle="normal"
+                android:textSize="14sp"
+                android:textColor="#333333"
+                android:letterSpacing="-0.01"
+                android:lineSpacingExtra="3sp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/imageView8"
+                android:text="@string/we_will_send_an_otp_on_this_number"
+                />
+
+            <TextView
+                android:id="@+id/country_code_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato"
+                android:textStyle="normal"
+                android:textSize="20sp"
+                android:textColor="#2e2f30"
+                android:lineSpacingExtra="4sp"
+                android:text="@string/country_code"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="40dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/we_will_send_otp_label"
+                />
+
+            <EditText
+                android:id="@+id/mobile_no_et"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="190dp"
+                android:fontFamily="@font/lato"
+                android:textStyle="normal"
+                android:textSize="20sp"
+                android:textColor="#2e2f30"
+                android:paddingStart="8dp"
+                android:lineSpacingExtra="4sp"
+                android:inputType="number"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:background="@drawable/rectangle_round_grey_solid"
+                android:maxLength="10"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="40dp"
+                app:layout_constraintStart_toEndOf="@id/country_code_label"
+                app:layout_constraintTop_toBottomOf="@id/we_will_send_otp_label"
+                />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
     <TextView
+        android:id="@+id/submit_button"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Hello" />
+        android:layout_height="48dp"
+        android:background="@drawable/app_gradient_button"
+        android:layout_marginStart="@dimen/size_16"
+        android:layout_marginEnd="@dimen/size_16"
+        android:layout_marginBottom="@dimen/size_22"
+        android:gravity="center"
+        android:minHeight="@dimen/size_36"
+        android:text="Next"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
 
-</FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

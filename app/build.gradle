@@ -196,6 +196,7 @@ dependencies {
     implementation project(path: ':modules:app-giger')
     implementation project(path: ':modules:learning')
     implementation project(path: ':modules:client-activation')
+    implementation project(path: ':modules:lead-management')
     implementation project(path: ':modules:profile')
     implementation project(path: ':modules:user_profile')
     implementation project(path: ':modules:wallet')
