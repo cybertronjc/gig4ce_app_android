@@ -1,10 +1,6 @@
 package com.gigforce.common_ui.viewdatamodels.leadManagement
 
-import com.gigforce.core.extensions.toLocalDateTime
 import com.google.gson.annotations.SerializedName
-import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.util.*
 
 data class Joining(
 
