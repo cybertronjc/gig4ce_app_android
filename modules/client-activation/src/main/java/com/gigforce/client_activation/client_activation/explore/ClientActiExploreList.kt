@@ -23,13 +23,20 @@ import com.gigforce.core.analytics.ClientActivationEvents
 import com.gigforce.common_ui.components.cells.SearchTextChangeListener
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.hideSoftKeyboard
+import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.listeners.AppBarClicks
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
+import com.google.android.play.core.review.ReviewInfo
+import com.google.android.play.core.review.ReviewManager
+import com.google.android.play.core.review.ReviewManagerFactory
+import com.google.android.play.core.review.model.ReviewErrorCode
+import com.google.android.play.core.review.testing.FakeReviewManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.client_acti_explore_list_fragment.*
 import kotlinx.android.synthetic.main.client_acti_explore_list_fragment.search_item
+import java.lang.Exception
 import java.util.ArrayList
 import javax.inject.Inject
 
@@ -51,6 +58,9 @@ class ClientActiExploreList : Fragment(), IOnBackPressedOverride, OnJobSelectedL
         }
     }
     private var win: Window? = null
+    private var manager: FakeReviewManager? = null
+    private var reviewInfo: ReviewInfo? = null
+
 
     var new_selected = false
     var approved_selected = false
@@ -90,6 +100,7 @@ class ClientActiExploreList : Fragment(), IOnBackPressedOverride, OnJobSelectedL
 
     private fun initClientActivation() {
 
+
         viewModel.observableJobProfile.observe(viewLifecycleOwner, Observer {
             run {
                 it?.let {
@@ -98,6 +109,43 @@ class ClientActiExploreList : Fragment(), IOnBackPressedOverride, OnJobSelectedL
             }
         })
         viewModel.getJobProfiles()
+        setUpReviewFlow()
+    }
+
+    private fun setUpReviewFlow() {
+        manager = FakeReviewManager(context)
+        val request = manager?.requestReviewFlow()
+        request?.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                // We got the ReviewInfo object
+                  reviewInfo = task.getResult()
+                showToast("Review Dialog reviewInfo object: "+ task.result.toString())
+
+            } else {
+                // There was some problem, log or handle the error code.
+                //@ReviewErrorCode val reviewErrorCode = (task.getException() as Exception)
+                Log.d("Error", task.exception.toString())
+                showToast("Review Dialog Error :"+ task.exception.toString() )
+
+            }
+        }
+    }
+
+    private fun showReviewFlow(reviewInfo: ReviewInfo){
+        if (reviewInfo != null) {
+            val flow = activity?.let { manager?.launchReviewFlow(it, reviewInfo) }
+            flow?.addOnCompleteListener { task ->
+                // The flow has finished. The API does not indicate whether the user
+                // reviewed or not, or even whether the review dialog was shown. Thus, no
+                // matter the result, we continue our app flow.
+                if (task.isSuccessful){
+                    showToast("Review Dialog Opened: ")
+                } else {
+                    showToast("Error while reviewing: ")
+                }
+            }
+
+        }
     }
 
     private fun showClientActivations(jobProfiles: ArrayList<JpExplore>) {
@@ -368,15 +416,19 @@ class ClientActiExploreList : Fragment(), IOnBackPressedOverride, OnJobSelectedL
     }
 
     override fun onBackPressed(): Boolean {
-        if (appBar.isSearchCurrentlyShown) {
-            hideSoftKeyboard()
-            appBar.hideSearchOption()
-            clientActiExploreAdapter.filter.filter("")
+//        if (appBar.isSearchCurrentlyShown) {
+//            hideSoftKeyboard()
+//            appBar.hideSearchOption()
+//            clientActiExploreAdapter.filter.filter("")
+//            return true
+//        } else {
+//            return false
+//        }
+        if (reviewInfo != null) {
+            showReviewFlow(reviewInfo!!)
             return true
         } else {
-
             return false
-
         }
 
     }
