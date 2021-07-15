@@ -57,6 +57,11 @@
         <attr name="title" format="string"/>
         <attr name="caption" format="string"/>
     </declare-styleable>
+    <declare-styleable name="GigerProfileCardComponent">
+        <attr name="name" format="string"/>
+        <attr name="number" format="string"/>
+        <attr name="jobProfile" format="string"/>
+    </declare-styleable>
     
     
     <declare-styleable name="ImageViewRounded">

@@ -2,4 +2,5 @@
 <resources>
     <color name="text_grey">#6F7070</color>
     <color name="limeGrey">#6D7278</color>
+    <color name="submitted">#E59840</color>
 </resources>
