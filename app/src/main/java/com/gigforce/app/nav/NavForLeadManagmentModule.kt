@@ -12,5 +12,8 @@ class NavForLeadManagmentModule(
         baseImplementation.registerRoute("${moduleName}/gigerOnboarding", R.id.gigerOnboardingFragment)
         baseImplementation.registerRoute("${moduleName}/gigerOnboardingOtp", R.id.gigerOtpVerification)
         baseImplementation.registerRoute("${moduleName}/selectGigApplicationToActivate", R.id.selectGigApplicationToActivate)
+        baseImplementation.registerRoute("${moduleName}/selectTeamLeaders", R.id.selectTeamLeaderFragment)
+        baseImplementation.registerRoute("${moduleName}/shiftTimings", R.id.shiftTimingFragment)
+        baseImplementation.registerRoute("${moduleName}/selectGigLocation", R.id.selectGigLocationFragment)
     }
 }

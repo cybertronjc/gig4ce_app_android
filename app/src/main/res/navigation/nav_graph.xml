@@ -948,6 +948,18 @@
         android:id="@+id/selectGigApplicationToActivate"
         android:name="com.gigforce.lead_management.gigeronboarding.SelectGigApplicationToActivate"
         android:label="SelectGigApplicationToActivate" />
+    <fragment
+        android:id="@+id/selectGigLocationFragment"
+        android:name="com.gigforce.lead_management.gigeronboarding.SelectGigLocationFragment"
+        android:label="SelectGigLocationFragment" />
+    <fragment
+        android:id="@+id/selectTeamLeaderFragment"
+        android:name="com.gigforce.lead_management.gigeronboarding.SelectTeamLeaderFragment"
+        android:label="SelectTeamLeaderFragment" />
+    <fragment
+        android:id="@+id/shiftTimingFragment"
+        android:name="com.gigforce.lead_management.gigeronboarding.ShiftTimingFragment"
+        android:label="ShiftTimingFragment" />
 
 
 </navigation>
