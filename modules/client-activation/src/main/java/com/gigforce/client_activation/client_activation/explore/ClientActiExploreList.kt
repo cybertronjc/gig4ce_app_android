@@ -28,11 +28,6 @@ import com.gigforce.common_ui.listeners.AppBarClicks
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
-import com.google.android.play.core.review.ReviewInfo
-import com.google.android.play.core.review.ReviewManager
-import com.google.android.play.core.review.ReviewManagerFactory
-import com.google.android.play.core.review.model.ReviewErrorCode
-import com.google.android.play.core.review.testing.FakeReviewManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.client_acti_explore_list_fragment.*
 import kotlinx.android.synthetic.main.client_acti_explore_list_fragment.search_item
@@ -58,7 +53,6 @@ class ClientActiExploreList : Fragment(), IOnBackPressedOverride, OnJobSelectedL
         }
     }
     private var win: Window? = null
-
 
     var new_selected = false
     var approved_selected = false
@@ -98,7 +92,6 @@ class ClientActiExploreList : Fragment(), IOnBackPressedOverride, OnJobSelectedL
 
     private fun initClientActivation() {
 
-
         viewModel.observableJobProfile.observe(viewLifecycleOwner, Observer {
             run {
                 it?.let {
@@ -107,7 +100,6 @@ class ClientActiExploreList : Fragment(), IOnBackPressedOverride, OnJobSelectedL
             }
         })
         viewModel.getJobProfiles()
-
     }
 
     private fun showClientActivations(jobProfiles: ArrayList<JpExplore>) {
