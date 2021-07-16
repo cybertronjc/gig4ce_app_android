@@ -9,20 +9,17 @@
             android:id="@+id/appBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:isSearchVisible="true"
             app:backgroundType="PinkBar"
-            app:searchHint="Search Business/ Job"
-            app:titleText="Explore Gigs"
+            app:titleText="Gig Application"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/appBar">
 
             <com.gigforce.common_ui.components.cells.GigerProfileCardComponent

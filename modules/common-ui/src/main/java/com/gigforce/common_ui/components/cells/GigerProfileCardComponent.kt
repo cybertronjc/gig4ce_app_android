@@ -37,18 +37,41 @@ class GigerProfileCardComponent(context: Context, attrs: AttributeSet?) : FrameL
         jobProfileName = this.findViewById(R.id.jobProfileTitle)
     }
 
-    fun setProfilePicture(image: String){
-        GlideApp.with(context)
-            .load(image)
-            .placeholder(ShimmerHelper.getShimmerDrawable())
-            .into(profileImg)
+    fun setProfilePicture(image: String?){
+        image?.let {
+            if (image.isEmpty()) profileImg.gone()
+            else
+                GlideApp.with(context)
+                    .load(image)
+                    .placeholder(ShimmerHelper.getShimmerDrawable())
+                    .into(profileImg)
+        }
+
     }
 
-    fun setJobProfileLogo(image: String){
-        GlideApp.with(context)
-            .load(image)
-            .placeholder(ShimmerHelper.getShimmerDrawable())
-            .into(logoImg)
+    fun setJobProfileLogo(image: String?){
+        image?.let {
+            if (image.isEmpty()) logoImg.gone()
+            else
+                GlideApp.with(context)
+                .load(image)
+                .placeholder(ShimmerHelper.getShimmerDrawable())
+                .into(logoImg)
+        }
+
+    }
+
+    fun setJobProfileTitle(jobProfile: String?){
+        jobProfile?.let {
+            if (it.isEmpty()) jobProfileName.gone() else jobProfileName.text = it
+        }
+
+    }
+    fun setGigerNumber(mobile: String?){
+        mobile?.let {
+            if (it.isEmpty()) gigerNumber.gone() else gigerNumber.text = it
+        }
+
     }
 
     fun setProfileCard(gigerProfileCardDVM: GigerProfileCardDVM){
