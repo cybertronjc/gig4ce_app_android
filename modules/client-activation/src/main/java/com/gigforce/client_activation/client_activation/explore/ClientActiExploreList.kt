@@ -58,8 +58,6 @@ class ClientActiExploreList : Fragment(), IOnBackPressedOverride, OnJobSelectedL
         }
     }
     private var win: Window? = null
-    private var manager: FakeReviewManager? = null
-    private var reviewInfo: ReviewInfo? = null
 
 
     var new_selected = false
@@ -109,43 +107,7 @@ class ClientActiExploreList : Fragment(), IOnBackPressedOverride, OnJobSelectedL
             }
         })
         viewModel.getJobProfiles()
-        setUpReviewFlow()
-    }
 
-    private fun setUpReviewFlow() {
-        manager = FakeReviewManager(context)
-        val request = manager?.requestReviewFlow()
-        request?.addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                // We got the ReviewInfo object
-                  reviewInfo = task.getResult()
-                showToast("Review Dialog reviewInfo object: "+ task.result.toString())
-
-            } else {
-                // There was some problem, log or handle the error code.
-                //@ReviewErrorCode val reviewErrorCode = (task.getException() as Exception)
-                Log.d("Error", task.exception.toString())
-                showToast("Review Dialog Error :"+ task.exception.toString() )
-
-            }
-        }
-    }
-
-    private fun showReviewFlow(reviewInfo: ReviewInfo){
-        if (reviewInfo != null) {
-            val flow = activity?.let { manager?.launchReviewFlow(it, reviewInfo) }
-            flow?.addOnCompleteListener { task ->
-                // The flow has finished. The API does not indicate whether the user
-                // reviewed or not, or even whether the review dialog was shown. Thus, no
-                // matter the result, we continue our app flow.
-                if (task.isSuccessful){
-                    showToast("Review Dialog Opened: ")
-                } else {
-                    showToast("Error while reviewing: ")
-                }
-            }
-
-        }
     }
 
     private fun showClientActivations(jobProfiles: ArrayList<JpExplore>) {
@@ -416,16 +378,10 @@ class ClientActiExploreList : Fragment(), IOnBackPressedOverride, OnJobSelectedL
     }
 
     override fun onBackPressed(): Boolean {
-//        if (appBar.isSearchCurrentlyShown) {
-//            hideSoftKeyboard()
-//            appBar.hideSearchOption()
-//            clientActiExploreAdapter.filter.filter("")
-//            return true
-//        } else {
-//            return false
-//        }
-        if (reviewInfo != null) {
-            showReviewFlow(reviewInfo!!)
+        if (appBar.isSearchCurrentlyShown) {
+            hideSoftKeyboard()
+            appBar.hideSearchOption()
+            clientActiExploreAdapter.filter.filter("")
             return true
         } else {
             return false

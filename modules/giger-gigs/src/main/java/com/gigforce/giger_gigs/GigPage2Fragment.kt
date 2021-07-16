@@ -66,6 +66,9 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.play.core.review.ReviewInfo
+import com.google.android.play.core.review.ReviewManager
+import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -107,6 +110,8 @@ class GigPage2Fragment : Fragment(),
     private lateinit var gigId: String
     private var location: Location? = null
     private var imageClickedPath: String? = null
+    private var manager: ReviewManager? = null
+    private var reviewInfo: ReviewInfo? = null
     private var isRequestingLocation = false
     private val firebaseRemoteConfig: FirebaseRemoteConfig = FirebaseRemoteConfig.getInstance()
 
@@ -156,6 +161,7 @@ class GigPage2Fragment : Fragment(),
         getDataFromIntents(arguments, savedInstanceState)
         initUi()
         initViewModel()
+        setUpReviewFlow()
 
         if (isNecessaryPermissionGranted())
             checkForGpsStatus()
@@ -470,10 +476,12 @@ class GigPage2Fragment : Fragment(),
 
                         if (it.content == AttendanceType.CHECK_OUT) {
                             showToast("Checkout Marked.")
-                            showFeedbackBottomSheet()
+                            //showFeedbackBottomSheet()
+                            showReviewFlow(reviewInfo)
                         } else {
                             showToast("Check-in marked")
                           //  plantLocationTrackers()
+                            showReviewFlow(reviewInfo)
                         }
                     }
                     is Lce.Error -> {
@@ -809,6 +817,34 @@ class GigPage2Fragment : Fragment(),
 
     private fun showFeedbackBottomSheet() {
         RateGigDialogFragment.launch(gigId, childFragmentManager)
+    }
+
+    private fun setUpReviewFlow() {
+        manager = context?.let { ReviewManagerFactory.create(it) }
+        val request = manager?.requestReviewFlow()
+        request?.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                // We got the ReviewInfo object
+                reviewInfo = task.getResult()
+            } else {
+                // There was some problem, log or handle the error code.
+                //@ReviewErrorCode val reviewErrorCode = (task.getException() as Exception)
+                Log.d("Error", task.exception.toString())
+
+            }
+        }
+    }
+
+    private fun showReviewFlow(reviewInfo: ReviewInfo?){
+        if (reviewInfo != null) {
+            val flow = activity?.let { manager?.launchReviewFlow(it, reviewInfo) }
+            flow?.addOnCompleteListener { task ->
+                // The flow has finished. The API does not indicate whether the user
+                // reviewed or not, or even whether the review dialog was shown. Thus, no
+                // matter the result, we continue our app flow.
+            }
+
+        }
     }
 
     private fun showDeclineGigDialog() {
