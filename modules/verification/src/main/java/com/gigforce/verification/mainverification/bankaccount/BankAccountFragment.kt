@@ -24,6 +24,7 @@ import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.AppConstants
+import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
@@ -68,7 +69,7 @@ class BankAccountFragment : Fragment(),
 
     @Inject
     lateinit var navigation: INavigation
-
+    @Inject lateinit var buildConfig : IBuildConfig
     private lateinit var viewModel: BankAccountViewModel
     private var didUserCameFromAmbassadorScreen = false
     private var clickedImagePath: Uri? = null
@@ -145,23 +146,6 @@ class BankAccountFragment : Fragment(),
                     showToast("Ocr status " + it.message)
             }
         })
-        viewModel.getVerifiedStatus()
-        viewModel.verifiedStatus.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                if (it) {
-                    viewBinding.belowLayout.gone()
-                    viewBinding.toplayoutblock.uploadStatusLayout(
-                            AppConstants.UPLOAD_SUCCESS,
-                            "VERIFICATION COMPLETED",
-                            "The Bank Details have been verified successfully."
-                    )
-                    viewBinding.submitButton.gone()
-                    viewBinding.toplayoutblock.setVerificationSuccessfulView("Bank Account verified")
-                    viewBinding.toplayoutblock.disableImageClick()
-                    viewBinding.toplayoutblock.hideOnVerifiedDocuments()
-                }
-            }
-        })
 
 
         viewModel.beneficiaryName.observe(viewLifecycleOwner, Observer {
@@ -177,11 +161,12 @@ class BankAccountFragment : Fragment(),
                 }
             }
         })
+        viewModel.getVerifiedStatus()
         viewModel.verifiedStatus.observe(viewLifecycleOwner, Observer {
             //verified entry to firebase
             //showToast("Verified")
             it?.let {
-                if (it) {
+                if (it.verified) {
                     viewBinding.belowLayout.gone()
                     viewBinding.toplayoutblock.uploadStatusLayout(
                             AppConstants.UPLOAD_SUCCESS,
@@ -190,6 +175,12 @@ class BankAccountFragment : Fragment(),
                     )
                     viewBinding.submitButton.gone()
                     viewBinding.toplayoutblock.setVerificationSuccessfulView("Bank Account verified")
+                    it.passbookImagePath?.let {
+                        getDLImages(it)?.let {
+                            val list = listOf(KYCImageModel(text = getString(R.string.upload_pan_card_new), imagePath = it, imageUploaded = true))
+                            viewBinding.toplayoutblock.setImageViewPager(list)
+                        }
+                    }
                 }
             }
 
@@ -205,6 +196,20 @@ class BankAccountFragment : Fragment(),
                     }
                     .show()
         })
+    }
+
+    fun getDLImages(imagePath: String): String? {
+        if (imagePath.isNotBlank()) {
+            try {
+                var modifiedString = imagePath
+                if (!imagePath.startsWith("/"))
+                    modifiedString = "/$imagePath"
+                return buildConfig.getStorageBaseUrl() + modifiedString
+            } catch (e: Exception) {
+                return null
+            }
+        }
+        return null
     }
 
     private fun activeLoader(activate: Boolean) {
@@ -303,14 +308,15 @@ class BankAccountFragment : Fragment(),
     }
 
     private fun setViews() {
+        // verification_doc_image ic_passbook_illustration
         val frontUri = Uri.Builder()
                 .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
-                .authority(resources.getResourcePackageName(R.drawable.ic_passbook_illustration))
-                .appendPath(resources.getResourceTypeName(R.drawable.ic_passbook_illustration))
-                .appendPath(resources.getResourceEntryName(R.drawable.ic_passbook_illustration))
+                .authority(resources.getResourcePackageName(R.drawable.verification_doc_image))
+                .appendPath(resources.getResourceTypeName(R.drawable.verification_doc_image))
+                .appendPath(resources.getResourceEntryName(R.drawable.verification_doc_image))
                 .build()
         val list =
-                listOf(KYCImageModel(getString(R.string.upload_bank_account_new), frontUri, false))
+                listOf(KYCImageModel(text = getString(R.string.upload_bank_account_new), imageIcon = frontUri, imageUploaded = false))
         viewBinding.toplayoutblock.setImageViewPager(list)
     }
 

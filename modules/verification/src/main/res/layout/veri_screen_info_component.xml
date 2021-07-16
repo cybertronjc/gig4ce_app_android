@@ -30,7 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/dp_sm1"
-        android:src="@drawable/ic_ques_round"
+        android:src="@drawable/ic_baseline_help_filled_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/uppercaption" />
 

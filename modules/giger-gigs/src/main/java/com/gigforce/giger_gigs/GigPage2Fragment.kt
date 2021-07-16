@@ -415,14 +415,18 @@ class GigPage2Fragment : Fragment(),
             ""
         }
 
-        viewModel.markAttendance(
-            location = location,
-            locationPhysicalAddress = locationPhysicalAddress,
-            image = imageClickedPath!!,
-            checkInTimeAccToUser = checkInTimeAccToUser,
-            remarks = "test",
-            distanceBetweenGigAndUser = distanceBetweenGigAndUser
-        )
+        imageClickedPath?.let {
+            viewModel.markAttendance(
+                location = location,
+                locationPhysicalAddress = locationPhysicalAddress,
+                image = it,
+                checkInTimeAccToUser = checkInTimeAccToUser,
+                remarks = "test",
+                distanceBetweenGigAndUser = distanceBetweenGigAndUser
+            )
+        }
+
+
     }
 
     private fun showAlertDialog(message: String) {

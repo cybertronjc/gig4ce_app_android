@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.core.datamodels.client_activation.States
+import com.gigforce.core.datamodels.verification.DrivingLicenseDataModel
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.verification.mainverification.Data
 import com.gigforce.verification.mainverification.KycOcrResultModel
@@ -28,8 +29,8 @@ class DrivingLicenseViewModel  @Inject constructor(
     val _kycVerifyResult = MutableLiveData<KycOcrResultModel>()
     val kycVerifyResult: LiveData<KycOcrResultModel> = _kycVerifyResult
 
-    val _verifiedStatus = MutableLiveData<Boolean>()
-    val verifiedStatus: LiveData<Boolean> = _verifiedStatus
+    val _verifiedStatus = MutableLiveData<DrivingLicenseDataModel>()
+    val verifiedStatus: LiveData<DrivingLicenseDataModel> = _verifiedStatus
 
     private val _observableStates = MutableLiveData<MutableList<States>>()
     val observableStates: MutableLiveData<MutableList<States>> = _observableStates
@@ -60,9 +61,9 @@ class DrivingLicenseViewModel  @Inject constructor(
     fun getVerifiedStatus(){
         viewModelScope.launch {
             try {
-                _verifiedStatus.value = verificationKycRepo.getVerificationStatus()?.driving_license?.verified
+                _verifiedStatus.value = verificationKycRepo.getVerificationStatus()?.driving_license
             }catch (e: Exception){
-                _verifiedStatus.value = false
+//                _verifiedStatus.value = false
             }
         }
     }

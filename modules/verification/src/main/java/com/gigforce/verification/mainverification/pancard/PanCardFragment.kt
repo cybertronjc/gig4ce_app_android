@@ -26,11 +26,13 @@ import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.AppConstants
 import com.gigforce.core.datamodels.verification.PanCardDataModel
+import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.DateHelper
 import com.gigforce.core.utils.VerificationValidations
+import com.gigforce.verification.BuildConfig
 import com.gigforce.verification.R
 import com.gigforce.verification.databinding.PanCardFragmentBinding
 import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
@@ -77,6 +79,7 @@ class PanCardFragment : Fragment(),
 
     @Inject
     lateinit var navigation: INavigation
+    @Inject lateinit var buildConfig : IBuildConfig
 
     private var panCardDataModel: PanCardDataModel? = null
     private var clickedImagePath: Uri? = null
@@ -175,7 +178,7 @@ class PanCardFragment : Fragment(),
         viewModel.verifiedStatus.observe(viewLifecycleOwner, Observer {
             it?.let {
                 Log.d("Status", it.toString())
-                if (it) {
+                if (it?.verified) {
                     viewBinding.belowLayout.gone()
                     viewBinding.toplayoutblock.uploadStatusLayout(
                             AppConstants.UPLOAD_SUCCESS,
@@ -186,6 +189,20 @@ class PanCardFragment : Fragment(),
                     viewBinding.toplayoutblock.setVerificationSuccessfulView("PAN verified")
                     viewBinding.toplayoutblock.disableImageClick()
                     viewBinding.toplayoutblock.hideOnVerifiedDocuments()
+                    it.panCardImagePath?.let {
+                        if(it.isNotEmpty()) {
+                            try{
+                                var modifiedString = it
+                                if(!it.startsWith("/"))
+                                    modifiedString = "/$it"
+                                val list = listOf(KYCImageModel(text = getString(R.string.upload_pan_card_new), imagePath = buildConfig.getStorageBaseUrl()+modifiedString, imageUploaded = true))
+                                viewBinding.toplayoutblock.setImageViewPager(list)
+                            }catch (e:Exception){
+
+                            }
+
+                        }
+                    }
 
                 }
             }
@@ -260,15 +277,15 @@ class PanCardFragment : Fragment(),
 
     private fun setViews() {
         viewBinding.toplayoutblock.showUploadHere()
+        //ic_pan_illustration
         val frontUri = Uri.Builder()
                 .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
-                .authority(resources.getResourcePackageName(R.drawable.ic_pan_illustration))
-                .appendPath(resources.getResourceTypeName(R.drawable.ic_pan_illustration))
-                .appendPath(resources.getResourceEntryName(R.drawable.ic_pan_illustration))
+                .authority(resources.getResourcePackageName(R.drawable.verification_doc_image))
+                .appendPath(resources.getResourceTypeName(R.drawable.verification_doc_image))
+                .appendPath(resources.getResourceEntryName(R.drawable.verification_doc_image))
                 .build()
-        val list = listOf(KYCImageModel(getString(R.string.upload_pan_card_new), frontUri, false))
+        val list = listOf(KYCImageModel(text = getString(R.string.upload_pan_card_new), imageIcon = frontUri, imageUploaded = false))
         viewBinding.toplayoutblock.setImageViewPager(list)
-
     }
 
     private fun checkForPermissionElseShowCameraGalleryBottomSheet() {
@@ -401,12 +418,6 @@ class PanCardFragment : Fragment(),
             Log.d("ImageUri", imageUriResultCrop.toString())
             clickedImagePath = imageUriResultCrop
             showPanInfoCard(clickedImagePath!!)
-            val baos = ByteArrayOutputStream()
-            if (imageUriResultCrop == null) {
-                val bitmap = data.data as Bitmap
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
-
-            }
         }
     }
 

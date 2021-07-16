@@ -256,24 +256,25 @@ class AadhaarCardImageUploadFragment : Fragment(),
 
 
     private fun setViews() {
+        //  ic_front   ic_back
         val frontUri = Uri.Builder()
                 .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
-                .authority(resources.getResourcePackageName(R.drawable.ic_front))
-                .appendPath(resources.getResourceTypeName(R.drawable.ic_front))
-                .appendPath(resources.getResourceEntryName(R.drawable.ic_front))
+                .authority(resources.getResourcePackageName(R.drawable.verification_doc_image))
+                .appendPath(resources.getResourceTypeName(R.drawable.verification_doc_image))
+                .appendPath(resources.getResourceEntryName(R.drawable.verification_doc_image))
                 .build()
         val backUri = Uri.Builder()
                 .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
-                .authority(resources.getResourcePackageName(R.drawable.ic_back))
-                .appendPath(resources.getResourceTypeName(R.drawable.ic_back))
-                .appendPath(resources.getResourceEntryName(R.drawable.ic_back))
+                .authority(resources.getResourcePackageName(R.drawable.verification_doc_image))
+                .appendPath(resources.getResourceTypeName(R.drawable.verification_doc_image))
+                .appendPath(resources.getResourceEntryName(R.drawable.verification_doc_image))
                 .build()
         val list = listOf(
                 KYCImageModel(
                         getString(R.string.upload_aadhar_card_front_side_new),
-                        frontUri,
-                        false
-                ), KYCImageModel(getString(R.string.upload_aadhar_card_back_side_new), backUri, false)
+                        imageIcon = frontUri,
+                        imageUploaded = false
+                ), KYCImageModel(text = getString(R.string.upload_aadhar_card_back_side_new), imageIcon = backUri, imageUploaded = false)
         )
         viewBinding.toplayoutblock.setImageViewPager(list)
     }

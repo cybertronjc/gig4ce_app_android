@@ -116,20 +116,25 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
     }
 
     fun setImageViewPager(list: List<KYCImageModel>) {
-        viewPager2.visible()
-        tabLayout.visible()
-        adapter = ViewPagerAdapter {
-            pageClickListener?.onClick(it)
-        }
-        adapter.setItem(list)
-        viewPager2.adapter = adapter
-        if (list.size == 1) {
-            tabLayout.gone()
-        }
-        Log.d("adapter", "" + adapter.itemCount + " list: " + list.toString())
-        TabLayoutMediator(tabLayout, viewPager2) { tab, position ->
 
-        }.attach()
+        if (list.isEmpty()) {
+            viewPager2.gone()
+            tabLayout.gone()
+        } else {
+            viewPager2.visible()
+            tabLayout.visible()
+            adapter = ViewPagerAdapter {
+                pageClickListener?.onClick(it)
+            }
+            adapter.setItem(list)
+            viewPager2.adapter = adapter
+            if (list.size == 1) {
+                tabLayout.gone()
+            }
+            Log.d("adapter", "" + adapter.itemCount + " list: " + list.toString())
+            TabLayoutMediator(tabLayout, viewPager2) { tab, position ->
+            }.attach()
+        }
 
     }
 

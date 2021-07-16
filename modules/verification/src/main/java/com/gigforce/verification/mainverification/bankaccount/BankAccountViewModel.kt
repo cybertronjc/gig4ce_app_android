@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.core.datamodels.verification.BankDetailsDataModel
 import com.gigforce.core.datamodels.verification.VerificationBaseModel
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.verification.mainverification.Data
@@ -30,8 +31,8 @@ class BankAccountViewModel @Inject constructor(
     val _beneficiaryName = MutableLiveData<String>()
     val beneficiaryName: LiveData<String> = _beneficiaryName
 
-    val _verifiedStatus = MutableLiveData<Boolean>()
-    val verifiedStatus: LiveData<Boolean> = _verifiedStatus
+    val _verifiedStatus = MutableLiveData<BankDetailsDataModel>()
+    val verifiedStatus: LiveData<BankDetailsDataModel> = _verifiedStatus
 
     val _verifiedStatusDB = MutableLiveData<Boolean>()
     val verifiedStatusDB: LiveData<Boolean> = _verifiedStatusDB
@@ -79,9 +80,9 @@ class BankAccountViewModel @Inject constructor(
     fun getVerifiedStatus(){
         viewModelScope.launch {
             try {
-                _verifiedStatus.value = verificationKycRepo.getVerificationStatus()?.bank_details?.verified
+                _verifiedStatus.value = verificationKycRepo.getVerificationStatus()?.bank_details
             }catch (e: Exception){
-                _verifiedStatus.value = false
+//                _verifiedStatus.value = false
             }
         }
     }

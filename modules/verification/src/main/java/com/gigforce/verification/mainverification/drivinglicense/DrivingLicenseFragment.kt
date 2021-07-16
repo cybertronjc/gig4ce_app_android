@@ -28,6 +28,7 @@ import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.AppConstants
 import com.gigforce.core.StringConstants
+import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
@@ -55,10 +56,12 @@ import java.net.URI
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 class DrivingLicenseFragment : Fragment(),
-        VerificationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener, IOnBackPressedOverride {
+    VerificationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener,
+    IOnBackPressedOverride {
     companion object {
         fun newInstance() = DrivingLicenseFragment()
         const val REQUEST_CODE_UPLOAD_DL = 2333
@@ -78,7 +81,7 @@ class DrivingLicenseFragment : Fragment(),
 
     @Inject
     lateinit var navigation: INavigation
-
+    @Inject lateinit var buildConfig : IBuildConfig
     private var FROM_CLIENT_ACTIVATON: Boolean = false
     private val viewModel: DrivingLicenseViewModel by viewModels()
     private lateinit var viewBinding: DrivingLicenseFragmentBinding
@@ -87,8 +90,8 @@ class DrivingLicenseFragment : Fragment(),
     private var currentlyClickingImageOfSide: DrivingLicenseSides? = null
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         viewBinding = DrivingLicenseFragmentBinding.inflate(inflater, container, false)
         return viewBinding.root
@@ -114,22 +117,19 @@ class DrivingLicenseFragment : Fragment(),
     private fun getDataFromIntents(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
             FROM_CLIENT_ACTIVATON =
-                    it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
+                it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
             it.getStringArrayList(VerificationConstants.NAVIGATION_STRINGS)?.let { arr ->
                 allNavigationList = arr
             }
         } ?: run {
             arguments?.let {
                 FROM_CLIENT_ACTIVATON =
-                        it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
+                    it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
                 it.getStringArrayList(VerificationConstants.NAVIGATION_STRINGS)?.let { arrData ->
                     allNavigationList = arrData
                 }
-
             }
         }
-
-
     }
 
     private fun checkForNextDoc() {
@@ -138,10 +138,15 @@ class DrivingLicenseFragment : Fragment(),
         } else {
             var navigationsForBundle = emptyList<String>()
             if (allNavigationList.size > 1) {
-                navigationsForBundle = allNavigationList.slice(IntRange(1, allNavigationList.size - 1)).filter { it.length > 0 }
+                navigationsForBundle =
+                    allNavigationList.slice(IntRange(1, allNavigationList.size - 1))
+                        .filter { it.length > 0 }
             }
             navigation.popBackStack()
-            navigation.navigateTo(allNavigationList.get(0), bundleOf(VerificationConstants.NAVIGATION_STRINGS to navigationsForBundle))
+            navigation.navigateTo(
+                allNavigationList.get(0),
+                bundleOf(VerificationConstants.NAVIGATION_STRINGS to navigationsForBundle)
+            )
 
         }
     }
@@ -151,10 +156,10 @@ class DrivingLicenseFragment : Fragment(),
             if (isDLVerified) {
                 var navFragmentsData = activity as NavFragmentsData
                 navFragmentsData.setData(
-                        bundleOf(
-                                StringConstants.BACK_PRESSED.value to true
+                    bundleOf(
+                        StringConstants.BACK_PRESSED.value to true
 
-                        )
+                    )
                 )
             }
             return false
@@ -192,30 +197,30 @@ class DrivingLicenseFragment : Fragment(),
                 if (viewBinding.submitButton.tag?.toString().equals(CONFIRM_TAG)) {
                     checkForNextDoc()
                 } else {
-                    if (viewBinding.stateSpinner.text.equals( "Select State")) {
+                    if (viewBinding.stateSpinner.text.equals("Select State")) {
                         MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert))
-                                .setMessage(getString(R.string.select_dl_state))
-                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                                .show()
+                            .setTitle(getString(R.string.alert))
+                            .setMessage(getString(R.string.select_dl_state))
+                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .show()
                         return@setOnClickListener
                     }
 
                     if (viewBinding.dlnoTil.editText?.text.toString().isBlank()) {
                         MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert))
-                                .setMessage(getString(R.string.select_dl_no))
-                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                                .show()
+                            .setTitle(getString(R.string.alert))
+                            .setMessage(getString(R.string.select_dl_no))
+                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .show()
                         return@setOnClickListener
                     }
 
                     if (viewBinding.dobDate.text.toString().isBlank()) {
                         MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert))
-                                .setMessage(getString(R.string.select_dl_dob))
-                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                                .show()
+                            .setTitle(getString(R.string.alert))
+                            .setMessage(getString(R.string.select_dl_dob))
+                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .show()
                         return@setOnClickListener
                     }
 
@@ -237,9 +242,9 @@ class DrivingLicenseFragment : Fragment(),
         }
         val arrayAdapter = context?.let { it1 ->
             ArrayAdapter.createFromResource(
-                    it1,
-                    R.array.indian_states,
-                    android.R.layout.simple_spinner_dropdown_item
+                it1,
+                R.array.indian_states,
+                android.R.layout.simple_spinner_dropdown_item
             )
         }
         viewBinding.stateSpinner.setAdapter(arrayAdapter)
@@ -267,12 +272,12 @@ class DrivingLicenseFragment : Fragment(),
                     anyImageUploaded = true
                     if (!it.dateOfBirth.isNullOrBlank() || !it.dlNumber.isNullOrBlank() || !it.validTill.isNullOrBlank()) {
                         viewBinding.toplayoutblock.uploadStatusLayout(
-                                AppConstants.UPLOAD_SUCCESS,
-                                "UPLOAD SUCCESSFUL",
-                                "Information of Driving License Captured Successfully."
+                            AppConstants.UPLOAD_SUCCESS,
+                            "UPLOAD SUCCESSFUL",
+                            "Information of Driving License Captured Successfully."
                         )
                         if (!it.dateOfBirth.isNullOrBlank())
-                            viewBinding.dobDate.setText(it.dateOfBirth)
+                            viewBinding.dobDate.text = it.dateOfBirth
                         if (!it.dlNumber.isNullOrBlank())
                             viewBinding.dlnoTil.editText?.setText(it.dlNumber)
 
@@ -287,16 +292,16 @@ class DrivingLicenseFragment : Fragment(),
 
                     } else {
                         viewBinding.toplayoutblock.uploadStatusLayout(
-                                AppConstants.UNABLE_TO_FETCH_DETAILS,
-                                "UNABLE TO FETCH DETAILS",
-                                "Enter your Driving License details manually or try again to continue the verification process."
+                            AppConstants.UNABLE_TO_FETCH_DETAILS,
+                            "UNABLE TO FETCH DETAILS",
+                            "Enter your Driving License details manually or try again to continue the verification process."
                         )
                     }
                 } else {
                     viewBinding.toplayoutblock.uploadStatusLayout(
-                            AppConstants.UNABLE_TO_FETCH_DETAILS,
-                            "UNABLE TO FETCH DETAILS",
-                            "Enter your Driving License details manually or try again to continue the verification process."
+                        AppConstants.UNABLE_TO_FETCH_DETAILS,
+                        "UNABLE TO FETCH DETAILS",
+                        "Enter your Driving License details manually or try again to continue the verification process."
                     )
                     showToast("Ocr status " + it.message)
                 }
@@ -309,9 +314,9 @@ class DrivingLicenseFragment : Fragment(),
                 if (it.status) {
                     viewBinding.belowLayout.gone()
                     viewBinding.toplayoutblock.uploadStatusLayout(
-                            AppConstants.UPLOAD_SUCCESS,
-                            "VERIFICATION COMPLETED",
-                            "The Driving License Details have been verified successfully."
+                        AppConstants.UPLOAD_SUCCESS,
+                        "VERIFICATION COMPLETED",
+                        "The Driving License Details have been verified successfully."
                     )
                     viewBinding.submitButton.tag = CONFIRM_TAG
                     viewBinding.toplayoutblock.setVerificationSuccessfulView("Your Driving License verified")
@@ -326,17 +331,25 @@ class DrivingLicenseFragment : Fragment(),
         viewModel.getVerifiedStatus()
         viewModel.verifiedStatus.observe(viewLifecycleOwner, Observer {
             it?.let {
-                if (it) {
+                if (it.verified) {
                     viewBinding.belowLayout.gone()
                     viewBinding.toplayoutblock.uploadStatusLayout(
-                            AppConstants.UPLOAD_SUCCESS,
-                            "VERIFICATION COMPLETED",
-                            "The Driving License Details have been verified successfully."
+                        AppConstants.UPLOAD_SUCCESS,
+                        "VERIFICATION COMPLETED",
+                        "The Driving License Details have been verified successfully."
                     )
                     viewBinding.submitButton.tag = CONFIRM_TAG
                     viewBinding.toplayoutblock.setVerificationSuccessfulView("Your Driving License verified")
                     viewBinding.toplayoutblock.disableImageClick()
                     viewBinding.toplayoutblock.hideOnVerifiedDocuments()
+                    var list = ArrayList<KYCImageModel>()
+                    it.frontImage?.let {
+                        getDLImages(it)?.let { list.add(KYCImageModel(text = getString(R.string.upload_pan_card_new), imagePath = it, imageUploaded = true)) }
+                    }
+                    it.backImage?.let {
+                        getDLImages(it)?.let { list.add(KYCImageModel(text = getString(R.string.upload_pan_card_new), imagePath = it, imageUploaded = true)) }
+                    }
+                    viewBinding.toplayoutblock.setImageViewPager(list)
                 }
             }
         })
@@ -354,6 +367,20 @@ class DrivingLicenseFragment : Fragment(),
 
     }
 
+    fun getDLImages(imagePath: String): String? {
+        if (imagePath.isNotBlank()) {
+            try {
+                var modifiedString = imagePath
+                if (!imagePath.startsWith("/"))
+                    modifiedString = "/$imagePath"
+                return buildConfig.getStorageBaseUrl() + modifiedString
+            } catch (e: Exception) {
+                return null
+            }
+        }
+        return null
+    }
+
     private fun getDDMMYYYYFormat(str: String): String {
         try {
             val sdf = SimpleDateFormat("dd-MM-yyyy")
@@ -368,25 +395,30 @@ class DrivingLicenseFragment : Fragment(),
     }
 
     private fun setViews() {
+        //verification_doc_image    ic_dl_front ic_dl_back
         val frontUri = Uri.Builder()
-                .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
-                .authority(resources.getResourcePackageName(R.drawable.ic_dl_front))
-                .appendPath(resources.getResourceTypeName(R.drawable.ic_dl_front))
-                .appendPath(resources.getResourceEntryName(R.drawable.ic_dl_front))
-                .build()
+            .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
+            .authority(resources.getResourcePackageName(R.drawable.verification_doc_image))
+            .appendPath(resources.getResourceTypeName(R.drawable.verification_doc_image))
+            .appendPath(resources.getResourceEntryName(R.drawable.verification_doc_image))
+            .build()
         val backUri = Uri.Builder()
-                .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
-                .authority(resources.getResourcePackageName(R.drawable.ic_dl_back))
-                .appendPath(resources.getResourceTypeName(R.drawable.ic_dl_back))
-                .appendPath(resources.getResourceEntryName(R.drawable.ic_dl_back))
-                .build()
+            .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
+            .authority(resources.getResourcePackageName(R.drawable.verification_doc_image))
+            .appendPath(resources.getResourceTypeName(R.drawable.verification_doc_image))
+            .appendPath(resources.getResourceEntryName(R.drawable.verification_doc_image))
+            .build()
         val list = listOf(
-                KYCImageModel(
-                        getString(R.string.upload_driving_license_front_side_new),
-                        frontUri,
-                        false
-                ),
-                KYCImageModel(getString(R.string.upload_driving_license_back_side_new), backUri, false)
+            KYCImageModel(
+                text = getString(R.string.upload_driving_license_front_side_new),
+                imageIcon = frontUri,
+                imageUploaded = false
+            ),
+            KYCImageModel(
+                text = getString(R.string.upload_driving_license_back_side_new),
+                imageIcon = backUri,
+                imageUploaded = false
+            )
         )
         viewBinding.toplayoutblock.setImageViewPager(list)
     }
@@ -399,16 +431,16 @@ class DrivingLicenseFragment : Fragment(),
             Log.d("Register", "Nombre del archivo " + file.name)
             // create RequestBody instance from file
             val requestFile: RequestBody =
-                    RequestBody.create(MediaType.parse("image/png"), file)
+                RequestBody.create(MediaType.parse("image/png"), file)
             // MultipartBody.Part is used to send also the actual file name
             image =
-                    MultipartBody.Part.createFormData("file", file.name, requestFile)
+                MultipartBody.Part.createFormData("file", file.name, requestFile)
         }
         image?.let {
             viewModel.getKycOcrResult(
-                    "DL",
-                    if (currentlyClickingImageOfSide == DrivingLicenseSides.FRONT_SIDE) "front" else "back",
-                    it
+                "DL",
+                if (currentlyClickingImageOfSide == DrivingLicenseSides.FRONT_SIDE) "front" else "back",
+                it
             )
         }
     }
@@ -417,9 +449,9 @@ class DrivingLicenseFragment : Fragment(),
     private fun checkForPermissionElseShowCameraGalleryBottomSheet() {
         if (hasStoragePermissions())
             VerificationClickOrSelectImageBottomSheet.launch(
-                    parentFragmentManager,
-                    "Upload Driving License",
-                    this
+                parentFragmentManager,
+                "Upload Driving License",
+                this
             )
         else
             requestStoragePermission()
@@ -428,43 +460,43 @@ class DrivingLicenseFragment : Fragment(),
     private fun requestStoragePermission() {
 
         requestPermissions(
-                arrayOf(
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.CAMERA
-                ),
-                REQUEST_STORAGE_PERMISSION
+            arrayOf(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.CAMERA
+            ),
+            REQUEST_STORAGE_PERMISSION
         )
     }
 
     private fun hasStoragePermissions(): Boolean {
         return ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            requireContext(),
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
         ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.READ_EXTERNAL_STORAGE
+            requireContext(),
+            Manifest.permission.READ_EXTERNAL_STORAGE
         ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.CAMERA
+            requireContext(),
+            Manifest.permission.CAMERA
         ) == PackageManager.PERMISSION_GRANTED
     }
 
     private val issueDatePicker: DatePickerDialog by lazy {
         val cal = Calendar.getInstance()
         val datePickerDialog = DatePickerDialog(
-                requireContext(),
-                DatePickerDialog.OnDateSetListener { _: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
-                    val newCal = Calendar.getInstance()
-                    newCal.set(Calendar.YEAR, year)
-                    newCal.set(Calendar.MONTH, month)
-                    newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                    viewBinding.issueDate.text = DateHelper.getDateInDDMMYYYY(newCal.time)
-                    viewBinding.calendarLabel2.visible()
-                },
-                1990,
-                cal.get(Calendar.MONTH),
-                cal.get(Calendar.DAY_OF_MONTH)
+            requireContext(),
+            DatePickerDialog.OnDateSetListener { _: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
+                val newCal = Calendar.getInstance()
+                newCal.set(Calendar.YEAR, year)
+                newCal.set(Calendar.MONTH, month)
+                newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                viewBinding.issueDate.text = DateHelper.getDateInDDMMYYYY(newCal.time)
+                viewBinding.calendarLabel2.visible()
+            },
+            1990,
+            cal.get(Calendar.MONTH),
+            cal.get(Calendar.DAY_OF_MONTH)
         )
 
         datePickerDialog.datePicker.maxDate = Calendar.getInstance().timeInMillis
@@ -473,18 +505,18 @@ class DrivingLicenseFragment : Fragment(),
     private val expiryDatePicker: DatePickerDialog by lazy {
         val cal = Calendar.getInstance()
         val datePickerDialog = DatePickerDialog(
-                requireContext(),
-                DatePickerDialog.OnDateSetListener { _: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
-                    val newCal = Calendar.getInstance()
-                    newCal.set(Calendar.YEAR, year)
-                    newCal.set(Calendar.MONTH, month)
-                    newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                    viewBinding.expiryDate.text = DateHelper.getDateInDDMMYYYY(newCal.time)
-                    viewBinding.calendarLabel1.visible()
-                },
-                cal.get(Calendar.YEAR),
-                cal.get(Calendar.MONTH),
-                cal.get(Calendar.DAY_OF_MONTH)
+            requireContext(),
+            DatePickerDialog.OnDateSetListener { _: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
+                val newCal = Calendar.getInstance()
+                newCal.set(Calendar.YEAR, year)
+                newCal.set(Calendar.MONTH, month)
+                newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                viewBinding.expiryDate.text = DateHelper.getDateInDDMMYYYY(newCal.time)
+                viewBinding.calendarLabel1.visible()
+            },
+            cal.get(Calendar.YEAR),
+            cal.get(Calendar.MONTH),
+            cal.get(Calendar.DAY_OF_MONTH)
         )
         val maxDate = Calendar.getInstance()
         maxDate.set(Calendar.YEAR, maxDate.get(Calendar.YEAR) + 30)
@@ -495,18 +527,18 @@ class DrivingLicenseFragment : Fragment(),
     private val dateOfBirthPicker: DatePickerDialog by lazy {
         val cal = Calendar.getInstance()
         val datePickerDialog = DatePickerDialog(
-                requireContext(),
-                DatePickerDialog.OnDateSetListener { _: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
-                    val newCal = Calendar.getInstance()
-                    newCal.set(Calendar.YEAR, year)
-                    newCal.set(Calendar.MONTH, month)
-                    newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                    viewBinding.dobDate.setText(DateHelper.getDateInDDMMYYYYHiphen(newCal.time))
-                    viewBinding.calendarLabel.visible()
-                },
-                1990,
-                cal.get(Calendar.MONTH),
-                cal.get(Calendar.DAY_OF_MONTH)
+            requireContext(),
+            DatePickerDialog.OnDateSetListener { _: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
+                val newCal = Calendar.getInstance()
+                newCal.set(Calendar.YEAR, year)
+                newCal.set(Calendar.MONTH, month)
+                newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                viewBinding.dobDate.text = DateHelper.getDateInDDMMYYYYHiphen(newCal.time)
+                viewBinding.calendarLabel.visible()
+            },
+            1990,
+            cal.get(Calendar.MONTH),
+            cal.get(Calendar.DAY_OF_MONTH)
         )
 
         datePickerDialog.datePicker.maxDate = Calendar.getInstance().timeInMillis
@@ -514,8 +546,8 @@ class DrivingLicenseFragment : Fragment(),
     }
 
     override fun onRequestPermissionsResult(
-            requestCode: Int,
-            permissions: Array<String>, grantResults: IntArray
+        requestCode: Int,
+        permissions: Array<String>, grantResults: IntArray
     ) {
         when (requestCode) {
             REQUEST_STORAGE_PERMISSION -> {
@@ -530,9 +562,9 @@ class DrivingLicenseFragment : Fragment(),
 
                 if (allPermsGranted)
                     VerificationClickOrSelectImageBottomSheet.launch(
-                            parentFragmentManager,
-                            "Upload Driving License",
-                            this
+                        parentFragmentManager,
+                        "Upload Driving License",
+                        this
                     )
                 else {
                     showToast("Please grant storage permission")
@@ -624,13 +656,13 @@ class DrivingLicenseFragment : Fragment(),
 
     private fun callKycVerificationApi() {
         var list = listOf(
-                Data("state", viewBinding.stateSpinner.text.toString()),
-                Data("name", viewBinding.nameTilDl.editText?.text.toString()),
-                Data("no", viewBinding.dlnoTil.editText?.text.toString()),
-                Data("fathername", viewBinding.fatherNameTil.editText?.text.toString()),
-                Data("issuedate", viewBinding.issueDate.text.toString()),
-                Data("expirydate", viewBinding.expiryDate.text.toString()),
-                Data("dob", viewBinding.dobDate.text.toString())
+            Data("state", viewBinding.stateSpinner.text.toString()),
+            Data("name", viewBinding.nameTilDl.editText?.text.toString()),
+            Data("no", viewBinding.dlnoTil.editText?.text.toString()),
+            Data("fathername", viewBinding.fatherNameTil.editText?.text.toString()),
+            Data("issuedate", viewBinding.issueDate.text.toString()),
+            Data("expirydate", viewBinding.expiryDate.text.toString()),
+            Data("dob", viewBinding.dobDate.text.toString())
         )
         activeLoader(true)
         viewModel.getKycVerificationResult("DL", list)
@@ -648,9 +680,9 @@ class DrivingLicenseFragment : Fragment(),
 
     private fun showWhyWeNeedThisDialog() {
         WhyWeNeedThisBottomSheet.launch(
-                childFragmentManager = childFragmentManager,
-                title = getString(R.string.why_do_we_need_this),
-                content = getString(R.string.why_do_we_need_this_dl)
+            childFragmentManager = childFragmentManager,
+            title = getString(R.string.why_do_we_need_this),
+            content = getString(R.string.why_do_we_need_this_dl)
         )
     }
 
@@ -685,13 +717,13 @@ class DrivingLicenseFragment : Fragment(),
         Log.v("Start Crop", "started")
         //can use this for a new name every time
         val timeStamp = SimpleDateFormat(
-                "yyyyMMdd_HHmmss",
-                Locale.getDefault()
+            "yyyyMMdd_HHmmss",
+            Locale.getDefault()
         ).format(Date())
         val imageFileName = PREFIX + "_" + timeStamp + "_"
         val uCrop: UCrop = UCrop.of(
-                uri,
-                Uri.fromFile(File(requireContext().cacheDir, imageFileName + EXTENSION))
+            uri,
+            Uri.fromFile(File(requireContext().cacheDir, imageFileName + EXTENSION))
         )
         val resultIntent: Intent = Intent()
         resultIntent.putExtra("filename", imageFileName + EXTENSION)
@@ -716,6 +748,9 @@ class DrivingLicenseFragment : Fragment(),
 
     override fun onResume() {
         super.onResume()
-        StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(resources, R.color.lipstick_2, null))
+        StatusBarUtil.setColorNoTranslucent(
+            requireActivity(),
+            ResourcesCompat.getColor(resources, R.color.lipstick_2, null)
+        )
     }
 }

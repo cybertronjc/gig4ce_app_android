@@ -13,6 +13,7 @@ import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.verification.R
+import com.google.firebase.storage.FirebaseStorage
 
 
 class ViewPagerAdapter(private val itemClickListener: (View) -> (Unit)) : RecyclerView.Adapter<ViewPagerAdapter.ViewPagerViewHolder>() {
@@ -66,9 +67,19 @@ class ViewPagerAdapter(private val itemClickListener: (View) -> (Unit)) : Recycl
 
         fun bind(kYCImageModel: KYCImageModel) {
             title.text = kYCImageModel.text
-            GlideApp.with(itemView.context)
-                .load(kYCImageModel.imageIcon)
-                .into(backgroundImage)
+            if (kYCImageModel.imagePath.isNullOrBlank()) {
+                GlideApp.with(itemView.context)
+                    .load(kYCImageModel.imageIcon)
+                    .into(backgroundImage)
+            }
+            else{
+                kYCImageModel.imagePath?.let {
+                    val gsReference = FirebaseStorage.getInstance().getReferenceFromUrl(it)
+                    GlideApp.with(itemView.context)
+                        .load(gsReference)
+                        .into(backgroundImage)
+                }
+            }
             if (kYCImageModel.imageUploaded) {
                 title.gone()
                 plusIcon.gone()

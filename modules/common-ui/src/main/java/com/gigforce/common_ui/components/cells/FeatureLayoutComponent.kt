@@ -57,8 +57,8 @@ open class FeatureLayoutComponent(context: Context, attrs: AttributeSet?) :
     }
 
     open fun setSectionIcon(iconUrl: String) {
-        layout_img.visible()
         try {
+            layout_img.visible()
             Glide.with(context.applicationContext)
                     .load(iconUrl)
                     .into(image)
@@ -103,4 +103,5 @@ open class FeatureLayoutComponent(context: Context, attrs: AttributeSet?) :
             else view.findViewById<ConstraintLayout>(R.id.top_cl).gone()
         }
     }
+
 }
