@@ -37,10 +37,13 @@ import com.gigforce.common_ui.viewmodels.gig.GigViewModel
 import com.gigforce.common_ui.viewmodels.gig.SharedGigViewModel
 import com.gigforce.common_ui.viewmodels.gig.SharedGigViewState
 import com.gigforce.core.AppConstants
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.datamodels.gigpage.ContactPerson
 import com.gigforce.core.datamodels.gigpage.Gig
-import com.gigforce.core.datamodels.gigpage.models.*
+import com.gigforce.core.datamodels.gigpage.models.AttendanceType
+import com.gigforce.core.datamodels.gigpage.models.OtherOption
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toFirebaseTimeStamp
 import com.gigforce.core.extensions.toLocalDateTime
@@ -77,7 +80,6 @@ import kotlinx.android.synthetic.main.fragment_gig_page_2.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_address.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_feedback.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_gig_type.*
-import kotlinx.android.synthetic.main.fragment_gig_page_2_info.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_main.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_other_options.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_people_to_expect.*
@@ -112,7 +114,8 @@ class GigPage2Fragment : Fragment(),
 
     @Inject
     lateinit var navigation: INavigation
-
+    @Inject
+    lateinit var eventTracker: IEventTracker
     private val locationHelper: LocationHelper by lazy {
         LocationHelper(requireContext())
             .apply {
@@ -473,7 +476,13 @@ class GigPage2Fragment : Fragment(),
                             showFeedbackBottomSheet()
                         } else {
                             showToast("Check-in marked")
-                          //  plantLocationTrackers()
+                            eventTracker.pushEvent(
+                                TrackingEventArgs(
+                                    "attendance",
+                                    mapOf("isPresent" to true, "gigId" to gigId)
+                                )
+                            )
+                            //  plantLocationTrackers()
                         }
                     }
                     is Lce.Error -> {
@@ -626,9 +635,9 @@ class GigPage2Fragment : Fragment(),
 
         gig_duration.text =
             ": ${timeFormatter.format(gig.startDateTime.toDate())} - ${
-                timeFormatter.format(
-                    gig.endDateTime.toDate()
-                )
+            timeFormatter.format(
+                gig.endDateTime.toDate()
+            )
             }"
 
         if ((gig.latitude != null && gig.longitude != 0.0) || gig.geoPoint != null) {
