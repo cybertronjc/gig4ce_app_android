@@ -21,6 +21,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.gigforce.common_image_picker.image_capture_camerax.CameraActivity
@@ -35,6 +36,8 @@ import com.gigforce.common_ui.viewmodels.gig.GigViewModel
 import com.gigforce.common_ui.viewmodels.gig.SharedGigViewModel
 import com.gigforce.common_ui.viewmodels.gig.SharedGigViewState
 import com.gigforce.core.AppConstants
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.datamodels.gigpage.ContactPerson
 import com.gigforce.core.datamodels.gigpage.Gig
@@ -110,6 +113,8 @@ class GigPage2Fragment : Fragment(),
 
     @Inject
     lateinit var navigation: INavigation
+    @Inject
+    lateinit var eventTracker : IEventTracker
 
     private val locationHelper: LocationHelper by lazy {
         LocationHelper(requireContext())
@@ -475,6 +480,7 @@ class GigPage2Fragment : Fragment(),
                             showFeedbackBottomSheet()
                         } else {
                             showToast("Check-in marked")
+                            eventTracker.pushEvent(TrackingEventArgs())
                           //  plantLocationTrackers()
                         }
                     }
