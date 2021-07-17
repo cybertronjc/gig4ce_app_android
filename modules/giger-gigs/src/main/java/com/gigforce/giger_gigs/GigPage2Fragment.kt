@@ -1,7 +1,5 @@
 package com.gigforce.giger_gigs
 
-//import com.gigforce.app.modules.gigPage2.viewModels.SharedGigViewModel
-//import com.gigforce.app.modules.gigPage2.viewModels.SharedGigViewState
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
