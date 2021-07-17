@@ -7,9 +7,11 @@ import android.content.ContentResolver
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.util.Size
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,7 +34,6 @@ import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.DateHelper
 import com.gigforce.core.utils.VerificationValidations
-import com.gigforce.verification.BuildConfig
 import com.gigforce.verification.R
 import com.gigforce.verification.databinding.PanCardFragmentBinding
 import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
@@ -44,12 +45,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jaeger.library.StatusBarUtil
 import com.yalantis.ucrop.UCrop
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.aadhaar_card_image_upload_fragment.*
 import kotlinx.android.synthetic.main.veri_screen_info_component.view.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import java.io.ByteArrayOutputStream
 import java.io.File
 import java.net.URI
 import java.text.SimpleDateFormat
@@ -170,6 +169,7 @@ class PanCardFragment : Fragment(),
                     viewBinding.submitButton.text = getString(R.string.submit)
                     viewBinding.toplayoutblock.disableImageClick()
                     viewBinding.toplayoutblock.hideOnVerifiedDocuments()
+                    viewModel.getVerifiedStatus()
                 } else
                     showToast("Verification " + it.message)
             }
@@ -189,21 +189,19 @@ class PanCardFragment : Fragment(),
                     viewBinding.toplayoutblock.setVerificationSuccessfulView("PAN verified")
                     viewBinding.toplayoutblock.disableImageClick()
                     viewBinding.toplayoutblock.hideOnVerifiedDocuments()
+                    val list = ArrayList<KYCImageModel>()
                     it.panCardImagePath?.let {
                         if(it.isNotEmpty()) {
                             try{
                                 var modifiedString = it
                                 if(!it.startsWith("/"))
                                     modifiedString = "/$it"
-                                val list = listOf(KYCImageModel(text = getString(R.string.upload_pan_card_new), imagePath = buildConfig.getStorageBaseUrl()+modifiedString, imageUploaded = true))
-                                viewBinding.toplayoutblock.setImageViewPager(list)
+                                listOf(KYCImageModel(text = getString(R.string.upload_pan_card_new), imagePath = buildConfig.getStorageBaseUrl()+modifiedString, imageUploaded = true))
                             }catch (e:Exception){
-
                             }
-
                         }
                     }
-
+                    viewBinding.toplayoutblock.setImageViewPager(list)
                 }
             }
         })
@@ -224,7 +222,7 @@ class PanCardFragment : Fragment(),
 
         viewBinding.submitButton.setOnClickListener {
             hideSoftKeyboard()
-            if (toplayoutblock.isDocDontOptChecked()) {
+            if (viewBinding.toplayoutblock.isDocDontOptChecked()) {
                 checkForNextDoc()
             } else {
                 if (viewBinding.submitButton.tag?.toString().equals(CONFIRM_TAG)) {
@@ -246,10 +244,10 @@ class PanCardFragment : Fragment(),
             }
         }
 
-        viewBinding.toplayoutblock.querytext.setOnClickListener {
+        viewBinding.toplayoutblock.whyweneedit.setOnClickListener {
             showWhyWeNeedThisDialog()
         }
-        viewBinding.toplayoutblock.imageView7.setOnClickListener {
+        viewBinding.toplayoutblock.iconwhyweneed.setOnClickListener {
             showWhyWeNeedThisDialog()
         }
         viewBinding.appBarPan.apply {
@@ -421,43 +419,6 @@ class PanCardFragment : Fragment(),
         }
     }
 
-//    private fun showImageInfoLayout() {
-//        panInfoLayout.visibility = View.VISIBLE
-//    }
-//
-//    private fun showPanImageLayout() {
-//        panImageHolder.visibility = View.VISIBLE
-//    }
-//
-//    private fun hidePanImageAndInfoLayout() {
-//        panImageHolder.visibility = View.GONE
-//        panInfoLayout.visibility = View.GONE
-//    }
-//
-//    private fun enableSubmitButton() {
-//        panSubmitSliderBtn.isEnabled = true
-//
-//        panSubmitSliderBtn.outerColor =
-//            ResourcesCompat.getColor(resources, R.color.light_pink, null)
-//        panSubmitSliderBtn.innerColor =
-//            ResourcesCompat.getColor(resources, R.color.lipstick, null)
-//    }
-//
-//    private fun disableSubmitButton() {
-//        panSubmitSliderBtn.isEnabled = false
-//
-//        panSubmitSliderBtn.outerColor =
-//            ResourcesCompat.getColor(resources, R.color.light_grey, null)
-//        panSubmitSliderBtn.innerColor =
-//            ResourcesCompat.getColor(resources, R.color.warm_grey, null)
-//    }
-
-    //    override fun onImageSourceSelected(source: ImageSource) {
-//        showImageInfoLayout()
-//
-//        if (panDataCorrectCB.isChecked)
-//            enableSubmitButton()
-//    }
     private fun callKycVerificationApi() {
         var list = listOf(
                 Data("name", viewBinding.nameTil.editText?.text.toString()),
@@ -520,10 +481,19 @@ class PanCardFragment : Fragment(),
         )
         val resultIntent: Intent = Intent()
         resultIntent.putExtra("filename", imageFileName + EXTENSION)
-        uCrop.withAspectRatio(1F, 1F)
+        val size = getImageDimensions(uri)
+        uCrop.withAspectRatio(size.width.toFloat(), size.height.toFloat())
         uCrop.withMaxResultSize(1920, 1080)
         uCrop.withOptions(getCropOptions())
         uCrop.start(requireContext(), this)
+    }
+    private fun getImageDimensions(uri: Uri): Size {
+        val options: BitmapFactory.Options = BitmapFactory.Options()
+        options.inJustDecodeBounds = true
+        BitmapFactory.decodeFile(File(uri.path).absolutePath, options)
+        val imageHeight: Int = options.outHeight
+        val imageWidth: Int = options.outWidth
+        return Size(imageWidth, imageHeight)
     }
 
     private fun getCropOptions(): UCrop.Options {

@@ -26,7 +26,7 @@
 
 
     <ImageView
-        android:id="@+id/imageView7"
+        android:id="@+id/iconwhyweneed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/dp_sm1"
@@ -35,16 +35,16 @@
         app:layout_constraintTop_toTopOf="@id/uppercaption" />
 
     <TextView
-        android:id="@+id/querytext"
+        android:id="@+id/whyweneedit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/dp_xsm1"
         android:text="Why we need this"
-        app:layout_constraintEnd_toStartOf="@+id/imageView7"
-        app:layout_constraintTop_toTopOf="@+id/imageView7" />
+        app:layout_constraintEnd_toStartOf="@+id/iconwhyweneed"
+        app:layout_constraintTop_toTopOf="@+id/iconwhyweneed" />
 
     <CheckBox
-        android:id="@+id/missingtext"
+        android:id="@+id/checkboxidonthave"
         style="@style/Caption1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -54,7 +54,7 @@
         app:layout_constraintTop_toBottomOf="@+id/title" />
 
     <TextView
-        android:id="@+id/docdetail"
+        android:id="@+id/docsubtitledetail"
         style="@style/Caption1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -62,8 +62,8 @@
         android:layout_marginRight="@dimen/dp_sm1"
         android:text="Please upload your PAN Card (Front and Back Side) for Document verification Process"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/missingtext"
-        app:layout_constraintTop_toBottomOf="@+id/missingtext" />
+        app:layout_constraintStart_toStartOf="@+id/checkboxidonthave"
+        app:layout_constraintTop_toBottomOf="@+id/checkboxidonthave" />
 
     <TextView
         android:id="@+id/uploadHereText"
@@ -75,8 +75,8 @@
         android:textColor="@color/black3"
         android:fontFamily="@font/lato_bold"
         android:layout_marginTop="@dimen/size_24"
-        app:layout_constraintStart_toStartOf="@+id/missingtext"
-        app:layout_constraintTop_toBottomOf="@id/docdetail" />
+        app:layout_constraintStart_toStartOf="@+id/checkboxidonthave"
+        app:layout_constraintTop_toBottomOf="@id/docsubtitledetail" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager2"
@@ -103,7 +103,7 @@
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/uploadLayout"
+        android:id="@+id/statusDialogLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"

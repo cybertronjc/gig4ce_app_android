@@ -58,7 +58,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
     <ImageView
-        android:id="@+id/imageView7"
+        android:id="@+id/iconwhyweneed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/dp_sm1"
@@ -75,8 +75,8 @@
         android:visibility="gone"
         android:text="Why we need this"
         style="@style/Caption1"
-        app:layout_constraintEnd_toStartOf="@+id/imageView7"
-        app:layout_constraintTop_toTopOf="@+id/imageView7" />
+        app:layout_constraintEnd_toStartOf="@+id/iconwhyweneed"
+        app:layout_constraintTop_toTopOf="@+id/iconwhyweneed" />
 
     <TextView
         android:id="@+id/textView7"

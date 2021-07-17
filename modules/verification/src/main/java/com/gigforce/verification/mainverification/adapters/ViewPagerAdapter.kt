@@ -47,6 +47,8 @@ class ViewPagerAdapter(private val itemClickListener: (View) -> (Unit)) : Recycl
         setImageClickable = enable
         notifyDataSetChanged()
     }
+    private var imageDetectionStarted = false
+    private var imageFound = false
     inner class ViewPagerViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView),
          View.OnClickListener {
 
@@ -66,11 +68,13 @@ class ViewPagerAdapter(private val itemClickListener: (View) -> (Unit)) : Recycl
 
 
         fun bind(kYCImageModel: KYCImageModel) {
+            imageDetectionStarted = true
             title.text = kYCImageModel.text
             if (kYCImageModel.imagePath.isNullOrBlank()) {
                 GlideApp.with(itemView.context)
                     .load(kYCImageModel.imageIcon)
                     .into(backgroundImage)
+
             }
             else{
                 kYCImageModel.imagePath?.let {

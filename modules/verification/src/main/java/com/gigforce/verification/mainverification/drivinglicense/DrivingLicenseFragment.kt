@@ -7,9 +7,11 @@ import android.content.ContentResolver
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.util.Size
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -229,10 +231,10 @@ class DrivingLicenseFragment : Fragment(),
             }
         }
 
-        viewBinding.toplayoutblock.querytext.setOnClickListener {
+        viewBinding.toplayoutblock.whyweneedit.setOnClickListener {
             showWhyWeNeedThisDialog()
         }
-        viewBinding.toplayoutblock.imageView7.setOnClickListener {
+        viewBinding.toplayoutblock.iconwhyweneed.setOnClickListener {
             showWhyWeNeedThisDialog()
         }
         viewBinding.appBarDl.apply {
@@ -324,6 +326,7 @@ class DrivingLicenseFragment : Fragment(),
                     viewBinding.toplayoutblock.disableImageClick()
                     viewBinding.toplayoutblock.hideOnVerifiedDocuments()
                     isDLVerified = true
+                    viewModel.getVerifiedStatus()
                 } else
                     showToast("Verification " + it.message)
             }
@@ -344,10 +347,10 @@ class DrivingLicenseFragment : Fragment(),
                     viewBinding.toplayoutblock.hideOnVerifiedDocuments()
                     var list = ArrayList<KYCImageModel>()
                     it.frontImage?.let {
-                        getDLImages(it)?.let { list.add(KYCImageModel(text = getString(R.string.upload_pan_card_new), imagePath = it, imageUploaded = true)) }
+                        getDBImageUrl(it)?.let { list.add(KYCImageModel(text = getString(R.string.upload_pan_card_new), imagePath = it, imageUploaded = true)) }
                     }
                     it.backImage?.let {
-                        getDLImages(it)?.let { list.add(KYCImageModel(text = getString(R.string.upload_pan_card_new), imagePath = it, imageUploaded = true)) }
+                        getDBImageUrl(it)?.let { list.add(KYCImageModel(text = getString(R.string.upload_pan_card_new), imagePath = it, imageUploaded = true)) }
                     }
                     viewBinding.toplayoutblock.setImageViewPager(list)
                 }
@@ -367,7 +370,7 @@ class DrivingLicenseFragment : Fragment(),
 
     }
 
-    fun getDLImages(imagePath: String): String? {
+    fun getDBImageUrl(imagePath: String): String? {
         if (imagePath.isNotBlank()) {
             try {
                 var modifiedString = imagePath
@@ -727,19 +730,27 @@ class DrivingLicenseFragment : Fragment(),
         )
         val resultIntent: Intent = Intent()
         resultIntent.putExtra("filename", imageFileName + EXTENSION)
-        uCrop.withAspectRatio(1F, 1F)
+        val size = getImageDimensions(uri)
+        uCrop.withAspectRatio(size.width.toFloat(), size.height.toFloat())
         uCrop.withMaxResultSize(1920, 1080)
         uCrop.withOptions(getCropOptions())
         uCrop.start(requireContext(), this)
     }
-
+    private fun getImageDimensions(uri: Uri): Size {
+        val options: BitmapFactory.Options = BitmapFactory.Options()
+        options.inJustDecodeBounds = true
+        BitmapFactory.decodeFile(File(uri.path).absolutePath, options)
+        val imageHeight: Int = options.outHeight
+        val imageWidth: Int = options.outWidth
+        return Size(imageWidth, imageHeight)
+    }
     private fun getCropOptions(): UCrop.Options {
         val options: UCrop.Options = UCrop.Options()
         options.setCompressionQuality(70)
         options.setCompressionFormat(Bitmap.CompressFormat.PNG)
 //        options.setMaxBitmapSize(1000)
         options.setHideBottomControls((false))
-        options.setFreeStyleCropEnabled(false)
+        options.setFreeStyleCropEnabled(true)
         options.setStatusBarColor(ResourcesCompat.getColor(resources, R.color.topBarDark, null))
         options.setToolbarColor(ResourcesCompat.getColor(resources, R.color.topBarDark, null))
         options.setToolbarTitle(getString(R.string.crop_and_rotate))

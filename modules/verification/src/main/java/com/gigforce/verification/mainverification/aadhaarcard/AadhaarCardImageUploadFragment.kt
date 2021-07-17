@@ -155,10 +155,10 @@ class AadhaarCardImageUploadFragment : Fragment(),
             }
         }
 
-        viewBinding.toplayoutblock.querytext.setOnClickListener {
+        viewBinding.toplayoutblock.whyweneedit.setOnClickListener {
             showWhyWeNeedThisDialog()
         }
-        viewBinding.toplayoutblock.imageView7.setOnClickListener {
+        viewBinding.toplayoutblock.iconwhyweneed.setOnClickListener {
             showWhyWeNeedThisDialog()
         }
         viewBinding.appBarAadhar.apply {

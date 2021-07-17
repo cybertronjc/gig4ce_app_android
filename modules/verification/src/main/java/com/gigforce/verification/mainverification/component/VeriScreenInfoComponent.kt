@@ -72,26 +72,26 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
     }
 
     fun hideOnVerifiedDocuments() {
-        imageView7.gone()
-        querytext.gone()
-        docdetail.gone()
+        iconwhyweneed.gone()
+        whyweneedit.gone()
+        docsubtitledetail.gone()
     }
 
     fun isDocDontOptChecked(): Boolean {
-        return missingtext.isChecked
+        return checkboxidonthave.isChecked
     }
 
     private fun setMissingDocText(missingdoctext: String) {
-        missingtext.text = missingdoctext
+        checkboxidonthave.text = missingdoctext
     }
 
     private fun setQueryStr(querytextstr: String) {
-        querytext.text = querytextstr
+        whyweneedit.text = querytextstr
     }
 
 
     private fun setDocInfo(docinfostr: String) {
-        docdetail.text = docinfostr
+        docsubtitledetail.text = docinfostr
     }
 
 
@@ -110,6 +110,14 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
     fun disableImageClick() {
         adapter.let {
             it.setImageClickable(false)
+            it.notifyDataSetChanged()
+
+        }
+    }
+
+    fun enableImageClick(){
+        adapter.let {
+            it.setImageClickable(true)
             it.notifyDataSetChanged()
 
         }
@@ -142,32 +150,33 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
         adapter.updateData(position, uri)
     }
 
+
     fun uploadStatusLayout(status: Int, title: String, subTitle: String) {
-        uploadLayout.visible()
+        statusDialogLayout.visible()
         when (status) {
             AppConstants.UPLOAD_SUCCESS -> {
-                uploadLayout.background = resources.getDrawable(R.drawable.upload_successfull_layout_bg)
+                statusDialogLayout.background = resources.getDrawable(R.drawable.upload_successfull_layout_bg)
                 uploadTitle.setTextColor(context.resources.getColor(R.color.upload_success))
                 uploadIcon.setImageDrawable(resources.getDrawable(R.drawable.ic_baseline_verified_24))
                 uploadTitle.text = title
                 uploadSubTitle.text = subTitle
             }
             AppConstants.UNABLE_TO_FETCH_DETAILS -> {
-                uploadLayout.background = resources.getDrawable(R.drawable.fetch_details_error_layout_bg)
+                statusDialogLayout.background = resources.getDrawable(R.drawable.fetch_details_error_layout_bg)
                 uploadTitle.setTextColor(context.resources.getColor(R.color.upload_mismatch))
                 uploadIcon.setImageDrawable(resources.getDrawable(R.drawable.ic_baseline_privacy_tip_24))
                 uploadTitle.text = title
                 uploadSubTitle.text = subTitle
             }
             AppConstants.DETAILS_MISMATCH -> {
-                uploadLayout.background = resources.getDrawable(R.drawable.details_mismatch_layout_bg)
+                statusDialogLayout.background = resources.getDrawable(R.drawable.details_mismatch_layout_bg)
                 uploadTitle.setTextColor(context.resources.getColor(R.color.upload_error))
                 uploadIcon.setImageDrawable(resources.getDrawable(R.drawable.ic_dangerous_white_48dp))
                 uploadTitle.text = title
                 uploadSubTitle.text = subTitle
             }
             AppConstants.VERIFICATION_COMPLETED -> {
-                uploadLayout.background = resources.getDrawable(R.drawable.upload_successfull_layout_bg)
+                statusDialogLayout.background = resources.getDrawable(R.drawable.upload_successfull_layout_bg)
                 uploadTitle.setTextColor(context.resources.getColor(R.color.upload_success))
                 uploadIcon.setImageDrawable(resources.getDrawable(R.drawable.ic_baseline_verified_user_24))
                 uploadTitle.text = title
@@ -177,13 +186,11 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
     }
 
     fun setVerificationSuccessfulView(titleStr: String, upperCaptionStr: String? = null) {
-        missingtext.gone()
+        checkboxidonthave.gone()
         titleStr.let {
             title.text = it
         }
-
-        docdetail.text = resources.getString(R.string.veri_done_text)
-        upperCaptionStr?.let { uppercaption.text } ?: run { uppercaption.text = "Congratulation" }
+        upperCaptionStr?.let { uppercaption.text = it } ?: run { uppercaption.text = "Congratulation" }
         uploadHereText.gone()
     }
 
@@ -193,6 +200,26 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
 
     fun setPrimaryClick(pageClickListener: OnClickListener) {
         this.pageClickListener = pageClickListener
+    }
+
+
+
+    fun resetAllViews(){
+        docsubtitledetail.visible()
+        iconwhyweneed.visible()
+        whyweneedit.visible()
+        enableImageClick()
+        statusDialogLayout.gone()
+    }
+    fun viewChangeOnVerified(){
+        docsubtitledetail.gone()
+        iconwhyweneed.gone()
+        whyweneedit.gone()
+        disableImageClick()
+    }
+    fun viewChangeOnStarted(){
+        viewChangeOnVerified()
+        statusDialogLayout.gone()
     }
 
 }
