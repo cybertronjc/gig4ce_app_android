@@ -174,7 +174,7 @@ class BankAccountFragment : Fragment(),
         viewBinding.toplayoutblock.viewChangeOnStarted()
         viewBinding.screenLoaderBar.visible()
         viewBinding.progressMessage.text =
-            "If it is taking longer time than 20 sec. You can come back and check"
+            "If it is taking longer time than 1 minute. \nYou can come back and check"
         viewBinding.submitButton.gone()
         viewBinding.progressBar.gone()
         viewBinding.belowLayout.gone()

@@ -31,9 +31,9 @@ class VerificationMainViewModel @Inject constructor (private val iBuildConfigVM:
 
         var allDocs = ArrayList<SimpleCardDVM>()
         allDocs.add(SimpleCardDVM("PAN Card","Tap to select", R.drawable.ic_badge_black_24dp,"verification/pancardimageupload", false))
-        allDocs.add(SimpleCardDVM("Aadhaar Card","Tap to select",R.drawable.ic_account_box_black_24dp, "verification/aadhaarcardimageupload", false))
         allDocs.add(SimpleCardDVM("Driving licence","Tap to select",R.drawable.ic_directions_car_black_24dp, "verification/drivinglicenseimageupload", false))
         allDocs.add(SimpleCardDVM("Bank Details","Tap to select",R.drawable.ic_account_balance_black_24dp, "verification/bank_account_fragment", false))
+        allDocs.add(SimpleCardDVM("Aadhaar Card","Tap to select",R.drawable.ic_account_box_black_24dp, "verification/aadhaarcardimageupload", false))
         _allDocumentsData.value = allDocs
 
         verificationKycRepo.db.collection("Verification").document(verificationKycRepo.getUID()).addSnapshotListener { value, error ->
@@ -41,9 +41,9 @@ class VerificationMainViewModel @Inject constructor (private val iBuildConfigVM:
                 val doc = value.toObject(VerificationBaseModel::class.java)
                 var allDocs = ArrayList<SimpleCardDVM>()
                 allDocs.add(SimpleCardDVM("PAN Card","Tap to select", R.drawable.ic_badge_black_24dp,"verification/pancardimageupload", doc?.pan_card?.verified))
-                allDocs.add(SimpleCardDVM("Aadhaar Card","Tap to select",R.drawable.ic_account_box_black_24dp, "verification/aadhaarcardimageupload", doc?.aadhar_card?.verified))
                 allDocs.add(SimpleCardDVM("Driving licence","Tap to select",R.drawable.ic_directions_car_black_24dp, "verification/drivinglicenseimageupload", doc?.driving_license?.verified))
                 allDocs.add(SimpleCardDVM("Bank Details","Tap to select",R.drawable.ic_account_balance_black_24dp, "verification/bank_account_fragment", doc?.bank_details?.verified))
+                allDocs.add(SimpleCardDVM("Aadhaar Card","Tap to select",R.drawable.ic_account_box_black_24dp, "verification/aadhaarcardimageupload", doc?.aadhar_card?.verified))
                 _allDocumentsData.value = allDocs
                 doc?.let {
                     var allVerified = true
