@@ -6,6 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.datamodels.GigerVerificationStatus
+import com.gigforce.core.datamodels.verification.PanCardDataModel
+import com.gigforce.core.datamodels.verification.VerificationBaseModel
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.verification.mainverification.Data
 import com.gigforce.verification.mainverification.KycOcrResultModel
@@ -29,8 +31,8 @@ class PanCardViewModel @Inject constructor(
     val _kycVerifyResult = MutableLiveData<KycOcrResultModel>()
     val kycVerifyResult: LiveData<KycOcrResultModel>  = _kycVerifyResult
 
-    val _verifiedStatus = MutableLiveData<Boolean>()
-    val verifiedStatus: LiveData<Boolean> = _verifiedStatus
+    val _verifiedStatus = MutableLiveData<PanCardDataModel>()
+    val verifiedStatus: LiveData<PanCardDataModel> = _verifiedStatus
 
     fun getKycOcrResult(type: String, subType: String, image: MultipartBody.Part) =
         viewModelScope.launch {
@@ -56,11 +58,9 @@ class PanCardViewModel @Inject constructor(
     fun getVerifiedStatus(){
         viewModelScope.launch {
             try {
-                _verifiedStatus.value = verificationKycRepo.getVerificationStatus()?.pan_card?.verified
+                _verifiedStatus.value = verificationKycRepo.getVerificationStatus()?.pan_card
 
             }catch (e: Exception){
-                _verifiedStatus.value = false
-
             }
         }
     }

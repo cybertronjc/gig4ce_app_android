@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
 
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/dp_sm1">
 
     <TextView
         android:id="@+id/tv_number_rv_access_frag"
@@ -13,6 +14,7 @@
         android:letterSpacing="0"
         android:paddingEnd="@dimen/size_5"
         android:text="A."
+        android:layout_marginStart="@dimen/dp_sm1"
         android:textColor="@color/black_85"
         android:textSize="@dimen/font_16"
         app:layout_constraintBottom_toBottomOf="@+id/tv_option_rv_access_frag"
@@ -31,6 +33,7 @@
         android:paddingBottom="@dimen/size_13"
         android:textColor="@color/black_85"
         android:textSize="@dimen/font_14"
+        android:layout_marginEnd="@dimen/dp_sm1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/tv_number_rv_access_frag"
         app:layout_constraintTop_toTopOf="parent"

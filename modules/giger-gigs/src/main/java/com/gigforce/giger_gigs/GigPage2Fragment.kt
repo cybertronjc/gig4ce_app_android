@@ -21,6 +21,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.gigforce.common_image_picker.image_capture_camerax.CameraActivity
@@ -416,14 +417,18 @@ class GigPage2Fragment : Fragment(),
             ""
         }
 
-        viewModel.markAttendance(
-            location = location,
-            locationPhysicalAddress = locationPhysicalAddress,
-            image = imageClickedPath!!,
-            checkInTimeAccToUser = checkInTimeAccToUser,
-            remarks = "test",
-            distanceBetweenGigAndUser = distanceBetweenGigAndUser
-        )
+        imageClickedPath?.let {
+            viewModel.markAttendance(
+                location = location,
+                locationPhysicalAddress = locationPhysicalAddress,
+                image = it,
+                checkInTimeAccToUser = checkInTimeAccToUser,
+                remarks = "test",
+                distanceBetweenGigAndUser = distanceBetweenGigAndUser
+            )
+        }
+
+
     }
 
     private fun showAlertDialog(message: String) {

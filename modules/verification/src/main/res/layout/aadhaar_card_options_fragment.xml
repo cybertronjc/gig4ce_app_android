@@ -37,7 +37,7 @@
 
 
     <ImageView
-        android:id="@+id/imageView7"
+        android:id="@+id/iconwhyweneed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/dp_sm1"
@@ -51,8 +51,8 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/dp_xsm1"
         android:text="Why we need this"
-        app:layout_constraintEnd_toStartOf="@+id/imageView7"
-        app:layout_constraintTop_toTopOf="@+id/imageView7" />
+        app:layout_constraintEnd_toStartOf="@+id/iconwhyweneed"
+        app:layout_constraintTop_toTopOf="@+id/iconwhyweneed" />
 
     <com.gigforce.common_ui.components.atoms.GrayLine
         android:id="@+id/grayLine2"

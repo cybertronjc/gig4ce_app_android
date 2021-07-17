@@ -113,6 +113,17 @@ class VerificationKycRepo(private val iBuildConfigVM: IBuildConfigVM) :
             return false
         }
     }
+    suspend fun setVerificationStatusStringToBlank(){
+        try {
+            db.collection(getCollectionName()).document(getUID()).updateOrThrow(
+                mapOf(
+                    "bank_details.status" to ""
+                )
+            )
+        }catch (e: Exception){
+        }
+    }
+
 
      suspend fun getVerificationStatus(): VerificationBaseModel? {
          try {

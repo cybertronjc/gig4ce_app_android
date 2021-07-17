@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_sm1"
         android:layout_marginTop="@dimen/dp_xl3"
-        android:text="Submit Documents"
+        android:text="Submit KYC Documents"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/appBar2" />
 
@@ -33,9 +33,9 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_sm1"
         android:layout_marginTop="@dimen/dp_large"
-        android:src="@drawable/ic_ques_round"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintTop_toBottomOf="@+id/textView4"
+        android:src="@drawable/ic_baseline_help_filled_24"/>
 
     <TextView
         android:id="@+id/textView6"
@@ -44,7 +44,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_sm3"
         android:layout_marginRight="@dimen/dp_xl6"
-        android:text="We need to verify your information. The acceptable documents involve your PAN Card, Aadhar, DL and Bank Details."
+        android:text="We need to verify your information. Select the documents below that are ready to verify"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView3"
         app:layout_constraintTop_toTopOf="@+id/imageView3" />
@@ -54,15 +54,16 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="@dimen/dp_large"
+        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
     <ImageView
-        android:id="@+id/imageView7"
+        android:id="@+id/iconwhyweneed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/dp_sm1"
         android:visibility="gone"
-        android:src="@drawable/ic_ques_round"
+        android:src="@drawable/ic_question_mark"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/textView4" />
 
@@ -74,8 +75,8 @@
         android:visibility="gone"
         android:text="Why we need this"
         style="@style/Caption1"
-        app:layout_constraintEnd_toStartOf="@+id/imageView7"
-        app:layout_constraintTop_toTopOf="@+id/imageView7" />
+        app:layout_constraintEnd_toStartOf="@+id/iconwhyweneed"
+        app:layout_constraintTop_toTopOf="@+id/iconwhyweneed" />
 
     <TextView
         android:id="@+id/textView7"
@@ -85,6 +86,7 @@
         android:layout_marginLeft="@dimen/dp_sm1"
         android:layout_marginTop="@dimen/dp_large"
         android:layout_marginRight="@dimen/dp_xl2"
+        android:visibility="gone"
         android:text="Select the documents that you feel are ready to submit."
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -95,7 +97,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginLeft="@dimen/dp_sm3"
-        android:layout_marginTop="@dimen/dp_xsm1"
+        android:layout_marginTop="@dimen/dp_large"
         android:layout_marginRight="@dimen/dp_sm3"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@id/next"
@@ -109,7 +111,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/button_style"
-        android:text="Next Step"
+        android:text="Next"
         android:padding="@dimen/dp_sm1"
         android:layout_marginBottom="@dimen/dp_xl1"
         app:layout_constraintBottom_toBottomOf="parent"

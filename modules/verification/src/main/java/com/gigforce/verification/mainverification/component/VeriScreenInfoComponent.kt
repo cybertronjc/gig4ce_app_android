@@ -66,24 +66,32 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
             setQueryStr(querytextstr)
             setMissingDocText(missingdoctext)
 
-            missingtext.setOnCheckedChangeListener { buttonView, isChecked ->
-                if (isChecked) navigation.popBackStack()
-            }
+
         }
 
     }
 
+    fun hideOnVerifiedDocuments() {
+        iconwhyweneed.gone()
+        whyweneedit.gone()
+        docsubtitledetail.gone()
+    }
+
+    fun isDocDontOptChecked(): Boolean {
+        return checkboxidonthave.isChecked
+    }
+
     private fun setMissingDocText(missingdoctext: String) {
-        missingtext.text = missingdoctext
+        checkboxidonthave.text = missingdoctext
     }
 
     private fun setQueryStr(querytextstr: String) {
-        querytext.text = querytextstr
+        whyweneedit.text = querytextstr
     }
 
 
     private fun setDocInfo(docinfostr: String) {
-        docdetail.text = docinfostr
+        docsubtitledetail.text = docinfostr
     }
 
 
@@ -107,21 +115,34 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
         }
     }
 
-    fun setImageViewPager(list: List<KYCImageModel>) {
-        viewPager2.visible()
-        tabLayout.visible()
-        adapter = ViewPagerAdapter {
-            pageClickListener?.onClick(it)
-        }
-        adapter.setItem(list)
-        viewPager2.adapter = adapter
-        if (list.size == 1) {
-            tabLayout.gone()
-        }
-        Log.d("adapter", "" + adapter.itemCount + " list: " + list.toString())
-        TabLayoutMediator(tabLayout, viewPager2) { tab, position ->
+    fun enableImageClick(){
+        adapter.let {
+            it.setImageClickable(true)
+            it.notifyDataSetChanged()
 
-        }.attach()
+        }
+    }
+
+    fun setImageViewPager(list: List<KYCImageModel>) {
+
+        if (list.isEmpty()) {
+            viewPager2.gone()
+            tabLayout.gone()
+        } else {
+            viewPager2.visible()
+            tabLayout.visible()
+            adapter = ViewPagerAdapter {
+                pageClickListener?.onClick(it)
+            }
+            adapter.setItem(list)
+            viewPager2.adapter = adapter
+            if (list.size == 1) {
+                tabLayout.gone()
+            }
+            Log.d("adapter", "" + adapter.itemCount + " list: " + list.toString())
+            TabLayoutMediator(tabLayout, viewPager2) { tab, position ->
+            }.attach()
+        }
 
     }
 
@@ -129,32 +150,33 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
         adapter.updateData(position, uri)
     }
 
+
     fun uploadStatusLayout(status: Int, title: String, subTitle: String) {
-        uploadLayout.visible()
+        statusDialogLayout.visible()
         when (status) {
             AppConstants.UPLOAD_SUCCESS -> {
-                uploadLayout.background = resources.getDrawable(R.drawable.upload_successfull_layout_bg)
+                statusDialogLayout.background = resources.getDrawable(R.drawable.upload_successfull_layout_bg)
                 uploadTitle.setTextColor(context.resources.getColor(R.color.upload_success))
                 uploadIcon.setImageDrawable(resources.getDrawable(R.drawable.ic_baseline_verified_24))
                 uploadTitle.text = title
                 uploadSubTitle.text = subTitle
             }
             AppConstants.UNABLE_TO_FETCH_DETAILS -> {
-                uploadLayout.background = resources.getDrawable(R.drawable.fetch_details_error_layout_bg)
+                statusDialogLayout.background = resources.getDrawable(R.drawable.fetch_details_error_layout_bg)
                 uploadTitle.setTextColor(context.resources.getColor(R.color.upload_mismatch))
                 uploadIcon.setImageDrawable(resources.getDrawable(R.drawable.ic_baseline_privacy_tip_24))
                 uploadTitle.text = title
                 uploadSubTitle.text = subTitle
             }
             AppConstants.DETAILS_MISMATCH -> {
-                uploadLayout.background = resources.getDrawable(R.drawable.details_mismatch_layout_bg)
+                statusDialogLayout.background = resources.getDrawable(R.drawable.details_mismatch_layout_bg)
                 uploadTitle.setTextColor(context.resources.getColor(R.color.upload_error))
                 uploadIcon.setImageDrawable(resources.getDrawable(R.drawable.ic_dangerous_white_48dp))
                 uploadTitle.text = title
                 uploadSubTitle.text = subTitle
             }
             AppConstants.VERIFICATION_COMPLETED -> {
-                uploadLayout.background = resources.getDrawable(R.drawable.upload_successfull_layout_bg)
+                statusDialogLayout.background = resources.getDrawable(R.drawable.upload_successfull_layout_bg)
                 uploadTitle.setTextColor(context.resources.getColor(R.color.upload_success))
                 uploadIcon.setImageDrawable(resources.getDrawable(R.drawable.ic_baseline_verified_user_24))
                 uploadTitle.text = title
@@ -163,14 +185,12 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
         }
     }
 
-    fun setVerificationSuccessfulView(titleStr: String? = null) {
-        missingtext.gone()
-        titleStr?.let {
+    fun setVerificationSuccessfulView(titleStr: String, upperCaptionStr: String? = null) {
+        checkboxidonthave.gone()
+        titleStr.let {
             title.text = it
-        } ?: run { title.text = resources.getString(R.string.congratulations) }
-
-        docdetail.text = resources.getString(R.string.veri_done_text)
-        uppercaption.text = "Verification"
+        }
+        upperCaptionStr?.let { uppercaption.text = it } ?: run { uppercaption.text = "Congratulation" }
         uploadHereText.gone()
     }
 
@@ -180,6 +200,26 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
 
     fun setPrimaryClick(pageClickListener: OnClickListener) {
         this.pageClickListener = pageClickListener
+    }
+
+
+
+    fun resetAllViews(){
+        docsubtitledetail.visible()
+        iconwhyweneed.visible()
+        whyweneedit.visible()
+        enableImageClick()
+        statusDialogLayout.gone()
+    }
+    fun viewChangeOnVerified(){
+        docsubtitledetail.gone()
+        iconwhyweneed.gone()
+        whyweneedit.gone()
+        disableImageClick()
+    }
+    fun viewChangeOnStarted(){
+        viewChangeOnVerified()
+        statusDialogLayout.gone()
     }
 
 }

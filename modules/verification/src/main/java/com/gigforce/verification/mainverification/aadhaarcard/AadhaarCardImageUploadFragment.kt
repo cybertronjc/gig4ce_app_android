@@ -16,6 +16,7 @@ import android.view.ViewGroup
 import android.widget.DatePicker
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -34,9 +35,12 @@ import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.gigforce.verification.gigerVerfication.aadharCard.AadharCardSides
 import com.gigforce.verification.mainverification.Data
 import com.gigforce.verification.mainverification.VerificationClickOrSelectImageBottomSheet
+import com.gigforce.verification.util.VerificationConstants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.jaeger.library.StatusBarUtil
 import com.yalantis.ucrop.UCrop
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.aadhaar_card_image_upload_fragment.*
 import kotlinx.android.synthetic.main.veri_screen_info_component.view.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -77,9 +81,11 @@ class AadhaarCardImageUploadFragment : Fragment(),
     private fun activeLoader(activate: Boolean) {
         if (activate) {
             viewBinding.progressBar.visible()
+            viewBinding.screenLoaderBar.visible()
             viewBinding.submitButton.isEnabled = false
         } else {
             viewBinding.progressBar.gone()
+            viewBinding.screenLoaderBar.gone()
             viewBinding.submitButton.isEnabled = true
         }
     }
@@ -95,12 +101,27 @@ class AadhaarCardImageUploadFragment : Fragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        getDataFromIntent(savedInstanceState)
         setViews()
         observer()
         listeners()
 
     }
+    var allNavigationList = ArrayList<String>()
+    private fun getDataFromIntent(savedInstanceState: Bundle?) {
+        savedInstanceState?.let {
+            it.getStringArrayList(VerificationConstants.NAVIGATION_STRINGS)?.let { arr ->
+                allNavigationList = arr
+            }
+        } ?: run {
+            arguments?.let {
+                it.getStringArrayList(VerificationConstants.NAVIGATION_STRINGS)?.let { arrData ->
+                    allNavigationList = arrData
+                }
+            }
+        }
 
+    }
     private fun listeners() {
         viewBinding.toplayoutblock.setPrimaryClick(View.OnClickListener {
             //call for bottom sheet
@@ -115,25 +136,29 @@ class AadhaarCardImageUploadFragment : Fragment(),
         viewBinding.submitButton.setOnClickListener {
 
             hideSoftKeyboard()
-            if (viewBinding.submitButton.tag?.toString().equals(CONFIRM_TAG)) {
-                activity?.onBackPressed()
+            if (toplayoutblock.isDocDontOptChecked()) {
+                checkForNextDoc()
             } else {
-                if (viewBinding.aadharcardTil.editText?.text?.length != 12) {
-                    MaterialAlertDialogBuilder(requireContext())
-                            .setTitle(getString(R.string.alert))
-                            .setMessage(getString(R.string.enter_valid_aadhar_no))
-                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                            .show()
-                    return@setOnClickListener
+                if (viewBinding.submitButton.tag?.toString().equals(CONFIRM_TAG)) {
+                    checkForNextDoc()
+                } else {
+                    if (viewBinding.aadharcardTil.editText?.text?.length != 12) {
+                        MaterialAlertDialogBuilder(requireContext())
+                                .setTitle(getString(R.string.alert))
+                                .setMessage(getString(R.string.enter_valid_aadhar_no))
+                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                                .show()
+                        return@setOnClickListener
+                    }
+                    callKycVerificationApi()
                 }
-                callKycVerificationApi()
             }
         }
 
-        viewBinding.toplayoutblock.querytext.setOnClickListener {
+        viewBinding.toplayoutblock.whyweneedit.setOnClickListener {
             showWhyWeNeedThisDialog()
         }
-        viewBinding.toplayoutblock.imageView7.setOnClickListener {
+        viewBinding.toplayoutblock.iconwhyweneed.setOnClickListener {
             showWhyWeNeedThisDialog()
         }
         viewBinding.appBarAadhar.apply {
@@ -142,7 +167,19 @@ class AadhaarCardImageUploadFragment : Fragment(),
             })
         }
     }
+    private fun checkForNextDoc() {
+        if (allNavigationList.size == 0) {
+            activity?.onBackPressed()
+        } else {
+            var navigationsForBundle = emptyList<String>()
+            if (allNavigationList.size > 1) {
+                navigationsForBundle = allNavigationList.slice(IntRange(1, allNavigationList.size - 1)).filter { it.length > 0 }
+            }
+            navigation.popBackStack()
+            navigation.navigateTo(allNavigationList.get(0), bundleOf(VerificationConstants.NAVIGATION_STRINGS to navigationsForBundle))
 
+        }
+    }
     val CONFIRM_TAG: String = "confirm"
     private fun observer() {
         viewModel.kycOcrResult.observe(viewLifecycleOwner, Observer {
@@ -169,6 +206,11 @@ class AadhaarCardImageUploadFragment : Fragment(),
                         )
                     }
                 } else {
+                    viewBinding.toplayoutblock.uploadStatusLayout(
+                            AppConstants.UNABLE_TO_FETCH_DETAILS,
+                            "UNABLE TO FETCH DETAILS",
+                            "Enter your Aadhar details manually or try again to continue the verification process."
+                    )
                     showToast("Ocr status " + it.message)
                 }
             }
@@ -185,9 +227,10 @@ class AadhaarCardImageUploadFragment : Fragment(),
                             "Information of Aadhar Card Captured Successfully pending for verify!"
                     )
                     viewBinding.submitButton.tag = CONFIRM_TAG
-                    viewBinding.toplayoutblock.setVerificationSuccessfulView()
+                    viewBinding.toplayoutblock.setVerificationSuccessfulView("Aadhaar pending for verify", "Verifying")
                     viewBinding.submitButton.text = getString(R.string.submit)
                     viewBinding.toplayoutblock.disableImageClick()
+                    viewBinding.toplayoutblock.hideOnVerifiedDocuments()
                 } else
                     showToast("Verification status " + it.message)
             }
@@ -203,8 +246,9 @@ class AadhaarCardImageUploadFragment : Fragment(),
                             "Information of Aadhar Card Captured Successfully pending for verify!"
                     )
                     viewBinding.submitButton.tag = CONFIRM_TAG
-                    viewBinding.toplayoutblock.setVerificationSuccessfulView("Verifying")
+                    viewBinding.toplayoutblock.setVerificationSuccessfulView("Aadhaar pending for verify", "Verifying")
                     viewBinding.toplayoutblock.disableImageClick()
+                    viewBinding.toplayoutblock.hideOnVerifiedDocuments()
                 }
             }
         })
@@ -212,24 +256,25 @@ class AadhaarCardImageUploadFragment : Fragment(),
 
 
     private fun setViews() {
+        //  ic_front   ic_back
         val frontUri = Uri.Builder()
                 .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
-                .authority(resources.getResourcePackageName(R.drawable.ic_front))
-                .appendPath(resources.getResourceTypeName(R.drawable.ic_front))
-                .appendPath(resources.getResourceEntryName(R.drawable.ic_front))
+                .authority(resources.getResourcePackageName(R.drawable.verification_doc_image))
+                .appendPath(resources.getResourceTypeName(R.drawable.verification_doc_image))
+                .appendPath(resources.getResourceEntryName(R.drawable.verification_doc_image))
                 .build()
         val backUri = Uri.Builder()
                 .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
-                .authority(resources.getResourcePackageName(R.drawable.ic_back))
-                .appendPath(resources.getResourceTypeName(R.drawable.ic_back))
-                .appendPath(resources.getResourceEntryName(R.drawable.ic_back))
+                .authority(resources.getResourcePackageName(R.drawable.verification_doc_image))
+                .appendPath(resources.getResourceTypeName(R.drawable.verification_doc_image))
+                .appendPath(resources.getResourceEntryName(R.drawable.verification_doc_image))
                 .build()
         val list = listOf(
                 KYCImageModel(
                         getString(R.string.upload_aadhar_card_front_side_new),
-                        frontUri,
-                        false
-                ), KYCImageModel(getString(R.string.upload_aadhar_card_back_side_new), backUri, false)
+                        imageIcon = frontUri,
+                        imageUploaded = false
+                ), KYCImageModel(text = getString(R.string.upload_aadhar_card_back_side_new), imageIcon = backUri, imageUploaded = false)
         )
         viewBinding.toplayoutblock.setImageViewPager(list)
     }
@@ -546,6 +591,9 @@ class AadhaarCardImageUploadFragment : Fragment(),
         options.setToolbarTitle(getString(R.string.crop_and_rotate))
         return options
     }
-
+    override fun onResume() {
+        super.onResume()
+        StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(resources, R.color.lipstick_2, null))
+    }
 
 }

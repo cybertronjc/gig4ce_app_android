@@ -7,9 +7,11 @@ import android.content.ContentResolver
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.util.Size
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,42 +19,51 @@ import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.AppConstants
+import com.gigforce.core.StringConstants
+import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.DateHelper
+import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.verification.R
 import com.gigforce.verification.databinding.DrivingLicenseFragmentBinding
 import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.gigforce.verification.gigerVerfication.drivingLicense.DrivingLicenseSides
 import com.gigforce.verification.mainverification.Data
 import com.gigforce.verification.mainverification.VerificationClickOrSelectImageBottomSheet
+import com.gigforce.verification.util.VerificationConstants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.jaeger.library.StatusBarUtil
 import com.yalantis.ucrop.UCrop
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.aadhaar_card_image_upload_fragment.*
 import kotlinx.android.synthetic.main.veri_screen_info_component.view.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.ByteArrayOutputStream
 import java.io.File
-import java.lang.Exception
 import java.net.URI
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 class DrivingLicenseFragment : Fragment(),
-    VerificationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener {
+    VerificationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener,
+    IOnBackPressedOverride {
     companion object {
         fun newInstance() = DrivingLicenseFragment()
         const val REQUEST_CODE_UPLOAD_DL = 2333
@@ -72,7 +83,7 @@ class DrivingLicenseFragment : Fragment(),
 
     @Inject
     lateinit var navigation: INavigation
-
+    @Inject lateinit var buildConfig : IBuildConfig
     private var FROM_CLIENT_ACTIVATON: Boolean = false
     private val viewModel: DrivingLicenseViewModel by viewModels()
     private lateinit var viewBinding: DrivingLicenseFragmentBinding
@@ -90,14 +101,78 @@ class DrivingLicenseFragment : Fragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        getDataFromIntents(savedInstanceState)
         setViews()
         observer()
         listeners()
     }
 
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, FROM_CLIENT_ACTIVATON)
+
+
+    }
+
+    var allNavigationList = ArrayList<String>()
+    private fun getDataFromIntents(savedInstanceState: Bundle?) {
+        savedInstanceState?.let {
+            FROM_CLIENT_ACTIVATON =
+                it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
+            it.getStringArrayList(VerificationConstants.NAVIGATION_STRINGS)?.let { arr ->
+                allNavigationList = arr
+            }
+        } ?: run {
+            arguments?.let {
+                FROM_CLIENT_ACTIVATON =
+                    it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
+                it.getStringArrayList(VerificationConstants.NAVIGATION_STRINGS)?.let { arrData ->
+                    allNavigationList = arrData
+                }
+            }
+        }
+    }
+
+    private fun checkForNextDoc() {
+        if (allNavigationList.size == 0) {
+            activity?.onBackPressed()
+        } else {
+            var navigationsForBundle = emptyList<String>()
+            if (allNavigationList.size > 1) {
+                navigationsForBundle =
+                    allNavigationList.slice(IntRange(1, allNavigationList.size - 1))
+                        .filter { it.length > 0 }
+            }
+            navigation.popBackStack()
+            navigation.navigateTo(
+                allNavigationList.get(0),
+                bundleOf(VerificationConstants.NAVIGATION_STRINGS to navigationsForBundle)
+            )
+
+        }
+    }
+
+    override fun onBackPressed(): Boolean {
+        if (FROM_CLIENT_ACTIVATON) {
+            if (isDLVerified) {
+                var navFragmentsData = activity as NavFragmentsData
+                navFragmentsData.setData(
+                    bundleOf(
+                        StringConstants.BACK_PRESSED.value to true
+
+                    )
+                )
+            }
+            return false
+        }
+        return false
+    }
+
     val CONFIRM_TAG: String = "confirm"
 
     private fun listeners() {
+        viewBinding.stateSpinner.keyListener = null
         viewBinding.toplayoutblock.setPrimaryClick(View.OnClickListener {
             //call for bottom sheet
             checkForPermissionElseShowCameraGalleryBottomSheet()
@@ -118,54 +193,48 @@ class DrivingLicenseFragment : Fragment(),
 
         viewBinding.submitButton.setOnClickListener {
             hideSoftKeyboard()
-            if (viewBinding.submitButton.tag?.toString().equals(CONFIRM_TAG)) {
-                activity?.onBackPressed()
+            if (toplayoutblock.isDocDontOptChecked()) {
+                checkForNextDoc()
             } else {
+                if (viewBinding.submitButton.tag?.toString().equals(CONFIRM_TAG)) {
+                    checkForNextDoc()
+                } else {
+                    if (viewBinding.stateSpinner.text.equals("Select State")) {
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert))
+                            .setMessage(getString(R.string.select_dl_state))
+                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .show()
+                        return@setOnClickListener
+                    }
 
-                if (!anyImageUploaded) {
-                    MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage(getString(R.string.select_dl_image))
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                        .show()
-                    return@setOnClickListener
+                    if (viewBinding.dlnoTil.editText?.text.toString().isBlank()) {
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert))
+                            .setMessage(getString(R.string.select_dl_no))
+                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .show()
+                        return@setOnClickListener
+                    }
+
+                    if (viewBinding.dobDate.text.toString().isBlank()) {
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert))
+                            .setMessage(getString(R.string.select_dl_dob))
+                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .show()
+                        return@setOnClickListener
+                    }
+
+                    callKycVerificationApi()
                 }
-
-                if (viewBinding.stateSpinner.selectedItemPosition == 0) {
-                    MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage(getString(R.string.select_dl_state))
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                        .show()
-                    return@setOnClickListener
-                }
-
-                if (viewBinding.dlnoTil.editText?.text.toString().isBlank()) {
-                    MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage(getString(R.string.select_dl_no))
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                        .show()
-                    return@setOnClickListener
-                }
-
-                if (viewBinding.dobDate.text.toString().isBlank()) {
-                    MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage(getString(R.string.select_dl_dob))
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                        .show()
-                    return@setOnClickListener
-                }
-
-                callKycVerificationApi()
             }
         }
 
-        viewBinding.toplayoutblock.querytext.setOnClickListener {
+        viewBinding.toplayoutblock.whyweneedit.setOnClickListener {
             showWhyWeNeedThisDialog()
         }
-        viewBinding.toplayoutblock.imageView7.setOnClickListener {
+        viewBinding.toplayoutblock.iconwhyweneed.setOnClickListener {
             showWhyWeNeedThisDialog()
         }
         viewBinding.appBarDl.apply {
@@ -180,19 +249,22 @@ class DrivingLicenseFragment : Fragment(),
                 android.R.layout.simple_spinner_dropdown_item
             )
         }
-        viewBinding.stateSpinner.adapter = arrayAdapter
+        viewBinding.stateSpinner.setAdapter(arrayAdapter)
     }
 
-    private fun activeLoader(activate : Boolean){
-        if(activate) {
+    private fun activeLoader(activate: Boolean) {
+        if (activate) {
             viewBinding.progressBar.visible()
+            viewBinding.screenLoaderBar.visible()
             viewBinding.submitButton.isEnabled = false
-        }else{
+        } else {
             viewBinding.progressBar.gone()
+            viewBinding.screenLoaderBar.gone()
             viewBinding.submitButton.isEnabled = true
         }
     }
 
+    var isDLVerified = false
     var anyImageUploaded = false
     private fun observer() {
         viewModel.kycOcrResult.observe(viewLifecycleOwner, Observer {
@@ -206,18 +278,18 @@ class DrivingLicenseFragment : Fragment(),
                             "UPLOAD SUCCESSFUL",
                             "Information of Driving License Captured Successfully."
                         )
-                        if(!it.dateOfBirth.isNullOrBlank())
-                        viewBinding.dobDate.text = it.dateOfBirth
-                        if(!it.dlNumber.isNullOrBlank())
-                        viewBinding.dlnoTil.editText?.setText(it.dlNumber)
+                        if (!it.dateOfBirth.isNullOrBlank())
+                            viewBinding.dobDate.text = it.dateOfBirth
+                        if (!it.dlNumber.isNullOrBlank())
+                            viewBinding.dlnoTil.editText?.setText(it.dlNumber)
 
-                        if(!it.validTill.isNullOrBlank()) {
-                            if(it.validTill.contains("-")){
+                        if (!it.validTill.isNullOrBlank()) {
+                            if (it.validTill.contains("-")) {
                                 var dateInFormat = getDDMMYYYYFormat(it.validTill)
-                                if(dateInFormat.isNotBlank())
-                                viewBinding.expiryDate.text = dateInFormat
-                            }else
-                            viewBinding.expiryDate.text = it.validTill
+                                if (dateInFormat.isNotBlank())
+                                    viewBinding.expiryDate.text = dateInFormat
+                            } else
+                                viewBinding.expiryDate.text = it.validTill
                         }
 
                     } else {
@@ -227,8 +299,14 @@ class DrivingLicenseFragment : Fragment(),
                             "Enter your Driving License details manually or try again to continue the verification process."
                         )
                     }
-                } else
+                } else {
+                    viewBinding.toplayoutblock.uploadStatusLayout(
+                        AppConstants.UNABLE_TO_FETCH_DETAILS,
+                        "UNABLE TO FETCH DETAILS",
+                        "Enter your Driving License details manually or try again to continue the verification process."
+                    )
                     showToast("Ocr status " + it.message)
+                }
             }
         })
 
@@ -243,9 +321,12 @@ class DrivingLicenseFragment : Fragment(),
                         "The Driving License Details have been verified successfully."
                     )
                     viewBinding.submitButton.tag = CONFIRM_TAG
-                    viewBinding.toplayoutblock.setVerificationSuccessfulView()
+                    viewBinding.toplayoutblock.setVerificationSuccessfulView("Your Driving License verified")
                     viewBinding.submitButton.text = getString(R.string.submit)
                     viewBinding.toplayoutblock.disableImageClick()
+                    viewBinding.toplayoutblock.hideOnVerifiedDocuments()
+                    isDLVerified = true
+                    viewModel.getVerifiedStatus()
                 } else
                     showToast("Verification " + it.message)
             }
@@ -253,7 +334,7 @@ class DrivingLicenseFragment : Fragment(),
         viewModel.getVerifiedStatus()
         viewModel.verifiedStatus.observe(viewLifecycleOwner, Observer {
             it?.let {
-                if (it) {
+                if (it.verified) {
                     viewBinding.belowLayout.gone()
                     viewBinding.toplayoutblock.uploadStatusLayout(
                         AppConstants.UPLOAD_SUCCESS,
@@ -261,8 +342,17 @@ class DrivingLicenseFragment : Fragment(),
                         "The Driving License Details have been verified successfully."
                     )
                     viewBinding.submitButton.tag = CONFIRM_TAG
-                    viewBinding.toplayoutblock.setVerificationSuccessfulView()
+                    viewBinding.toplayoutblock.setVerificationSuccessfulView("Your Driving License verified")
                     viewBinding.toplayoutblock.disableImageClick()
+                    viewBinding.toplayoutblock.hideOnVerifiedDocuments()
+                    var list = ArrayList<KYCImageModel>()
+                    it.frontImage?.let {
+                        getDBImageUrl(it)?.let { list.add(KYCImageModel(text = getString(R.string.upload_pan_card_new), imagePath = it, imageUploaded = true)) }
+                    }
+                    it.backImage?.let {
+                        getDBImageUrl(it)?.let { list.add(KYCImageModel(text = getString(R.string.upload_pan_card_new), imagePath = it, imageUploaded = true)) }
+                    }
+                    viewBinding.toplayoutblock.setImageViewPager(list)
                 }
             }
         })
@@ -280,39 +370,58 @@ class DrivingLicenseFragment : Fragment(),
 
     }
 
-    private fun getDDMMYYYYFormat(str : String): String {
+    fun getDBImageUrl(imagePath: String): String? {
+        if (imagePath.isNotBlank()) {
+            try {
+                var modifiedString = imagePath
+                if (!imagePath.startsWith("/"))
+                    modifiedString = "/$imagePath"
+                return buildConfig.getStorageBaseUrl() + modifiedString
+            } catch (e: Exception) {
+                return null
+            }
+        }
+        return null
+    }
+
+    private fun getDDMMYYYYFormat(str: String): String {
         try {
             val sdf = SimpleDateFormat("dd-MM-yyyy")
             val date = sdf.parse(str)
-            if(Date().after(date)){
+            if (Date().after(date)) {
                 return ""
             }
             return DateHelper.getDateInDDMMYYYY(date)
-        }catch (e:Exception){
+        } catch (e: Exception) {
             return ""
         }
     }
 
     private fun setViews() {
+        //verification_doc_image    ic_dl_front ic_dl_back
         val frontUri = Uri.Builder()
             .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
-            .authority(resources.getResourcePackageName(R.drawable.ic_dl_front))
-            .appendPath(resources.getResourceTypeName(R.drawable.ic_dl_front))
-            .appendPath(resources.getResourceEntryName(R.drawable.ic_dl_front))
+            .authority(resources.getResourcePackageName(R.drawable.verification_doc_image))
+            .appendPath(resources.getResourceTypeName(R.drawable.verification_doc_image))
+            .appendPath(resources.getResourceEntryName(R.drawable.verification_doc_image))
             .build()
         val backUri = Uri.Builder()
             .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
-            .authority(resources.getResourcePackageName(R.drawable.ic_dl_back))
-            .appendPath(resources.getResourceTypeName(R.drawable.ic_dl_back))
-            .appendPath(resources.getResourceEntryName(R.drawable.ic_dl_back))
+            .authority(resources.getResourcePackageName(R.drawable.verification_doc_image))
+            .appendPath(resources.getResourceTypeName(R.drawable.verification_doc_image))
+            .appendPath(resources.getResourceEntryName(R.drawable.verification_doc_image))
             .build()
         val list = listOf(
             KYCImageModel(
-                getString(R.string.upload_driving_license_front_side_new),
-                frontUri,
-                false
+                text = getString(R.string.upload_driving_license_front_side_new),
+                imageIcon = frontUri,
+                imageUploaded = false
             ),
-            KYCImageModel(getString(R.string.upload_driving_license_back_side_new), backUri, false)
+            KYCImageModel(
+                text = getString(R.string.upload_driving_license_back_side_new),
+                imageIcon = backUri,
+                imageUploaded = false
+            )
         )
         viewBinding.toplayoutblock.setImageViewPager(list)
     }
@@ -339,26 +448,6 @@ class DrivingLicenseFragment : Fragment(),
         }
     }
 
-    private val issueDatePicker: DatePickerDialog by lazy {
-        val cal = Calendar.getInstance()
-        val datePickerDialog = DatePickerDialog(
-            requireContext(),
-            DatePickerDialog.OnDateSetListener { _: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
-                val newCal = Calendar.getInstance()
-                newCal.set(Calendar.YEAR, year)
-                newCal.set(Calendar.MONTH, month)
-                newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-
-                viewBinding.issueDate.text = DateHelper.getDateInDDMMYYYY(newCal.time)
-            },
-            1990,
-            cal.get(Calendar.MONTH),
-            cal.get(Calendar.DAY_OF_MONTH)
-        )
-
-        datePickerDialog.datePicker.maxDate = Calendar.getInstance().timeInMillis
-        datePickerDialog
-    }
 
     private fun checkForPermissionElseShowCameraGalleryBottomSheet() {
         if (hasStoragePermissions())
@@ -396,6 +485,26 @@ class DrivingLicenseFragment : Fragment(),
         ) == PackageManager.PERMISSION_GRANTED
     }
 
+    private val issueDatePicker: DatePickerDialog by lazy {
+        val cal = Calendar.getInstance()
+        val datePickerDialog = DatePickerDialog(
+            requireContext(),
+            DatePickerDialog.OnDateSetListener { _: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
+                val newCal = Calendar.getInstance()
+                newCal.set(Calendar.YEAR, year)
+                newCal.set(Calendar.MONTH, month)
+                newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                viewBinding.issueDate.text = DateHelper.getDateInDDMMYYYY(newCal.time)
+                viewBinding.calendarLabel2.visible()
+            },
+            1990,
+            cal.get(Calendar.MONTH),
+            cal.get(Calendar.DAY_OF_MONTH)
+        )
+
+        datePickerDialog.datePicker.maxDate = Calendar.getInstance().timeInMillis
+        datePickerDialog
+    }
     private val expiryDatePicker: DatePickerDialog by lazy {
         val cal = Calendar.getInstance()
         val datePickerDialog = DatePickerDialog(
@@ -405,8 +514,8 @@ class DrivingLicenseFragment : Fragment(),
                 newCal.set(Calendar.YEAR, year)
                 newCal.set(Calendar.MONTH, month)
                 newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-
                 viewBinding.expiryDate.text = DateHelper.getDateInDDMMYYYY(newCal.time)
+                viewBinding.calendarLabel1.visible()
             },
             cal.get(Calendar.YEAR),
             cal.get(Calendar.MONTH),
@@ -428,6 +537,7 @@ class DrivingLicenseFragment : Fragment(),
                 newCal.set(Calendar.MONTH, month)
                 newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
                 viewBinding.dobDate.text = DateHelper.getDateInDDMMYYYYHiphen(newCal.time)
+                viewBinding.calendarLabel.visible()
             },
             1990,
             cal.get(Calendar.MONTH),
@@ -549,7 +659,7 @@ class DrivingLicenseFragment : Fragment(),
 
     private fun callKycVerificationApi() {
         var list = listOf(
-            Data("state", viewBinding.stateSpinner.selectedItem.toString()),
+            Data("state", viewBinding.stateSpinner.text.toString()),
             Data("name", viewBinding.nameTilDl.editText?.text.toString()),
             Data("no", viewBinding.dlnoTil.editText?.text.toString()),
             Data("fathername", viewBinding.fatherNameTil.editText?.text.toString()),
@@ -620,23 +730,38 @@ class DrivingLicenseFragment : Fragment(),
         )
         val resultIntent: Intent = Intent()
         resultIntent.putExtra("filename", imageFileName + EXTENSION)
-        uCrop.withAspectRatio(1F, 1F)
+        val size = getImageDimensions(uri)
+        uCrop.withAspectRatio(size.width.toFloat(), size.height.toFloat())
         uCrop.withMaxResultSize(1920, 1080)
         uCrop.withOptions(getCropOptions())
         uCrop.start(requireContext(), this)
     }
-
+    private fun getImageDimensions(uri: Uri): Size {
+        val options: BitmapFactory.Options = BitmapFactory.Options()
+        options.inJustDecodeBounds = true
+        BitmapFactory.decodeFile(File(uri.path).absolutePath, options)
+        val imageHeight: Int = options.outHeight
+        val imageWidth: Int = options.outWidth
+        return Size(imageWidth, imageHeight)
+    }
     private fun getCropOptions(): UCrop.Options {
         val options: UCrop.Options = UCrop.Options()
         options.setCompressionQuality(70)
         options.setCompressionFormat(Bitmap.CompressFormat.PNG)
 //        options.setMaxBitmapSize(1000)
         options.setHideBottomControls((false))
-        options.setFreeStyleCropEnabled(false)
+        options.setFreeStyleCropEnabled(true)
         options.setStatusBarColor(ResourcesCompat.getColor(resources, R.color.topBarDark, null))
         options.setToolbarColor(ResourcesCompat.getColor(resources, R.color.topBarDark, null))
         options.setToolbarTitle(getString(R.string.crop_and_rotate))
         return options
     }
 
+    override fun onResume() {
+        super.onResume()
+        StatusBarUtil.setColorNoTranslucent(
+            requireActivity(),
+            ResourcesCompat.getColor(resources, R.color.lipstick_2, null)
+        )
+    }
 }

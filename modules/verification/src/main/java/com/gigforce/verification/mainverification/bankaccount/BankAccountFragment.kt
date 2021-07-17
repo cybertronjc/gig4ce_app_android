@@ -6,15 +6,16 @@ import android.content.ContentResolver
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.util.Size
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -24,6 +25,8 @@ import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.AppConstants
+import com.gigforce.core.datamodels.verification.BankDetailsDataModel
+import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
@@ -34,8 +37,10 @@ import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.gigforce.verification.mainverification.Data
 import com.gigforce.verification.mainverification.VerificationClickOrSelectImageBottomSheet
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.jaeger.library.StatusBarUtil
 import com.yalantis.ucrop.UCrop
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.aadhaar_card_image_upload_fragment.*
 import kotlinx.android.synthetic.main.veri_screen_info_component.view.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -47,14 +52,23 @@ import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
+enum class VerificationScreenStatus {
+    OCR_COMPLETED,
+    VERIFIED,
+    STARTED_VERIFYING,
+    FAILED,
+    COMPLETED,
+    DEFAULT
+}
+
 @AndroidEntryPoint
 class BankAccountFragment : Fragment(),
-    VerificationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener,IOnBackPressedOverride {
+    VerificationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener,
+    IOnBackPressedOverride {
 
     companion object {
         fun newInstance() = BankAccountFragment()
         const val REQUEST_CODE_CAPTURE_BANK_PHOTO = 2333
-        const val INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT = "user_came_from_amb_screen"
         private const val REQUEST_CAPTURE_IMAGE = 1012
         private const val REQUEST_PICK_IMAGE = 1013
 
@@ -64,13 +78,19 @@ class BankAccountFragment : Fragment(),
         private const val REQUEST_STORAGE_PERMISSION = 102
     }
 
+    var verificationScreenStatus = VerificationScreenStatus.DEFAULT
+    var ocrOrVerificationRquested = false
+
     @Inject
     lateinit var navigation: INavigation
 
+    @Inject
+    lateinit var buildConfig: IBuildConfig
     private lateinit var viewModel: BankAccountViewModel
     private var didUserCameFromAmbassadorScreen = false
     private var clickedImagePath: Uri? = null
     private lateinit var viewBinding: BankAccountFragmentBinding
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -83,7 +103,7 @@ class BankAccountFragment : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(BankAccountViewModel::class.java)
-        setViews()
+        initializeImages()
         observer()
         listeners()
     }
@@ -93,6 +113,7 @@ class BankAccountFragment : Fragment(),
         viewModel.kycOcrResult.observe(viewLifecycleOwner, Observer {
             activeLoader(false)
             it?.let {
+                verificationScreenStatus = VerificationScreenStatus.OCR_COMPLETED
                 if (it.status) {
                     if (!it.beneficiaryName.isNullOrBlank() || !it.accountNumber.isNullOrBlank() || !it.ifscCode.isNullOrBlank() || !it.bankName.isNullOrBlank()) {
                         viewBinding.toplayoutblock.uploadStatusLayout(
@@ -100,12 +121,12 @@ class BankAccountFragment : Fragment(),
                             "UPLOAD SUCCESSFUL",
                             "Information of Bank Captured Successfully."
                         )
-                        if(!it.accountNumber.isNullOrBlank())
-                        viewBinding.bankAccNumberItl.editText?.setText(it.accountNumber)
-                        if(!it.ifscCode.isNullOrBlank())
-                        viewBinding.ifscCode.editText?.setText(it.ifscCode)
-                        if(!it.bankName.isNullOrBlank())
-                        viewBinding.bankNameTil.editText?.setText(it.bankName)
+                        if (!it.accountNumber.isNullOrBlank())
+                            viewBinding.bankAccNumberItl.editText?.setText(it.accountNumber)
+                        if (!it.ifscCode.isNullOrBlank())
+                            viewBinding.ifscCode.editText?.setText(it.ifscCode)
+                        if (!it.bankName.isNullOrBlank())
+                            viewBinding.bankNameTil.editText?.setText(it.bankName)
                     } else {
                         viewBinding.toplayoutblock.uploadStatusLayout(
                             AppConstants.UNABLE_TO_FETCH_DETAILS,
@@ -114,94 +135,195 @@ class BankAccountFragment : Fragment(),
                         )
 
                     }
-                } else
+                } else {
+                    viewBinding.toplayoutblock.uploadStatusLayout(
+                        AppConstants.UNABLE_TO_FETCH_DETAILS,
+                        "UNABLE TO FETCH DETAILS",
+                        "Enter your Bank details manually or try again to continue the verification process."
+                    )
                     showToast("Ocr status " + it.message)
+                }
             }
+            ocrOrVerificationRquested = false
         })
 
         viewModel.kycVerifyResult.observe(viewLifecycleOwner, Observer {
-            activeLoader(false)
-            it?.let {
-                if (it.status) {
-                    viewBinding.screenLoader.visible()
-                    viewBinding.belowLayout.gone()
-                    viewBinding.toplayoutblock.setVerificationSuccessfulView("Verifying")
-                    viewModel.getBeneficiaryName()
-                    viewBinding.submitButton.gone()
-                    viewBinding.toplayoutblock.disableImageClick()
-//                    viewBinding.accountHolderName.editText?.setText(it.beneficiaryName)
-//                    viewBinding.bankAccNumberItl.editText?.setText(it.accountNumber)
-//                    viewBinding.ifscCode.editText?.setText(it.ifscCode)
-//                    viewBinding.bankNameTil.editText?.setText(it.bankName)
-                } else
-                    showToast("Ocr status " + it.message)
-            }
+            ocrOrVerificationRquested = false
         })
-        viewModel.getVerifiedStatus()
-        viewModel.verifiedStatus.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                if (it){
-                    viewBinding.belowLayout.gone()
-                    viewBinding.toplayoutblock.uploadStatusLayout(
-                        AppConstants.UPLOAD_SUCCESS,
-                        "VERIFICATION COMPLETED",
-                        "The Bank Details have been verified successfully."
-                    )
-                    viewBinding.submitButton.gone()
-                    viewBinding.toplayoutblock.setVerificationSuccessfulView()
-                    viewBinding.toplayoutblock.disableImageClick()
+
+        viewModel.getBankVerificationUpdation()
+        viewModel.bankDetailedObject.observe(viewLifecycleOwner, Observer {
+            if (!ocrOrVerificationRquested) {
+                viewBinding.screenLoaderBar.gone()
+                it?.let {
+
+                    if (it.verified) {
+                        verificationScreenStatus = VerificationScreenStatus.VERIFIED
+                        verifiedStatusViews(it)
+                    } else {
+                        checkforStatusAndVerified(it)
+                    }
                 }
             }
         })
 
 
-        viewModel.beneficiaryName.observe(viewLifecycleOwner, Observer {
-            //observing beneficiary name here
-            viewBinding.screenLoader.gone()
-            it?.let {
-                if (it.isNotEmpty()) {
-                    viewBinding.confirmBeneficiaryLayout.visible()
-                    viewBinding.belowLayout.gone()
-                    viewBinding.beneficiaryName.text = it
-                } else { showToast("Empty") }
-            }
-        })
-        viewModel.verifiedStatus.observe(viewLifecycleOwner, Observer {
-            //verified entry to firebase
-            //showToast("Verified")
-            it?.let {
-                if (it){
-                    viewBinding.belowLayout.gone()
-                    viewBinding.toplayoutblock.uploadStatusLayout(
-                        AppConstants.UPLOAD_SUCCESS,
-                        "VERIFICATION COMPLETED",
-                        "The Bank Details have been verified successfully."
-                    )
-                    viewBinding.submitButton.gone()
-                    viewBinding.toplayoutblock.setVerificationSuccessfulView()
-                }
-            }
-
-        })
-        viewModel.verifiedStatusDB.observe(viewLifecycleOwner, Observer {
-            viewBinding.toplayoutblock.setVerificationSuccessfulView("Verified")
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Congratulations, your Bank details are verified.")
-                .setCancelable(false)
-                .setPositiveButton(getString(R.string.okay)) { dialog, _ ->
-                    dialog.dismiss()
-                    navigation.popBackStack()
-                }
-                .show()
-        })
     }
 
-    private fun activeLoader(activate : Boolean){
-        if(activate) {
+    private fun startedStatusViews(bankDetailsDataModel: BankDetailsDataModel) {
+        viewBinding.toplayoutblock.viewChangeOnStarted()
+        viewBinding.screenLoaderBar.visible()
+        viewBinding.progressMessage.text =
+            "If it is taking longer time than 1 minute. \nYou can come back and check"
+        viewBinding.submitButton.gone()
+        viewBinding.progressBar.gone()
+        viewBinding.belowLayout.gone()
+        viewBinding.toplayoutblock.setVerificationSuccessfulView(
+            "Bank Account pending for verify",
+            "Verifying"
+        )
+        var list = ArrayList<KYCImageModel>()
+        bankDetailsDataModel.passbookImagePath?.let {
+            getDBImageUrl(it)?.let {
+                list.add(
+                    KYCImageModel(
+                        text = getString(R.string.upload_pan_card_new),
+                        imagePath = it,
+                        imageUploaded = true
+                    )
+                )
+            }
+        }
+        viewBinding.toplayoutblock.setImageViewPager(list)
+        viewBinding.confirmBeneficiaryLayout.gone()
+    }
+
+    private fun verifiedStatusViews(bankDetailsDataModel: BankDetailsDataModel) {
+        viewBinding.toplayoutblock.viewChangeOnVerified()
+        viewBinding.belowLayout.gone()
+        viewBinding.confirmBeneficiaryLayout.gone()
+        viewBinding.toplayoutblock.uploadStatusLayout(
+            AppConstants.UPLOAD_SUCCESS,
+            "VERIFICATION COMPLETED",
+            "The Bank Details have been verified successfully."
+        )
+        viewBinding.submitButton.gone()
+        viewBinding.progressBar.gone()
+        viewBinding.toplayoutblock.setVerificationSuccessfulView("Bank Account verified")
+
+        var list = ArrayList<KYCImageModel>()
+        bankDetailsDataModel.passbookImagePath?.let {
+            getDBImageUrl(it)?.let {
+                list.add(
+                    KYCImageModel(
+                        text = getString(R.string.upload_pan_card_new),
+                        imagePath = it,
+                        imageUploaded = true
+                    )
+                )
+            }
+        }
+        viewBinding.toplayoutblock.setImageViewPager(list)
+
+    }
+
+    private fun checkforStatusAndVerified(obj: BankDetailsDataModel) {
+        obj.status?.let {
+            when (it) {
+                "started" -> {
+                    verificationScreenStatus = VerificationScreenStatus.STARTED_VERIFYING
+                    print("Bank Verification started")
+                    startedStatusViews(obj)
+                }
+                "failed" -> {
+                    verificationScreenStatus = VerificationScreenStatus.FAILED
+                    print("failed transaction")
+                    resetInitializeViews()
+                    viewBinding.toplayoutblock.uploadStatusLayout(
+                        AppConstants.DETAILS_MISMATCH,
+                        "VERIFICATION FAILED",
+                        "Please re-enter the correct information as per the documents"
+                    )
+                }
+                "" -> {
+                    verificationScreenStatus = VerificationScreenStatus.DEFAULT
+                    print("transaction reinitialized")
+                    resetInitializeViews()
+                }
+                "completed" -> {
+                    verificationScreenStatus = VerificationScreenStatus.COMPLETED
+                    print("beneficiary name will show")
+                    showBankBeneficiaryName(obj)
+                }
+                else -> "unmatched status"
+            }
+        }
+    }
+
+    private fun resetInitializeViews() {
+        viewBinding.submitButton.visible()
+        viewBinding.submitButton.isEnabled = true
+        viewBinding.belowLayout.visible()
+        viewBinding.confirmBeneficiaryLayout.gone()
+        viewBinding.toplayoutblock.setVerificationSuccessfulView(
+            "Bank Account",
+            "You need to upload"
+        )
+        initializeImages()
+        viewBinding.toplayoutblock.resetAllViews()
+    }
+
+    private fun showBankBeneficiaryName(obj: BankDetailsDataModel) {
+        obj.bankBeneficiaryName?.let { beneficiary ->
+            if (beneficiary.isNotBlank()) {
+                viewBinding.toplayoutblock.viewChangeOnStarted()
+                viewBinding.confirmBeneficiaryLayout.visible()
+                viewBinding.belowLayout.gone()
+                viewBinding.beneficiaryName.text = beneficiary
+                viewBinding.toplayoutblock.setVerificationSuccessfulView(
+                    "Bank Account pending for verify",
+                    "Verifying"
+                )
+                var list = ArrayList<KYCImageModel>()
+                obj.passbookImagePath?.let {
+                    getDBImageUrl(it)?.let {
+                        list.add(
+                            KYCImageModel(
+                                text = getString(R.string.upload_pan_card_new),
+                                imagePath = it,
+                                imageUploaded = true
+                            )
+                        )
+                    }
+                }
+                viewBinding.toplayoutblock.setImageViewPager(list)
+            }
+        }
+    }
+
+    fun getDBImageUrl(imagePath: String): String? {
+        if (imagePath.isNotBlank()) {
+            try {
+                var modifiedString = imagePath
+                if (!imagePath.startsWith("/"))
+                    modifiedString = "/$imagePath"
+                return buildConfig.getStorageBaseUrl() + modifiedString
+            } catch (e: Exception) {
+                return null
+            }
+        }
+        return null
+    }
+
+    private fun activeLoader(activate: Boolean) {
+        if (activate) {
             viewBinding.progressBar.visible()
+            viewBinding.screenLoaderBar.visible()
+            viewBinding.progressMessage.text = ""
             viewBinding.submitButton.isEnabled = false
-        }else{
+        } else {
             viewBinding.progressBar.gone()
+            viewBinding.screenLoaderBar.gone()
             viewBinding.submitButton.isEnabled = true
         }
     }
@@ -214,50 +336,55 @@ class BankAccountFragment : Fragment(),
         })
         viewBinding.submitButton.setOnClickListener {
             hideSoftKeyboard()
-            val ifsc =
-                viewBinding.ifscCode.editText?.text.toString().toUpperCase(Locale.getDefault())
-            if (!VerificationValidations.isIfSCValid(ifsc)) {
 
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(getString(R.string.alert))
-                    .setMessage(getString(R.string.enter_valid_ifsc))
-                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                    .show()
-                return@setOnClickListener
-            }
+            if (toplayoutblock.isDocDontOptChecked()) {
+                activity?.onBackPressed()
+            } else {
+                val ifsc =
+                    viewBinding.ifscCode.editText?.text.toString().toUpperCase(Locale.getDefault())
+                if (!VerificationValidations.isIfSCValid(ifsc)) {
 
-            if (viewBinding.bankNameTil.editText?.text.toString().isNullOrBlank()) {
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(getString(R.string.alert))
-                    .setMessage(getString(R.string.enter_bank_name))
-                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                    .show()
-                return@setOnClickListener
-            }
-            if (viewBinding.bankNameTil.editText?.text.toString().length < 3) {
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(getString(R.string.alert))
-                    .setMessage(getString(R.string.bank_name_too_short))
-                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                    .show()
-                return@setOnClickListener
-            }
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert))
+                        .setMessage(getString(R.string.enter_valid_ifsc))
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .show()
+                    return@setOnClickListener
+                }
 
-            if (viewBinding.bankAccNumberItl.editText?.text.toString().length < 4) {
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(getString(R.string.alert))
-                    .setMessage(getString(R.string.enter_valid_acc_no))
-                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                    .show()
-                return@setOnClickListener
+                if (viewBinding.bankNameTil.editText?.text.toString().isNullOrBlank()) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert))
+                        .setMessage(getString(R.string.enter_bank_name))
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .show()
+                    return@setOnClickListener
+                }
+                if (viewBinding.bankNameTil.editText?.text.toString().length < 3) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert))
+                        .setMessage(getString(R.string.bank_name_too_short))
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .show()
+                    return@setOnClickListener
+                }
+
+                if (viewBinding.bankAccNumberItl.editText?.text.toString().length < 4) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert))
+                        .setMessage(getString(R.string.enter_valid_acc_no))
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .show()
+                    return@setOnClickListener
+                }
+                callKycVerificationApi()
             }
-            callKycVerificationApi()
         }
 
-        viewBinding.toplayoutblock.querytext.setOnClickListener {
+        viewBinding.toplayoutblock.whyweneedit.setOnClickListener {
             showWhyWeNeedThisDialog()
         }
-        viewBinding.toplayoutblock.imageView7.setOnClickListener {
+        viewBinding.toplayoutblock.iconwhyweneed.setOnClickListener {
             showWhyWeNeedThisDialog()
         }
 
@@ -268,35 +395,42 @@ class BankAccountFragment : Fragment(),
         }
         viewBinding.confirmButton.setOnClickListener {
             viewModel.setVerificationStatusInDB(true)
+            viewBinding.toplayoutblock.hideOnVerifiedDocuments()
         }
         viewBinding.notConfirmButton.setOnClickListener {
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Do you want to re-enter Bank details?")
                 .setPositiveButton(getString(R.string.yes)) { _, _ ->
-                        navigation.popBackStack()
-                        navigation.navigateTo("verification/bank_account_fragment")
+                    viewModel.setVerificationStatusStringToBlank()
                 }
                 .setNegativeButton(getString(R.string.no)) { dialog, _ ->
-                        dialog.dismiss()
+                    dialog.dismiss()
                 }
                 .show()
         }
     }
 
-    private fun setViews() {
+    private fun initializeImages() {
+        // verification_doc_image ic_passbook_illustration
         val frontUri = Uri.Builder()
             .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
-            .authority(resources.getResourcePackageName(R.drawable.ic_passbook_illustration))
-            .appendPath(resources.getResourceTypeName(R.drawable.ic_passbook_illustration))
-            .appendPath(resources.getResourceEntryName(R.drawable.ic_passbook_illustration))
+            .authority(resources.getResourcePackageName(R.drawable.verification_doc_image))
+            .appendPath(resources.getResourceTypeName(R.drawable.verification_doc_image))
+            .appendPath(resources.getResourceEntryName(R.drawable.verification_doc_image))
             .build()
         val list =
-            listOf(KYCImageModel(getString(R.string.upload_bank_account_new), frontUri, false))
+            listOf(
+                KYCImageModel(
+                    text = getString(R.string.upload_bank_account_new),
+                    imageIcon = frontUri,
+                    imageUploaded = false
+                )
+            )
         viewBinding.toplayoutblock.setImageViewPager(list)
     }
 
     private fun callKycOcrApi(path: Uri) {
-
+        ocrOrVerificationRquested = true
         var image: MultipartBody.Part? = null
         if (path != null) {
             val file = File(URI(path.toString()))
@@ -416,53 +550,9 @@ class BankAccountFragment : Fragment(),
             }
         }
 
-//            if (resultCode == Activity.RESULT_OK) {
-//                clickedImagePath =
-//                    data?.getParcelableExtra("uri")
-//                showPassbookInfoCard(clickedImagePath!!)
-//
-////                if (bankDetailsDataConfirmationCB.isChecked)
-////                    enableSubmitButton()
-////
-////                if (clickedImagePath != null && passbookSubmitSliderBtn.isGone) {
-////                    bankDetailsDataConfirmationCB.visible()
-////                    passbookSubmitSliderBtn.visible()
-////                }
-//
-//            }
-
     }
 
-    //    private fun disableSubmitButton() {
-//        passbookSubmitSliderBtn.isEnabled = false
-//
-//        passbookSubmitSliderBtn.outerColor =
-//            ResourcesCompat.getColor(resources, R.color.light_grey, null)
-//        passbookSubmitSliderBtn.innerColor =
-//            ResourcesCompat.getColor(resources, R.color.warm_grey, null)
-//    }
-//
-//    private fun showPassbookImageLayout() {
-//        passbookImageHolder.visibility = View.VISIBLE
-//    }
-//
-//    private fun showPassbookInfoLayout() {
-//        passbookInfoLayout.visibility = View.VISIBLE
-//    }
-//
-//    private fun hidePassbookImageAndInfoLayout() {
-//        passbookImageHolder.visibility = View.GONE
-//        passbookInfoLayout.visibility = View.GONE
-//    }
-//
-//    private fun enableSubmitButton() {
-//        passbookSubmitSliderBtn.isEnabled = true
-//
-//        passbookSubmitSliderBtn.outerColor =
-//            ResourcesCompat.getColor(resources, R.color.light_pink, null)
-//        passbookSubmitSliderBtn.innerColor =
-//            ResourcesCompat.getColor(resources, R.color.lipstick, null)
-//    }
+
     private fun showWhyWeNeedThisDialog() {
         WhyWeNeedThisBottomSheet.launch(
             childFragmentManager = childFragmentManager,
@@ -478,6 +568,7 @@ class BankAccountFragment : Fragment(),
             Data("ifsccode", viewBinding.ifscCode.editText?.text.toString())
         )
         activeLoader(true)
+        ocrOrVerificationRquested = true
         viewModel.getKycVerificationResult("bank", list)
     }
 
@@ -511,10 +602,20 @@ class BankAccountFragment : Fragment(),
         )
         val resultIntent: Intent = Intent()
         resultIntent.putExtra("filename", imageFileName + EXTENSION)
-        uCrop.withAspectRatio(1F, 1F)
+        val size = getImageDimensions(uri)
+        uCrop.withAspectRatio(size.width.toFloat(), size.height.toFloat())
         uCrop.withMaxResultSize(1920, 1080)
         uCrop.withOptions(getCropOptions())
         uCrop.start(requireContext(), this)
+    }
+
+    private fun getImageDimensions(uri: Uri): Size {
+        val options: BitmapFactory.Options = BitmapFactory.Options()
+        options.inJustDecodeBounds = true
+        BitmapFactory.decodeFile(File(uri.path).absolutePath, options)
+        val imageHeight: Int = options.outHeight
+        val imageWidth: Int = options.outWidth
+        return Size(imageWidth, imageHeight)
     }
 
     private fun getCropOptions(): UCrop.Options {
@@ -531,8 +632,30 @@ class BankAccountFragment : Fragment(),
     }
 
     override fun onBackPressed(): Boolean {
-        return viewBinding.screenLoader.isVisible
+        if (verificationScreenStatus == VerificationScreenStatus.STARTED_VERIFYING) {
+            reContinueDialog()
+            return true
+        } else return false
+
     }
 
+    private fun reContinueDialog() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Do you want to wait?")
+            .setPositiveButton(getString(R.string.yes)) { dialog, _ ->
+                dialog.dismiss()
+            }
+            .setNegativeButton(getString(R.string.no)) { dialog, _ ->
+                navigation.popBackStack()
+            }
+            .show()
+    }
 
+    override fun onResume() {
+        super.onResume()
+        StatusBarUtil.setColorNoTranslucent(
+            requireActivity(),
+            ResourcesCompat.getColor(resources, R.color.lipstick_2, null)
+        )
+    }
 }

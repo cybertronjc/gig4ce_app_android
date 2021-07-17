@@ -116,6 +116,7 @@ class GigPeopleToExpectAdapter(
                 R.id.call_btn -> otherOptionClickListener?.onCallManagerClicked(contactPerson[adapterPosition])
                 R.id.chat_btn -> otherOptionClickListener?.onChatWithManagerClicked(contactPerson[adapterPosition])
                 else -> {
+                    if(adapterPosition>=0)
                     otherOptionClickListener?.onPeopleToExpectClicked(contactPerson[adapterPosition])
                 }
             }
