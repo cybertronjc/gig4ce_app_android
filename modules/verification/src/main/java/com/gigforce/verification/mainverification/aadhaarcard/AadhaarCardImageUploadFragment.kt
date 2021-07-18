@@ -31,6 +31,7 @@ import com.gigforce.core.AppConstants
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.core.utils.DateHelper
 import com.gigforce.verification.R
 import com.gigforce.verification.databinding.AadhaarCardImageUploadFragmentBinding
@@ -117,29 +118,29 @@ class AadhaarCardImageUploadFragment : Fragment(),
             viewBinding.digilockerWebview.addJavascriptInterface(WebViewInterface(it), "Android")
             viewBinding.digilockerWebview.settings.loadWithOverviewMode = true
             viewBinding.digilockerWebview.settings.useWideViewPort = true
-//            viewBinding.digilockerWebview.loadUrl("http://staging.gigforce.in/kyc/sadasdas")
-            val rawHTML = "<!DOCTYPE >\n" +
-                    "<html>\n" +
-                    "  <head>\n" +
-                    "    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n" +
-                    "    <script type=\"text/javascript\">\n" +
-                    "           function init()\n" +
-                    "           {\n" +
-                    "              var testVal = 'Привет от Android Tools!';\n" +
-                    "              Android.sendData(\"working\");\n" +
-                    "           }\n" +
-                    "        </script>\n" +
-                    "  </head>\n" +
-                    "  <body>\n" +
-                    "    <div style=\"clear: both;height: 3px;\"> </div>\n" +
-                    "    <div>\n" +
-                    "      <input value=\"submit\" type=\"button\" name=\"submit\"\n" +
-                    "           id=\"btnSubmit\" onclick=\"javascript:return init();\" />\n" +
-                    "    </div>\n" +
-                    "  </body>\n" +
-                    "</html>"
-
-            viewBinding.digilockerWebview.loadData(rawHTML,"text/HTML", "UTF-8")
+            viewBinding.digilockerWebview.loadUrl("http://staging.gigforce.in/kyc/${FirebaseAuthStateListener.getInstance().getCurrentSignInUserInfoOrThrow().uid}")
+//            val rawHTML = "<!DOCTYPE >\n" +
+//                    "<html>\n" +
+//                    "  <head>\n" +
+//                    "    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n" +
+//                    "    <script type=\"text/javascript\">\n" +
+//                    "           function init()\n" +
+//                    "           {\n" +
+//                    "              var testVal = 'Привет от Android Tools!';\n" +
+//                    "              Android.sendData(\"working\");\n" +
+//                    "           }\n" +
+//                    "        </script>\n" +
+//                    "  </head>\n" +
+//                    "  <body>\n" +
+//                    "    <div style=\"clear: both;height: 3px;\"> </div>\n" +
+//                    "    <div>\n" +
+//                    "      <input value=\"submit\" type=\"button\" name=\"submit\"\n" +
+//                    "           id=\"btnSubmit\" onclick=\"javascript:return init();\" />\n" +
+//                    "    </div>\n" +
+//                    "  </body>\n" +
+//                    "</html>"
+//
+//            viewBinding.digilockerWebview.loadData(rawHTML,"text/HTML", "UTF-8")
         }
     }
 
