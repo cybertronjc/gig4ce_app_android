@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.ContentResolver
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -13,6 +14,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.JavascriptInterface
 import android.widget.DatePicker
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
@@ -22,6 +24,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.ext.showToast
+import com.gigforce.common_ui.utils.UtilMethods
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.AppConstants
@@ -105,8 +108,57 @@ class AadhaarCardImageUploadFragment : Fragment(),
         setViews()
         observer()
         listeners()
-
+        initWebview()
     }
+
+    private fun initWebview() {
+        viewBinding.digilockerWebview.settings.javaScriptEnabled = true
+        context?.let {
+            viewBinding.digilockerWebview.addJavascriptInterface(WebViewInterface(it), "Android")
+            viewBinding.digilockerWebview.settings.loadWithOverviewMode = true
+            viewBinding.digilockerWebview.settings.useWideViewPort = true
+//            viewBinding.digilockerWebview.loadUrl("http://staging.gigforce.in/kyc/sadasdas")
+            val rawHTML = "<!DOCTYPE >\n" +
+                    "<html>\n" +
+                    "  <head>\n" +
+                    "    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n" +
+                    "    <script type=\"text/javascript\">\n" +
+                    "           function init()\n" +
+                    "           {\n" +
+                    "              var testVal = 'Привет от Android Tools!';\n" +
+                    "              Android.sendData(\"working\");\n" +
+                    "           }\n" +
+                    "        </script>\n" +
+                    "  </head>\n" +
+                    "  <body>\n" +
+                    "    <div style=\"clear: both;height: 3px;\"> </div>\n" +
+                    "    <div>\n" +
+                    "      <input value=\"submit\" type=\"button\" name=\"submit\"\n" +
+                    "           id=\"btnSubmit\" onclick=\"javascript:return init();\" />\n" +
+                    "    </div>\n" +
+                    "  </body>\n" +
+                    "</html>"
+
+            viewBinding.digilockerWebview.loadData(rawHTML,"text/HTML", "UTF-8")
+        }
+    }
+
+    class WebViewInterface {
+        var context: Context
+        var data: String? = null
+
+        constructor(context: Context) {
+            this.context = context
+        }
+
+        @JavascriptInterface
+        fun sendData(data: String) {
+            this.data = data
+            Log.e("javascript",data)
+            UtilMethods.showLongToast(context, data)
+        }
+    }
+
     var allNavigationList = ArrayList<String>()
     private fun getDataFromIntent(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
@@ -122,6 +174,7 @@ class AadhaarCardImageUploadFragment : Fragment(),
         }
 
     }
+
     private fun listeners() {
         viewBinding.toplayoutblock.setPrimaryClick(View.OnClickListener {
             //call for bottom sheet
@@ -167,6 +220,7 @@ class AadhaarCardImageUploadFragment : Fragment(),
             })
         }
     }
+
     private fun checkForNextDoc() {
         if (allNavigationList.size == 0) {
             activity?.onBackPressed()
@@ -180,6 +234,7 @@ class AadhaarCardImageUploadFragment : Fragment(),
 
         }
     }
+
     val CONFIRM_TAG: String = "confirm"
     private fun observer() {
         viewModel.kycOcrResult.observe(viewLifecycleOwner, Observer {
@@ -591,6 +646,7 @@ class AadhaarCardImageUploadFragment : Fragment(),
         options.setToolbarTitle(getString(R.string.crop_and_rotate))
         return options
     }
+
     override fun onResume() {
         super.onResume()
         StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(resources, R.color.lipstick_2, null))
