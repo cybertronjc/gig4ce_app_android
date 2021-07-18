@@ -137,10 +137,12 @@ class AadhaarCardImageUploadFragment : Fragment(),
 
             hideSoftKeyboard()
             if (toplayoutblock.isDocDontOptChecked()) {
-                checkForNextDoc()
+                activity?.onBackPressed()
+//                checkForNextDoc()
             } else {
                 if (viewBinding.submitButton.tag?.toString().equals(CONFIRM_TAG)) {
-                    checkForNextDoc()
+//                    checkForNextDoc()
+                    activity?.onBackPressed()
                 } else {
                     if (viewBinding.aadharcardTil.editText?.text?.length != 12) {
                         MaterialAlertDialogBuilder(requireContext())
