@@ -130,8 +130,8 @@ class BankAccountFragment : Fragment(),
     private fun observer() {
         viewModel.kycOcrResult.observe(viewLifecycleOwner, Observer {
             activeLoader(false)
+            verificationScreenStatus = VerificationScreenStatus.OCR_COMPLETED
             it?.let {
-                verificationScreenStatus = VerificationScreenStatus.OCR_COMPLETED
                 if (it.status) {
                     if (!it.beneficiaryName.isNullOrBlank() || !it.accountNumber.isNullOrBlank() || !it.ifscCode.isNullOrBlank() || !it.bankName.isNullOrBlank()) {
                         viewBinding.toplayoutblock.uploadStatusLayout(
