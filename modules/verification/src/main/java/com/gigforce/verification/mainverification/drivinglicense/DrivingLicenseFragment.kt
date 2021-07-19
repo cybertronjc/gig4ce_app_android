@@ -117,9 +117,8 @@ class DrivingLicenseFragment : Fragment(),
         super.onViewCreated(view, savedInstanceState)
         getDataFromIntents(savedInstanceState)
         setViews()
-        observer()
-        observerFinal()
         listeners()
+        observer()
     }
 
 
@@ -206,12 +205,9 @@ class DrivingLicenseFragment : Fragment(),
 
         viewBinding.submitButton.setOnClickListener {
             hideSoftKeyboard()
-            if (toplayoutblock.isDocDontOptChecked()) {
+            if (toplayoutblock.isDocDontOptChecked()|| verificationScreenStatus == VerificationScreenStatus.VERIFIED) {
                 checkForNextDoc()
             } else {
-                if (viewBinding.submitButton.tag?.toString().equals(CONFIRM_TAG)) {
-                    checkForNextDoc()
-                } else {
                     if (viewBinding.stateSpinner.text.equals("Select State")) {
                         MaterialAlertDialogBuilder(requireContext())
                                 .setTitle(getString(R.string.alert))
@@ -240,7 +236,6 @@ class DrivingLicenseFragment : Fragment(),
                     }
 
                     callKycVerificationApi()
-                }
             }
         }
 
@@ -327,6 +322,21 @@ class DrivingLicenseFragment : Fragment(),
         viewModel.kycVerifyResult.observe(viewLifecycleOwner, Observer {
             ocrOrVerificationRquested = false
         })
+
+        viewModel.getVerifiedStatus()
+        viewModel.verifiedStatus.observe(viewLifecycleOwner, Observer {
+            if (!ocrOrVerificationRquested) {
+                viewBinding.screenLoaderBar.gone()
+                it?.let {
+                    if (it.verified) {
+                        verificationScreenStatus = VerificationScreenStatus.VERIFIED
+                        verifiedStatusViews(it)
+                    } else {
+                        checkforStatusAndVerified(it)
+                    }
+                }
+            }
+        })
     }
 
     fun getDBImageUrl(imagePath: String): String? {
@@ -398,6 +408,7 @@ class DrivingLicenseFragment : Fragment(),
             image =
                     MultipartBody.Part.createFormData("file", file.name, requestFile)
         }
+        ocrOrVerificationRquested = true
         image?.let {
             viewModel.getKycOcrResult(
                     "DL",
@@ -577,6 +588,7 @@ class DrivingLicenseFragment : Fragment(),
                 Data("dob", viewBinding.dobDate.text.toString())
         )
         activeLoader(true)
+        ocrOrVerificationRquested = true
         viewModel.getKycVerificationResult("DL", list)
     }
 
@@ -674,25 +686,6 @@ class DrivingLicenseFragment : Fragment(),
                 requireActivity(),
                 ResourcesCompat.getColor(resources, R.color.lipstick_2, null)
         )
-    }
-
-
-    private fun observerFinal() {
-        viewModel.getVerifiedStatus()
-        viewModel.verifiedStatus.observe(viewLifecycleOwner, Observer {
-            if (!ocrOrVerificationRquested) {
-                viewBinding.screenLoaderBar.gone()
-                it?.let {
-
-                    if (it.verified) {
-                        verificationScreenStatus = VerificationScreenStatus.VERIFIED
-                        verifiedStatusViews(it)
-                    } else {
-                        checkforStatusAndVerified(it)
-                    }
-                }
-            }
-        })
     }
 
     private fun verifiedStatusViews(drivingLicenseDataModel: DrivingLicenseDataModel) {

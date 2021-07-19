@@ -357,52 +357,48 @@ class BankAccountFragment : Fragment(),
         viewBinding.submitButton.setOnClickListener {
             hideSoftKeyboard()
 
-            if (toplayoutblock.isDocDontOptChecked()) {
+            if (toplayoutblock.isDocDontOptChecked() || verificationScreenStatus == VerificationScreenStatus.VERIFIED) {
                 checkForNextDoc()
-//                activity?.onBackPressed()
             } else {
-                if (verificationScreenStatus == VerificationScreenStatus.VERIFIED) {
-                    checkForNextDoc()
-                } else {
-                    val ifsc =
-                            viewBinding.ifscCode.editText?.text.toString().toUpperCase(Locale.getDefault())
-                    if (!VerificationValidations.isIfSCValid(ifsc)) {
+                val ifsc =
+                        viewBinding.ifscCode.editText?.text.toString().toUpperCase(Locale.getDefault())
+                if (!VerificationValidations.isIfSCValid(ifsc)) {
 
-                        MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert))
-                                .setMessage(getString(R.string.enter_valid_ifsc))
-                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                                .show()
-                        return@setOnClickListener
-                    }
-
-                    if (viewBinding.bankNameTil.editText?.text.toString().isNullOrBlank()) {
-                        MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert))
-                                .setMessage(getString(R.string.enter_bank_name))
-                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                                .show()
-                        return@setOnClickListener
-                    }
-                    if (viewBinding.bankNameTil.editText?.text.toString().length < 3) {
-                        MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert))
-                                .setMessage(getString(R.string.bank_name_too_short))
-                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                                .show()
-                        return@setOnClickListener
-                    }
-
-                    if (viewBinding.bankAccNumberItl.editText?.text.toString().length < 4) {
-                        MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert))
-                                .setMessage(getString(R.string.enter_valid_acc_no))
-                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                                .show()
-                        return@setOnClickListener
-                    }
-                    callKycVerificationApi()
+                    MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert))
+                            .setMessage(getString(R.string.enter_valid_ifsc))
+                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .show()
+                    return@setOnClickListener
                 }
+
+                if (viewBinding.bankNameTil.editText?.text.toString().isNullOrBlank()) {
+                    MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert))
+                            .setMessage(getString(R.string.enter_bank_name))
+                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .show()
+                    return@setOnClickListener
+                }
+                if (viewBinding.bankNameTil.editText?.text.toString().length < 3) {
+                    MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert))
+                            .setMessage(getString(R.string.bank_name_too_short))
+                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .show()
+                    return@setOnClickListener
+                }
+
+                if (viewBinding.bankAccNumberItl.editText?.text.toString().length < 4) {
+                    MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert))
+                            .setMessage(getString(R.string.enter_valid_acc_no))
+                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .show()
+                    return@setOnClickListener
+                }
+                callKycVerificationApi()
+
             }
         }
 

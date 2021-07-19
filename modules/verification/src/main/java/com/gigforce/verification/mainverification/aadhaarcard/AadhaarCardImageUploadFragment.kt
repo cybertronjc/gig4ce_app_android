@@ -40,6 +40,7 @@ import com.gigforce.verification.mainverification.Data
 import com.gigforce.verification.mainverification.VerificationClickOrSelectImageBottomSheet
 import com.gigforce.verification.util.VerificationConstants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.gson.Gson
 import com.jaeger.library.StatusBarUtil
 import com.yalantis.ucrop.UCrop
 import dagger.hilt.android.AndroidEntryPoint
@@ -121,9 +122,7 @@ class AadhaarCardImageUploadFragment : Fragment(),
                 loadsImagesAutomatically = true
                 domStorageEnabled = true
             }
-//            viewBinding.digilockerWebview.loadUrl("http://dev.manchtech.com/esign.html?kycToken=oeDAPTj7KK9mWOHrRoNVKA%3D%3D")
             viewBinding.digilockerWebview.loadUrl("http://staging.gigforce.in/kyc/6yB48vGLTkTQYpaKXG4bapwcrtp2")
-//            viewBinding.digilockerWebview.loadUrl("https://accounts.digitallocker.gov.in/signup/oauth_partner/%252Foauth2%252F1%252Fauthorize%253Fresponse_type%253Dcode%2526client_id%253D4A933F08%2526state%253DeyJ0eXBlIjoiRE9DVU1FTlQiLCJpZCI6MTcyMiwicGFyZW50UmVsSWQiOjM1OTU0LCJjbGllbnRSZXR1cm5VcmwiOiJodHRwOi8vc3RhZ2luZy5naWdmb3JjZS5pbi92ZXJpZnkva3ljLzZ5QjQ4dkdMVGtUUVlwYUtYRzRiYXB3Y3J0cDIvMzU5NTQifQ%25253D%25253D%2526orgid%253D002869%2526txn%253D60f4db02cf20bf7c4b587ef4oauth21626659586%2526hashkey%253D3a018e19317d39555fe1e7f8d6f3870cb72275c3bd1c5b58f0f1de408d3b7ea5%2526requst_pdf%253DY%2526enable_signup_link%253D1%2526disable_userpwd_login%253D1%2526aadhaar_only%253DY%2526app_name%253DTWFuY2hUZWNoIERldg%25253D%25253D%2526partner_name%253DTWFuY2ggVGVjaG5vbG9naWVzIFByaXZhdGUgTGltaXRlZA%25253D%25253D%2526authMode%253DO")
             viewBinding.digilockerWebview.webViewClient = object : WebViewClient() {
                 override fun shouldOverrideUrlLoading(view: WebView, url: String?): Boolean {
                     url?.let {
@@ -139,33 +138,10 @@ class AadhaarCardImageUploadFragment : Fragment(),
                     }
                 }
             }
-
-//            val rawHTML = "<!DOCTYPE >\n" +
-//                    "<html>\n" +
-//                    "  <head>\n" +
-//                    "    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n" +
-//                    "    <script type=\"text/javascript\">\n" +
-//                    "           function init()\n" +
-//                    "           {\n" +
-//                    "              var testVal = 'Привет от Android Tools!';\n" +
-//                    "              Android.sendData(\"working\");\n" +
-//                    "           }\n" +
-//                    "        </script>\n" +
-//                    "  </head>\n" +
-//                    "  <body>\n" +
-//                    "    <div style=\"clear: both;height: 3px;\"> </div>\n" +
-//                    "    <div>\n" +
-//                    "      <input value=\"submit\" type=\"button\" name=\"submit\"\n" +
-//                    "           id=\"btnSubmit\" onclick=\"javascript:return init();\" />\n" +
-//                    "    </div>\n" +
-//                    "  </body>\n" +
-//                    "</html>"
-//
-//            viewBinding.digilockerWebview.loadData(rawHTML,"text/HTML", "UTF-8")
         }
     }
 
-    class WebViewInterface {
+    inner class WebViewInterface {
         var context: Context
         var data: String? = null
 
@@ -177,7 +153,8 @@ class AadhaarCardImageUploadFragment : Fragment(),
         fun sendData(data: String) {
             this.data = data
             Log.e("javascript", data)
-            UtilMethods.showLongToast(context, data)
+            var adharResponseModel = Gson().fromJson(data, AadharResponseModel::class.java)
+            viewBinding.digilockerWebview.gone()
         }
     }
 
