@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.ContentResolver
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -13,6 +14,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.*
 import android.widget.DatePicker
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
@@ -22,6 +24,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.ext.showToast
+import com.gigforce.common_ui.utils.UtilMethods
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.AppConstants
@@ -105,8 +108,79 @@ class AadhaarCardImageUploadFragment : Fragment(),
         setViews()
         observer()
         listeners()
-
+        initWebview()
     }
+
+    private fun initWebview() {
+        context?.let {
+            viewBinding.digilockerWebview.addJavascriptInterface(WebViewInterface(it), "Android")
+            viewBinding.digilockerWebview.settings.apply {
+                javaScriptEnabled = true
+                loadWithOverviewMode = true
+                useWideViewPort = true
+                loadsImagesAutomatically = true
+                domStorageEnabled = true
+            }
+//            viewBinding.digilockerWebview.loadUrl("http://dev.manchtech.com/esign.html?kycToken=oeDAPTj7KK9mWOHrRoNVKA%3D%3D")
+            viewBinding.digilockerWebview.loadUrl("http://staging.gigforce.in/kyc/6yB48vGLTkTQYpaKXG4bapwcrtp2")
+//            viewBinding.digilockerWebview.loadUrl("https://accounts.digitallocker.gov.in/signup/oauth_partner/%252Foauth2%252F1%252Fauthorize%253Fresponse_type%253Dcode%2526client_id%253D4A933F08%2526state%253DeyJ0eXBlIjoiRE9DVU1FTlQiLCJpZCI6MTcyMiwicGFyZW50UmVsSWQiOjM1OTU0LCJjbGllbnRSZXR1cm5VcmwiOiJodHRwOi8vc3RhZ2luZy5naWdmb3JjZS5pbi92ZXJpZnkva3ljLzZ5QjQ4dkdMVGtUUVlwYUtYRzRiYXB3Y3J0cDIvMzU5NTQifQ%25253D%25253D%2526orgid%253D002869%2526txn%253D60f4db02cf20bf7c4b587ef4oauth21626659586%2526hashkey%253D3a018e19317d39555fe1e7f8d6f3870cb72275c3bd1c5b58f0f1de408d3b7ea5%2526requst_pdf%253DY%2526enable_signup_link%253D1%2526disable_userpwd_login%253D1%2526aadhaar_only%253DY%2526app_name%253DTWFuY2hUZWNoIERldg%25253D%25253D%2526partner_name%253DTWFuY2ggVGVjaG5vbG9naWVzIFByaXZhdGUgTGltaXRlZA%25253D%25253D%2526authMode%253DO")
+            viewBinding.digilockerWebview.webViewClient = object : WebViewClient() {
+                override fun shouldOverrideUrlLoading(view: WebView, url: String?): Boolean {
+                    url?.let {
+                        view.loadUrl(it)
+                    }
+                    return true
+                }
+
+                override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
+                    super.onReceivedError(view, request, error)
+                    context?.let {
+                        UtilMethods.showLongToast(it, error?.description.toString())
+                    }
+                }
+            }
+
+//            val rawHTML = "<!DOCTYPE >\n" +
+//                    "<html>\n" +
+//                    "  <head>\n" +
+//                    "    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n" +
+//                    "    <script type=\"text/javascript\">\n" +
+//                    "           function init()\n" +
+//                    "           {\n" +
+//                    "              var testVal = 'Привет от Android Tools!';\n" +
+//                    "              Android.sendData(\"working\");\n" +
+//                    "           }\n" +
+//                    "        </script>\n" +
+//                    "  </head>\n" +
+//                    "  <body>\n" +
+//                    "    <div style=\"clear: both;height: 3px;\"> </div>\n" +
+//                    "    <div>\n" +
+//                    "      <input value=\"submit\" type=\"button\" name=\"submit\"\n" +
+//                    "           id=\"btnSubmit\" onclick=\"javascript:return init();\" />\n" +
+//                    "    </div>\n" +
+//                    "  </body>\n" +
+//                    "</html>"
+//
+//            viewBinding.digilockerWebview.loadData(rawHTML,"text/HTML", "UTF-8")
+        }
+    }
+
+    class WebViewInterface {
+        var context: Context
+        var data: String? = null
+
+        constructor(context: Context) {
+            this.context = context
+        }
+
+        @JavascriptInterface
+        fun sendData(data: String) {
+            this.data = data
+            Log.e("javascript", data)
+            UtilMethods.showLongToast(context, data)
+        }
+    }
+
     var allNavigationList = ArrayList<String>()
     private fun getDataFromIntent(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
@@ -122,6 +196,7 @@ class AadhaarCardImageUploadFragment : Fragment(),
         }
 
     }
+
     private fun listeners() {
         viewBinding.toplayoutblock.setPrimaryClick(View.OnClickListener {
             //call for bottom sheet
@@ -169,6 +244,7 @@ class AadhaarCardImageUploadFragment : Fragment(),
             })
         }
     }
+
     private fun checkForNextDoc() {
         if (allNavigationList.size == 0) {
             activity?.onBackPressed()
@@ -182,6 +258,7 @@ class AadhaarCardImageUploadFragment : Fragment(),
 
         }
     }
+
     val CONFIRM_TAG: String = "confirm"
     private fun observer() {
         viewModel.kycOcrResult.observe(viewLifecycleOwner, Observer {
@@ -593,6 +670,7 @@ class AadhaarCardImageUploadFragment : Fragment(),
         options.setToolbarTitle(getString(R.string.crop_and_rotate))
         return options
     }
+
     override fun onResume() {
         super.onResume()
         StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(resources, R.color.lipstick_2, null))
