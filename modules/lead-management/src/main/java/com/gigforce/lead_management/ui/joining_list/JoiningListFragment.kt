@@ -1,5 +1,6 @@
 package com.gigforce.lead_management.ui.joining_list
 
+import android.os.Bundle
 import android.widget.LinearLayout
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -25,7 +26,10 @@ class JoiningListFragment : BaseFragment2<FragmentJoiningListBinding>(
     private val viewModel: JoiningListViewModel by viewModels()
     private val sharedLeadViewModel: SharedLeadManagementViewModel by activityViewModels()
 
-    override fun viewCreated(viewBinding: FragmentJoiningListBinding) {
+    override fun viewCreated(
+        viewBinding: FragmentJoiningListBinding,
+        savedInstanceState: Bundle?
+    ) {
         initToolbar(viewBinding)
         initListeners(viewBinding)
         initViewModel()

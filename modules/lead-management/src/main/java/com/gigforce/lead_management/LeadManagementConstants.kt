@@ -10,4 +10,8 @@ object LeadManagementConstants {
 
     const val MODE_REGISTERED = 1
     const val MODE_NOT_REGISTERED = 2
+
+
+    //INTENTs
+    const val INTENT_EXTRA_USER_UID = "user_uid"
 }

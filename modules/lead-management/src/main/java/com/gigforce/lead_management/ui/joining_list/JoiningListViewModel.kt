@@ -84,6 +84,14 @@ class JoiningListViewModel constructor(
 
         val statusToJoiningGroupedList = joiningsRaw.filter {
             it.status != null
+        }.filter {
+            if(currentSearchString.isNullOrBlank())
+                true
+            else
+               it.status?.contains(
+                   currentSearchString!!,
+                   true
+               ) ?: false
         }.groupBy {
             it.status!!
         }
@@ -126,16 +134,13 @@ class JoiningListViewModel constructor(
     fun searchJoinings(
         searchString: String
     ) {
+        gigforceLogger.d(TAG, "new search string received : '$searchString'")
         this.currentSearchString = searchString
 
         if (joiningsRaw.isEmpty()) {
             _viewState.postValue(JoiningListViewState.NoJoiningFound)
             return
         }
-
-        val filteredJoinings = joiningsRaw.filter {
-            it.status?.contains(searchString,true) ?: false
-        }
-        processJoiningsAndEmit(filteredJoinings)
+        processJoiningsAndEmit(joiningsRaw)
     }
 }

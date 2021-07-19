@@ -17,6 +17,10 @@ abstract class BaseFragment2<V : ViewDataBinding>(
     @ColorRes private val statusBarColor: Int
 ) : Fragment() {
 
+    val logTag : String get() {
+        return fragmentName
+    }
+
     val logger: GigforceLogger = GigforceLogger()
     private lateinit var _viewDataBinding: V
 
@@ -71,6 +75,5 @@ abstract class BaseFragment2<V : ViewDataBinding>(
     abstract fun viewCreated(
         viewBinding: V,
         savedInstanceState: Bundle?
-
     )
 }
