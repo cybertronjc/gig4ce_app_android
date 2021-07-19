@@ -10,6 +10,9 @@ import android.provider.Settings
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.work.Data
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.gigforce.app.MainActivity
 import com.gigforce.app.R
 import com.gigforce.app.notification.NotificationChannels.CHAT_NOTIFICATIONS
@@ -18,6 +21,7 @@ import com.gigforce.app.services.SyncUnSyncedDataService
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.user_tracking.TrackingConstants
 import com.gigforce.user_tracking.service.TrackingService
+import com.gigforce.user_tracking.workers.TrackingWorker
 import kotlin.random.Random
 
 
@@ -172,8 +176,23 @@ class NotificationHelper(private val mContext: Context) {
             context.startService(intent)
         } catch (e: IllegalStateException) {
             // App is probably in background hence not able to start Service
-            // Using Work Manager to start service
+            // Using Work Manager
 
+            val workerData = Data.Builder()
+                .putString(
+                    TrackingConstants.SERVICE_INTENT_EXTRA_GIG_ID,
+                    data.get(TrackingConstants.SERVICE_INTENT_EXTRA_GIG_ID)
+                ).putString(
+                    TrackingConstants.SERVICE_INTENT_EXTRA_USER_NAME,
+                    data.get(TrackingConstants.SERVICE_INTENT_EXTRA_USER_NAME)
+                ).putString(
+                    TrackingConstants.SERVICE_INTENT_EXTRA_TRADING_NAME,
+                    data.get(TrackingConstants.SERVICE_INTENT_EXTRA_TRADING_NAME)
+                ).build()
+
+            val request =
+                OneTimeWorkRequestBuilder<TrackingWorker>().setInputData(workerData).build()
+            WorkManager.getInstance(context).enqueue(request)
         } catch (e: Exception) {
             e.printStackTrace()
             CrashlyticsLogger.e(

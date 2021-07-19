@@ -473,6 +473,7 @@ class GigPage2Fragment : Fragment(),
                             showFeedbackBottomSheet()
                         } else {
                             showToast("Check-in marked")
+                            plantLocationTrackers()
                         }
                     }
                     is Lce.Error -> {
@@ -485,6 +486,27 @@ class GigPage2Fragment : Fragment(),
             })
 
         viewModel.watchGig(gigId, true)
+    }
+
+    private fun plantLocationTrackers() {
+
+        try {
+            val gig = viewModel.currentGig ?: return
+            trackingScheduler.scheduleTrackerForGig(gig)
+        } catch (e: Exception) {
+
+            MaterialAlertDialogBuilder(requireContext())
+                .setMessage("Unable to plant trackers")
+                .setPositiveButton("Okay") { _, _ -> }
+                .show()
+
+            e.printStackTrace()
+            CrashlyticsLogger.e(
+                TAG,
+                "While planting trackers",
+                e
+            )
+        }
     }
 
     private fun showErrorWhileLoadingGigData(error: String) {
