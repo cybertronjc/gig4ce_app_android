@@ -15,6 +15,18 @@
     <string name="not_signed_up">The input number has not signed up on Gigforce app yet</string>
     <string name="not_registered">Giger can only be activated if s/he has created profile on Gigforce app</string>
     <string name="verification_code">Verification Code</string>
+    <string name="gig_location">Gig Location</string>
+    <string name="add_city">Add City*</string>
+    <string name="select_location">Select Locations</string>
+    <string name="search_or_select">Search and Choose from this list</string>
+    <string name="need_to_select">You need to select</string>
+    <string name="team_leaders">Team Leaders</string>
+    <string name="gigforce_tls">Gigforce TeamLeader*</string>
+    <string name="business_tls">Business Leader(optional)</string>
+    <string name="shift_timing">Shift timings</string>
+    <string name="select_shift">Select shift*</string>
+    <string name="expected_start_date">Expected start date*</string>
+    <string name="date_format">DD/MM/YYYY</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
