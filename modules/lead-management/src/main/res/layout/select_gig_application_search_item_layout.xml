@@ -8,16 +8,16 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="8dp"
-        android:background="@drawable/giger_profile_card_background"
+        android:layout_marginStart="@dimen/size_16"
+        android:layout_marginEnd="@dimen/size_16"
         >
 
         <EditText
             android:id="@+id/search_bar"
             android:layout_width="match_parent"
-            android:layout_height="38dp"
-            android:textColor="@color/black"
-            android:lineHeight="15sp"
-            android:padding="@dimen/size_4"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:background="@drawable/giger_profile_card_background"
             android:fontFamily="@font/lato_bold"
             android:hint="Search by business name / Job Profile"
             />

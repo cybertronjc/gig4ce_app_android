@@ -22,7 +22,7 @@ class GigAppListStatusRecyclerItemView (
 
     init {
         this.layoutParams =
-            LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         viewBinding = SelectGigApplicationStatusItemLayoutBinding.inflate(
             LayoutInflater.from(context),
             this,

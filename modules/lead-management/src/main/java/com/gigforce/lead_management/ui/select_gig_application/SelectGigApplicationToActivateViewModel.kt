@@ -99,14 +99,6 @@ class SelectGigApplicationToActivateViewModel @Inject constructor(
         val gigAppList: List<GigApplication> = ongoingGigApps + otherGigApps
         val statusToGigAppList = gigAppList.filter {
             it.type != null
-        }.filter {
-            if(currentSearchString.isNullOrBlank())
-                true
-            else
-                it.status?.contains(
-                    currentSearchString!!,
-                    true
-                ) ?: false
         }.groupBy {
             it.type
         }
@@ -122,10 +114,10 @@ class SelectGigApplicationToActivateViewModel @Inject constructor(
                )
            )
 
-           if (type.equals("other")) {
+           if (type.equals("Other Applications")) {
                gigAppsListForView.add(
                    GigAppListRecyclerItemData.GigAppListSearchRecyclerItemData(
-                       "Search"
+                       ""
                    )
                )
            }
@@ -160,7 +152,7 @@ class SelectGigApplicationToActivateViewModel @Inject constructor(
         }
     }
 
-    fun searchJoinings(
+    fun searchOtherApplications(
         searchString: String
     ) {
         gigforceLogger.d(TAG, "new search string received : '$searchString'")

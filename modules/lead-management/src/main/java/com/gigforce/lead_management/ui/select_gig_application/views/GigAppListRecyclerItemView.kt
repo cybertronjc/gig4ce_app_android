@@ -32,7 +32,7 @@ class GigAppListRecyclerItemView  (
     init {
         this.layoutParams =
             LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
         viewBinding = SelectGigApplicationItemLayoutBinding.inflate(
@@ -50,8 +50,8 @@ class GigAppListRecyclerItemView  (
                 it as GigAppListRecyclerItemData.GigAppRecyclerItemData
             viewData = gigApplicationData
 
-            viewBinding.companyName.text = gigApplicationData.businessName
-            viewBinding.jobProfileTitle.text = gigApplicationData.jobProfileTitle
+            viewBinding.companyName.text = gigApplicationData.jobProfileTitle
+            viewBinding.jobProfileTitle.text = gigApplicationData.businessName
 
             setBusinessLogo(
                 gigApplicationData.businessLogoThumbnail,
