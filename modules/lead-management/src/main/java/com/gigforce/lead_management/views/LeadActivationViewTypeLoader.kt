@@ -3,6 +3,9 @@ package com.gigforce.lead_management.views
 import android.content.Context
 import android.view.View
 import com.gigforce.core.IViewTypeLoader
+import com.gigforce.lead_management.gigeronboarding.views.GigAppListRecyclerItemView
+import com.gigforce.lead_management.gigeronboarding.views.GigAppListSearchRecyclerItemView
+import com.gigforce.lead_management.gigeronboarding.views.GigAppListStatusRecyclerItemView
 import com.gigforce.lead_management.ui.joining_list.views.JoiningRecyclerItemView
 import com.gigforce.lead_management.ui.joining_list.views.JoiningStatusRecyclerItemView
 
@@ -19,6 +22,18 @@ object LeadActivationViewTypeLoader : IViewTypeLoader {
                 null
             )
             LeadActivationViewTypes.JoiningList -> JoiningRecyclerItemView(
+                context,
+                null
+            )
+            LeadActivationViewTypes.GigAppList -> GigAppListRecyclerItemView(
+                context,
+                null
+            )
+            LeadActivationViewTypes.GigAppListStatus -> GigAppListStatusRecyclerItemView(
+                context,
+                null
+            )
+            LeadActivationViewTypes.GigAppListSearch -> GigAppListSearchRecyclerItemView(
                 context,
                 null
             )

@@ -16,8 +16,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@HiltViewModel
-class GigerOnboardingViewModel @Inject constructor(
+
+class GigerOnboardingViewModel constructor(
     private val buildConfig: IBuildConfigVM
 ) : ViewModel() {
 
