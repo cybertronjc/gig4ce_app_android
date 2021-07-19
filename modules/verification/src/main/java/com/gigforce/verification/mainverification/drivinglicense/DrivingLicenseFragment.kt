@@ -759,12 +759,12 @@ class DrivingLicenseFragment : Fragment(),
         viewBinding.toplayoutblock.uploadStatusLayout(
                 AppConstants.UPLOAD_SUCCESS,
                 "VERIFICATION COMPLETED",
-                "The Bank Details have been verified successfully."
+                "The Driving License Details have been verified successfully."
         )
         viewBinding.submitButton.visible()
         viewBinding.submitButton.text = "Next"
         viewBinding.progressBar.gone()
-        viewBinding.toplayoutblock.setVerificationSuccessfulView("Bank Account verified")
+        viewBinding.toplayoutblock.setVerificationSuccessfulView("Driving License verified")
 
         var list = ArrayList<KYCImageModel>()
         drivingLicenseDataModel.frontImage?.let {
@@ -782,7 +782,7 @@ class DrivingLicenseFragment : Fragment(),
             when (it) {
                 "started" -> {
                     verificationScreenStatus = VerificationScreenStatus.STARTED_VERIFYING
-                    print("Bank Verification started")
+                    print("Driving Lincense started")
                     startedStatusViews(drivingLicenseDataModel)
                 }
                 "failed" -> {
@@ -811,7 +811,7 @@ class DrivingLicenseFragment : Fragment(),
         viewBinding.submitButton.isEnabled = true
         viewBinding.belowLayout.visible()
         viewBinding.toplayoutblock.setVerificationSuccessfulView(
-                "Bank Account",
+                "Driving License",
                 "You need to upload"
         )
         initializeImages()
@@ -826,14 +826,25 @@ class DrivingLicenseFragment : Fragment(),
                 .appendPath(resources.getResourceTypeName(R.drawable.verification_doc_image))
                 .appendPath(resources.getResourceEntryName(R.drawable.verification_doc_image))
                 .build()
-        val list =
-                listOf(
-                        KYCImageModel(
-                                text = getString(R.string.upload_bank_account_new),
-                                imageIcon = frontUri,
-                                imageUploaded = false
-                        )
+        val backUri = Uri.Builder()
+                .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
+                .authority(resources.getResourcePackageName(R.drawable.verification_doc_image))
+                .appendPath(resources.getResourceTypeName(R.drawable.verification_doc_image))
+                .appendPath(resources.getResourceEntryName(R.drawable.verification_doc_image))
+                .build()
+        val list = listOf(
+                KYCImageModel(
+                        text = getString(R.string.upload_driving_license_front_side_new),
+                        imageIcon = frontUri,
+                        imageUploaded = false
+                ),
+                KYCImageModel(
+                        text = getString(R.string.upload_driving_license_back_side_new),
+                        imageIcon = backUri,
+                        imageUploaded = false
                 )
+        )
+
         viewBinding.toplayoutblock.setImageViewPager(list)
     }
 
@@ -846,7 +857,7 @@ class DrivingLicenseFragment : Fragment(),
         viewBinding.progressBar.gone()
         viewBinding.belowLayout.gone()
         viewBinding.toplayoutblock.setVerificationSuccessfulView(
-                "Bank Account pending for verify",
+                "Driving License Pending for verify",
                 "Verifying"
         )
         var list = ArrayList<KYCImageModel>()
