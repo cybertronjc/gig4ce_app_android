@@ -23,6 +23,7 @@ import com.gigforce.core.analytics.ClientActivationEvents
 import com.gigforce.common_ui.components.cells.SearchTextChangeListener
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.hideSoftKeyboard
+import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.listeners.AppBarClicks
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
@@ -30,6 +31,7 @@ import com.gigforce.core.navigation.INavigation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.client_acti_explore_list_fragment.*
 import kotlinx.android.synthetic.main.client_acti_explore_list_fragment.search_item
+import java.lang.Exception
 import java.util.ArrayList
 import javax.inject.Inject
 
@@ -374,9 +376,7 @@ class ClientActiExploreList : Fragment(), IOnBackPressedOverride, OnJobSelectedL
             clientActiExploreAdapter.filter.filter("")
             return true
         } else {
-
             return false
-
         }
 
     }
