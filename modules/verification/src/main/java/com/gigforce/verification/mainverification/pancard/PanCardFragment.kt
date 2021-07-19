@@ -27,6 +27,7 @@ import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.AppConstants
+import com.gigforce.core.datamodels.verification.DrivingLicenseDataModel
 import com.gigforce.core.datamodels.verification.PanCardDataModel
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.gone
@@ -40,6 +41,7 @@ import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.gigforce.verification.gigerVerfication.panCard.AddPanCardInfoFragment
 import com.gigforce.verification.mainverification.Data
 import com.gigforce.verification.mainverification.VerificationClickOrSelectImageBottomSheet
+import com.gigforce.verification.mainverification.drivinglicense.VerificationScreenStatus
 import com.gigforce.verification.util.VerificationConstants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jaeger.library.StatusBarUtil
@@ -84,7 +86,8 @@ class PanCardFragment : Fragment(),
     private var clickedImagePath: Uri? = null
     private val viewModel: PanCardViewModel by viewModels()
     private lateinit var viewBinding: PanCardFragmentBinding
-
+    var verificationScreenStatus = VerificationScreenStatus.DEFAULT
+    var ocrOrVerificationRquested = false
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -100,6 +103,7 @@ class PanCardFragment : Fragment(),
         setViews()
         listeners()
         initViewModel()
+        observerFinal()
     }
 
     var allNavigationList = ArrayList<String>()
@@ -154,57 +158,62 @@ class PanCardFragment : Fragment(),
                 }
             }
         })
+
         viewModel.kycVerifyResult.observe(viewLifecycleOwner, Observer {
-            activeLoader(false)
-            it?.let {
-                if (it.status) {
-                    viewBinding.belowLayout.gone()
-                    viewBinding.toplayoutblock.uploadStatusLayout(
-                            AppConstants.UPLOAD_SUCCESS,
-                            "VERIFICATION COMPLETED",
-                            "The PAN card Details have been verified successfully."
-                    )
-                    viewBinding.submitButton.tag = CONFIRM_TAG
-                    viewBinding.toplayoutblock.setVerificationSuccessfulView("PAN verified")
-                    viewBinding.submitButton.text = getString(R.string.submit)
-                    viewBinding.toplayoutblock.disableImageClick()
-                    viewBinding.toplayoutblock.hideOnVerifiedDocuments()
-                    viewModel.getVerifiedStatus()
-                } else
-                    showToast("Verification " + it.message)
-            }
+            ocrOrVerificationRquested = false
         })
+
+//        viewModel.kycVerifyResult.observe(viewLifecycleOwner, Observer {
+//            activeLoader(false)
+//            it?.let {
+//                if (it.status) {
+//                    viewBinding.belowLayout.gone()
+//                    viewBinding.toplayoutblock.uploadStatusLayout(
+//                            AppConstants.UPLOAD_SUCCESS,
+//                            "VERIFICATION COMPLETED",
+//                            "The PAN card Details have been verified successfully."
+//                    )
+//                    viewBinding.submitButton.tag = CONFIRM_TAG
+//                    viewBinding.toplayoutblock.setVerificationSuccessfulView("PAN verified")
+//                    viewBinding.submitButton.text = getString(R.string.submit)
+//                    viewBinding.toplayoutblock.disableImageClick()
+//                    viewBinding.toplayoutblock.hideOnVerifiedDocuments()
+//                    viewModel.getVerifiedStatus()
+//                } else
+//                    showToast("Verification " + it.message)
+//            }
+//        })
         viewModel.getVerifiedStatus()
-        viewModel.verifiedStatus.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                Log.d("Status", it.toString())
-                if (it?.verified) {
-                    viewBinding.belowLayout.gone()
-                    viewBinding.toplayoutblock.uploadStatusLayout(
-                            AppConstants.UPLOAD_SUCCESS,
-                            "VERIFICATION COMPLETED",
-                            "The PAN card Details have been verified successfully."
-                    )
-                    viewBinding.submitButton.tag = CONFIRM_TAG
-                    viewBinding.toplayoutblock.setVerificationSuccessfulView("PAN verified")
-                    viewBinding.toplayoutblock.disableImageClick()
-                    viewBinding.toplayoutblock.hideOnVerifiedDocuments()
-                    val list = ArrayList<KYCImageModel>()
-                    it.panCardImagePath?.let {
-                        if(it.isNotEmpty()) {
-                            try{
-                                var modifiedString = it
-                                if(!it.startsWith("/"))
-                                    modifiedString = "/$it"
-                                listOf(KYCImageModel(text = getString(R.string.upload_pan_card_new), imagePath = buildConfig.getStorageBaseUrl()+modifiedString, imageUploaded = true))
-                            }catch (e:Exception){
-                            }
-                        }
-                    }
-                    viewBinding.toplayoutblock.setImageViewPager(list)
-                }
-            }
-        })
+//        viewModel.verifiedStatus.observe(viewLifecycleOwner, Observer {
+//            it?.let {
+//                Log.d("Status", it.toString())
+//                if (it?.verified) {
+//                    viewBinding.belowLayout.gone()
+//                    viewBinding.toplayoutblock.uploadStatusLayout(
+//                            AppConstants.UPLOAD_SUCCESS,
+//                            "VERIFICATION COMPLETED",
+//                            "The PAN card Details have been verified successfully."
+//                    )
+//                    viewBinding.submitButton.tag = CONFIRM_TAG
+//                    viewBinding.toplayoutblock.setVerificationSuccessfulView("PAN verified")
+//                    viewBinding.toplayoutblock.disableImageClick()
+//                    viewBinding.toplayoutblock.hideOnVerifiedDocuments()
+//                    val list = ArrayList<KYCImageModel>()
+//                    it.panCardImagePath?.let {
+//                        if(it.isNotEmpty()) {
+//                            try{
+//                                var modifiedString = it
+//                                if(!it.startsWith("/"))
+//                                    modifiedString = "/$it"
+//                                listOf(KYCImageModel(text = getString(R.string.upload_pan_card_new), imagePath = buildConfig.getStorageBaseUrl()+modifiedString, imageUploaded = true))
+//                            }catch (e:Exception){
+//                            }
+//                        }
+//                    }
+//                    viewBinding.toplayoutblock.setImageViewPager(list)
+//                }
+//            }
+//        })
     }
 
     val CONFIRM_TAG: String = "confirm"
@@ -512,4 +521,146 @@ class PanCardFragment : Fragment(),
         super.onResume()
         StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(resources, R.color.lipstick_2, null))
     }
+
+
+    private fun observerFinal() {
+        viewModel.verifiedStatus.observe(viewLifecycleOwner, Observer {
+            if (!ocrOrVerificationRquested) {
+                viewBinding.screenLoaderBar.gone()
+                it?.let {
+
+                    if (it.verified) {
+                        verificationScreenStatus = VerificationScreenStatus.VERIFIED
+                        verifiedStatusViews(it)
+                    } else {
+                        checkforStatusAndVerified(it)
+                    }
+                }
+            }
+        })
+    }
+
+    private fun verifiedStatusViews(drivingLicenseDataModel: PanCardDataModel) {
+        viewBinding.toplayoutblock.viewChangeOnVerified()
+        viewBinding.belowLayout.gone()
+        viewBinding.toplayoutblock.uploadStatusLayout(
+                AppConstants.UPLOAD_SUCCESS,
+                "VERIFICATION COMPLETED",
+                "The Driving License Details have been verified successfully."
+        )
+        viewBinding.submitButton.visible()
+        viewBinding.submitButton.text = "Next"
+        viewBinding.progressBar.gone()
+        viewBinding.toplayoutblock.setVerificationSuccessfulView("Driving License verified")
+
+        var list = ArrayList<KYCImageModel>()
+        drivingLicenseDataModel.panCardImagePath?.let {
+            getDBImageUrl(it)?.let { list.add(KYCImageModel(text = getString(R.string.upload_pan_card_new), imagePath = it, imageUploaded = true)) }
+        }
+        viewBinding.toplayoutblock.setImageViewPager(list)
+
+    }
+    fun getDBImageUrl(imagePath: String): String? {
+        if (imagePath.isNotBlank()) {
+            try {
+                var modifiedString = imagePath
+                if (!imagePath.startsWith("/"))
+                    modifiedString = "/$imagePath"
+                return buildConfig.getStorageBaseUrl() + modifiedString
+            } catch (e: Exception) {
+                return null
+            }
+        }
+        return null
+    }
+    private fun checkforStatusAndVerified(drivingLicenseDataModel: PanCardDataModel) {
+        drivingLicenseDataModel.status?.let {
+            when (it) {
+                "started" -> {
+                    verificationScreenStatus = VerificationScreenStatus.STARTED_VERIFYING
+                    print("Driving Lincense started")
+                    startedStatusViews(drivingLicenseDataModel)
+                }
+                "failed" -> {
+                    verificationScreenStatus = VerificationScreenStatus.FAILED
+                    print("failed transaction")
+                    resetInitializeViews()
+                    viewBinding.toplayoutblock.uploadStatusLayout(
+                            AppConstants.DETAILS_MISMATCH,
+                            "VERIFICATION FAILED",
+                            "Please re-enter the correct information as per the documents"
+                    )
+                }
+                "" -> {
+                    verificationScreenStatus = VerificationScreenStatus.DEFAULT
+                    print("transaction reinitialized")
+                    resetInitializeViews()
+                }
+                else -> "unmatched status"
+            }
+        }
+    }
+
+    private fun resetInitializeViews() {
+        viewBinding.submitButton.visible()
+        viewBinding.submitButton.text = "Submit"
+        viewBinding.submitButton.isEnabled = true
+        viewBinding.belowLayout.visible()
+        viewBinding.toplayoutblock.setVerificationSuccessfulView(
+                "Driving License",
+                "You need to upload"
+        )
+        initializeImages()
+        viewBinding.toplayoutblock.resetAllViews()
+    }
+
+    private fun initializeImages() {
+        // verification_doc_image ic_passbook_illustration
+        val frontUri = Uri.Builder()
+                .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
+                .authority(resources.getResourcePackageName(R.drawable.verification_doc_image))
+                .appendPath(resources.getResourceTypeName(R.drawable.verification_doc_image))
+                .appendPath(resources.getResourceEntryName(R.drawable.verification_doc_image))
+                .build()
+        val backUri = Uri.Builder()
+                .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
+                .authority(resources.getResourcePackageName(R.drawable.verification_doc_image))
+                .appendPath(resources.getResourceTypeName(R.drawable.verification_doc_image))
+                .appendPath(resources.getResourceEntryName(R.drawable.verification_doc_image))
+                .build()
+        val list = listOf(
+                KYCImageModel(
+                        text = getString(R.string.upload_driving_license_front_side_new),
+                        imageIcon = frontUri,
+                        imageUploaded = false
+                ),
+                KYCImageModel(
+                        text = getString(R.string.upload_driving_license_back_side_new),
+                        imageIcon = backUri,
+                        imageUploaded = false
+                )
+        )
+
+        viewBinding.toplayoutblock.setImageViewPager(list)
+    }
+
+    private fun startedStatusViews(drivingLicenseDataModel: PanCardDataModel) {
+        viewBinding.toplayoutblock.viewChangeOnStarted()
+        viewBinding.screenLoaderBar.visible()
+        viewBinding.progressMessage.text =
+                "If it is taking longer time than 1 minute. \nYou can come back and check"
+        viewBinding.submitButton.gone()
+        viewBinding.progressBar.gone()
+        viewBinding.belowLayout.gone()
+        viewBinding.toplayoutblock.setVerificationSuccessfulView(
+                "Driving License Pending for verify",
+                "Verifying"
+        )
+        var list = ArrayList<KYCImageModel>()
+        drivingLicenseDataModel.panCardImagePath?.let {
+            getDBImageUrl(it)?.let { list.add(KYCImageModel(text = getString(R.string.upload_pan_card_new), imagePath = it, imageUploaded = true)) }
+        }
+        viewBinding.toplayoutblock.setImageViewPager(list)
+    }
+
 }

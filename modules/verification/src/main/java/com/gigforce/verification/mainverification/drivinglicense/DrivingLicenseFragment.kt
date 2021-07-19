@@ -350,30 +350,30 @@ class DrivingLicenseFragment : Fragment(),
 //            }
 //        })
         viewModel.getVerifiedStatus()
-        viewModel.verifiedStatus.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                if (it.verified) {
-                    viewBinding.belowLayout.gone()
-                    viewBinding.toplayoutblock.uploadStatusLayout(
-                            AppConstants.UPLOAD_SUCCESS,
-                            "VERIFICATION COMPLETED",
-                            "The Driving License Details have been verified successfully."
-                    )
-                    viewBinding.submitButton.tag = CONFIRM_TAG
-                    viewBinding.toplayoutblock.setVerificationSuccessfulView("Your Driving License verified")
-                    viewBinding.toplayoutblock.disableImageClick()
-                    viewBinding.toplayoutblock.hideOnVerifiedDocuments()
-                    var list = ArrayList<KYCImageModel>()
-                    it.frontImage?.let {
-                        getDBImageUrl(it)?.let { list.add(KYCImageModel(text = getString(R.string.upload_pan_card_new), imagePath = it, imageUploaded = true)) }
-                    }
-                    it.backImage?.let {
-                        getDBImageUrl(it)?.let { list.add(KYCImageModel(text = getString(R.string.upload_pan_card_new), imagePath = it, imageUploaded = true)) }
-                    }
-                    viewBinding.toplayoutblock.setImageViewPager(list)
-                }
-            }
-        })
+//        viewModel.verifiedStatus.observe(viewLifecycleOwner, Observer {
+//            it?.let {
+//                if (it.verified) {
+//                    viewBinding.belowLayout.gone()
+//                    viewBinding.toplayoutblock.uploadStatusLayout(
+//                            AppConstants.UPLOAD_SUCCESS,
+//                            "VERIFICATION COMPLETED",
+//                            "The Driving License Details have been verified successfully."
+//                    )
+//                    viewBinding.submitButton.tag = CONFIRM_TAG
+//                    viewBinding.toplayoutblock.setVerificationSuccessfulView("Your Driving License verified")
+//                    viewBinding.toplayoutblock.disableImageClick()
+//                    viewBinding.toplayoutblock.hideOnVerifiedDocuments()
+//                    var list = ArrayList<KYCImageModel>()
+//                    it.frontImage?.let {
+//                        getDBImageUrl(it)?.let { list.add(KYCImageModel(text = getString(R.string.upload_driving_license_front_side_new), imagePath = it, imageUploaded = true)) }
+//                    }
+//                    it.backImage?.let {
+//                        getDBImageUrl(it)?.let { list.add(KYCImageModel(text = getString(R.string.upload_driving_license_back_side_new), imagePath = it, imageUploaded = true)) }
+//                    }
+//                    viewBinding.toplayoutblock.setImageViewPager(list)
+//                }
+//            }
+//        })
         viewModel.observableStates.observe(viewLifecycleOwner, Observer {
             it?.let {
                 val stateList = arrayListOf<String>()
@@ -768,10 +768,10 @@ class DrivingLicenseFragment : Fragment(),
 
         var list = ArrayList<KYCImageModel>()
         drivingLicenseDataModel.frontImage?.let {
-            getDBImageUrl(it)?.let { list.add(KYCImageModel(text = getString(R.string.upload_pan_card_new), imagePath = it, imageUploaded = true)) }
+            getDBImageUrl(it)?.let { list.add(KYCImageModel(text = getString(R.string.upload_driving_license_front_side_new), imagePath = it, imageUploaded = true)) }
         }
         drivingLicenseDataModel.backImage?.let {
-            getDBImageUrl(it)?.let { list.add(KYCImageModel(text = getString(R.string.upload_pan_card_new), imagePath = it, imageUploaded = true)) }
+            getDBImageUrl(it)?.let { list.add(KYCImageModel(text = getString(R.string.upload_driving_license_back_side_new), imagePath = it, imageUploaded = true)) }
         }
         viewBinding.toplayoutblock.setImageViewPager(list)
 
@@ -862,10 +862,10 @@ class DrivingLicenseFragment : Fragment(),
         )
         var list = ArrayList<KYCImageModel>()
         drivingLicenseDataModel.frontImage?.let {
-            getDBImageUrl(it)?.let { list.add(KYCImageModel(text = getString(R.string.upload_pan_card_new), imagePath = it, imageUploaded = true)) }
+            getDBImageUrl(it)?.let { list.add(KYCImageModel(text = getString(R.string.upload_driving_license_front_side_new), imagePath = it, imageUploaded = true)) }
         }
         drivingLicenseDataModel.backImage?.let {
-            getDBImageUrl(it)?.let { list.add(KYCImageModel(text = getString(R.string.upload_pan_card_new), imagePath = it, imageUploaded = true)) }
+            getDBImageUrl(it)?.let { list.add(KYCImageModel(text = getString(R.string.upload_driving_license_back_side_new), imagePath = it, imageUploaded = true)) }
         }
         viewBinding.toplayoutblock.setImageViewPager(list)
     }

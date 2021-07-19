@@ -10,6 +10,7 @@ data class PanCardDataModel(
     val verified: Boolean = false,
     val panCardNo : String? = null,
     val state :Int = -1,
+    val status : String? = null,
     val verifiedString : String? = null
 ) : BaseFirestoreDataModel(TABLE_NAME){
 
