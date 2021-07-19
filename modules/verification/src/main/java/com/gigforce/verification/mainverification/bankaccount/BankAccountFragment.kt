@@ -21,7 +21,6 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
@@ -255,7 +254,7 @@ class BankAccountFragment : Fragment(),
                     startedStatusViews(obj)
                     Handler().postDelayed({
                         try {
-                            if (verificationScreenStatus != VerificationScreenStatus.VERIFIED) {
+                            if (verificationScreenStatus != VerificationScreenStatus.VERIFIED || verificationScreenStatus != VerificationScreenStatus.COMPLETED) {
                                 viewBinding.screenLoaderBar.gone()
                                 verifiedStatusViews(null)
                                 viewBinding.toplayoutblock.uploadStatusLayout(
@@ -263,7 +262,7 @@ class BankAccountFragment : Fragment(),
                                         "VERIFICATION IN PROGRESS",
                                         "Click next to proceed. Verification will be done in parallel"
                                 )
-                                viewBinding.toplayoutblock.setVerificationSuccessfulView("","")
+                                viewBinding.toplayoutblock.setVerificationSuccessfulView("", "")
                             }
                         } catch (e: Exception) {
 
