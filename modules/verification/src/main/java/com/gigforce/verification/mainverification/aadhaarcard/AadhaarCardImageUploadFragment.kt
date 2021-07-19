@@ -119,6 +119,7 @@ class AadhaarCardImageUploadFragment : Fragment(),
                 loadWithOverviewMode = true
                 useWideViewPort = true
                 loadsImagesAutomatically = true
+                domStorageEnabled = true
             }
 //            viewBinding.digilockerWebview.loadUrl("http://dev.manchtech.com/esign.html?kycToken=oeDAPTj7KK9mWOHrRoNVKA%3D%3D")
             viewBinding.digilockerWebview.loadUrl("http://staging.gigforce.in/kyc/6yB48vGLTkTQYpaKXG4bapwcrtp2")
