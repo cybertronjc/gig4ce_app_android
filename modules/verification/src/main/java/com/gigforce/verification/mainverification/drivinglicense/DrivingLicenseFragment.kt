@@ -15,7 +15,6 @@ import android.util.Size
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
@@ -256,14 +255,14 @@ class DrivingLicenseFragment : Fragment(),
                 navigation.popBackStack()
             })
         }
-        val arrayAdapter = context?.let { it1 ->
-            ArrayAdapter.createFromResource(
-                    it1,
-                    R.array.indian_states,
-                    android.R.layout.simple_spinner_dropdown_item
-            )
-        }
-        viewBinding.stateSpinner.setAdapter(arrayAdapter)
+//        val arrayAdapter = context?.let { it1 ->
+//            ArrayAdapter.createFromResource(
+//                    it1,
+//                    R.array.indian_states,
+//                    android.R.layout.simple_spinner_dropdown_item
+//            )
+//        }
+//        viewBinding.stateSpinner.setAdapter(arrayAdapter)
     }
 
     private fun activeLoader(activate: Boolean) {
@@ -328,64 +327,6 @@ class DrivingLicenseFragment : Fragment(),
         viewModel.kycVerifyResult.observe(viewLifecycleOwner, Observer {
             ocrOrVerificationRquested = false
         })
-//        viewModel.kycVerifyResult.observe(viewLifecycleOwner, Observer {
-//            activeLoader(false)
-//            it?.let {
-//                if (it.status) {
-//                    viewBinding.belowLayout.gone()
-//                    viewBinding.toplayoutblock.uploadStatusLayout(
-//                            AppConstants.UPLOAD_SUCCESS,
-//                            "VERIFICATION COMPLETED",
-//                            "The Driving License Details have been verified successfully."
-//                    )
-//                    viewBinding.submitButton.tag = CONFIRM_TAG
-//                    viewBinding.toplayoutblock.setVerificationSuccessfulView("Your Driving License verified")
-//                    viewBinding.submitButton.text = getString(R.string.submit)
-//                    viewBinding.toplayoutblock.disableImageClick()
-//                    viewBinding.toplayoutblock.hideOnVerifiedDocuments()
-//                    isDLVerified = true
-//                    viewModel.getVerifiedStatus()
-//                } else
-//                    showToast("Verification " + it.message)
-//            }
-//        })
-        viewModel.getVerifiedStatus()
-//        viewModel.verifiedStatus.observe(viewLifecycleOwner, Observer {
-//            it?.let {
-//                if (it.verified) {
-//                    viewBinding.belowLayout.gone()
-//                    viewBinding.toplayoutblock.uploadStatusLayout(
-//                            AppConstants.UPLOAD_SUCCESS,
-//                            "VERIFICATION COMPLETED",
-//                            "The Driving License Details have been verified successfully."
-//                    )
-//                    viewBinding.submitButton.tag = CONFIRM_TAG
-//                    viewBinding.toplayoutblock.setVerificationSuccessfulView("Your Driving License verified")
-//                    viewBinding.toplayoutblock.disableImageClick()
-//                    viewBinding.toplayoutblock.hideOnVerifiedDocuments()
-//                    var list = ArrayList<KYCImageModel>()
-//                    it.frontImage?.let {
-//                        getDBImageUrl(it)?.let { list.add(KYCImageModel(text = getString(R.string.upload_driving_license_front_side_new), imagePath = it, imageUploaded = true)) }
-//                    }
-//                    it.backImage?.let {
-//                        getDBImageUrl(it)?.let { list.add(KYCImageModel(text = getString(R.string.upload_driving_license_back_side_new), imagePath = it, imageUploaded = true)) }
-//                    }
-//                    viewBinding.toplayoutblock.setImageViewPager(list)
-//                }
-//            }
-//        })
-        viewModel.observableStates.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                val stateList = arrayListOf<String>()
-                it.forEach {
-                    stateList.add(it.name)
-                }
-                Log.d("states", it.toString())
-//                val arrayAdapter = context?.let { it1 -> ArrayAdapter(it1,android.R.layout.simple_spinner_item, stateList) }
-//                stateSpinner.adapter = arrayAdapter
-            }
-        })
-
     }
 
     fun getDBImageUrl(imagePath: String): String? {
@@ -627,10 +568,10 @@ class DrivingLicenseFragment : Fragment(),
 
     private fun callKycVerificationApi() {
         var list = listOf(
-                Data("state", viewBinding.stateSpinner.text.toString()),
+//                Data("state", viewBinding.stateSpinner.text.toString()),
                 Data("name", viewBinding.nameTilDl.editText?.text.toString()),
                 Data("no", viewBinding.dlnoTil.editText?.text.toString()),
-                Data("fathername", viewBinding.fatherNameTil.editText?.text.toString()),
+//                Data("fathername", viewBinding.fatherNameTil.editText?.text.toString()),
                 Data("issuedate", viewBinding.issueDate.text.toString()),
                 Data("expirydate", viewBinding.expiryDate.text.toString()),
                 Data("dob", viewBinding.dobDate.text.toString())
@@ -737,6 +678,7 @@ class DrivingLicenseFragment : Fragment(),
 
 
     private fun observerFinal() {
+        viewModel.getVerifiedStatus()
         viewModel.verifiedStatus.observe(viewLifecycleOwner, Observer {
             if (!ocrOrVerificationRquested) {
                 viewBinding.screenLoaderBar.gone()

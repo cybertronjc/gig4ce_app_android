@@ -27,7 +27,6 @@ import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.AppConstants
-import com.gigforce.core.datamodels.verification.DrivingLicenseDataModel
 import com.gigforce.core.datamodels.verification.PanCardDataModel
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.gone
@@ -41,7 +40,6 @@ import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.gigforce.verification.gigerVerfication.panCard.AddPanCardInfoFragment
 import com.gigforce.verification.mainverification.Data
 import com.gigforce.verification.mainverification.VerificationClickOrSelectImageBottomSheet
-import com.gigforce.verification.mainverification.drivinglicense.VerificationScreenStatus
 import com.gigforce.verification.util.VerificationConstants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jaeger.library.StatusBarUtil
@@ -58,6 +56,15 @@ import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
+
+enum class VerificationScreenStatus {
+    OCR_COMPLETED,
+    VERIFIED,
+    STARTED_VERIFYING,
+    FAILED,
+    COMPLETED,
+    DEFAULT
+}
 
 @AndroidEntryPoint
 class PanCardFragment : Fragment(),
@@ -80,7 +87,8 @@ class PanCardFragment : Fragment(),
 
     @Inject
     lateinit var navigation: INavigation
-    @Inject lateinit var buildConfig : IBuildConfig
+    @Inject
+    lateinit var buildConfig: IBuildConfig
 
     private var panCardDataModel: PanCardDataModel? = null
     private var clickedImagePath: Uri? = null
@@ -496,6 +504,7 @@ class PanCardFragment : Fragment(),
         uCrop.withOptions(getCropOptions())
         uCrop.start(requireContext(), this)
     }
+
     private fun getImageDimensions(uri: Uri): Size {
         val options: BitmapFactory.Options = BitmapFactory.Options()
         options.inJustDecodeBounds = true
@@ -517,6 +526,7 @@ class PanCardFragment : Fragment(),
         options.setToolbarTitle(getString(R.string.crop_and_rotate))
         return options
     }
+
     override fun onResume() {
         super.onResume()
         StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(resources, R.color.lipstick_2, null))
@@ -540,26 +550,27 @@ class PanCardFragment : Fragment(),
         })
     }
 
-    private fun verifiedStatusViews(drivingLicenseDataModel: PanCardDataModel) {
+    private fun verifiedStatusViews(panCardDataModel: PanCardDataModel) {
         viewBinding.toplayoutblock.viewChangeOnVerified()
         viewBinding.belowLayout.gone()
         viewBinding.toplayoutblock.uploadStatusLayout(
                 AppConstants.UPLOAD_SUCCESS,
                 "VERIFICATION COMPLETED",
-                "The Driving License Details have been verified successfully."
+                "The PAN card details have been verified successfully."
         )
         viewBinding.submitButton.visible()
         viewBinding.submitButton.text = "Next"
         viewBinding.progressBar.gone()
-        viewBinding.toplayoutblock.setVerificationSuccessfulView("Driving License verified")
+        viewBinding.toplayoutblock.setVerificationSuccessfulView("PAN card verified")
 
         var list = ArrayList<KYCImageModel>()
-        drivingLicenseDataModel.panCardImagePath?.let {
+        panCardDataModel.panCardImagePath?.let {
             getDBImageUrl(it)?.let { list.add(KYCImageModel(text = getString(R.string.upload_pan_card_new), imagePath = it, imageUploaded = true)) }
         }
         viewBinding.toplayoutblock.setImageViewPager(list)
 
     }
+
     fun getDBImageUrl(imagePath: String): String? {
         if (imagePath.isNotBlank()) {
             try {
@@ -573,17 +584,16 @@ class PanCardFragment : Fragment(),
         }
         return null
     }
-    private fun checkforStatusAndVerified(drivingLicenseDataModel: PanCardDataModel) {
-        drivingLicenseDataModel.status?.let {
+
+    private fun checkforStatusAndVerified(panCardDataModel: PanCardDataModel) {
+        panCardDataModel.status?.let {
             when (it) {
                 "started" -> {
                     verificationScreenStatus = VerificationScreenStatus.STARTED_VERIFYING
-                    print("Driving Lincense started")
-                    startedStatusViews(drivingLicenseDataModel)
+                    startedStatusViews(panCardDataModel)
                 }
                 "failed" -> {
                     verificationScreenStatus = VerificationScreenStatus.FAILED
-                    print("failed transaction")
                     resetInitializeViews()
                     viewBinding.toplayoutblock.uploadStatusLayout(
                             AppConstants.DETAILS_MISMATCH,
@@ -607,7 +617,7 @@ class PanCardFragment : Fragment(),
         viewBinding.submitButton.isEnabled = true
         viewBinding.belowLayout.visible()
         viewBinding.toplayoutblock.setVerificationSuccessfulView(
-                "Driving License",
+                "PAN card",
                 "You need to upload"
         )
         initializeImages()
@@ -644,7 +654,7 @@ class PanCardFragment : Fragment(),
         viewBinding.toplayoutblock.setImageViewPager(list)
     }
 
-    private fun startedStatusViews(drivingLicenseDataModel: PanCardDataModel) {
+    private fun startedStatusViews(panCardDataModel: PanCardDataModel) {
         viewBinding.toplayoutblock.viewChangeOnStarted()
         viewBinding.screenLoaderBar.visible()
         viewBinding.progressMessage.text =
@@ -653,11 +663,11 @@ class PanCardFragment : Fragment(),
         viewBinding.progressBar.gone()
         viewBinding.belowLayout.gone()
         viewBinding.toplayoutblock.setVerificationSuccessfulView(
-                "Driving License Pending for verify",
+                "PAN card pending for verify",
                 "Verifying"
         )
         var list = ArrayList<KYCImageModel>()
-        drivingLicenseDataModel.panCardImagePath?.let {
+        panCardDataModel.panCardImagePath?.let {
             getDBImageUrl(it)?.let { list.add(KYCImageModel(text = getString(R.string.upload_pan_card_new), imagePath = it, imageUploaded = true)) }
         }
         viewBinding.toplayoutblock.setImageViewPager(list)

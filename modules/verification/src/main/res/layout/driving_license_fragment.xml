@@ -82,6 +82,7 @@
                         android:layout_marginTop="@dimen/dp_xl1"
                         android:layout_marginRight="@dimen/dp_sm1"
                         android:hint="State"
+                        android:visibility="gone"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView10">
@@ -149,6 +150,7 @@
                         android:layout_marginTop="@dimen/dp_xl1"
                         android:layout_marginRight="@dimen/dp_sm1"
                         android:hint="Father Name"
+                        android:visibility="gone"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/dlno_til">
