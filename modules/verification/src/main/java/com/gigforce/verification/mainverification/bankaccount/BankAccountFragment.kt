@@ -9,6 +9,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.util.Size
 import android.view.LayoutInflater
@@ -65,8 +66,7 @@ enum class VerificationScreenStatus {
 
 @AndroidEntryPoint
 class BankAccountFragment : Fragment(),
-        VerificationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener,
-        IOnBackPressedOverride {
+        VerificationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener {
 
     companion object {
         fun newInstance() = BankAccountFragment()
@@ -191,8 +191,6 @@ class BankAccountFragment : Fragment(),
     private fun startedStatusViews(bankDetailsDataModel: BankDetailsDataModel) {
         viewBinding.toplayoutblock.viewChangeOnStarted()
         viewBinding.screenLoaderBar.visible()
-        viewBinding.progressMessage.text =
-                "If it is taking longer time than 1 minute. \nYou can come back and check"
         viewBinding.submitButton.gone()
         viewBinding.progressBar.gone()
         viewBinding.belowLayout.gone()
@@ -216,7 +214,7 @@ class BankAccountFragment : Fragment(),
         viewBinding.confirmBeneficiaryLayout.gone()
     }
 
-    private fun verifiedStatusViews(bankDetailsDataModel: BankDetailsDataModel) {
+    private fun verifiedStatusViews(bankDetailsDataModel: BankDetailsDataModel?) {
         viewBinding.toplayoutblock.viewChangeOnVerified()
         viewBinding.belowLayout.gone()
         viewBinding.confirmBeneficiaryLayout.gone()
@@ -227,11 +225,12 @@ class BankAccountFragment : Fragment(),
         )
         viewBinding.submitButton.visible()
         viewBinding.submitButton.text = "Next"
+        viewBinding.submitButton.isEnabled = true
         viewBinding.progressBar.gone()
         viewBinding.toplayoutblock.setVerificationSuccessfulView("Bank Account verified")
 
         var list = ArrayList<KYCImageModel>()
-        bankDetailsDataModel.passbookImagePath?.let {
+        bankDetailsDataModel?.passbookImagePath?.let {
             getDBImageUrl(it)?.let {
                 list.add(
                         KYCImageModel(
@@ -246,6 +245,7 @@ class BankAccountFragment : Fragment(),
 
     }
 
+    private val SPLASH_TIME_OUT: Long = 1000 * 5
     private fun checkforStatusAndVerified(obj: BankDetailsDataModel) {
         obj.status?.let {
             when (it) {
@@ -253,6 +253,22 @@ class BankAccountFragment : Fragment(),
                     verificationScreenStatus = VerificationScreenStatus.STARTED_VERIFYING
                     print("Bank Verification started")
                     startedStatusViews(obj)
+                    Handler().postDelayed({
+                        try {
+                            if (verificationScreenStatus != VerificationScreenStatus.VERIFIED) {
+                                viewBinding.screenLoaderBar.gone()
+                                verifiedStatusViews(null)
+                                viewBinding.toplayoutblock.uploadStatusLayout(
+                                        AppConstants.UNABLE_TO_FETCH_DETAILS,
+                                        "VERIFICATION IN PROGRESS",
+                                        "Click next to proceed. Verification will be done in parallel"
+                                )
+                                viewBinding.toplayoutblock.setVerificationSuccessfulView("","")
+                            }
+                        } catch (e: Exception) {
+
+                        }
+                    }, SPLASH_TIME_OUT)
                 }
                 "failed" -> {
                     verificationScreenStatus = VerificationScreenStatus.FAILED
@@ -261,7 +277,7 @@ class BankAccountFragment : Fragment(),
                     viewBinding.toplayoutblock.uploadStatusLayout(
                             AppConstants.DETAILS_MISMATCH,
                             "VERIFICATION FAILED",
-                            "Please re-enter the correct information as per the documents"
+                            "Please recheck the information and try again"
                     )
                 }
                 "" -> {
@@ -339,7 +355,6 @@ class BankAccountFragment : Fragment(),
         if (activate) {
             viewBinding.progressBar.visible()
             viewBinding.screenLoaderBar.visible()
-            viewBinding.progressMessage.text = ""
             viewBinding.submitButton.isEnabled = false
         } else {
             viewBinding.progressBar.gone()
@@ -357,7 +372,7 @@ class BankAccountFragment : Fragment(),
         viewBinding.submitButton.setOnClickListener {
             hideSoftKeyboard()
 
-            if (toplayoutblock.isDocDontOptChecked() || verificationScreenStatus == VerificationScreenStatus.VERIFIED) {
+            if (toplayoutblock.isDocDontOptChecked() || verificationScreenStatus == VerificationScreenStatus.VERIFIED || verificationScreenStatus == VerificationScreenStatus.STARTED_VERIFYING) {
                 checkForNextDoc()
             } else {
                 val ifsc =
@@ -666,13 +681,13 @@ class BankAccountFragment : Fragment(),
         return options
     }
 
-    override fun onBackPressed(): Boolean {
-        if (verificationScreenStatus == VerificationScreenStatus.STARTED_VERIFYING) {
-            reContinueDialog()
-            return true
-        } else return false
-
-    }
+//    override fun onBackPressed(): Boolean {
+//        if (verificationScreenStatus == VerificationScreenStatus.STARTED_VERIFYING) {
+//            reContinueDialog()
+//            return true
+//        } else return false
+//
+//    }
 
     private fun reContinueDialog() {
         MaterialAlertDialogBuilder(requireContext())

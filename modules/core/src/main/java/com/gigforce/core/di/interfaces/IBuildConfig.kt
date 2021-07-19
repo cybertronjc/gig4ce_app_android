@@ -11,4 +11,5 @@ interface IBuildConfig {
     fun getSendSMSURL():String
     fun getFeaturesIconLocationUrl() : String
     fun getStorageBaseUrl() : String
+    fun getPanelBaseUrl() : String
 }

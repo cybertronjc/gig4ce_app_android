@@ -10,6 +10,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.util.Size
 import android.view.LayoutInflater
@@ -144,8 +145,10 @@ class PanCardFragment : Fragment(),
                             viewBinding.panTil.editText?.setText(it.panNumber)
                         if (!it.name.isNullOrBlank())
                             viewBinding.nameTil.editText?.setText(it.name)
-                        if (!it.dateOfBirth.isNullOrBlank())
+                        if (!it.dateOfBirth.isNullOrBlank()) {
                             viewBinding.dateOfBirth.text = it.dateOfBirth
+                            viewBinding.dobLabel.visible()
+                        }
 
                     } else {
                         viewBinding.toplayoutblock.uploadStatusLayout(
@@ -202,7 +205,7 @@ class PanCardFragment : Fragment(),
 
         viewBinding.submitButton.setOnClickListener {
             hideSoftKeyboard()
-            if (viewBinding.toplayoutblock.isDocDontOptChecked() || verificationScreenStatus == VerificationScreenStatus.VERIFIED) {
+            if (viewBinding.toplayoutblock.isDocDontOptChecked() || verificationScreenStatus == VerificationScreenStatus.VERIFIED || verificationScreenStatus == VerificationScreenStatus.STARTED_VERIFYING) {
                 checkForNextDoc()
             } else {
                 val panCardNo =
@@ -311,7 +314,6 @@ class PanCardFragment : Fragment(),
             image =
                     MultipartBody.Part.createFormData("file", file.name, requestFile)
         }
-        ocrOrVerificationRquested = true
         image?.let { viewModel.getKycOcrResult("pan", "dsd", it) }
     }
 
@@ -324,8 +326,8 @@ class PanCardFragment : Fragment(),
                     newCal.set(Calendar.YEAR, year)
                     newCal.set(Calendar.MONTH, month)
                     newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-
                     viewBinding.dateOfBirth.text = DateHelper.getDateInDDMMYYYY(newCal.time)
+                    viewBinding.dobLabel.visible()
                 },
                 1990,
                 cal.get(Calendar.MONTH),
@@ -404,7 +406,6 @@ class PanCardFragment : Fragment(),
                 Data("dob", viewBinding.dateOfBirth.text.toString())
         )
         activeLoader(true)
-        ocrOrVerificationRquested = true
         viewModel.getKycVerificationResult("pan", list)
 
     }
@@ -495,7 +496,7 @@ class PanCardFragment : Fragment(),
     }
 
 
-    private fun verifiedStatusViews(panCardDataModel: PanCardDataModel) {
+    private fun verifiedStatusViews(panCardDataModel: PanCardDataModel?) {
         viewBinding.toplayoutblock.viewChangeOnVerified()
         viewBinding.belowLayout.gone()
         viewBinding.toplayoutblock.uploadStatusLayout(
@@ -505,11 +506,12 @@ class PanCardFragment : Fragment(),
         )
         viewBinding.submitButton.visible()
         viewBinding.submitButton.text = "Next"
+        viewBinding.submitButton.isEnabled = true
         viewBinding.progressBar.gone()
         viewBinding.toplayoutblock.setVerificationSuccessfulView("PAN card verified")
 
         var list = ArrayList<KYCImageModel>()
-        panCardDataModel.panCardImagePath?.let {
+        panCardDataModel?.panCardImagePath?.let {
             getDBImageUrl(it)?.let { list.add(KYCImageModel(text = getString(R.string.upload_pan_card_new), imagePath = it, imageUploaded = true)) }
         }
         viewBinding.toplayoutblock.setImageViewPager(list)
@@ -530,12 +532,29 @@ class PanCardFragment : Fragment(),
         return null
     }
 
+    private val SPLASH_TIME_OUT: Long = 1000 * 5
     private fun checkforStatusAndVerified(panCardDataModel: PanCardDataModel) {
         panCardDataModel.status?.let {
             when (it) {
                 "started" -> {
                     verificationScreenStatus = VerificationScreenStatus.STARTED_VERIFYING
                     startedStatusViews(panCardDataModel)
+                    Handler().postDelayed({
+                        try {
+                            if (verificationScreenStatus != VerificationScreenStatus.VERIFIED) {
+                                viewBinding.screenLoaderBar.gone()
+                                verifiedStatusViews(null)
+                                viewBinding.toplayoutblock.uploadStatusLayout(
+                                        AppConstants.UNABLE_TO_FETCH_DETAILS,
+                                        "VERIFICATION IN PROGRESS",
+                                        "Click next to proceed. Verification will be done in parallel"
+                                )
+                                viewBinding.toplayoutblock.setVerificationSuccessfulView("", "")
+                            }
+                        } catch (e: Exception) {
+
+                        }
+                    }, SPLASH_TIME_OUT)
                 }
                 "failed" -> {
                     verificationScreenStatus = VerificationScreenStatus.FAILED
@@ -543,7 +562,7 @@ class PanCardFragment : Fragment(),
                     viewBinding.toplayoutblock.uploadStatusLayout(
                             AppConstants.DETAILS_MISMATCH,
                             "VERIFICATION FAILED",
-                            "Please re-enter the correct information as per the documents"
+                            "Please recheck the information and try again"
                     )
                 }
                 "" -> {
@@ -571,8 +590,6 @@ class PanCardFragment : Fragment(),
     private fun startedStatusViews(panCardDataModel: PanCardDataModel) {
         viewBinding.toplayoutblock.viewChangeOnStarted()
         viewBinding.screenLoaderBar.visible()
-        viewBinding.progressMessage.text =
-                "If it is taking longer time than 1 minute. \nYou can come back and check"
         viewBinding.submitButton.gone()
         viewBinding.progressBar.gone()
         viewBinding.belowLayout.gone()

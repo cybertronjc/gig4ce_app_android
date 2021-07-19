@@ -65,8 +65,6 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
             setDocInfo(docinfostr)
             setQueryStr(querytextstr)
             setMissingDocText(missingdoctext)
-
-
         }
 
     }
@@ -108,7 +106,7 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
     }
 
     fun disableImageClick() {
-        adapter.let {
+        adapter?.let {
             it.setImageClickable(false)
             it.notifyDataSetChanged()
 

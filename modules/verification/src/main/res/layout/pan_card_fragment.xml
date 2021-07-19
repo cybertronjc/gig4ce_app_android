@@ -156,6 +156,8 @@
                             android:background="@drawable/rect_border_grey"
                             android:gravity="center_vertical|start"
                             android:paddingLeft="@dimen/dp_sm1"
+                            android:hint="Date of Birth"
+                            android:textColor="#333333"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -171,11 +173,13 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
+                            android:id="@+id/dobLabel"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/dp_sm1"
+                            android:layout_marginLeft="@dimen/dp_xsm1"
                             android:background="@color/white"
-                            android:text="   Date of birth   "
+                            android:text=" Date of birth   "
+                            android:visibility="gone"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -209,7 +213,7 @@
             android:layout_marginStart="@dimen/size_16"
             android:layout_marginEnd="@dimen/size_16"
             android:layout_marginBottom="@dimen/size_22"
-            android:background="@drawable/app_gradient_button"
+            android:background="@drawable/submit_button_selector"
             android:gravity="center"
             android:minHeight="@dimen/size_36"
             android:text="Next"
@@ -247,16 +251,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
-            <TextView
-                android:id="@+id/progressMessage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_sm1"
-                style="@style/Caption1"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/loader" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
