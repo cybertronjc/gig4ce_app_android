@@ -30,23 +30,34 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
-            <androidx.core.widget.NestedScrollView
-                android:id="@+id/nestedScrollView"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                app:layout_constraintTop_toBottomOf="@id/gigerProfileCard"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/gigApplicationsRv"
+
+                <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="@dimen/size_16"
-                    />
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/gigerProfileCard"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
 
-            </androidx.core.widget.NestedScrollView>
+                    <com.gigforce.core.recyclerView.CoreRecyclerView
+                        android:id="@+id/gigApplicationsRv"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="@dimen/size_16"/>
+
+                    <include
+                        android:id="@+id/gigapps_shimmer_container"
+                        layout="@layout/shimmer_container"
+                        android:visibility="visible" />
+
+                    <include
+                        android:id="@+id/gigapp_list_info_layout"
+                        layout="@layout/layout_error_with_retry" />
+
+                </FrameLayout>
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

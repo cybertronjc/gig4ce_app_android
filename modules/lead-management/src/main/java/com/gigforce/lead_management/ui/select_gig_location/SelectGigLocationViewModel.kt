@@ -1,4 +1,4 @@
-package com.gigforce.lead_management.gigeronboarding
+package com.gigforce.lead_management.ui.select_gig_location
 
 import androidx.lifecycle.ViewModel
 

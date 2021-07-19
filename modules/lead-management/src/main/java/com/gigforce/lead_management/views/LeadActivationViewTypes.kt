@@ -12,4 +12,12 @@ object LeadActivationViewTypes {
      * Referral -
      */
     const val ReferralGig = 23565344
+
+    /**
+     * Gig Application Selection
+     */
+    const val GigAppListStatus = 25001
+    const val GigAppList = 25002
+    const val GigAppListSearch = 25003
+
 }
