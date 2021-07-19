@@ -12,19 +12,23 @@ import com.gigforce.common_ui.repository.repo.ILearningDataRepository
 import com.gigforce.common_ui.repository.repo.LearningDataRepository
 import com.gigforce.core.ICoreViewHolderFactory
 import com.gigforce.core.IEventTracker
-import com.gigforce.app.di.implementations.SharedPreAndCommonUtilDataImp
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.di.interfaces.INavHost
 import com.gigforce.core.di.repo.IProfileFirestoreRepository
+import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.giger_app.repo.*
+import com.gigforce.lead_management.repositories.LeadManagementRepository
 import dagger.Binds
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.android.components.ViewModelComponent
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
 @InstallIn(ActivityComponent::class)
 @Module
@@ -89,4 +93,25 @@ interface ViewModelBindings {
 
     @Binds
     fun provideViewModelEventTracker(imp: EventTrackerImp): IEventTracker
+}
+
+
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class SingeltonBindings {
+
+
+    companion object {
+
+        @Provides
+        fun provideLeadManagementRepository(): LeadManagementRepository {
+            return LeadManagementRepository()
+        }
+
+
+        @Provides
+        fun provideLogger(): GigforceLogger {
+            return GigforceLogger()
+        }
+    }
 }

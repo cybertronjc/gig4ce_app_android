@@ -149,4 +149,5 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxjava:2.2.0'
 
     implementation 'com.jakewharton.timber:timber:4.7.1'
+    implementation 'com.jaeger.statusbarutil:library:1.5.1'
 }

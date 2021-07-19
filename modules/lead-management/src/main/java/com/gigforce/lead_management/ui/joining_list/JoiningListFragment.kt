@@ -16,8 +16,10 @@ import com.gigforce.lead_management.R
 import com.gigforce.lead_management.SharedLeadManagementViewModel
 import com.gigforce.lead_management.databinding.FragmentJoiningListBinding
 import com.gigforce.lead_management.models.JoiningListRecyclerItemData
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
+@AndroidEntryPoint
 class JoiningListFragment : BaseFragment2<FragmentJoiningListBinding>(
     fragmentName = "JoiningListFragment",
     layoutId = R.layout.fragment_joining_list,

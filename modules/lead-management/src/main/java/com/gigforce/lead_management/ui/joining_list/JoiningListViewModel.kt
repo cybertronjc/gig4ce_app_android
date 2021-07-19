@@ -5,10 +5,18 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.viewdatamodels.leadManagement.Joining
+import com.gigforce.common_ui.viewdatamodels.leadManagement.JoiningSignUpInitiatedMode
+import com.gigforce.common_ui.viewdatamodels.leadManagement.JoiningStatus
+import com.gigforce.core.extensions.toLocalDate
 import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.lead_management.models.JoiningListRecyclerItemData
 import com.gigforce.lead_management.repositories.LeadManagementRepository
+import com.google.firebase.Timestamp
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.time.Duration
+import java.time.LocalDate
+import javax.inject.Inject
 
 sealed class JoiningListViewState {
 
@@ -26,7 +34,8 @@ sealed class JoiningListViewState {
     ) : JoiningListViewState()
 }
 
-class JoiningListViewModel constructor(
+@HiltViewModel
+class JoiningListViewModel @Inject constructor(
     private val leadManagementRepository: LeadManagementRepository,
     private val gigforceLogger: GigforceLogger
 ) : ViewModel() {
@@ -41,7 +50,7 @@ class JoiningListViewModel constructor(
     //Data
     private var joiningsRaw: List<Joining> = emptyList()
     private var joiningListShownOnView: MutableList<JoiningListRecyclerItemData> = mutableListOf()
-    private var currentSearchString : String? = null
+    private var currentSearchString: String? = null
 
     init {
         refreshJoinings()
@@ -83,17 +92,20 @@ class JoiningListViewModel constructor(
     ) {
 
         val statusToJoiningGroupedList = joiningsRaw.filter {
-            it.status != null
-        }.filter {
-            if(currentSearchString.isNullOrBlank())
+            if (currentSearchString.isNullOrBlank())
                 true
-            else
-               it.status?.contains(
-                   currentSearchString!!,
-                   true
-               ) ?: false
+            else {
+                it.name?.contains(
+                    currentSearchString!!,
+                    true
+                ) ?: false
+                        || it.phoneNumber?.contains(
+                    currentSearchString!!,
+                    true
+                ) ?: false
+            }
         }.groupBy {
-            it.status!!
+            it.getStatus().getOverallStatusString()
         }
 
         val joiningListForView = mutableListOf<JoiningListRecyclerItemData>()
@@ -109,13 +121,13 @@ class JoiningListViewModel constructor(
             joinings.forEach {
                 joiningListForView.add(
                     JoiningListRecyclerItemData.JoiningListRecyclerJoiningItemData(
-                        userUid = it.uid ?: "",
+                        userUid = it.uid,
                         userName = it.name ?: "N/A",
                         userProfilePicture = it.profilePicture ?: "",
                         userProfilePictureThumbnail = it.profilePicture ?: "",
                         userProfilePhoneNumber = it.phoneNumber ?: "",
-                        status = it.status ?: "",
-                        joiningStatusText = it.joiningStatusText ?: ""
+                        status = it.getStatus().getStatusCapitalized(),
+                        joiningStatusText = getJoiningText(it)
                     )
                 )
             }
@@ -128,7 +140,55 @@ class JoiningListViewModel constructor(
             )
         )
 
-        gigforceLogger.d(TAG, "${joiningListShownOnView.size} items (joinings + status) shown on view")
+        gigforceLogger.d(
+            TAG,
+            "${joiningListShownOnView.size} items (joinings + status) shown on view"
+        )
+    }
+
+    private fun getJoiningText(
+        it: Joining
+    ): String {
+        return when (it.getStatus()) {
+            JoiningStatus.SIGN_UP_PENDING -> {
+                if (JoiningSignUpInitiatedMode.BY_LINK == it.signUpMode) {
+                    "Onboarding started ${getDateDifferenceFormatted(it.updatedOn)}"
+                } else if (JoiningSignUpInitiatedMode.BY_LINK == it.signUpMode) {
+                    "App invite sent ${getDateDifferenceFormatted(it.updatedOn)}"
+                } else {
+                    "Signup started ${getDateDifferenceFormatted(it.updatedOn)}"
+                }
+            }
+            JoiningStatus.APPLICATION_PENDING -> {
+                if (it.applicationNameInvitedFor != null) {
+                    "No Application Link shared yet"
+                } else {
+                    "${it.applicationNameInvitedFor} invite sent ${getDateDifferenceFormatted(it.updatedOn)}"
+                }
+            }
+            JoiningStatus.JOINING_PENDING -> {
+                "Joining initiated ${getDateDifferenceFormatted(it.updatedOn)}"
+            }
+            JoiningStatus.JOINED -> {
+                "Joined ${getDateDifferenceFormatted(it.updatedOn)}"
+            }
+        }
+    }
+
+    private fun getDateDifferenceFormatted(updatedOn: Timestamp): String {
+        val updateOnDate = updatedOn.toLocalDate()
+        val currentDate = LocalDate.now()
+
+        return if (currentDate.isEqual(updateOnDate)) {
+            "today"
+        } else {
+            val daysDiff = Duration.between(
+                updateOnDate.atStartOfDay(),
+                currentDate.atStartOfDay()
+            ).toDays()
+
+            "$daysDiff day(s) ago"
+        }
     }
 
     fun searchJoinings(

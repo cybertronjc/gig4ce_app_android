@@ -6,10 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.ColorRes
 import androidx.annotation.LayoutRes
+import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import com.gigforce.core.logger.GigforceLogger
+import com.jaeger.library.StatusBarUtil
 
 abstract class BaseFragment2<V : ViewDataBinding>(
     private val fragmentName: String,
@@ -35,6 +37,12 @@ abstract class BaseFragment2<V : ViewDataBinding>(
         savedInstanceState: Bundle?
     ): View {
         logger.d(fragmentName, "onCreateView()")
+
+        StatusBarUtil.setColorNoTranslucent(
+            requireActivity(),
+            ResourcesCompat.getColor(resources, statusBarColor, null)
+        )
+
         _viewDataBinding = DataBindingUtil.inflate(
             inflater,
             layoutId,

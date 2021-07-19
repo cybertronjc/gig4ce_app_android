@@ -1,39 +1,68 @@
 package com.gigforce.common_ui.viewdatamodels.leadManagement
 
-import com.google.gson.annotations.SerializedName
+import com.google.firebase.Timestamp
+import com.google.firebase.firestore.DocumentId
+import com.google.firebase.firestore.Exclude
+import com.google.firebase.firestore.PropertyName
 
 data class Joining(
 
-	@field:SerializedName("shiftTime")
-	val shiftTime: String? = null,
+	@DocumentId
+	@get:PropertyName("uid")
+	@set:PropertyName("uid")
+	var uid: String = "",
 
-	@field:SerializedName("uid")
-	val uid: String? = null,
+	@get:PropertyName("joiningStartedOn")
+	@set:PropertyName("joiningStartedOn")
+	var joiningStartedOn: Timestamp = Timestamp.now(),
 
-	@field:SerializedName("role")
-	val role: String? = null,
+	@get:PropertyName("updatedOn")
+	@set:PropertyName("updatedOn")
+	var updatedOn: Timestamp = Timestamp.now(),
 
-	@field:SerializedName("companyName")
-	val companyName: String? = null,
+	@get:PropertyName("joiningTLUid")
+	@set:PropertyName("joiningTLUid")
+	var joiningTLUid: String = "",
 
-	@field:SerializedName("name")
-	val name: String? = null,
+	@get:PropertyName("status")
+	@set:PropertyName("status")
+	var status: String = "",
 
-	@field:SerializedName("phonenumber")
-	val phoneNumber: String? = null,
+	@get:PropertyName("name")
+	@set:PropertyName("name")
+	var name: String? = null,
 
-	@field:SerializedName("profilepicture")
-	val profilePicture: String? = null,
+	@get:PropertyName("phoneNumber")
+	@set:PropertyName("phoneNumber")
+	var phoneNumber: String? = null,
 
-	@field:SerializedName("joiningStatusText")
-	var joiningStatusText: String? = null,
+	@get:PropertyName("profilePicture")
+	@set:PropertyName("profilePicture")
+	var profilePicture: String? = null,
 
-	@field:SerializedName("status")
-	var status: String? = null,
+	@get:PropertyName("profilePictureThumbnail")
+	@set:PropertyName("profilePictureThumbnail")
+	var profilePictureThumbnail: String? = null,
 
-	@field:SerializedName("gigId")
-	val gigId: String? = null,
+	@get:PropertyName("appInviteSentTimestamp")
+	@set:PropertyName("appInviteSentTimestamp")
+	var appInviteSentTimestamp:  Timestamp? = null,
 
-	@field:SerializedName("location")
-	val location: String? = null
-)
+	@get:PropertyName("applicationInviteSentTimeStamp")
+	@set:PropertyName("applicationInviteSentTimeStamp")
+	var applicationInviteSentTimeStamp:  Timestamp? = null,
+
+	@get:PropertyName("applicationNameInvitedFor")
+	@set:PropertyName("applicationNameInvitedFor")
+	var applicationNameInvitedFor:  String? = null,
+
+	@get:PropertyName("signUpMode")
+	@set:PropertyName("signUpMode")
+	var signUpMode: String? = null,
+) {
+
+	@Exclude
+    fun getStatus(): JoiningStatus {
+        return JoiningStatus.valueOf(status)
+    }
+}
