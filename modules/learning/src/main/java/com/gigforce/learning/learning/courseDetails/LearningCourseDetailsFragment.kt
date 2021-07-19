@@ -643,7 +643,10 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
                     )
             )
         }
-        moduleList.get(0).isSelectedView = true
+
+        if(moduleList.isNotEmpty())
+           moduleList.get(0).isSelectedView = true
+
         return moduleList
     }
 
