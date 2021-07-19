@@ -254,7 +254,7 @@ class BankAccountFragment : Fragment(),
                     startedStatusViews(obj)
                     Handler().postDelayed({
                         try {
-                            if (verificationScreenStatus != VerificationScreenStatus.VERIFIED || verificationScreenStatus != VerificationScreenStatus.COMPLETED) {
+                            if (verificationScreenStatus == VerificationScreenStatus.STARTED_VERIFYING) {
                                 viewBinding.screenLoaderBar.gone()
                                 verifiedStatusViews(null)
                                 viewBinding.toplayoutblock.uploadStatusLayout(
@@ -371,7 +371,7 @@ class BankAccountFragment : Fragment(),
         viewBinding.submitButton.setOnClickListener {
             hideSoftKeyboard()
 
-            if (toplayoutblock.isDocDontOptChecked() || verificationScreenStatus == VerificationScreenStatus.VERIFIED || verificationScreenStatus == VerificationScreenStatus.STARTED_VERIFYING) {
+            if (toplayoutblock.isDocDontOptChecked() || verificationScreenStatus == VerificationScreenStatus.VERIFIED || verificationScreenStatus == VerificationScreenStatus.STARTED_VERIFYING || verificationScreenStatus == VerificationScreenStatus.COMPLETED) {
                 checkForNextDoc()
             } else {
                 val ifsc =

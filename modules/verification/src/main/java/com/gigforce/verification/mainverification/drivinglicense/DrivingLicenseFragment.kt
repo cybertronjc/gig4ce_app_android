@@ -734,7 +734,7 @@ class DrivingLicenseFragment : Fragment(),
                     startedStatusViews(drivingLicenseDataModel)
                     Handler().postDelayed({
                         try {
-                            if (verificationScreenStatus != VerificationScreenStatus.VERIFIED) {
+                            if (verificationScreenStatus == VerificationScreenStatus.STARTED_VERIFYING) {
                                 viewBinding.screenLoaderBar.gone()
                                 verifiedStatusViews(null)
                                 viewBinding.toplayoutblock.uploadStatusLayout(
@@ -820,7 +820,7 @@ class DrivingLicenseFragment : Fragment(),
         viewBinding.progressBar.gone()
         viewBinding.belowLayout.gone()
         viewBinding.toplayoutblock.setVerificationSuccessfulView(
-            "Driving License Pending for verify",
+            "Driving License pending for verification",
             "Verifying"
         )
         var list = ArrayList<KYCImageModel>()

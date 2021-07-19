@@ -541,7 +541,7 @@ class PanCardFragment : Fragment(),
                     startedStatusViews(panCardDataModel)
                     Handler().postDelayed({
                         try {
-                            if (verificationScreenStatus != VerificationScreenStatus.VERIFIED) {
+                            if (verificationScreenStatus == VerificationScreenStatus.STARTED_VERIFYING) {
                                 viewBinding.screenLoaderBar.gone()
                                 verifiedStatusViews(null)
                                 viewBinding.toplayoutblock.uploadStatusLayout(
