@@ -77,6 +77,7 @@ class TrackingWorker(
         }
 
         if (TrackingUtility.hasLocationPermissions(appContext)) {
+            Log.d(TAG,"Location permission available")
             val request = LocationRequest().apply {
                 interval = TrackingConstants.LOCATION_UPDATE_INTERVAL
                 fastestInterval = TrackingConstants.FASTEST_LOCATION_INTERVAL
@@ -86,8 +87,15 @@ class TrackingWorker(
                 request,
                 locationCallback,
                 Looper.getMainLooper()
-            )
+            ).addOnSuccessListener {
+                Log.d(TAG,"Location updates started")
+            }.addOnFailureListener {
+                Log.e(TAG,"Location update not able to start")
+            }.addOnCanceledListener {
+                Log.e(TAG,"Location updates cancelled")
+            }
         } else {
+            Log.e(TAG,"Location permission not available")
             cont.resumeWithException(
                 IllegalStateException(
                     "Location permission not granted"
@@ -146,10 +154,7 @@ class TrackingWorker(
             }
         }
 
-        if (locationUpdatesReceivedSoFar == MAX_LOCATION_UPDATES_IN_ONE_SESSION) {
-            submitLocationToDB(currentBestLocation!!, fullAddressFromGps)
-            Log.d(TAG, "Stopping Service....")
-        }
+        submitLocationToDB(currentBestLocation!!, fullAddressFromGps)
     }
 
     private fun submitLocationToDB(
@@ -167,6 +172,7 @@ class TrackingWorker(
             )
         } catch (e: Exception) {
 
+            e.printStackTrace()
             CrashlyticsLogger.e(
                 TAG,
                 "unable to sync user location",
@@ -176,7 +182,7 @@ class TrackingWorker(
     }
 
     companion object {
-        const val TAG = "TrackingService"
+        const val TAG = "TrackingWorker"
         const val MAX_LOCATION_UPDATES_IN_ONE_SESSION = 5
         const val MAX_TIME_FOR_WHICH_SERVICE_CAN_RUN = 30L * 1000
     }
