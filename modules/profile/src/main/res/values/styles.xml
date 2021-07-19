@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="button_style" parent="Widget.AppCompat.TextView">
-        <item name="android:textColor">@color/white</item>
-        <item name="android:background">@drawable/app_gradient_button</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:gravity">center</item>
-        <item name="android:letterSpacing">0</item>
-    </style>
+
 
 
 </resources>

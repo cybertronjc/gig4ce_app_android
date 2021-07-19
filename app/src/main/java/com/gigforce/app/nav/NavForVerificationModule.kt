@@ -26,11 +26,13 @@ class NavForVerificationModule(
         baseImplementation.registerRoute("${moduleName}/addPanCardInfoFragment", R.id.addPanCardInfoFragment)
         baseImplementation.registerRoute("${moduleName}/addAadharCardInfoFragment", R.id.addAadharCardInfoFragment)
 
-
-
-
-
-
+        //verification new
+        baseImplementation.registerRoute("${moduleName}/aadhaarOptionsFragment", R.id.aadhaarOptionsFragment)
+        baseImplementation.registerRoute("${moduleName}/aadhaarcardimageupload",R.id.aadhaarcardimageupload)
+        baseImplementation.registerRoute("${moduleName}/aadhaarcardphonenumber",R.id.aadhaarcardphonenumber)
+        baseImplementation.registerRoute("${moduleName}/bank_account_fragment",R.id.bank_account_fragment)
+        baseImplementation.registerRoute("${moduleName}/pancardimageupload",R.id.panCardFragment)
+        baseImplementation.registerRoute("${moduleName}/drivinglicenseimageupload",R.id.drivingLicenseFragment)
 
     }
 }

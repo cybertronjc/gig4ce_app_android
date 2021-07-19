@@ -10,7 +10,7 @@ import com.gigforce.common_ui.R
 class GrayLine(context: Context,attributeSet: AttributeSet?) : View(context,attributeSet){
     init {
         minimumHeight = getPixelValue(2)
-        setBackgroundColor(ContextCompat.getColor(context, R.color.grey))
+        setBackgroundColor(ContextCompat.getColor(context, R.color.greyLight))
     }
 
     fun getPixelValue(sizeInDp:Int): Int {
