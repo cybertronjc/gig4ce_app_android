@@ -150,6 +150,7 @@
                 android:layout_marginStart="@dimen/size_13"
                 android:layout_marginEnd="@dimen/size_23"
                 android:letterSpacing="0"
+                android:orientation="horizontal"
                 android:nestedScrollingEnabled="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

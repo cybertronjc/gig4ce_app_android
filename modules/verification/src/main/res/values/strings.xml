@@ -4,7 +4,7 @@
     <string name="veri_aadhaar_title">"Step 2 : Upload your Aadhaar"</string>
     <string name="veri_add_doc_front">"Front Side"</string>
     <string name="veri_add_doc_back">"Back Side"</string>
-    <string name="veri_pan_title">"Step 5 : Upload your Pan"</string>
+    <string name="veri_pan_title">"Step 5 : Upload your PAN"</string>
     <string name="veri_no_aadhaar">"No Aadhaar! Skip>>"</string>
     <string name="veri_dl_title">"Step 3 : Upload your Driving License"</string>
     <string name="veri_bank_title">"Step 4 : Please add your Bank Details"</string>
@@ -60,7 +60,7 @@
     <string name="bank_details_uploaded">Bank details Uploaded</string>
     <string name="cancel">CANCEL</string>
     <string name="why_do_we_need_this">Why we need this ?</string>
-    <string name="why_do_we_need_this_dl">A Driving License is mandatory for profile verification. It helps verify your name and date of birth and also helps with payments to your wallet.</string>
+    <string name="why_do_we_need_this_dl">A driving license is mandatory for driving and delivery gigs</string>
     <string name="why_do_we_need_this_bank">A Bank Passbook is mandatory for profile verification. It helps verify your name and date of birth and also helps with payments to your wallet.</string>
     <string name="license_number_with_colon">License Number :</string>
     <string name="address_with_colon">Address :</string>
@@ -93,30 +93,30 @@
     <string name="upload_driving_license_front_side">Upload Driving License (Front Side)</string>
     <string name="upload_aadhar_card_back_side_new">Upload your Aadhaar Card\nBACK Side</string>
     <string name="upload_aadhar_card_front_side_new">Upload your Aadhaar Card\nFRONT Side</string>
-    <string name="upload_pan_card_new">Please upload your Pan Card\nfor verification</string>
+    <string name="upload_pan_card_new">Please upload your PAN Card\nfor verification</string>
     <string name="upload_bank_account_new">Upload your Bank Passbook\nFront Page</string>
-    <string name="upload_driving_license_back_side_new">Upload your Driving License\nBACK Side</string>
-    <string name="upload_driving_license_front_side_new">Upload your Driving License\nFRONT Side</string>
+    <string name="upload_driving_license_back_side_new">Upload your Driving License\nback Side</string>
+    <string name="upload_driving_license_front_side_new">Upload your Driving License\nfront Side</string>
     <string name="no_i_don_t_have_aadhar_card">No, I don\'t have Aadhaar Card</string>
     <string name="yes_i_have_aadhar_card">Yes, I have Aadhaar Card</string>
     <string name="do_you_have_aadhar_card">Do you have Aadhaar Card ?</string>
     <string name="reupload"><u>Reupload</u></string>
     <string name="save_all_caps">SAVE</string>
-    <string name="upload_pan_card">Upload Pan Card</string>
+    <string name="upload_pan_card">Upload PAN Card</string>
     <string name="please_confirm_the_following_information">Please confirm the following information</string>
     <string name="name_with_colon">Name :</string>
     <string name="father_s_name_with_colon">Father\'s Name :</string>
     <string name="date_of_birth">Date Of Birth :</string>
     <string name="pan_with_colon">Permanent Account Number :</string>
     <string name="yes_i_confirm_the_data_is_correct">Yes, I confirm the data is correct.</string>
-    <string name="please_upload_your_pan">Please upload your Pan Card for\nyour verification</string>
-    <string name="pan_card_image">Pan Card Image</string>
+    <string name="please_upload_your_pan">Please upload your PAN Card for\nyour verification</string>
+    <string name="pan_card_image">PAN Card Image</string>
 
 
     <string name="you_are_reuploading_pan_card">You are re-uploading your PAN details. They will be verified once again, which may take up to 7 days.</string>
     <string name="enter_valid_pan">Enter Valid PAN Card No</string>
-    <string name="click_select_pan_image">Click Or Select your Pan card Image first</string>
-    <string name="pan_details_uploaded">Pan Card Details Uploaded</string>
+    <string name="click_select_pan_image">Click Or Select your PAN card Image first</string>
+    <string name="pan_details_uploaded">PAN Card Details Uploaded</string>
     <string name="unable_to_capture_image">Unable to capture image</string>
     <string name="got_it">Got it</string>
     <string name="why_do_we_need_this_pan">A PAN card is mandatory for profile verification. It helps verify your name and date of birth and also helps with payments to your wallet.</string>
@@ -151,8 +151,8 @@
     <string name="aadhar_card">Aadhaar Card *</string>
     <string name="pan_card">PAN Card</string>
     <string name="do_you_have_pan_card">Do you have PAN Card ?</string>
-    <string name="yes_i_have_pan_card">Yes, I have Pan Card.</string>
-    <string name="no_i_don_t_have_pan_card">No, I don\'t have Pan Card.</string>
+    <string name="yes_i_have_pan_card">Yes, I have PAN Card.</string>
+    <string name="no_i_don_t_have_pan_card">No, I don\'t have PAN Card.</string>
     <string name="do_you_have_driving_license">Do you have Driving License ?</string>
     <string name="yes_i_have_driving_license">Yes, I have Driving License</string>
     <string name="no_i_don_t_have_driving_license">No, I don\'t have Driving License</string>

@@ -100,6 +100,9 @@ android {
             buildConfigField "String", 'ALL_FEATURES_ICONS_STORAGE_URL','"gs://gig4ce-app.appspot.com/app_assets/feature_icons/ic_"'
             buildConfigField "String", 'KYC_OCR_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/prod/kyc/upload"'
             buildConfigField "String", 'KYC_VERIFY_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/prod/kyc/verify"'
+            buildConfigField "String", 'EVENT_BRIDGE_URL','"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/prod/updatestatus/sendToEventBridge"'
+            buildConfigField "String", 'STORAGE_BASE_URL','"gs://gig4ce-app.appspot.com"'
+            buildConfigField "String", 'PANEL_BASE_URL', '"http://gigforce.in"'
         }
 
         /**
@@ -131,7 +134,9 @@ android {
             buildConfigField "String", 'ALL_FEATURES_ICONS_STORAGE_URL','"gs://gigforce-dev.appspot.com/pub/app_icons/ic_"'
             buildConfigField "String", 'KYC_OCR_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/kyc/upload"'
             buildConfigField "String", 'KYC_VERIFY_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/kyc/verify"'
-
+            buildConfigField "String", 'EVENT_BRIDGE_URL','"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/updatestatus/sendToEventBridge"'
+            buildConfigField "String", 'STORAGE_BASE_URL','"gs://gigforce-dev.appspot.com"'
+            buildConfigField "String", 'PANEL_BASE_URL', '"http://staging.gigforce.in"'
         }
 
         staging {
@@ -156,10 +161,12 @@ android {
             buildConfigField "String", 'MOENGAGE_KEY', '"L991NPOGW0FVJBN6C2FN3KS5"'
             buildConfigField "String", 'GET_GIGER_UNDER_TL_ATTENDANCE_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/gigs/tlwise"'
             buildConfigField "String", 'GET_USER_REGISTER_INFO_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/auth/check"'
-            buildConfigField "String", 'ALL_FEATURES_ICONS_STORAGE_URL','"gs://gigforce-dev.appspot.com/pub/app_icons/ic_"'
+            buildConfigField "String", 'ALL_FEATURES_ICONS_STORAGE_URL','"gs://gigforce-staging.appspot.com/pub/app_icons/ic_"'
             buildConfigField "String", 'KYC_OCR_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/kyc/upload"'
             buildConfigField "String", 'KYC_VERIFY_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/kyc/verify"'
-
+            buildConfigField "String", 'EVENT_BRIDGE_URL','"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/updatestatus/sendToEventBridge"'
+            buildConfigField "String", 'STORAGE_BASE_URL','"gs://gigforce-staging.appspot.com"'
+            buildConfigField "String", 'PANEL_BASE_URL', '"http://staging.gigforce.in"'
         }
     }
 

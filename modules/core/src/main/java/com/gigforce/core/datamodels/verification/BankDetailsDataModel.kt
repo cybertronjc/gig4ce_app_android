@@ -13,6 +13,7 @@ data class BankDetailsDataModel(
     val accountNo: String? = null,
     val bankBeneficiaryName: String? = null,
     val state :Int = -1,
+    val status : String? = "",
     val verifiedString : String? = null
 ) : BaseFirestoreDataModel(TABLE_NAME) {
 

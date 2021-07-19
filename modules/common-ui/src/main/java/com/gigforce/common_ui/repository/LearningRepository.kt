@@ -673,9 +673,10 @@ class LearningRepository : BaseFirestoreDBRepository() {
             mProfile = profileFirebaseRepository.getProfileData()
         }
 
-        return getModuleLessonsC(courseId, moduleId).filter {
-            it.isActive /*&& doesLessonFullFillsCondition(it)*/
-        }
+        return getModuleLessonsC(courseId, moduleId)
+//                .filter {
+//            it.isActive /*&& doesLessonFullFillsCondition(it)*/
+//        }
     }
 
     suspend fun getModuleLessons(
@@ -702,6 +703,7 @@ class LearningRepository : BaseFirestoreDBRepository() {
                 TYPE,
                 TYPE_LESSON
             )
+            .whereEqualTo("is_active",true)
             .get()
             .addOnSuccessListener { querySnap ->
 
@@ -710,7 +712,7 @@ class LearningRepository : BaseFirestoreDBRepository() {
                         val lesson = it.toObject(CourseContent::class.java)!!
                         lesson.id = it.id
                         lesson
-                    }
+                    }.sortedBy { it.priority }
                 cont.resume(modules)
             }
             .addOnFailureListener {

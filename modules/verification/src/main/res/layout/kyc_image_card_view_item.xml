@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    android:background="@drawable/dashed_border_979797_1dp"
+    android:background="@drawable/dashed_border_387ef3_1dp"
     android:padding="@dimen/size_1">
 
     <FrameLayout
@@ -30,7 +30,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:src="@drawable/ic_baseline_add_circle_24" />
+                android:src="@drawable/ic_add_circle_app_color_24" />
 
             <TextView
                 android:id="@+id/title"

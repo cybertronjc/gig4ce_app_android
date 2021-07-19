@@ -15,4 +15,6 @@ class BuildConfigImp @Inject constructor(): IBuildConfig {
     override fun getApplicationID(): String = BuildConfig.APPLICATION_ID
     override fun getSendSMSURL() : String = BuildConfig.SEND_SMS_URL
     override fun getFeaturesIconLocationUrl(): String = BuildConfig.ALL_FEATURES_ICONS_STORAGE_URL
+    override fun getStorageBaseUrl(): String = BuildConfig.STORAGE_BASE_URL
+    override fun getPanelBaseUrl(): String = BuildConfig.PANEL_BASE_URL
 }

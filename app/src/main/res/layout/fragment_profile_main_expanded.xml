@@ -420,7 +420,7 @@
                     android:layout_marginStart="12dp">
 
                     <ImageView
-                        android:id="@+id/imageView7"
+                        android:id="@+id/iconwhyweneed"
                         android:layout_width="64dp"
                         android:layout_height="64dp"
                         android:adjustViewBounds="true"
