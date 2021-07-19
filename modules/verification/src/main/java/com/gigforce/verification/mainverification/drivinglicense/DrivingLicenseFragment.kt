@@ -30,6 +30,7 @@ import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.AppConstants
 import com.gigforce.core.StringConstants
+import com.gigforce.core.datamodels.verification.DrivingLicenseDataModel
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
@@ -42,7 +43,6 @@ import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.gigforce.verification.gigerVerfication.drivingLicense.DrivingLicenseSides
 import com.gigforce.verification.mainverification.Data
 import com.gigforce.verification.mainverification.VerificationClickOrSelectImageBottomSheet
-import com.gigforce.verification.mainverification.bankaccount.VerificationScreenStatus
 import com.gigforce.verification.util.VerificationConstants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jaeger.library.StatusBarUtil
@@ -96,6 +96,7 @@ class DrivingLicenseFragment : Fragment(),
 
     @Inject
     lateinit var navigation: INavigation
+
     @Inject
     lateinit var buildConfig: IBuildConfig
     private var FROM_CLIENT_ACTIVATON: Boolean = false
@@ -118,6 +119,7 @@ class DrivingLicenseFragment : Fragment(),
         getDataFromIntents(savedInstanceState)
         setViews()
         observer()
+        observerFinal()
         listeners()
     }
 
@@ -320,29 +322,33 @@ class DrivingLicenseFragment : Fragment(),
                     showToast("Ocr status " + it.message)
                 }
             }
+            ocrOrVerificationRquested = false
         })
 
         viewModel.kycVerifyResult.observe(viewLifecycleOwner, Observer {
-            activeLoader(false)
-            it?.let {
-                if (it.status) {
-                    viewBinding.belowLayout.gone()
-                    viewBinding.toplayoutblock.uploadStatusLayout(
-                            AppConstants.UPLOAD_SUCCESS,
-                            "VERIFICATION COMPLETED",
-                            "The Driving License Details have been verified successfully."
-                    )
-                    viewBinding.submitButton.tag = CONFIRM_TAG
-                    viewBinding.toplayoutblock.setVerificationSuccessfulView("Your Driving License verified")
-                    viewBinding.submitButton.text = getString(R.string.submit)
-                    viewBinding.toplayoutblock.disableImageClick()
-                    viewBinding.toplayoutblock.hideOnVerifiedDocuments()
-                    isDLVerified = true
-                    viewModel.getVerifiedStatus()
-                } else
-                    showToast("Verification " + it.message)
-            }
+            ocrOrVerificationRquested = false
         })
+//        viewModel.kycVerifyResult.observe(viewLifecycleOwner, Observer {
+//            activeLoader(false)
+//            it?.let {
+//                if (it.status) {
+//                    viewBinding.belowLayout.gone()
+//                    viewBinding.toplayoutblock.uploadStatusLayout(
+//                            AppConstants.UPLOAD_SUCCESS,
+//                            "VERIFICATION COMPLETED",
+//                            "The Driving License Details have been verified successfully."
+//                    )
+//                    viewBinding.submitButton.tag = CONFIRM_TAG
+//                    viewBinding.toplayoutblock.setVerificationSuccessfulView("Your Driving License verified")
+//                    viewBinding.submitButton.text = getString(R.string.submit)
+//                    viewBinding.toplayoutblock.disableImageClick()
+//                    viewBinding.toplayoutblock.hideOnVerifiedDocuments()
+//                    isDLVerified = true
+//                    viewModel.getVerifiedStatus()
+//                } else
+//                    showToast("Verification " + it.message)
+//            }
+//        })
         viewModel.getVerifiedStatus()
         viewModel.verifiedStatus.observe(viewLifecycleOwner, Observer {
             it?.let {
@@ -728,4 +734,129 @@ class DrivingLicenseFragment : Fragment(),
                 ResourcesCompat.getColor(resources, R.color.lipstick_2, null)
         )
     }
+
+
+    private fun observerFinal() {
+        viewModel.verifiedStatus.observe(viewLifecycleOwner, Observer {
+            if (!ocrOrVerificationRquested) {
+                viewBinding.screenLoaderBar.gone()
+                it?.let {
+
+                    if (it.verified) {
+                        verificationScreenStatus = VerificationScreenStatus.VERIFIED
+                        verifiedStatusViews(it)
+                    } else {
+                        checkforStatusAndVerified(it)
+                    }
+                }
+            }
+        })
+    }
+
+    private fun verifiedStatusViews(drivingLicenseDataModel: DrivingLicenseDataModel) {
+        viewBinding.toplayoutblock.viewChangeOnVerified()
+        viewBinding.belowLayout.gone()
+        viewBinding.toplayoutblock.uploadStatusLayout(
+                AppConstants.UPLOAD_SUCCESS,
+                "VERIFICATION COMPLETED",
+                "The Bank Details have been verified successfully."
+        )
+        viewBinding.submitButton.visible()
+        viewBinding.submitButton.text = "Next"
+        viewBinding.progressBar.gone()
+        viewBinding.toplayoutblock.setVerificationSuccessfulView("Bank Account verified")
+
+        var list = ArrayList<KYCImageModel>()
+        drivingLicenseDataModel.frontImage?.let {
+            getDBImageUrl(it)?.let { list.add(KYCImageModel(text = getString(R.string.upload_pan_card_new), imagePath = it, imageUploaded = true)) }
+        }
+        drivingLicenseDataModel.backImage?.let {
+            getDBImageUrl(it)?.let { list.add(KYCImageModel(text = getString(R.string.upload_pan_card_new), imagePath = it, imageUploaded = true)) }
+        }
+        viewBinding.toplayoutblock.setImageViewPager(list)
+
+    }
+
+    private fun checkforStatusAndVerified(drivingLicenseDataModel: DrivingLicenseDataModel) {
+        drivingLicenseDataModel.status?.let {
+            when (it) {
+                "started" -> {
+                    verificationScreenStatus = VerificationScreenStatus.STARTED_VERIFYING
+                    print("Bank Verification started")
+                    startedStatusViews(drivingLicenseDataModel)
+                }
+                "failed" -> {
+                    verificationScreenStatus = VerificationScreenStatus.FAILED
+                    print("failed transaction")
+                    resetInitializeViews()
+                    viewBinding.toplayoutblock.uploadStatusLayout(
+                            AppConstants.DETAILS_MISMATCH,
+                            "VERIFICATION FAILED",
+                            "Please re-enter the correct information as per the documents"
+                    )
+                }
+                "" -> {
+                    verificationScreenStatus = VerificationScreenStatus.DEFAULT
+                    print("transaction reinitialized")
+                    resetInitializeViews()
+                }
+                else -> "unmatched status"
+            }
+        }
+    }
+
+    private fun resetInitializeViews() {
+        viewBinding.submitButton.visible()
+        viewBinding.submitButton.text = "Submit"
+        viewBinding.submitButton.isEnabled = true
+        viewBinding.belowLayout.visible()
+        viewBinding.toplayoutblock.setVerificationSuccessfulView(
+                "Bank Account",
+                "You need to upload"
+        )
+        initializeImages()
+        viewBinding.toplayoutblock.resetAllViews()
+    }
+
+    private fun initializeImages() {
+        // verification_doc_image ic_passbook_illustration
+        val frontUri = Uri.Builder()
+                .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
+                .authority(resources.getResourcePackageName(R.drawable.verification_doc_image))
+                .appendPath(resources.getResourceTypeName(R.drawable.verification_doc_image))
+                .appendPath(resources.getResourceEntryName(R.drawable.verification_doc_image))
+                .build()
+        val list =
+                listOf(
+                        KYCImageModel(
+                                text = getString(R.string.upload_bank_account_new),
+                                imageIcon = frontUri,
+                                imageUploaded = false
+                        )
+                )
+        viewBinding.toplayoutblock.setImageViewPager(list)
+    }
+
+    private fun startedStatusViews(drivingLicenseDataModel: DrivingLicenseDataModel) {
+        viewBinding.toplayoutblock.viewChangeOnStarted()
+        viewBinding.screenLoaderBar.visible()
+        viewBinding.progressMessage.text =
+                "If it is taking longer time than 1 minute. \nYou can come back and check"
+        viewBinding.submitButton.gone()
+        viewBinding.progressBar.gone()
+        viewBinding.belowLayout.gone()
+        viewBinding.toplayoutblock.setVerificationSuccessfulView(
+                "Bank Account pending for verify",
+                "Verifying"
+        )
+        var list = ArrayList<KYCImageModel>()
+        drivingLicenseDataModel.frontImage?.let {
+            getDBImageUrl(it)?.let { list.add(KYCImageModel(text = getString(R.string.upload_pan_card_new), imagePath = it, imageUploaded = true)) }
+        }
+        drivingLicenseDataModel.backImage?.let {
+            getDBImageUrl(it)?.let { list.add(KYCImageModel(text = getString(R.string.upload_pan_card_new), imagePath = it, imageUploaded = true)) }
+        }
+        viewBinding.toplayoutblock.setImageViewPager(list)
+    }
+
 }
