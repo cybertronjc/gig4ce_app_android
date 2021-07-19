@@ -1,4 +1,4 @@
-package com.gigforce.lead_management.gigeronboarding
+package com.gigforce.lead_management.ui.giger_onboarding
 
 
 import android.app.Activity
@@ -9,7 +9,6 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 
 import androidx.core.os.bundleOf
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.common_ui.ext.showToast

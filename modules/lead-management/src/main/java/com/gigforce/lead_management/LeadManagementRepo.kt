@@ -161,7 +161,7 @@ class LeadManagementRepo (
                     Log.d("profileId", it)
                     val jpObject = getJPApplication(it, gigerid)
                     Log.d("object", jpObject.toString())
-                    val jpExplore = GigApplication(jobProfileId,gigerid, jpId = jpObject.id, profileId = obj.profileId, obj.profileName,  obj.cardTitle, obj.cardImage, jpObject.status, obj.title)
+                    val jpExplore = GigApplication(jobProfileId,gigerid, jpId = jpObject.id, profileId = obj.profileId, obj.profileName,  obj.cardTitle, obj.cardImage, jpObject.status, obj.title, "ongoing")
                     allClientActivations.add(jpExplore)
                 }
 
@@ -206,7 +206,7 @@ class LeadManagementRepo (
         toObjects.forEachIndexed { index, jobProfile ->
             var jobProfileId = items.documents.get(index).id
             jobProfile.id = jobProfile.profileId
-            val gigApplication = GigApplication(jobProfileId, "", jpId = jobProfile.id, profileId = jobProfile.profileId, jobProfile.profileName,  jobProfile.cardTitle, jobProfile.cardImage, "", jobProfile.title)
+            val gigApplication = GigApplication(jobProfileId, "", jpId = jobProfile.id, profileId = jobProfile.profileId, jobProfile.profileName,  jobProfile.cardTitle, jobProfile.cardImage, "", jobProfile.title, "other")
             allGigApplications.add(gigApplication)
         }
 

@@ -1,13 +1,10 @@
-package com.gigforce.lead_management.gigeronboarding
+package com.gigforce.lead_management.ui.giger_onboarding
 
 import android.app.Activity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
@@ -22,7 +19,7 @@ import com.gigforce.core.utils.Lce
 import com.gigforce.lead_management.LeadManagementConstants
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.FragmentGigerOtpVerificationBinding
-import com.gigforce.lead_management.databinding.GigerOnboardingFragmentBinding
+import com.gigforce.lead_management.ui.giger_onboarding.GigerOnboardingViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

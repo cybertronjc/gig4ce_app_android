@@ -933,7 +933,7 @@
         android:label="DrivingLicenseFragment" />
     <fragment
         android:id="@+id/gigerOnboardingFragment"
-        android:name="com.gigforce.lead_management.gigeronboarding.GigerOnboardingFragment"
+        android:name="com.gigforce.lead_management.ui.giger_onboarding.GigerOnboardingFragment"
         android:label="GigerOnboardingFragment" />
 
     <fragment
@@ -946,19 +946,19 @@
         android:label="GigerOtpVerification" />
     <fragment
         android:id="@+id/selectGigApplicationToActivate"
-        android:name="com.gigforce.lead_management.gigeronboarding.SelectGigApplicationToActivate"
+        android:name="com.gigforce.lead_management.ui.select_gig_application.SelectGigApplicationToActivate"
         android:label="SelectGigApplicationToActivate" />
     <fragment
         android:id="@+id/selectGigLocationFragment"
-        android:name="com.gigforce.lead_management.gigeronboarding.SelectGigLocationFragment"
+        android:name="com.gigforce.lead_management.ui.select_gig_location.SelectGigLocationFragment"
         android:label="SelectGigLocationFragment" />
     <fragment
         android:id="@+id/selectTeamLeaderFragment"
-        android:name="com.gigforce.lead_management.gigeronboarding.SelectTeamLeaderFragment"
+        android:name="com.gigforce.lead_management.ui.select_team_leader.SelectTeamLeaderFragment"
         android:label="SelectTeamLeaderFragment" />
     <fragment
         android:id="@+id/shiftTimingFragment"
-        android:name="com.gigforce.lead_management.gigeronboarding.ShiftTimingFragment"
+        android:name="com.gigforce.lead_management.ui.select_shift_timing.ShiftTimingFragment"
         android:label="ShiftTimingFragment" />
 
 

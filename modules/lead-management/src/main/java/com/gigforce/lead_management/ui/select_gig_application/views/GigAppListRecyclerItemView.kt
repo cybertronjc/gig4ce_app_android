@@ -1,57 +1,45 @@
-package com.gigforce.lead_management.gigeronboarding.views
+package com.gigforce.lead_management.ui.select_gig_application.views
 
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.RelativeLayout
-import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.shimmer.ShimmerHelper
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.lead_management.databinding.SelectGigApplicationItemLayoutBinding
+import com.gigforce.lead_management.databinding.SelectGigApplicationSearchItemLayoutBinding
 import com.gigforce.lead_management.models.GigAppListRecyclerItemData
 
 
 class GigAppListRecyclerItemView  (
     context: Context,
     attrs: AttributeSet?
-    ) : RelativeLayout(
+    ) : FrameLayout(
     context,
     attrs
     ), IViewHolder, View.OnClickListener {
-    private lateinit var viewBinding: SelectGigApplicationItemLayoutBinding
+    private var viewBinding: SelectGigApplicationItemLayoutBinding
     private var viewData: GigAppListRecyclerItemData.GigAppRecyclerItemData? = null
 
 
 
     init {
-        setDefault()
-        inflate()
-        setListenersOnView()
-    }
-
-    private fun setListenersOnView() {
-
-    }
-
-    private fun setDefault() {
-        val params = RelativeLayout.LayoutParams(
-            RelativeLayout.LayoutParams.MATCH_PARENT,
-            RelativeLayout.LayoutParams.WRAP_CONTENT
-        )
-        this.layoutParams = params
-    }
-
-    private fun inflate() {
+        this.layoutParams =
+            LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
         viewBinding = SelectGigApplicationItemLayoutBinding.inflate(
             LayoutInflater.from(context),
             this,
             true
         )
-
     }
 
     override fun bind(data: Any?) {

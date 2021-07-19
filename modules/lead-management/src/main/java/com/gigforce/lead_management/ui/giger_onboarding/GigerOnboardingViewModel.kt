@@ -1,4 +1,4 @@
-package com.gigforce.lead_management.gigeronboarding
+package com.gigforce.lead_management.ui.giger_onboarding
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,9 +12,7 @@ import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.utils.Lce
 import com.gigforce.lead_management.LeadManagementRepo
 import com.google.firebase.auth.FirebaseAuth
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 
 class GigerOnboardingViewModel constructor(

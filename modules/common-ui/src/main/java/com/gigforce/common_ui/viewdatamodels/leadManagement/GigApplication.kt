@@ -30,5 +30,7 @@ data class GigApplication(
     @field:SerializedName("jobProfileTitle")
     var jobProfileTitle: String? = null,
 
+    var type: String? = null
+
 ) {
 }

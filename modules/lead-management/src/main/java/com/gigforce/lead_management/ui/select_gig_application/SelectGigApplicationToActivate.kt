@@ -1,11 +1,6 @@
-package com.gigforce.lead_management.gigeronboarding
+package com.gigforce.lead_management.ui.select_gig_application
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -19,11 +14,13 @@ import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.SelectGigApplicationToActivateFragmentBinding
+import com.gigforce.lead_management.gigeronboarding.SelectGigAppViewState
+import com.gigforce.lead_management.gigeronboarding.SelectGigApplicationToActivateViewModel
 import com.gigforce.lead_management.models.GigAppListRecyclerItemData
-import com.gigforce.lead_management.models.JoiningListRecyclerItemData
-import com.gigforce.lead_management.ui.joining_list.JoiningListViewState
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActivateFragmentBinding>(
     fragmentName = "SelectGigApplicationFragment",
     layoutId = R.layout.select_gig_application_to_activate_fragment,
@@ -65,7 +62,7 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
 
             when (state) {
                 is SelectGigAppViewState.ErrorInLoadingDataFromServer -> showErrorInLoadingGigApps(state.error)
-                is SelectGigAppViewState.GigAppListLoaded -> showGigApps(state.gigAppList)
+                is SelectGigAppViewState.GigAppListLoaded -> showGigApps(state.gigApps)
                 SelectGigAppViewState.LoadingDataFromServer -> loadingGigAppsFromServer()
                 SelectGigAppViewState.NoGigAppsFound -> showNoGigAppsFound()
             }

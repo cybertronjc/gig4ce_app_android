@@ -1,18 +1,12 @@
-package com.gigforce.lead_management.gigeronboarding
+package com.gigforce.lead_management.ui.select_gig_location
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.SelectGigLocationFragmentBinding
 
-import java.util.regex.Pattern
 import javax.inject.Inject
 
 class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentBinding>(

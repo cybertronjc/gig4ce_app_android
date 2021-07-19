@@ -6,15 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.viewdatamodels.leadManagement.GigApplication
 import com.gigforce.common_ui.viewdatamodels.leadManagement.GigForGigerActivation
+import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.lead_management.LeadManagementRepo
-import com.gigforce.lead_management.gigeronboarding.views.GigAppListRecyclerItemView
 import com.gigforce.lead_management.models.GigAppListRecyclerItemData
-import com.gigforce.lead_management.models.JoiningListRecyclerItemData
-import com.gigforce.lead_management.ui.joining_list.JoiningListViewModel
-import com.gigforce.lead_management.ui.joining_list.JoiningListViewState
-import kotlinx.coroutines.flow.merge
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 sealed class SelectGigAppViewState {
 
@@ -28,20 +26,22 @@ sealed class SelectGigAppViewState {
     ) : SelectGigAppViewState()
 
     data class GigAppListLoaded(
-        val gigAppList: List<GigAppListRecyclerItemData>
+        val gigApps: List<GigAppListRecyclerItemData>
     ) : SelectGigAppViewState()
 }
 
-class SelectGigApplicationToActivateViewModel(
-    private val leadManagementRepo: LeadManagementRepo,
-    private val gigforceLogger: GigforceLogger
+@HiltViewModel
+class SelectGigApplicationToActivateViewModel @Inject constructor(
+    private val buildConfig: IBuildConfigVM
+
 ) : ViewModel() {
 
     companion object {
         private const val TAG = "SelectGigApplicationViewModel"
     }
 
-
+    private val leadManagementRepo: LeadManagementRepo = LeadManagementRepo(buildConfig = buildConfig)
+    private val gigforceLogger: GigforceLogger = GigforceLogger()
     private val _viewState = MutableLiveData<SelectGigAppViewState>()
     val viewState: LiveData<SelectGigAppViewState> = _viewState
 
@@ -54,7 +54,7 @@ class SelectGigApplicationToActivateViewModel(
     private var ongoingGigApplications: List<GigApplication> = emptyList()
 
 
-     fun fetchGigApplications(gigerId: String) = viewModelScope.launch {
+    fun fetchGigApplications(gigerId: String) = viewModelScope.launch {
         _viewState.postValue(SelectGigAppViewState.LoadingDataFromServer)
         gigforceLogger.d(
             TAG,
@@ -96,63 +96,58 @@ class SelectGigApplicationToActivateViewModel(
         otherGigApps: List<GigApplication>
     ) {
 
-//        val statusToGigAppList1 = gigAppList.filter {
-//            it.status != null
-//        }.filter {
-//            if(currentSearchString.isNullOrBlank())
-//                true
-//            else
-//                it.status?.contains(
-//                    currentSearchString!!,
-//                    true
-//                ) ?: false
-//        }.groupBy {
-//            it.status!!
-//        }
-
         val gigAppList: List<GigApplication> = ongoingGigApps + otherGigApps
-        val statusToGigAppList: List<GigApplication> =
-            ongoingGigApps.orEmpty() + otherGigApps.orEmpty()
-//        statusToGigAppList.groupBy {
-//            if (it.status?.isEmpty()!!) "OtherApplications" else "OnGoing Applications"
-//        }
-
-        val gigAppsListForView = mutableListOf<GigAppListRecyclerItemData>()
-        statusToGigAppList.forEachIndexed { index, gigApplication ->
-            gigforceLogger.d(TAG, "processing data, Status :  : ${statusToGigAppList.size} GigApps")
-
-            gigAppsListForView.add(
-                GigAppListRecyclerItemData.GigAppListStatusRecyclerItemData(
-                    if (gigApplication.status?.isEmpty()!!) "Other Applications" else "OnGoing Applications"
-                )
-            )
-
-            if (gigApplication.status?.isEmpty()!!) {
-                gigAppsListForView.add(
-                    GigAppListRecyclerItemData.GigAppListSearchRecyclerItemData(
-                        "Search"
-                    )
-                )
-            }
-            gigAppList.forEach {
-                gigAppsListForView.add(
-                    GigAppListRecyclerItemData.GigAppRecyclerItemData(
-                        userUid = it.gigerId.toString(),
-                        status = it.status.toString(),
-                        businessName = it.profileName.toString(),
-                        jobProfileTitle = it.jobProfileTitle.toString(),
-                        businessLogo = it.image.toString(),
-                        businessLogoThumbnail = it.image.toString()
-                    )
-                )
-            }
-
+        val statusToGigAppList = gigAppList.filter {
+            it.type != null
+        }.filter {
+            if(currentSearchString.isNullOrBlank())
+                true
+            else
+                it.status?.contains(
+                    currentSearchString!!,
+                    true
+                ) ?: false
+        }.groupBy {
+            it.type
         }
 
-        gigAppListShownOnView = gigAppsListForView
+        val gigAppsListForView = mutableListOf<GigAppListRecyclerItemData>()
+        try {
+            statusToGigAppList.forEach { (type, gigApps) ->
+           gigforceLogger.d(TAG, "processing data, Status :  : ${statusToGigAppList.size} GigApps")
+
+           gigAppsListForView.add(
+               GigAppListRecyclerItemData.GigAppListStatusRecyclerItemData(
+                   "$type"
+               )
+           )
+
+           if (type.equals("other")) {
+               gigAppsListForView.add(
+                   GigAppListRecyclerItemData.GigAppListSearchRecyclerItemData(
+                       "Search"
+                   )
+               )
+           }
+           gigAppList.forEach {
+               if (it.type.equals(type)) {
+                   gigAppsListForView.add(
+                       GigAppListRecyclerItemData.GigAppRecyclerItemData(
+                           userUid = it.gigerId.toString(),
+                           status = it.status.toString(),
+                           businessName = it.profileName.toString(),
+                           jobProfileTitle = it.jobProfileTitle.toString(),
+                           businessLogo = it.image.toString(),
+                           businessLogoThumbnail = it.image.toString()
+                       )
+                   )
+               }
+           }
+       }
+        //gigAppListShownOnView = gigAppsListForView
         _viewState.postValue(
             SelectGigAppViewState.GigAppListLoaded(
-                gigAppListShownOnView
+                gigAppsListForView
             )
         )
 
@@ -160,6 +155,9 @@ class SelectGigApplicationToActivateViewModel(
             TAG,
             "${gigAppListShownOnView.size} items (joinings + status) shown on view"
         )
+        }catch (e: Exception){
+
+        }
     }
 
     fun searchJoinings(
