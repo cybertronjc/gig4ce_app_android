@@ -53,7 +53,7 @@ class AadhaarCardOptionsFragment : Fragment(), View.OnClickListener {
        viewBinding.textView5.setOnClickListener {
             showWhyWeNeedThisDialog()
         }
-        viewBinding.imageView7.setOnClickListener {
+        viewBinding.iconwhyweneed.setOnClickListener {
             showWhyWeNeedThisDialog()
         }
 

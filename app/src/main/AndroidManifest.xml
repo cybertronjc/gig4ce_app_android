@@ -36,6 +36,7 @@
         android:supportsRtl="true"
         android:theme="@style/GigforceTheme"
         tools:node="merge"
+        android:usesCleartextTraffic="true"
         tools:replace="android:label,android:allowBackup">
         <!--
                Set to true if your app is Standalone, that is, it does not require the handheld

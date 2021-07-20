@@ -12,4 +12,8 @@ data class SimpleCardDVM(
     var isSelected: Boolean = false
 ) : SimpleDVM(
     CommonViewTypes.VIEW_SIMPLE_CARD
-)
+){
+    override fun toString(): String {
+        return navpath
+    }
+}

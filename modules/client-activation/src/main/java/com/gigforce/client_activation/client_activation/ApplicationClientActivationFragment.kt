@@ -377,7 +377,7 @@ class ApplicationClientActivationFragment : Fragment(),
             )
             )
             "driving_licence" -> navigation.navigateTo(
-                    "verification/DLCA",
+                    "verification/drivinglicenseimageupload",
                     bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
             )
             "learning" ->

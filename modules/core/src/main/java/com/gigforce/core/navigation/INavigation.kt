@@ -20,7 +20,7 @@ interface INavigation {
     fun popAllBackStates()
     fun getActivity(): Activity
     fun navigateToDocViewerActivity(activity: Activity,url:String)
-    fun navigateToPlayVideoDialogFragment(fragment: Fragment, lessonId:String, shouldShowFeedbackDialog:Boolean)
+    fun navigateToPlayVideoDialogFragment(fragment: Fragment, moduleId:String?="",lessonId:String, shouldShowFeedbackDialog:Boolean)
     fun navigateToPlayVideoDialogWithUrl(fragment: Fragment, lessonId:String, shouldShowFeedbackDialog:Boolean)
     fun navigateToPhotoCrop(photoCropIntent: Intent, requestCodeUploadPanImage: Int, requireContext: Context, fragment: Fragment)
     fun navigateToAttendanceImageCaptureActivity(photoCropIntent: Intent,requestCodeUploadPanImage: Int,requireContext: Context, fragment: Fragment)

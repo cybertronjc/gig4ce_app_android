@@ -67,7 +67,12 @@ class SimpleCardComponent(context: Context, attrs: AttributeSet?) : FrameLayout(
     }
 
     fun setVerified(verified: Boolean){
-        if (verified) verified_img.visible() else verified_img.gone()
+//        if (verified) verified_img.visible() else verified_img.gone()
+        if(verified) {
+            subtitle.text = "Verified"
+            subtitle.setTextColor(resources.getColor(R.color.green))
+        }
+
     }
 
     override fun bind(data: Any?) {

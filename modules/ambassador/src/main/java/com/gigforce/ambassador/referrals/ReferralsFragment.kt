@@ -359,6 +359,9 @@ class ReferralsFragment : Fragment(),
                 )
             )
         }
+        catch (e:Exception){
+
+        }
     }
 
     fun shareToAnyApp(url: String) {

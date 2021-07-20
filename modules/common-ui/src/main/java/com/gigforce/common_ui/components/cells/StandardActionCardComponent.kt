@@ -141,13 +141,13 @@ open class StandardActionCardComponent(context: Context, attrs: AttributeSet?) :
     }
 
     fun setImageFromUrl(url: String, imageType: String) {
-        GlideApp.with(context)
+        GlideApp.with(context.applicationContext)
             .load(url)
             .into(if (imageType.equals("image")) image else icon)
     }
 
     fun setImageFromFirebaseUrl(storageReference: StorageReference, imageType: String) {
-        GlideApp.with(context)
+        GlideApp.with(context.applicationContext)
             .load(storageReference)
             .into(if (imageType.equals("image")) image else icon)
     }

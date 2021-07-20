@@ -4,24 +4,24 @@ import com.gigforce.common_ui.R
 import com.gigforce.core.datamodels.verification.*
 
 data class GigerVerificationStatus(
-        val selfieVideoUploaded: Boolean = false,
-        val selfieVideoDataModel: SelfieVideoDataModel? = null,
-        val panCardDetailsUploaded: Boolean = false,
-        val panCardDetails: PanCardDataModel? = null,
-        val aadharCardDetailsUploaded: Boolean = false,
-        val aadharCardDataModel: AadharCardDataModel? = null,
-        val dlCardDetailsUploaded: Boolean = false,
-        val drivingLicenseDataModel: DrivingLicenseDataModel? = null,
-        val bankDetailsUploaded: Boolean = false,
-        val bankUploadDetailsDataModel: BankDetailsDataModel? = null,
-        val everyDocumentUploaded: Boolean = false
+    val selfieVideoUploaded: Boolean = false,
+    val selfieVideoDataModel: SelfieVideoDataModel? = null,
+    val panCardDetailsUploaded: Boolean = false,
+    val panCardDetails: PanCardDataModel? = null,
+    val aadharCardDetailsUploaded: Boolean = false,
+    val aadharCardDataModel: AadharCardDataModel? = null,
+    val dlCardDetailsUploaded: Boolean = false,
+    val drivingLicenseDataModel: DrivingLicenseDataModel? = null,
+    val bankDetailsUploaded: Boolean = false,
+    val bankUploadDetailsDataModel: BankDetailsDataModel? = null,
+    val everyDocumentUploaded: Boolean = false
 ) {
 
     val requiredDocsVerified: Boolean
         get() {
-            return panCardDetails?.state == STATUS_VERIFIED
-                    || aadharCardDataModel?.state == STATUS_VERIFIED
-                    || drivingLicenseDataModel?.state == STATUS_VERIFIED
+            return panCardDetails?.verified?:false
+                    || aadharCardDataModel?.verified?:false
+                    || drivingLicenseDataModel?.verified?:false
         }
     val requiredDocsUploaded: Boolean
         get() {
