@@ -516,10 +516,10 @@ class GigPage2Fragment : Fragment(),
             trackingScheduler.scheduleTrackerForGig(gig)
         } catch (e: Exception) {
 
-            MaterialAlertDialogBuilder(requireContext())
-                .setMessage("Unable to plant trackers")
-                .setPositiveButton("Okay") { _, _ -> }
-                .show()
+//            MaterialAlertDialogBuilder(requireContext())
+//                .setMessage("Unable to plant trackers")
+//                .setPositiveButton("Okay") { _, _ -> }
+//                .show()
 
             e.printStackTrace()
             CrashlyticsLogger.e(
