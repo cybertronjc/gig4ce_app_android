@@ -27,4 +27,18 @@ enum class JoiningStatus constructor(
         else
             "Joining Pending"
     }
+
+    companion object {
+
+        fun fromValue(status: String): JoiningStatus {
+            values().forEach {
+
+                if (it.getStatusString() == status) {
+                    return it
+                }
+            }
+
+            throw IllegalStateException("joining status doesnot match")
+        }
+    }
 }

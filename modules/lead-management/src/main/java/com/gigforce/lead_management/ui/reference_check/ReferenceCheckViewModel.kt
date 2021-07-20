@@ -6,9 +6,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.lead_management.repositories.LeadManagementRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ReferenceCheckViewModel constructor(
+@HiltViewModel
+class ReferenceCheckViewModel @Inject constructor(
     private val leadManagementRepository: LeadManagementRepository,
     private val logger: GigforceLogger
 ) : ViewModel() {
@@ -94,27 +97,27 @@ class ReferenceCheckViewModel constructor(
                         nameValidationError = "Invalid name"
                     )
                 )
-                logger.d(TAG, "empty name provided : $name")
+                logger.d(TAG, "invalid name provided : $name")
                 false
             }
             relation.isEmpty() -> {
                 _viewState.postValue(
                     ReferenceCheckViewState.ValidationError(
-                        nameValidationError = "Invalid relation"
+                        relationValidationError = "Invalid relation"
                     )
                 )
 
-                logger.d(TAG, "empty relation provided : $relation")
+                logger.d(TAG, "invalid relation provided : $relation")
                 false
             }
             contactNo.isEmpty() -> {
                 _viewState.postValue(
                     ReferenceCheckViewState.ValidationError(
-                        nameValidationError = "Invalid Contact no"
+                        contactValidationError = "Invalid Contact no"
                     )
                 )
 
-                logger.d(TAG, "empty contactNo provided : $contactNo")
+                logger.d(TAG, "invalid contactNo provided : $contactNo")
                 false
             }
             else -> {

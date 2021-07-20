@@ -11,7 +11,9 @@ import com.github.razir.progressbutton.bindProgressButton
 import com.github.razir.progressbutton.hideProgress
 import com.github.razir.progressbutton.showProgress
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ReferenceCheckFragment : BaseFragment2<ReferenceCheckFragmentBinding>(
     fragmentName = "ReferenceCheckFragment",
     layoutId = R.layout.reference_check_fragment,
@@ -75,7 +77,7 @@ class ReferenceCheckFragment : BaseFragment2<ReferenceCheckFragmentBinding>(
     ) = viewBinding.toolbar.apply {
 
         showTitle("Reference Check")
-        hideSearchOption()
+        hideActionMenu()
         setBackButtonListener {
             activity?.onBackPressed()
         }

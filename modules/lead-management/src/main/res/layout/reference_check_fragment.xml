@@ -131,7 +131,9 @@
                 android:paddingStart="8dp"
                 android:textColor="#333333"
                 android:textSize="14sp"
-                android:textStyle="normal" />
+                android:textStyle="normal"
+                android:inputType="number"
+                android:maxLength="10"/>
 
             <View
                 android:layout_width="match_parent"

@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.RelativeLayout
 import androidx.core.view.isVisible
+import com.gigforce.common_ui.utils.PushDownAnim
 import com.gigforce.core.IViewHolder
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.RecyclerRowJoiningItemBinding
@@ -35,7 +36,9 @@ class JoiningRecyclerItemView(
     }
 
     private fun setListenersOnView() {
-        viewBinding.callGigerBtn.setOnClickListener(this)
+        PushDownAnim.setPushDownAnimTo(
+            viewBinding.callGigerBtn
+        ).setOnClickListener(this)
     }
 
     private fun setDefault() {

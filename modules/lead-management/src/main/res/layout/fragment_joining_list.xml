@@ -32,15 +32,20 @@
 
         </FrameLayout>
 
-        <com.google.android.material.button.MaterialButton
+        <TextView
             android:id="@+id/join_now_button"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="18dp"
+            android:layout_height="48dp"
+            android:background="@drawable/app_gradient_button"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginEnd="@dimen/size_16"
+            android:layout_marginBottom="@dimen/size_18"
+            android:gravity="center"
+            android:layout_marginTop="8dp"
+            android:minHeight="@dimen/size_36"
             android:text="Add New"
-            android:textAllCaps="false" />
+            android:textColor="@color/white" />
+
 
     </LinearLayout>
 </layout>
