@@ -2,15 +2,21 @@ package com.gigforce.lead_management.ui.joining_list
 
 import android.os.Bundle
 import android.widget.LinearLayout
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.navOptions
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
+import com.gigforce.common_ui.utils.PushDownAnim
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
+import com.gigforce.core.navigation.INavigation
+import com.gigforce.lead_management.LeadManagementConstants
 import com.gigforce.lead_management.LeadManagementSharedViewState
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.SharedLeadManagementViewModel
@@ -18,6 +24,7 @@ import com.gigforce.lead_management.databinding.FragmentJoiningListBinding
 import com.gigforce.lead_management.models.JoiningListRecyclerItemData
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class JoiningListFragment : BaseFragment2<FragmentJoiningListBinding>(
@@ -25,6 +32,9 @@ class JoiningListFragment : BaseFragment2<FragmentJoiningListBinding>(
     layoutId = R.layout.fragment_joining_list,
     statusBarColor = R.color.lipstick_2
 ) {
+
+    @Inject
+    lateinit var navigation: INavigation
     private val viewModel: JoiningListViewModel by viewModels()
     private val sharedLeadViewModel: SharedLeadManagementViewModel by activityViewModels()
 
@@ -41,10 +51,27 @@ class JoiningListFragment : BaseFragment2<FragmentJoiningListBinding>(
         viewBinding: FragmentJoiningListBinding
     ) = viewBinding.apply {
 
-        this.joinNowButton.setOnClickListener {
+        this.joiningsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-            //todo redirec to no check screen
+        PushDownAnim.setPushDownAnimTo(this.joinNowButton).setOnClickListener {
+            logger.d(logTag,"navigating to LeadMgmt/gigerOnboarding")
+
+            navigation.navigateTo(
+                dest = "LeadMgmt/referenceCheckFragment"/*"LeadMgmt/gigerOnboarding"*/,
+                args = bundleOf(
+                    LeadManagementConstants.INTENT_EXTRA_USER_UID to "qxikOJuJSqXvXyOKgv5usgWZmW82"
+                ),
+                navOptions = navOptions {
+                    this.anim {
+                        this.enter = R.anim.nav_default_enter_anim
+                        this.exit = R.anim.nav_default_exit_anim
+                        this.popEnter= R.anim.nav_default_pop_enter_anim
+                        this.popExit= R.anim.nav_default_pop_exit_anim
+                    }
+                }
+            )
         }
+
     }
 
     private fun initToolbar(
@@ -77,7 +104,9 @@ class JoiningListFragment : BaseFragment2<FragmentJoiningListBinding>(
                 val state = it ?: return@observe
 
                 when (state) {
-                    is JoiningListViewState.ErrorInLoadingDataFromServer -> showErrorInLoadingJoinings(state.error)
+                    is JoiningListViewState.ErrorInLoadingDataFromServer -> showErrorInLoadingJoinings(
+                        state.error
+                    )
                     is JoiningListViewState.JoiningListLoaded -> showJoinings(state.joiningList)
                     JoiningListViewState.LoadingDataFromServer -> loadingJoiningsFromServer()
                     JoiningListViewState.NoJoiningFound -> showNoJoiningsFound()
@@ -105,11 +134,11 @@ class JoiningListFragment : BaseFragment2<FragmentJoiningListBinding>(
     }
 
 
-
     private fun showJoinings(
         joiningList: List<JoiningListRecyclerItemData>
-    ) = viewBinding.apply{
-        stopShimmer(joiningShimmerContainer as LinearLayout,
+    ) = viewBinding.apply {
+        stopShimmer(
+            joiningShimmerContainer as LinearLayout,
             R.id.shimmer_controller
         )
         joiningShimmerContainer.gone()
@@ -118,10 +147,11 @@ class JoiningListFragment : BaseFragment2<FragmentJoiningListBinding>(
         joiningsRecyclerView.collection = joiningList
     }
 
-    private fun showNoJoiningsFound() = viewBinding.apply{
+    private fun showNoJoiningsFound() = viewBinding.apply {
 
         joiningsRecyclerView.collection = emptyList()
-        stopShimmer(joiningShimmerContainer as LinearLayout,
+        stopShimmer(
+            joiningShimmerContainer as LinearLayout,
             R.id.shimmer_controller
         )
         joiningShimmerContainer.gone()
@@ -132,10 +162,11 @@ class JoiningListFragment : BaseFragment2<FragmentJoiningListBinding>(
 
     private fun showErrorInLoadingJoinings(
         error: String
-    ) = viewBinding.apply{
+    ) = viewBinding.apply {
 
         joiningsRecyclerView.collection = emptyList()
-        stopShimmer(joiningShimmerContainer as LinearLayout,
+        stopShimmer(
+            joiningShimmerContainer as LinearLayout,
             R.id.shimmer_controller
         )
         joiningShimmerContainer.gone()

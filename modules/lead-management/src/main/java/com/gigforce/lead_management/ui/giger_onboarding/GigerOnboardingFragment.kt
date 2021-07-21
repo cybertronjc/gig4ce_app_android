@@ -28,7 +28,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class GigerOnboardingFragment  : BaseFragment2<GigerOnboardingFragmentBinding>(
-    fragmentName = "JoiningListFragment",
+    fragmentName = "GigerOnboardingFragment",
     layoutId = R.layout.giger_onboarding_fragment,
     statusBarColor = R.color.lipstick_2
 ) {

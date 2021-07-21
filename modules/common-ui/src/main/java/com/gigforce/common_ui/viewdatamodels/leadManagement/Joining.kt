@@ -63,6 +63,6 @@ data class Joining(
 
 	@Exclude
     fun getStatus(): JoiningStatus {
-        return JoiningStatus.valueOf(status)
+		return JoiningStatus.fromValue(status)
     }
 }

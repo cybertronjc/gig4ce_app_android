@@ -39,7 +39,7 @@ data class ProfileData(
     var contactEmail: ArrayList<ContactEmail>? = null,
     var invited: ArrayList<Invites>? = null,
     var role_interests: ArrayList<RoleInterests>? = null,
-    var gigerStatus : String = "lead",
+    var gigerStatus: String = "lead",
 
     @get:PropertyName("companies")
     @set:PropertyName("companies")
@@ -59,7 +59,7 @@ data class ProfileData(
 
     @get:PropertyName("enrolledByLink")
     @set:PropertyName("enrolledByLink")
-    var enrolledByLink:Boolean = false,
+    var enrolledByLink: Boolean = false,
 
     @get:PropertyName("firstLogin")
     @set:PropertyName("firstLogin")
@@ -88,9 +88,14 @@ data class ProfileData(
     @get:PropertyName("lastLoginDetails")
     @set:PropertyName("lastLoginDetails")
     var lastLoginDetails: LastLoginDetails? = null,
+
     @get:PropertyName("isUserRegistered")
     @set:PropertyName("isUserRegistered")
-    var isUserRegistered : Boolean = false
+    var isUserRegistered: Boolean = false,
+
+    @get:PropertyName("reference")
+    @set:PropertyName("reference")
+    var reference: Reference? = null
 ) {
 
     @Exclude
@@ -140,4 +145,18 @@ data class LastLoginDetails(
     @get:PropertyName("lastLoginFromAddress")
     @set:PropertyName("lastLoginFromAddress")
     var lastLoginFromAddress: String = ""
+)
+
+data class Reference(
+    @get:PropertyName("name")
+    @set:PropertyName("name")
+    var name: String = "",
+
+    @get:PropertyName("relation")
+    @set:PropertyName("relation")
+    var relation: String = "",
+
+    @get:PropertyName("contactNo")
+    @set:PropertyName("contactNo")
+    var contactNo: String = ""
 )

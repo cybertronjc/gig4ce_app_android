@@ -960,6 +960,10 @@
         android:id="@+id/shiftTimingFragment"
         android:name="com.gigforce.lead_management.ui.select_shift_timing.ShiftTimingFragment"
         android:label="ShiftTimingFragment" />
+    <fragment
+        android:id="@+id/referenceCheckFragment"
+        android:name="com.gigforce.lead_management.ui.reference_check.ReferenceCheckFragment"
+        android:label="ReferenceCheckFragment" />
 
 
 </navigation>
