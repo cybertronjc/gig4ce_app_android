@@ -6,10 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.viewdatamodels.leadManagement.GigApplication
 import com.gigforce.common_ui.viewdatamodels.leadManagement.GigForGigerActivation
-import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.logger.GigforceLogger
-import com.gigforce.lead_management.LeadManagementRepo
 import com.gigforce.lead_management.models.GigAppListRecyclerItemData
+import com.gigforce.lead_management.repositories.LeadManagementRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -32,7 +31,8 @@ sealed class SelectGigAppViewState {
 
 @HiltViewModel
 class SelectGigApplicationToActivateViewModel @Inject constructor(
-    private val buildConfig: IBuildConfigVM
+    private val leadManagementRepo: LeadManagementRepository,
+    private val gigforceLogger: GigforceLogger
 
 ) : ViewModel() {
 
@@ -40,8 +40,6 @@ class SelectGigApplicationToActivateViewModel @Inject constructor(
         private const val TAG = "SelectGigApplicationViewModel"
     }
 
-    private val leadManagementRepo: LeadManagementRepo = LeadManagementRepo(buildConfig = buildConfig)
-    private val gigforceLogger: GigforceLogger = GigforceLogger()
     private val _viewState = MutableLiveData<SelectGigAppViewState>()
     val viewState: LiveData<SelectGigAppViewState> = _viewState
 

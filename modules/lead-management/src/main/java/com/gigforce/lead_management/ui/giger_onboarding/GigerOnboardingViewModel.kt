@@ -9,8 +9,9 @@ import com.gigforce.core.datamodels.ambassador.CreateUserResponse
 import com.gigforce.core.datamodels.ambassador.RegisterMobileNoResponse
 import com.gigforce.core.datamodels.login.LoginResponse
 import com.gigforce.core.di.interfaces.IBuildConfigVM
+import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.core.utils.Lce
-import com.gigforce.lead_management.LeadManagementRepo
+import com.gigforce.lead_management.repositories.LeadManagementRepository
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -18,14 +19,15 @@ import javax.inject.Inject
 
 @HiltViewModel
 class GigerOnboardingViewModel @Inject constructor(
-    private val buildConfig: IBuildConfigVM
+    private val buildConfig: IBuildConfigVM,
+    private val leadManagementRepository: LeadManagementRepository,
+    private val logger: GigforceLogger
 ) : ViewModel() {
 
     companion object {
         private const val TAG = "GigerOnboardingViewModel"
     }
 
-    private val leadManagementRepo: LeadManagementRepo = LeadManagementRepo(buildConfig)
     val liveState: MutableLiveData<LoginResponse> = MutableLiveData<LoginResponse>()
     private val _checkMobileNo = MutableLiveData<Lce<RegisterMobileNoResponse>>()
     val checkMobileNo: LiveData<Lce<RegisterMobileNoResponse>> = _checkMobileNo
@@ -46,7 +48,7 @@ class GigerOnboardingViewModel @Inject constructor(
         _numberRegistered.postValue(Lce.loading())
         try {
             val repsonse =
-                leadManagementRepo.getUserAuthStatus(mobileNo)
+                leadManagementRepository.getUserAuthStatus(mobileNo, buildConfig.getCreateOrSendOTPUrl())
             _numberRegistered.value = Lce.content(repsonse)
         } catch (e: Exception) {
             e.printStackTrace()
@@ -61,7 +63,7 @@ class GigerOnboardingViewModel @Inject constructor(
         _checkMobileNo.postValue(Lce.loading())
         try {
             val repsonse =
-                leadManagementRepo.checkMobileForExistingRegistrationElseSendOtp(mobileNo)
+                leadManagementRepository.checkMobileForExistingRegistrationElseSendOtp(mobileNo,  buildConfig.getVerifyOTPURL())
             _checkMobileNo.value = Lce.content(repsonse)
         } catch (e: Exception) {
             e.printStackTrace()
@@ -83,11 +85,11 @@ class GigerOnboardingViewModel @Inject constructor(
         try {
             _verifyOtp.value = Lce.loading()
 
-                val verifyOtpResponse = leadManagementRepo.verifyOtp(token, otp)
+                val verifyOtpResponse = leadManagementRepository.verifyOtp(token, otp, buildConfig.getUserRegisterInfoUrl())
 
                 if (verifyOtpResponse.isVerified) {
                     //val profile = profileFirebaseRepository.getProfileData()
-                    val response = leadManagementRepo.createUser(
+                    val response = leadManagementRepository.createUser(
                         createUserUrl = buildConfig.getCreateUserUrl(),
                         mobile = mobile,
                         enrolledByName = ""
