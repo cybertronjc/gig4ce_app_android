@@ -8,12 +8,17 @@ enum class JoiningStatus constructor(
     JOINING_PENDING("joining_pending"),
     JOINED("joined");
 
-    fun getStatusCapitalized(): String {
-        return this.string.capitalize()
-    }
-
     fun getStatusString(): String {
         return this.string
+    }
+
+    fun getStatusFormattedString(): String {
+        return when (this) {
+            SIGN_UP_PENDING -> "Signup Pending"
+            APPLICATION_PENDING -> "Application Pending"
+            JOINING_PENDING -> "Joining Pending"
+            JOINED -> "Joined"
+        }
     }
 
     /**
@@ -31,10 +36,9 @@ enum class JoiningStatus constructor(
     companion object {
 
         fun fromValue(status: String): JoiningStatus {
-            values().forEach {
-
-                if (it.getStatusString() == status) {
-                    return it
+            for (value in values()) {
+                if (value.getStatusString() == status) {
+                    return value
                 }
             }
 

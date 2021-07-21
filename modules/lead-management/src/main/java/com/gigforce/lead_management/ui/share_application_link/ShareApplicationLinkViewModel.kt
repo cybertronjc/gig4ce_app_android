@@ -34,6 +34,7 @@ class ShareApplicationLinkViewModel @Inject constructor(
     //Data
     private var jobProfiles: List<JobProfileOverview> = emptyList()
     private var jobProfilesShownOnView: List<JobProfileOverview> = emptyList()
+    private var currentlySelectedGigIndex: Int = -1
 
     private fun getJobProfileForSharing() = viewModelScope.launch {
         _viewState.postValue(Lce.loading())
@@ -78,6 +79,48 @@ class ShareApplicationLinkViewModel @Inject constructor(
 
         _viewState.value = Lce.content(jobProfilesShownOnView)
         logger.d(TAG, "Job profiles found after search : ${jobProfilesShownOnView.size}")
+    }
+
+    fun selectJobProfile(
+        jobProfile: JobProfileOverview
+    ) {
+        logger.d(TAG, "selecting job profile ${jobProfile.jobProfileId}...")
+
+        if (currentlySelectedGigIndex == -1) {
+            currentlySelectedGigIndex = jobProfilesShownOnView.indexOfFirst {
+                it.jobProfileId == jobProfile.jobProfileId
+            }
+            logger.d(
+                TAG,
+                "no job profile selected yet, selecting index no $currentlySelectedGigIndex"
+            )
+
+            if (currentlySelectedGigIndex != -1) {
+                jobProfilesShownOnView[currentlySelectedGigIndex].isSelected = true
+            }
+        } else {
+
+            val newSelectedItemIndex = jobProfilesShownOnView.indexOfFirst {
+                it.jobProfileId == jobProfile.jobProfileId
+            }
+
+            if (newSelectedItemIndex == currentlySelectedGigIndex) {
+                //Item Already selected
+                return
+            }
+
+            jobProfilesShownOnView[currentlySelectedGigIndex].isSelected = false
+            jobProfilesShownOnView[newSelectedItemIndex].isSelected = true
+
+            logger.d(
+                TAG,
+                "already profile selected yet, selecting index no $newSelectedItemIndex, deselecting : $currentlySelectedGigIndex"
+            )
+
+            currentlySelectedGigIndex = newSelectedItemIndex
+        }
+
+        _viewState.value = Lce.content(jobProfilesShownOnView)
     }
 
 }

@@ -2,6 +2,7 @@ package com.gigforce.lead_management.ui.share_application_link
 
 import android.os.Bundle
 import androidx.fragment.app.viewModels
+import com.gigforce.common_ui.utils.PushDownAnim
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfileOverview
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.utils.Lce
@@ -23,7 +24,20 @@ class ShareApplicationLinkFragment : BaseFragment2<ShareApplicationLinkFragmentB
     ) {
 
 
+        initListeners(viewBinding)
         initViewModel()
+    }
+
+    private fun initListeners(
+        viewBinding: ShareApplicationLinkFragmentBinding
+    )  = viewBinding.apply{
+
+        PushDownAnim.setPushDownAnimTo(sendReferralLinkBtn).setOnClickListener{
+
+
+
+        }
+
     }
 
     private fun initViewModel() {

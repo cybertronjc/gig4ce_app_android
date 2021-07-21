@@ -91,14 +91,6 @@ class JoiningListFragment : BaseFragment2<FragmentJoiningListBinding>(
     }
 
     private fun initViewModel() {
-        sharedLeadViewModel.joiningsSharedViewState
-            .observe(viewLifecycleOwner, {
-
-                when (it) {
-                    LeadManagementSharedViewState.LeadsChangedRefreshJoinings -> viewModel.refreshJoinings()
-                }
-            })
-
         viewModel.viewState
             .observe(viewLifecycleOwner, {
                 val state = it ?: return@observe
@@ -157,7 +149,8 @@ class JoiningListFragment : BaseFragment2<FragmentJoiningListBinding>(
         joiningShimmerContainer.gone()
         joiningListInfoLayout.root.visible()
 
-        //todo show illus here
+        joiningListInfoLayout.infoIv.loadImage(R.drawable.ic_no_joining_found)
+        joiningListInfoLayout.infoMessageTv.text = "No Job Profile Found"
     }
 
     private fun showErrorInLoadingJoinings(
@@ -171,6 +164,8 @@ class JoiningListFragment : BaseFragment2<FragmentJoiningListBinding>(
         )
         joiningShimmerContainer.gone()
         joiningListInfoLayout.root.visible()
-        joiningListInfoLayout
+
+        joiningListInfoLayout.infoIv.loadImage(R.drawable.ic_no_joining_found)
+        joiningListInfoLayout.infoMessageTv.text = error
     }
 }

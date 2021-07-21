@@ -7,6 +7,7 @@ import com.gigforce.client_activation.repo.IClientActivationDataRepository
 import com.gigforce.common_ui.AppDialogsInterface
 import com.gigforce.common_ui.IUserInfo
 import com.gigforce.common_ui.UserInfoImp
+import com.gigforce.common_ui.remote.JoiningProfileService
 import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 import com.gigforce.common_ui.repository.repo.ILearningDataRepository
 import com.gigforce.common_ui.repository.repo.LearningDataRepository
@@ -19,8 +20,11 @@ import com.gigforce.core.di.interfaces.INavHost
 import com.gigforce.core.di.repo.IProfileFirestoreRepository
 import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.retrofit.RetrofitFactory
+import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.giger_app.repo.*
 import com.gigforce.lead_management.repositories.LeadManagementRepository
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -55,8 +59,7 @@ interface AppBindingsModule {
     @Binds
     fun provideUpcomingGigsRepo(imp: UpcomingGigInfoRepository): IUpcomingGigInfoRepository
 
-    @Binds
-    fun provideBuildConfig(imp: BuildConfigImp): IBuildConfig
+
 
     @Binds
     fun provideEventTracker(imp: EventTrackerImp): IEventTracker
@@ -100,18 +103,32 @@ interface ViewModelBindings {
 @InstallIn(SingletonComponent::class)
 abstract class SingeltonBindings {
 
+    @Binds
+    abstract fun provideBuildConfig(imp: BuildConfigImp): IBuildConfig
 
     companion object {
 
+        //Base
         @Provides
-        fun provideLeadManagementRepository(): LeadManagementRepository {
-            return LeadManagementRepository()
+        fun provideFirebaseFirestore(): FirebaseFirestore {
+            return FirebaseFirestore.getInstance()
         }
 
+        @Provides
+        fun provideFirebaseAuthStateListener(): FirebaseAuthStateListener {
+            return FirebaseAuthStateListener.getInstance()
+        }
 
         @Provides
         fun provideLogger(): GigforceLogger {
             return GigforceLogger()
+        }
+
+        //Remote Services
+
+        @Provides
+        fun provideJoiningProfileService():  JoiningProfileService{
+            return RetrofitFactory.createService(JoiningProfileService::class.java)
         }
     }
 }
