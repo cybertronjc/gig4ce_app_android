@@ -7,29 +7,23 @@ import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfileOverview
 import android.util.Log
 import com.gigforce.common_ui.viewdatamodels.client_activation.JobProfile
 import com.gigforce.common_ui.viewdatamodels.leadManagement.GigApplication
-import com.gigforce.common_ui.viewdatamodels.leadManagement.GigForGigerActivation
 import com.gigforce.common_ui.viewdatamodels.leadManagement.Joining
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.datamodels.ambassador.*
 import com.gigforce.core.datamodels.auth.UserAuthStatusModel
 import com.gigforce.core.datamodels.client_activation.JpApplication
-import com.gigforce.core.datamodels.profile.Contact
-import com.gigforce.core.datamodels.profile.EnrollmentInfo
-import com.gigforce.core.datamodels.profile.ProfileData
-import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.extensions.getOrThrow
-import com.gigforce.core.extensions.setOrThrow
 import com.gigforce.core.extensions.updateOrThrow
 import com.gigforce.core.retrofit.CreateUserAccEnrollmentAPi
 import com.gigforce.core.retrofit.RetrofitFactory
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
-import com.google.firebase.Timestamp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
+import javax.inject.Inject
 
-class LeadManagementRepository constructor(
+class LeadManagementRepository @Inject constructor(
     private val firebaseFirestore: FirebaseFirestore,
     private val firebaseAuthStateListener: FirebaseAuthStateListener,
     private val joiningProfileRemoteService: JoiningProfileService,
@@ -45,11 +39,6 @@ class LeadManagementRepository constructor(
      * Collection references
      */
     private val createUserApi: CreateUserAccEnrollmentAPi = RetrofitFactory.createUserAccEnrollmentAPi()
-
-    private val firebaseFirestore: FirebaseFirestore by lazy {
-        FirebaseFirestore.getInstance()
-    }
-
     //Collections Refs
     private val joiningsCollectionRef: CollectionReference by lazy {
         firebaseFirestore.collection(COLLECTION_JOININGS)
@@ -116,6 +105,7 @@ class LeadManagementRepository constructor(
         tlUid = tlUid,
         userUid = userUid
     ).bodyOrThrow()
+
     suspend fun checkMobileForExistingRegistrationElseSendOtp(mobile: String, url: String): RegisterMobileNoResponse {
         val registerUserRequest = createUserApi.registerMobile(
             url,
@@ -175,10 +165,10 @@ class LeadManagementRepository constructor(
                 throw Exception(response.error)
             } else {
                 response.uid?.let {
-                    createProfileDataForUser(
-                        uid = it,
-                        mobile = mobile
-                    )
+//                    createProfileDataForUser(
+//                        uid = it,
+//                        mobile = mobile
+//                    )
                 }
 
             }
@@ -186,37 +176,7 @@ class LeadManagementRepository constructor(
             return response
         }
     }
-
-    private suspend fun createProfileDataForUser(
-        uid: String,
-        mobile: String,
-
-
-        ) {
-
-        val profileData = ProfileData(
-            loginMobile = "+91${mobile}",
-            contact = ArrayList(
-                listOf(
-                    Contact(
-                        phone = "+91${mobile}",
-                        email = ""
-                    )
-                )
-            ),
-            createdOn = Timestamp.now(),
-            enrolledBy = EnrollmentInfo(
-                id = uid,
-                enrolledOn = Timestamp.now()
-            )
-        )
-
-        firebaseFirestore.collection("Profiles")
-            .document(uid)
-            .setOrThrow(profileData)
-    }
-
-    suspend fun getJobProfiles(gigerid: String): List<GigApplication>{
+    suspend fun getJobProfiles1(gigerid: String): List<GigApplication>{
         val allClientActivations = ArrayList<GigApplication>()
         val items = firebaseFirestore.collection("Job_Profiles")
             .whereEqualTo("isActive", true).get()
