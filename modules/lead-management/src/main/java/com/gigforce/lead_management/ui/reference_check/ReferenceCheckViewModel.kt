@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.common_ui.viewdatamodels.client_activation.JobProfile
 import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.lead_management.repositories.LeadManagementRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,6 +30,8 @@ class ReferenceCheckViewModel @Inject constructor(
         relation: String,
         contactNo: String
     ) = viewModelScope.launch {
+
+        JobProfile
 
         if (checkIfDataValid(
                 name,

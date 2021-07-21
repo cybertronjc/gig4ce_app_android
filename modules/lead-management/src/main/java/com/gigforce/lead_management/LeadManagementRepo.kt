@@ -4,7 +4,6 @@ package com.gigforce.lead_management
 import android.util.Log
 import com.gigforce.common_ui.viewdatamodels.client_activation.JobProfile
 import com.gigforce.common_ui.viewdatamodels.leadManagement.GigApplication
-import com.gigforce.common_ui.viewdatamodels.leadManagement.GigForGigerActivation
 import com.gigforce.core.datamodels.auth.UserAuthStatusModel
 import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
 import com.gigforce.core.datamodels.ambassador.*
@@ -18,7 +17,6 @@ import com.gigforce.core.retrofit.CreateUserAccEnrollmentAPi
 import com.gigforce.core.retrofit.RetrofitFactory
 import com.google.firebase.Timestamp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 
