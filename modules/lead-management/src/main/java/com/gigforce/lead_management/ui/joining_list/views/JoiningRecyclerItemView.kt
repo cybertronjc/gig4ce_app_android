@@ -8,7 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.RelativeLayout
 import androidx.core.view.isVisible
-import com.gigforce.common_ui.utils.PushDownAnim
+import com.gigforce.common_ui.viewdatamodels.leadManagement.JoiningStatus
 import com.gigforce.core.IViewHolder
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.RecyclerRowJoiningItemBinding
@@ -36,9 +36,8 @@ class JoiningRecyclerItemView(
     }
 
     private fun setListenersOnView() {
-        PushDownAnim.setPushDownAnimTo(
-            viewBinding.callGigerBtn
-        ).setOnClickListener(this)
+        viewBinding.root.setOnClickListener(this)
+        viewBinding.callGigerBtn.setOnClickListener(this)
     }
 
     private fun setDefault() {
@@ -73,20 +72,31 @@ class JoiningRecyclerItemView(
                 gigerAttendanceData.userProfilePicture
             )
             setOfficeOnView(gigerAttendanceData.joiningStatusText)
-//            setUserAttendanceStatus(gigerAttendanceData.attendanceStatus, gigerAttendanceData.gigStatus)
+            setJoiningStatus(gigerAttendanceData.status)
         }
     }
 
-    private fun setUserAttendanceStatus(
-        attendanceStatus: String,
-        gigStatus: String
+    private fun setJoiningStatus(
+        status: String,
     ) {
-        viewBinding.userAttendanceStatusTextview.text = gigStatus
-//        if ("Present".equals(attendanceStatus, true)) {
-//            viewBinding.userAttendanceStatusTextview.setBackgroundResource(R.drawable.status_present_chip_background)
-//        } else {
-//            viewBinding.userAttendanceStatusTextview.setBackgroundResource(R.drawable.status_absent_chip_background)
-//        }
+
+        val joiningStatus = JoiningStatus.fromValue(status)
+        viewBinding.userAttendanceStatusTextview.isVisible = joiningStatus != JoiningStatus.JOINED
+        viewBinding.userAttendanceStatusTextview.text = joiningStatus.getStatusFormattedString()
+
+        when (joiningStatus) {
+            JoiningStatus.SIGN_UP_PENDING -> {
+                viewBinding.userAttendanceStatusTextview.setBackgroundResource(R.drawable.joining_status_bck_orange)
+            }
+            JoiningStatus.APPLICATION_PENDING -> {
+                viewBinding.userAttendanceStatusTextview.setBackgroundResource(R.drawable.joining_status_bck_orange)
+            }
+            JoiningStatus.JOINING_PENDING -> {
+                viewBinding.userAttendanceStatusTextview.setBackgroundResource(R.drawable.joining_status_bck_green)
+            }
+            JoiningStatus.JOINED -> {
+            }
+        }
     }
 
     private fun setOfficeOnView(

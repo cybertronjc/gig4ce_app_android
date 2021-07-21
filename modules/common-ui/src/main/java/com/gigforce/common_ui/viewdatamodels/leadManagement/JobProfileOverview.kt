@@ -20,5 +20,7 @@ data class JobProfileOverview(
     val ongoing: Boolean?,
 
     @SerializedName("status")
-    val status: String?
+    val status: String?,
+
+    var isSelected :Boolean = false
 )

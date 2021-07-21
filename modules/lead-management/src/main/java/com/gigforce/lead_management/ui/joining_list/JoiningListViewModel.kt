@@ -12,6 +12,7 @@ import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.lead_management.models.JoiningListRecyclerItemData
 import com.gigforce.lead_management.repositories.LeadManagementRepository
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.ListenerRegistration
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.time.Duration
@@ -51,40 +52,56 @@ class JoiningListViewModel @Inject constructor(
     private var joiningsRaw: List<Joining> = emptyList()
     private var joiningListShownOnView: MutableList<JoiningListRecyclerItemData> = mutableListOf()
     private var currentSearchString: String? = null
+    private var fetchJoiningListener: ListenerRegistration? = null
 
     init {
-        refreshJoinings()
+        startListeningToJoinings()
     }
 
-    fun refreshJoinings() = viewModelScope.launch {
+    override fun onCleared() {
+        super.onCleared()
+        fetchJoiningListener?.remove()
+    }
+
+    private fun startListeningToJoinings() = viewModelScope.launch {
         _viewState.postValue(JoiningListViewState.LoadingDataFromServer)
+
         gigforceLogger.d(
             TAG,
-            "fetching joining list..."
+            "listening to fetch joining query..."
         )
+        fetchJoiningListener = leadManagementRepository.fetchJoiningsQuery()
+            .addSnapshotListener { value, error ->
 
-        try {
-            joiningsRaw = leadManagementRepository.fetchJoinings()
-            gigforceLogger.d(
-                TAG,
-                " ${joiningsRaw.size} joinings received from server"
-            )
+                if (error != null) {
+                    gigforceLogger.e(
+                        TAG,
+                        "while listing to joining list",
+                        error
+                    )
 
-            processJoiningsAndEmit(joiningsRaw)
-        } catch (e: Exception) {
-            gigforceLogger.e(
-                TAG,
-                "while fetching joining list",
-                e
-            )
+                    _viewState.postValue(
+                        JoiningListViewState.ErrorInLoadingDataFromServer(
+                            error = "Unable to fetch Joinings",
+                            shouldShowErrorButton = true
+                        )
+                    )
+                }
 
-            _viewState.postValue(
-                JoiningListViewState.ErrorInLoadingDataFromServer(
-                    error = e.message ?: "Unable to fetch joinings",
-                    shouldShowErrorButton = true
-                )
-            )
-        }
+                if (value != null) {
+                    gigforceLogger.d(
+                        TAG,
+                        " ${value.size()} joinings received from server"
+                    )
+
+                    joiningsRaw = value.toObjects(Joining::class.java)
+                    if (joiningsRaw.isEmpty()) {
+                        _viewState.postValue(JoiningListViewState.NoJoiningFound)
+                    } else {
+                        processJoiningsAndEmit(joiningsRaw)
+                    }
+                }
+            }
     }
 
     private fun processJoiningsAndEmit(
@@ -126,7 +143,7 @@ class JoiningListViewModel @Inject constructor(
                         userProfilePicture = it.profilePicture ?: "",
                         userProfilePictureThumbnail = it.profilePicture ?: "",
                         userProfilePhoneNumber = it.phoneNumber ?: "",
-                        status = it.getStatus().getStatusCapitalized(),
+                        status = it.getStatus().getStatusString(),
                         joiningStatusText = getJoiningText(it)
                     )
                 )
@@ -134,11 +151,18 @@ class JoiningListViewModel @Inject constructor(
         }
 
         joiningListShownOnView = joiningListForView
-        _viewState.postValue(
-            JoiningListViewState.JoiningListLoaded(
-                joiningList = joiningListShownOnView
+        if (joiningListShownOnView.isEmpty()) {
+
+            _viewState.postValue(
+                JoiningListViewState.NoJoiningFound
             )
-        )
+        } else {
+            _viewState.postValue(
+                JoiningListViewState.JoiningListLoaded(
+                    joiningList = joiningListShownOnView
+                )
+            )
+        }
 
         gigforceLogger.d(
             TAG,
@@ -162,8 +186,10 @@ class JoiningListViewModel @Inject constructor(
             JoiningStatus.APPLICATION_PENDING -> {
                 if (it.applicationNameInvitedFor != null) {
                     "No Application Link shared yet"
-                } else {
+                } else if(it.applicationNameInvitedFor != null){
                     "${it.applicationNameInvitedFor} invite sent ${getDateDifferenceFormatted(it.updatedOn)}"
+                } else {
+                    "Application Pending"
                 }
             }
             JoiningStatus.JOINING_PENDING -> {
