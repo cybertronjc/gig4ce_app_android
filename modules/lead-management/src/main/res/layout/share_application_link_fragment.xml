@@ -46,7 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="30dp"
             android:fontFamily="@font/lato_bold"
             android:lineHeight="19sp"
             android:text="Select Gig"
@@ -105,15 +105,19 @@
 
         </FrameLayout>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/join_now_button"
+        <TextView
+            android:id="@+id/send_referral_link_btn"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="18dp"
+            android:layout_height="48dp"
+            android:background="@drawable/app_gradient_button"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginEnd="@dimen/size_16"
+            android:layout_marginBottom="@dimen/size_18"
+            android:gravity="center"
+            android:layout_marginTop="8dp"
+            android:minHeight="@dimen/size_36"
             android:text="Send Referral Link"
-            android:textAllCaps="false" />
+            android:textColor="@color/white" />
 
 
     </LinearLayout>
