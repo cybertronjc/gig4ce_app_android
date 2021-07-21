@@ -12,7 +12,9 @@ import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.lead_management.LeadManagementConstants
 import com.gigforce.lead_management.R
+import com.gigforce.lead_management.databinding.ReferenceCheckFragmentBinding
 import com.gigforce.lead_management.databinding.SelectGigApplicationToActivateFragmentBinding
 import com.gigforce.lead_management.gigeronboarding.SelectGigAppViewState
 import com.gigforce.lead_management.gigeronboarding.SelectGigApplicationToActivateViewModel
@@ -37,26 +39,62 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
     lateinit var navigation: INavigation
 
     private val viewModel: SelectGigApplicationToActivateViewModel by viewModels()
-
+    private  var userUid: String = ""
 
     override fun viewCreated(
         viewBinding: SelectGigApplicationToActivateFragmentBinding,
         savedInstanceState: Bundle?
     ) {
+        initToolbar(viewBinding)
+        getDataFrom(
+            arguments,
+            savedInstanceState
+        )
         initViews()
         initListeners()
         initViewModel()
+    }
+
+    private fun initToolbar(
+        viewBinding: SelectGigApplicationToActivateFragmentBinding
+    ) = viewBinding.toolbar.apply {
+
+        showTitle("Gig Application")
+        hideSearchOption()
+        setBackButtonListener {
+            activity?.onBackPressed()
+        }
+    }
+
+    private fun getDataFrom(
+        arguments: Bundle?,
+        savedInstanceState: Bundle?
+    ) {
+
+        arguments?.let {
+            userUid = it.getString(LeadManagementConstants.INTENT_EXTRA_USER_UID) ?: return@let
+        }
+
+        savedInstanceState?.let {
+            userUid = it.getString(LeadManagementConstants.INTENT_EXTRA_USER_UID) ?: return@let
+        }
+    }
+
+    override fun onSaveInstanceState(
+        outState: Bundle
+    ) {
+        super.onSaveInstanceState(outState)
+        outState.putString(LeadManagementConstants.INTENT_EXTRA_USER_UID, userUid)
     }
 
     private fun initViews() {
         viewBinding.gigerProfileCard.apply {
             setProfileCard(GigerProfileCardDVM("https://instagram.fdel11-2.fna.fbcdn.net/v/t51.2885-19/s320x320/125221466_394003705121691_8790543636526463384_n.jpg", "Jagdish Choudhary", "+919898833257", "Swiggy delivery", ""))
         }
-
     }
 
     private fun initViewModel() {
-        viewModel.fetchGigApplications("APHKP30i4rRpcY6ew1XtmEdXvFK2")
+        viewModel.fetchGigApplications(userUid)
         viewModel.viewState.observe(viewLifecycleOwner, Observer {
             val state = it ?: ""
 
@@ -75,9 +113,9 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
 
     private fun loadingGigAppsFromServer() = viewBinding.apply {
 
-        gigApplicationsRv.collection = emptyList()
-        gigappListInfoLayout.root.gone()
-        gigappsShimmerContainer.visible()
+        viewBinding.gigApplicationsRv.collection = emptyList()
+        viewBinding.gigappListInfoLayout.root.gone()
+        viewBinding.gigappsShimmerContainer.visible()
 
         startShimmer(
             this.gigappsShimmerContainer as LinearLayout,
@@ -97,23 +135,23 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
     private fun showGigApps(
         gigAppList: List<GigAppListRecyclerItemData>
     ) = viewBinding.apply{
-        stopShimmer(gigappsShimmerContainer as LinearLayout,
+        stopShimmer(viewBinding.gigappsShimmerContainer as LinearLayout,
             R.id.shimmer_controller
         )
-        gigappsShimmerContainer.gone()
-        gigappListInfoLayout.root.gone()
+        viewBinding.gigappsShimmerContainer.gone()
+        viewBinding.gigappListInfoLayout.root.gone()
 
-        gigApplicationsRv.collection = gigAppList
+        viewBinding.gigApplicationsRv.collection = gigAppList
     }
 
     private fun showNoGigAppsFound() = viewBinding.apply{
 
-        gigApplicationsRv.collection = emptyList()
-        stopShimmer(gigappsShimmerContainer as LinearLayout,
+        viewBinding.gigApplicationsRv.collection = emptyList()
+        stopShimmer(viewBinding.gigappsShimmerContainer as LinearLayout,
             R.id.shimmer_controller
         )
-        gigappsShimmerContainer.gone()
-        gigappListInfoLayout.root.visible()
+        viewBinding.gigappsShimmerContainer.gone()
+        viewBinding.gigappListInfoLayout.root.visible()
 
         //todo show illus here
     }
@@ -122,12 +160,12 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
         error: String
     ) = viewBinding.apply{
 
-        gigApplicationsRv.collection = emptyList()
-        stopShimmer(gigappsShimmerContainer as LinearLayout,
+        viewBinding.gigApplicationsRv.collection = emptyList()
+        stopShimmer(viewBinding.gigappsShimmerContainer as LinearLayout,
             R.id.shimmer_controller
         )
-        gigappsShimmerContainer.gone()
-        gigappListInfoLayout.root.visible()
+        viewBinding.gigappsShimmerContainer.gone()
+        viewBinding.gigappListInfoLayout.root.visible()
 
     }
 

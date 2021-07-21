@@ -12,6 +12,7 @@ import com.gigforce.common_ui.shimmer.ShimmerHelper
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
+import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.SelectGigApplicationItemLayoutBinding
 import com.gigforce.lead_management.databinding.SelectGigApplicationSearchItemLayoutBinding
 import com.gigforce.lead_management.models.GigAppListRecyclerItemData
@@ -58,7 +59,25 @@ class GigAppListRecyclerItemView  (
                 gigApplicationData.businessLogo
             )
             setStatus(gigApplicationData.status)
+
+            viewBinding.root.setOnClickListener {
+                if (gigApplicationData.selected){
+                    gigApplicationData.selected = false
+                    setViewSelected(gigApplicationData.selected)
+                } else {
+                    gigApplicationData.selected = true
+                    setViewSelected(gigApplicationData.selected)
+                }
+            }
            
+        }
+    }
+
+    private fun setViewSelected(isSelected: Boolean){
+        if (isSelected){
+            viewBinding.root.background = resources.getDrawable(R.drawable.background_layout_selector)
+        } else {
+            viewBinding.root.background = resources.getDrawable(R.drawable.giger_profile_card_background)
         }
     }
 

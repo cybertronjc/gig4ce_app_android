@@ -50,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/size16"
                 android:text="Swigy delivery"
-                android:layout_marginTop="@dimen/size_4"
+                android:layout_marginTop="@dimen/size_8"
                 android:fontFamily="@font/lato"
                 android:textSize="12sp"
                 android:textColor="@color/giger_card_text"

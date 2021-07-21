@@ -95,7 +95,6 @@ class SelectGigApplicationToActivateViewModel @Inject constructor(
         ongoingGigApps: List<GigApplication>,
         otherGigApps: List<GigApplication>
     ) {
-
         val gigAppList: List<GigApplication> = ongoingGigApps + otherGigApps
         val statusToGigAppList = gigAppList.filter {
             it.type != null
@@ -105,6 +104,30 @@ class SelectGigApplicationToActivateViewModel @Inject constructor(
 
         val gigAppsListForView = mutableListOf<GigAppListRecyclerItemData>()
         try {
+            if (otherGigApps.isEmpty()){
+                gigAppsListForView.add(
+                    GigAppListRecyclerItemData.GigAppListStatusRecyclerItemData(
+                        "Other Applications"
+                    )
+                )
+                gigAppsListForView.add(
+                    GigAppListRecyclerItemData.NoGigAppsFoundItemData(
+                        "No Applications"
+                    )
+                )
+            } else if (ongoingGigApps.isEmpty()){
+                gigAppsListForView.add(
+                    GigAppListRecyclerItemData.GigAppListStatusRecyclerItemData(
+                        "Ongoing Applications"
+                    )
+                )
+                gigAppsListForView.add(
+                    GigAppListRecyclerItemData.NoGigAppsFoundItemData(
+                        "No Applications"
+                    )
+                )
+            }
+
             statusToGigAppList.forEach { (type, gigApps) ->
            gigforceLogger.d(TAG, "processing data, Status :  : ${statusToGigAppList.size} GigApps")
 
@@ -117,23 +140,23 @@ class SelectGigApplicationToActivateViewModel @Inject constructor(
            if (type.equals("Other Applications")) {
                gigAppsListForView.add(
                    GigAppListRecyclerItemData.GigAppListSearchRecyclerItemData(
-                       ""
+                       "",
+                        this
                    )
                )
            }
-           gigAppList.forEach {
-               if (it.type.equals(type)) {
-                   gigAppsListForView.add(
-                       GigAppListRecyclerItemData.GigAppRecyclerItemData(
-                           userUid = it.gigerId.toString(),
-                           status = it.status.toString(),
-                           businessName = it.profileName.toString(),
-                           jobProfileTitle = it.jobProfileTitle.toString(),
-                           businessLogo = it.image.toString(),
-                           businessLogoThumbnail = it.image.toString()
-                       )
+
+           gigApps.forEach {
+               gigAppsListForView.add(
+                   GigAppListRecyclerItemData.GigAppRecyclerItemData(
+                       userUid = it.gigerId.toString(),
+                       status = it.status.toString(),
+                       businessName = it.profileName.toString(),
+                       jobProfileTitle = it.jobProfileTitle.toString(),
+                       businessLogo = it.image.toString(),
+                       businessLogoThumbnail = it.image.toString()
                    )
-               }
+               )
            }
        }
         //gigAppListShownOnView = gigAppsListForView
@@ -157,11 +180,11 @@ class SelectGigApplicationToActivateViewModel @Inject constructor(
     ) {
         gigforceLogger.d(TAG, "new search string received : '$searchString'")
         this.currentSearchString = searchString
-
-        if (gigAppListShownOnView.isEmpty()) {
-            _viewState.postValue(SelectGigAppViewState.NoGigAppsFound)
-            return
-        }
+////
+//        if (gigAppListShownOnView.isEmpty()) {
+//            _viewState.postValue(SelectGigAppViewState.NoGigAppsFound)
+//            return
+//        }
         processGigAppssAndEmit(ongoingGigApplications, otherGigApplications)
     }
 }
