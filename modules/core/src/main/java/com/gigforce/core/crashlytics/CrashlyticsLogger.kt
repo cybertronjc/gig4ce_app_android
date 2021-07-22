@@ -13,8 +13,8 @@ object CrashlyticsLogger {
         tag: String,
         msg: String
     ) {
-        firebaseCrashlytics.log("$tag : $msg")
         Log.d(tag, msg)
+        firebaseCrashlytics.log("$tag : $msg")
     }
 
     fun e(

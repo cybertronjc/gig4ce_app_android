@@ -15,11 +15,22 @@ object NotificationConstants {
         const val OPEN_VERIFICATION_PAGE = "com.gigforce.app.verification.open_verification_page"
         const val OPEN_CHAT_PAGE = "com.gigforce.app.chats.open_chat"
         const val OPEN_GROUP_CHAT_PAGE = "com.gigforce.app.chats.open_group_chat"
-
     }
 
     object PAYLOADS{
         const val GIG_ID = "gig_id"
     }
 
+    object TOPICS{
+        const val TOPIC_SYNC_DATA = "sync_data"
+    }
+
+    object GlobalKeys{
+        const val IS_SILENT_PUSH = "gigforce_silent_push"
+        const val SILENT_PURPOSE = "silent_push_purpose"
+
+        const val TASK_SYNC_GEOFENCES = "sync_geofences"
+        const val TASK_SYNC_CURRENT_LOCATION_FOR_GIG = "sync_location_for_gig"
+        const val TASK_UNSYNCED_DATA = "sync_unsynced_data"
+    }
 }

@@ -15,6 +15,7 @@ import androidx.lifecycle.Observer
 import com.gigforce.common_ui.AppDialogsInterface
 import com.gigforce.common_ui.ConfirmationDialogOnClickListener
 import com.gigforce.common_ui.configrepository.ConfigRepository
+import com.gigforce.common_ui.deviceInfo_permission.DeviceInfoGatherer
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.giger_app.R
 import com.gigforce.giger_app.vm.LandingViewModel
@@ -45,8 +46,18 @@ class LandingFragment : Fragment() {
             landing_rv.collection = it
         })
         checkforForceupdate()
+        logDeviceAndPermissionInfo()
     }
 
+    private fun logDeviceAndPermissionInfo() {
+        try {
+            DeviceInfoGatherer.updateDeviceInfoAndPermissionGranted(
+                    requireContext().applicationContext
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
 
 
     private fun checkforForceupdate() {

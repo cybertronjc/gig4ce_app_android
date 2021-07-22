@@ -15,8 +15,10 @@ import android.os.Looper
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
+import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.user_tracking.R
 import com.gigforce.user_tracking.TrackingConstants
 import com.gigforce.user_tracking.TrackingConstants.NOTIFICATION_CHANNEL_ID
@@ -52,6 +54,7 @@ class TrackingService : LifecycleService() {
 
     //Data from UI
     private lateinit var gigId: String
+    private lateinit var fullCompanyName: String
     private var userName: String? = null
 
     override fun onCreate() {
@@ -67,6 +70,7 @@ class TrackingService : LifecycleService() {
         intent?.let {
             gigId = it.getStringExtra(TrackingConstants.SERVICE_INTENT_EXTRA_GIG_ID)!!
             userName = it.getStringExtra(TrackingConstants.SERVICE_INTENT_EXTRA_USER_NAME)
+            fullCompanyName = it.getStringExtra(TrackingConstants.SERVICE_INTENT_EXTRA_TRADING_NAME) ?: "Gigforce"
 
             when (it.action) {
 
@@ -182,13 +186,22 @@ class TrackingService : LifecycleService() {
             fullAddressFromGps: String
     ) = GlobalScope.launch {
 
-        userLocationRepository.updateUserLocation(
-                location = LatLng(location.latitude, location.longitude),
-                accuracy = location.accuracy,
-                gigId = gigId,
-                couldBeAFakeLocation = location.isFromMockProvider,
-                fullAddressFromGps = fullAddressFromGps
-        )
+        try {
+            userLocationRepository.updateUserLocation(
+                    location = LatLng(location.latitude, location.longitude),
+                    accuracy = location.accuracy,
+                    gigId = gigId,
+                    couldBeAFakeLocation = location.isFromMockProvider,
+                    fullAddressFromGps = fullAddressFromGps
+            )
+        } catch (e: Exception) {
+
+            CrashlyticsLogger.e(
+                TAG,
+                "unable to sync user location",
+                e
+            )
+        }
     }
 
     private fun startForegroundService() {
@@ -205,8 +218,15 @@ class TrackingService : LifecycleService() {
                 .setAutoCancel(false)
                 .setOngoing(true)
                 .setSmallIcon(R.drawable.ic_notification_icon)
-                .setColor(R.color.lipstick_2)
-                .setContentTitle("Checking Location...")
+                .setColor(
+                    ResourcesCompat.getColor(
+                        applicationContext.resources,
+                        R.color.notification_icon_color,
+                        null
+                    )
+                   )
+                .setContentTitle("Fetching location for $fullCompanyName Gig")
+                .setContentText("Tap for details")
                 .setContentIntent(getMainActivityPendingIntent())
 
         startForeground(NOTIFICATION_ID, notificationBuilder.build())
@@ -216,7 +236,9 @@ class TrackingService : LifecycleService() {
             this,
             0,
             Intent(this,  Class.forName("com.gigforce.app.MainActivity")).also {
-                it.action = TrackingConstants.ACTION_SHOW_TRACKING_FRAGMENT
+                it.putExtra("gig_id", gigId)
+                it.putExtra("is_deeplink", "true")
+                it.putExtra("click_action", "com.gigforce.app.gig.open_gig_page_2")
             },
             FLAG_UPDATE_CURRENT
     )
