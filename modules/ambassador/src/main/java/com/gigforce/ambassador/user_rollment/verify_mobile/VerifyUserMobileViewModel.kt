@@ -103,7 +103,7 @@ class VerifyUserMobileViewModel @Inject constructor(
                             )
                         }
                     } else {
-                        _createProfile.value = Lce.error("Otp does not match")
+                        _createProfile.value = Lce.error("OTP does not match")
                     }
                 } else {
                     if (verifyOtpResponse.isVerified) {
@@ -118,7 +118,7 @@ class VerifyUserMobileViewModel @Inject constructor(
                         )
                         _createProfile.value = Lce.content(response)
                     } else {
-                        _createProfile.value = Lce.error("Otp does not match")
+                        _createProfile.value = Lce.error("OTP does not match")
                     }
                 }
             }

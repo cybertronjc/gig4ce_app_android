@@ -10,6 +10,9 @@
     <color name="black_three">#333333</color>
     <color name="grey_c7">#c7c7c7</color>
     <color name="dust_grey">#979797</color>
-
-
+    <color name="green_dc3ab105">#dc3ab105</color>
+    <color name="upload_success">#00bf80</color>
+    <color name="upload_mismatch">#d79f3c</color>
+    <color name="upload_error">#ea6a5e</color>
+    <color name="black3">#333333</color>
 </resources>

@@ -394,12 +394,12 @@ class LandingScreenFragment : Fragment() {
             .observe(viewLifecycleOwner, Observer {
 
                 val requiredDocsVerified = it.selfieVideoDataModel?.videoPath != null
-                        && it.panCardDetails?.state == STATUS_VERIFIED
+                        && it.panCardDataModel?.state == STATUS_VERIFIED
                         && it.bankUploadDetailsDataModel?.state == STATUS_VERIFIED
                         && (it.aadharCardDataModel?.state == STATUS_VERIFIED || it.drivingLicenseDataModel?.state == STATUS_VERIFIED)
 
                 val requiredDocsUploaded = it.selfieVideoDataModel?.videoPath != null
-                        && it.panCardDetails?.panCardImagePath != null
+                        && it.panCardDataModel?.panCardImagePath != null
                         && it.bankUploadDetailsDataModel?.passbookImagePath != null
                         && (it.aadharCardDataModel?.frontImage != null || it.drivingLicenseDataModel?.backImage != null)
 

@@ -8,8 +8,8 @@ data class SimpleCardDVM(
     val subtitle: String = "",
     val image: Int,
     val navpath: String = "",
-    val verified: Boolean? = false,
-    var isSelected: Boolean = false
+    var isSelected: Boolean = false,
+    var color : String?=""
 ) : SimpleDVM(
     CommonViewTypes.VIEW_SIMPLE_CARD
 ){

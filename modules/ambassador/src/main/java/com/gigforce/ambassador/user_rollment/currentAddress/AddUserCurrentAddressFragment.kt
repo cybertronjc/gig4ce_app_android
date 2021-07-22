@@ -10,13 +10,13 @@ import android.widget.ArrayAdapter
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.utils.MDUtil.textChanged
 import com.gigforce.ambassador.EnrollmentConstants
 import com.gigforce.ambassador.R
+import com.gigforce.ambassador.user_rollment.kycdocs.VerificationConstants
 import com.gigforce.ambassador.user_rollment.user_details.UserDetailsViewModel
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.showToast
@@ -35,7 +35,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_user_current_address.*
 import kotlinx.android.synthetic.main.fragment_user_current_address_main.*
-import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -49,20 +48,30 @@ class AddUserCurrentAddressFragment : Fragment(), IOnBackPressedOverride {
     private var mode: Int = EnrollmentConstants.MODE_ADD
     private var profileData: ProfileData? = null
 
-    @Inject lateinit var navigation : INavigation
+    @Inject
+    lateinit var navigation: INavigation
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ) = inflater.inflate(R.layout.fragment_user_current_address, container, false)
 
+    var navigationsForBundle = ArrayList<String>()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         getDataFromIntents(arguments, savedInstanceState)
+        initializeNavigations()
         initListeners()
         initViewModel()
         getProfileForUser()
+    }
+
+    private fun initializeNavigations() {
+        navigationsForBundle.add("userinfo/addUserPanCardInfoFragment")
+        navigationsForBundle.add("userinfo/addUserDrivingLicenseInfoFragment")
+        navigationsForBundle.add("userinfo/addUserAadharCardInfoFragment")
     }
 
     private fun getProfileForUser() {
@@ -197,10 +206,13 @@ class AddUserCurrentAddressFragment : Fragment(), IOnBackPressedOverride {
         }
 
         skip_btn.setOnClickListener {
-            navigation.navigateTo("userinfo/addUserBankDetailsInfoFragment",bundleOf(
-                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
-                EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
-            ))
+            navigation.navigateTo(
+                "userinfo/addUserBankDetailsInfoFragment", bundleOf(
+                    EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                    EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName,
+                    VerificationConstants.NAVIGATION_STRINGS to navigationsForBundle
+                )
+            )
 //            navigate(
 //                R.id.addUserBankDetailsInfoFragment, bundleOf(
 //                    EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
@@ -375,10 +387,13 @@ class AddUserCurrentAddressFragment : Fragment(), IOnBackPressedOverride {
                             activity?.onBackPressed()
                         } else {
                             showToast("User Current Address Details submitted")
-                            navigation.navigateTo("userinfo/addUserBankDetailsInfoFragment",bundleOf(
-                                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
-                                EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
-                            ))
+                            navigation.navigateTo(
+                                "userinfo/addUserBankDetailsInfoFragment", bundleOf(
+                                    EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                                    EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName,
+                                    VerificationConstants.NAVIGATION_STRINGS to navigationsForBundle
+                                )
+                            )
 //                            navigate(
 //                                R.id.addUserBankDetailsInfoFragment, bundleOf(
 //                                    EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
@@ -431,7 +446,7 @@ class AddUserCurrentAddressFragment : Fragment(), IOnBackPressedOverride {
                     }
                 }
             }
-        } catch (e: Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }

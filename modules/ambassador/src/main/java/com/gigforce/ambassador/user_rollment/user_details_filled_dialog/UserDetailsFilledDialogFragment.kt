@@ -147,7 +147,7 @@ class UserDetailsFilledDialogFragment : DialogFragment() {
         gigerVerificationViewModel.gigerVerificationStatus
             .observe(viewLifecycleOwner, Observer {
 
-                if (it.requiredDocsUploaded) {
+                if (it.requiredDocUploadedOrVerifiedForAmbassador) {
                     sendSmsToEnrolledUser()
                 } else {
                     showAtLeastOneDocumentNecessaryCard()
