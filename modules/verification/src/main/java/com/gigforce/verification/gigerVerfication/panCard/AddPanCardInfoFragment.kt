@@ -32,7 +32,6 @@ import com.gigforce.verification.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import com.jaeger.library.StatusBarUtil
-import com.ncorti.slidetoact.SlideToActView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_add_pan_card_info_2.*
 import kotlinx.android.synthetic.main.fragment_add_pan_card_info_2.progressBar
@@ -229,13 +228,13 @@ class AddPanCardInfoFragment : Fragment(), SelectImageSourceBottomSheetActionLis
         viewModel.gigerVerificationStatus
             .observe(viewLifecycleOwner, Observer {
                 this.gigerVerificationStatus = it
-                this.panCardDataModel = it.panCardDetails
+                this.panCardDataModel = it.panCardDataModel
                 progressBar.gone()
 
-                if (it.panCardDetailsUploaded && it.panCardDetails != null) {
+                if (it.panCardDetailsUploaded && it.panCardDataModel != null) {
 
-                    if (it.panCardDetails!!.userHasPanCard != null) {
-                        if (it.panCardDetails!!.userHasPanCard!!) {
+                    if (it.panCardDataModel!!.userHasPanCard != null) {
+                        if (it.panCardDataModel!!.userHasPanCard!!) {
                             setDataOnViewLayout(it)
                         } else {
                             setDataOnEditLayout(null)
@@ -273,7 +272,7 @@ class AddPanCardInfoFragment : Fragment(), SelectImageSourceBottomSheetActionLis
         panViewLayout.visible()
         //TODO handle error message when process is ready
 
-        val panDetails = gigVerificationStatus.panCardDetails ?: return
+        val panDetails = gigVerificationStatus.panCardDataModel ?: return
 
         statusTV.text = panDetails.verifiedString
         statusTV.setTextColor(

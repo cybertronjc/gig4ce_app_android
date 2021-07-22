@@ -340,14 +340,14 @@ class GigerVerificationFragment : Fragment(), IOnBackPressedOverride {
                         )
                     )
                 }
-                val userHasPan = it.panCardDetails?.userHasPanCard ?: false
+                val userHasPan = it.panCardDataModel?.userHasPanCard ?: false
                 if (userHasPan) {
-                    panLayout.descTitleTV.text = it.panCardDetails!!.verifiedString
+                    panLayout.descTitleTV.text = it.panCardDataModel!!.verifiedString
 
                     panLayout.descTitleTV.setTextColor(
                         ResourcesCompat.getColor(
                             resources,
-                            it.getColorCodeForStatus(it.panCardDetails!!.state),
+                            it.getColorCodeForStatus(it.panCardDataModel!!.state),
                             null
                         )
                     )
