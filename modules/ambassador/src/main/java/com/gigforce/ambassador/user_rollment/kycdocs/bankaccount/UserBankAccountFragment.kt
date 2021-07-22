@@ -21,6 +21,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import com.gigforce.ambassador.EnrollmentConstants
 import com.gigforce.ambassador.R
 import com.gigforce.ambassador.databinding.UserBankAccountFragmentBinding
@@ -28,6 +29,7 @@ import com.gigforce.ambassador.user_rollment.kycdocs.Data
 import com.gigforce.ambassador.user_rollment.kycdocs.VerificationClickOrSelectImageBottomSheet
 import com.gigforce.ambassador.user_rollment.kycdocs.VerificationConstants
 import com.gigforce.ambassador.user_rollment.kycdocs.WhyWeNeedThisBottomSheet
+import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
@@ -65,7 +67,7 @@ enum class VerificationScreenStatus {
 
 @AndroidEntryPoint
 class BankAccountFragment : Fragment(),
-    VerificationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener {
+    VerificationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener, IOnBackPressedOverride {
 
     companion object {
         const val REQUEST_CODE_CAPTURE_BANK_PHOTO = 2333
@@ -185,8 +187,10 @@ class BankAccountFragment : Fragment(),
 
 
         viewModelUser.bankDetailedObject.observe(viewLifecycleOwner, Observer {
+            Log.e("loaderissue","first")
             if (!ocrOrVerificationRquested) {
                 viewBinding.screenLoaderBar.gone()
+                Log.e("loaderissue","fifth")
                 it?.let {
 
                     if (it.verified) {
@@ -205,6 +209,7 @@ class BankAccountFragment : Fragment(),
     private fun startedStatusViews(bankDetailsDataModel: BankDetailsDataModel) {
         viewBinding.toplayoutblock.viewChangeOnStarted()
         viewBinding.screenLoaderBar.visible()
+        Log.e("loaderissue","second")
         viewBinding.submitButton.gone()
         viewBinding.progressBar.gone()
         viewBinding.belowLayout.gone()
@@ -271,6 +276,7 @@ class BankAccountFragment : Fragment(),
                         try {
                             if (verificationScreenStatus == VerificationScreenStatus.STARTED_VERIFYING) {
                                 viewBinding.screenLoaderBar.gone()
+                                Log.e("loaderissue","sixth")
                                 verifiedStatusViews(null)
                                 viewBinding.toplayoutblock.uploadStatusLayout(
                                     AppConstants.UNABLE_TO_FETCH_DETAILS,
@@ -369,10 +375,12 @@ class BankAccountFragment : Fragment(),
         if (activate) {
             viewBinding.progressBar.visible()
             viewBinding.screenLoaderBar.visible()
+            Log.e("loaderissue","third")
             viewBinding.submitButton.isEnabled = false
         } else {
             viewBinding.progressBar.gone()
             viewBinding.screenLoaderBar.gone()
+            Log.e("loaderissue","forth")
             viewBinding.submitButton.isEnabled = true
         }
     }
@@ -733,7 +741,22 @@ class BankAccountFragment : Fragment(),
 //        } else return false
 //
 //    }
+    override fun onBackPressed(): Boolean {
+        showGoBackConfirmationDialog()
+        return true
+    }
 
+    private fun showGoBackConfirmationDialog() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(getString(R.string.alert))
+            .setMessage(getString(R.string.are_u_sure_u_want_to_go_back))
+            .setPositiveButton(getString(R.string.yes)) { _, _ -> goBackToUsersList() }
+            .setNegativeButton(getString(R.string.no)) { _, _ -> }
+            .show()
+    }
+    private fun goBackToUsersList() {
+        findNavController().navigateUp()
+    }
     private fun reContinueDialog() {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("Do you want to wait?")

@@ -23,6 +23,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.gigforce.ambassador.EnrollmentConstants
 import com.gigforce.ambassador.R
 import com.gigforce.ambassador.databinding.UserPanCardFragmentBinding
@@ -30,6 +31,7 @@ import com.gigforce.ambassador.user_rollment.kycdocs.Data
 import com.gigforce.ambassador.user_rollment.kycdocs.VerificationClickOrSelectImageBottomSheet
 import com.gigforce.ambassador.user_rollment.kycdocs.VerificationConstants
 import com.gigforce.ambassador.user_rollment.kycdocs.WhyWeNeedThisBottomSheet
+import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
@@ -69,7 +71,8 @@ enum class VerificationScreenStatus {
 
 @AndroidEntryPoint
 class PanCardFragment : Fragment(),
-    VerificationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener {
+    VerificationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener,
+    IOnBackPressedOverride {
 
     companion object {
         const val REQUEST_CODE_UPLOAD_PAN_IMAGE = 2333
@@ -659,6 +662,24 @@ class PanCardFragment : Fragment(),
             }
         }
         viewBinding.toplayoutblock.setImageViewPager(list)
+    }
+
+    override fun onBackPressed(): Boolean {
+        showGoBackConfirmationDialog()
+        return true
+    }
+
+    private fun showGoBackConfirmationDialog() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(getString(R.string.alert))
+            .setMessage(getString(R.string.are_u_sure_u_want_to_go_back))
+            .setPositiveButton(getString(R.string.yes)) { _, _ -> goBackToUsersList() }
+            .setNegativeButton(getString(R.string.no)) { _, _ -> }
+            .show()
+    }
+
+    private fun goBackToUsersList() {
+        findNavController().navigateUp()
     }
 
 }

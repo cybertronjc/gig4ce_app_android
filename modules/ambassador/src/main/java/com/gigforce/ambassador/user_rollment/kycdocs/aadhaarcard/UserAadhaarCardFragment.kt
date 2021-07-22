@@ -14,6 +14,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.gigforce.ambassador.EnrollmentConstants
 import com.gigforce.ambassador.R
 import com.gigforce.ambassador.databinding.UserAadhaarCardFragmentBinding
@@ -29,6 +30,7 @@ import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.Gson
 import com.jaeger.library.StatusBarUtil
 import dagger.hilt.android.AndroidEntryPoint
@@ -299,12 +301,19 @@ class UserAadhaarCardFragment : Fragment(), UserDetailsFilledDialogFragmentResul
     }
 
     override fun onBackPressed(): Boolean {
-        UserDetailsFilledDialogFragment.launch(
-            userId = userId,
-            userName = userName,
-            fragmentManager = childFragmentManager,
-            okayClickListener = this@UserAadhaarCardFragment
-        )
+        showGoBackConfirmationDialog()
         return true
+    }
+
+    private fun showGoBackConfirmationDialog() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(getString(R.string.alert))
+            .setMessage(getString(R.string.are_u_sure_u_want_to_go_back))
+            .setPositiveButton(getString(R.string.yes)) { _, _ -> goBackToUsersList() }
+            .setNegativeButton(getString(R.string.no)) { _, _ -> }
+            .show()
+    }
+    private fun goBackToUsersList() {
+        findNavController().navigateUp()
     }
 }

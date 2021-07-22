@@ -305,7 +305,7 @@ class AddCurrentAddressFragment : Fragment(),IOnBackPressedOverride {
     private fun initViewModel() {
         viewModel.submitUserDetailsState
             .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-
+                it?:return@Observer
                 when (it) {
                     Lse.Loading -> {
                         // UtilMethods.showLoading(requireContext())

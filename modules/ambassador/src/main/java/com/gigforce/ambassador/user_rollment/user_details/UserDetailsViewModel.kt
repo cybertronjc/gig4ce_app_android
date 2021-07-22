@@ -81,11 +81,11 @@ class UserDetailsViewModel @Inject constructor(
             //  enrolledUserListRepository.setUserDetailsAsFilled(uid)
 
             _submitUserDetailsState.value = Lse.success()
-//            _submitUserDetailsState.value = null
+            _submitUserDetailsState.value = null
         } catch (e: Exception) {
             e.printStackTrace()
             _submitUserDetailsState.value = Lse.error(e.message ?: "Unable to submit user details")
-//            _submitUserDetailsState.value = null
+            _submitUserDetailsState.value = null
         }
     }
 
@@ -119,11 +119,11 @@ class UserDetailsViewModel @Inject constructor(
                 userEnrollmentRepository.setCurrentAddressAsUploaded(uid)
 
             _submitUserDetailsState.value = Lse.success()
-//            _submitUserDetailsState.value = null
+            _submitUserDetailsState.value = null
         } catch (e: Exception) {
             e.printStackTrace()
             _submitUserDetailsState.value = Lse.error(e.message ?: "Unable to submit user details")
-//            _submitUserDetailsState.value = null
+            _submitUserDetailsState.value = null
         }
     }
 
@@ -159,7 +159,7 @@ class UserDetailsViewModel @Inject constructor(
             }
 
             _submitUserDetailsState.postValue(Lse.success())
-//            _submitUserDetailsState.postValue(null)
+            _submitUserDetailsState.postValue(null)
 
             Log.v("ProfilePicture", "Sucess")
         } catch (e: Exception) {
@@ -172,7 +172,7 @@ class UserDetailsViewModel @Inject constructor(
             _submitUserDetailsState.postValue(
                 Lse.error(e.message ?: "Unable to upload profile picture")
             )
-            //           _submitUserDetailsState.postValue(null)
+                       _submitUserDetailsState.postValue(null)
         }
     }
 
