@@ -10,6 +10,7 @@ import android.os.Handler
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
 import com.gigforce.core.crashlytics.CrashlyticsLogger
@@ -111,7 +112,12 @@ class SyncUnSyncedDataService : LifecycleService() {
             .setAutoCancel(false)
             .setOngoing(true)
             .setSmallIcon(R.drawable.ic_notification_icon)
-            .setColor(R.color.lipstick_2)
+            .setColor(
+                ResourcesCompat.getColor(
+                applicationContext.resources,
+                R.color.notification_icon_color,
+                null
+            ))
             .setContentTitle("Syncing data to server...")
 
         startForeground(NOTIFICATION_ID, notificationBuilder.build())

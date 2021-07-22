@@ -15,6 +15,7 @@ import android.os.Looper
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
 import com.gigforce.core.crashlytics.CrashlyticsLogger
@@ -217,7 +218,13 @@ class TrackingService : LifecycleService() {
                 .setAutoCancel(false)
                 .setOngoing(true)
                 .setSmallIcon(R.drawable.ic_notification_icon)
-                .setColor(R.color.lipstick_2)
+                .setColor(
+                    ResourcesCompat.getColor(
+                        applicationContext.resources,
+                        R.color.notification_icon_color,
+                        null
+                    )
+                   )
                 .setContentTitle("Fetching location for $fullCompanyName Gig")
                 .setContentText("Tap for details")
                 .setContentIntent(getMainActivityPendingIntent())
