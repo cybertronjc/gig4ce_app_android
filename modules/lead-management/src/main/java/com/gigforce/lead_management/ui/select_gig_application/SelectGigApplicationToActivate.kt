@@ -1,7 +1,9 @@
 package com.gigforce.lead_management.ui.select_gig_application
 
 import android.os.Bundle
+import android.view.View
 import android.widget.LinearLayout
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
@@ -19,6 +21,7 @@ import com.gigforce.lead_management.databinding.SelectGigApplicationToActivateFr
 import com.gigforce.lead_management.gigeronboarding.SelectGigAppViewState
 import com.gigforce.lead_management.gigeronboarding.SelectGigApplicationToActivateViewModel
 import com.gigforce.lead_management.models.GigAppListRecyclerItemData
+import com.gigforce.lead_management.ui.giger_onboarding.GigerOnboardingFragment
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -94,7 +97,7 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
     }
 
     private fun initViewModel() {
-        viewModel.fetchGigApplications(userUid)
+        viewModel.getJobProfilesToActivate("d5ToQmOn6sdAcPWvjsBuhYWm9kF3")
         viewModel.viewState.observe(viewLifecycleOwner, Observer {
             val state = it ?: ""
 
@@ -108,7 +111,23 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
     }
 
     private fun initListeners() {
+        viewBinding.submitBtn.setOnClickListener {
+            viewModel.getSelectedJobProfile().let {
+                navigation.navigateTo("LeadMgmt/selectGigLocation", bundleOf(
+                    LeadManagementConstants.INTENT_EXTRA_USER_UID to userUid,
+                    LeadManagementConstants.INTENT_EXTRA_JOB_PROFILE to it.jobProfileId
+                )
+                )
+            }
+        }
 
+        viewBinding.toolbar.apply {
+            hideActionMenu()
+            showTitle("Gig Application")
+            setBackButtonListener(View.OnClickListener {
+                navigation.popBackStack()
+            })
+        }
     }
 
     private fun loadingGigAppsFromServer() = viewBinding.apply {

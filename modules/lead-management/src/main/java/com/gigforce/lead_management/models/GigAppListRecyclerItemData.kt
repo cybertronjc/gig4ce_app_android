@@ -15,13 +15,13 @@ open class GigAppListRecyclerItemData(
     )
 
     data class GigAppRecyclerItemData(
-        val userUid: String,
         val status: String,
-        val businessName: String,
-        val jobProfileTitle: String,
-        val businessLogo: String,
-        val businessLogoThumbnail: String,
-        var selected: Boolean = false
+        val jobProfileId: String,
+        val tradeName: String,
+        val profileName: String,
+        val companyLogo: String,
+        var selected: Boolean = false,
+        val selectGigAppViewModel: SelectGigApplicationToActivateViewModel
     ) : GigAppListRecyclerItemData(
         LeadActivationViewTypes.GigAppList
     )

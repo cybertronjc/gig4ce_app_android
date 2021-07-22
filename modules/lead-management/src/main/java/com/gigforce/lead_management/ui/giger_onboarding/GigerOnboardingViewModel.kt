@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 import com.gigforce.core.datamodels.auth.UserAuthStatusModel
 import com.gigforce.core.datamodels.ambassador.CreateUserResponse
 import com.gigforce.core.datamodels.ambassador.RegisterMobileNoResponse
@@ -19,9 +20,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class GigerOnboardingViewModel @Inject constructor(
-    private val buildConfig: IBuildConfigVM,
     private val leadManagementRepository: LeadManagementRepository,
-    private val logger: GigforceLogger
+    private val logger: GigforceLogger,
+    private val buildConfig: IBuildConfigVM,
+    private val profileFirebaseRepository: ProfileFirebaseRepository
 ) : ViewModel() {
 
     companion object {
@@ -47,11 +49,13 @@ class GigerOnboardingViewModel @Inject constructor(
     ) = viewModelScope.launch {
         _numberRegistered.postValue(Lce.loading())
         try {
-            val repsonse =
-                leadManagementRepository.getUserAuthStatus(mobileNo, buildConfig.getCreateOrSendOTPUrl())
-            _numberRegistered.value = Lce.content(repsonse)
+            val response =
+                leadManagementRepository.getUserAuthStatus(mobileNo)
+            _numberRegistered.value = Lce.content(response)
+            logger.d(TAG, "Unable to check if number is already registered", response.toString())
         } catch (e: Exception) {
             e.printStackTrace()
+            logger.d(TAG, "Unable to check if number is already registered", e.toString())
             _numberRegistered.value = Lce.error(e.message ?: "Unable to check if number already registered")
         }
     }
@@ -85,14 +89,13 @@ class GigerOnboardingViewModel @Inject constructor(
         try {
             _verifyOtp.value = Lce.loading()
 
-                val verifyOtpResponse = leadManagementRepository.verifyOtp(token, otp, buildConfig.getUserRegisterInfoUrl())
+                val verifyOtpResponse = leadManagementRepository.verifyOtp(token, otp)
 
                 if (verifyOtpResponse.isVerified) {
-                    //val profile = profileFirebaseRepository.getProfileData()
+                    val profile = profileFirebaseRepository.getProfileData()
                     val response = leadManagementRepository.createUser(
-                        createUserUrl = buildConfig.getCreateUserUrl(),
                         mobile = mobile,
-                        enrolledByName = ""
+                        enrolledByName = profile.name
                     )
                     _verifyOtp.value = Lce.content(response)
                 } else {

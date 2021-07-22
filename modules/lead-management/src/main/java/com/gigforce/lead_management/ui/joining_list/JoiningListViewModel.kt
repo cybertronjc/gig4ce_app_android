@@ -70,38 +70,38 @@ class JoiningListViewModel @Inject constructor(
             TAG,
             "listening to fetch joining query..."
         )
-        fetchJoiningListener = leadManagementRepository.fetchJoiningsQuery()
-            .addSnapshotListener { value, error ->
-
-                if (error != null) {
-                    gigforceLogger.e(
-                        TAG,
-                        "while listing to joining list",
-                        error
-                    )
-
-                    _viewState.postValue(
-                        JoiningListViewState.ErrorInLoadingDataFromServer(
-                            error = "Unable to fetch Joinings",
-                            shouldShowErrorButton = true
-                        )
-                    )
-                }
-
-                if (value != null) {
-                    gigforceLogger.d(
-                        TAG,
-                        " ${value.size()} joinings received from server"
-                    )
-
-                    joiningsRaw = value.toObjects(Joining::class.java)
-                    if (joiningsRaw.isEmpty()) {
-                        _viewState.postValue(JoiningListViewState.NoJoiningFound)
-                    } else {
-                        processJoiningsAndEmit(joiningsRaw)
-                    }
-                }
-            }
+//        fetchJoiningListener = leadManagementRepository.fetchJoinings()
+//            .addSnapshotListener { value, error ->
+//
+//                if (error != null) {
+//                    gigforceLogger.e(
+//                        TAG,
+//                        "while listing to joining list",
+//                        error
+//                    )
+//
+//                    _viewState.postValue(
+//                        JoiningListViewState.ErrorInLoadingDataFromServer(
+//                            error = "Unable to fetch Joinings",
+//                            shouldShowErrorButton = true
+//                        )
+//                    )
+//                }
+//
+//                if (value != null) {
+//                    gigforceLogger.d(
+//                        TAG,
+//                        " ${value.size()} joinings received from server"
+//                    )
+//
+//                    joiningsRaw = value.toObjects(Joining::class.java)
+//                    if (joiningsRaw.isEmpty()) {
+//                        _viewState.postValue(JoiningListViewState.NoJoiningFound)
+//                    } else {
+//                        processJoiningsAndEmit(joiningsRaw)
+//                    }
+//                }
+//            }
     }
 
     private fun processJoiningsAndEmit(

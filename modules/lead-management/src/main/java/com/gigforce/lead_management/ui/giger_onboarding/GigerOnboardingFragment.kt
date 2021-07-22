@@ -150,13 +150,16 @@ class GigerOnboardingFragment  : BaseFragment2<GigerOnboardingFragmentBinding>(
                             if (!it.content.isUserRegistered){
                                 isNumberRegistered = false
                                 logger.d(TAG, "When User is not registered "+ isNumberRegistered.toString())
-                                showMobileAlreadyRegisterdDialog()
+                                showMobileNotRegisterdDialog()
                             } else {
                                 isNumberRegistered = true
                                 logger.d(TAG, "When User is registered "+ isNumberRegistered.toString())
-                                logger.d(TAG, "When User is registered send OTP")
-                                viewModel.sendOtp(
-                                    viewBinding.mobileNoEt.text.toString()
+//                                viewModel.sendOtp(
+//                                    viewBinding.mobileNoEt.text.toString()
+//                                )
+                                navigation.navigateTo("LeadMgmt/selectGigApplicationToActivate", bundleOf(
+                                    LeadManagementConstants.INTENT_EXTRA_USER_UID to "d5ToQmOn6sdAcPWvjsBuhYWm9kF3",
+                                )
                                 )
 
                             }
@@ -198,7 +201,7 @@ class GigerOnboardingFragment  : BaseFragment2<GigerOnboardingFragmentBinding>(
                                 viewBinding.mobileNoEt.setText("")
                             }
                         } else {
-                            showMobileAlreadyRegisterdDialog()
+                            showMobileNotRegisterdDialog()
                             showToast("Number not registered")
 
                         }
@@ -211,7 +214,7 @@ class GigerOnboardingFragment  : BaseFragment2<GigerOnboardingFragmentBinding>(
             })
     }
 
-    private fun showMobileAlreadyRegisterdDialog() {
+    private fun showMobileNotRegisterdDialog() {
         //UserAlreadyExistDialogFragment.launch(childFragmentManager, this)
         viewBinding.notRegisteredLayout.visible()
         viewBinding.createProfileBtn.visible()

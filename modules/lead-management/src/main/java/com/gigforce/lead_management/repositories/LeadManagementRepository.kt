@@ -12,11 +12,17 @@ import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.datamodels.ambassador.*
 import com.gigforce.core.datamodels.auth.UserAuthStatusModel
 import com.gigforce.core.datamodels.client_activation.JpApplication
+import com.gigforce.core.datamodels.profile.Contact
+import com.gigforce.core.datamodels.profile.EnrollmentInfo
+import com.gigforce.core.datamodels.profile.ProfileData
+import com.gigforce.core.di.repo.UserEnrollmentRepository
 import com.gigforce.core.extensions.getOrThrow
 import com.gigforce.core.extensions.updateOrThrow
 import com.gigforce.core.retrofit.CreateUserAccEnrollmentAPi
 import com.gigforce.core.retrofit.RetrofitFactory
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
+import com.gigforce.core.utils.EventLogs.setOrThrow
+import com.google.firebase.Timestamp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -81,7 +87,7 @@ class LeadManagementRepository @Inject constructor(
     suspend fun getJobProfiles(
         tlUid: String
     ): List<JobProfileOverview> = joiningProfileRemoteService.getProfiles(
-        getProfilesUrl = buildConfig.getGigersUnderTlUrl(),
+        getProfilesUrl = buildConfig.getJobProfiles(),
         tlUid = tlUid,
         userUid = null
     ).bodyOrThrow()
@@ -90,7 +96,7 @@ class LeadManagementRepository @Inject constructor(
         tlUid: String,
         userUid: String
     ): List<JobProfileOverview> = joiningProfileRemoteService.getProfiles(
-        getProfilesUrl = buildConfig.getGigersUnderTlUrl(),
+        getProfilesUrl = buildConfig.getJobProfiles(),
         tlUid = tlUid,
         userUid = userUid
     ).bodyOrThrow()
@@ -100,7 +106,7 @@ class LeadManagementRepository @Inject constructor(
         tlUid: String,
         userUid: String
     ): JobProfileDetails = joiningProfileRemoteService.getProfileDetails(
-        getProfilesDetailsUrl = buildConfig.getGigersUnderTlUrl(),
+        getProfilesDetailsUrl = buildConfig.getJobProfiles(),
         jobProfileId = jobProfileId,
         tlUid = tlUid,
         userUid = userUid
@@ -121,9 +127,9 @@ class LeadManagementRepository @Inject constructor(
         }
     }
 
-    suspend fun verifyOtp(token: String, otp: String, url: String): VerifyOtpResponse {
+    suspend fun verifyOtp(token: String, otp: String): VerifyOtpResponse {
         val verifyOtpResponse = createUserApi.verifyOtp(
-           url,
+           buildConfig.getVerifyOTPURL(),
             token,
             otp
         )
@@ -135,8 +141,8 @@ class LeadManagementRepository @Inject constructor(
         }
     }
 
-    suspend fun getUserAuthStatus(mobileNo : String, url: String): UserAuthStatusModel {
-        var userAuthStatus = createUserApi.getGigersAuthStatus(url,mobileNo)
+    suspend fun getUserAuthStatus(mobileNo : String): UserAuthStatusModel {
+        var userAuthStatus = createUserApi.getGigersAuthStatus(buildConfig.getUserRegisterInfoUrl(),mobileNo)
         if(userAuthStatus.isSuccessful){
             return userAuthStatus.body()!!
         }
@@ -147,12 +153,11 @@ class LeadManagementRepository @Inject constructor(
     }
 
     suspend fun createUser(
-        createUserUrl: String,
         mobile: String,
         enrolledByName: String
     ): CreateUserResponse {
         val createUserResponse = createUserApi.createUser(
-            createUserUrl, listOf(
+            buildConfig.getCreateUserUrl(), listOf(
                 CreateUserRequest(mobile)
             )
         )
@@ -164,11 +169,17 @@ class LeadManagementRepository @Inject constructor(
             if (response.error != null) {
                 throw Exception(response.error)
             } else {
+                addUserToAmbassadorEnrolledUserList(
+                    response.uid!!,
+                    mobile,
+                    enrolledByName
+                )
                 response.uid?.let {
-//                    createProfileDataForUser(
-//                        uid = it,
-//                        mobile = mobile
-//                    )
+                    createProfileDataForUser(
+                        uid = it,
+                        mobile = mobile,
+                        enrolledByName = enrolledByName
+                    )
                 }
 
             }
@@ -176,75 +187,61 @@ class LeadManagementRepository @Inject constructor(
             return response
         }
     }
-    suspend fun getJobProfiles1(gigerid: String): List<GigApplication>{
-        val allClientActivations = ArrayList<GigApplication>()
-        val items = firebaseFirestore.collection("Job_Profiles")
-            .whereEqualTo("isActive", true).get()
-            .await()
+    private suspend fun createProfileDataForUser(
+        uid: String,
+        mobile: String,
+        enrolledByName: String
 
-        if (items.documents.isNullOrEmpty()){
-            return emptyList()
-        }
-        val toObjects = items.toObjects(JobProfile::class.java)
-        for (i in 0..toObjects.size - 1 ){
-            val obj = toObjects[i]
-            var jobProfileId = items.documents.get(i).id
-            obj.id = toObjects[i].profileId
-            obj.id?.let {
-                Log.d("profileId", it)
-                val jpObject = getJPApplication(it, gigerid)
-                Log.d("object", jpObject.toString())
-                val jpExplore = GigApplication(jobProfileId,gigerid, jpId = jpObject.id, profileId = obj.profileId, obj.profileName,  obj.cardTitle, obj.cardImage, jpObject.status, obj.title, "Ongoing Applications")
-                allClientActivations.add(jpExplore)
-            }
+    ) {
 
-        }
-        return allClientActivations
+        val profileData = ProfileData(
+            loginMobile = "+91${mobile}",
+            contact = ArrayList(
+                listOf(
+                    Contact(
+                        phone = "+91${mobile}",
+                        email = "",
+                    )
+                )
+            ),
+            createdOn = Timestamp.now(),
+            enrolledBy = EnrollmentInfo(
+                id = uid,
+                enrolledOn = Timestamp.now()
+            )
+        )
+
+        profileCollectionRef
+            .document(uid)
+            .setOrThrow(profileData)
     }
 
-    suspend fun getJPApplication(jobProfileId: String, gigerid: String): JpApplication {
-        var jpApplication = JpApplication()
-        try {
-            val items = firebaseFirestore.collection("JP_Applications").whereEqualTo("jpid", jobProfileId)
-                .whereEqualTo("gigerId", gigerid).get()
-                .await()
-
-            if (items.documents.isNullOrEmpty()) {
-                jpApplication = JpApplication(JPId = jobProfileId, gigerId = gigerid)
-            } else {
-                val toObject = items.toObjects(JpApplication::class.java).get(0)
-                toObject.id = items.documents[0].id
-                Log.d("status", toObject.toString())
-                jpApplication = toObject
-            }
-
-        } catch (e: Exception) {
-
-        }
-
-        return jpApplication
+    private suspend fun addUserToAmbassadorEnrolledUserList(
+        uid: String,
+        mobile: String,
+        enrolledByName: String
+    ) {
+        firebaseFirestore.collection("Ambassador_Enrolled_User")
+            .document(firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow().uid)
+            .collection("Enrolled_Users")
+            .document(uid)
+            .setOrThrow(
+                EnrolledUser(
+                    uid = uid,
+                    enrolledOn = Timestamp.now(),
+                    enrolledBy = firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow().uid,
+                    enrollmentStepsCompleted = EnrollmentStepsCompleted(),
+                    name = mobile,
+                    enrolledByName = enrolledByName,
+                    mobileNumber = mobile,
+                    locationLogs = listOf(
+                        LocationLog(
+                            entryType = "created_by_ambassador"
+                        )
+                    )
+                )
+            )
     }
 
-    suspend fun getOtherApplications(): List<GigApplication> {
-        val allGigApplications = ArrayList<GigApplication>()
-        val items = firebaseFirestore.collection("Job_Profiles")
-            .whereEqualTo("isActive", true).get()
-            .await()
-
-        if (items.documents.isNullOrEmpty()){
-            return emptyList()
-        }
-        val toObjects = items.toObjects(JobProfile::class.java)
-
-        toObjects.forEachIndexed { index, jobProfile ->
-            var jobProfileId = items.documents.get(index).id
-            jobProfile.id = jobProfile.profileId
-            val gigApplication = GigApplication(jobProfileId, "", jpId = jobProfile.id, profileId = jobProfile.profileId, jobProfile.profileName,  jobProfile.cardTitle, jobProfile.cardImage, "", jobProfile.title, "Other Applications")
-            allGigApplications.add(gigApplication)
-        }
-
-        return allGigApplications
-
-    }
 
 }

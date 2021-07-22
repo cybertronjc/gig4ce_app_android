@@ -13,4 +13,5 @@ interface IBuildConfigVM {
     fun getUserRegisterInfoUrl() : String
     fun getVerificationKycOcrResult():String
     fun getKycVerificationUrl(): String
+    fun getJobProfiles(): String
 }

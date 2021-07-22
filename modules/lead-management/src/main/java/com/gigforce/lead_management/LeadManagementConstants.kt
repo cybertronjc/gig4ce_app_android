@@ -14,4 +14,5 @@ object LeadManagementConstants {
 
     //INTENTs
     const val INTENT_EXTRA_USER_UID = "user_uid"
+    const val INTENT_EXTRA_JOB_PROFILE = "job_profile_id"
 }

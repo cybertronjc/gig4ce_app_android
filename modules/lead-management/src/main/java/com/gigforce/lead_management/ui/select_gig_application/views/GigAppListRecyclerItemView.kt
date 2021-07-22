@@ -9,6 +9,7 @@ import android.widget.FrameLayout
 import android.widget.RelativeLayout
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.shimmer.ShimmerHelper
+import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfileOverview
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
@@ -51,23 +52,24 @@ class GigAppListRecyclerItemView  (
                 it as GigAppListRecyclerItemData.GigAppRecyclerItemData
             viewData = gigApplicationData
 
-            viewBinding.companyName.text = gigApplicationData.jobProfileTitle
-            viewBinding.jobProfileTitle.text = gigApplicationData.businessName
+            viewBinding.companyName.text = gigApplicationData.tradeName
+            viewBinding.jobProfileTitle.text = gigApplicationData.profileName
 
             setBusinessLogo(
-                gigApplicationData.businessLogoThumbnail,
-                gigApplicationData.businessLogo
+                gigApplicationData.companyLogo
             )
             setStatus(gigApplicationData.status)
+            setViewSelected(gigApplicationData.selected)
 
             viewBinding.root.setOnClickListener {
-                if (gigApplicationData.selected){
-                    gigApplicationData.selected = false
-                    setViewSelected(gigApplicationData.selected)
-                } else {
-                    gigApplicationData.selected = true
-                    setViewSelected(gigApplicationData.selected)
-                }
+//                if (gigApplicationData.selected){
+//                    gigApplicationData.selected = false
+//                    setViewSelected(gigApplicationData.selected)
+//                } else {
+//                    gigApplicationData.selected = true
+//                    setViewSelected(gigApplicationData.selected)
+//                }
+                gigApplicationData.selectGigAppViewModel.selectJobProfile(gigApplicationData)
             }
            
         }
@@ -82,11 +84,10 @@ class GigAppListRecyclerItemView  (
     }
 
     private fun setBusinessLogo(
-        businessLogoThumbnail: String,
-        businessLogo: String) {
+        companyLogo: String) {
 
         Glide.with(context)
-            .load(businessLogo)
+            .load(companyLogo)
             .placeholder(ShimmerHelper.getShimmerDrawable())
             .into(viewBinding.companyLogo)
 
