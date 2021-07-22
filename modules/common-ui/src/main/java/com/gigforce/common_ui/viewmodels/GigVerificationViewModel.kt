@@ -56,7 +56,7 @@ class GigVerificationViewModel @Inject constructor(
                         selfieVideoUploaded = false,
                         selfieVideoDataModel = null,
                         panCardDetailsUploaded = false,
-                        panCardDetails = null,
+                        panCardDataModel = null,
                         aadharCardDetailsUploaded = false,
                         aadharCardDataModel = null,
                         dlCardDetailsUploaded = false,
@@ -80,7 +80,7 @@ class GigVerificationViewModel @Inject constructor(
                         selfieVideoUploaded = it.selfie_video?.videoPath != null,
                         selfieVideoDataModel = it.selfie_video,
                         panCardDetailsUploaded = it.pan_card?.userHasPanCard != null,
-                        panCardDetails = it.pan_card,
+                        panCardDataModel = it.pan_card,
                         aadharCardDetailsUploaded = it.aadhar_card?.userHasAadharCard != null,
                         aadharCardDataModel = it.aadhar_card,
                         dlCardDetailsUploaded = it.driving_license?.userHasDL != null,
@@ -100,24 +100,28 @@ class GigVerificationViewModel @Inject constructor(
         try {
             getVerificationModel(userId).let {
 
-                val everyDocumentUploaded = it.aadhar_card?.userHasAadharCard != null
-                        && it.pan_card?.userHasPanCard != null
-                        && it.bank_details?.userHasPassBook != null
-                        && it.driving_license?.userHasDL != null
-                        && it.selfie_video?.videoPath != null
+//                val everyDocumentUploaded = it.aadhar_card?.userHasAadharCard != null
+//                        && it.pan_card?.userHasPanCard != null
+//                        && it.bank_details?.userHasPassBook != null
+//                        && it.driving_license?.userHasDL != null
+//                        && it.selfie_video?.videoPath != null
+//                val everyDocumentUploaded =
+//                        it.pan_card?.userHasPanCard != null
+//                        && it.bank_details?.userHasPassBook != null
+//                        && it.driving_license?.userHasDL != null
 
                 _gigerVerificationStatus.value = GigerVerificationStatus(
                     selfieVideoUploaded = it.selfie_video?.videoPath != null,
                     selfieVideoDataModel = it.selfie_video,
                     panCardDetailsUploaded = it.pan_card?.userHasPanCard != null,
-                    panCardDetails = it.pan_card,
+                    panCardDataModel = it.pan_card,
                     aadharCardDetailsUploaded = it.aadhar_card?.userHasAadharCard != null,
                     aadharCardDataModel = it.aadhar_card,
                     dlCardDetailsUploaded = it.driving_license?.userHasDL != null,
                     drivingLicenseDataModel = it.driving_license,
                     bankDetailsUploaded = it.bank_details?.userHasPassBook != null,
                     bankUploadDetailsDataModel = it.bank_details,
-                    everyDocumentUploaded = everyDocumentUploaded
+                    everyDocumentUploaded = false
                 )
             }
         } catch (e: Exception) {

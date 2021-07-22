@@ -2,7 +2,6 @@ package com.gigforce.app.notification
 
 import android.app.PendingIntent
 import android.content.Intent
-import android.os.Bundle
 import android.util.Log
 import androidx.core.app.TaskStackBuilder
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -16,9 +15,7 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.moengage.firebase.MoEFireBaseHelper
 import com.moengage.pushbase.MoEPushHelper
-import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
-import javax.inject.Inject
 import kotlin.random.Random
 
 
@@ -26,6 +23,14 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     val TAG: String = "Firebase/FCM"
     var fcmToken: String? = null
+
+    private val notificationHelper: NotificationHelper by lazy {
+        NotificationHelper(applicationContext)
+    }
+
+    private val moEngagePushedHelper: MoEPushHelper by lazy {
+        MoEPushHelper.getInstance()
+    }
 
     private val currentUser: FirebaseUser?
         get() {
@@ -40,95 +45,74 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     private fun registerFirebaseToken(token: String) {
-        // doing nothing for now
+        registerTokenOnMoEngage(token)
 
         FirebaseAuth.getInstance().addAuthStateListener {
             it.currentUser?.let {
                 FirebaseFirestore.getInstance().collection("firebase_tokens").document(token)
-                        .set(
-                                hashMapOf(
-                                        "uid" to it.uid,
-                                        "type" to "fcm",
-                                        "timestamp" to Date().time
-                                )
-                        ).addOnSuccessListener {
-                            Log.v(TAG, "Token Updated on Firestore Successfully")
-                        }.addOnFailureListener {
-                            Log.e(TAG, "Token Update Failed on Firestore", it)
-                            CrashlyticsLogger.e("MyFirebaseMessagingService", "Token Update Failed on Firestore", it)
-                        }
+                    .set(
+                        hashMapOf(
+                            "uid" to it.uid,
+                            "type" to "fcm",
+                            "timestamp" to Date().time
+                        )
+                    ).addOnSuccessListener {
+                        Log.v(TAG, "Token Updated on Firestore Successfully")
+                    }.addOnFailureListener {
+                        Log.e(TAG, "Token Update Failed on Firestore", it)
+                        CrashlyticsLogger.e(
+                            "MyFirebaseMessagingService",
+                            "Token Update Failed on Firestore",
+                            it
+                        )
+                    }
 
-                try {
-                    MoEFireBaseHelper.getInstance().passPushToken(applicationContext, token)
-                }catch (e: Exception){
-                    Log.e(TAG, "Token Update Failed on MoEngage")
-                    CrashlyticsLogger.e("MyFirebaseMessagingService", "Token Update Failed on MoEngage", e)
-                }
+
             } ?: run {
                 Log.v(
-                        TAG,
-                        "User Not Authenticated. Ideally set an Auth Listener and Register when Authenticated"
+                    TAG,
+                    "User Not Authenticated. Ideally set an Auth Listener and Register when Authenticated"
                 )
             }
         }
     }
 
-//    private fun registerFirebaseTokenIfLoggedIn() {
-//        FirebaseAuth.getInstance().currentUser?.let {
-//            val uid = it.uid
-//            FirebaseFirestore.getInstance().collection("firebase_tokens").document(this.fcmToken!!)
-//                .set(
-//                    hashMapOf(
-//                        "uid" to uid,
-//                        "type" to "fcm",
-//                        "timestamp" to Date().time
-//                    )
-//                ).addOnSuccessListener {
-//                    Log.v(TAG, "Token Updated on Firestore Successfully")
-//                }.addOnFailureListener {
-//                    Log.e(TAG, "Token Update Failed on Firestore", it)
-//                }
-//
-//            try {
-//                MoEFireBaseHelper.getInstance().passPushToken(applicationContext, this.fcmToken!!)
-//            }catch (e: Exception){
-//                Log.e(TAG, "Token Update Failed on MoEngage")
-//            }
-//
-//
-//        }
-//
-//    }
+    private fun registerTokenOnMoEngage(token: String) {
+        try {
+            MoEFireBaseHelper.getInstance().passPushToken(applicationContext, token)
+        } catch (e: Exception) {
+            Log.e(TAG, "Token Update Failed on MoEngage")
+            CrashlyticsLogger.e(
+                "MyFirebaseMessagingService",
+                "Token Update Failed on MoEngage",
+                e
+            )
+        }
+    }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
+        Log.d(TAG, "Notification received")
 
-        try {
-            if (remoteMessage.data.isNotEmpty()) {
-                val extras = Bundle()
-                for ((key, value) in remoteMessage.data.entries) {
-                    extras.putString(key, value)
-                }
-                val moEInfo = MoEPushHelper.getInstance().isFromMoEngagePlatform(extras)
-                if(moEInfo){
-                    MoEFireBaseHelper.getInstance().passPushPayload(applicationContext, remoteMessage.data)
-                } else {
-                    // not from MoEngage handle yourself or pass to another provider
-                    handleNotificationMessageNotFromMoEngage(remoteMessage)
-                }
+        if (NotificationHelper.isSilentPush(remoteMessage.data)) {
+            notificationHelper.handleSilentPush(applicationContext, remoteMessage.data)
+            return
+        } else if (moEngagePushedHelper.isFromMoEngagePlatform(remoteMessage.data)) {
+            MoEPushHelper.getInstance()
+                .logNotificationReceived(applicationContext, remoteMessage.data)
+
+            if (moEngagePushedHelper.isSilentPush(remoteMessage.data)) {
+                return
             }
-        } catch (t: Throwable) {
-            Log.d("MYFCMLIST", "Error parsing FCM message", t)
+            MoEFireBaseHelper.getInstance().passPushPayload(applicationContext, remoteMessage.data)
+        } else {
+            handleNotificationMessageNotFromMoEngage(remoteMessage)
         }
-
-
-        // Also if you intend on generating your own notifications as a result of a received FCM
-        // message, here is where that should be initiated. See sendNotification method below.
     }
 
     private fun handleNotificationMessageNotFromMoEngage(remoteMessage: RemoteMessage) {
         Log.d(TAG, "From: ${remoteMessage.from}")
-        // Check if message contains a notification payload.
+
         remoteMessage.notification?.let {
             Log.d(TAG, "Message Notification Body: ${it.body}")
 
@@ -136,9 +120,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
              * Receiver id is uid of user for whom message was sent,
              * if message was received with delay and logged in user was changed, message is not shown
              */
-            val isForCurrentUserId = remoteMessage.data.getOrDefault(RECEIVER_ID, "") == currentUser?.uid
+            val isForCurrentUserId =
+                remoteMessage.data.getOrDefault(RECEIVER_ID, "") == currentUser?.uid
             if (!isForCurrentUserId) {
-                Log.d(TAG, "Message Notification Received but receiver id did not match with current user id ${remoteMessage.data}")
+                Log.d(
+                    TAG,
+                    "Message Notification Received but receiver id did not match with current user id ${remoteMessage.data}"
+                )
                 return
             }
 
@@ -150,7 +138,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                         putExtra(INTENT_EXTRA_REMOTE_MESSAGE, remoteMessage)
                     }
                 LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
-                //handleChatNotifications(remoteMessage)
             } else {
 
                 val pendingIntent = if (remoteMessage.data.isNotEmpty()) {

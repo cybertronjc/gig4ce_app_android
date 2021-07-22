@@ -81,8 +81,8 @@ android {
 
             applicationId "com.gigforce.app"
             resValue "string", "app_name", "Gigforce"
-            versionCode 129
-            versionName "1.32.0"
+            versionCode 130
+            versionName "1.32.1"
             buildConfigField "String", 'REFERRAL_BASE_URL', '"https://gig4ce.page.link/"'
             buildConfigField "String", 'GENERATE_PAYSLIP_URL', '"https://45nydq0i5g.execute-api.ap-south-1.amazonaws.com/default/get-or-create-payment-advice-prod"'
             buildConfigField "String", 'DRIVING_CERTIFICATE_URL', '"https://d1rdwfmrsl.execute-api.ap-south-1.amazonaws.com/default/"'
@@ -210,6 +210,7 @@ dependencies {
     implementation project(path: ':modules:giger-gigs')
     implementation project(path: ':modules:landing')
     implementation project(path: ':modules:common-image-capture-picker')
+    implementation project(path: ':modules:user-tracking')
 
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.9'
 
@@ -309,7 +310,6 @@ dependencies {
 
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
     implementation 'com.google.firebase:firebase-core:17.4.0'
-    implementation 'com.firebaseui:firebase-ui-auth:4.3.1'
     //ID fy
 
     // LocaleChanger - language
@@ -430,4 +430,6 @@ dependencies {
     //implementation "androidx.appcompat:appcompat:1.2.0"
     implementation "androidx.lifecycle:lifecycle-process:2.2.0"
     implementation "com.moengage:moe-android-sdk:$moengageVersion"
+
+    implementation "androidx.work:work-runtime-ktx:2.5.0"
 }

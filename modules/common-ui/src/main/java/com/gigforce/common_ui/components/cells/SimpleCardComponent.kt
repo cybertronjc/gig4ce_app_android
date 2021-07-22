@@ -14,6 +14,13 @@ import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import kotlinx.android.synthetic.main.simple_card_component.view.*
 
+enum class SubTitleColor(val value : String){
+    DEFAULT(""),
+    GREEN("GREEN"),
+    YELLOW("YELLOW"),
+    RED("RED")
+}
+
 class SimpleCardComponent(context: Context, attrs: AttributeSet?) : FrameLayout(context, attrs),
     IViewHolder {
     val view : View
@@ -66,11 +73,14 @@ class SimpleCardComponent(context: Context, attrs: AttributeSet?) : FrameLayout(
         left_img.setImageDrawable(resources.getDrawable(drawable))
     }
 
-    fun setVerified(verified: Boolean){
+    fun setVerified(color: String){
 //        if (verified) verified_img.visible() else verified_img.gone()
-        if(verified) {
-            subtitle.text = "Verified"
+        if(color.toUpperCase().equals(SubTitleColor.GREEN.value)) {
             subtitle.setTextColor(resources.getColor(R.color.green))
+        } else if(color.toUpperCase().equals(SubTitleColor.YELLOW.value)) {
+            subtitle.setTextColor(resources.getColor(R.color.yellow))
+        } else if(color.toUpperCase().equals(SubTitleColor.RED.value)) {
+            subtitle.setTextColor(resources.getColor(R.color.app_red))
         }
 
     }
@@ -81,7 +91,7 @@ class SimpleCardComponent(context: Context, attrs: AttributeSet?) : FrameLayout(
             setSubTitle(data.subtitle)
             setViewSelected(data.isSelected)
             setLeftImage(data.image)
-            data.verified?.let { setVerified(it) }
+            data.color?.let { setVerified(it) }
             view.setOnClickListener(null)
             view.setOnClickListener{
                 customOnclickListner?.onClick(it)

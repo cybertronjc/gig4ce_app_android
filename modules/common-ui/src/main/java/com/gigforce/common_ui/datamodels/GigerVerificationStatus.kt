@@ -7,7 +7,7 @@ data class GigerVerificationStatus(
     val selfieVideoUploaded: Boolean = false,
     val selfieVideoDataModel: SelfieVideoDataModel? = null,
     val panCardDetailsUploaded: Boolean = false,
-    val panCardDetails: PanCardDataModel? = null,
+    val panCardDataModel: PanCardDataModel? = null,
     val aadharCardDetailsUploaded: Boolean = false,
     val aadharCardDataModel: AadharCardDataModel? = null,
     val dlCardDetailsUploaded: Boolean = false,
@@ -19,16 +19,22 @@ data class GigerVerificationStatus(
 
     val requiredDocsVerified: Boolean
         get() {
-            return panCardDetails?.verified?:false
-                    || aadharCardDataModel?.verified?:false
-                    || drivingLicenseDataModel?.verified?:false
+            return panCardDataModel?.verified ?: false
+                    || aadharCardDataModel?.verified ?: false
+                    || drivingLicenseDataModel?.verified ?: false
         }
     val requiredDocsUploaded: Boolean
         get() {
-            return bankUploadDetailsDataModel?.accountNo.isNullOrBlank().not()
-                    || aadharCardDataModel?.frontImage != null
-                    || drivingLicenseDataModel?.dlNo.isNullOrBlank().not()
+            return drivingLicenseDataModel?.status?.equals("started") ?: false
+                    || panCardDataModel?.status?.equals("started") ?: false
         }
+
+    val requiredDocUploadedOrVerifiedForAmbassador : Boolean
+    get() = panCardDataModel?.verified ?: false
+            || aadharCardDataModel?.verified ?: false
+            || drivingLicenseDataModel?.verified ?: false
+            || drivingLicenseDataModel?.status?.equals("started") ?: false
+            || panCardDataModel?.status?.equals("started") ?: false
 
     fun getColorCodeForStatus(statusCode: Int): Int {
         return when (statusCode) {

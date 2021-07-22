@@ -12,7 +12,6 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -251,13 +250,13 @@ class AddUserPanCardInfoFragment : Fragment(), SelectImageSourceBottomSheetActio
         viewModel.gigerVerificationStatus
             .observe(viewLifecycleOwner, Observer {
                 this.gigerVerificationStatus = it
-                this.panCardDataModel = it.panCardDetails
+                this.panCardDataModel = it.panCardDataModel
                 progressBar.gone()
 
-                if (it.panCardDetailsUploaded && it.panCardDetails != null) {
+                if (it.panCardDetailsUploaded && it.panCardDataModel != null) {
 
-                    if (it.panCardDetails!!.userHasPanCard != null) {
-                        if (it.panCardDetails!!.userHasPanCard!!) {
+                    if (it.panCardDataModel!!.userHasPanCard != null) {
+                        if (it.panCardDataModel!!.userHasPanCard!!) {
                             setDataOnViewLayout(it)
                         } else {
                             setDataOnEditLayout(null)
@@ -435,7 +434,7 @@ class AddUserPanCardInfoFragment : Fragment(), SelectImageSourceBottomSheetActio
         panEditLayout.gone()
         panViewLayout.visible()
 
-        val panDetails = gigVerificationStatus.panCardDetails ?: return
+        val panDetails = gigVerificationStatus.panCardDataModel ?: return
 
         statusTV.text = panDetails.verifiedString
         statusTV.setTextColor(

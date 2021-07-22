@@ -118,7 +118,7 @@ class EditProfileConsentAndSendOtpDialogFragment : DialogFragment() {
                     }
                     is Lce.Content -> {
 
-                        Toast.makeText(requireContext(), "Otp Sent", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "OTP Sent", Toast.LENGTH_SHORT).show()
                         mOkayResultListener.onOtpSent(it.content)
                         dismiss()
                     }
