@@ -85,7 +85,7 @@ class CheckMobileFragment : Fragment(), UserAlreadyExistDialogFragmentActionList
                     }
                     is Lce.Content -> {
                         UtilMethods.hideLoading()
-                        showToast("Otp sent")
+                        showToast("OTP sent")
 
                         if (it.content.isUserAlreadyRegistered) {
                             //show user already registered dialog
