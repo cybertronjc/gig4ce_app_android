@@ -20,6 +20,7 @@ import com.gigforce.ambassador.databinding.UserAadhaarCardFragmentBinding
 import com.gigforce.ambassador.user_rollment.kycdocs.VerificationConstants
 import com.gigforce.ambassador.user_rollment.user_details_filled_dialog.UserDetailsFilledDialogFragment
 import com.gigforce.ambassador.user_rollment.user_details_filled_dialog.UserDetailsFilledDialogFragmentResultListener
+import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.utils.UtilMethods
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
@@ -35,7 +36,7 @@ import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class UserAadhaarCardFragment : Fragment(), UserDetailsFilledDialogFragmentResultListener {
+class UserAadhaarCardFragment : Fragment(), UserDetailsFilledDialogFragmentResultListener,IOnBackPressedOverride {
 
     companion object {
         fun newInstance() = UserAadhaarCardFragment()
@@ -295,5 +296,15 @@ class UserAadhaarCardFragment : Fragment(), UserDetailsFilledDialogFragmentResul
                 EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
             )
         )
+    }
+
+    override fun onBackPressed(): Boolean {
+        UserDetailsFilledDialogFragment.launch(
+            userId = userId,
+            userName = userName,
+            fragmentManager = childFragmentManager,
+            okayClickListener = this@UserAadhaarCardFragment
+        )
+        return true
     }
 }
