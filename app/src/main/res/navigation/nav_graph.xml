@@ -965,6 +965,11 @@
         android:name="com.gigforce.lead_management.ui.reference_check.ReferenceCheckFragment"
         android:label="ReferenceCheckFragment" />
 
+    <fragment
+        android:id="@+id/pickProfileForReferralFragment"
+        android:name="com.gigforce.lead_management.ui.share_application_link.PickJobProfileForReferralFragment"
+        android:label="ReferenceCheckFragment" />
+
 
 </navigation>
 

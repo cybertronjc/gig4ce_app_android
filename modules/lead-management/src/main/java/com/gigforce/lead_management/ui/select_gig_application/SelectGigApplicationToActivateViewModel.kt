@@ -138,7 +138,8 @@ class SelectGigApplicationToActivateViewModel @Inject constructor(
                            businessName = it.profileName.toString(),
                            jobProfileTitle = it.jobProfileTitle.toString(),
                            businessLogo = it.image.toString(),
-                           businessLogoThumbnail = it.image.toString()
+                           businessLogoThumbnail = it.image.toString(),
+                           isSelected = false
                        )
                    )
                }

@@ -61,6 +61,10 @@ class JoiningListViewModel @Inject constructor(
     override fun onCleared() {
         super.onCleared()
         fetchJoiningListener?.remove()
+        gigforceLogger.d(
+            TAG,
+            "removing listener to fetch joining query"
+        )
     }
 
     private fun startListeningToJoinings() = viewModelScope.launch {

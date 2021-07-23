@@ -27,7 +27,7 @@ import java.util.regex.Pattern
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class GigerOnboardingFragment  : BaseFragment2<GigerOnboardingFragmentBinding>(
+class GigerOnboardingFragment : BaseFragment2<GigerOnboardingFragmentBinding>(
     fragmentName = "GigerOnboardingFragment",
     layoutId = R.layout.giger_onboarding_fragment,
     statusBarColor = R.color.lipstick_2
@@ -59,8 +59,14 @@ class GigerOnboardingFragment  : BaseFragment2<GigerOnboardingFragmentBinding>(
     val REFERRAL_TAG: String = "referral"
     private fun initListeners() {
         viewBinding.submitButton.setOnClickListener {
-            if (viewBinding.submitButton.tag?.toString().equals(REFERRAL_TAG)){
+            if (viewBinding.submitButton.tag?.toString().equals(REFERRAL_TAG)) {
                 //navigate to referral
+                navigation.navigateTo(
+                    dest = "LeadMgmt/pickProfileForReferralFragment",
+                    args = null,
+                    navOptions = getNavOptions()
+                )
+
             } else {
                 validateDataAndsubmit()
             }
@@ -77,7 +83,7 @@ class GigerOnboardingFragment  : BaseFragment2<GigerOnboardingFragmentBinding>(
             viewBinding.mobileNoEt.requestFocus()
         }
 
-        viewBinding.mobileNoEt.addTextChangedListener(object : TextWatcher{
+        viewBinding.mobileNoEt.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
             }
@@ -91,7 +97,8 @@ class GigerOnboardingFragment  : BaseFragment2<GigerOnboardingFragmentBinding>(
                 if (viewBinding.mobileNoEt.text.toString().length == 10) {
                     hideKeyboard()
                     viewBinding.submitButton.isEnabled = true
-                    viewBinding.submitButton.background = resources.getDrawable(R.drawable.gradient_button)
+                    viewBinding.submitButton.background =
+                        resources.getDrawable(R.drawable.gradient_button)
                 } else {
                     viewBinding.submitButton.isEnabled = false
                     viewBinding.submitButton.background =
@@ -146,14 +153,20 @@ class GigerOnboardingFragment  : BaseFragment2<GigerOnboardingFragmentBinding>(
 
                     is Lce.Content -> {
                         UtilMethods.hideLoading()
-                        if (it.content.status){
-                            if (!it.content.isUserRegistered){
+                        if (it.content.status) {
+                            if (!it.content.isUserRegistered) {
                                 isNumberRegistered = false
-                                logger.d(TAG, "When User is not registered "+ isNumberRegistered.toString())
+                                logger.d(
+                                    TAG,
+                                    "When User is not registered " + isNumberRegistered.toString()
+                                )
                                 showMobileAlreadyRegisterdDialog()
                             } else {
                                 isNumberRegistered = true
-                                logger.d(TAG, "When User is registered "+ isNumberRegistered.toString())
+                                logger.d(
+                                    TAG,
+                                    "When User is registered " + isNumberRegistered.toString()
+                                )
                                 logger.d(TAG, "When User is registered send OTP")
                                 viewModel.sendOtp(
                                     viewBinding.mobileNoEt.text.toString()
@@ -168,7 +181,7 @@ class GigerOnboardingFragment  : BaseFragment2<GigerOnboardingFragmentBinding>(
                     is Lce.Error -> {
                         UtilMethods.hideLoading()
                         showAlertDialog("", it.error)
-                        logger.d(TAG, "While checking if number is  registered: "+ it.error)
+                        logger.d(TAG, "While checking if number is  registered: " + it.error)
                     }
                 }
             })

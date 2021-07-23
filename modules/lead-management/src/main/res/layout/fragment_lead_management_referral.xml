@@ -6,7 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".ui.share_application_link.ShareApplicationLinkFragment">
+        tools:context=".ui.share_application_link.PickJobProfileForReferralFragment">
 
         <com.gigforce.common_ui.views.GigforceToolbar
             android:id="@+id/toolbar"
@@ -40,6 +40,19 @@
             android:textColor="#333333"
             android:textSize="14sp"
             android:textStyle="normal" />
+
+        <TextView
+            android:id="@+id/name_error_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/lato"
+            android:lineSpacingExtra="3sp"
+            android:textColor="@android:color/holo_red_dark"
+            android:textSize="12sp"
+            android:textStyle="normal"
+         />
 
         <TextView
             android:id="@+id/select_gig_label"

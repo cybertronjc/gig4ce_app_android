@@ -19,7 +19,8 @@ open class GigAppListRecyclerItemData(
         val businessName: String,
         val jobProfileTitle: String,
         val businessLogo: String,
-        val businessLogoThumbnail: String
+        val businessLogoThumbnail: String,
+        val isSelected : Boolean
     ) : GigAppListRecyclerItemData(
         LeadActivationViewTypes.GigAppList
     )

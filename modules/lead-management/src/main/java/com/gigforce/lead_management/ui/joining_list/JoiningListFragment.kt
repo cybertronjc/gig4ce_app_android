@@ -2,11 +2,8 @@ package com.gigforce.lead_management.ui.joining_list
 
 import android.os.Bundle
 import android.widget.LinearLayout
-import androidx.core.os.bundleOf
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.navOptions
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.startShimmer
@@ -16,10 +13,8 @@ import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
-import com.gigforce.lead_management.LeadManagementConstants
-import com.gigforce.lead_management.LeadManagementSharedViewState
+import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
-import com.gigforce.lead_management.SharedLeadManagementViewModel
 import com.gigforce.lead_management.databinding.FragmentJoiningListBinding
 import com.gigforce.lead_management.models.JoiningListRecyclerItemData
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,7 +31,6 @@ class JoiningListFragment : BaseFragment2<FragmentJoiningListBinding>(
     @Inject
     lateinit var navigation: INavigation
     private val viewModel: JoiningListViewModel by viewModels()
-    private val sharedLeadViewModel: SharedLeadManagementViewModel by activityViewModels()
 
     override fun viewCreated(
         viewBinding: FragmentJoiningListBinding,
@@ -54,21 +48,12 @@ class JoiningListFragment : BaseFragment2<FragmentJoiningListBinding>(
         this.joiningsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         PushDownAnim.setPushDownAnimTo(this.joinNowButton).setOnClickListener {
-            logger.d(logTag,"navigating to LeadMgmt/gigerOnboarding")
+            logger.d(logTag, "navigating to ${LeadManagementNavDestinations.FRAGMENT_GIGER_ONBOARDING}")
 
             navigation.navigateTo(
-                dest = "LeadMgmt/referenceCheckFragment"/*"LeadMgmt/gigerOnboarding"*/,
-                args = bundleOf(
-                    LeadManagementConstants.INTENT_EXTRA_USER_UID to "qxikOJuJSqXvXyOKgv5usgWZmW82"
-                ),
-                navOptions = navOptions {
-                    this.anim {
-                        this.enter = R.anim.nav_default_enter_anim
-                        this.exit = R.anim.nav_default_exit_anim
-                        this.popEnter= R.anim.nav_default_pop_enter_anim
-                        this.popExit= R.anim.nav_default_pop_exit_anim
-                    }
-                }
+                dest = LeadManagementNavDestinations.FRAGMENT_GIGER_ONBOARDING,
+                args = null,
+                navOptions = getNavOptions()
             )
         }
 
@@ -113,7 +98,7 @@ class JoiningListFragment : BaseFragment2<FragmentJoiningListBinding>(
         joiningShimmerContainer.visible()
 
         startShimmer(
-            this.joiningShimmerContainer as LinearLayout,
+            this.joiningShimmerContainer,
             ShimmerDataModel(
                 minHeight = R.dimen.size_120,
                 minWidth = LinearLayout.LayoutParams.MATCH_PARENT,
@@ -130,7 +115,7 @@ class JoiningListFragment : BaseFragment2<FragmentJoiningListBinding>(
         joiningList: List<JoiningListRecyclerItemData>
     ) = viewBinding.apply {
         stopShimmer(
-            joiningShimmerContainer as LinearLayout,
+            joiningShimmerContainer,
             R.id.shimmer_controller
         )
         joiningShimmerContainer.gone()
@@ -143,7 +128,7 @@ class JoiningListFragment : BaseFragment2<FragmentJoiningListBinding>(
 
         joiningsRecyclerView.collection = emptyList()
         stopShimmer(
-            joiningShimmerContainer as LinearLayout,
+            joiningShimmerContainer,
             R.id.shimmer_controller
         )
         joiningShimmerContainer.gone()
@@ -159,7 +144,7 @@ class JoiningListFragment : BaseFragment2<FragmentJoiningListBinding>(
 
         joiningsRecyclerView.collection = emptyList()
         stopShimmer(
-            joiningShimmerContainer as LinearLayout,
+            joiningShimmerContainer,
             R.id.shimmer_controller
         )
         joiningShimmerContainer.gone()

@@ -2,7 +2,10 @@ package com.gigforce.lead_management.ui.reference_check
 
 import android.os.Bundle
 import androidx.fragment.app.viewModels
+import com.gigforce.common_ui.viewdatamodels.leadManagement.AssignGigRequest
 import com.gigforce.core.base.BaseFragment2
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 import com.gigforce.lead_management.LeadManagementConstants
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.ReferenceCheckFragmentBinding
@@ -21,6 +24,7 @@ class ReferenceCheckFragment : BaseFragment2<ReferenceCheckFragmentBinding>(
 ) {
     //Data
     private lateinit var userUid: String
+    private lateinit var assignGigRequest: AssignGigRequest
     private val viewModel: ReferenceCheckViewModel by viewModels()
 
     override fun viewCreated(
@@ -43,11 +47,13 @@ class ReferenceCheckFragment : BaseFragment2<ReferenceCheckFragmentBinding>(
     ) {
 
         arguments?.let {
-            userUid = it.getString(LeadManagementConstants.INTENT_EXTRA_USER_UID) ?: return@let
+            userUid = it.getString(LeadManagementConstants.INTENT_EXTRA_USER_ID) ?: return@let
+            assignGigRequest = it.getParcelable(LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL) ?: return@let
         }
 
         savedInstanceState?.let {
-            userUid = it.getString(LeadManagementConstants.INTENT_EXTRA_USER_UID) ?: return@let
+            userUid = it.getString(LeadManagementConstants.INTENT_EXTRA_USER_ID) ?: return@let
+            assignGigRequest = it.getParcelable(LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL) ?: return@let
         }
 
         logDataReceivedFromBundles()
@@ -63,13 +69,22 @@ class ReferenceCheckFragment : BaseFragment2<ReferenceCheckFragmentBinding>(
                 Exception("no User-id received from bundles")
             )
         }
+
+        if (::assignGigRequest.isInitialized.not()) {
+            logger.e(
+                logTag,
+                "null assignGigRequest received from bundles",
+                Exception("null assignGigRequest received from bundles")
+            )
+        }
     }
 
     override fun onSaveInstanceState(
         outState: Bundle
     ) {
         super.onSaveInstanceState(outState)
-        outState.putString(LeadManagementConstants.INTENT_EXTRA_USER_UID, userUid)
+        outState.putString(LeadManagementConstants.INTENT_EXTRA_USER_ID, userUid)
+        outState.putParcelable(LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL, assignGigRequest)
     }
 
     private fun initToolbar(
@@ -154,24 +169,30 @@ class ReferenceCheckFragment : BaseFragment2<ReferenceCheckFragmentBinding>(
         nameValidationError: String?,
         relationValidationError: String?,
         contactValidationError: String?
-    ) {
+    ) = viewBinding.apply{
+
         if (nameValidationError != null) {
-
+            nameErrorTv.visible()
+            nameErrorTv.text = nameValidationError
         } else {
-
+            nameErrorTv.text = ""
+            nameErrorTv.gone()
         }
 
         if (relationValidationError != null) {
-
+            relationErrorTv.visible()
+            relationErrorTv.text = nameValidationError
         } else {
-
+            relationErrorTv.text = ""
+            relationErrorTv.gone()
         }
 
         if (contactValidationError != null) {
-
+            contactNoErrorTv.visible()
+            contactNoErrorTv.text = nameValidationError
         } else {
-
+            contactNoErrorTv.text = ""
+            contactNoErrorTv.gone()
         }
     }
-
 }

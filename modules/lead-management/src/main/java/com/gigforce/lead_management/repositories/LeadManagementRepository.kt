@@ -2,9 +2,9 @@ package com.gigforce.lead_management.repositories
 
 import com.gigforce.common_ui.ext.bodyOrThrow
 import com.gigforce.common_ui.remote.JoiningProfileService
+import com.gigforce.common_ui.viewdatamodels.leadManagement.AssignGigRequest
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfileDetails
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfileOverview
-import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.updateOrThrow
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.google.firebase.firestore.CollectionReference
@@ -17,10 +17,8 @@ import javax.inject.Singleton
 class LeadManagementRepository @Inject constructor(
     private val firebaseFirestore: FirebaseFirestore,
     private val firebaseAuthStateListener: FirebaseAuthStateListener,
-    private val joiningProfileRemoteService: JoiningProfileService,
-    private val buildConfig: IBuildConfig
+    private val joiningProfileRemoteService: JoiningProfileService
 ) {
-
 
     companion object {
 
@@ -40,7 +38,7 @@ class LeadManagementRepository @Inject constructor(
     }
 
 
-    suspend fun fetchJoiningsQuery(): Query = joiningsCollectionRef
+    fun fetchJoiningsQuery(): Query = joiningsCollectionRef
         .whereEqualTo(
             "joiningTLUid",
             firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow().uid
@@ -70,7 +68,6 @@ class LeadManagementRepository @Inject constructor(
     suspend fun getJobProfiles(
         tlUid: String
     ): List<JobProfileOverview> = joiningProfileRemoteService.getProfiles(
-        getProfilesUrl = buildConfig.getCreateOrSendOTPUrl(),
         tlUid = tlUid,
         userUid = null
     ).bodyOrThrow()
@@ -79,7 +76,6 @@ class LeadManagementRepository @Inject constructor(
         tlUid: String,
         userUid: String
     ): List<JobProfileOverview> = joiningProfileRemoteService.getProfiles(
-        getProfilesUrl = buildConfig.getCreateOrSendOTPUrl(),
         tlUid = tlUid,
         userUid = userUid
     ).bodyOrThrow()
@@ -89,9 +85,13 @@ class LeadManagementRepository @Inject constructor(
         tlUid: String,
         userUid: String
     ): JobProfileDetails = joiningProfileRemoteService.getProfileDetails(
-        getProfilesDetailsUrl = buildConfig.getCreateOrSendOTPUrl(),
         jobProfileId = jobProfileId,
         tlUid = tlUid,
         userUid = userUid
     ).bodyOrThrow()
+
+    suspend fun assignGigs(
+        assignGigRequest: AssignGigRequest
+    ) = joiningProfileRemoteService.createGigs(assignGigRequest)
+        .bodyOrThrow()
 }
