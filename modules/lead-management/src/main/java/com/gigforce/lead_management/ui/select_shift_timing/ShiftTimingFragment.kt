@@ -9,6 +9,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.gigforce.common_ui.components.atoms.ChipGroupComponent
 import com.gigforce.common_ui.components.atoms.models.ChipGroupModel
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfileDetails
@@ -21,6 +22,7 @@ import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.ShiftTimingFragmentBinding
 import com.gigforce.lead_management.ui.select_gig_location.SelectGigLocationFragment
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
@@ -120,6 +122,10 @@ class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
 
         viewBinding.expectedDate.setOnClickListener {
             expectedStartDatePicker.show()
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewBinding.gigerProfileCard.setGigerProfileData("d5ToQmOn6sdAcPWvjsBuhYWm9kF3")
         }
 
     }

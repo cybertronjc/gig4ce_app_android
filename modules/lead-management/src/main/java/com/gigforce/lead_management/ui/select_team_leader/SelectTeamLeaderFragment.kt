@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.gigforce.common_ui.components.atoms.ChipGroupComponent
 import com.gigforce.common_ui.components.atoms.models.ChipGroupModel
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfileDetails
@@ -14,6 +15,7 @@ import com.gigforce.lead_management.LeadManagementConstants
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.SelectTeamLeaderFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 
@@ -102,6 +104,10 @@ class SelectTeamLeaderFragment: BaseFragment2<SelectTeamLeaderFragmentBinding>(
                 LeadManagementConstants.INTENT_EXTRA_JOB_PROFILE to jobProfileId
             )
             )
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewBinding.gigerProfileCard.setGigerProfileData("d5ToQmOn6sdAcPWvjsBuhYWm9kF3")
         }
     }
 

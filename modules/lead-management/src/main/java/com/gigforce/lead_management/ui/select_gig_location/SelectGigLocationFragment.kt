@@ -5,6 +5,7 @@ import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.gigforce.common_ui.components.atoms.ChipGroupComponent
 import com.gigforce.common_ui.components.atoms.models.ChipGroupModel
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfileDetails
@@ -17,6 +18,7 @@ import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.SelectGigLocationFragmentBinding
 import com.gigforce.lead_management.gigeronboarding.SelectGigApplicationToActivateViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 import javax.inject.Inject
 
@@ -105,12 +107,16 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentBinding
                 LeadManagementConstants.INTENT_EXTRA_JOB_PROFILE to jobProfileId
             ))
         }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewBinding.gigerProfileCard.setGigerProfileData("d5ToQmOn6sdAcPWvjsBuhYWm9kF3")
+        }
     }
 
     private fun showGigLocations(jobProfile: JobProfileDetails){
         //set chips for gig locations
-        var cityChips = arrayListOf<ChipGroupModel>()
-        var locationChips = arrayListOf<ChipGroupModel>()
+        val cityChips = arrayListOf<ChipGroupModel>()
+        val locationChips = arrayListOf<ChipGroupModel>()
         val cityAndLocations = jobProfile.cityAndLocations
         cityAndLocations.forEachIndexed { index, jobProfileCityAndLocation ->
             jobProfileCityAndLocation.let {

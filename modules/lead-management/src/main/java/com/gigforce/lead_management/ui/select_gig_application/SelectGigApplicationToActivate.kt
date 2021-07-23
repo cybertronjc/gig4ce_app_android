@@ -6,6 +6,7 @@ import android.widget.LinearLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
@@ -23,6 +24,7 @@ import com.gigforce.lead_management.gigeronboarding.SelectGigApplicationToActiva
 import com.gigforce.lead_management.models.GigAppListRecyclerItemData
 import com.gigforce.lead_management.ui.giger_onboarding.GigerOnboardingFragment
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -91,9 +93,9 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
     }
 
     private fun initViews() {
-        viewBinding.gigerProfileCard.apply {
-            setProfileCard(GigerProfileCardDVM("https://instagram.fdel11-2.fna.fbcdn.net/v/t51.2885-19/s320x320/125221466_394003705121691_8790543636526463384_n.jpg", "Jagdish Choudhary", "+919898833257", "Swiggy delivery", ""))
-        }
+//        viewBinding.gigerProfileCard.apply {
+//            setProfileCard(GigerProfileCardDVM("https://instagram.fdel11-2.fna.fbcdn.net/v/t51.2885-19/s320x320/125221466_394003705121691_8790543636526463384_n.jpg", "Jagdish Choudhary", "+919898833257", "Swiggy delivery", ""))
+//        }
     }
 
     private fun initViewModel() {
@@ -127,6 +129,10 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
             setBackButtonListener(View.OnClickListener {
                 navigation.popBackStack()
             })
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewBinding.gigerProfileCard.setGigerProfileData("d5ToQmOn6sdAcPWvjsBuhYWm9kF3")
         }
     }
 
