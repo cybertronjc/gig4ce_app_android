@@ -4,6 +4,7 @@ package com.gigforce.giger_app.calendarscreen.maincalendarscreen
 import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -15,6 +16,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
@@ -34,6 +36,7 @@ import com.gigforce.common_ui.ConfirmationDialogOnClickListener
 import com.gigforce.common_ui.chat.ChatHeadersViewModel
 import com.gigforce.common_ui.configrepository.ConfigRepository
 import com.gigforce.common_ui.core.TextDrawable
+import com.gigforce.common_ui.utils.LocationUpdates
 import com.gigforce.common_ui.viewmodels.ProfileViewModel
 import com.gigforce.common_ui.viewmodels.custom_gig_preferences.CustomPreferencesViewModel
 import com.gigforce.common_ui.viewmodels.custom_gig_preferences.ParamCustPreferViewModel
@@ -73,7 +76,8 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class CalendarHomeScreen : Fragment(),
-        CalendarRecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
+        CalendarRecyclerItemTouchHelper.RecyclerItemTouchHelperListener,
+    LocationUpdates.LocationUpdateCallbacks  {
 
     companion object {
         fun newInstance() =
@@ -87,6 +91,9 @@ class CalendarHomeScreen : Fragment(),
 
     @Inject
     lateinit var eventTracker: IEventTracker
+
+    var locationUpdates: LocationUpdates? = LocationUpdates()
+    var location: Location? = null
 
     lateinit var selectedMonthModel: CalendarView.MonthModel
 
@@ -161,6 +168,8 @@ class CalendarHomeScreen : Fragment(),
                 requireActivity(),
                 ResourcesCompat.getColor(resources, R.color.white, null)
         )
+        locationUpdates?.startUpdates(requireActivity() as AppCompatActivity)
+        locationUpdates?.setLocationUpdateCallbacks(this)
     }
 
     private fun isNotLatestVersion(latestAPPUpdateModel: ConfigRepository.LatestAPPUpdateModel): Boolean {
@@ -1080,5 +1089,17 @@ class CalendarHomeScreen : Fragment(),
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        locationUpdates?.stopLocationUpdates(requireActivity())
+    }
+
+    override fun locationReceiver(location: Location?) {
+
+    }
+
+    override fun lastLocationReceiver(location: Location?) {
+
+    }
 
 }
