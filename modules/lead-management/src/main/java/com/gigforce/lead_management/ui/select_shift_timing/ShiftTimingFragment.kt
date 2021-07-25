@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.DatePicker
+import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
@@ -12,12 +13,21 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.gigforce.common_ui.components.atoms.ChipGroupComponent
 import com.gigforce.common_ui.components.atoms.models.ChipGroupModel
+import com.gigforce.common_ui.datamodels.ShimmerDataModel
+import com.gigforce.common_ui.ext.startShimmer
+import com.gigforce.common_ui.ext.stopShimmer
+import com.gigforce.common_ui.viewdatamodels.leadManagement.AssignGigRequest
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfileDetails
+import com.gigforce.common_ui.viewdatamodels.leadManagement.JobShift
 import com.gigforce.core.base.BaseFragment2
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.toFirebaseTimeStamp
+import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.DateHelper
 import com.gigforce.core.utils.Lce
 import com.gigforce.lead_management.LeadManagementConstants
+import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.ShiftTimingFragmentBinding
 import com.gigforce.lead_management.ui.select_gig_location.SelectGigLocationFragment
@@ -45,8 +55,8 @@ class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
     lateinit var navigation: INavigation
 
     private val viewModel: ShiftTimingViewModel by viewModels()
-    private  var userUid: String = ""
-    private  var jobProfileId: String = ""
+    private lateinit var userUid: String
+    private lateinit var assignGigRequest: AssignGigRequest
 
     override fun viewCreated(
         viewBinding: ShiftTimingFragmentBinding,
@@ -67,13 +77,36 @@ class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
     ) {
 
         arguments?.let {
-            userUid = it.getString(LeadManagementConstants.INTENT_EXTRA_USER_UID) ?: return@let
-            jobProfileId = it.getString(LeadManagementConstants.INTENT_EXTRA_JOB_PROFILE) ?: return@let
+            userUid = it.getString(LeadManagementConstants.INTENT_EXTRA_USER_ID) ?: return@let
+            assignGigRequest = it.getParcelable(LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL) ?: return@let
         }
 
         savedInstanceState?.let {
-            userUid = it.getString(LeadManagementConstants.INTENT_EXTRA_USER_UID) ?: return@let
-            jobProfileId = it.getString(LeadManagementConstants.INTENT_EXTRA_JOB_PROFILE) ?: return@let
+            userUid = it.getString(LeadManagementConstants.INTENT_EXTRA_USER_ID) ?: return@let
+            assignGigRequest = it.getParcelable(LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL) ?: return@let
+        }
+        logDataReceivedFromBundles()
+    }
+
+    private fun logDataReceivedFromBundles() {
+        if (::userUid.isInitialized) {
+            logger.d(logTag, "User-id received from bundles : $userUid")
+        } else {
+            logger.e(
+                logTag,
+                "no User-id received from bundles",
+                Exception("no User-id received from bundles")
+            )
+        }
+
+        if (::assignGigRequest.isInitialized.not()) {
+            logger.e(
+                logTag,
+                "null assignGigRequest received from bundles",
+                Exception("null assignGigRequest received from bundles")
+            )
+        } else {
+            logger.d(logTag, "AssignGigRequest received from bundles : $assignGigRequest")
         }
     }
 
@@ -81,12 +114,12 @@ class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
         outState: Bundle
     ) {
         super.onSaveInstanceState(outState)
-        outState.putString(LeadManagementConstants.INTENT_EXTRA_USER_UID, userUid)
-        outState.putString(LeadManagementConstants.INTENT_EXTRA_JOB_PROFILE, jobProfileId)
+        outState.putString(LeadManagementConstants.INTENT_EXTRA_USER_ID, userUid)
+        outState.putParcelable(LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL, assignGigRequest)
     }
 
     private fun initViewModel() {
-        viewModel.getJobProfileDetails(jobProfileId, userUid)
+        viewModel.getJobProfileDetails(assignGigRequest.jobProfileId, userUid)
         viewModel.viewState.observe(viewLifecycleOwner, Observer {
             val jobProfileDetails = it
 
@@ -110,11 +143,11 @@ class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
         }
 
         viewBinding.submitBtn.setOnClickListener {
-            navigation.navigateTo("LeadMgmt/selectTeamLeaders", bundleOf(
-                LeadManagementConstants.INTENT_EXTRA_USER_UID to userUid,
-                LeadManagementConstants.INTENT_EXTRA_JOB_PROFILE to jobProfileId
-            )
-            )
+            navigation.navigateTo(
+                LeadManagementNavDestinations.FRAGMENT_SELECT_TEAM_LEADERS, bundleOf(
+                LeadManagementConstants.INTENT_EXTRA_USER_ID to userUid,
+                LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL to assignGigRequest
+            ))
         }
         viewBinding.calendarIcon.setOnClickListener {
             expectedStartDatePicker.show()
@@ -125,7 +158,7 @@ class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            viewBinding.gigerProfileCard.setGigerProfileData("d5ToQmOn6sdAcPWvjsBuhYWm9kF3")
+            viewBinding.gigerProfileCard.setGigerProfileData(userUid)
         }
 
     }
@@ -142,6 +175,7 @@ class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
                 newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
 
                 viewBinding.expectedDate.text = DateHelper.getDateInDDMMYYYY(newCal.time)
+                assignGigRequest.assignGigsFrom = newCal.time.toFirebaseTimeStamp()!!
             },
             cal.get(Calendar.YEAR),
             cal.get(Calendar.MONTH),
@@ -152,34 +186,80 @@ class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
         datePickerDialog
     }
 
-    private fun showGigShifts(jobProfile: JobProfileDetails){
+    private fun showGigShifts(jobProfile: JobProfileDetails) = viewBinding.apply {
+
+        stopShimmer(
+            this.shiftShimmerContainer,
+            R.id.shimmer_controller
+        )
+        shiftLayout.visible()
+        shiftShimmerContainer.gone()
+        shiftInfoLayout.root.gone()
         //set chips for gig shift timings
         var shiftChips = arrayListOf<ChipGroupModel>()
         val shifts = jobProfile.shifts
-        shifts.forEachIndexed { index, jobShift ->
-            jobShift.let {
-                shiftChips.add(ChipGroupModel(it.name.toString(), -1, index))
+        if (shifts.isEmpty()) {
+            showNoGigShiftsFound()
+        } else {
+            val selectedShifts = arrayListOf<JobShift>()
+            shifts.forEachIndexed { index, jobShift ->
+                jobShift.let {
+                    shiftChips.add(ChipGroupModel(it.name.toString(), -1, index))
+                }
             }
+            viewBinding.shiftChipGroup.removeAllViews()
+            viewBinding.shiftChipGroup.addChips(shiftChips, isSingleSelection = false)
+            logger.d(TAG, "Shift timings ${shiftChips.toArray()}")
+            viewBinding.shiftChipGroup.setOnCheckedChangeListener(object :
+                ChipGroupComponent.OnCustomCheckedChangeListener {
+                override fun onCheckedChangeListener(model: ChipGroupModel) {
+                    selectedShifts.add(shifts.get(model.chipId))
+                }
+            })
+            assignGigRequest.shift = selectedShifts
         }
-        viewBinding.shiftChipGroup.addChips(shiftChips)
-        logger.d(TAG, "Shift timings ${shiftChips.toArray()}")
-        viewBinding.shiftChipGroup.setOnCheckedChangeListener(object : ChipGroupComponent.OnCustomCheckedChangeListener{
-            override fun onCheckedChangeListener(model: ChipGroupModel) {
-
-            }
-        })
-
-
-
-
     }
 
-    private fun showErrorInLoadingGigShifts(error: String){
-
+    private fun showErrorInLoadingGigShifts(error: String) = viewBinding.apply{
+        stopShimmer(
+            shiftShimmerContainer,
+            R.id.shimmer_controller
+        )
+        shiftShimmerContainer.gone()
+        shiftInfoLayout.root.visible()
+        shiftLayout.gone()
+        shiftInfoLayout.infoIv.loadImage(R.drawable.ic_no_joining_found)
+        shiftInfoLayout.infoMessageTv.text = error
     }
 
-    private fun showGigShiftAsLoading(){
+    private fun showNoGigShiftsFound() = viewBinding.apply {
+        stopShimmer(
+            shiftShimmerContainer,
+            R.id.shimmer_controller
+        )
+        shiftShimmerContainer.gone()
+        shiftInfoLayout.root.visible()
+        shiftLayout.gone()
+        shiftInfoLayout.infoIv.loadImage(R.drawable.ic_no_joining_found)
+        shiftInfoLayout.infoMessageTv.text = "No Gig Shifts Found"
+    }
 
+    private fun showGigShiftAsLoading() = viewBinding.apply{
+        shiftLayout.gone()
+        shiftInfoLayout.root.gone()
+        shiftShimmerContainer.visible()
+
+        startShimmer(
+            this.shiftShimmerContainer,
+            ShimmerDataModel(
+                minHeight = R.dimen.size_120,
+                minWidth = LinearLayout.LayoutParams.MATCH_PARENT,
+                marginRight = R.dimen.size_16,
+                marginTop = R.dimen.size_1,
+                orientation = LinearLayout.VERTICAL
+            ),
+            R.id.shimmer_controller
+        )
     }
 
 

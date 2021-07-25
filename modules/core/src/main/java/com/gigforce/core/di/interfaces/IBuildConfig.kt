@@ -10,4 +10,6 @@ interface IBuildConfig {
     fun getApplicationID():String
     fun getSendSMSURL():String
     fun getFeaturesIconLocationUrl() : String
+    val debugBuild : Boolean
+    val baseUrl : String
 }

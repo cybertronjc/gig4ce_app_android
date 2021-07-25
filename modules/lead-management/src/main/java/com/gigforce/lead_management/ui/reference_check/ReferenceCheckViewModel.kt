@@ -74,7 +74,7 @@ class ReferenceCheckViewModel @Inject constructor(
         } catch (e: Exception) {
             _viewState.postValue(
                 ReferenceCheckViewState.SubmittingReferenceDataError(
-                    error = e.message ?: "Unable to submit reference",
+                    error = "Unable to submit reference",
                     shouldShowErrorButton = false
                 )
             )

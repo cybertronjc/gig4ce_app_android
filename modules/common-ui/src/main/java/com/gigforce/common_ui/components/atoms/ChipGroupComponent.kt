@@ -31,25 +31,30 @@ class ChipGroupComponent : ChipGroup {
         this.checkedChangeListener = listener
     }
 
-    fun addChips(list: List<ChipGroupModel>) {
-
+    fun addChips(list: List<ChipGroupModel>, isSingleSelection: Boolean) {
+        this.isSingleSelection = isSingleSelection
         list.forEach {
             var chipComponent = Chip(this.context)
+            chipComponent.id = it.chipId
             chipComponent.text = it.text
-            chipComponent.setOnClickListener { it1 ->
-                setAllChipsUnselected()
-                setChipSelected(it1)
-                checkedChangeListener?.onCheckedChangeListener(it)
-            }
+//            chipComponent.setOnClickListener { it1 ->
+//                if(!it1.isSelected) setChipSelected(it1, it) else setChipUnSelected(it1, it)
+//                checkedChangeListener?.onCheckedChangeListener(it)
+//            }
             this.addView(chipComponent)
         }
-        (getChildAt(0) as Chip).isChecked = true
+        setChipSelected((getChildAt(0) as Chip), list.get(0))
+        //(getChildAt(0) as Chip).isChecked = true
 
     }
 
-    private fun setChipSelected(chip: View) {
+    private fun setChipSelected(chip: View, chipGroupModel: ChipGroupModel) {
         (chip as Chip).isChecked = true
-
+        chipGroupModel.isSelected = true
+    }
+    private fun setChipUnSelected(chip: View, chipGroupModel: ChipGroupModel) {
+        (chip as Chip).isChecked = false
+        chipGroupModel.isSelected = false
     }
 
     private fun setAllChipsUnselected() {

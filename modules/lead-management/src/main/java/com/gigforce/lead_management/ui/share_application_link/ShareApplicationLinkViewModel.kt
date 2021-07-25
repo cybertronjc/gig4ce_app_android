@@ -24,17 +24,26 @@ class ShareApplicationLinkViewModel @Inject constructor(
         private const val TAG = "ShareApplicationLinkViewModel"
     }
 
+    private val _viewState = MutableLiveData<Lce<List<JobProfileOverview>>>()
+    val viewState: LiveData<Lce<List<JobProfileOverview>>> = _viewState
+
     init {
         getJobProfileForSharing()
     }
-
-    private val _viewState = MutableLiveData<Lce<List<JobProfileOverview>>>()
-    val viewState: LiveData<Lce<List<JobProfileOverview>>> = _viewState
 
     //Data
     private var jobProfiles: List<JobProfileOverview> = emptyList()
     private var jobProfilesShownOnView: List<JobProfileOverview> = emptyList()
     private var currentlySelectedGigIndex: Int = -1
+
+    fun getSelectedJobProfile() : JobProfileOverview?{
+        if(currentlySelectedGigIndex == -1) return null
+
+        return if(jobProfilesShownOnView.size > currentlySelectedGigIndex)
+            jobProfilesShownOnView[currentlySelectedGigIndex]
+        else
+            null
+    }
 
     private fun getJobProfileForSharing() = viewModelScope.launch {
         _viewState.postValue(Lce.loading())

@@ -14,11 +14,13 @@ import androidx.lifecycle.Observer
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.utils.UtilMethods
 import com.gigforce.core.base.BaseFragment2
+import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.Lce
 import com.gigforce.lead_management.LeadManagementConstants
+import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.GigerOnboardingFragmentBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -59,8 +61,14 @@ class GigerOnboardingFragment  : BaseFragment2<GigerOnboardingFragmentBinding>(
     val REFERRAL_TAG: String = "referral"
     private fun initListeners() {
         viewBinding.submitButton.setOnClickListener {
-            if (viewBinding.submitButton.tag?.toString().equals(REFERRAL_TAG)){
+            if (viewBinding.submitButton.tag?.toString().equals(REFERRAL_TAG)) {
                 //navigate to referral
+                navigation.navigateTo(
+                    dest = LeadManagementNavDestinations.FRAGMENT_PICK_PROFILE_FOR_REFERRAL,
+                    args = null,
+                    navOptions = getNavOptions()
+                )
+
             } else {
                 validateDataAndsubmit()
             }
@@ -75,6 +83,10 @@ class GigerOnboardingFragment  : BaseFragment2<GigerOnboardingFragmentBinding>(
 
         viewBinding.changeNumber.setOnClickListener {
             viewBinding.mobileNoEt.requestFocus()
+            viewBinding.createProfileBtn.gone()
+            viewBinding.submitButton.tag = "next"
+            viewBinding.submitButton.setText("Next")
+
         }
 
         viewBinding.mobileNoEt.addTextChangedListener(object : TextWatcher{
@@ -102,7 +114,6 @@ class GigerOnboardingFragment  : BaseFragment2<GigerOnboardingFragmentBinding>(
         })
 
         viewBinding.createProfileBtn.setOnClickListener {
-            logger.d(TAG, "When User not registered send OTP")
             viewModel.sendOtp(
                 viewBinding.mobileNoEt.text.toString()
             )
@@ -157,21 +168,20 @@ class GigerOnboardingFragment  : BaseFragment2<GigerOnboardingFragmentBinding>(
 //                                viewModel.sendOtp(
 //                                    viewBinding.mobileNoEt.text.toString()
 //                                )
-                                navigation.navigateTo("LeadMgmt/selectGigApplicationToActivate", bundleOf(
-                                    LeadManagementConstants.INTENT_EXTRA_USER_UID to "d5ToQmOn6sdAcPWvjsBuhYWm9kF3",
+                                navigation.navigateTo(LeadManagementNavDestinations.FRAGMENT_SELECT_GIG_TO_ACTIVATE, bundleOf(
+                                    LeadManagementConstants.INTENT_EXTRA_USER_ID to "d5ToQmOn6sdAcPWvjsBuhYWm9kF3",
                                 )
                                 )
-
                             }
                         } else {
-                            logger.d(TAG, "While checking if number is  registered")
+                            logger.d(TAG, "While checking if number is  registered API status failure")
                         }
                     }
 
                     is Lce.Error -> {
                         UtilMethods.hideLoading()
                         showAlertDialog("", it.error)
-                        logger.d(TAG, "While checking if number is  registered: "+ it.error)
+                        logger.d(TAG, "While checking if number is  registered: " + it.error)
                     }
                 }
             })
@@ -187,9 +197,8 @@ class GigerOnboardingFragment  : BaseFragment2<GigerOnboardingFragmentBinding>(
                         UtilMethods.hideLoading()
                         showToast("Otp sent")
 
-                        if (isNumberRegistered) {
+                        if (!it.content.isUserAlreadyRegistered) {
                             //show user already registered dialog
-                            showToast("Number  registered")
                             if (viewBinding.mobileNoEt.text.toString().isNotEmpty()) {
                                 navigation.navigateTo(
                                     "LeadMgmt/gigerOnboardingOtp", bundleOf(
@@ -198,12 +207,8 @@ class GigerOnboardingFragment  : BaseFragment2<GigerOnboardingFragmentBinding>(
                                         INTENT_EXTRA_OTP_TOKEN to it.content.verificationToken
                                     )
                                 )
-                                viewBinding.mobileNoEt.setText("")
+                                //viewBinding.mobileNoEt.setText("")
                             }
-                        } else {
-                            showMobileNotRegisterdDialog()
-                            showToast("Number not registered")
-
                         }
                     }
                     is Lce.Error -> {

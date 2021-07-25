@@ -18,5 +18,4 @@ class BuildConfigVMImp @Inject constructor() : IBuildConfigVM {
     override fun getUserRegisterInfoUrl(): String = BuildConfig.GET_USER_REGISTER_INFO_URL
     override fun getVerificationKycOcrResult(): String = BuildConfig.KYC_OCR_URL
     override fun getKycVerificationUrl(): String = BuildConfig.KYC_VERIFY_URL
-    override fun getJobProfiles(): String = BuildConfig.GET_JOB_PROFILES
 }

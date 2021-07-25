@@ -122,6 +122,7 @@
                 android:textStyle="normal"
                 android:textSize="20sp"
                 android:textColor="#2e2f30"
+                android:text="9898833257"
                 android:paddingStart="8dp"
                 android:inputType="phone"
                 android:digits="0123456789"

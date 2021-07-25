@@ -107,6 +107,7 @@ class LoginSuccessfulViewModel constructor(
                     )
                     return@EventListener
                 }
+
                 if (value!!.data == null) {
                     profileFirebaseRepository.createEmptyProfile()
                 } else {

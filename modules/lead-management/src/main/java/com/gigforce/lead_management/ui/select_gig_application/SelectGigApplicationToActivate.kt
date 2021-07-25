@@ -11,11 +11,13 @@ import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.viewdatamodels.GigerProfileCardDVM
+import com.gigforce.common_ui.viewdatamodels.leadManagement.AssignGigRequest
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.lead_management.LeadManagementConstants
+import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.ReferenceCheckFragmentBinding
 import com.gigforce.lead_management.databinding.SelectGigApplicationToActivateFragmentBinding
@@ -37,14 +39,14 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
     companion object {
         fun newInstance() = SelectGigApplicationToActivate()
         private const val TAG = "SelectGigApplicationFragment"
-        private var isNumberRegistered = false
     }
 
     @Inject
     lateinit var navigation: INavigation
 
     private val viewModel: SelectGigApplicationToActivateViewModel by viewModels()
-    private  var userUid: String = ""
+    private lateinit var userUid: String
+    private var assignGigRequest = AssignGigRequest()
 
     override fun viewCreated(
         viewBinding: SelectGigApplicationToActivateFragmentBinding,
@@ -67,7 +69,7 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
         showTitle("Gig Application")
         hideSearchOption()
         setBackButtonListener {
-            activity?.onBackPressed()
+            navigation.popBackStack()
         }
     }
 
@@ -77,19 +79,45 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
     ) {
 
         arguments?.let {
-            userUid = it.getString(LeadManagementConstants.INTENT_EXTRA_USER_UID) ?: return@let
+            userUid = it.getString(LeadManagementConstants.INTENT_EXTRA_USER_ID) ?: return@let
+            //assignGigRequest = it.getParcelable(LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL) ?: return@let
         }
 
         savedInstanceState?.let {
-            userUid = it.getString(LeadManagementConstants.INTENT_EXTRA_USER_UID) ?: return@let
+            userUid = it.getString(LeadManagementConstants.INTENT_EXTRA_USER_ID) ?: return@let
+            //assignGigRequest = it.getParcelable(LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL) ?: return@let
         }
+        logDataReceivedFromBundles()
+    }
+
+    private fun logDataReceivedFromBundles() {
+        if (::userUid.isInitialized) {
+            logger.d(logTag, "User-id received from bundles : $userUid")
+        } else {
+            logger.e(
+                logTag,
+                "no User-id received from bundles",
+                Exception("no User-id received from bundles")
+            )
+        }
+
+//        if (::assignGigRequest.isInitialized.not()) {
+//            logger.e(
+//                logTag,
+//                "null assignGigRequest received from bundles",
+//                Exception("null assignGigRequest received from bundles")
+//            )
+//        } else {
+//            logger.d(logTag, "AssignGigRequest received from bundles : $assignGigRequest")
+//        }
     }
 
     override fun onSaveInstanceState(
         outState: Bundle
     ) {
         super.onSaveInstanceState(outState)
-        outState.putString(LeadManagementConstants.INTENT_EXTRA_USER_UID, userUid)
+        outState.putString(LeadManagementConstants.INTENT_EXTRA_USER_ID, userUid)
+        //outState.putParcelable(LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL, assignGigRequest)
     }
 
     private fun initViews() {
@@ -115,9 +143,13 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
     private fun initListeners() {
         viewBinding.submitBtn.setOnClickListener {
             viewModel.getSelectedJobProfile().let {
-                navigation.navigateTo("LeadMgmt/selectGigLocation", bundleOf(
-                    LeadManagementConstants.INTENT_EXTRA_USER_UID to userUid,
-                    LeadManagementConstants.INTENT_EXTRA_JOB_PROFILE to it.jobProfileId
+                assignGigRequest.jobProfileId = it.jobProfileId
+                assignGigRequest.jobProfileName = it.profileName.toString()
+                assignGigRequest.companyLogo = it.companyLogo.toString()
+                //logger.d(TAG, "Company logo: ${assignGigRequest.companyLogo}")
+                navigation.navigateTo(LeadManagementNavDestinations.FRAGMENT_SELECT_GIG_LOCATION, bundleOf(
+                    LeadManagementConstants.INTENT_EXTRA_USER_ID to userUid,
+                    LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL to assignGigRequest
                 )
                 )
             }
@@ -132,7 +164,7 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            viewBinding.gigerProfileCard.setGigerProfileData("d5ToQmOn6sdAcPWvjsBuhYWm9kF3")
+            viewBinding.gigerProfileCard.setGigerProfileData(userUid)
         }
     }
 
@@ -154,8 +186,6 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
             R.id.shimmer_controller
         )
     }
-
-
 
     private fun showGigApps(
         gigAppList: List<GigAppListRecyclerItemData>
