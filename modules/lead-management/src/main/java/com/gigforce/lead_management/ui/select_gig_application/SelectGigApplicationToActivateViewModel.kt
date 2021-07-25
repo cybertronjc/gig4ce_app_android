@@ -55,6 +55,12 @@ class SelectGigApplicationToActivateViewModel @Inject constructor(
     private var jobProfilesShownOnView: List<JobProfileOverview> = emptyList()
     val gigAppsListForView = mutableListOf<GigAppListRecyclerItemData>()
     private var currentlySelectedGigIndex: Int = -1
+    private val _selectedIndex = MutableLiveData<Int>()
+    val selectedIndex: LiveData<Int> = _selectedIndex
+
+    private val _selectedJobProfileOverview = MutableLiveData<JobProfileOverview>()
+    val selectedJobProfileOverview: LiveData<JobProfileOverview> = _selectedJobProfileOverview
+
 
      fun getJobProfilesToActivate(userUid: String) = viewModelScope.launch {
         _viewState.postValue(SelectGigAppViewState.LoadingDataFromServer)
@@ -88,6 +94,7 @@ class SelectGigApplicationToActivateViewModel @Inject constructor(
     }
 
     private fun processGigApps(jobApps: List<JobProfileOverview>){
+        _selectedIndex.value = -1
         val gigAppList: List<JobProfileOverview> = jobApps
         val statusToGigAppList = gigAppList.filter {
 //            if (currentSearchString.isNullOrEmpty())
@@ -104,7 +111,7 @@ class SelectGigApplicationToActivateViewModel @Inject constructor(
 //            }
             it.ongoing != null
         }.groupBy {
-            if (it.ongoing == false) "Ongoing Applications" else "Other Applications"
+            if (it.ongoing == true) "Ongoing Applications" else "Other Applications"
         }
 
         gigAppsListForView.clear()
@@ -225,8 +232,11 @@ class SelectGigApplicationToActivateViewModel @Inject constructor(
             )
 
             if (currentlySelectedGigIndex != -1) {
+                _selectedIndex.value = currentlySelectedGigIndex
                 jobProfilesShownOnView[currentlySelectedGigIndex].isSelected = true
+                setSelectedJobProfile()
             }
+
         } else {
 
             val newSelectedItemIndex = jobProfilesShownOnView.indexOfFirst {
@@ -246,13 +256,24 @@ class SelectGigApplicationToActivateViewModel @Inject constructor(
             )
 
             currentlySelectedGigIndex = newSelectedItemIndex
+            _selectedIndex.value = newSelectedItemIndex
+            setSelectedJobProfile()
         }
 
         processGigApps(jobProfilesShownOnView)
     }
 
+    fun setSelectedJobProfile(){
+        _selectedJobProfileOverview.value =  jobProfilesShownOnView.get(currentlySelectedGigIndex)
+    }
+
     fun getSelectedJobProfile(): JobProfileOverview{
         return jobProfilesShownOnView.get(currentlySelectedGigIndex)
     }
+
+    fun getSelectedIndex(): Int {
+        return currentlySelectedGigIndex
+    }
+
 }
 

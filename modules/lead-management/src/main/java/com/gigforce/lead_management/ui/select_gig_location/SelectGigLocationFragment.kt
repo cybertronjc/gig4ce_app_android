@@ -1,6 +1,7 @@
 package com.gigforce.lead_management.ui.select_gig_location
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
@@ -11,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import com.gigforce.common_ui.components.atoms.ChipGroupComponent
 import com.gigforce.common_ui.components.atoms.models.ChipGroupModel
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
+import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
@@ -24,6 +26,7 @@ import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.SelectGigLocationFragmentBinding
 import com.gigforce.lead_management.gigeronboarding.SelectGigApplicationToActivateViewModel
+import com.gigforce.lead_management.ui.select_team_leader.SelectTeamLeaderFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -47,6 +50,8 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentBinding
     private val viewModel: SelectGigLocationViewModel by viewModels()
     private lateinit var userUid: String
     private lateinit var assignGigRequest: AssignGigRequest
+    val cityChips = arrayListOf<ChipGroupModel>()
+    var cityAndLocations = listOf<JobProfileCityAndLocation>()
 
     override fun viewCreated(
         viewBinding: SelectGigLocationFragmentBinding,
@@ -94,8 +99,6 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentBinding
                 "null assignGigRequest received from bundles",
                 Exception("null assignGigRequest received from bundles")
             )
-        } else {
-            logger.d(logTag, "AssignGigRequest received from bundles : $assignGigRequest")
         }
     }
 
@@ -132,10 +135,23 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentBinding
         }
 
         viewBinding.submitBtn.setOnClickListener {
-            navigation.navigateTo(LeadManagementNavDestinations.FRAGMENT_SELECT_SHIFT_TIMMINGS, bundleOf(
-                LeadManagementConstants.INTENT_EXTRA_USER_ID to userUid,
-                LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL to assignGigRequest
-            ))
+            cityChips.forEachIndexed { index, chipGroupModel ->
+                if (chipGroupModel.isSelected){
+                    assignGigRequest.cityId = cityAndLocations.get(index).id
+                    assignGigRequest.cityName = cityAndLocations.get(index).city.toString()
+                }
+            }
+            if (!assignGigRequest.cityId.isNotEmpty()){
+                showToast("Select a city to continue")
+            } else {
+                logger.d(TAG, "AssignGigRequest $assignGigRequest")
+                navigation.navigateTo(
+                    LeadManagementNavDestinations.FRAGMENT_SELECT_SHIFT_TIMMINGS, bundleOf(
+                        LeadManagementConstants.INTENT_EXTRA_USER_ID to userUid,
+                        LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL to assignGigRequest
+                    )
+                )
+            }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -159,27 +175,23 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentBinding
         locationInfoLayout.root.gone()
 
         //set chips for gig locations
-        val cityChips = arrayListOf<ChipGroupModel>()
-        val cityAndLocations = jobProfile.cityAndLocations
+
+        cityAndLocations = jobProfile.cityAndLocations
         if (cityAndLocations.isEmpty()){
             showNoGigLocationFound()
         } else {
+            cityChips.clear()
             cityAndLocations.forEachIndexed { index, jobProfileCityAndLocation ->
                 jobProfileCityAndLocation.let {
                     cityChips.add(ChipGroupModel(it.city.toString(), -1, index))
                 }
             }
             viewBinding.cityChipGroup.removeAllViews()
-            viewBinding.cityChipGroup.addChips(cityChips, isSingleSelection = true)
+            viewBinding.cityChipGroup.addChips(cityChips, isSingleSelection = true, true)
             logger.d(TAG, "Job city and locations ${cityChips.toArray()}")
             viewBinding.cityChipGroup.setOnCheckedChangeListener(object :
                 ChipGroupComponent.OnCustomCheckedChangeListener {
                 override fun onCheckedChangeListener(model: ChipGroupModel) {
-                    if (model.isSelected) {
-                        assignGigRequest.cityId = cityAndLocations.get(model.chipId).id
-                        assignGigRequest.cityName =
-                            cityAndLocations.get(model.chipId).city.toString()
-                    }
                     try {
                         val jobLocations = cityAndLocations.get(model.chipId).jobLocations
                         jobLocations?.let { processJobLocations(it) }
@@ -201,17 +213,14 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentBinding
             it.type
         }
 
-        //logger.d(TAG, "Grouped job locations $groupedJobLocations")
-
         var count = 0;
-        if (groupedJobLocations?.isNotEmpty() == true){
-            groupedJobLocations?.forEach { (localityType, list) ->
-                logger.d(TAG, "processing data, Status :  : ${list.size} JobLocations")
-                locationChips.add(ChipGroupModel(localityType, -1, count))
-                count++
-            }
+        groupedJobLocations?.forEach { (localityType, list) ->
+            logger.d(TAG, "processing data, Status :  : ${list.size} JobLocations")
+            locationChips.add(ChipGroupModel(localityType, -1, count))
+            count++
         }
-        viewBinding.locationChipGroup.addChips(locationChips, isSingleSelection = true)
+
+        viewBinding.locationChipGroup.addChips(locationChips, isSingleSelection = true, true)
 
         //extract dropdown from JobLocations by grouping into one list with type : Locality, Hub, Store
         viewBinding.locationChipGroup.setOnCheckedChangeListener(object : ChipGroupComponent.OnCustomCheckedChangeListener{

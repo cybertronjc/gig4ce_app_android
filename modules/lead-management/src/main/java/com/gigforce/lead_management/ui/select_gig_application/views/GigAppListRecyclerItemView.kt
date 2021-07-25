@@ -2,6 +2,7 @@ package com.gigforce.lead_management.ui.select_gig_application.views
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -76,6 +77,7 @@ class GigAppListRecyclerItemView  (
     }
 
     private fun setViewSelected(isSelected: Boolean){
+
         if (isSelected){
             viewBinding.root.background = resources.getDrawable(R.drawable.background_layout_selector)
         } else {

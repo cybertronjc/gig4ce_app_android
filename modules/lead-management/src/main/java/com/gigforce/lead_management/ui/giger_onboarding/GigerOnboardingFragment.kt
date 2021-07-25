@@ -86,6 +86,8 @@ class GigerOnboardingFragment  : BaseFragment2<GigerOnboardingFragmentBinding>(
             viewBinding.createProfileBtn.gone()
             viewBinding.submitButton.tag = "next"
             viewBinding.submitButton.setText("Next")
+            viewBinding.notRegisteredLayout.gone()
+            showKeyboard()
 
         }
 

@@ -3,6 +3,7 @@ package com.gigforce.lead_management.ui.select_shift_timing
 import android.app.DatePickerDialog
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.DatePicker
 import android.widget.LinearLayout
@@ -14,6 +15,7 @@ import androidx.lifecycle.lifecycleScope
 import com.gigforce.common_ui.components.atoms.ChipGroupComponent
 import com.gigforce.common_ui.components.atoms.models.ChipGroupModel
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
+import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.viewdatamodels.leadManagement.AssignGigRequest
@@ -31,6 +33,7 @@ import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.ShiftTimingFragmentBinding
 import com.gigforce.lead_management.ui.select_gig_location.SelectGigLocationFragment
+import com.gigforce.lead_management.ui.select_team_leader.SelectTeamLeaderFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.lang.Exception
@@ -57,6 +60,9 @@ class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
     private val viewModel: ShiftTimingViewModel by viewModels()
     private lateinit var userUid: String
     private lateinit var assignGigRequest: AssignGigRequest
+    val selectedShifts = arrayListOf<JobShift>()
+    var shiftChips = arrayListOf<ChipGroupModel>()
+    var shifts = listOf<JobShift>()
 
     override fun viewCreated(
         viewBinding: ShiftTimingFragmentBinding,
@@ -105,8 +111,6 @@ class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
                 "null assignGigRequest received from bundles",
                 Exception("null assignGigRequest received from bundles")
             )
-        } else {
-            logger.d(logTag, "AssignGigRequest received from bundles : $assignGigRequest")
         }
     }
 
@@ -133,8 +137,8 @@ class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
         })
     }
 
-    private fun initListeners() {
-        viewBinding.toolbar.apply {
+    private fun initListeners() = viewBinding.apply {
+        toolbar.apply {
             hideActionMenu()
             showTitle("Shift Timings")
             setBackButtonListener(View.OnClickListener {
@@ -142,24 +146,44 @@ class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
             })
         }
 
-        viewBinding.submitBtn.setOnClickListener {
-            navigation.navigateTo(
-                LeadManagementNavDestinations.FRAGMENT_SELECT_TEAM_LEADERS, bundleOf(
-                LeadManagementConstants.INTENT_EXTRA_USER_ID to userUid,
-                LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL to assignGigRequest
-            ))
+        submitBtn.setOnClickListener {
+            selectedShifts.clear()
+            shiftChips.forEachIndexed { index, chipGroupModel ->
+                if (chipGroupModel.isSelected){
+                    selectedShifts.add(shifts.get(index))
+                }
+            }
+
+            when {
+                selectedShifts.isEmpty() -> {
+                    showToast("Select at least one shift to continue")
+                }
+                expectedDate.text.isEmpty() -> {
+                    showToast("Select expected date of start to continue")
+                }
+                else -> {
+                    assignGigRequest.shift = selectedShifts
+                    logger.d(TAG, "AssignGigRequest $assignGigRequest")
+                    navigation.navigateTo(
+                        LeadManagementNavDestinations.FRAGMENT_SELECT_TEAM_LEADERS, bundleOf(
+                            LeadManagementConstants.INTENT_EXTRA_USER_ID to userUid,
+                            LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL to assignGigRequest
+                        ))
+                }
+            }
         }
-        viewBinding.calendarIcon.setOnClickListener {
+        calendarIcon.setOnClickListener {
             expectedStartDatePicker.show()
         }
 
-        viewBinding.expectedDate.setOnClickListener {
+        expectedDate.setOnClickListener {
             expectedStartDatePicker.show()
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            viewBinding.gigerProfileCard.setGigerProfileData(userUid)
+            gigerProfileCard.setGigerProfileData(userUid)
         }
+        viewBinding.gigerProfileCard.setJobProfileData(assignGigRequest.jobProfileName, assignGigRequest.companyLogo)
 
     }
 
@@ -196,27 +220,21 @@ class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
         shiftShimmerContainer.gone()
         shiftInfoLayout.root.gone()
         //set chips for gig shift timings
-        var shiftChips = arrayListOf<ChipGroupModel>()
-        val shifts = jobProfile.shifts
+
+        shifts = jobProfile.shifts
         if (shifts.isEmpty()) {
             showNoGigShiftsFound()
         } else {
-            val selectedShifts = arrayListOf<JobShift>()
+            shiftChips.clear()
             shifts.forEachIndexed { index, jobShift ->
                 jobShift.let {
                     shiftChips.add(ChipGroupModel(it.name.toString(), -1, index))
                 }
             }
             viewBinding.shiftChipGroup.removeAllViews()
-            viewBinding.shiftChipGroup.addChips(shiftChips, isSingleSelection = false)
-            logger.d(TAG, "Shift timings ${shiftChips.toArray()}")
-            viewBinding.shiftChipGroup.setOnCheckedChangeListener(object :
-                ChipGroupComponent.OnCustomCheckedChangeListener {
-                override fun onCheckedChangeListener(model: ChipGroupModel) {
-                    selectedShifts.add(shifts.get(model.chipId))
-                }
-            })
-            assignGigRequest.shift = selectedShifts
+            viewBinding.shiftChipGroup.addChips(shiftChips, isSingleSelection = false, setFirstChecked = true)
+            logger.d(TAG, "Shift timings chips ${shiftChips.size}  shifts $shifts")
+
         }
     }
 

@@ -1,6 +1,7 @@
 package com.gigforce.lead_management.ui.select_team_leader
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import androidx.core.os.bundleOf
@@ -46,6 +47,12 @@ class SelectTeamLeaderFragment: BaseFragment2<SelectTeamLeaderFragmentBinding>(
     private val viewModel: SelectTeamLeaderViewModel by viewModels()
     private lateinit var userUid: String
     private lateinit var assignGigRequest: AssignGigRequest
+    val selectedGigforceTLs = arrayListOf<JobTeamLeader>()
+    val selectedBusinessTLs = arrayListOf<JobTeamLeader>()
+    var gigforceTeamLeaders = listOf<JobTeamLeader>()
+    var businessTeamLeaders = listOf<JobTeamLeader>()
+    val gigforceTeamLeaderChips = arrayListOf<ChipGroupModel>()
+    val businessTeamLeaderChips = arrayListOf<ChipGroupModel>()
 
     override fun viewCreated(
         viewBinding: SelectTeamLeaderFragmentBinding,
@@ -130,17 +137,36 @@ class SelectTeamLeaderFragment: BaseFragment2<SelectTeamLeaderFragmentBinding>(
             })
         }
 
-//        viewBinding.submitBtn.setOnClickListener {
+        viewBinding.submitBtn.setOnClickListener {
+            selectedGigforceTLs.clear()
+            selectedBusinessTLs.clear()
+            gigforceTeamLeaderChips.forEachIndexed { index, chipGroupModel ->
+                if (chipGroupModel.isSelected){
+                    selectedGigforceTLs.add(gigforceTeamLeaders.get(index))
+                }
+            }
+            businessTeamLeaderChips.forEachIndexed { index, chipGroupModel ->
+                if (chipGroupModel.isSelected){
+                    selectedBusinessTLs.add(businessTeamLeaders.get(index))
+                }
+            }
+            if (selectedGigforceTLs.isNotEmpty()){
+                assignGigRequest.gigForceTeamLeaders = selectedGigforceTLs
+                assignGigRequest.businessTeamLeaders = selectedBusinessTLs
+                logger.d(TAG, "Selected Business TLs $selectedBusinessTLs Selected Gigforce TLs $selectedGigforceTLs")
+                logger.d(TAG, "AssignGigReuest $assignGigRequest")
 //            navigation.navigateTo(LeadManagementNavDestinations.FRAGMENT_SELECT_TEAM_LEADERS, bundleOf(
 //                LeadManagementConstants.INTENT_EXTRA_USER_ID to userUid,
 //                LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL to assignGigRequest
 //            )
 //            )
-//        }
+            }
+        }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewBinding.gigerProfileCard.setGigerProfileData(userUid)
         }
+        viewBinding.gigerProfileCard.setJobProfileData(assignGigRequest.jobProfileName, assignGigRequest.companyLogo)
     }
 
     private fun showGigTeamLeaders(jobProfile: JobProfileDetails) = viewBinding.apply{
@@ -151,47 +177,35 @@ class SelectTeamLeaderFragment: BaseFragment2<SelectTeamLeaderFragmentBinding>(
         teamLeadersLayout.visible()
         teamLeaderShimmerContainer.gone()
         teamLeadersInfoLayout.root.gone()
-        //set chips for gig team leaders
 
-        val gigforceTeamLeaders = jobProfile.gigforceTeamLeaders
-
-
-        val businessTeamLeaders = jobProfile.businessTeamLeaders
-
-
+        gigforceTeamLeaders = jobProfile.gigforceTeamLeaders
+        businessTeamLeaders = jobProfile.businessTeamLeaders
         processTeamLeaders(gigforceTeamLeaders, businessTeamLeaders)
     }
 
     private fun processTeamLeaders(gigforceTLs: List<JobTeamLeader>, businessTLs: List<JobTeamLeader>){
-        val gigforceTeamLeaderChips = arrayListOf<ChipGroupModel>()
-        val businessTeamLeaderChips = arrayListOf<ChipGroupModel>()
-        val selectedGigforceTLs = arrayListOf<JobTeamLeader>()
-        val selectedBusinessTLs = arrayListOf<JobTeamLeader>()
+        gigforceTeamLeaderChips.clear()
         gigforceTLs.forEachIndexed { index, teamLeader ->
             teamLeader.let {
                 gigforceTeamLeaderChips.add(ChipGroupModel(it.name.toString(), -1, index))
             }
         }
-        viewBinding.gigforceTLChipGroup.addChips(gigforceTeamLeaderChips, isSingleSelection = true)
+        viewBinding.gigforceTLChipGroup.removeAllViews()
+        viewBinding.gigforceTLChipGroup.addChips(gigforceTeamLeaderChips, isSingleSelection = true, true)
         logger.d(TAG, "Gigforce team leaders ${gigforceTeamLeaderChips.toArray()}")
-        viewBinding.gigforceTLChipGroup.setOnCheckedChangeListener(object : ChipGroupComponent.OnCustomCheckedChangeListener{
-            override fun onCheckedChangeListener(model: ChipGroupModel) {
-                selectedGigforceTLs.add(gigforceTLs.get(model.chipId))
-            }
-        })
+
+        businessTeamLeaderChips.clear()
         businessTLs.forEachIndexed { index, teamLeader ->
             teamLeader.let {
                 businessTeamLeaderChips.add(ChipGroupModel(it.name.toString(), -1, index))
             }
         }
-        viewBinding.businessTLChipGroup.addChips(businessTeamLeaderChips, isSingleSelection = false)
+        viewBinding.businessTLChipGroup.removeAllViews()
+        viewBinding.businessTLChipGroup.addChips(businessTeamLeaderChips, isSingleSelection = false, false)
         logger.d(TAG, "Business team leaders ${businessTeamLeaderChips.toArray()}")
-        viewBinding.businessTLChipGroup.setOnCheckedChangeListener(object : ChipGroupComponent.OnCustomCheckedChangeListener{
-            override fun onCheckedChangeListener(model: ChipGroupModel) {
-                selectedBusinessTLs.add(businessTLs.get(model.chipId))
-            }
-        })
+
     }
+
 
     private fun showErrorInLoadingGigTeamLeaders(error: String) = viewBinding.apply {
         stopShimmer(
@@ -234,8 +248,5 @@ class SelectTeamLeaderFragment: BaseFragment2<SelectTeamLeaderFragmentBinding>(
             ),
             R.id.shimmer_controller
         )
-
-
-
     }
 }

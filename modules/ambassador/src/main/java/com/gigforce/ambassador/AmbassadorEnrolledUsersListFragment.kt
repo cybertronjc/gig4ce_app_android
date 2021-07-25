@@ -191,7 +191,7 @@ class AmbassadorEnrolledUsersListFragment : Fragment(),
             })
         }
 
-        testingchipgrp.addChips(viewModel.getChipsData(), isSingleSelection = true)
+        testingchipgrp.addChips(viewModel.getChipsData(), isSingleSelection = true, true)
         testingchipgrp.setOnCheckedChangeListener(object : ChipGroupComponent.OnCustomCheckedChangeListener{
             override fun onCheckedChangeListener(model: ChipGroupModel) {
                 if (model.chipId == 0) {

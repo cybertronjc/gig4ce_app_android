@@ -126,7 +126,7 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
 //        }
     }
 
-    private fun initViewModel() {
+    private fun initViewModel() = viewBinding.apply {
         viewModel.getJobProfilesToActivate("d5ToQmOn6sdAcPWvjsBuhYWm9kF3")
         viewModel.viewState.observe(viewLifecycleOwner, Observer {
             val state = it ?: ""
@@ -138,20 +138,29 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
                 SelectGigAppViewState.NoGigAppsFound -> showNoGigAppsFound()
             }
         })
+        viewModel.selectedIndex.observe(viewLifecycleOwner, Observer {
+            submitBtn.isEnabled = it == -1
+        })
+        viewModel.selectedJobProfileOverview.observe(viewLifecycleOwner, Observer {
+            logger.d(TAG, "selected job profile $it")
+            submitBtn.text = if (it.ongoing!!) "Share Referral Link" else "Next"
+        })
     }
 
     private fun initListeners() {
         viewBinding.submitBtn.setOnClickListener {
-            viewModel.getSelectedJobProfile().let {
-                assignGigRequest.jobProfileId = it.jobProfileId
-                assignGigRequest.jobProfileName = it.profileName.toString()
-                assignGigRequest.companyLogo = it.companyLogo.toString()
-                //logger.d(TAG, "Company logo: ${assignGigRequest.companyLogo}")
-                navigation.navigateTo(LeadManagementNavDestinations.FRAGMENT_SELECT_GIG_LOCATION, bundleOf(
-                    LeadManagementConstants.INTENT_EXTRA_USER_ID to userUid,
-                    LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL to assignGigRequest
-                )
-                )
+            if (viewModel.getSelectedIndex() != -1){
+                viewModel.getSelectedJobProfile().let {
+                    assignGigRequest.jobProfileId = it.jobProfileId
+                    assignGigRequest.jobProfileName = it.profileName.toString()
+                    assignGigRequest.companyLogo = it.companyLogo.toString()
+                    //logger.d(TAG, "Company logo: ${assignGigRequest.companyLogo}")
+                    navigation.navigateTo(LeadManagementNavDestinations.FRAGMENT_SELECT_GIG_LOCATION, bundleOf(
+                        LeadManagementConstants.INTENT_EXTRA_USER_ID to userUid,
+                        LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL to assignGigRequest
+                    )
+                    )
+                }
             }
         }
 
