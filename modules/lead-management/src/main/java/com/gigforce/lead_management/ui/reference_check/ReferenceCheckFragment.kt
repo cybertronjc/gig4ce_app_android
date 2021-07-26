@@ -2,6 +2,7 @@ package com.gigforce.lead_management.ui.reference_check
 
 import android.os.Bundle
 import androidx.fragment.app.viewModels
+import com.gigforce.common_ui.viewdatamodels.GigerProfileCardDVM
 import com.gigforce.common_ui.viewdatamodels.leadManagement.AssignGigRequest
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.gone
@@ -25,6 +26,8 @@ class ReferenceCheckFragment : BaseFragment2<ReferenceCheckFragmentBinding>(
     //Data
     private lateinit var userUid: String
     private lateinit var assignGigRequest: AssignGigRequest
+    private lateinit var currentGigerInfo: GigerProfileCardDVM
+
     private val viewModel: ReferenceCheckViewModel by viewModels()
 
     override fun viewCreated(
@@ -37,8 +40,15 @@ class ReferenceCheckFragment : BaseFragment2<ReferenceCheckFragmentBinding>(
             savedInstanceState
         )
         initToolbar(viewBinding)
+        initUi(viewBinding)
         initListeners(viewBinding)
         initViewModel()
+    }
+
+    private fun initUi(
+        viewBinding: ReferenceCheckFragmentBinding
+    ) = viewBinding.apply {
+        gigerProfileCard.setProfileCard(currentGigerInfo)
     }
 
     private fun getDataFrom(
@@ -48,12 +58,22 @@ class ReferenceCheckFragment : BaseFragment2<ReferenceCheckFragmentBinding>(
 
         arguments?.let {
             userUid = it.getString(LeadManagementConstants.INTENT_EXTRA_USER_ID) ?: return@let
-            assignGigRequest = it.getParcelable(LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL) ?: return@let
+            assignGigRequest =
+                it.getParcelable(LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL)
+                    ?: return@let
+            currentGigerInfo =
+                it.getParcelable(LeadManagementConstants.INTENT_EXTRA_CURRENT_JOINING_USER_INFO)
+                    ?: return@let
         }
 
         savedInstanceState?.let {
             userUid = it.getString(LeadManagementConstants.INTENT_EXTRA_USER_ID) ?: return@let
-            assignGigRequest = it.getParcelable(LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL) ?: return@let
+            assignGigRequest =
+                it.getParcelable(LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL)
+                    ?: return@let
+            currentGigerInfo =
+                it.getParcelable(LeadManagementConstants.INTENT_EXTRA_CURRENT_JOINING_USER_INFO)
+                    ?: return@let
         }
 
         logDataReceivedFromBundles()
@@ -77,6 +97,14 @@ class ReferenceCheckFragment : BaseFragment2<ReferenceCheckFragmentBinding>(
                 Exception("null assignGigRequest received from bundles")
             )
         }
+
+        if (::currentGigerInfo.isInitialized.not()) {
+            logger.e(
+                logTag,
+                "null currentGigerInfo received from bundles",
+                Exception("null currentGigerInfo received from bundles")
+            )
+        }
     }
 
     override fun onSaveInstanceState(
@@ -84,7 +112,14 @@ class ReferenceCheckFragment : BaseFragment2<ReferenceCheckFragmentBinding>(
     ) {
         super.onSaveInstanceState(outState)
         outState.putString(LeadManagementConstants.INTENT_EXTRA_USER_ID, userUid)
-        outState.putParcelable(LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL, assignGigRequest)
+        outState.putParcelable(
+            LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL,
+            assignGigRequest
+        )
+        outState.putParcelable(
+            LeadManagementConstants.INTENT_EXTRA_CURRENT_JOINING_USER_INFO,
+            currentGigerInfo
+        )
     }
 
     private fun initToolbar(
@@ -169,7 +204,7 @@ class ReferenceCheckFragment : BaseFragment2<ReferenceCheckFragmentBinding>(
         nameValidationError: String?,
         relationValidationError: String?,
         contactValidationError: String?
-    ) = viewBinding.apply{
+    ) = viewBinding.apply {
 
         if (nameValidationError != null) {
             nameErrorTv.visible()

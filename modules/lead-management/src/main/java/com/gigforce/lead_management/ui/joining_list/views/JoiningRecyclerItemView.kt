@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.RelativeLayout
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import com.gigforce.common_ui.viewdatamodels.GigerProfileCardDVM
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JoiningStatus
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.navigation.INavigation
@@ -16,7 +17,6 @@ import com.gigforce.lead_management.LeadManagementConstants
 import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.RecyclerRowJoiningItemBinding
-import com.gigforce.lead_management.models.CurrentUserInfo
 import com.gigforce.lead_management.models.JoiningListRecyclerItemData
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -191,14 +191,13 @@ class JoiningRecyclerItemView(
 
     private fun prepareCurrentUserInfo(
         currentViewData: JoiningListRecyclerItemData.JoiningListRecyclerJoiningItemData
-    ): CurrentUserInfo {
-        return CurrentUserInfo(
-            userName = currentViewData.userName,
-            userProfilePicture = currentViewData.userProfilePicture,
-            userProfilePictureThumbnail = currentViewData.userProfilePictureThumbnail,
-            userMobileNo = currentViewData.userProfilePhoneNumber,
+    ): GigerProfileCardDVM {
+        return GigerProfileCardDVM(
+            name = currentViewData.userName,
+            gigerImg = currentViewData.userProfilePicture,
+            number = currentViewData.userProfilePhoneNumber,
             jobProfileName = currentViewData.jobProfileName,
-            jobProfileIcon = currentViewData.jobProfileIcon
+            jobProfileLogo = currentViewData.jobProfileIcon
         )
     }
 
