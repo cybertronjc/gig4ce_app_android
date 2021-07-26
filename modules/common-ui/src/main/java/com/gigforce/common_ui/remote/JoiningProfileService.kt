@@ -15,9 +15,9 @@ interface JoiningProfileService {
         @Query("userUid") userUid: String?
     ): Response<List<JobProfileOverview>>
 
-    @GET
+    @GET("gigs/jobprofiles/{jobProfileId}")
     suspend fun getProfileDetails(
-        @Query("jobProfileId") jobProfileId: String,
+        @Path("jobProfileId") jobProfileId: String,
         @Query("tlUid") tlUid: String,
         @Query("userUid") userUid: String
     ): Response<JobProfileDetails>

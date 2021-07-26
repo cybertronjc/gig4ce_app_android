@@ -1,11 +1,12 @@
 package com.gigforce.lead_management.models
 
 import com.gigforce.core.SimpleDVM
+import com.gigforce.lead_management.gigeronboarding.SelectGigApplicationToActivateViewModel
 import com.gigforce.lead_management.views.LeadActivationViewTypes
 
 open class GigAppListRecyclerItemData(
     val type: Int
-) : SimpleDVM(type) {
+) : SimpleDVM(type, onClickNavPath = null) {
 
     data class GigAppListStatusRecyclerItemData(
         val status: String
@@ -14,20 +15,27 @@ open class GigAppListRecyclerItemData(
     )
 
     data class GigAppRecyclerItemData(
-        val userUid: String,
         val status: String,
-        val businessName: String,
-        val jobProfileTitle: String,
-        val businessLogo: String,
-        val businessLogoThumbnail: String,
-        val isSelected : Boolean
+        val jobProfileId: String,
+        val tradeName: String,
+        val profileName: String,
+        val companyLogo: String,
+        var selected: Boolean = false,
+        val selectGigAppViewModel: SelectGigApplicationToActivateViewModel
     ) : GigAppListRecyclerItemData(
         LeadActivationViewTypes.GigAppList
     )
 
     data class GigAppListSearchRecyclerItemData(
-        val search: String
+        val search: String,
+        val selectGigAppViewModel: SelectGigApplicationToActivateViewModel
     ) : GigAppListRecyclerItemData(
         LeadActivationViewTypes.GigAppListSearch
+    )
+
+    data class NoGigAppsFoundItemData(
+        val message: String
+    ) : GigAppListRecyclerItemData(
+        LeadActivationViewTypes.NoGigAppsFound
     )
 }
