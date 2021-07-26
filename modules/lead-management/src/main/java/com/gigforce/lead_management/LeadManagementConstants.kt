@@ -14,4 +14,7 @@ object LeadManagementConstants {
     const val INTENT_EXTRA_JOB_PROFILE_ID = "job_profile_id"
     const val INTENT_EXTRA_JOB_PROFILE_NAME = "job_profile_name"
     const val INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL = "assign_gig_request_model"
+
+    const val INTENT_EXTRA_SHARE_TYPE = "share_type"
+    const val INTENT_EXTRA_JOINING_ID = "joining_id"
 }

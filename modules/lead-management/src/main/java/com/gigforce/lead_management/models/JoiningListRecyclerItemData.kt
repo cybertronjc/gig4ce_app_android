@@ -14,7 +14,8 @@ open class JoiningListRecyclerItemData(
     )
 
     data class JoiningListRecyclerJoiningItemData(
-        val userUid: String,
+        val joiningId :String,
+        val userUid: String?,
         val userName: String,
         val userProfilePicture: String,
         val userProfilePhoneNumber: String,

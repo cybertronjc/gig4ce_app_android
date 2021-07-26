@@ -7,14 +7,20 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.RelativeLayout
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JoiningStatus
 import com.gigforce.core.IViewHolder
+import com.gigforce.core.navigation.INavigation
+import com.gigforce.lead_management.LeadManagementConstants
+import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.RecyclerRowJoiningItemBinding
 import com.gigforce.lead_management.models.JoiningListRecyclerItemData
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class JoiningRecyclerItemView(
     context: Context,
     attrs: AttributeSet?
@@ -23,6 +29,8 @@ class JoiningRecyclerItemView(
     attrs
 ), IViewHolder, View.OnClickListener {
 
+    @Inject
+    lateinit var navigation: INavigation
     private lateinit var viewBinding: RecyclerRowJoiningItemBinding
     private var viewData: JoiningListRecyclerItemData.JoiningListRecyclerJoiningItemData? = null
 
@@ -133,12 +141,41 @@ class JoiningRecyclerItemView(
     override fun onClick(v: View?) {
         val currentViewData = viewData ?: return
 
-        val intent =
-            Intent(
-                Intent.ACTION_DIAL,
-                Uri.fromParts("tel", currentViewData.userProfilePhoneNumber, null)
-            )
-        context.startActivity(intent)
+        if (v?.id == R.id.call_giger_btn) {
+
+            val intent =
+                Intent(
+                    Intent.ACTION_DIAL,
+                    Uri.fromParts("tel", currentViewData.userProfilePhoneNumber, null)
+                )
+            context.startActivity(intent)
+        } else {
+            if (currentViewData.status.isEmpty())
+                return
+
+
+            when (JoiningStatus.fromValue(currentViewData.status)) {
+                JoiningStatus.SIGN_UP_PENDING, JoiningStatus.JOINED -> {
+                }
+                JoiningStatus.APPLICATION_PENDING -> {
+                    //navigate to applications screen
+                    navigation.navigateTo(
+                        LeadManagementNavDestinations.FRAGMENT_SELECT_GIG_TO_ACTIVATE,
+                        bundleOf(
+                            LeadManagementConstants.INTENT_EXTRA_JOINING_ID to currentViewData.joiningId
+                        )
+                    )
+                }
+                JoiningStatus.JOINING_PENDING -> {
+                    navigation.navigateTo(
+                        LeadManagementNavDestinations.FRAGMENT_SELECT_GIG_LOCATION,
+                        bundleOf(
+                            LeadManagementConstants.INTENT_EXTRA_JOINING_ID to currentViewData.joiningId
+                        )
+                    )
+                }
+            }
+        }
     }
 
     fun getGigDataOrThrow(): JoiningListRecyclerItemData.JoiningListRecyclerJoiningItemData {

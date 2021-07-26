@@ -2,11 +2,14 @@ package com.gigforce.lead_management.repositories
 
 import com.gigforce.common_ui.ext.bodyOrThrow
 import com.gigforce.common_ui.remote.JoiningProfileService
-import com.gigforce.common_ui.viewdatamodels.leadManagement.AssignGigRequest
-import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfileDetails
-import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfileOverview
+import com.gigforce.common_ui.viewdatamodels.leadManagement.*
+import com.gigforce.core.extensions.addOrThrow
+import com.gigforce.core.extensions.getOrThrow
 import com.gigforce.core.extensions.updateOrThrow
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
+import com.gigforce.lead_management.exceptions.TryingToDowngradeJoiningStatusException
+import com.gigforce.lead_management.exceptions.UserDoesNotExistInProfileException
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -94,4 +97,277 @@ class LeadManagementRepository @Inject constructor(
         assignGigRequest: AssignGigRequest
     ) = joiningProfileRemoteService.createGigs(assignGigRequest)
         .bodyOrThrow()
+
+    suspend fun createOrUpdateJoiningDocumentWithStatusSignUpPending(
+        userUid: String,
+        name: String,
+        phoneNumber: String,
+        jobProfileId: String,
+        jobProfileName: String,
+        signUpMode: String,
+        lastStatusChangeSource: String
+    ) {
+
+        val getJobProfileLink = joiningsCollectionRef
+            .whereEqualTo(
+                "joiningTLUid",
+                firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow().uid
+            )
+            .whereEqualTo("phoneNumber", phoneNumber)
+            .whereEqualTo("jobProfileId", jobProfileId)
+            .getOrThrow()
+
+        if (!getJobProfileLink.isEmpty) {
+
+            val firstJoiningId = getJobProfileLink.first().id
+            val existingJoiningStatus = getJobProfileLink.first().getString("status")
+
+            if (existingJoiningStatus != null &&
+                isExistingStatusHigherThan(
+                    existingStatusString = existingJoiningStatus,
+                    newStatus = JoiningStatus.SIGN_UP_PENDING
+                )
+            ) {
+                throw TryingToDowngradeJoiningStatusException(
+                    documentId = firstJoiningId,
+                    existingStatus = existingJoiningStatus,
+                    newStatus = JoiningStatus.SIGN_UP_PENDING.getStatusString()
+                )
+            }
+
+            joiningsCollectionRef
+                .document(firstJoiningId)
+                .updateOrThrow(
+                    mapOf(
+                        "updatedOn" to Timestamp.now(),
+                        "status" to JoiningStatus.SIGN_UP_PENDING.getStatusString(),
+                        "lastStatusChangeSource" to lastStatusChangeSource,
+                        "jobProfileIdInvitedFor" to jobProfileId,
+                        "jobProfileNameInvitedFor" to jobProfileName,
+                        "signUpMode" to signUpMode,
+                        "name" to name,
+                        "uid" to userUid
+                    )
+                )
+
+        } else {
+            joiningsCollectionRef.addOrThrow(
+                Joining(
+                    uid = userUid,
+                    joiningStartedOn = Timestamp.now(),
+                    updatedOn = Timestamp.now(),
+                    joiningTLUid = firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow().uid,
+                    status = JoiningStatus.SIGN_UP_PENDING.getStatusString(),
+                    name = name,
+                    phoneNumber = phoneNumber,
+                    profilePicture = null,
+                    profilePictureThumbnail = null,
+                    jobProfileIdInvitedFor = jobProfileId,
+                    jobProfileNameInvitedFor = jobProfileName,
+                    signUpMode = signUpMode,
+                    lastStatusChangeSource = lastStatusChangeSource
+                )
+            )
+        }
+    }
+
+    @Throws(UserDoesNotExistInProfileException::class)
+    suspend fun createOrUpdateJoiningDocumentWithApplicationPending(
+        userUid: String,
+        name: String,
+        jobProfileId: String,
+        jobProfileName: String,
+        phoneNumber: String = "",
+        lastStatusChangeSource: String
+    ) {
+        val getProfileForUid = profileCollectionRef
+            .document(userUid)
+            .getOrThrow()
+
+        if (!getProfileForUid.exists()) {
+            throw UserDoesNotExistInProfileException(userUid)
+        }
+
+        val userMobileNo: String = if (phoneNumber.isEmpty()) {
+            getProfileForUid.get("loginMobile") as String
+        } else {
+            phoneNumber
+        }
+
+        val getJobProfileLink = joiningsCollectionRef
+            .whereEqualTo(
+                "joiningTLUid",
+                firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow().uid
+            )
+            .whereEqualTo("phoneNumber", userMobileNo)
+            .whereEqualTo("jobProfileId", jobProfileId)
+            .getOrThrow()
+
+        if (getJobProfileLink.isEmpty) {
+
+            joiningsCollectionRef.addOrThrow(
+                Joining(
+                    uid = userUid,
+                    joiningStartedOn = Timestamp.now(),
+                    updatedOn = Timestamp.now(),
+                    joiningTLUid = firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow().uid,
+                    status = JoiningStatus.APPLICATION_PENDING.getStatusString(),
+                    name = name,
+                    phoneNumber = userMobileNo,
+                    profilePicture = null,
+                    profilePictureThumbnail = null,
+                    jobProfileIdInvitedFor = jobProfileId,
+                    jobProfileNameInvitedFor = jobProfileName,
+                    signUpMode = null,
+                    lastStatusChangeSource = lastStatusChangeSource
+                )
+            )
+        } else {
+            val existingJoiningId = getJobProfileLink.first().id
+            val existingJoiningStatus = getJobProfileLink.first().getString("status")
+
+            if (existingJoiningStatus != null &&
+                isExistingStatusHigherThan(
+                    existingStatusString = existingJoiningStatus,
+                    newStatus = JoiningStatus.APPLICATION_PENDING
+                )
+            ) {
+                throw TryingToDowngradeJoiningStatusException(
+                    documentId = existingJoiningId,
+                    existingStatus = existingJoiningStatus,
+                    newStatus = JoiningStatus.APPLICATION_PENDING.getStatusString()
+                )
+            }
+
+
+            joiningsCollectionRef
+                .document(existingJoiningId)
+                .updateOrThrow(
+                    mapOf(
+                        "updatedOn" to Timestamp.now(),
+                        "status" to JoiningStatus.APPLICATION_PENDING.getStatusString(),
+                        "lastStatusChangeSource" to lastStatusChangeSource
+                    )
+                )
+        }
+    }
+
+
+    @Throws(UserDoesNotExistInProfileException::class)
+    suspend fun createOrUpdateJoiningDocumentWithJoiningPending(
+        userUid: String,
+        name: String,
+        jobProfileId: String,
+        jobProfileName: String,
+        phoneNumber: String = "",
+        lastStatusChangeSource: String
+    ) {
+        val getProfileForUid = profileCollectionRef
+            .document(userUid)
+            .getOrThrow()
+
+        if (!getProfileForUid.exists()) {
+            throw UserDoesNotExistInProfileException(userUid)
+        }
+
+        val userMobileNo: String = if (phoneNumber.isEmpty()) {
+            getProfileForUid.get("loginMobile") as String
+        } else {
+            phoneNumber
+        }
+
+        val getJobProfileLink = joiningsCollectionRef
+            .whereEqualTo(
+                "joiningTLUid",
+                firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow().uid
+            )
+            .whereEqualTo("phoneNumber", userMobileNo)
+            .whereEqualTo("jobProfileId", jobProfileId)
+            .getOrThrow()
+
+        if (getJobProfileLink.isEmpty) {
+
+            joiningsCollectionRef.addOrThrow(
+                Joining(
+                    uid = userUid,
+                    joiningStartedOn = Timestamp.now(),
+                    updatedOn = Timestamp.now(),
+                    joiningTLUid = firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow().uid,
+                    status = JoiningStatus.JOINING_PENDING.getStatusString(),
+                    name = name,
+                    phoneNumber = userMobileNo,
+                    profilePicture = null,
+                    profilePictureThumbnail = null,
+                    jobProfileIdInvitedFor = jobProfileId,
+                    jobProfileNameInvitedFor = jobProfileName,
+                    signUpMode = null,
+                    lastStatusChangeSource = lastStatusChangeSource
+                )
+            )
+        } else {
+            val existingJoiningId = getJobProfileLink.first().id
+            val existingJoiningStatus = getJobProfileLink.first().getString("status")
+
+            if (existingJoiningStatus != null &&
+                isExistingStatusHigherThan(
+                    existingStatusString = existingJoiningStatus,
+                    newStatus = JoiningStatus.JOINING_PENDING
+                )
+            ) {
+                throw TryingToDowngradeJoiningStatusException(
+                    documentId = existingJoiningId,
+                    existingStatus = existingJoiningStatus,
+                    newStatus = JoiningStatus.JOINING_PENDING.getStatusString()
+                )
+            }
+
+            joiningsCollectionRef
+                .document(existingJoiningId)
+                .updateOrThrow(
+                    mapOf(
+                        "updatedOn" to Timestamp.now(),
+                        "status" to JoiningStatus.JOINING_PENDING.getStatusString(),
+                        "lastStatusChangeSource" to lastStatusChangeSource
+                    )
+                )
+        }
+    }
+
+    private fun isExistingStatusHigherThan(
+        existingStatusString: String,
+        newStatus: JoiningStatus
+    ): Boolean {
+
+        if (existingStatusString.isEmpty())
+            return false
+
+        val existingStatus = JoiningStatus.fromValue(existingStatusString)
+        if (existingStatus == JoiningStatus.JOINED) {
+
+            return newStatus != JoiningStatus.JOINED
+        } else if (existingStatus == JoiningStatus.JOINING_PENDING) {
+
+            return newStatus == JoiningStatus.APPLICATION_PENDING ||
+                    newStatus == JoiningStatus.SIGN_UP_PENDING
+
+        } else if (existingStatus == JoiningStatus.APPLICATION_PENDING) {
+
+            return newStatus == JoiningStatus.SIGN_UP_PENDING
+        } else {
+            return false
+        }
+    }
+
+     suspend fun sendReferralLink(
+        referralType: String,
+        mobileNumber: String,
+        jobProfileName: String,
+        name: String,
+        shareLink :String
+    ) {
+
+
+
+    }
+
 }

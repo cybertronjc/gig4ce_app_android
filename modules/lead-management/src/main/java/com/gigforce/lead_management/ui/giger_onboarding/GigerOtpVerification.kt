@@ -125,7 +125,7 @@ class GigerOtpVerification : BaseFragment2<FragmentGigerOtpVerificationBinding>(
     }
 
     private fun initViewModel() {
-            viewModel.verifyOtp.observe(viewLifecycleOwner, Observer {
+            viewModel.verifyOtp.observe(viewLifecycleOwner, {
 
                 when (it) {
                     Lce.Loading -> {

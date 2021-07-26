@@ -19,21 +19,7 @@ import java.time.Duration
 import java.time.LocalDate
 import javax.inject.Inject
 
-sealed class JoiningListViewState {
 
-    object LoadingDataFromServer : JoiningListViewState()
-
-    object NoJoiningFound : JoiningListViewState()
-
-    data class ErrorInLoadingDataFromServer(
-        val error: String,
-        val shouldShowErrorButton: Boolean
-    ) : JoiningListViewState()
-
-    data class JoiningListLoaded(
-        val joiningList: List<JoiningListRecyclerItemData>
-    ) : JoiningListViewState()
-}
 
 @HiltViewModel
 class JoiningListViewModel @Inject constructor(
@@ -188,10 +174,10 @@ class JoiningListViewModel @Inject constructor(
                 }
             }
             JoiningStatus.APPLICATION_PENDING -> {
-                if (it.applicationNameInvitedFor != null) {
+                if (it.jobProfileNameInvitedFor != null) {
                     "No Application Link shared yet"
-                } else if(it.applicationNameInvitedFor != null){
-                    "${it.applicationNameInvitedFor} invite sent ${getDateDifferenceFormatted(it.updatedOn)}"
+                } else if(it.jobProfileNameInvitedFor != null){
+                    "${it.jobProfileNameInvitedFor} invite sent ${getDateDifferenceFormatted(it.updatedOn)}"
                 } else {
                     "Application Pending"
                 }

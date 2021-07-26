@@ -7,10 +7,9 @@ import com.google.firebase.firestore.PropertyName
 
 data class Joining(
 
-	@DocumentId
 	@get:PropertyName("uid")
 	@set:PropertyName("uid")
-	var uid: String = "",
+	var uid: String? = null,
 
 	@get:PropertyName("joiningStartedOn")
 	@set:PropertyName("joiningStartedOn")
@@ -44,21 +43,21 @@ data class Joining(
 	@set:PropertyName("profilePictureThumbnail")
 	var profilePictureThumbnail: String? = null,
 
-	@get:PropertyName("appInviteSentTimestamp")
-	@set:PropertyName("appInviteSentTimestamp")
-	var appInviteSentTimestamp:  Timestamp? = null,
+	@get:PropertyName("jobProfileIdInvitedFor")
+	@set:PropertyName("jobProfileIdInvitedFor")
+	var jobProfileIdInvitedFor:  String? = null,
 
-	@get:PropertyName("applicationInviteSentTimeStamp")
-	@set:PropertyName("applicationInviteSentTimeStamp")
-	var applicationInviteSentTimeStamp:  Timestamp? = null,
-
-	@get:PropertyName("applicationNameInvitedFor")
-	@set:PropertyName("applicationNameInvitedFor")
-	var applicationNameInvitedFor:  String? = null,
+	@get:PropertyName("jobProfileNameInvitedFor")
+	@set:PropertyName("jobProfileNameInvitedFor")
+	var jobProfileNameInvitedFor:  String? = null,
 
 	@get:PropertyName("signUpMode")
 	@set:PropertyName("signUpMode")
 	var signUpMode: String? = null,
+
+	@get:PropertyName("lastStatusChangeSource")
+	@set:PropertyName("lastStatusChangeSource")
+	var lastStatusChangeSource: String? = null,
 ) {
 
 	@Exclude
