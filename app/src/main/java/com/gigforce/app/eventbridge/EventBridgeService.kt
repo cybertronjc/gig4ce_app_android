@@ -9,8 +9,5 @@ import retrofit2.http.Url
 
 interface EventBridgeService {
     @POST
-    suspend fun setStatus(@Url url : String, @Body data : EventBridgeModel)
-
-    @POST
     suspend fun setMapStatus(@Url url : String, @Body data : JsonObject)
 }
