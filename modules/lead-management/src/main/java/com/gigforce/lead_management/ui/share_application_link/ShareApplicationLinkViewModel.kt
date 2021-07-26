@@ -109,13 +109,13 @@ class ShareApplicationLinkViewModel @Inject constructor(
 
 
     fun selectJobProfile(
-        jobProfile: JobProfileOverview
+        jobProfileId: String
     ) {
-        logger.d(TAG, "selecting job profile ${jobProfile.jobProfileId}...")
+        logger.d(TAG, "selecting job profile $jobProfileId...")
 
         if (currentlySelectedGigIndex == -1) {
             currentlySelectedGigIndex = jobProfilesShownOnView.indexOfFirst {
-                it.jobProfileId == jobProfile.jobProfileId
+                it.jobProfileId == jobProfileId
             }
             logger.d(
                 TAG,
@@ -128,7 +128,7 @@ class ShareApplicationLinkViewModel @Inject constructor(
         } else {
 
             val newSelectedItemIndex = jobProfilesShownOnView.indexOfFirst {
-                it.jobProfileId == jobProfile.jobProfileId
+                it.jobProfileId == jobProfileId
             }
 
             if (newSelectedItemIndex == currentlySelectedGigIndex) {

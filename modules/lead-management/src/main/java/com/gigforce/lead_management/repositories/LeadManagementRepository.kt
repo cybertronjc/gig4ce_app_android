@@ -3,8 +3,15 @@ package com.gigforce.lead_management.repositories
 import com.gigforce.common_ui.ext.bodyOrThrow
 import com.gigforce.common_ui.remote.JoiningProfileService
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
+import com.gigforce.core.datamodels.ambassador.*
+import com.gigforce.core.datamodels.auth.UserAuthStatusModel
+import com.gigforce.core.datamodels.profile.Contact
+import com.gigforce.core.datamodels.profile.EnrollmentInfo
+import com.gigforce.core.datamodels.profile.ProfileData
+import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.addOrThrow
 import com.gigforce.core.extensions.getOrThrow
+import com.gigforce.core.extensions.setOrThrow
 import com.gigforce.core.extensions.updateOrThrow
 import com.gigforce.core.retrofit.CreateUserAccEnrollmentAPi
 import com.gigforce.core.retrofit.RetrofitFactory
@@ -12,6 +19,7 @@ import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.lead_management.exceptions.TryingToDowngradeJoiningStatusException
 import com.gigforce.lead_management.exceptions.UserDoesNotExistInProfileException
 import com.google.firebase.Timestamp
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -22,7 +30,7 @@ class LeadManagementRepository @Inject constructor(
     private val firebaseFirestore: FirebaseFirestore,
     private val firebaseAuthStateListener: FirebaseAuthStateListener,
     private val joiningProfileRemoteService: JoiningProfileService,
-    private val buildConfig: IBuildConfigVM
+    private val buildConfig: IBuildConfig
 ) {
 
 
@@ -455,19 +463,16 @@ class LeadManagementRepository @Inject constructor(
         uid: String,
         mobile: String,
         enrolledByName: String
-
     ) {
 
         val profileData = ProfileData(
             loginMobile = "+91${mobile}",
-            contact = ArrayList(
-                listOf(
+            contact = arrayListOf(
                     Contact(
                         phone = "+91${mobile}",
                         email = "",
                     )
-                )
-            ),
+                ),
             createdOn = Timestamp.now(),
             enrolledBy = EnrollmentInfo(
                 id = uid,

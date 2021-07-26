@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.RelativeLayout
+import androidx.core.content.res.ResourcesCompat
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.shimmer.ShimmerHelper
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfileOverview
@@ -17,7 +18,9 @@ import com.gigforce.core.extensions.visible
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.SelectGigApplicationItemLayoutBinding
 import com.gigforce.lead_management.databinding.SelectGigApplicationSearchItemLayoutBinding
+import com.gigforce.lead_management.gigeronboarding.SelectGigApplicationToActivateViewModel
 import com.gigforce.lead_management.models.GigAppListRecyclerItemData
+import com.gigforce.lead_management.ui.share_application_link.ShareApplicationLinkViewModel
 
 
 class GigAppListRecyclerItemView  (
@@ -27,9 +30,11 @@ class GigAppListRecyclerItemView  (
     context,
     attrs
     ), IViewHolder, View.OnClickListener {
-    private var viewBinding: SelectGigApplicationItemLayoutBinding
-    private var viewData: GigAppListRecyclerItemData.GigAppRecyclerItemData? = null
 
+    private var viewBinding: SelectGigApplicationItemLayoutBinding
+    private lateinit var viewData: GigAppListRecyclerItemData.GigAppRecyclerItemData
+    private var shareApplicationLinkViewModel : ShareApplicationLinkViewModel? = null
+    private var selectGigApplicationToActivateViewModel : SelectGigApplicationToActivateViewModel? = null
 
 
     init {
@@ -43,15 +48,18 @@ class GigAppListRecyclerItemView  (
             this,
             true
         )
+        viewBinding.rootCardView.setOnClickListener(this)
+        viewBinding.root.setOnClickListener(this)
     }
 
     override fun bind(data: Any?) {
-        viewData = null
 
         data?.let {
             val gigApplicationData =
                 it as GigAppListRecyclerItemData.GigAppRecyclerItemData
             viewData = gigApplicationData
+            shareApplicationLinkViewModel = gigApplicationData.shareApplicationLinkViewModel
+            selectGigApplicationToActivateViewModel = gigApplicationData.selectGigAppViewModel
 
             viewBinding.companyName.text = gigApplicationData.tradeName
             viewBinding.jobProfileTitle.text = gigApplicationData.profileName
@@ -61,27 +69,15 @@ class GigAppListRecyclerItemView  (
             )
             setStatus(gigApplicationData.status)
             setViewSelected(gigApplicationData.selected)
-
-            viewBinding.root.setOnClickListener {
-//                if (gigApplicationData.selected){
-//                    gigApplicationData.selected = false
-//                    setViewSelected(gigApplicationData.selected)
-//                } else {
-//                    gigApplicationData.selected = true
-//                    setViewSelected(gigApplicationData.selected)
-//                }
-                gigApplicationData.selectGigAppViewModel.selectJobProfile(gigApplicationData)
-            }
-           
         }
     }
 
     private fun setViewSelected(isSelected: Boolean){
 
         if (isSelected){
-            viewBinding.root.background = resources.getDrawable(R.drawable.background_layout_selector)
+            viewBinding.root.background = ResourcesCompat.getDrawable(context.resources,R.drawable.background_layout_selector,null)
         } else {
-            viewBinding.root.background = resources.getDrawable(R.drawable.giger_profile_card_background)
+            viewBinding.root.background = ResourcesCompat.getDrawable(context.resources,R.drawable.giger_profile_card_background,null)
         }
     }
 
@@ -107,7 +103,11 @@ class GigAppListRecyclerItemView  (
     }
 
     override fun onClick(p0: View?) {
+        shareApplicationLinkViewModel?.selectJobProfile(
+            viewData.jobProfileId
+        )
 
+        selectGigApplicationToActivateViewModel?.selectJobProfile(viewData)
     }
 
 }

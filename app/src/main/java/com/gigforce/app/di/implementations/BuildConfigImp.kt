@@ -17,4 +17,5 @@ class BuildConfigImp @Inject constructor(): IBuildConfig {
     override fun getFeaturesIconLocationUrl(): String = BuildConfig.ALL_FEATURES_ICONS_STORAGE_URL
     override val debugBuild: Boolean get() = BuildConfig.DEBUG
     override val baseUrl: String get() = BuildConfig.BASE_URL
+    override fun getUserRegisterInfoUrl(): String = BuildConfig.GET_USER_REGISTER_INFO_URL
 }

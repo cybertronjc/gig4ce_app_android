@@ -18,6 +18,7 @@ import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
+import com.gigforce.common_ui.viewdatamodels.GigerProfileCardDVM
 import com.gigforce.common_ui.viewdatamodels.leadManagement.AssignGigRequest
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfileDetails
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JobShift
@@ -60,6 +61,8 @@ class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
     private val viewModel: ShiftTimingViewModel by viewModels()
     private lateinit var userUid: String
     private lateinit var assignGigRequest: AssignGigRequest
+    private var currentGigerInfo: GigerProfileCardDVM? = null
+
     val selectedShifts = arrayListOf<JobShift>()
     var shiftChips = arrayListOf<ChipGroupModel>()
     var shifts = listOf<JobShift>()
@@ -180,10 +183,13 @@ class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
             expectedStartDatePicker.show()
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            gigerProfileCard.setGigerProfileData(userUid)
+        if (currentGigerInfo != null) {
+            viewBinding.gigerProfileCard.setProfileCard(currentGigerInfo!!)
+        } else {
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewBinding.gigerProfileCard.setGigerProfileData(userUid)
+            }
         }
-        viewBinding.gigerProfileCard.setJobProfileData(assignGigRequest.jobProfileName, assignGigRequest.companyLogo)
 
     }
 

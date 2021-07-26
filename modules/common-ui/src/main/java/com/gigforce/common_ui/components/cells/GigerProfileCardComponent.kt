@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 import com.gigforce.common_ui.shimmer.ShimmerHelper
+import com.gigforce.common_ui.viewdatamodels.GigerProfileCardDVM
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.invisible
 import com.gigforce.core.extensions.visible
@@ -112,7 +113,7 @@ class GigerProfileCardComponent(context: Context, attrs: AttributeSet?) : FrameL
         setJobProfileLogo(companyLogo)
     }
 
-//    fun setProfileCard(gigerProfileCardDVM: GigerProfileCardDVM){
+    fun setProfileCard(gigerProfileCardDVM: GigerProfileCardDVM){
 //        gigerProfileCardDVM?.let {
 //            viewBinding.gigerName.text = it.name
 //            viewBinding.gigerNumber.text = it.number
@@ -120,5 +121,5 @@ class GigerProfileCardComponent(context: Context, attrs: AttributeSet?) : FrameL
 //            setProfilePicture(it.gigerImg)
 //            setJobProfileLogo(it.jobProfileLogo)
 //        }
-//    }
+    }
 }

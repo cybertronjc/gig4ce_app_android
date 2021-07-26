@@ -5,9 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.repository.ProfileFirebaseRepository
-import com.gigforce.core.datamodels.auth.UserAuthStatusModel
+import com.gigforce.common_ui.viewdatamodels.leadManagement.JoiningSignUpInitiatedMode
 import com.gigforce.core.datamodels.ambassador.CreateUserResponse
 import com.gigforce.core.datamodels.ambassador.RegisterMobileNoResponse
+import com.gigforce.core.datamodels.auth.UserAuthStatusModel
 import com.gigforce.core.datamodels.login.LoginResponse
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.logger.GigforceLogger
@@ -56,7 +57,8 @@ class GigerOnboardingViewModel @Inject constructor(
         } catch (e: Exception) {
             e.printStackTrace()
             logger.d(TAG, "Unable to check if number is already registered", e.toString())
-            _numberRegistered.value = Lce.error(e.message ?: "Unable to check if number already registered")
+            _numberRegistered.value =
+                Lce.error(e.message ?: "Unable to check if number already registered")
         }
     }
 
@@ -67,7 +69,10 @@ class GigerOnboardingViewModel @Inject constructor(
         _checkMobileNo.postValue(Lce.loading())
         try {
             val repsonse =
-                leadManagementRepository.checkMobileForExistingRegistrationElseSendOtp(mobileNo,  buildConfig.getVerifyOTPURL())
+                leadManagementRepository.checkMobileForExistingRegistrationElseSendOtp(
+                    mobileNo,
+                    buildConfig.getVerifyOTPURL()
+                )
             _checkMobileNo.value = Lce.content(repsonse)
         } catch (e: Exception) {
             e.printStackTrace()
@@ -89,18 +94,28 @@ class GigerOnboardingViewModel @Inject constructor(
         try {
             _verifyOtp.value = Lce.loading()
 
-                val verifyOtpResponse = leadManagementRepository.verifyOtp(token, otp)
+            val verifyOtpResponse = leadManagementRepository.verifyOtp(token, otp)
 
-                if (verifyOtpResponse.isVerified) {
-                    val profile = profileFirebaseRepository.getProfileData()
-                    val response = leadManagementRepository.createUser(
-                        mobile = mobile,
-                        enrolledByName = profile.name
-                    )
-                    _verifyOtp.value = Lce.content(response)
-                } else {
-                    _verifyOtp.value = Lce.error("Otp does not match")
-                }
+            if (verifyOtpResponse.isVerified) {
+                val profile = profileFirebaseRepository.getProfileData()
+                val response = leadManagementRepository.createUser(
+                    mobile = mobile,
+                    enrolledByName = profile.name
+                )
+                leadManagementRepository.createOrUpdateJoiningDocumentWithStatusSignUpPending(
+                    userUid = response.uid!!,
+                    name = "",
+                    phoneNumber = "+91$mobile",
+                    jobProfileId = "",
+                    jobProfileName = "",
+                    signUpMode = JoiningSignUpInitiatedMode.BY_AMBASSADOR_PROGRAM,
+                    lastStatusChangeSource = "confirm_otp_screen"
+                )
+
+                _verifyOtp.value = Lce.content(response)
+            } else {
+                _verifyOtp.value = Lce.error("Otp does not match")
+            }
 
 
         } catch (e: Exception) {

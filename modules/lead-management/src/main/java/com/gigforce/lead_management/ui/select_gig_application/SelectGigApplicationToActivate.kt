@@ -10,7 +10,6 @@ import androidx.lifecycle.lifecycleScope
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
-import com.gigforce.common_ui.viewdatamodels.GigerProfileCardDVM
 import com.gigforce.common_ui.viewdatamodels.leadManagement.AssignGigRequest
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.gone
@@ -19,12 +18,10 @@ import com.gigforce.core.navigation.INavigation
 import com.gigforce.lead_management.LeadManagementConstants
 import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
-import com.gigforce.lead_management.databinding.ReferenceCheckFragmentBinding
 import com.gigforce.lead_management.databinding.SelectGigApplicationToActivateFragmentBinding
 import com.gigforce.lead_management.gigeronboarding.SelectGigAppViewState
 import com.gigforce.lead_management.gigeronboarding.SelectGigApplicationToActivateViewModel
 import com.gigforce.lead_management.models.GigAppListRecyclerItemData
-import com.gigforce.lead_management.ui.giger_onboarding.GigerOnboardingFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -46,7 +43,7 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
 
     private val viewModel: SelectGigApplicationToActivateViewModel by viewModels()
     private lateinit var userUid: String
-    private var assignGigRequest = AssignGigRequest()
+    private lateinit var assignGigRequest: AssignGigRequest
 
     override fun viewCreated(
         viewBinding: SelectGigApplicationToActivateFragmentBinding,
@@ -132,7 +129,9 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
             val state = it ?: ""
 
             when (state) {
-                is SelectGigAppViewState.ErrorInLoadingDataFromServer -> showErrorInLoadingGigApps(state.error)
+                is SelectGigAppViewState.ErrorInLoadingDataFromServer -> showErrorInLoadingGigApps(
+                    state.error
+                )
                 is SelectGigAppViewState.GigAppListLoaded -> showGigApps(state.gigApps)
                 SelectGigAppViewState.LoadingDataFromServer -> loadingGigAppsFromServer()
                 SelectGigAppViewState.NoGigAppsFound -> showNoGigAppsFound()
@@ -149,16 +148,17 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
 
     private fun initListeners() {
         viewBinding.submitBtn.setOnClickListener {
-            if (viewModel.getSelectedIndex() != -1){
+            if (viewModel.getSelectedIndex() != -1) {
                 viewModel.getSelectedJobProfile().let {
                     assignGigRequest.jobProfileId = it.jobProfileId
                     assignGigRequest.jobProfileName = it.profileName.toString()
-                    assignGigRequest.companyLogo = it.companyLogo.toString()
+
                     //logger.d(TAG, "Company logo: ${assignGigRequest.companyLogo}")
-                    navigation.navigateTo(LeadManagementNavDestinations.FRAGMENT_SELECT_GIG_LOCATION, bundleOf(
-                        LeadManagementConstants.INTENT_EXTRA_USER_ID to userUid,
-                        LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL to assignGigRequest
-                    )
+                    navigation.navigateTo(
+                        LeadManagementNavDestinations.FRAGMENT_SELECT_GIG_LOCATION, bundleOf(
+                            LeadManagementConstants.INTENT_EXTRA_USER_ID to userUid,
+                            LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL to assignGigRequest
+                        )
                     )
                 }
             }
@@ -171,7 +171,7 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
                 navigation.popBackStack()
             })
         }
-
+        
         viewLifecycleOwner.lifecycleScope.launch {
             viewBinding.gigerProfileCard.setGigerProfileData(userUid)
         }
@@ -198,8 +198,9 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
 
     private fun showGigApps(
         gigAppList: List<GigAppListRecyclerItemData>
-    ) = viewBinding.apply{
-        stopShimmer(viewBinding.gigappsShimmerContainer as LinearLayout,
+    ) = viewBinding.apply {
+        stopShimmer(
+            viewBinding.gigappsShimmerContainer as LinearLayout,
             R.id.shimmer_controller
         )
         viewBinding.gigappsShimmerContainer.gone()
@@ -208,10 +209,11 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
         viewBinding.gigApplicationsRv.collection = gigAppList
     }
 
-    private fun showNoGigAppsFound() = viewBinding.apply{
+    private fun showNoGigAppsFound() = viewBinding.apply {
 
         viewBinding.gigApplicationsRv.collection = emptyList()
-        stopShimmer(viewBinding.gigappsShimmerContainer as LinearLayout,
+        stopShimmer(
+            viewBinding.gigappsShimmerContainer as LinearLayout,
             R.id.shimmer_controller
         )
         viewBinding.gigappsShimmerContainer.gone()
@@ -222,10 +224,11 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
 
     private fun showErrorInLoadingGigApps(
         error: String
-    ) = viewBinding.apply{
+    ) = viewBinding.apply {
 
         viewBinding.gigApplicationsRv.collection = emptyList()
-        stopShimmer(viewBinding.gigappsShimmerContainer as LinearLayout,
+        stopShimmer(
+            viewBinding.gigappsShimmerContainer as LinearLayout,
             R.id.shimmer_controller
         )
         viewBinding.gigappsShimmerContainer.gone()

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.widget.LinearLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
@@ -19,6 +20,7 @@ import com.gigforce.lead_management.LeadManagementConstants
 import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.FragmentPickJobProfileForReferralBinding
+import com.gigforce.lead_management.models.GigAppListRecyclerItemData
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -39,6 +41,7 @@ class PickJobProfileForReferralFragment : BaseFragment2<FragmentPickJobProfileFo
     ) {
 
         initToolbar(viewBinding.toolbar)
+        initView(viewBinding)
         initListeners(viewBinding)
         initViewModel()
     }
@@ -49,6 +52,12 @@ class PickJobProfileForReferralFragment : BaseFragment2<FragmentPickJobProfileFo
         toolbar.setBackButtonListener{
             activity?.onBackPressed()
         }
+    }
+
+    private fun initView(
+        viewBinding: FragmentPickJobProfileForReferralBinding
+    )= viewBinding.apply {
+        gigsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
     }
 
     private fun initListeners(
@@ -138,7 +147,18 @@ class PickJobProfileForReferralFragment : BaseFragment2<FragmentPickJobProfileFo
         gigsShimmerContainer.gone()
         gigsListInfoLayout.root.gone()
 
-        gigsRecyclerView.collection = content
+        gigsRecyclerView.collection = content.map {
+            GigAppListRecyclerItemData.GigAppRecyclerItemData(
+                status = "",
+                jobProfileId = it.jobProfileId,
+                tradeName = it.tradeName ?: "Trade name N/A",
+                profileName = it.profileName ?: "Profile N/A",
+                companyLogo = it.companyLogo ?: "",
+                selected = it.isSelected,
+                selectGigAppViewModel = null,
+                shareApplicationLinkViewModel = viewModel
+            )
+        }
     }
 
     private fun showErrorInLoadingJobProfiles(

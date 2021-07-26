@@ -2,6 +2,7 @@ package com.gigforce.lead_management.models
 
 import com.gigforce.core.SimpleDVM
 import com.gigforce.lead_management.gigeronboarding.SelectGigApplicationToActivateViewModel
+import com.gigforce.lead_management.ui.share_application_link.ShareApplicationLinkViewModel
 import com.gigforce.lead_management.views.LeadActivationViewTypes
 
 open class GigAppListRecyclerItemData(
@@ -21,7 +22,8 @@ open class GigAppListRecyclerItemData(
         val profileName: String,
         val companyLogo: String,
         var selected: Boolean = false,
-        val selectGigAppViewModel: SelectGigApplicationToActivateViewModel
+        val selectGigAppViewModel: SelectGigApplicationToActivateViewModel? = null,
+        val shareApplicationLinkViewModel: ShareApplicationLinkViewModel? = null
     ) : GigAppListRecyclerItemData(
         LeadActivationViewTypes.GigAppList
     )

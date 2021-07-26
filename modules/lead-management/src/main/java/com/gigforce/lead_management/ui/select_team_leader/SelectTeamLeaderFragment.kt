@@ -12,6 +12,7 @@ import com.gigforce.common_ui.components.atoms.models.ChipGroupModel
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
+import com.gigforce.common_ui.viewdatamodels.GigerProfileCardDVM
 import com.gigforce.common_ui.viewdatamodels.leadManagement.AssignGigRequest
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfileDetails
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JobTeamLeader
@@ -45,8 +46,11 @@ class SelectTeamLeaderFragment: BaseFragment2<SelectTeamLeaderFragmentBinding>(
     lateinit var navigation: INavigation
 
     private val viewModel: SelectTeamLeaderViewModel by viewModels()
+
     private lateinit var userUid: String
     private lateinit var assignGigRequest: AssignGigRequest
+    private lateinit var currentGigerInfo: GigerProfileCardDVM
+
     val selectedGigforceTLs = arrayListOf<JobTeamLeader>()
     val selectedBusinessTLs = arrayListOf<JobTeamLeader>()
     var gigforceTeamLeaders = listOf<JobTeamLeader>()
@@ -74,11 +78,15 @@ class SelectTeamLeaderFragment: BaseFragment2<SelectTeamLeaderFragmentBinding>(
         arguments?.let {
             userUid = it.getString(LeadManagementConstants.INTENT_EXTRA_USER_ID) ?: return@let
             assignGigRequest = it.getParcelable(LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL) ?: return@let
+            currentGigerInfo = it.getParcelable(LeadManagementConstants.INTENT_EXTRA_CURRENT_JOINING_USER_INFO)
+                    ?: return@let
         }
 
         savedInstanceState?.let {
             userUid = it.getString(LeadManagementConstants.INTENT_EXTRA_USER_ID) ?: return@let
             assignGigRequest = it.getParcelable(LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL) ?: return@let
+            currentGigerInfo = it.getParcelable(LeadManagementConstants.INTENT_EXTRA_CURRENT_JOINING_USER_INFO)
+                    ?: return@let
         }
         logDataReceivedFromBundles()
     }
@@ -111,6 +119,7 @@ class SelectTeamLeaderFragment: BaseFragment2<SelectTeamLeaderFragmentBinding>(
         super.onSaveInstanceState(outState)
         outState.putString(LeadManagementConstants.INTENT_EXTRA_USER_ID, userUid)
         outState.putParcelable(LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL, assignGigRequest)
+        outState.putParcelable(LeadManagementConstants.INTENT_EXTRA_CURRENT_JOINING_USER_INFO, currentGigerInfo)
     }
 
     private fun initViewModel() {
@@ -163,10 +172,7 @@ class SelectTeamLeaderFragment: BaseFragment2<SelectTeamLeaderFragmentBinding>(
             }
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewBinding.gigerProfileCard.setGigerProfileData(userUid)
-        }
-        viewBinding.gigerProfileCard.setJobProfileData(assignGigRequest.jobProfileName, assignGigRequest.companyLogo)
+        viewBinding.gigerProfileCard.setProfileCard(currentGigerInfo)
     }
 
     private fun showGigTeamLeaders(jobProfile: JobProfileDetails) = viewBinding.apply{
