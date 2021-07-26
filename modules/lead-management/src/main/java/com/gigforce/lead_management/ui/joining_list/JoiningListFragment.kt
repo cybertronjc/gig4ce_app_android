@@ -32,6 +32,7 @@ class JoiningListFragment : BaseFragment2<FragmentJoiningListBinding>(
     lateinit var navigation: INavigation
     private val viewModel: JoiningListViewModel by viewModels()
 
+
     override fun viewCreated(
         viewBinding: FragmentJoiningListBinding,
         savedInstanceState: Bundle?

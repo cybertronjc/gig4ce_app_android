@@ -2,6 +2,8 @@ package com.gigforce.common_ui.components.atoms
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
+import android.util.TypedValue
 import android.view.View
 import com.gigforce.common_ui.components.atoms.models.ChipGroupModel
 import com.google.android.material.chip.Chip
@@ -11,7 +13,7 @@ import com.google.android.material.chip.ChipGroup
 class ChipGroupComponent : ChipGroup {
 
     init {
-        isSelectionRequired = true
+        isSelectionRequired = false
     }
 
     constructor(context: Context?) : super(context)
@@ -31,31 +33,59 @@ class ChipGroupComponent : ChipGroup {
         this.checkedChangeListener = listener
     }
 
-    fun addChips(list: List<ChipGroupModel>) {
-
+    fun addChips(list: List<ChipGroupModel>, isSingleSelection: Boolean, setFirstChecked: Boolean) {
+        this.isSingleSelection = isSingleSelection
+        val twelveDp: Float = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP, 24F,
+            context.getResources().getDisplayMetrics()
+        )
         list.forEach {
             var chipComponent = Chip(this.context)
+            chipComponent.chipCornerRadius = twelveDp
+            chipComponent.id = it.chipId
             chipComponent.text = it.text
+            if (isSingleSelection){
+                chipComponent.isClickable = true
+                chipComponent.isCheckable = true
+            }
             chipComponent.setOnClickListener { it1 ->
-                setAllChipsUnselected()
-                setChipSelected(it1)
+                if (isSingleSelection){
+                    this.clearCheck()
+                    setAllChipsUnselected(list)
+                    setChipSelected(it1, it)
+                } else {
+                    if (!it.isSelected) setChipSelected(it1, it) else setChipUnSelected(it1, it)
+                }
                 checkedChangeListener?.onCheckedChangeListener(it)
             }
             this.addView(chipComponent)
         }
-        (getChildAt(0) as Chip).isChecked = true
+        if(setFirstChecked){
+            setChipSelected((getChildAt(0) as Chip), list.get(0))
+            //(getChildAt(0) as Chip).isChecked = true
+        }
+
 
     }
 
-    private fun setChipSelected(chip: View) {
+    private fun setChipSelected(chip: View, chipGroupModel: ChipGroupModel) {
+        Log.d("Here", "selected")
         (chip as Chip).isChecked = true
-
+        chipGroupModel.isSelected = true
+    }
+    private fun setChipUnSelected(chip: View, chipGroupModel: ChipGroupModel) {
+        Log.d("Here", "UnSelected")
+        (chip as Chip).isChecked = false
+        chipGroupModel.isSelected = false
     }
 
-    private fun setAllChipsUnselected() {
+    private fun setAllChipsUnselected(list:List<ChipGroupModel> ) {
         for (i in 0 until this.childCount) {
             (getChildAt(i) as Chip).isChecked = false
+            list.get(i).isSelected = false
+            Log.d("Unselected chip", list.get(i).toString())
         }
+        Log.d("Unselected list", list.toString())
     }
 
 

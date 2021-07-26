@@ -92,7 +92,7 @@ class AssignGigsDialogFragment : BaseDialogFragment<FragmentAssignGigDialogBindi
         viewBinding: FragmentAssignGigDialogBinding
     ) = viewBinding.apply {
 
-        viewBinding.successLayout.okayBtn.setOnClickListener {
+        successLayout.okayBtn.setOnClickListener {
 
             navigation.popBackStack(
                 LeadManagementNavDestinations.FRAGMENT_JOINING,

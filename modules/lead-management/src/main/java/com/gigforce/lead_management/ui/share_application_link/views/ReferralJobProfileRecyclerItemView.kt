@@ -11,7 +11,7 @@ import com.gigforce.common_ui.shimmer.ShimmerHelper
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
-import com.gigforce.lead_management.databinding.SelectGigApplicationItemLayoutBinding
+import com.gigforce.lead_management.databinding.RecyclerRowReferralJobProfileLayoutBinding
 import com.gigforce.lead_management.models.GigAppListRecyclerItemData
 
 
@@ -24,7 +24,7 @@ class ReferralJobProfileRecyclerItemView(
 ), IViewHolder,
     View.OnClickListener {
 
-    private var viewBinding: SelectGigApplicationItemLayoutBinding
+    private var viewBinding: RecyclerRowReferralJobProfileLayoutBinding
     private var viewData: GigAppListRecyclerItemData.GigAppRecyclerItemData? = null
 
 
@@ -34,7 +34,7 @@ class ReferralJobProfileRecyclerItemView(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
-        viewBinding = SelectGigApplicationItemLayoutBinding.inflate(
+        viewBinding = RecyclerRowReferralJobProfileLayoutBinding.inflate(
             LayoutInflater.from(context),
             this,
             true
@@ -49,12 +49,11 @@ class ReferralJobProfileRecyclerItemView(
                 it as GigAppListRecyclerItemData.GigAppRecyclerItemData
             viewData = gigApplicationData
 
-            viewBinding.companyName.text = gigApplicationData.businessName
-            viewBinding.jobProfileTitle.text = gigApplicationData.jobProfileTitle
+            viewBinding.companyName.text = gigApplicationData.tradeName
+            viewBinding.jobProfileTitle.text = gigApplicationData.profileName
 
             setBusinessLogo(
-                gigApplicationData.businessLogoThumbnail,
-                gigApplicationData.businessLogo
+                gigApplicationData.companyLogo
             )
             setStatus(gigApplicationData.status)
 
@@ -62,12 +61,11 @@ class ReferralJobProfileRecyclerItemView(
     }
 
     private fun setBusinessLogo(
-        businessLogoThumbnail: String,
-        businessLogo: String
+        companyLogo: String
     ) {
 
         Glide.with(context)
-            .load(businessLogo)
+            .load(companyLogo)
             .placeholder(ShimmerHelper.getShimmerDrawable())
             .into(viewBinding.companyLogo)
 

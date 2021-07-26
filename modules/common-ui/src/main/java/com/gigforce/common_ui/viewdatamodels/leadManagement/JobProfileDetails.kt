@@ -32,22 +32,22 @@ data class JobProfileCityAndLocation(
     val city: String?,
 
     @SerializedName("jobLocations")
-    val jobLocations: List<JobLocation>,
+    val jobLocations: List<JobLocation>? = emptyList(),
 
     @SerializedName("shifts")
-    val shifts: List<JobShift>,
+    val shifts: List<JobShift>? = emptyList(),
 ) : Parcelable
 
 @Parcelize
 data class JobLocation(
     @SerializedName("id")
-    val id: String,
+    val id: String = "",
 
     @SerializedName("type")
-    val type: String,
+    val type: String = "",
 
     @SerializedName("name")
-    val name: String?
+    val name: String? = ""
 ) : Parcelable
 
 @Parcelize

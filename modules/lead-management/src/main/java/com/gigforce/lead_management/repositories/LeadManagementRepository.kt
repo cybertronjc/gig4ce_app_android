@@ -6,6 +6,8 @@ import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.core.extensions.addOrThrow
 import com.gigforce.core.extensions.getOrThrow
 import com.gigforce.core.extensions.updateOrThrow
+import com.gigforce.core.retrofit.CreateUserAccEnrollmentAPi
+import com.gigforce.core.retrofit.RetrofitFactory
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.lead_management.exceptions.TryingToDowngradeJoiningStatusException
 import com.gigforce.lead_management.exceptions.UserDoesNotExistInProfileException
@@ -13,15 +15,16 @@ import com.google.firebase.Timestamp
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 class LeadManagementRepository @Inject constructor(
     private val firebaseFirestore: FirebaseFirestore,
     private val firebaseAuthStateListener: FirebaseAuthStateListener,
-    private val joiningProfileRemoteService: JoiningProfileService
+    private val joiningProfileRemoteService: JoiningProfileService,
+    private val buildConfig: IBuildConfigVM
 ) {
+
 
     companion object {
 
@@ -32,6 +35,8 @@ class LeadManagementRepository @Inject constructor(
     /**
      * Collection references
      */
+    private val createUserApi: CreateUserAccEnrollmentAPi = RetrofitFactory.createUserAccEnrollmentAPi()
+    //Collections Refs
     private val joiningsCollectionRef: CollectionReference by lazy {
         firebaseFirestore.collection(COLLECTION_JOININGS)
     }
@@ -369,5 +374,138 @@ class LeadManagementRepository @Inject constructor(
 
 
     }
+
+
+    suspend fun checkMobileForExistingRegistrationElseSendOtp(mobile: String, url: String): RegisterMobileNoResponse {
+        val registerUserRequest = createUserApi.registerMobile(
+            url,
+            RegisterMobileNoRequest(
+                mobile
+            )
+        )
+
+        if (!registerUserRequest.isSuccessful) {
+            throw Exception(registerUserRequest.message())
+        } else {
+            return registerUserRequest.body()!!
+        }
+    }
+
+    suspend fun verifyOtp(token: String, otp: String): VerifyOtpResponse {
+        val verifyOtpResponse = createUserApi.verifyOtp(
+           buildConfig.getVerifyOTPURL(),
+            token,
+            otp
+        )
+
+        if (!verifyOtpResponse.isSuccessful) {
+            throw Exception(verifyOtpResponse.message())
+        } else {
+            return verifyOtpResponse.body()!!
+        }
+    }
+
+    suspend fun getUserAuthStatus(mobileNo : String): UserAuthStatusModel {
+        var userAuthStatus = createUserApi.getGigersAuthStatus(buildConfig.getUserRegisterInfoUrl(),mobileNo)
+        if(userAuthStatus.isSuccessful){
+            return userAuthStatus.body()!!
+        }
+        else{
+            FirebaseCrashlytics.getInstance().log("Exception : checkIfSignInOrSignup Method ${userAuthStatus.message()}")
+            throw Exception("Issue in Authentication result ${userAuthStatus.message()}")
+        }
+    }
+
+    suspend fun createUser(
+        mobile: String,
+        enrolledByName: String
+    ): CreateUserResponse {
+        val createUserResponse = createUserApi.createUser(
+            buildConfig.getCreateUserUrl(), listOf(
+                CreateUserRequest(mobile)
+            )
+        )
+
+        if (!createUserResponse.isSuccessful) {
+            throw Exception(createUserResponse.message())
+        } else {
+            val response = createUserResponse.body()!!.first()
+            if (response.error != null) {
+                throw Exception(response.error)
+            } else {
+                addUserToAmbassadorEnrolledUserList(
+                    response.uid!!,
+                    mobile,
+                    enrolledByName
+                )
+                response.uid?.let {
+                    createProfileDataForUser(
+                        uid = it,
+                        mobile = mobile,
+                        enrolledByName = enrolledByName
+                    )
+                }
+
+            }
+
+            return response
+        }
+    }
+    private suspend fun createProfileDataForUser(
+        uid: String,
+        mobile: String,
+        enrolledByName: String
+
+    ) {
+
+        val profileData = ProfileData(
+            loginMobile = "+91${mobile}",
+            contact = ArrayList(
+                listOf(
+                    Contact(
+                        phone = "+91${mobile}",
+                        email = "",
+                    )
+                )
+            ),
+            createdOn = Timestamp.now(),
+            enrolledBy = EnrollmentInfo(
+                id = uid,
+                enrolledOn = Timestamp.now()
+            )
+        )
+
+        profileCollectionRef
+            .document(uid)
+            .setOrThrow(profileData)
+    }
+
+    private suspend fun addUserToAmbassadorEnrolledUserList(
+        uid: String,
+        mobile: String,
+        enrolledByName: String
+    ) {
+        firebaseFirestore.collection("Ambassador_Enrolled_User")
+            .document(firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow().uid)
+            .collection("Enrolled_Users")
+            .document(uid)
+            .setOrThrow(
+                EnrolledUser(
+                    uid = uid,
+                    enrolledOn = Timestamp.now(),
+                    enrolledBy = firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow().uid,
+                    enrollmentStepsCompleted = EnrollmentStepsCompleted(),
+                    name = mobile,
+                    enrolledByName = enrolledByName,
+                    mobileNumber = mobile,
+                    locationLogs = listOf(
+                        LocationLog(
+                            entryType = "created_by_ambassador"
+                        )
+                    )
+                )
+            )
+    }
+
 
 }

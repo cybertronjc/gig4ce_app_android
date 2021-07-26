@@ -19,5 +19,6 @@ object LeadActivationViewTypes {
     const val GigAppListStatus = 25001
     const val GigAppList = 25002
     const val GigAppListSearch = 25003
+    const val NoGigAppsFound = 25004
 
 }

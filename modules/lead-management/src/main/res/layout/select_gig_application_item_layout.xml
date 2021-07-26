@@ -5,6 +5,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:layout_marginTop="@dimen/size_12"
+    android:clickable="true"
+    android:layout_marginStart="@dimen/size_16"
+    android:layout_marginEnd="@dimen/size_16"
+    android:layout_marginBottom="@dimen/size_4"
     android:background="@drawable/giger_profile_card_background"
     android:layout_height="wrap_content">
 
@@ -15,8 +20,8 @@
 
             <com.gigforce.common_ui.views.GigforceImageView
                 android:id="@+id/companyLogo"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
                 android:scaleType="centerCrop"
                 android:layout_marginStart="@dimen/size_12"
                 android:layout_marginTop="@dimen/size_12"
@@ -45,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/size16"
                 android:text="Swigy delivery"
-                android:layout_marginTop="@dimen/size_4"
+                android:layout_marginTop="@dimen/size_8"
                 android:fontFamily="@font/lato"
                 android:textSize="12sp"
                 android:textColor="@color/giger_card_text"
