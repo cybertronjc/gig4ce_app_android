@@ -17,4 +17,5 @@ object LeadManagementConstants {
 
     const val INTENT_EXTRA_SHARE_TYPE = "share_type"
     const val INTENT_EXTRA_JOINING_ID = "joining_id"
+    const val INTENT_EXTRA_CURRENT_JOINING_USER_INFO = "current_joining_info"
 }

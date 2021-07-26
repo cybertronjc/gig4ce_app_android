@@ -134,7 +134,11 @@ class JoiningListViewModel @Inject constructor(
                         userProfilePictureThumbnail = it.profilePicture ?: "",
                         userProfilePhoneNumber = it.phoneNumber ?: "",
                         status = it.getStatus().getStatusString(),
-                        joiningStatusText = getJoiningText(it)
+                        joiningStatusText = getJoiningText(it),
+                        joiningId = it.joiningId,
+                        jobProfileId = it.jobProfileIdInvitedFor ?: "",
+                        jobProfileName = it.jobProfileNameInvitedFor ?: "",
+                        jobProfileIcon = it.jobProfileIcon ?: ""
                     )
                 )
             }

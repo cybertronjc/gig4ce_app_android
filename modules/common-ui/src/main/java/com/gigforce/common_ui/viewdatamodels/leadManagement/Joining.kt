@@ -7,6 +7,10 @@ import com.google.firebase.firestore.PropertyName
 
 data class Joining(
 
+	@get:PropertyName("joiningId")
+	@set:PropertyName("joiningId")
+	var joiningId: String = "",
+
 	@get:PropertyName("uid")
 	@set:PropertyName("uid")
 	var uid: String? = null,
@@ -50,6 +54,10 @@ data class Joining(
 	@get:PropertyName("jobProfileNameInvitedFor")
 	@set:PropertyName("jobProfileNameInvitedFor")
 	var jobProfileNameInvitedFor:  String? = null,
+
+	@get:PropertyName("jobProfileIcon")
+	@set:PropertyName("jobProfileIcon")
+	var jobProfileIcon:  String? = null,
 
 	@get:PropertyName("signUpMode")
 	@set:PropertyName("signUpMode")

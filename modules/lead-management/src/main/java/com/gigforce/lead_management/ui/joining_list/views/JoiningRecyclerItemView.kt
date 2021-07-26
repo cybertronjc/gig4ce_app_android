@@ -16,6 +16,7 @@ import com.gigforce.lead_management.LeadManagementConstants
 import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.RecyclerRowJoiningItemBinding
+import com.gigforce.lead_management.models.CurrentUserInfo
 import com.gigforce.lead_management.models.JoiningListRecyclerItemData
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -162,20 +163,43 @@ class JoiningRecyclerItemView(
                     navigation.navigateTo(
                         LeadManagementNavDestinations.FRAGMENT_SELECT_GIG_TO_ACTIVATE,
                         bundleOf(
-                            LeadManagementConstants.INTENT_EXTRA_JOINING_ID to currentViewData.joiningId
+                            LeadManagementConstants.INTENT_EXTRA_JOINING_ID to currentViewData.joiningId,
+                            LeadManagementConstants.INTENT_EXTRA_CURRENT_JOINING_USER_INFO to prepareCurrentUserInfo(
+                                currentViewData
+                            )
                         )
                     )
                 }
                 JoiningStatus.JOINING_PENDING -> {
+                    if (currentViewData.jobProfileId.isEmpty()) {
+                        return
+                    }
+
                     navigation.navigateTo(
                         LeadManagementNavDestinations.FRAGMENT_SELECT_GIG_LOCATION,
                         bundleOf(
-                            LeadManagementConstants.INTENT_EXTRA_JOINING_ID to currentViewData.joiningId
+                            LeadManagementConstants.INTENT_EXTRA_JOINING_ID to currentViewData.joiningId,
+                            LeadManagementConstants.INTENT_EXTRA_CURRENT_JOINING_USER_INFO to prepareCurrentUserInfo(
+                                currentViewData
+                            )
                         )
                     )
                 }
             }
         }
+    }
+
+    private fun prepareCurrentUserInfo(
+        currentViewData: JoiningListRecyclerItemData.JoiningListRecyclerJoiningItemData
+    ): CurrentUserInfo {
+        return CurrentUserInfo(
+            userName = currentViewData.userName,
+            userProfilePicture = currentViewData.userProfilePicture,
+            userProfilePictureThumbnail = currentViewData.userProfilePictureThumbnail,
+            userMobileNo = currentViewData.userProfilePhoneNumber,
+            jobProfileName = currentViewData.jobProfileName,
+            jobProfileIcon = currentViewData.jobProfileIcon
+        )
     }
 
     fun getGigDataOrThrow(): JoiningListRecyclerItemData.JoiningListRecyclerJoiningItemData {

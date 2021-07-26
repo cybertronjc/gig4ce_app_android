@@ -21,7 +21,10 @@ open class JoiningListRecyclerItemData(
         val userProfilePhoneNumber: String,
         val userProfilePictureThumbnail: String,
         val status: String,
-        val joiningStatusText: String
+        val joiningStatusText: String,
+        val jobProfileId : String,
+        val jobProfileName : String,
+        val jobProfileIcon : String
     ): JoiningListRecyclerItemData(
         LeadActivationViewTypes.JoiningList
     )
