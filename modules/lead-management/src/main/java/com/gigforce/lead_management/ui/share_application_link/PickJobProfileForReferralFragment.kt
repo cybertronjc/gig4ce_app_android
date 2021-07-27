@@ -2,6 +2,7 @@ package com.gigforce.lead_management.ui.share_application_link
 
 import android.os.Bundle
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -9,7 +10,9 @@ import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.utils.PushDownAnim
+import com.gigforce.common_ui.utils.UtilMethods
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfileOverview
+import com.gigforce.common_ui.viewdatamodels.leadManagement.JoiningSignUpInitiatedMode
 import com.gigforce.common_ui.views.GigforceToolbar
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.gone
@@ -34,20 +37,50 @@ class PickJobProfileForReferralFragment : BaseFragment2<FragmentPickJobProfileFo
     @Inject lateinit var navigation: INavigation
     private val viewModel: ShareApplicationLinkViewModel by viewModels()
 
+    //Data
+    private var shareType: String = ShareReferralType.SHARE_SIGNUP_LINK
+    private var userUid: String? = null
+
+
 
     override fun viewCreated(
         viewBinding: FragmentPickJobProfileForReferralBinding,
         savedInstanceState: Bundle?
     ) {
 
+        getArgumentsFrom(
+            arguments,
+            savedInstanceState
+        )
         initToolbar(viewBinding.toolbar)
         initView(viewBinding)
         initListeners(viewBinding)
         initViewModel()
     }
 
+    private fun getArgumentsFrom(
+        arguments: Bundle?,
+        savedInstanceState: Bundle?
+    ) {
+        arguments?.let {
+            shareType = it.getString(LeadManagementConstants.INTENT_EXTRA_SHARE_TYPE) ?: return@let
+        }
+
+        savedInstanceState?.let {
+            shareType = it.getString(LeadManagementConstants.INTENT_EXTRA_SHARE_TYPE) ?: return@let
+        }
+
+        logger.d(logTag, "shared type received from intents : '$shareType'")
+    }
+
     private fun initToolbar(toolbar: GigforceToolbar) {
-        toolbar.showTitle("Share Application Link")
+        val shareTitle = if (shareType == ShareReferralType.SHARE_JOB_PROFILE_LINK) {
+            "Share Job Profile"
+        } else {
+            "Share Application Link"
+        }
+
+        toolbar.showTitle(shareTitle)
         toolbar.hideActionMenu()
         toolbar.setBackButtonListener{
             activity?.onBackPressed()
@@ -71,15 +104,6 @@ class PickJobProfileForReferralFragment : BaseFragment2<FragmentPickJobProfileFo
 
     private fun validateDataAndOpenReferralScreen() = viewBinding.apply {
 
-        val userName = gigersNameET.text.toString().capitalize()
-        if (userName.isEmpty()) {
-            nameErrorTv.visible()
-            nameErrorTv.text = "Please fill user name"
-            return@apply
-        } else {
-            nameErrorTv.gone()
-        }
-
         val selectedJobProfile = viewModel.getSelectedJobProfile()
         if (selectedJobProfile == null) {
 
@@ -92,16 +116,50 @@ class PickJobProfileForReferralFragment : BaseFragment2<FragmentPickJobProfileFo
             return@apply
         }
 
-        logger.d(logTag,"navigating to $LeadManagementNavDestinations.FRAGMENT_REFERENCE_CHECK")
-        navigation.navigateTo(
-            dest = LeadManagementNavDestinations.FRAGMENT_REFERENCE_CHECK,
-            args = bundleOf(
-                LeadManagementConstants.INTENT_EXTRA_JOB_PROFILE_ID to selectedJobProfile.jobProfileId,
-                LeadManagementConstants.INTENT_EXTRA_JOB_PROFILE_NAME to selectedJobProfile.profileName,
-                LeadManagementConstants.INTENT_EXTRA_USER_NAME to userName,
-            ),
-            navOptions = getNavOptions()
-        )
+        if (shareType == ShareReferralType.SHARE_JOB_PROFILE_LINK) {
+
+            navigation.navigateTo(
+                LeadManagementNavDestinations.FRAGMENT_REFERRAL,
+                bundleOf(
+                    LeadManagementConstants.INTENT_EXTRA_SHARE_TYPE to ShareReferralType.SHARE_JOB_PROFILE_LINK,
+                    LeadManagementConstants.INTENT_EXTRA_JOB_PROFILE_ID to selectedJobProfile.jobProfileId,
+                    LeadManagementConstants.INTENT_EXTRA_JOB_PROFILE_NAME to (selectedJobProfile.profileName ?: ""),
+                    LeadManagementConstants.INTENT_EXTRA_USER_ID to userUid!!
+                )
+            )
+
+        } else {
+
+            val userName = gigersNameET.text.toString().capitalize()
+            if (userName.isEmpty()) {
+                nameErrorTv.visible()
+                nameErrorTv.text = "Please fill user name"
+                return@apply
+            } else {
+                nameErrorTv.gone()
+            }
+
+            val userMobile = gigersMobileET.text.toString()
+            if (userMobile.isEmpty()) {
+                mobileErrorTv.visible()
+                mobileErrorTv.text = "Please fill user mobile"
+                return@apply
+            } else {
+                mobileErrorTv.gone()
+            }
+
+
+            navigation.navigateTo(
+                LeadManagementNavDestinations.FRAGMENT_REFERRAL,
+                bundleOf(
+                    LeadManagementConstants.INTENT_EXTRA_SHARE_TYPE to ShareReferralType.SHARE_SIGNUP_LINK,
+                    LeadManagementConstants.INTENT_EXTRA_JOB_PROFILE_ID to selectedJobProfile.jobProfileId,
+                    LeadManagementConstants.INTENT_EXTRA_JOB_PROFILE_NAME to (selectedJobProfile.profileName ?: ""),
+                    LeadManagementConstants.INTENT_EXTRA_USER_NAME to userName,
+                    LeadManagementConstants.INTENT_EXTRA_PHONE_NUMBER to "+91$userMobile",
+                )
+            )
+        }
     }
 
     private fun initViewModel() {
@@ -117,7 +175,9 @@ class PickJobProfileForReferralFragment : BaseFragment2<FragmentPickJobProfileFo
                     }
                 }
             })
+
     }
+
 
     private fun showJobProfilesAsLoading() = viewBinding.apply {
         gigsRecyclerView.collection = emptyList()

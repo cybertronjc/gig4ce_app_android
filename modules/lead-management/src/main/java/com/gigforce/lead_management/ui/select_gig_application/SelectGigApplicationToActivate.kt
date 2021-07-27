@@ -22,6 +22,7 @@ import com.gigforce.lead_management.databinding.SelectGigApplicationToActivateFr
 import com.gigforce.lead_management.gigeronboarding.SelectGigAppViewState
 import com.gigforce.lead_management.gigeronboarding.SelectGigApplicationToActivateViewModel
 import com.gigforce.lead_management.models.GigAppListRecyclerItemData
+import com.gigforce.lead_management.ui.share_application_link.ShareReferralType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -150,16 +151,29 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
         viewBinding.submitBtn.setOnClickListener {
             if (viewModel.getSelectedIndex() != -1) {
                 viewModel.getSelectedJobProfile().let {
-                    assignGigRequest.jobProfileId = it.jobProfileId
-                    assignGigRequest.jobProfileName = it.profileName.toString()
 
-                    //logger.d(TAG, "Company logo: ${assignGigRequest.companyLogo}")
-                    navigation.navigateTo(
-                        LeadManagementNavDestinations.FRAGMENT_SELECT_GIG_LOCATION, bundleOf(
-                            LeadManagementConstants.INTENT_EXTRA_USER_ID to userUid,
-                            LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL to assignGigRequest
+                    if(!it.ongoing) {
+                        assignGigRequest.jobProfileId = it.jobProfileId
+                        assignGigRequest.jobProfileName = it.profileName.toString()
+
+                        //logger.d(TAG, "Company logo: ${assignGigRequest.companyLogo}")
+                        navigation.navigateTo(
+                            LeadManagementNavDestinations.FRAGMENT_SELECT_GIG_LOCATION, bundleOf(
+                                LeadManagementConstants.INTENT_EXTRA_USER_ID to userUid,
+                                LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL to assignGigRequest
+                            )
                         )
-                    )
+                    } else {
+                        navigation.navigateTo(
+                            LeadManagementNavDestinations.FRAGMENT_REFERRAL, bundleOf(
+                                LeadManagementConstants.INTENT_EXTRA_SHARE_TYPE to ShareReferralType.SHARE_JOB_PROFILE_LINK,
+                                LeadManagementConstants.INTENT_EXTRA_JOB_PROFILE_ID to it.jobProfileId,
+                                LeadManagementConstants.INTENT_EXTRA_JOB_PROFILE_NAME to (it.profileName ?: ""),
+                                LeadManagementConstants.INTENT_EXTRA_USER_ID to userUid
+                            )
+                        )
+
+                    }
                 }
             }
         }

@@ -17,7 +17,7 @@ data class JobProfileOverview(
     val companyLogo: String?,
 
     @SerializedName("ongoing")
-    val ongoing: Boolean?,
+    val ongoing: Boolean,
 
     @SerializedName("status")
     val status: String?,

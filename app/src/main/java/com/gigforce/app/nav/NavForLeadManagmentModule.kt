@@ -17,5 +17,6 @@ class NavForLeadManagmentModule(
         baseImplementation.registerRoute(LeadManagementNavDestinations.FRAGMENT_SELECT_GIG_LOCATION, R.id.selectGigLocationFragment)
         baseImplementation.registerRoute(LeadManagementNavDestinations.FRAGMENT_REFERENCE_CHECK, R.id.referenceCheckFragment)
         baseImplementation.registerRoute(LeadManagementNavDestinations.FRAGMENT_PICK_PROFILE_FOR_REFERRAL, R.id.pickProfileForReferralFragment)
+        baseImplementation.registerRoute(LeadManagementNavDestinations.FRAGMENT_REFERRAL, R.id.shareReferralLinkFragment)
     }
 }

@@ -12,4 +12,5 @@ object LeadManagementNavDestinations {
     const val FRAGMENT_SELECT_GIG_LOCATION = "${moduleName}/selectGigLocation"
     const val FRAGMENT_REFERENCE_CHECK = "${moduleName}/referenceCheckFragment"
     const val FRAGMENT_PICK_PROFILE_FOR_REFERRAL = "${moduleName}/pickProfileForReferralFragment"
+    const val FRAGMENT_REFERRAL = "${moduleName}/leadActReferral"
 }

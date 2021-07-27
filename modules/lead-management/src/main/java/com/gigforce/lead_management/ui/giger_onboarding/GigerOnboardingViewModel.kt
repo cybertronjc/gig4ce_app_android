@@ -109,7 +109,8 @@ class GigerOnboardingViewModel @Inject constructor(
                     jobProfileId = "",
                     jobProfileName = "",
                     signUpMode = JoiningSignUpInitiatedMode.BY_AMBASSADOR_PROGRAM,
-                    lastStatusChangeSource = "confirm_otp_screen"
+                    lastStatusChangeSource = "confirm_otp_screen",
+                    tradeName = ""
                 )
 
                 _verifyOtp.value = Lce.content(response)

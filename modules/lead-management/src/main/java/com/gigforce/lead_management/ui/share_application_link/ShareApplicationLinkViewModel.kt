@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfileOverview
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JoiningSignUpInitiatedMode
+import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
@@ -155,46 +156,27 @@ class ShareApplicationLinkViewModel @Inject constructor(
         name: String,
         mobileNumber: String,
         jobProfileId: String,
-        jobProfileName: String
+        jobProfileName: String,
+        tradeName: String
     ) = viewModelScope.launch {
 
         _referralViewState.postValue(ShareReferralViewState.SharingAndUpdatingJoiningDocument)
+        val result = createDocumentWithSignUpPending(
+            mobileNumber,
+            jobProfileId,
+            jobProfileName,
+            name,
+            tradeName
+        )
+        if (!result) return@launch
 
-        try {
-            logger.d(
-                TAG,
-                "creating joining document with sign_up_pending status",
-                mapOf(
-                    "mobile-number" to mobileNumber,
-                    "jobProfileId" to jobProfileId,
-                    "jobProfileName" to jobProfileName,
-                )
-            )
-
-            leadManagementRepository.createOrUpdateJoiningDocumentWithStatusSignUpPending(
-                userUid = "",
-                name = name,
-                phoneNumber = mobileNumber,
-                jobProfileId = jobProfileId,
-                jobProfileName = jobProfileName,
-                signUpMode = JoiningSignUpInitiatedMode.BY_LINK,
-                lastStatusChangeSource = TAG
-            )
-
-            logger.d(
-                TAG,
-                "joining document created"
-            )
+        val referralLink = try {
+            createAppReferralLink()
         } catch (e: Exception) {
-            logger.e(
-                TAG,
-                "error in creating or updating document, stopping...",
-                e
-            )
-
+            logger.e(TAG,"unable to create referral link",e)
             _referralViewState.postValue(
-                ShareReferralViewState.ErrorInCreatingOrUpdatingDocument(
-                    "Unable to create joining document, please try again later"
+                ShareReferralViewState.UnableToCreateShareLink(
+                    "Unable to create referral link"
                 )
             )
             return@launch
@@ -217,7 +199,7 @@ class ShareApplicationLinkViewModel @Inject constructor(
                 mobileNumber = mobileNumber,
                 jobProfileName = jobProfileName,
                 name = name,
-                shareLink = createAppReferralLink()
+                shareLink = referralLink
             )
 
             _referralViewState.postValue(
@@ -235,66 +217,53 @@ class ShareApplicationLinkViewModel @Inject constructor(
             )
 
             _referralViewState.postValue(
-                ShareReferralViewState.DocumentUpdatesButErrorInSharingDocument(
-                    "Unable to share document link"
+                ShareReferralViewState.OpenWhatsAppToShareDocumentSharingDocument(
+                    shareType = ShareReferralType.SHARE_SIGNUP_LINK,
+                    shareLink = referralLink
                 )
             )
         }
     }
 
-    fun sendJobProfileReferralLink(
-        userUid: String,
+    private suspend fun createDocumentWithSignUpPending(
+        mobileNumber: String,
         jobProfileId: String,
-        jobProfileName: String
-    ) = viewModelScope.launch {
-
-        _referralViewState.postValue(ShareReferralViewState.SharingAndUpdatingJoiningDocument)
-
-        val profile = try {
-            logger.d(
-                TAG,
-                "fetching profile data with uid : $userUid"
-            )
-
-            profileFirebaseRepository.getProfileOrThrow(userUid)
-        } catch (e: Exception) {
-            logger.e(
-                TAG,
-                "unable to fetch profile data",
-                e
-            )
-            return@launch
-        }
-
-
+        jobProfileName: String,
+        name: String,
+        tradeName: String
+    ): Boolean {
         try {
             logger.d(
                 TAG,
-                "creating joining document with application_pending status",
+                "creating joining document with sign_up_pending status",
                 mapOf(
-                    "uid" to userUid,
+                    "mobile-number" to mobileNumber,
                     "jobProfileId" to jobProfileId,
                     "jobProfileName" to jobProfileName,
                 )
             )
 
-            leadManagementRepository.createOrUpdateJoiningDocumentWithApplicationPending(
-                userUid = userUid,
-                name = profile.name,
-                phoneNumber = profile.loginMobile,
+            leadManagementRepository.createOrUpdateJoiningDocumentWithStatusSignUpPending(
+                userUid = "",
+                name = name,
+                phoneNumber = mobileNumber,
                 jobProfileId = jobProfileId,
                 jobProfileName = jobProfileName,
-                lastStatusChangeSource = TAG
+                signUpMode = JoiningSignUpInitiatedMode.BY_LINK,
+                lastStatusChangeSource = TAG,
+                tradeName
             )
 
             logger.d(
                 TAG,
                 "joining document created"
             )
+
+            return true
         } catch (e: Exception) {
             logger.e(
                 TAG,
-                "error in creating or updating document, stoppping...",
+                "error in creating or updating document, stopping...",
                 e
             )
 
@@ -303,6 +272,32 @@ class ShareApplicationLinkViewModel @Inject constructor(
                     "Unable to create joining document, please try again later"
                 )
             )
+            return false
+        }
+    }
+
+
+    fun sendJobProfileReferralLink(
+        userUid: String,
+        jobProfileId: String,
+        jobProfileName: String,
+        tradeName: String
+    ) = viewModelScope.launch {
+
+        _referralViewState.postValue(ShareReferralViewState.SharingAndUpdatingJoiningDocument)
+        val profile = getProfileForUid(userUid) ?: return@launch
+        val result = createOrUpdateJoiningPendingDocument(
+            userUid,
+            jobProfileId,
+            jobProfileName,
+            profile,
+            tradeName
+        )
+        if (!result) return@launch
+
+        val shareLink = try {
+            createJobProfileReferralLink(jobProfileId)
+        } catch (e: Exception) {
             return@launch
         }
 
@@ -323,7 +318,7 @@ class ShareApplicationLinkViewModel @Inject constructor(
                 mobileNumber = profile.loginMobile,
                 jobProfileName = jobProfileName,
                 name = profile.name,
-                shareLink = createJobProfileReferralLink(jobProfileId)
+                shareLink = shareLink
             )
 
             _referralViewState.postValue(
@@ -341,11 +336,192 @@ class ShareApplicationLinkViewModel @Inject constructor(
             )
 
             _referralViewState.postValue(
-                ShareReferralViewState.DocumentUpdatesButErrorInSharingDocument(
-                    "Unable to share document link"
+                ShareReferralViewState.OpenWhatsAppToShareDocumentSharingDocument(
+                    shareType = ShareReferralType.SHARE_JOB_PROFILE_LINK,
+                    shareLink = shareLink
                 )
             )
         }
+    }
+
+    private suspend fun createOrUpdateJoiningPendingDocument(
+        userUid: String,
+        jobProfileId: String,
+        jobProfileName: String,
+        profile: ProfileData,
+        tradeName: String
+    ): Boolean {
+        try {
+            logger.d(
+                TAG,
+                "creating joining document with application_pending status",
+                mapOf(
+                    "uid" to userUid,
+                    "jobProfileId" to jobProfileId,
+                    "jobProfileName" to jobProfileName,
+                )
+            )
+
+            leadManagementRepository.createOrUpdateJoiningDocumentWithApplicationPending(
+                userUid = userUid,
+                name = profile.name,
+                phoneNumber = profile.loginMobile,
+                jobProfileId = jobProfileId,
+                jobProfileName = jobProfileName,
+                lastStatusChangeSource = TAG,
+                tradeName = tradeName
+            )
+
+            logger.d(
+                TAG,
+                "joining document created"
+            )
+
+            return true
+        } catch (e: Exception) {
+            logger.e(
+                TAG,
+                "error in creating or updating document, stoppping...",
+                e
+            )
+
+            _referralViewState.postValue(
+                ShareReferralViewState.ErrorInCreatingOrUpdatingDocument(
+                    "Unable to create joining document, please try again later"
+                )
+            )
+        }
+
+        return false
+    }
+
+    private suspend fun getProfileForUid(
+        userUid: String
+    ): ProfileData? = try {
+        logger.d(
+            TAG,
+            "fetching profile data with uid : $userUid"
+        )
+
+        profileFirebaseRepository.getProfileOrThrow(userUid)
+    } catch (e: Exception) {
+        _referralViewState.postValue(
+            ShareReferralViewState.ErrorInCreatingOrUpdatingDocument(
+                "Unable to create joining document, please try again later"
+            )
+        )
+
+        logger.e(
+            TAG,
+            "unable to fetch profile data",
+            e
+        )
+
+        null
+    }
+
+    fun sendJobProfileReferralLinkViaOtherApps(
+        userUid: String,
+        jobProfileId: String,
+        jobProfileName: String,
+        tradeName: String
+    ) = viewModelScope.launch {
+
+        _referralViewState.postValue(ShareReferralViewState.SharingAndUpdatingJoiningDocument)
+        val profile = getProfileForUid(userUid) ?: return@launch
+        val result = createOrUpdateJoiningDocWithStatusApplicationPending(
+            userUid,
+            jobProfileId,
+            jobProfileName,
+            profile,
+            tradeName
+        )
+        if (!result) return@launch
+
+
+        try {
+            logger.d(
+                TAG,
+                "creating share link...",
+                mapOf(
+                    "referralType" to ShareReferralType.SHARE_JOB_PROFILE_LINK,
+                    "mobile-number" to profile.loginMobile,
+                    "name" to profile.name,
+                    "jobProfileName" to jobProfileName,
+                )
+            )
+
+            val referralLink = createJobProfileReferralLink(jobProfileId)
+            _referralViewState.postValue(
+                ShareReferralViewState.OpenOtherAppsToShareDocumentSharingDocument(
+                    shareType = ShareReferralType.SHARE_JOB_PROFILE_LINK,
+                    shareLink = referralLink
+                )
+            )
+            logger.d(
+                TAG,
+                "[Success] Referral shared"
+            )
+        } catch (e: Exception) {
+            logger.e(
+                TAG,
+                "[Error] in sharing referral",
+                e
+            )
+
+            _referralViewState.postValue(
+                ShareReferralViewState.UnableToCreateShareLink(
+                    "Unable to create share link"
+                )
+            )
+        }
+    }
+
+    private suspend fun createOrUpdateJoiningDocWithStatusApplicationPending(
+        userUid: String,
+        jobProfileId: String,
+        jobProfileName: String,
+        profile: ProfileData,
+        tradeName: String
+    ) = try {
+        logger.d(
+            TAG,
+            "creating joining document with application_pending status",
+            mapOf(
+                "uid" to userUid,
+                "jobProfileId" to jobProfileId,
+                "jobProfileName" to jobProfileName,
+            )
+        )
+
+        leadManagementRepository.createOrUpdateJoiningDocumentWithApplicationPending(
+            userUid = userUid,
+            name = profile.name,
+            phoneNumber = profile.loginMobile,
+            jobProfileId = jobProfileId,
+            jobProfileName = jobProfileName,
+            lastStatusChangeSource = TAG,
+            tradeName = tradeName
+        )
+
+        logger.d(
+            TAG,
+            "joining document created"
+        )
+        true
+    } catch (e: Exception) {
+        logger.e(
+            TAG,
+            "error in creating or updating document, stoppping...",
+            e
+        )
+
+        _referralViewState.postValue(
+            ShareReferralViewState.ErrorInCreatingOrUpdatingDocument(
+                "Unable to create joining document, please try again later"
+            )
+        )
+        false
     }
 
 

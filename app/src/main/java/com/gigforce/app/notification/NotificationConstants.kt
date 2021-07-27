@@ -15,7 +15,8 @@ object NotificationConstants {
         const val OPEN_VERIFICATION_PAGE = "com.gigforce.app.verification.open_verification_page"
         const val OPEN_CHAT_PAGE = "com.gigforce.app.chats.open_chat"
         const val OPEN_GROUP_CHAT_PAGE = "com.gigforce.app.chats.open_group_chat"
-
+        const val OPEN_CALENDAR_HOME_SCREEN = "com.gigforce.app.chats.open_calendar_home_screen"
+        const val OPEN_JOINING_SCREEN = "com.gigforce.app.chats.open_joining_screen"
     }
 
     object PAYLOADS{

@@ -118,7 +118,8 @@ class LeadManagementRepository @Inject constructor(
         jobProfileId: String,
         jobProfileName: String,
         signUpMode: String,
-        lastStatusChangeSource: String
+        lastStatusChangeSource: String,
+        tradeName: String
     ) {
 
         val getJobProfileLink = joiningsCollectionRef
@@ -159,7 +160,8 @@ class LeadManagementRepository @Inject constructor(
                         "jobProfileNameInvitedFor" to jobProfileName,
                         "signUpMode" to signUpMode,
                         "name" to name,
-                        "uid" to userUid
+                        "uid" to userUid,
+                        "tradeName" to tradeName
                     )
                 )
 
@@ -178,7 +180,8 @@ class LeadManagementRepository @Inject constructor(
                     jobProfileIdInvitedFor = jobProfileId,
                     jobProfileNameInvitedFor = jobProfileName,
                     signUpMode = signUpMode,
-                    lastStatusChangeSource = lastStatusChangeSource
+                    lastStatusChangeSource = lastStatusChangeSource,
+                    tradeName = tradeName
                 )
             )
         }
@@ -191,7 +194,8 @@ class LeadManagementRepository @Inject constructor(
         jobProfileId: String,
         jobProfileName: String,
         phoneNumber: String = "",
-        lastStatusChangeSource: String
+        lastStatusChangeSource: String,
+        tradeName : String
     ) {
         val getProfileForUid = profileCollectionRef
             .document(userUid)
@@ -232,7 +236,8 @@ class LeadManagementRepository @Inject constructor(
                     jobProfileIdInvitedFor = jobProfileId,
                     jobProfileNameInvitedFor = jobProfileName,
                     signUpMode = null,
-                    lastStatusChangeSource = lastStatusChangeSource
+                    lastStatusChangeSource = lastStatusChangeSource,
+                    tradeName = tradeName
                 )
             )
         } else {
@@ -273,7 +278,8 @@ class LeadManagementRepository @Inject constructor(
         jobProfileId: String,
         jobProfileName: String,
         phoneNumber: String = "",
-        lastStatusChangeSource: String
+        lastStatusChangeSource: String,
+        tradeName: String
     ) {
         val getProfileForUid = profileCollectionRef
             .document(userUid)
@@ -314,7 +320,8 @@ class LeadManagementRepository @Inject constructor(
                     jobProfileIdInvitedFor = jobProfileId,
                     jobProfileNameInvitedFor = jobProfileName,
                     signUpMode = null,
-                    lastStatusChangeSource = lastStatusChangeSource
+                    lastStatusChangeSource = lastStatusChangeSource,
+                    tradeName = tradeName
                 )
             )
         } else {

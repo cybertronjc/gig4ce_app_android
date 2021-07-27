@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
@@ -13,124 +14,156 @@
             android:layout_width="match_parent"
             android:layout_height="?android:actionBarSize" />
 
-        <TextView
-            android:id="@+id/giger_name_TV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="60dp"
-            android:fontFamily="@font/lato_bold"
-            android:lineHeight="19sp"
-            android:text="Giger's Name"
-            android:textColor="@color/black"
-            android:textSize="16sp" />
 
-        <EditText
-            android:id="@+id/gigers_name_ET"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/rectangle_round_grey"
-            android:fontFamily="@font/lato"
-            android:lineSpacingExtra="3sp"
-            android:minHeight="36dp"
-            android:paddingStart="8dp"
-            android:textColor="#333333"
-            android:textSize="14sp"
-            android:textStyle="normal" />
-
-        <TextView
-            android:id="@+id/name_error_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="4dp"
-            android:fontFamily="@font/lato"
-            android:lineSpacingExtra="3sp"
-            android:textColor="@android:color/holo_red_dark"
-            android:textSize="12sp"
-            android:textStyle="normal"
-         />
-
-        <TextView
-            android:id="@+id/select_gig_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="30dp"
-            android:fontFamily="@font/lato_bold"
-            android:lineHeight="19sp"
-            android:text="Select Gig"
-            android:textColor="@color/black"
-            android:textSize="16sp" />
-
-        <EditText
-            android:id="@+id/search_gig_ET"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/rectangle_round_grey"
-            android:fontFamily="@font/lato"
-            android:hint="Search by business name/profile"
-            android:lineSpacingExtra="3sp"
-            android:minHeight="36dp"
-            android:paddingStart="8dp"
-            android:textColor="#333333"
-            android:textSize="14sp"
-            android:textStyle="normal" />
+            android:layout_height="wrap_content">
 
 
-        <TextView
-            android:id="@+id/search_result_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="16dp"
-            android:fontFamily="@font/lato"
-            android:paddingStart="8dp"
-            android:textColor="#6D7278"
-            android:textSize="12sp"
-            android:textStyle="normal" />
+            <ImageView
+                android:id="@+id/iv_bg_referrals_frag"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/size_213"
+                android:layout_marginStart="@dimen/size_53"
+                android:layout_marginTop="@dimen/size_90"
+                android:layout_marginEnd="@dimen/size_54"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_refer_bg" />
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
+            <TextView
+                android:id="@+id/iv_share_joy_referrals_frag"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_44"
+                android:layout_marginTop="@dimen/size_40"
+                android:layout_marginEnd="@dimen/size_46"
+                android:gravity="center_horizontal"
+                android:letterSpacing="0"
+                android:text="@string/share_the_joy_of_working_with_gigforce_and_invite_your_friends"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/iv_bg_referrals_frag" />
 
-            <com.gigforce.core.recyclerView.CoreRecyclerView
-                android:id="@+id/gigs_recycler_view"
+            <TextView
+                android:id="@+id/start_referring_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="3sp"
+                android:text="Start referring now"
+                android:textColor="@color/lipstick"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/iv_share_joy_referrals_frag" />
+
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="12dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/start_referring_textview">
 
-            <include
-                android:id="@+id/gigs_shimmer_container"
-                layout="@layout/shimmer_container"
-                android:visibility="visible" />
 
-            <include
-                android:id="@+id/gigs_list_info_layout"
-                layout="@layout/layout_error_with_retry" />
+                <LinearLayout
+                    android:id="@+id/send_via_whatsapp_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/size_16">
 
-        </FrameLayout>
 
-        <TextView
-            android:id="@+id/send_referral_link_btn"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:background="@drawable/app_gradient_button"
-            android:layout_marginStart="@dimen/size_16"
-            android:layout_marginEnd="@dimen/size_16"
-            android:layout_marginBottom="@dimen/size_18"
-            android:gravity="center"
-            android:layout_marginTop="8dp"
-            android:minHeight="@dimen/size_36"
-            android:text="Send Referral Link"
-            android:textColor="@color/white" />
+                    <ImageView
+                        android:id="@+id/send_whatsapp_image"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_whatsapp" />
+
+                    <TextView
+                        android:id="@+id/send_via_whatsapp"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/lato"
+                        android:lineSpacingExtra="3sp"
+                        android:text="Send via Whatsapp"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        android:textStyle="normal" />
+
+                    <ImageView
+                        android:layout_width="14dp"
+                        android:layout_height="22dp"
+                        app:srcCompat="@drawable/ic_forward"
+                        app:tint="#c7c7cc" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/send_via_other_apps"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/size_16">
+
+
+                    <ImageView
+                        android:id="@+id/others_apps_iv"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_ellipses_round" />
+
+                    <TextView
+                        android:id="@+id/others_apps"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/lato"
+                        android:lineSpacingExtra="3sp"
+                        android:text="Send via other apps"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        android:textStyle="normal" />
+
+                    <ImageView
+                        android:layout_width="14dp"
+                        android:layout_height="22dp"
+                        app:srcCompat="@drawable/ic_forward"
+                        app:tint="#c7c7cc" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <ProgressBar
+                android:id="@+id/pb_referrals_frag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </LinearLayout>

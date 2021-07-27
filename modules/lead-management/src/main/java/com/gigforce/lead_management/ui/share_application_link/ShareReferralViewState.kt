@@ -8,8 +8,18 @@ sealed class ShareReferralViewState {
         val error: String
     ) : ShareReferralViewState()
 
-    data class DocumentUpdatesButErrorInSharingDocument(
+    data class UnableToCreateShareLink(
         val error: String
+    ) : ShareReferralViewState()
+
+    data class OpenWhatsAppToShareDocumentSharingDocument(
+        val shareType : String,
+        val shareLink : String
+    ) : ShareReferralViewState()
+
+    data class OpenOtherAppsToShareDocumentSharingDocument(
+        val shareType : String,
+        val shareLink : String
     ) : ShareReferralViewState()
 
     object DocumentUpdatedAndReferralShared : ShareReferralViewState()

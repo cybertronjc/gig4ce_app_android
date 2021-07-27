@@ -5,6 +5,7 @@ object LeadManagementConstants {
     const val INTENT_EXTRA_PHONE_NUMBER = "phone_number"
     const val INTENT_EXTRA_USER_NAME = "user_name"
     const val INTENT_EXTRA_PIN_CODE = "pincode"
+    const val INTENT_EXTRA_TRADE_NAME = "trade_name"
 
     const val INTENT_EXTRA_MODE = "mode"
 
