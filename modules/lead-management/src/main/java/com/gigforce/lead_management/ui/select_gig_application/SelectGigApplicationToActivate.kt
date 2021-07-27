@@ -10,7 +10,6 @@ import androidx.lifecycle.lifecycleScope
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
-import com.gigforce.common_ui.viewdatamodels.leadManagement.AssignGigRequest
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
@@ -23,6 +22,7 @@ import com.gigforce.lead_management.gigeronboarding.SelectGigAppViewState
 import com.gigforce.lead_management.gigeronboarding.SelectGigApplicationToActivateViewModel
 import com.gigforce.lead_management.models.GigAppListRecyclerItemData
 import com.gigforce.lead_management.ui.share_application_link.ShareReferralType
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -41,10 +41,10 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
 
     @Inject
     lateinit var navigation: INavigation
-
     private val viewModel: SelectGigApplicationToActivateViewModel by viewModels()
+
     private lateinit var userUid: String
-    private lateinit var assignGigRequest: AssignGigRequest
+    private var joiningId: String? = null
 
     override fun viewCreated(
         viewBinding: SelectGigApplicationToActivateFragmentBinding,
@@ -78,12 +78,12 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
 
         arguments?.let {
             userUid = it.getString(LeadManagementConstants.INTENT_EXTRA_USER_ID) ?: return@let
-            //assignGigRequest = it.getParcelable(LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL) ?: return@let
+            joiningId = it.getString(LeadManagementConstants.INTENT_EXTRA_JOINING_ID) ?: return@let
         }
 
         savedInstanceState?.let {
             userUid = it.getString(LeadManagementConstants.INTENT_EXTRA_USER_ID) ?: return@let
-            //assignGigRequest = it.getParcelable(LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL) ?: return@let
+            joiningId = it.getString(LeadManagementConstants.INTENT_EXTRA_JOINING_ID) ?: return@let
         }
         logDataReceivedFromBundles()
     }
@@ -99,15 +99,15 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
             )
         }
 
-//        if (::assignGigRequest.isInitialized.not()) {
-//            logger.e(
-//                logTag,
-//                "null assignGigRequest received from bundles",
-//                Exception("null assignGigRequest received from bundles")
-//            )
-//        } else {
-//            logger.d(logTag, "AssignGigRequest received from bundles : $assignGigRequest")
-//        }
+        if (joiningId != null) {
+            logger.d(logTag, "joiningId received from bundles : $joiningId")
+        } else {
+            logger.e(
+                logTag,
+                "no joiningId received from bundles",
+                Exception("no joiningId received from bundles")
+            )
+        }
     }
 
     override fun onSaveInstanceState(
@@ -115,20 +115,20 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
     ) {
         super.onSaveInstanceState(outState)
         outState.putString(LeadManagementConstants.INTENT_EXTRA_USER_ID, userUid)
-        //outState.putParcelable(LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL, assignGigRequest)
+        outState.putString(LeadManagementConstants.INTENT_EXTRA_JOINING_ID, joiningId)
     }
 
     private fun initViews() {
-//        viewBinding.gigerProfileCard.apply {
-//            setProfileCard(GigerProfileCardDVM("https://instagram.fdel11-2.fna.fbcdn.net/v/t51.2885-19/s320x320/125221466_394003705121691_8790543636526463384_n.jpg", "Jagdish Choudhary", "+919898833257", "Swiggy delivery", ""))
-//        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewBinding.gigerProfileCard.setGigerProfileData(userUid)
+        }
     }
 
     private fun initViewModel() = viewBinding.apply {
         viewModel.getJobProfilesToActivate("d5ToQmOn6sdAcPWvjsBuhYWm9kF3")
-        viewModel.viewState.observe(viewLifecycleOwner, Observer {
-            val state = it ?: ""
 
+        viewModel.viewState.observe(viewLifecycleOwner, Observer {
+            val state = it ?: return@Observer
             when (state) {
                 is SelectGigAppViewState.ErrorInLoadingDataFromServer -> showErrorInLoadingGigApps(
                     state.error
@@ -136,15 +136,42 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
                 is SelectGigAppViewState.GigAppListLoaded -> showGigApps(state.gigApps)
                 SelectGigAppViewState.LoadingDataFromServer -> loadingGigAppsFromServer()
                 SelectGigAppViewState.NoGigAppsFound -> showNoGigAppsFound()
+                is SelectGigAppViewState.StartGigerJoiningProcess -> {
+
+                    navigation.navigateTo(
+
+                        LeadManagementNavDestinations.FRAGMENT_SELECT_GIG_LOCATION, bundleOf(
+                            LeadManagementConstants.INTENT_EXTRA_USER_ID to userUid,
+                            LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL to state.assignGigRequest,
+                            LeadManagementConstants.INTENT_EXTRA_JOINING_ID to joiningId,
+                            LeadManagementConstants.INTENT_EXTRA_CURRENT_JOINING_USER_INFO to state.gigerInfo
+                        )
+                    )
+                }
+                is SelectGigAppViewState.ErrorInStartingJoiningProcess -> {
+
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle("Unble to start Joining")
+                        .setMessage(state.error)
+                        .setPositiveButton("Okay") { _, _ -> }
+                        .show()
+                }
+                SelectGigAppViewState.FetchingDataToStartJoiningProcess -> {
+
+                }
             }
         })
+
         viewModel.selectedIndex.observe(viewLifecycleOwner, Observer {
             submitBtn.isEnabled = it == -1
         })
+
         viewModel.selectedJobProfileOverview.observe(viewLifecycleOwner, Observer {
             logger.d(TAG, "selected job profile $it")
-            submitBtn.text = if (it.ongoing!!) "Share Referral Link" else "Next"
+            submitBtn.text = if (it.ongoing) "Share Referral Link" else "Next"
         })
+
+
     }
 
     private fun initListeners() {
@@ -152,24 +179,27 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
             if (viewModel.getSelectedIndex() != -1) {
                 viewModel.getSelectedJobProfile().let {
 
-                    if(!it.ongoing) {
-                        assignGigRequest.jobProfileId = it.jobProfileId
-                        assignGigRequest.jobProfileName = it.profileName.toString()
 
-                        //logger.d(TAG, "Company logo: ${assignGigRequest.companyLogo}")
-                        navigation.navigateTo(
-                            LeadManagementNavDestinations.FRAGMENT_SELECT_GIG_LOCATION, bundleOf(
-                                LeadManagementConstants.INTENT_EXTRA_USER_ID to userUid,
-                                LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL to assignGigRequest
+                    //todo Check Application submitted flag
+                    if (!it.ongoing) {
+
+                        if("Application submitted".equals(it.status,true)) {
+                            viewModel.fetchInfoAndStartJoiningProcess(
+                                userUid = userUid,
+                                joiningId = joiningId,
+                                jobProfileOverview = it
                             )
-                        )
+                        }
                     } else {
+
                         navigation.navigateTo(
                             LeadManagementNavDestinations.FRAGMENT_REFERRAL, bundleOf(
                                 LeadManagementConstants.INTENT_EXTRA_SHARE_TYPE to ShareReferralType.SHARE_JOB_PROFILE_LINK,
                                 LeadManagementConstants.INTENT_EXTRA_JOB_PROFILE_ID to it.jobProfileId,
-                                LeadManagementConstants.INTENT_EXTRA_JOB_PROFILE_NAME to (it.profileName ?: ""),
-                                LeadManagementConstants.INTENT_EXTRA_USER_ID to userUid
+                                LeadManagementConstants.INTENT_EXTRA_JOB_PROFILE_NAME to (it.profileName
+                                    ?: ""),
+                                LeadManagementConstants.INTENT_EXTRA_USER_ID to userUid,
+                                LeadManagementConstants.INTENT_EXTRA_TRADE_NAME to it.tradeName
                             )
                         )
 
@@ -184,10 +214,6 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
             setBackButtonListener(View.OnClickListener {
                 navigation.popBackStack()
             })
-        }
-        
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewBinding.gigerProfileCard.setGigerProfileData(userUid)
         }
     }
 
@@ -247,7 +273,6 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
         )
         viewBinding.gigappsShimmerContainer.gone()
         viewBinding.gigappListInfoLayout.root.visible()
-
     }
 
 }

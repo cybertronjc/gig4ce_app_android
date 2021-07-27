@@ -1,13 +1,11 @@
 package com.gigforce.lead_management.ui.select_team_leader
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import com.gigforce.common_ui.components.atoms.ChipGroupComponent
 import com.gigforce.common_ui.components.atoms.models.ChipGroupModel
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.startShimmer
@@ -22,20 +20,20 @@ import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.Lce
 import com.gigforce.lead_management.LeadManagementConstants
+import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.SelectTeamLeaderFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import java.lang.Exception
 import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class SelectTeamLeaderFragment: BaseFragment2<SelectTeamLeaderFragmentBinding>(
+class SelectTeamLeaderFragment : BaseFragment2<SelectTeamLeaderFragmentBinding>(
     fragmentName = "SelectTeamLeadersFragment",
     layoutId = R.layout.select_team_leader_fragment,
     statusBarColor = R.color.lipstick_2
-    ) {
+) {
 
     companion object {
         fun newInstance() = SelectTeamLeaderFragment()
@@ -49,7 +47,7 @@ class SelectTeamLeaderFragment: BaseFragment2<SelectTeamLeaderFragmentBinding>(
 
     private lateinit var userUid: String
     private lateinit var assignGigRequest: AssignGigRequest
-    private lateinit var currentGigerInfo: GigerProfileCardDVM
+    private var currentGigerInfo: GigerProfileCardDVM? = null
 
     val selectedGigforceTLs = arrayListOf<JobTeamLeader>()
     val selectedBusinessTLs = arrayListOf<JobTeamLeader>()
@@ -77,15 +75,21 @@ class SelectTeamLeaderFragment: BaseFragment2<SelectTeamLeaderFragmentBinding>(
 
         arguments?.let {
             userUid = it.getString(LeadManagementConstants.INTENT_EXTRA_USER_ID) ?: return@let
-            assignGigRequest = it.getParcelable(LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL) ?: return@let
-            currentGigerInfo = it.getParcelable(LeadManagementConstants.INTENT_EXTRA_CURRENT_JOINING_USER_INFO)
+            assignGigRequest =
+                it.getParcelable(LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL)
+                    ?: return@let
+            currentGigerInfo =
+                it.getParcelable(LeadManagementConstants.INTENT_EXTRA_CURRENT_JOINING_USER_INFO)
                     ?: return@let
         }
 
         savedInstanceState?.let {
             userUid = it.getString(LeadManagementConstants.INTENT_EXTRA_USER_ID) ?: return@let
-            assignGigRequest = it.getParcelable(LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL) ?: return@let
-            currentGigerInfo = it.getParcelable(LeadManagementConstants.INTENT_EXTRA_CURRENT_JOINING_USER_INFO)
+            assignGigRequest =
+                it.getParcelable(LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL)
+                    ?: return@let
+            currentGigerInfo =
+                it.getParcelable(LeadManagementConstants.INTENT_EXTRA_CURRENT_JOINING_USER_INFO)
                     ?: return@let
         }
         logDataReceivedFromBundles()
@@ -118,8 +122,14 @@ class SelectTeamLeaderFragment: BaseFragment2<SelectTeamLeaderFragmentBinding>(
     ) {
         super.onSaveInstanceState(outState)
         outState.putString(LeadManagementConstants.INTENT_EXTRA_USER_ID, userUid)
-        outState.putParcelable(LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL, assignGigRequest)
-        outState.putParcelable(LeadManagementConstants.INTENT_EXTRA_CURRENT_JOINING_USER_INFO, currentGigerInfo)
+        outState.putParcelable(
+            LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL,
+            assignGigRequest
+        )
+        outState.putParcelable(
+            LeadManagementConstants.INTENT_EXTRA_CURRENT_JOINING_USER_INFO,
+            currentGigerInfo
+        )
     }
 
     private fun initViewModel() {
@@ -150,32 +160,44 @@ class SelectTeamLeaderFragment: BaseFragment2<SelectTeamLeaderFragmentBinding>(
             selectedGigforceTLs.clear()
             selectedBusinessTLs.clear()
             gigforceTeamLeaderChips.forEachIndexed { index, chipGroupModel ->
-                if (chipGroupModel.isSelected){
+                if (chipGroupModel.isSelected) {
                     selectedGigforceTLs.add(gigforceTeamLeaders.get(index))
                 }
             }
             businessTeamLeaderChips.forEachIndexed { index, chipGroupModel ->
-                if (chipGroupModel.isSelected){
+                if (chipGroupModel.isSelected) {
                     selectedBusinessTLs.add(businessTeamLeaders.get(index))
                 }
             }
-            if (selectedGigforceTLs.isNotEmpty()){
+            if (selectedGigforceTLs.isNotEmpty()) {
                 assignGigRequest.gigForceTeamLeaders = selectedGigforceTLs
                 assignGigRequest.businessTeamLeaders = selectedBusinessTLs
-                logger.d(TAG, "Selected Business TLs $selectedBusinessTLs Selected Gigforce TLs $selectedGigforceTLs")
+                logger.d(
+                    TAG,
+                    "Selected Business TLs $selectedBusinessTLs Selected Gigforce TLs $selectedGigforceTLs"
+                )
                 logger.d(TAG, "AssignGigReuest $assignGigRequest")
-//            navigation.navigateTo(LeadManagementNavDestinations.FRAGMENT_SELECT_TEAM_LEADERS, bundleOf(
-//                LeadManagementConstants.INTENT_EXTRA_USER_ID to userUid,
-//                LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL to assignGigRequest
-//            )
-//            )
+
+                navigation.navigateTo(
+                    LeadManagementNavDestinations.FRAGMENT_REFERENCE_CHECK, bundleOf(
+                        LeadManagementConstants.INTENT_EXTRA_USER_ID to userUid,
+                        LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL to assignGigRequest,
+                        LeadManagementConstants.INTENT_EXTRA_CURRENT_JOINING_USER_INFO to currentGigerInfo,
+                    )
+                )
             }
         }
 
-        viewBinding.gigerProfileCard.setProfileCard(currentGigerInfo)
+        if (currentGigerInfo != null) {
+            viewBinding.gigerProfileCard.setProfileCard(currentGigerInfo!!)
+        } else {
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewBinding.gigerProfileCard.setGigerProfileData(userUid)
+            }
+        }
     }
 
-    private fun showGigTeamLeaders(jobProfile: JobProfileDetails) = viewBinding.apply{
+    private fun showGigTeamLeaders(jobProfile: JobProfileDetails) = viewBinding.apply {
         stopShimmer(
             this.teamLeaderShimmerContainer,
             R.id.shimmer_controller
@@ -189,7 +211,10 @@ class SelectTeamLeaderFragment: BaseFragment2<SelectTeamLeaderFragmentBinding>(
         processTeamLeaders(gigforceTeamLeaders, businessTeamLeaders)
     }
 
-    private fun processTeamLeaders(gigforceTLs: List<JobTeamLeader>, businessTLs: List<JobTeamLeader>){
+    private fun processTeamLeaders(
+        gigforceTLs: List<JobTeamLeader>,
+        businessTLs: List<JobTeamLeader>
+    ) {
         gigforceTeamLeaderChips.clear()
         gigforceTLs.forEachIndexed { index, teamLeader ->
             teamLeader.let {
@@ -197,7 +222,11 @@ class SelectTeamLeaderFragment: BaseFragment2<SelectTeamLeaderFragmentBinding>(
             }
         }
         viewBinding.gigforceTLChipGroup.removeAllViews()
-        viewBinding.gigforceTLChipGroup.addChips(gigforceTeamLeaderChips, isSingleSelection = true, true)
+        viewBinding.gigforceTLChipGroup.addChips(
+            gigforceTeamLeaderChips,
+            isSingleSelection = true,
+            true
+        )
         logger.d(TAG, "Gigforce team leaders ${gigforceTeamLeaderChips.toArray()}")
 
         businessTeamLeaderChips.clear()
@@ -207,7 +236,11 @@ class SelectTeamLeaderFragment: BaseFragment2<SelectTeamLeaderFragmentBinding>(
             }
         }
         viewBinding.businessTLChipGroup.removeAllViews()
-        viewBinding.businessTLChipGroup.addChips(businessTeamLeaderChips, isSingleSelection = false, false)
+        viewBinding.businessTLChipGroup.addChips(
+            businessTeamLeaderChips,
+            isSingleSelection = false,
+            false
+        )
         logger.d(TAG, "Business team leaders ${businessTeamLeaderChips.toArray()}")
 
     }
@@ -238,7 +271,7 @@ class SelectTeamLeaderFragment: BaseFragment2<SelectTeamLeaderFragmentBinding>(
         teamLeadersInfoLayout.infoMessageTv.text = "No Team Leaders Found"
     }
 
-    private fun showGigTeamLeadersAsLoading()= viewBinding.apply {
+    private fun showGigTeamLeadersAsLoading() = viewBinding.apply {
         teamLeadersLayout.gone()
         teamLeadersInfoLayout.root.gone()
         teamLeaderShimmerContainer.visible()

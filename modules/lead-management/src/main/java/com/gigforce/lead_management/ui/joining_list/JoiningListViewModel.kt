@@ -84,7 +84,12 @@ class JoiningListViewModel @Inject constructor(
                         " ${value.size()} joinings received from server"
                     )
 
-                    joiningsRaw = value.toObjects(Joining::class.java)
+                    joiningsRaw =value.documents.map {
+                        it.toObject(Joining::class.java)!!.apply {
+                            this.joiningId = it.id
+                        }
+                    }
+
                     if (joiningsRaw.isEmpty()) {
                         _viewState.postValue(JoiningListViewState.NoJoiningFound)
                     } else {
@@ -170,20 +175,16 @@ class JoiningListViewModel @Inject constructor(
         return when (it.getStatus()) {
             JoiningStatus.SIGN_UP_PENDING -> {
                 if (JoiningSignUpInitiatedMode.BY_LINK == it.signUpMode) {
-                    "Onboarding started ${getDateDifferenceFormatted(it.updatedOn)}"
-                } else if (JoiningSignUpInitiatedMode.BY_LINK == it.signUpMode) {
                     "App invite sent ${getDateDifferenceFormatted(it.updatedOn)}"
                 } else {
                     "Signup started ${getDateDifferenceFormatted(it.updatedOn)}"
                 }
             }
             JoiningStatus.APPLICATION_PENDING -> {
-                if (it.jobProfileNameInvitedFor != null) {
+                if (it.jobProfileNameInvitedFor == null) {
                     "No Application Link shared yet"
-                } else if(it.jobProfileNameInvitedFor != null){
-                    "${it.jobProfileNameInvitedFor} invite sent ${getDateDifferenceFormatted(it.updatedOn)}"
                 } else {
-                    "Application Pending"
+                    "${it.jobProfileNameInvitedFor} invite sent ${getDateDifferenceFormatted(it.updatedOn)}"
                 }
             }
             JoiningStatus.JOINING_PENDING -> {

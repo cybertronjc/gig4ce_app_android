@@ -31,7 +31,7 @@ private const val ARG_PARAM2 = "param2"
 
 @AndroidEntryPoint
 class GigerOtpVerification : BaseFragment2<FragmentGigerOtpVerificationBinding>(
-    fragmentName = "JoiningListFragment",
+    fragmentName = "GigerOtpVerification",
     layoutId = R.layout.fragment_giger_otp_verification,
     statusBarColor = R.color.lipstick_2
 ) {
@@ -47,6 +47,7 @@ class GigerOtpVerification : BaseFragment2<FragmentGigerOtpVerificationBinding>(
     private lateinit var verificationToken: String
     private lateinit var mobileNo: String
 
+    private var cameFromJoinings : Boolean = false
     private var userId: String? = null
     private var mode = 0
 
@@ -67,6 +68,7 @@ class GigerOtpVerification : BaseFragment2<FragmentGigerOtpVerificationBinding>(
         arguments?.let {
             mode = it.getInt(LeadManagementConstants.INTENT_EXTRA_MODE)
             userId = it.getString(LeadManagementConstants.INTENT_EXTRA_USER_ID)
+            cameFromJoinings = it.getBoolean(GigerOnboardingFragment.INTENT_CAME_FROM_JOINING)
             mobileNo = it.getString(INTENT_EXTRA_MOBILE_NO) ?: return@let
             verificationToken = it.getString(INTENT_EXTRA_OTP_TOKEN) ?: return@let
         }
@@ -74,6 +76,7 @@ class GigerOtpVerification : BaseFragment2<FragmentGigerOtpVerificationBinding>(
         savedInstanceState?.let {
             mode = it.getInt(LeadManagementConstants.INTENT_EXTRA_MODE)
             userId = it.getString(LeadManagementConstants.INTENT_EXTRA_USER_ID)
+            cameFromJoinings = it.getBoolean(GigerOnboardingFragment.INTENT_CAME_FROM_JOINING)
             mobileNo = it.getString(INTENT_EXTRA_MOBILE_NO) ?: return@let
             verificationToken = it.getString(INTENT_EXTRA_OTP_TOKEN) ?: return@let
         }
@@ -84,6 +87,7 @@ class GigerOtpVerification : BaseFragment2<FragmentGigerOtpVerificationBinding>(
         outState.putString(INTENT_EXTRA_MOBILE_NO, mobileNo)
         outState.putString(INTENT_EXTRA_OTP_TOKEN, verificationToken)
         outState.putString(LeadManagementConstants.INTENT_EXTRA_USER_ID, userId)
+        outState.putBoolean(GigerOnboardingFragment.INTENT_CAME_FROM_JOINING, cameFromJoinings)
     }
 
     private fun initListeners() {
@@ -177,7 +181,8 @@ class GigerOtpVerification : BaseFragment2<FragmentGigerOtpVerificationBinding>(
             mode,
             token = verificationToken,
             otp = viewBinding.txtOtp.text.toString(),
-            mobile = mobileNo
+            mobile = mobileNo,
+            cameFromJoining = cameFromJoinings
         )
     }
 

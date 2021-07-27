@@ -29,7 +29,7 @@ import java.util.regex.Pattern
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class GigerOnboardingFragment  : BaseFragment2<GigerOnboardingFragmentBinding>(
+class GigerOnboardingFragment : BaseFragment2<GigerOnboardingFragmentBinding>(
     fragmentName = "GigerOnboardingFragment",
     layoutId = R.layout.giger_onboarding_fragment,
     statusBarColor = R.color.lipstick_2
@@ -41,21 +41,48 @@ class GigerOnboardingFragment  : BaseFragment2<GigerOnboardingFragmentBinding>(
         private val INDIAN_MOBILE_NUMBER = Pattern.compile("^[6-9][0-9]{9}\$")
         const val INTENT_EXTRA_MOBILE_NO = "mobileNo"
         const val INTENT_EXTRA_OTP_TOKEN = "otp_token"
+        const val INTENT_CAME_FROM_JOINING = "came_from_joing"
         private var isNumberRegistered = false
     }
 
     @Inject
     lateinit var navigation: INavigation
-
     private val viewModel: GigerOnboardingViewModel by viewModels()
 
+    //Data
+    private var cameFromJoinings: Boolean = false
 
     override fun viewCreated(
         viewBinding: GigerOnboardingFragmentBinding,
         savedInstanceState: Bundle?
     ) {
+        getArgsFrom(
+            arguments,
+            savedInstanceState
+        )
         initListeners()
         initViewModel()
+    }
+
+    private fun getArgsFrom(
+        arguments: Bundle?,
+        savedInstanceState: Bundle?
+    ) {
+        arguments?.let {
+            cameFromJoinings = it.getBoolean(INTENT_CAME_FROM_JOINING)
+        }
+
+        savedInstanceState?.let {
+            cameFromJoinings = it.getBoolean(INTENT_CAME_FROM_JOINING)
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(
+            INTENT_CAME_FROM_JOINING,
+            cameFromJoinings
+        )
     }
 
     val REFERRAL_TAG: String = "referral"
@@ -91,7 +118,7 @@ class GigerOnboardingFragment  : BaseFragment2<GigerOnboardingFragmentBinding>(
 
         }
 
-        viewBinding.mobileNoEt.addTextChangedListener(object : TextWatcher{
+        viewBinding.mobileNoEt.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
             }
@@ -105,7 +132,8 @@ class GigerOnboardingFragment  : BaseFragment2<GigerOnboardingFragmentBinding>(
                 if (viewBinding.mobileNoEt.text.toString().length == 10) {
                     hideKeyboard()
                     viewBinding.submitButton.isEnabled = true
-                    viewBinding.submitButton.background = resources.getDrawable(R.drawable.gradient_button)
+                    viewBinding.submitButton.background =
+                        resources.getDrawable(R.drawable.gradient_button)
                 } else {
                     viewBinding.submitButton.isEnabled = false
                     viewBinding.submitButton.background =
@@ -151,7 +179,9 @@ class GigerOnboardingFragment  : BaseFragment2<GigerOnboardingFragmentBinding>(
     private fun initViewModel() {
 
         viewModel.numberRegistered
-            .observe(viewLifecycleOwner, Observer {
+            .observe(viewLifecycleOwner, {
+                val status  = it?: return@observe
+
                 when (it) {
                     Lce.Loading -> {
                         UtilMethods.showLoading(requireContext())
@@ -159,24 +189,47 @@ class GigerOnboardingFragment  : BaseFragment2<GigerOnboardingFragmentBinding>(
 
                     is Lce.Content -> {
                         UtilMethods.hideLoading()
-                        if (it.content.status){
-                            if (!it.content.isUserRegistered){
+                        if (it.content.status) {
+
+                            val isUserRegistered = it.content.uId != null
+                            if (!isUserRegistered) {
                                 isNumberRegistered = false
-                                logger.d(TAG, "When User is not registered "+ isNumberRegistered.toString())
+                                logger.d(
+                                    TAG,
+                                    "When User is not registered " + isNumberRegistered.toString()
+                                )
                                 showMobileNotRegisterdDialog()
                             } else {
                                 isNumberRegistered = true
-                                logger.d(TAG, "When User is registered "+ isNumberRegistered.toString())
+                                logger.d(
+                                    TAG,
+                                    "When User is registered " + isNumberRegistered.toString()
+                                )
 //                                viewModel.sendOtp(
 //                                    viewBinding.mobileNoEt.text.toString()
 //                                )
-                                navigation.navigateTo(LeadManagementNavDestinations.FRAGMENT_SELECT_GIG_TO_ACTIVATE, bundleOf(
-                                    LeadManagementConstants.INTENT_EXTRA_USER_ID to "d5ToQmOn6sdAcPWvjsBuhYWm9kF3",
-                                )
-                                )
+                                if(cameFromJoinings) {
+
+                                    navigation.navigateTo(
+                                        LeadManagementNavDestinations.FRAGMENT_SELECT_GIG_TO_ACTIVATE,
+                                        bundleOf(
+                                            LeadManagementConstants.INTENT_EXTRA_USER_ID to "d5ToQmOn6sdAcPWvjsBuhYWm9kF3",
+                                        )
+                                    )
+                                } else{
+                                    //todo show user already registerd dialog
+                                }
                             }
                         } else {
-                            logger.d(TAG, "While checking if number is  registered API status failure")
+                            MaterialAlertDialogBuilder(requireContext())
+                                .setTitle("Unable to check user")
+                                .setMessage("Unable to check if user is already registered or not")
+                                .setPositiveButton("Okay") { _, _ -> }
+                                .show()
+                            logger.d(
+                                TAG,
+                                "While checking if number is  registered API status failure"
+                            )
                         }
                     }
 
@@ -190,6 +243,7 @@ class GigerOnboardingFragment  : BaseFragment2<GigerOnboardingFragmentBinding>(
 
         viewModel.checkMobileNo
             .observe(viewLifecycleOwner, Observer {
+                it ?: return@Observer
 
                 when (it) {
                     Lce.Loading -> {
@@ -206,7 +260,8 @@ class GigerOnboardingFragment  : BaseFragment2<GigerOnboardingFragmentBinding>(
                                     "LeadMgmt/gigerOnboardingOtp", bundleOf(
                                         LeadManagementConstants.INTENT_EXTRA_MODE to LeadManagementConstants.MODE_REGISTERED,
                                         INTENT_EXTRA_MOBILE_NO to "${viewBinding.mobileNoEt.text}",
-                                        INTENT_EXTRA_OTP_TOKEN to it.content.verificationToken
+                                        INTENT_EXTRA_OTP_TOKEN to it.content.verificationToken,
+                                        INTENT_CAME_FROM_JOINING to cameFromJoinings
                                     )
                                 )
                                 //viewBinding.mobileNoEt.setText("")

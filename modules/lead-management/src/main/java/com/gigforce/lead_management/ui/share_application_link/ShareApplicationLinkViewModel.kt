@@ -298,6 +298,7 @@ class ShareApplicationLinkViewModel @Inject constructor(
         val shareLink = try {
             createJobProfileReferralLink(jobProfileId)
         } catch (e: Exception) {
+            logger.e(TAG,"Unable to create share link",e)
             return@launch
         }
 
@@ -390,9 +391,8 @@ class ShareApplicationLinkViewModel @Inject constructor(
                     "Unable to create joining document, please try again later"
                 )
             )
+            return false
         }
-
-        return false
     }
 
     private suspend fun getProfileForUid(

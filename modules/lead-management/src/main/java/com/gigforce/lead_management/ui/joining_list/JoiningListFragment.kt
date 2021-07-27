@@ -2,6 +2,7 @@ package com.gigforce.lead_management.ui.joining_list
 
 import android.os.Bundle
 import android.widget.LinearLayout
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,6 +18,7 @@ import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.FragmentJoiningListBinding
 import com.gigforce.lead_management.models.JoiningListRecyclerItemData
+import com.gigforce.lead_management.ui.giger_onboarding.GigerOnboardingFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
@@ -53,7 +55,9 @@ class JoiningListFragment : BaseFragment2<FragmentJoiningListBinding>(
 
             navigation.navigateTo(
                 dest = LeadManagementNavDestinations.FRAGMENT_GIGER_ONBOARDING,
-                args = null,
+                args = bundleOf(
+                    GigerOnboardingFragment.INTENT_CAME_FROM_JOINING to true
+                ),
                 navOptions = getNavOptions()
             )
         }

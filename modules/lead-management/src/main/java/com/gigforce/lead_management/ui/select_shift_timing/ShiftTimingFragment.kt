@@ -88,11 +88,13 @@ class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
         arguments?.let {
             userUid = it.getString(LeadManagementConstants.INTENT_EXTRA_USER_ID) ?: return@let
             assignGigRequest = it.getParcelable(LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL) ?: return@let
+            currentGigerInfo = it.getParcelable(LeadManagementConstants.INTENT_EXTRA_CURRENT_JOINING_USER_INFO)
         }
 
         savedInstanceState?.let {
             userUid = it.getString(LeadManagementConstants.INTENT_EXTRA_USER_ID) ?: return@let
             assignGigRequest = it.getParcelable(LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL) ?: return@let
+            currentGigerInfo = it.getParcelable(LeadManagementConstants.INTENT_EXTRA_CURRENT_JOINING_USER_INFO)
         }
         logDataReceivedFromBundles()
     }
@@ -123,6 +125,7 @@ class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
         super.onSaveInstanceState(outState)
         outState.putString(LeadManagementConstants.INTENT_EXTRA_USER_ID, userUid)
         outState.putParcelable(LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL, assignGigRequest)
+        outState.putParcelable(LeadManagementConstants.INTENT_EXTRA_CURRENT_JOINING_USER_INFO, currentGigerInfo)
     }
 
     private fun initViewModel() {
