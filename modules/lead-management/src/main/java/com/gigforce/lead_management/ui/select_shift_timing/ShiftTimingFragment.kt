@@ -61,7 +61,7 @@ class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
     private val viewModel: ShiftTimingViewModel by viewModels()
     private lateinit var userUid: String
     private lateinit var assignGigRequest: AssignGigRequest
-    private var currentGigerInfo: GigerProfileCardDVM? = null
+    //private lateinit var currentGigerInfo: GigerProfileCardDVM
 
     val selectedShifts = arrayListOf<JobShift>()
     var shiftChips = arrayListOf<ChipGroupModel>()
@@ -88,11 +88,15 @@ class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
         arguments?.let {
             userUid = it.getString(LeadManagementConstants.INTENT_EXTRA_USER_ID) ?: return@let
             assignGigRequest = it.getParcelable(LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL) ?: return@let
+//            currentGigerInfo = it.getParcelable(LeadManagementConstants.INTENT_EXTRA_CURRENT_JOINING_USER_INFO)
+//                ?: return@let
         }
 
         savedInstanceState?.let {
             userUid = it.getString(LeadManagementConstants.INTENT_EXTRA_USER_ID) ?: return@let
             assignGigRequest = it.getParcelable(LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL) ?: return@let
+//            currentGigerInfo = it.getParcelable(LeadManagementConstants.INTENT_EXTRA_CURRENT_JOINING_USER_INFO)
+//                ?: return@let
         }
         logDataReceivedFromBundles()
     }
@@ -123,6 +127,7 @@ class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
         super.onSaveInstanceState(outState)
         outState.putString(LeadManagementConstants.INTENT_EXTRA_USER_ID, userUid)
         outState.putParcelable(LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL, assignGigRequest)
+        //outState.putParcelable(LeadManagementConstants.INTENT_EXTRA_CURRENT_JOINING_USER_INFO, currentGigerInfo)
     }
 
     private fun initViewModel() {
@@ -143,7 +148,7 @@ class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
     private fun initListeners() = viewBinding.apply {
         toolbar.apply {
             hideActionMenu()
-            showTitle("Shift Timings")
+            showTitle("Shift ")
             setBackButtonListener(View.OnClickListener {
                 navigation.popBackStack()
             })
@@ -171,6 +176,7 @@ class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
                         LeadManagementNavDestinations.FRAGMENT_SELECT_TEAM_LEADERS, bundleOf(
                             LeadManagementConstants.INTENT_EXTRA_USER_ID to userUid,
                             LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL to assignGigRequest
+                            //LeadManagementConstants.INTENT_EXTRA_CURRENT_JOINING_USER_INFO to currentGigerInfo
                         ))
                 }
             }
@@ -183,13 +189,14 @@ class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
             expectedStartDatePicker.show()
         }
 
-        if (currentGigerInfo != null) {
-            viewBinding.gigerProfileCard.setProfileCard(currentGigerInfo!!)
-        } else {
+//        if (currentGigerInfo != null) {
+//            viewBinding.gigerProfileCard.setProfileCard(currentGigerInfo!!)
+//        } else {
             viewLifecycleOwner.lifecycleScope.launch {
                 viewBinding.gigerProfileCard.setGigerProfileData(userUid)
             }
-        }
+            viewBinding.gigerProfileCard.setJobProfileData(assignGigRequest.jobProfileName, assignGigRequest.companyLogo)
+        //}
 
     }
 

@@ -75,9 +75,11 @@ class GigerOnboardingFragment  : BaseFragment2<GigerOnboardingFragmentBinding>(
 
         }
 
-        viewBinding.appBar.apply {
+        viewBinding.toolbar.apply {
+            hideActionMenu()
+            showTitle("Mobile Number")
             setBackButtonListener(View.OnClickListener {
-                activity?.onBackPressed()
+                navigation.popBackStack()
             })
         }
 
@@ -171,7 +173,7 @@ class GigerOnboardingFragment  : BaseFragment2<GigerOnboardingFragmentBinding>(
 //                                    viewBinding.mobileNoEt.text.toString()
 //                                )
                                 navigation.navigateTo(LeadManagementNavDestinations.FRAGMENT_SELECT_GIG_TO_ACTIVATE, bundleOf(
-                                    LeadManagementConstants.INTENT_EXTRA_USER_ID to "d5ToQmOn6sdAcPWvjsBuhYWm9kF3",
+                                    LeadManagementConstants.INTENT_EXTRA_USER_ID to it.content.uId,
                                 )
                                 )
                             }

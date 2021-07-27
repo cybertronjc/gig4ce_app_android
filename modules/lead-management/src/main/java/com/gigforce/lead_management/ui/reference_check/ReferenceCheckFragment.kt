@@ -2,6 +2,7 @@ package com.gigforce.lead_management.ui.reference_check
 
 import android.os.Bundle
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.gigforce.common_ui.viewdatamodels.GigerProfileCardDVM
 import com.gigforce.common_ui.viewdatamodels.leadManagement.AssignGigRequest
 import com.gigforce.core.base.BaseFragment2
@@ -16,6 +17,7 @@ import com.github.razir.progressbutton.hideProgress
 import com.github.razir.progressbutton.showProgress
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ReferenceCheckFragment : BaseFragment2<ReferenceCheckFragmentBinding>(
@@ -48,7 +50,11 @@ class ReferenceCheckFragment : BaseFragment2<ReferenceCheckFragmentBinding>(
     private fun initUi(
         viewBinding: ReferenceCheckFragmentBinding
     ) = viewBinding.apply {
-        gigerProfileCard.setProfileCard(currentGigerInfo)
+        //gigerProfileCard.setProfileCard(currentGigerInfo)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewBinding.gigerProfileCard.setGigerProfileData(userUid)
+        }
+        viewBinding.gigerProfileCard.setJobProfileData(assignGigRequest.jobProfileName, assignGigRequest.companyLogo)
     }
 
     private fun getDataFrom(

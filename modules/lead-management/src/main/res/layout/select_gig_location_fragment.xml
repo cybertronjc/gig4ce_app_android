@@ -163,7 +163,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"/>
 
-                    <AutoCompleteTextView
+                    <Spinner
                         android:id="@+id/searchLocation"
                         android:layout_width="match_parent"
                         android:layout_height="36dp"
@@ -175,6 +175,27 @@
                         android:hint="@string/search_or_select"
                         android:focusableInTouchMode="true"
                         android:fontFamily="@font/lato"
+                        android:padding="4dp"
+                        android:textColor="@color/text_grey"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/locationChipGroup"
+                        />
+
+                    <AutoCompleteTextView
+                        android:id="@+id/searchLocation1"
+                        android:layout_width="match_parent"
+                        android:layout_height="36dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="24dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="@dimen/size_16"
+                        android:background="@drawable/search_autocomplete_bg"
+                        android:hint="@string/search_or_select"
+                        android:focusableInTouchMode="true"
+                        android:fontFamily="@font/lato"
+                        android:visibility="gone"
                         android:padding="4dp"
                         android:textColor="@color/text_grey"
                         android:textSize="14sp"

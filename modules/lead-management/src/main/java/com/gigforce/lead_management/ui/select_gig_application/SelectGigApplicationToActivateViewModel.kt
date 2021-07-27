@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 import com.gigforce.common_ui.viewdatamodels.leadManagement.GigApplication
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfileOverview
 import com.gigforce.core.logger.GigforceLogger
@@ -36,7 +37,8 @@ sealed class SelectGigAppViewState {
 class SelectGigApplicationToActivateViewModel @Inject constructor(
     private val leadManagementRepo: LeadManagementRepository,
     private val logger: GigforceLogger,
-    private val firebaseAuthStateListener: FirebaseAuthStateListener
+    private val firebaseAuthStateListener: FirebaseAuthStateListener,
+    private val profileFirebaseRepository: ProfileFirebaseRepository
 
 ) : ViewModel() {
 

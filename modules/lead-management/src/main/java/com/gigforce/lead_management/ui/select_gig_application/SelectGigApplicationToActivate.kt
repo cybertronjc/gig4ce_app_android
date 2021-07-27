@@ -10,6 +10,8 @@ import androidx.lifecycle.lifecycleScope
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
+import com.gigforce.common_ui.repository.ProfileFirebaseRepository
+import com.gigforce.common_ui.viewdatamodels.GigerProfileCardDVM
 import com.gigforce.common_ui.viewdatamodels.leadManagement.AssignGigRequest
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.gone
@@ -42,9 +44,12 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
     @Inject
     lateinit var navigation: INavigation
 
+    @Inject
+    lateinit var profileFirebaseRepository: ProfileFirebaseRepository
     private val viewModel: SelectGigApplicationToActivateViewModel by viewModels()
     private lateinit var userUid: String
-    private lateinit var assignGigRequest: AssignGigRequest
+    private var assignGigRequest = AssignGigRequest()
+    private var currentGigerInfo: GigerProfileCardDVM? = null
 
     override fun viewCreated(
         viewBinding: SelectGigApplicationToActivateFragmentBinding,
@@ -119,13 +124,24 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
     }
 
     private fun initViews() {
-//        viewBinding.gigerProfileCard.apply {
-//            setProfileCard(GigerProfileCardDVM("https://instagram.fdel11-2.fna.fbcdn.net/v/t51.2885-19/s320x320/125221466_394003705121691_8790543636526463384_n.jpg", "Jagdish Choudhary", "+919898833257", "Swiggy delivery", ""))
-//        }
+        viewBinding.gigerProfileCard.apply {
+            viewLifecycleOwner.lifecycleScope.launch {
+                val profileData = profileFirebaseRepository.getProfileData(userUid)
+                currentGigerInfo = GigerProfileCardDVM(
+                    profileData.profileAvatarName,
+                    profileData.name,
+                    profileData.loginMobile,
+                    "", ""
+                )
+                setProfileCard(
+                    currentGigerInfo!!
+                )
+            }
+        }
     }
 
     private fun initViewModel() = viewBinding.apply {
-        viewModel.getJobProfilesToActivate("d5ToQmOn6sdAcPWvjsBuhYWm9kF3")
+        viewModel.getJobProfilesToActivate(userUid)
         viewModel.viewState.observe(viewLifecycleOwner, Observer {
             val state = it ?: ""
 
@@ -152,13 +168,17 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
             if (viewModel.getSelectedIndex() != -1) {
                 viewModel.getSelectedJobProfile().let {
 
-                    if(!it.ongoing) {
+                    if(it.ongoing) {
                         assignGigRequest.jobProfileId = it.jobProfileId
                         assignGigRequest.jobProfileName = it.profileName.toString()
+                        currentGigerInfo?.jobProfileName = it.profileName.toString()
+                        currentGigerInfo?.jobProfileLogo = it.companyLogo.toString()
 
-                        //logger.d(TAG, "Company logo: ${assignGigRequest.companyLogo}")
+                        logger.d(TAG, "Current Giger info ${currentGigerInfo?.jobProfileLogo}")
                         navigation.navigateTo(
                             LeadManagementNavDestinations.FRAGMENT_SELECT_GIG_LOCATION, bundleOf(
+                                LeadManagementConstants.INTENT_EXTRA_JOB_PROFILE_ID to it.jobProfileId,
+                                LeadManagementConstants.INTENT_EXTRA_CURRENT_JOINING_USER_INFO to currentGigerInfo,
                                 LeadManagementConstants.INTENT_EXTRA_USER_ID to userUid,
                                 LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL to assignGigRequest
                             )
@@ -168,7 +188,7 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
                             LeadManagementNavDestinations.FRAGMENT_REFERRAL, bundleOf(
                                 LeadManagementConstants.INTENT_EXTRA_SHARE_TYPE to ShareReferralType.SHARE_JOB_PROFILE_LINK,
                                 LeadManagementConstants.INTENT_EXTRA_JOB_PROFILE_ID to it.jobProfileId,
-                                LeadManagementConstants.INTENT_EXTRA_JOB_PROFILE_NAME to (it.profileName ?: ""),
+                                LeadManagementConstants.INTENT_EXTRA_CURRENT_JOINING_USER_INFO to currentGigerInfo,
                                 LeadManagementConstants.INTENT_EXTRA_USER_ID to userUid
                             )
                         )
@@ -185,10 +205,7 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
                 navigation.popBackStack()
             })
         }
-        
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewBinding.gigerProfileCard.setGigerProfileData(userUid)
-        }
+
     }
 
     private fun loadingGigAppsFromServer() = viewBinding.apply {

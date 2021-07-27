@@ -1,6 +1,7 @@
 package com.gigforce.lead_management.ui.select_gig_location
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
@@ -25,8 +26,11 @@ import com.gigforce.lead_management.LeadManagementConstants
 import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.SelectGigLocationFragmentBinding
+import com.gigforce.lead_management.gigeronboarding.SelectGigApplicationToActivateViewModel
+import com.gigforce.lead_management.ui.select_team_leader.SelectTeamLeaderFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -48,9 +52,13 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentBinding
     private lateinit var userUid: String
     private lateinit var assignGigRequest: AssignGigRequest
     private var currentGigerInfo: GigerProfileCardDVM? = null
+    var arrayAdapter: ArrayAdapter<String>? = null
+    val locationsArray = arrayListOf<String>()
 
     val cityChips = arrayListOf<ChipGroupModel>()
+    val locationChips = arrayListOf<ChipGroupModel>()
     var cityAndLocations = listOf<JobProfileCityAndLocation>()
+    //var arrayAdapter =  ArrayAdapter<String>()
 
     override fun viewCreated(
         viewBinding: SelectGigLocationFragmentBinding,
@@ -74,12 +82,18 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentBinding
             assignGigRequest =
                 it.getParcelable(LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL)
                     ?: return@let
+            currentGigerInfo =
+                it.getParcelable(LeadManagementConstants.INTENT_EXTRA_CURRENT_JOINING_USER_INFO)
+                    ?: return@let
         }
 
         savedInstanceState?.let {
             userUid = it.getString(LeadManagementConstants.INTENT_EXTRA_USER_ID) ?: return@let
             assignGigRequest =
                 it.getParcelable(LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL)
+                    ?: return@let
+            currentGigerInfo =
+                it.getParcelable(LeadManagementConstants.INTENT_EXTRA_CURRENT_JOINING_USER_INFO)
                     ?: return@let
         }
         logDataReceivedFromBundles()
@@ -142,7 +156,7 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentBinding
 
         viewBinding.submitBtn.setOnClickListener {
             cityChips.forEachIndexed { index, chipGroupModel ->
-                if (chipGroupModel.isSelected) {
+                if (chipGroupModel.isSelected){
                     assignGigRequest.cityId = cityAndLocations.get(index).id
                     assignGigRequest.cityName = cityAndLocations.get(index).city.toString()
                 }
@@ -154,24 +168,30 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentBinding
                 navigation.navigateTo(
                     LeadManagementNavDestinations.FRAGMENT_SELECT_SHIFT_TIMMINGS, bundleOf(
                         LeadManagementConstants.INTENT_EXTRA_USER_ID to userUid,
-                        LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL to assignGigRequest
+                        LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL to assignGigRequest,
+                        LeadManagementConstants.INTENT_EXTRA_CURRENT_JOINING_USER_INFO to currentGigerInfo
                     )
                 )
             }
         }
 
+        arrayAdapter = context?.let { ArrayAdapter(it,android.R.layout.simple_spinner_dropdown_item, locationsArray) }
+        viewBinding.searchLocation.adapter = arrayAdapter
 
-        if (currentGigerInfo != null) {
-            viewBinding.gigerProfileCard.setProfileCard(currentGigerInfo!!)
-        } else {
+
+//        if (currentGigerInfo != null) {
+//            viewBinding.gigerProfileCard.setProfileCard(currentGigerInfo!!)
+//        } else {
             viewLifecycleOwner.lifecycleScope.launch {
                 viewBinding.gigerProfileCard.setGigerProfileData(userUid)
             }
-        }
+            viewBinding.gigerProfileCard.setJobProfileData(assignGigRequest.jobProfileName, assignGigRequest.companyLogo)
+        //}
 
-        viewBinding.searchLocation.setOnItemClickListener { adapterView, view, i, l ->
 
-        }
+//        viewBinding.searchLocation.setOnItemClickListener { adapterView, view, i, l ->
+//
+//        }
     }
 
     private fun showGigLocations(jobProfile: JobProfileDetails) = viewBinding.apply {
@@ -187,7 +207,7 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentBinding
         //set chips for gig locations
 
         cityAndLocations = jobProfile.cityAndLocations
-        if (cityAndLocations.isEmpty()) {
+        if (cityAndLocations.isEmpty()){
             showNoGigLocationFound()
         } else {
             cityChips.clear()
@@ -197,14 +217,19 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentBinding
                 }
             }
             viewBinding.cityChipGroup.removeAllViews()
-            viewBinding.cityChipGroup.addChips(cityChips, isSingleSelection = true, true)
+            viewBinding.cityChipGroup.addChips(cityChips, isSingleSelection = true, false)
             logger.d(TAG, "Job city and locations ${cityChips.toArray()}")
             viewBinding.cityChipGroup.setOnCheckedChangeListener(object :
                 ChipGroupComponent.OnCustomCheckedChangeListener {
                 override fun onCheckedChangeListener(model: ChipGroupModel) {
                     try {
-                        val jobLocations = cityAndLocations.get(model.chipId).jobLocations
-                        jobLocations?.let { processJobLocations(it) }
+//                        val jobLocations = cityAndLocations.get(model.chipId).jobLocations
+//                        jobLocations?.let { processJobLocations(it) }
+
+                        val jobLocalities = jobProfile.locality
+                        val stores = jobProfile.stores.filter { it.cityId?.equals(cityAndLocations.get(model.chipId).id) == true }
+                        locationChipGroup.removeAllViews()
+                        processJobLocations(jobLocalities, stores)
 
                     } catch (e: Exception) {
                         logger.d(TAG, "Exception while checkedChangeListener ${e.toString()}")
@@ -215,42 +240,51 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentBinding
         }
     }
 
-    private fun processJobLocations(jobLocations: List<JobLocation>) {
-        val locationChips = arrayListOf<ChipGroupModel>()
-        val groupedJobLocations = jobLocations?.filter {
+
+    private fun processJobLocations(jobLocalities: List<JobLocality>, jobStores: List<JobStore>) = viewBinding.apply{
+
+        locationChips.clear()
+        arrayAdapter?.notifyDataSetChanged()
+        val groupedJobLocations = jobStores?.filter {
             it.type != null
         }?.groupBy {
             it.type
         }
-
         var count = 0;
-        groupedJobLocations?.forEach { (localityType, list) ->
-            logger.d(TAG, "processing data, Status :  : ${list.size} JobLocations")
-            locationChips.add(ChipGroupModel(localityType, -1, count))
+        if (jobLocalities.isNotEmpty()){
+            locationChips.add(ChipGroupModel("Locality", -1, 0))
+            logger.d(TAG, "processing job localities $locationChips")
+        }
+
+        groupedJobLocations?.forEach { (storeType, list) ->
+            locationChips.add(ChipGroupModel(storeType, -1, count))
+            logger.d(TAG, "processing data, Status :  : ${locationChips} JobStores")
             count++
         }
 
-        viewBinding.locationChipGroup.addChips(locationChips, isSingleSelection = true, true)
+       locationChipGroup.addChips(locationChips, isSingleSelection = true, false)
 
         //extract dropdown from JobLocations by grouping into one list with type : Locality, Hub, Store
-        viewBinding.locationChipGroup.setOnCheckedChangeListener(object :
-            ChipGroupComponent.OnCustomCheckedChangeListener {
+        viewBinding.locationChipGroup.setOnCheckedChangeListener(object : ChipGroupComponent.OnCustomCheckedChangeListener{
             override fun onCheckedChangeListener(model1: ChipGroupModel) {
-                val locationsArray = arrayListOf<String>()
-                jobLocations.forEachIndexed { index, jobLocation ->
-                    locationsArray.add(jobLocation.name.toString())
-                }
-                val arrayAdapter: ArrayAdapter<String> = ArrayAdapter(
-                    requireContext(),
-                    android.R.layout.simple_spinner_dropdown_item,
-                    locationsArray
-                )
-                viewBinding.searchLocation.threshold = 1
-                viewBinding.searchLocation.setAdapter(arrayAdapter)
 
-                viewBinding.searchLocation.setOnItemClickListener { adapterView, view, i, l ->
-                    assignGigRequest.location = jobLocations.get(i)
+                if (model1.chipId == 0){
+                    jobLocalities.forEachIndexed { index, jobLocality ->
+                        locationsArray.add(jobLocality.name.toString())
+                    }
+                } else{
+                    groupedJobLocations.forEach { s, list ->
+                        //locationsArray.add(s)
+                        list.forEach {
+                            locationsArray.add(it.name.toString())
+                        }
+                    }
                 }
+                arrayAdapter?.notifyDataSetChanged()
+                logger.d(TAG, "locations array $locationsArray")
+
+
+
             }
 
         })
@@ -269,7 +303,7 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentBinding
         locationInfoLayout.infoMessageTv.text = "No Gig Location Found"
     }
 
-    private fun showErrorInLoadingGigLocation(error: String) = viewBinding.apply {
+    private fun showErrorInLoadingGigLocation(error: String) = viewBinding.apply{
         locationLayout.gone()
         locationInfoLayout.root.visible()
         locationShimmerContainer.gone()
@@ -282,7 +316,7 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentBinding
         locationInfoLayout.infoMessageTv.text = error
     }
 
-    private fun showGigLocationAsLoading() {
+    private fun showGigLocationAsLoading(){
         viewBinding.locationLayout.gone()
         viewBinding.locationInfoLayout.root.gone()
         viewBinding.locationShimmerContainer.visible()

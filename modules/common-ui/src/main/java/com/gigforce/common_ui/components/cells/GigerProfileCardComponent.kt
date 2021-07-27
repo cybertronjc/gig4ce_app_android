@@ -114,12 +114,12 @@ class GigerProfileCardComponent(context: Context, attrs: AttributeSet?) : FrameL
     }
 
     fun setProfileCard(gigerProfileCardDVM: GigerProfileCardDVM){
-//        gigerProfileCardDVM?.let {
-//            viewBinding.gigerName.text = it.name
-//            viewBinding.gigerNumber.text = it.number
-//            viewBinding.jobProfileTitle.text = it.jobProfileName
-//            setProfilePicture(it.gigerImg)
-//            setJobProfileLogo(it.jobProfileLogo)
-//        }
+        gigerProfileCardDVM?.let {
+            setGigerName(it.name)
+            setGigerNumber(it.number)
+            setProfilePicture(it.gigerImg)
+            setJobProfileData(it.jobProfileName, it.jobProfileLogo)
+
+        }
     }
 }
