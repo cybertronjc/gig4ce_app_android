@@ -3,6 +3,7 @@ package com.gigforce.lead_management.ui.select_gig_location
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import androidx.core.os.bundleOf
@@ -175,18 +176,25 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentBinding
             }
         }
 
-        arrayAdapter = context?.let { ArrayAdapter(it,android.R.layout.simple_spinner_dropdown_item, locationsArray) }
-        viewBinding.searchLocation.adapter = arrayAdapter
 
+        viewBinding.searchLocation.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                showToast("Selected: " + p1.toString())
+            }
 
-//        if (currentGigerInfo != null) {
-//            viewBinding.gigerProfileCard.setProfileCard(currentGigerInfo!!)
-//        } else {
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+
+            }
+
+        }
+        if (currentGigerInfo != null) {
+            viewBinding.gigerProfileCard.setProfileCard(currentGigerInfo!!)
+        } else {
             viewLifecycleOwner.lifecycleScope.launch {
                 viewBinding.gigerProfileCard.setGigerProfileData(userUid)
             }
             viewBinding.gigerProfileCard.setJobProfileData(assignGigRequest.jobProfileName, assignGigRequest.companyLogo)
-        //}
+        }
 
 
 //        viewBinding.searchLocation.setOnItemClickListener { adapterView, view, i, l ->
@@ -225,8 +233,11 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentBinding
                     try {
 //                        val jobLocations = cityAndLocations.get(model.chipId).jobLocations
 //                        jobLocations?.let { processJobLocations(it) }
-
-                        val jobLocalities = jobProfile.locality
+                        locationsArray.clear()
+                        arrayAdapter?.notifyDataSetChanged()
+                        viewBinding.searchLocation.adapter = null
+                        arrayAdapter?.clear()
+                        val jobLocalities = jobProfile.locality.filter { it.cityId?.equals(cityAndLocations.get(model.chipId).id) == true }
                         val stores = jobProfile.stores.filter { it.cityId?.equals(cityAndLocations.get(model.chipId).id) == true }
                         locationChipGroup.removeAllViews()
                         processJobLocations(jobLocalities, stores)
@@ -244,7 +255,7 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentBinding
     private fun processJobLocations(jobLocalities: List<JobLocality>, jobStores: List<JobStore>) = viewBinding.apply{
 
         locationChips.clear()
-        arrayAdapter?.notifyDataSetChanged()
+
         val groupedJobLocations = jobStores?.filter {
             it.type != null
         }?.groupBy {
@@ -254,6 +265,7 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentBinding
         if (jobLocalities.isNotEmpty()){
             locationChips.add(ChipGroupModel("Locality", -1, 0))
             logger.d(TAG, "processing job localities $locationChips")
+            count++
         }
 
         groupedJobLocations?.forEach { (storeType, list) ->
@@ -267,8 +279,11 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentBinding
         //extract dropdown from JobLocations by grouping into one list with type : Locality, Hub, Store
         viewBinding.locationChipGroup.setOnCheckedChangeListener(object : ChipGroupComponent.OnCustomCheckedChangeListener{
             override fun onCheckedChangeListener(model1: ChipGroupModel) {
-
-                if (model1.chipId == 0){
+                locationsArray.clear()
+                arrayAdapter?.notifyDataSetChanged()
+                viewBinding.searchLocation.adapter = null
+                arrayAdapter?.clear()
+                if (model1.text.equals("Locality")){
                     jobLocalities.forEachIndexed { index, jobLocality ->
                         locationsArray.add(jobLocality.name.toString())
                     }
@@ -280,10 +295,10 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentBinding
                         }
                     }
                 }
+                arrayAdapter = context?.let { ArrayAdapter(it,android.R.layout.simple_spinner_dropdown_item, locationsArray) }
+                viewBinding.searchLocation.adapter = arrayAdapter
                 arrayAdapter?.notifyDataSetChanged()
                 logger.d(TAG, "locations array $locationsArray")
-
-
 
             }
 

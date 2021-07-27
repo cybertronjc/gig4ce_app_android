@@ -50,11 +50,11 @@ class ReferenceCheckFragment : BaseFragment2<ReferenceCheckFragmentBinding>(
     private fun initUi(
         viewBinding: ReferenceCheckFragmentBinding
     ) = viewBinding.apply {
-        //gigerProfileCard.setProfileCard(currentGigerInfo)
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewBinding.gigerProfileCard.setGigerProfileData(userUid)
-        }
-        viewBinding.gigerProfileCard.setJobProfileData(assignGigRequest.jobProfileName, assignGigRequest.companyLogo)
+        gigerProfileCard.setProfileCard(currentGigerInfo)
+//        viewLifecycleOwner.lifecycleScope.launch {
+//            viewBinding.gigerProfileCard.setGigerProfileData(userUid)
+//        }
+//        viewBinding.gigerProfileCard.setJobProfileData(assignGigRequest.jobProfileName, assignGigRequest.companyLogo)
     }
 
     private fun getDataFrom(
