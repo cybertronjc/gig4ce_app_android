@@ -13,6 +13,12 @@ data class JobProfileDetails(
     @SerializedName("cityAndLocations")
     val cityAndLocations: List<JobProfileCityAndLocation>,
 
+    @SerializedName("locality")
+    val locality: List<JobLocality>,
+
+    @SerializedName("stores")
+    val stores: List<JobStore>,
+
     @SerializedName("shifts")
     val shifts: List<JobShift>,
 
@@ -30,12 +36,6 @@ data class JobProfileCityAndLocation(
 
     @SerializedName("city")
     val city: String?,
-
-    @SerializedName("jobLocations")
-    val jobLocations: List<JobLocation>? = emptyList(),
-
-    @SerializedName("shifts")
-    val shifts: List<JobShift>? = emptyList(),
 ) : Parcelable
 
 @Parcelize
@@ -48,6 +48,33 @@ data class JobLocation(
 
     @SerializedName("name")
     val name: String? = ""
+) : Parcelable
+
+@Parcelize
+data class JobStore(
+    @SerializedName("id")
+    val id: String = "",
+
+    @SerializedName("type")
+    val type: String = "",
+
+    @SerializedName("name")
+    val name: String? = "",
+
+    @SerializedName("cityId")
+    val cityId: String? = ""
+) : Parcelable
+
+@Parcelize
+data class JobLocality(
+    @SerializedName("id")
+    val id: String = "",
+
+    @SerializedName("name")
+    val name: String? = "",
+
+    @SerializedName("cityId")
+    val cityId: String? = ""
 ) : Parcelable
 
 @Parcelize

@@ -173,7 +173,8 @@ class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
                     navigation.navigateTo(
                         LeadManagementNavDestinations.FRAGMENT_SELECT_TEAM_LEADERS, bundleOf(
                             LeadManagementConstants.INTENT_EXTRA_USER_ID to userUid,
-                            LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL to assignGigRequest
+                            LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL to assignGigRequest,
+                            LeadManagementConstants.INTENT_EXTRA_CURRENT_JOINING_USER_INFO to currentGigerInfo
                         ))
                 }
             }

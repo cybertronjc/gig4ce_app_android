@@ -10,6 +10,9 @@ import androidx.lifecycle.lifecycleScope
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
+import com.gigforce.common_ui.repository.ProfileFirebaseRepository
+import com.gigforce.common_ui.viewdatamodels.GigerProfileCardDVM
+import com.gigforce.common_ui.viewdatamodels.leadManagement.AssignGigRequest
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
@@ -125,8 +128,7 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
     }
 
     private fun initViewModel() = viewBinding.apply {
-        viewModel.getJobProfilesToActivate("d5ToQmOn6sdAcPWvjsBuhYWm9kF3")
-
+        viewModel.getJobProfilesToActivate(userUid)
         viewModel.viewState.observe(viewLifecycleOwner, Observer {
             val state = it ?: return@Observer
             when (state) {
