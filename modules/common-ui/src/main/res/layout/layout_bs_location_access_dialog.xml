@@ -39,7 +39,7 @@
         android:fontFamily="@font/lato"
 
         android:gravity="center_horizontal"
-        android:text="@string/your_location_details_will_help_us_find_you_best_gig_near_you"
+        android:text="@string/background_location_details_subtitle"
         android:textColor="@color/warm_grey"
         android:textSize="@dimen/font14"
         android:textStyle="normal" />

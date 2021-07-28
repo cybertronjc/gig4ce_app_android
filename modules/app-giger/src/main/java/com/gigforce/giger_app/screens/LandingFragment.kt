@@ -3,32 +3,43 @@ package com.gigforce.giger_app.screens
 import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.common_ui.AppDialogsInterface
 import com.gigforce.common_ui.ConfirmationDialogOnClickListener
 import com.gigforce.common_ui.configrepository.ConfigRepository
+import com.gigforce.common_ui.deviceInfo_permission.DeviceInfoGatherer
+import com.gigforce.common_ui.utils.LocationUpdates
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.giger_app.R
 import com.gigforce.giger_app.vm.LandingViewModel
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.jaeger.library.StatusBarUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_landing.*
 import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class LandingFragment : Fragment() {
+class LandingFragment : Fragment(),
+    LocationUpdates.LocationUpdateCallbacks {
     val viewModel: LandingViewModel by viewModels()
     @Inject lateinit var navigation: INavigation
     @Inject
     lateinit var appDialogsInterface: AppDialogsInterface
+
+    var locationUpdates: LocationUpdates? = LocationUpdates()
+    var location: Location? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -43,8 +54,18 @@ class LandingFragment : Fragment() {
             landing_rv.collection = it
         })
         checkforForceupdate()
+        logDeviceAndPermissionInfo()
     }
 
+    private fun logDeviceAndPermissionInfo() {
+        try {
+            DeviceInfoGatherer.updateDeviceInfoAndPermissionGranted(
+                    requireContext().applicationContext
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
 
 
     private fun checkforForceupdate() {
@@ -125,4 +146,32 @@ class LandingFragment : Fragment() {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
     }
+
+    override fun onResume() {
+        super.onResume()
+        StatusBarUtil.setColorNoTranslucent(
+                requireActivity(), ResourcesCompat.getColor(
+                resources,
+                android.R.color.white,
+                null
+        )
+        )
+
+        locationUpdates?.startUpdates(requireActivity() as AppCompatActivity)
+        locationUpdates?.setLocationUpdateCallbacks(this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        locationUpdates?.stopLocationUpdates(requireActivity())
+    }
+
+    override fun locationReceiver(location: Location?) {
+
+    }
+
+    override fun lastLocationReceiver(location: Location?) {
+
+    }
+
 }

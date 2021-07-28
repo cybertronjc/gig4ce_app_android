@@ -11,4 +11,7 @@ interface IBuildConfigVM {
     fun getSendSMSURL():String
     fun getGigersUnderTlUrl(): String
     fun getUserRegisterInfoUrl() : String
+    fun getVerificationKycOcrResult():String
+    fun getKycVerificationUrl(): String
+    fun getEventBridgeUrl(): String
 }

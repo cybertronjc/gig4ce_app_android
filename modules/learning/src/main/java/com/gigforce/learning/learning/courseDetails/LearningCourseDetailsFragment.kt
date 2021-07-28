@@ -18,8 +18,10 @@ import com.example.learning.R
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.getCircularProgressDrawable
 import com.gigforce.common_ui.viewdatamodels.FeatureItemCardDVM
-import com.gigforce.core.utils.NavFragmentsData
+import com.gigforce.common_ui.viewdatamodels.VideoPlayCardDVM
+import com.gigforce.common_ui.viewdatamodels.models.Module
 import com.gigforce.core.StringConstants
+import com.gigforce.core.datamodels.learning.Course
 import com.gigforce.core.datamodels.learning.CourseContent
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
@@ -27,10 +29,9 @@ import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.recyclerView.ItemClickListener
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.Lce
+import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.learning.learning.LearningConstants
 import com.gigforce.learning.learning.courseContent.CourseContentListFragment
-import com.gigforce.core.datamodels.learning.Course
-import com.gigforce.common_ui.viewdatamodels.models.Module
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_learning_course_details.*
@@ -54,9 +55,9 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ) = inflater.inflate(R.layout.fragment_learning_course_details, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -64,14 +65,14 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
 
         savedInstanceState?.let {
             FROM_CLIENT_ACTIVATION =
-                it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
+                    it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
             mCourseId = it.getString(INTENT_EXTRA_COURSE_ID) ?: return@let
             mModuleId = it.getString(INTENT_EXTRA_MODULE_ID) ?: return@let
         }
 
         arguments?.let {
             FROM_CLIENT_ACTIVATION =
-                it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
+                    it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
             mCourseId = it.getString(INTENT_EXTRA_COURSE_ID) ?: return@let
             mModuleId = it.getString(INTENT_EXTRA_MODULE_ID) ?: return@let
         }
@@ -151,8 +152,6 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
         //learning_details_lessons_rv.adapter = mAdapter
 
 
-
-
         learningBackButton.setOnClickListener {
             activity?.onBackPressed()
         }
@@ -161,57 +160,57 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
 
             if (viewModel.currentlySelectedModule != null) {
                 navigation.navigateTo(
-                    "learning/assessmentListFragment", bundleOf(
+                        "learning/assessmentListFragment", bundleOf(
                         StringConstants.INTENT_COURSE_ID.value to viewModel.currentlySelectedModule?.courseId,
                         StringConstants.INTENT_MODULE_ID.value to viewModel.currentlySelectedModule?.id
-                    )
+                )
                 )
             }
         }
 
         lessonsSeeMoreButton.setOnClickListener {
             navigation.navigateTo(
-                "learning/courseContentListFragment",
-                bundleOf(
-                    CourseContentListFragment.INTENT_EXTRA_COURSE_ID to viewModel.currentlySelectedModule?.courseId,
-                    CourseContentListFragment.INTENT_EXTRA_MODULE_ID to viewModel.currentlySelectedModule?.id
-                )
+                    "learning/courseContentListFragment",
+                    bundleOf(
+                            CourseContentListFragment.INTENT_EXTRA_COURSE_ID to viewModel.currentlySelectedModule?.courseId,
+                            CourseContentListFragment.INTENT_EXTRA_MODULE_ID to viewModel.currentlySelectedModule?.id
+                    )
             )
         }
     }
 
     private fun initViewModel() {
         viewModel
-            .courseDetails
-            .observe(viewLifecycleOwner, Observer {
+                .courseDetails
+                .observe(viewLifecycleOwner, Observer {
 
-                when (it) {
-                    Lce.Loading -> showCourseDetailsAsLoading()
-                    is Lce.Content -> showCourseDetails(it.content)
-                    is Lce.Error -> showErrorInLoadingCourseDetails(it.error)
-                }
-            })
+                    when (it) {
+                        Lce.Loading -> showCourseDetailsAsLoading()
+                        is Lce.Content -> showCourseDetails(it.content)
+                        is Lce.Error -> showErrorInLoadingCourseDetails(it.error)
+                    }
+                })
 
         viewModel.courseModules
-            .observe(viewLifecycleOwner, Observer {
+                .observe(viewLifecycleOwner, Observer {
 
-                when (it) {
-                    Lce.Loading -> showModulesAsLoading()
-                    is Lce.Content -> showModulesOnView(it.content)
-                    is Lce.Error -> showErrorInLoadingModules(it.error)
-                }
-            })
+                    when (it) {
+                        Lce.Loading -> showModulesAsLoading()
+                        is Lce.Content -> showModulesOnView(it.content)
+                        is Lce.Error -> showErrorInLoadingModules(it.error)
+                    }
+                })
 
         viewModel
-            .courseLessons
-            .observe(viewLifecycleOwner, Observer {
+                .courseLessons
+                .observe(viewLifecycleOwner, Observer {
 
-                when (it) {
+                    when (it) {
 //                    Lce.Loading -> showLessonsAsLoading()
 //                    is Lce.Content -> showLessonsOnView(it.content)
 //                    is Lce.Error -> showErrorInLoadingLessons(it.error)
-                }
-            })
+                    }
+                })
 
 //        viewModel
 //            .courseAssessments
@@ -225,15 +224,17 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
 //            })
 
         //loading and showing lessons and assessments
-        viewModel.courseLessonsAndAssessments.observe(viewLifecycleOwner, Observer {
+        viewModel.courseLessonsAndAssessments.observe(viewLifecycleOwner, Observer { it ->
             Log.d("list1234", it.toString())
-            if (it.size > 0){
-                var sublist = it.subList(0,4)
+            if (it.isNotEmpty()) {
+                var sublist = it
+                if (it.size >= 4)
+                    sublist = it.subList(0, 4)
                 learning_all_lesson_rv.visible()
                 learning_details_learning_error.gone()
+                sublist.forEach{ if(it is VideoPlayCardDVM) it.fragment = this }
                 learning_all_lesson_rv.collection = sublist
-            }
-            else{
+            } else {
                 learning_all_lesson_rv.gone()
                 learning_details_learning_error.visible()
             }
@@ -250,28 +251,28 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
             if (course.coverPicture!!.startsWith("http", true)) {
 
                 GlideApp.with(requireContext())
-                    .load(course.coverPicture)
-                    .placeholder(getCircularProgressDrawable())
-                    .error(R.drawable.ic_learning_default_back)
-                    .into(videoThumnailIV)
+                        .load(course.coverPicture)
+                        .placeholder(getCircularProgressDrawable())
+                        .error(R.drawable.ic_learning_default_back)
+                        .into(videoThumnailIV)
             } else {
                 FirebaseStorage.getInstance()
-                    .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
-                    .child(course.coverPicture!!)
-                    .downloadUrl
-                    .addOnSuccessListener { fileUri ->
+                        .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
+                        .child(course.coverPicture!!)
+                        .downloadUrl
+                        .addOnSuccessListener { fileUri ->
 
-                        GlideApp.with(requireContext())
-                            .load(fileUri)
-                            .placeholder(getCircularProgressDrawable())
-                            .error(R.drawable.ic_learning_default_back)
-                            .into(videoThumnailIV)
-                    }
+                            GlideApp.with(requireContext())
+                                    .load(fileUri)
+                                    .placeholder(getCircularProgressDrawable())
+                                    .error(R.drawable.ic_learning_default_back)
+                                    .into(videoThumnailIV)
+                        }
             }
         } else {
             GlideApp.with(requireContext())
-                .load(R.drawable.ic_learning_default_back)
-                .into(videoThumnailIV)
+                    .load(R.drawable.ic_learning_default_back)
+                    .into(videoThumnailIV)
         }
 
         videoTitleTV.text = course.name
@@ -385,7 +386,7 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
         var assignmentsCompleted = 0
         var totalAssignments = 0
 
-        if(viewModel.currentlySelectedModule != null) {
+        if (viewModel.currentlySelectedModule != null) {
 
             val currentModuleProgress = viewModel.mCurrentModulesProgressData?.find { it.moduleId == viewModel.currentlySelectedModule!!.id }
                     ?: return
@@ -599,8 +600,8 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
                 viewModel.currentlySelectedModule = module
 
                 viewModel.getCourseLessonsAndAssessments(
-                    courseId = mCourseId,
-                    moduleId = module.id
+                        courseId = mCourseId,
+                        moduleId = module.id
                 )
 
                 course_details_main_layout.post {
@@ -612,15 +613,15 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
 
                 if (oldPostion != viewModel.currentlySelectedModulePosition) {
                     (learning_details_modules_rv?.collection?.get(oldPostion) as FeatureItemCardDVM).isSelectedView =
-                        false
+                            false
                     (learning_details_modules_rv?.collection?.get(position) as FeatureItemCardDVM).isSelectedView =
-                        true
+                            true
 
                     learning_details_modules_rv?.coreAdapter?.notifyItemChanged(oldPostion)
                     learning_details_modules_rv?.coreAdapter?.notifyItemChanged(viewModel.currentlySelectedModulePosition)
-                    (learning_details_modules_rv?.layoutManager as LinearLayoutManager )?.scrollToPositionWithOffset(
-                        viewModel.currentlySelectedModulePosition,
-                        40
+                    (learning_details_modules_rv?.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(
+                            viewModel.currentlySelectedModulePosition,
+                            40
                     )
 //                        learning_details_modules_rv.scrollTP(viewModel.currentlySelectedModulePosition)
                 }
@@ -635,14 +636,17 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
 //        var abc = "$e.lessonsCompleted} / ${e.totalLessons} Completed"
         content.forEach { e ->
             moduleList.add(
-                FeatureItemCardDVM(
-                    image = e.coverPicture,
-                    title = e.title,
-                    subtitle = "${e.lessonsCompleted} / ${e.totalLessons} Completed"
-                )
+                    FeatureItemCardDVM(
+                            image = e.coverPicture,
+                            title = e.title,
+                            subtitle = "${e.lessonsCompleted} / ${e.totalLessons} Completed"
+                    )
             )
         }
-        moduleList.get(0).isSelectedView = true
+
+        if(moduleList.isNotEmpty())
+           moduleList.get(0).isSelectedView = true
+
         return moduleList
     }
 

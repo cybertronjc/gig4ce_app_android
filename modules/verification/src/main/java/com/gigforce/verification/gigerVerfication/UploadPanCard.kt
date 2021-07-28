@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -34,7 +33,6 @@ import com.gigforce.verification.R
 import com.gigforce.verification.gigerVerfication.panCard.AddPanCardInfoFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
-import com.ncorti.slidetoact.SlideToActView
 import dagger.hilt.android.AndroidEntryPoint
 //import kotlinx.android.synthetic.main.fragment_add_pan_card_info_2.*
 //import kotlinx.android.synthetic.main.fragment_add_pan_card_info_2.panViewLayout
@@ -239,13 +237,13 @@ class UploadPanCard : Fragment(), SelectImageSourceBottomSheetActionListener,
         viewModel.gigerVerificationStatus
             .observe(viewLifecycleOwner, Observer {
                 this.gigerVerificationStatus = it
-                this.panCardDataModel = it.panCardDetails
+                this.panCardDataModel = it.panCardDataModel
                 progressBar1.gone()
 
-                if (it.panCardDetailsUploaded && it.panCardDetails != null) {
+                if (it.panCardDetailsUploaded && it.panCardDataModel != null) {
 
-                    if (it.panCardDetails!!.userHasPanCard != null) {
-                        if (it.panCardDetails!!.userHasPanCard!!) {
+                    if (it.panCardDataModel!!.userHasPanCard != null) {
+                        if (it.panCardDataModel!!.userHasPanCard!!) {
                             setDataOnViewLayout(it)
                         } else {
                             setDataOnEditLayout(null)
@@ -282,7 +280,7 @@ class UploadPanCard : Fragment(), SelectImageSourceBottomSheetActionListener,
         panMainLayout1.gone()
         panViewLayout1.visible()
 
-        val panDetails = gigVerificationStatus.panCardDetails ?: return
+        val panDetails = gigVerificationStatus.panCardDataModel ?: return
 
         statusTV.text = panDetails.verifiedString
         statusTV.setTextColor(

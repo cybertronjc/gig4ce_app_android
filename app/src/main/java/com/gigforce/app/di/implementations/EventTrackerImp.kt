@@ -1,12 +1,12 @@
 package com.gigforce.app.di.implementations
 
-import android.app.NotificationManager
 import android.content.Context
 import android.util.Log
 import com.appsflyer.AppsFlyerConversionListener
 import com.appsflyer.AppsFlyerLib
 import com.gigforce.app.BuildConfig
 import com.gigforce.app.MainApplication
+import com.gigforce.app.eventbridge.EventBridgeRepo
 import com.gigforce.core.extensions.toBundle
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.ProfilePropArgs
@@ -18,6 +18,10 @@ import com.moe.pushlibrary.MoEHelper
 import com.moengage.core.Properties
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.branch.referral.Branch
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class EventTrackerImp @Inject constructor(
@@ -28,7 +32,7 @@ class EventTrackerImp @Inject constructor(
 
     var mixpanel: MixpanelAPI? = MixpanelAPI.getInstance(context, BuildConfig.MIX_PANEL_KEY)
 
-
+    var eventBridgeRepo = EventBridgeRepo(BuildConfig.EVENT_BRIDGE_URL)
 
     private var moEngageHelper: MoEHelper? = MoEHelper.getInstance(context)
 
@@ -81,8 +85,15 @@ class EventTrackerImp @Inject constructor(
         logEventOnFirebaseAnalytics(args)
         logEventOnAppsFlyer(args)
         logEventOnMoEngage(args)
+        logEventOnEventBridge(args)
     }
 
+    private fun logEventOnEventBridge(args: TrackingEventArgs) {
+        val scope = CoroutineScope(Job() + Dispatchers.Main)
+        scope.launch {
+            eventBridgeRepo.setEventToEventBridge(args.eventName,args.props)
+        }
+    }
 
 
     override fun setUpAnalyticsTools(){

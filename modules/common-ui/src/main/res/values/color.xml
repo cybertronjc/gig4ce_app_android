@@ -13,8 +13,9 @@
     <color name="brandColor2">#990077</color>
 
     <color name="greyLight">#e5e5e5</color>
-    <color name="grey">#e5e5e5</color>
+    <color name="grey">#979797</color>
     <color name="greyDark">#e5e5e5</color>
+
 
     <color name="blueLight">#90CAF9</color>
     <color name="blue">#2196F3</color>
@@ -64,6 +65,7 @@
     <color name="black_two">#313131</color>
 
     <color name="app_red">#E02020</color>
+    <color name="outlined_button_text">#cd1e6a</color>
 
     <color name="gig_timer_silver_light">#e2dfdf</color>
     <color name="gig_timer_silver_dark">#888888</color>

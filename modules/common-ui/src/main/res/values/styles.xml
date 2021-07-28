@@ -200,16 +200,36 @@
         <item name="android:textAppearance">?attr/textAppearanceSubtitle1</item>
     </style>
 
-    <style name="CardTitle" parent="Widget.MaterialComponents.TextView">
-        <item name="android:textAppearance">?attr/textAppearanceSubtitle2</item>
-        <item name="android:fontFamily">@font/lato_bold</item>
+    <style name="Title" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:textAppearance">?attr/textAppearanceBody2</item>
         <item name="fontFamily">@font/lato_bold</item>
+        <item name="textcolor">@color/blackDark</item>
+    </style>
+
+    <style name="Title1" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="android:textAppearance">?attr/textAppearanceHeadline5</item>
+        <item name="fontFamily">@font/lato_bold</item>
+        <item name="textcolor">@color/blackDark</item>
+        <item name="android:fontFamily">@font/lato_bold</item>
+    </style>
+
+    <style name="Body1" parent="TextAppearance.MaterialComponents.Subtitle2">
+        <item name="android:textAppearance">?attr/textAppearanceSubtitle2</item>
+        <item name="textcolor">@color/blackDark</item>
     </style>
 
 
+    <style name="Caption1" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:textAppearance">?attr/textAppearanceCaption</item>
+        <item name="textcolor">@color/grey</item>
+    </style>
 
-    <style name="CardSubtitle" parent="Widget.MaterialComponents.TextView">
-        <item name="android:textAppearance">?attr/textAppearanceSubtitle2</item>
+    <style name="Caption2" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:textAppearance">?attr/textAppearanceCaption</item>
+        <item name="android:textSize">14sp</item>
+        <item name="fontFamily">@font/lato_bold</item>
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="textcolor">@color/grey</item>
     </style>
 
     <style name="CardCaptionTitle" parent="Widget.AppCompat.TextView">
@@ -217,6 +237,27 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
+    <style name="CardTitle" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textAppearance">?attr/textAppearanceSubtitle2</item>
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="fontFamily">@font/lato_bold</item>
+    </style>
+
+    <style name="CardSubtitle" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textAppearance">?attr/textAppearanceSubtitle2</item>
+    </style>
+
+    <style name="CardCaption1" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textAppearance">?attr/textAppearanceCaption</item>
+        <item name="textcolor">@color/grey</item>
+    </style>
+
+
+
+
+
+
+    <!--    Buttons and others-->
     <style name="IconButtonStyle" parent="Widget.AppCompat.ImageButton">
         <item name="backgroundTint">@color/white</item>
         <item name="android:background">@color/white</item>
@@ -259,18 +300,38 @@
         <item name="android:layout_marginRight">@dimen/dp_xsm1</item>
     </style>
 
+
+    <style name="button_style" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@drawable/app_gradient_button</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+
+
+
+
+
+
+
+
+
+    <!--Second Theme-->
     <style name="GigforceTheme.Option2">
         <item name="colorPrimary">@color/yellow</item>
         <item name="colorOnPrimary">@color/blackLight</item>
     </style>
 
     <style name="RoundedSquaredChipsUI" parent="@style/Widget.MaterialComponents.Chip.Choice">
-<!--        <item name="chipBackgroundColor">@color/app_chip_bck_colors_ui</item>-->
+        <!--        <item name="chipBackgroundColor">@color/app_chip_bck_colors_ui</item>-->
         <item name="android:textColor">@color/app_chip_text_colors_ui</item>
         <item name="chipStrokeColor">@color/app_enrolled_users_chip_stroke_colors_ui</item>
         <item name="chipStrokeWidth">1dp</item>
         <item name="shapeAppearanceOverlay">@style/RoundedSquaredChipsStyle</item>
     </style>
+
     <style name="RoundedSquaredChipsStyle" parent="">
         <item name="cornerSize">50%</item>
     </style>

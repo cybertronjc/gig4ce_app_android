@@ -31,7 +31,7 @@ enum class ColorOptions(val value: Int) {
     LightPink(201),
     LightBlue(202),
     Lipstick(203),
-    GRAY(204);
+    GreyLight(204);
 
     companion object {
         private val VALUES = values()
@@ -46,7 +46,7 @@ enum class TextColorOptions(val value: Int) {
     LightPink(201),
     LightBlue(202),
     Lipstick(203),
-    GRAY(204);
+    GreyLight(204);
 
 
     companion object {
@@ -109,7 +109,7 @@ open class StandardActionCardComponent(context: Context, attrs: AttributeSet?) :
                 ColorOptions.LightPink -> R.color.light_pink
                 ColorOptions.LightBlue -> R.color.light_blue
                 ColorOptions.Lipstick -> R.color.lipstick
-                ColorOptions.GRAY -> R.color.grey
+                ColorOptions.GreyLight -> R.color.greyLight
                 else -> R.color.white
             }
             setBackgroundColor(ContextCompat.getColor(context, selectedColor))
@@ -123,7 +123,7 @@ open class StandardActionCardComponent(context: Context, attrs: AttributeSet?) :
                 TextColorOptions.LightPink -> R.color.light_pink
                 TextColorOptions.LightBlue -> R.color.light_blue
                 TextColorOptions.Lipstick -> R.color.lipstick
-                TextColorOptions.GRAY -> R.color.grey
+                TextColorOptions.GreyLight -> R.color.greyLight
                 else -> 0
             }
             if (selectedColor != 0) {
@@ -141,13 +141,13 @@ open class StandardActionCardComponent(context: Context, attrs: AttributeSet?) :
     }
 
     fun setImageFromUrl(url: String, imageType: String) {
-        GlideApp.with(context)
+        GlideApp.with(context.applicationContext)
             .load(url)
             .into(if (imageType.equals("image")) image else icon)
     }
 
     fun setImageFromFirebaseUrl(storageReference: StorageReference, imageType: String) {
-        GlideApp.with(context)
+        GlideApp.with(context.applicationContext)
             .load(storageReference)
             .into(if (imageType.equals("image")) image else icon)
     }

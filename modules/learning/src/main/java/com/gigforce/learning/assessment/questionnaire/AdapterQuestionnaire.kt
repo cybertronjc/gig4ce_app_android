@@ -1,5 +1,6 @@
 package com.gigforce.learning.assessment.questionnaire
 
+import android.app.Activity
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
@@ -19,7 +20,9 @@ import com.gigforce.core.extensions.visible
 import kotlinx.android.synthetic.main.layout_rv_questionnaire_cards.view.*
 import java.util.*
 
-class AdapterQuestionnaire : RecyclerView.Adapter<AdapterQuestionnaire.ViewHolder>() {
+class AdapterQuestionnaire constructor(
+        private val acitivity : Activity
+) : RecyclerView.Adapter<AdapterQuestionnaire.ViewHolder>() {
     private lateinit var callbacks: AdapterQuestionnaireCallbacks
     private var horizontalItemDecoration: ItemOffsetDecoration? = null
     var items: List<Questions> = listOf()
@@ -70,7 +73,7 @@ class AdapterQuestionnaire : RecyclerView.Adapter<AdapterQuestionnaire.ViewHolde
         holder.itemView.rv_answers_questionnaire.addItemDecoration(
             horizontalItemDecoration!!
         )
-        val adapterAnswers = AdapterOptionsQuestionnaire()
+        val adapterAnswers = AdapterOptionsQuestionnaire(acitivity)
         if (!stateCityMap.isNullOrEmpty()) {
             adapterAnswers.setStateCityMap(stateCityMap!!)
 

@@ -27,7 +27,9 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AdapterOptionsQuestionnaire constructor(
+        private val activity : Activity
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private lateinit var callbacks: AdapterOptionsQuestionnaireCallbacks
     private lateinit var item: Questions
     private var stateCityMap: MutableMap<States, MutableList<Cities>?> = mutableMapOf()
@@ -280,7 +282,7 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
                     holder.itemView.tv_cities.visible()
                     holder.itemView.tv_cities.text = option.dropDownHint
                     val spinnerDialog = SpinnerDialog(
-                        holder.itemView.context as Activity,
+                        activity,
                         option.cities?.map { it.city }?.toList() as ArrayList<String>,
                         option.dropDownHint,
                         "close"

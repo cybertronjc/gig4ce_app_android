@@ -49,8 +49,8 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    dataBinding {
-        enabled = true
+    buildFeatures {
+        dataBinding true
     }
 
     buildTypes {
@@ -81,8 +81,8 @@ android {
 
             applicationId "com.gigforce.app"
             resValue "string", "app_name", "Gigforce"
-            versionCode 126
-            versionName "1.31.7"
+            versionCode 133
+            versionName "1.32.4"
             buildConfigField "String", 'REFERRAL_BASE_URL', '"https://gig4ce.page.link/"'
             buildConfigField "String", 'GENERATE_PAYSLIP_URL', '"https://45nydq0i5g.execute-api.ap-south-1.amazonaws.com/default/get-or-create-payment-advice-prod"'
             buildConfigField "String", 'DRIVING_CERTIFICATE_URL', '"https://d1rdwfmrsl.execute-api.ap-south-1.amazonaws.com/default/"'
@@ -98,6 +98,11 @@ android {
             buildConfigField "String", 'GET_GIGER_UNDER_TL_ATTENDANCE_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/prod/gigs/tlwise"'
             buildConfigField "String", 'GET_USER_REGISTER_INFO_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/prod/auth/check"'
             buildConfigField "String", 'ALL_FEATURES_ICONS_STORAGE_URL','"gs://gig4ce-app.appspot.com/app_assets/feature_icons/ic_"'
+            buildConfigField "String", 'KYC_OCR_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/prod/kyc/upload"'
+            buildConfigField "String", 'KYC_VERIFY_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/prod/kyc/verify"'
+            buildConfigField "String", 'EVENT_BRIDGE_URL','"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/prod/updatestatus/sendToEventBridge"'
+            buildConfigField "String", 'STORAGE_BASE_URL','"gs://gig4ce-app.appspot.com"'
+            buildConfigField "String", 'PANEL_BASE_URL', '"http://gigforce.in"'
         }
 
         /**
@@ -127,6 +132,11 @@ android {
             buildConfigField "String", 'GET_GIGER_UNDER_TL_ATTENDANCE_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/gigs/tlwise"'
             buildConfigField "String", 'GET_USER_REGISTER_INFO_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/auth/check"'
             buildConfigField "String", 'ALL_FEATURES_ICONS_STORAGE_URL','"gs://gigforce-dev.appspot.com/pub/app_icons/ic_"'
+            buildConfigField "String", 'KYC_OCR_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/kyc/upload"'
+            buildConfigField "String", 'KYC_VERIFY_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/kyc/verify"'
+            buildConfigField "String", 'EVENT_BRIDGE_URL','"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/updatestatus/sendToEventBridge"'
+            buildConfigField "String", 'STORAGE_BASE_URL','"gs://gigforce-dev.appspot.com"'
+            buildConfigField "String", 'PANEL_BASE_URL', '"http://staging.gigforce.in"'
         }
 
         staging {
@@ -151,7 +161,12 @@ android {
             buildConfigField "String", 'MOENGAGE_KEY', '"L991NPOGW0FVJBN6C2FN3KS5"'
             buildConfigField "String", 'GET_GIGER_UNDER_TL_ATTENDANCE_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/gigs/tlwise"'
             buildConfigField "String", 'GET_USER_REGISTER_INFO_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/auth/check"'
-            buildConfigField "String", 'ALL_FEATURES_ICONS_STORAGE_URL','"gs://gigforce-dev.appspot.com/pub/app_icons/ic_"'
+            buildConfigField "String", 'ALL_FEATURES_ICONS_STORAGE_URL','"gs://gigforce-staging.appspot.com/pub/app_icons/ic_"'
+            buildConfigField "String", 'KYC_OCR_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/kyc/upload"'
+            buildConfigField "String", 'KYC_VERIFY_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/kyc/verify"'
+            buildConfigField "String", 'EVENT_BRIDGE_URL','"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/updatestatus/sendToEventBridge"'
+            buildConfigField "String", 'STORAGE_BASE_URL','"gs://gigforce-staging.appspot.com"'
+            buildConfigField "String", 'PANEL_BASE_URL', '"http://staging.gigforce.in"'
         }
     }
 
@@ -195,6 +210,7 @@ dependencies {
     implementation project(path: ':modules:giger-gigs')
     implementation project(path: ':modules:landing')
     implementation project(path: ':modules:common-image-capture-picker')
+    implementation project(path: ':modules:user-tracking')
 
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.9'
 
@@ -294,7 +310,6 @@ dependencies {
 
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
     implementation 'com.google.firebase:firebase-core:17.4.0'
-    implementation 'com.firebaseui:firebase-ui-auth:4.3.1'
     //ID fy
 
     // LocaleChanger - language
@@ -415,4 +430,6 @@ dependencies {
     //implementation "androidx.appcompat:appcompat:1.2.0"
     implementation "androidx.lifecycle:lifecycle-process:2.2.0"
     implementation "com.moengage:moe-android-sdk:$moengageVersion"
+
+    implementation "androidx.work:work-runtime-ktx:2.5.0"
 }

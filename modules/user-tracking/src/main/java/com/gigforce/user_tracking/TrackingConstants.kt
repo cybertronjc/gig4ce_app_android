@@ -9,6 +9,7 @@ object TrackingConstants {
 
     const val SERVICE_INTENT_EXTRA_USER_NAME = "user_name"
     const val SERVICE_INTENT_EXTRA_GIG_ID = "gig_id"
+    const val SERVICE_INTENT_EXTRA_TRADING_NAME = "trading_name"
 
     const val LOCATION_UPDATE_INTERVAL = 5000L
     const val FASTEST_LOCATION_INTERVAL = 2000L

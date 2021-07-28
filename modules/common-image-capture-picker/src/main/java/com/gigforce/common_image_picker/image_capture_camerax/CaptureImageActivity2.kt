@@ -196,20 +196,21 @@ class CameraActivity : AppCompatActivity() {
         val cameraIdList = cameraManager.cameraIdList
         if (cameraIdList.isEmpty()) return
 
+        if (cameraIdList.size > 1) {
+            val cameraFragment = CameraFragment.getInstance(
+                cameraId = cameraIdList[1],
+                pixelFormat = ImageFormat.JPEG
+            )
 
-        val cameraFragment = CameraFragment.getInstance(
-            cameraId = cameraIdList[1],
-            pixelFormat = ImageFormat.JPEG
-        )
-
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.add(
-            R.id.fragment_container,
-            cameraFragment,
-            CameraFragment.TAG
-        )
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-        transaction.commit()
+            val transaction = supportFragmentManager.beginTransaction()
+            transaction.add(
+                R.id.fragment_container,
+                cameraFragment,
+                CameraFragment.TAG
+            )
+            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+            transaction.commit()
+        }
     }
 
     companion object {

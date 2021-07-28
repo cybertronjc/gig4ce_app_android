@@ -4,8 +4,10 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.gigforce.app.di.implementations.SharedPreAndCommonUtilDataImp
+import com.gigforce.app.notification.NotificationConstants
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.moe.pushlibrary.MoEHelper
 import com.moengage.core.MoEngage
@@ -34,6 +36,17 @@ class MainApplication : Application() {
         ProcessLifecycleOwner.get().lifecycle.addObserver(PresenceManager())
         setUpRemoteConfig()
         initFirebaseAuthListener()
+        subscribeToFirebaseMessageingTopics()
+    }
+
+    private fun subscribeToFirebaseMessageingTopics() {
+        FirebaseMessaging.getInstance()
+            .subscribeToTopic(NotificationConstants.TOPICS.TOPIC_SYNC_DATA)
+            .addOnSuccessListener {
+                Log.d(LOG_TAG, "subscibed to topic sync data")
+            }.addOnFailureListener {
+                Log.e(LOG_TAG, "Unable to subscribe to sync data topic",it)
+            }
     }
 
     private fun initFirebaseAuthListener() {

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingLeft="19dp"
+    android:paddingTop="16dp"
+    android:paddingRight="15dp"
+    android:paddingBottom="15dp">
+
+    <ImageView
+        android:id="@+id/imageview"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_ques_round" />
+
+
+    <ImageView
+        android:id="@+id/close"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_marginTop="2dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="4dp"
+          app:srcCompat="@drawable/ic_cross_grey"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/titleTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        android:fontFamily="@font/lato_bold"
+        android:letterSpacing="0"
+        android:textColor="#000000"
+        android:textSize="14sp"
+        app:layout_constraintStart_toEndOf="@id/imageview"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="19dp"
+        tools:text="Why we need this " />
+
+
+    <TextView
+        android:id="@+id/contentTV"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        android:fontFamily="@font/lato"
+        android:letterSpacing="0"
+        android:textColor="#000000"
+        app:layout_constraintEnd_toStartOf="@+id/close"
+        app:layout_constraintStart_toEndOf="@id/imageview"
+        app:layout_constraintTop_toBottomOf="@id/titleTV"
+        tools:text="Lorem Ipsum is simply dummy .Lorem Ipsum is simply dummy. Lorem Ipsum is simply dummy .Lorem Ipsum is simply dummy . Lorem Ipsum is simply dummy .Lorem Ipsum is simply dummy. Lorem Ipsum i " />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/gotItBtn"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="21dp"
+        android:layout_marginBottom="15dp"
+        android:minHeight="@dimen/size_36"
+        android:text="@string/got_it"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/contentTV"
+        app:strokeColor="@color/colorPrimary"
+        tools:layout_editor_absoluteX="19dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

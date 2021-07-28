@@ -250,7 +250,7 @@ class LoginViewModel @Inject constructor(
                 .signInWithCredential(credential)
                 .addOnSuccessListener {
                     Log.d(TAG, "signInWithCredential:success")
-
+                        Log.e("eventtesting","capturing")
                     if (it.additionalUserInfo!!.isNewUser) {
                         eventTracker.pushEvent(
                                 TrackingEventArgs(
