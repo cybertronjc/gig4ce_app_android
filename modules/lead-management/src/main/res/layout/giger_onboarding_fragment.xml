@@ -198,7 +198,7 @@
                     android:fontFamily="@font/lato"
                     android:lineSpacingExtra="3sp"
                     android:text="@string/not_registered"
-                    android:textColor="@color/black"
+                    android:textColor="#131415"
                     android:textSize="14sp"
                     android:layout_marginEnd="@dimen/size_16"
                     android:layout_marginBottom="@dimen/size_16"

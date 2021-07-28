@@ -36,6 +36,7 @@ import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.ShiftTimingFragmentBinding
 import com.gigforce.lead_management.ui.select_gig_location.SelectGigLocationFragment
 import com.gigforce.lead_management.ui.select_team_leader.SelectTeamLeaderFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.lang.Exception
@@ -165,10 +166,16 @@ class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
 
             when {
                 selectedShifts.isEmpty() -> {
-                    showToast("Select at least one shift to continue")
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setMessage("Select at least one shift to continue")
+                        .setPositiveButton("Okay") { _, _ -> }
+                        .show()
                 }
                 expectedDate.text.isEmpty() -> {
-                    showToast("Select expected date of start to continue")
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setMessage("Select expected date to continue")
+                        .setPositiveButton("Okay") { _, _ -> }
+                        .show()
                 }
                 else -> {
                     assignGigRequest.shift = selectedShifts

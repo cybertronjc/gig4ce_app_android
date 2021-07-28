@@ -115,11 +115,12 @@ class GigerOnboardingFragment : BaseFragment2<GigerOnboardingFragmentBinding>(
             hideActionMenu()
             showTitle("Mobile Number")
             setBackButtonListener(View.OnClickListener {
-                navigation.popBackStack()
+                activity?.onBackPressed()
             })
         }
 
         viewBinding.changeNumber.setOnClickListener {
+            viewBinding.mobileNoEt.setText("")
             viewBinding.mobileNoEt.requestFocus()
             viewBinding.createProfileBtn.gone()
             viewBinding.submitButton.tag = "next"

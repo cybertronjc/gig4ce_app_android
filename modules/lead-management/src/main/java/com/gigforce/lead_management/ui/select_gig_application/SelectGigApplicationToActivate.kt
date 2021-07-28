@@ -153,7 +153,7 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
                 is SelectGigAppViewState.ErrorInStartingJoiningProcess -> {
 
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Unble to start Joining")
+                        .setTitle("Unable to start Joining")
                         .setMessage(state.error)
                         .setPositiveButton("Okay") { _, _ -> }
                         .show()
@@ -165,12 +165,29 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
         })
 
         viewModel.selectedIndex.observe(viewLifecycleOwner, Observer {
-            submitBtn.isEnabled = it == -1
+            if (it == -1) {
+                submitBtn.isEnabled = false
+                submitBtn.background = resources.getDrawable(R.drawable.app_gradient_button_disabled)
+            }
         })
 
         viewModel.selectedJobProfileOverview.observe(viewLifecycleOwner, Observer {
             logger.d(TAG, "selected job profile $it")
-            submitBtn.text = if (it.ongoing) "Share Referral Link" else "Next"
+            if (it.ongoing) {
+                if ("Application submitted".equals(it.status, true)) {
+                    submitBtn.text = "Next"
+                    submitBtn.isEnabled = true
+                    submitBtn.background = resources.getDrawable(R.drawable.app_gradient_button)
+                } else {
+                    submitBtn.text = "Next"
+                    submitBtn.isEnabled = false
+                    submitBtn.background = resources.getDrawable(R.drawable.app_gradient_button_disabled)
+                }
+            }else {
+                submitBtn.text = "Share Referral Link"
+                submitBtn.isEnabled = true
+                submitBtn.background = resources.getDrawable(R.drawable.app_gradient_button)
+            }
         })
 
 
@@ -183,8 +200,7 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
 
 
                     //todo Check Application submitted flag
-                    if (!it.ongoing) {
-
+                    if (it.ongoing) {
                         if("Application submitted".equals(it.status,true)) {
                             viewModel.fetchInfoAndStartJoiningProcess(
                                 userUid = userUid,
@@ -221,9 +237,9 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
 
     private fun loadingGigAppsFromServer() = viewBinding.apply {
 
-        viewBinding.gigApplicationsRv.collection = emptyList()
-        viewBinding.gigappListInfoLayout.root.gone()
-        viewBinding.gigappsShimmerContainer.visible()
+        gigApplicationsRv.collection = emptyList()
+        gigappListInfoLayout.root.gone()
+        gigappsShimmerContainer.visible()
 
         startShimmer(
             this.gigappsShimmerContainer as LinearLayout,
@@ -242,24 +258,24 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
         gigAppList: List<GigAppListRecyclerItemData>
     ) = viewBinding.apply {
         stopShimmer(
-            viewBinding.gigappsShimmerContainer as LinearLayout,
+            gigappsShimmerContainer as LinearLayout,
             R.id.shimmer_controller
         )
-        viewBinding.gigappsShimmerContainer.gone()
-        viewBinding.gigappListInfoLayout.root.gone()
+        gigappsShimmerContainer.gone()
+        gigappListInfoLayout.root.gone()
 
-        viewBinding.gigApplicationsRv.collection = gigAppList
+        gigApplicationsRv.collection = gigAppList
     }
 
     private fun showNoGigAppsFound() = viewBinding.apply {
 
-        viewBinding.gigApplicationsRv.collection = emptyList()
+        gigApplicationsRv.collection = emptyList()
         stopShimmer(
             viewBinding.gigappsShimmerContainer as LinearLayout,
             R.id.shimmer_controller
         )
-        viewBinding.gigappsShimmerContainer.gone()
-        viewBinding.gigappListInfoLayout.root.visible()
+        gigappsShimmerContainer.gone()
+        gigappListInfoLayout.root.visible()
 
         //todo show illus here
     }
@@ -268,13 +284,13 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
         error: String
     ) = viewBinding.apply {
 
-        viewBinding.gigApplicationsRv.collection = emptyList()
+        gigApplicationsRv.collection = emptyList()
         stopShimmer(
-            viewBinding.gigappsShimmerContainer as LinearLayout,
+            gigappsShimmerContainer as LinearLayout,
             R.id.shimmer_controller
         )
-        viewBinding.gigappsShimmerContainer.gone()
-        viewBinding.gigappListInfoLayout.root.visible()
+        gigappsShimmerContainer.gone()
+        gigappListInfoLayout.root.visible()
     }
 
 }
