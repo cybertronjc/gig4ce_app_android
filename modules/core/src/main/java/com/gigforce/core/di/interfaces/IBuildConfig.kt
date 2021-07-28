@@ -12,4 +12,5 @@ interface IBuildConfig {
     fun getFeaturesIconLocationUrl() : String
     fun getStorageBaseUrl() : String
     fun getPanelBaseUrl() : String
+    fun getApiBaseURL() : String
 }
