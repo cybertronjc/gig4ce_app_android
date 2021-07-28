@@ -208,7 +208,7 @@ class JoiningRecyclerItemView(
             userName = currentViewData.userName,
             userUid = currentViewData.userUid!!,
             enrollingTlUid = "",
-            assignGigsFrom = Timestamp.now(),
+            assignGigsFrom = "",
             cityId = "",
             cityName = "",
             location = JobLocation(

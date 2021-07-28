@@ -5,6 +5,7 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.startShimmer
@@ -15,6 +16,7 @@ import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfileOverview
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JoiningSignUpInitiatedMode
 import com.gigforce.common_ui.views.GigforceToolbar
 import com.gigforce.core.base.BaseFragment2
+import com.gigforce.core.extensions.getTextChangeAsStateFlow
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
@@ -26,6 +28,7 @@ import com.gigforce.lead_management.databinding.FragmentPickJobProfileForReferra
 import com.gigforce.lead_management.models.GigAppListRecyclerItemData
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -37,15 +40,43 @@ class PickJobProfileForReferralFragment : BaseFragment2<FragmentPickJobProfileFo
     @Inject lateinit var navigation: INavigation
     private val viewModel: ShareApplicationLinkViewModel by viewModels()
 
+    //data
+    private lateinit var userMobileNo : String
+
     override fun viewCreated(
         viewBinding: FragmentPickJobProfileForReferralBinding,
         savedInstanceState: Bundle?
     ) {
 
+        getDataFrom(
+            arguments,
+            savedInstanceState
+        )
         initToolbar(viewBinding.toolbar)
         initView(viewBinding)
         initListeners(viewBinding)
         initViewModel()
+    }
+
+    private fun getDataFrom(
+        arguments: Bundle?,
+        savedInstanceState: Bundle?
+    ) {
+        arguments?.let {
+            userMobileNo = it.getString(LeadManagementConstants.INTENT_EXTRA_PHONE_NUMBER) ?: return@let
+        }
+
+        savedInstanceState?.let {
+            userMobileNo = it.getString(LeadManagementConstants.INTENT_EXTRA_PHONE_NUMBER) ?: return@let
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(
+            LeadManagementConstants.INTENT_EXTRA_PHONE_NUMBER,
+            userMobileNo
+        )
     }
 
 
@@ -69,6 +100,13 @@ class PickJobProfileForReferralFragment : BaseFragment2<FragmentPickJobProfileFo
 
         PushDownAnim.setPushDownAnimTo(sendReferralLinkBtn).setOnClickListener {
             validateDataAndOpenReferralScreen()
+        }
+
+        lifecycleScope.launchWhenCreated {
+            searchGigET.getTextChangeAsStateFlow()
+                .collect {
+                    viewModel.searchJobProfiles(it)
+                }
         }
     }
 
@@ -95,15 +133,6 @@ class PickJobProfileForReferralFragment : BaseFragment2<FragmentPickJobProfileFo
             nameErrorTv.gone()
         }
 
-        val userMobile = gigersMobileET.text.toString()
-        if (userMobile.isEmpty()) {
-            mobileErrorTv.visible()
-            mobileErrorTv.text = "Please fill user mobile"
-            return@apply
-        } else {
-            mobileErrorTv.gone()
-        }
-
 
         navigation.navigateTo(
             LeadManagementNavDestinations.FRAGMENT_REFERRAL,
@@ -112,7 +141,7 @@ class PickJobProfileForReferralFragment : BaseFragment2<FragmentPickJobProfileFo
                 LeadManagementConstants.INTENT_EXTRA_JOB_PROFILE_ID to selectedJobProfile.jobProfileId,
                 LeadManagementConstants.INTENT_EXTRA_JOB_PROFILE_NAME to (selectedJobProfile.profileName ?: ""),
                 LeadManagementConstants.INTENT_EXTRA_USER_NAME to userName,
-                LeadManagementConstants.INTENT_EXTRA_PHONE_NUMBER to "+91$userMobile",
+                LeadManagementConstants.INTENT_EXTRA_PHONE_NUMBER to userMobileNo,
                 LeadManagementConstants.INTENT_EXTRA_TRADE_NAME to (selectedJobProfile.tradeName ?: "")
             )
         )

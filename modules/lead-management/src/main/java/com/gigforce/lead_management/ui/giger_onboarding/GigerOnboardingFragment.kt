@@ -89,10 +89,19 @@ class GigerOnboardingFragment : BaseFragment2<GigerOnboardingFragmentBinding>(
     private fun initListeners() {
         viewBinding.submitButton.setOnClickListener {
             if (viewBinding.submitButton.tag?.toString().equals(REFERRAL_TAG)) {
+
+                val mobileNo = viewBinding.mobileNoEt.text.toString()
+                if (!INDIAN_MOBILE_NUMBER.matcher(mobileNo).matches()) {
+                    showAlertDialog("", "Enter a valid Mobile No")
+                    return@setOnClickListener
+                }
+
                 //navigate to referral
                 navigation.navigateTo(
                     dest = LeadManagementNavDestinations.FRAGMENT_PICK_PROFILE_FOR_REFERRAL,
-                    args = null,
+                    args = bundleOf(
+                        LeadManagementConstants.INTENT_EXTRA_PHONE_NUMBER to "+91$mobileNo"
+                    ),
                     navOptions = getNavOptions()
                 )
 

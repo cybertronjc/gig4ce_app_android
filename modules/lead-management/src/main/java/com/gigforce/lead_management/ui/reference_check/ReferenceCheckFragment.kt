@@ -1,23 +1,26 @@
 package com.gigforce.lead_management.ui.reference_check
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.gigforce.common_ui.ext.showToast
+import com.gigforce.common_ui.utils.PushDownAnim
 import com.gigforce.common_ui.viewdatamodels.GigerProfileCardDVM
 import com.gigforce.common_ui.viewdatamodels.leadManagement.AssignGigRequest
+import com.gigforce.core.ValidationHelper
 import com.gigforce.core.base.BaseFragment2
+import com.gigforce.core.extensions.getTextChangeAsStateFlow
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.lead_management.LeadManagementConstants
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.ReferenceCheckFragmentBinding
 import com.gigforce.lead_management.ui.assign_gig_dialog.AssignGigsDialogFragment
-import com.github.razir.progressbutton.attachTextChangeAnimator
-import com.github.razir.progressbutton.bindProgressButton
-import com.github.razir.progressbutton.hideProgress
-import com.github.razir.progressbutton.showProgress
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -139,11 +142,30 @@ class ReferenceCheckFragment : BaseFragment2<ReferenceCheckFragmentBinding>(
         viewBinding: ReferenceCheckFragmentBinding
     ) = viewBinding.apply {
 
-        bindProgressButton(viewBinding.submitButton)
-        viewBinding.submitButton.attachTextChangeAnimator()
-        submitButton.setOnClickListener {
-            submitReferenceData()
+//        bindProgressButton(viewBinding.submitButton)
+//        viewBinding.submitButton.attachTextChangeAnimator()
+
+        lifecycleScope.launchWhenCreated {
+            viewBinding.contactNoET.getTextChangeAsStateFlow()
+                .collect {
+                    viewBinding.callGigerBtn.isEnabled = ValidationHelper.isValidIndianMobileNo(it)
+                }
         }
+
+        viewBinding.callGigerBtn.setOnClickListener {
+
+            val intent = Intent(
+                Intent.ACTION_DIAL,
+                Uri.fromParts("tel", viewBinding.contactNoET.text.toString(), null)
+            )
+            requireContext().startActivity(intent)
+        }
+
+        PushDownAnim
+            .setPushDownAnimTo(submitButton)
+            .setOnClickListener {
+                submitReferenceData()
+            }
     }
 
     private fun submitReferenceData() {
@@ -179,7 +201,7 @@ class ReferenceCheckFragment : BaseFragment2<ReferenceCheckFragmentBinding>(
     }
 
     private fun referenceDataSubmitted() = viewBinding.apply {
-        submitButton.hideProgress("Submitted")
+        // submitButton.hideProgress("Submitted")
         AssignGigsDialogFragment.launch(
             fragmentManager = childFragmentManager,
             gigRequest = assignGigRequest
@@ -187,17 +209,18 @@ class ReferenceCheckFragment : BaseFragment2<ReferenceCheckFragmentBinding>(
     }
 
     private fun showReferenceSubmittingState() = viewBinding.apply {
-        submitButton.showProgress {
-            this.buttonText = "Submitting..."
-            this.progressColor = R.color.white
-        }
+        showToast("Reference data submitted")
+//        submitButton.showProgress {
+//            this.buttonText = "Submitting..."
+//            this.progressColor = R.color.white
+//        }
     }
 
     private fun showErrorInSubmittingReferenceData(
         error: String,
         shouldShowErrorButton: Boolean
     ) = viewBinding.apply {
-        submitButton.hideProgress("Submit")
+//        submitButton.hideProgress("Submit")
 
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("Unable to submit")

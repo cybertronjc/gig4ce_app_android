@@ -27,8 +27,6 @@ class AssignGigsDialogFragment : BaseDialogFragment<FragmentAssignGigDialogBindi
     companion object {
         const val TAG = "AssignGigsDialogFragment"
 
-
-
         fun launch(
             fragmentManager: FragmentManager,
             gigRequest: AssignGigRequest
@@ -103,6 +101,10 @@ class AssignGigsDialogFragment : BaseDialogFragment<FragmentAssignGigDialogBindi
                 false
             )
         }
+
+        errorLayout.retryBtn.setOnClickListener {
+            submitAssignGigRequest()
+        }
     }
 
 
@@ -138,7 +140,7 @@ class AssignGigsDialogFragment : BaseDialogFragment<FragmentAssignGigDialogBindi
                         errorLayout.root.visible()
 
                         errorLayout.infoMessageTv.text = it.error
-
+                        errorLayout.retryBtn.visible()
                     }
                 }
             }

@@ -25,7 +25,16 @@
             android:textColor="@color/black_two"
             tools:text="Some error"/>
 
-
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/retry_btn"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="26dp"
+            android:fontFamily="@font/lato_bold"
+            android:textColor="@color/black_two"
+            android:visibility="gone"
+            android:text="Re-try"/>
 
     </LinearLayout>
 </layout>

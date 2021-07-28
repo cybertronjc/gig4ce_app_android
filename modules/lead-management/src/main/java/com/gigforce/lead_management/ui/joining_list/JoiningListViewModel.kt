@@ -118,7 +118,8 @@ class JoiningListViewModel @Inject constructor(
             }
         }.groupBy {
             it.getStatus().getOverallStatusString()
-        }
+        }.toSortedMap(compareByDescending { it })
+
 
         val joiningListForView = mutableListOf<JoiningListRecyclerItemData>()
         statusToJoiningGroupedList.forEach { (status, joinings) ->

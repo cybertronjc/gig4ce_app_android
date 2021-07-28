@@ -345,7 +345,7 @@ class SelectGigApplicationToActivateViewModel @Inject constructor(
                 userName = "",
                 userUid = "",
                 enrollingTlUid = "",
-                assignGigsFrom = Timestamp.now(),
+                assignGigsFrom = "",
                 cityId = "",
                 cityName = "",
                 location = JobLocation(

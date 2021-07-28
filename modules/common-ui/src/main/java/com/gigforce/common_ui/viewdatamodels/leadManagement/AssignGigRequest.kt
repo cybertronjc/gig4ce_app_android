@@ -30,7 +30,7 @@ data class AssignGigRequest(
     var enrollingTlUid: String = "",
 
     @SerializedName("assignGigsFrom")
-    var assignGigsFrom: Timestamp = Timestamp.now(),
+    var assignGigsFrom: String = "",
 
     @SerializedName("cityId")
     var cityId: String = "",

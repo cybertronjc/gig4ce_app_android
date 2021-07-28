@@ -25,6 +25,7 @@ import com.gigforce.common_ui.viewdatamodels.leadManagement.JobShift
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toFirebaseTimeStamp
+import com.gigforce.core.extensions.toLocalDate
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.DateHelper
@@ -39,6 +40,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.lang.Exception
 import java.text.SimpleDateFormat
+import java.time.format.DateTimeFormatter
 import java.util.*
 import javax.inject.Inject
 
@@ -58,6 +60,7 @@ class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
     @Inject
     lateinit var navigation: INavigation
 
+    private val dateFormatter = DateTimeFormatter.ISO_LOCAL_DATE //YYYY-MM-DD
     private val viewModel: ShiftTimingViewModel by viewModels()
     private lateinit var userUid: String
     private lateinit var assignGigRequest: AssignGigRequest
@@ -209,7 +212,7 @@ class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
                 newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
 
                 viewBinding.expectedDate.text = DateHelper.getDateInDDMMYYYY(newCal.time)
-                assignGigRequest.assignGigsFrom = newCal.time.toFirebaseTimeStamp()!!
+                assignGigRequest.assignGigsFrom = newCal.time.toLocalDate().format(dateFormatter)
             },
             cal.get(Calendar.YEAR),
             cal.get(Calendar.MONTH),
