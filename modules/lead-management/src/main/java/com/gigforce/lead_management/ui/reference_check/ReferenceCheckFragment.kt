@@ -11,6 +11,7 @@ import com.gigforce.core.extensions.visible
 import com.gigforce.lead_management.LeadManagementConstants
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.ReferenceCheckFragmentBinding
+import com.gigforce.lead_management.ui.assign_gig_dialog.AssignGigsDialogFragment
 import com.github.razir.progressbutton.attachTextChangeAnimator
 import com.github.razir.progressbutton.bindProgressButton
 import com.github.razir.progressbutton.hideProgress
@@ -28,7 +29,7 @@ class ReferenceCheckFragment : BaseFragment2<ReferenceCheckFragmentBinding>(
     //Data
     private lateinit var userUid: String
     private lateinit var assignGigRequest: AssignGigRequest
-    private lateinit var currentGigerInfo: GigerProfileCardDVM
+    private var currentGigerInfo: GigerProfileCardDVM? = null
 
     private val viewModel: ReferenceCheckViewModel by viewModels()
 
@@ -50,11 +51,14 @@ class ReferenceCheckFragment : BaseFragment2<ReferenceCheckFragmentBinding>(
     private fun initUi(
         viewBinding: ReferenceCheckFragmentBinding
     ) = viewBinding.apply {
-        gigerProfileCard.setProfileCard(currentGigerInfo)
-//        viewLifecycleOwner.lifecycleScope.launch {
-//            viewBinding.gigerProfileCard.setGigerProfileData(userUid)
-//        }
-//        viewBinding.gigerProfileCard.setJobProfileData(assignGigRequest.jobProfileName, assignGigRequest.companyLogo)
+
+        if (currentGigerInfo != null) {
+            viewBinding.gigerProfileCard.setProfileCard(currentGigerInfo!!)
+        } else {
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewBinding.gigerProfileCard.setGigerProfileData(userUid)
+            }
+        }
     }
 
     private fun getDataFrom(
@@ -101,14 +105,6 @@ class ReferenceCheckFragment : BaseFragment2<ReferenceCheckFragmentBinding>(
                 logTag,
                 "null assignGigRequest received from bundles",
                 Exception("null assignGigRequest received from bundles")
-            )
-        }
-
-        if (::currentGigerInfo.isInitialized.not()) {
-            logger.e(
-                logTag,
-                "null currentGigerInfo received from bundles",
-                Exception("null currentGigerInfo received from bundles")
             )
         }
     }
@@ -184,6 +180,10 @@ class ReferenceCheckFragment : BaseFragment2<ReferenceCheckFragmentBinding>(
 
     private fun referenceDataSubmitted() = viewBinding.apply {
         submitButton.hideProgress("Submitted")
+        AssignGigsDialogFragment.launch(
+            fragmentManager = childFragmentManager,
+            gigRequest = assignGigRequest
+        )
     }
 
     private fun showReferenceSubmittingState() = viewBinding.apply {

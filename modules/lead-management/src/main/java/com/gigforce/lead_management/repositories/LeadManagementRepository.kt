@@ -2,7 +2,9 @@ package com.gigforce.lead_management.repositories
 
 import com.gigforce.common_ui.ext.bodyOrThrow
 import com.gigforce.common_ui.remote.JoiningProfileService
+import com.gigforce.common_ui.remote.ReferralService
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
+import com.gigforce.common_ui.viewdatamodels.referral.ReferralRequest
 import com.gigforce.core.datamodels.ambassador.*
 import com.gigforce.core.datamodels.auth.UserAuthStatusModel
 import com.gigforce.core.datamodels.profile.Contact
@@ -30,6 +32,7 @@ class LeadManagementRepository @Inject constructor(
     private val firebaseFirestore: FirebaseFirestore,
     private val firebaseAuthStateListener: FirebaseAuthStateListener,
     private val joiningProfileRemoteService: JoiningProfileService,
+    private val referralService: ReferralService,
     private val buildConfig: IBuildConfig
 ) {
 
@@ -264,7 +267,9 @@ class LeadManagementRepository @Inject constructor(
                     mapOf(
                         "updatedOn" to Timestamp.now(),
                         "status" to JoiningStatus.APPLICATION_PENDING.getStatusString(),
-                        "lastStatusChangeSource" to lastStatusChangeSource
+                        "lastStatusChangeSource" to lastStatusChangeSource,
+                        "jobProfileIdInvitedFor" to jobProfileId,
+                        "jobProfileNameInvitedFor" to jobProfileName
                     )
                 )
         }
@@ -280,7 +285,7 @@ class LeadManagementRepository @Inject constructor(
         phoneNumber: String = "",
         lastStatusChangeSource: String,
         tradeName: String
-    ) {
+    ) : String {
         val getProfileForUid = profileCollectionRef
             .document(userUid)
             .getOrThrow()
@@ -306,7 +311,7 @@ class LeadManagementRepository @Inject constructor(
 
         if (getJobProfileLink.isEmpty) {
 
-            joiningsCollectionRef.addOrThrow(
+            return joiningsCollectionRef.addOrThrow(
                 Joining(
                     uid = userUid,
                     joiningStartedOn = Timestamp.now(),
@@ -323,7 +328,7 @@ class LeadManagementRepository @Inject constructor(
                     lastStatusChangeSource = lastStatusChangeSource,
                     tradeName = tradeName
                 )
-            )
+            ).id
         } else {
             val existingJoiningId = getJobProfileLink.first().id
             val existingJoiningStatus = getJobProfileLink.first().getString("status")
@@ -350,6 +355,8 @@ class LeadManagementRepository @Inject constructor(
                         "lastStatusChangeSource" to lastStatusChangeSource
                     )
                 )
+
+            return existingJoiningId
         }
     }
 
@@ -385,9 +392,15 @@ class LeadManagementRepository @Inject constructor(
         name: String,
         shareLink :String
     ) {
-
-
-
+         referralService.sendReferralThroughWhatsApp(
+             ReferralRequest(
+                 referralType = referralType,
+                 mobileNumber = mobileNumber,
+                 jobProfileName = jobProfileName,
+                 userName = name,
+                 shareLink = shareLink
+             )
+         ).bodyOrThrow()
     }
 
 
@@ -518,6 +531,27 @@ class LeadManagementRepository @Inject constructor(
                 )
             )
     }
+
+//    suspend fun fetchJoiningFor(
+//        userUid: String,
+//        jobProfileId : String
+//    ) : Joining?{
+//
+//        val getJobProfileLink = joiningsCollectionRef
+//            .whereEqualTo(
+//                "joiningTLUid",
+//                firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow().uid
+//            )
+//            .whereEqualTo("uid", userUid)
+//            .whereEqualTo("jobProfileId", jobProfileId)
+//            .getOrThrow()
+//
+//        if(getJobProfileLink.isEmpty)
+//            return null
+//        else{
+//            return getJobProfileLink.first().toObject(Joining::class.java)
+//        }
+//    }
 
 
 }

@@ -103,6 +103,26 @@ data class ProfileData(
         profileAvatarName.isNotBlank() && profileAvatarName != "avatar.jpg"
 
 
+    @Exclude
+    fun getFullProfilePicPathThumbnail(): String? {
+
+        return if (hasUserUploadedProfilePicture()) {
+            if (!profileAvatarThumbnail.isNullOrEmpty()) {
+
+                if (profileAvatarThumbnail!!.startsWith("profile_pics"))
+                    profileAvatarThumbnail
+                else
+                    "profile_pics/$profileAvatarThumbnail"
+            } else {
+                if (profileAvatarName.startsWith("profile_pics"))
+                    profileAvatarName
+                else
+                    "profile_pics/$profileAvatarName"
+            }
+        } else
+            ""
+    }
+
 }
 
 data class EnrollmentInfo(

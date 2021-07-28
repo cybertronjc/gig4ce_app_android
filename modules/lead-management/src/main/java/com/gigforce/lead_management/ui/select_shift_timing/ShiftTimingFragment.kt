@@ -61,7 +61,7 @@ class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
     private val viewModel: ShiftTimingViewModel by viewModels()
     private lateinit var userUid: String
     private lateinit var assignGigRequest: AssignGigRequest
-    private lateinit var currentGigerInfo: GigerProfileCardDVM
+    private var currentGigerInfo: GigerProfileCardDVM? = null
 
     val selectedShifts = arrayListOf<JobShift>()
     var shiftChips = arrayListOf<ChipGroupModel>()
@@ -89,14 +89,12 @@ class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
             userUid = it.getString(LeadManagementConstants.INTENT_EXTRA_USER_ID) ?: return@let
             assignGigRequest = it.getParcelable(LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL) ?: return@let
             currentGigerInfo = it.getParcelable(LeadManagementConstants.INTENT_EXTRA_CURRENT_JOINING_USER_INFO)
-                ?: return@let
         }
 
         savedInstanceState?.let {
             userUid = it.getString(LeadManagementConstants.INTENT_EXTRA_USER_ID) ?: return@let
             assignGigRequest = it.getParcelable(LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL) ?: return@let
             currentGigerInfo = it.getParcelable(LeadManagementConstants.INTENT_EXTRA_CURRENT_JOINING_USER_INFO)
-                ?: return@let
         }
         logDataReceivedFromBundles()
     }
@@ -195,7 +193,6 @@ class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
             viewLifecycleOwner.lifecycleScope.launch {
                 viewBinding.gigerProfileCard.setGigerProfileData(userUid)
             }
-            viewBinding.gigerProfileCard.setJobProfileData(assignGigRequest.jobProfileName, assignGigRequest.companyLogo)
         }
 
     }
@@ -205,7 +202,7 @@ class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
         val cal = Calendar.getInstance()
         val datePickerDialog = DatePickerDialog(
             requireContext(),
-            DatePickerDialog.OnDateSetListener { _: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
+            DatePickerDialog.OnDateSetListener { datePicker: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
                 val newCal = Calendar.getInstance()
                 newCal.set(Calendar.YEAR, year)
                 newCal.set(Calendar.MONTH, month)
@@ -219,7 +216,7 @@ class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
             cal.get(Calendar.DAY_OF_MONTH)
         )
 
-//        datePickerDialog.datePicker.maxDate = Calendar.getInstance().timeInMillis
+        datePickerDialog.datePicker.minDate = Date().time
         datePickerDialog
     }
 

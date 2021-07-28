@@ -37,50 +37,20 @@ class PickJobProfileForReferralFragment : BaseFragment2<FragmentPickJobProfileFo
     @Inject lateinit var navigation: INavigation
     private val viewModel: ShareApplicationLinkViewModel by viewModels()
 
-    //Data
-    private var shareType: String = ShareReferralType.SHARE_SIGNUP_LINK
-    private var userUid: String? = null
-
-
-
     override fun viewCreated(
         viewBinding: FragmentPickJobProfileForReferralBinding,
         savedInstanceState: Bundle?
     ) {
 
-        getArgumentsFrom(
-            arguments,
-            savedInstanceState
-        )
         initToolbar(viewBinding.toolbar)
         initView(viewBinding)
         initListeners(viewBinding)
         initViewModel()
     }
 
-    private fun getArgumentsFrom(
-        arguments: Bundle?,
-        savedInstanceState: Bundle?
-    ) {
-        arguments?.let {
-            shareType = it.getString(LeadManagementConstants.INTENT_EXTRA_SHARE_TYPE) ?: return@let
-        }
-
-        savedInstanceState?.let {
-            shareType = it.getString(LeadManagementConstants.INTENT_EXTRA_SHARE_TYPE) ?: return@let
-        }
-
-        logger.d(logTag, "shared type received from intents : '$shareType'")
-    }
 
     private fun initToolbar(toolbar: GigforceToolbar) {
-        val shareTitle = if (shareType == ShareReferralType.SHARE_JOB_PROFILE_LINK) {
-            "Share Job Profile"
-        } else {
-            "Share Application Link"
-        }
-
-        toolbar.showTitle(shareTitle)
+        toolbar.showTitle("Share Application Link")
         toolbar.hideActionMenu()
         toolbar.setBackButtonListener{
             activity?.onBackPressed()
@@ -116,50 +86,36 @@ class PickJobProfileForReferralFragment : BaseFragment2<FragmentPickJobProfileFo
             return@apply
         }
 
-        if (shareType == ShareReferralType.SHARE_JOB_PROFILE_LINK) {
-
-            navigation.navigateTo(
-                LeadManagementNavDestinations.FRAGMENT_REFERRAL,
-                bundleOf(
-                    LeadManagementConstants.INTENT_EXTRA_SHARE_TYPE to ShareReferralType.SHARE_JOB_PROFILE_LINK,
-                    LeadManagementConstants.INTENT_EXTRA_JOB_PROFILE_ID to selectedJobProfile.jobProfileId,
-                    LeadManagementConstants.INTENT_EXTRA_JOB_PROFILE_NAME to (selectedJobProfile.profileName ?: ""),
-                    LeadManagementConstants.INTENT_EXTRA_USER_ID to userUid!!
-                )
-            )
-
+        val userName = gigersNameET.text.toString().capitalize()
+        if (userName.isEmpty()) {
+            nameErrorTv.visible()
+            nameErrorTv.text = "Please fill user name"
+            return@apply
         } else {
-
-            val userName = gigersNameET.text.toString().capitalize()
-            if (userName.isEmpty()) {
-                nameErrorTv.visible()
-                nameErrorTv.text = "Please fill user name"
-                return@apply
-            } else {
-                nameErrorTv.gone()
-            }
-
-            val userMobile = gigersMobileET.text.toString()
-            if (userMobile.isEmpty()) {
-                mobileErrorTv.visible()
-                mobileErrorTv.text = "Please fill user mobile"
-                return@apply
-            } else {
-                mobileErrorTv.gone()
-            }
-
-
-            navigation.navigateTo(
-                LeadManagementNavDestinations.FRAGMENT_REFERRAL,
-                bundleOf(
-                    LeadManagementConstants.INTENT_EXTRA_SHARE_TYPE to ShareReferralType.SHARE_SIGNUP_LINK,
-                    LeadManagementConstants.INTENT_EXTRA_JOB_PROFILE_ID to selectedJobProfile.jobProfileId,
-                    LeadManagementConstants.INTENT_EXTRA_JOB_PROFILE_NAME to (selectedJobProfile.profileName ?: ""),
-                    LeadManagementConstants.INTENT_EXTRA_USER_NAME to userName,
-                    LeadManagementConstants.INTENT_EXTRA_PHONE_NUMBER to "+91$userMobile",
-                )
-            )
+            nameErrorTv.gone()
         }
+
+        val userMobile = gigersMobileET.text.toString()
+        if (userMobile.isEmpty()) {
+            mobileErrorTv.visible()
+            mobileErrorTv.text = "Please fill user mobile"
+            return@apply
+        } else {
+            mobileErrorTv.gone()
+        }
+
+
+        navigation.navigateTo(
+            LeadManagementNavDestinations.FRAGMENT_REFERRAL,
+            bundleOf(
+                LeadManagementConstants.INTENT_EXTRA_SHARE_TYPE to ShareReferralType.SHARE_SIGNUP_LINK,
+                LeadManagementConstants.INTENT_EXTRA_JOB_PROFILE_ID to selectedJobProfile.jobProfileId,
+                LeadManagementConstants.INTENT_EXTRA_JOB_PROFILE_NAME to (selectedJobProfile.profileName ?: ""),
+                LeadManagementConstants.INTENT_EXTRA_USER_NAME to userName,
+                LeadManagementConstants.INTENT_EXTRA_PHONE_NUMBER to "+91$userMobile",
+                LeadManagementConstants.INTENT_EXTRA_TRADE_NAME to (selectedJobProfile.tradeName ?: "")
+            )
+        )
     }
 
     private fun initViewModel() {

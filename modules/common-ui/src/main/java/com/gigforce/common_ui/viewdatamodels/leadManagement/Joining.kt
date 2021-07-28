@@ -53,7 +53,7 @@ data class Joining(
 
 	@get:PropertyName("tradeName")
 	@set:PropertyName("tradeName")
-	var tradeName: String,
+	var tradeName: String? = null,
 
 	@get:PropertyName("jobProfileNameInvitedFor")
 	@set:PropertyName("jobProfileNameInvitedFor")

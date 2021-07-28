@@ -27,15 +27,19 @@ class AssignGigsDialogFragment : BaseDialogFragment<FragmentAssignGigDialogBindi
     companion object {
         const val TAG = "AssignGigsDialogFragment"
 
+
+
         fun launch(
             fragmentManager: FragmentManager,
             gigRequest: AssignGigRequest
         ) {
+
             val dialog = AssignGigsDialogFragment().apply {
                 arguments = bundleOf(
                     LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL to gigRequest
                 )
             }
+
             try {
                 dialog.show(fragmentManager, TAG)
             } catch (e: Exception) {

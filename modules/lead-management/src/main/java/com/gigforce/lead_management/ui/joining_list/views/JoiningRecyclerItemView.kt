@@ -10,6 +10,8 @@ import android.widget.RelativeLayout
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import com.gigforce.common_ui.viewdatamodels.GigerProfileCardDVM
+import com.gigforce.common_ui.viewdatamodels.leadManagement.AssignGigRequest
+import com.gigforce.common_ui.viewdatamodels.leadManagement.JobLocation
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JoiningStatus
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.navigation.INavigation
@@ -18,6 +20,7 @@ import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.RecyclerRowJoiningItemBinding
 import com.gigforce.lead_management.models.JoiningListRecyclerItemData
+import com.google.firebase.Timestamp
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -166,7 +169,8 @@ class JoiningRecyclerItemView(
                             LeadManagementConstants.INTENT_EXTRA_JOINING_ID to currentViewData.joiningId,
                             LeadManagementConstants.INTENT_EXTRA_CURRENT_JOINING_USER_INFO to prepareCurrentUserInfo(
                                 currentViewData
-                            )
+                            ),
+                            LeadManagementConstants.INTENT_EXTRA_USER_ID to currentViewData.userUid,
                         )
                     )
                 }
@@ -181,12 +185,41 @@ class JoiningRecyclerItemView(
                             LeadManagementConstants.INTENT_EXTRA_JOINING_ID to currentViewData.joiningId,
                             LeadManagementConstants.INTENT_EXTRA_CURRENT_JOINING_USER_INFO to prepareCurrentUserInfo(
                                 currentViewData
-                            )
+                            ),
+                            LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL to prepareAssigngigModel(
+                                currentViewData
+                            ),
+                            LeadManagementConstants.INTENT_EXTRA_USER_ID to currentViewData.userUid,
                         )
                     )
                 }
             }
         }
+    }
+
+    private fun prepareAssigngigModel(
+        currentViewData: JoiningListRecyclerItemData.JoiningListRecyclerJoiningItemData
+    ): AssignGigRequest {
+
+        return AssignGigRequest(
+            joiningId = currentViewData.joiningId,
+            jobProfileId = currentViewData.jobProfileId,
+            jobProfileName = currentViewData.jobProfileName,
+            userName = currentViewData.userName,
+            userUid = currentViewData.userUid!!,
+            enrollingTlUid = "",
+            assignGigsFrom = Timestamp.now(),
+            cityId = "",
+            cityName = "",
+            location = JobLocation(
+                id = "",
+                type = "",
+                name = null
+            ),
+            shift = listOf(),
+            gigForceTeamLeaders = listOf(),
+            businessTeamLeaders = listOf()
+        )
     }
 
     private fun prepareCurrentUserInfo(

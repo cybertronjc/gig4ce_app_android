@@ -2,6 +2,7 @@ package com.gigforce.app.di
 
 import com.gigforce.app.di.implementations.BuildConfigImp
 import com.gigforce.common_ui.remote.JoiningProfileService
+import com.gigforce.common_ui.remote.ReferralService
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.core.retrofit.RetrofitFactory
@@ -53,6 +54,13 @@ abstract class SingeltonBindings {
             retrofitServiceFactory : RetrofitServiceFactory
         ): JoiningProfileService {
             return retrofitServiceFactory.prepareService(JoiningProfileService::class.java)
+        }
+
+        @Provides
+        fun provideReferralService(
+            retrofitServiceFactory : RetrofitServiceFactory
+        ): ReferralService {
+            return retrofitServiceFactory.prepareService(ReferralService::class.java)
         }
     }
 }

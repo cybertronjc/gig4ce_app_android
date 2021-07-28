@@ -32,11 +32,11 @@ class GigerOnboardingViewModel @Inject constructor(
     }
 
     val liveState: MutableLiveData<LoginResponse> = MutableLiveData<LoginResponse>()
-    private val _checkMobileNo = MutableLiveData<Lce<RegisterMobileNoResponse>>()
-    val checkMobileNo: LiveData<Lce<RegisterMobileNoResponse>> = _checkMobileNo
+    private val _checkMobileNo = MutableLiveData<Lce<RegisterMobileNoResponse>?>()
+    val checkMobileNo: LiveData<Lce<RegisterMobileNoResponse>?> = _checkMobileNo
 
-    private val _numberRegistered = MutableLiveData<Lce<UserAuthStatusModel>>()
-    val numberRegistered: LiveData<Lce<UserAuthStatusModel>> = _numberRegistered
+    private val _numberRegistered = MutableLiveData<Lce<UserAuthStatusModel>?>()
+    val numberRegistered: LiveData<Lce<UserAuthStatusModel>?> = _numberRegistered
 
     var userAuthStatus: UserAuthStatusModel? = null
 
@@ -53,12 +53,15 @@ class GigerOnboardingViewModel @Inject constructor(
             val response =
                 leadManagementRepository.getUserAuthStatus(mobileNo)
             _numberRegistered.value = Lce.content(response)
+            _numberRegistered.value = null
+
             logger.d(TAG, "Unable to check if number is already registered", response.toString())
         } catch (e: Exception) {
             e.printStackTrace()
             logger.d(TAG, "Unable to check if number is already registered", e.toString())
             _numberRegistered.value =
                 Lce.error(e.message ?: "Unable to check if number already registered")
+            _numberRegistered.value = null
         }
     }
 
@@ -74,9 +77,11 @@ class GigerOnboardingViewModel @Inject constructor(
                     buildConfig.getVerifyOTPURL()
                 )
             _checkMobileNo.value = Lce.content(repsonse)
+            _checkMobileNo.value = null
         } catch (e: Exception) {
             e.printStackTrace()
             _checkMobileNo.value = Lce.error(e.message ?: "Unable to check mobile number")
+            _checkMobileNo.value = null
         }
     }
 
@@ -88,7 +93,8 @@ class GigerOnboardingViewModel @Inject constructor(
         mode: Int,
         token: String,
         otp: String,
-        mobile: String
+        mobile: String,
+        cameFromJoining :Boolean
     ) = viewModelScope.launch {
 
         try {
@@ -102,16 +108,19 @@ class GigerOnboardingViewModel @Inject constructor(
                     mobile = mobile,
                     enrolledByName = profile.name
                 )
-                leadManagementRepository.createOrUpdateJoiningDocumentWithStatusSignUpPending(
-                    userUid = response.uid!!,
-                    name = "",
-                    phoneNumber = "+91$mobile",
-                    jobProfileId = "",
-                    jobProfileName = "",
-                    signUpMode = JoiningSignUpInitiatedMode.BY_AMBASSADOR_PROGRAM,
-                    lastStatusChangeSource = "confirm_otp_screen",
-                    tradeName = ""
-                )
+
+                if(cameFromJoining) {
+                    leadManagementRepository.createOrUpdateJoiningDocumentWithStatusSignUpPending(
+                        userUid = response.uid!!,
+                        name = "",
+                        phoneNumber = "+91$mobile",
+                        jobProfileId = "",
+                        jobProfileName = "",
+                        signUpMode = JoiningSignUpInitiatedMode.BY_AMBASSADOR_PROGRAM,
+                        lastStatusChangeSource = "confirm_otp_screen",
+                        tradeName = ""
+                    )
+                }
 
                 _verifyOtp.value = Lce.content(response)
             } else {
