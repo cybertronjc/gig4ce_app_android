@@ -111,6 +111,7 @@ class GigerOnboardingFragment : BaseFragment2<GigerOnboardingFragmentBinding>(
         }
 
         viewBinding.changeNumber.setOnClickListener {
+            viewBinding.mobileNoEt.setText("")
             viewBinding.mobileNoEt.requestFocus()
             viewBinding.createProfileBtn.gone()
             viewBinding.submitButton.tag = "next"

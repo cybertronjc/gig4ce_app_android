@@ -78,7 +78,7 @@ class SelectGigApplicationToActivateViewModel @Inject constructor(
 
     fun getJobProfilesToActivate(userUid: String) = viewModelScope.launch {
         _viewState.postValue(SelectGigAppViewState.LoadingDataFromServer)
-
+        _selectedIndex.value = -1
         try {
             logger.d(TAG, "fetching job profiles...")
 
@@ -108,7 +108,7 @@ class SelectGigApplicationToActivateViewModel @Inject constructor(
     }
 
     private fun processGigApps(jobApps: List<JobProfileOverview>) {
-        _selectedIndex.value = -1
+
         val gigAppList: List<JobProfileOverview> = jobApps
         val statusToGigAppList = gigAppList.filter {
 //            if (currentSearchString.isNullOrEmpty())

@@ -50,7 +50,7 @@ class GigerProfileCardComponent(context: Context, attrs: AttributeSet?) : FrameL
     fun setProfilePicture(image: String?){
         image?.let {
             if (image.isEmpty()) {
-                profileImg.setImageDrawable(resources.getDrawable(R.drawable.profile_avatar))
+                profileImg.setImageDrawable(resources.getDrawable(R.drawable.ic_avatar_male))
             }
             else {
                 val profilePicRef: StorageReference =

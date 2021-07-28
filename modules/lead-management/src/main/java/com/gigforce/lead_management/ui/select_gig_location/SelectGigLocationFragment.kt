@@ -26,18 +26,17 @@ import com.gigforce.core.utils.Lce
 import com.gigforce.lead_management.LeadManagementConstants
 import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
-import com.gigforce.lead_management.databinding.SelectGigLocationFragmentBinding
-import com.gigforce.lead_management.gigeronboarding.SelectGigApplicationToActivateViewModel
-import com.gigforce.lead_management.ui.select_team_leader.SelectTeamLeaderFragment
+import com.gigforce.lead_management.databinding.SelectGigLocationFragmentLayoutBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentBinding>(
+class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentLayoutBinding>(
     fragmentName = "SelectGigLocationFragment",
-    layoutId = R.layout.select_gig_location_fragment,
+    layoutId = R.layout.select_gig_location_fragment_layout,
     statusBarColor = R.color.lipstick_2
 ) {
 
@@ -62,7 +61,7 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentBinding
     //var arrayAdapter =  ArrayAdapter<String>()
 
     override fun viewCreated(
-        viewBinding: SelectGigLocationFragmentBinding,
+        viewBinding: SelectGigLocationFragmentLayoutBinding,
         savedInstanceState: Bundle?
     ) {
         getDataFrom(
@@ -163,7 +162,11 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentBinding
                 }
             }
             if (!assignGigRequest.cityId.isNotEmpty()) {
-                showToast("Select a city to continue")
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("Select a City to continue")
+                    .setMessage("")
+                    .setPositiveButton("Okay") { _, _ -> }
+                    .show()
             } else {
                 logger.d(TAG, "AssignGigRequest $assignGigRequest")
                 navigation.navigateTo(
@@ -186,10 +189,6 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentBinding
             viewBinding.gigerProfileCard.setJobProfileData(assignGigRequest.jobProfileName, assignGigRequest.companyLogo)
         }
 
-
-//        viewBinding.searchLocation.setOnItemClickListener { adapterView, view, i, l ->
-//
-//        }
     }
 
     private fun showGigLocations(jobProfile: JobProfileDetails) = viewBinding.apply {
@@ -198,7 +197,7 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentBinding
             this.locationShimmerContainer,
             R.id.shimmer_controller
         )
-        locationLayout.visible()
+        locationLayout1.visible()
         locationShimmerContainer.gone()
         locationInfoLayout.root.gone()
 
@@ -221,8 +220,14 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentBinding
                 ChipGroupComponent.OnCustomCheckedChangeListener {
                 override fun onCheckedChangeListener(model: ChipGroupModel) {
                     try {
-//                        val jobLocations = cityAndLocations.get(model.chipId).jobLocations
-//                        jobLocations?.let { processJobLocations(it) }
+                        //make select location layout visible
+                        viewBinding.selectLocTV.visible()
+                        viewBinding.locationLayout2.visible()
+
+                        //make submit button enabled
+                        viewBinding.submitBtn.background = resources.getDrawable(R.drawable.app_gradient_button)
+
+                        //clear locations dropdown array
                         locationsArray.clear()
                         arrayAdapter?.notifyDataSetChanged()
                         viewBinding.searchLocation.adapter = null
@@ -269,6 +274,8 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentBinding
         //extract dropdown from JobLocations by grouping into one list with type : Locality, Hub, Store
         viewBinding.locationChipGroup.setOnCheckedChangeListener(object : ChipGroupComponent.OnCustomCheckedChangeListener{
             override fun onCheckedChangeListener(model1: ChipGroupModel) {
+                //make dropdown visible
+                viewBinding.searchLocation.visible()
                 locationsArray.clear()
                 arrayAdapter?.notifyDataSetChanged()
                 viewBinding.searchLocation.adapter = null
@@ -306,7 +313,7 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentBinding
     }
 
     private fun showNoGigLocationFound() = viewBinding.apply {
-        locationLayout.gone()
+        locationLayout1.gone()
         locationInfoLayout.root.visible()
         locationShimmerContainer.gone()
         stopShimmer(
@@ -319,7 +326,7 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentBinding
     }
 
     private fun showErrorInLoadingGigLocation(error: String) = viewBinding.apply{
-        locationLayout.gone()
+        locationLayout1.gone()
         locationInfoLayout.root.visible()
         locationShimmerContainer.gone()
         stopShimmer(
@@ -332,7 +339,7 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentBinding
     }
 
     private fun showGigLocationAsLoading(){
-        viewBinding.locationLayout.gone()
+        viewBinding.locationLayout1.gone()
         viewBinding.locationInfoLayout.root.gone()
         viewBinding.locationShimmerContainer.visible()
         startShimmer(
