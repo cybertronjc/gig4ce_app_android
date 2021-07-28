@@ -163,8 +163,7 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentLayoutB
             }
             if (!assignGigRequest.cityId.isNotEmpty()) {
                 MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Select a City to continue")
-                    .setMessage("")
+                    .setMessage("Select a City to continue")
                     .setPositiveButton("Okay") { _, _ -> }
                     .show()
             } else {

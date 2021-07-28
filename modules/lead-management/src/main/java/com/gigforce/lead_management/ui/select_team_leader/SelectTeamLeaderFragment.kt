@@ -23,6 +23,7 @@ import com.gigforce.lead_management.LeadManagementConstants
 import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.SelectTeamLeaderFragmentBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.util.*
@@ -185,6 +186,11 @@ class SelectTeamLeaderFragment : BaseFragment2<SelectTeamLeaderFragmentBinding>(
                         LeadManagementConstants.INTENT_EXTRA_CURRENT_JOINING_USER_INFO to currentGigerInfo,
                     )
                 )
+            } else {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setMessage("Select Gigforce Team Leader to continue")
+                    .setPositiveButton("Okay") { _, _ -> }
+                    .show()
             }
         }
 
