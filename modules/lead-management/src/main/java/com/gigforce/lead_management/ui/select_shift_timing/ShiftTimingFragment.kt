@@ -202,7 +202,7 @@ class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
         val cal = Calendar.getInstance()
         val datePickerDialog = DatePickerDialog(
             requireContext(),
-            DatePickerDialog.OnDateSetListener { _: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
+            DatePickerDialog.OnDateSetListener { datePicker: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
                 val newCal = Calendar.getInstance()
                 newCal.set(Calendar.YEAR, year)
                 newCal.set(Calendar.MONTH, month)
@@ -216,7 +216,7 @@ class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
             cal.get(Calendar.DAY_OF_MONTH)
         )
 
-//        datePickerDialog.datePicker.maxDate = Calendar.getInstance().timeInMillis
+        datePickerDialog.datePicker.minDate = Date().time
         datePickerDialog
     }
 
