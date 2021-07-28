@@ -73,17 +73,6 @@ class MainNavDataRepository @Inject constructor(private val buildConfig: IBuildC
                     }
                 }
             }
-
-        FirebaseFirestore.getInstance().collection("AppConfigs")
-            .whereEqualTo("uid", FirebaseAuth.getInstance().currentUser?.uid)
-            .get()
-            .addOnSuccessListener { documents ->
-                documents?.documents?.let {
-
-                }
-
-
-            }
     }
 
     private fun receivedNotifyToServer() {
