@@ -8,12 +8,13 @@ import com.gigforce.core.retrofit.RetrofitFactory
 import com.gigforce.giger_app.service.APPRenderingService
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import java.lang.Exception
 import javax.inject.Inject
 
 interface IMainNavDataRepository {
@@ -26,6 +27,7 @@ class MainNavDataRepository @Inject constructor(private val buildConfig: IBuildC
     private val appRenderingService = RetrofitFactory.createService(APPRenderingService::class.java)
     private var data: MutableLiveData<List<FeatureItemCard2DVM>> = MutableLiveData()
     private var needToReflect = true
+
     init {
         reload()
     }
@@ -33,13 +35,20 @@ class MainNavDataRepository @Inject constructor(private val buildConfig: IBuildC
     override fun reload() {
 
         FirebaseFirestore.getInstance().collection("AppConfigs")
-            .whereEqualTo("uid", FirebaseAuth.getInstance().currentUser?.uid).addSnapshotListener{value, error ->
+            .whereEqualTo("uid", FirebaseAuth.getInstance().currentUser?.uid)
+            .addSnapshotListener { value, error ->
                 value?.documents?.let {
                     if (it.isNotEmpty() && needToReflect) {
                         val list = it[0].data?.get("data") as? List<Map<String, Any>>
                         list?.let {
                             val mainNavData = ArrayList<FeatureItemCard2DVM>()
                             for (item in list) {
+//                                var jsonObject = Gson().toJsonTree(list.get(0)).asJsonObject
+//                                var dataModelObject = GsonBuilder().create().fromJson(
+//                                    jsonObject.toString(),
+//                                    FeatureItemCard2DVM::class.java
+//                                )
+//                                mainNavData.add(dataModelObject)
                                 val title = item.get("title") as? String ?: "-"
                                 val index = (item.get("index") as? Long) ?: 500
                                 val icon_type = item.get("icon") as? String
@@ -47,7 +56,7 @@ class MainNavDataRepository @Inject constructor(private val buildConfig: IBuildC
                                 mainNavData.add(
                                     FeatureItemCard2DVM(
                                         title = title,
-                                        image_type = icon_type,
+                                        icon = icon_type,
                                         navPath = navPath,
                                         index = index.toInt()
                                     )
@@ -90,7 +99,7 @@ class MainNavDataRepository @Inject constructor(private val buildConfig: IBuildC
             var jsonData = JsonObject()
             jsonData.addProperty("userId", FirebaseAuth.getInstance().currentUser?.uid!!)
             appRenderingService.notifyToServer(buildConfig.getApiBaseURL(), jsonData)
-        }catch (e:Exception){
+        } catch (e: Exception) {
 
         }
     }
