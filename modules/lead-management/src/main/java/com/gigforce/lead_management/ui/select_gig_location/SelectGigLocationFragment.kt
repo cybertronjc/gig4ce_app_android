@@ -1,7 +1,6 @@
 package com.gigforce.lead_management.ui.select_gig_location
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -52,13 +51,12 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentLayoutB
     private lateinit var userUid: String
     private lateinit var assignGigRequest: AssignGigRequest
     private var currentGigerInfo: GigerProfileCardDVM? = null
-    var arrayAdapter: ArrayAdapter<String>? = null
-    val locationsArray = arrayListOf<String>()
+    var arrayAdapter1: ArrayAdapter<String>? = null
+    var locationsArray = arrayListOf<String>()
 
     val cityChips = arrayListOf<ChipGroupModel>()
     val locationChips = arrayListOf<ChipGroupModel>()
     var cityAndLocations = listOf<JobProfileCityAndLocation>()
-    //var arrayAdapter =  ArrayAdapter<String>()
 
     override fun viewCreated(
         viewBinding: SelectGigLocationFragmentLayoutBinding,
@@ -145,8 +143,8 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentLayoutB
         })
     }
 
-    private fun initListeners() {
-        viewBinding.toolbar.apply {
+    private fun initListeners() = viewBinding.apply{
+        toolbar.apply {
             hideActionMenu()
             showTitle("Gig Location")
             setBackButtonListener(View.OnClickListener {
@@ -154,14 +152,14 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentLayoutB
             })
         }
 
-        viewBinding.submitBtn.setOnClickListener {
+        submitBtn.setOnClickListener {
             cityChips.forEachIndexed { index, chipGroupModel ->
                 if (chipGroupModel.isSelected){
                     assignGigRequest.cityId = cityAndLocations.get(index).id
                     assignGigRequest.cityName = cityAndLocations.get(index).city.toString()
                 }
             }
-            if (!assignGigRequest.cityId.isNotEmpty()) {
+            if (assignGigRequest.cityId.isEmpty()) {
                 MaterialAlertDialogBuilder(requireContext())
                     .setMessage("Select a City to continue")
                     .setPositiveButton("Okay") { _, _ -> }
@@ -176,6 +174,26 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentLayoutB
                     )
                 )
             }
+        }
+
+
+
+        searchLocation1.setOnFocusChangeListener { view, b ->
+            if (b){
+                searchLocation1.showDropDown()
+            }
+        }
+
+        spinnerDrop.setOnClickListener {
+            searchLocation1.showDropDown()
+        }
+
+        searchLocation1.onItemClickListener = object : AdapterView.OnItemClickListener{
+            override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                //todo
+                showToast("Clicked ${locationsArray.get(p2)}")
+            }
+
         }
 
 
@@ -228,9 +246,9 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentLayoutB
 
                         //clear locations dropdown array
                         locationsArray.clear()
-                        arrayAdapter?.notifyDataSetChanged()
-                        viewBinding.searchLocation.adapter = null
-                        arrayAdapter?.clear()
+                        viewBinding.searchLocation1.setAdapter(null)
+                        viewBinding.searchLocation1.setText("")
+                        arrayAdapter1?.clear()
                         val jobLocalities = jobProfile.locality
                         val stores = jobProfile.stores.filter { it.cityId?.equals(cityAndLocations.get(model.chipId).id) == true }
                         locationChipGroup.removeAllViews()
@@ -274,11 +292,12 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentLayoutB
         viewBinding.locationChipGroup.setOnCheckedChangeListener(object : ChipGroupComponent.OnCustomCheckedChangeListener{
             override fun onCheckedChangeListener(model1: ChipGroupModel) {
                 //make dropdown visible
-                viewBinding.searchLocation.visible()
+                viewBinding.searchLocation1.visible()
+                spinnerDrop.visible()
                 locationsArray.clear()
-                arrayAdapter?.notifyDataSetChanged()
-                viewBinding.searchLocation.adapter = null
-                arrayAdapter?.clear()
+                viewBinding.searchLocation1.setAdapter(null)
+                viewBinding.searchLocation1.setText("")
+                arrayAdapter1?.clear()
                 if (model1.text.equals("Locality")){
                     jobLocalities.forEachIndexed { index, jobLocality ->
                         locationsArray.add(jobLocality.name.toString())
@@ -291,19 +310,10 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentLayoutB
                         }
                     }
                 }
-                arrayAdapter = context?.let { ArrayAdapter(it,android.R.layout.simple_spinner_dropdown_item, locationsArray) }
-                viewBinding.searchLocation.adapter = arrayAdapter
-                viewBinding.searchLocation.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-                    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                        //showToast("Selected: " + p1.toString())
-                    }
-
-                    override fun onNothingSelected(p0: AdapterView<*>?) {
-
-                    }
-
-                }
-                arrayAdapter?.notifyDataSetChanged()
+                arrayAdapter1 = context?.let { ArrayAdapter(it,android.R.layout.simple_spinner_dropdown_item, locationsArray) }
+                searchLocation1.threshold = 1
+                searchLocation1.setAdapter(arrayAdapter1)
+                arrayAdapter1?.notifyDataSetChanged()
                 logger.d(TAG, "locations array $locationsArray")
 
             }

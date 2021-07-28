@@ -199,7 +199,7 @@
                     android:lineSpacingExtra="3sp"
                     android:text="@string/not_registered"
                     android:textColor="#131415"
-                    android:textSize="24sp"
+                    android:textSize="14sp"
                     android:layout_marginEnd="@dimen/size_16"
                     android:layout_marginBottom="@dimen/size_16"
                     app:layout_constraintEnd_toEndOf="parent"

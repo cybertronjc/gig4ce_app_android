@@ -164,13 +164,13 @@ class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
             when {
                 selectedShifts.isEmpty() -> {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setMessage("Select at least one shift to ")
+                        .setMessage("Select at least one shift to continue")
                         .setPositiveButton("Okay") { _, _ -> }
                         .show()
                 }
                 expectedDate.text.isEmpty() -> {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setMessage("Select expected date to ")
+                        .setMessage("Select expected date to continue")
                         .setPositiveButton("Okay") { _, _ -> }
                         .show()
                 }

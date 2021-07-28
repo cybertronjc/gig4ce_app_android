@@ -199,13 +199,15 @@
                                 app:layout_constraintTop_toBottomOf="@id/locationChipGroup" />
 
                             <ImageView
+                                android:id="@+id/spinnerDrop"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="@dimen/size_16"
+                                android:background="?android:attr/selectableItemBackground"
                                 android:src="@drawable/ic_baseline_keyboard_arrow_down_24"
-                                app:layout_constraintTop_toTopOf="@id/searchLocation"
-                                app:layout_constraintBottom_toBottomOf="@id/searchLocation"
-                                app:layout_constraintEnd_toEndOf="@id/searchLocation"
+                                app:layout_constraintTop_toTopOf="@id/searchLocation1"
+                                app:layout_constraintBottom_toBottomOf="@id/searchLocation1"
+                                app:layout_constraintEnd_toEndOf="@id/searchLocation1"
                                 />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>

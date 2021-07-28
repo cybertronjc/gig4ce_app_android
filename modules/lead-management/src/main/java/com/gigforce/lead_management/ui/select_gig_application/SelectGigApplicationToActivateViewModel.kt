@@ -110,6 +110,8 @@ class SelectGigApplicationToActivateViewModel @Inject constructor(
     private fun processGigApps(jobApps: List<JobProfileOverview>) {
 
         val gigAppList: List<JobProfileOverview> = jobApps
+        val otherApps = jobApps.filter { !it.ongoing }
+        val ongoingApps = jobApps.filter { it.ongoing }
         val statusToGigAppList = gigAppList.filter {
 //            if (currentSearchString.isNullOrEmpty())
 //                true
@@ -125,7 +127,7 @@ class SelectGigApplicationToActivateViewModel @Inject constructor(
 //            }
             it.ongoing != null
         }.groupBy {
-            if (!it.ongoing) "Ongoing Applications" else "Other Applications"
+            if (it.ongoing) "Ongoing Applications" else "Other Applications"
         }
 
         gigAppsListForView.clear()
@@ -136,6 +138,13 @@ class SelectGigApplicationToActivateViewModel @Inject constructor(
                         "Other Applications"
                     )
                 )
+                gigAppsListForView.add(
+                    GigAppListRecyclerItemData.GigAppListSearchRecyclerItemData(
+                        "",
+                        this
+                    )
+                )
+
                 gigAppsListForView.add(
                     GigAppListRecyclerItemData.NoGigAppsFoundItemData(
                         "No Applications"
@@ -222,8 +231,8 @@ class SelectGigApplicationToActivateViewModel @Inject constructor(
             return
         } else {
             jobProfilesShownOnView = jobProfiles.filter {
-                it.tradeName?.contains(searchString, true) ?: false
-                        || it.profileName?.contains(searchString, true) ?: false
+                !it.ongoing && (it.tradeName?.contains(searchString, true) ?: false
+                        || it.profileName?.contains(searchString, true) ?: false)
             }
         }
 

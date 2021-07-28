@@ -33,6 +33,7 @@
             android:layout_marginEnd="@dimen/size_16"
             android:text="Giger Name"
             android:fontFamily="@font/lato_bold"
+            android:textFontWeight="600"
             android:textSize="14sp"
             android:textColor="@color/black"
             app:layout_constraintEnd_toStartOf="@id/jobProfileLogo"

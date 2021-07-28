@@ -165,12 +165,7 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
         })
 
         viewModel.selectedIndex.observe(viewLifecycleOwner, Observer {
-            if (it != -1) {
-                logger.d(TAG, "currently selected index $it")
-                submitBtn.isEnabled = true
-                submitBtn.background = resources.getDrawable(R.drawable.app_gradient_button)
-            } else {
-                logger.d(TAG, "currently selected  $it")
+            if (it == -1) {
                 submitBtn.isEnabled = false
                 submitBtn.background = resources.getDrawable(R.drawable.app_gradient_button_disabled)
             }
@@ -178,7 +173,21 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
 
         viewModel.selectedJobProfileOverview.observe(viewLifecycleOwner, Observer {
             logger.d(TAG, "selected job profile $it")
-            submitBtn.text = if (it.ongoing) "Share Referral Link" else "Next"
+            if (it.ongoing) {
+                if ("Application submitted".equals(it.status, true)) {
+                    submitBtn.text = "Next"
+                    submitBtn.isEnabled = true
+                    submitBtn.background = resources.getDrawable(R.drawable.app_gradient_button)
+                } else {
+                    submitBtn.text = "Next"
+                    submitBtn.isEnabled = false
+                    submitBtn.background = resources.getDrawable(R.drawable.app_gradient_button_disabled)
+                }
+            }else {
+                submitBtn.text = "Share Referral Link"
+                submitBtn.isEnabled = true
+                submitBtn.background = resources.getDrawable(R.drawable.app_gradient_button)
+            }
         })
 
 
@@ -192,27 +201,13 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
 
                     //todo Check Application submitted flag
                     if (it.ongoing) {
-
-                        val gigerInfo = GigerProfileCardDVM("","", "", it.profileName.toString(), it.companyLogo.toString() )
-                        val assignGigRequest = AssignGigRequest()
-                        assignGigRequest.jobProfileId = it.jobProfileId
-                        assignGigRequest.jobProfileName = it.profileName.toString()
-                        assignGigRequest.companyLogo = it.companyLogo.toString()
-                        navigation.navigateTo(
-
-                            LeadManagementNavDestinations.FRAGMENT_SELECT_GIG_LOCATION, bundleOf(
-                                LeadManagementConstants.INTENT_EXTRA_USER_ID to userUid,
-                                LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL to assignGigRequest,
-                                LeadManagementConstants.INTENT_EXTRA_CURRENT_JOINING_USER_INFO to gigerInfo
+                        if("Application submitted".equals(it.status,true)) {
+                            viewModel.fetchInfoAndStartJoiningProcess(
+                                userUid = userUid,
+                                joiningId = joiningId,
+                                jobProfileOverview = it
                             )
-                        )
-//                        if("Application submitted".equals(it.status,true)) {
-//                            viewModel.fetchInfoAndStartJoiningProcess(
-//                                userUid = userUid,
-//                                joiningId = joiningId,
-//                                jobProfileOverview = it
-//                            )
-//                        }
+                        }
                     } else {
 
                         navigation.navigateTo(
