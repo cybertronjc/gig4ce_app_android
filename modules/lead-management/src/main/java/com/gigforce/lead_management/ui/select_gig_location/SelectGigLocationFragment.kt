@@ -177,16 +177,6 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentBinding
         }
 
 
-        viewBinding.searchLocation.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                showToast("Selected: " + p1.toString())
-            }
-
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-
-            }
-
-        }
         if (currentGigerInfo != null) {
             viewBinding.gigerProfileCard.setProfileCard(currentGigerInfo!!)
         } else {
@@ -237,7 +227,7 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentBinding
                         arrayAdapter?.notifyDataSetChanged()
                         viewBinding.searchLocation.adapter = null
                         arrayAdapter?.clear()
-                        val jobLocalities = jobProfile.locality.filter { it.cityId?.equals(cityAndLocations.get(model.chipId).id) == true }
+                        val jobLocalities = jobProfile.locality
                         val stores = jobProfile.stores.filter { it.cityId?.equals(cityAndLocations.get(model.chipId).id) == true }
                         locationChipGroup.removeAllViews()
                         processJobLocations(jobLocalities, stores)
@@ -297,6 +287,16 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentBinding
                 }
                 arrayAdapter = context?.let { ArrayAdapter(it,android.R.layout.simple_spinner_dropdown_item, locationsArray) }
                 viewBinding.searchLocation.adapter = arrayAdapter
+                viewBinding.searchLocation.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+                    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                        //showToast("Selected: " + p1.toString())
+                    }
+
+                    override fun onNothingSelected(p0: AdapterView<*>?) {
+
+                    }
+
+                }
                 arrayAdapter?.notifyDataSetChanged()
                 logger.d(TAG, "locations array $locationsArray")
 

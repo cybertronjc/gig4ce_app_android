@@ -76,10 +76,10 @@ class GigerOnboardingFragment  : BaseFragment2<GigerOnboardingFragmentBinding>(
         }
 
         viewBinding.toolbar.apply {
-            hideActionMenu()
-            showTitle("Mobile Number")
-            setBackButtonListener(View.OnClickListener {
-                navigation.popBackStack()
+            this.hideActionMenu()
+            this.showTitle("Mobile Number")
+            this.setBackButtonListener(View.OnClickListener {
+                activity?.onBackPressed()
             })
         }
 

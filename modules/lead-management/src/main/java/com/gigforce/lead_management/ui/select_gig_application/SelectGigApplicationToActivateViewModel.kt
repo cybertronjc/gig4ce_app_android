@@ -113,7 +113,7 @@ class SelectGigApplicationToActivateViewModel @Inject constructor(
 //            }
             it.ongoing != null
         }.groupBy {
-            if (it.ongoing == true) "Ongoing Applications" else "Other Applications"
+            if (!it.ongoing) "Ongoing Applications" else "Other Applications"
         }
 
         gigAppsListForView.clear()
