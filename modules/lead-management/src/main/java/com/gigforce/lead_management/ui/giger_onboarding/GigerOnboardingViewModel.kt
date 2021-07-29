@@ -74,7 +74,7 @@ class GigerOnboardingViewModel @Inject constructor(
             val repsonse =
                 leadManagementRepository.checkMobileForExistingRegistrationElseSendOtp(
                     mobileNo,
-                    buildConfig.getVerifyOTPURL()
+                    buildConfig.getCreateOrSendOTPUrl()
                 )
             _checkMobileNo.value = Lce.content(repsonse)
             _checkMobileNo.value = null

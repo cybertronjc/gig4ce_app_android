@@ -942,7 +942,7 @@
         android:label="JoiningListFragment" />
     <fragment
         android:id="@+id/gigerOtpVerification"
-        android:name="com.gigforce.lead_management.gigeronboarding.GigerOtpVerification"
+        android:name="com.gigforce.lead_management.ui.giger_onboarding.GigerOtpVerification"
         android:label="GigerOtpVerification" />
     <fragment
         android:id="@+id/selectGigApplicationToActivate"

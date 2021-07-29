@@ -265,19 +265,15 @@ class GigerOnboardingFragment : BaseFragment2<GigerOnboardingFragmentBinding>(
                         UtilMethods.hideLoading()
                         showToast("Otp sent")
 
-                        if (!it.content.isUserAlreadyRegistered) {
-                            //show user already registered dialog
-                            if (viewBinding.mobileNoEt.text.toString().isNotEmpty()) {
-                                navigation.navigateTo(
-                                    "LeadMgmt/gigerOnboardingOtp", bundleOf(
-                                        LeadManagementConstants.INTENT_EXTRA_MODE to LeadManagementConstants.MODE_REGISTERED,
-                                        INTENT_EXTRA_MOBILE_NO to "+91${viewBinding.mobileNoEt.text}",
-                                        INTENT_EXTRA_OTP_TOKEN to it.content.verificationToken,
-                                        INTENT_CAME_FROM_JOINING to cameFromJoinings
-                                    )
+                        if (viewBinding.mobileNoEt.text.toString().isNotEmpty()) {
+                            navigation.navigateTo(
+                                LeadManagementNavDestinations.FRAGMENT_GIGER_ONBOARDING_OTP, bundleOf(
+                                    LeadManagementConstants.INTENT_EXTRA_MODE to LeadManagementConstants.MODE_REGISTERED,
+                                    INTENT_EXTRA_MOBILE_NO to viewBinding.mobileNoEt.text.toString(),
+                                    INTENT_EXTRA_OTP_TOKEN to it.content.verificationToken,
+                                    INTENT_CAME_FROM_JOINING to cameFromJoinings
                                 )
-                                //viewBinding.mobileNoEt.setText("")
-                            }
+                            )
                         }
                     }
                     is Lce.Error -> {
