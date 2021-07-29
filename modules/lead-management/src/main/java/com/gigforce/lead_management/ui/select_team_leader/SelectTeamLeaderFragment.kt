@@ -24,6 +24,7 @@ import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.SelectTeamLeaderFragmentBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.util.*
@@ -212,7 +213,7 @@ class SelectTeamLeaderFragment : BaseFragment2<SelectTeamLeaderFragmentBinding>(
         teamLeaderShimmerContainer.gone()
         teamLeadersInfoLayout.root.gone()
 
-        gigforceTeamLeaders = jobProfile.gigforceTeamLeaders
+        gigforceTeamLeaders = jobProfile.gigforceTeamLeaders.sortedBy { it.id.equals(FirebaseAuth.getInstance().currentUser?.uid) }
         businessTeamLeaders = jobProfile.businessTeamLeaders
         processTeamLeaders(gigforceTeamLeaders, businessTeamLeaders)
     }
