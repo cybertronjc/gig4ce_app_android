@@ -213,6 +213,9 @@ class SelectTeamLeaderFragment : BaseFragment2<SelectTeamLeaderFragmentBinding>(
         teamLeaderShimmerContainer.gone()
         teamLeadersInfoLayout.root.gone()
 
+        val gfTeamLeaders = jobProfile.gigforceTeamLeaders
+        val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
+        gigforceTeamLeaders = gfTeamLeaders.filter { it.id.equals(currentUserUid) } + gfTeamLeaders.filter { !it.id.equals(currentUserUid) }
         gigforceTeamLeaders = jobProfile.gigforceTeamLeaders.sortedBy { it.id.equals(FirebaseAuth.getInstance().currentUser?.uid) }
         businessTeamLeaders = jobProfile.businessTeamLeaders
         processTeamLeaders(gigforceTeamLeaders, businessTeamLeaders)
