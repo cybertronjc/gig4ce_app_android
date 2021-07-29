@@ -2,12 +2,20 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:width="6dp">
         <shape android:shape="rectangle">
-            <solid android:color="#F44336" />
+            <solid android:color="@color/white" />
         </shape>
+
     </item>
+
     <item android:left="4dp">
         <shape android:shape="rectangle">
             <solid android:color="@android:color/transparent" />
+
+            <!-- View border color and width -->
+            <stroke
+                android:width="0.4dp"
+                android:color="@color/white" >
+            </stroke>
         </shape>
     </item>
 </layer-list>

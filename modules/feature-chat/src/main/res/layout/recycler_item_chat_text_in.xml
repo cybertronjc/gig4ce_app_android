@@ -24,10 +24,10 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:focusable="true"
-            android:paddingStart="12dp"
+            android:paddingStart="8dp"
             android:paddingTop="8dp"
-            android:paddingBottom="5dp"
-            android:paddingEnd="10dp"
+            android:paddingBottom="8dp"
+            android:paddingEnd="8dp"
             >
 
 
@@ -51,10 +51,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minWidth="150dp"
-                android:layout_marginTop="6dp"
+                android:maxWidth="250dp"
+                android:layout_marginTop="2dp"
+                android:paddingBottom="6dp"
                 android:orientation="vertical"
-                app:layout_constraintTop_toBottomOf="@id/user_name_tv"
-                />
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/user_name_tv"/>
 
 
             <TextView
@@ -64,13 +66,12 @@
                 android:textSize="16sp"
                 android:id="@+id/tv_msgValue"
                 android:linksClickable="true"
-                android:layout_marginTop="6dp"
                 android:textColorLink="@android:color/black"
                 android:fontFamily="@font/lato"
                 android:letterSpacing="0"
                 app:layout_constraintTop_toBottomOf="@id/reply_messages_quote_container_layout"
                 app:layout_constraintStart_toStartOf="parent"
-                tools:text="ddwdewdeewdd wdewde"
+                tools:text="dededdedededed"
                 />
 
             <ImageView

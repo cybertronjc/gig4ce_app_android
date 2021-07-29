@@ -75,6 +75,9 @@ class ChatPageViewModel constructor(
     private var _otherUserInfo = MutableLiveData<ContactModel>()
     val otherUserInfo: LiveData<ContactModel> = _otherUserInfo
 
+    private var _scrollToMessage = MutableLiveData<Int?>()
+    val scrollToMessage: LiveData<Int?> = _scrollToMessage
+
     private var messagesListener: ListenerRegistration? = null
     private var headerInfoChangeListener: ListenerRegistration? = null
     private var contactInfoChangeListener: ListenerRegistration? = null
@@ -256,8 +259,14 @@ class ChatPageViewModel constructor(
                                 this.chatType = ChatConstants.CHAT_TYPE_USER
                             }
                         }
-                        this.chatMessages = messages.toMutableList()
 
+                        messages.forEach { message ->
+                            if(message.isAReplyToOtherMessage && message.replyForMessageId != null){
+                                message.replyForMessage = messages.find { it.id == message.replyForMessageId || message.replyForMessageId == it.otherUsersMessageId}
+                            }
+                        }
+
+                        this.chatMessages = messages.toMutableList()
                         chatMessages?.let {
 
                             val unreadMessages = it.filter {
@@ -267,6 +276,7 @@ class ChatPageViewModel constructor(
                             }
                             setMessagesAsRead(unreadMessages)
                         }
+
 
                         _messages.postValue(messages)
                     }
@@ -892,5 +902,16 @@ class ChatPageViewModel constructor(
                     e
             )
         }
+    }
+
+    fun scrollToMessage(
+        replyMessage: ChatMessage
+    ){
+       val messageList =  chatMessages ?: return
+       val index =  messageList.indexOf(replyMessage)
+       if(index != -1){
+            _scrollToMessage.value = index
+            _scrollToMessage.value = null
+       }
     }
 }

@@ -49,9 +49,7 @@ import com.gigforce.core.PermissionUtils
 import com.gigforce.core.StringConstants
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.date.DateHelper
-import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toDisplayText
-import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.recyclerView.CoreRecyclerView
 import com.gigforce.modules.feature_chat.ChatNavigation
@@ -180,32 +178,35 @@ class ChatPageFragment : Fragment(),
         val sharedFileBundle = arguments?.getBundle(INTENT_EXTRA_SHARED_FILES_BUNDLE) ?: return
 
         val imagesShared: ArrayList<SharedFile>? =
-                sharedFileBundle.getParcelableArrayList(INTENT_EXTRA_SHARED_IMAGES)
+            sharedFileBundle.getParcelableArrayList(INTENT_EXTRA_SHARED_IMAGES)
         if (imagesShared != null && imagesShared.isNotEmpty()) {
             sharedFile = imagesShared.first()
-            cameraAndGalleryIntegrator.startImageCropper(imagesShared.first().file, imageCropOptions)
+            cameraAndGalleryIntegrator.startImageCropper(
+                imagesShared.first().file,
+                imageCropOptions
+            )
         }
 
         val videosShared: ArrayList<SharedFile>? =
-                sharedFileBundle.getParcelableArrayList(INTENT_EXTRA_SHARED_VIDEOS)
+            sharedFileBundle.getParcelableArrayList(INTENT_EXTRA_SHARED_VIDEOS)
         if (videosShared != null && videosShared.isNotEmpty()) {
 
             videosShared.forEach {
                 sendVideoMessage(
-                        it.file,
-                        it.text
+                    it.file,
+                    it.text
                 )
             }
         }
 
         val documentsShared: ArrayList<SharedFile>? =
-                sharedFileBundle.getParcelableArrayList(INTENT_EXTRA_SHARED_DOCUMENTS)
+            sharedFileBundle.getParcelableArrayList(INTENT_EXTRA_SHARED_DOCUMENTS)
         if (documentsShared != null && documentsShared.isNotEmpty()) {
 
             documentsShared.forEach {
                 sendDocumentMessage(
-                        it.file,
-                        it.text
+                    it.file,
+                    it.text
                 )
             }
         }
@@ -372,6 +373,13 @@ class ChatPageFragment : Fragment(),
                     )
                 }
                 chatRecyclerView.smoothScrollToLastPosition()
+            })
+
+        groupChatViewModel
+            .scrollToMessage
+            .observe(viewLifecycleOwner, {
+                it ?: return@observe
+                chatRecyclerView.smoothAndSafeScrollToPosition(it)
             })
 
         groupChatViewModel
@@ -589,6 +597,13 @@ class ChatPageFragment : Fragment(),
                     }
                 }
             })
+
+        viewModel
+            .scrollToMessage
+            .observe(viewLifecycleOwner, {
+                it ?: return@observe
+                chatRecyclerView.smoothAndSafeScrollToPosition(it)
+            })
     }
 
     private fun showErrorDialog(error: String) {
@@ -766,14 +781,14 @@ class ChatPageFragment : Fragment(),
 
                 if (chatType == ChatConstants.CHAT_TYPE_USER)
                     viewModel.sendNewText(
-                            message,
-                            chatFooter.getReplyToMessage()
+                        message,
+                        chatFooter.getReplyToMessage()
                     )
                 else
                     groupChatViewModel.sendNewText(
-                            message,
-                            usersMentioned,
-                            chatFooter.getReplyToMessage()
+                        message,
+                        usersMentioned,
+                        chatFooter.getReplyToMessage()
                     )
 
                 chatFooter.closeReplyUi()
@@ -875,8 +890,8 @@ class ChatPageFragment : Fragment(),
     }
 
     private fun sendDocumentMessage(
-            uri: Uri,
-            text : String? = null
+        uri: Uri,
+        text: String? = null
     ) {
         val uriString = uri.toString()
         val myFile = File(uriString)
@@ -885,17 +900,17 @@ class ChatPageFragment : Fragment(),
 
         if (chatType == ChatConstants.CHAT_TYPE_USER)
             viewModel.sendNewDocumentMessage(
-                    requireContext(),
-                    text ?: "",
-                    displayName,
-                    uri
+                requireContext(),
+                text ?: "",
+                displayName,
+                uri
             )
         else
             groupChatViewModel.sendNewDocumentMessage(
-                    context = requireContext(),
-                    text = text ?: "",
-                    fileName = displayName ?: "Document",
-                    uri = uri
+                context = requireContext(),
+                text = text ?: "",
+                fileName = displayName ?: "Document",
+                uri = uri
             )
 
 
@@ -904,8 +919,8 @@ class ChatPageFragment : Fragment(),
     }
 
     private fun sendVideoMessage(
-            uri: Uri,
-            text: String? = null
+        uri: Uri,
+        text: String? = null
     ) {
         val uriString = uri.toString()
         val myFile = File(uri.path)
@@ -914,17 +929,17 @@ class ChatPageFragment : Fragment(),
 
         if (chatType == ChatConstants.CHAT_TYPE_USER)
             viewModel.sendNewVideoMessage(
-                    requireContext(),
-                    text ?: "",
-                    videoInfo,
-                    uri
+                requireContext(),
+                text ?: "",
+                videoInfo,
+                uri
             )
         else
             groupChatViewModel.sendNewVideoMessage(
-                    context = requireContext(),
-                    text = text ?: "",
-                    videoInfo = videoInfo,
-                    uri = uri
+                context = requireContext(),
+                text = text ?: "",
+                videoInfo = videoInfo,
+                uri = uri
             )
     }
 
@@ -1112,7 +1127,7 @@ class ChatPageFragment : Fragment(),
         val activity = activity ?: return
 
         val inputMethodManager =
-                activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(activity.currentFocus?.windowToken, 0)
     }
 
@@ -1132,33 +1147,33 @@ class ChatPageFragment : Fragment(),
 
     override fun imageResult(uri: Uri) {
         sendImageMessage(
-                uri,
-                sharedFile?.text ?: ""
+            uri,
+            sharedFile?.text ?: ""
         )
         sharedFile = null
     }
 
     private fun sendImageMessage(
-            uri: Uri,
-            text: String
+        uri: Uri,
+        text: String
     ) {
         if (chatType == ChatConstants.CHAT_TYPE_USER)
             viewModel.sendNewImageMessage(
-                    context = requireContext().applicationContext,
-                    text = text,
-                    uri = uri
+                context = requireContext().applicationContext,
+                text = text,
+                uri = uri
             )
         else {
             groupChatViewModel.sendNewImageMessage(
-                    context = requireContext().applicationContext,
-                    text = text,
-                    uri = uri
+                context = requireContext().applicationContext,
+                text = text,
+                uri = uri
             )
         }
     }
 
     override fun showReplyUI(chatMessage: ChatMessage) {
-            chatFooter.openReplyUi(chatMessage)
+        chatFooter.openReplyUi(chatMessage)
     }
 
     companion object {

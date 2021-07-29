@@ -93,6 +93,9 @@ class GroupChatViewModel constructor(
     private val _createGroup: MutableLiveData<Lce<String>> = MutableLiveData()
     val createGroup: LiveData<Lce<String>> = _createGroup
 
+    private var _scrollToMessage = MutableLiveData<Int?>()
+    val scrollToMessage: LiveData<Int?> = _scrollToMessage
+
     fun createGroup(
             groupName: String,
             groupMembers: List<ContactModel>
@@ -968,10 +971,17 @@ class GroupChatViewModel constructor(
         }
     }
 
-
+    fun scrollToMessage(
+        replyMessage: ChatMessage
+    ){
+        val messageList =  grpMessages ?: return
+        val index =  messageList.indexOf(replyMessage)
+        if(index != -1){
+            _scrollToMessage.value = index
+            _scrollToMessage.value = null
+        }
+    }
     companion object {
         const val TAG: String = "GroupChatVM"
     }
-
-
 }

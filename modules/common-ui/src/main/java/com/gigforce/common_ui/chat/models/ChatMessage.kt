@@ -147,6 +147,10 @@ class ChatMessage(
     @set:PropertyName("replyForMessageId")
     var replyForMessageId: String? = null,
 
+    @get:PropertyName("otherUsersMessageId")
+    @set:PropertyName("otherUsersMessageId")
+    var otherUsersMessageId: String? = null,
+
     @get:Exclude
     @set:Exclude
     var replyForMessage: ChatMessage? = null,
