@@ -50,6 +50,7 @@ class ChipGroupComponent : ChipGroup {
             }
             if (list.size == 1){
                 setChipSelected(chipComponent.rootView, it)
+                checkedChangeListener?.onCheckedChangeListener(it)
             }
             chipComponent.setOnClickListener { it1 ->
                 if (isSingleSelection){
@@ -59,7 +60,7 @@ class ChipGroupComponent : ChipGroup {
                 } else {
                     if (!it.isSelected) setChipSelected(it1, it) else setChipUnSelected(it1, it)
                 }
-
+                checkedChangeListener?.onCheckedChangeListener(it)
             }
             this.addView(chipComponent)
         }
@@ -72,14 +73,10 @@ class ChipGroupComponent : ChipGroup {
     }
 
     private fun setChipSelected(chip: View, chipGroupModel: ChipGroupModel) {
-        Log.d("Here", "selected")
-        checkedChangeListener?.onCheckedChangeListener(chipGroupModel)
         (chip as Chip).isChecked = true
         chipGroupModel.isSelected = true
     }
     private fun setChipUnSelected(chip: View, chipGroupModel: ChipGroupModel) {
-        Log.d("Here", "UnSelected")
-        checkedChangeListener?.onCheckedChangeListener(chipGroupModel)
         (chip as Chip).isChecked = false
         chipGroupModel.isSelected = false
     }
