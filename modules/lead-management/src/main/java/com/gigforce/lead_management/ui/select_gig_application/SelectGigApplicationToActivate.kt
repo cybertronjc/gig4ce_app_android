@@ -197,10 +197,8 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
             if (viewModel.getSelectedIndex() != -1) {
                 viewModel.getSelectedJobProfile().let {
 
-
-                    //todo Check Application submitted flag
                     if (it.ongoing) {
-                        if("Application submitted".equals(it.status,true)) {
+                        if(it.submitted) {
                             viewModel.fetchInfoAndStartJoiningProcess(
                                 userUid = userUid,
                                 joiningId = joiningId,

@@ -19,6 +19,9 @@ data class JobProfileOverview(
     @SerializedName("ongoing")
     val ongoing: Boolean,
 
+    @SerializedName("submitted")
+    val submitted: Boolean,
+
     @SerializedName("status")
     val status: String?,
 

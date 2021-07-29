@@ -22,7 +22,7 @@ interface JoiningProfileService {
         @Query("userUid") userUid: String
     ): Response<JobProfileDetails>
 
-    @POST("gig/submit")
+    @POST("gigs/activations")
     suspend fun createGigs(
         @Body request : AssignGigRequest
     ): Response<String>
