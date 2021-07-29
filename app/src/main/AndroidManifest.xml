@@ -207,16 +207,13 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <intent-filter>
-                <action android:name="com.gigforce.app.chats.open_calendar_home_screen" />
+                <action android:name="com.gigforce.app.calendar.open_calendar_home_screen" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <intent-filter>
-                <action android:name="com.gigforce.app.chats.open_joining_screen" />
+                <action android:name="com.gigforce.app.joinings.open_joining_screen" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-
-
-
 
         </activity>
 
