@@ -39,6 +39,15 @@ class AssignGigsViewModel @Inject constructor(
         try {
             _viewState.postValue(Lse.loading())
 
+            assignGigRequest.enrollingTlUid =
+                firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow().uid
+
+            if (!assignGigRequest.gigForceTeamLeaders.isNullOrEmpty())
+                assignGigRequest.gigForceTeamLeaders?.first()?.primary = true
+
+            if (!assignGigRequest.businessTeamLeaders.isNullOrEmpty())
+                assignGigRequest.businessTeamLeaders?.first()?.primary = true
+
             leadManagementRepository.assignGigs(
                 assignGigRequest
             )

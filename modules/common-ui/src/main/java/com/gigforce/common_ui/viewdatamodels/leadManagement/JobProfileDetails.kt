@@ -83,7 +83,8 @@ data class JobShift(
     val id: String,
 
     @SerializedName("name")
-    val name: String?
+    val name: String?,
+
 ) : Parcelable
 
 @Parcelize
@@ -92,5 +93,8 @@ data class JobTeamLeader(
     val id: String,
 
     @SerializedName("name")
-    val name: String?
+    val name: String?,
+
+    @SerializedName("primary")
+    var primary : Boolean = false
 ) : Parcelable
