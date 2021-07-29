@@ -53,7 +53,9 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentLayoutB
     private var currentGigerInfo: GigerProfileCardDVM? = null
     var arrayAdapter1: ArrayAdapter<String>? = null
     var locationsArray = arrayListOf<String>()
-
+    var selectedJobLocation : JobLocation? = null
+    var jobLocalities : List<JobLocality> = emptyList()
+    var jobStores : List<JobStore> = emptyList()
     val cityChips = arrayListOf<ChipGroupModel>()
     val locationChips = arrayListOf<ChipGroupModel>()
     var cityAndLocations = listOf<JobProfileCityAndLocation>()
@@ -159,6 +161,24 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentLayoutB
                     assignGigRequest.cityName = cityAndLocations.get(index).city.toString()
                 }
             }
+            //get the selected location chip and create JobLocation model
+            locationChips.forEachIndexed { index, chipGroupModel ->
+                if (chipGroupModel.isSelected){
+                    if ("Locality".equals(chipGroupModel.text)){
+                        jobLocalities.forEach {
+                            if (searchLocation1.text.toString().trim().equals(it.name)){
+                                selectedJobLocation = JobLocation(it.id, "Locality", it.name)
+                            }
+                        }
+                    } else {
+                        jobStores.forEach {
+                            if (searchLocation1.text.toString().trim().equals(it.name)){
+                                selectedJobLocation = JobLocation(it.id, it.type, it.name)
+                            }
+                        }
+                    }
+                }
+            }
             if (assignGigRequest.cityId.isEmpty()) {
                 MaterialAlertDialogBuilder(requireContext())
                     .setMessage("Select a City to continue")
@@ -166,6 +186,7 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentLayoutB
                     .show()
             } else {
                 logger.d(TAG, "AssignGigRequest $assignGigRequest")
+                assignGigRequest.location = selectedJobLocation
                 navigation.navigateTo(
                     LeadManagementNavDestinations.FRAGMENT_SELECT_SHIFT_TIMMINGS, bundleOf(
                         LeadManagementConstants.INTENT_EXTRA_USER_ID to userUid,
@@ -188,13 +209,7 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentLayoutB
             searchLocation1.showDropDown()
         }
 
-        searchLocation1.onItemClickListener = object : AdapterView.OnItemClickListener{
-            override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                //todo
-                showToast("Clicked ${locationsArray.get(p2)}")
-            }
 
-        }
 
 
         if (currentGigerInfo != null) {
@@ -249,10 +264,10 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentLayoutB
                         viewBinding.searchLocation1.setAdapter(null)
                         viewBinding.searchLocation1.setText("")
                         arrayAdapter1?.clear()
-                        val jobLocalities = jobProfile.locality.filter { it.cityId?.equals(cityAndLocations.get(model.chipId).id) == true }
-                        val stores = jobProfile.stores.filter { it.cityId?.equals(cityAndLocations.get(model.chipId).id) == true }
+                        jobLocalities = jobProfile.locality
+                        jobStores = jobProfile.stores.filter { it.cityId?.equals(cityAndLocations.get(model.chipId).id) == true }
                         locationChipGroup.removeAllViews()
-                        processJobLocations(jobLocalities, stores)
+                        processJobLocations(jobLocalities, jobStores)
 
                     } catch (e: Exception) {
                         logger.d(TAG, "Exception while checkedChangeListener ${e.toString()}")
@@ -313,8 +328,20 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentLayoutB
                 arrayAdapter1 = context?.let { ArrayAdapter(it,android.R.layout.simple_spinner_dropdown_item, locationsArray) }
                 searchLocation1.threshold = 1
                 searchLocation1.setAdapter(arrayAdapter1)
+                if (locationsArray.size == 1){
+                    searchLocation1.setText(arrayAdapter1?.getItem(0).toString())
+                }
                 arrayAdapter1?.notifyDataSetChanged()
                 logger.d(TAG, "locations array $locationsArray")
+
+                searchLocation1.onItemClickListener = object : AdapterView.OnItemClickListener{
+                    override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                        //todo
+                        showToast("Clicked ${locationsArray.get(p2)}")
+
+                    }
+
+                }
 
             }
 
