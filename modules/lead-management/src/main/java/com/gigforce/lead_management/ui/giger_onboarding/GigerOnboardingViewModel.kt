@@ -89,8 +89,6 @@ class GigerOnboardingViewModel @Inject constructor(
     val verifyOtp: LiveData<Lce<CreateUserResponse>> = _verifyOtp
 
     fun checkOtp(
-        userId: String?,
-        mode: Int,
         token: String,
         otp: String,
         mobile: String,

@@ -229,7 +229,7 @@ class GigerOnboardingFragment : BaseFragment2<GigerOnboardingFragmentBinding>(
                                         )
                                     )
                                 } else{
-                                    //todo show user already registerd dialog
+                                    PhoneNumberAlreadyRegisteredDialogFragment.launch(childFragmentManager)
                                 }
                             }
                         } else {
@@ -271,7 +271,7 @@ class GigerOnboardingFragment : BaseFragment2<GigerOnboardingFragmentBinding>(
                                 navigation.navigateTo(
                                     "LeadMgmt/gigerOnboardingOtp", bundleOf(
                                         LeadManagementConstants.INTENT_EXTRA_MODE to LeadManagementConstants.MODE_REGISTERED,
-                                        INTENT_EXTRA_MOBILE_NO to "${viewBinding.mobileNoEt.text}",
+                                        INTENT_EXTRA_MOBILE_NO to "+91${viewBinding.mobileNoEt.text}",
                                         INTENT_EXTRA_OTP_TOKEN to it.content.verificationToken,
                                         INTENT_CAME_FROM_JOINING to cameFromJoinings
                                     )

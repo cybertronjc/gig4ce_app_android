@@ -41,15 +41,21 @@ class GigerOtpVerification : BaseFragment2<FragmentGigerOtpVerificationBinding>(
         const val INTENT_EXTRA_MOBILE_NO = "mobileNo"
         const val INTENT_EXTRA_OTP_TOKEN = "otp_token"
         const val TAG = "GigerOnboardingOTP"
+
+        const val INTENT_EXTRA_USER_ID = "uid"
+        const val INTENT_EXTRA_PHONE_NUMBER = "phone_number"
+        const val INTENT_EXTRA_USER_NAME = "user_name"
+        const val INTENT_EXTRA_PIN_CODE = "pincode"
+        const val INTENT_EXTRA_MODE = "mode"
+
+        const val MODE_EDIT = 1
+        const val MODE_ADD = 2
     }
 
     private val viewModel: GigerOnboardingViewModel by viewModels()
     private lateinit var verificationToken: String
     private lateinit var mobileNo: String
-
     private var cameFromJoinings : Boolean = false
-    private var userId: String? = null
-    private var mode = 0
 
     @Inject
     lateinit var navigation: INavigation
@@ -66,16 +72,12 @@ class GigerOtpVerification : BaseFragment2<FragmentGigerOtpVerificationBinding>(
 
     private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {
         arguments?.let {
-            mode = it.getInt(LeadManagementConstants.INTENT_EXTRA_MODE)
-            userId = it.getString(LeadManagementConstants.INTENT_EXTRA_USER_ID)
             cameFromJoinings = it.getBoolean(GigerOnboardingFragment.INTENT_CAME_FROM_JOINING)
             mobileNo = it.getString(INTENT_EXTRA_MOBILE_NO) ?: return@let
             verificationToken = it.getString(INTENT_EXTRA_OTP_TOKEN) ?: return@let
         }
 
         savedInstanceState?.let {
-            mode = it.getInt(LeadManagementConstants.INTENT_EXTRA_MODE)
-            userId = it.getString(LeadManagementConstants.INTENT_EXTRA_USER_ID)
             cameFromJoinings = it.getBoolean(GigerOnboardingFragment.INTENT_CAME_FROM_JOINING)
             mobileNo = it.getString(INTENT_EXTRA_MOBILE_NO) ?: return@let
             verificationToken = it.getString(INTENT_EXTRA_OTP_TOKEN) ?: return@let
@@ -86,7 +88,6 @@ class GigerOtpVerification : BaseFragment2<FragmentGigerOtpVerificationBinding>(
         super.onSaveInstanceState(outState)
         outState.putString(INTENT_EXTRA_MOBILE_NO, mobileNo)
         outState.putString(INTENT_EXTRA_OTP_TOKEN, verificationToken)
-        outState.putString(LeadManagementConstants.INTENT_EXTRA_USER_ID, userId)
         outState.putBoolean(GigerOnboardingFragment.INTENT_CAME_FROM_JOINING, cameFromJoinings)
     }
 
@@ -139,25 +140,14 @@ class GigerOtpVerification : BaseFragment2<FragmentGigerOtpVerificationBinding>(
                     is Lce.Content -> {
                         showToast("Otp Confirmed")
 
-                        if (mode == LeadManagementConstants.MODE_REGISTERED) {
-                            logger.d(TAG, "User is Registered with Gigforce")
-                            navigation.navigateTo(
-                                "LeadMgmt/selectGigApplicationToActivate", bundleOf(
-                                    LeadManagementConstants.INTENT_EXTRA_USER_ID to userId,
-                                    LeadManagementConstants.INTENT_EXTRA_PHONE_NUMBER to mobileNo,
-                                    LeadManagementConstants.INTENT_EXTRA_MODE to mode
-                                )
+                        navigation.navigateTo(
+                            "userinfo/addUserDetailsFragment", bundleOf(
+                                INTENT_EXTRA_USER_ID to it.content.uid,
+                                INTENT_EXTRA_PHONE_NUMBER to mobileNo,
+                                INTENT_EXTRA_MODE to MODE_ADD
                             )
-                        } else {
-                            logger.d(TAG, "User was not Registered with Gigforce")
-//                            navigation.navigateTo(
-//                                "LeadMgmt/selectGigApplicationToActivate", bundleOf(
-//                                    LeadManagementConstants.INTENT_EXTRA_USER_ID to it.content.uid,
-//                                    LeadManagementConstants.INTENT_EXTRA_PHONE_NUMBER to it.content.phoneNumber,
-//                                    LeadManagementConstants.INTENT_EXTRA_MODE to mode
-//                                )
-//                            )
-                        }
+                        )
+
                     }
                     is Lce.Error -> {
                         viewBinding.confirmingOtpPb.gone()
@@ -177,8 +167,6 @@ class GigerOtpVerification : BaseFragment2<FragmentGigerOtpVerificationBinding>(
         }
 
         viewModel.checkOtp(
-            userId = userId,
-            mode,
             token = verificationToken,
             otp = viewBinding.txtOtp.text.toString(),
             mobile = mobileNo,
