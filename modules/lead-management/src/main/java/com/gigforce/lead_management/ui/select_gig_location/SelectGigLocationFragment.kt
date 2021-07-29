@@ -249,7 +249,7 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentLayoutB
                         viewBinding.searchLocation1.setAdapter(null)
                         viewBinding.searchLocation1.setText("")
                         arrayAdapter1?.clear()
-                        val jobLocalities = jobProfile.locality
+                        val jobLocalities = jobProfile.locality.filter { it.cityId?.equals(cityAndLocations.get(model.chipId).id) == true }
                         val stores = jobProfile.stores.filter { it.cityId?.equals(cityAndLocations.get(model.chipId).id) == true }
                         locationChipGroup.removeAllViews()
                         processJobLocations(jobLocalities, stores)
