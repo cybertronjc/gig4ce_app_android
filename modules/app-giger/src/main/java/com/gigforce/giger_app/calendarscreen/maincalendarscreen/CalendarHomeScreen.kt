@@ -17,7 +17,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
@@ -114,21 +113,16 @@ class CalendarHomeScreen : Fragment(),
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        Log.d("lifecycle","oncreateview")
-
         return inflater.inflate(R.layout.calendar_home_screen, container, false)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         checkForLocationPermission()
-        Log.d("lifecycle","oncreate")
-
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("lifecycle","onviewcreated")
-
         viewModelProfile = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         viewModelCustomPreference =
             ViewModelProvider(this, ParamCustPreferViewModel(viewLifecycleOwner)).get(
@@ -170,16 +164,6 @@ class CalendarHomeScreen : Fragment(),
 
     }
 
-    override fun onStart() {
-        super.onStart()
-        Log.d("lifecycle","onstart")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.d("lifecycle","onstop")
-
-    }
     private fun checkForLocationPermission() {
         val locationPermissionGranted = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
             EasyPermissions.hasPermissions(
@@ -212,15 +196,8 @@ class CalendarHomeScreen : Fragment(),
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-        Log.d("lifecycle","onpause")
-
-    }
     override fun onResume() {
         super.onResume()
-        Log.d("lifecycle","onresume")
-
         StatusBarUtil.setColorNoTranslucent(
             requireActivity(),
             ResourcesCompat.getColor(resources, R.color.white, null)
