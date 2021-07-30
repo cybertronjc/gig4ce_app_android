@@ -1035,7 +1035,7 @@ class GigPage2Fragment : Fragment(),
             )
         }
         if (!locationPermissionGranted) {
-            permissionRequiredAndTheirReasons.put("LOCATION", "To capture cocation for check-in, suggest gigs based on your location")
+            permissionRequiredAndTheirReasons.put("LOCATION", "To capture location for check-in, suggest gigs based on your location")
         }
 
         PermissionRequiredBottomSheet.launch(
