@@ -1009,7 +1009,7 @@ class GigPage2Fragment : Fragment(),
                 Manifest.permission.CAMERA
         )
         if (!cameraPermissionGranted) {
-            permissionRequiredAndTheirReasons.put("CAMERA", "To Click Image for CheckIn")
+            permissionRequiredAndTheirReasons.put("CAMERA", "To click image for check-in")
         }
 
         val storagePermissionGranted = EasyPermissions.hasPermissions(
@@ -1018,7 +1018,7 @@ class GigPage2Fragment : Fragment(),
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
         )
         if (!storagePermissionGranted) {
-            permissionRequiredAndTheirReasons.put("STORAGE", "To Store Image captured while CheckIn")
+            permissionRequiredAndTheirReasons.put("STORAGE", "To store image captured while check-in")
         }
 
         val locationPermissionGranted = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
@@ -1031,12 +1031,11 @@ class GigPage2Fragment : Fragment(),
             EasyPermissions.hasPermissions(
                     requireContext(),
                     Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION,
-                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                    Manifest.permission.ACCESS_COARSE_LOCATION
             )
         }
         if (!locationPermissionGranted) {
-            permissionRequiredAndTheirReasons.put("LOCATION", "To Capture Location For CheckIn, suggest gigs based on your location")
+            permissionRequiredAndTheirReasons.put("LOCATION", "To capture cocation for check-in, suggest gigs based on your location")
         }
 
         PermissionRequiredBottomSheet.launch(
