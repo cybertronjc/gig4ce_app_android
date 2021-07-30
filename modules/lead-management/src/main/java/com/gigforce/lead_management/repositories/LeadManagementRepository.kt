@@ -25,7 +25,6 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class LeadManagementRepository @Inject constructor(
@@ -46,7 +45,9 @@ class LeadManagementRepository @Inject constructor(
     /**
      * Collection references
      */
-    private val createUserApi: CreateUserAccEnrollmentAPi = RetrofitFactory.createUserAccEnrollmentAPi()
+    private val createUserApi: CreateUserAccEnrollmentAPi =
+        RetrofitFactory.createUserAccEnrollmentAPi()
+
     //Collections Refs
     private val joiningsCollectionRef: CollectionReference by lazy {
         firebaseFirestore.collection(COLLECTION_JOININGS)
@@ -111,8 +112,12 @@ class LeadManagementRepository @Inject constructor(
 
     suspend fun assignGigs(
         assignGigRequest: AssignGigRequest
-    ) = joiningProfileRemoteService.createGigs(assignGigRequest)
-        .bodyOrThrow()
+    ) {
+        val response = joiningProfileRemoteService.createGigs(assignGigRequest).bodyOrThrow()
+        if (!response.success) {
+            throw Exception(response.message ?: "Unable to assign gigs")
+        }
+    }
 
     suspend fun createOrUpdateJoiningDocumentWithStatusSignUpPending(
         userUid: String,
@@ -198,7 +203,7 @@ class LeadManagementRepository @Inject constructor(
         jobProfileName: String,
         phoneNumber: String = "",
         lastStatusChangeSource: String,
-        tradeName : String
+        tradeName: String
     ) {
         val getProfileForUid = profileCollectionRef
             .document(userUid)
@@ -285,7 +290,7 @@ class LeadManagementRepository @Inject constructor(
         phoneNumber: String = "",
         lastStatusChangeSource: String,
         tradeName: String
-    ) : String {
+    ): String {
         val getProfileForUid = profileCollectionRef
             .document(userUid)
             .getOrThrow()
@@ -385,26 +390,29 @@ class LeadManagementRepository @Inject constructor(
         }
     }
 
-     suspend fun sendReferralLink(
+    suspend fun sendReferralLink(
         referralType: String,
         mobileNumber: String,
         jobProfileName: String,
         name: String,
-        shareLink :String
+        shareLink: String
     ) {
-         referralService.sendReferralThroughWhatsApp(
-             ReferralRequest(
-                 referralType = referralType,
-                 mobileNumber = mobileNumber,
-                 jobProfileName = jobProfileName,
-                 userName = name,
-                 shareLink = shareLink
-             )
-         ).bodyOrThrow()
+        referralService.sendReferralThroughWhatsApp(
+            ReferralRequest(
+                referralType = referralType,
+                mobileNumber = mobileNumber,
+                jobProfileName = jobProfileName,
+                userName = name,
+                shareLink = shareLink
+            )
+        ).bodyOrThrow()
     }
 
 
-    suspend fun checkMobileForExistingRegistrationElseSendOtp(mobile: String, url: String): RegisterMobileNoResponse {
+    suspend fun checkMobileForExistingRegistrationElseSendOtp(
+        mobile: String,
+        url: String
+    ): RegisterMobileNoResponse {
         val registerUserRequest = createUserApi.registerMobile(
             url,
             RegisterMobileNoRequest(
@@ -421,7 +429,7 @@ class LeadManagementRepository @Inject constructor(
 
     suspend fun verifyOtp(token: String, otp: String): VerifyOtpResponse {
         val verifyOtpResponse = createUserApi.verifyOtp(
-           buildConfig.getVerifyOTPURL(),
+            buildConfig.getVerifyOTPURL(),
             token,
             otp
         )
@@ -433,13 +441,14 @@ class LeadManagementRepository @Inject constructor(
         }
     }
 
-    suspend fun getUserAuthStatus(mobileNo : String): UserAuthStatusModel {
-        var userAuthStatus = createUserApi.getGigersAuthStatus(buildConfig.getUserRegisterInfoUrl(),mobileNo)
-        if(userAuthStatus.isSuccessful){
+    suspend fun getUserAuthStatus(mobileNo: String): UserAuthStatusModel {
+        var userAuthStatus =
+            createUserApi.getGigersAuthStatus(buildConfig.getUserRegisterInfoUrl(), mobileNo)
+        if (userAuthStatus.isSuccessful) {
             return userAuthStatus.body()!!
-        }
-        else{
-            FirebaseCrashlytics.getInstance().log("Exception : checkIfSignInOrSignup Method ${userAuthStatus.message()}")
+        } else {
+            FirebaseCrashlytics.getInstance()
+                .log("Exception : checkIfSignInOrSignup Method ${userAuthStatus.message()}")
             throw Exception("Issue in Authentication result ${userAuthStatus.message()}")
         }
     }
@@ -479,6 +488,7 @@ class LeadManagementRepository @Inject constructor(
             return response
         }
     }
+
     private suspend fun createProfileDataForUser(
         uid: String,
         mobile: String,
@@ -488,11 +498,11 @@ class LeadManagementRepository @Inject constructor(
         val profileData = ProfileData(
             loginMobile = "+91${mobile}",
             contact = arrayListOf(
-                    Contact(
-                        phone = "+91${mobile}",
-                        email = "",
-                    )
-                ),
+                Contact(
+                    phone = "+91${mobile}",
+                    email = "",
+                )
+            ),
             createdOn = Timestamp.now(),
             enrolledBy = EnrollmentInfo(
                 id = uid,

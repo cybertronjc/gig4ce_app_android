@@ -1,6 +1,7 @@
 package com.gigforce.common_ui.remote
 
 import com.gigforce.common_ui.viewdatamodels.leadManagement.AssignGigRequest
+import com.gigforce.common_ui.viewdatamodels.leadManagement.AssignGigResponse
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfileDetails
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfileOverview
 import com.gigforce.core.datamodels.auth.UserAuthStatusModel
@@ -25,6 +26,6 @@ interface JoiningProfileService {
     @POST("gigs/activations")
     suspend fun createGigs(
         @Body request : AssignGigRequest
-    ): Response<String>
+    ): Response<AssignGigResponse>
 
 }
