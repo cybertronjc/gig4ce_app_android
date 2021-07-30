@@ -1190,10 +1190,6 @@ class GigPage2Fragment : Fragment(),
                 name = "Decline Gig",
                 icon = R.drawable.ic_gig_decline
         )
-
-        private val PERMISSION_STORAGE_EXPLANATION = "STORAGE" to ""
-        private val PERMISSION_CAMERA_EXPLANATION = "CAMERA" to ""
-        private val PERMISSION_LOCATION_EXPLANATION = "LOCATION" to "To Capture Location For CheckIn"
     }
 
 
