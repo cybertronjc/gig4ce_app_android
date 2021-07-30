@@ -118,6 +118,7 @@ class GigPage2Fragment : Fragment(),
 
     @Inject
     lateinit var navigation: INavigation
+
     @Inject
     lateinit var eventTracker: IEventTracker
     private val locationHelper: LocationHelper by lazy {
@@ -168,7 +169,7 @@ class GigPage2Fragment : Fragment(),
         if (isNecessaryPermissionGranted())
             checkForGpsStatus()
         else
-            showPermissionRequiredAndTheirReasonsDialog()
+            showPermissionRequiredAndTheirReasonsDialog(true)
     }
 
 
@@ -287,7 +288,7 @@ class GigPage2Fragment : Fragment(),
                     startRegularisation()
                 }
             } else {
-                showPermissionRequiredAndTheirReasonsDialog()
+                showPermissionRequiredAndTheirReasonsDialog(false)
             }
         }
 
@@ -493,7 +494,7 @@ class GigPage2Fragment : Fragment(),
                                     mapOf("isPresent" to true, "gigId" to gigId)
                                 )
                             )
-                          //  plantLocationTrackers()
+                            //  plantLocationTrackers()
                             showReviewFlow(reviewInfo)
                         }
                     }
@@ -739,12 +740,6 @@ class GigPage2Fragment : Fragment(),
                         viewModel.currentGig?.gigId
                     )
                 })
-//                navigate(R.id.giger_id_fragment, Bundle().apply {
-//                    this.putString(
-//                        INTENT_EXTRA_GIG_ID,
-//                        viewModel.currentGig?.gigId
-//                    )
-//                })
             }
             ID_ATTENDANCE_HISTORY -> {
                 val gig = viewModel.currentGig ?: return
@@ -763,19 +758,6 @@ class GigPage2Fragment : Fragment(),
                         GigMonthlyAttendanceFragment.INTENT_EXTRA_ROLE to gig.getGigTitle()
                     )
                 )
-//                navigate(
-//                    R.id.gigMonthlyAttendanceFragment, bundleOf(
-//                        GigMonthlyAttendanceFragment.INTENT_EXTRA_SELECTED_DATE to LocalDate.of(
-//                            currentDate.year,
-//                            currentDate.monthValue,
-//                            1
-//                        ),
-//                        GigMonthlyAttendanceFragment.INTENT_EXTRA_COMPANY_LOGO to gig.getFullCompanyLogo(),
-//                        GigMonthlyAttendanceFragment.INTENT_EXTRA_COMPANY_NAME to gig.getFullCompanyName(),
-//                        GigMonthlyAttendanceFragment.INTENT_EXTRA_GIG_ORDER_ID to gig.gigOrderId,
-//                        GigMonthlyAttendanceFragment.INTENT_EXTRA_ROLE to gig.getGigTitle()
-//                    )
-//                )
             }
             ID_DECLINE_GIG -> {
                 showDeclineGigDialog()
@@ -838,7 +820,7 @@ class GigPage2Fragment : Fragment(),
         request?.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 // We got the ReviewInfo object
-                reviewInfo = task.getResult()
+                reviewInfo = task.result
             } else {
                 // There was some problem, log or handle the error code.
                 //@ReviewErrorCode val reviewErrorCode = (task.getException() as Exception)
@@ -848,7 +830,7 @@ class GigPage2Fragment : Fragment(),
         }
     }
 
-    private fun showReviewFlow(reviewInfo: ReviewInfo?){
+    private fun showReviewFlow(reviewInfo: ReviewInfo?) {
         if (reviewInfo != null) {
             val flow = activity?.let { manager?.launchReviewFlow(it, reviewInfo) }
             flow?.addOnCompleteListener { task ->
@@ -946,11 +928,6 @@ class GigPage2Fragment : Fragment(),
                 GigContactPersonBottomSheet.INTENT_GIG_CONTACT_PERSON_DETAILS to option
             )
         )
-//        navigate(
-//            R.id.gigContactPersonBottomSheet, bundleOf(
-//                GigContactPersonBottomSheet.INTENT_GIG_CONTACT_PERSON_DETAILS to option
-//            )
-//        )
     }
 
     override fun onCallManagerClicked(manager: ContactPerson) {
@@ -971,43 +948,100 @@ class GigPage2Fragment : Fragment(),
         )
     }
 
-    override fun onPermissionOkayClicked() {
-        askForRequiredPermissions()
+    override fun onPermissionOkayClicked(
+        askPermissionsUsingSystemSdk: Boolean
+    ) {
+        askForRequiredPermissions(askPermissionsUsingSystemSdk)
     }
 
-    private fun askForRequiredPermissions() {
+    private fun askForRequiredPermissions(
+        askPermissionUsingSystemsdk: Boolean
+    ) {
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+        if (askPermissionUsingSystemsdk) {
+
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                requestPermissions(
+                    arrayOf(
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    ),
+                    REQUEST_PERMISSIONS_SYTEM_SDK
+                )
+            } else {
+                requestPermissions(
+                    arrayOf(
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                    ),
+                    REQUEST_PERMISSIONS_SYTEM_SDK
+                )
+            }
+        } else {
             EasyPermissions.requestPermissions(
                 this,
-                "You need to accept location permissions to use this app.",
-                REQUEST_PERMISSIONS,
+                "You need to accept camera,storage and location permissions to use this app.",
+                REQUEST_PERMISSIONS_DEV_REL_LIB,
                 Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.CAMERA,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
             )
-        } else {
-            EasyPermissions.requestPermissions(
-                this,
-                "You need to accept location permissions to use this app.",
-                REQUEST_PERMISSIONS,
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.CAMERA,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.ACCESS_BACKGROUND_LOCATION
-            )
         }
     }
 
-    private fun showPermissionRequiredAndTheirReasonsDialog() {
+    private fun showPermissionRequiredAndTheirReasonsDialog(
+        askPermissionUsingSystemsdk: Boolean
+    ) {
+
+        val permissionRequiredAndTheirReasons = mutableMapOf<String, String>()
+
+        val cameraPermissionGranted = EasyPermissions.hasPermissions(
+            requireContext(),
+            Manifest.permission.CAMERA
+        )
+        if (!cameraPermissionGranted) {
+            permissionRequiredAndTheirReasons.put("CAMERA", "To click image for check-in")
+        }
+
+        val storagePermissionGranted = EasyPermissions.hasPermissions(
+            requireContext(),
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        )
+        if (!storagePermissionGranted) {
+            permissionRequiredAndTheirReasons.put(
+                "STORAGE",
+                "To store image captured while check-in"
+            )
+        }
+
+        val locationPermissionGranted = EasyPermissions.hasPermissions(
+            requireContext(),
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        )
+
+        if (!locationPermissionGranted) {
+            permissionRequiredAndTheirReasons.put(
+                "LOCATION",
+                "To capture location for check-in, suggest gigs based on your location"
+            )
+        }
+
         PermissionRequiredBottomSheet.launch(
             childFragmentManager = childFragmentManager,
             permissionBottomSheetActionListener = this,
-            permissionWithReason = PERMISSION_AND_REASONS
+            permissionWithReason = permissionRequiredAndTheirReasons,
+            askPermissionUsingSystemSdk = askPermissionUsingSystemsdk
         )
     }
 
@@ -1085,26 +1119,15 @@ class GigPage2Fragment : Fragment(),
 
     private fun isNecessaryPermissionGranted(): Boolean {
 
-        return if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-            EasyPermissions.hasPermissions(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.CAMERA,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE
-            )
-        } else {
-            EasyPermissions.hasPermissions(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.CAMERA,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.ACCESS_BACKGROUND_LOCATION
-            )
-        }
+        return EasyPermissions.hasPermissions(
+            requireContext(),
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.CAMERA,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        )
+
     }
 
     override fun onRequestPermissionsResult(
@@ -1113,7 +1136,9 @@ class GigPage2Fragment : Fragment(),
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
+
+        if (requestCode == REQUEST_PERMISSIONS_DEV_REL_LIB)
+            EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
     }
 
     override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
@@ -1124,7 +1149,7 @@ class GigPage2Fragment : Fragment(),
         if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
             AppSettingsDialog.Builder(this).build().show()
         } else {
-            showPermissionRequiredAndTheirReasonsDialog()
+            showPermissionRequiredAndTheirReasonsDialog(false)
         }
     }
 
@@ -1132,7 +1157,9 @@ class GigPage2Fragment : Fragment(),
         const val TAG = "Gig_page_2"
         const val INTENT_EXTRA_GIG_ID = "gig_id"
 
-        const val REQUEST_PERMISSIONS = 100
+        const val REQUEST_PERMISSIONS_DEV_REL_LIB = 100
+        const val REQUEST_PERMISSIONS_SYTEM_SDK = 101
+
         const val REQUEST_CODE_UPLOAD_SELFIE_IMAGE = 2333
         const val REQUEST_UPGRADE_GPS_SETTINGS = 2321
         const val REQUEST_UPDATE_GPS_SETTINGS_MANUALLY = 2322
@@ -1160,12 +1187,6 @@ class GigPage2Fragment : Fragment(),
             id = ID_DECLINE_GIG,
             name = "Decline Gig",
             icon = R.drawable.ic_gig_decline
-        )
-
-        private val PERMISSION_AND_REASONS: HashMap<String, String> = hashMapOf(
-            "LOCATION" to "To Capture Location For CheckIn",
-            "CAMERA" to "To Click Image for CheckIn",
-            "STORAGE" to "To Store Image captured while CheckIn"
         )
     }
 

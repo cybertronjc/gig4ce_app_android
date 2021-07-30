@@ -24,6 +24,7 @@ class PermissionRequiredBottomSheet : BottomSheetDialogFragment() {
     private lateinit var permissionList: HashMap<String, String>
     private var permissionLabelText: String? = null
     private var permissionBottomSheetActionListener: PermissionBottomSheetActionListener? = null
+    private var askPermissionsUsingSystemSdk : Boolean = false
 
     @DrawableRes
     private var imageToShow: Int? = null
@@ -58,6 +59,7 @@ class PermissionRequiredBottomSheet : BottomSheetDialogFragment() {
             } else {
                 null
             }
+            askPermissionsUsingSystemSdk = it.getBoolean(INTENT_ASK_PERMISSION_USING_SYSTEM_SDK)
         }
 
         savedInstanceState?.let {
@@ -69,6 +71,7 @@ class PermissionRequiredBottomSheet : BottomSheetDialogFragment() {
             } else {
                 null
             }
+            askPermissionsUsingSystemSdk = it.getBoolean(INTENT_ASK_PERMISSION_USING_SYSTEM_SDK)
         }
     }
 
@@ -77,6 +80,7 @@ class PermissionRequiredBottomSheet : BottomSheetDialogFragment() {
         outState.putSerializable(INTENT_PERMISSION_LIST, permissionList)
         outState.putInt(INTENT_PERMISSION_IMAGE, imageToShow ?: -1)
         outState.putString(INTENT_PERMISSION_TEXT, permissionLabelText)
+        outState.putBoolean(INTENT_ASK_PERMISSION_USING_SYSTEM_SDK, askPermissionsUsingSystemSdk)
     }
 
     private fun initView(view: View) {
@@ -87,7 +91,7 @@ class PermissionRequiredBottomSheet : BottomSheetDialogFragment() {
         permissionOkayButton = view.findViewById(R.id.permission_okay_button)
 
         permissionOkayButton.setOnClickListener {
-            permissionBottomSheetActionListener?.onPermissionOkayClicked()
+            permissionBottomSheetActionListener?.onPermissionOkayClicked(askPermissionsUsingSystemSdk)
             dismiss()
         }
     }
@@ -118,13 +122,16 @@ class PermissionRequiredBottomSheet : BottomSheetDialogFragment() {
 
     interface PermissionBottomSheetActionListener {
 
-        fun onPermissionOkayClicked()
+        fun onPermissionOkayClicked(
+            askPermissionsUsingSystemSdk : Boolean
+        )
     }
 
     companion object {
         private const val INTENT_PERMISSION_LIST = "permission_list"
         private const val INTENT_PERMISSION_TEXT = "permission_text"
         private const val INTENT_PERMISSION_IMAGE = "permission_image"
+        private const val INTENT_ASK_PERMISSION_USING_SYSTEM_SDK = "permission_using_system_sdk"
 
         const val TAG = "PermissionRequiredBottomSheet"
 
@@ -133,14 +140,16 @@ class PermissionRequiredBottomSheet : BottomSheetDialogFragment() {
                 permissionBottomSheetActionListener: PermissionBottomSheetActionListener,
                 permissionWithReason: Map<String, String>,
                 permissionText: String? = null,
-                @DrawableRes imageToShow: Int? = null
+                @DrawableRes imageToShow: Int? = null,
+                askPermissionUsingSystemSdk : Boolean
         ) {
             PermissionRequiredBottomSheet().apply {
                 this.permissionBottomSheetActionListener = permissionBottomSheetActionListener
                 arguments = bundleOf(
                     INTENT_PERMISSION_LIST to permissionWithReason,
                     INTENT_PERMISSION_IMAGE to imageToShow,
-                    INTENT_PERMISSION_TEXT to permissionText
+                    INTENT_PERMISSION_TEXT to permissionText,
+                    INTENT_ASK_PERMISSION_USING_SYSTEM_SDK to askPermissionUsingSystemSdk
                 )
                 show(childFragmentManager, TAG)
             }
