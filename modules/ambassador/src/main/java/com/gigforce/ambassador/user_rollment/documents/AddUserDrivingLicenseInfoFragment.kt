@@ -521,8 +521,13 @@ class AddUserDrivingLicenseInfoFragment : Fragment(),
     }
 
     override fun onOkayClicked() {
-        navigation.popBackStack("ambassador/users_enrolled",inclusive = false)
-//        findNavController().popBackStack(R.id.ambassadorEnrolledUsersListFragment, false)
+
+        try {
+            navigation.getBackStackEntry("LeadMgmt/joiningListFragment")
+            navigation.popBackStack("LeadMgmt/joiningListFragment",inclusive = false)
+        } catch (e: IllegalArgumentException) {
+            navigation.popBackStack("ambassador/users_enrolled",inclusive = false)
+        }
     }
 
     private fun setDataOnEditLayout(it: DrivingLicenseDataModel?) {

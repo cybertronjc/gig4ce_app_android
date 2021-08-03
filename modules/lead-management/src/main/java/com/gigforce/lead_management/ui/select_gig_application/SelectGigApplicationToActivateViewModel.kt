@@ -128,7 +128,7 @@ class SelectGigApplicationToActivateViewModel @Inject constructor(
             it.ongoing != null
         }.groupBy {
             if (it.ongoing) "Ongoing Applications" else "Other Applications"
-        }
+        }.toSortedMap(compareByDescending { it })
 
         gigAppsListForView.clear()
         try {

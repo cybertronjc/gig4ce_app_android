@@ -33,7 +33,6 @@ class AssignGigsViewModel @Inject constructor(
         logger.d(
             TAG,
             "Assigning gigs....",
-            assignGigRequest
         )
 
         try {
@@ -48,6 +47,10 @@ class AssignGigsViewModel @Inject constructor(
             if (!assignGigRequest.businessTeamLeaders.isNullOrEmpty())
                 assignGigRequest.businessTeamLeaders?.first()?.primary = true
 
+            logger.d(
+                TAG,
+                "Assigning gigs [Data]...., $assignGigRequest",
+            )
             leadManagementRepository.assignGigs(
                 assignGigRequest
             )

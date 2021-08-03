@@ -14,14 +14,18 @@ import com.gigforce.app.modules.auth.ui.main.LoginSuccessfulViewModel
 import com.gigforce.app.modules.auth.ui.main.ProfileAnGigInfo
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.ext.showToast
+import com.gigforce.common_ui.viewdatamodels.leadManagement.Joining
+import com.gigforce.core.AppConstants
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.datamodels.profile.ProfileData
+import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -32,6 +36,7 @@ class OnboardingLoaderFragment : BaseFragment() {
             OnboardingLoaderFragment()
     }
 
+
     @Inject
     lateinit var eventTracker: IEventTracker
 
@@ -40,7 +45,12 @@ class OnboardingLoaderFragment : BaseFragment() {
     @Inject
     lateinit var shareDataAndCommUtil: SharedPreAndCommonUtilInterface
 
+    private val firebaseAuthStateListener: FirebaseAuthStateListener by lazy {
+        FirebaseAuthStateListener.getInstance()
+    }
+
     private val SPLASH_TIME_OUT: Long = 250
+    private var shouldCheckInJoinings = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -51,10 +61,38 @@ class OnboardingLoaderFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(LoginSuccessfulViewModel::class.java)
+        getDataFrom(
+            arguments,
+            savedInstanceState
+        )
         observer()
         Handler().postDelayed({
             viewModel.getProfileAndGigData()
         }, SPLASH_TIME_OUT)
+    }
+
+    private fun getDataFrom(
+        arguments: Bundle?,
+        savedInstanceState: Bundle?
+    ) {
+
+        arguments?.let {
+            shouldCheckInJoinings =
+                it.getBoolean(AppConstants.SHOULD_CHECK_FOR_JOININGS_APPLICATIONS)
+        }
+
+        savedInstanceState?.let {
+            shouldCheckInJoinings =
+                it.getBoolean(AppConstants.SHOULD_CHECK_FOR_JOININGS_APPLICATIONS)
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(
+            AppConstants.SHOULD_CHECK_FOR_JOININGS_APPLICATIONS,
+            shouldCheckInJoinings
+        )
     }
 
     private fun navigateToLandingHomeScreen() {
@@ -92,6 +130,15 @@ class OnboardingLoaderFragment : BaseFragment() {
 
     private fun checkForPendingWritesAndVavigateToHomeScr(profileAndGig: ProfileAnGigInfo) {
 
+        if (shouldCheckInJoinings) {
+            checkForApplicationInvites(profileAndGig)
+            return
+        }
+
+        checkPendingWritesAndNavigateNormally(profileAndGig)
+    }
+
+    private fun checkPendingWritesAndNavigateNormally(profileAndGig: ProfileAnGigInfo) {
         FirebaseFirestore
             .getInstance()
             .waitForPendingWrites()
@@ -120,8 +167,64 @@ class OnboardingLoaderFragment : BaseFragment() {
                     navigateToLandingHomeScreen()
                 }
             }
+    }
 
+    private fun checkForApplicationInvites(profileAndGig: ProfileAnGigInfo) {
+        FirebaseFirestore.getInstance()
+            .collection("Joinings")
+            .whereEqualTo(
+                "phoneNumber",
+                firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow().phoneNumber
+            )
+            .whereIn(
+                "status",
+                listOf(
+                    "sign_up_pending",
+                    "application_pending",
+                )
+            ).get()
+            .addOnSuccessListener {
 
+                if (it.isEmpty) {
+                    checkPendingWritesAndNavigateNormally(profileAndGig)
+                } else {
+                    checkForPendingInvitesAndOpenJobProfile(
+                        it,
+                        profileAndGig
+                        )
+                }
+            }
+            .addOnFailureListener {
+                checkPendingWritesAndNavigateNormally(profileAndGig)
+            }
+    }
+
+    private fun checkForPendingInvitesAndOpenJobProfile(
+        query: QuerySnapshot?,
+        profileAndGig: ProfileAnGigInfo
+    ) {
+        val querySnap = query ?: return
+
+        val joinings = querySnap.documents.map {
+
+            it.toObject(Joining::class.java)!!.apply {
+                this.joiningId = it.id
+            }
+        }
+
+        for (joing in joinings) {
+            if (!joing.jobProfileIdInvitedFor.isNullOrEmpty()) {
+
+                popAllBackStates()
+                navigate(
+                    R.id.fragment_client_activation,
+                    bundleOf(StringConstants.JOB_PROFILE_ID.value to joing.jobProfileIdInvitedFor)
+                )
+                return
+            }
+        }
+
+        checkPendingWritesAndNavigateNormally(profileAndGig)
     }
 
     private fun checkForDeepLink(): Boolean {

@@ -136,7 +136,7 @@ class LeadManagementRepository @Inject constructor(
                 firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow().uid
             )
             .whereEqualTo("phoneNumber", phoneNumber)
-            .whereEqualTo("jobProfileId", jobProfileId)
+            .whereEqualTo("jobProfileIdInvitedFor", jobProfileId)
             .getOrThrow()
 
         if (!getJobProfileLink.isEmpty) {
@@ -225,7 +225,7 @@ class LeadManagementRepository @Inject constructor(
                 firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow().uid
             )
             .whereEqualTo("phoneNumber", userMobileNo)
-            .whereEqualTo("jobProfileId", jobProfileId)
+            .whereEqualTo("jobProfileIdInvitedFor", jobProfileId)
             .getOrThrow()
 
         if (getJobProfileLink.isEmpty) {
@@ -311,7 +311,7 @@ class LeadManagementRepository @Inject constructor(
                 firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow().uid
             )
             .whereEqualTo("phoneNumber", userMobileNo)
-            .whereEqualTo("jobProfileId", jobProfileId)
+            .whereEqualTo("jobProfileIdInvitedFor", jobProfileId)
             .getOrThrow()
 
         if (getJobProfileLink.isEmpty) {
@@ -542,26 +542,6 @@ class LeadManagementRepository @Inject constructor(
             )
     }
 
-//    suspend fun fetchJoiningFor(
-//        userUid: String,
-//        jobProfileId : String
-//    ) : Joining?{
-//
-//        val getJobProfileLink = joiningsCollectionRef
-//            .whereEqualTo(
-//                "joiningTLUid",
-//                firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow().uid
-//            )
-//            .whereEqualTo("uid", userUid)
-//            .whereEqualTo("jobProfileId", jobProfileId)
-//            .getOrThrow()
-//
-//        if(getJobProfileLink.isEmpty)
-//            return null
-//        else{
-//            return getJobProfileLink.first().toObject(Joining::class.java)
-//        }
-//    }
 
 
 }

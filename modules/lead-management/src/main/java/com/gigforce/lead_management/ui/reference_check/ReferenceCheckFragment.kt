@@ -202,6 +202,7 @@ class ReferenceCheckFragment : BaseFragment2<ReferenceCheckFragmentBinding>(
 
     private fun referenceDataSubmitted() = viewBinding.apply {
         // submitButton.hideProgress("Submitted")
+        assignGigRequest.userUid = userUid
         AssignGigsDialogFragment.launch(
             fragmentManager = childFragmentManager,
             gigRequest = assignGigRequest

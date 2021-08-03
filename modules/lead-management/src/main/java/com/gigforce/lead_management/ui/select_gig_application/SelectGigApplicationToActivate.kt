@@ -175,7 +175,7 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
             logger.d(TAG, "selected job profile $it")
             if (it.ongoing) {
                 submitBtn.text = "Next"
-                if ("Application submitted".equals(it.status, true)) {
+                if (it.submitted) {
                     submitBtn.isEnabled = true
                     submitBtn.background = resources.getDrawable(R.drawable.app_gradient_button)
                 } else {

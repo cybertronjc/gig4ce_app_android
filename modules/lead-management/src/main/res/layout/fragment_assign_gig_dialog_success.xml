@@ -38,10 +38,11 @@
 
             <TextView
                 android:id="@+id/gigs_assigned_label"
-                android:layout_width="wrap_content"
+                android:layout_width="260dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/lato"
+                android:gravity="center"
                 android:text="Giger has been activated successfully."
                 android:textColor="@color/blackDark"
                 android:textSize="18sp"

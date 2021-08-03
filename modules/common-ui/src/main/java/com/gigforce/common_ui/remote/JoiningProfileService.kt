@@ -27,5 +27,4 @@ interface JoiningProfileService {
     suspend fun createGigs(
         @Body request : AssignGigRequest
     ): Response<AssignGigResponse>
-
 }
