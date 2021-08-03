@@ -7,7 +7,6 @@ import com.gigforce.app.di.implementations.SharedPreAndCommonUtilDataImp
 import com.gigforce.app.notification.NotificationConstants
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.logger.TimberReleaseTree
-import com.gigforce.core.logger.TimberReleaseTree
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig

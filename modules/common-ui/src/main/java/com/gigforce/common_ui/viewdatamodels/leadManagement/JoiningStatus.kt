@@ -42,7 +42,7 @@ enum class JoiningStatus constructor(
                 }
             }
 
-            throw IllegalStateException("joining status doesnot match")
+            throw IllegalStateException("joining status doesnot match : $status")
         }
     }
 }
