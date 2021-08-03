@@ -935,6 +935,10 @@
         android:id="@+id/drivingLicenseFragment"
         android:name="com.gigforce.verification.mainverification.drivinglicense.DrivingLicenseFragment"
         android:label="DrivingLicenseFragment" />
+    <fragment
+        android:id="@+id/teamLeaderLoginDetailsFragment"
+        android:name="com.gigforce.giger_gigs.tl_login_details.TeamLeaderLoginDetailsFragment"
+        android:label="TeamLeaderLoginDetailsFragment" />
 
 
 </navigation>
