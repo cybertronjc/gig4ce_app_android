@@ -10,6 +10,7 @@ import android.widget.FrameLayout
 import android.widget.RelativeLayout
 import androidx.core.content.res.ResourcesCompat
 import com.bumptech.glide.Glide
+import com.gigforce.common_ui.core.TextDrawable
 import com.gigforce.common_ui.shimmer.ShimmerHelper
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfileOverview
 import com.gigforce.core.IViewHolder
@@ -65,9 +66,9 @@ class GigAppListRecyclerItemView  (
             viewBinding.jobProfileTitle.text = gigApplicationData.profileName
 
             setBusinessLogo(
-                gigApplicationData.companyLogo
+                gigApplicationData.companyLogo, gigApplicationData.profileName
             )
-            setStatus(gigApplicationData.status)
+            setStatus(gigApplicationData.ongoing,gigApplicationData.status)
             setViewSelected(gigApplicationData.selected)
         }
     }
@@ -82,23 +83,47 @@ class GigAppListRecyclerItemView  (
     }
 
     private fun setBusinessLogo(
-        companyLogo: String) {
+        companyLogo: String, profileName: String) {
 
-        Glide.with(context)
-            .load(companyLogo)
-            .placeholder(ShimmerHelper.getShimmerDrawable())
-            .into(viewBinding.companyLogo)
+//        Glide.with(context)
+//            .load(companyLogo)
+//            .placeholder(ShimmerHelper.getShimmerDrawable())
+//            .into(viewBinding.companyLogo)
+
+        companyLogo.let {
+            if (it.isEmpty()){
+                val companyInitials = if (profileName.isNullOrBlank())
+                    "C"
+                else
+                    profileName[0].toString().toUpperCase()
+
+                val drawable = TextDrawable.builder().buildRound(
+                    companyInitials,
+                    ResourcesCompat.getColor(resources, com.gigforce.common_ui.R.color.lipstick, null)
+                )
+                viewBinding.companyLogo.visible()
+                viewBinding.companyLogo.setImageDrawable(drawable)
+            }
+            else {
+                viewBinding.companyLogo.visible()
+                Glide.with(context)
+                    .load(companyLogo)
+                    .placeholder(ShimmerHelper.getShimmerDrawable())
+                    .into(viewBinding.companyLogo)
+            }
+        }
 
     }
 
     private fun setStatus(
+        isOngoing: Boolean,
         status: String
     ) {
-        if (status.isEmpty()) {
-            viewBinding.status.gone()
-        } else {
+        if (isOngoing) {
             viewBinding.status.visible()
-            viewBinding.status.text = status
+            viewBinding.status.setText(status)
+        } else {
+            viewBinding.status.gone()
         }
     }
 
