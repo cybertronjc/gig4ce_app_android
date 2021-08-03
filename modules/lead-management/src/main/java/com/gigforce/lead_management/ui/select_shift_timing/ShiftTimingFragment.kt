@@ -22,6 +22,7 @@ import com.gigforce.common_ui.viewdatamodels.GigerProfileCardDVM
 import com.gigforce.common_ui.viewdatamodels.leadManagement.AssignGigRequest
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfileDetails
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JobShift
+import com.gigforce.common_ui.viewdatamodels.leadManagement.WorkingDays
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toFirebaseTimeStamp
@@ -70,6 +71,10 @@ class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
     val selectedShifts = arrayListOf<JobShift>()
     var shiftChips = arrayListOf<ChipGroupModel>()
     var shifts = listOf<JobShift>()
+
+    val selectedWorkingDays = arrayListOf<WorkingDays>()
+    var workingDaysChips = arrayListOf<ChipGroupModel>()
+    var workingDays = listOf<WorkingDays>()
 
     override fun viewCreated(
         viewBinding: ShiftTimingFragmentBinding,
@@ -164,10 +169,23 @@ class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
                 }
             }
 
+            selectedWorkingDays.clear()
+            workingDaysChips.forEachIndexed { index, chipGroupModel ->
+                if (chipGroupModel.isSelected){
+                    selectedWorkingDays.add(workingDays.get(index))
+                }
+            }
+
             when {
                 selectedShifts.isEmpty() -> {
                     MaterialAlertDialogBuilder(requireContext())
                         .setMessage("Select at least one shift to continue")
+                        .setPositiveButton("Okay") { _, _ -> }
+                        .show()
+                }
+                selectedWorkingDays.isEmpty() -> {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setMessage("Select at least one working days option")
                         .setPositiveButton("Okay") { _, _ -> }
                         .show()
                 }
@@ -179,6 +197,8 @@ class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
                 }
                 else -> {
                     assignGigRequest.shift = selectedShifts
+                    assignGigRequest.workingDays = selectedWorkingDays.first()
+
                     logger.d(TAG, "AssignGigRequest $assignGigRequest")
                     navigation.navigateTo(
                         LeadManagementNavDestinations.FRAGMENT_SELECT_TEAM_LEADERS, bundleOf(
@@ -254,7 +274,19 @@ class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
             viewBinding.shiftChipGroup.removeAllViews()
             viewBinding.shiftChipGroup.addChips(shiftChips, isSingleSelection = false, setFirstChecked = true)
             logger.d(TAG, "Shift timings chips ${shiftChips.size}  shifts $shifts")
+        }
 
+        workingDays = jobProfile.workingDays
+        if (workingDays.isNotEmpty()) {
+            workingDaysChips.clear()
+            workingDays.forEachIndexed { index, workingDay ->
+                workingDay.let {
+                    workingDaysChips.add(ChipGroupModel(it.title.toString(), -1, index))
+                }
+            }
+            viewBinding.workingDaysChipgroup.removeAllViews()
+            viewBinding.workingDaysChipgroup.addChips(workingDaysChips, isSingleSelection = true, setFirstChecked = true)
+            logger.d(TAG, "working day chips set ,count: ${workingDays.size}")
         }
     }
 

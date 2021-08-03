@@ -42,6 +42,7 @@ class PickJobProfileForReferralFragment : BaseFragment2<FragmentPickJobProfileFo
 
     //data
     private lateinit var userMobileNo : String
+    private var joiningId : String? = null
 
     override fun viewCreated(
         viewBinding: FragmentPickJobProfileForReferralBinding,
@@ -64,10 +65,12 @@ class PickJobProfileForReferralFragment : BaseFragment2<FragmentPickJobProfileFo
     ) {
         arguments?.let {
             userMobileNo = it.getString(LeadManagementConstants.INTENT_EXTRA_PHONE_NUMBER) ?: return@let
+            joiningId = it.getString(LeadManagementConstants.INTENT_EXTRA_JOINING_ID)
         }
 
         savedInstanceState?.let {
             userMobileNo = it.getString(LeadManagementConstants.INTENT_EXTRA_PHONE_NUMBER) ?: return@let
+            joiningId = it.getString(LeadManagementConstants.INTENT_EXTRA_JOINING_ID)
         }
     }
 
@@ -76,6 +79,10 @@ class PickJobProfileForReferralFragment : BaseFragment2<FragmentPickJobProfileFo
         outState.putString(
             LeadManagementConstants.INTENT_EXTRA_PHONE_NUMBER,
             userMobileNo
+        )
+        outState.putString(
+            LeadManagementConstants.INTENT_EXTRA_JOINING_ID,
+            joiningId
         )
     }
 
@@ -142,7 +149,9 @@ class PickJobProfileForReferralFragment : BaseFragment2<FragmentPickJobProfileFo
                 LeadManagementConstants.INTENT_EXTRA_JOB_PROFILE_NAME to (selectedJobProfile.profileName ?: ""),
                 LeadManagementConstants.INTENT_EXTRA_USER_NAME to userName,
                 LeadManagementConstants.INTENT_EXTRA_PHONE_NUMBER to userMobileNo,
-                LeadManagementConstants.INTENT_EXTRA_TRADE_NAME to (selectedJobProfile.tradeName ?: "")
+                LeadManagementConstants.INTENT_EXTRA_TRADE_NAME to (selectedJobProfile.tradeName ?: ""),
+                LeadManagementConstants.INTENT_EXTRA_JOINING_ID to joiningId,
+                LeadManagementConstants.INTENT_EXTRA_JOB_PROFILE_ICON to selectedJobProfile.companyLogo
             )
         )
     }

@@ -50,35 +50,25 @@ class GigerProfileCardComponent(context: Context, attrs: AttributeSet?) : FrameL
     }
 
     fun setProfilePicture(image: String?, gigerName: String){
-        image?.let {
-            if (image.isEmpty()) {
-                val companyInitials = if (gigerName.isNullOrBlank())
-                    "G"
-                else
-                    gigerName[0].toString().toUpperCase()
-
-                val drawable = TextDrawable.builder().buildRound(
-                    companyInitials,
-                    resources.getColor(R.color.lipstick)
-                )
-                profileImg.setImageDrawable(drawable)
-            }
-            else {
+            if(!image.isNullOrBlank()){
                 val profilePicRef: StorageReference =
-                    FirebaseStorage.getInstance().reference.child("profile_pics").child(image)
+                    FirebaseStorage.getInstance().reference.child(image)
                 Log.d("profilePicRef", profilePicRef.toString())
                 Glide.with(context)
                     .load(profilePicRef)
-                    .placeholder(ShimmerHelper.getShimmerDrawable())
+                    .placeholder(R.drawable.ic_avatar_male)
+                    .error(R.drawable.ic_avatar_male)
+                    .into(profileImg)
+            }else {
+
+                Glide.with(context)
+                    .load(R.drawable.ic_avatar_male)
                     .into(profileImg)
             }
-        }
-
     }
 
     fun setJobProfileLogo(title: String, companyLogo: String){
-        companyLogo.let {
-            if (it.isEmpty()){
+            if (companyLogo.isEmpty()){
                 val companyInitials = if (title.isNullOrBlank())
                     "C"
                 else
@@ -88,7 +78,6 @@ class GigerProfileCardComponent(context: Context, attrs: AttributeSet?) : FrameL
                     companyInitials,
                     ResourcesCompat.getColor(resources, R.color.lipstick, null)
                 )
-                if (title.isEmpty()) logoImg.invisible() else logoImg.visible()
                 logoImg.setImageDrawable(drawable)
             }
             else {
@@ -98,8 +87,6 @@ class GigerProfileCardComponent(context: Context, attrs: AttributeSet?) : FrameL
                     .placeholder(ShimmerHelper.getShimmerDrawable())
                     .into(logoImg)
             }
-        }
-
     }
 
     fun setJobProfileTitle(jobProfile: String?){
@@ -131,9 +118,9 @@ class GigerProfileCardComponent(context: Context, attrs: AttributeSet?) : FrameL
         setGigerNumber(profiledata.loginMobile)
     }
 
-    fun setJobProfileData(title: String, companyLogo: String){
+    fun setJobProfileData(title: String,tradeName : String, companyLogo: String){
         setJobProfileTitle(title)
-        setJobProfileLogo(title, companyLogo)
+        setJobProfileLogo(tradeName, companyLogo)
     }
 
     fun setProfileCard(gigerProfileCardDVM: GigerProfileCardDVM){
@@ -141,7 +128,7 @@ class GigerProfileCardComponent(context: Context, attrs: AttributeSet?) : FrameL
             setGigerName(it.name)
             setGigerNumber(it.number)
             setProfilePicture(it.gigerImg, it.name)
-            setJobProfileData(it.jobProfileName, it.jobProfileLogo)
+            setJobProfileData(it.jobProfileName,it.tradeName, it.jobProfileLogo)
 
         }
     }

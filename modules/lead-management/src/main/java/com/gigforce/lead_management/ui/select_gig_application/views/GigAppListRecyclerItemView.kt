@@ -2,24 +2,20 @@ package com.gigforce.lead_management.ui.select_gig_application.views
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.RelativeLayout
 import androidx.core.content.res.ResourcesCompat
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.core.TextDrawable
 import com.gigforce.common_ui.shimmer.ShimmerHelper
-import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfileOverview
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.SelectGigApplicationItemLayoutBinding
-import com.gigforce.lead_management.databinding.SelectGigApplicationSearchItemLayoutBinding
-import com.gigforce.lead_management.gigeronboarding.SelectGigApplicationToActivateViewModel
+import com.gigforce.lead_management.ui.select_gig_application.SelectGigApplicationToActivateViewModel
 import com.gigforce.lead_management.models.GigAppListRecyclerItemData
 import com.gigforce.lead_management.ui.share_application_link.ShareApplicationLinkViewModel
 

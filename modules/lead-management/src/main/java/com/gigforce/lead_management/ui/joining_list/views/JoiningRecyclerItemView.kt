@@ -230,7 +230,8 @@ class JoiningRecyclerItemView(
             gigerImg = currentViewData.userProfilePicture,
             number = currentViewData.userProfilePhoneNumber,
             jobProfileName = currentViewData.jobProfileName,
-            jobProfileLogo = currentViewData.jobProfileIcon
+            jobProfileLogo = currentViewData.jobProfileIcon,
+            tradeName = currentViewData.tradeName
         )
     }
 

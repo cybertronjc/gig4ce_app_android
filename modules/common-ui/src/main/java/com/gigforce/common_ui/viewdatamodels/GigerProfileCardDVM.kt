@@ -9,5 +9,6 @@ class GigerProfileCardDVM(
     val name: String,
     var number: String,
     var jobProfileName: String,
-    var jobProfileLogo: String
+    var jobProfileLogo: String,
+    var tradeName : String
 ) : Parcelable

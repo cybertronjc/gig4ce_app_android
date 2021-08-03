@@ -218,7 +218,11 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentLayoutB
             viewLifecycleOwner.lifecycleScope.launch {
                 viewBinding.gigerProfileCard.setGigerProfileData(userUid)
             }
-            viewBinding.gigerProfileCard.setJobProfileData(assignGigRequest.jobProfileName, assignGigRequest.companyLogo)
+            viewBinding.gigerProfileCard.setJobProfileData(
+                assignGigRequest.jobProfileName,
+                assignGigRequest.jobProfileName,
+                assignGigRequest.companyLogo
+            )
         }
 
     }

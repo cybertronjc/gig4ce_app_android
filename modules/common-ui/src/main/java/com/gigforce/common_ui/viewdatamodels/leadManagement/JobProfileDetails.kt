@@ -22,6 +22,9 @@ data class JobProfileDetails(
     @SerializedName("shifts")
     val shifts: List<JobShift>,
 
+    @SerializedName("workingDays")
+    val workingDays: List<WorkingDays>,
+
     @SerializedName("gigforceTeamLeaders")
     val gigforceTeamLeaders: List<JobTeamLeader>,
 
@@ -97,4 +100,13 @@ data class JobTeamLeader(
 
     @SerializedName("primary")
     var primary : Boolean = false
+) : Parcelable
+
+@Parcelize
+data class WorkingDays(
+    @SerializedName("id")
+    val id: String,
+
+    @SerializedName("title")
+    val title: String?
 ) : Parcelable

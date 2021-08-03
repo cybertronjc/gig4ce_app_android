@@ -1,4 +1,4 @@
-package com.gigforce.lead_management.gigeronboarding
+package com.gigforce.lead_management.ui.select_gig_application
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -13,7 +13,6 @@ import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.lead_management.models.GigAppListRecyclerItemData
 import com.gigforce.lead_management.repositories.LeadManagementRepository
-import com.google.firebase.Timestamp
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -394,7 +393,8 @@ class SelectGigApplicationToActivateViewModel @Inject constructor(
                     jobProfileName = jobProfileOverview.profileName ?: "",
                     phoneNumber = profile.loginMobile,
                     tradeName = jobProfileOverview.tradeName ?: "",
-                    lastStatusChangeSource = "SelectGigApplicationToActivateViewModel"
+                    lastStatusChangeSource = "SelectGigApplicationToActivateViewModel",
+                    jobProfileIcon = jobProfileOverview.companyLogo ?: ""
                 )
             } catch (e: Exception) {
                 _viewState.value = SelectGigAppViewState.ErrorInStartingJoiningProcess(
@@ -413,7 +413,8 @@ class SelectGigApplicationToActivateViewModel @Inject constructor(
                 name = profile.name,
                 number = profile.loginMobile,
                 jobProfileName = jobProfileOverview.profileName ?: "",
-                jobProfileLogo = jobProfileOverview.companyLogo ?: ""
+                jobProfileLogo = jobProfileOverview.companyLogo ?: "",
+                tradeName = jobProfileOverview.tradeName ?: ""
             )
 
             val assignGigRequest = AssignGigRequest(

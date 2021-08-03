@@ -44,6 +44,9 @@ data class AssignGigRequest(
     @SerializedName("shift")
     var shift : List<JobShift>? = emptyList(),
 
+    @SerializedName("workingDays")
+    var workingDays : WorkingDays? = null,
+
     @SerializedName("gigForceTeamLeaders")
     var gigForceTeamLeaders : List<JobTeamLeader>? = emptyList(),
 

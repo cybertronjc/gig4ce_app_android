@@ -10,9 +10,6 @@ import androidx.lifecycle.lifecycleScope
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
-import com.gigforce.common_ui.repository.ProfileFirebaseRepository
-import com.gigforce.common_ui.viewdatamodels.GigerProfileCardDVM
-import com.gigforce.common_ui.viewdatamodels.leadManagement.AssignGigRequest
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
@@ -21,8 +18,6 @@ import com.gigforce.lead_management.LeadManagementConstants
 import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.SelectGigApplicationToActivateFragmentBinding
-import com.gigforce.lead_management.gigeronboarding.SelectGigAppViewState
-import com.gigforce.lead_management.gigeronboarding.SelectGigApplicationToActivateViewModel
 import com.gigforce.lead_management.models.GigAppListRecyclerItemData
 import com.gigforce.lead_management.ui.share_application_link.ShareReferralType
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -214,10 +209,12 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
                                 LeadManagementConstants.INTENT_EXTRA_JOB_PROFILE_NAME to (it.profileName
                                     ?: ""),
                                 LeadManagementConstants.INTENT_EXTRA_USER_ID to userUid,
-                                LeadManagementConstants.INTENT_EXTRA_TRADE_NAME to it.tradeName
+                                LeadManagementConstants.INTENT_EXTRA_TRADE_NAME to it.tradeName,
+                                LeadManagementConstants.INTENT_EXTRA_JOINING_ID to joiningId,
+                                LeadManagementConstants.INTENT_EXTRA_JOB_PROFILE_ICON to (it.companyLogo
+                                    ?: ""),
                             )
                         )
-
                     }
                 }
             }

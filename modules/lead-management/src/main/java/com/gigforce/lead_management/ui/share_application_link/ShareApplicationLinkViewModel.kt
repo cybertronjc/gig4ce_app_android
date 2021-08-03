@@ -157,7 +157,8 @@ class ShareApplicationLinkViewModel @Inject constructor(
         mobileNumber: String,
         jobProfileId: String,
         jobProfileName: String,
-        tradeName: String
+        tradeName: String,
+        jobProfileIcon: String
     ) = viewModelScope.launch {
 
         _referralViewState.postValue(ShareReferralViewState.SharingAndUpdatingJoiningDocument)
@@ -166,7 +167,8 @@ class ShareApplicationLinkViewModel @Inject constructor(
             jobProfileId,
             jobProfileName,
             name,
-            tradeName
+            tradeName,
+            jobProfileIcon
         )
         if (!result) return@launch
 
@@ -230,7 +232,8 @@ class ShareApplicationLinkViewModel @Inject constructor(
         jobProfileId: String,
         jobProfileName: String,
         name: String,
-        tradeName: String
+        tradeName: String,
+        jobProfileIcon: String
     ): Boolean {
         try {
             logger.d(
@@ -251,7 +254,8 @@ class ShareApplicationLinkViewModel @Inject constructor(
                 jobProfileName = jobProfileName,
                 signUpMode = JoiningSignUpInitiatedMode.BY_LINK,
                 lastStatusChangeSource = TAG,
-                tradeName
+                tradeName = tradeName,
+                jobProfileIcon = jobProfileIcon
             )
 
             logger.d(
@@ -281,7 +285,9 @@ class ShareApplicationLinkViewModel @Inject constructor(
         userUid: String,
         jobProfileId: String,
         jobProfileName: String,
-        tradeName: String
+        tradeName: String,
+        jobProfileIcon: String,
+        joiningId : String?
     ) = viewModelScope.launch {
 
         _referralViewState.postValue(ShareReferralViewState.SharingAndUpdatingJoiningDocument)
@@ -291,7 +297,9 @@ class ShareApplicationLinkViewModel @Inject constructor(
             jobProfileId,
             jobProfileName,
             profile,
-            tradeName
+            tradeName,
+            jobProfileIcon,
+            joiningId
         )
         if (!result) return@launch
 
@@ -350,7 +358,9 @@ class ShareApplicationLinkViewModel @Inject constructor(
         jobProfileId: String,
         jobProfileName: String,
         profile: ProfileData,
-        tradeName: String
+        tradeName: String,
+        jobProfileIcon: String,
+        joiningId: String?
     ): Boolean {
         try {
             logger.d(
@@ -370,7 +380,9 @@ class ShareApplicationLinkViewModel @Inject constructor(
                 jobProfileId = jobProfileId,
                 jobProfileName = jobProfileName,
                 lastStatusChangeSource = TAG,
-                tradeName = tradeName
+                tradeName = tradeName,
+                joiningId = joiningId,
+                jobProfileIcon = jobProfileIcon
             )
 
             logger.d(
@@ -424,7 +436,9 @@ class ShareApplicationLinkViewModel @Inject constructor(
         userUid: String,
         jobProfileId: String,
         jobProfileName: String,
-        tradeName: String
+        tradeName: String,
+        jobProfileIcon : String,
+        joiningId: String?,
     ) = viewModelScope.launch {
 
         _referralViewState.postValue(ShareReferralViewState.SharingAndUpdatingJoiningDocument)
@@ -434,7 +448,9 @@ class ShareApplicationLinkViewModel @Inject constructor(
             jobProfileId,
             jobProfileName,
             profile,
-            tradeName
+            tradeName,
+            jobProfileIcon,
+            joiningId
         )
         if (!result) return@launch
 
@@ -482,7 +498,9 @@ class ShareApplicationLinkViewModel @Inject constructor(
         jobProfileId: String,
         jobProfileName: String,
         profile: ProfileData,
-        tradeName: String
+        tradeName: String,
+        jobProfileIcon : String,
+        joiningId: String?
     ) = try {
         logger.d(
             TAG,
@@ -501,7 +519,9 @@ class ShareApplicationLinkViewModel @Inject constructor(
             jobProfileId = jobProfileId,
             jobProfileName = jobProfileName,
             lastStatusChangeSource = TAG,
-            tradeName = tradeName
+            tradeName = tradeName,
+            joiningId = joiningId,
+            jobProfileIcon = jobProfileIcon
         )
 
         logger.d(

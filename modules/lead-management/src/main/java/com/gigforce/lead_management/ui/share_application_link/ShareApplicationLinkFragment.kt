@@ -42,10 +42,12 @@ class ShareApplicationLinkFragment : BaseFragment2<FragmentLeadManagementReferra
     private var shareType: String = ShareReferralType.SHARE_SIGNUP_LINK
     private lateinit var jobProfileId: String
     private lateinit var jobProfileName: String
+    private var jobProfileIcon: String? = null
     private var userUid: String? = null
     private var name: String? = null
     private var mobile: String? = null
     private var tradeName: String? = null
+    private var joiningId: String? = null
 
     override fun viewCreated(
         viewBinding: FragmentLeadManagementReferralBinding,
@@ -67,6 +69,8 @@ class ShareApplicationLinkFragment : BaseFragment2<FragmentLeadManagementReferra
     ) {
         arguments?.let {
 
+            jobProfileIcon = it.getString(LeadManagementConstants.INTENT_EXTRA_JOB_PROFILE_ICON)
+            joiningId = it.getString(LeadManagementConstants.INTENT_EXTRA_JOINING_ID)
             jobProfileId =
                 it.getString(LeadManagementConstants.INTENT_EXTRA_JOB_PROFILE_ID) ?: return@let
             jobProfileName =
@@ -80,6 +84,8 @@ class ShareApplicationLinkFragment : BaseFragment2<FragmentLeadManagementReferra
 
         savedInstanceState?.let {
 
+            jobProfileIcon = it.getString(LeadManagementConstants.INTENT_EXTRA_JOB_PROFILE_ICON)
+            joiningId = it.getString(LeadManagementConstants.INTENT_EXTRA_JOINING_ID)
             jobProfileId =
                 it.getString(LeadManagementConstants.INTENT_EXTRA_JOB_PROFILE_ID) ?: return@let
             jobProfileName =
@@ -101,6 +107,8 @@ class ShareApplicationLinkFragment : BaseFragment2<FragmentLeadManagementReferra
         outState.putString(LeadManagementConstants.INTENT_EXTRA_USER_NAME, name)
         outState.putString(LeadManagementConstants.INTENT_EXTRA_PHONE_NUMBER, mobile)
         outState.putString(LeadManagementConstants.INTENT_EXTRA_TRADE_NAME, tradeName)
+        outState.putString(LeadManagementConstants.INTENT_EXTRA_JOINING_ID, joiningId)
+        outState.putString(LeadManagementConstants.INTENT_EXTRA_JOB_PROFILE_ICON, jobProfileIcon)
     }
 
     private fun initToolbar(toolbar: GigforceToolbar) = toolbar.apply{
@@ -130,7 +138,9 @@ class ShareApplicationLinkFragment : BaseFragment2<FragmentLeadManagementReferra
                         userUid = userUid!!,
                         jobProfileId = jobProfileId,
                         jobProfileName = jobProfileName,
-                        tradeName = tradeName ?: ""
+                        tradeName = tradeName ?: "",
+                        joiningId = joiningId,
+                        jobProfileIcon = jobProfileIcon ?: ""
                     )
                 } else {
                     viewModel.sendAppReferralLink(
@@ -138,7 +148,8 @@ class ShareApplicationLinkFragment : BaseFragment2<FragmentLeadManagementReferra
                         mobileNumber = mobile!!,
                         jobProfileId = jobProfileId,
                         jobProfileName = jobProfileName,
-                        tradeName = tradeName ?: ""
+                        tradeName = tradeName ?: "",
+                        jobProfileIcon = jobProfileIcon ?: ""
                     )
                 }
             }
@@ -153,15 +164,19 @@ class ShareApplicationLinkFragment : BaseFragment2<FragmentLeadManagementReferra
                         userUid = userUid!!,
                         jobProfileId = jobProfileId,
                         jobProfileName = jobProfileName,
-                        tradeName = tradeName ?: ""
+                        tradeName = tradeName ?: "",
+                        joiningId = joiningId,
+                        jobProfileIcon = jobProfileIcon ?: ""
                     )
                 } else {
-//                    viewModel.cre(
-//                        name = name ?: "",
-//                        mobileNumber = mobile!!,
-//                        jobProfileId = jobProfileId,
-//                        jobProfileName = jobProfileName
-//                    )
+                    viewModel.sendJobProfileReferralLinkViaOtherApps(
+                        userUid = userUid!!,
+                        jobProfileId = jobProfileId,
+                        jobProfileName = jobProfileName,
+                        tradeName = tradeName ?: "",
+                        joiningId = joiningId,
+                        jobProfileIcon = jobProfileIcon ?: ""
+                    )
                 }
 
             }

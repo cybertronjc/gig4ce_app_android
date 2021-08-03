@@ -1,7 +1,7 @@
 package com.gigforce.lead_management.models
 
 import com.gigforce.core.SimpleDVM
-import com.gigforce.lead_management.gigeronboarding.SelectGigApplicationToActivateViewModel
+import com.gigforce.lead_management.ui.select_gig_application.SelectGigApplicationToActivateViewModel
 import com.gigforce.lead_management.ui.share_application_link.ShareApplicationLinkViewModel
 import com.gigforce.lead_management.views.LeadActivationViewTypes
 

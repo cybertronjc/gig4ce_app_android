@@ -116,7 +116,8 @@ class GigerOnboardingViewModel @Inject constructor(
                         jobProfileName = "",
                         signUpMode = JoiningSignUpInitiatedMode.BY_AMBASSADOR_PROGRAM,
                         lastStatusChangeSource = "confirm_otp_screen",
-                        tradeName = ""
+                        tradeName = "",
+                        jobProfileIcon = ""
                     )
                 }
 

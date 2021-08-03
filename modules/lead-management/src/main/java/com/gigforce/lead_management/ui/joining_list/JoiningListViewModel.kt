@@ -144,7 +144,8 @@ class JoiningListViewModel @Inject constructor(
                         joiningId = it.joiningId,
                         jobProfileId = it.jobProfileIdInvitedFor ?: "",
                         jobProfileName = it.jobProfileNameInvitedFor ?: "",
-                        jobProfileIcon = it.jobProfileIcon ?: ""
+                        jobProfileIcon = it.jobProfileIcon ?: "",
+                        tradeName = it.tradeName ?: ""
                     )
                 )
             }
@@ -182,7 +183,7 @@ class JoiningListViewModel @Inject constructor(
                 }
             }
             JoiningStatus.APPLICATION_PENDING -> {
-                if (it.jobProfileNameInvitedFor == null) {
+                if (it.jobProfileNameInvitedFor.isNullOrBlank()) {
                     "No Application Link shared yet"
                 } else {
                     "${it.jobProfileNameInvitedFor} invite sent ${getDateDifferenceFormatted(it.updatedOn)}"

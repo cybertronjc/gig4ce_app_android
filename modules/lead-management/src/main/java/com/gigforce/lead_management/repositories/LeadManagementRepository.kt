@@ -125,6 +125,7 @@ class LeadManagementRepository @Inject constructor(
         phoneNumber: String,
         jobProfileId: String,
         jobProfileName: String,
+        jobProfileIcon : String,
         signUpMode: String,
         lastStatusChangeSource: String,
         tradeName: String
@@ -169,7 +170,8 @@ class LeadManagementRepository @Inject constructor(
                         "signUpMode" to signUpMode,
                         "name" to name,
                         "uid" to userUid,
-                        "tradeName" to tradeName
+                        "tradeName" to tradeName,
+                        "jobProfileIcon" to jobProfileIcon
                     )
                 )
 
@@ -185,6 +187,7 @@ class LeadManagementRepository @Inject constructor(
                     phoneNumber = phoneNumber,
                     profilePicture = null,
                     profilePictureThumbnail = null,
+                    jobProfileIcon = jobProfileIcon,
                     jobProfileIdInvitedFor = jobProfileId,
                     jobProfileNameInvitedFor = jobProfileName,
                     signUpMode = signUpMode,
@@ -201,9 +204,11 @@ class LeadManagementRepository @Inject constructor(
         name: String,
         jobProfileId: String,
         jobProfileName: String,
+        jobProfileIcon : String,
         phoneNumber: String = "",
         lastStatusChangeSource: String,
-        tradeName: String
+        tradeName: String,
+        joiningId: String?
     ) {
         val getProfileForUid = profileCollectionRef
             .document(userUid)
@@ -228,7 +233,21 @@ class LeadManagementRepository @Inject constructor(
             .whereEqualTo("jobProfileIdInvitedFor", jobProfileId)
             .getOrThrow()
 
-        if (getJobProfileLink.isEmpty) {
+        if (joiningId != null) {
+
+            joiningsCollectionRef
+                .document(joiningId)
+                .updateOrThrow(
+                    mapOf(
+                        "updatedOn" to Timestamp.now(),
+                        "status" to JoiningStatus.APPLICATION_PENDING.getStatusString(),
+                        "lastStatusChangeSource" to lastStatusChangeSource,
+                        "jobProfileIdInvitedFor" to jobProfileId,
+                        "jobProfileNameInvitedFor" to jobProfileName,
+                        "jobProfileIcon" to jobProfileIcon
+                    )
+                )
+        } else if (getJobProfileLink.isEmpty) {
 
             joiningsCollectionRef.addOrThrow(
                 Joining(
@@ -241,6 +260,7 @@ class LeadManagementRepository @Inject constructor(
                     phoneNumber = userMobileNo,
                     profilePicture = null,
                     profilePictureThumbnail = null,
+                    jobProfileIcon = jobProfileIcon,
                     jobProfileIdInvitedFor = jobProfileId,
                     jobProfileNameInvitedFor = jobProfileName,
                     signUpMode = null,
@@ -274,7 +294,8 @@ class LeadManagementRepository @Inject constructor(
                         "status" to JoiningStatus.APPLICATION_PENDING.getStatusString(),
                         "lastStatusChangeSource" to lastStatusChangeSource,
                         "jobProfileIdInvitedFor" to jobProfileId,
-                        "jobProfileNameInvitedFor" to jobProfileName
+                        "jobProfileNameInvitedFor" to jobProfileName,
+                        "jobProfileIcon" to jobProfileIcon
                     )
                 )
         }
@@ -289,7 +310,8 @@ class LeadManagementRepository @Inject constructor(
         jobProfileName: String,
         phoneNumber: String = "",
         lastStatusChangeSource: String,
-        tradeName: String
+        tradeName: String,
+        jobProfileIcon : String
     ): String {
         val getProfileForUid = profileCollectionRef
             .document(userUid)
@@ -331,7 +353,8 @@ class LeadManagementRepository @Inject constructor(
                     jobProfileNameInvitedFor = jobProfileName,
                     signUpMode = null,
                     lastStatusChangeSource = lastStatusChangeSource,
-                    tradeName = tradeName
+                    tradeName = tradeName,
+                    jobProfileIcon = jobProfileIcon
                 )
             ).id
         } else {
@@ -357,7 +380,9 @@ class LeadManagementRepository @Inject constructor(
                     mapOf(
                         "updatedOn" to Timestamp.now(),
                         "status" to JoiningStatus.JOINING_PENDING.getStatusString(),
-                        "lastStatusChangeSource" to lastStatusChangeSource
+                        "lastStatusChangeSource" to lastStatusChangeSource,
+                        "jobProfileIcon" to jobProfileIcon,
+                        "tradeName" to tradeName,
                     )
                 )
 
@@ -442,7 +467,7 @@ class LeadManagementRepository @Inject constructor(
     }
 
     suspend fun getUserAuthStatus(mobileNo: String): UserAuthStatusModel {
-        var userAuthStatus =
+        val userAuthStatus =
             createUserApi.getGigersAuthStatus(buildConfig.getUserRegisterInfoUrl(), mobileNo)
         if (userAuthStatus.isSuccessful) {
             return userAuthStatus.body()!!
@@ -541,7 +566,4 @@ class LeadManagementRepository @Inject constructor(
                 )
             )
     }
-
-
-
 }

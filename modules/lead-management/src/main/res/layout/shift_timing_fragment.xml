@@ -35,6 +35,7 @@
                 android:id="@+id/nestedScrollView"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:fillViewport="true"
                 app:layout_constraintTop_toBottomOf="@id/gigerProfileCard"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/submitBtn"
@@ -111,11 +112,38 @@
                         android:id="@+id/shiftChipGroup"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/size_16"
+                        android:layout_marginTop="@dimen/size_8"
                         android:layout_marginStart="@dimen/size_16"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/selectShiftTV"/>
+
+                    <TextView
+                        android:id="@+id/selectDaysTV"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="18dp"
+                        android:layout_marginEnd="16dp"
+                        android:fontFamily="@font/lato"
+                        android:lineSpacingExtra="7sp"
+                        android:text="Select working days*"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/shiftChipGroup" />
+
+                    <com.gigforce.common_ui.components.atoms.ChipGroupComponent
+                        android:id="@+id/workingDaysChipgroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/size_8"
+                        android:layout_marginStart="@dimen/size_16"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/selectDaysTV"/>
+
 
 
                     <TextView
@@ -132,7 +160,7 @@
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/shiftChipGroup" />
+                        app:layout_constraintTop_toBottomOf="@id/workingDaysChipgroup" />
 
 
                         <TextView
@@ -150,7 +178,6 @@
                             android:paddingStart="8dp"
                             android:textColor="@color/text_grey"
                             android:textSize="14sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/expectedDateTV" />
 
@@ -173,9 +200,10 @@
                     layout="@layout/shimmer_container"
                     android:visibility="visible" />
 
-                <include
-                    android:id="@+id/shift_info_layout"
-                    layout="@layout/layout_error_with_retry" />
+                    <include
+                        android:id="@+id/shift_info_layout"
+                        layout="@layout/layout_error_with_retry"
+                        app:layout_constraintBottom_toBottomOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.core.widget.NestedScrollView>
