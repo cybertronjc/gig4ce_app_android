@@ -939,6 +939,10 @@
         android:id="@+id/teamLeaderLoginDetailsFragment"
         android:name="com.gigforce.giger_gigs.tl_login_details.TeamLeaderLoginDetailsFragment"
         android:label="TeamLeaderLoginDetailsFragment" />
+    <fragment
+        android:id="@+id/addNewLoginSummaryFragment"
+        android:name="com.gigforce.giger_gigs.tl_login_details.AddNewLoginSummaryFragment"
+        android:label="AddNewLoginSummaryFragment" />
 
 
 </navigation>

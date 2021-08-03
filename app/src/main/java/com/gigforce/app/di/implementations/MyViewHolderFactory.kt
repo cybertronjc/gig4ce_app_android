@@ -5,6 +5,7 @@ import com.gigforce.giger_app.AppModuleLevelViewTypeLoader
 import com.gigforce.giger_app.ComponentViewLoader
 import com.gigforce.giger_app.LandingViewTypeLoader
 import com.gigforce.giger_gigs.GigViewTypeLoader
+import com.gigforce.giger_gigs.LoginSummaryViewTypeLoader
 import com.gigforce.modules.feature_chat.ChatViewTypeLoader
 import javax.inject.Inject
 
@@ -16,5 +17,6 @@ class MyViewHolderFactory @Inject constructor(): CoreViewHolderFactory() {
         this.registerViewTypeLoader(LandingViewTypeLoader())
         this.registerViewTypeLoader(GigViewTypeLoader())
         this.registerViewTypeLoader(ComponentViewLoader())
+        this.registerViewTypeLoader(LoginSummaryViewTypeLoader())
     }
 }
