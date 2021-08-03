@@ -48,10 +48,10 @@ class ChipGroupComponent : ChipGroup {
                 chipComponent.isClickable = true
                 chipComponent.isCheckable = true
             }
-            if (list.size == 1){
-                setChipSelected(chipComponent.rootView, it)
-                checkedChangeListener?.onCheckedChangeListener(it)
-            }
+//            if (list.size == 1){
+//                setChipSelected(chipComponent.rootView, it)
+//                checkedChangeListener?.onCheckedChangeListener(it)
+//            }
             chipComponent.setOnClickListener { it1 ->
                 if (isSingleSelection){
                     this.clearCheck()
@@ -66,6 +66,7 @@ class ChipGroupComponent : ChipGroup {
         }
         if(setFirstChecked){
             setChipSelected((getChildAt(0) as Chip), list.get(0))
+            checkedChangeListener?.onCheckedChangeListener(list.get(0))
             //(getChildAt(0) as Chip).isChecked = true
         }
 

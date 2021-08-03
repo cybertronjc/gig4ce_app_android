@@ -66,9 +66,9 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
     private fun initToolbar(
         viewBinding: SelectGigApplicationToActivateFragmentBinding
     ) = viewBinding.toolbar.apply {
-
-        showTitle("Gig Application")
         hideSearchOption()
+        showTitle("Gig Application")
+        hideSubTitle()
         setBackButtonListener {
             navigation.popBackStack()
         }

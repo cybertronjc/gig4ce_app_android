@@ -67,7 +67,6 @@ class SelectGigApplicationToActivateViewModel @Inject constructor(
     //Data
     private var jobProfiles: List<JobProfileOverview> = emptyList()
     private var jobProfilesShownOnView: List<JobProfileOverview> = emptyList()
-    val gigAppsListForView = mutableListOf<GigAppListRecyclerItemData>()
     private var currentlySelectedGigIndex: Int = -1
     private val _selectedIndex = MutableLiveData<Int>()
     val selectedIndex: LiveData<Int> = _selectedIndex
@@ -110,78 +109,104 @@ class SelectGigApplicationToActivateViewModel @Inject constructor(
     private fun processGigApps(jobApps: List<JobProfileOverview>) {
 
         val gigAppList: List<JobProfileOverview> = jobApps
-        val otherApps = jobApps.filter { !it.ongoing }
+        val otherApps = jobApps.filter {
+            !it.ongoing
+        }
         val ongoingApps = jobApps.filter { it.ongoing }
-        val statusToGigAppList = gigAppList.filter {
-//            if (currentSearchString.isNullOrEmpty())
-//                true
-//            else  {
-//                it.ongoing == false && it.tradeName?.contains(
-//                    currentSearchString!!,
-//                    true
-//                ) ?: false
-//                        || it.ongoing == false && it.profileName?.contains(
-//                    currentSearchString!!,
-//                    true
-//                ) ?: false
-//            }
+        val statusToGigAppList = (ongoingApps + otherApps).groupBy { if (it.ongoing) "Ongoing Applications" else "Other Applications" }
+        val statusToGigAppList1 = gigAppList.filter {
+            if (currentSearchString.isNullOrEmpty())
+                true
+            else  {
+                !it.ongoing && it.tradeName?.contains(
+                    currentSearchString!!,
+                    true
+                ) ?: false || !it.ongoing && it.profileName?.contains(
+                    currentSearchString!!,
+                    true
+                ) ?: false
+            }
             it.ongoing != null
         }.groupBy {
             if (it.ongoing) "Ongoing Applications" else "Other Applications"
         }.toSortedMap(compareByDescending { it })
 
-        gigAppsListForView.clear()
+        var gigAppsListForView = mutableListOf<GigAppListRecyclerItemData>()
         try {
-            if (jobApps.isEmpty()) {
-                gigAppsListForView.add(
-                    GigAppListRecyclerItemData.GigAppListStatusRecyclerItemData(
-                        "Other Applications"
-                    )
-                )
-                gigAppsListForView.add(
-                    GigAppListRecyclerItemData.GigAppListSearchRecyclerItemData(
-                        "",
-                        this
-                    )
-                )
 
-                gigAppsListForView.add(
-                    GigAppListRecyclerItemData.NoGigAppsFoundItemData(
-                        "No Applications"
-                    )
+//            statusToGigAppList.forEach { (ongoing, gigApps) ->
+//                logger.d(TAG, "processing data, Status :  : ${statusToGigAppList.size} GigApps")
+//
+//                gigAppsListForView.add(
+//                    GigAppListRecyclerItemData.GigAppListStatusRecyclerItemData(
+//                        "$ongoing"
+//                    )
+//                )
+//
+//                if (ongoing.equals("Other Applications")) {
+//                    gigAppsListForView.add(
+//                        GigAppListRecyclerItemData.GigAppListSearchRecyclerItemData(
+//                            currentSearchString.toString(),
+//                            this
+//                        )
+//                    )
+//                }
+//
+//                gigApps.forEach {
+//                    gigAppsListForView.add(
+//                        GigAppListRecyclerItemData.GigAppRecyclerItemData(
+//                            status = it.status.toString(),
+//                            jobProfileId = it.jobProfileId,
+//                            tradeName = it.tradeName.toString(),
+//                            profileName = it.profileName.toString(),
+//                            companyLogo = it.companyLogo.toString(),
+//                            it.ongoing,
+//                            selected = it.isSelected,
+//                            this
+//                        )
+//                    )
+//                }
+//            }
+//
+//            if (otherApps.isEmpty()) {
+//                gigAppsListForView.add(
+//                    GigAppListRecyclerItemData.GigAppListStatusRecyclerItemData(
+//                        "Other Applications"
+//                    )
+//                )
+//                gigAppsListForView.add(
+//                    GigAppListRecyclerItemData.GigAppListSearchRecyclerItemData(
+//                        "",
+//                        this
+//                    )
+//                )
+//
+//                gigAppsListForView.add(
+//                    GigAppListRecyclerItemData.NoGigAppsFoundItemData(
+//                        "No Applications"
+//                    )
+//                )
+//            } else if (ongoingApps.isEmpty()) {
+//                gigAppsListForView.add(
+//                    GigAppListRecyclerItemData.GigAppListStatusRecyclerItemData(
+//                        "Ongoing Applications"
+//                    )
+//                )
+//                gigAppsListForView.add(
+//                    GigAppListRecyclerItemData.NoGigAppsFoundItemData(
+//                        "No Applications"
+//                    )
+//                )
+//            }
+//
+            gigAppsListForView.add(
+                GigAppListRecyclerItemData.GigAppListStatusRecyclerItemData(
+                    "Ongoing Applications"
                 )
-            } else if (jobApps.isEmpty()) {
-                gigAppsListForView.add(
-                    GigAppListRecyclerItemData.GigAppListStatusRecyclerItemData(
-                        "Ongoing Applications"
-                    )
-                )
-                gigAppsListForView.add(
-                    GigAppListRecyclerItemData.NoGigAppsFoundItemData(
-                        "No Applications"
-                    )
-                )
-            }
+            )
 
-            statusToGigAppList.forEach { (ongoing, gigApps) ->
-                logger.d(TAG, "processing data, Status :  : ${statusToGigAppList.size} GigApps")
-
-                gigAppsListForView.add(
-                    GigAppListRecyclerItemData.GigAppListStatusRecyclerItemData(
-                        "$ongoing"
-                    )
-                )
-
-                if (ongoing.equals("Other Applications")) {
-                    gigAppsListForView.add(
-                        GigAppListRecyclerItemData.GigAppListSearchRecyclerItemData(
-                            "",
-                            this
-                        )
-                    )
-                }
-
-                gigApps.forEach {
+            if (ongoingApps.isNotEmpty()){
+                ongoingApps.forEach {
                     gigAppsListForView.add(
                         GigAppListRecyclerItemData.GigAppRecyclerItemData(
                             status = it.status.toString(),
@@ -189,12 +214,56 @@ class SelectGigApplicationToActivateViewModel @Inject constructor(
                             tradeName = it.tradeName.toString(),
                             profileName = it.profileName.toString(),
                             companyLogo = it.companyLogo.toString(),
+                            it.ongoing,
                             selected = it.isSelected,
                             this
                         )
                     )
                 }
+            } else {
+                gigAppsListForView.add(
+                    GigAppListRecyclerItemData.NoGigAppsFoundItemData(
+                        "No Applications"
+                    )
+                )
             }
+
+            gigAppsListForView.add(
+                GigAppListRecyclerItemData.GigAppListStatusRecyclerItemData(
+                    "Other Applications"
+                )
+            )
+            gigAppsListForView.add(
+                GigAppListRecyclerItemData.GigAppListSearchRecyclerItemData(
+                    "",
+                    this
+                )
+            )
+
+            if (otherApps.isNotEmpty()){
+                otherApps.forEach {
+                    gigAppsListForView.add(
+                        GigAppListRecyclerItemData.GigAppRecyclerItemData(
+                            status = it.status.toString(),
+                            jobProfileId = it.jobProfileId,
+                            tradeName = it.tradeName.toString(),
+                            profileName = it.profileName.toString(),
+                            companyLogo = it.companyLogo.toString(),
+                            it.ongoing,
+                            selected = it.isSelected,
+                            this
+                        )
+                    )
+                }
+            } else {
+                gigAppsListForView.add(
+                    GigAppListRecyclerItemData.NoGigAppsFoundItemData(
+                        "No Applications"
+                    )
+                )
+            }
+
+
             //gigAppListShownOnView = gigAppsListForView
             _viewState.postValue(
                 SelectGigAppViewState.GigAppListLoaded(
@@ -215,7 +284,7 @@ class SelectGigApplicationToActivateViewModel @Inject constructor(
         searchString: String
     ) {
         logger.d(TAG, "new search string received : '$searchString'")
-        //this.currentSearchString = searchString
+        this.currentSearchString = searchString
 ////
 //        if (gigAppListShownOnView.isEmpty()) {
 //            _viewState.postValue(SelectGigAppViewState.NoGigAppsFound)
@@ -230,7 +299,7 @@ class SelectGigApplicationToActivateViewModel @Inject constructor(
             processGigApps(jobProfilesShownOnView)
             return
         } else {
-            jobProfilesShownOnView = jobProfiles.filter {
+            jobProfilesShownOnView = jobProfiles.filter { it.ongoing } +  jobProfiles.filter {
                 !it.ongoing && (it.tradeName?.contains(searchString, true) ?: false
                         || it.profileName?.contains(searchString, true) ?: false)
             }
@@ -257,7 +326,7 @@ class SelectGigApplicationToActivateViewModel @Inject constructor(
             if (currentlySelectedGigIndex != -1) {
                 _selectedIndex.value = currentlySelectedGigIndex
                 jobProfilesShownOnView[currentlySelectedGigIndex].isSelected = true
-                setSelectedJobProfile()
+                setSelectedJobProfile(currentlySelectedGigIndex)
             }
 
         } else {
@@ -281,14 +350,14 @@ class SelectGigApplicationToActivateViewModel @Inject constructor(
 
             currentlySelectedGigIndex = newSelectedItemIndex
             _selectedIndex.value = newSelectedItemIndex
-            setSelectedJobProfile()
+            setSelectedJobProfile(currentlySelectedGigIndex)
         }
 
         processGigApps(jobProfilesShownOnView)
     }
 
-    fun setSelectedJobProfile() {
-        _selectedJobProfileOverview.value = jobProfilesShownOnView.get(currentlySelectedGigIndex)
+    fun setSelectedJobProfile(selected: Int) {
+        _selectedJobProfileOverview.value = jobProfilesShownOnView.get(selected)
     }
 
     fun getSelectedJobProfile(): JobProfileOverview {
