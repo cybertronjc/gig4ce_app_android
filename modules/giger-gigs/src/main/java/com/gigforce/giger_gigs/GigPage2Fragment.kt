@@ -1,7 +1,5 @@
 package com.gigforce.giger_gigs
 
-//import com.gigforce.app.modules.gigPage2.viewModels.SharedGigViewModel
-//import com.gigforce.app.modules.gigPage2.viewModels.SharedGigViewState
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
@@ -23,6 +21,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.gigforce.common_image_picker.image_capture_camerax.CameraActivity
@@ -37,10 +36,13 @@ import com.gigforce.common_ui.viewmodels.gig.GigViewModel
 import com.gigforce.common_ui.viewmodels.gig.SharedGigViewModel
 import com.gigforce.common_ui.viewmodels.gig.SharedGigViewState
 import com.gigforce.core.AppConstants
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.datamodels.gigpage.ContactPerson
 import com.gigforce.core.datamodels.gigpage.Gig
-import com.gigforce.core.datamodels.gigpage.models.*
+import com.gigforce.core.datamodels.gigpage.models.AttendanceType
+import com.gigforce.core.datamodels.gigpage.models.OtherOption
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toFirebaseTimeStamp
 import com.gigforce.core.extensions.toLocalDateTime
@@ -66,6 +68,9 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.play.core.review.ReviewInfo
+import com.google.android.play.core.review.ReviewManager
+import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -77,7 +82,6 @@ import kotlinx.android.synthetic.main.fragment_gig_page_2.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_address.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_feedback.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_gig_type.*
-import kotlinx.android.synthetic.main.fragment_gig_page_2_info.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_main.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_other_options.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_people_to_expect.*
@@ -107,12 +111,16 @@ class GigPage2Fragment : Fragment(),
     private lateinit var gigId: String
     private var location: Location? = null
     private var imageClickedPath: String? = null
+    private var manager: ReviewManager? = null
+    private var reviewInfo: ReviewInfo? = null
     private var isRequestingLocation = false
     private val firebaseRemoteConfig: FirebaseRemoteConfig = FirebaseRemoteConfig.getInstance()
 
     @Inject
     lateinit var navigation: INavigation
 
+    @Inject
+    lateinit var eventTracker: IEventTracker
     private val locationHelper: LocationHelper by lazy {
         LocationHelper(requireContext())
             .apply {
@@ -156,11 +164,12 @@ class GigPage2Fragment : Fragment(),
         getDataFromIntents(arguments, savedInstanceState)
         initUi()
         initViewModel()
+        setUpReviewFlow()
 
         if (isNecessaryPermissionGranted())
             checkForGpsStatus()
         else
-            showPermissionRequiredAndTheirReasonsDialog()
+            showPermissionRequiredAndTheirReasonsDialog(true)
     }
 
 
@@ -279,7 +288,7 @@ class GigPage2Fragment : Fragment(),
                     startRegularisation()
                 }
             } else {
-                showPermissionRequiredAndTheirReasonsDialog()
+                showPermissionRequiredAndTheirReasonsDialog(false)
             }
         }
 
@@ -415,14 +424,18 @@ class GigPage2Fragment : Fragment(),
             ""
         }
 
-        viewModel.markAttendance(
-            location = location,
-            locationPhysicalAddress = locationPhysicalAddress,
-            image = imageClickedPath!!,
-            checkInTimeAccToUser = checkInTimeAccToUser,
-            remarks = "test",
-            distanceBetweenGigAndUser = distanceBetweenGigAndUser
-        )
+        imageClickedPath?.let {
+            viewModel.markAttendance(
+                location = location,
+                locationPhysicalAddress = locationPhysicalAddress,
+                image = it,
+                checkInTimeAccToUser = checkInTimeAccToUser,
+                remarks = "test",
+                distanceBetweenGigAndUser = distanceBetweenGigAndUser
+            )
+        }
+
+
     }
 
     private fun showAlertDialog(message: String) {
@@ -470,10 +483,19 @@ class GigPage2Fragment : Fragment(),
 
                         if (it.content == AttendanceType.CHECK_OUT) {
                             showToast("Checkout Marked.")
-                            showFeedbackBottomSheet()
+                            //showFeedbackBottomSheet()
+                            showReviewFlow(reviewInfo)
                         } else {
                             showToast("Check-in marked")
-                          //  plantLocationTrackers()
+                            plantLocationTrackers()
+                            eventTracker.pushEvent(
+                                TrackingEventArgs(
+                                    "attendance",
+                                    mapOf("isPresent" to true, "gigId" to gigId)
+                                )
+                            )
+                            //  plantLocationTrackers()
+                            showReviewFlow(reviewInfo)
                         }
                     }
                     is Lce.Error -> {
@@ -489,15 +511,16 @@ class GigPage2Fragment : Fragment(),
     }
 
     private fun plantLocationTrackers() {
+
         try {
             val gig = viewModel.currentGig ?: return
             trackingScheduler.scheduleTrackerForGig(gig)
         } catch (e: Exception) {
 
-            MaterialAlertDialogBuilder(requireContext())
-                .setMessage("Unable to plant trackers")
-                .setPositiveButton("Okay") { _, _ -> }
-                .show()
+//            MaterialAlertDialogBuilder(requireContext())
+//                .setMessage("Unable to plant trackers")
+//                .setPositiveButton("Okay") { _, _ -> }
+//                .show()
 
             e.printStackTrace()
             CrashlyticsLogger.e(
@@ -507,7 +530,6 @@ class GigPage2Fragment : Fragment(),
             )
         }
     }
-
 
     private fun showErrorWhileLoadingGigData(error: String) {
         gig_page_2_progressbar.gone()
@@ -626,9 +648,9 @@ class GigPage2Fragment : Fragment(),
 
         gig_duration.text =
             ": ${timeFormatter.format(gig.startDateTime.toDate())} - ${
-                timeFormatter.format(
-                    gig.endDateTime.toDate()
-                )
+            timeFormatter.format(
+                gig.endDateTime.toDate()
+            )
             }"
 
         if ((gig.latitude != null && gig.longitude != 0.0) || gig.geoPoint != null) {
@@ -718,12 +740,6 @@ class GigPage2Fragment : Fragment(),
                         viewModel.currentGig?.gigId
                     )
                 })
-//                navigate(R.id.giger_id_fragment, Bundle().apply {
-//                    this.putString(
-//                        INTENT_EXTRA_GIG_ID,
-//                        viewModel.currentGig?.gigId
-//                    )
-//                })
             }
             ID_ATTENDANCE_HISTORY -> {
                 val gig = viewModel.currentGig ?: return
@@ -742,19 +758,6 @@ class GigPage2Fragment : Fragment(),
                         GigMonthlyAttendanceFragment.INTENT_EXTRA_ROLE to gig.getGigTitle()
                     )
                 )
-//                navigate(
-//                    R.id.gigMonthlyAttendanceFragment, bundleOf(
-//                        GigMonthlyAttendanceFragment.INTENT_EXTRA_SELECTED_DATE to LocalDate.of(
-//                            currentDate.year,
-//                            currentDate.monthValue,
-//                            1
-//                        ),
-//                        GigMonthlyAttendanceFragment.INTENT_EXTRA_COMPANY_LOGO to gig.getFullCompanyLogo(),
-//                        GigMonthlyAttendanceFragment.INTENT_EXTRA_COMPANY_NAME to gig.getFullCompanyName(),
-//                        GigMonthlyAttendanceFragment.INTENT_EXTRA_GIG_ORDER_ID to gig.gigOrderId,
-//                        GigMonthlyAttendanceFragment.INTENT_EXTRA_ROLE to gig.getGigTitle()
-//                    )
-//                )
             }
             ID_DECLINE_GIG -> {
                 showDeclineGigDialog()
@@ -809,6 +812,34 @@ class GigPage2Fragment : Fragment(),
 
     private fun showFeedbackBottomSheet() {
         RateGigDialogFragment.launch(gigId, childFragmentManager)
+    }
+
+    private fun setUpReviewFlow() {
+        manager = context?.let { ReviewManagerFactory.create(it) }
+        val request = manager?.requestReviewFlow()
+        request?.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                // We got the ReviewInfo object
+                reviewInfo = task.result
+            } else {
+                // There was some problem, log or handle the error code.
+                //@ReviewErrorCode val reviewErrorCode = (task.getException() as Exception)
+                Log.d("Error", task.exception.toString())
+
+            }
+        }
+    }
+
+    private fun showReviewFlow(reviewInfo: ReviewInfo?) {
+        if (reviewInfo != null) {
+            val flow = activity?.let { manager?.launchReviewFlow(it, reviewInfo) }
+            flow?.addOnCompleteListener { task ->
+                // The flow has finished. The API does not indicate whether the user
+                // reviewed or not, or even whether the review dialog was shown. Thus, no
+                // matter the result, we continue our app flow.
+            }
+
+        }
     }
 
     private fun showDeclineGigDialog() {
@@ -897,11 +928,6 @@ class GigPage2Fragment : Fragment(),
                 GigContactPersonBottomSheet.INTENT_GIG_CONTACT_PERSON_DETAILS to option
             )
         )
-//        navigate(
-//            R.id.gigContactPersonBottomSheet, bundleOf(
-//                GigContactPersonBottomSheet.INTENT_GIG_CONTACT_PERSON_DETAILS to option
-//            )
-//        )
     }
 
     override fun onCallManagerClicked(manager: ContactPerson) {
@@ -922,43 +948,100 @@ class GigPage2Fragment : Fragment(),
         )
     }
 
-    override fun onPermissionOkayClicked() {
-        askForRequiredPermissions()
+    override fun onPermissionOkayClicked(
+        askPermissionsUsingSystemSdk: Boolean
+    ) {
+        askForRequiredPermissions(askPermissionsUsingSystemSdk)
     }
 
-    private fun askForRequiredPermissions() {
+    private fun askForRequiredPermissions(
+        askPermissionUsingSystemsdk: Boolean
+    ) {
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+        if (askPermissionUsingSystemsdk) {
+
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                requestPermissions(
+                    arrayOf(
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    ),
+                    REQUEST_PERMISSIONS_SYTEM_SDK
+                )
+            } else {
+                requestPermissions(
+                    arrayOf(
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                    ),
+                    REQUEST_PERMISSIONS_SYTEM_SDK
+                )
+            }
+        } else {
             EasyPermissions.requestPermissions(
                 this,
-                "You need to accept location permissions to use this app.",
-                REQUEST_PERMISSIONS,
+                "You need to accept camera,storage and location permissions to use this app.",
+                REQUEST_PERMISSIONS_DEV_REL_LIB,
                 Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.CAMERA,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
             )
-        } else {
-            EasyPermissions.requestPermissions(
-                this,
-                "You need to accept location permissions to use this app.",
-                REQUEST_PERMISSIONS,
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.CAMERA,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE/*,
-                Manifest.permission.ACCESS_BACKGROUND_LOCATION*/
-            )
         }
     }
 
-    private fun showPermissionRequiredAndTheirReasonsDialog() {
+    private fun showPermissionRequiredAndTheirReasonsDialog(
+        askPermissionUsingSystemsdk: Boolean
+    ) {
+
+        val permissionRequiredAndTheirReasons = mutableMapOf<String, String>()
+
+        val cameraPermissionGranted = EasyPermissions.hasPermissions(
+            requireContext(),
+            Manifest.permission.CAMERA
+        )
+        if (!cameraPermissionGranted) {
+            permissionRequiredAndTheirReasons.put("CAMERA", "To click image for check-in")
+        }
+
+        val storagePermissionGranted = EasyPermissions.hasPermissions(
+            requireContext(),
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        )
+        if (!storagePermissionGranted) {
+            permissionRequiredAndTheirReasons.put(
+                "STORAGE",
+                "To store image captured while check-in"
+            )
+        }
+
+        val locationPermissionGranted = EasyPermissions.hasPermissions(
+            requireContext(),
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        )
+
+        if (!locationPermissionGranted) {
+            permissionRequiredAndTheirReasons.put(
+                "LOCATION",
+                "To capture location for check-in, suggest gigs based on your location"
+            )
+        }
+
         PermissionRequiredBottomSheet.launch(
             childFragmentManager = childFragmentManager,
             permissionBottomSheetActionListener = this,
-            permissionWithReason = PERMISSION_AND_REASONS
+            permissionWithReason = permissionRequiredAndTheirReasons,
+            askPermissionUsingSystemSdk = askPermissionUsingSystemsdk
         )
     }
 
@@ -1036,26 +1119,15 @@ class GigPage2Fragment : Fragment(),
 
     private fun isNecessaryPermissionGranted(): Boolean {
 
-        return if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-            EasyPermissions.hasPermissions(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.CAMERA,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE
-            )
-        } else {
-            EasyPermissions.hasPermissions(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.CAMERA,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE/*,
-                Manifest.permission.ACCESS_BACKGROUND_LOCATION*/
-            )
-        }
+        return EasyPermissions.hasPermissions(
+            requireContext(),
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.CAMERA,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        )
+
     }
 
     override fun onRequestPermissionsResult(
@@ -1064,7 +1136,9 @@ class GigPage2Fragment : Fragment(),
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
+
+        if (requestCode == REQUEST_PERMISSIONS_DEV_REL_LIB)
+            EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
     }
 
     override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
@@ -1075,7 +1149,7 @@ class GigPage2Fragment : Fragment(),
         if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
             AppSettingsDialog.Builder(this).build().show()
         } else {
-            showPermissionRequiredAndTheirReasonsDialog()
+            showPermissionRequiredAndTheirReasonsDialog(false)
         }
     }
 
@@ -1083,7 +1157,9 @@ class GigPage2Fragment : Fragment(),
         const val TAG = "Gig_page_2"
         const val INTENT_EXTRA_GIG_ID = "gig_id"
 
-        const val REQUEST_PERMISSIONS = 100
+        const val REQUEST_PERMISSIONS_DEV_REL_LIB = 100
+        const val REQUEST_PERMISSIONS_SYTEM_SDK = 101
+
         const val REQUEST_CODE_UPLOAD_SELFIE_IMAGE = 2333
         const val REQUEST_UPGRADE_GPS_SETTINGS = 2321
         const val REQUEST_UPDATE_GPS_SETTINGS_MANUALLY = 2322
@@ -1111,12 +1187,6 @@ class GigPage2Fragment : Fragment(),
             id = ID_DECLINE_GIG,
             name = "Decline Gig",
             icon = R.drawable.ic_gig_decline
-        )
-
-        private val PERMISSION_AND_REASONS: HashMap<String, String> = hashMapOf(
-            "LOCATION" to "To Capture Location For CheckIn",
-            "CAMERA" to "To Click Image for CheckIn",
-            "STORAGE" to "To Store Image captured while CheckIn"
         )
     }
 

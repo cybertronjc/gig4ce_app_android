@@ -108,4 +108,8 @@ dependencies {
     implementation "com.ncorti:slidetoact:0.8.0"
     implementation 'com.github.franmontiel:LocaleChanger:0.9.2'
 
+    //Permissions
+    implementation 'pub.devrel:easypermissions:3.0.0'
+
+
 }

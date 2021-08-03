@@ -1,10 +1,12 @@
 package com.gigforce.giger_app.calendarscreen.maincalendarscreen
 
 
+import android.Manifest
 import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -24,7 +26,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -34,6 +35,7 @@ import com.gigforce.common_ui.ConfirmationDialogOnClickListener
 import com.gigforce.common_ui.chat.ChatHeadersViewModel
 import com.gigforce.common_ui.configrepository.ConfigRepository
 import com.gigforce.common_ui.core.TextDrawable
+import com.gigforce.common_ui.utils.BsBackgroundAndLocationAccess
 import com.gigforce.common_ui.viewmodels.ProfileViewModel
 import com.gigforce.common_ui.viewmodels.custom_gig_preferences.CustomPreferencesViewModel
 import com.gigforce.common_ui.viewmodels.custom_gig_preferences.ParamCustPreferViewModel
@@ -63,9 +65,7 @@ import com.jaeger.library.StatusBarUtil
 import com.riningan.widget.ExtendedBottomSheetBehavior
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.calendar_home_screen.*
-import kotlinx.android.synthetic.main.calendar_home_screen.cardView
-import kotlinx.android.synthetic.main.calendar_home_screen.chat_icon_iv
-import kotlinx.android.synthetic.main.calendar_home_screen.profile_image
+import pub.devrel.easypermissions.EasyPermissions
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.util.*
@@ -73,7 +73,10 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class CalendarHomeScreen : Fragment(),
-        CalendarRecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
+    CalendarRecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
+    private val locationAccessDialog: BsBackgroundAndLocationAccess by lazy {
+        BsBackgroundAndLocationAccess()
+    }
 
     companion object {
         fun newInstance() =
@@ -87,6 +90,7 @@ class CalendarHomeScreen : Fragment(),
 
     @Inject
     lateinit var eventTracker: IEventTracker
+
 
     lateinit var selectedMonthModel: CalendarView.MonthModel
 
@@ -106,60 +110,97 @@ class CalendarHomeScreen : Fragment(),
     @Inject
     lateinit var appDialogsInterface: AppDialogsInterface
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.calendar_home_screen, container, false)
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        checkForLocationPermission()
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModelProfile = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         viewModelCustomPreference =
-                ViewModelProvider(this, ParamCustPreferViewModel(viewLifecycleOwner)).get(
-                        CustomPreferencesViewModel::class.java
-                )
+            ViewModelProvider(this, ParamCustPreferViewModel(viewLifecycleOwner)).get(
+                CustomPreferencesViewModel::class.java
+            )
 
         ConfigRepository().getForceUpdateCurrentVersion(object :
-                ConfigRepository.LatestAPPUpdateListener {
+            ConfigRepository.LatestAPPUpdateListener {
             override fun getCurrentAPPVersion(latestAPPUpdateModel: ConfigRepository.LatestAPPUpdateModel) {
                 if (latestAPPUpdateModel.active && isNotLatestVersion(latestAPPUpdateModel))
                     appDialogsInterface.showConfirmationDialogType3(
-                            getString(R.string.new_version_available),
-                            getString(R.string.new_version_available_detail),
-                            getString(R.string.update_now),
-                            getString(R.string.cancel_update),
-                            object :
-                                    ConfirmationDialogOnClickListener {
-                                override fun clickedOnYes(dialog: Dialog?) {
-                                    redirectToStore("https://play.google.com/store/apps/details?id=com.gigforce.app")
-                                }
+                        getString(R.string.new_version_available),
+                        getString(R.string.new_version_available_detail),
+                        getString(R.string.update_now),
+                        getString(R.string.cancel_update),
+                        object :
+                            ConfirmationDialogOnClickListener {
+                            override fun clickedOnYes(dialog: Dialog?) {
+                                redirectToStore("https://play.google.com/store/apps/details?id=com.gigforce.app")
+                            }
 
-                                override fun clickedOnNo(dialog: Dialog?) {
-                                    if (latestAPPUpdateModel.force_update_required)
-                                        activity?.finish()
-                                    dialog?.dismiss()
-                                }
+                            override fun clickedOnNo(dialog: Dialog?) {
+                                if (latestAPPUpdateModel.force_update_required)
+                                    activity?.finish()
+                                dialog?.dismiss()
+                            }
 
-                            })
+                        })
             }
         })
         arrCalendarDependent =
 //            arrayOf(calendar_dependent, margin_40, below_oval, calendar_cv, bottom_sheet_top_shadow)
-                arrayOf(calendar_dependent, calendar_cv, bottom_sheet_top_shadow)
+            arrayOf(calendar_dependent, calendar_cv, bottom_sheet_top_shadow)
 
         selectedMonthModel = CalendarView.MonthModel(Calendar.getInstance().get(Calendar.MONTH))
         initializeViews()
         listener()
         observers()
+
+    }
+
+    private fun checkForLocationPermission() {
+        val locationPermissionGranted = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            EasyPermissions.hasPermissions(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            )
+        } else {
+            EasyPermissions.hasPermissions(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_BACKGROUND_LOCATION
+            )
+        }
+
+        if (!locationPermissionGranted) {
+            showLocationDialog()
+        }
+
+    }
+
+    private fun showLocationDialog() {
+        if (locationAccessDialog.dialog == null || locationAccessDialog.dialog?.isShowing == false) {
+            locationAccessDialog.isCancelable = false
+            locationAccessDialog.show(
+                childFragmentManager,
+                BsBackgroundAndLocationAccess::class.simpleName
+            )
+        }
     }
 
     override fun onResume() {
         super.onResume()
         StatusBarUtil.setColorNoTranslucent(
-                requireActivity(),
-                ResourcesCompat.getColor(resources, R.color.white, null)
+            requireActivity(),
+            ResourcesCompat.getColor(resources, R.color.white, null)
         )
     }
 
@@ -171,21 +212,21 @@ class CalendarHomeScreen : Fragment(),
             }
             val appVersion = currentAppVersion.split(".").toTypedArray()
             val serverAPPVersion =
-                    latestAPPUpdateModel.force_update_current_version.split(".").toTypedArray()
+                latestAPPUpdateModel.force_update_current_version.split(".").toTypedArray()
             if (appVersion.size == 0 || serverAPPVersion.size == 0) {
                 FirebaseCrashlytics.getInstance()
-                        .log("isNotLatestVersion method : appVersion or serverAPPVersion has zero size!!")
+                    .log("isNotLatestVersion method : appVersion or serverAPPVersion has zero size!!")
                 return false
             } else {
                 if (appVersion.get(0).toInt() < serverAPPVersion.get(0).toInt()) {
                     return true
                 } else if (appVersion.get(0).toInt() == serverAPPVersion.get(0)
-                                .toInt() && appVersion.get(1).toInt() < serverAPPVersion.get(1).toInt()
+                        .toInt() && appVersion.get(1).toInt() < serverAPPVersion.get(1).toInt()
                 ) {
                     return true
                 } else return appVersion.get(0).toInt() == serverAPPVersion.get(0)
-                        .toInt() && appVersion.get(1).toInt() == serverAPPVersion.get(1)
-                        .toInt() && appVersion.get(2).toInt() < serverAPPVersion.get(2).toInt()
+                    .toInt() && appVersion.get(1).toInt() == serverAPPVersion.get(1)
+                    .toInt() && appVersion.get(2).toInt() < serverAPPVersion.get(2).toInt()
 
             }
         } catch (e: Exception) {
@@ -200,8 +241,8 @@ class CalendarHomeScreen : Fragment(),
 
         try {
             result = context?.packageManager
-                    ?.getPackageInfo(context?.packageName, 0)
-                    ?.versionName ?: ""
+                ?.getPackageInfo(context?.packageName, 0)
+                ?.versionName ?: ""
         } catch (e: PackageManager.NameNotFoundException) {
 
         }
@@ -254,7 +295,7 @@ class CalendarHomeScreen : Fragment(),
             changeVisibilityCalendarView()
         }
         calendarView.setMonthChangeListener(object :
-                CalendarView.MonthChangeAndDateClickedListener {
+            CalendarView.MonthChangeAndDateClickedListener {
             override fun onMonthChange(monthModel: CalendarView.MonthModel) {
                 selectedMonthModel = monthModel
                 var calendar = Calendar.getInstance()
@@ -264,10 +305,10 @@ class CalendarHomeScreen : Fragment(),
                 initializeMonthTV(calendar, false)
                 if (!isLoading) {
                     recyclerGenericAdapter.list.addAll(
-                            viewModel.getVerticalCalendarData(
-                                    recyclerGenericAdapter.list.get(recyclerGenericAdapter.list.size - 1),
-                                    false
-                            )
+                        viewModel.getVerticalCalendarData(
+                            recyclerGenericAdapter.list.get(recyclerGenericAdapter.list.size - 1),
+                            false
+                        )
                     )
                 }
             }
@@ -285,13 +326,13 @@ class CalendarHomeScreen : Fragment(),
 
     private fun changeVisibilityCalendarView() {
         var extendedBottomSheetBehavior: ExtendedBottomSheetBehavior<NestedScrollView> =
-                ExtendedBottomSheetBehavior.from(nsv)
+            ExtendedBottomSheetBehavior.from(nsv)
 
         if (extendedBottomSheetBehavior.isAllowUserDragging) {
             hideDependentViews(false)
             Log.d(
-                    "BottomSheetState ",
-                    "changeVisibilityCalendarView  : ${viewModel.currentBottomSheetState}"
+                "BottomSheetState ",
+                "changeVisibilityCalendarView  : ${viewModel.currentBottomSheetState}"
             )
             extendedBottomSheetBehavior.state = viewModel.currentBottomSheetState
             extendedBottomSheetBehavior.isAllowUserDragging = false
@@ -314,23 +355,23 @@ class CalendarHomeScreen : Fragment(),
         val firstVisibleItem = layoutManager.findFirstVisibleItemPosition()
         var dayModel = selectedMonthModel.days.get(0)
         if (recyclerGenericAdapter.list.get(firstVisibleItem).year < dayModel.year || (recyclerGenericAdapter.list.get(
-                        firstVisibleItem
-                ).year == dayModel.year && recyclerGenericAdapter.list.get(firstVisibleItem).month < dayModel.month) || (recyclerGenericAdapter.list.get(
-                        firstVisibleItem
-                ).year == dayModel.year && recyclerGenericAdapter.list.get(firstVisibleItem).month == dayModel.month && recyclerGenericAdapter.list.get(
-                        firstVisibleItem
-                ).date < dayModel.date)
+                firstVisibleItem
+            ).year == dayModel.year && recyclerGenericAdapter.list.get(firstVisibleItem).month < dayModel.month) || (recyclerGenericAdapter.list.get(
+                firstVisibleItem
+            ).year == dayModel.year && recyclerGenericAdapter.list.get(firstVisibleItem).month == dayModel.month && recyclerGenericAdapter.list.get(
+                firstVisibleItem
+            ).date < dayModel.date)
         ) {
             for (index in firstVisibleItem..recyclerGenericAdapter.list.size) {
                 if (recyclerGenericAdapter.list.get(index).year == dayModel.year && recyclerGenericAdapter.list.get(
-                                index
-                        ).month == dayModel.month && recyclerGenericAdapter.list.get(
-                                index
-                        ).date == dayModel.date
+                        index
+                    ).month == dayModel.month && recyclerGenericAdapter.list.get(
+                        index
+                    ).date == dayModel.date
                 ) {
                     (rv_.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(
-                            index,
-                            0
+                        index,
+                        0
                     )
                     break
                 }
@@ -338,12 +379,12 @@ class CalendarHomeScreen : Fragment(),
         } else {
             for (index in 0..firstVisibleItem) {
                 if (recyclerGenericAdapter.list.get(index).year == dayModel.year && recyclerGenericAdapter.list.get(
-                                index
-                        ).month == dayModel.month && recyclerGenericAdapter.list.get(index).date == dayModel.date
+                        index
+                    ).month == dayModel.month && recyclerGenericAdapter.list.get(index).date == dayModel.date
                 ) {
                     (rv_.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(
-                            index,
-                            0
+                        index,
+                        0
                     )
                     break
                 }
@@ -371,25 +412,25 @@ class CalendarHomeScreen : Fragment(),
         })
 
         chatHeadersViewModel.unreadMessageCount
-                .observe(viewLifecycleOwner, Observer {
+            .observe(viewLifecycleOwner, Observer {
 
-                    if (it == 0) {
-                        unread_message_count_tv.setImageDrawable(null)
-                    } else {
-                        val drawable = TextDrawable.builder().buildRound(
-                                it.toString(),
-                                ResourcesCompat.getColor(requireContext().resources, R.color.lipstick, null)
-                        )
-                        unread_message_count_tv.setImageDrawable(drawable)
-                    }
-                })
+                if (it == 0) {
+                    unread_message_count_tv.setImageDrawable(null)
+                } else {
+                    val drawable = TextDrawable.builder().buildRound(
+                        it.toString(),
+                        ResourcesCompat.getColor(requireContext().resources, R.color.lipstick, null)
+                    )
+                    unread_message_count_tv.setImageDrawable(drawable)
+                }
+            })
         chatHeadersViewModel.startWatchingChatHeaders()
 
 
         // load user data
         viewModelProfile.getProfileData().observe(viewLifecycleOwner, Observer { profile ->
             displayImage(profile.profileAvatarName)
-            if (profile.name != null && !profile.name.equals("")){
+            if (profile.name != null && !profile.name.equals("")) {
                 tv1HS1.text = profile.name
 
                 //setting user's name to mixpanel
@@ -401,20 +442,20 @@ class CalendarHomeScreen : Fragment(),
             }
         })
         viewModelCustomPreference.customPreferencesLiveDataModel.observe(
-                viewLifecycleOwner,
-                Observer { data ->
+            viewLifecycleOwner,
+            Observer { data ->
 
+                viewModel.customPreferenceUnavailableData = data.unavailable
+                viewModelCustomPreference.getCustomPreferenceData()?.let {
+                    //viewModel.setCustomPreferenceData(it)
                     viewModel.customPreferenceUnavailableData = data.unavailable
-                    viewModelCustomPreference.getCustomPreferenceData()?.let {
-                        //viewModel.setCustomPreferenceData(it)
-                        viewModel.customPreferenceUnavailableData = data.unavailable
-                        if (swipedToupdateGig) {
+                    if (swipedToupdateGig) {
 //                    swipedToupdateGig = false
-                        } else
-                            initializeViews()
-                    }
+                    } else
+                        initializeViews()
+                }
 
-                })
+            })
 
         viewModel.preferenceDataModel.observe(viewLifecycleOwner, Observer { preferenceData ->
             if (preferenceData != null) {
@@ -434,10 +475,10 @@ class CalendarHomeScreen : Fragment(),
                 }
                 is Lce.Error -> {
                     MaterialAlertDialogBuilder(requireContext())
-                            .setTitle("Alert")
-                            .setMessage("Unable to fetch todays gig list, ${it.error}")
-                            .setPositiveButton("Okay") { _, _ -> }
-                            .show()
+                        .setTitle("Alert")
+                        .setMessage("Unable to fetch todays gig list, ${it.error}")
+                        .setPositiveButton("Okay") { _, _ -> }
+                        .show()
                 }
             }
         })
@@ -451,14 +492,14 @@ class CalendarHomeScreen : Fragment(),
                 FirebaseStorage.getInstance().reference.child("profile_pics").child(profileImg)
             if (profile_image != null)
                 GlideApp.with(this.requireContext())
-                        .load(profilePicRef)
-                        .apply(RequestOptions().circleCrop())
-                        .into(profile_image)
-        } else {
-            GlideApp.with(this.requireContext())
-                    .load(R.drawable.avatar)
+                    .load(profilePicRef)
                     .apply(RequestOptions().circleCrop())
                     .into(profile_image)
+        } else {
+            GlideApp.with(this.requireContext())
+                .load(R.drawable.avatar)
+                .apply(RequestOptions().circleCrop())
+                .into(profile_image)
         }
     }
 
@@ -477,70 +518,95 @@ class CalendarHomeScreen : Fragment(),
     var isLoading: Boolean = false
     private fun initializeVerticalCalendarRV() {
         recyclerGenericAdapter =
-                RecyclerGenericAdapter<VerticalCalendarDataItemModel>(
-                        activity?.applicationContext,
-                        PFRecyclerViewAdapter.OnViewHolderClick<VerticalCalendarDataItemModel?> { view, position, item ->
-                            //item?.year, item?.month, item?.date
-                            var layoutManager = rv_.layoutManager as LinearLayoutManager
-                            fistvisibleItemOnclick = layoutManager.findFirstVisibleItemPosition()
+            RecyclerGenericAdapter<VerticalCalendarDataItemModel>(
+                activity?.applicationContext,
+                PFRecyclerViewAdapter.OnViewHolderClick<VerticalCalendarDataItemModel?> { view, position, item ->
+                    //item?.year, item?.month, item?.date
+                    var layoutManager = rv_.layoutManager as LinearLayoutManager
+                    fistvisibleItemOnclick = layoutManager.findFirstVisibleItemPosition()
 
-                            val activeDateTime =
-                                    LocalDateTime.of(item?.year!!, item.month + 1, item.date, 0, 0, 0)
+                    val activeDateTime =
+                        LocalDateTime.of(item?.year!!, item.month + 1, item.date, 0, 0, 0)
 
-                            RosterDayFragment.arrMainHomeDataModel = viewModel.arrMainHomeDataModel!!
-                            val bundle = Bundle()
-                            bundle.putSerializable("active_date", activeDateTime)
-                            navigation.navigateTo("rosterDayFragment",bundle)
+                    RosterDayFragment.arrMainHomeDataModel = viewModel.arrMainHomeDataModel!!
+                    val bundle = Bundle()
+                    bundle.putSerializable("active_date", activeDateTime)
+                    navigation.navigateTo("rosterDayFragment", bundle)
 //                            findNavController().navigate(R.id.rosterDayFragment, bundle)
-                        },
-                        RecyclerGenericAdapter.ItemInterface<VerticalCalendarDataItemModel?> { obj, viewHolder, position ->
-                            if (obj!!.isMonth) {
-                                showMonthLayout(true, viewHolder)
+                },
+                RecyclerGenericAdapter.ItemInterface<VerticalCalendarDataItemModel?> { obj, viewHolder, position ->
+                    if (obj!!.isMonth) {
+                        showMonthLayout(true, viewHolder)
 //                                getTextView(viewHolder, R.id.month_year).text =
 //                                        obj.monthStr + " " + obj.year
-                                (viewHolder.getView(R.id.month_year) as TextView).text =
-                                        obj.monthStr + " " + obj.year
-                            } else {
-                                (viewHolder.getView(R.id.title) as TextView).setTextSize(TypedValue.COMPLEX_UNIT_SP, 14F)
-                                (viewHolder.getView(R.id.subtitle) as TextView).setTextSize(TypedValue.COMPLEX_UNIT_SP, 12F)
+                        (viewHolder.getView(R.id.month_year) as TextView).text =
+                            obj.monthStr + " " + obj.year
+                    } else {
+                        (viewHolder.getView(R.id.title) as TextView).setTextSize(
+                            TypedValue.COMPLEX_UNIT_SP,
+                            14F
+                        )
+                        (viewHolder.getView(R.id.subtitle) as TextView).setTextSize(
+                            TypedValue.COMPLEX_UNIT_SP,
+                            12F
+                        )
 
 //                        setTextViewSize(getTextView(viewHolder, R.id.title), 14F)
 //                        setTextViewSize(getTextView(viewHolder, R.id.subtitle), 12F)
-                                viewHolder.getView(R.id.coloredsideline).visibility = View.GONE
-                                viewHolder.getView(R.id.graysideline).visibility = View.VISIBLE
+                        viewHolder.getView(R.id.coloredsideline).visibility = View.GONE
+                        viewHolder.getView(R.id.graysideline).visibility = View.VISIBLE
 
 //                        getView(viewHolder, R.id.coloredsideline).visibility = View.GONE
 //                        getView(viewHolder, R.id.graysideline).visibility = View.VISIBLE
-                                showMonthLayout(false, viewHolder)
-                                (viewHolder.getView(R.id.title) as TextView).text = obj.title
+                        showMonthLayout(false, viewHolder)
+                        (viewHolder.getView(R.id.title) as TextView).text = obj.title
 //                        getTextView(viewHolder, R.id.title).text = obj.title
-                                if (obj.subTitle != null && !obj.subTitle.equals("")) {
-                                    viewHolder.getView(R.id.subtitle).visibility = View.VISIBLE
-                                    (viewHolder.getView(R.id.subtitle) as TextView).text = obj.subTitle
+                        if (obj.subTitle != null && !obj.subTitle.equals("")) {
+                            viewHolder.getView(R.id.subtitle).visibility = View.VISIBLE
+                            (viewHolder.getView(R.id.subtitle) as TextView).text = obj.subTitle
 //                            getTextView(viewHolder, R.id.subtitle).visibility = View.VISIBLE
 //                            getTextView(viewHolder, R.id.subtitle).text = obj.subTitle
-                                } else {
-                                    viewHolder.getView(R.id.subtitle).visibility = View.GONE
+                        } else {
+                            viewHolder.getView(R.id.subtitle).visibility = View.GONE
 //                            getTextView(viewHolder, R.id.subtitle).visibility = View.GONE
-                                }
-                                (viewHolder.getView(R.id.day) as TextView).text = obj.day
-                                (viewHolder.getView(R.id.date) as TextView).text = obj.date.toString()
+                        }
+                        (viewHolder.getView(R.id.day) as TextView).text = obj.day
+                        (viewHolder.getView(R.id.date) as TextView).text = obj.date.toString()
 
 //                        getTextView(viewHolder, R.id.day).text = obj.day
 //                        getTextView(viewHolder, R.id.date).text = obj.date.toString()
-                                if (obj.isToday) {
-                                    viewHolder.getView(R.id.coloredsideline).visibility = View.VISIBLE
-                                    viewHolder.getView(R.id.graysideline).visibility = View.GONE
+                        if (obj.isToday) {
+                            viewHolder.getView(R.id.coloredsideline).visibility = View.VISIBLE
+                            viewHolder.getView(R.id.graysideline).visibility = View.GONE
 //                            getView(viewHolder, R.id.coloredsideline).visibility = View.VISIBLE
 //                            getView(viewHolder, R.id.graysideline).visibility = View.GONE
 
-                                    activity?.let {
-                                        viewHolder.getView(R.id.daydatecard).setBackgroundColor(ContextCompat.getColor(it.applicationContext, R.color.vertical_calendar_today))
-                                        (viewHolder.getView(R.id.title) as TextView).setTextColor(ContextCompat.getColor(it.applicationContext, R.color.vertical_calendar_today1))
-                                        (viewHolder.getView(R.id.subtitle) as TextView).setTextColor(ContextCompat.getColor(it.applicationContext, R.color.vertical_calendar_today1))
-                                        (viewHolder.getView(R.id.day) as TextView).setTextColor(ContextCompat.getColor(it.applicationContext, R.color.white))
-                                        (viewHolder.getView(R.id.date) as TextView).setTextColor(ContextCompat.getColor(it.applicationContext, R.color.white))
-                                    }
+                            activity?.let {
+                                viewHolder.getView(R.id.daydatecard).setBackgroundColor(
+                                    ContextCompat.getColor(
+                                        it.applicationContext,
+                                        R.color.vertical_calendar_today
+                                    )
+                                )
+                                (viewHolder.getView(R.id.title) as TextView).setTextColor(
+                                    ContextCompat.getColor(
+                                        it.applicationContext,
+                                        R.color.vertical_calendar_today1
+                                    )
+                                )
+                                (viewHolder.getView(R.id.subtitle) as TextView).setTextColor(
+                                    ContextCompat.getColor(
+                                        it.applicationContext,
+                                        R.color.vertical_calendar_today1
+                                    )
+                                )
+                                (viewHolder.getView(R.id.day) as TextView).setTextColor(
+                                    ContextCompat.getColor(it.applicationContext, R.color.white)
+                                )
+                                (viewHolder.getView(R.id.date) as TextView).setTextColor(
+                                    ContextCompat.getColor(it.applicationContext, R.color.white)
+                                )
+                            }
 
 //                            setViewBackgroundColor(
 //                                getView(viewHolder, R.id.daydatecard),
@@ -562,22 +628,53 @@ class CalendarHomeScreen : Fragment(),
 //                                getTextView(viewHolder, R.id.date),
 //                                R.color.white
 //                            )
-                                    viewHolder.getView(R.id.daydatecard).alpha = 1.0F
+                            viewHolder.getView(R.id.daydatecard).alpha = 1.0F
 //                            getView(viewHolder, R.id.daydatecard).alpha = 1.0F
-                                    (viewHolder.getView(R.id.day) as TextView).setTextSize(TypedValue.COMPLEX_UNIT_SP, 12F)
-                                    (viewHolder.getView(R.id.date) as TextView).setTextSize(TypedValue.COMPLEX_UNIT_SP, 14F)
+                            (viewHolder.getView(R.id.day) as TextView).setTextSize(
+                                TypedValue.COMPLEX_UNIT_SP,
+                                12F
+                            )
+                            (viewHolder.getView(R.id.date) as TextView).setTextSize(
+                                TypedValue.COMPLEX_UNIT_SP,
+                                14F
+                            )
 
 //                            setTextViewSize(getTextView(viewHolder, R.id.day), 12F)
 //                            setTextViewSize(getTextView(viewHolder, R.id.date), 14F)
-                                } else if (obj.isPreviousDate) {
-                                    activity?.let {
-                                        viewHolder.getView(R.id.daydatecard).setBackgroundColor(ContextCompat.getColor(it.applicationContext, R.color.gray_color_calendar_previous_date))
+                        } else if (obj.isPreviousDate) {
+                            activity?.let {
+                                viewHolder.getView(R.id.daydatecard).setBackgroundColor(
+                                    ContextCompat.getColor(
+                                        it.applicationContext,
+                                        R.color.gray_color_calendar_previous_date
+                                    )
+                                )
 
-                                        (viewHolder.getView(R.id.title) as TextView).setTextColor(ContextCompat.getColor(it.applicationContext, R.color.gray_color_calendar))
-                                        (viewHolder.getView(R.id.subtitle) as TextView).setTextColor(ContextCompat.getColor(it.applicationContext, R.color.gray_color_calendar))
-                                        (viewHolder.getView(R.id.day) as TextView).setTextColor(ContextCompat.getColor(it.applicationContext, R.color.gray_color))
-                                        (viewHolder.getView(R.id.date) as TextView).setTextColor(ContextCompat.getColor(it.applicationContext, R.color.gray_color))
-                                    }
+                                (viewHolder.getView(R.id.title) as TextView).setTextColor(
+                                    ContextCompat.getColor(
+                                        it.applicationContext,
+                                        R.color.gray_color_calendar
+                                    )
+                                )
+                                (viewHolder.getView(R.id.subtitle) as TextView).setTextColor(
+                                    ContextCompat.getColor(
+                                        it.applicationContext,
+                                        R.color.gray_color_calendar
+                                    )
+                                )
+                                (viewHolder.getView(R.id.day) as TextView).setTextColor(
+                                    ContextCompat.getColor(
+                                        it.applicationContext,
+                                        R.color.gray_color
+                                    )
+                                )
+                                (viewHolder.getView(R.id.date) as TextView).setTextColor(
+                                    ContextCompat.getColor(
+                                        it.applicationContext,
+                                        R.color.gray_color
+                                    )
+                                )
+                            }
 //                            setTextViewColor(
 //                                getTextView(viewHolder, R.id.title),
 //                                R.color.gray_color_calendar
@@ -600,29 +697,49 @@ class CalendarHomeScreen : Fragment(),
 //                            )
 
 
-                                    if (obj.isGigAssign) {
-                                        viewHolder.getView(R.id.daydatecard).alpha = 1.0F
+                            if (obj.isGigAssign) {
+                                viewHolder.getView(R.id.daydatecard).alpha = 1.0F
 //                                getView(viewHolder, R.id.daydatecard).alpha = 1.0F
-                                    } else {
-                                        viewHolder.getView(R.id.daydatecard).alpha = 1.0F
-                                        viewHolder.getView(R.id.daydatecard).alpha = 0.5F
+                            } else {
+                                viewHolder.getView(R.id.daydatecard).alpha = 1.0F
+                                viewHolder.getView(R.id.daydatecard).alpha = 0.5F
 
 //                                getView(viewHolder, R.id.daydatecard).alpha = 1.0F
 //                                getView(viewHolder, R.id.daydatecard).alpha = 0.5F
-                                    }
-                                } else {
-                                    if (obj.isUnavailable) {
-                                        (viewHolder.getView(R.id.title) as TextView).text =
-                                                getString(R.string.not_working)
-                                        viewHolder.getView(R.id.subtitle).gone()
+                            }
+                        } else {
+                            if (obj.isUnavailable) {
+                                (viewHolder.getView(R.id.title) as TextView).text =
+                                    getString(R.string.not_working)
+                                viewHolder.getView(R.id.subtitle).gone()
 
-                                        activity?.let {
-                                            viewHolder.getView(R.id.daydatecard).setBackgroundColor(ContextCompat.getColor(it.applicationContext, R.color.date_day_unavailable_color))
+                                activity?.let {
+                                    viewHolder.getView(R.id.daydatecard).setBackgroundColor(
+                                        ContextCompat.getColor(
+                                            it.applicationContext,
+                                            R.color.date_day_unavailable_color
+                                        )
+                                    )
 
-                                            (viewHolder.getView(R.id.title) as TextView).setTextColor(ContextCompat.getColor(it.applicationContext, R.color.gray_color_calendar))
-                                            (viewHolder.getView(R.id.day) as TextView).setTextColor(ContextCompat.getColor(it.applicationContext, R.color.gray_color_day_date_calendar))
-                                            (viewHolder.getView(R.id.date) as TextView).setTextColor(ContextCompat.getColor(it.applicationContext, R.color.gray_color_day_date_calendar))
-                                        }
+                                    (viewHolder.getView(R.id.title) as TextView).setTextColor(
+                                        ContextCompat.getColor(
+                                            it.applicationContext,
+                                            R.color.gray_color_calendar
+                                        )
+                                    )
+                                    (viewHolder.getView(R.id.day) as TextView).setTextColor(
+                                        ContextCompat.getColor(
+                                            it.applicationContext,
+                                            R.color.gray_color_day_date_calendar
+                                        )
+                                    )
+                                    (viewHolder.getView(R.id.date) as TextView).setTextColor(
+                                        ContextCompat.getColor(
+                                            it.applicationContext,
+                                            R.color.gray_color_day_date_calendar
+                                        )
+                                    )
+                                }
 //                                setTextViewColor(
 //                                    getTextView(viewHolder, R.id.title),
 //                                    R.color.gray_color_day_date_calendar
@@ -639,20 +756,39 @@ class CalendarHomeScreen : Fragment(),
 //                                    getView(viewHolder, R.id.daydatecard),
 //                                    R.color.date_day_unavailable_color
 //                                )
-                                        viewHolder.getView(R.id.daydatecard).alpha = 1.0F
+                                viewHolder.getView(R.id.daydatecard).alpha = 1.0F
 //                                getView(viewHolder, R.id.daydatecard).alpha = 1.0F
-                                        setBackgroundStateAvailable(viewHolder)
-                                    } else if (obj.isGigAssign) {
+                                setBackgroundStateAvailable(viewHolder)
+                            } else if (obj.isGigAssign) {
 
-                                        activity?.let {
-                                            viewHolder.getView(R.id.daydatecard).setBackgroundColor(ContextCompat.getColor(it.applicationContext, R.color.vertical_calendar_today1))
+                                activity?.let {
+                                    viewHolder.getView(R.id.daydatecard).setBackgroundColor(
+                                        ContextCompat.getColor(
+                                            it.applicationContext,
+                                            R.color.vertical_calendar_today1
+                                        )
+                                    )
 
-                                            (viewHolder.getView(R.id.title) as TextView).setTextColor(ContextCompat.getColor(it.applicationContext, R.color.black_color_future_date))
-                                            (viewHolder.getView(R.id.subtitle) as TextView).setTextColor(ContextCompat.getColor(it.applicationContext, R.color.black_color_future_date))
+                                    (viewHolder.getView(R.id.title) as TextView).setTextColor(
+                                        ContextCompat.getColor(
+                                            it.applicationContext,
+                                            R.color.black_color_future_date
+                                        )
+                                    )
+                                    (viewHolder.getView(R.id.subtitle) as TextView).setTextColor(
+                                        ContextCompat.getColor(
+                                            it.applicationContext,
+                                            R.color.black_color_future_date
+                                        )
+                                    )
 
-                                            (viewHolder.getView(R.id.day) as TextView).setTextColor(ContextCompat.getColor(it.applicationContext, R.color.black))
-                                            (viewHolder.getView(R.id.date) as TextView).setTextColor(ContextCompat.getColor(it.applicationContext, R.color.black))
-                                        }
+                                    (viewHolder.getView(R.id.day) as TextView).setTextColor(
+                                        ContextCompat.getColor(it.applicationContext, R.color.black)
+                                    )
+                                    (viewHolder.getView(R.id.date) as TextView).setTextColor(
+                                        ContextCompat.getColor(it.applicationContext, R.color.black)
+                                    )
+                                }
 
 //                                setTextViewColor(
 //                                    getTextView(viewHolder, R.id.title),
@@ -674,19 +810,39 @@ class CalendarHomeScreen : Fragment(),
 //                                    getView(viewHolder, R.id.daydatecard),
 //                                    R.color.vertical_calendar_today1
 //                                )
-                                        viewHolder.getView(R.id.daydatecard).alpha = 1.0F
-                                        viewHolder.getView(R.id.daydatecard).alpha = 0.7F
+                                viewHolder.getView(R.id.daydatecard).alpha = 1.0F
+                                viewHolder.getView(R.id.daydatecard).alpha = 0.7F
 //                                getView(viewHolder, R.id.daydatecard).alpha = 1.0F
 //                                getView(viewHolder, R.id.daydatecard).alpha = 0.7F
-                                    } else {
+                            } else {
 
-                                        activity?.let {
-                                            viewHolder.getView(R.id.daydatecard).setBackgroundColor(ContextCompat.getColor(it.applicationContext, R.color.vertical_calendar_today1))
+                                activity?.let {
+                                    viewHolder.getView(R.id.daydatecard).setBackgroundColor(
+                                        ContextCompat.getColor(
+                                            it.applicationContext,
+                                            R.color.vertical_calendar_today1
+                                        )
+                                    )
 
-                                            (viewHolder.getView(R.id.title) as TextView).setTextColor(ContextCompat.getColor(it.applicationContext, R.color.gray_color_day_date_calendar))
-                                            (viewHolder.getView(R.id.day) as TextView).setTextColor(ContextCompat.getColor(it.applicationContext, R.color.gray_color_day_date_calendar))
-                                            (viewHolder.getView(R.id.date) as TextView).setTextColor(ContextCompat.getColor(it.applicationContext, R.color.gray_color_day_date_calendar))
-                                        }
+                                    (viewHolder.getView(R.id.title) as TextView).setTextColor(
+                                        ContextCompat.getColor(
+                                            it.applicationContext,
+                                            R.color.gray_color_day_date_calendar
+                                        )
+                                    )
+                                    (viewHolder.getView(R.id.day) as TextView).setTextColor(
+                                        ContextCompat.getColor(
+                                            it.applicationContext,
+                                            R.color.gray_color_day_date_calendar
+                                        )
+                                    )
+                                    (viewHolder.getView(R.id.date) as TextView).setTextColor(
+                                        ContextCompat.getColor(
+                                            it.applicationContext,
+                                            R.color.gray_color_day_date_calendar
+                                        )
+                                    )
+                                }
 
 //                                setTextViewColor(
 //                                    getTextView(viewHolder, R.id.title),
@@ -704,21 +860,21 @@ class CalendarHomeScreen : Fragment(),
 //                                    getView(viewHolder, R.id.daydatecard),
 //                                    R.color.vertical_calendar_today1
 //                                )
-                                        viewHolder.getView(R.id.daydatecard).alpha = 1.0F
-                                        viewHolder.getView(R.id.daydatecard).alpha = 0.4F
+                                viewHolder.getView(R.id.daydatecard).alpha = 1.0F
+                                viewHolder.getView(R.id.daydatecard).alpha = 0.4F
 //                                getView(viewHolder, R.id.daydatecard).alpha = 1.0F
 //                                getView(viewHolder, R.id.daydatecard).alpha = 0.4F
-                                    }
-                                }
                             }
-                        })
+                        }
+                    }
+                })
 
         recyclerGenericAdapter.list = viewModel.getAllCalendarData()
         recyclerGenericAdapter.setLayout(R.layout.vertical_calendar_item)
         rv_.layoutManager = LinearLayoutManager(
-                activity?.applicationContext,
-                LinearLayoutManager.VERTICAL,
-                false
+            activity?.applicationContext,
+            LinearLayoutManager.VERTICAL,
+            false
         )
         rv_.adapter = recyclerGenericAdapter
         if (fistvisibleItemOnclick == -1) {
@@ -751,10 +907,10 @@ class CalendarHomeScreen : Fragment(),
                     if (totalItemCount!! <= (lastVisibleItem + visibleThreshold)) {
                         isLoading = true
                         recyclerGenericAdapter.list.addAll(
-                                viewModel.getVerticalCalendarData(
-                                        recyclerGenericAdapter.list.get(recyclerGenericAdapter.list.size - 1),
-                                        false
-                                )
+                            viewModel.getVerticalCalendarData(
+                                recyclerGenericAdapter.list.get(recyclerGenericAdapter.list.size - 1),
+                                false
+                            )
                         )
                         recyclerGenericAdapter.notifyDataSetChanged()
                         isLoading = false
@@ -785,8 +941,8 @@ class CalendarHomeScreen : Fragment(),
                 var calendar = Calendar.getInstance()
 
                 calendar.set(
-                        Calendar.MONTH,
-                        recyclerGenericAdapter.list.get(firstVisibleItem - 1).month
+                    Calendar.MONTH,
+                    recyclerGenericAdapter.list.get(firstVisibleItem - 1).month
                 )
                 calendar.set(Calendar.YEAR, recyclerGenericAdapter.list.get(firstVisibleItem).year)
                 initializeMonthTV(calendar, true)
@@ -795,7 +951,7 @@ class CalendarHomeScreen : Fragment(),
         rv_.addOnScrollListener(scrollListener)
 
         var itemTouchListener =
-                CalendarRecyclerItemTouchHelper(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT, this)
+            CalendarRecyclerItemTouchHelper(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT, this)
         ItemTouchHelper(itemTouchListener).attachToRecyclerView(rv_)
 
     }
@@ -811,17 +967,17 @@ class CalendarHomeScreen : Fragment(),
             return
 
         if (recyclerGenericAdapter.list.get(firstVisibleItem).year < selectedMonthModel.year || (recyclerGenericAdapter.list.get(
-                        firstVisibleItem
-                ).year == selectedMonthModel.year && recyclerGenericAdapter.list.get(firstVisibleItem).month < selectedMonthModel.currentMonth)
+                firstVisibleItem
+            ).year == selectedMonthModel.year && recyclerGenericAdapter.list.get(firstVisibleItem).month < selectedMonthModel.currentMonth)
         ) {
             for (index in firstVisibleItem..recyclerGenericAdapter.list.size) {
                 if (recyclerGenericAdapter.list.get(index).year == selectedMonthModel.year && recyclerGenericAdapter.list.get(
-                                index
-                        ).month == selectedMonthModel.currentMonth
+                        index
+                    ).month == selectedMonthModel.currentMonth
                 ) {
                     (rv_.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(
-                            index + 1,
-                            0
+                        index + 1,
+                        0
                     )
                     break
                 }
@@ -829,12 +985,12 @@ class CalendarHomeScreen : Fragment(),
         } else {
             for (index in 0..firstVisibleItem) {
                 if (recyclerGenericAdapter.list.get(index).year == selectedMonthModel.year && recyclerGenericAdapter.list.get(
-                                index
-                        ).month == selectedMonthModel.currentMonth
+                        index
+                    ).month == selectedMonthModel.currentMonth
                 ) {
                     (rv_.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(
-                            index + 1,
-                            0
+                        index + 1,
+                        0
                     )
                     break
                 }
@@ -845,12 +1001,30 @@ class CalendarHomeScreen : Fragment(),
     private fun setBackgroundStateAvailable(viewHolder: PFRecyclerViewAdapter<*>.ViewHolder) {
 
         activity?.let {
-            viewHolder.getView(R.id.action_layout).setBackgroundColor(ContextCompat.getColor(it.applicationContext, R.color.action_layout_available))
-            viewHolder.getView(R.id.border_top).setBackgroundColor(ContextCompat.getColor(it.applicationContext, R.color.action_layout_available_border))
-            viewHolder.getView(R.id.border_bottom).setBackgroundColor(ContextCompat.getColor(it.applicationContext, R.color.action_layout_available_border))
+            viewHolder.getView(R.id.action_layout).setBackgroundColor(
+                ContextCompat.getColor(
+                    it.applicationContext,
+                    R.color.action_layout_available
+                )
+            )
+            viewHolder.getView(R.id.border_top).setBackgroundColor(
+                ContextCompat.getColor(
+                    it.applicationContext,
+                    R.color.action_layout_available_border
+                )
+            )
+            viewHolder.getView(R.id.border_bottom).setBackgroundColor(
+                ContextCompat.getColor(
+                    it.applicationContext,
+                    R.color.action_layout_available_border
+                )
+            )
 
-            (viewHolder.getView(R.id.title_calendar_action_item) as TextView).setTextColor(ContextCompat.getColor(it.applicationContext, R.color.action_layout_available_title))
-            (viewHolder.getView(R.id.title_calendar_action_item) as TextView).text = getString(R.string.marked_working)
+            (viewHolder.getView(R.id.title_calendar_action_item) as TextView).setTextColor(
+                ContextCompat.getColor(it.applicationContext, R.color.action_layout_available_title)
+            )
+            (viewHolder.getView(R.id.title_calendar_action_item) as TextView).text =
+                getString(R.string.marked_working)
 
             (viewHolder.getView(R.id.flash_icon) as ImageView).setImageResource(R.drawable.ic_flash_green)
         }
@@ -885,12 +1059,12 @@ class CalendarHomeScreen : Fragment(),
                 temporaryData.isUnavailable = false
                 swipedToupdateGig = true
                 var data =
-                        UnavailableDataModel(
-                                temporaryData.getDateObj()
-                        )
+                    UnavailableDataModel(
+                        temporaryData.getDateObj()
+                    )
                 data.dayUnavailable = false
                 viewModelCustomPreference.updateCustomPreference(
-                        data
+                    data
                 )
 
                 recyclerGenericAdapter.notifyItemChanged(position)
@@ -951,68 +1125,70 @@ class CalendarHomeScreen : Fragment(),
     var calPosition = -1
     private fun showTodaysGigDialog(gigOnDay: Int) {
         val view =
-                layoutInflater.inflate(R.layout.dialog_confirm_gig_denial, null)
+            layoutInflater.inflate(R.layout.dialog_confirm_gig_denial, null)
 
         val dialog = AlertDialog.Builder(requireContext())
-                .setView(view)
-                .show()
+            .setView(view)
+            .show()
 
         view.findViewById<TextView>(R.id.dialog_message_tv)
-                .text =
-                "You have $gigOnDay Active Gig(s) on this day. All Gigs will be declined for selected day."
+            .text =
+            "You have $gigOnDay Active Gig(s) on this day. All Gigs will be declined for selected day."
 
         view.findViewById<View>(R.id.yesBtn)
-                .setOnClickListener {
-                    val date = temporaryData.getLocalDate()
-                    navigation.navigateTo("gigsListForDeclineBottomSheet", bundleOf(
-                            AppConstants.INTEN_EXTRA_DATE to date
-                    ))
+            .setOnClickListener {
+                val date = temporaryData.getLocalDate()
+                navigation.navigateTo(
+                    "gigsListForDeclineBottomSheet", bundleOf(
+                        AppConstants.INTEN_EXTRA_DATE to date
+                    )
+                )
 //                navigate(
 //                    R.id.gigsListForDeclineBottomSheet, bundleOf(
 //                        GigsListForDeclineBottomSheet.INTEN_EXTRA_DATE to date
 //                    )
 //                )
 
-                    makeChangesToCalendarItem(calPosition, true)
-                    dialog?.dismiss()
-                }
+                makeChangesToCalendarItem(calPosition, true)
+                dialog?.dismiss()
+            }
 
         view.findViewById<View>(R.id.noBtn)
-                .setOnClickListener {
-                    makeChangesToCalendarItem(calPosition, true)
-                    dialog?.dismiss()
-                }
+            .setOnClickListener {
+                makeChangesToCalendarItem(calPosition, true)
+                dialog?.dismiss()
+            }
     }
 
     fun makeChangesToCalendarItem(position: Int, status: Boolean) {
         temporaryData.isUnavailable = status
         var data =
-                UnavailableDataModel(
-                        temporaryData.getDateObj()
-                )
+            UnavailableDataModel(
+                temporaryData.getDateObj()
+            )
         data.dayUnavailable = status
         swipedToupdateGig = true
         viewModelCustomPreference.updateCustomPreference(
-                data
+            data
         )
         recyclerGenericAdapter.notifyItemChanged(position)
     }
 
     class OnSnackBarUndoClickListener(
-            var position: Int,
-            var recyclerGenericAdapter: RecyclerGenericAdapter<VerticalCalendarDataItemModel>,
-            var snackbar: Snackbar,
-            var viewModelCustomPreference: CustomPreferencesViewModel
+        var position: Int,
+        var recyclerGenericAdapter: RecyclerGenericAdapter<VerticalCalendarDataItemModel>,
+        var snackbar: Snackbar,
+        var viewModelCustomPreference: CustomPreferencesViewModel
     ) : View.OnClickListener {
         override fun onClick(v: View?) {
             temporaryData.isUnavailable = false
             var data =
-                    UnavailableDataModel(
-                            temporaryData.getDateObj()
-                    )
+                UnavailableDataModel(
+                    temporaryData.getDateObj()
+                )
             data.dayUnavailable = false
             viewModelCustomPreference.updateCustomPreference(
-                    data
+                data
             )
             recyclerGenericAdapter.notifyItemChanged(position)
             snackbar.dismiss()
@@ -1026,7 +1202,7 @@ class CalendarHomeScreen : Fragment(),
         var layout = snackbar.view as Snackbar.SnackbarLayout
         // Hide the text
         var textView =
-                layout.findViewById<TextView>(R.id.snackbar_text)
+            layout.findViewById<TextView>(R.id.snackbar_text)
         textView.visibility = View.INVISIBLE
 
         // Inflate our custom view
@@ -1079,6 +1255,5 @@ class CalendarHomeScreen : Fragment(),
         override fun onSlide(bottomSheet: View, slideOffset: Float) {
         }
     }
-
 
 }

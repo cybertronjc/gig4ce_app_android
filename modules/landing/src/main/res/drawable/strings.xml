@@ -1274,7 +1274,7 @@
     <string name="ambassador_program">Ambassador Program</string>
     <string name="open">Open</string>
     <string name="join_us_as_an_ambassador">Join Us as an Ambassador</string>
-    <string name="otp_sent">Otp sent</string>
+    <string name="otp_sent">OTP sent</string>
     <string name="application_check_pending"><![CDATA[Application Check : <b>Pending</b>]]></string>
     <string name="application_check_approved"><![CDATA[Application Check : <b>Approved</b>]]></string>
     <string name="application_check_rejected"><![CDATA[Application Check : <b>Rejected</b>]]></string>
@@ -1284,7 +1284,7 @@
     <string name="active">Active</string>
     <string name="generate_otp">Generate OTP</string>
     <string name="allow_gigforce_to_access_this_device_s_location">Allow Gigforce to access this device’s location?</string>
-    <string name="your_location_details_will_help_us_find_you_best_gig_near_you">Your location details will help us find you best Gig near you</string>
+    <string name="your_location_details_will_help_us_find_you_best_gig_near_you">Your location details will help us find best Gig near you</string>
     <string name="allow_access_location">Allow Access Location</string>
     <string name="location_error">There is some problem in fetching your location ,Please enable it to continue</string>
     <string name="activate">Activate</string>

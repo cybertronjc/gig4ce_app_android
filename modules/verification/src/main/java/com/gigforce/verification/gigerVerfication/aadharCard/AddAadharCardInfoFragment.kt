@@ -29,7 +29,6 @@ import com.gigforce.verification.R
 import com.jaeger.library.StatusBarUtil
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
-import com.ncorti.slidetoact.SlideToActView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info_2.*
 import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info_2.progressBar

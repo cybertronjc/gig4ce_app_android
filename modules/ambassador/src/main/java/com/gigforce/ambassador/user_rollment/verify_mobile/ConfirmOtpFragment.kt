@@ -160,7 +160,7 @@ class ConfirmOtpFragment : Fragment(), LocationUpdates.LocationUpdateCallbacks {
                         confirming_otp_pb.visible()
                     }
                     is Lce.Content -> {
-                        showToast("Otp Confirmed, Profile Created")
+                        showToast("OTP Confirmed, Profile Created")
 
                         if (mode == EnrollmentConstants.MODE_EDIT) {
                             navigation.navigateTo(

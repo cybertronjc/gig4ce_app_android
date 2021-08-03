@@ -96,13 +96,14 @@ class NavManagerImpl @Inject constructor(
 
     override fun navigateToPlayVideoDialogFragment(
         fragment: Fragment,
+        moduleId : String?,
         lessonId: String,
         shouldShowFeedbackDialog: Boolean
     ) {
         PlayVideoDialogFragment.launch(
             childFragmentManager = fragment.childFragmentManager,
+            moduleId = if(moduleId.isNullOrBlank()) "" else moduleId,
             lessonId = lessonId,
-            moduleId = "",
             shouldShowFeedbackDialog = shouldShowFeedbackDialog,
             disableLessonCompleteAction = true
         )

@@ -21,18 +21,27 @@ class ClientActivationLayoutComponent(context: Context, attrs: AttributeSet?) :
     lateinit var navigation: INavigation
 
     override fun bind(data: Any?) {
-        if(data is ClientActivationLayoutDVM){
+        if (data is ClientActivationLayoutDVM) {
             repository.getData().observeForever {
                 if (it.isNotEmpty()) {
                     var itemToShow = data.showItem
                     if (itemToShow == 0) {
                         super.bind(FeatureLayoutDVM("", "", emptyList()))
-                    } else {
-                        val list: List<Any> = it.slice(IntRange(0, itemToShow - 1))
+                    } else if(it.isNotEmpty()) {
+
+                        val list: List<Any> = it.slice(
+                            IntRange(
+                                0,
+                                if (it.size >= itemToShow) itemToShow - 1 else it.size-1
+                            )
+                        )
                         val list1 = list.toMutableList()
                         list1.add(SeeMoreItemDVM("", "", data.seeMoreNav))
-                        super.bind(FeatureLayoutDVM(data.image,data.title, list1))
+                        super.bind(FeatureLayoutDVM(data.image, data.title, list1))
 
+                    }
+                    else{
+                        super.bind(FeatureLayoutDVM("", "", emptyList()))
                     }
                 } else {
                     super.bind(FeatureLayoutDVM("", "", emptyList()))

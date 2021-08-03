@@ -210,5 +210,16 @@
     <string name="and">and</string>
     <string name="more">more</string>
     <string name="find_gigs_on">find gigs on Gigforce.</string>
+    <string name="upload_pan_card_new">Please upload your PAN Card\nfor verification</string>
+    <string name="upload_bank_account_new">Upload your Bank Passbook\nFront Page</string>
+    <string name="why_do_we_need_this_bank">A Bank Passbook is mandatory for profile verification. It helps verify your name and date of birth and also helps with payments to your wallet.</string>
+    <string name="got_it">Got it</string>
+    <string name="bank_name_too_short">Bank name is too short</string>
+    <string name="enter_bank_name">Enter Bank Name</string>
+    <string name="select_dl_no">Select Driving License Number</string>
+    <string name="select_dl_dob">Select Date of Birth</string>
+    <string name="upload_driving_license_front_side_new">Upload your Driving License\nfront Side</string>
+    <string name="upload_driving_license_back_side_new">Upload your Driving License\nback Side</string>
+    <string name="why_do_we_need_this_dl">A driving license is mandatory for driving and delivery gigs</string>
 
 </resources>

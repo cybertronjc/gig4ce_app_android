@@ -18,4 +18,6 @@ class BuildConfigImp @Inject constructor(): IBuildConfig {
     override val debugBuild: Boolean get() = BuildConfig.DEBUG
     override val baseUrl: String get() = BuildConfig.BASE_URL
     override fun getUserRegisterInfoUrl(): String = BuildConfig.GET_USER_REGISTER_INFO_URL
+    override fun getStorageBaseUrl(): String = BuildConfig.STORAGE_BASE_URL
+    override fun getPanelBaseUrl(): String = BuildConfig.PANEL_BASE_URL
 }

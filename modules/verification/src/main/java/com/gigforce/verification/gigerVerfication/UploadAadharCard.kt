@@ -34,13 +34,11 @@ import com.gigforce.verification.gigerVerfication.aadharCard.AddAadharCardInfoFr
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info_2.*
 import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info_main_2.*
 import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info_main_2.topSeaparator
 import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info_main_2.whyWeNeedThisTV
 import kotlinx.android.synthetic.main.fragment_add_aadhar_card_view_2.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
-import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation.*
 import kotlinx.android.synthetic.main.upload_aadhar_card_fragment.*
 import javax.inject.Inject
 

@@ -25,23 +25,10 @@
         android:layout_marginEnd="@dimen/size18"
         android:fontFamily="@font/lato"
         android:gravity="center_horizontal"
+        android:visibility="gone"
         android:text="@string/allow_gigforce_to_access_this_device_s_location"
         android:textColor="#333333"
         android:textSize="@dimen/font16"
-        android:textStyle="normal" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/size42"
-        android:layout_marginTop="@dimen/size7"
-        android:layout_marginEnd="@dimen/size41"
-        android:fontFamily="@font/lato"
-
-        android:gravity="center_horizontal"
-        android:text="@string/your_location_details_will_help_us_find_you_best_gig_near_you"
-        android:textColor="@color/warm_grey"
-        android:textSize="@dimen/font14"
         android:textStyle="normal" />
 
     <TextView
@@ -51,7 +38,6 @@
         android:layout_marginStart="@dimen/size16"
         android:layout_marginTop="@dimen/size16"
         android:layout_marginEnd="@dimen/size16"
-        android:layout_marginBottom="@dimen/size40"
         android:background="@drawable/rect_bg_rad_rad_5_sg_e42c64_eg_990077"
         android:gravity="center_horizontal"
         android:minHeight="@dimen/size36"
@@ -61,5 +47,21 @@
         android:textColor="@color/white"
         android:textSize="@dimen/font18"
         app:layout_constraintBottom_toBottomOf="parent" />
+
+    <TextView
+        android:id="@+id/description_bg_service"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/size42"
+        android:layout_marginTop="@dimen/size_20"
+        android:layout_marginEnd="@dimen/size41"
+        android:layout_marginBottom="@dimen/size40"
+        android:fontFamily="@font/lato"
+        android:gravity="center_horizontal"
+        android:text="@string/background_location_details_subtitle"
+        android:textColor="@color/warm_grey"
+        android:textSize="@dimen/font14"
+        android:textStyle="normal" />
+
 
 </LinearLayout>

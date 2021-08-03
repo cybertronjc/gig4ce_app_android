@@ -45,6 +45,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_contacts.*
+import okhttp3.MultipartBody
 import javax.inject.Inject
 
 @AndroidEntryPoint

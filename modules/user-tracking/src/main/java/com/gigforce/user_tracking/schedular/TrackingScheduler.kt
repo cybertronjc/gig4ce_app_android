@@ -54,42 +54,15 @@ class TrackingScheduler constructor(
         scheduleAlarmsBetween(
                 alarmTimes = possibleAlarmsBtw,
                 gigId = gig.gigId,
-                userName = profile?.name
+                userName = profile?.name,
+                tradingName = gig.getFullCompanyName() ?: "Gigforce"
         )
     }
-
-//    private suspend fun scheduleTrackers() {
-//        try {
-//
-//            val gigs = gigsRepository.getOngoingAndUpcomingGigsFor(LocalDate.now())
-//            val profile = profileFirebaseRepository.getProfileDataIfExist()
-//
-//            for (gig in gigs) {
-//
-//                val possibleAlarmsBtw = TrackingScheduleCalculator.getPossibleAlarmTimesBetween(
-//                        start = gig.startDateTime,
-//                        end = gig.endDateTime
-//                )
-//                scheduleAlarmsBetween(
-//                        alarmTimes = possibleAlarmsBtw,
-//                        gigId = gig.gigId,
-//                        userName = profile?.name
-//                )
-//            }
-//        } catch (e: Exception) {
-//            e.printStackTrace()
-//            CrashlyticsLogger.e(
-//                    TAG,
-//                    "Scheduling Alarms",
-//                    e
-//            )
-//        }
-//    }
-
 
     private fun scheduleAlarmsBetween(
             alarmTimes: List<LocalDateTime>,
             gigId: String,
+            tradingName : String,
             userName: String?
 
     ) {
@@ -100,6 +73,7 @@ class TrackingScheduler constructor(
             action = TrackingConstants.ACTION_START_OR_RESUME_SERVICE
             this.putExtra(TrackingConstants.SERVICE_INTENT_EXTRA_GIG_ID, gigId)
             this.putExtra(TrackingConstants.SERVICE_INTENT_EXTRA_USER_NAME, userName)
+            this.putExtra(TrackingConstants.SERVICE_INTENT_EXTRA_TRADING_NAME, tradingName)
         }
 
         var alarmsId = 0

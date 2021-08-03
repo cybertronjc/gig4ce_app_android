@@ -18,6 +18,7 @@ import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.utils.MDUtil.textChanged
 import com.gigforce.ambassador.EnrollmentConstants
 import com.gigforce.ambassador.R
+import com.gigforce.ambassador.user_rollment.kycdocs.VerificationConstants
 import com.gigforce.ambassador.user_rollment.user_details.UserDetailsViewModel
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.core.IOnBackPressedOverride
@@ -57,13 +58,21 @@ class AddCurrentAddressFragment : Fragment(),IOnBackPressedOverride {
         savedInstanceState: Bundle?
     ) = inflater.inflate(R.layout.fragment_ambsd_user_current_address, container, false)
 
+    var navigationsForBundle = ArrayList<String>()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navFragmentsData = activity as NavFragmentsData
         getDataFromIntents(arguments, savedInstanceState)
+        initializeNavigations()
         setUpUiForAmbOrUser()
         initListeners()
         initViewModel()
+    }
+    private fun initializeNavigations() {
+        navigationsForBundle.add("userinfo/addUserPanCardInfoFragment")
+        navigationsForBundle.add("userinfo/addUserDrivingLicenseInfoFragment")
+        navigationsForBundle.add("userinfo/addUserAadharCardInfoFragment")
     }
 
     private fun setUpUiForAmbOrUser() {
@@ -296,7 +305,7 @@ class AddCurrentAddressFragment : Fragment(),IOnBackPressedOverride {
     private fun initViewModel() {
         viewModel.submitUserDetailsState
             .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-
+                it?:return@Observer
                 when (it) {
                     Lse.Loading -> {
                         // UtilMethods.showLoading(requireContext())
@@ -311,7 +320,8 @@ class AddCurrentAddressFragment : Fragment(),IOnBackPressedOverride {
                             showToast(getString(R.string.user_current_address_details_sub))
                             navigation.navigateTo("userinfo/addUserBankDetailsInfoFragment",bundleOf(
                                 EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
-                                EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
+                                EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName,
+                                VerificationConstants.NAVIGATION_STRINGS to navigationsForBundle
                             ))
 //                            navigate(
 //                                R.id.addUserBankDetailsInfoFragment, bundleOf(

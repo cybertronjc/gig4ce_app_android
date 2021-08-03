@@ -1,6 +1,7 @@
 package com.gigforce.learning.learning.courseDetails
 
 import android.util.Log
+import androidx.core.os.bundleOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,6 +15,7 @@ import com.gigforce.core.datamodels.learning.Course
 import com.gigforce.core.datamodels.learning.CourseContent
 import com.gigforce.common_ui.viewdatamodels.models.Module
 import com.gigforce.common_ui.viewdatamodels.models.progress.ModuleProgress
+import com.gigforce.core.StringConstants
 //import com.gigforce.app.utils.Lce
 import kotlinx.coroutines.launch
 
@@ -192,10 +194,13 @@ class CourseDetailsViewModel constructor(
 
                 courseLessons.forEach {
                     if (it.type == CourseContent.TYPE_ASSESSMENT){
-                        assessmentsAndLessons.add(AssessmentCardDVM(title = it.title, completed = it.completed, videoLengthString = it.videoLengthString))
+                        assessmentsAndLessons.add(AssessmentCardDVM(title = it.title, completed = it.completed, videoLengthString = it.videoLengthString,navPath = "learning/assessment",args =  bundleOf(
+                                StringConstants.INTENT_LESSON_ID.value to it.id,
+                                StringConstants.INTENT_MODULE_ID.value to it.moduleId
+                        )))
                     }
                     else if (it.type == CourseContent.TYPE_VIDEO){
-                        assessmentsAndLessons.add(VideoPlayCardDVM(title = it.title, coverPicture = it.coverPicture, completed = it.completed, completionProgress = it.completionProgress, lessonTotalLength = it.lessonTotalLength, videoLengthString = it.videoLengthString))
+                        assessmentsAndLessons.add(VideoPlayCardDVM(title = it.title, coverPicture = it.coverPicture, completed = it.completed, completionProgress = it.completionProgress, lessonTotalLength = it.lessonTotalLength, videoLengthString = it.videoLengthString,lessonId = it.id,moduleId = it.moduleId,shouldShowFeedbackDialog = it.shouldShowFeedbackDialog))
                     }
                 }
                 _courseLessonsAndAssessments.value = assessmentsAndLessons
@@ -259,10 +264,13 @@ class CourseDetailsViewModel constructor(
                         var assessmentsAndLessons = ArrayList<Any>()
                         currentLessons!!.forEach {
                             if (it.type == CourseContent.TYPE_ASSESSMENT){
-                                assessmentsAndLessons.add(AssessmentCardDVM(title = it.title, completed = it.completed, videoLengthString = it.videoLengthString))
+                                assessmentsAndLessons.add(AssessmentCardDVM(title = it.title, completed = it.completed, videoLengthString = it.videoLengthString,navPath = "learning/assessment",args =  bundleOf(
+                                        StringConstants.INTENT_LESSON_ID.value to it.id,
+                                        StringConstants.INTENT_MODULE_ID.value to it.moduleId
+                                )))
                             }
                             else if (it.type == CourseContent.TYPE_VIDEO){
-                                assessmentsAndLessons.add(VideoPlayCardDVM(title = it.title, coverPicture = it.coverPicture, completed = it.completed, completionProgress = it.completionProgress, lessonTotalLength = it.lessonTotalLength, videoLengthString = it.videoLengthString))
+                                assessmentsAndLessons.add(VideoPlayCardDVM(title = it.title, coverPicture = it.coverPicture, completed = it.completed, completionProgress = it.completionProgress, lessonTotalLength = it.lessonTotalLength, videoLengthString = it.videoLengthString,lessonId = it.id,moduleId = it.moduleId,shouldShowFeedbackDialog = it.shouldShowFeedbackDialog))
                             }
                         }
                         _courseLessonsAndAssessments.value = assessmentsAndLessons

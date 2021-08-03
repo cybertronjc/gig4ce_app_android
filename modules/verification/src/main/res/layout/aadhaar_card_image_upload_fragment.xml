@@ -35,7 +35,7 @@
                 android:layout_marginStart="@dimen/dp_sm1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:docinfotext="Please upload your Aadhaar Card (Front and Back Side) for Document verification Process"
+                app:docinfotext="Please upload your Aadhaar card or enter the details manually"
                 app:missingdoctext="I don’t have an Aadhaar Card"
                 app:title="Aadhaar Card"
                 app:uppercaption="You need to upload" />
@@ -46,6 +46,7 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
+                    android:visibility="gone"
                     app:layout_constraintTop_toBottomOf="@+id/toplayoutblock">
 
                     <com.gigforce.common_ui.components.atoms.GrayLine
@@ -55,7 +56,8 @@
                         android:layout_marginTop="@dimen/dp_xl1"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:visibility="gone"/>
 
                     <TextView
                         android:id="@+id/textView10"
@@ -63,7 +65,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dp_sm1"
-                        android:layout_marginTop="@dimen/dp_xl1"
+                        android:layout_marginTop="@dimen/dp_large"
                         android:layout_marginRight="@dimen/dp_sm1"
                         android:text="Please confirm the following information "
                         app:layout_constraintEnd_toEndOf="parent"
@@ -189,7 +191,7 @@
         android:layout_marginStart="@dimen/size_16"
         android:layout_marginEnd="@dimen/size_16"
         android:layout_marginBottom="@dimen/size_22"
-        android:background="@drawable/app_gradient_button"
+        android:background="@drawable/submit_button_selector"
         android:gravity="center"
         android:minHeight="@dimen/size_36"
         android:text="Next"
@@ -208,5 +210,33 @@
         app:layout_constraintEnd_toEndOf="@+id/submit_button"
         app:layout_constraintStart_toStartOf="@+id/submit_button"
         app:layout_constraintTop_toTopOf="@+id/submit_button" />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/screenLoaderBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:elevation="@dimen/dp_xsm2"
+        android:clickable="true"
+        android:visibility="gone">
+    <ProgressBar
+        android:id="@+id/loader"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <WebView
+        android:id="@+id/digilocker_webview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="5dp"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

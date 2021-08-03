@@ -13,7 +13,6 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -49,9 +48,10 @@ enum class DrivingLicenseSides {
     FRONT_SIDE,
     BACK_SIDE
 }
+
 @AndroidEntryPoint
 class AddUserDrivingLicenseInfoFragment : Fragment(),
-    UserDetailsFilledDialogFragmentResultListener, IOnBackPressedOverride{
+    UserDetailsFilledDialogFragmentResultListener, IOnBackPressedOverride {
 
     companion object {
         const val REQUEST_CODE_UPLOAD_DL = 2333
@@ -73,7 +73,8 @@ class AddUserDrivingLicenseInfoFragment : Fragment(),
     private var gigerVerificationStatus: GigerVerificationStatus? = null
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
 
-    @Inject lateinit var navigation : INavigation
+    @Inject
+    lateinit var navigation: INavigation
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -294,10 +295,12 @@ class AddUserDrivingLicenseInfoFragment : Fragment(),
     }
 
     private fun showWhyWeNeedThisDialog() {
-        navigation.navigateToWhyNeedThisBSFragment(childFragmentManager,bundleOf(
-            AppConstants.INTENT_EXTRA_TITLE to getString(R.string.why_do_we_need_this),
-            AppConstants.INTENT_EXTRA_CONTENT to getString(R.string.why_we_need_this_dl)
-        ))
+        navigation.navigateToWhyNeedThisBSFragment(
+            childFragmentManager, bundleOf(
+                AppConstants.INTENT_EXTRA_TITLE to getString(R.string.why_do_we_need_this),
+                AppConstants.INTENT_EXTRA_CONTENT to getString(R.string.why_we_need_this_dl)
+            )
+        )
 //        WhyWeNeedThisBottomSheet.launch(
 //            childFragmentManager = childFragmentManager,
 //            title = getString(R.string.why_do_we_need_this),
@@ -409,7 +412,12 @@ class AddUserDrivingLicenseInfoFragment : Fragment(),
         photoCropIntent.putExtra("folder", "verification")
         photoCropIntent.putExtra("detectFace", 0)
         photoCropIntent.putExtra("file", "aadhar_card_front.jpg")
-        navigation.navigateToPhotoCrop(photoCropIntent,REQUEST_CODE_UPLOAD_DL,requireContext(),this)
+        navigation.navigateToPhotoCrop(
+            photoCropIntent,
+            REQUEST_CODE_UPLOAD_DL,
+            requireContext(),
+            this
+        )
 //        startActivityForResult(
 //            photoCropIntent,
 //            REQUEST_CODE_UPLOAD_DL
@@ -430,7 +438,12 @@ class AddUserDrivingLicenseInfoFragment : Fragment(),
         photoCropIntent.putExtra("folder", "verification")
         photoCropIntent.putExtra("detectFace", 0)
         photoCropIntent.putExtra("file", "aadhar_card_back.jpg")
-        navigation.navigateToPhotoCrop(photoCropIntent, REQUEST_CODE_UPLOAD_DL,requireContext(),this)
+        navigation.navigateToPhotoCrop(
+            photoCropIntent,
+            REQUEST_CODE_UPLOAD_DL,
+            requireContext(),
+            this
+        )
 //        startActivityForResult(
 //            photoCropIntent,
 //            REQUEST_CODE_UPLOAD_DL
@@ -668,10 +681,12 @@ class AddUserDrivingLicenseInfoFragment : Fragment(),
     }
 
     override fun onReUploadDocumentsClicked() {
-        navigation.navigateTo("userinfo/addUserBankDetailsInfoFragment",bundleOf(
-            EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
-            EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
-        ))
+        navigation.navigateTo(
+            "userinfo/addUserBankDetailsInfoFragment", bundleOf(
+                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
+            )
+        )
 //        navigate(
 //            R.id.addUserBankDetailsInfoFragment, bundleOf(
 //                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,

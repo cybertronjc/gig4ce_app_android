@@ -22,7 +22,7 @@ class VerificationMainViewModel @Inject constructor (private val iBuildConfigVM:
     var allDocumentsVerified : LiveData<Boolean> = _allDocumentsVerified
 
     val verificationKycRepo = VerificationKycRepo(iBuildConfigVM)
-
+    val TAP_TO_SELECT = "Tap to select"
     init {
         getAllDocuments()
     }
@@ -30,20 +30,20 @@ class VerificationMainViewModel @Inject constructor (private val iBuildConfigVM:
     private fun getAllDocuments() {
 
         var allDocs = ArrayList<SimpleCardDVM>()
-        allDocs.add(SimpleCardDVM("PAN Card","Takes about 45 seconds", R.drawable.ic_badge_black_24dp,"verification/pancardimageupload", false))
-        allDocs.add(SimpleCardDVM("Aadhaar Card","Takes about 45 seconds",R.drawable.ic_account_box_black_24dp, "verification/aadhaarcardimageupload", false))
-        allDocs.add(SimpleCardDVM("Driving licence","Takes about 45 seconds",R.drawable.ic_directions_car_black_24dp, "verification/drivinglicenseimageupload", false))
-        allDocs.add(SimpleCardDVM("Bank Details","Takes about 45 seconds",R.drawable.ic_account_balance_black_24dp, "verification/bank_account_fragment", false))
+        allDocs.add(SimpleCardDVM("PAN Card","Tap to select", R.drawable.ic_badge_black_24dp,"verification/pancardimageupload",false))
+        allDocs.add(SimpleCardDVM("Driving licence","Tap to select",R.drawable.ic_directions_car_black_24dp, "verification/drivinglicenseimageupload", false))
+        allDocs.add(SimpleCardDVM("Bank Details","Tap to select",R.drawable.ic_account_balance_black_24dp, "verification/bank_account_fragment", false))
+        allDocs.add(SimpleCardDVM("Aadhaar Card","Tap to select",R.drawable.ic_account_box_black_24dp, "verification/aadhaarcardimageupload", false))
         _allDocumentsData.value = allDocs
 
         verificationKycRepo.db.collection("Verification").document(verificationKycRepo.getUID()).addSnapshotListener { value, error ->
             value?.data?.let {
                 val doc = value.toObject(VerificationBaseModel::class.java)
                 var allDocs = ArrayList<SimpleCardDVM>()
-                allDocs.add(SimpleCardDVM("PAN Card","Takes about 45 seconds", R.drawable.ic_badge_black_24dp,"verification/pancardimageupload", doc?.pan_card?.verified))
-                allDocs.add(SimpleCardDVM("Aadhaar Card","Takes about 45 seconds",R.drawable.ic_account_box_black_24dp, "verification/aadhaarcardimageupload", doc?.aadhar_card?.verified))
-                allDocs.add(SimpleCardDVM("Driving licence","Takes about 45 seconds",R.drawable.ic_directions_car_black_24dp, "verification/drivinglicenseimageupload", doc?.driving_license?.verified))
-                allDocs.add(SimpleCardDVM("Bank Details","Takes about 45 seconds",R.drawable.ic_account_balance_black_24dp, "verification/bank_account_fragment", doc?.bank_details?.verified))
+                allDocs.add(SimpleCardDVM(title = "PAN Card",subtitle = getSubString(doc?.pan_card?.verified,doc?.pan_card?.status), image = R.drawable.ic_badge_black_24dp,navpath = "verification/pancardimageupload", color = getSubStringColor(doc?.pan_card?.verified,doc?.pan_card?.status)))
+                allDocs.add(SimpleCardDVM(title = "Driving licence",subtitle = getSubString(doc?.driving_license?.verified,doc?.driving_license?.status),image = R.drawable.ic_directions_car_black_24dp, navpath = "verification/drivinglicenseimageupload", color = getSubStringColor(doc?.driving_license?.verified,doc?.driving_license?.status)))
+                allDocs.add(SimpleCardDVM(title = "Bank Details",subtitle = getSubString(doc?.bank_details?.verified,doc?.bank_details?.status),image = R.drawable.ic_account_balance_black_24dp, navpath = "verification/bank_account_fragment", color = getSubStringColor(doc?.bank_details?.verified,doc?.bank_details?.status)))
+                allDocs.add(SimpleCardDVM(title = "Aadhaar Card",subtitle = getSubString(doc?.aadhar_card?.verified,""),image = R.drawable.ic_account_box_black_24dp, navpath = "verification/aadhaarcardimageupload", color = getSubStringColor(doc?.aadhar_card?.verified,"")))
                 _allDocumentsData.value = allDocs
                 doc?.let {
                     var allVerified = true
@@ -70,6 +70,18 @@ class VerificationMainViewModel @Inject constructor (private val iBuildConfigVM:
         }
 
 
+    }
+
+    fun getSubString(isVerified : Boolean ? =false, status : String? = "") : String{
+            if(isVerified == true)return "Verified"
+            if(status?.equals("started") == true) return "Pending"
+            return TAP_TO_SELECT
+    }
+
+    fun getSubStringColor(isVerified : Boolean ? =false, status : String? = "") : String{
+        if(isVerified == true)return "GREEN"
+        if(status?.equals("started") == true) return "YELLOW"
+        return ""
     }
 
 }
