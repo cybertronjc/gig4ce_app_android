@@ -88,7 +88,7 @@ class GigerProfileCardComponent(context: Context, attrs: AttributeSet?) : FrameL
                     companyInitials,
                     ResourcesCompat.getColor(resources, R.color.lipstick, null)
                 )
-                if (title.isNotEmpty()) logoImg.invisible() else logoImg.visible()
+                if (title.isEmpty()) logoImg.invisible() else logoImg.visible()
                 logoImg.setImageDrawable(drawable)
             }
             else {
