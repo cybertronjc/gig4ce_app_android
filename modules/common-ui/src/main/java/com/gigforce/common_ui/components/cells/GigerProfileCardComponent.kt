@@ -9,9 +9,11 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.R
+import com.gigforce.common_ui.core.TextDrawable
 import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 import com.gigforce.common_ui.shimmer.ShimmerHelper
 import com.gigforce.common_ui.viewdatamodels.GigerProfileCardDVM
@@ -47,10 +49,19 @@ class GigerProfileCardComponent(context: Context, attrs: AttributeSet?) : FrameL
 
     }
 
-    fun setProfilePicture(image: String?){
+    fun setProfilePicture(image: String?, gigerName: String){
         image?.let {
             if (image.isEmpty()) {
-                profileImg.setImageDrawable(resources.getDrawable(R.drawable.ic_avatar_male))
+                val companyInitials = if (gigerName.isNullOrBlank())
+                    "G"
+                else
+                    gigerName[0].toString().toUpperCase()
+
+                val drawable = TextDrawable.builder().buildRound(
+                    companyInitials,
+                    resources.getColor(R.color.lipstick)
+                )
+                profileImg.setImageDrawable(drawable)
             }
             else {
                 val profilePicRef: StorageReference =
@@ -65,13 +76,25 @@ class GigerProfileCardComponent(context: Context, attrs: AttributeSet?) : FrameL
 
     }
 
-    fun setJobProfileLogo(image: String?){
-        image?.let {
-            if (image.isEmpty()) logoImg.invisible()
+    fun setJobProfileLogo(title: String, companyLogo: String){
+        companyLogo.let {
+            if (it.isEmpty()){
+                val companyInitials = if (title.isNullOrBlank())
+                    "C"
+                else
+                    title[0].toString().toUpperCase()
+
+                val drawable = TextDrawable.builder().buildRound(
+                    companyInitials,
+                    ResourcesCompat.getColor(resources, R.color.lipstick, null)
+                )
+                if (title.isNotEmpty()) logoImg.invisible() else logoImg.visible()
+                logoImg.setImageDrawable(drawable)
+            }
             else {
                 logoImg.visible()
                 Glide.with(context)
-                    .load(image)
+                    .load(companyLogo)
                     .placeholder(ShimmerHelper.getShimmerDrawable())
                     .into(logoImg)
             }
@@ -104,20 +127,20 @@ class GigerProfileCardComponent(context: Context, attrs: AttributeSet?) : FrameL
     suspend fun setGigerProfileData(userUid: String){
         val profiledata = profileFirebaseRepository.getProfileData(userUid)
         setGigerName(profiledata.name)
-        setProfilePicture(profiledata.profileAvatarThumbnail)
+        setProfilePicture(profiledata.profileAvatarThumbnail, profiledata.name)
         setGigerNumber(profiledata.loginMobile)
     }
 
     fun setJobProfileData(title: String, companyLogo: String){
         setJobProfileTitle(title)
-        setJobProfileLogo(companyLogo)
+        setJobProfileLogo(title, companyLogo)
     }
 
     fun setProfileCard(gigerProfileCardDVM: GigerProfileCardDVM){
         gigerProfileCardDVM?.let {
             setGigerName(it.name)
             setGigerNumber(it.number)
-            setProfilePicture(it.gigerImg)
+            setProfilePicture(it.gigerImg, it.name)
             setJobProfileData(it.jobProfileName, it.jobProfileLogo)
 
         }

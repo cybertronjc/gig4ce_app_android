@@ -11,6 +11,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.utils.UtilMethods
 import com.gigforce.core.base.BaseFragment2
@@ -22,9 +23,11 @@ import com.gigforce.core.utils.Lce
 import com.gigforce.lead_management.LeadManagementConstants
 import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
+import com.gigforce.lead_management.databinding.FragmentJoiningListBinding
 import com.gigforce.lead_management.databinding.GigerOnboardingFragmentBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import java.util.regex.Pattern
 import javax.inject.Inject
 
@@ -60,6 +63,7 @@ class GigerOnboardingFragment : BaseFragment2<GigerOnboardingFragmentBinding>(
             arguments,
             savedInstanceState
         )
+        initToolbar(viewBinding)
         initListeners()
         initViewModel()
     }
@@ -102,14 +106,6 @@ class GigerOnboardingFragment : BaseFragment2<GigerOnboardingFragmentBinding>(
 
         }
 
-        viewBinding.toolbar.apply {
-            hideActionMenu()
-            showTitle("Mobile Number")
-            setBackButtonListener(View.OnClickListener {
-                activity?.onBackPressed()
-            })
-        }
-
         viewBinding.changeNumber.setOnClickListener {
             viewBinding.mobileNoEt.setText("")
             viewBinding.mobileNoEt.requestFocus()
@@ -117,6 +113,9 @@ class GigerOnboardingFragment : BaseFragment2<GigerOnboardingFragmentBinding>(
             viewBinding.submitButton.tag = "next"
             viewBinding.submitButton.setText("Next")
             viewBinding.notRegisteredLayout.gone()
+            viewBinding.tvPleaseEnter.setText(resources.getString(R.string.please_enter))
+            viewBinding.makeSureText.setText(resources.getString(R.string.registered))
+            viewBinding.enterMobileLabel.setText(resources.getString(R.string.gigers_phone))
             showKeyboard()
 
         }
@@ -152,6 +151,16 @@ class GigerOnboardingFragment : BaseFragment2<GigerOnboardingFragmentBinding>(
             )
         }
 
+    }
+
+    private fun initToolbar(
+        viewBinding: GigerOnboardingFragmentBinding
+    ) = viewBinding.toolbarOnboarding.apply {
+        this.hideActionMenu()
+        this.showTitle("Mobile Number")
+        this.setBackButtonListener(View.OnClickListener {
+            activity?.onBackPressed()
+        })
     }
 
     private fun validateDataAndsubmit() {

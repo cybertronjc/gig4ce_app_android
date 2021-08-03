@@ -66,9 +66,9 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
     private fun initToolbar(
         viewBinding: SelectGigApplicationToActivateFragmentBinding
     ) = viewBinding.toolbar.apply {
-
-        showTitle("Gig Application")
         hideSearchOption()
+        showTitle("Gig Application")
+        hideSubTitle()
         setBackButtonListener {
             navigation.popBackStack()
         }
@@ -174,13 +174,13 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
         viewModel.selectedJobProfileOverview.observe(viewLifecycleOwner, Observer {
             logger.d(TAG, "selected job profile $it")
             if (it.ongoing) {
-                submitBtn.text = "Next"
                 if ("Application submitted".equals(it.status, true)) {
                     submitBtn.isEnabled = true
                     submitBtn.background = resources.getDrawable(R.drawable.app_gradient_button)
                 } else {
-                    submitBtn.isEnabled = false
-                    submitBtn.background = resources.getDrawable(R.drawable.app_gradient_button_disabled)
+                    submitBtn.text = "Share Referral Link"
+                    submitBtn.isEnabled = true
+                    submitBtn.background = resources.getDrawable(R.drawable.app_gradient_button)
                 }
             }else {
                 submitBtn.text = "Share Referral Link"

@@ -21,6 +21,7 @@ open class GigAppListRecyclerItemData(
         val tradeName: String,
         val profileName: String,
         val companyLogo: String,
+        val ongoing: Boolean,
         var selected: Boolean = false,
         val selectGigAppViewModel: SelectGigApplicationToActivateViewModel? = null,
         val shareApplicationLinkViewModel: ShareApplicationLinkViewModel? = null

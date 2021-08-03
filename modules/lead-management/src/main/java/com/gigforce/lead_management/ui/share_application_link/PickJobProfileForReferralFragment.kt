@@ -170,6 +170,7 @@ class PickJobProfileForReferralFragment : BaseFragment2<FragmentPickJobProfileFo
                 tradeName = it.tradeName ?: "Trade name N/A",
                 profileName = it.profileName ?: "Profile N/A",
                 companyLogo = it.companyLogo ?: "",
+                it.ongoing,
                 selected = it.isSelected,
                 selectGigAppViewModel = null,
                 shareApplicationLinkViewModel = viewModel

@@ -252,9 +252,6 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentLayoutB
                 ChipGroupComponent.OnCustomCheckedChangeListener {
                 override fun onCheckedChangeListener(model: ChipGroupModel) {
                     try {
-                        //make select location layout visible
-                        viewBinding.selectLocTV.visible()
-                        viewBinding.locationLayout2.visible()
 
                         //make submit button enabled
                         viewBinding.submitBtn.background = resources.getDrawable(R.drawable.app_gradient_button)
@@ -264,7 +261,7 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentLayoutB
                         viewBinding.searchLocation1.setAdapter(null)
                         viewBinding.searchLocation1.setText("")
                         arrayAdapter1?.clear()
-                        jobLocalities = jobProfile.locality
+                        jobLocalities = jobProfile.locality.filter { it.cityId?.equals(cityAndLocations.get(model.chipId).id) == true }
                         jobStores = jobProfile.stores.filter { it.cityId?.equals(cityAndLocations.get(model.chipId).id) == true }
                         locationChipGroup.removeAllViews()
                         processJobLocations(jobLocalities, jobStores)
@@ -300,52 +297,69 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentLayoutB
             logger.d(TAG, "processing data, Status :  : ${locationChips} JobStores")
             count++
         }
+        //make select location layout visible
+        if (locationChips.isNotEmpty()){
+            selectLocTV.visible()
+            locationLayout2.visible()
+            viewBinding.searchLocation1.gone()
+            viewBinding.spinnerDrop.gone()
+//            if (locationChips.size == 1){
+//                locationChipGroup.addChips(locationChips, isSingleSelection = true, true)
+//            } else {
+//                locationChipGroup.addChips(locationChips, isSingleSelection = true, false)
+//            }
+            locationChipGroup.addChips(locationChips, isSingleSelection = true, false)
 
-       locationChipGroup.addChips(locationChips, isSingleSelection = true, false)
+            //extract dropdown from JobLocations by grouping into one list with type : Locality, Hub, Store
+            viewBinding.locationChipGroup.setOnCheckedChangeListener(object : ChipGroupComponent.OnCustomCheckedChangeListener{
+                override fun onCheckedChangeListener(model1: ChipGroupModel) {
+                    //make dropdown visible
 
-        //extract dropdown from JobLocations by grouping into one list with type : Locality, Hub, Store
-        viewBinding.locationChipGroup.setOnCheckedChangeListener(object : ChipGroupComponent.OnCustomCheckedChangeListener{
-            override fun onCheckedChangeListener(model1: ChipGroupModel) {
-                //make dropdown visible
-                viewBinding.searchLocation1.visible()
-                spinnerDrop.visible()
-                locationsArray.clear()
-                viewBinding.searchLocation1.setAdapter(null)
-                viewBinding.searchLocation1.setText("")
-                arrayAdapter1?.clear()
-                if (model1.text.equals("Locality")){
-                    jobLocalities.forEachIndexed { index, jobLocality ->
-                        locationsArray.add(jobLocality.name.toString())
-                    }
-                } else{
-                    groupedJobLocations.forEach { s, list ->
-                        //locationsArray.add(s)
-                        list.forEach {
-                            locationsArray.add(it.name.toString())
+                    locationsArray.clear()
+                    viewBinding.searchLocation1.setAdapter(null)
+                    viewBinding.searchLocation1.setText("")
+                    arrayAdapter1?.clear()
+                    if (model1.text.equals("Locality")){
+                        jobLocalities.forEachIndexed { index, jobLocality ->
+                            locationsArray.add(jobLocality.name.toString())
+                        }
+                    } else{
+                        groupedJobLocations.forEach { s, list ->
+                            //locationsArray.add(s)
+                            list.forEach {
+                                locationsArray.add(it.name.toString())
+                            }
                         }
                     }
-                }
-                arrayAdapter1 = context?.let { ArrayAdapter(it,android.R.layout.simple_spinner_dropdown_item, locationsArray) }
-                searchLocation1.threshold = 1
-                searchLocation1.setAdapter(arrayAdapter1)
-                if (locationsArray.size == 1){
-                    searchLocation1.setText(arrayAdapter1?.getItem(0).toString())
-                }
-                arrayAdapter1?.notifyDataSetChanged()
-                logger.d(TAG, "locations array $locationsArray")
-
-                searchLocation1.onItemClickListener = object : AdapterView.OnItemClickListener{
-                    override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                        //todo
-                        showToast("Clicked ${locationsArray.get(p2)}")
-
+                    viewBinding.searchLocation1.visible()
+                    viewBinding.spinnerDrop.visible()
+                    arrayAdapter1 = context?.let { ArrayAdapter(it,android.R.layout.simple_spinner_dropdown_item, locationsArray) }
+                    viewBinding.searchLocation1.threshold = 1
+                    viewBinding.searchLocation1.setAdapter(arrayAdapter1)
+                    if (locationsArray.size == 1){
+                        viewBinding.searchLocation1.setText(arrayAdapter1?.getItem(0).toString())
                     }
+                    arrayAdapter1?.notifyDataSetChanged()
+                    logger.d(TAG, "locations array $locationsArray")
+
+//                viewBinding.searchLocation1.onItemClickListener = object : AdapterView.OnItemClickListener{
+//                    override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+//                        //todo
+//                        showToast("Clicked ${locationsArray.get(p2)}")
+//
+//                    }
+//
+//                }
 
                 }
 
-            }
+            })
+        } else {
+            selectLocTV.gone()
+            locationLayout2.gone()
+        }
 
-        })
+
     }
 
     private fun showNoGigLocationFound() = viewBinding.apply {
