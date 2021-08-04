@@ -3,27 +3,30 @@ package com.gigforce.giger_gigs.tl_login_details
 import android.app.DatePickerDialog
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.text.format.DateUtils
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
+import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
-import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.gigforce.core.extensions.visible
+import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.DateHelper
 import com.gigforce.core.utils.Lce
+import com.gigforce.giger_gigs.LoginSummaryConstants
 import com.gigforce.giger_gigs.adapters.TLLoginSummaryAdapter
 import com.gigforce.giger_gigs.databinding.TeamLeaderLoginDetailsFragmentBinding
 import com.gigforce.giger_gigs.models.ListingTLModel
+import com.gigforce.giger_gigs.tl_login_details.views.OnTlItemSelectedListener
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class TeamLeaderLoginDetailsFragment : Fragment() {
+class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
 
     companion object {
         fun newInstance() = TeamLeaderLoginDetailsFragment()
@@ -34,6 +37,12 @@ class TeamLeaderLoginDetailsFragment : Fragment() {
 
     private lateinit var viewModel: TeamLeaderLoginDetailsViewModel
     private lateinit var viewBinding: TeamLeaderLoginDetailsFragmentBinding
+
+    private val tlLoginSummaryAdapter: TLLoginSummaryAdapter by lazy {
+        TLLoginSummaryAdapter(requireContext(), this).apply {
+            setOnTlItemSelectedListener(this@TeamLeaderLoginDetailsFragment)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,8 +71,9 @@ class TeamLeaderLoginDetailsFragment : Fragment() {
         }
     }
 
-    private fun initializeViews() {
-        viewModel.getListingForTL()
+    private fun initializeViews() = viewBinding.apply {
+            viewModel.getListingForTL("", "")
+
     }
 
     private val datePicker: DatePickerDialog by lazy {
@@ -77,7 +87,7 @@ class TeamLeaderLoginDetailsFragment : Fragment() {
                 newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
                 viewBinding.searchDate.text = DateHelper.getDateInDDMMYYYY(newCal.time)
             },
-            cal.get(Calendar.YEAR),
+            2050,
             cal.get(Calendar.MONTH),
             cal.get(Calendar.DAY_OF_MONTH)
         )
@@ -88,11 +98,19 @@ class TeamLeaderLoginDetailsFragment : Fragment() {
 
     private fun listeners() = viewBinding.apply {
         addNew.setOnClickListener {
-            navigation.navigateTo("gig/addNewLoginSummary")
+            navigation.navigateTo("gig/addNewLoginSummary", bundleOf(
+                LoginSummaryConstants.INTENT_EXTRA_MODE to LoginSummaryConstants.MODE_ADD
+            ))
         }
 
         searchDate.setOnClickListener {
             datePicker.show()
+        }
+
+        searchButton.setOnClickListener {
+            val searchCityText = searchItem.text.toString().trim()
+            val searchDateText = searchDate.text.toString().trim()
+            viewModel.getListingForTL(searchCityText, searchDateText)
         }
     }
 
@@ -108,16 +126,24 @@ class TeamLeaderLoginDetailsFragment : Fragment() {
                     setupReyclerView(res.content)
                 }
             }
-
-
         })
     }
 
     private fun setupReyclerView(res: List<ListingTLModel>) {
-        val adapter = TLLoginSummaryAdapter()
         viewBinding.datecityRv.layoutManager = LinearLayoutManager(context)
-        adapter.submitList(res)
-        viewBinding.datecityRv.adapter = adapter
+        tlLoginSummaryAdapter.submitList(res)
+        viewBinding.datecityRv.adapter = tlLoginSummaryAdapter
+    }
+
+    override fun onTlItemSelected(listingTLModel: ListingTLModel) {
+        if (DateUtils.isToday(listingTLModel.dateTimestamp)){
+            navigation.navigateTo("gig/addNewLoginSummary", bundleOf(
+                LoginSummaryConstants.INTENT_EXTRA_MODE to LoginSummaryConstants.MODE_EDIT,
+                LoginSummaryConstants.INTENT_LOGIN_SUMMARY to listingTLModel
+            ))
+        }else{
+            showToast("Select today's summary to edit")
+        }
     }
 
 

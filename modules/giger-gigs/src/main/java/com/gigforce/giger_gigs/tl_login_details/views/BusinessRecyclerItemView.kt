@@ -3,6 +3,7 @@ package com.gigforce.giger_gigs.tl_login_details.views
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.gigforce.core.IViewHolder
@@ -15,7 +16,7 @@ class BusinessRecyclerItemView(
     ) : FrameLayout(
     context,
     attrs
-    ), IViewHolder {
+    ), IViewHolder, View.OnClickListener {
 
     private lateinit var viewBinding: LayoutBusinessNameRecyclerItemBinding
 
@@ -56,7 +57,12 @@ class BusinessRecyclerItemView(
                     viewBinding.loginCount.setText(businessData.loginCount.toString() ?: "0")
                 }
             }
+            businessData.loginCount = viewBinding.loginCount.text.toString().toInt()
         }
+
+    }
+
+    override fun onClick(p0: View?) {
 
     }
 }

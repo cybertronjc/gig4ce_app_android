@@ -53,11 +53,8 @@ class AddNewLoginSummaryViewModel @Inject constructor (
     private var _businesses = MutableLiveData<List<BusinessListRecyclerItemData>>()
     var businesses : LiveData<List<BusinessListRecyclerItemData>> = _businesses
 
-    //private var gigAppListShownOnView: MutableList<GigAppListRecyclerItemData> = mutableListOf()
-    private var businessListShownOnView: MutableList<LoginSummaryBusiness> = mutableListOf()
     var businessListForView = mutableListOf<BusinessListRecyclerItemData>()
 
-    //private var jobProfiles: List<JobProfileOverview> = emptyList()
     private var businessList: List<LoginSummaryBusiness> = emptyList()
     private var businessListShown: List<LoginSummaryBusiness> = emptyList()
 
@@ -94,6 +91,8 @@ class AddNewLoginSummaryViewModel @Inject constructor (
         }
     }
 
+
+
     fun submitLoginSummaryData(addNewSummaryReqModel: AddNewSummaryReqModel) = viewModelScope.launch{
         _submitDataState.postValue("Loading")
         try {
@@ -111,7 +110,7 @@ class AddNewLoginSummaryViewModel @Inject constructor (
         }
     }
 
-    private fun processBusinessList(businessListShown: List<LoginSummaryBusiness>) {
+     fun processBusinessList(businessListShown: List<LoginSummaryBusiness>) {
 
         businessListForView.clear()
 
@@ -123,7 +122,7 @@ class AddNewLoginSummaryViewModel @Inject constructor (
                         loginSummaryBusiness.business_id,
                         loginSummaryBusiness.businessName,
                         loginSummaryBusiness.legalName,
-                        0
+                        loginSummaryBusiness.loginCount
                     )
                 )
             }
