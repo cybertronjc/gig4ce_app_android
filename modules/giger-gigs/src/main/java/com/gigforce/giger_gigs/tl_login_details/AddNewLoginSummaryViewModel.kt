@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.repository.ProfileFirebaseRepository
+import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.core.utils.Lce
 import com.gigforce.giger_gigs.models.AddNewSummaryReqModel
@@ -34,16 +35,17 @@ sealed class BusinessAppViewState {
 }
 
 @HiltViewModel
-class AddNewLoginSummaryViewModel @Inject constructor(
-    private val tlLoginSummaryRepository: TlLoginSummaryRepository,
-    private val firebaseAuthStateListener: FirebaseAuthStateListener,
-    private val profileFirebaseRepository: ProfileFirebaseRepository
+class AddNewLoginSummaryViewModel @Inject constructor (
+    private val iBuildConfig: IBuildConfigVM
 ) : ViewModel() {
 
     companion object {
         private const val TAG = "AddNewLoginSummaryViewModel"
     }
 
+    private val tlLoginSummaryRepository= TlLoginSummaryRepository(iBuildConfig)
+    private val firebaseAuthStateListener= FirebaseAuthStateListener.getInstance()
+    private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository()
     //data
     private var _cities = MutableLiveData<Lce<List<LoginSummaryCity>>>()
     var cities : LiveData<Lce<List<LoginSummaryCity>>> = _cities
@@ -111,7 +113,7 @@ class AddNewLoginSummaryViewModel @Inject constructor(
 
     private fun processBusinessList(businessListShown: List<LoginSummaryBusiness>) {
 
-
+        businessListForView.clear()
 
         try {
             businessListShown.forEachIndexed { index, loginSummaryBusiness ->

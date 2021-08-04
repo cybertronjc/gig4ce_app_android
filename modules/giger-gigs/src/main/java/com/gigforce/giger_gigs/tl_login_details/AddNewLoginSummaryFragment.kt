@@ -1,25 +1,29 @@
 package com.gigforce.giger_gigs.tl_login_details
 
-import androidx.lifecycle.ViewModelProvider
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.gigforce.common_ui.ext.showToast
+import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.utils.DateHelper
 import com.gigforce.core.utils.Lce
 import com.gigforce.giger_gigs.LoginSummaryConstants
-import com.gigforce.giger_gigs.R
 import com.gigforce.giger_gigs.databinding.AddNewLoginSummaryFragmentBinding
-import com.gigforce.giger_gigs.databinding.TeamLeaderLoginDetailsFragmentBinding
 import com.gigforce.giger_gigs.models.*
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -35,6 +39,8 @@ class AddNewLoginSummaryFragment : Fragment() {
 
     private lateinit var viewModel: AddNewLoginSummaryViewModel
     private lateinit var viewBinding: AddNewLoginSummaryFragmentBinding
+
+    private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository()
 
     private var mode = LoginSummaryConstants.MODE_ADD
 
@@ -86,10 +92,26 @@ class AddNewLoginSummaryFragment : Fragment() {
         if (mode == LoginSummaryConstants.MODE_ADD){
             viewModel.getCities()
         }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                val userUid = FirebaseAuth.getInstance().uid
+                val profileData = profileFirebaseRepository.getProfileData(userUid)
+                viewBinding.teamLeaderName.text = profileData.name
+            }catch (e: Exception){
+
+            }
+        }
+
+        val c: Date = Calendar.getInstance().getTime()
+        viewBinding.dateTV.text = DateHelper.getDateInDDMMYYYY(c)
+
     }
 
     private fun initToolbar() = viewBinding.apply {
         appBar.apply {
+            hideActionMenu()
+            showTitle("Add New Login Summary")
             setBackButtonListener(View.OnClickListener {
                 activity?.onBackPressed()
             })
@@ -99,18 +121,6 @@ class AddNewLoginSummaryFragment : Fragment() {
     private fun listeners() = viewBinding.apply {
         arrayAdapter = context?.let { ArrayAdapter(it,android.R.layout.simple_spinner_dropdown_item, citiesArray) }
         citySpinner.setAdapter(arrayAdapter)
-        citySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                val cityId = citiesModelArray.get(p2).id
-                selectedCity = citiesModelArray.get(p2)
-                viewModel.getBusinessByCity(cityId = cityId)
-            }
-
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-
-            }
-
-        }
 
         submit.setOnClickListener {
             if (citySpinner.selectedItem.toString().isEmpty()){
@@ -214,6 +224,7 @@ class AddNewLoginSummaryFragment : Fragment() {
 
     }
 
+
     private fun showBusinesses(businessList: List<BusinessListRecyclerItemData>)  = viewBinding.apply {
         Log.d(TAG, "Business list $businessList")
         businessRV.collection = businessList
@@ -225,6 +236,19 @@ class AddNewLoginSummaryFragment : Fragment() {
         citiesModelArray.forEach {
             citiesArray.add(it.name)
         }
+        viewBinding.citySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                val cityId = citiesModelArray.get(p2).id
+                selectedCity = citiesModelArray.get(p2)
+                viewModel.getBusinessByCity(cityId = cityId)
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+
+            }
+
+        }
+
         arrayAdapter?.notifyDataSetChanged()
     }
 

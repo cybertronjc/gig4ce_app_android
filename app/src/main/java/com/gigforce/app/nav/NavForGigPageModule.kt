@@ -18,7 +18,7 @@ class NavForGigPageModule(
         baseImplementation.registerRoute("${moduleName}/gigMonthlyAttendanceFragment",R.id.gigMonthlyAttendanceFragment)
         baseImplementation.registerRoute("${moduleName}/gigerAttendanceUnderManagerFragment",R.id.gigerAttendanceUnderManagerFragment)
         baseImplementation.registerRoute("${moduleName}/tlLoginDetails",R.id.teamLeaderLoginDetailsFragment)
-        baseImplementation.registerRoute("${moduleName}/addNewLoginSummary",R.id.teamLeaderLoginDetailsFragment)
+        baseImplementation.registerRoute("${moduleName}/addNewLoginSummary",R.id.addNewLoginSummaryFragment)
 
     }
 }

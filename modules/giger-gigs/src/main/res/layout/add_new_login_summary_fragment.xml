@@ -6,20 +6,20 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".tl_login_details.AddNewLoginSummaryFragment">
+        tools:context=".tl_login_details.TeamLeaderLoginDetailsFragment"
+        >
 
-        <com.gigforce.common_ui.components.cells.AppBar
+        <com.gigforce.common_ui.views.GigforceToolbar
             android:id="@+id/appBar"
             android:layout_width="match_parent"
-            android:layout_height="36dp"
-            app:backgroundType="PinkBar"
+            android:layout_height="?android:attr/actionBarSize"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:titleText="Add New Login Summary" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/appBar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
@@ -48,7 +48,6 @@
                 android:layout_marginTop="@dimen/size_16"
                 android:layout_marginStart="@dimen/size_16"
                 android:layout_marginEnd="@dimen/size_16"
-                tools:ignore="KeyboardInaccessibleWidget"
                 app:layout_constraintTop_toBottomOf="@id/teamLeaderName"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
@@ -71,7 +70,8 @@
             <com.gigforce.core.recyclerView.CoreRecyclerView
                 android:id="@+id/businessRV"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:orientation="vertical"
                 android:layout_marginTop="@dimen/size_16"
                 android:layout_marginStart="@dimen/size_16"
                 android:layout_marginEnd="@dimen/size_16"

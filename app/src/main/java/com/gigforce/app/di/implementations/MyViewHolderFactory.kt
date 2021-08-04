@@ -17,6 +17,6 @@ class MyViewHolderFactory @Inject constructor(): CoreViewHolderFactory() {
         this.registerViewTypeLoader(LandingViewTypeLoader())
         this.registerViewTypeLoader(GigViewTypeLoader())
         this.registerViewTypeLoader(ComponentViewLoader())
-        this.registerViewTypeLoader(LoginSummaryViewTypeLoader())
+        this.registerViewTypeLoader(LoginSummaryViewTypeLoader)
     }
 }

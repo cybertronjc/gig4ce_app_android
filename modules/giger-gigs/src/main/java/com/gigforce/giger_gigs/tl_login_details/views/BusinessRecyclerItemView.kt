@@ -39,18 +39,21 @@ class BusinessRecyclerItemView(
 
             viewBinding.businessName.text = businessData.businessName ?: "Business N/A"
             viewBinding.loginCount.setText(businessData.loginCount.toString() ?: "0")
+            businessData.loginCount = viewBinding.loginCount.text.toString().toInt()
 
             viewBinding.minusIcon.setOnClickListener {
                 if (businessData.loginCount != 0 && viewBinding.loginCount.text.toString().isNotEmpty()){
+                    businessData.loginCount = viewBinding.loginCount.text.toString().toInt()
                     businessData.loginCount--
-
+                    viewBinding.loginCount.setText(businessData.loginCount.toString() ?: "0")
                 }
             }
 
             viewBinding.plusIcon.setOnClickListener {
                 if ( viewBinding.loginCount.text.toString().isNotEmpty()){
+                    businessData.loginCount = viewBinding.loginCount.text.toString().toInt()
                     businessData.loginCount++
-
+                    viewBinding.loginCount.setText(businessData.loginCount.toString() ?: "0")
                 }
             }
         }

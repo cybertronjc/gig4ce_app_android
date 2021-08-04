@@ -1,5 +1,7 @@
 package com.gigforce.giger_gigs.models
 
+import android.os.Parcelable
+import com.google.firebase.Timestamp
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
@@ -17,11 +19,11 @@ data class LoginSummaryCity(
 
     @SerializedName("state_code")
     val state_code: String = ""
-)
+) : Parcelable
 
 @Parcelize
 data class LoginSummaryBusiness(
-    @SerializedName("id")
+    @SerializedName("_id")
     val id: String,
 
     @SerializedName("business_id")
@@ -34,7 +36,7 @@ data class LoginSummaryBusiness(
     val legalName: String,
 
     var loginCount: Int = -1
-)
+) : Parcelable
 
 @Parcelize
 data class AddNewSummaryReqModel(
@@ -49,7 +51,7 @@ data class AddNewSummaryReqModel(
 
     @SerializedName("update")
     val update: Boolean = false
-)
+) : Parcelable
 
 @Parcelize
 data class BusinessDataReqModel(
@@ -67,4 +69,28 @@ data class BusinessDataReqModel(
 
     @SerializedName("gigerCount")
     val gigerCount: Int = 0,
-)
+) : Parcelable
+
+@Parcelize
+data class ListingTLModel(
+    @SerializedName("_id")
+    val _id: String = "",
+
+    @SerializedName("UID")
+    val UID: String = "",
+
+    @SerializedName("businessData")
+    val businessData: List<BusinessDataReqModel> = emptyList(),
+
+    @SerializedName("city")
+    val city: LoginSummaryCity = LoginSummaryCity(),
+
+    @SerializedName("date")
+    val date: String = "",
+
+    @SerializedName("dateTimestamp")
+    val dateTimestamp: Long,
+
+    @SerializedName("id")
+    val id: String = ""
+) : Parcelable
