@@ -19,7 +19,6 @@ class MainNavigationComponent(context: Context, attrs: AttributeSet?) :
 
     @Inject
     lateinit var repository: IMainNavDataRepository
-
     init {
         this.setOrientationAndRows(0, 2)
     }

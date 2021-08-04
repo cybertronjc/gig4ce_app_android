@@ -53,8 +53,8 @@ class FeatureItemCard2Component(context: Context, attrs: AttributeSet?) :
             feature_icon.setImageResource(data.imageRes)
         }
 
-        data.image_type ?. let{
-            val firebaseStoragePath = "${buildConfig.getFeaturesIconLocationUrl()}${data.image_type}.png"
+        data.icon ?. let{
+            val firebaseStoragePath = "${buildConfig.getFeaturesIconLocationUrl()}${data.icon}.png"
             val gsReference = FirebaseStorage.getInstance().getReferenceFromUrl(firebaseStoragePath)
             setImageFromUrl(gsReference)
         }
@@ -74,6 +74,7 @@ class FeatureItemCard2Component(context: Context, attrs: AttributeSet?) :
                 }
             }
             setImage(data)
+
         }
 
     }
