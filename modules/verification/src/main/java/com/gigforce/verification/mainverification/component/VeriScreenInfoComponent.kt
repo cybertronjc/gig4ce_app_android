@@ -65,6 +65,7 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
             setDocInfo(docinfostr)
             setQueryStr(querytextstr)
             setMissingDocText(missingdoctext)
+//            setCheckBoxChangeListener()
         }
 
     }
@@ -208,6 +209,7 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
         whyweneedit.visible()
         enableImageClick()
         statusDialogLayout.gone()
+        checkboxidonthave.visible()
     }
     fun viewChangeOnVerified(){
         docsubtitledetail.gone()
@@ -218,6 +220,20 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
     fun viewChangeOnStarted(){
         viewChangeOnVerified()
         statusDialogLayout.gone()
+    }
+
+    private fun setNoCertificateImageVisible(visible: Boolean) {
+        if(visible){
+            no_document.visible()
+        }else{
+            no_document.gone()
+        }
+    }
+
+    fun setCheckBoxChangeListener(){
+        checkboxidonthave.setOnCheckedChangeListener { p0, p1 ->
+            setNoCertificateImageVisible(p1)
+        }
     }
 
 }

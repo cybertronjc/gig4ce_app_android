@@ -157,4 +157,15 @@
             tools:text="The DL details provided were uploaded and matched successfully"></TextView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+    <ImageView
+        android:id="@+id/no_document"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/checkboxidonthave"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="@dimen/dp_xl4"
+        android:src="@drawable/ic_no_certification_found"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

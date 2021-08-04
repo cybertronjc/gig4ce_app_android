@@ -2,6 +2,7 @@ package com.gigforce.core.datamodels.verification
 
 import androidx.annotation.Keep
 import com.gigforce.core.base.basefirestore.BaseFirestoreDataModel
+import java.util.*
 
 @Keep
 data class DrivingLicenseDataModel(
@@ -13,7 +14,11 @@ data class DrivingLicenseDataModel(
         val dlNo: String? = null,
         val state: Int = -1,
         val status: String? = null,
-        val verifiedString: String? = null
+        val verifiedString: String? = null,
+        val issuedate: String? = "",
+        val name: String? = "",
+        val dob : Date? = null,
+        val expirydate: Date? = null
 ) : BaseFirestoreDataModel(TABLE_NAME) {
 
     companion object {

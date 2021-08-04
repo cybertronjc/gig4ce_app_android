@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.ContentResolver
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -11,6 +12,8 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.util.Size
 import android.view.LayoutInflater
@@ -57,7 +60,6 @@ import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
-
 enum class VerificationScreenStatus {
     OCR_COMPLETED,
     VERIFIED,
@@ -69,7 +71,7 @@ enum class VerificationScreenStatus {
 
 @AndroidEntryPoint
 class PanCardFragment : Fragment(),
-        VerificationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener {
+    VerificationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener {
 
     companion object {
         fun newInstance() = PanCardFragment()
@@ -98,8 +100,8 @@ class PanCardFragment : Fragment(),
     var ocrOrVerificationRquested = false
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         viewBinding = PanCardFragmentBinding.inflate(inflater, container, false)
         return viewBinding.root
@@ -137,9 +139,9 @@ class PanCardFragment : Fragment(),
                 if (it.status) {
                     if (!it.panNumber.isNullOrBlank() || !it.name.isNullOrBlank() || !it.dateOfBirth.isNullOrBlank() || !it.fatherName.isNullOrBlank()) {
                         viewBinding.toplayoutblock.uploadStatusLayout(
-                                AppConstants.UPLOAD_SUCCESS,
-                                "UPLOAD SUCCESSFUL",
-                                "Information of PAN card Captured Successfully."
+                            AppConstants.UPLOAD_SUCCESS,
+                            "UPLOAD SUCCESSFUL",
+                            "Information of PAN card Captured Successfully."
                         )
                         if (!it.panNumber.isNullOrBlank())
                             viewBinding.panTil.editText?.setText(it.panNumber)
@@ -152,17 +154,17 @@ class PanCardFragment : Fragment(),
 
                     } else {
                         viewBinding.toplayoutblock.uploadStatusLayout(
-                                AppConstants.UNABLE_TO_FETCH_DETAILS,
-                                "UNABLE TO FETCH DETAILS",
-                                "Enter your PAN card details manually or try again to continue the verification process."
+                            AppConstants.UNABLE_TO_FETCH_DETAILS,
+                            "Unable to fetch information",
+                            "Enter the PAN details manually below"
                         )
                     }
 
                 } else {
                     viewBinding.toplayoutblock.uploadStatusLayout(
-                            AppConstants.UNABLE_TO_FETCH_DETAILS,
-                            "UNABLE TO FETCH DETAILS",
-                            "Enter your PAN card details manually or try again to continue the verification process."
+                        AppConstants.UNABLE_TO_FETCH_DETAILS,
+                        "Unable to fetch information",
+                        "Enter the PAN details manually below"
                     )
                     showToast("Ocr status " + it.message)
                 }
@@ -183,6 +185,8 @@ class PanCardFragment : Fragment(),
                     if (it.verified) {
                         verificationScreenStatus = VerificationScreenStatus.VERIFIED
                         verifiedStatusViews(it)
+                        viewBinding.belowLayout.visible()
+                        setAlreadyfilledData(it, false)
                     } else {
                         checkforStatusAndVerified(it)
                     }
@@ -191,8 +195,65 @@ class PanCardFragment : Fragment(),
         })
     }
 
+    var anyDataEntered = false
+
+    inner class ValidationTextWatcher(
+        val context: Context?,
+        val viewBinding: PanCardFragmentBinding
+    ) :
+        TextWatcher {
+        override fun afterTextChanged(text: Editable?) {
+            context?.let { cxt ->
+                text?.let {
+                    if (viewBinding.nameTil.editText?.text.toString()
+                            .isNullOrBlank() && viewBinding.panTil.editText?.text.toString()
+                            .isNullOrBlank() && viewBinding.fatherNameTil.editText?.text.toString()
+                            .isNullOrBlank() && viewBinding.dateOfBirth.text.toString()
+                            .isNullOrBlank()
+                    ) {
+                        viewBinding.submitButton.text = "Skip"
+                        anyDataEntered = false
+                    } else {
+                        viewBinding.submitButton.text = "Submit"
+                        anyDataEntered = true
+                    }
+                }
+
+            }
+        }
+
+        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+        }
+
+        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+        }
+
+    }
 
     private fun listeners() {
+
+        viewBinding.nameTil.editText?.addTextChangedListener(
+            ValidationTextWatcher(
+                context,
+                viewBinding
+            )
+        )
+        viewBinding.panTil.editText?.addTextChangedListener(
+            ValidationTextWatcher(
+                context,
+                viewBinding
+            )
+        )
+        viewBinding.fatherNameTil.editText?.addTextChangedListener(
+            ValidationTextWatcher(
+                context,
+                viewBinding
+            )
+        )
+        viewBinding.dateOfBirth.addTextChangedListener(ValidationTextWatcher(context, viewBinding))
+
         viewBinding.toplayoutblock.setPrimaryClick(View.OnClickListener {
             //call for bottom sheet
             checkForPermissionElseShowCameraGalleryBottomSheet()
@@ -205,18 +266,18 @@ class PanCardFragment : Fragment(),
 
         viewBinding.submitButton.setOnClickListener {
             hideSoftKeyboard()
-            if (viewBinding.toplayoutblock.isDocDontOptChecked() || verificationScreenStatus == VerificationScreenStatus.VERIFIED || verificationScreenStatus == VerificationScreenStatus.STARTED_VERIFYING) {
+            if (viewBinding.toplayoutblock.isDocDontOptChecked() || verificationScreenStatus == VerificationScreenStatus.VERIFIED || verificationScreenStatus == VerificationScreenStatus.STARTED_VERIFYING || !anyDataEntered) {
                 checkForNextDoc()
             } else {
                 val panCardNo =
-                        viewBinding.panTil.editText?.text.toString().toUpperCase(Locale.getDefault())
+                    viewBinding.panTil.editText?.text.toString().toUpperCase(Locale.getDefault())
                 if (!VerificationValidations.isPanCardValid(panCardNo)) {
 
                     MaterialAlertDialogBuilder(requireContext())
-                            .setTitle(getString(R.string.alert))
-                            .setMessage(getString(R.string.enter_valid_pan))
-                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                            .show()
+                        .setTitle(getString(R.string.alert))
+                        .setMessage(getString(R.string.enter_valid_pan))
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .show()
                     return@setOnClickListener
                 }
                 callKycVerificationApi()
@@ -235,6 +296,45 @@ class PanCardFragment : Fragment(),
             })
         }
 
+    }
+
+    private fun setAlreadyfilledData(panCardDataModel: PanCardDataModel, enableFields: Boolean) {
+
+        viewBinding.nameTil.editText?.setText(panCardDataModel.name)
+
+        viewBinding.panTil.editText?.setText(panCardDataModel.panCardNo)
+
+        viewBinding.fatherNameTil.editText?.setText(panCardDataModel.fathername)
+
+        panCardDataModel.dob?.let {
+
+            viewBinding.dateOfBirth.text = panCardDataModel.dob
+
+            viewBinding.dobLabel.visible()
+
+        }
+
+        var list = ArrayList<KYCImageModel>()
+
+        panCardDataModel.panCardImagePath?.let {
+
+            getDBImageUrl(it)?.let {
+                list.add(
+                    KYCImageModel(
+                        text = getString(R.string.upload_pan_card_new),
+                        imagePath = it,
+                        imageUploaded = true
+                    )
+                )
+            }
+
+        }
+
+        viewBinding.toplayoutblock.setImageViewPager(list)
+        viewBinding.nameTil.editText?.isEnabled = enableFields
+        viewBinding.panTil.editText?.isEnabled = enableFields
+        viewBinding.fatherNameTil.editText?.isEnabled = enableFields
+        viewBinding.dateRl.isEnabled = enableFields
 
     }
 
@@ -244,10 +344,15 @@ class PanCardFragment : Fragment(),
         } else {
             var navigationsForBundle = emptyList<String>()
             if (allNavigationList.size > 1) {
-                navigationsForBundle = allNavigationList.slice(IntRange(1, allNavigationList.size - 1)).filter { it.length > 0 }
+                navigationsForBundle =
+                    allNavigationList.slice(IntRange(1, allNavigationList.size - 1))
+                        .filter { it.length > 0 }
             }
             navigation.popBackStack()
-            navigation.navigateTo(allNavigationList.get(0), bundleOf(VerificationConstants.NAVIGATION_STRINGS to navigationsForBundle))
+            navigation.navigateTo(
+                allNavigationList.get(0),
+                bundleOf(VerificationConstants.NAVIGATION_STRINGS to navigationsForBundle)
+            )
 
         }
     }
@@ -256,21 +361,27 @@ class PanCardFragment : Fragment(),
         viewBinding.toplayoutblock.showUploadHere()
         //ic_pan_illustration
         val frontUri = Uri.Builder()
-                .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
-                .authority(resources.getResourcePackageName(R.drawable.verification_doc_image))
-                .appendPath(resources.getResourceTypeName(R.drawable.verification_doc_image))
-                .appendPath(resources.getResourceEntryName(R.drawable.verification_doc_image))
-                .build()
-        val list = listOf(KYCImageModel(text = getString(R.string.upload_pan_card_new), imageIcon = frontUri, imageUploaded = false))
+            .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
+            .authority(resources.getResourcePackageName(R.drawable.verification_doc_image))
+            .appendPath(resources.getResourceTypeName(R.drawable.verification_doc_image))
+            .appendPath(resources.getResourceEntryName(R.drawable.verification_doc_image))
+            .build()
+        val list = listOf(
+            KYCImageModel(
+                text = getString(R.string.upload_pan_card_new),
+                imageIcon = frontUri,
+                imageUploaded = false
+            )
+        )
         viewBinding.toplayoutblock.setImageViewPager(list)
     }
 
     private fun checkForPermissionElseShowCameraGalleryBottomSheet() {
         if (hasStoragePermissions())
             VerificationClickOrSelectImageBottomSheet.launch(
-                    parentFragmentManager,
-                    "Upload PAN Card",
-                    this
+                parentFragmentManager,
+                "Upload PAN Card",
+                this
             )
         else
             requestStoragePermission()
@@ -279,25 +390,25 @@ class PanCardFragment : Fragment(),
     private fun requestStoragePermission() {
 
         requestPermissions(
-                arrayOf(
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.CAMERA
-                ),
-                REQUEST_STORAGE_PERMISSION
+            arrayOf(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.CAMERA
+            ),
+            REQUEST_STORAGE_PERMISSION
         )
     }
 
     private fun hasStoragePermissions(): Boolean {
         return ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            requireContext(),
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
         ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.READ_EXTERNAL_STORAGE
+            requireContext(),
+            Manifest.permission.READ_EXTERNAL_STORAGE
         ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.CAMERA
+            requireContext(),
+            Manifest.permission.CAMERA
         ) == PackageManager.PERMISSION_GRANTED
     }
 
@@ -309,10 +420,10 @@ class PanCardFragment : Fragment(),
             Log.d("Register", "Nombre del archivo " + file.name)
             // create RequestBody instance from file
             val requestFile: RequestBody =
-                    RequestBody.create(MediaType.parse("image/png"), file)
+                RequestBody.create(MediaType.parse("image/png"), file)
             // MultipartBody.Part is used to send also the actual file name
             image =
-                    MultipartBody.Part.createFormData("file", file.name, requestFile)
+                MultipartBody.Part.createFormData("file", file.name, requestFile)
         }
         image?.let { viewModel.getKycOcrResult("pan", "dsd", it) }
     }
@@ -320,18 +431,18 @@ class PanCardFragment : Fragment(),
     private val dateOfBirthPicker: DatePickerDialog by lazy {
         val cal = Calendar.getInstance()
         val datePickerDialog = DatePickerDialog(
-                requireContext(),
-                DatePickerDialog.OnDateSetListener { _: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
-                    val newCal = Calendar.getInstance()
-                    newCal.set(Calendar.YEAR, year)
-                    newCal.set(Calendar.MONTH, month)
-                    newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                    viewBinding.dateOfBirth.text = DateHelper.getDateInDDMMYYYY(newCal.time)
-                    viewBinding.dobLabel.visible()
-                },
-                1990,
-                cal.get(Calendar.MONTH),
-                cal.get(Calendar.DAY_OF_MONTH)
+            requireContext(),
+            DatePickerDialog.OnDateSetListener { _: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
+                val newCal = Calendar.getInstance()
+                newCal.set(Calendar.YEAR, year)
+                newCal.set(Calendar.MONTH, month)
+                newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                viewBinding.dateOfBirth.text = DateHelper.getDateInDDMMYYYY(newCal.time)
+                viewBinding.dobLabel.visible()
+            },
+            1990,
+            cal.get(Calendar.MONTH),
+            cal.get(Calendar.DAY_OF_MONTH)
         )
 
         datePickerDialog.datePicker.maxDate = Calendar.getInstance().timeInMillis
@@ -346,14 +457,14 @@ class PanCardFragment : Fragment(),
         photoCropIntent.putExtra("detectFace", 0)
         photoCropIntent.putExtra("file", "pan_card.jpg")
         navigation.navigateToPhotoCrop(
-                photoCropIntent,
-                AddPanCardInfoFragment.REQUEST_CODE_UPLOAD_PAN_IMAGE, requireContext(), this
+            photoCropIntent,
+            AddPanCardInfoFragment.REQUEST_CODE_UPLOAD_PAN_IMAGE, requireContext(), this
         )
     }
 
     override fun onRequestPermissionsResult(
-            requestCode: Int,
-            permissions: Array<String>, grantResults: IntArray
+        requestCode: Int,
+        permissions: Array<String>, grantResults: IntArray
     ) {
         when (requestCode) {
             REQUEST_STORAGE_PERMISSION -> {
@@ -368,9 +479,9 @@ class PanCardFragment : Fragment(),
 
                 if (allPermsGranted)
                     VerificationClickOrSelectImageBottomSheet.launch(
-                            parentFragmentManager,
-                            "Upload PAN Card",
-                            this
+                        parentFragmentManager,
+                        "Upload PAN Card",
+                        this
                     )
                 else {
                     showToast("Please grant storage permission")
@@ -400,10 +511,10 @@ class PanCardFragment : Fragment(),
 
     private fun callKycVerificationApi() {
         var list = listOf(
-                Data("name", viewBinding.nameTil.editText?.text.toString()),
-                Data("no", viewBinding.panTil.editText?.text.toString()),
-                Data("fathername", viewBinding.fatherNameTil.editText?.text.toString()),
-                Data("dob", viewBinding.dateOfBirth.text.toString())
+            Data("name", viewBinding.nameTil.editText?.text.toString()),
+            Data("no", viewBinding.panTil.editText?.text.toString()),
+            Data("fathername", viewBinding.fatherNameTil.editText?.text.toString()),
+            Data("dob", viewBinding.dateOfBirth.text.toString())
         )
         activeLoader(true)
         viewModel.getKycVerificationResult("pan", list)
@@ -441,9 +552,9 @@ class PanCardFragment : Fragment(),
 
     private fun showWhyWeNeedThisDialog() {
         WhyWeNeedThisBottomSheet.launch(
-                childFragmentManager = childFragmentManager,
-                title = getString(R.string.why_do_we_need_this),
-                content = getString(R.string.why_do_we_need_this_pan)
+            childFragmentManager = childFragmentManager,
+            title = getString(R.string.why_do_we_need_this),
+            content = getString(R.string.why_do_we_need_this_pan)
         )
     }
 
@@ -451,13 +562,13 @@ class PanCardFragment : Fragment(),
         Log.v("Start Crop", "started")
         //can use this for a new name every time
         val timeStamp = SimpleDateFormat(
-                "yyyyMMdd_HHmmss",
-                Locale.getDefault()
+            "yyyyMMdd_HHmmss",
+            Locale.getDefault()
         ).format(Date())
         val imageFileName = PREFIX + "_" + timeStamp + "_"
         val uCrop: UCrop = UCrop.of(
-                uri,
-                Uri.fromFile(File(requireContext().cacheDir, imageFileName + EXTENSION))
+            uri,
+            Uri.fromFile(File(requireContext().cacheDir, imageFileName + EXTENSION))
         )
         val resultIntent: Intent = Intent()
         resultIntent.putExtra("filename", imageFileName + EXTENSION)
@@ -492,7 +603,10 @@ class PanCardFragment : Fragment(),
 
     override fun onResume() {
         super.onResume()
-        StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(resources, R.color.lipstick_2, null))
+        StatusBarUtil.setColorNoTranslucent(
+            requireActivity(),
+            ResourcesCompat.getColor(resources, R.color.lipstick_2, null)
+        )
     }
 
 
@@ -500,9 +614,9 @@ class PanCardFragment : Fragment(),
         viewBinding.toplayoutblock.viewChangeOnVerified()
         viewBinding.belowLayout.gone()
         viewBinding.toplayoutblock.uploadStatusLayout(
-                AppConstants.UPLOAD_SUCCESS,
-                "VERIFICATION COMPLETED",
-                "The PAN card details have been verified successfully."
+            AppConstants.UPLOAD_SUCCESS,
+            "VERIFICATION COMPLETED",
+            "The PAN card details have been verified successfully."
         )
         viewBinding.submitButton.visible()
         viewBinding.submitButton.text = "Next"
@@ -512,7 +626,15 @@ class PanCardFragment : Fragment(),
 
         var list = ArrayList<KYCImageModel>()
         panCardDataModel?.panCardImagePath?.let {
-            getDBImageUrl(it)?.let { list.add(KYCImageModel(text = getString(R.string.upload_pan_card_new), imagePath = it, imageUploaded = true)) }
+            getDBImageUrl(it)?.let {
+                list.add(
+                    KYCImageModel(
+                        text = getString(R.string.upload_pan_card_new),
+                        imagePath = it,
+                        imageUploaded = true
+                    )
+                )
+            }
         }
         viewBinding.toplayoutblock.setImageViewPager(list)
 
@@ -532,7 +654,7 @@ class PanCardFragment : Fragment(),
         return null
     }
 
-    private val SPLASH_TIME_OUT: Long = 1000 * 5
+    private val WAITING_TIME: Long = 1000 * 3
     private fun checkforStatusAndVerified(panCardDataModel: PanCardDataModel) {
         panCardDataModel.status?.let {
             when (it) {
@@ -545,25 +667,28 @@ class PanCardFragment : Fragment(),
                                 viewBinding.screenLoaderBar.gone()
                                 verifiedStatusViews(null)
                                 viewBinding.toplayoutblock.uploadStatusLayout(
-                                        AppConstants.UNABLE_TO_FETCH_DETAILS,
-                                        "VERIFICATION IN PROGRESS",
-                                        "Click next to proceed. Verification will be done in parallel"
+                                    AppConstants.UNABLE_TO_FETCH_DETAILS,
+                                    "Verification in progress",
+                                    "Document will be verified soon. You can click Next to proceed"
                                 )
                                 viewBinding.toplayoutblock.setVerificationSuccessfulView("", "")
                             }
                         } catch (e: Exception) {
 
                         }
-                    }, SPLASH_TIME_OUT)
+                    }, WAITING_TIME)
+                    viewBinding.belowLayout.visible()
+                    setAlreadyfilledData(panCardDataModel, false)
                 }
                 "failed" -> {
                     verificationScreenStatus = VerificationScreenStatus.FAILED
                     resetInitializeViews()
                     viewBinding.toplayoutblock.uploadStatusLayout(
-                            AppConstants.DETAILS_MISMATCH,
-                            "VERIFICATION FAILED",
-                            "Please recheck the information and try again"
+                        AppConstants.DETAILS_MISMATCH,
+                        "Verification Failed",
+                        "The details submitted are incorrect. Please try again."
                     )
+                    setAlreadyfilledData(panCardDataModel, true)
                 }
                 "" -> {
                     verificationScreenStatus = VerificationScreenStatus.DEFAULT
@@ -580,8 +705,8 @@ class PanCardFragment : Fragment(),
         viewBinding.submitButton.isEnabled = true
         viewBinding.belowLayout.visible()
         viewBinding.toplayoutblock.setVerificationSuccessfulView(
-                "PAN card",
-                "You need to upload"
+            "PAN card",
+            "You need to upload"
         )
         initializeImageViews()
         viewBinding.toplayoutblock.resetAllViews()
@@ -594,12 +719,20 @@ class PanCardFragment : Fragment(),
         viewBinding.progressBar.gone()
         viewBinding.belowLayout.gone()
         viewBinding.toplayoutblock.setVerificationSuccessfulView(
-                "PAN card pending for verify",
-                "Verifying"
+            "PAN card pending for verify",
+            "Verifying"
         )
         var list = ArrayList<KYCImageModel>()
         panCardDataModel.panCardImagePath?.let {
-            getDBImageUrl(it)?.let { list.add(KYCImageModel(text = getString(R.string.upload_pan_card_new), imagePath = it, imageUploaded = true)) }
+            getDBImageUrl(it)?.let {
+                list.add(
+                    KYCImageModel(
+                        text = getString(R.string.upload_pan_card_new),
+                        imagePath = it,
+                        imageUploaded = true
+                    )
+                )
+            }
         }
         viewBinding.toplayoutblock.setImageViewPager(list)
     }
