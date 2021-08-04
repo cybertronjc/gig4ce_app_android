@@ -50,7 +50,6 @@ class UserDetailsFilledDialogFragment : DialogFragment() {
             frag.mOkayResultListener = okayClickListener
             frag.show(fragmentManager, TAG)
         }
-
     }
 
     private val gigerVerificationViewModel: GigVerificationViewModel by viewModels()

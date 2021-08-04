@@ -116,6 +116,7 @@ class GigerOnboardingFragment : BaseFragment2<GigerOnboardingFragmentBinding>(
         }
 
         viewBinding.changeNumber.setOnClickListener {
+            viewBinding.mobileNoEt.isEnabled = true
             viewBinding.mobileNoEt.setText("")
             viewBinding.mobileNoEt.requestFocus()
             viewBinding.createProfileBtn.gone()
@@ -125,8 +126,9 @@ class GigerOnboardingFragment : BaseFragment2<GigerOnboardingFragmentBinding>(
             viewBinding.tvPleaseEnter.setText(resources.getString(R.string.please_enter))
             viewBinding.makeSureText.setText(resources.getString(R.string.registered))
             viewBinding.enterMobileLabel.setText(resources.getString(R.string.gigers_phone))
-            showKeyboard()
+            viewBinding.changeNumber.gone()
 
+            showKeyboard()
         }
 
         viewBinding.mobileNoEt.addTextChangedListener(object : TextWatcher {
@@ -298,6 +300,7 @@ class GigerOnboardingFragment : BaseFragment2<GigerOnboardingFragmentBinding>(
         viewBinding.notRegisteredLayout.visible()
         viewBinding.createProfileBtn.visible()
         viewBinding.changeNumber.visible()
+        viewBinding.mobileNoEt.isEnabled = false
         viewBinding.enterMobileLabel.setText(getString(R.string.giger_not_registered))
         viewBinding.tvPleaseEnter.setText(getString(R.string.joining_failed))
         viewBinding.makeSureText.setText(getString(R.string.not_signed_up))

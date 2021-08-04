@@ -13,6 +13,7 @@ import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.core.utils.Lce
+import com.gigforce.lead_management.exceptions.TryingToDowngradeJoiningStatusException
 import com.gigforce.lead_management.repositories.LeadManagementRepository
 import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
@@ -205,7 +206,10 @@ class ShareApplicationLinkViewModel @Inject constructor(
             )
 
             _referralViewState.postValue(
-                ShareReferralViewState.DocumentUpdatedAndReferralShared
+                ShareReferralViewState.DocumentUpdatedAndReferralShared(
+                    shareType = ShareReferralType.SHARE_SIGNUP_LINK,
+                    shareLink = referralLink
+                )
             )
             logger.d(
                 TAG,
@@ -331,7 +335,10 @@ class ShareApplicationLinkViewModel @Inject constructor(
             )
 
             _referralViewState.postValue(
-                ShareReferralViewState.DocumentUpdatedAndReferralShared
+                ShareReferralViewState.DocumentUpdatedAndReferralShared(
+                  shareType = ShareReferralType.SHARE_JOB_PROFILE_LINK,
+                  shareLink = shareLink
+                )
             )
             logger.d(
                 TAG,
@@ -391,7 +398,15 @@ class ShareApplicationLinkViewModel @Inject constructor(
             )
 
             return true
-        } catch (e: Exception) {
+        } catch (e: TryingToDowngradeJoiningStatusException){
+
+            _referralViewState.postValue(
+                ShareReferralViewState.ErrorInCreatingOrUpdatingDocument(
+                    "You've already referred this user for this job profile"
+                )
+            )
+            return false
+        }catch (e: Exception) {
             logger.e(
                 TAG,
                 "error in creating or updating document, stoppping...",
@@ -529,6 +544,14 @@ class ShareApplicationLinkViewModel @Inject constructor(
             "joining document created"
         )
         true
+    } catch (e: TryingToDowngradeJoiningStatusException){
+
+        _referralViewState.postValue(
+            ShareReferralViewState.ErrorInCreatingOrUpdatingDocument(
+                "You've already referred this user for this job profile"
+            )
+        )
+        false
     } catch (e: Exception) {
         logger.e(
             TAG,

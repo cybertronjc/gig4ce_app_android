@@ -22,5 +22,8 @@ sealed class ShareReferralViewState {
         val shareLink : String
     ) : ShareReferralViewState()
 
-    object DocumentUpdatedAndReferralShared : ShareReferralViewState()
+    data class DocumentUpdatedAndReferralShared(
+        val shareType : String,
+        val shareLink : String
+    ) : ShareReferralViewState()
 }

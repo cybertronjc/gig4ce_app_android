@@ -125,21 +125,40 @@ class JoiningRecyclerItemView(
         profilePicThumbnail: String?,
         gigerImage: String
     ) {
-        if (gigerImage.isEmpty() || gigerImage == "avatar.jpg") {
+
+        if(!profilePicThumbnail.isNullOrBlank()){
+            val userPathInFirebase = if (profilePicThumbnail.startsWith("profile_pics/"))
+                profilePicThumbnail
+            else
+                "profile_pics/${profilePicThumbnail}"
+
+            viewBinding.userImageIv.loadImageIfUrlElseTryFirebaseStorage(
+                userPathInFirebase,
+                R.drawable.ic_user_2,
+                R.drawable.ic_user_2
+            )
+
+        } else if(!gigerImage.isBlank()) {
+
+            if (gigerImage.isEmpty() || gigerImage == "avatar.jpg") {
+                viewBinding.userImageIv.loadImage(R.drawable.ic_user_2)
+                return
+            }
+
+            val userPathInFirebase = if (gigerImage.startsWith("profile_pics/"))
+                gigerImage
+            else
+                "profile_pics/${gigerImage}"
+
+            viewBinding.userImageIv.loadImageIfUrlElseTryFirebaseStorage(
+                userPathInFirebase,
+                R.drawable.ic_user_2,
+                R.drawable.ic_user_2
+            )
+        } else {
             viewBinding.userImageIv.loadImage(R.drawable.ic_user_2)
-            return
+
         }
-
-        val userPathInFirebase = if (gigerImage.startsWith("profile_pics/"))
-            gigerImage
-        else
-            "profile_pics/${gigerImage}"
-
-        viewBinding.userImageIv.loadImageIfUrlElseTryFirebaseStorage(
-            userPathInFirebase,
-            R.drawable.ic_user_2,
-            R.drawable.ic_user_2
-        )
     }
 
     override fun onClick(v: View?) {

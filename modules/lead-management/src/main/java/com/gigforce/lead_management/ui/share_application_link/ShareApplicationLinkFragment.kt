@@ -8,7 +8,9 @@ import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.core.content.FileProvider
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.gigforce.common_ui.utils.PushDownAnim
 import com.gigforce.common_ui.utils.UtilMethods
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfileOverview
@@ -21,6 +23,8 @@ import com.gigforce.lead_management.LeadManagementConstants
 import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.FragmentLeadManagementReferralBinding
+import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
+import com.gigforce.lead_management.ui.LeadManagementSharedViewModelState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
@@ -34,9 +38,15 @@ class ShareApplicationLinkFragment : BaseFragment2<FragmentLeadManagementReferra
     statusBarColor = R.color.lipstick_2
 ) {
 
+    companion object{
+        const val REQUEST_CODE_SHARE_VIA_WHATSAPP = 101
+        const val REQUEST_CODE_SHARE_VIA_OTHER_APPS = 102
+    }
+
     @Inject
     lateinit var navigation: INavigation
     private val viewModel: ShareApplicationLinkViewModel by viewModels()
+    private val sharedViewModel : LeadManagementSharedViewModel by activityViewModels()
 
     //Data
     private var shareType: String = ShareReferralType.SHARE_SIGNUP_LINK
@@ -131,27 +141,7 @@ class ShareApplicationLinkFragment : BaseFragment2<FragmentLeadManagementReferra
         PushDownAnim
             .setPushDownAnimTo(sendViaWhatsappLayout)
             .setOnClickListener {
-
-                if (shareType == ShareReferralType.SHARE_JOB_PROFILE_LINK) {
-
-                    viewModel.sendJobProfileReferralLink(
-                        userUid = userUid!!,
-                        jobProfileId = jobProfileId,
-                        jobProfileName = jobProfileName,
-                        tradeName = tradeName ?: "",
-                        joiningId = joiningId,
-                        jobProfileIcon = jobProfileIcon ?: ""
-                    )
-                } else {
-                    viewModel.sendAppReferralLink(
-                        name = name ?: "",
-                        mobileNumber = mobile!!,
-                        jobProfileId = jobProfileId,
-                        jobProfileName = jobProfileName,
-                        tradeName = tradeName ?: "",
-                        jobProfileIcon = jobProfileIcon ?: ""
-                    )
-                }
+                openWhatsAppForSharingLink()
             }
 
         PushDownAnim
@@ -169,17 +159,40 @@ class ShareApplicationLinkFragment : BaseFragment2<FragmentLeadManagementReferra
                         jobProfileIcon = jobProfileIcon ?: ""
                     )
                 } else {
-                    viewModel.sendJobProfileReferralLinkViaOtherApps(
-                        userUid = userUid!!,
+                    viewModel.sendAppReferralLink(
+                        name = name ?: "",
+                        mobileNumber = mobile!!,
                         jobProfileId = jobProfileId,
                         jobProfileName = jobProfileName,
                         tradeName = tradeName ?: "",
-                        joiningId = joiningId,
                         jobProfileIcon = jobProfileIcon ?: ""
                     )
                 }
 
             }
+    }
+
+    private fun openWhatsAppForSharingLink() {
+        if (shareType == ShareReferralType.SHARE_JOB_PROFILE_LINK) {
+
+            viewModel.sendJobProfileReferralLink(
+                userUid = userUid!!,
+                jobProfileId = jobProfileId,
+                jobProfileName = jobProfileName,
+                tradeName = tradeName ?: "",
+                joiningId = joiningId,
+                jobProfileIcon = jobProfileIcon ?: ""
+            )
+        } else {
+            viewModel.sendAppReferralLink(
+                name = name ?: "",
+                mobileNumber = mobile!!,
+                jobProfileId = jobProfileId,
+                jobProfileName = jobProfileName,
+                tradeName = tradeName ?: "",
+                jobProfileIcon = jobProfileIcon ?: ""
+            )
+        }
     }
 
     private fun initViewModel() {
@@ -188,18 +201,14 @@ class ShareApplicationLinkFragment : BaseFragment2<FragmentLeadManagementReferra
                 val referralState = it ?: return@observe
 
                 when (referralState) {
-                    ShareReferralViewState.DocumentUpdatedAndReferralShared -> {
+                    is ShareReferralViewState.DocumentUpdatedAndReferralShared -> {
                         viewBinding.pbReferralsFrag.gone()
 
                         Toast.makeText(requireContext(),
                             "Link Shared",
                             Toast.LENGTH_SHORT
                         ).show()
-
-                        navigation.popBackStack(
-                            LeadManagementNavDestinations.FRAGMENT_JOINING,
-                            false
-                        )
+                        ReferralLinkSharedResultDialogFragment.launchSuccess(childFragmentManager,referralState.shareLink)
                     }
                     is ShareReferralViewState.ErrorInCreatingOrUpdatingDocument -> {
                         viewBinding.pbReferralsFrag.gone()
@@ -215,7 +224,7 @@ class ShareApplicationLinkFragment : BaseFragment2<FragmentLeadManagementReferra
                     }
                     is ShareReferralViewState.OpenWhatsAppToShareDocumentSharingDocument -> {
                         viewBinding.pbReferralsFrag.gone()
-                        shareViaWhatsApp(referralState.shareLink)
+                        ReferralLinkSharedResultDialogFragment.launchError(childFragmentManager,referralState.shareLink)
                     }
                     is ShareReferralViewState.OpenOtherAppsToShareDocumentSharingDocument -> {
                         viewBinding.pbReferralsFrag.gone()
@@ -231,6 +240,30 @@ class ShareApplicationLinkFragment : BaseFragment2<FragmentLeadManagementReferra
                     }
                 }
             })
+
+        sharedViewModel
+            .viewState
+            .observe(viewLifecycleOwner, Observer {
+                it ?: return@Observer
+
+                when (it) {
+                    LeadManagementSharedViewModelState.OnReferralDialogOkayClicked -> {
+                        if(!isAdded) return@Observer
+                        navigateBackToJoiningListScreen()
+                    }
+                    is LeadManagementSharedViewModelState.OnReferralDialogSendLinkViaLocalWhatsappClicked -> {
+                        if(!isAdded) return@Observer
+                        shareViaWhatsApp(it.link)
+                    }
+                }
+            })
+    }
+
+    private fun navigateBackToJoiningListScreen() {
+        navigation.popBackStack(
+            LeadManagementNavDestinations.FRAGMENT_JOINING,
+            false
+        )
     }
 
     private fun shareViaWhatsApp(url: String) {
@@ -260,7 +293,10 @@ class ShareApplicationLinkFragment : BaseFragment2<FragmentLeadManagementReferra
         )
 
         try {
-            requireActivity().startActivity(whatsappIntent)
+            requireActivity().startActivityForResult(
+                whatsappIntent,
+                REQUEST_CODE_SHARE_VIA_WHATSAPP
+                )
         } catch (ex: ActivityNotFoundException) {
             startActivity(
                 Intent(
@@ -300,9 +336,17 @@ class ShareApplicationLinkFragment : BaseFragment2<FragmentLeadManagementReferra
                     outputFile
                 )
             )
-            startActivity(Intent.createChooser(shareIntent, "choose one"))
+            startActivityForResult(
+                Intent.createChooser(shareIntent, "choose one"),
+                REQUEST_CODE_SHARE_VIA_OTHER_APPS
+                )
         } catch (e: Exception) {
             //e.toString();
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        navigateBackToJoiningListScreen()
     }
 }

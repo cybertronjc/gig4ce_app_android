@@ -51,8 +51,14 @@ class GigerProfileCardComponent(context: Context, attrs: AttributeSet?) : FrameL
 
     fun setProfilePicture(image: String?, gigerName: String){
             if(!image.isNullOrBlank()){
-                val profilePicRef: StorageReference =
-                    FirebaseStorage.getInstance().reference.child(image)
+
+                val fullProfilePath = if(image.startsWith("profile_pics/")){
+                    image
+                } else{
+                    "profile_pics/$image"
+                }
+
+                val profilePicRef: StorageReference = FirebaseStorage.getInstance().reference.child(fullProfilePath)
                 Log.d("profilePicRef", profilePicRef.toString())
                 Glide.with(context)
                     .load(profilePicRef)
@@ -119,7 +125,7 @@ class GigerProfileCardComponent(context: Context, attrs: AttributeSet?) : FrameL
     }
 
     fun setJobProfileData(title: String,tradeName : String, companyLogo: String){
-        setJobProfileTitle(title)
+        setJobProfileTitle("$tradeName, $title")
         setJobProfileLogo(tradeName, companyLogo)
     }
 

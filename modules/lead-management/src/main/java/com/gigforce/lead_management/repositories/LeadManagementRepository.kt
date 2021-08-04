@@ -125,7 +125,7 @@ class LeadManagementRepository @Inject constructor(
         phoneNumber: String,
         jobProfileId: String,
         jobProfileName: String,
-        jobProfileIcon : String,
+        jobProfileIcon: String,
         signUpMode: String,
         lastStatusChangeSource: String,
         tradeName: String
@@ -204,7 +204,7 @@ class LeadManagementRepository @Inject constructor(
         name: String,
         jobProfileId: String,
         jobProfileName: String,
-        jobProfileIcon : String,
+        jobProfileIcon: String,
         phoneNumber: String = "",
         lastStatusChangeSource: String,
         tradeName: String,
@@ -223,6 +223,25 @@ class LeadManagementRepository @Inject constructor(
         } else {
             phoneNumber
         }
+
+        val profilePicPath = getProfileForUid.getString("profileAvatarName") ?: ""
+        var fullProfilePath = ""
+        if (profilePicPath.isNotBlank()) {
+            fullProfilePath = if (profilePicPath.startsWith("profile_pics/"))
+                profilePicPath
+            else
+                "profile_pics/$profilePicPath"
+        }
+
+        val profilePicPathThumbnail = getProfileForUid.getString("profilePicThumbnail") ?: ""
+        var fullProfileThumbnailPath = ""
+        if (profilePicPathThumbnail.isNotBlank()) {
+            fullProfileThumbnailPath = if (profilePicPathThumbnail.startsWith("profile_pics/"))
+                profilePicPathThumbnail
+            else
+                "profile_pics/$profilePicPathThumbnail"
+        }
+
 
         val getJobProfileLink = joiningsCollectionRef
             .whereEqualTo(
@@ -244,7 +263,9 @@ class LeadManagementRepository @Inject constructor(
                         "lastStatusChangeSource" to lastStatusChangeSource,
                         "jobProfileIdInvitedFor" to jobProfileId,
                         "jobProfileNameInvitedFor" to jobProfileName,
-                        "jobProfileIcon" to jobProfileIcon
+                        "jobProfileIcon" to jobProfileIcon,
+                        "profilePicture" to fullProfilePath,
+                        "profilePictureThumbnail" to fullProfileThumbnailPath
                     )
                 )
         } else if (getJobProfileLink.isEmpty) {
@@ -258,8 +279,8 @@ class LeadManagementRepository @Inject constructor(
                     status = JoiningStatus.APPLICATION_PENDING.getStatusString(),
                     name = name,
                     phoneNumber = userMobileNo,
-                    profilePicture = null,
-                    profilePictureThumbnail = null,
+                    profilePicture = fullProfilePath,
+                    profilePictureThumbnail = fullProfileThumbnailPath,
                     jobProfileIcon = jobProfileIcon,
                     jobProfileIdInvitedFor = jobProfileId,
                     jobProfileNameInvitedFor = jobProfileName,
@@ -295,7 +316,9 @@ class LeadManagementRepository @Inject constructor(
                         "lastStatusChangeSource" to lastStatusChangeSource,
                         "jobProfileIdInvitedFor" to jobProfileId,
                         "jobProfileNameInvitedFor" to jobProfileName,
-                        "jobProfileIcon" to jobProfileIcon
+                        "jobProfileIcon" to jobProfileIcon,
+                        "profilePicture" to fullProfilePath,
+                        "profilePictureThumbnail" to fullProfileThumbnailPath
                     )
                 )
         }
@@ -311,7 +334,7 @@ class LeadManagementRepository @Inject constructor(
         phoneNumber: String = "",
         lastStatusChangeSource: String,
         tradeName: String,
-        jobProfileIcon : String
+        jobProfileIcon: String
     ): String {
         val getProfileForUid = profileCollectionRef
             .document(userUid)
@@ -325,6 +348,24 @@ class LeadManagementRepository @Inject constructor(
             getProfileForUid.get("loginMobile") as String
         } else {
             phoneNumber
+        }
+
+        val profilePicPath = getProfileForUid.getString("profileAvatarName") ?: ""
+        var fullProfilePath = ""
+        if (profilePicPath.isNotBlank()) {
+            fullProfilePath = if (profilePicPath.startsWith("profile_pics/"))
+                profilePicPath
+            else
+                "profile_pics/$profilePicPath"
+        }
+
+        val profilePicPathThumbnail = getProfileForUid.getString("profilePicThumbnail") ?: ""
+        var fullProfileThumbnailPath = ""
+        if (profilePicPathThumbnail.isNotBlank()) {
+            fullProfileThumbnailPath = if (profilePicPathThumbnail.startsWith("profile_pics/"))
+                profilePicPathThumbnail
+            else
+                "profile_pics/$profilePicPathThumbnail"
         }
 
         val getJobProfileLink = joiningsCollectionRef
@@ -347,8 +388,8 @@ class LeadManagementRepository @Inject constructor(
                     status = JoiningStatus.JOINING_PENDING.getStatusString(),
                     name = name,
                     phoneNumber = userMobileNo,
-                    profilePicture = null,
-                    profilePictureThumbnail = null,
+                    profilePicture = fullProfilePath,
+                    profilePictureThumbnail = fullProfileThumbnailPath,
                     jobProfileIdInvitedFor = jobProfileId,
                     jobProfileNameInvitedFor = jobProfileName,
                     signUpMode = null,
@@ -383,6 +424,8 @@ class LeadManagementRepository @Inject constructor(
                         "lastStatusChangeSource" to lastStatusChangeSource,
                         "jobProfileIcon" to jobProfileIcon,
                         "tradeName" to tradeName,
+                        "profilePicture" to fullProfilePath,
+                        "profilePictureThumbnail" to fullProfileThumbnailPath
                     )
                 )
 
