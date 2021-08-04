@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.text.Editable
 import android.util.Log
 import android.util.Size
 import android.view.LayoutInflater
@@ -59,6 +60,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
+import android.text.TextWatcher
 
 enum class VerificationScreenStatus {
     OCR_COMPLETED,
@@ -184,9 +186,52 @@ class DrivingLicenseFragment : Fragment(),
         return false
     }
 
-    val CONFIRM_TAG: String = "confirm"
+    var anyDataEntered = false
+
+    inner class ValidationTextWatcher : TextWatcher {
+        override fun afterTextChanged(text: Editable?) {
+            context?.let { cxt ->
+                if (verificationScreenStatus == VerificationScreenStatus.DEFAULT || verificationScreenStatus == VerificationScreenStatus.FAILED) {
+                    text?.let {
+
+                        if (viewBinding.nameTilDl.editText?.text.toString()
+                                .isNullOrBlank() && viewBinding.dlnoTil.editText?.text.toString()
+                                .isNullOrBlank() && viewBinding.issueDate.text.toString()
+                                .isNullOrBlank() && viewBinding.expiryDate.text.toString()
+                                .isNullOrBlank() && viewBinding.dobDate.text.toString()
+                                .isNullOrBlank()
+                        ) {
+                            viewBinding.submitButton.text = "Skip"
+                            anyDataEntered = false
+                        } else {
+                            viewBinding.submitButton.text = "Submit"
+                            anyDataEntered = true
+                        }
+
+                    }
+                }
+            }
+        }
+
+        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            TODO("Not yet implemented")
+        }
+
+        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            TODO("Not yet implemented")
+        }
+
+    }
 
     private fun listeners() {
+
+        viewBinding.nameTilDl.editText?.addTextChangedListener(ValidationTextWatcher())
+        viewBinding.dlnoTil.editText?.addTextChangedListener(ValidationTextWatcher())
+        viewBinding.issueDate.addTextChangedListener(ValidationTextWatcher())
+        viewBinding.expiryDate.addTextChangedListener(ValidationTextWatcher())
+        viewBinding.dobDate.addTextChangedListener(ValidationTextWatcher())
+
+
         viewBinding.stateSpinner.keyListener = null
         viewBinding.toplayoutblock.setPrimaryClick(View.OnClickListener {
             //call for bottom sheet
@@ -208,7 +253,7 @@ class DrivingLicenseFragment : Fragment(),
 
         viewBinding.submitButton.setOnClickListener {
             hideSoftKeyboard()
-            if (viewBinding.toplayoutblock.isDocDontOptChecked() || verificationScreenStatus == VerificationScreenStatus.VERIFIED || verificationScreenStatus == VerificationScreenStatus.STARTED_VERIFYING) {
+            if (viewBinding.toplayoutblock.isDocDontOptChecked() || verificationScreenStatus == VerificationScreenStatus.VERIFIED || verificationScreenStatus == VerificationScreenStatus.STARTED_VERIFYING || !anyDataEntered) {
                 checkForNextDoc()
             } else {
                 if (viewBinding.stateSpinner.text.equals("Select State")) {
@@ -751,7 +796,7 @@ class DrivingLicenseFragment : Fragment(),
 
                     }, WAITING_TIME)
                     viewBinding.belowLayout.visible()
-                    setAlreadyfilledData(drivingLicenseDataModel,false)
+                    setAlreadyfilledData(drivingLicenseDataModel, false)
                 }
                 "failed" -> {
                     verificationScreenStatus = VerificationScreenStatus.FAILED
@@ -762,7 +807,7 @@ class DrivingLicenseFragment : Fragment(),
                         "Verification Failed",
                         "The details submitted are incorrect. Please try again."
                     )
-                    setAlreadyfilledData(drivingLicenseDataModel,true)
+                    setAlreadyfilledData(drivingLicenseDataModel, true)
                 }
                 "" -> {
                     verificationScreenStatus = VerificationScreenStatus.DEFAULT

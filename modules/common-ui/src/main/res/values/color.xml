@@ -101,4 +101,5 @@
 
     <color name="status_bar_pink">#e53369</color>
 
+    <color name="edit_action">#e42c64</color>
 </resources>

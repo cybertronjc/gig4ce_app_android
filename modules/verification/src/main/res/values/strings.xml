@@ -277,5 +277,6 @@
 
     <string name="veri_done_text">As your documents will get verified, you will be able to start your gigs.</string>
     <string name="congratulations">Congratulations !</string>
+    <string name="change_text"><![CDATA[<u>Change</u>]]></string>
 
 </resources>

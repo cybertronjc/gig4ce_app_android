@@ -18,7 +18,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.veri_screen_info_component.view.*
 import javax.inject.Inject
-
+import android.text.TextWatcher
 @AndroidEntryPoint
 class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
         FrameLayout(context, attrs) {
@@ -65,7 +65,7 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
             setDocInfo(docinfostr)
             setQueryStr(querytextstr)
             setMissingDocText(missingdoctext)
-//            setCheckBoxChangeListener()
+            setCheckBoxChangeListener()
         }
 
     }

@@ -204,21 +204,22 @@ class PanCardFragment : Fragment(),
         TextWatcher {
         override fun afterTextChanged(text: Editable?) {
             context?.let { cxt ->
-                text?.let {
-                    if (viewBinding.nameTil.editText?.text.toString()
-                            .isNullOrBlank() && viewBinding.panTil.editText?.text.toString()
-                            .isNullOrBlank() && viewBinding.fatherNameTil.editText?.text.toString()
-                            .isNullOrBlank() && viewBinding.dateOfBirth.text.toString()
-                            .isNullOrBlank()
-                    ) {
-                        viewBinding.submitButton.text = "Skip"
-                        anyDataEntered = false
-                    } else {
-                        viewBinding.submitButton.text = "Submit"
-                        anyDataEntered = true
+                if (verificationScreenStatus == VerificationScreenStatus.DEFAULT || verificationScreenStatus == VerificationScreenStatus.FAILED) {
+                    text?.let {
+                        if (viewBinding.nameTil.editText?.text.toString()
+                                .isNullOrBlank() && viewBinding.panTil.editText?.text.toString()
+                                .isNullOrBlank() && viewBinding.fatherNameTil.editText?.text.toString()
+                                .isNullOrBlank() && viewBinding.dateOfBirth.text.toString()
+                                .isNullOrBlank()
+                        ) {
+                            viewBinding.submitButton.text = "Skip"
+                            anyDataEntered = false
+                        } else {
+                            viewBinding.submitButton.text = "Submit"
+                            anyDataEntered = true
+                        }
                     }
                 }
-
             }
         }
 

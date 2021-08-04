@@ -10,6 +10,10 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.text.Editable
+import android.text.SpannableString
+import android.text.TextWatcher
+import android.text.style.UnderlineSpan
 import android.util.Log
 import android.util.Size
 import android.view.LayoutInflater
@@ -104,9 +108,16 @@ class BankAccountFragment : Fragment(),
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(BankAccountViewModel::class.java)
         getDataFromIntent(savedInstanceState)
+        initViews()
         initializeImages()
         observer()
         listeners()
+    }
+
+    private fun initViews() {
+        val content = SpannableString(resources.getString(R.string.change_text))
+        content.setSpan(UnderlineSpan(), 0, content.length, 0)
+        viewBinding.editBankDetail.text = content
     }
 
     var allNavigationList = ArrayList<String>()
@@ -177,7 +188,8 @@ class BankAccountFragment : Fragment(),
                         verificationScreenStatus = VerificationScreenStatus.VERIFIED
                         verifiedStatusViews(it)
                         viewBinding.belowLayout.visible()
-                        setAlreadyfilledData(it,false)
+                        setAlreadyfilledData(it, false)
+                        viewBinding.editBankDetail.visible()
                     } else {
                         checkforStatusAndVerified(it)
                     }
@@ -194,6 +206,7 @@ class BankAccountFragment : Fragment(),
         viewBinding.submitButton.gone()
         viewBinding.progressBar.gone()
         viewBinding.belowLayout.gone()
+        viewBinding.editBankDetail.gone()
         viewBinding.toplayoutblock.setVerificationSuccessfulView(
             "Bank Account pending for verify",
             "Verifying"
@@ -251,7 +264,6 @@ class BankAccountFragment : Fragment(),
             when (it) {
                 "started" -> {
                     verificationScreenStatus = VerificationScreenStatus.STARTED_VERIFYING
-                    print("Bank Verification started")
                     startedStatusViews(obj)
                     Handler().postDelayed({
                         try {
@@ -270,27 +282,24 @@ class BankAccountFragment : Fragment(),
                         }
                     }, WAITING_TIME)
                     viewBinding.belowLayout.visible()
-                    setAlreadyfilledData(obj,false)
+                    setAlreadyfilledData(obj, false)
                 }
                 "failed" -> {
                     verificationScreenStatus = VerificationScreenStatus.FAILED
-                    print("failed transaction")
                     resetInitializeViews()
                     viewBinding.toplayoutblock.uploadStatusLayout(
                         AppConstants.DETAILS_MISMATCH,
                         "Verification Failed",
                         "The details submitted are incorrect. Please try again."
                     )
-                    setAlreadyfilledData(obj,true)
+                    setAlreadyfilledData(obj, true)
                 }
                 "" -> {
                     verificationScreenStatus = VerificationScreenStatus.DEFAULT
-                    print("transaction reinitialized")
                     resetInitializeViews()
                 }
                 "completed" -> {
                     verificationScreenStatus = VerificationScreenStatus.COMPLETED
-                    print("beneficiary name will show")
                     showBankBeneficiaryName(obj)
                 }
                 else -> "unmatched status"
@@ -298,7 +307,7 @@ class BankAccountFragment : Fragment(),
         }
     }
 
-    private fun setAlreadyfilledData(obj: BankDetailsDataModel,enableFields: Boolean) {
+    private fun setAlreadyfilledData(obj: BankDetailsDataModel, enableFields: Boolean) {
 
         viewBinding.bankNameTil.editText?.setText(obj.bankName)
 
@@ -344,12 +353,17 @@ class BankAccountFragment : Fragment(),
         viewBinding.submitButton.isEnabled = true
         viewBinding.belowLayout.visible()
         viewBinding.confirmBeneficiaryLayout.gone()
+        viewBinding.editBankDetail.gone()
         viewBinding.toplayoutblock.setVerificationSuccessfulView(
             "Bank Account",
             "You need to upload"
         )
         initializeImages()
         viewBinding.toplayoutblock.resetAllViews()
+
+        viewBinding.bankAccNumberItl.editText?.setText("")
+        viewBinding.bankNameTil.editText?.setText("")
+        viewBinding.ifscCode.editText?.setText("")
     }
 
     private fun showBankBeneficiaryName(obj: BankDetailsDataModel) {
@@ -406,16 +420,55 @@ class BankAccountFragment : Fragment(),
         }
     }
 
+    var anyDataEntered = false
+
+    inner class ValidationTextWatcher : TextWatcher {
+        override fun afterTextChanged(text: Editable?) {
+            context?.let { cxt ->
+                if (verificationScreenStatus == VerificationScreenStatus.DEFAULT || verificationScreenStatus == VerificationScreenStatus.FAILED) {
+                    text?.let {
+                        if (viewBinding.bankNameTil.editText?.text.toString()
+                                .isNullOrBlank() || viewBinding.bankAccNumberItl.editText?.text.toString()
+                                .isNullOrBlank() || viewBinding.ifscCode.editText?.text.toString()
+                                .isNullOrBlank()
+                        ) {
+                            viewBinding.submitButton.text = "Skip"
+                            anyDataEntered = false
+                        } else {
+                            viewBinding.submitButton.text = "Submit"
+                            anyDataEntered = true
+                        }
+                    }
+                }
+            }
+        }
+
+        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+        }
+
+        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+        }
+
+    }
+
     private fun listeners() {
+        viewBinding.bankNameTil.editText?.addTextChangedListener(ValidationTextWatcher())
+        viewBinding.bankAccNumberItl.editText?.addTextChangedListener(ValidationTextWatcher())
+        viewBinding.ifscCode.editText?.addTextChangedListener(ValidationTextWatcher())
+
         viewBinding.toplayoutblock.setPrimaryClick(View.OnClickListener {
             //call for bottom sheet
             //showCameraAndGalleryOption()
             checkForPermissionElseShowCameraGalleryBottomSheet()
         })
+        viewBinding.editBankDetail.setOnClickListener {
+            resetInitializeViews()
+            viewBinding.editBankDetail.gone()
+        }
         viewBinding.submitButton.setOnClickListener {
             hideSoftKeyboard()
 
-            if (viewBinding.toplayoutblock.isDocDontOptChecked() || verificationScreenStatus == VerificationScreenStatus.VERIFIED || verificationScreenStatus == VerificationScreenStatus.STARTED_VERIFYING || verificationScreenStatus == VerificationScreenStatus.COMPLETED) {
+            if (viewBinding.toplayoutblock.isDocDontOptChecked() || verificationScreenStatus == VerificationScreenStatus.VERIFIED || verificationScreenStatus == VerificationScreenStatus.STARTED_VERIFYING || verificationScreenStatus == VerificationScreenStatus.COMPLETED || !anyDataEntered) {
                 checkForNextDoc()
             } else {
                 val ifsc =
