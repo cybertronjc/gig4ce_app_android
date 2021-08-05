@@ -29,6 +29,7 @@
     <color name="lipstick_2">#e42c64</color>
     <color name="lipstick_3">#e53369</color>
 
+    <color name="lipstick_light">#ECAFC1</color>
 
     <!-- Theme Colors -->
     <color name="colorPrimary">@color/brandColor1</color>

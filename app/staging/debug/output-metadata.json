@@ -4,15 +4,15 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.gigforce.app",
+  "applicationId": "com.gigforce.app.staging",
   "variantName": "stagingDebug",
   "elements": [
     {
       "type": "SINGLE",
       "filters": [],
       "properties": [],
-      "versionCode": 80,
-      "versionName": "1.27.1-staging",
+      "versionCode": 1,
+      "versionName": "1.0.0-Staging",
       "enabled": true,
       "outputFile": "app-staging-debug.apk"
     }

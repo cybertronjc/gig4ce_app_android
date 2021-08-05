@@ -46,11 +46,11 @@ class TeamLeaderLoginDetailsViewModel @Inject constructor(
     var isInitialDataLoaded = false
     private val limit: Int = 10
 
-    fun getListingForTL(searchDate: String, searchCity: String) = viewModelScope.launch {
+    fun getListingForTL( searchCity: String, searchDate: String) = viewModelScope.launch {
         _loginListing.postValue(Lce.loading())
 
         try {
-            val response = tlLoginSummaryRepository.fetchListingForTL(searchDate,searchCity,0, 100)
+            val response = tlLoginSummaryRepository.fetchListingForTL(searchCity,searchDate,0, 100)
             _loginListing.value = Lce.content(response)
 
         }catch (e: Exception){

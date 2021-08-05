@@ -97,6 +97,35 @@
                 app:layout_constraintEnd_toEndOf="parent"/>
 
             <TextView
+                android:id="@+id/noData"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginEnd="@dimen/size_16"
+                android:layout_marginBottom="@dimen/size_22"
+                android:gravity="center"
+                android:visibility="gone"
+                android:minHeight="@dimen/size_36"
+                android:text="No Data Found"
+                android:layout_marginTop="16dp"
+                android:textColor="@color/black"
+                app:layout_constraintTop_toBottomOf="@id/dateTV"
+                app:layout_constraintBottom_toTopOf="@id/submit"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/dateTV"
+                app:layout_constraintBottom_toTopOf="@id/submit"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
                 android:id="@+id/submit"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"

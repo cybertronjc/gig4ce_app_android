@@ -13,6 +13,8 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.common_ui.ext.showToast
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.DateHelper
 import com.gigforce.core.utils.Lce
@@ -114,22 +116,36 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
         }
     }
 
-    private fun observer() {
+    private fun observer() = viewBinding.apply {
         viewModel.loginListing.observe(viewLifecycleOwner, Observer {
             val res = it ?: return@Observer
             when(res){
                 Lce.Loading -> {
-
+                    progressBar.visibility = View.VISIBLE
                 }
 
                 is Lce.Content -> {
+                    progressBar.visibility = View.GONE
                     setupReyclerView(res.content)
+                }
+
+                is Lce.Error -> {
+                    showToast("Error loading data")
+                    progressBar.visibility = View.GONE
                 }
             }
         })
     }
 
     private fun setupReyclerView(res: List<ListingTLModel>) {
+
+        if (res.isEmpty()){
+            viewBinding.noData.visibility = View.VISIBLE
+            viewBinding.datecityRv.visibility = View.GONE
+        }else {
+            viewBinding.noData.visibility = View.GONE
+            viewBinding.datecityRv.visibility = View.VISIBLE
+        }
         viewBinding.datecityRv.layoutManager = LinearLayoutManager(context)
         tlLoginSummaryAdapter.submitList(res)
         viewBinding.datecityRv.adapter = tlLoginSummaryAdapter
@@ -141,10 +157,12 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
                 LoginSummaryConstants.INTENT_EXTRA_MODE to LoginSummaryConstants.MODE_EDIT,
                 LoginSummaryConstants.INTENT_LOGIN_SUMMARY to listingTLModel
             ))
-        }else{
-            showToast("Select today's summary to edit")
-        }
-    }
+        }else {
+            navigation.navigateTo("gig/addNewLoginSummary", bundleOf(
+                LoginSummaryConstants.INTENT_EXTRA_MODE to LoginSummaryConstants.MODE_EDIT,
+                LoginSummaryConstants.INTENT_LOGIN_SUMMARY to listingTLModel,
+                LoginSummaryConstants.INTENT_EXTRA_MODE to LoginSummaryConstants.MODE_VIEW
+            ))
 
-
+        }}
 }
