@@ -42,7 +42,7 @@ object LeadActivationViewTypeLoader : IViewTypeLoader {
                 context,
                 null
             )
-            else -> throw IllegalStateException("no view type match")
+            else -> null
         }
     }
 }

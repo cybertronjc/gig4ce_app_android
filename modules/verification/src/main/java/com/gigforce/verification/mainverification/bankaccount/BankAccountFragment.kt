@@ -304,6 +304,7 @@ class BankAccountFragment : Fragment(),
                                     "Document will be verified soon. You can click Next to proceed."
                                 )
                                 viewBinding.toplayoutblock.setVerificationSuccessfulView("", "")
+                                viewBinding.editBankDetail.visible()
                             }
                         } catch (e: Exception) {
 
@@ -311,6 +312,7 @@ class BankAccountFragment : Fragment(),
                     }, WAITING_TIME)
                     viewBinding.belowLayout.visible()
                     setAlreadyfilledData(obj, false)
+                    viewBinding.editBankDetail.visible()
                 }
                 "failed" -> {
                     verificationScreenStatus = VerificationScreenStatus.FAILED
@@ -321,14 +323,17 @@ class BankAccountFragment : Fragment(),
                         "The details submitted are incorrect. Please try again."
                     )
                     setAlreadyfilledData(obj, true)
+                    viewBinding.editBankDetail.gone()
                 }
                 "" -> {
                     verificationScreenStatus = VerificationScreenStatus.DEFAULT
                     resetInitializeViews()
+                    viewBinding.editBankDetail.gone()
                 }
                 "completed" -> {
                     verificationScreenStatus = VerificationScreenStatus.COMPLETED
                     showBankBeneficiaryName(obj)
+                    viewBinding.editBankDetail.gone()
                 }
                 else -> "unmatched status"
             }
@@ -453,7 +458,7 @@ class BankAccountFragment : Fragment(),
     inner class ValidationTextWatcher : TextWatcher {
         override fun afterTextChanged(text: Editable?) {
             context?.let { cxt ->
-                if (verificationScreenStatus == VerificationScreenStatus.DEFAULT || verificationScreenStatus == VerificationScreenStatus.FAILED) {
+                if (verificationScreenStatus == VerificationScreenStatus.DEFAULT || verificationScreenStatus == VerificationScreenStatus.FAILED || verificationScreenStatus == VerificationScreenStatus.OCR_COMPLETED) {
                     text?.let {
                         if (viewBinding.bankNameTil.editText?.text.toString()
                                 .isNullOrBlank() || viewBinding.bankAccNumberItl.editText?.text.toString()

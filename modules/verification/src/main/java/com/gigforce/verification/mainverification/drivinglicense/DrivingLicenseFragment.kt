@@ -191,7 +191,7 @@ class DrivingLicenseFragment : Fragment(),
     inner class ValidationTextWatcher : TextWatcher {
         override fun afterTextChanged(text: Editable?) {
             context?.let { cxt ->
-                if (verificationScreenStatus == VerificationScreenStatus.DEFAULT || verificationScreenStatus == VerificationScreenStatus.FAILED) {
+                if (verificationScreenStatus == VerificationScreenStatus.DEFAULT || verificationScreenStatus == VerificationScreenStatus.FAILED || verificationScreenStatus == VerificationScreenStatus.OCR_COMPLETED) {
                     text?.let {
 
                         if (viewBinding.nameTilDl.editText?.text.toString()

@@ -4,7 +4,6 @@ import android.Manifest
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.ContentResolver
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -75,7 +74,8 @@ enum class VerificationScreenStatus {
 
 @AndroidEntryPoint
 class PanCardFragment : Fragment(),
-    VerificationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener, IOnBackPressedOverride {
+    VerificationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener,
+    IOnBackPressedOverride {
 
     companion object {
         fun newInstance() = PanCardFragment()
@@ -139,10 +139,12 @@ class PanCardFragment : Fragment(),
         }
 
     }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, FROM_CLIENT_ACTIVATON)
     }
+
     private fun observer() {
         viewModel.kycOcrResult.observe(viewLifecycleOwner, Observer {
             verificationScreenStatus = VerificationScreenStatus.OCR_COMPLETED
@@ -160,7 +162,7 @@ class PanCardFragment : Fragment(),
                         if (!it.name.isNullOrBlank())
                             viewBinding.nameTil.editText?.setText(it.name)
                         if (!it.dateOfBirth.isNullOrBlank()) {
-                            if(it.dateOfBirth.contains("/") || it.dateOfBirth.contains("-")) {
+                            if (it.dateOfBirth.contains("/") || it.dateOfBirth.contains("-")) {
                                 viewBinding.dateOfBirth.text = it.dateOfBirth
                                 viewBinding.dobLabel.visible()
                             }
@@ -211,14 +213,11 @@ class PanCardFragment : Fragment(),
 
     var anyDataEntered = false
 
-    inner class ValidationTextWatcher(
-        val context: Context?,
-        val viewBinding: PanCardFragmentBinding
-    ) :
+    inner class ValidationTextWatcher :
         TextWatcher {
         override fun afterTextChanged(text: Editable?) {
             context?.let { cxt ->
-                if (verificationScreenStatus == VerificationScreenStatus.DEFAULT || verificationScreenStatus == VerificationScreenStatus.FAILED) {
+                if (verificationScreenStatus == VerificationScreenStatus.DEFAULT || verificationScreenStatus == VerificationScreenStatus.FAILED || verificationScreenStatus == VerificationScreenStatus.OCR_COMPLETED) {
                     text?.let {
                         if (viewBinding.nameTil.editText?.text.toString()
                                 .isNullOrBlank() && viewBinding.panTil.editText?.text.toString()
@@ -251,23 +250,17 @@ class PanCardFragment : Fragment(),
 
         viewBinding.nameTil.editText?.addTextChangedListener(
             ValidationTextWatcher(
-                context,
-                viewBinding
             )
         )
         viewBinding.panTil.editText?.addTextChangedListener(
             ValidationTextWatcher(
-                context,
-                viewBinding
             )
         )
         viewBinding.fatherNameTil.editText?.addTextChangedListener(
             ValidationTextWatcher(
-                context,
-                viewBinding
             )
         )
-        viewBinding.dateOfBirth.addTextChangedListener(ValidationTextWatcher(context, viewBinding))
+        viewBinding.dateOfBirth.addTextChangedListener(ValidationTextWatcher())
 
         viewBinding.toplayoutblock.setPrimaryClick(View.OnClickListener {
             //call for bottom sheet
@@ -714,7 +707,7 @@ class PanCardFragment : Fragment(),
 
     private fun resetInitializeViews() {
         viewBinding.submitButton.visible()
-        viewBinding.submitButton.text = "Submit"
+        viewBinding.submitButton.text = "Skip"
         viewBinding.submitButton.isEnabled = true
         viewBinding.belowLayout.visible()
         viewBinding.toplayoutblock.setVerificationSuccessfulView(
