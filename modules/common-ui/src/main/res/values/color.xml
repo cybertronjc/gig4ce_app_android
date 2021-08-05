@@ -102,4 +102,5 @@
     <color name="status_bar_pink">#e53369</color>
     <color name="giger_card_text">#9D9D9D</color>
 
+    <color name="edit_action">#e42c64</color>
 </resources>

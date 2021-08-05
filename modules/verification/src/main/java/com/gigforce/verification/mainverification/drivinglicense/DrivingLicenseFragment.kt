@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.text.Editable
 import android.util.Log
 import android.util.Size
 import android.view.LayoutInflater
@@ -59,6 +60,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
+import android.text.TextWatcher
 
 enum class VerificationScreenStatus {
     OCR_COMPLETED,
@@ -113,7 +115,7 @@ class DrivingLicenseFragment : Fragment(),
         return viewBinding.root
     }
 
-    private val SPLASH_TIME_OUT: Long = 1000 * 5
+    private val WAITING_TIME: Long = 1000 * 3
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -170,7 +172,7 @@ class DrivingLicenseFragment : Fragment(),
 
     override fun onBackPressed(): Boolean {
         if (FROM_CLIENT_ACTIVATON) {
-            if (isDLVerified) {
+            if (verificationScreenStatus == VerificationScreenStatus.VERIFIED) {
                 var navFragmentsData = activity as NavFragmentsData
                 navFragmentsData.setData(
                     bundleOf(
@@ -184,9 +186,50 @@ class DrivingLicenseFragment : Fragment(),
         return false
     }
 
-    val CONFIRM_TAG: String = "confirm"
+    var anyDataEntered = false
+
+    inner class ValidationTextWatcher : TextWatcher {
+        override fun afterTextChanged(text: Editable?) {
+            context?.let { cxt ->
+                if (verificationScreenStatus == VerificationScreenStatus.DEFAULT || verificationScreenStatus == VerificationScreenStatus.FAILED) {
+                    text?.let {
+
+                        if (viewBinding.nameTilDl.editText?.text.toString()
+                                .isNullOrBlank() && viewBinding.dlnoTil.editText?.text.toString()
+                                .isNullOrBlank() && viewBinding.issueDate.text.toString()
+                                .isNullOrBlank() && viewBinding.expiryDate.text.toString()
+                                .isNullOrBlank() && viewBinding.dobDate.text.toString()
+                                .isNullOrBlank()
+                        ) {
+                            viewBinding.submitButton.text = "Skip"
+                            anyDataEntered = false
+                        } else {
+                            viewBinding.submitButton.text = "Submit"
+                            anyDataEntered = true
+                        }
+
+                    }
+                }
+            }
+        }
+
+        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+        }
+
+        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+        }
+
+    }
 
     private fun listeners() {
+
+        viewBinding.nameTilDl.editText?.addTextChangedListener(ValidationTextWatcher())
+        viewBinding.dlnoTil.editText?.addTextChangedListener(ValidationTextWatcher())
+        viewBinding.issueDate.addTextChangedListener(ValidationTextWatcher())
+        viewBinding.expiryDate.addTextChangedListener(ValidationTextWatcher())
+        viewBinding.dobDate.addTextChangedListener(ValidationTextWatcher())
+
+
         viewBinding.stateSpinner.keyListener = null
         viewBinding.toplayoutblock.setPrimaryClick(View.OnClickListener {
             //call for bottom sheet
@@ -208,7 +251,7 @@ class DrivingLicenseFragment : Fragment(),
 
         viewBinding.submitButton.setOnClickListener {
             hideSoftKeyboard()
-            if (viewBinding.toplayoutblock.isDocDontOptChecked() || verificationScreenStatus == VerificationScreenStatus.VERIFIED || verificationScreenStatus == VerificationScreenStatus.STARTED_VERIFYING) {
+            if (viewBinding.toplayoutblock.isDocDontOptChecked() || verificationScreenStatus == VerificationScreenStatus.VERIFIED || verificationScreenStatus == VerificationScreenStatus.STARTED_VERIFYING || !anyDataEntered) {
                 checkForNextDoc()
             } else {
                 if (viewBinding.stateSpinner.text.equals("Select State")) {
@@ -267,7 +310,6 @@ class DrivingLicenseFragment : Fragment(),
         }
     }
 
-    var isDLVerified = false
     private fun observer() {
         viewModel.kycOcrResult.observe(viewLifecycleOwner, Observer {
             activeLoader(false)
@@ -300,15 +342,15 @@ class DrivingLicenseFragment : Fragment(),
                     } else {
                         viewBinding.toplayoutblock.uploadStatusLayout(
                             AppConstants.UNABLE_TO_FETCH_DETAILS,
-                            "UNABLE TO FETCH DETAILS",
-                            "Enter your Driving License details manually or try again to continue the verification process."
+                            "Unable to fetch information",
+                            "Enter the Driving License details manually below"
                         )
                     }
                 } else {
                     viewBinding.toplayoutblock.uploadStatusLayout(
                         AppConstants.UNABLE_TO_FETCH_DETAILS,
-                        "UNABLE TO FETCH DETAILS",
-                        "Enter your Driving License details manually or try again to continue the verification process."
+                        "Unable to fetch information",
+                        "Enter the Driving License details manually below"
                     )
                     showToast("Ocr status " + it.message)
                 }
@@ -328,6 +370,8 @@ class DrivingLicenseFragment : Fragment(),
                     if (it.verified) {
                         verificationScreenStatus = VerificationScreenStatus.VERIFIED
                         verifiedStatusViews(it)
+                        viewBinding.belowLayout.visible()
+                        setAlreadyfilledData(it, false)
                     } else {
                         checkforStatusAndVerified(it)
                     }
@@ -738,16 +782,18 @@ class DrivingLicenseFragment : Fragment(),
                                 verifiedStatusViews(null)
                                 viewBinding.toplayoutblock.uploadStatusLayout(
                                     AppConstants.UNABLE_TO_FETCH_DETAILS,
-                                    "VERIFICATION IN PROGRESS",
-                                    "Click next to proceed. Verification will be done in parallel."
+                                    "Verification in progress",
+                                    "Document will be verified soon. You can click Next to proceed."
                                 )
-                                viewBinding.toplayoutblock.setVerificationSuccessfulView("","")
+                                viewBinding.toplayoutblock.setVerificationSuccessfulView("", "")
                             }
-                        }catch (e:Exception){
+                        } catch (e: Exception) {
 
                         }
 
-                    }, SPLASH_TIME_OUT)
+                    }, WAITING_TIME)
+                    viewBinding.belowLayout.visible()
+                    setAlreadyfilledData(drivingLicenseDataModel, false)
                 }
                 "failed" -> {
                     verificationScreenStatus = VerificationScreenStatus.FAILED
@@ -755,9 +801,10 @@ class DrivingLicenseFragment : Fragment(),
                     resetInitializeViews()
                     viewBinding.toplayoutblock.uploadStatusLayout(
                         AppConstants.DETAILS_MISMATCH,
-                        "VERIFICATION FAILED",
-                        "Please recheck the information and try again"
+                        "Verification Failed",
+                        "The details submitted are incorrect. Please try again."
                     )
+                    setAlreadyfilledData(drivingLicenseDataModel, true)
                 }
                 "" -> {
                     verificationScreenStatus = VerificationScreenStatus.DEFAULT
@@ -767,6 +814,95 @@ class DrivingLicenseFragment : Fragment(),
                 else -> "unmatched status"
             }
         }
+    }
+
+    private fun setAlreadyfilledData(
+        drivingLicenseDataModel: DrivingLicenseDataModel,
+        enableFields: Boolean
+    ) {
+
+        viewBinding.nameTilDl.editText?.setText(drivingLicenseDataModel.name)
+
+        viewBinding.dlnoTil.editText?.setText(drivingLicenseDataModel.dlNo)
+
+        drivingLicenseDataModel.issuedate?.let {
+
+            viewBinding.issueDate.text = it
+
+            viewBinding.calendarLabel2.visible()
+
+        }
+
+        drivingLicenseDataModel.dob?.let {
+
+            viewBinding.dobDate.text = DateHelper.getDateInDDMMYYYYHiphen(it)
+
+            viewBinding.calendarLabel.visible()
+
+        }
+
+        drivingLicenseDataModel.expirydate?.let {
+
+            viewBinding.expiryDate.text = DateHelper.getDateInDDMMYYYY(it)
+
+            viewBinding.calendarLabel1.visible()
+
+        }
+
+        var list = ArrayList<KYCImageModel>()
+
+        drivingLicenseDataModel.frontImage?.let {
+
+            getDBImageUrl(it)?.let {
+
+                list.add(
+
+                    KYCImageModel(
+
+                        text = getString(R.string.upload_driving_license_front_side_new),
+
+                        imagePath = it,
+
+                        imageUploaded = true
+
+                    )
+
+                )
+
+            }
+
+        }
+
+        drivingLicenseDataModel.backImage?.let {
+
+            getDBImageUrl(it)?.let {
+
+                list.add(
+
+                    KYCImageModel(
+
+                        text = getString(R.string.upload_driving_license_back_side_new),
+
+                        imagePath = it,
+
+                        imageUploaded = true
+
+                    )
+
+                )
+
+            }
+
+        }
+
+        viewBinding.toplayoutblock.setImageViewPager(list)
+
+        viewBinding.nameTilDl.editText?.isEnabled = enableFields
+        viewBinding.dlnoTil.editText?.isEnabled = enableFields
+        viewBinding.dobDateRl.isEnabled = enableFields
+        viewBinding.issueDateRl.isEnabled = enableFields
+        viewBinding.expiryDateRl.isEnabled = enableFields
+
     }
 
     private fun resetInitializeViews() {

@@ -249,7 +249,7 @@ class ApplicationClientActivationFragment : Fragment(),
                     )
                     "driving_licence" -> navigation.navigateTo(
                         "verification/drivinglicenseimageupload",
-                        bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
+                            bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
                     )
                     "learning" -> navigation.navigateTo(
                             "learning/coursedetails",
@@ -259,15 +259,6 @@ class ApplicationClientActivationFragment : Fragment(),
                             )
                     )
 
-//                    "aadhar_card" -> navigation.navigateTo(
-//                        "verification/AADHAR",
-//                        bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
-//                    )
-//
-//                    "pan_card" -> navigation.navigateTo(
-//                        "verification/PAN",
-//                        bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
-//                    )
                     "aadhar_card" -> navigation.navigateTo(
                         "verification/aadhaarcardimageupload",
                         bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
@@ -418,15 +409,6 @@ class ApplicationClientActivationFragment : Fragment(),
                 "verification/bank_account_fragment",
                 bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
             )
-//            "aadhar_card" -> navigation.navigateTo(
-//                "verification/AADHAR",
-//                bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
-//            )
-//
-//            "pan_card" -> navigation.navigateTo(
-//                "verification/PAN",
-//                bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
-//            )
         }
     }
 

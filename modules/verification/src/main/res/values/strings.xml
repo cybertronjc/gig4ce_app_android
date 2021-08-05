@@ -95,7 +95,7 @@
     <string name="upload_aadhar_card_front_side_new">Upload your Aadhaar Card\nFRONT Side</string>
     <string name="upload_pan_card_new">Please upload your PAN Card\nfor verification</string>
     <string name="upload_bank_account_new">Upload your Bank Passbook\nFront Page</string>
-    <string name="upload_driving_license_back_side_new">Upload your Driving License\nback Side</string>
+    <string name="upload_driving_license_back_side_new">Upload the Driving License\nback side(optional)</string>
     <string name="upload_driving_license_front_side_new">Upload your Driving License\nfront Side</string>
     <string name="no_i_don_t_have_aadhar_card">No, I don\'t have Aadhaar Card</string>
     <string name="yes_i_have_aadhar_card">Yes, I have Aadhaar Card</string>
@@ -277,5 +277,6 @@
 
     <string name="veri_done_text">As your documents will get verified, you will be able to start your gigs.</string>
     <string name="congratulations">Congratulations !</string>
+    <string name="change_text"><![CDATA[<u>Change</u>]]></string>
 
 </resources>

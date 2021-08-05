@@ -20,6 +20,7 @@ import com.gigforce.common_ui.utils.UtilMethods
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.core.AppConstants
 import com.gigforce.core.StringConstants
+import com.gigforce.core.datamodels.verification.AadharCardDataModel
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
@@ -235,9 +236,30 @@ class AadhaarCardImageUploadFragment : Fragment(),
                 if (it.verified) {
 //                    verificationScreenStatus = VerificationScreenStatus.VERIFIED
                     verifiedStatusViews()
+                    viewBinding.belowLayout.visible()
+                    setAlreadyfilledData(it, false)
+                }
+                else{
+                    viewBinding.belowLayout.gone()
                 }
             }
         })
+    }
+
+    private fun setAlreadyfilledData(aadharCardDataModel: AadharCardDataModel, enableFields: Boolean) {
+
+        viewBinding.aadharcardTil.editText?.setText(aadharCardDataModel.aadharCardNo?:"")
+        viewBinding.nameTilAadhar.editText?.setText(aadharCardDataModel.name?:"")
+        aadharCardDataModel.dob?.let {
+            if(it.isNotEmpty()){
+                viewBinding.dateOfBirthAadhar.text = it
+                viewBinding.dobLabel.visible()
+            }
+
+        }
+        viewBinding.aadharcardTil.editText?.isEnabled = enableFields
+        viewBinding.nameTilAadhar.editText?.isEnabled = enableFields
+        viewBinding.dateRlAadhar.isEnabled = enableFields
     }
 
     private fun verifiedStatusViews() {
