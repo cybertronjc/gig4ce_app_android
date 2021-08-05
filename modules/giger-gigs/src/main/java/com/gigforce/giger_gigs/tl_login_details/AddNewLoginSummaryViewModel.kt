@@ -99,8 +99,11 @@ class AddNewLoginSummaryViewModel @Inject constructor (
             val res = tlLoginSummaryRepository.submitLoginSummary(addNewSummaryReqModel)
             if (res.code() == 201){
                 _submitDataState.postValue("Created")
-            } else if (res.code() == 500){
+            }  else if (res.code() == 400) {
                 _submitDataState.postValue("Already Exists")
+            }
+            else if (res.code() == 500){
+                _submitDataState.postValue("Error")
             } else {
                 _submitDataState.postValue("Error")
             }
@@ -117,13 +120,18 @@ class AddNewLoginSummaryViewModel @Inject constructor (
         try {
             businessListShown.forEachIndexed { index, loginSummaryBusiness ->
                 businessListForView.add(
+                    loginSummaryBusiness.let {
                     BusinessListRecyclerItemData.BusinessRecyclerItemData(
-                        loginSummaryBusiness.id,
-                        loginSummaryBusiness.business_id,
-                        loginSummaryBusiness.businessName,
-                        loginSummaryBusiness.legalName,
-                        loginSummaryBusiness.loginCount
+                        it.business_id,
+                        it.businessName,
+                        it.legalName,
+                        it.loginCount,
+                        it.updatedBy.toString(),
+                            this,
+                        it.itemMode
+
                     )
+                    }
                 )
             }
 
@@ -143,9 +151,23 @@ class AddNewLoginSummaryViewModel @Inject constructor (
 
         businessListForView.forEachIndexed { index, itemData ->
             val data = itemData as BusinessListRecyclerItemData.BusinessRecyclerItemData
-            list.add(LoginSummaryBusiness(data.id, data.businessId, data.businessName, data.legalName, data.loginCount))
+            list.add(LoginSummaryBusiness(data.businessId, data.businessName, data.legalName, data.loginCount))
         }
 
         return list.toList()
+    }
+
+    fun updateList(businessId: String, text: String){
+        businessListForView.forEachIndexed { index, itemData ->
+            val data = itemData as BusinessListRecyclerItemData.BusinessRecyclerItemData
+            if (businessId.equals(data.businessId)){
+                if (text.isEmpty()){
+                    itemData.loginCount = null
+                } else {
+                    itemData.loginCount = text.toInt()
+                }
+
+            }
+        }
     }
 }

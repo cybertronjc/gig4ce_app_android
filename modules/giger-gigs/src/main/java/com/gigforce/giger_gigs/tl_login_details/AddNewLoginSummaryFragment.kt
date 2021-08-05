@@ -92,8 +92,6 @@ class AddNewLoginSummaryFragment : Fragment() {
     }
 
     private fun initializeViews() {
-
-
         viewLifecycleOwner.lifecycleScope.launch {
             try {
                 val userUid = FirebaseAuth.getInstance().uid
@@ -106,6 +104,12 @@ class AddNewLoginSummaryFragment : Fragment() {
 
         val c: Date = Calendar.getInstance().getTime()
         viewBinding.dateTV.text = DateHelper.getDateInDDMMYYYY(c)
+
+        if (mode == LoginSummaryConstants.MODE_VIEW){
+            viewBinding.submit.invisible()
+        }else {
+            viewBinding.submit.visible()
+        }
 
     }
 
@@ -150,15 +154,22 @@ class AddNewLoginSummaryFragment : Fragment() {
                 cityTextView.visible()
                 cityTextView.setText(loginSummaryDetails?.city?.name.toString())
 
+                var itemMode = 0
+                if (mode == LoginSummaryConstants.MODE_VIEW){
+                    itemMode = 1
+                }
+
                 //set businesses
                 val list = arrayListOf<LoginSummaryBusiness>()
                 loginSummaryDetails?.businessData?.forEachIndexed { index, businessDataReqModel ->
                     list.add(LoginSummaryBusiness(
                         businessDataReqModel.businessId,
-                        businessDataReqModel.businessId,
                         businessDataReqModel.businessName,
                         businessDataReqModel.legalName,
-                        businessDataReqModel.gigerCount))
+                        businessDataReqModel.gigerCount,
+                        businessDataReqModel.updatedBy,
+                        itemMode
+                    ))
                 }
                 viewModel.processBusinessList(list)
             }
@@ -205,7 +216,8 @@ class AddNewLoginSummaryFragment : Fragment() {
             tlUID.toString(),
             selectedCity,
             businessList,
-            isUpdate
+            isUpdate,
+            loginSummaryDetails?.id.toString()
 
         )
         viewModel.submitLoginSummaryData(addNewSummaryReqModel = addNewSummaryReqModel)
@@ -244,10 +256,12 @@ class AddNewLoginSummaryFragment : Fragment() {
                 }
 
                 is BusinessAppViewState.BusinessListLoaded -> {
+                    Log.d("List1", "Business list ${state.businessList}")
                     showBusinesses(state.businessList)
                 }
 
                 is BusinessAppViewState.ErrorInLoadingDataFromServer -> {
+
                     showToast("Error loading businesses")
                 }
             }
@@ -259,18 +273,22 @@ class AddNewLoginSummaryFragment : Fragment() {
             when(result) {
                 "Loading" -> {
                     showToast("Submitting data")
+                    viewBinding.progressBar.visibility = View.VISIBLE
                 }
 
                 "Created" -> {
                     showToast("Data submitted successfully")
+                    viewBinding.progressBar.visibility = View.GONE
                     navigation.popBackStack()
                 }
 
                 "Already Exists" -> {
+                    viewBinding.progressBar.visibility = View.GONE
                     showToast("Data already exists")
                 }
 
                 "Error" -> {
+                    viewBinding.progressBar.visibility = View.GONE
                     showToast("Error submitting data")
                 }
             }
@@ -279,7 +297,7 @@ class AddNewLoginSummaryFragment : Fragment() {
 
 
     private fun showBusinesses(businessList: List<BusinessListRecyclerItemData>)  = viewBinding.apply {
-        Log.d(TAG, "Business list $businessList")
+        Log.d("List", "Business list $businessList")
         businessRV.collection = businessList
 
     }

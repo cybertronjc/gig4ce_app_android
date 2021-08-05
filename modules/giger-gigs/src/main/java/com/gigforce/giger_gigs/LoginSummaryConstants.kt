@@ -6,4 +6,5 @@ object LoginSummaryConstants {
     const val INTENT_LOGIN_SUMMARY = "loginSummary"
     const val MODE_EDIT = 1
     const val MODE_ADD = 2
+    const val MODE_VIEW = 3
 }

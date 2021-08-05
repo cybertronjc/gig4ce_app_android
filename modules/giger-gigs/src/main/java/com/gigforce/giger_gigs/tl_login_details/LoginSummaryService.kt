@@ -29,8 +29,8 @@ interface LoginSummaryService {
     @GET
     suspend fun getListingForTL(
         @Url getListingUrl : String,
-        @Query("searchDate") searchDate: String,
         @Query("searchCity") searchCity: String,
+        @Query("searchDate") searchDate: String,
         @Query("page") page: Int,
         @Query("pagesize") pagesize: Int
 

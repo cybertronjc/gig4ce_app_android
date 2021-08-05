@@ -23,8 +23,6 @@ data class LoginSummaryCity(
 
 @Parcelize
 data class LoginSummaryBusiness(
-    @SerializedName("_id")
-    val id: String,
 
     @SerializedName("business_id")
     val business_id: String,
@@ -35,7 +33,11 @@ data class LoginSummaryBusiness(
     @SerializedName("legalName")
     val legalName: String,
 
-    var loginCount: Int = -1
+    var loginCount: Int? = null,
+
+    var updatedBy: String? = null,
+
+    var itemMode: Int = 0
 ) : Parcelable
 
 @Parcelize
@@ -50,7 +52,10 @@ data class AddNewSummaryReqModel(
     val businessData : List<BusinessDataReqModel> = emptyList(),
 
     @SerializedName("update")
-    val update: Boolean = false
+    val update: Boolean = false,
+
+    @SerializedName("id")
+    val id: String = ""
 ) : Parcelable
 
 @Parcelize
@@ -68,7 +73,11 @@ data class BusinessDataReqModel(
     val city: LoginSummaryCity = LoginSummaryCity(),
 
     @SerializedName("gigerCount")
-    val gigerCount: Int = 0,
+    val gigerCount: Int? = null,
+
+    @SerializedName("updatedBy")
+    val updatedBy: String? = null,
+
 ) : Parcelable
 
 @Parcelize
