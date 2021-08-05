@@ -169,9 +169,9 @@ class GigerOnboardingFragment : BaseFragment2<GigerOnboardingFragmentBinding>(
     ) = viewBinding.toolbarOnboarding.apply {
         this.hideActionMenu()
         this.showTitle("Mobile Number")
-        this.setBackButtonListener(View.OnClickListener {
+        this.setBackButtonListener{
             activity?.onBackPressed()
-        })
+        }
     }
 
     private fun validateDataAndsubmit() {

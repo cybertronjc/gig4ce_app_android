@@ -202,7 +202,8 @@ class ShareApplicationLinkViewModel @Inject constructor(
                 mobileNumber = mobileNumber,
                 jobProfileName = jobProfileName,
                 name = name,
-                shareLink = referralLink
+                shareLink = referralLink,
+                tradeName = tradeName
             )
 
             _referralViewState.postValue(
@@ -229,6 +230,46 @@ class ShareApplicationLinkViewModel @Inject constructor(
                 )
             )
         }
+    }
+
+    fun sendAppReferralLinkViaOtherApps(
+        name: String,
+        mobileNumber: String,
+        jobProfileId: String,
+        jobProfileName: String,
+        tradeName: String,
+        jobProfileIcon: String
+    ) = viewModelScope.launch {
+
+        _referralViewState.postValue(ShareReferralViewState.SharingAndUpdatingJoiningDocument)
+        val result = createDocumentWithSignUpPending(
+            mobileNumber,
+            jobProfileId,
+            jobProfileName,
+            name,
+            tradeName,
+            jobProfileIcon
+        )
+        if (!result) return@launch
+
+        val referralLink = try {
+            createAppReferralLink()
+        } catch (e: Exception) {
+            logger.e(TAG,"unable to create referral link",e)
+            _referralViewState.postValue(
+                ShareReferralViewState.UnableToCreateShareLink(
+                    "Unable to create referral link"
+                )
+            )
+            return@launch
+        }
+
+        _referralViewState.postValue(
+            ShareReferralViewState.OpenOtherAppsToShareDocumentSharingDocument(
+                shareType = ShareReferralType.SHARE_SIGNUP_LINK,
+                shareLink = referralLink
+            )
+        )
     }
 
     private suspend fun createDocumentWithSignUpPending(
@@ -331,7 +372,8 @@ class ShareApplicationLinkViewModel @Inject constructor(
                 mobileNumber = profile.loginMobile,
                 jobProfileName = jobProfileName,
                 name = profile.name,
-                shareLink = shareLink
+                shareLink = shareLink,
+                tradeName = tradeName
             )
 
             _referralViewState.postValue(

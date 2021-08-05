@@ -18,6 +18,9 @@ data class ReferralRequest(
 
     @SerializedName("shareLink")
     val shareLink : String,
+
+    @SerializedName("tradeName")
+    val tradeName : String,
 )
 
 

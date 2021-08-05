@@ -159,7 +159,7 @@ class ShareApplicationLinkFragment : BaseFragment2<FragmentLeadManagementReferra
                         jobProfileIcon = jobProfileIcon ?: ""
                     )
                 } else {
-                    viewModel.sendAppReferralLink(
+                    viewModel.sendAppReferralLinkViaOtherApps(
                         name = name ?: "",
                         mobileNumber = mobile!!,
                         jobProfileId = jobProfileId,
@@ -168,7 +168,6 @@ class ShareApplicationLinkFragment : BaseFragment2<FragmentLeadManagementReferra
                         jobProfileIcon = jobProfileIcon ?: ""
                     )
                 }
-
             }
     }
 

@@ -463,17 +463,23 @@ class LeadManagementRepository @Inject constructor(
         mobileNumber: String,
         jobProfileName: String,
         name: String,
-        shareLink: String
+        shareLink: String,
+        tradeName: String
     ) {
-        referralService.sendReferralThroughWhatsApp(
+        val response = referralService.sendReferralThroughWhatsApp(
             ReferralRequest(
                 referralType = referralType,
                 mobileNumber = mobileNumber,
                 jobProfileName = jobProfileName,
                 userName = name,
-                shareLink = shareLink
+                shareLink = shareLink,
+                tradeName = tradeName
             )
         ).bodyOrThrow()
+
+        if (!response.success) {
+            throw Exception(response.message ?: "Unable to assign gigs")
+        }
     }
 
 
