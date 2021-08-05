@@ -4,12 +4,12 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.client_activation.client_activation.models.JpSettings
+import com.gigforce.core.SingleLiveEvent
 import com.gigforce.core.datamodels.client_activation.Dependency
 import com.gigforce.core.datamodels.client_activation.JpApplication
-import com.gigforce.client_activation.client_activation.models.JpSettings
-import com.gigforce.core.datamodels.verification.VerificationBaseModel
 import com.gigforce.core.datamodels.profile.ProfileData
-import com.gigforce.core.SingleLiveEvent
+import com.gigforce.core.datamodels.verification.VerificationBaseModel
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
@@ -115,7 +115,9 @@ class ApplicationClientActivationViewModel : ViewModel() {
                         "driving_licence" -> {
                             val verification = getVerification()
                             it.isDone =
-                                verification?.driving_license != null && (verification.driving_license?.status?.equals("started")?:false || verification.driving_license?.verified?:false)
+                                verification?.driving_license != null && (verification.driving_license?.status?.equals(
+                                    "started"
+                                ) ?: false || verification.driving_license?.verified ?: false)
                         }
                         "questionnaire" -> {
                             it.isDone =
@@ -134,16 +136,23 @@ class ApplicationClientActivationViewModel : ViewModel() {
                         "aadhar_card" -> {
                             val verification = getVerification()
                             it.isDone =
-                                verification?.aadhar_card != null && (verification.aadhar_card?.state
-                                    ?: -2) >= -1 && verification.aadhar_card?.backImage != "" && verification.aadhar_card?.frontImage != ""
+                                verification?.aadhar_card != null && (verification.aadhar_card?.verified
+                                    ?: false)
                         }
                         "pan_card" -> {
                             val verification = getVerification()
                             it.isDone =
-                                verification?.pan_card != null && (verification.pan_card?.state
-                                    ?: -2) >= -1 && verification.pan_card?.panCardNo != "" && verification.pan_card?.panCardImagePath != ""
+                                verification?.pan_card != null && (verification.pan_card?.status?.equals(
+                                    "started"
+                                ) ?: false || verification.pan_card?.verified ?: false)
                         }
-
+                        "bank_account" -> {
+                            val verification = getVerification()
+                            it.isDone =
+                                verification?.bank_details != null && (verification.bank_details?.status?.equals(
+                                    "started"
+                                ) ?: false || verification.bank_details?.verified ?: false)
+                        }
 
                     }
                 }
@@ -193,31 +202,31 @@ class ApplicationClientActivationViewModel : ViewModel() {
     }
 
     fun apply(jobProfileId: String) = viewModelScope.launch {
-            val application = getJPApplication(jobProfileId)
-            var statusUpdate = mapOf(
+        val application = getJPApplication(jobProfileId)
+        var statusUpdate = mapOf(
+            "stepsTotal" to (observableJobProfile.value?.step ?: 0),
+            "status" to "Submitted",
+            "applicationComplete" to Date()
+        )
+        if (isActivationScreenFound) {
+            statusUpdate = mapOf(
                 "stepsTotal" to (observableJobProfile.value?.step ?: 0),
-                "status" to "Submitted",
+                "status" to "Inprocess",
                 "applicationComplete" to Date()
             )
-            if (isActivationScreenFound) {
-                statusUpdate = mapOf(
-                    "stepsTotal" to (observableJobProfile.value?.step ?: 0),
-                    "status" to "Inprocess",
-                    "applicationComplete" to Date()
-                )
-            }
-            repository.db.collection("JP_Applications").document(application.id)
-                .update(
-                    statusUpdate
-                )
-                .addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        observableApplicationStatus.value = true
+        }
+        repository.db.collection("JP_Applications").document(application.id)
+            .update(
+                statusUpdate
+            )
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    observableApplicationStatus.value = true
 
-                    } else {
-                        observableError.value = it.exception?.message ?: ""
-                    }
+                } else {
+                    observableError.value = it.exception?.message ?: ""
                 }
+            }
 
     }
 

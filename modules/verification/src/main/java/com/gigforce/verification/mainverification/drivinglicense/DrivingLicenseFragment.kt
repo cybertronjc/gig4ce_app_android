@@ -172,7 +172,7 @@ class DrivingLicenseFragment : Fragment(),
 
     override fun onBackPressed(): Boolean {
         if (FROM_CLIENT_ACTIVATON) {
-            if (isDLVerified) {
+            if (verificationScreenStatus == VerificationScreenStatus.VERIFIED) {
                 var navFragmentsData = activity as NavFragmentsData
                 navFragmentsData.setData(
                     bundleOf(
@@ -312,7 +312,6 @@ class DrivingLicenseFragment : Fragment(),
         }
     }
 
-    var isDLVerified = false
     private fun observer() {
         viewModel.kycOcrResult.observe(viewLifecycleOwner, Observer {
             activeLoader(false)
