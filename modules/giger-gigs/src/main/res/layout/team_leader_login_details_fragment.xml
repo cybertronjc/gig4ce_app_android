@@ -43,7 +43,7 @@
             <EditText
                 android:id="@+id/search_item"
                 android:layout_width="0dp"
-                android:layout_height="48dp"
+                android:layout_height="36dp"
                 android:layout_marginStart="@dimen/size_16"
                 android:layout_marginTop="@dimen/size_16"
                 android:layout_marginEnd="@dimen/size_16"
@@ -59,22 +59,10 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/add_new" />
 
-            <ImageView
-                android:id="@+id/calenderImg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:src="@drawable/ic_baseline_calendar_today_24"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintTop_toTopOf="@id/searchDate"
-                app:layout_constraintBottom_toBottomOf="@id/searchDate"
-                app:layout_constraintStart_toStartOf="@id/searchDate"
-                />
-
             <TextView
                 android:id="@+id/searchDate"
                 android:layout_width="0dp"
-                android:layout_height="48dp"
+                android:layout_height="36dp"
                 android:layout_marginStart="@dimen/size_16"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="@dimen/size_16"
@@ -82,7 +70,7 @@
                 android:gravity="start|center_vertical"
                 android:hint="Search By Date"
                 android:minHeight="@dimen/size_36"
-                android:paddingStart="30dp"
+                android:paddingStart="6dp"
                 android:textColor="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
