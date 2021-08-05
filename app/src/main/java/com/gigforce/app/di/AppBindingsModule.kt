@@ -12,9 +12,7 @@ import com.gigforce.common_ui.repository.repo.ILearningDataRepository
 import com.gigforce.common_ui.repository.repo.LearningDataRepository
 import com.gigforce.core.ICoreViewHolderFactory
 import com.gigforce.core.IEventTracker
-import com.gigforce.app.di.implementations.SharedPreAndCommonUtilDataImp
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
-import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.di.interfaces.INavHost
 import com.gigforce.core.di.repo.IProfileFirestoreRepository
@@ -51,8 +49,6 @@ interface AppBindingsModule {
     @Binds
     fun provideUpcomingGigsRepo(imp: UpcomingGigInfoRepository): IUpcomingGigInfoRepository
 
-    @Binds
-    fun provideBuildConfig(imp: BuildConfigImp): IBuildConfig
 
     @Binds
     fun provideEventTracker(imp: EventTrackerImp): IEventTracker
@@ -90,3 +86,6 @@ interface ViewModelBindings {
     @Binds
     fun provideViewModelEventTracker(imp: EventTrackerImp): IEventTracker
 }
+
+
+

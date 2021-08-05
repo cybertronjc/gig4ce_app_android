@@ -1,6 +1,7 @@
 package com.gigforce.core.retrofit
 
 import com.gigforce.core.datamodels.ambassador.*
+import com.gigforce.core.datamodels.auth.UserAuthStatusModel
 import com.gigforce.core.datamodels.verification.*
 import io.reactivex.Observable
 import retrofit2.Response
@@ -70,4 +71,10 @@ interface CreateUserAccEnrollmentAPi {
     suspend fun loadCityAndStateUsingPincode(
         @Url fullUrl: String
     ): Response<List<PincodeResponse>> // body data
+
+    @GET
+    suspend fun getGigersAuthStatus(
+        @Url getGigersAuthUrl : String,
+        @Query("mobile") mobile: String
+    ): Response<UserAuthStatusModel>
 }

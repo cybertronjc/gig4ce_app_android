@@ -154,7 +154,6 @@ class ConfirmOtpFragment : Fragment(), LocationUpdates.LocationUpdateCallbacks {
     private fun initViewModel() {
         viewModel.createProfile
             .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-
                 when (it) {
                     Lce.Loading -> {
                         submitBtn.invisible()
@@ -203,6 +202,7 @@ class ConfirmOtpFragment : Fragment(), LocationUpdates.LocationUpdateCallbacks {
                     }
                 }
             })
+
     }
 
 

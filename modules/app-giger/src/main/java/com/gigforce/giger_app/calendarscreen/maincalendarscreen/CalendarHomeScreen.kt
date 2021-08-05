@@ -118,7 +118,7 @@ class CalendarHomeScreen : Fragment(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        checkForLocationPermission()
+       // checkForLocationPermission()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

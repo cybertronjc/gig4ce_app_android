@@ -7,6 +7,7 @@ object AppConstants {
     val LANGUAGE_SELECTED: String = "language_selected"
     const val UNLOCK_FEATURE = false
     const val ON_BOARDING_COMPLETED = "on_boarding_completed"
+    const val SHOULD_CHECK_FOR_JOININGS_APPLICATIONS = "should_check_joining_applications"
     // shared preferences keys
     const val APP_LANGUAGE_CODE = "app_lang_code";
     const val APP_LANGUAGE_NAME = "app_lang_name";

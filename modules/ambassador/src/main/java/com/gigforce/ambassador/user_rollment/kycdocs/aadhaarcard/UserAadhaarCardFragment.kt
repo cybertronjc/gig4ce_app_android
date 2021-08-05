@@ -288,7 +288,12 @@ class UserAadhaarCardFragment : Fragment(), UserDetailsFilledDialogFragmentResul
     }
 
     override fun onOkayClicked() {
-        navigation.popBackStack("ambassador/users_enrolled",inclusive = false)
+        try {
+            navigation.getBackStackEntry("LeadMgmt/joiningListFragment")
+            navigation.popBackStack("LeadMgmt/joiningListFragment",inclusive = false)
+        } catch (e: IllegalArgumentException) {
+            navigation.popBackStack("ambassador/users_enrolled",inclusive = false)
+        }
     }
 
     override fun onReUploadDocumentsClicked() {

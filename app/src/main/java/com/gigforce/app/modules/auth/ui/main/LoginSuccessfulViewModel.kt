@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.app.BuildConfig
 import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 import com.gigforce.common_ui.repository.gig.GigsRepository
+import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
@@ -107,6 +108,7 @@ class LoginSuccessfulViewModel constructor(
                     )
                     return@EventListener
                 }
+
                 if (value!!.data == null) {
                     profileFirebaseRepository.createEmptyProfile()
                 } else {
@@ -161,9 +163,15 @@ class LoginSuccessfulViewModel constructor(
     private fun hasGigs(querySnapshot: QuerySnapshot): Boolean {
         val userGigs: MutableList<Gig> = mutableListOf()
         querySnapshot.documents.forEach { t ->
-            t.toObject(Gig::class.java)?.let {
-                it.gigId = t.id
-                userGigs.add(it)
+
+
+            try {
+                t.toObject(Gig::class.java)?.let {
+                    it.gigId = t.id
+                    userGigs.add(it)
+                }
+            } catch (e: Exception) {
+                CrashlyticsLogger.e("LoginSuccessfullViewModel","while desearializing gig data",e)
             }
         }
 

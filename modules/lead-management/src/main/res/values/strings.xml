@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="gigers_phone">Giger\'s Mobile Number</string>
+    <string name="we_will_send_an_otp_on_this_number">We will send a Verification code on this number.</string>
+    <string name="country_code">+91-</string>
+    <string name="enter_code_sent_on_mobile">Enter verification code sent to User’s number</string>
+    <string name="new_joining">Mobile Number</string>
+    <string name="please_enter">You need to enter the</string>
+    <string name="registered">Make sure this user is registered on Gigforce App</string>
+    <string name="change_number">Change Number</string>
+    <string name="note">Note</string>
+    <string name="joining_failed">Joining Failed</string>
+    <string name="giger_not_registered">Giger not registered</string>
+    <string name="not_signed_up">The input number has not signed up on Gigforce app yet</string>
+    <string name="not_registered">Giger can only be activated if giger has created profile on Gigforce app</string>
+    <string name="verification_code">Verification Code</string>
+    <string name="gig_location">Gig Location</string>
+    <string name="add_city">Select City*</string>
+    <string name="select_location">Select Location</string>
+    <string name="search_or_select">Search and Choose from this list</string>
+    <string name="need_to_select">You need to select</string>
+    <string name="team_leaders">Team Leaders</string>
+    <string name="gigforce_tls">Gigforce TeamLeader*</string>
+    <string name="business_tls">Business Leader(optional)</string>
+    <string name="shift_timing">Shift timings</string>
+    <string name="select_shift">Select shift*</string>
+    <string name="expected_start_date">Expected start date*</string>
+    <string name="date_format">DD/MM/YYYY</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="looking_for_dynamic_working_hours">\Looking for flexible working hours? Join me at Gigforce :</string>
+    <string name="didn_t_received_the_link"><u>Didn\'t received the link ?</u></string>
+
+</resources>

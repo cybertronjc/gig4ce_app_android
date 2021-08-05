@@ -23,17 +23,20 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.AppConstants
+import com.gigforce.core.StringConstants
 import com.gigforce.core.datamodels.verification.PanCardDataModel
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.DateHelper
+import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.core.utils.VerificationValidations
 import com.gigforce.verification.R
 import com.gigforce.verification.databinding.PanCardFragmentBinding
@@ -69,7 +72,8 @@ enum class VerificationScreenStatus {
 
 @AndroidEntryPoint
 class PanCardFragment : Fragment(),
-        VerificationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener {
+        VerificationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener,
+        IOnBackPressedOverride {
 
     companion object {
         fun newInstance() = PanCardFragment()
@@ -92,6 +96,7 @@ class PanCardFragment : Fragment(),
     @Inject
     lateinit var buildConfig: IBuildConfig
     private var clickedImagePath: Uri? = null
+    private var FROM_CLIENT_ACTIVATON: Boolean = false
     private val viewModel: PanCardViewModel by viewModels()
     private lateinit var viewBinding: PanCardFragmentBinding
     var verificationScreenStatus = VerificationScreenStatus.DEFAULT
@@ -116,11 +121,15 @@ class PanCardFragment : Fragment(),
     var allNavigationList = ArrayList<String>()
     private fun getDataFromIntent(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
+            FROM_CLIENT_ACTIVATON =
+                it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
             it.getStringArrayList(VerificationConstants.NAVIGATION_STRINGS)?.let { arr ->
                 allNavigationList = arr
             }
         } ?: run {
             arguments?.let {
+                FROM_CLIENT_ACTIVATON =
+                    it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
                 it.getStringArrayList(VerificationConstants.NAVIGATION_STRINGS)?.let { arrData ->
                     allNavigationList = arrData
                 }
@@ -128,7 +137,12 @@ class PanCardFragment : Fragment(),
         }
 
     }
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, FROM_CLIENT_ACTIVATON)
+    }
 
+    var isPanVerified = false
     private fun observer() {
         viewModel.kycOcrResult.observe(viewLifecycleOwner, Observer {
             verificationScreenStatus = VerificationScreenStatus.OCR_COMPLETED
@@ -250,6 +264,22 @@ class PanCardFragment : Fragment(),
             navigation.navigateTo(allNavigationList.get(0), bundleOf(VerificationConstants.NAVIGATION_STRINGS to navigationsForBundle))
 
         }
+    }
+
+    override fun onBackPressed(): Boolean {
+        if (FROM_CLIENT_ACTIVATON) {
+            if (isPanVerified) {
+                var navFragmentsData = activity as NavFragmentsData
+                navFragmentsData.setData(
+                    bundleOf(
+                        StringConstants.BACK_PRESSED.value to true
+
+                    )
+                )
+            }
+            return false
+        }
+        return false
     }
 
     private fun initializeImageViews() {

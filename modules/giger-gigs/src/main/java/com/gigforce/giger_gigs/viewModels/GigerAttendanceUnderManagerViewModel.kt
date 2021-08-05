@@ -144,7 +144,7 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
     private fun prepareStatusAndAttendanceItems(
         gigersAttendance: List<GigerAttendance>
     ): List<AttendanceRecyclerItemData> {
-
+9011190111
 
         val attendanceGroupedByShiftAndCompany = groupAttendanceByShiftTimeAndCompany(
             gigersAttendance
