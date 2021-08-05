@@ -65,7 +65,7 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
             setDocInfo(docinfostr)
             setQueryStr(querytextstr)
             setMissingDocText(missingdoctext)
-            setCheckBoxChangeListener()
+//            setCheckBoxChangeListener()
         }
 
     }

@@ -160,8 +160,10 @@ class PanCardFragment : Fragment(),
                         if (!it.name.isNullOrBlank())
                             viewBinding.nameTil.editText?.setText(it.name)
                         if (!it.dateOfBirth.isNullOrBlank()) {
-                            viewBinding.dateOfBirth.text = it.dateOfBirth
-                            viewBinding.dobLabel.visible()
+                            if(it.dateOfBirth.contains("/") || it.dateOfBirth.contains("-")) {
+                                viewBinding.dateOfBirth.text = it.dateOfBirth
+                                viewBinding.dobLabel.visible()
+                            }
                         }
 
                     } else {
@@ -511,8 +513,6 @@ class PanCardFragment : Fragment(),
             if (outputFileUri != null) {
                 startCrop(outputFileUri)
                 Log.d("image", outputFileUri.toString())
-            } else {
-                showToast(getString(R.string.issue_in_cap_image))
             }
         } else if (requestCode == UCrop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
             val imageUriResultCrop: Uri? = UCrop.getOutput(data!!)

@@ -323,8 +323,10 @@ class DrivingLicenseFragment : Fragment(),
                             "Information of Driving License Captured Successfully."
                         )
                         if (!it.dateOfBirth.isNullOrBlank()) {
-                            viewBinding.dobDate.text = it.dateOfBirth
-                            viewBinding.calendarLabel.visible()
+                            if(it.dateOfBirth.contains("/") || it.dateOfBirth.contains("-")) {
+                                viewBinding.dobDate.text = it.dateOfBirth
+                                viewBinding.calendarLabel.visible()
+                            }
                         }
 
                         if (!it.dlNumber.isNullOrBlank())
@@ -335,7 +337,7 @@ class DrivingLicenseFragment : Fragment(),
                                 var dateInFormat = getDDMMYYYYFormat(it.validTill)
                                 if (dateInFormat.isNotBlank())
                                     viewBinding.expiryDate.text = dateInFormat
-                            } else
+                            } else if(it.validTill.contains("/"))
                                 viewBinding.expiryDate.text = it.validTill
                         }
 
@@ -594,8 +596,6 @@ class DrivingLicenseFragment : Fragment(),
             val outputFileUri = ImagePicker.getImageFromResult(requireContext(), resultCode, data)
             if (outputFileUri != null) {
                 startCrop(outputFileUri)
-            } else {
-                showToast(getString(R.string.issue_in_cap_image))
             }
         } else if (requestCode == UCrop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
             val imageUriResultCrop: Uri? = UCrop.getOutput(data!!)
