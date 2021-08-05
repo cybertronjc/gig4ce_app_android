@@ -20,4 +20,5 @@ class BuildConfigImp @Inject constructor(): IBuildConfig {
     override fun getUserRegisterInfoUrl(): String = BuildConfig.GET_USER_REGISTER_INFO_URL
     override fun getStorageBaseUrl(): String = BuildConfig.STORAGE_BASE_URL
     override fun getPanelBaseUrl(): String = BuildConfig.PANEL_BASE_URL
+    override fun getApiBaseURL() = BuildConfig.API_BASE_URL
 }

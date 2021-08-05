@@ -101,9 +101,11 @@ android {
             buildConfigField "String", 'KYC_OCR_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/prod/kyc/upload"'
             buildConfigField "String", 'KYC_VERIFY_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/prod/kyc/verify"'
             buildConfigField "String", 'EVENT_BRIDGE_URL','"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/prod/updatestatus/sendToEventBridge"'
+            buildConfigField "String", 'LISTING_BASE_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/prod/gigerAttendanceReport"'
             buildConfigField "String", 'STORAGE_BASE_URL','"gs://gig4ce-app.appspot.com"'
             buildConfigField "String", 'PANEL_BASE_URL', '"http://gigforce.in"'
             buildConfigField "String", 'BASE_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/prod/"'
+            buildConfigField "String", 'API_BASE_URL','"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/prod/iconsVisibility/sendToIconsEventBus"'
         }
 
         /**
@@ -136,8 +138,10 @@ android {
             buildConfigField "String", 'KYC_OCR_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/kyc/upload"'
             buildConfigField "String", 'KYC_VERIFY_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/kyc/verify"'
             buildConfigField "String", 'EVENT_BRIDGE_URL','"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/updatestatus/sendToEventBridge"'
+            buildConfigField "String", 'LISTING_BASE_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/gigerAttendanceReport"'
             buildConfigField "String", 'STORAGE_BASE_URL','"gs://gigforce-dev.appspot.com"'
             buildConfigField "String", 'PANEL_BASE_URL', '"http://staging.gigforce.in"'
+            buildConfigField "String", 'API_BASE_URL','"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/iconsVisibility/sendToIconsEventBus"'
             buildConfigField "String", 'BASE_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/"'
         }
 
@@ -167,8 +171,10 @@ android {
             buildConfigField "String", 'KYC_OCR_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/kyc/upload"'
             buildConfigField "String", 'KYC_VERIFY_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/kyc/verify"'
             buildConfigField "String", 'EVENT_BRIDGE_URL','"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/updatestatus/sendToEventBridge"'
+            buildConfigField "String", 'LISTING_BASE_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/gigerAttendanceReport"'
             buildConfigField "String", 'STORAGE_BASE_URL','"gs://gigforce-staging.appspot.com"'
             buildConfigField "String", 'PANEL_BASE_URL', '"http://staging.gigforce.in"'
+            buildConfigField "String", 'API_BASE_URL','"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/iconsVisibility/sendToIconsEventBus"'
             buildConfigField "String", 'BASE_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/"'
         }
     }

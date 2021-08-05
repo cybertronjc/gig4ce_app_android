@@ -15,4 +15,5 @@ interface IBuildConfig {
     fun getUserRegisterInfoUrl() : String
     val debugBuild : Boolean
     val baseUrl : String
+    fun getApiBaseURL() : String
 }
