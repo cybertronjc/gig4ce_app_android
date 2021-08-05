@@ -20,7 +20,7 @@ class MainNavigationComponent(context: Context, attrs: AttributeSet?) :
     @Inject
     lateinit var repository: IMainNavDataRepository
     init {
-        this.setOrientationAndRows(0, 2)
+        this.setOrientationAndRows(1, 4)
     }
 
     override fun bind(data: Any?) {

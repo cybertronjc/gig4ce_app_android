@@ -68,6 +68,7 @@ class MainNavDataRepository @Inject constructor(private val buildConfig: IBuildC
                                         index = index.toInt()
                                     )
                                 )
+
                             }
                             mainNavData.sortBy { it.index }
                             data.value = mainNavData
