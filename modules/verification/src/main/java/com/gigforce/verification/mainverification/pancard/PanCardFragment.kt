@@ -117,9 +117,14 @@ class PanCardFragment : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getDataFromIntent(savedInstanceState)
+        initviews()
         initializeImageViews()
         listeners()
         observer()
+    }
+
+    private fun initviews() {
+        viewBinding.toplayoutblock.setIdonthaveDocContent(resources.getString(R.string.no_doc_title_pan),resources.getString(R.string.no_doc_subtitle_pan))
     }
 
     var allNavigationList = ArrayList<String>()

@@ -124,6 +124,9 @@ class BankAccountFragment : Fragment(),
         val content = SpannableString(resources.getString(R.string.change_text))
         content.setSpan(UnderlineSpan(), 0, content.length, 0)
         viewBinding.editBankDetail.text = content
+
+        viewBinding.toplayoutblock.setIdonthaveDocContent(resources.getString(R.string.no_doc_title_bank),resources.getString(R.string.no_doc_subtitle_bank))
+
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

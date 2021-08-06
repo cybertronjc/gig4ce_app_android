@@ -6,7 +6,9 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.CompoundButton
 import android.widget.FrameLayout
+import androidx.core.view.isVisible
 import com.gigforce.ambassador.R
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.core.AppConstants
@@ -64,6 +66,7 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
             setDocInfo(docinfostr)
             setQueryStr(querytextstr)
             setMissingDocText(missingdoctext)
+            setCheckBoxChangeListener()
         }
 
     }
@@ -218,6 +221,44 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
         viewChangeOnVerified()
         statusDialogLayout.gone()
     }
+
+    data class OLDStateHolder(var tabLayoutVisible: Boolean, var statusDialogLayoutVisible: Boolean)
+
+    var oldStateHolder: OLDStateHolder? = null
+    private fun setNoCertificateImageVisible(visible: Boolean) {
+        if (visible) {
+            no_document_cl.visible()
+            docsubtitledetail.gone()
+            uploadHereText.gone()
+            viewPager2.gone()
+            tabLayout.gone()
+            statusDialogLayout.gone()
+        } else {
+            no_document_cl.gone()
+            docsubtitledetail.visible()
+            uploadHereText.visible()
+            viewPager2.visible()
+            if (oldStateHolder?.tabLayoutVisible == true)
+                tabLayout.visible()
+            if (oldStateHolder?.statusDialogLayoutVisible == true)
+                statusDialogLayout.visible()
+        }
+    }
+
+    var onCheckboxChangeListener: CompoundButton.OnCheckedChangeListener? = null
+
+    fun setOnCheckedChangeListener(onCheckboxChangeListener: CompoundButton.OnCheckedChangeListener?) {
+        oldStateHolder = OLDStateHolder(tabLayout.isVisible,statusDialogLayout.isVisible)
+        this.onCheckboxChangeListener = onCheckboxChangeListener
+    }
+
+    private fun setCheckBoxChangeListener() {
+        checkboxidonthave.setOnCheckedChangeListener { p0, p1 ->
+            setNoCertificateImageVisible(p1)
+            onCheckboxChangeListener?.onCheckedChanged(p0, p1)
+        }
+    }
+
 
 }
 

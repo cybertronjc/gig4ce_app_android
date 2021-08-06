@@ -122,13 +122,16 @@ class DrivingLicenseFragment : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getDataFromIntents(savedInstanceState)
+        initviews()
         setViews()
         listeners()
         observer()
 
     }
 
-
+    private fun initviews() {
+        viewBinding.toplayoutblock.setIdonthaveDocContent(resources.getString(R.string.no_doc_title_dl),resources.getString(R.string.no_doc_subtitle_dl))
+    }
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, FROM_CLIENT_ACTIVATON)

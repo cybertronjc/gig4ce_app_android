@@ -279,4 +279,13 @@
     <string name="congratulations">Congratulations !</string>
     <string name="change_text"><u>Change</u></string>
 
+    <string name="no_doc_title_pan">PAN not available!</string>
+    <string name="no_doc_subtitle_pan">No Worries! Once you own PAN you can untick the checkbox to verify it</string>
+
+    <string name="no_doc_title_dl">Driving License not available!</string>
+    <string name="no_doc_subtitle_dl">No Worries! Once you own Driving License you can untick the checkbox to verify it</string>
+
+    <string name="no_doc_title_bank">Bank details not available!</string>
+    <string name="no_doc_subtitle_bank">No Worries! Once you own Bank details you can untick the checkbox to verify it</string>
+
 </resources>
