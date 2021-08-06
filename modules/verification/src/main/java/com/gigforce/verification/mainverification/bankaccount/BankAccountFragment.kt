@@ -241,7 +241,7 @@ class BankAccountFragment : Fragment(),
         viewBinding.belowLayout.gone()
         viewBinding.editBankDetail.gone()
         viewBinding.toplayoutblock.setVerificationSuccessfulView(
-            "Bank Account pending for verify",
+            "Bank account verification is pending",
             "Verifying"
         )
         var list = ArrayList<KYCImageModel>()
@@ -309,7 +309,9 @@ class BankAccountFragment : Fragment(),
                                     "Document will be verified soon. You can click Next to proceed."
                                 )
                                 viewBinding.toplayoutblock.setVerificationSuccessfulView("", "")
-                                viewBinding.editBankDetail.visible()
+//                                viewBinding.editBankDetail.visible()
+                                viewBinding.belowLayout.visible()
+                                setAlreadyfilledData(obj, false)
                             }
                         } catch (e: Exception) {
 
@@ -317,7 +319,6 @@ class BankAccountFragment : Fragment(),
                     }, WAITING_TIME)
                     viewBinding.belowLayout.visible()
                     setAlreadyfilledData(obj, false)
-                    viewBinding.editBankDetail.visible()
                 }
                 "failed" -> {
                     verificationScreenStatus = VerificationScreenStatus.FAILED
@@ -327,27 +328,31 @@ class BankAccountFragment : Fragment(),
                         "Verification Failed",
                         "The details submitted are incorrect. Please try again."
                     )
-                    setAlreadyfilledData(obj, true)
+                    var listData = setAlreadyfilledData(obj, true)
+                    if(listData.isEmpty()){
+                        initializeImages()
+                    }
                     viewBinding.editBankDetail.gone()
                 }
                 "" -> {
                     verificationScreenStatus = VerificationScreenStatus.DEFAULT
                     resetInitializeViews()
-                    viewBinding.editBankDetail.gone()
                     setAlreadyfilledData(null,true)
+                    viewBinding.editBankDetail.gone()
                 }
                 "completed" -> {
                     verificationScreenStatus = VerificationScreenStatus.COMPLETED
                     showBankBeneficiaryName(obj)
                     viewBinding.editBankDetail.gone()
+
                 }
                 else -> "unmatched status"
             }
         }
     }
 
-    private fun setAlreadyfilledData(obj1: BankDetailsDataModel?, enableFields: Boolean) {
-
+    private fun setAlreadyfilledData(obj1: BankDetailsDataModel?, enableFields: Boolean) : ArrayList<KYCImageModel> {
+        var list = ArrayList<KYCImageModel>()
         obj1?.let {obj->
             viewBinding.bankNameTil.editText?.setText(obj.bankName)
 
@@ -355,7 +360,7 @@ class BankAccountFragment : Fragment(),
 
             viewBinding.ifscCode.editText?.setText(obj.ifscCode)
 
-            var list = ArrayList<KYCImageModel>()
+
 
             obj.passbookImagePath?.let {
 
@@ -376,6 +381,7 @@ class BankAccountFragment : Fragment(),
                 }
             }
             viewBinding.toplayoutblock.setImageViewPager(list)
+
         }
 
 
@@ -383,7 +389,7 @@ class BankAccountFragment : Fragment(),
         viewBinding.bankNameTil.editText?.isEnabled = enableFields
         viewBinding.bankAccNumberItl.editText?.isEnabled = enableFields
         viewBinding.ifscCode.editText?.isEnabled = enableFields
-
+        return list
     }
 
     private fun resetInitializeViews() {
@@ -391,6 +397,7 @@ class BankAccountFragment : Fragment(),
         viewBinding.submitButton.text = "Skip"
         viewBinding.submitButton.isEnabled = true
         viewBinding.belowLayout.visible()
+        viewBinding.progressBar.gone()
         viewBinding.confirmBeneficiaryLayout.gone()
         viewBinding.editBankDetail.gone()
         viewBinding.toplayoutblock.setVerificationSuccessfulView(
@@ -411,9 +418,11 @@ class BankAccountFragment : Fragment(),
                 viewBinding.toplayoutblock.viewChangeOnStarted()
                 viewBinding.confirmBeneficiaryLayout.visible()
                 viewBinding.belowLayout.gone()
+                viewBinding.submitButton.gone()
+                viewBinding.progressBar.gone()
                 viewBinding.beneficiaryName.text = beneficiary
                 viewBinding.toplayoutblock.setVerificationSuccessfulView(
-                    "Bank Account pending for verify",
+                    "Bank account verification is pending",
                     "Verifying"
                 )
                 var list = ArrayList<KYCImageModel>()

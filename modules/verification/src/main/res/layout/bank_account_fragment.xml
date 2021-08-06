@@ -65,7 +65,7 @@
                         android:layout_marginStart="@dimen/size_16"
                         android:layout_marginTop="@dimen/dp_large"
                         android:gravity="center"
-                        android:text="Please confirm the Beneficiary name"
+                        android:text="Please confirm the beneficiary name"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -153,6 +153,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dp_sm1"
                         android:text="@string/change_text"
+                        android:visibility="gone"
                         android:textColor="@color/colorPrimary"
                         app:layout_constraintBottom_toBottomOf="@id/textView10"
                         app:layout_constraintStart_toEndOf="@id/textView10"

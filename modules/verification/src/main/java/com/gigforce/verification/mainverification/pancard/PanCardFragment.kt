@@ -324,7 +324,7 @@ class PanCardFragment : Fragment(),
 
     }
 
-    private fun setAlreadyfilledData(panCardDataModel: PanCardDataModel, enableFields: Boolean) {
+    private fun setAlreadyfilledData(panCardDataModel: PanCardDataModel, enableFields: Boolean) : ArrayList<KYCImageModel>{
 
         viewBinding.nameTil.editText?.setText(panCardDataModel.name)
 
@@ -361,7 +361,7 @@ class PanCardFragment : Fragment(),
         viewBinding.panTil.editText?.isEnabled = enableFields
         viewBinding.fatherNameTil.editText?.isEnabled = enableFields
         viewBinding.dateRl.isEnabled = enableFields
-
+        return list
     }
 
     private fun checkForNextDoc() {
@@ -714,7 +714,13 @@ class PanCardFragment : Fragment(),
                         "Verification Failed",
                         "The details submitted are incorrect. Please try again."
                     )
-                    setAlreadyfilledData(panCardDataModel, true)
+                    var listData = setAlreadyfilledData(panCardDataModel, true)
+                    if(listData.isEmpty()){
+                        initializeImageViews()
+                    }else{
+                        //single if showing error
+                    }
+
                 }
                 "" -> {
                     verificationScreenStatus = VerificationScreenStatus.DEFAULT

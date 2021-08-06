@@ -750,7 +750,7 @@ class DrivingLicenseFragment : Fragment(),
         viewBinding.toplayoutblock.uploadStatusLayout(
             AppConstants.UPLOAD_SUCCESS,
             "VERIFICATION COMPLETED",
-            "The Driving License Details have been verified successfully."
+            "The Driving License details have been verified successfully."
         )
         viewBinding.submitButton.visible()
         viewBinding.submitButton.text = "Next"
@@ -823,7 +823,13 @@ class DrivingLicenseFragment : Fragment(),
                         "Verification Failed",
                         "The details submitted are incorrect. Please try again."
                     )
-                    setAlreadyfilledData(drivingLicenseDataModel, true)
+                    var listData = setAlreadyfilledData(drivingLicenseDataModel, true)
+                    if(listData.isEmpty()){
+                        initializeImages()
+                    }else{
+                        //single if showing error
+                    }
+
                 }
                 "" -> {
                     verificationScreenStatus = VerificationScreenStatus.DEFAULT
@@ -838,7 +844,7 @@ class DrivingLicenseFragment : Fragment(),
     private fun setAlreadyfilledData(
         drivingLicenseDataModel: DrivingLicenseDataModel,
         enableFields: Boolean
-    ) {
+    ) : ArrayList<KYCImageModel> {
 
         viewBinding.nameTilDl.editText?.setText(drivingLicenseDataModel.name)
 
@@ -921,7 +927,7 @@ class DrivingLicenseFragment : Fragment(),
         viewBinding.dobDateRl.isEnabled = enableFields
         viewBinding.issueDateRl.isEnabled = enableFields
         viewBinding.expiryDateRl.isEnabled = enableFields
-
+        return list
     }
 
     private fun resetInitializeViews() {
