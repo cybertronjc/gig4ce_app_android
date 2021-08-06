@@ -267,7 +267,7 @@ class BankAccountFragment : Fragment(),
         viewBinding.toplayoutblock.uploadStatusLayout(
             AppConstants.UPLOAD_SUCCESS,
             "VERIFICATION COMPLETED",
-            "The Bank Details have been verified successfully."
+            "The Bank details have been verified successfully."
         )
         viewBinding.submitButton.visible()
         viewBinding.submitButton.text = "Next"
