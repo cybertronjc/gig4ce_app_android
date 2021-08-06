@@ -259,7 +259,10 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
         }
     }
 
-
+    fun setIdonthaveDocContent(title : String, subtitle : String ){
+        title_nodoc.text = title
+        subtitle_nodoc.text = subtitle
+    }
 }
 
 

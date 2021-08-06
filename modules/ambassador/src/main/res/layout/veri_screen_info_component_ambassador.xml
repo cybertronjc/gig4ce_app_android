@@ -77,7 +77,6 @@
             style="@style/Body2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="PAN not available!"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/no_document" />
@@ -89,7 +88,6 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_sm1"
             android:layout_marginRight="@dimen/dp_sm1"
-            android:text="No Worries! Once you own PAN you can untick the checkbox to verify it"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title_nodoc" />
