@@ -291,6 +291,11 @@ class AddNewLoginSummaryFragment : Fragment() {
                     viewBinding.progressBar.visibility = View.GONE
                     showToast("Error submitting data")
                 }
+
+                else -> {
+                    viewBinding.progressBar.visibility = View.GONE
+                    showToast(result)
+                }
             }
         })
     }

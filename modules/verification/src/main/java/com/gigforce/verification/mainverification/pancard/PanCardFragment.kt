@@ -162,7 +162,7 @@ class PanCardFragment : Fragment(),
                         viewBinding.toplayoutblock.uploadStatusLayout(
                             AppConstants.UPLOAD_SUCCESS,
                             "UPLOAD SUCCESSFUL",
-                            "Information of PAN card Captured Successfully."
+                            "Information of PAN card captured successfully."
                         )
                         if (!it.panNumber.isNullOrBlank())
                             viewBinding.panTil.editText?.setText(it.panNumber)
@@ -295,6 +295,9 @@ class PanCardFragment : Fragment(),
             if (viewBinding.toplayoutblock.isDocDontOptChecked() || verificationScreenStatus == VerificationScreenStatus.VERIFIED || verificationScreenStatus == VerificationScreenStatus.STARTED_VERIFYING || !anyDataEntered) {
                 checkForNextDoc()
             } else {
+                if(verificationScreenStatus == VerificationScreenStatus.FAILED){
+                    viewBinding.toplayoutblock.statusDialogLayoutvisibilityGone()
+                }
                 val panCardNo =
                     viewBinding.panTil.editText?.text.toString().toUpperCase(Locale.getDefault())
                 if (!VerificationValidations.isPanCardValid(panCardNo)) {
@@ -324,7 +327,7 @@ class PanCardFragment : Fragment(),
 
     }
 
-    private fun setAlreadyfilledData(panCardDataModel: PanCardDataModel, enableFields: Boolean) {
+    private fun setAlreadyfilledData(panCardDataModel: PanCardDataModel, enableFields: Boolean) : ArrayList<KYCImageModel>{
 
         viewBinding.nameTil.editText?.setText(panCardDataModel.name)
 
@@ -361,7 +364,13 @@ class PanCardFragment : Fragment(),
         viewBinding.panTil.editText?.isEnabled = enableFields
         viewBinding.fatherNameTil.editText?.isEnabled = enableFields
         viewBinding.dateRl.isEnabled = enableFields
-
+        viewBinding.dateOfBirth.isEnabled = enableFields
+        if (enableFields) {
+            viewBinding.textView10.visible()
+        } else {
+            viewBinding.textView10.gone()
+        }
+        return list
     }
 
     private fun checkForNextDoc() {
@@ -639,7 +648,7 @@ class PanCardFragment : Fragment(),
         viewBinding.belowLayout.gone()
         viewBinding.toplayoutblock.uploadStatusLayout(
             AppConstants.UPLOAD_SUCCESS,
-            "VERIFICATION COMPLETED",
+            "Verification Completed",
             "The PAN card details have been verified successfully."
         )
         viewBinding.submitButton.visible()
@@ -693,9 +702,11 @@ class PanCardFragment : Fragment(),
                                 viewBinding.toplayoutblock.uploadStatusLayout(
                                     AppConstants.UNABLE_TO_FETCH_DETAILS,
                                     "Verification in progress",
-                                    "Document will be verified soon. You can click Next to proceed"
+                                    "Document will be verified soon. You can click next to proceed"
                                 )
                                 viewBinding.toplayoutblock.setVerificationSuccessfulView("", "")
+                                viewBinding.belowLayout.visible()
+                                setAlreadyfilledData(panCardDataModel, false)
                             }
                         } catch (e: Exception) {
 
@@ -712,7 +723,13 @@ class PanCardFragment : Fragment(),
                         "Verification Failed",
                         "The details submitted are incorrect. Please try again."
                     )
-                    setAlreadyfilledData(panCardDataModel, true)
+                    var listData = setAlreadyfilledData(panCardDataModel, true)
+                    if(listData.isEmpty()){
+                        initializeImageViews()
+                    }else{
+                        //single if showing error
+                    }
+
                 }
                 "" -> {
                     verificationScreenStatus = VerificationScreenStatus.DEFAULT

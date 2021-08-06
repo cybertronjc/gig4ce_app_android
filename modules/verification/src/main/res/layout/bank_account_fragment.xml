@@ -11,15 +11,32 @@
         <com.gigforce.common_ui.components.cells.AppBar
             android:id="@+id/appBarBank"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="?android:actionBarSize"
             app:backgroundType="PinkBar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:titleText="Bank Account" />
 
+        <TextView
+            android:id="@+id/submit_button"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginEnd="@dimen/size_16"
+            android:layout_marginBottom="@dimen/size_22"
+            android:background="@drawable/submit_button_selector"
+            android:gravity="center"
+            android:minHeight="@dimen/size_36"
+            android:text="Skip"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:fillViewport="true"
             app:layout_constraintBottom_toTopOf="@+id/submit_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -65,7 +82,7 @@
                         android:layout_marginStart="@dimen/size_16"
                         android:layout_marginTop="@dimen/dp_large"
                         android:gravity="center"
-                        android:text="Please confirm the Beneficiary name"
+                        android:text="Please confirm the beneficiary name"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -147,16 +164,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/grayLine3" />
 
-                    <TextView
-                        android:id="@+id/editBankDetail"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/dp_sm1"
-                        android:text="@string/change_text"
-                        android:textColor="@color/colorPrimary"
-                        app:layout_constraintBottom_toBottomOf="@id/textView10"
-                        app:layout_constraintStart_toEndOf="@id/textView10"
-                        app:layout_constraintTop_toTopOf="@id/textView10" />
+
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/bank_acc_number_itl"
@@ -246,21 +254,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
 
-        <TextView
-            android:id="@+id/submit_button"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginStart="@dimen/size_16"
-            android:layout_marginEnd="@dimen/size_16"
-            android:layout_marginBottom="@dimen/size_22"
-            android:background="@drawable/submit_button_selector"
-            android:gravity="center"
-            android:minHeight="@dimen/size_36"
-            android:text="Skip"
-            android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+
 
         <ProgressBar
             android:id="@+id/progressBar"

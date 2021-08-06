@@ -33,8 +33,7 @@ class MainNavDataRepository @Inject constructor(private val buildConfig: IBuildC
     IMainNavDataRepository {
     private val appRenderingService = RetrofitFactory.createService(APPRenderingService::class.java)
     private var data: MutableLiveData<List<FeatureItemCard2DVM>> = MutableLiveData()
-    private var needToReflect = true
-
+    private var reloadCount = 0
     init {
         reload()
     }
@@ -45,7 +44,7 @@ class MainNavDataRepository @Inject constructor(private val buildConfig: IBuildC
             .whereEqualTo("uid", FirebaseAuth.getInstance().currentUser?.uid)
             .addSnapshotListener { value, error ->
                 value?.documents?.let {
-                    if (it.isNotEmpty() && needToReflect) {
+                    if (it.isNotEmpty() && reloadCount<2) {
                         val list = it[0].data?.get("data") as? List<Map<String, Any>>
                         list?.let {
                             val mainNavData = ArrayList<FeatureItemCard2DVM>()
@@ -73,10 +72,10 @@ class MainNavDataRepository @Inject constructor(private val buildConfig: IBuildC
                             mainNavData.sortBy { it.index }
                             data.value = mainNavData
                             receivedNotifyToServer()
-                            needToReflect = false
+                            reloadCount++
                         }
                     } else {
-                        needToReflect = true
+                        reloadCount = 1
                         receivedNotifyToServer()
                     }
                 }

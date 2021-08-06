@@ -11,9 +11,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
-import android.text.SpannableString
 import android.text.TextWatcher
-import android.text.style.UnderlineSpan
 import android.util.Log
 import android.util.Size
 import android.view.LayoutInflater
@@ -73,7 +71,8 @@ enum class VerificationScreenStatus {
 
 @AndroidEntryPoint
 class BankAccountFragment : Fragment(),
-    VerificationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener, IOnBackPressedOverride {
+    VerificationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener,
+    IOnBackPressedOverride {
 
     companion object {
         fun newInstance() = BankAccountFragment()
@@ -121,11 +120,10 @@ class BankAccountFragment : Fragment(),
     }
 
     private fun initViews() {
-        val content = SpannableString(resources.getString(R.string.change_text))
-        content.setSpan(UnderlineSpan(), 0, content.length, 0)
-        viewBinding.editBankDetail.text = content
-
-        viewBinding.toplayoutblock.setIdonthaveDocContent(resources.getString(R.string.no_doc_title_bank),resources.getString(R.string.no_doc_subtitle_bank))
+        viewBinding.toplayoutblock.setIdonthaveDocContent(
+            resources.getString(R.string.no_doc_title_bank),
+            resources.getString(R.string.no_doc_subtitle_bank)
+        )
 
     }
 
@@ -169,6 +167,7 @@ class BankAccountFragment : Fragment(),
         }
         return false
     }
+
     private fun observer() {
         viewModel.kycOcrResult.observe(viewLifecycleOwner, Observer {
             activeLoader(false)
@@ -211,7 +210,8 @@ class BankAccountFragment : Fragment(),
             ocrOrVerificationRquested = false
         })
 
-        viewModel.getBankVerificationUpdation()
+//        viewModel.getBankVerificationUpdation()
+        viewModel.getBankDetailsStatus()
         viewModel.bankDetailedObject.observe(viewLifecycleOwner, Observer {
             if (!ocrOrVerificationRquested) {
                 viewBinding.screenLoaderBar.gone()
@@ -222,7 +222,7 @@ class BankAccountFragment : Fragment(),
                         verifiedStatusViews(it)
                         viewBinding.belowLayout.visible()
                         setAlreadyfilledData(it, false)
-                        viewBinding.editBankDetail.visible()
+                        viewBinding.toplayoutblock.toggleChangeTextView(true)
                     } else {
                         checkforStatusAndVerified(it)
                     }
@@ -239,9 +239,9 @@ class BankAccountFragment : Fragment(),
         viewBinding.submitButton.gone()
         viewBinding.progressBar.gone()
         viewBinding.belowLayout.gone()
-        viewBinding.editBankDetail.gone()
+        viewBinding.toplayoutblock.toggleChangeTextView(false)
         viewBinding.toplayoutblock.setVerificationSuccessfulView(
-            "Bank Account pending for verify",
+            "Bank account verification is pending",
             "Verifying"
         )
         var list = ArrayList<KYCImageModel>()
@@ -266,14 +266,14 @@ class BankAccountFragment : Fragment(),
         viewBinding.confirmBeneficiaryLayout.gone()
         viewBinding.toplayoutblock.uploadStatusLayout(
             AppConstants.UPLOAD_SUCCESS,
-            "VERIFICATION COMPLETED",
-            "The Bank Details have been verified successfully."
+            "Verification Completed",
+            "The bank details have been verified successfully."
         )
         viewBinding.submitButton.visible()
         viewBinding.submitButton.text = "Next"
         viewBinding.submitButton.isEnabled = true
         viewBinding.progressBar.gone()
-        viewBinding.toplayoutblock.setVerificationSuccessfulView("Bank Account verified")
+        viewBinding.toplayoutblock.setVerificationSuccessfulView("Bank account verified")
 
         var list = ArrayList<KYCImageModel>()
         bankDetailsDataModel?.passbookImagePath?.let {
@@ -309,7 +309,9 @@ class BankAccountFragment : Fragment(),
                                     "Document will be verified soon. You can click Next to proceed."
                                 )
                                 viewBinding.toplayoutblock.setVerificationSuccessfulView("", "")
-                                viewBinding.editBankDetail.visible()
+//                                viewBinding.editBankDetail.visible()
+                                viewBinding.belowLayout.visible()
+                                setAlreadyfilledData(obj, false)
                             }
                         } catch (e: Exception) {
 
@@ -317,7 +319,6 @@ class BankAccountFragment : Fragment(),
                     }, WAITING_TIME)
                     viewBinding.belowLayout.visible()
                     setAlreadyfilledData(obj, false)
-                    viewBinding.editBankDetail.visible()
                 }
                 "failed" -> {
                     verificationScreenStatus = VerificationScreenStatus.FAILED
@@ -327,35 +328,42 @@ class BankAccountFragment : Fragment(),
                         "Verification Failed",
                         "The details submitted are incorrect. Please try again."
                     )
-                    setAlreadyfilledData(obj, true)
-                    viewBinding.editBankDetail.gone()
+                    var listData = setAlreadyfilledData(obj, true)
+                    if (listData.isEmpty()) {
+                        initializeImages()
+                    }
+                    viewBinding.toplayoutblock.toggleChangeTextView(false)
                 }
                 "" -> {
                     verificationScreenStatus = VerificationScreenStatus.DEFAULT
                     resetInitializeViews()
-                    viewBinding.editBankDetail.gone()
-                    setAlreadyfilledData(null,true)
+                    setAlreadyfilledData(null, true)
+                    viewBinding.toplayoutblock.toggleChangeTextView(false)
                 }
                 "completed" -> {
                     verificationScreenStatus = VerificationScreenStatus.COMPLETED
                     showBankBeneficiaryName(obj)
-                    viewBinding.editBankDetail.gone()
+                    viewBinding.toplayoutblock.toggleChangeTextView(false)
+
                 }
                 else -> "unmatched status"
             }
         }
     }
 
-    private fun setAlreadyfilledData(obj1: BankDetailsDataModel?, enableFields: Boolean) {
-
-        obj1?.let {obj->
+    private fun setAlreadyfilledData(
+        obj1: BankDetailsDataModel?,
+        enableFields: Boolean
+    ): ArrayList<KYCImageModel> {
+        var list = ArrayList<KYCImageModel>()
+        obj1?.let { obj ->
             viewBinding.bankNameTil.editText?.setText(obj.bankName)
 
             viewBinding.bankAccNumberItl.editText?.setText(obj.accountNo)
 
             viewBinding.ifscCode.editText?.setText(obj.ifscCode)
 
-            var list = ArrayList<KYCImageModel>()
+
 
             obj.passbookImagePath?.let {
 
@@ -376,6 +384,7 @@ class BankAccountFragment : Fragment(),
                 }
             }
             viewBinding.toplayoutblock.setImageViewPager(list)
+
         }
 
 
@@ -383,7 +392,12 @@ class BankAccountFragment : Fragment(),
         viewBinding.bankNameTil.editText?.isEnabled = enableFields
         viewBinding.bankAccNumberItl.editText?.isEnabled = enableFields
         viewBinding.ifscCode.editText?.isEnabled = enableFields
-
+        if (enableFields) {
+            viewBinding.textView10.visible()
+        } else {
+            viewBinding.textView10.gone()
+        }
+        return list
     }
 
     private fun resetInitializeViews() {
@@ -391,8 +405,9 @@ class BankAccountFragment : Fragment(),
         viewBinding.submitButton.text = "Skip"
         viewBinding.submitButton.isEnabled = true
         viewBinding.belowLayout.visible()
+        viewBinding.progressBar.gone()
         viewBinding.confirmBeneficiaryLayout.gone()
-        viewBinding.editBankDetail.gone()
+        viewBinding.toplayoutblock.toggleChangeTextView(false)
         viewBinding.toplayoutblock.setVerificationSuccessfulView(
             "Bank Account",
             "You need to upload"
@@ -411,9 +426,11 @@ class BankAccountFragment : Fragment(),
                 viewBinding.toplayoutblock.viewChangeOnStarted()
                 viewBinding.confirmBeneficiaryLayout.visible()
                 viewBinding.belowLayout.gone()
+                viewBinding.submitButton.gone()
+                viewBinding.progressBar.gone()
                 viewBinding.beneficiaryName.text = beneficiary
                 viewBinding.toplayoutblock.setVerificationSuccessfulView(
-                    "Bank Account pending for verify",
+                    "Bank account verification is pending",
                     "Verifying"
                 )
                 var list = ArrayList<KYCImageModel>()
@@ -512,12 +529,14 @@ class BankAccountFragment : Fragment(),
             //showCameraAndGalleryOption()
             checkForPermissionElseShowCameraGalleryBottomSheet()
         })
-        viewBinding.editBankDetail.setOnClickListener {
+
+        viewBinding.toplayoutblock.setChangeTextListener(View.OnClickListener {
             resetInitializeViews()
-            viewBinding.editBankDetail.gone()
-            setAlreadyfilledData(null,true)
+            viewBinding.toplayoutblock.toggleChangeTextView(false)
+            setAlreadyfilledData(null, true)
             verificationScreenStatus = VerificationScreenStatus.DEFAULT
-        }
+        })
+
         viewBinding.submitButton.setOnClickListener {
             hideSoftKeyboard()
 
@@ -770,7 +789,6 @@ class BankAccountFragment : Fragment(),
             Data("ifsccode", viewBinding.ifscCode.editText?.text.toString())
         )
         activeLoader(true)
-        ocrOrVerificationRquested = true
         viewModel.getKycVerificationResult("bank", list)
     }
 

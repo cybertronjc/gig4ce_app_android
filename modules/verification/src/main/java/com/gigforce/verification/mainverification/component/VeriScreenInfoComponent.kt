@@ -2,6 +2,8 @@ package com.gigforce.verification.mainverification.component
 
 import android.content.Context
 import android.net.Uri
+import android.text.SpannableString
+import android.text.style.UnderlineSpan
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
@@ -68,8 +70,16 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
             setQueryStr(querytextstr)
             setMissingDocText(missingdoctext)
             setCheckBoxChangeListener()
+            setChangeText()
         }
 
+    }
+
+    private fun setChangeText() {
+        val content = SpannableString(resources.getString(R.string.change_text))
+        content.setSpan(UnderlineSpan(), 0, content.length, 0)
+        editBankDetail.text = content
+        editBankDetail.gone()
     }
 
     fun hideOnVerifiedDocuments() {
@@ -192,10 +202,21 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
 
     fun setVerificationSuccessfulView(titleStr: String, upperCaptionStr: String? = null) {
         checkboxidonthave.gone()
-        titleStr.let {
-            title.text = it
+        if (titleStr.isNotEmpty()) {
+            title.visible()
+            title.text = titleStr
+        } else {
+            title.gone()
         }
-        upperCaptionStr?.let { uppercaption.text = it } ?: run {
+
+        upperCaptionStr?.let {
+            if (it.isNotEmpty()) {
+                uppercaption.visible()
+                uppercaption.text = it
+            } else {
+                uppercaption.gone()
+            }
+        } ?: run {
             uppercaption.text = "Congratulation"
         }
         uploadHereText.gone()
@@ -231,6 +252,10 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
         statusDialogLayout.gone()
     }
 
+    fun statusDialogLayoutvisibilityGone(){
+        statusDialogLayout.gone()
+    }
+
     data class OLDStateHolder(var tabLayoutVisible: Boolean, var statusDialogLayoutVisible: Boolean)
 
     var oldStateHolder: OLDStateHolder? = null
@@ -257,7 +282,7 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
     var onCheckboxChangeListener: CompoundButton.OnCheckedChangeListener? = null
 
     fun setOnCheckedChangeListener(onCheckboxChangeListener: CompoundButton.OnCheckedChangeListener?) {
-        oldStateHolder = OLDStateHolder(tabLayout.isVisible,statusDialogLayout.isVisible)
+        oldStateHolder = OLDStateHolder(tabLayout.isVisible, statusDialogLayout.isVisible)
         this.onCheckboxChangeListener = onCheckboxChangeListener
     }
 
@@ -268,9 +293,21 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
         }
     }
 
-    fun setIdonthaveDocContent(title : String, subtitle : String ){
+    fun setIdonthaveDocContent(title: String, subtitle: String) {
         title_nodoc.text = title
         subtitle_nodoc.text = subtitle
+    }
+
+
+    fun setChangeTextListener(onClickListener: OnClickListener) {
+        editBankDetail.setOnClickListener(onClickListener)
+    }
+
+    fun toggleChangeTextView(visible: Boolean) {
+        if (visible)
+            editBankDetail.visible()
+        else
+            editBankDetail.gone()
     }
 }
 

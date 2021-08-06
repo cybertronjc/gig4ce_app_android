@@ -158,7 +158,7 @@ class GigerOtpVerification : BaseFragment2<FragmentGigerOtpVerificationBinding>(
 
     private fun validateDataAndSubmit() {
         if (viewBinding.txtOtp.text?.length != 6) {
-            showAlertDialog("", "Enter a valid otp")
+            showAlertDialog("", "Enter a valid OTP")
             return
         }
 

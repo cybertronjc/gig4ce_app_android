@@ -3,6 +3,7 @@ package com.gigforce.giger_gigs.tl_login_details
 import android.app.DatePickerDialog
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.os.Handler
 import android.text.format.DateUtils
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,8 +14,6 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.common_ui.ext.showToast
-import com.gigforce.core.extensions.gone
-import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.DateHelper
 import com.gigforce.core.utils.Lce
@@ -24,6 +23,7 @@ import com.gigforce.giger_gigs.databinding.TeamLeaderLoginDetailsFragmentBinding
 import com.gigforce.giger_gigs.models.ListingTLModel
 import com.gigforce.giger_gigs.tl_login_details.views.OnTlItemSelectedListener
 import dagger.hilt.android.AndroidEntryPoint
+import java.lang.Exception
 import java.util.*
 import javax.inject.Inject
 
@@ -63,6 +63,39 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
         listeners()
     }
 
+    private val INTERVAL_TIME: Long = 1000 * 5
+    private var refreshCount = 0
+    var hadler = Handler()
+    fun refreshListHandler() {
+        hadler.postDelayed({
+            try {
+                if (refreshCount < 3 && !onpaused) {
+                    initializeViews()
+                    refreshCount++
+                    refreshListHandler()
+                }
+            } catch (e: Exception) {
+
+            }
+
+        }, INTERVAL_TIME)
+
+    }
+
+    var onpaused = false
+    override fun onPause() {
+        super.onPause()
+        onpaused = true
+        hadler.removeCallbacks(null)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        onpaused = false
+        refreshCount = 0
+        refreshListHandler()
+    }
+
     private fun initToolbar() = viewBinding.apply {
         appBar.apply {
             hideActionMenu()
@@ -74,7 +107,7 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
     }
 
     private fun initializeViews() = viewBinding.apply {
-            viewModel.getListingForTL("", "")
+        viewModel.getListingForTL("", "")
 
     }
 
@@ -100,9 +133,11 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
 
     private fun listeners() = viewBinding.apply {
         addNew.setOnClickListener {
-            navigation.navigateTo("gig/addNewLoginSummary", bundleOf(
-                LoginSummaryConstants.INTENT_EXTRA_MODE to LoginSummaryConstants.MODE_ADD
-            ))
+            navigation.navigateTo(
+                "gig/addNewLoginSummary", bundleOf(
+                    LoginSummaryConstants.INTENT_EXTRA_MODE to LoginSummaryConstants.MODE_ADD
+                )
+            )
         }
 
         searchDate.setOnClickListener {
@@ -119,7 +154,7 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
     private fun observer() = viewBinding.apply {
         viewModel.loginListing.observe(viewLifecycleOwner, Observer {
             val res = it ?: return@Observer
-            when(res){
+            when (res) {
                 Lce.Loading -> {
                     progressBar.visibility = View.VISIBLE
                 }
@@ -139,10 +174,10 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
 
     private fun setupReyclerView(res: List<ListingTLModel>) {
 
-        if (res.isEmpty()){
+        if (res.isEmpty()) {
             viewBinding.noData.visibility = View.VISIBLE
             viewBinding.datecityRv.visibility = View.GONE
-        }else {
+        } else {
             viewBinding.noData.visibility = View.GONE
             viewBinding.datecityRv.visibility = View.VISIBLE
         }
@@ -152,17 +187,21 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
     }
 
     override fun onTlItemSelected(listingTLModel: ListingTLModel) {
-        if (DateUtils.isToday(listingTLModel.dateTimestamp)){
-            navigation.navigateTo("gig/addNewLoginSummary", bundleOf(
-                LoginSummaryConstants.INTENT_EXTRA_MODE to LoginSummaryConstants.MODE_EDIT,
-                LoginSummaryConstants.INTENT_LOGIN_SUMMARY to listingTLModel
-            ))
-        }else {
-            navigation.navigateTo("gig/addNewLoginSummary", bundleOf(
-                LoginSummaryConstants.INTENT_EXTRA_MODE to LoginSummaryConstants.MODE_EDIT,
-                LoginSummaryConstants.INTENT_LOGIN_SUMMARY to listingTLModel,
-                LoginSummaryConstants.INTENT_EXTRA_MODE to LoginSummaryConstants.MODE_VIEW
-            ))
+        if (DateUtils.isToday(listingTLModel.dateTimestamp)) {
+            navigation.navigateTo(
+                "gig/addNewLoginSummary", bundleOf(
+                    LoginSummaryConstants.INTENT_EXTRA_MODE to LoginSummaryConstants.MODE_EDIT,
+                    LoginSummaryConstants.INTENT_LOGIN_SUMMARY to listingTLModel
+                )
+            )
+        } else {
+            navigation.navigateTo(
+                "gig/addNewLoginSummary", bundleOf(
+                    LoginSummaryConstants.INTENT_LOGIN_SUMMARY to listingTLModel,
+                    LoginSummaryConstants.INTENT_EXTRA_MODE to LoginSummaryConstants.MODE_VIEW
+                )
+            )
 
-        }}
+        }
+    }
 }
