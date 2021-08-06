@@ -362,6 +362,11 @@ class PanCardFragment : Fragment(),
         viewBinding.fatherNameTil.editText?.isEnabled = enableFields
         viewBinding.dateRl.isEnabled = enableFields
         viewBinding.dateOfBirth.isEnabled = enableFields
+        if (enableFields) {
+            viewBinding.textView10.visible()
+        } else {
+            viewBinding.textView10.gone()
+        }
         return list
     }
 

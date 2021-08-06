@@ -931,6 +931,11 @@ class DrivingLicenseFragment : Fragment(),
         viewBinding.issueDate.isEnabled = enableFields
         viewBinding.expiryDateRl.isEnabled = enableFields
         viewBinding.expiryDate.isEnabled = enableFields
+        if (enableFields) {
+            viewBinding.textView10.visible()
+        } else {
+            viewBinding.textView10.gone()
+        }
         return list
     }
 
