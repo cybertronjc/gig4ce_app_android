@@ -50,13 +50,9 @@ class TlLoginSummaryRepository (
     }
 
     suspend fun submitLoginSummary(addNewSummaryReqModel: AddNewSummaryReqModel): Response<ResponseBody> {
-        val response = loginSummaryService.submitLoginSummary(buildConfig.getListingBaseUrl() + "/submit" ,addNewSummaryReqModel)
 
-        if (!response.isSuccessful){
-            throw Exception(response.message())
-        } else {
-            return response!!
-        }
+        return loginSummaryService.submitLoginSummary(buildConfig.getListingBaseUrl() + "/submit" ,addNewSummaryReqModel)
+
     }
 
     suspend fun fetchListingForTL(searchCity: String,searchDate: String,page: Int, pageSize: Int): List<ListingTLModel> {
