@@ -75,12 +75,14 @@ class VerificationMainViewModel @Inject constructor (private val iBuildConfigVM:
     fun getSubString(isVerified : Boolean ? =false, status : String? = "") : String{
             if(isVerified == true)return "Verified"
             if(status?.equals("started") == true) return "Pending"
+            if(status?.equals("failed") == true) return "Failed"
             return TAP_TO_SELECT
     }
 
     fun getSubStringColor(isVerified : Boolean ? =false, status : String? = "") : String{
         if(isVerified == true)return "GREEN"
         if(status?.equals("started") == true) return "YELLOW"
+        if(status?.equals("failed") == true) return "RED"
         return ""
     }
 

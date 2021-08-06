@@ -295,6 +295,9 @@ class PanCardFragment : Fragment(),
             if (viewBinding.toplayoutblock.isDocDontOptChecked() || verificationScreenStatus == VerificationScreenStatus.VERIFIED || verificationScreenStatus == VerificationScreenStatus.STARTED_VERIFYING || !anyDataEntered) {
                 checkForNextDoc()
             } else {
+                if(verificationScreenStatus == VerificationScreenStatus.FAILED){
+                    viewBinding.toplayoutblock.statusDialogLayoutvisibilityGone()
+                }
                 val panCardNo =
                     viewBinding.panTil.editText?.text.toString().toUpperCase(Locale.getDefault())
                 if (!VerificationValidations.isPanCardValid(panCardNo)) {
@@ -645,7 +648,7 @@ class PanCardFragment : Fragment(),
         viewBinding.belowLayout.gone()
         viewBinding.toplayoutblock.uploadStatusLayout(
             AppConstants.UPLOAD_SUCCESS,
-            "VERIFICATION COMPLETED",
+            "Verification Completed",
             "The PAN card details have been verified successfully."
         )
         viewBinding.submitButton.visible()

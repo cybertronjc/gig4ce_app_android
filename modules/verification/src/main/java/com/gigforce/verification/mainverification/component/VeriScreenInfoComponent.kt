@@ -252,6 +252,10 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
         statusDialogLayout.gone()
     }
 
+    fun statusDialogLayoutvisibilityGone(){
+        statusDialogLayout.gone()
+    }
+
     data class OLDStateHolder(var tabLayoutVisible: Boolean, var statusDialogLayoutVisible: Boolean)
 
     var oldStateHolder: OLDStateHolder? = null

@@ -749,7 +749,7 @@ class DrivingLicenseFragment : Fragment(),
         viewBinding.belowLayout.gone()
         viewBinding.toplayoutblock.uploadStatusLayout(
             AppConstants.UPLOAD_SUCCESS,
-            "VERIFICATION COMPLETED",
+            "Verification Completed",
             "The Driving License details have been verified successfully."
         )
         viewBinding.submitButton.visible()

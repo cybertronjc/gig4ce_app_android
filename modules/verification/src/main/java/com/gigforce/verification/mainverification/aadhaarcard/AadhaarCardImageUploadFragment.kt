@@ -294,7 +294,7 @@ class AadhaarCardImageUploadFragment : Fragment(),
         viewBinding.belowLayout.gone()
         viewBinding.toplayoutblock.uploadStatusLayout(
             AppConstants.UPLOAD_SUCCESS,
-            "VERIFICATION COMPLETED",
+            "Verification Completed",
             "The Aadhar card details have been verified successfully."
         )
         viewBinding.submitButton.visible()

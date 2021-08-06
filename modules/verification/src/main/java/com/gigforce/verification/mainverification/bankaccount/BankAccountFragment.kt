@@ -266,14 +266,14 @@ class BankAccountFragment : Fragment(),
         viewBinding.confirmBeneficiaryLayout.gone()
         viewBinding.toplayoutblock.uploadStatusLayout(
             AppConstants.UPLOAD_SUCCESS,
-            "VERIFICATION COMPLETED",
-            "The Bank details have been verified successfully."
+            "Verification Completed",
+            "The bank details have been verified successfully."
         )
         viewBinding.submitButton.visible()
         viewBinding.submitButton.text = "Next"
         viewBinding.submitButton.isEnabled = true
         viewBinding.progressBar.gone()
-        viewBinding.toplayoutblock.setVerificationSuccessfulView("Bank Account verified")
+        viewBinding.toplayoutblock.setVerificationSuccessfulView("Bank account verified")
 
         var list = ArrayList<KYCImageModel>()
         bankDetailsDataModel?.passbookImagePath?.let {
