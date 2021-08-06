@@ -100,7 +100,7 @@ class AddNewLoginSummaryViewModel @Inject constructor (
             if (res.code() == 201){
                 _submitDataState.postValue("Created")
             }  else if (res.code() == 400) {
-                _submitDataState.postValue("Already Exists")
+                _submitDataState.postValue(res.errorBody()?.string() ?: "Already Exists")
             }
             else if (res.code() == 500){
                 _submitDataState.postValue("Error")
