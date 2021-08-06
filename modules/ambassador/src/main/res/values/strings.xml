@@ -219,7 +219,7 @@
     <string name="select_dl_no">Select Driving License Number</string>
     <string name="select_dl_dob">Select Date of Birth</string>
     <string name="upload_driving_license_front_side_new">Upload your Driving License\nfront Side</string>
-    <string name="upload_driving_license_back_side_new">Upload your Driving License\nback Side</string>
+    <string name="upload_driving_license_back_side_new">Upload your Driving License\nback side(optional)</string>
     <string name="why_do_we_need_this_dl">A driving license is mandatory for driving and delivery gigs</string>
 
 </resources>

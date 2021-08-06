@@ -6,7 +6,9 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.CompoundButton
 import android.widget.FrameLayout
+import androidx.core.view.isVisible
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.core.AppConstants
 import com.gigforce.core.extensions.gone
@@ -18,10 +20,10 @@ import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.veri_screen_info_component.view.*
 import javax.inject.Inject
-import android.text.TextWatcher
+
 @AndroidEntryPoint
 class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
-        FrameLayout(context, attrs) {
+    FrameLayout(context, attrs) {
 
     @Inject
     lateinit var navigation: INavigation
@@ -36,36 +38,36 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
 
     init {
         this.layoutParams =
-                LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         LayoutInflater.from(context).inflate(R.layout.veri_screen_info_component, this, true)
         attrs?.let {
             val styledAttributeSet =
-                    context.obtainStyledAttributes(
-                            it,
-                            R.styleable.VeriScreenInfoComponent,
-                            0,
-                            0
-                    )
+                context.obtainStyledAttributes(
+                    it,
+                    R.styleable.VeriScreenInfoComponent,
+                    0,
+                    0
+                )
             val uppercaptionstr =
-                    styledAttributeSet.getString(R.styleable.VeriScreenInfoComponent_uppercaption)
-                            ?: ""
+                styledAttributeSet.getString(R.styleable.VeriScreenInfoComponent_uppercaption)
+                    ?: ""
             val titlestr =
-                    styledAttributeSet.getString(R.styleable.VeriScreenInfoComponent_title) ?: ""
+                styledAttributeSet.getString(R.styleable.VeriScreenInfoComponent_title) ?: ""
             val docinfostr =
-                    styledAttributeSet.getString(R.styleable.VeriScreenInfoComponent_docinfotext)
-                            ?: ""
+                styledAttributeSet.getString(R.styleable.VeriScreenInfoComponent_docinfotext)
+                    ?: ""
             val querytextstr =
-                    styledAttributeSet.getString(R.styleable.VeriScreenInfoComponent_querytext)
-                            ?: "Why we need this"
+                styledAttributeSet.getString(R.styleable.VeriScreenInfoComponent_querytext)
+                    ?: "Why we need this"
             val missingdoctext =
-                    styledAttributeSet.getString(R.styleable.VeriScreenInfoComponent_missingdoctext)
-                            ?: ""
+                styledAttributeSet.getString(R.styleable.VeriScreenInfoComponent_missingdoctext)
+                    ?: ""
             setUpperCaption(uppercaptionstr)
             setTitle(titlestr)
             setDocInfo(docinfostr)
             setQueryStr(querytextstr)
             setMissingDocText(missingdoctext)
-//            setCheckBoxChangeListener()
+            setCheckBoxChangeListener()
         }
 
     }
@@ -107,14 +109,14 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
     }
 
     fun disableImageClick() {
-        adapter?.let {
+        adapter.let {
             it.setImageClickable(false)
             it.notifyDataSetChanged()
 
         }
     }
 
-    fun enableImageClick(){
+    fun enableImageClick() {
         adapter.let {
             it.setImageClickable(true)
             it.notifyDataSetChanged()
@@ -154,28 +156,32 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
         statusDialogLayout.visible()
         when (status) {
             AppConstants.UPLOAD_SUCCESS -> {
-                statusDialogLayout.background = resources.getDrawable(R.drawable.upload_successfull_layout_bg)
+                statusDialogLayout.background =
+                    resources.getDrawable(R.drawable.upload_successfull_layout_bg)
                 uploadTitle.setTextColor(context.resources.getColor(R.color.upload_success))
                 uploadIcon.setImageDrawable(resources.getDrawable(R.drawable.ic_baseline_verified_24))
                 uploadTitle.text = title
                 uploadSubTitle.text = subTitle
             }
             AppConstants.UNABLE_TO_FETCH_DETAILS -> {
-                statusDialogLayout.background = resources.getDrawable(R.drawable.fetch_details_error_layout_bg)
+                statusDialogLayout.background =
+                    resources.getDrawable(R.drawable.fetch_details_error_layout_bg)
                 uploadTitle.setTextColor(context.resources.getColor(R.color.upload_mismatch))
                 uploadIcon.setImageDrawable(resources.getDrawable(R.drawable.ic_baseline_privacy_tip_24))
                 uploadTitle.text = title
                 uploadSubTitle.text = subTitle
             }
             AppConstants.DETAILS_MISMATCH -> {
-                statusDialogLayout.background = resources.getDrawable(R.drawable.details_mismatch_layout_bg)
+                statusDialogLayout.background =
+                    resources.getDrawable(R.drawable.details_mismatch_layout_bg)
                 uploadTitle.setTextColor(context.resources.getColor(R.color.upload_error))
                 uploadIcon.setImageDrawable(resources.getDrawable(R.drawable.ic_dangerous_white_48dp))
                 uploadTitle.text = title
                 uploadSubTitle.text = subTitle
             }
             AppConstants.VERIFICATION_COMPLETED -> {
-                statusDialogLayout.background = resources.getDrawable(R.drawable.upload_successfull_layout_bg)
+                statusDialogLayout.background =
+                    resources.getDrawable(R.drawable.upload_successfull_layout_bg)
                 uploadTitle.setTextColor(context.resources.getColor(R.color.upload_success))
                 uploadIcon.setImageDrawable(resources.getDrawable(R.drawable.ic_baseline_verified_user_24))
                 uploadTitle.text = title
@@ -189,7 +195,9 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
         titleStr.let {
             title.text = it
         }
-        upperCaptionStr?.let { uppercaption.text = it } ?: run { uppercaption.text = "Congratulation" }
+        upperCaptionStr?.let { uppercaption.text = it } ?: run {
+            uppercaption.text = "Congratulation"
+        }
         uploadHereText.gone()
     }
 
@@ -202,8 +210,7 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
     }
 
 
-
-    fun resetAllViews(){
+    fun resetAllViews() {
         docsubtitledetail.visible()
         iconwhyweneed.visible()
         whyweneedit.visible()
@@ -211,30 +218,56 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
         statusDialogLayout.gone()
         checkboxidonthave.visible()
     }
-    fun viewChangeOnVerified(){
+
+    fun viewChangeOnVerified() {
         docsubtitledetail.gone()
         iconwhyweneed.gone()
         whyweneedit.gone()
         disableImageClick()
     }
-    fun viewChangeOnStarted(){
+
+    fun viewChangeOnStarted() {
         viewChangeOnVerified()
         statusDialogLayout.gone()
     }
 
+    data class OLDStateHolder(var tabLayoutVisible: Boolean, var statusDialogLayoutVisible: Boolean)
+
+    var oldStateHolder: OLDStateHolder? = null
     private fun setNoCertificateImageVisible(visible: Boolean) {
-        if(visible){
-            no_document.visible()
-        }else{
-            no_document.gone()
+        if (visible) {
+            no_document_cl.visible()
+            docsubtitledetail.gone()
+            uploadHereText.gone()
+            viewPager2.gone()
+            tabLayout.gone()
+            statusDialogLayout.gone()
+        } else {
+            no_document_cl.gone()
+            docsubtitledetail.visible()
+            uploadHereText.visible()
+            viewPager2.visible()
+            if (oldStateHolder?.tabLayoutVisible == true)
+                tabLayout.visible()
+            if (oldStateHolder?.statusDialogLayoutVisible == true)
+                statusDialogLayout.visible()
         }
     }
 
-    fun setCheckBoxChangeListener(){
+    var onCheckboxChangeListener: CompoundButton.OnCheckedChangeListener? = null
+
+    fun setOnCheckedChangeListener(onCheckboxChangeListener: CompoundButton.OnCheckedChangeListener?) {
+        oldStateHolder = OLDStateHolder(tabLayout.isVisible,statusDialogLayout.isVisible)
+        this.onCheckboxChangeListener = onCheckboxChangeListener
+    }
+
+    private fun setCheckBoxChangeListener() {
         checkboxidonthave.setOnCheckedChangeListener { p0, p1 ->
             setNoCertificateImageVisible(p1)
+            onCheckboxChangeListener?.onCheckedChanged(p0, p1)
         }
     }
+
 
 }
 

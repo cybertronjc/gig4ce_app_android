@@ -15,7 +15,7 @@ import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.veri_screen_info_component.view.*
+import kotlinx.android.synthetic.main.veri_screen_info_component_ambassador.view.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -36,7 +36,7 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
     init {
         this.layoutParams =
                 LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-        LayoutInflater.from(context).inflate(R.layout.veri_screen_info_component, this, true)
+        LayoutInflater.from(context).inflate(R.layout.veri_screen_info_component_ambassador, this, true)
         attrs?.let {
             val styledAttributeSet =
                     context.obtainStyledAttributes(

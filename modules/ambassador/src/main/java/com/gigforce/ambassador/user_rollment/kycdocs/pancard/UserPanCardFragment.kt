@@ -48,7 +48,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jaeger.library.StatusBarUtil
 import com.yalantis.ucrop.UCrop
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.veri_screen_info_component.view.*
+import kotlinx.android.synthetic.main.veri_screen_info_component_ambassador.view.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody

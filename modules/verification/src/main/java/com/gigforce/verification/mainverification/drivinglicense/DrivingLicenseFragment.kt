@@ -12,11 +12,13 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.util.Size
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CompoundButton
 import android.widget.DatePicker
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
@@ -43,6 +45,7 @@ import com.gigforce.verification.databinding.DrivingLicenseFragmentBinding
 import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.gigforce.verification.gigerVerfication.drivingLicense.DrivingLicenseSides
 import com.gigforce.verification.mainverification.Data
+import com.gigforce.verification.mainverification.OLDStateHolder
 import com.gigforce.verification.mainverification.VerificationClickOrSelectImageBottomSheet
 import com.gigforce.verification.util.VerificationConstants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -60,7 +63,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
-import android.text.TextWatcher
 
 enum class VerificationScreenStatus {
     OCR_COMPLETED,
@@ -221,7 +223,19 @@ class DrivingLicenseFragment : Fragment(),
 
     }
 
+    var oldStateHolder = OLDStateHolder("")
     private fun listeners() {
+        viewBinding.toplayoutblock.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { p1, b1 ->
+            if (b1) {
+                oldStateHolder.submitButtonCta = viewBinding.submitButton.text.toString()
+                viewBinding.submitButton.text = "Skip"
+                viewBinding.belowLayout.gone()
+            } else {
+                viewBinding.submitButton.text = oldStateHolder.submitButtonCta
+                viewBinding.belowLayout.visible()
+            }
+
+        })
 
         viewBinding.nameTilDl.editText?.addTextChangedListener(ValidationTextWatcher())
         viewBinding.dlnoTil.editText?.addTextChangedListener(ValidationTextWatcher())
@@ -323,7 +337,7 @@ class DrivingLicenseFragment : Fragment(),
                             "Information of Driving License Captured Successfully."
                         )
                         if (!it.dateOfBirth.isNullOrBlank()) {
-                            if(it.dateOfBirth.contains("/") || it.dateOfBirth.contains("-")) {
+                            if (it.dateOfBirth.contains("/") || it.dateOfBirth.contains("-")) {
                                 viewBinding.dobDate.text = it.dateOfBirth
                                 viewBinding.calendarLabel.visible()
                             }
@@ -337,7 +351,7 @@ class DrivingLicenseFragment : Fragment(),
                                 var dateInFormat = getDDMMYYYYFormat(it.validTill)
                                 if (dateInFormat.isNotBlank())
                                     viewBinding.expiryDate.text = dateInFormat
-                            } else if(it.validTill.contains("/"))
+                            } else if (it.validTill.contains("/"))
                                 viewBinding.expiryDate.text = it.validTill
                         }
 
@@ -907,7 +921,7 @@ class DrivingLicenseFragment : Fragment(),
 
     private fun resetInitializeViews() {
         viewBinding.submitButton.visible()
-        viewBinding.submitButton.text = "Submit"
+        viewBinding.submitButton.text = "Skip"
         viewBinding.submitButton.isEnabled = true
         viewBinding.belowLayout.visible()
         viewBinding.toplayoutblock.setVerificationSuccessfulView(

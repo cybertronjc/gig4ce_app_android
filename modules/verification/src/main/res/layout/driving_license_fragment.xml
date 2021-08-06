@@ -348,7 +348,7 @@
             android:background="@drawable/submit_button_selector"
             android:gravity="center"
             android:minHeight="@dimen/size_36"
-            android:text="Next"
+            android:text="Skip"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
