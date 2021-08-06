@@ -51,10 +51,10 @@
     <string name="select_dl_no">Select Driving License Number</string>
     <string name="select_dl_dob">Select Date of Birth</string>
     <string name="why_we_need_this_bank">The bank details are mandatory to approve and send payments from gigs to your account. It also helps verify your name, address, date of birth, and other details.</string>
-    <string name="enter_valid_ifsc">Enter Valid IfSC Code</string>
-    <string name="enter_bank_name">Enter Bank Name</string>
+    <string name="enter_valid_ifsc">Enter valid ifsc code</string>
+    <string name="enter_bank_name">Enter bank name</string>
     <string name="bank_name_too_short">Bank name is too short</string>
-    <string name="enter_valid_acc_no">Enter A Valid Account No</string>
+    <string name="enter_valid_acc_no">Enter A valid account No</string>
     <string name="click_or_select_bank_passbook">Click Or Select your Passbook Image first</string>
     <string name="your_are_reuploading_bank_details">You are re-uploading your Bank details. They will be verified once again, which may take up to 7 days.</string>
     <string name="bank_details_uploaded">Bank details Uploaded</string>
