@@ -919,9 +919,12 @@ class DrivingLicenseFragment : Fragment(),
         viewBinding.nameTilDl.editText?.isEnabled = enableFields
         viewBinding.dlnoTil.editText?.isEnabled = enableFields
         viewBinding.dobDateRl.isEnabled = enableFields
-        viewBinding.issueDateRl.isEnabled = enableFields
-        viewBinding.expiryDateRl.isEnabled = enableFields
+        viewBinding.dobDate.isEnabled = enableFields
 
+        viewBinding.issueDateRl.isEnabled = enableFields
+        viewBinding.issueDate.isEnabled = enableFields
+        viewBinding.expiryDateRl.isEnabled = enableFields
+        viewBinding.expiryDate.isEnabled = enableFields
     }
 
     private fun resetInitializeViews() {

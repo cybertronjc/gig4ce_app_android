@@ -361,7 +361,7 @@ class PanCardFragment : Fragment(),
         viewBinding.panTil.editText?.isEnabled = enableFields
         viewBinding.fatherNameTil.editText?.isEnabled = enableFields
         viewBinding.dateRl.isEnabled = enableFields
-
+        viewBinding.dateOfBirth.isEnabled = enableFields
     }
 
     private fun checkForNextDoc() {
