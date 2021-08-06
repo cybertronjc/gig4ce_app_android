@@ -6,7 +6,9 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.CompoundButton
 import android.widget.FrameLayout
+import androidx.core.view.isVisible
 import com.gigforce.ambassador.R
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.core.AppConstants
@@ -15,7 +17,7 @@ import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.veri_screen_info_component.view.*
+import kotlinx.android.synthetic.main.veri_screen_info_component_ambassador.view.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -36,7 +38,7 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
     init {
         this.layoutParams =
                 LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-        LayoutInflater.from(context).inflate(R.layout.veri_screen_info_component, this, true)
+        LayoutInflater.from(context).inflate(R.layout.veri_screen_info_component_ambassador, this, true)
         attrs?.let {
             val styledAttributeSet =
                     context.obtainStyledAttributes(
@@ -64,6 +66,7 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
             setDocInfo(docinfostr)
             setQueryStr(querytextstr)
             setMissingDocText(missingdoctext)
+            setCheckBoxChangeListener()
         }
 
     }
@@ -219,6 +222,47 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
         statusDialogLayout.gone()
     }
 
+    data class OLDStateHolder(var tabLayoutVisible: Boolean, var statusDialogLayoutVisible: Boolean)
+
+    var oldStateHolder: OLDStateHolder? = null
+    private fun setNoCertificateImageVisible(visible: Boolean) {
+        if (visible) {
+            no_document_cl.visible()
+            docsubtitledetail.gone()
+            uploadHereText.gone()
+            viewPager2.gone()
+            tabLayout.gone()
+            statusDialogLayout.gone()
+        } else {
+            no_document_cl.gone()
+            docsubtitledetail.visible()
+            uploadHereText.visible()
+            viewPager2.visible()
+            if (oldStateHolder?.tabLayoutVisible == true)
+                tabLayout.visible()
+            if (oldStateHolder?.statusDialogLayoutVisible == true)
+                statusDialogLayout.visible()
+        }
+    }
+
+    var onCheckboxChangeListener: CompoundButton.OnCheckedChangeListener? = null
+
+    fun setOnCheckedChangeListener(onCheckboxChangeListener: CompoundButton.OnCheckedChangeListener?) {
+        oldStateHolder = OLDStateHolder(tabLayout.isVisible,statusDialogLayout.isVisible)
+        this.onCheckboxChangeListener = onCheckboxChangeListener
+    }
+
+    private fun setCheckBoxChangeListener() {
+        checkboxidonthave.setOnCheckedChangeListener { p0, p1 ->
+            setNoCertificateImageVisible(p1)
+            onCheckboxChangeListener?.onCheckedChanged(p0, p1)
+        }
+    }
+
+    fun setIdonthaveDocContent(title : String, subtitle : String ){
+        title_nodoc.text = title
+        subtitle_nodoc.text = subtitle
+    }
 }
 
 

@@ -19,6 +19,7 @@ import android.util.Size
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CompoundButton
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
@@ -43,6 +44,7 @@ import com.gigforce.verification.R
 import com.gigforce.verification.databinding.BankAccountFragmentBinding
 import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.gigforce.verification.mainverification.Data
+import com.gigforce.verification.mainverification.OLDStateHolder
 import com.gigforce.verification.mainverification.VerificationClickOrSelectImageBottomSheet
 import com.gigforce.verification.util.VerificationConstants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -122,6 +124,9 @@ class BankAccountFragment : Fragment(),
         val content = SpannableString(resources.getString(R.string.change_text))
         content.setSpan(UnderlineSpan(), 0, content.length, 0)
         viewBinding.editBankDetail.text = content
+
+        viewBinding.toplayoutblock.setIdonthaveDocContent(resources.getString(R.string.no_doc_title_bank),resources.getString(R.string.no_doc_subtitle_bank))
+
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -329,6 +334,7 @@ class BankAccountFragment : Fragment(),
                     verificationScreenStatus = VerificationScreenStatus.DEFAULT
                     resetInitializeViews()
                     viewBinding.editBankDetail.gone()
+                    setAlreadyfilledData(null,true)
                 }
                 "completed" -> {
                     verificationScreenStatus = VerificationScreenStatus.COMPLETED
@@ -340,39 +346,39 @@ class BankAccountFragment : Fragment(),
         }
     }
 
-    private fun setAlreadyfilledData(obj: BankDetailsDataModel, enableFields: Boolean) {
+    private fun setAlreadyfilledData(obj1: BankDetailsDataModel?, enableFields: Boolean) {
 
-        viewBinding.bankNameTil.editText?.setText(obj.bankName)
+        obj1?.let {obj->
+            viewBinding.bankNameTil.editText?.setText(obj.bankName)
 
-        viewBinding.bankAccNumberItl.editText?.setText(obj.accountNo)
+            viewBinding.bankAccNumberItl.editText?.setText(obj.accountNo)
 
-        viewBinding.ifscCode.editText?.setText(obj.ifscCode)
+            viewBinding.ifscCode.editText?.setText(obj.ifscCode)
 
-        var list = ArrayList<KYCImageModel>()
+            var list = ArrayList<KYCImageModel>()
 
-        obj.passbookImagePath?.let {
+            obj.passbookImagePath?.let {
 
-            getDBImageUrl(it)?.let {
+                getDBImageUrl(it)?.let {
 
-                list.add(
+                    list.add(
 
-                    KYCImageModel(
+                        KYCImageModel(
 
-                        text = getString(R.string.upload_pan_card_new),
+                            text = getString(R.string.upload_pan_card_new),
 
-                        imagePath = it,
+                            imagePath = it,
 
-                        imageUploaded = true
+                            imageUploaded = true
 
+                        )
                     )
-
-                )
-
+                }
             }
-
+            viewBinding.toplayoutblock.setImageViewPager(list)
         }
 
-        viewBinding.toplayoutblock.setImageViewPager(list)
+
 
         viewBinding.bankNameTil.editText?.isEnabled = enableFields
         viewBinding.bankAccNumberItl.editText?.isEnabled = enableFields
@@ -382,7 +388,7 @@ class BankAccountFragment : Fragment(),
 
     private fun resetInitializeViews() {
         viewBinding.submitButton.visible()
-        viewBinding.submitButton.text = "Submit"
+        viewBinding.submitButton.text = "Skip"
         viewBinding.submitButton.isEnabled = true
         viewBinding.belowLayout.visible()
         viewBinding.confirmBeneficiaryLayout.gone()
@@ -461,8 +467,8 @@ class BankAccountFragment : Fragment(),
                 if (verificationScreenStatus == VerificationScreenStatus.DEFAULT || verificationScreenStatus == VerificationScreenStatus.FAILED || verificationScreenStatus == VerificationScreenStatus.OCR_COMPLETED) {
                     text?.let {
                         if (viewBinding.bankNameTil.editText?.text.toString()
-                                .isNullOrBlank() || viewBinding.bankAccNumberItl.editText?.text.toString()
-                                .isNullOrBlank() || viewBinding.ifscCode.editText?.text.toString()
+                                .isNullOrBlank() && viewBinding.bankAccNumberItl.editText?.text.toString()
+                                .isNullOrBlank() && viewBinding.ifscCode.editText?.text.toString()
                                 .isNullOrBlank()
                         ) {
                             viewBinding.submitButton.text = "Skip"
@@ -484,7 +490,19 @@ class BankAccountFragment : Fragment(),
 
     }
 
+    var oldStateHolder = OLDStateHolder("")
     private fun listeners() {
+        viewBinding.toplayoutblock.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { p1, b1 ->
+            if (b1) {
+                oldStateHolder.submitButtonCta = viewBinding.submitButton.text.toString()
+                viewBinding.submitButton.text = "Skip"
+                viewBinding.belowLayout.gone()
+            } else {
+                viewBinding.submitButton.text = oldStateHolder.submitButtonCta
+                viewBinding.belowLayout.visible()
+            }
+
+        })
         viewBinding.bankNameTil.editText?.addTextChangedListener(ValidationTextWatcher())
         viewBinding.bankAccNumberItl.editText?.addTextChangedListener(ValidationTextWatcher())
         viewBinding.ifscCode.editText?.addTextChangedListener(ValidationTextWatcher())
@@ -497,6 +515,8 @@ class BankAccountFragment : Fragment(),
         viewBinding.editBankDetail.setOnClickListener {
             resetInitializeViews()
             viewBinding.editBankDetail.gone()
+            setAlreadyfilledData(null,true)
+            verificationScreenStatus = VerificationScreenStatus.DEFAULT
         }
         viewBinding.submitButton.setOnClickListener {
             hideSoftKeyboard()

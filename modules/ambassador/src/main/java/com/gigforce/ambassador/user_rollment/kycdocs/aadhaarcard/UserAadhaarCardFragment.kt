@@ -58,7 +58,7 @@ class UserAadhaarCardFragment : Fragment(), UserDetailsFilledDialogFragmentResul
 
     @Inject
     lateinit var iBuildConfig: IBuildConfig
-
+    var navigationsForBundle = ArrayList<String>()
     private val viewModelUser: UserAadhaarCardViewModel by viewModels()
     private lateinit var viewBinding: UserAadhaarCardFragmentBinding
     private fun activeLoader(activate: Boolean) {
@@ -85,12 +85,17 @@ class UserAadhaarCardFragment : Fragment(), UserDetailsFilledDialogFragmentResul
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getDataFromIntent(savedInstanceState)
+        initializeNavigations()
         initializeImageViews()
         observer()
         listeners()
         initWebview()
     }
-
+    private fun initializeNavigations() {
+        navigationsForBundle.add("userinfo/addUserPanCardInfoFragment")
+        navigationsForBundle.add("userinfo/addUserDrivingLicenseInfoFragment")
+        navigationsForBundle.add("userinfo/addUserAadharCardInfoFragment")
+    }
     private fun initializeImageViews() {
         viewBinding.toplayoutblock.showUploadHere()
         //ic_pan_illustration
@@ -297,12 +302,15 @@ class UserAadhaarCardFragment : Fragment(), UserDetailsFilledDialogFragmentResul
     }
 
     override fun onReUploadDocumentsClicked() {
+        navigation.popBackStack()
         navigation.navigateTo(
             "userinfo/addUserBankDetailsInfoFragment", bundleOf(
                 EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
-                EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
+                EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName,
+                VerificationConstants.NAVIGATION_STRINGS to navigationsForBundle
             )
         )
+
     }
 
     override fun onBackPressed(): Boolean {

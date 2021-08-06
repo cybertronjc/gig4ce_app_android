@@ -11,11 +11,14 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.util.Size
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CompoundButton
 import android.widget.DatePicker
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
@@ -27,10 +30,7 @@ import androidx.navigation.fragment.findNavController
 import com.gigforce.ambassador.EnrollmentConstants
 import com.gigforce.ambassador.R
 import com.gigforce.ambassador.databinding.UserPanCardFragmentBinding
-import com.gigforce.ambassador.user_rollment.kycdocs.Data
-import com.gigforce.ambassador.user_rollment.kycdocs.VerificationClickOrSelectImageBottomSheet
-import com.gigforce.ambassador.user_rollment.kycdocs.VerificationConstants
-import com.gigforce.ambassador.user_rollment.kycdocs.WhyWeNeedThisBottomSheet
+import com.gigforce.ambassador.user_rollment.kycdocs.*
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.ext.showToast
@@ -48,7 +48,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jaeger.library.StatusBarUtil
 import com.yalantis.ucrop.UCrop
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.veri_screen_info_component.view.*
+import kotlinx.android.synthetic.main.veri_screen_info_component_ambassador.view.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -111,11 +111,15 @@ class PanCardFragment : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getDataFromIntent(savedInstanceState)
+        initviews()
         initializeImageViews()
         listeners()
         observer()
     }
 
+    private fun initviews() {
+        viewBinding.toplayoutblock.setIdonthaveDocContent(resources.getString(R.string.no_doc_title_pan),"")
+    }
     private lateinit var userId: String
     private lateinit var userName: String
     var allNavigationList = ArrayList<String>()
@@ -161,23 +165,25 @@ class PanCardFragment : Fragment(),
                         if (!it.name.isNullOrBlank())
                             viewBinding.nameTil.editText?.setText(it.name)
                         if (!it.dateOfBirth.isNullOrBlank()) {
-                            viewBinding.dateOfBirth.text = it.dateOfBirth
-                            viewBinding.dobLabel.visible()
+                            if (it.dateOfBirth.contains("/") || it.dateOfBirth.contains("-")) {
+                                viewBinding.dateOfBirth.text = it.dateOfBirth
+                                viewBinding.dobLabel.visible()
+                            }
                         }
 
                     } else {
                         viewBinding.toplayoutblock.uploadStatusLayout(
                             AppConstants.UNABLE_TO_FETCH_DETAILS,
-                            "UNABLE TO FETCH DETAILS",
-                            "Enter your PAN card details manually or try again to continue the verification process."
+                            "Unable to fetch information",
+                            "Enter the PAN details manually below"
                         )
                     }
 
                 } else {
                     viewBinding.toplayoutblock.uploadStatusLayout(
                         AppConstants.UNABLE_TO_FETCH_DETAILS,
-                        "UNABLE TO FETCH DETAILS",
-                        "Enter your PAN card details manually or try again to continue the verification process."
+                        "Unable to fetch information",
+                        "Enter the PAN details manually below"
                     )
                     showToast("Ocr status " + it.message)
                 }
@@ -202,6 +208,8 @@ class PanCardFragment : Fragment(),
                     if (it.verified) {
                         verificationScreenStatus = VerificationScreenStatus.VERIFIED
                         verifiedStatusViews(it)
+                        viewBinding.belowLayout.visible()
+                        setAlreadyfilledData(it, false)
                     } else {
                         checkforStatusAndVerified(it)
                     }
@@ -210,8 +218,68 @@ class PanCardFragment : Fragment(),
         })
     }
 
+    var anyDataEntered = false
 
+    inner class ValidationTextWatcher :
+        TextWatcher {
+        override fun afterTextChanged(text: Editable?) {
+            context?.let { cxt ->
+                if (verificationScreenStatus == VerificationScreenStatus.DEFAULT || verificationScreenStatus == VerificationScreenStatus.FAILED || verificationScreenStatus == VerificationScreenStatus.OCR_COMPLETED) {
+                    text?.let {
+                        if (viewBinding.nameTil.editText?.text.toString()
+                                .isNullOrBlank() && viewBinding.panTil.editText?.text.toString()
+                                .isNullOrBlank() && viewBinding.fatherNameTil.editText?.text.toString()
+                                .isNullOrBlank() && viewBinding.dateOfBirth.text.toString()
+                                .isNullOrBlank()
+                        ) {
+                            viewBinding.submitButton.text = "Skip"
+                            anyDataEntered = false
+                        } else {
+                            viewBinding.submitButton.text = "Submit"
+                            anyDataEntered = true
+                        }
+                    }
+                }
+            }
+        }
+
+        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+        }
+
+        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+        }
+
+    }
+
+    var oldStateHolder = OLDStateHolder("")
     private fun listeners() {
+        viewBinding.toplayoutblock.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { p1, b1 ->
+            if (b1) {
+                oldStateHolder.submitButtonCta = viewBinding.submitButton.text.toString()
+                viewBinding.submitButton.text = "Skip"
+                viewBinding.belowLayout.gone()
+            } else {
+                viewBinding.submitButton.text = oldStateHolder.submitButtonCta
+                viewBinding.belowLayout.visible()
+            }
+
+        })
+        viewBinding.nameTil.editText?.addTextChangedListener(
+            ValidationTextWatcher(
+            )
+        )
+        viewBinding.panTil.editText?.addTextChangedListener(
+            ValidationTextWatcher(
+            )
+        )
+        viewBinding.fatherNameTil.editText?.addTextChangedListener(
+            ValidationTextWatcher(
+            )
+        )
+        viewBinding.dateOfBirth.addTextChangedListener(ValidationTextWatcher())
+
         viewBinding.toplayoutblock.setPrimaryClick(View.OnClickListener {
             //call for bottom sheet
             checkForPermissionElseShowCameraGalleryBottomSheet()
@@ -224,7 +292,7 @@ class PanCardFragment : Fragment(),
 
         viewBinding.submitButton.setOnClickListener {
             hideSoftKeyboard()
-            if (viewBinding.toplayoutblock.isDocDontOptChecked() || verificationScreenStatus == VerificationScreenStatus.VERIFIED || verificationScreenStatus == VerificationScreenStatus.STARTED_VERIFYING) {
+            if (viewBinding.toplayoutblock.isDocDontOptChecked() || verificationScreenStatus == VerificationScreenStatus.VERIFIED || verificationScreenStatus == VerificationScreenStatus.STARTED_VERIFYING || !anyDataEntered) {
                 checkForNextDoc()
             } else {
                 val panCardNo =
@@ -254,6 +322,45 @@ class PanCardFragment : Fragment(),
             })
         }
 
+    }
+
+    private fun setAlreadyfilledData(panCardDataModel: PanCardDataModel, enableFields: Boolean) {
+
+        viewBinding.nameTil.editText?.setText(panCardDataModel.name)
+
+        viewBinding.panTil.editText?.setText(panCardDataModel.panCardNo)
+
+        viewBinding.fatherNameTil.editText?.setText(panCardDataModel.fathername)
+
+        panCardDataModel.dob?.let {
+
+            viewBinding.dateOfBirth.text = panCardDataModel.dob
+
+            viewBinding.dobLabel.visible()
+
+        }
+
+        var list = ArrayList<KYCImageModel>()
+
+        panCardDataModel.panCardImagePath?.let {
+
+            getDBImageUrl(it)?.let {
+                list.add(
+                    KYCImageModel(
+                        text = getString(R.string.upload_pan_card_new),
+                        imagePath = it,
+                        imageUploaded = true
+                    )
+                )
+            }
+
+        }
+
+        viewBinding.toplayoutblock.setImageViewPager(list)
+        viewBinding.nameTil.editText?.isEnabled = enableFields
+        viewBinding.panTil.editText?.isEnabled = enableFields
+        viewBinding.fatherNameTil.editText?.isEnabled = enableFields
+        viewBinding.dateRl.isEnabled = enableFields
 
     }
 
@@ -425,8 +532,6 @@ class PanCardFragment : Fragment(),
             if (outputFileUri != null) {
                 startCrop(outputFileUri)
                 Log.d("image", outputFileUri.toString())
-            } else {
-                showToast(getString(R.string.issue_in_cap_image))
             }
         } else if (requestCode == UCrop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
             val imageUriResultCrop: Uri? = UCrop.getOutput(data!!)
@@ -584,7 +689,7 @@ class PanCardFragment : Fragment(),
         return null
     }
 
-    private val SPLASH_TIME_OUT: Long = 1000 * 5
+    private val WAITING_TIME: Long = 1000 * 3
     private fun checkforStatusAndVerified(panCardDataModel: PanCardDataModel) {
         panCardDataModel.status?.let {
             when (it) {
@@ -598,24 +703,27 @@ class PanCardFragment : Fragment(),
                                 verifiedStatusViews(null)
                                 viewBinding.toplayoutblock.uploadStatusLayout(
                                     AppConstants.UNABLE_TO_FETCH_DETAILS,
-                                    "VERIFICATION IN PROGRESS",
-                                    "Click next to proceed. Verification will be done in parallel"
+                                    "Verification in progress",
+                                    "Document will be verified soon. You can click Next to proceed"
                                 )
                                 viewBinding.toplayoutblock.setVerificationSuccessfulView("", "")
                             }
                         } catch (e: Exception) {
 
                         }
-                    }, SPLASH_TIME_OUT)
+                    }, WAITING_TIME)
+                    viewBinding.belowLayout.visible()
+                    setAlreadyfilledData(panCardDataModel, false)
                 }
                 "failed" -> {
                     verificationScreenStatus = VerificationScreenStatus.FAILED
                     resetInitializeViews()
                     viewBinding.toplayoutblock.uploadStatusLayout(
                         AppConstants.DETAILS_MISMATCH,
-                        "VERIFICATION FAILED",
-                        "Please recheck the information and try again"
+                        "Verification Failed",
+                        "The details submitted are incorrect. Please try again."
                     )
+                    setAlreadyfilledData(panCardDataModel, true)
                 }
                 "" -> {
                     verificationScreenStatus = VerificationScreenStatus.DEFAULT
@@ -628,7 +736,7 @@ class PanCardFragment : Fragment(),
 
     private fun resetInitializeViews() {
         viewBinding.submitButton.visible()
-        viewBinding.submitButton.text = "Submit"
+        viewBinding.submitButton.text = "Skip"
         viewBinding.submitButton.isEnabled = true
         viewBinding.belowLayout.visible()
         viewBinding.toplayoutblock.setVerificationSuccessfulView(

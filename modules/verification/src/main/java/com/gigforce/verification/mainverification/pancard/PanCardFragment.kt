@@ -18,6 +18,7 @@ import android.util.Size
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CompoundButton
 import android.widget.DatePicker
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
@@ -45,6 +46,7 @@ import com.gigforce.verification.databinding.PanCardFragmentBinding
 import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.gigforce.verification.gigerVerfication.panCard.AddPanCardInfoFragment
 import com.gigforce.verification.mainverification.Data
+import com.gigforce.verification.mainverification.OLDStateHolder
 import com.gigforce.verification.mainverification.VerificationClickOrSelectImageBottomSheet
 import com.gigforce.verification.util.VerificationConstants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -115,9 +117,14 @@ class PanCardFragment : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getDataFromIntent(savedInstanceState)
+        initviews()
         initializeImageViews()
         listeners()
         observer()
+    }
+
+    private fun initviews() {
+        viewBinding.toplayoutblock.setIdonthaveDocContent(resources.getString(R.string.no_doc_title_pan),resources.getString(R.string.no_doc_subtitle_pan))
     }
 
     var allNavigationList = ArrayList<String>()
@@ -246,8 +253,19 @@ class PanCardFragment : Fragment(),
 
     }
 
+    var oldStateHolder = OLDStateHolder("")
     private fun listeners() {
+        viewBinding.toplayoutblock.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { p1, b1 ->
+            if (b1) {
+                oldStateHolder.submitButtonCta = viewBinding.submitButton.text.toString()
+                viewBinding.submitButton.text = "Skip"
+                viewBinding.belowLayout.gone()
+            } else {
+                viewBinding.submitButton.text = oldStateHolder.submitButtonCta
+                viewBinding.belowLayout.visible()
+            }
 
+        })
         viewBinding.nameTil.editText?.addTextChangedListener(
             ValidationTextWatcher(
             )
