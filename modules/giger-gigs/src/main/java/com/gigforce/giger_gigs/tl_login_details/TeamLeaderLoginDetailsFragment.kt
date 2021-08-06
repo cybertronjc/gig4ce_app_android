@@ -197,7 +197,6 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
         } else {
             navigation.navigateTo(
                 "gig/addNewLoginSummary", bundleOf(
-                    LoginSummaryConstants.INTENT_EXTRA_MODE to LoginSummaryConstants.MODE_EDIT,
                     LoginSummaryConstants.INTENT_LOGIN_SUMMARY to listingTLModel,
                     LoginSummaryConstants.INTENT_EXTRA_MODE to LoginSummaryConstants.MODE_VIEW
                 )
