@@ -162,7 +162,7 @@ class PanCardFragment : Fragment(),
                         viewBinding.toplayoutblock.uploadStatusLayout(
                             AppConstants.UPLOAD_SUCCESS,
                             "UPLOAD SUCCESSFUL",
-                            "Information of PAN card Captured Successfully."
+                            "Information of PAN card captured successfully."
                         )
                         if (!it.panNumber.isNullOrBlank())
                             viewBinding.panTil.editText?.setText(it.panNumber)
@@ -693,9 +693,11 @@ class PanCardFragment : Fragment(),
                                 viewBinding.toplayoutblock.uploadStatusLayout(
                                     AppConstants.UNABLE_TO_FETCH_DETAILS,
                                     "Verification in progress",
-                                    "Document will be verified soon. You can click Next to proceed"
+                                    "Document will be verified soon. You can click next to proceed"
                                 )
                                 viewBinding.toplayoutblock.setVerificationSuccessfulView("", "")
+                                viewBinding.belowLayout.visible()
+                                setAlreadyfilledData(panCardDataModel, false)
                             }
                         } catch (e: Exception) {
 
