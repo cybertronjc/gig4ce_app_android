@@ -337,7 +337,7 @@ class DrivingLicenseFragment : Fragment(),
                     if (!it.dateOfBirth.isNullOrBlank() || !it.dlNumber.isNullOrBlank() || !it.validTill.isNullOrBlank()) {
                         viewBinding.toplayoutblock.uploadStatusLayout(
                             AppConstants.UPLOAD_SUCCESS,
-                            "UPLOAD SUCCESSFUL",
+                            "Upload Successful",
                             "Information of Driving License captured successfully."
                         )
                         if (!it.dateOfBirth.isNullOrBlank()) {

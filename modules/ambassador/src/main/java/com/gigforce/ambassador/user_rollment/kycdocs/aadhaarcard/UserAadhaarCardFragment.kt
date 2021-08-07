@@ -26,6 +26,7 @@ import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.utils.UtilMethods
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.core.AppConstants
+import com.gigforce.core.datamodels.verification.AadharCardDataModel
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
@@ -36,6 +37,15 @@ import com.jaeger.library.StatusBarUtil
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 import javax.inject.Inject
+
+enum class VerificationScreenStatus {
+    OCR_COMPLETED,
+    VERIFIED,
+    STARTED_VERIFYING,
+    FAILED,
+    COMPLETED,
+    DEFAULT
+}
 
 @AndroidEntryPoint
 class UserAadhaarCardFragment : Fragment(), UserDetailsFilledDialogFragmentResultListener,IOnBackPressedOverride {
@@ -52,6 +62,8 @@ class UserAadhaarCardFragment : Fragment(), UserDetailsFilledDialogFragmentResul
 
         private const val REQUEST_STORAGE_PERMISSION = 103
     }
+
+    var verificationScreenStatus = VerificationScreenStatus.DEFAULT
 
     @Inject
     lateinit var navigation: INavigation
@@ -260,11 +272,40 @@ class UserAadhaarCardFragment : Fragment(), UserDetailsFilledDialogFragmentResul
             it?.let {
 
                 if (it.verified) {
-//                    verificationScreenStatus = VerificationScreenStatus.VERIFIED
+                    verificationScreenStatus = VerificationScreenStatus.VERIFIED
                     verifiedStatusViews()
+                    viewBinding.belowLayout.visible()
+                    setAlreadyfilledData(it, false)
+                } else {
+                    viewBinding.belowLayout.gone()
                 }
             }
         })
+    }
+
+    private fun setAlreadyfilledData(
+        aadharCardDataModel: AadharCardDataModel,
+        enableFields: Boolean
+    ) {
+
+        viewBinding.aadharcardTil.editText?.setText(aadharCardDataModel.aadharCardNo ?: "")
+        viewBinding.nameTilAadhar.editText?.setText(aadharCardDataModel.name ?: "")
+        aadharCardDataModel.dob?.let {
+            if (it.isNotEmpty()) {
+                viewBinding.dateOfBirthAadhar.text = it
+                viewBinding.dobLabel.visible()
+            }
+
+        }
+        viewBinding.aadharcardTil.editText?.isEnabled = enableFields
+        viewBinding.nameTilAadhar.editText?.isEnabled = enableFields
+        viewBinding.dateRlAadhar.isEnabled = enableFields
+
+        if (enableFields) {
+            viewBinding.textView10.visible()
+        } else {
+            viewBinding.textView10.gone()
+        }
     }
 
     private fun verifiedStatusViews() {
@@ -273,7 +314,7 @@ class UserAadhaarCardFragment : Fragment(), UserDetailsFilledDialogFragmentResul
         viewBinding.belowLayout.gone()
         viewBinding.toplayoutblock.uploadStatusLayout(
             AppConstants.UPLOAD_SUCCESS,
-            "VERIFICATION COMPLETED",
+            "Verification Completed",
             "The Aadhar card details have been verified successfully."
         )
         viewBinding.submitButton.visible()

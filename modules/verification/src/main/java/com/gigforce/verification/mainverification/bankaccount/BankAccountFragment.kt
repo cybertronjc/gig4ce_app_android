@@ -176,7 +176,7 @@ class BankAccountFragment : Fragment(),
                     if (!it.beneficiaryName.isNullOrBlank() || !it.accountNumber.isNullOrBlank() || !it.ifscCode.isNullOrBlank() || !it.bankName.isNullOrBlank()) {
                         viewBinding.toplayoutblock.uploadStatusLayout(
                             AppConstants.UPLOAD_SUCCESS,
-                            "UPLOAD SUCCESSFUL",
+                            "Upload Successful",
                             "Information of Bank Captured Successfully."
                         )
                         if (!it.accountNumber.isNullOrBlank())
