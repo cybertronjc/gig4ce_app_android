@@ -159,10 +159,8 @@ class DrivingLicenseFragment : Fragment(),
             }
         }
     }
-    var manuallyRequestBackpress = false
     private fun checkForNextDoc() {
         if (allNavigationList.size == 0) {
-            manuallyRequestBackpress = true
             activity?.onBackPressed()
         } else {
             var navigationsForBundle = emptyList<String>()

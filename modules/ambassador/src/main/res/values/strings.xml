@@ -51,7 +51,7 @@
     <string name="upload_bank_details">Upload Bank Details</string>
     <string name="bank_passbook_front_image">Bank Passbook/Cheque (Front Image)</string>
     <string name="your_are_reuploading_bank_details">You are re-uploading your Bank details. They will be verified once again, which may take up to 7 days.</string>
-    <string name="enter_valid_ifsc">Enter Valid IfSC Code</string>
+    <string name="enter_valid_ifsc">Enter valid IFSC code</string>
     <string name="enter_valid_acc_no">Enter a valid account no</string>
     <string name="why_we_need_this_bank">The bank details are mandatory to approve and send payments from gigs to your account. It also helps verify your name, address, date of birth, and other details.</string>
     <string name="bank_details_uploaded">Bank details uploaded</string>
@@ -71,7 +71,7 @@
     <string name="upload_pan_details">Upload PAN Details</string>
     <string name="pan_card_image">Pan Card Image</string>
     <string name="you_are_reuploading_pan_card">You are re-uploading your PAN details. They will be verified once again, which may take up to 7 days.</string>
-    <string name="enter_valid_pan">Enter Valid PAN Card No</string>
+    <string name="enter_valid_pan">Enter valid PAN card no</string>
     <string name="click_select_pan_image">Click or select your PAN card image first</string>
     <string name="why_do_we_need_this_pan">A PAN card is mandatory for profile verification. It helps verify your name and date of birth and also helps with payments to your wallet.</string>
     <string name="pan_details_uploaded">Pan Card Details Uploaded</string>
@@ -215,9 +215,9 @@
     <string name="why_do_we_need_this_bank">A Bank Passbook is mandatory for profile verification. It helps verify your name and date of birth and also helps with payments to your wallet.</string>
     <string name="got_it">Got it</string>
     <string name="bank_name_too_short">Bank name is too short</string>
-    <string name="enter_bank_name">Enter Bank Name</string>
-    <string name="select_dl_no">Select Driving License Number</string>
-    <string name="select_dl_dob">Select Date of Birth</string>
+    <string name="enter_bank_name">Enter bank name</string>
+    <string name="select_dl_no">Enter driving license number</string>
+    <string name="select_dl_dob">Select date of birth</string>
     <string name="upload_driving_license_front_side_new">Upload your Driving License\nfront Side</string>
     <string name="upload_driving_license_back_side_new">Upload your Driving License\nback side(optional)</string>
     <string name="why_do_we_need_this_dl">A driving license is mandatory for driving and delivery gigs</string>

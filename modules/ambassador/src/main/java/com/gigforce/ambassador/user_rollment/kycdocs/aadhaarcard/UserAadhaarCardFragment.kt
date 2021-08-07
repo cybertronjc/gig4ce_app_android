@@ -38,14 +38,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 import javax.inject.Inject
 
-enum class VerificationScreenStatus {
-    OCR_COMPLETED,
-    VERIFIED,
-    STARTED_VERIFYING,
-    FAILED,
-    COMPLETED,
-    DEFAULT
-}
 
 @AndroidEntryPoint
 class UserAadhaarCardFragment : Fragment(), UserDetailsFilledDialogFragmentResultListener,IOnBackPressedOverride {
@@ -63,7 +55,6 @@ class UserAadhaarCardFragment : Fragment(), UserDetailsFilledDialogFragmentResul
         private const val REQUEST_STORAGE_PERMISSION = 103
     }
 
-    var verificationScreenStatus = VerificationScreenStatus.DEFAULT
 
     @Inject
     lateinit var navigation: INavigation
@@ -184,7 +175,8 @@ class UserAadhaarCardFragment : Fragment(), UserDetailsFilledDialogFragmentResul
             if (adharResponseModel.status) {
                 verifiedStatusViews()
             } else {
-                navigation.popBackStack()
+                openDialogForKYCRequirement()
+//                navigation.popBackStack()
             }
         }
     }
@@ -218,18 +210,22 @@ class UserAadhaarCardFragment : Fragment(), UserDetailsFilledDialogFragmentResul
         outState.putString(EnrollmentConstants.INTENT_EXTRA_USER_NAME, userName)
     }
 
+    private fun openDialogForKYCRequirement(){
+        UserDetailsFilledDialogFragment.launch(
+            userId = userId,
+            userName = userName,
+            fragmentManager = childFragmentManager,
+            okayClickListener = this@UserAadhaarCardFragment
+        )
+    }
+
     private fun listeners() {
 
 
         viewBinding.submitButton.setOnClickListener {
 
             hideSoftKeyboard()
-            UserDetailsFilledDialogFragment.launch(
-                userId = userId,
-                userName = userName,
-                fragmentManager = childFragmentManager,
-                okayClickListener = this@UserAadhaarCardFragment
-            )
+            openDialogForKYCRequirement()
 //            activity?.onBackPressed()
         }
 
@@ -272,7 +268,6 @@ class UserAadhaarCardFragment : Fragment(), UserDetailsFilledDialogFragmentResul
             it?.let {
 
                 if (it.verified) {
-                    verificationScreenStatus = VerificationScreenStatus.VERIFIED
                     verifiedStatusViews()
                     viewBinding.belowLayout.visible()
                     setAlreadyfilledData(it, false)

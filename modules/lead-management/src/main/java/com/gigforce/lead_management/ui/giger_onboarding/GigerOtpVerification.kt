@@ -134,7 +134,7 @@ class GigerOtpVerification : BaseFragment2<FragmentGigerOtpVerificationBinding>(
                         viewBinding.confirmingOtpPb.visible()
                     }
                     is Lce.Content -> {
-                        showToast("Otp Confirmed")
+                        showToast("OTP Confirmed")
 
                         navigation.navigateTo(
                             "userinfo/addUserDetailsFragment", bundleOf(

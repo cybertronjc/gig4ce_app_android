@@ -123,7 +123,7 @@ class GigerOnboardingViewModel @Inject constructor(
 
                 _verifyOtp.value = Lce.content(response)
             } else {
-                _verifyOtp.value = Lce.error("Otp does not match")
+                _verifyOtp.value = Lce.error("OTP does not match")
             }
 
 

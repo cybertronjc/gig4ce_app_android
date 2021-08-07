@@ -518,6 +518,7 @@ class BankAccountFragment : Fragment(),
             viewBinding.toplayoutblock.toggleChangeTextView(false)
             setAlreadyfilledData(null, true)
             verificationScreenStatus = VerificationScreenStatus.DEFAULT
+            viewBinding.submitButton.text = "Skip"
         })
 
         viewBinding.submitButton.setOnClickListener {
@@ -796,7 +797,6 @@ class BankAccountFragment : Fragment(),
             Data("ifsccode", viewBinding.ifscCode.editText?.text.toString())
         )
         activeLoader(true)
-        ocrOrVerificationRquested = true
         userId?.let {
             if (it.isNotBlank())
                 viewModelUser.getKycVerificationResult(it, "bank", list)

@@ -274,7 +274,7 @@ class GigerOnboardingFragment : BaseFragment2<GigerOnboardingFragmentBinding>(
                     }
                     is Lce.Content -> {
                         UtilMethods.hideLoading()
-                        showToast("Otp sent")
+                        showToast("OTP sent")
 
                         if (viewBinding.mobileNoEt.text.toString().isNotEmpty()) {
                             navigation.navigateTo(
