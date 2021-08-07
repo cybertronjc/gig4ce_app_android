@@ -124,7 +124,10 @@ class PanCardFragment : Fragment(),
     }
 
     private fun initviews() {
-        viewBinding.toplayoutblock.setIdonthaveDocContent(resources.getString(R.string.no_doc_title_pan),resources.getString(R.string.no_doc_subtitle_pan))
+        viewBinding.toplayoutblock.setIdonthaveDocContent(
+            resources.getString(R.string.no_doc_title_pan),
+            resources.getString(R.string.no_doc_subtitle_pan)
+        )
     }
 
     var allNavigationList = ArrayList<String>()
@@ -292,10 +295,10 @@ class PanCardFragment : Fragment(),
 
         viewBinding.submitButton.setOnClickListener {
             hideSoftKeyboard()
-            if (viewBinding.toplayoutblock.isDocDontOptChecked() || verificationScreenStatus == VerificationScreenStatus.VERIFIED || verificationScreenStatus == VerificationScreenStatus.STARTED_VERIFYING || !anyDataEntered) {
+            if (viewBinding.toplayoutblock.isDocDontOptChecked() || !anyDataEntered || verificationScreenStatus == VerificationScreenStatus.VERIFIED || verificationScreenStatus == VerificationScreenStatus.STARTED_VERIFYING) {
                 checkForNextDoc()
             } else {
-                if(verificationScreenStatus == VerificationScreenStatus.FAILED){
+                if (verificationScreenStatus == VerificationScreenStatus.FAILED) {
                     viewBinding.toplayoutblock.statusDialogLayoutvisibilityGone()
                 }
                 val panCardNo =
@@ -321,13 +324,17 @@ class PanCardFragment : Fragment(),
         }
         viewBinding.appBarPan.apply {
             setBackButtonListener(View.OnClickListener {
-                navigation.popBackStack()
+//                navigation.popBackStack()
+                activity?.onBackPressed()
             })
         }
 
     }
 
-    private fun setAlreadyfilledData(panCardDataModel: PanCardDataModel, enableFields: Boolean) : ArrayList<KYCImageModel>{
+    private fun setAlreadyfilledData(
+        panCardDataModel: PanCardDataModel,
+        enableFields: Boolean
+    ): ArrayList<KYCImageModel> {
 
         viewBinding.nameTil.editText?.setText(panCardDataModel.name)
 
@@ -373,8 +380,10 @@ class PanCardFragment : Fragment(),
         return list
     }
 
+    var manuallyRequestBackpress = false
     private fun checkForNextDoc() {
         if (allNavigationList.size == 0) {
+            manuallyRequestBackpress = true
             activity?.onBackPressed()
         } else {
             var navigationsForBundle = emptyList<String>()
@@ -724,9 +733,9 @@ class PanCardFragment : Fragment(),
                         "The details submitted are incorrect. Please try again."
                     )
                     var listData = setAlreadyfilledData(panCardDataModel, true)
-                    if(listData.isEmpty()){
+                    if (listData.isEmpty()) {
                         initializeImageViews()
-                    }else{
+                    } else {
                         //single if showing error
                     }
 
@@ -780,7 +789,7 @@ class PanCardFragment : Fragment(),
 
     override fun onBackPressed(): Boolean {
         if (FROM_CLIENT_ACTIVATON) {
-            if (verificationScreenStatus == VerificationScreenStatus.VERIFIED) {
+            if(!manuallyRequestBackpress || viewBinding.toplayoutblock.isDocDontOptChecked() || (!anyDataEntered && verificationScreenStatus == VerificationScreenStatus.DEFAULT)){
                 var navFragmentsData = activity as NavFragmentsData
                 navFragmentsData.setData(
                     bundleOf(
@@ -789,7 +798,6 @@ class PanCardFragment : Fragment(),
                     )
                 )
             }
-            return false
         }
         return false
     }
