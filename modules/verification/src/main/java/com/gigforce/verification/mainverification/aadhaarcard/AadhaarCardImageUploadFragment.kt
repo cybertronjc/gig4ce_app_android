@@ -36,6 +36,15 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 import javax.inject.Inject
 
+enum class VerificationScreenStatus {
+    OCR_COMPLETED,
+    VERIFIED,
+    STARTED_VERIFYING,
+    FAILED,
+    COMPLETED,
+    DEFAULT
+}
+
 @AndroidEntryPoint
 class AadhaarCardImageUploadFragment : Fragment(),
     IOnBackPressedOverride {
@@ -52,6 +61,8 @@ class AadhaarCardImageUploadFragment : Fragment(),
 
         private const val REQUEST_STORAGE_PERMISSION = 103
     }
+
+    var verificationScreenStatus = VerificationScreenStatus.DEFAULT
 
     @Inject
     lateinit var navigation: INavigation
@@ -204,6 +215,7 @@ class AadhaarCardImageUploadFragment : Fragment(),
 
         viewBinding.appBarAadhar.apply {
             setBackButtonListener(View.OnClickListener {
+//                navigation.popBackStack()
                 activity?.onBackPressed()
             })
         }
@@ -230,7 +242,7 @@ class AadhaarCardImageUploadFragment : Fragment(),
 
     override fun onBackPressed(): Boolean {
         if (FROM_CLIENT_ACTIVATON) {
-            if (isAadharVerified) {
+            if (verificationScreenStatus == VerificationScreenStatus.DEFAULT) {
                 var navFragmentsData = activity as NavFragmentsData
                 navFragmentsData.setData(
                     bundleOf(
@@ -239,12 +251,12 @@ class AadhaarCardImageUploadFragment : Fragment(),
                     )
                 )
             }
+
             return false
         }
         return false
     }
 
-    var isAadharVerified = false
     private fun observer() {
 
         viewModel.getVerifiedStatus() //getting userHasVerified status
@@ -252,7 +264,7 @@ class AadhaarCardImageUploadFragment : Fragment(),
             it?.let {
 
                 if (it.verified) {
-//                    verificationScreenStatus = VerificationScreenStatus.VERIFIED
+                    verificationScreenStatus = VerificationScreenStatus.VERIFIED
                     verifiedStatusViews()
                     viewBinding.belowLayout.visible()
                     setAlreadyfilledData(it, false)

@@ -155,9 +155,10 @@ class DrivingLicenseFragment : Fragment(),
             }
         }
     }
-
+    var manuallyRequestBackpress = false
     private fun checkForNextDoc() {
         if (allNavigationList.size == 0) {
+            manuallyRequestBackpress = true
             activity?.onBackPressed()
         } else {
             var navigationsForBundle = emptyList<String>()
@@ -177,7 +178,7 @@ class DrivingLicenseFragment : Fragment(),
 
     override fun onBackPressed(): Boolean {
         if (FROM_CLIENT_ACTIVATON) {
-            if (verificationScreenStatus == VerificationScreenStatus.VERIFIED) {
+            if(!manuallyRequestBackpress || viewBinding.toplayoutblock.isDocDontOptChecked() || (!anyDataEntered && verificationScreenStatus == VerificationScreenStatus.DEFAULT)){
                 var navFragmentsData = activity as NavFragmentsData
                 navFragmentsData.setData(
                     bundleOf(
@@ -186,7 +187,6 @@ class DrivingLicenseFragment : Fragment(),
                     )
                 )
             }
-            return false
         }
         return false
     }
@@ -310,7 +310,8 @@ class DrivingLicenseFragment : Fragment(),
         }
         viewBinding.appBarDl.apply {
             setBackButtonListener(View.OnClickListener {
-                navigation.popBackStack()
+//                navigation.popBackStack()
+                activity?.onBackPressed()
             })
         }
     }
