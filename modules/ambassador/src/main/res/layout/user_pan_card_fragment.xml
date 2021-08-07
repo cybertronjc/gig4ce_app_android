@@ -37,7 +37,7 @@
                     app:docinfotext="Please upload your PAN card or enter the details manually"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:missingdoctext="I don’t have a PAN Card"
+                    app:missingdoctext="I don’t have a PAN card"
                     app:title="PAN Card"
                     app:uppercaption="You need to upload" />
 

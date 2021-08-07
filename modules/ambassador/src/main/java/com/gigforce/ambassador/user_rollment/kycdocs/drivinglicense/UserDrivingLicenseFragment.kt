@@ -231,6 +231,16 @@ class DrivingLicenseFragment : Fragment(),
     }
     private fun goBackToUsersList() {
         findNavController().navigateUp()
+        var navigationsForBundleOld = ArrayList<String>()
+        navigationsForBundleOld.add("userinfo/addUserDrivingLicenseInfoFragment")
+        navigationsForBundleOld.add("userinfo/addUserAadharCardInfoFragment")
+        navigation.navigateTo(
+            "userinfo/addUserPanCardInfoFragment", bundleOf(
+                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName,
+                VerificationConstants.NAVIGATION_STRINGS to navigationsForBundleOld
+            )
+        )
     }
 
     var oldStateHolder = OLDStateHolder("")

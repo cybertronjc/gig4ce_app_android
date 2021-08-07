@@ -809,6 +809,19 @@ class PanCardFragment : Fragment(),
 
     private fun goBackToUsersList() {
         findNavController().navigateUp()
+
+//        var navigationsForBundleOld = ArrayList<String>()
+//        navigationsForBundleOld.add("userinfo/addUserPanCardInfoFragment")
+//        navigationsForBundleOld.add("userinfo/addUserDrivingLicenseInfoFragment")
+//        navigationsForBundleOld.add("userinfo/addUserAadharCardInfoFragment")
+//        navigation.navigateTo(
+//            "userinfo/addUserBankDetailsInfoFragment", bundleOf(
+//                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+//                EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName,
+//                VerificationConstants.NAVIGATION_STRINGS to navigationsForBundleOld
+//            )
+//        )
+
     }
 
 }

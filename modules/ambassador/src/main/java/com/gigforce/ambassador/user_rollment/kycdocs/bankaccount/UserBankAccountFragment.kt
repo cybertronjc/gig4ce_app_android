@@ -624,7 +624,7 @@ class BankAccountFragment : Fragment(),
                     allNavigationList.slice(IntRange(1, allNavigationList.size - 1))
                         .filter { it.length > 0 }
             }
-            navigation.popBackStack()
+//            navigation.popBackStack()
             navigation.navigateTo(
                 allNavigationList.get(0), bundleOf(
                     VerificationConstants.NAVIGATION_STRINGS to navigationsForBundle,
