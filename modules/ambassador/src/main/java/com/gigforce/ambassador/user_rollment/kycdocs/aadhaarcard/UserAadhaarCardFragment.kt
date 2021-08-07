@@ -95,7 +95,7 @@ class UserAadhaarCardFragment : Fragment(), UserDetailsFilledDialogFragmentResul
         initWebview()
     }
     private fun initializeNavigations() {
-        navigationsForBundle.add("userinfo/addUserPanCardInfoFragment")
+//        navigationsForBundle.add("userinfo/addUserPanCardInfoFragment")
         navigationsForBundle.add("userinfo/addUserDrivingLicenseInfoFragment")
         navigationsForBundle.add("userinfo/addUserAadharCardInfoFragment")
     }
@@ -340,7 +340,7 @@ class UserAadhaarCardFragment : Fragment(), UserDetailsFilledDialogFragmentResul
     override fun onReUploadDocumentsClicked() {
         navigation.popBackStack()
         navigation.navigateTo(
-            "userinfo/addUserBankDetailsInfoFragment", bundleOf(
+            "userinfo/addUserPanCardInfoFragment", bundleOf(
                 EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
                 EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName,
                 VerificationConstants.NAVIGATION_STRINGS to navigationsForBundle
