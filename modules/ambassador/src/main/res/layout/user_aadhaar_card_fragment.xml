@@ -158,7 +158,8 @@
                             android:src="@drawable/ic_sharp_event_available_24"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:visibility="gone"/>
 
                         <TextView
                             android:id="@+id/dobLabel"

@@ -164,7 +164,7 @@ class PanCardFragment : Fragment(),
                     if (!it.panNumber.isNullOrBlank() || !it.name.isNullOrBlank() || !it.dateOfBirth.isNullOrBlank() || !it.fatherName.isNullOrBlank()) {
                         viewBinding.toplayoutblock.uploadStatusLayout(
                             AppConstants.UPLOAD_SUCCESS,
-                            "UPLOAD SUCCESSFUL",
+                            "Upload Successful",
                             "Information of PAN card captured successfully."
                         )
                         if (!it.panNumber.isNullOrBlank())

@@ -48,7 +48,7 @@
     <string name="enter_valid_dl">Enter Valid Driving License</string>
     <string name="select_dl_state">Select Driving License State</string>
     <string name="select_dl_image">Upload Driving License Image</string>
-    <string name="select_dl_no">Select Driving License Number</string>
+    <string name="select_dl_no">Enter driving license number</string>
     <string name="select_dl_dob">Select date of birth</string>
     <string name="why_we_need_this_bank">The bank details are mandatory to approve and send payments from gigs to your account. It also helps verify your name, address, date of birth, and other details.</string>
     <string name="enter_valid_ifsc">Enter valid IFSC code</string>
