@@ -336,7 +336,6 @@ class BankAccountFragment : Fragment(),
                 "" -> {
                     verificationScreenStatus = VerificationScreenStatus.DEFAULT
                     resetInitializeViews()
-                    setAlreadyfilledData(null, true)
                     viewBinding.toplayoutblock.toggleChangeTextView(false)
                 }
                 "completed" -> {
