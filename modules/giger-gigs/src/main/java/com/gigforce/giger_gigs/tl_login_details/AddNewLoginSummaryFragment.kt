@@ -1,6 +1,5 @@
 package com.gigforce.giger_gigs.tl_login_details
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -20,7 +19,6 @@ import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.DateHelper
 import com.gigforce.core.utils.Lce
 import com.gigforce.giger_gigs.LoginSummaryConstants
-import com.gigforce.giger_gigs.R
 import com.gigforce.giger_gigs.databinding.AddNewLoginSummaryFragmentBinding
 import com.gigforce.giger_gigs.models.*
 import com.google.firebase.auth.FirebaseAuth
@@ -52,7 +50,7 @@ class AddNewLoginSummaryFragment : Fragment() {
     var selectedCity: LoginSummaryCity = LoginSummaryCity()
     var citiesModelArray = listOf<LoginSummaryCity>()
     var businessListToSubmit = listOf<LoginSummaryBusiness>()
-    private  var loginSummaryDetails : ListingTLModel? = null
+    private var loginSummaryDetails: ListingTLModel? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -97,17 +95,17 @@ class AddNewLoginSummaryFragment : Fragment() {
                 val userUid = FirebaseAuth.getInstance().uid
                 val profileData = profileFirebaseRepository.getProfileData(userUid)
                 viewBinding.teamLeaderName.text = profileData.name
-            }catch (e: Exception){
+            } catch (e: Exception) {
 
             }
         }
 
-        val c: Date = Calendar.getInstance().getTime()
+        val c: Date = Calendar.getInstance().time
         viewBinding.dateTV.text = DateHelper.getDateInDDMMYYYY(c)
 
-        if (mode == LoginSummaryConstants.MODE_VIEW){
+        if (mode == LoginSummaryConstants.MODE_VIEW) {
             viewBinding.submit.invisible()
-        }else {
+        } else {
             viewBinding.submit.visible()
         }
 
@@ -116,7 +114,13 @@ class AddNewLoginSummaryFragment : Fragment() {
     private fun initToolbar() = viewBinding.apply {
         appBar.apply {
             hideActionMenu()
-            showTitle("Add New Login Summary")
+            if (mode == LoginSummaryConstants.MODE_VIEW) {
+                showTitle("Login Summary")
+            } else if (mode == LoginSummaryConstants.MODE_EDIT) {
+                showTitle("Edit Login Summary")
+            } else {
+                showTitle("Add New Login Summary")
+            }
             setBackButtonListener(View.OnClickListener {
                 activity?.onBackPressed()
             })
@@ -125,12 +129,18 @@ class AddNewLoginSummaryFragment : Fragment() {
 
     private fun listeners() = viewBinding.apply {
 
-        arrayAdapter = context?.let { ArrayAdapter(it,android.R.layout.simple_spinner_dropdown_item, citiesArray) }
-        citySpinner.setAdapter(arrayAdapter)
+        arrayAdapter = context?.let {
+            ArrayAdapter(
+                it,
+                android.R.layout.simple_spinner_dropdown_item,
+                citiesArray
+            )
+        }
+        citySpinner.adapter = arrayAdapter
 
         submit.setOnClickListener {
-            if (mode == LoginSummaryConstants.MODE_ADD){
-                if (citySpinner.selectedItem.toString().isEmpty()){
+            if (mode == LoginSummaryConstants.MODE_ADD) {
+                if (citySpinner.selectedItem.toString().isEmpty()) {
                     showToast("Select a city to continue")
                 } else {
                     //submit data
@@ -143,64 +153,63 @@ class AddNewLoginSummaryFragment : Fragment() {
 
         }
 
-        if (mode == LoginSummaryConstants.MODE_ADD){
+        if (mode == LoginSummaryConstants.MODE_ADD) {
             viewModel.getCities()
         } else {
-            if (loginSummaryDetails != null){
+            if (loginSummaryDetails != null) {
                 citiesArray.add(loginSummaryDetails?.city?.name.toString())
                 citiesModelArray.toMutableList().add(loginSummaryDetails?.city!!)
                 citySpinner.isEnabled = false
                 citySpinner.invisible()
                 cityTextView.visible()
-                cityTextView.setText(loginSummaryDetails?.city?.name.toString())
+                cityTextView.text = loginSummaryDetails?.city?.name.toString()
 
                 var itemMode = 0
-                if (mode == LoginSummaryConstants.MODE_VIEW){
+                if (mode == LoginSummaryConstants.MODE_VIEW) {
                     itemMode = 1
                 }
 
                 //set businesses
                 val list = arrayListOf<LoginSummaryBusiness>()
                 loginSummaryDetails?.businessData?.forEachIndexed { index, businessDataReqModel ->
-                    list.add(LoginSummaryBusiness(
-                        businessDataReqModel.businessId,
-                        businessDataReqModel.businessName,
-                        businessDataReqModel.legalName,
-                        businessDataReqModel.gigerCount,
-                        businessDataReqModel.updatedBy,
-                        itemMode
-                    ))
+                    list.add(
+                        LoginSummaryBusiness(
+                            businessDataReqModel.businessId,
+                            businessDataReqModel.businessName,
+                            businessDataReqModel.legalName,
+                            businessDataReqModel.gigerCount,
+                            businessDataReqModel.updatedBy,
+                            itemMode
+                        )
+                    )
                 }
                 viewModel.processBusinessList(list)
             }
         }
 
-        viewBinding.citySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                val cityId = citiesModelArray.get(p2).id
-                selectedCity = citiesModelArray.get(p2)
-                if (mode == LoginSummaryConstants.MODE_ADD){
-                    viewModel.getBusinessByCity(cityId = cityId)
+        viewBinding.citySpinner.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                    val cityId = citiesModelArray.get(p2).id
+                    selectedCity = citiesModelArray.get(p2)
+                    if (mode == LoginSummaryConstants.MODE_ADD) {
+                        viewModel.getBusinessByCity(cityId = cityId)
+                    }
+
+                }
+
+                override fun onNothingSelected(p0: AdapterView<*>?) {
+
                 }
 
             }
-
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-
-            }
-
-        }
     }
 
     private fun submitLoginSummary() {
         val tlUID = FirebaseAuth.getInstance().currentUser?.uid
         val businessList = arrayListOf<BusinessDataReqModel>()
         var isUpdate = false
-        if (mode == LoginSummaryConstants.MODE_ADD){
-            isUpdate = false
-        } else {
-            isUpdate = true
-        }
+        isUpdate = mode != LoginSummaryConstants.MODE_ADD
         businessListToSubmit = viewModel.getBusinessListForProcessingData()
         businessListToSubmit.forEachIndexed { index, loginSummaryBusiness ->
             val businessDataReqModel = BusinessDataReqModel(
@@ -233,7 +242,7 @@ class AddNewLoginSummaryFragment : Fragment() {
                 is Lce.Content -> {
                     showToast("getting cities")
 
-                    if (mode == LoginSummaryConstants.MODE_ADD){
+                    if (mode == LoginSummaryConstants.MODE_ADD) {
                         citySpinner.isEnabled = true
                         processCities(it.content)
 
@@ -270,7 +279,7 @@ class AddNewLoginSummaryFragment : Fragment() {
         viewModel.submitDataState.observe(viewLifecycleOwner, Observer {
             val result = it ?: return@Observer
 
-            when(result) {
+            when (result) {
                 "Loading" -> {
                     showToast("Submitting data")
                     viewBinding.progressBar.visibility = View.VISIBLE
@@ -301,11 +310,12 @@ class AddNewLoginSummaryFragment : Fragment() {
     }
 
 
-    private fun showBusinesses(businessList: List<BusinessListRecyclerItemData>)  = viewBinding.apply {
-        Log.d("List", "Business list $businessList")
-        businessRV.collection = businessList
+    private fun showBusinesses(businessList: List<BusinessListRecyclerItemData>) =
+        viewBinding.apply {
+            Log.d("List", "Business list $businessList")
+            businessRV.collection = businessList
 
-    }
+        }
 
     private fun processCities(content: List<LoginSummaryCity>) {
         citiesModelArray = content
@@ -315,8 +325,6 @@ class AddNewLoginSummaryFragment : Fragment() {
 
         arrayAdapter?.notifyDataSetChanged()
     }
-
-
 
 
 }
