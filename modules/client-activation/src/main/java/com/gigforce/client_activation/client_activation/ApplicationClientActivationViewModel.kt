@@ -112,13 +112,7 @@ class ApplicationClientActivationViewModel : ViewModel() {
                             it.isDone = !profileModel?.aboutMe.isNullOrEmpty()
 
                         }
-                        "driving_licence" -> {
-                            val verification = getVerification()
-                            it.isDone =
-                                verification?.driving_license != null && (verification.driving_license?.status?.equals(
-                                    "started"
-                                ) ?: false || verification.driving_license?.verified ?: false)
-                        }
+
                         "questionnaire" -> {
                             it.isDone =
                                 checkForQuestionnaire(
@@ -133,27 +127,42 @@ class ApplicationClientActivationViewModel : ViewModel() {
                                 model.applicationLearningCompletionDate = Date()
                             }
                         }
-                        "aadhar_card" -> {
-                            val verification = getVerification()
-                            it.isDone =
-                                verification?.aadhar_card != null && (verification.aadhar_card?.verified
-                                    ?: false)
-                        }
-                        "pan_card" -> {
-                            val verification = getVerification()
-                            it.isDone =
-                                verification?.pan_card != null && (verification.pan_card?.status?.equals(
-                                    "started"
-                                ) ?: false || verification.pan_card?.verified ?: false)
-                        }
-                        "bank_account" -> {
-                            val verification = getVerification()
-                            it.isDone =
-                                verification?.bank_details != null && (verification.bank_details?.status?.equals(
-                                    "started"
-                                ) ?: false || verification.bank_details?.verified ?: false)
-                        }
 
+
+                    }
+                }
+            }
+
+
+            // need to change for KYC
+            model.application.forEach {
+                when (it.type) {
+                    "driving_licence" -> {
+                        val verification = getVerification()
+                        it.isDone =
+                            verification?.driving_license != null && (verification.driving_license?.status?.equals(
+                                "started"
+                            ) ?: false || verification.driving_license?.verified ?: false)
+                    }
+                    "aadhar_card" -> {
+                        val verification = getVerification()
+                        it.isDone =
+                            verification?.aadhar_card != null && (verification.aadhar_card?.verified
+                                ?: false)
+                    }
+                    "pan_card" -> {
+                        val verification = getVerification()
+                        it.isDone =
+                            verification?.pan_card != null && (verification.pan_card?.status?.equals(
+                                "started"
+                            ) ?: false || verification.pan_card?.verified ?: false)
+                    }
+                    "bank_account" -> {
+                        val verification = getVerification()
+                        it.isDone =
+                            verification?.bank_details != null && (verification.bank_details?.status?.equals(
+                                "started"
+                            ) ?: false || verification.bank_details?.verified ?: false)
                     }
                 }
             }
