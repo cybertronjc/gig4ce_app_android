@@ -351,7 +351,14 @@ class GigersAttendanceUnderManagerFragment : Fragment(), AttendanceSwipeHandler.
                     R.id.shimmer_controller
             )
             this.attendanceRecyclerView.collection = attendanceItemData
-            if (attendanceItemData.isEmpty()) noAttendanceFound()
+            if (attendanceItemData.isEmpty()) {
+                noAttendanceFound()
+            } else {
+                this.businessSpinner.visible()
+                this.businessLabel.visible()
+                this.shiftSpinner.visible()
+                this.shiftLabel.visible()
+            }
         }
     }
 
@@ -463,6 +470,11 @@ class GigersAttendanceUnderManagerFragment : Fragment(), AttendanceSwipeHandler.
         this.attendanceRecyclerView.collection = emptyList()
         this.errorInfoLayout.visible()
         this.gigersUnderManagerMainError.text = "No Attendance Found"
+
+        this.businessSpinner.gone()
+        this.businessLabel.gone()
+        this.shiftSpinner.gone()
+        this.shiftLabel.gone()
     }
 
 
