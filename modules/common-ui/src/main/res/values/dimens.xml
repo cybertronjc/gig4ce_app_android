@@ -40,6 +40,7 @@
 
     <dimen name="dp_xsm2">4dp</dimen>
     <dimen name="dp_xsm1">8dp</dimen>
+    <dimen name="dp_sm4">10dp</dimen>
     <dimen name="dp_sm3">12dp</dimen>
     <dimen name="dp_sm2">14dp</dimen>
     <dimen name="dp_sm1">16dp</dimen>

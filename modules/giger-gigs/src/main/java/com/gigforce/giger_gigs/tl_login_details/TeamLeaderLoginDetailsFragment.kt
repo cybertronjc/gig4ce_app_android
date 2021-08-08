@@ -64,14 +64,12 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
     }
 
     private val INTERVAL_TIME: Long = 1000 * 5
-    private var refreshCount = 0
     var hadler = Handler()
     fun refreshListHandler() {
         hadler.postDelayed({
             try {
-                if (refreshCount < 3 && !onpaused) {
+                if (!onpaused) {
                     initializeViews()
-                    refreshCount++
                     refreshListHandler()
                 }
             } catch (e: Exception) {
@@ -92,7 +90,6 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
     override fun onResume() {
         super.onResume()
         onpaused = false
-        refreshCount = 0
         refreshListHandler()
     }
 
