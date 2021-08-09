@@ -276,10 +276,7 @@ class ApplicationClientActivationFragment : Fragment(),
                 }
                 break
             }
-
         }
-
-
     }
     companion object {
         val UPLOAD_PROFILE_PIC = 1
