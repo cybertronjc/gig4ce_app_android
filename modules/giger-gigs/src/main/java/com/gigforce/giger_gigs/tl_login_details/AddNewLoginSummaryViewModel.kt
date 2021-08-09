@@ -1,5 +1,6 @@
 package com.gigforce.giger_gigs.tl_login_details
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,10 +9,7 @@ import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.core.utils.Lce
-import com.gigforce.giger_gigs.models.AddNewSummaryReqModel
-import com.gigforce.giger_gigs.models.BusinessListRecyclerItemData
-import com.gigforce.giger_gigs.models.LoginSummaryBusiness
-import com.gigforce.giger_gigs.models.LoginSummaryCity
+import com.gigforce.giger_gigs.models.*
 import com.gigforce.giger_gigs.repositories.TlLoginSummaryRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -53,6 +51,9 @@ class AddNewLoginSummaryViewModel @Inject constructor (
     private var _businesses = MutableLiveData<List<BusinessListRecyclerItemData>>()
     var businesses : LiveData<List<BusinessListRecyclerItemData>> = _businesses
 
+    private var _checkinMarked = MutableLiveData<CheckMark>()
+    var checkinMarked : LiveData<CheckMark> = _checkinMarked
+
     var businessListForView = mutableListOf<BusinessListRecyclerItemData>()
 
     private var businessList: List<LoginSummaryBusiness> = emptyList()
@@ -60,6 +61,7 @@ class AddNewLoginSummaryViewModel @Inject constructor (
 
     private val _viewState = MutableLiveData<BusinessAppViewState>()
     val viewState: LiveData<BusinessAppViewState> = _viewState
+
 
     private val _submitDataState = MutableLiveData<String>()
     val submitDataState: LiveData<String> = _submitDataState
@@ -125,6 +127,8 @@ class AddNewLoginSummaryViewModel @Inject constructor (
                         it.business_id,
                         it.businessName,
                         it.legalName,
+                        it.jobProfileId.toString(),
+                        it.jobProfileName.toString(),
                         it.loginCount,
                         it.updatedBy.toString(),
                             this,
@@ -151,7 +155,7 @@ class AddNewLoginSummaryViewModel @Inject constructor (
 
         businessListForView.forEachIndexed { index, itemData ->
             val data = itemData as BusinessListRecyclerItemData.BusinessRecyclerItemData
-            list.add(LoginSummaryBusiness(data.businessId, data.businessName, data.legalName, data.loginCount))
+            list.add(LoginSummaryBusiness(data.businessId, data.businessName, data.legalName, data.jobProfileId, data.jobProfileName, data.loginCount))
         }
 
         return list.toList()
@@ -168,6 +172,16 @@ class AddNewLoginSummaryViewModel @Inject constructor (
                 }
 
             }
+        }
+    }
+
+     fun checkIfTLAttendanceMarked() = viewModelScope.launch {
+        _checkinMarked.value = CheckMark()
+        try {
+            val attMarked = tlLoginSummaryRepository.checkIfAttendanceMarked()
+            _checkinMarked.value = attMarked
+        }catch (e: Exception){
+            Log.d("Error", "Error while checking attendance ${e}")
         }
     }
 }

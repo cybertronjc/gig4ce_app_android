@@ -48,6 +48,13 @@ class BusinessRecyclerItemView(
             val businessData = it as BusinessListRecyclerItemData.BusinessRecyclerItemData
             var count = 0
             viewBinding.businessName.text = businessData.businessName ?: "Business N/A"
+            viewBinding.jobProfileName.text = businessData.jobProfileName ?: "Job Profile N/A"
+            if (viewBinding.jobProfileName.text.equals("null")){
+                viewBinding.jobProfileName.visibility = View.INVISIBLE
+            } else {
+                viewBinding.jobProfileName.visibility = View.VISIBLE
+            }
+
             if (businessData.loginCount == null || businessData.loginCount == -1){
                 viewBinding.loginCount.setText("")
                 count = -1
@@ -80,24 +87,26 @@ class BusinessRecyclerItemView(
                 viewBinding.loginCount.isEnabled = false
                 viewBinding.plusIcon.isEnabled = false
                 viewBinding.minusIcon.isEnabled = false
+                viewBinding.plusIcon.visibility = View.GONE
+                viewBinding.minusIcon.visibility = View.GONE
             } else {
                 viewBinding.loginCount.isEnabled = true
                 viewBinding.plusIcon.isEnabled = true
                 viewBinding.minusIcon.isEnabled = true
+                viewBinding.plusIcon.visibility = View.VISIBLE
+                viewBinding.minusIcon.visibility = View.VISIBLE
             }
-
-//            Log.d("updated", "data : $businessData")
-
-//            if (businessData.updatedBy == "null" || businessData.updatedBy === null){
-//                viewBinding.root.background = resources.getDrawable(R.drawable.border_option_grey)
-//            } else {
-//                viewBinding.root.background = resources.getDrawable(R.drawable.business_item_background_pink)
-//            }
 
             viewBinding.loginCount.onTextChanged {
                 //update data in viewmodel
                     businessData.addNewLoginSummaryViewModel.updateList(businessData.businessId, it)
             }
+
+//            if (viewBinding.loginCount.text.toString().isEmpty()){
+//                viewBinding.root.background = resources.getDrawable(R.drawable.business_item_background_pink)
+//            } else {
+//                viewBinding.root.background = resources.getDrawable(R.drawable.default_border_grey_background)
+//            }
         }
 
     }

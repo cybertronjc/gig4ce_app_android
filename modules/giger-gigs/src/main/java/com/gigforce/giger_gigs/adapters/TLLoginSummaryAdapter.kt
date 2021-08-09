@@ -48,9 +48,20 @@ class TLLoginSummaryAdapter(
 
         private val dateTV: TextView = view.dateTV
         private val cityTV: TextView = view.cityTV
+        private val gigerCount: TextView = view.gigerCount
         fun bindValues(listingTLModel: ListingTLModel, position: Int) {
             dateTV.text = listingTLModel.date
             cityTV.text = listingTLModel.city.name
+
+            var totalCount = 0
+            listingTLModel.businessData.forEach {
+                it.gigerCount?.let {
+                    totalCount += it
+                }
+            }
+
+            gigerCount.setText("$totalCount Logins")
+
         }
 
         override fun onClick(p0: View?) {

@@ -94,13 +94,12 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
     }
 
     private fun initToolbar() = viewBinding.apply {
-        appBar.apply {
-            hideActionMenu()
-            showTitle("Login Summary")
+        appBarComp.apply {
             setBackButtonListener(View.OnClickListener {
                 activity?.onBackPressed()
             })
         }
+
     }
 
     private fun initializeViews() = viewBinding.apply {
@@ -108,25 +107,25 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
 
     }
 
-    private val datePicker: DatePickerDialog by lazy {
-        val cal = Calendar.getInstance()
-        val datePickerDialog = DatePickerDialog(
-            requireContext(),
-            DatePickerDialog.OnDateSetListener { _: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
-                val newCal = Calendar.getInstance()
-                newCal.set(Calendar.YEAR, year)
-                newCal.set(Calendar.MONTH, month)
-                newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                viewBinding.searchDate.text = DateHelper.getDateInDDMMYYYY(newCal.time)
-            },
-            2050,
-            cal.get(Calendar.MONTH),
-            cal.get(Calendar.DAY_OF_MONTH)
-        )
-
-        datePickerDialog.datePicker.maxDate = Calendar.getInstance().timeInMillis
-        datePickerDialog
-    }
+//    private val datePicker: DatePickerDialog by lazy {
+//        val cal = Calendar.getInstance()
+//        val datePickerDialog = DatePickerDialog(
+//            requireContext(),
+//            DatePickerDialog.OnDateSetListener { _: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
+//                val newCal = Calendar.getInstance()
+//                newCal.set(Calendar.YEAR, year)
+//                newCal.set(Calendar.MONTH, month)
+//                newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+//
+//            },
+//            2050,
+//            cal.get(Calendar.MONTH),
+//            cal.get(Calendar.DAY_OF_MONTH)
+//        )
+//
+//        datePickerDialog.datePicker.maxDate = Calendar.getInstance().timeInMillis
+//        datePickerDialog
+//    }
 
     private fun listeners() = viewBinding.apply {
         addNew.setOnClickListener {
@@ -137,15 +136,15 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
             )
         }
 
-        searchDate.setOnClickListener {
-            datePicker.show()
-        }
-
-        searchButton.setOnClickListener {
-            val searchCityText = searchItem.text.toString().trim()
-            val searchDateText = searchDate.text.toString().trim()
-            viewModel.getListingForTL(searchCityText, searchDateText)
-        }
+//        searchDate.setOnClickListener {
+//            datePicker.show()
+//        }
+//
+//        searchButton.setOnClickListener {
+//            val searchCityText = searchItem.text.toString().trim()
+//            val searchDateText = searchDate.text.toString().trim()
+//            viewModel.getListingForTL(searchCityText, searchDateText)
+//        }
     }
 
     private fun observer() = viewBinding.apply {

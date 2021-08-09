@@ -9,35 +9,118 @@
         tools:context=".tl_login_details.TeamLeaderLoginDetailsFragment"
         >
 
-        <com.gigforce.common_ui.views.GigforceToolbar
-            android:id="@+id/appBar"
+        <com.gigforce.common_ui.components.cells.AppBar
+            android:id="@+id/appBarComp"
             android:layout_width="match_parent"
-            android:layout_height="?android:attr/actionBarSize"
+            android:layout_height="wrap_content"
+            app:backgroundType="WhiteBar"
+            android:visibility="visible"
+            android:elevation="2dp"
+            app:titleText="Add Login Summary"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/appBar"
+            app:layout_constraintTop_toBottomOf="@id/appBarComp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
             <TextView
                 android:id="@+id/teamLeaderName"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Team Leader name"
-                android:padding="6dp"
                 android:fontFamily="@font/lato_bold"
-                android:background="@drawable/border_option_grey"
+                android:textSize="@dimen/font16"
                 android:layout_marginStart="@dimen/size_16"
                 android:layout_marginEnd="@dimen/size_16"
                 android:layout_marginTop="@dimen/size_16"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/dateOfAtt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Date of attendance"
+                android:textColor="#979C9E"
+                android:textSize="@dimen/font12"
+                android:fontFamily="@font/lato_bold"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginEnd="@dimen/size_16"
+                android:layout_marginTop="@dimen/size_16"
+                app:layout_constraintTop_toBottomOf="@id/teamLeaderName"
                 app:layout_constraintStart_toStartOf="parent"
+             />
+
+<!--            <ImageView-->
+<!--                android:id="@+id/changeDateImg"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:src="@drawable/ic_vector"-->
+<!--                android:layout_marginStart="@dimen/size_6"-->
+<!--                app:layout_constraintStart_toEndOf="@id/dateOfAtt"-->
+<!--                app:layout_constraintTop_toTopOf="@id/dateOfAtt"-->
+<!--                app:layout_constraintBottom_toBottomOf="@id/dateOfAtt"/>-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/changeDate"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Change Date"-->
+<!--                android:textColor="#E42C64"-->
+<!--                android:textSize="@dimen/font12"-->
+<!--                android:fontFamily="@font/lato_bold"-->
+<!--                android:layout_marginStart="@dimen/size4"-->
+<!--                app:layout_constraintTop_toTopOf="@id/changeDateImg"-->
+<!--                app:layout_constraintBottom_toBottomOf="@id/changeDateImg"-->
+<!--                app:layout_constraintStart_toEndOf="@id/changeDateImg"-->
+<!--                />-->
+
+
+
+            <TextView
+                android:id="@+id/loginsCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:padding="6dp"
+                android:textColor="#E42C64"
+                android:fontFamily="@font/lato_bold"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginEnd="@dimen/size_16"
+                app:layout_constraintTop_toTopOf="@id/teamLeaderName"
                 app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                android:id="@+id/totalLogins"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Logins"
+                android:padding="6dp"
+                android:textColor="#000000"
+                android:fontFamily="@font/lato"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginEnd="@dimen/size_16"
+                app:layout_constraintBottom_toBottomOf="@id/dateOfAtt"
+                app:layout_constraintTop_toTopOf="@+id/dateOfAtt"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                android:id="@+id/chooseCity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Choose City"
+                android:fontFamily="@font/lato_bold"
+                android:layout_marginTop="@dimen/size_8"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginEnd="@dimen/size_16"
+                app:layout_constraintTop_toBottomOf="@+id/dateOfAtt"
+                app:layout_constraintStart_toStartOf="parent"/>
 
             <Spinner
                 android:id="@+id/citySpinner"
@@ -45,43 +128,127 @@
                 android:layout_height="@dimen/size_46"
                 android:clickable="true"
                 android:inputType="none"
-                android:layout_marginTop="@dimen/size_16"
+                android:background="@drawable/city_spinner_background"
+                android:layout_marginTop="@dimen/size_8"
                 android:layout_marginStart="@dimen/size_16"
                 android:layout_marginEnd="@dimen/size_16"
-                app:layout_constraintTop_toBottomOf="@id/teamLeaderName"
+                app:layout_constraintTop_toBottomOf="@id/chooseCity"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
+
+            <ImageView
+                android:id="@+id/chooseCityImg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/down_arrow_pink_vector"
+                app:layout_constraintEnd_toEndOf="@id/citySpinner"
+                app:layout_constraintTop_toTopOf="@id/citySpinner"
+                app:layout_constraintBottom_toBottomOf="@id/citySpinner"/>
 
             <TextView
                 android:id="@+id/cityTextView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/size_46"
                 android:text="City"
                 android:visibility="invisible"
                 android:padding="6dp"
+                android:gravity="center_vertical"
                 android:fontFamily="@font/lato_bold"
-                android:background="@drawable/border_option_grey"
-                android:layout_marginTop="@dimen/size_16"
+                android:background="@drawable/city_spinner_background"
+                android:layout_marginTop="@dimen/size_8"
                 android:layout_marginStart="@dimen/size_16"
                 android:layout_marginEnd="@dimen/size_16"
-                app:layout_constraintTop_toBottomOf="@id/teamLeaderName"
+                app:layout_constraintTop_toBottomOf="@id/chooseCity"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
-            <TextView
-                android:id="@+id/dateTV"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/defaultGreyLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Date"
-                android:padding="6dp"
-                android:fontFamily="@font/lato_bold"
-                android:background="@drawable/border_option_grey"
+                android:layout_height="46dp"
+                android:elevation="2dp"
+                android:layout_marginTop="@dimen/size_16"
                 android:layout_marginStart="@dimen/size_16"
                 android:layout_marginEnd="@dimen/size_16"
-                android:layout_marginTop="@dimen/size_16"
+                android:background="@drawable/default_grey_background"
                 app:layout_constraintTop_toBottomOf="@id/citySpinner"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <TextView
+                    android:id="@+id/businessNameLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Business Name"
+                    android:padding="6dp"
+                    android:textColor="#656565"
+                    android:fontFamily="@font/lato_bold"
+                    android:layout_marginTop="@dimen/size_4"
+                    android:layout_marginBottom="@dimen/size_4"
+                    android:layout_marginStart="@dimen/size_16"
+                    android:layout_marginEnd="@dimen/size_16"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/businessQuantityLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Enter"
+                    android:padding="6dp"
+                    android:textColor="#E42C64"
+                    android:fontFamily="@font/lato_bold"
+                    android:layout_marginBottom="@dimen/size_4"
+                    android:layout_marginStart="@dimen/size_4"
+                    android:layout_marginEnd="@dimen/size_16"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/noDataFound"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="4dp"
+                android:visibility="gone"
+                android:layout_marginTop="@dimen/size_16"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginEnd="@dimen/size_16"
+                app:layout_constraintTop_toBottomOf="@id/citySpinner"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <ImageView
+                    android:id="@+id/noDataImg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_group_2679"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/attMarkedText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Please mark your today's attendance to submit Login Summary"
+                    android:padding="6dp"
+                    android:textSize="@dimen/font12"
+                    android:gravity="center_horizontal"
+                    android:textColor="#000000"
+                    android:fontFamily="@font/lato_bold"
+                    android:layout_marginStart="@dimen/size_16"
+                    android:layout_marginEnd="@dimen/size_16"
+                    android:layout_marginTop="@dimen/size_6"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/noDataImg"
+                    app:layout_constraintStart_toStartOf="parent"
+                    />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <com.gigforce.core.recyclerView.CoreRecyclerView
                 android:id="@+id/businessRV"
@@ -89,9 +256,7 @@
                 android:layout_height="0dp"
                 android:orientation="vertical"
                 android:layout_marginTop="@dimen/size_16"
-                android:layout_marginStart="@dimen/size_16"
-                android:layout_marginEnd="@dimen/size_16"
-                app:layout_constraintTop_toBottomOf="@id/dateTV"
+                app:layout_constraintTop_toBottomOf="@id/defaultGreyLayout"
                 app:layout_constraintBottom_toTopOf="@id/submit"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
@@ -109,7 +274,7 @@
                 android:text="No Data Found"
                 android:layout_marginTop="16dp"
                 android:textColor="@color/black"
-                app:layout_constraintTop_toBottomOf="@id/dateTV"
+                app:layout_constraintTop_toBottomOf="@id/citySpinner"
                 app:layout_constraintBottom_toTopOf="@id/submit"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
@@ -120,12 +285,12 @@
                 android:layout_height="30dp"
                 android:layout_gravity="center"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/dateTV"
+                app:layout_constraintTop_toBottomOf="@id/citySpinner"
                 app:layout_constraintBottom_toTopOf="@id/submit"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
-            <TextView
+            <Button
                 android:id="@+id/submit"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"

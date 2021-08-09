@@ -1,9 +1,6 @@
 package com.gigforce.giger_gigs.tl_login_details
 
-import com.gigforce.giger_gigs.models.AddNewSummaryReqModel
-import com.gigforce.giger_gigs.models.ListingTLModel
-import com.gigforce.giger_gigs.models.LoginSummaryBusiness
-import com.gigforce.giger_gigs.models.LoginSummaryCity
+import com.gigforce.giger_gigs.models.*
 import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.*
@@ -35,4 +32,9 @@ interface LoginSummaryService {
         @Query("pagesize") pagesize: Int
 
     ) : Response<List<ListingTLModel>>
+
+    @GET
+    suspend fun checkIfTLMarked(
+        @Url getCheckUrl: String
+    ) : Response<CheckMark>
 }

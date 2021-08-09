@@ -12,6 +12,8 @@ open class BusinessListRecyclerItemData (
         val businessId: String,
         val businessName: String,
         val legalName: String,
+        val jobProfileId: String,
+        val jobProfileName: String,
         var loginCount: Int?,
         var updatedBy: String,
         val addNewLoginSummaryViewModel: AddNewLoginSummaryViewModel,

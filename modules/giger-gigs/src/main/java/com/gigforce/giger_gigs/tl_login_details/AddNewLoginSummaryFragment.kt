@@ -13,16 +13,20 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.repository.ProfileFirebaseRepository
+import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.invisible
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.DateHelper
 import com.gigforce.core.utils.Lce
 import com.gigforce.giger_gigs.LoginSummaryConstants
+import com.gigforce.giger_gigs.R
 import com.gigforce.giger_gigs.databinding.AddNewLoginSummaryFragmentBinding
 import com.gigforce.giger_gigs.models.*
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.add_new_login_summary_fragment.*
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
@@ -51,6 +55,7 @@ class AddNewLoginSummaryFragment : Fragment() {
     var citiesModelArray = listOf<LoginSummaryCity>()
     var businessListToSubmit = listOf<LoginSummaryBusiness>()
     private var loginSummaryDetails: ListingTLModel? = null
+    var totalLoginsCount = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -99,9 +104,10 @@ class AddNewLoginSummaryFragment : Fragment() {
 
             }
         }
+        viewModel.checkIfTLAttendanceMarked()
 
         val c: Date = Calendar.getInstance().time
-        viewBinding.dateTV.text = DateHelper.getDateInDDMMYYYY(c)
+        viewBinding.dateOfAtt.text = DateHelper.getDateInDDMMYYYY(c)
 
         if (mode == LoginSummaryConstants.MODE_VIEW) {
             viewBinding.submit.invisible()
@@ -112,19 +118,20 @@ class AddNewLoginSummaryFragment : Fragment() {
     }
 
     private fun initToolbar() = viewBinding.apply {
-        appBar.apply {
-            hideActionMenu()
+
+        appBarComp.apply {
             if (mode == LoginSummaryConstants.MODE_VIEW) {
-                showTitle("Login Summary")
+                setAppBarTitle("Login Summary".toString())
             } else if (mode == LoginSummaryConstants.MODE_EDIT) {
-                showTitle("Edit Login Summary")
+                setAppBarTitle("Edit Login Summary".toString())
             } else {
-                showTitle("Add New Login Summary")
+                setAppBarTitle("Add New Login Summary".toString())
             }
             setBackButtonListener(View.OnClickListener {
                 activity?.onBackPressed()
             })
         }
+
     }
 
     private fun listeners() = viewBinding.apply {
@@ -139,22 +146,28 @@ class AddNewLoginSummaryFragment : Fragment() {
         citySpinner.adapter = arrayAdapter
 
         submit.setOnClickListener {
-            if (mode == LoginSummaryConstants.MODE_ADD) {
-                if (citySpinner.selectedItem.toString().isEmpty()) {
-                    showToast("Select a city to continue")
+            if (submit.text.equals("Checkin Now")){
+                navigation.popBackStack()
+                navigation.navigateTo("gig/mygig")
+            } else {
+                if (mode == LoginSummaryConstants.MODE_ADD) {
+                    if (citySpinner.selectedItem.toString().isEmpty()) {
+                        showToast("Select a city to continue")
+                    } else {
+                        //submit data
+                        submitLoginSummary()
+                    }
                 } else {
-                    //submit data
+                    selectedCity = loginSummaryDetails?.city!!
                     submitLoginSummary()
                 }
-            } else {
-                selectedCity = loginSummaryDetails?.city!!
-                submitLoginSummary()
             }
+
 
         }
 
         if (mode == LoginSummaryConstants.MODE_ADD) {
-            viewModel.getCities()
+            viewModel.checkIfTLAttendanceMarked()
         } else {
             if (loginSummaryDetails != null) {
                 citiesArray.add(loginSummaryDetails?.city?.name.toString())
@@ -177,12 +190,18 @@ class AddNewLoginSummaryFragment : Fragment() {
                             businessDataReqModel.businessId,
                             businessDataReqModel.businessName,
                             businessDataReqModel.legalName,
+                            businessDataReqModel.jobProfileId,
+                            businessDataReqModel.jobProfileName,
                             businessDataReqModel.gigerCount,
                             businessDataReqModel.updatedBy,
                             itemMode
                         )
                     )
+                    if (businessDataReqModel.gigerCount != null && businessDataReqModel.gigerCount != 0){
+                        totalLoginsCount += businessDataReqModel.gigerCount
+                    }
                 }
+                loginsCount.setText(totalLoginsCount.toString())
                 viewModel.processBusinessList(list)
             }
         }
@@ -205,6 +224,21 @@ class AddNewLoginSummaryFragment : Fragment() {
             }
     }
 
+    private fun launchSuccessfullDialog(){
+        val dialog = context?.let { MaterialAlertDialogBuilder(it) }
+        val customView : View = LayoutInflater.from(context)
+            .inflate(R.layout.login_data_submitted_dialog_layout, null, false)
+
+        dialog?.setView(customView)?.setPositiveButton("Done"){ dialog, _ ->
+            dialog.dismiss()
+            viewBinding.progressBar.visibility = View.GONE
+            navigation.popBackStack()
+
+        }?.show()
+
+
+    }
+
     private fun submitLoginSummary() {
         val tlUID = FirebaseAuth.getInstance().currentUser?.uid
         val businessList = arrayListOf<BusinessDataReqModel>()
@@ -217,6 +251,8 @@ class AddNewLoginSummaryFragment : Fragment() {
                 loginSummaryBusiness.legalName,
                 loginSummaryBusiness.businessName,
                 selectedCity,
+                loginSummaryBusiness.jobProfileId,
+                loginSummaryBusiness.jobProfileName,
                 loginSummaryBusiness.loginCount
             )
             businessList.add(businessDataReqModel)
@@ -257,6 +293,39 @@ class AddNewLoginSummaryFragment : Fragment() {
             }
         })
 
+        viewModel.checkinMarked.observe(viewLifecycleOwner, Observer {
+            val checkIn = it ?: return@Observer
+            try {
+                if (mode == LoginSummaryConstants.MODE_ADD) {
+                    if (checkIn.checkedIn) {
+                        viewBinding.apply {
+                            citySpinner.visibility = View.VISIBLE
+                            businessRV.visibility = View.VISIBLE
+                            chooseCity.visibility = View.VISIBLE
+                            chooseCityImg.visibility = View.VISIBLE
+                            defaultGreyLayout.visibility = View.GONE
+                            noDataFound.visibility = View.GONE
+                            submit.setText("Submit")
+                        }
+                        viewModel.getCities()
+
+                    } else {
+                        viewBinding.apply {
+                            citySpinner.visibility = View.GONE
+                            businessRV.visibility = View.GONE
+                            chooseCity.visibility = View.GONE
+                            chooseCityImg.visibility = View.GONE
+                            defaultGreyLayout.visibility = View.GONE
+                            noDataFound.visibility = View.VISIBLE
+                            submit.setText("Checkin Now")
+                        }
+                    }
+                }
+            }catch (e: Exception){
+
+            }
+        })
+
         viewModel.viewState.observe(viewLifecycleOwner, Observer {
             val state = it ?: return@Observer
             when (state) {
@@ -287,8 +356,7 @@ class AddNewLoginSummaryFragment : Fragment() {
 
                 "Created" -> {
                     showToast("Data submitted successfully")
-                    viewBinding.progressBar.visibility = View.GONE
-                    navigation.popBackStack()
+                    launchSuccessfullDialog()
                 }
 
                 "Already Exists" -> {
@@ -314,8 +382,8 @@ class AddNewLoginSummaryFragment : Fragment() {
         viewBinding.apply {
             Log.d("List", "Business list $businessList")
             businessRV.collection = businessList
-
         }
+
 
     private fun processCities(content: List<LoginSummaryCity>) {
         citiesModelArray = content
