@@ -152,7 +152,7 @@ class BankAccountFragment : Fragment(),
             verificationScreenStatus = VerificationScreenStatus.OCR_COMPLETED
             it?.let {
                 if (it.status) {
-                    if (!it.beneficiaryName.isNullOrBlank() || !it.accountNumber.isNullOrBlank() || !it.ifscCode.isNullOrBlank() || !it.bankName.isNullOrBlank()) {
+                    if (!it.accountNumber.isNullOrBlank() || !it.ifscCode.isNullOrBlank() || !it.bankName.isNullOrBlank()) {
                         viewBinding.toplayoutblock.uploadStatusLayout(
                             AppConstants.UPLOAD_SUCCESS,
                             "Upload Successful",
