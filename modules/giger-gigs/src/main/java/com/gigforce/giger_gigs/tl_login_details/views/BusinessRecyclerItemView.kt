@@ -96,7 +96,7 @@ class BusinessRecyclerItemView(
 
 
         viewBinding.minusIcon.setOnClickListener {
-            if (count != 0 && businessData.loginCount != 0 && viewBinding.loginCount.text.toString().isNotEmpty()){
+            if (count != 0  && viewBinding.loginCount.text.toString().isNotEmpty()){
 //                    businessData.loginCount = viewBinding.loginCount.text.toString().toInt()
                 count--
                 Log.d("clicked", "minus $count")

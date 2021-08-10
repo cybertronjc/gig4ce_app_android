@@ -155,7 +155,7 @@ class AddNewLoginSummaryFragment : Fragment() {
         citySpinner.adapter = arrayAdapter
 
         submit.setOnClickListener {
-            if (submit.text.equals("Checkin Now")){
+            if (submit.text.equals("Check In")){
                 navigation.popBackStack()
                 navigation.navigateTo("gig/mygig")
             } else {
@@ -221,13 +221,16 @@ class AddNewLoginSummaryFragment : Fragment() {
                 override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                     if (p2 != 0){
                         Log.d("cityModelArray", "cities $citiesModelArray  string array: $citiesArray")
-                        val cityId = citiesModelArray.get(p2 - 1).id
-                        selectedCity = citiesModelArray.get(p2 - 1)
-                        viewBinding.businessRV.visibility = View.VISIBLE
-                        viewBinding.submit.visibility = View.VISIBLE
-                        if (mode == LoginSummaryConstants.MODE_ADD) {
-                            viewModel.getBusinessByCity(cityId = cityId)
+                        if (p2 <= citiesModelArray.size + 1){
+                            val cityId = citiesModelArray.get(p2 - 1).id
+                            selectedCity = citiesModelArray.get(p2 - 1)
+                            viewBinding.businessRV.visibility = View.VISIBLE
+                            viewBinding.submit.visibility = View.VISIBLE
+                            if (mode == LoginSummaryConstants.MODE_ADD) {
+                                viewModel.getBusinessByCity(cityId = cityId)
+                            }
                         }
+
                     } else {
                         viewBinding.businessRV.visibility = View.INVISIBLE
                         viewBinding.submit.visibility = View.INVISIBLE
@@ -335,7 +338,7 @@ class AddNewLoginSummaryFragment : Fragment() {
                             businessRV.visibility = View.GONE
                             chooseCityImg.visibility = View.GONE
                             noDataFound.visibility = View.VISIBLE
-                            submit.setText("Checkin Now")
+                            submit.setText("Check In")
                         }
                     }
                 }
@@ -479,6 +482,8 @@ class AddNewLoginSummaryFragment : Fragment() {
         return businessList
     }
     private fun processCities(content: List<LoginSummaryCity>) {
+        citiesArray.clear()
+        citiesModelArray.toMutableList().clear()
         citiesArray.add("Choose City...")
         citiesModelArray = content
         citiesModelArray.forEach {
