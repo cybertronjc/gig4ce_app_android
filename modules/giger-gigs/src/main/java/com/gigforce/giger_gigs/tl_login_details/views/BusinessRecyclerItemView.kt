@@ -133,7 +133,10 @@ class BusinessRecyclerItemView(
                 if (it.isEmpty()){
                     count = 0
                 }else {
-                    count = it.toInt()
+                    it.toIntOrNull()?.let {
+                        count = it
+                    }
+
                 }
                 quantityTextChangeListener?.onQuantityTextChanged(it, quantityTag)
             }

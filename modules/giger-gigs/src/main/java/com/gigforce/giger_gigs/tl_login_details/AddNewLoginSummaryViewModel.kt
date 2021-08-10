@@ -125,27 +125,7 @@ class AddNewLoginSummaryViewModel @Inject constructor (
 
      fun processBusinessList(businessListShown: List<LoginSummaryBusiness>) {
 
-        businessList.toMutableList().clear()
-
         try {
-//            businessListShown.forEachIndexed { index, loginSummaryBusiness ->
-//                businessListForView.add(
-//                    loginSummaryBusiness.let {
-//                    BusinessListRecyclerItemData.BusinessRecyclerItemData(
-//                        it.business_id,
-//                        it.businessName,
-//                        it.legalName,
-//                        it.jobProfileId.toString(),
-//                        it.jobProfileName.toString(),
-//                        it.loginCount,
-//                        it.updatedBy.toString(),
-//                            this,
-//                        it.itemMode
-//
-//                    )
-//                    }
-//                )
-//            }
 
             businessList = businessListShown
             _viewState.postValue(
@@ -154,11 +134,6 @@ class AddNewLoginSummaryViewModel @Inject constructor (
                 )
             )
 
-//            _viewState.postValue(
-//                BusinessAppViewState.BusinessListLoaded(
-//                    businessListForView
-//                )
-//            )
 
         } catch (e: Exception){
 
@@ -188,7 +163,10 @@ class AddNewLoginSummaryViewModel @Inject constructor (
                 }
             }
             data?.let {
-                count += data.loginCount?.toInt() ?: 0
+                it.loginCount?.let {
+                    count += it
+                }
+
             }
         }
         _totalCount.postValue(count)

@@ -449,12 +449,9 @@ class AddNewLoginSummaryFragment : Fragment() {
     fun setTotalSumFromMap(){
         var count = 0
         map.forEach {
-            if (it.value.isEmpty()){
-                count += 0
-            }else {
-                count += it.value.toInt() ?: 0
+            it.value.toIntOrNull()?.let {
+                count += it
             }
-
         }
         Log.d("count", "count $count , map: $map")
 
