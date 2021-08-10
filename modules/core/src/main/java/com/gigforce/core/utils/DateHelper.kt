@@ -16,4 +16,8 @@ object DateHelper {
     fun getFullDateTimeStamp() : String{
         return SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
     }
+
+    fun getDateInDDMMMYYYY(date : Date) : String {
+        return SimpleDateFormat("dd-MMM-yyyy").format(date)
+    }
 }

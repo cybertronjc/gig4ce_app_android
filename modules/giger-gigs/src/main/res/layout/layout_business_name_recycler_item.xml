@@ -19,11 +19,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Business name"
-            android:padding="6dp"
+            android:padding="4dp"
+            android:textColor="#202325"
             android:fontFamily="@font/lato_bold"
+            android:layout_marginTop="@dimen/size_6"
             android:layout_marginStart="@dimen/size_16"
             android:layout_marginEnd="@dimen/size_16"
-            android:layout_marginBottom="@dimen/size_16"
+            android:layout_marginBottom="@dimen/size_6"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -32,9 +34,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Job Profile Name"
-            android:padding="6dp"
+            android:padding="4dp"
             android:textSize="@dimen/font_12"
-            android:fontFamily="@font/lato_bold"
+            android:fontFamily="@font/lato"
             android:layout_marginStart="@dimen/size_16"
             android:layout_marginEnd="@dimen/size_16"
             android:layout_marginBottom="@dimen/size_6"
@@ -42,10 +44,26 @@
             app:layout_constraintTop_toBottomOf="@id/businessName"
             app:layout_constraintStart_toStartOf="parent" />
 
+        <TextView
+            android:id="@+id/enterQuantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enter"
+            android:padding="6dp"
+            android:textColor="#E42C64"
+            android:fontFamily="@font/lato_bold"
+            android:layout_marginBottom="@dimen/size_4"
+            android:layout_marginStart="@dimen/size_4"
+            android:layout_marginEnd="@dimen/size_16"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/plusMinusLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">

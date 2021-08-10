@@ -6,6 +6,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:foreground="@drawable/shape_window_dim"
         tools:context=".tl_login_details.TeamLeaderLoginDetailsFragment"
         >
 
@@ -36,6 +37,7 @@
                 android:text="Team Leader name"
                 android:fontFamily="@font/lato_bold"
                 android:textSize="@dimen/font16"
+                android:textColor="#202325"
                 android:layout_marginStart="@dimen/size_16"
                 android:layout_marginEnd="@dimen/size_16"
                 android:layout_marginTop="@dimen/size_16"
@@ -110,17 +112,18 @@
                 app:layout_constraintTop_toTopOf="@+id/dateOfAtt"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
-            <TextView
-                android:id="@+id/chooseCity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Choose City"
-                android:fontFamily="@font/lato_bold"
-                android:layout_marginTop="@dimen/size_8"
-                android:layout_marginStart="@dimen/size_16"
-                android:layout_marginEnd="@dimen/size_16"
-                app:layout_constraintTop_toBottomOf="@+id/dateOfAtt"
-                app:layout_constraintStart_toStartOf="parent"/>
+<!--            <TextView-->
+<!--                android:id="@+id/chooseCity"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Choose City"-->
+<!--                android:textColor="#202325"-->
+<!--                android:fontFamily="@font/lato_bold"-->
+<!--                android:layout_marginTop="@dimen/size_8"-->
+<!--                android:layout_marginStart="@dimen/size_16"-->
+<!--                android:layout_marginEnd="@dimen/size_16"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/dateOfAtt"-->
+<!--                app:layout_constraintStart_toStartOf="parent"/>-->
 
             <Spinner
                 android:id="@+id/citySpinner"
@@ -129,10 +132,10 @@
                 android:clickable="true"
                 android:inputType="none"
                 android:background="@drawable/city_spinner_background"
-                android:layout_marginTop="@dimen/size_8"
+                android:layout_marginTop="@dimen/size_16"
                 android:layout_marginStart="@dimen/size_16"
                 android:layout_marginEnd="@dimen/size_16"
-                app:layout_constraintTop_toBottomOf="@id/chooseCity"
+                app:layout_constraintTop_toBottomOf="@id/dateOfAtt"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -158,55 +161,10 @@
                 android:layout_marginTop="@dimen/size_8"
                 android:layout_marginStart="@dimen/size_16"
                 android:layout_marginEnd="@dimen/size_16"
-                app:layout_constraintTop_toBottomOf="@id/chooseCity"
+                app:layout_constraintTop_toBottomOf="@id/dateOfAtt"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/defaultGreyLayout"
-                android:layout_width="match_parent"
-                android:layout_height="46dp"
-                android:elevation="2dp"
-                android:layout_marginTop="@dimen/size_16"
-                android:layout_marginStart="@dimen/size_16"
-                android:layout_marginEnd="@dimen/size_16"
-                android:background="@drawable/default_grey_background"
-                app:layout_constraintTop_toBottomOf="@id/citySpinner"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
-
-                <TextView
-                    android:id="@+id/businessNameLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Business Name"
-                    android:padding="6dp"
-                    android:textColor="#656565"
-                    android:fontFamily="@font/lato_bold"
-                    android:layout_marginTop="@dimen/size_4"
-                    android:layout_marginBottom="@dimen/size_4"
-                    android:layout_marginStart="@dimen/size_16"
-                    android:layout_marginEnd="@dimen/size_16"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-                <TextView
-                    android:id="@+id/businessQuantityLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Enter"
-                    android:padding="6dp"
-                    android:textColor="#E42C64"
-                    android:fontFamily="@font/lato_bold"
-                    android:layout_marginBottom="@dimen/size_4"
-                    android:layout_marginStart="@dimen/size_4"
-                    android:layout_marginEnd="@dimen/size_16"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"/>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/noDataFound"
@@ -218,6 +176,7 @@
                 android:layout_marginStart="@dimen/size_16"
                 android:layout_marginEnd="@dimen/size_16"
                 app:layout_constraintTop_toBottomOf="@id/citySpinner"
+                app:layout_constraintBottom_toTopOf="@id/submit"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
 
@@ -234,15 +193,15 @@
                     android:id="@+id/attMarkedText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Please mark your today's attendance to submit Login Summary"
+                    android:text="Please mark your today's attendance to submit login summary"
                     android:padding="6dp"
-                    android:textSize="@dimen/font12"
+                    android:textSize="@dimen/font14"
                     android:gravity="center_horizontal"
                     android:textColor="#000000"
                     android:fontFamily="@font/lato_bold"
                     android:layout_marginStart="@dimen/size_16"
                     android:layout_marginEnd="@dimen/size_16"
-                    android:layout_marginTop="@dimen/size_6"
+                    android:layout_marginTop="@dimen/size_16"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/noDataImg"
                     app:layout_constraintStart_toStartOf="parent"
@@ -250,16 +209,35 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <com.gigforce.core.recyclerView.CoreRecyclerView
+<!--            <com.gigforce.core.recyclerView.CoreRecyclerView-->
+<!--                android:id="@+id/businessRV"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="0dp"-->
+<!--                android:orientation="vertical"-->
+<!--                android:layout_marginTop="@dimen/size_16"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/citySpinner"-->
+<!--                app:layout_constraintBottom_toTopOf="@id/submit"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"/>-->
+            <ScrollView
                 android:id="@+id/businessRV"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:orientation="vertical"
                 android:layout_marginTop="@dimen/size_16"
-                app:layout_constraintTop_toBottomOf="@id/defaultGreyLayout"
+                app:layout_constraintTop_toBottomOf="@id/citySpinner"
                 app:layout_constraintBottom_toTopOf="@id/submit"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <LinearLayout
+                    android:id="@+id/business_login_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"/>
+
+            </ScrollView>
+
 
             <TextView
                 android:id="@+id/noData"

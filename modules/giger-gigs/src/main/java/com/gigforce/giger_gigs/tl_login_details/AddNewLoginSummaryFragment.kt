@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -23,6 +24,7 @@ import com.gigforce.giger_gigs.LoginSummaryConstants
 import com.gigforce.giger_gigs.R
 import com.gigforce.giger_gigs.databinding.AddNewLoginSummaryFragmentBinding
 import com.gigforce.giger_gigs.models.*
+import com.gigforce.giger_gigs.tl_login_details.views.BusinessRecyclerItemView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,6 +32,7 @@ import kotlinx.android.synthetic.main.add_new_login_summary_fragment.*
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 class AddNewLoginSummaryFragment : Fragment() {
@@ -49,11 +52,14 @@ class AddNewLoginSummaryFragment : Fragment() {
 
     private var mode = -1
 
+    val map = mutableMapOf<String, String>()
+
     var arrayAdapter: ArrayAdapter<String>? = null
     var citiesArray = arrayListOf<String>()
     var selectedCity: LoginSummaryCity = LoginSummaryCity()
     var citiesModelArray = listOf<LoginSummaryCity>()
     var businessListToSubmit = listOf<LoginSummaryBusiness>()
+    var businessListToProcess = listOf<LoginSummaryBusiness>()
     private var loginSummaryDetails: ListingTLModel? = null
     var totalLoginsCount = 0
 
@@ -95,6 +101,9 @@ class AddNewLoginSummaryFragment : Fragment() {
     }
 
     private fun initializeViews() {
+
+        viewBinding.root.foreground.alpha = 0
+        viewBinding.submit.transformationMethod = null
         viewLifecycleOwner.lifecycleScope.launch {
             try {
                 val userUid = FirebaseAuth.getInstance().uid
@@ -107,7 +116,7 @@ class AddNewLoginSummaryFragment : Fragment() {
         viewModel.checkIfTLAttendanceMarked()
 
         val c: Date = Calendar.getInstance().time
-        viewBinding.dateOfAtt.text = DateHelper.getDateInDDMMYYYY(c)
+        viewBinding.dateOfAtt.text = DateHelper.getDateInDDMMMYYYY(c)
 
         if (mode == LoginSummaryConstants.MODE_VIEW) {
             viewBinding.submit.invisible()
@@ -170,6 +179,7 @@ class AddNewLoginSummaryFragment : Fragment() {
             viewModel.checkIfTLAttendanceMarked()
         } else {
             if (loginSummaryDetails != null) {
+                citiesArray.add("Choose City...")
                 citiesArray.add(loginSummaryDetails?.city?.name.toString())
                 citiesModelArray.toMutableList().add(loginSummaryDetails?.city!!)
                 citySpinner.isEnabled = false
@@ -209,11 +219,20 @@ class AddNewLoginSummaryFragment : Fragment() {
         viewBinding.citySpinner.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                    val cityId = citiesModelArray.get(p2).id
-                    selectedCity = citiesModelArray.get(p2)
-                    if (mode == LoginSummaryConstants.MODE_ADD) {
-                        viewModel.getBusinessByCity(cityId = cityId)
+                    if (p2 != 0){
+                        Log.d("cityModelArray", "cities $citiesModelArray  string array: $citiesArray")
+                        val cityId = citiesModelArray.get(p2 - 1).id
+                        selectedCity = citiesModelArray.get(p2 - 1)
+                        viewBinding.businessRV.visibility = View.VISIBLE
+                        viewBinding.submit.visibility = View.VISIBLE
+                        if (mode == LoginSummaryConstants.MODE_ADD) {
+                            viewModel.getBusinessByCity(cityId = cityId)
+                        }
+                    } else {
+                        viewBinding.businessRV.visibility = View.INVISIBLE
+                        viewBinding.submit.visibility = View.INVISIBLE
                     }
+
 
                 }
 
@@ -229,7 +248,8 @@ class AddNewLoginSummaryFragment : Fragment() {
         val customView : View = LayoutInflater.from(context)
             .inflate(R.layout.login_data_submitted_dialog_layout, null, false)
 
-        dialog?.setView(customView)?.setPositiveButton("Done"){ dialog, _ ->
+        viewBinding.root.foreground.alpha = 200
+        dialog?.setView(customView)?.setCancelable(false)?.setPositiveButton("Done"){ dialog, _ ->
             dialog.dismiss()
             viewBinding.progressBar.visibility = View.GONE
             navigation.popBackStack()
@@ -241,22 +261,23 @@ class AddNewLoginSummaryFragment : Fragment() {
 
     private fun submitLoginSummary() {
         val tlUID = FirebaseAuth.getInstance().currentUser?.uid
-        val businessList = arrayListOf<BusinessDataReqModel>()
+//        val businessList = arrayListOf<BusinessDataReqModel>()
         var isUpdate = false
         isUpdate = mode != LoginSummaryConstants.MODE_ADD
-        businessListToSubmit = viewModel.getBusinessListForProcessingData()
-        businessListToSubmit.forEachIndexed { index, loginSummaryBusiness ->
-            val businessDataReqModel = BusinessDataReqModel(
-                loginSummaryBusiness.business_id,
-                loginSummaryBusiness.legalName,
-                loginSummaryBusiness.businessName,
-                selectedCity,
-                loginSummaryBusiness.jobProfileId,
-                loginSummaryBusiness.jobProfileName,
-                loginSummaryBusiness.loginCount
-            )
-            businessList.add(businessDataReqModel)
-        }
+//        businessListToSubmit = viewModel.getBusinessListForProcessingData()
+//        businessListToSubmit.forEachIndexed { index, loginSummaryBusiness ->
+//            val businessDataReqModel = BusinessDataReqModel(
+//                loginSummaryBusiness.business_id,
+//                loginSummaryBusiness.legalName,
+//                loginSummaryBusiness.businessName,
+//                selectedCity,
+//                loginSummaryBusiness.jobProfileId,
+//                loginSummaryBusiness.jobProfileName,
+//                loginSummaryBusiness.loginCount
+//            )
+//            businessList.add(businessDataReqModel)
+//        }
+        val businessList = getDataToSubmit()
         val addNewSummaryReqModel = AddNewSummaryReqModel(
             tlUID.toString(),
             selectedCity,
@@ -297,13 +318,12 @@ class AddNewLoginSummaryFragment : Fragment() {
             val checkIn = it ?: return@Observer
             try {
                 if (mode == LoginSummaryConstants.MODE_ADD) {
+
                     if (checkIn.checkedIn) {
                         viewBinding.apply {
                             citySpinner.visibility = View.VISIBLE
                             businessRV.visibility = View.VISIBLE
-                            chooseCity.visibility = View.VISIBLE
                             chooseCityImg.visibility = View.VISIBLE
-                            defaultGreyLayout.visibility = View.GONE
                             noDataFound.visibility = View.GONE
                             submit.setText("Submit")
                         }
@@ -313,9 +333,7 @@ class AddNewLoginSummaryFragment : Fragment() {
                         viewBinding.apply {
                             citySpinner.visibility = View.GONE
                             businessRV.visibility = View.GONE
-                            chooseCity.visibility = View.GONE
                             chooseCityImg.visibility = View.GONE
-                            defaultGreyLayout.visibility = View.GONE
                             noDataFound.visibility = View.VISIBLE
                             submit.setText("Checkin Now")
                         }
@@ -375,17 +393,93 @@ class AddNewLoginSummaryFragment : Fragment() {
                 }
             }
         })
+
+        viewModel.totalCount.observe(viewLifecycleOwner, Observer {
+            val count = it ?: return@Observer
+            count?.let {
+                viewBinding.submit.text = "Submit ($count Logins)"
+            }
+        })
     }
 
 
-    private fun showBusinesses(businessList: List<BusinessListRecyclerItemData>) =
+    private fun showBusinesses(businessList: List<LoginSummaryBusiness>) =
         viewBinding.apply {
             Log.d("List", "Business list $businessList")
-            businessRV.collection = businessList
+//            businessRV.collection = businessList
+            businessListToProcess = businessList
+            businessLoginLayout.removeAllViews()
+            map.clear()
+            submit.setText("Submit")
+            businessList.forEachIndexed { index, loginSummaryBusiness ->
+                val view = BusinessRecyclerItemView(requireContext(), null)
+                businessLoginLayout.addView(view)
+                //need to set listener
+                view.setOnQuantityTextChangeListener(object: BusinessRecyclerItemView.QuantityTextChangeListener{
+                    override fun onQuantityTextChanged(text: String, tag: String) {
+                        map.put(tag, text)
+                        Log.d("map", "getting listener $map")
+                        setTotalSumFromMap()
+                    }
+
+                }, index.toString())
+                view.showData(
+                    BusinessListRecyclerItemData.BusinessRecyclerItemData(
+                        businessId = loginSummaryBusiness.business_id,
+                        businessName = loginSummaryBusiness.businessName,
+                        legalName = loginSummaryBusiness.legalName,
+                        jobProfileId = loginSummaryBusiness.jobProfileId.toString(),
+                        jobProfileName = loginSummaryBusiness.jobProfileName.toString(),
+                        loginCount = loginSummaryBusiness.loginCount,
+                        loginSummaryBusiness.updatedBy.toString(),
+                        viewModel,
+                        loginSummaryBusiness.itemMode
+                    )
+                )
+                if (loginSummaryBusiness.loginCount != null){
+                    map.put(index.toString(), loginSummaryBusiness.loginCount.toString())
+                }
+            }
+            setTotalSumFromMap()
         }
 
+    fun setTotalSumFromMap(){
+        var count = 0
+        map.forEach {
+            if (it.value.isEmpty()){
+                count += 0
+            }else {
+                count += it.value.toInt() ?: 0
+            }
 
+        }
+        Log.d("count", "count $count , map: $map")
+
+        viewBinding.submit.setText("Submit ($count Logins)")
+        viewBinding.loginsCount.setText("$count")
+
+    }
+
+    fun getDataToSubmit() : ArrayList<BusinessDataReqModel> {
+        val businessList = arrayListOf<BusinessDataReqModel>()
+        businessListToProcess.forEachIndexed { index, loginSummaryBusiness ->
+            val view = viewBinding.businessLoginLayout.get(index) as BusinessRecyclerItemView
+            val loginSummary = view.getTLLoginSummary()
+            val businessDataReqModel = BusinessDataReqModel(
+                loginSummary.businessId,
+                loginSummary.legalName,
+                loginSummary.businessName,
+                selectedCity,
+                loginSummary.jobProfileId,
+                loginSummary.jobProfileName,
+                loginSummary.loginCount
+            )
+            businessList.add(businessDataReqModel)
+        }
+        return businessList
+    }
     private fun processCities(content: List<LoginSummaryCity>) {
+        citiesArray.add("Choose City...")
         citiesModelArray = content
         citiesModelArray.forEach {
             citiesArray.add(it.name)

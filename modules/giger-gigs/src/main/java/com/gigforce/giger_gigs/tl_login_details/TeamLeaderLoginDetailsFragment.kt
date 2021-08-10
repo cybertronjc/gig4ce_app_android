@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.os.Handler
 import android.text.format.DateUtils
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.common_ui.ext.showToast
+import com.gigforce.common_ui.listeners.PaginationScrollListener
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.DateHelper
 import com.gigforce.core.utils.Lce
@@ -39,6 +41,12 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
 
     private lateinit var viewModel: TeamLeaderLoginDetailsViewModel
     private lateinit var viewBinding: TeamLeaderLoginDetailsFragmentBinding
+
+    val PAGE_START = 1
+    var currentPage = PAGE_START
+    var isLoading = false
+    var isLastPage = false
+    val TOTAL_PAGES = 10
 
     private val tlLoginSummaryAdapter: TLLoginSummaryAdapter by lazy {
         TLLoginSummaryAdapter(requireContext(), this).apply {
@@ -103,29 +111,10 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
     }
 
     private fun initializeViews() = viewBinding.apply {
-        viewModel.getListingForTL("", "")
-
+        //loadFirstPage()
+        viewModel.getListingForTL(0)
     }
 
-//    private val datePicker: DatePickerDialog by lazy {
-//        val cal = Calendar.getInstance()
-//        val datePickerDialog = DatePickerDialog(
-//            requireContext(),
-//            DatePickerDialog.OnDateSetListener { _: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
-//                val newCal = Calendar.getInstance()
-//                newCal.set(Calendar.YEAR, year)
-//                newCal.set(Calendar.MONTH, month)
-//                newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-//
-//            },
-//            2050,
-//            cal.get(Calendar.MONTH),
-//            cal.get(Calendar.DAY_OF_MONTH)
-//        )
-//
-//        datePickerDialog.datePicker.maxDate = Calendar.getInstance().timeInMillis
-//        datePickerDialog
-//    }
 
     private fun listeners() = viewBinding.apply {
         addNew.setOnClickListener {
@@ -136,15 +125,6 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
             )
         }
 
-//        searchDate.setOnClickListener {
-//            datePicker.show()
-//        }
-//
-//        searchButton.setOnClickListener {
-//            val searchCityText = searchItem.text.toString().trim()
-//            val searchDateText = searchDate.text.toString().trim()
-//            viewModel.getListingForTL(searchCityText, searchDateText)
-//        }
     }
 
     private fun observer() = viewBinding.apply {
@@ -177,10 +157,50 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
             viewBinding.noData.visibility = View.GONE
             viewBinding.datecityRv.visibility = View.VISIBLE
         }
-        viewBinding.datecityRv.layoutManager = LinearLayoutManager(context)
+        val layoutManager = LinearLayoutManager(context)
+        viewBinding.datecityRv.layoutManager = layoutManager
         tlLoginSummaryAdapter.submitList(res)
         viewBinding.datecityRv.adapter = tlLoginSummaryAdapter
+
+//        if (currentPage <= TOTAL_PAGES) {
+//            //show loader
+//            viewBinding.progressBarBottom.visibility = View.VISIBLE
+//        }
+//        else{
+//            isLastPage = true
+//        }
+//
+//        viewBinding.datecityRv.addOnScrollListener(object : PaginationScrollListener(layoutManager) {
+//            override fun isLastPage(): Boolean {
+//                return isLastPage
+//            }
+//
+//            override fun isLoading(): Boolean {
+//                return isLoading
+//            }
+//
+//            override fun loadMoreItems() {
+//                isLoading = true;
+//                currentPage += 1;
+//
+//                loadNextPage();
+//            }
+//
+//        })
     }
+
+//    private fun loadNextPage() {
+////        onpaused = true
+////        viewBinding.progressBarBottom.visibility = View.GONE
+////        viewModel.getListingForTL(currentPage)
+//    }
+//
+//    private fun loadFirstPage(){
+//        Log.d("LIST", "loadFirstPage: ");
+//        currentPage = PAGE_START;
+//
+//        viewModel.getListingForTL(currentPage)
+//    }
 
     override fun onTlItemSelected(listingTLModel: ListingTLModel) {
         if (DateUtils.isToday(listingTLModel.dateTimestamp)) {

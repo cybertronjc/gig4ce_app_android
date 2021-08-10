@@ -27,7 +27,7 @@ sealed class BusinessAppViewState {
     ) : BusinessAppViewState()
 
     data class BusinessListLoaded(
-        val businessList: List<BusinessListRecyclerItemData>
+        val businessList: List<LoginSummaryBusiness>
     ) : BusinessAppViewState()
 
 }
@@ -53,6 +53,9 @@ class AddNewLoginSummaryViewModel @Inject constructor (
 
     private var _checkinMarked = MutableLiveData<CheckMark>()
     var checkinMarked : LiveData<CheckMark> = _checkinMarked
+
+    private var _totalCount = MutableLiveData<Int>()
+    var totalCount : LiveData<Int> = _totalCount
 
     var businessListForView = mutableListOf<BusinessListRecyclerItemData>()
 
@@ -85,7 +88,12 @@ class AddNewLoginSummaryViewModel @Inject constructor (
         try {
             businessList = tlLoginSummaryRepository.getBusinessByCity(cityId)
             businessListShown = businessList
-            processBusinessList(businessListShown)
+            //processBusinessList(businessListShown)
+            _viewState.postValue(
+                BusinessAppViewState.BusinessListLoaded(
+                    businessList
+                )
+            )
 
         }catch (e: Exception){
             e.printStackTrace()
@@ -117,33 +125,40 @@ class AddNewLoginSummaryViewModel @Inject constructor (
 
      fun processBusinessList(businessListShown: List<LoginSummaryBusiness>) {
 
-        businessListForView.clear()
+        businessList.toMutableList().clear()
 
         try {
-            businessListShown.forEachIndexed { index, loginSummaryBusiness ->
-                businessListForView.add(
-                    loginSummaryBusiness.let {
-                    BusinessListRecyclerItemData.BusinessRecyclerItemData(
-                        it.business_id,
-                        it.businessName,
-                        it.legalName,
-                        it.jobProfileId.toString(),
-                        it.jobProfileName.toString(),
-                        it.loginCount,
-                        it.updatedBy.toString(),
-                            this,
-                        it.itemMode
+//            businessListShown.forEachIndexed { index, loginSummaryBusiness ->
+//                businessListForView.add(
+//                    loginSummaryBusiness.let {
+//                    BusinessListRecyclerItemData.BusinessRecyclerItemData(
+//                        it.business_id,
+//                        it.businessName,
+//                        it.legalName,
+//                        it.jobProfileId.toString(),
+//                        it.jobProfileName.toString(),
+//                        it.loginCount,
+//                        it.updatedBy.toString(),
+//                            this,
+//                        it.itemMode
+//
+//                    )
+//                    }
+//                )
+//            }
 
-                    )
-                    }
-                )
-            }
-
+            businessList = businessListShown
             _viewState.postValue(
                 BusinessAppViewState.BusinessListLoaded(
-                    businessListForView
+                    businessList
                 )
             )
+
+//            _viewState.postValue(
+//                BusinessAppViewState.BusinessListLoaded(
+//                    businessListForView
+//                )
+//            )
 
         } catch (e: Exception){
 
@@ -162,6 +177,7 @@ class AddNewLoginSummaryViewModel @Inject constructor (
     }
 
     fun updateList(businessId: String, text: String){
+        var count = 0
         businessListForView.forEachIndexed { index, itemData ->
             val data = itemData as BusinessListRecyclerItemData.BusinessRecyclerItemData
             if (businessId.equals(data.businessId)){
@@ -170,9 +186,12 @@ class AddNewLoginSummaryViewModel @Inject constructor (
                 } else {
                     itemData.loginCount = text.toInt()
                 }
-
+            }
+            data?.let {
+                count += data.loginCount?.toInt() ?: 0
             }
         }
+        _totalCount.postValue(count)
     }
 
      fun checkIfTLAttendanceMarked() = viewModelScope.launch {

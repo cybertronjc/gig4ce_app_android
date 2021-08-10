@@ -20,13 +20,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Date"
-            android:padding="6dp"
+            android:padding="4dp"
             android:textColor="#202325"
             android:fontFamily="@font/lato_bold"
             android:layout_marginStart="@dimen/size_16"
             android:layout_marginEnd="@dimen/size_16"
             android:layout_marginTop="@dimen/size_6"
-            android:layout_marginBottom="@dimen/size_16"
+            android:layout_marginBottom="@dimen/size_6"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -36,12 +36,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Gurgaon"
-            android:padding="6dp"
+            android:padding="4dp"
             android:textColor="#979C9E"
-            android:fontFamily="@font/lato_bold"
-            android:layout_marginBottom="@dimen/size_16"
+            android:fontFamily="@font/lato"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginEnd="@dimen/size_16"
+            android:layout_marginBottom="@dimen/size_6"
             app:layout_constraintTop_toBottomOf="@id/dateTV"
-            app:layout_constraintStart_toStartOf="@id/dateTV" />
+            app:layout_constraintStart_toStartOf="parent" />
 
 
         <TextView

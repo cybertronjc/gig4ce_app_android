@@ -61,8 +61,8 @@ class TlLoginSummaryRepository (
 
     }
 
-    suspend fun fetchListingForTL(searchCity: String,searchDate: String,page: Int, pageSize: Int): List<ListingTLModel> {
-        val response = loginSummaryService.getListingForTL(buildConfig.getListingBaseUrl() + "/listingForTL/"+userUid, searchCity, searchDate, page, pageSize)
+    suspend fun fetchListingForTL(page: Int, pageSize: Int): List<ListingTLModel> {
+        val response = loginSummaryService.getListingForTL(buildConfig.getListingBaseUrl() + "/listingForTL/"+userUid, page, pageSize)
 
         if (!response.isSuccessful){
             throw Exception(response.message())
