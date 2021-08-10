@@ -1,4 +1,4 @@
-package com.gigforce.giger_gigs.tl_login_details
+package com.gigforce.giger_gigs.tl_login_report
 
 import android.app.DatePickerDialog
 import androidx.lifecycle.ViewModelProvider
@@ -10,14 +10,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
 import androidx.core.os.bundleOf
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.common_ui.ext.showToast
+import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.DateHelper
 import com.gigforce.core.utils.Lce
 import com.gigforce.giger_gigs.LoginSummaryConstants
+import com.gigforce.giger_gigs.R
 import com.gigforce.giger_gigs.adapters.TLLoginSummaryAdapter
+import com.gigforce.giger_gigs.databinding.FragmentTlDailyLoginReportListBinding
 import com.gigforce.giger_gigs.databinding.TeamLeaderLoginDetailsFragmentBinding
 import com.gigforce.giger_gigs.models.ListingTLModel
 import com.gigforce.giger_gigs.tl_login_details.views.OnTlItemSelectedListener
@@ -26,35 +30,32 @@ import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
+class TLDailyReportListFragment : BaseFragment2<FragmentTlDailyLoginReportListBinding>(
+    fragmentName = "TLDailyReportListFragment",
+    layoutId = R.layout.fragment_tl_daily_login_report_list,
+    statusBarColor = R.color.lipstick_2
+),
+    OnTlItemSelectedListener {
 
     companion object {
-        fun newInstance() = TeamLeaderLoginDetailsFragment()
+        fun newInstance() = TLDailyReportListFragment()
     }
 
     @Inject
     lateinit var navigation: INavigation
-
-    private lateinit var viewModel: TeamLeaderLoginDetailsViewModel
-    private lateinit var viewBinding: TeamLeaderLoginDetailsFragmentBinding
+    private val viewModel: TLDailyReportListViewModel by viewModels()
 
     private val tlLoginSummaryAdapter: TLLoginSummaryAdapter by lazy {
         TLLoginSummaryAdapter().apply {
-            setOnTlItemSelectedListener(this@TeamLeaderLoginDetailsFragment)
+            setOnTlItemSelectedListener(this@TLDailyReportListFragment)
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        viewBinding = TeamLeaderLoginDetailsFragmentBinding.inflate(inflater, container, false)
-        return viewBinding.root
-    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this).get(TeamLeaderLoginDetailsViewModel::class.java)
+    override fun viewCreated(
+        viewBinding: FragmentTlDailyLoginReportListBinding,
+        savedInstanceState: Bundle?
+    ) {
         initToolbar()
         initializeViews()
         observer()
@@ -64,7 +65,7 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
     private fun initToolbar() = viewBinding.apply {
         appBar.apply {
             hideActionMenu()
-            showTitle("Login Summary")
+            showTitle("Login Report")
             setBackButtonListener(View.OnClickListener {
                 activity?.onBackPressed()
             })
@@ -98,7 +99,7 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
 
     private fun listeners() = viewBinding.apply {
         addNew.setOnClickListener {
-            navigation.navigateTo("gig/addNewLoginSummary", bundleOf(
+            navigation.navigateTo("tlReport/addLoginReportFragment", bundleOf(
                 LoginSummaryConstants.INTENT_EXTRA_MODE to LoginSummaryConstants.MODE_ADD
             ))
         }
@@ -151,13 +152,12 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
 
     override fun onTlItemSelected(listingTLModel: ListingTLModel) {
         if (DateUtils.isToday(listingTLModel.dateTimestamp)){
-            navigation.navigateTo("gig/addNewLoginSummary", bundleOf(
+            navigation.navigateTo("tlReport/addLoginReportFragment", bundleOf(
                 LoginSummaryConstants.INTENT_EXTRA_MODE to LoginSummaryConstants.MODE_EDIT,
                 LoginSummaryConstants.INTENT_LOGIN_SUMMARY to listingTLModel
             ))
         }else {
-            navigation.navigateTo("gig/addNewLoginSummary", bundleOf(
-                LoginSummaryConstants.INTENT_EXTRA_MODE to LoginSummaryConstants.MODE_EDIT,
+            navigation.navigateTo("tlReport/addLoginReportFragment", bundleOf(
                 LoginSummaryConstants.INTENT_LOGIN_SUMMARY to listingTLModel,
                 LoginSummaryConstants.INTENT_EXTRA_MODE to LoginSummaryConstants.MODE_VIEW
             ))

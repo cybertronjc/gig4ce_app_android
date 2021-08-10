@@ -35,4 +35,15 @@ interface LoginSummaryService {
         @Query("pagesize") pagesize: Int
 
     ) : Response<List<ListingTLModel>>
+
+
+    @GET("gigerAttendanceReport/listingForTL/{tlUid}")
+    suspend fun getDailyLoginReportListingForTL(
+        @Path("tlUid") getListingUrl : String,
+        @Query("searchCity") searchCity: String,
+        @Query("searchDate") searchDate: String,
+        @Query("page") page: Int,
+        @Query("pagesize") pagesize: Int
+
+    ) : Response<List<ListingTLModel>>
 }

@@ -2,24 +2,22 @@ package com.gigforce.giger_gigs.tl_login_details.views
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.extensions.onTextChanged
-import com.gigforce.giger_gigs.R
 import com.gigforce.giger_gigs.databinding.LayoutBusinessNameRecyclerItemBinding
 import com.gigforce.giger_gigs.models.BusinessListRecyclerItemData
 
 class BusinessRecyclerItemView(
     context: Context,
     attrs: AttributeSet?
-    ) : FrameLayout(
+) : FrameLayout(
     context,
     attrs
-    ), IViewHolder, View.OnClickListener {
+), IViewHolder, View.OnClickListener {
 
     private lateinit var viewBinding: LayoutBusinessNameRecyclerItemBinding
 
@@ -48,17 +46,19 @@ class BusinessRecyclerItemView(
             val businessData = it as BusinessListRecyclerItemData.BusinessRecyclerItemData
             var count = 0
             viewBinding.businessName.text = businessData.businessName ?: "Business N/A"
-            if (businessData.loginCount == null || businessData.loginCount == -1){
+            if (businessData.loginCount == null || businessData.loginCount == -1) {
                 viewBinding.loginCount.setText("")
                 count = -1
             } else {
                 count = businessData.loginCount!!
-                 viewBinding.loginCount.setText(businessData.loginCount.toString())
+                viewBinding.loginCount.setText(businessData.loginCount.toString())
 
             }
 
             viewBinding.minusIcon.setOnClickListener {
-                if (businessData.loginCount != null && businessData.loginCount != 0 && viewBinding.loginCount.text.toString().isNotEmpty()){
+                if (businessData.loginCount != null && businessData.loginCount != 0 && viewBinding.loginCount.text.toString()
+                        .isNotEmpty()
+                ) {
 //                    businessData.loginCount = viewBinding.loginCount.text.toString().toInt()
                     count--
                     viewBinding.loginCount.setText(count.toString())
@@ -66,17 +66,19 @@ class BusinessRecyclerItemView(
             }
 
             viewBinding.plusIcon.setOnClickListener {
-                if (businessData.loginCount != null && viewBinding.loginCount.text.toString().isNotEmpty()){
+                if (businessData.loginCount != null && viewBinding.loginCount.text.toString()
+                        .isNotEmpty()
+                ) {
 //                    businessData.loginCount = viewBinding.loginCount.text.toString().toInt()
                     count++
                     viewBinding.loginCount.setText(count.toString())
-                } else if (count == -1){
+                } else if (count == -1) {
                     count++
                     viewBinding.loginCount.setText(count.toString())
                 }
             }
             //businessData.loginCount = viewBinding.loginCount.text.toString().toInt()
-            if (businessData.itemView == 1){
+            if (businessData.itemView == 1) {
                 viewBinding.loginCount.isEnabled = false
                 viewBinding.plusIcon.isEnabled = false
                 viewBinding.minusIcon.isEnabled = false
@@ -96,7 +98,7 @@ class BusinessRecyclerItemView(
 
             viewBinding.loginCount.onTextChanged {
                 //update data in viewmodel
-                    businessData.addNewLoginSummaryViewModel.updateList(businessData.businessId, it)
+                businessData.addNewLoginSummaryViewModel.updateList(businessData.businessId, it)
             }
         }
 

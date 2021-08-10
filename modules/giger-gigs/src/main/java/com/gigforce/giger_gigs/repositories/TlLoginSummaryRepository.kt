@@ -67,7 +67,16 @@ class TlLoginSummaryRepository (
         } else {
             return response.body()!!
         }
+    }
 
+    suspend fun fetchTLDailyLoginReportListingForTL(searchCity: String,searchDate: String,page: Int, pageSize: Int): List<ListingTLModel> {
+        val response = loginSummaryService.getListingForTL(buildConfig.getBaseUrl() + "tlDailyReport/listingForTL/"+userUid, searchCity, searchDate, page, pageSize)
+
+        if (!response.isSuccessful){
+            throw Exception(response.message())
+        } else {
+            return response.body()!!
+        }
     }
 
 }

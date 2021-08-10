@@ -1,4 +1,4 @@
-package com.gigforce.giger_gigs.tl_login_details
+package com.gigforce.giger_gigs.tl_login_report
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -29,13 +29,13 @@ sealed class BusinessAppViewState {
     ) : BusinessAppViewState()
 
     data class BusinessListLoaded(
-        val businessList: List<BusinessListRecyclerItemData>
+        val businessList: List<LoginSummaryBusiness>
     ) : BusinessAppViewState()
 
 }
 
 @HiltViewModel
-class AddNewLoginSummaryViewModel @Inject constructor (
+class AddDailyLoginReportViewModel @Inject constructor (
     private val iBuildConfig: IBuildConfigVM
 ) : ViewModel() {
 
@@ -83,11 +83,33 @@ class AddNewLoginSummaryViewModel @Inject constructor (
         try {
             businessList = tlLoginSummaryRepository.getBusinessByCity(cityId)
             businessListShown = businessList
-            processBusinessList(businessListShown)
+
+            _viewState.postValue(
+                BusinessAppViewState.BusinessListLoaded(
+                    businessList
+                )
+            )
 
         }catch (e: Exception){
             e.printStackTrace()
             _viewState.value = BusinessAppViewState.ErrorInLoadingDataFromServer(e.message ?: "Unable to fetch businesses by city", false)
+        }
+    }
+
+    fun processBusinessList(businessListShown: List<LoginSummaryBusiness>) {
+
+        businessListForView.clear()
+
+        try {
+            businessList = businessListShown
+            _viewState.postValue(
+                BusinessAppViewState.BusinessListLoaded(
+                    businessList
+                )
+            )
+
+        } catch (e: Exception){
+
         }
     }
 
@@ -113,38 +135,7 @@ class AddNewLoginSummaryViewModel @Inject constructor (
         }
     }
 
-     fun processBusinessList(businessListShown: List<LoginSummaryBusiness>) {
 
-        businessListForView.clear()
-
-        try {
-            businessListShown.forEachIndexed { index, loginSummaryBusiness ->
-                businessListForView.add(
-                    loginSummaryBusiness.let {
-                    BusinessListRecyclerItemData.BusinessRecyclerItemData(
-                        it.business_id,
-                        it.businessName,
-                        it.legalName,
-                        it.loginCount,
-                        it.updatedBy.toString(),
-                        addNewLoginSummaryViewModel = this,
-                        it.itemMode
-
-                    )
-                    }
-                )
-            }
-
-            _viewState.postValue(
-                BusinessAppViewState.BusinessListLoaded(
-                    businessListForView
-                )
-            )
-
-        } catch (e: Exception){
-
-        }
-    }
 
     fun getBusinessListForProcessingData(): List<LoginSummaryBusiness> {
         var list = arrayListOf<LoginSummaryBusiness>()

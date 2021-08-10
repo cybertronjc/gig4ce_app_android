@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.gigforce.common_ui.ext.showToast
 import com.gigforce.giger_gigs.R
 import com.gigforce.giger_gigs.models.ListingTLModel
 import com.gigforce.giger_gigs.tl_login_details.TeamLeaderLoginDetailsFragment
@@ -14,9 +13,7 @@ import com.gigforce.giger_gigs.tl_login_details.views.OnTlItemSelectedListener
 import kotlinx.android.synthetic.main.date_city_recycler_item_layout.view.*
 
 
-class TLLoginSummaryAdapter(
-    private val context: Context, private val teamLeaderLoginDetailsFragment: TeamLeaderLoginDetailsFragment
-) : RecyclerView.Adapter<TLLoginSummaryAdapter.TlLoginViewHolder>() {
+class TLLoginSummaryAdapter() : RecyclerView.Adapter<TLLoginSummaryAdapter.TlLoginViewHolder>() {
 
      var originalList: List<ListingTLModel> = emptyList()
      var filteredList: List<ListingTLModel> = emptyList()
