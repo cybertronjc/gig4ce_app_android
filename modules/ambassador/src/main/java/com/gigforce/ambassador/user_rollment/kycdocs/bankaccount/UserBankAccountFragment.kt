@@ -207,6 +207,7 @@ class BankAccountFragment : Fragment(),
                         viewBinding.belowLayout.visible()
                         setAlreadyfilledData(it, false)
                         viewBinding.toplayoutblock.toggleChangeTextView(true)
+                        viewBinding.toplayoutblock.disableImageClick()//keep this line in end only
                     } else {
                         checkforStatusAndVerified(it)
                     }
@@ -296,6 +297,7 @@ class BankAccountFragment : Fragment(),
 //                                viewBinding.editBankDetail.visible()
                                 viewBinding.belowLayout.visible()
                                 setAlreadyfilledData(obj, false)
+                                viewBinding.toplayoutblock.disableImageClick()//keep this line in end only
                             }
                         } catch (e: Exception) {
 
@@ -303,6 +305,7 @@ class BankAccountFragment : Fragment(),
                     }, WAITING_TIME)
                     viewBinding.belowLayout.visible()
                     setAlreadyfilledData(obj, false)
+                    viewBinding.toplayoutblock.disableImageClick()//keep this line in end only
                 }
                 "failed" -> {
                     verificationScreenStatus = VerificationScreenStatus.FAILED
@@ -317,17 +320,19 @@ class BankAccountFragment : Fragment(),
                         initializeImages()
                     }
                     viewBinding.toplayoutblock.toggleChangeTextView(false)
+                    viewBinding.toplayoutblock.enableImageClick()//keep this line in end only
                 }
                 "" -> {
                     verificationScreenStatus = VerificationScreenStatus.DEFAULT
                     resetInitializeViews()
                     viewBinding.toplayoutblock.toggleChangeTextView(false)
+                    viewBinding.toplayoutblock.enableImageClick()//keep this line in end only
                 }
                 "completed" -> {
                     verificationScreenStatus = VerificationScreenStatus.COMPLETED
                     showBankBeneficiaryName(obj)
                     viewBinding.toplayoutblock.toggleChangeTextView(false)
-
+                    viewBinding.toplayoutblock.disableImageClick()//keep this line in end only
                 }
                 else -> "unmatched status"
             }

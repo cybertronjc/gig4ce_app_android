@@ -178,7 +178,7 @@ class DrivingLicenseFragment : Fragment(),
 
     override fun onBackPressed(): Boolean {
         if (FROM_CLIENT_ACTIVATON) {
-            if(!manuallyRequestBackpress || viewBinding.toplayoutblock.isDocDontOptChecked() || (!anyDataEntered && verificationScreenStatus == VerificationScreenStatus.DEFAULT)){
+            if(!manuallyRequestBackpress || viewBinding.toplayoutblock.isDocDontOptChecked() || (!anyDataEntered &&  (verificationScreenStatus == VerificationScreenStatus.DEFAULT || verificationScreenStatus == VerificationScreenStatus.FAILED))){
                 var navFragmentsData = activity as NavFragmentsData
                 navFragmentsData.setData(
                     bundleOf(
@@ -392,6 +392,7 @@ class DrivingLicenseFragment : Fragment(),
                         verifiedStatusViews(it)
                         viewBinding.belowLayout.visible()
                         setAlreadyfilledData(it, false)
+                        viewBinding.toplayoutblock.disableImageClick() //keep this line in end only
                     } else {
                         checkforStatusAndVerified(it)
                     }
@@ -806,6 +807,7 @@ class DrivingLicenseFragment : Fragment(),
                                 viewBinding.toplayoutblock.setVerificationSuccessfulView("", "")
                                 viewBinding.belowLayout.visible()
                                 setAlreadyfilledData(drivingLicenseDataModel, false)
+                                viewBinding.toplayoutblock.disableImageClick() //keep this line in end only
                             }
                         } catch (e: Exception) {
 
@@ -814,6 +816,7 @@ class DrivingLicenseFragment : Fragment(),
                     }, WAITING_TIME)
                     viewBinding.belowLayout.visible()
                     setAlreadyfilledData(drivingLicenseDataModel, false)
+                    viewBinding.toplayoutblock.disableImageClick()//keep this line in end only
                 }
                 "failed" -> {
                     verificationScreenStatus = VerificationScreenStatus.FAILED
@@ -830,12 +833,13 @@ class DrivingLicenseFragment : Fragment(),
                     }else{
                         //single if showing error
                     }
-
+                    viewBinding.toplayoutblock.enableImageClick()//keep this line in end only
                 }
                 "" -> {
                     verificationScreenStatus = VerificationScreenStatus.DEFAULT
                     print("transaction reinitialized")
                     resetInitializeViews()
+                    viewBinding.toplayoutblock.enableImageClick()//keep this line in end only
                 }
                 else -> "unmatched status"
             }
