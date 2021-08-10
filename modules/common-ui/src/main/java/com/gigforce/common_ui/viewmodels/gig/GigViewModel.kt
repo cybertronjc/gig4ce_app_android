@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.repository.gig.GigerProfileFirebaseRepository
 import com.gigforce.common_ui.repository.gig.GigsRepository
 import com.gigforce.common_ui.viewdatamodels.GigStatus
+import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.datamodels.gigpage.models.AttendanceType
 import com.gigforce.core.datamodels.profile.ProfileData
@@ -199,9 +200,20 @@ class GigViewModel constructor(
     }
 
     private fun extractGigs(querySnapshot: QuerySnapshot): MutableList<Gig> {
-        return querySnapshot.documents.map { t ->
-            t.toObject(Gig::class.java)!!
-        }.toMutableList()
+
+        val gigs = mutableListOf<Gig>()
+         querySnapshot.documents.map { t ->
+            try {
+                t.toObject(Gig::class.java)?.let {
+                    it.gigId = t.id
+                    gigs.add(it)
+                }
+            } catch (e: Exception) {
+                CrashlyticsLogger.e("GigViewModel - extractGigs","while desearializing gig data",e)
+            }
+        }
+
+        return gigs
     }
 
 

@@ -39,7 +39,7 @@
     <string name="cancel">CANCEL</string>
     <string name="update">UPDATE</string>
     <string name="enter_valid_aadhar_no">Enter Valid Aadhaar Card No</string>
-    <string name="select_or_capture_both_sides_of_aadhar">Select or capture both sides of Aadhaar Card</string>
+    <string name="select_or_capture_both_sides_of_aadhar">Select or capture both sides of Aadhaar card</string>
     <string name="why_do_we_need_this">Why we need this ?</string>
     <string name="why_we_need_this_aadhar">Uploading either Aadhaar or Driver’s license is mandatory for profile verification. Aadhaar card helps verify your name, date of birth, address, and other details.</string>
     <string name="aadhar_card_details_uploaded">Aadhaar Card Details Uploaded</string>
@@ -51,10 +51,10 @@
     <string name="upload_bank_details">Upload Bank Details</string>
     <string name="bank_passbook_front_image">Bank Passbook/Cheque (Front Image)</string>
     <string name="your_are_reuploading_bank_details">You are re-uploading your Bank details. They will be verified once again, which may take up to 7 days.</string>
-    <string name="enter_valid_ifsc">Enter Valid IfSC Code</string>
-    <string name="enter_valid_acc_no">Enter A Valid Account No</string>
+    <string name="enter_valid_ifsc">Enter valid IFSC code</string>
+    <string name="enter_valid_acc_no">Enter a valid account no</string>
     <string name="why_we_need_this_bank">The bank details are mandatory to approve and send payments from gigs to your account. It also helps verify your name, address, date of birth, and other details.</string>
-    <string name="bank_details_uploaded">Bank details Uploaded</string>
+    <string name="bank_details_uploaded">Bank details uploaded</string>
     <string name="upload_driving_license_front_side">Upload Driving License (Front Side)</string>
     <string name="upload_your_driving_license">Please upload your Driving License for\nyour verification.</string>
     <string name="upload_driving_license_back_side">Upload Driving License (Back Side)</string>
@@ -67,12 +67,12 @@
     <string name="why_we_need_this_dl">Uploading either Driver’s license or Aadhaar card is mandatory for profile verification. A Driver’s license helps verify your name, date of birth, address, and other details.</string>
     <string name="dl_details_uploaded">Driving License Details Uploaded</string>
     <string name="upload_pan_card">Upload Pan Card</string>
-    <string name="please_upload_your_pan">Please upload your Pan Card for\nyour verification</string>
+    <string name="please_upload_your_pan">Please upload your PAN card for\nyour verification</string>
     <string name="upload_pan_details">Upload PAN Details</string>
     <string name="pan_card_image">Pan Card Image</string>
     <string name="you_are_reuploading_pan_card">You are re-uploading your PAN details. They will be verified once again, which may take up to 7 days.</string>
-    <string name="enter_valid_pan">Enter Valid PAN Card No</string>
-    <string name="click_select_pan_image">Click Or Select your Pan card Image first</string>
+    <string name="enter_valid_pan">Enter valid PAN card no</string>
+    <string name="click_select_pan_image">Click or select your PAN card image first</string>
     <string name="why_do_we_need_this_pan">A PAN card is mandatory for profile verification. It helps verify your name and date of birth and also helps with payments to your wallet.</string>
     <string name="pan_details_uploaded">Pan Card Details Uploaded</string>
     <string name="add_experience">Add experience</string>
@@ -87,12 +87,12 @@
     <string name="add_interest">Add Interest</string>
     <string name="unable_to_submit_interest">Unable to submit interest</string>
     <string name="upload_profile_picture">Upload Profile Picture</string>
-    <string name="profile_pic_uploaded">Profile Picture uploaded</string>
+    <string name="profile_pic_uploaded">Profile picture uploaded</string>
     <string name="could_not_submit_info">Could not submit info</string>
     <string name="please_grant_storage_permission">Please grant storage permission</string>
     <string name="face_detected_upload">Face Detected. Uploading...</string>
     <string name="something_seems_of">Something seems off. Please take a smart selfie with good lights.</string>
-    <string name="issue_in_cap_image">Issue in capturing or selecting Image</string>
+    <string name="issue_in_cap_image">Issue in capturing or selecting image</string>
     <string name="user_details">User Details</string>
     <string name="name_should_be_more_than_2_chars">Name should be more than 2 characters</string>
     <string name="select_ur_gender">Select your gender</string>
@@ -135,8 +135,8 @@
     <string name="bank_account_details">Bank Account Details</string>
     <string name="do_you_have_bank_passbook">Do you have Bank Account ?</string>
     <string name="err_driving_license">Error : Uploaded Image is not a Driving License Image</string>
-    <string name="yes_i_have_bank_passbook">Yes, I have Bank Account</string>
-    <string name="no_i_dont_have_bank_passbook">No, I dont have Bank Account</string>
+    <string name="yes_i_have_bank_passbook">Yes, I have bank account</string>
+    <string name="no_i_dont_have_bank_passbook">No, I dont have bank account</string>
     <string name="please_provide_following_details">Please provide following details.</string>
     <string name="ifsc_eg_sbin0000572_bkid0000048">IFSC* (Eg: SBIN0000572, BKID0000048)</string>
     <string name="bank_name">Bank Name *</string>
@@ -163,7 +163,7 @@
     <string name="enter_user_s_mobile_number">Enter User’s mobile number</string>
     <string name="we_will_send_an_otp_on_this_number">We will send a Verification code on this number.</string>
     <string name="country_code">+91-</string>
-    <string name="enter_code_sent_on_mobile">Enter verification code sent to User’s number</string>
+    <string name="enter_code_sent_on_mobile">Enter verification code sent to user’s number</string>
     <string name="submit">Submit</string>
     <string name="profile_picture">Profile Picture</string>
     <string name="documents_uploaded_long">As your documents will get verified, you will be able to start your gigs.</string>
@@ -210,16 +210,26 @@
     <string name="and">and</string>
     <string name="more">more</string>
     <string name="find_gigs_on">find gigs on Gigforce.</string>
-    <string name="upload_pan_card_new">Please upload your PAN Card\nfor verification</string>
+    <string name="upload_pan_card_new">Please upload your PAN card\nfor verification</string>
     <string name="upload_bank_account_new">Upload your Bank Passbook\nFront Page</string>
     <string name="why_do_we_need_this_bank">A Bank Passbook is mandatory for profile verification. It helps verify your name and date of birth and also helps with payments to your wallet.</string>
     <string name="got_it">Got it</string>
     <string name="bank_name_too_short">Bank name is too short</string>
-    <string name="enter_bank_name">Enter Bank Name</string>
-    <string name="select_dl_no">Select Driving License Number</string>
-    <string name="select_dl_dob">Select Date of Birth</string>
+    <string name="enter_bank_name">Enter bank name</string>
+    <string name="select_dl_no">Enter driving license number</string>
+    <string name="select_dl_dob">Select date of birth</string>
     <string name="upload_driving_license_front_side_new">Upload your Driving License\nfront Side</string>
-    <string name="upload_driving_license_back_side_new">Upload your Driving License\nback Side</string>
+    <string name="upload_driving_license_back_side_new">Upload your Driving License\nback side(optional)</string>
     <string name="why_do_we_need_this_dl">A driving license is mandatory for driving and delivery gigs</string>
+    <string name="change_text"><u>Change</u></string>
+
+    <string name="no_doc_title_pan">PAN not available!</string>
+    <string name="no_doc_subtitle_pan">No Worries! Once you own PAN you can untick the checkbox to verify it</string>
+
+    <string name="no_doc_title_dl">Driving License not available!</string>
+    <string name="no_doc_subtitle_dl">No Worries! Once you own Driving License you can untick the checkbox to verify it</string>
+
+    <string name="no_doc_title_bank">Bank details not available!</string>
+    <string name="no_doc_subtitle_bank">No Worries! Once you own Bank details you can untick the checkbox to verify it</string>
 
 </resources>

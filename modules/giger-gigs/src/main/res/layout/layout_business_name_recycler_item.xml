@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:ignore="MissingDefaultResource">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_6"
+        android:background="@drawable/border_option_grey">
+
+        <TextView
+            android:id="@+id/businessName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Business name"
+            android:padding="6dp"
+            android:fontFamily="@font/lato_bold"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginEnd="@dimen/size_16"
+            android:layout_marginTop="@dimen/size_16"
+            android:layout_marginBottom="@dimen/size_16"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/plusMinusLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/minusIcon"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@drawable/ic_baseline_remove_24"
+                android:layout_marginEnd="@dimen/size_8"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/loginCount"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <EditText
+                android:id="@+id/loginCount"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:fontFamily="@font/lato_bold"
+                android:inputType="number"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:layout_marginEnd="@dimen/size_8"
+                app:layout_constraintTop_toTopOf="parent"
+                android:background="@drawable/border_option_grey"
+                app:layout_constraintEnd_toStartOf="@+id/plusIcon"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/minusIcon" />
+
+            <ImageView
+                android:id="@+id/plusIcon"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginEnd="@dimen/size_16"
+                android:src="@drawable/ic_add_pink"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/loginCount" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -10,6 +10,7 @@
     <color name="warm_grey_two">#979797</color>
     <color name="battleship_grey">#6d7278</color>
     <color name="upload_success">#00bf80</color>
+    <color name="verification_inprogress">#7cd6a9</color>
     <color name="upload_mismatch">#d79f3c</color>
     <color name="upload_error">#ea6a5e</color>
     <color name="black3">#333333</color>

@@ -26,6 +26,7 @@ import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.utils.UtilMethods
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.core.AppConstants
+import com.gigforce.core.datamodels.verification.AadharCardDataModel
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
@@ -36,6 +37,7 @@ import com.jaeger.library.StatusBarUtil
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class UserAadhaarCardFragment : Fragment(), UserDetailsFilledDialogFragmentResultListener,IOnBackPressedOverride {
@@ -53,12 +55,13 @@ class UserAadhaarCardFragment : Fragment(), UserDetailsFilledDialogFragmentResul
         private const val REQUEST_STORAGE_PERMISSION = 103
     }
 
+
     @Inject
     lateinit var navigation: INavigation
 
     @Inject
     lateinit var iBuildConfig: IBuildConfig
-
+    var navigationsForBundle = ArrayList<String>()
     private val viewModelUser: UserAadhaarCardViewModel by viewModels()
     private lateinit var viewBinding: UserAadhaarCardFragmentBinding
     private fun activeLoader(activate: Boolean) {
@@ -85,12 +88,17 @@ class UserAadhaarCardFragment : Fragment(), UserDetailsFilledDialogFragmentResul
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getDataFromIntent(savedInstanceState)
+        initializeNavigations()
         initializeImageViews()
         observer()
         listeners()
         initWebview()
     }
-
+    private fun initializeNavigations() {
+//        navigationsForBundle.add("userinfo/addUserPanCardInfoFragment")
+        navigationsForBundle.add("userinfo/addUserDrivingLicenseInfoFragment")
+        navigationsForBundle.add("userinfo/addUserAadharCardInfoFragment")
+    }
     private fun initializeImageViews() {
         viewBinding.toplayoutblock.showUploadHere()
         //ic_pan_illustration
@@ -167,7 +175,8 @@ class UserAadhaarCardFragment : Fragment(), UserDetailsFilledDialogFragmentResul
             if (adharResponseModel.status) {
                 verifiedStatusViews()
             } else {
-                navigation.popBackStack()
+                openDialogForKYCRequirement()
+//                navigation.popBackStack()
             }
         }
     }
@@ -201,18 +210,22 @@ class UserAadhaarCardFragment : Fragment(), UserDetailsFilledDialogFragmentResul
         outState.putString(EnrollmentConstants.INTENT_EXTRA_USER_NAME, userName)
     }
 
+    private fun openDialogForKYCRequirement(){
+        UserDetailsFilledDialogFragment.launch(
+            userId = userId,
+            userName = userName,
+            fragmentManager = childFragmentManager,
+            okayClickListener = this@UserAadhaarCardFragment
+        )
+    }
+
     private fun listeners() {
 
 
         viewBinding.submitButton.setOnClickListener {
 
             hideSoftKeyboard()
-            UserDetailsFilledDialogFragment.launch(
-                userId = userId,
-                userName = userName,
-                fragmentManager = childFragmentManager,
-                okayClickListener = this@UserAadhaarCardFragment
-            )
+            openDialogForKYCRequirement()
 //            activity?.onBackPressed()
         }
 
@@ -255,11 +268,39 @@ class UserAadhaarCardFragment : Fragment(), UserDetailsFilledDialogFragmentResul
             it?.let {
 
                 if (it.verified) {
-//                    verificationScreenStatus = VerificationScreenStatus.VERIFIED
                     verifiedStatusViews()
+                    viewBinding.belowLayout.visible()
+                    setAlreadyfilledData(it, false)
+                } else {
+                    viewBinding.belowLayout.gone()
                 }
             }
         })
+    }
+
+    private fun setAlreadyfilledData(
+        aadharCardDataModel: AadharCardDataModel,
+        enableFields: Boolean
+    ) {
+
+        viewBinding.aadharcardTil.editText?.setText(aadharCardDataModel.aadharCardNo ?: "")
+        viewBinding.nameTilAadhar.editText?.setText(aadharCardDataModel.name ?: "")
+        aadharCardDataModel.dob?.let {
+            if (it.isNotEmpty()) {
+                viewBinding.dateOfBirthAadhar.text = it
+                viewBinding.dobLabel.visible()
+            }
+
+        }
+        viewBinding.aadharcardTil.editText?.isEnabled = enableFields
+        viewBinding.nameTilAadhar.editText?.isEnabled = enableFields
+        viewBinding.dateRlAadhar.isEnabled = enableFields
+
+        if (enableFields) {
+            viewBinding.textView10.visible()
+        } else {
+            viewBinding.textView10.gone()
+        }
     }
 
     private fun verifiedStatusViews() {
@@ -268,7 +309,7 @@ class UserAadhaarCardFragment : Fragment(), UserDetailsFilledDialogFragmentResul
         viewBinding.belowLayout.gone()
         viewBinding.toplayoutblock.uploadStatusLayout(
             AppConstants.UPLOAD_SUCCESS,
-            "VERIFICATION COMPLETED",
+            "Verification Completed",
             "The Aadhar card details have been verified successfully."
         )
         viewBinding.submitButton.visible()
@@ -288,16 +329,24 @@ class UserAadhaarCardFragment : Fragment(), UserDetailsFilledDialogFragmentResul
     }
 
     override fun onOkayClicked() {
-        navigation.popBackStack("ambassador/users_enrolled",inclusive = false)
+        try {
+            navigation.getBackStackEntry("LeadMgmt/joiningListFragment")
+            navigation.popBackStack("LeadMgmt/joiningListFragment",inclusive = false)
+        } catch (e: IllegalArgumentException) {
+            navigation.popBackStack("ambassador/users_enrolled",inclusive = false)
+        }
     }
 
     override fun onReUploadDocumentsClicked() {
+        navigation.popBackStack()
         navigation.navigateTo(
-            "userinfo/addUserBankDetailsInfoFragment", bundleOf(
+            "userinfo/addUserPanCardInfoFragment", bundleOf(
                 EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
-                EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
+                EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName,
+                VerificationConstants.NAVIGATION_STRINGS to navigationsForBundle
             )
         )
+
     }
 
     override fun onBackPressed(): Boolean {
@@ -315,5 +364,15 @@ class UserAadhaarCardFragment : Fragment(), UserDetailsFilledDialogFragmentResul
     }
     private fun goBackToUsersList() {
         findNavController().navigateUp()
+        var navigationsForBundleOld = ArrayList<String>()
+        navigationsForBundleOld.add("userinfo/addUserAadharCardInfoFragment")
+        navigation.navigateTo(
+            "userinfo/addUserDrivingLicenseInfoFragment", bundleOf(
+                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName,
+                VerificationConstants.NAVIGATION_STRINGS to navigationsForBundleOld
+            )
+        )
+
     }
 }

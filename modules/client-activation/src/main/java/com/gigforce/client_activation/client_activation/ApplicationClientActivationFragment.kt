@@ -248,7 +248,7 @@ class ApplicationClientActivationFragment : Fragment(),
                     )
                     )
                     "driving_licence" -> navigation.navigateTo(
-                            "verification/DLCA",
+                        "verification/drivinglicenseimageupload",
                             bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
                     )
                     "learning" -> navigation.navigateTo(
@@ -260,21 +260,23 @@ class ApplicationClientActivationFragment : Fragment(),
                     )
 
                     "aadhar_card" -> navigation.navigateTo(
-                        "verification/AADHAR",
+                        "verification/aadhaarcardimageupload",
                         bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
                     )
 
                     "pan_card" -> navigation.navigateTo(
-                        "verification/PAN",
+                        "verification/pancardimageupload",
+                        bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
+                    )
+
+                    "bank_account" -> navigation.navigateTo(
+                        "verification/bank_account_fragment",
                         bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
                     )
                 }
                 break
             }
-
         }
-
-
     }
     companion object {
         val UPLOAD_PROFILE_PIC = 1
@@ -391,12 +393,17 @@ class ApplicationClientActivationFragment : Fragment(),
                 )
 
             "aadhar_card" -> navigation.navigateTo(
-                "verification/AADHAR",
+                "verification/aadhaarcardimageupload",
                 bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
             )
 
             "pan_card" -> navigation.navigateTo(
-                "verification/PAN",
+                "verification/pancardimageupload",
+                bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
+            )
+
+            "bank_account" -> navigation.navigateTo(
+                "verification/bank_account_fragment",
                 bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
             )
         }

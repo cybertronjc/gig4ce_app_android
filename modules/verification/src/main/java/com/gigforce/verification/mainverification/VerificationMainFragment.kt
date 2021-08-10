@@ -53,13 +53,15 @@ class VerificationMainFragment : Fragment() {
                 (it as ArrayList<SimpleCardDVM>).filter { doc -> doc.isSelected }.let {
 
                     if(it.isNullOrEmpty()){
-                     showToast("Please select minimum one document to upload")
+                     if(viewModel.isAllDocVerified()){
+                        activity?.onBackPressed()
+                     }else{
+                         viewModel.allDocumentsData.value?.let {
+                            navigateToNotverifiedDocs(it)
+                         }
+                     }
                     }else {
-                        var navigationsForBundle = emptyList<String>()
-                        if (it.size > 1) {
-                            navigationsForBundle = it.slice(IntRange(1, it.size - 1)).map { it.navpath }
-                        }
-                        navigation.navigateTo(it.get(0).navpath, bundleOf(VerificationConstants.NAVIGATION_STRINGS to navigationsForBundle))
+                        navigateForDocsSubmission(it)
                     }
                 }
             }
@@ -69,6 +71,22 @@ class VerificationMainFragment : Fragment() {
         appBar2.setBackButtonListener(View.OnClickListener {
             activity?.onBackPressed()
         })
+
+    }
+
+    private fun navigateToNotverifiedDocs(it: List<SimpleCardDVM>) {
+        navigateForDocsSubmission(it.filter { it.subtitle != "Verified" })
+    }
+
+    private fun navigateForDocsSubmission(it : List<SimpleCardDVM>){
+            var navigationsForBundle = emptyList<String>()
+            if (it.size > 1) {
+                navigationsForBundle = it.slice(IntRange(1, it.size - 1)).map { it.navpath }
+            }
+            navigation.navigateTo(
+                it.get(0).navpath,
+                bundleOf(VerificationConstants.NAVIGATION_STRINGS to navigationsForBundle)
+            )
 
     }
 

@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.gigforce.common_ui.views.GigforceToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?android:actionBarSize"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+            <com.gigforce.common_ui.components.cells.GigerProfileCardComponent
+                android:id="@+id/gigerProfileCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/nestedScrollView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toTopOf="@id/submitBtn"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/gigerProfileCard">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/teamLeadersLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:visibility="visible"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            android:id="@+id/selectTv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="16dp"
+                            android:fontFamily="@font/lato"
+                            android:letterSpacing="-0.01"
+                            android:lineSpacingExtra="3sp"
+                            android:text="@string/need_to_select"
+                            android:textColor="@color/text_grey"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/teamLeaderTV"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginEnd="16dp"
+                            android:fontFamily="@font/lato"
+                            android:lineSpacingExtra="7sp"
+                            android:text="@string/team_leaders"
+                            android:textColor="#131415"
+                            android:textSize="24sp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/selectTv" />
+
+                        <TextView
+                            android:id="@+id/gigforceTLsTV"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="30dp"
+                            android:layout_marginEnd="16dp"
+                            android:fontFamily="@font/lato"
+                            android:lineSpacingExtra="7sp"
+                            android:text="@string/gigforce_tls"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/teamLeaderTV" />
+
+
+                        <LinearLayout
+                            android:id="@+id/gigforceTlContainerLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="190dp"
+                            android:orientation="vertical"
+
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/gigforceTLsTV"
+                            >
+
+                            <androidx.core.widget.NestedScrollView
+                                android:id="@+id/gigforceTLScrollView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+>
+
+                                <com.gigforce.common_ui.components.atoms.ChipGroupComponent
+                                    android:id="@+id/gigforceTLChipGroup"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="@dimen/size_16"
+                                    android:layout_marginTop="@dimen/size_16" />
+
+                            </androidx.core.widget.NestedScrollView>
+                        </LinearLayout>
+
+
+                        <TextView
+                            android:id="@+id/businessTLTV"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="25dp"
+                            android:layout_marginEnd="16dp"
+                            android:fontFamily="@font/lato"
+                            android:lineSpacingExtra="7sp"
+                            android:text="@string/business_tls"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/gigforceTlContainerLayout" />
+
+                        <com.gigforce.common_ui.components.atoms.ChipGroupComponent
+                            android:id="@+id/businessTLChipGroup"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/size_16"
+                            android:layout_marginTop="@dimen/size_16"
+                            android:visibility="visible"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/businessTLTV" />
+
+                        <com.google.android.material.chip.ChipGroup
+                            android:id="@+id/businessTLChipGroup1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/size_16"
+                            android:layout_marginTop="@dimen/size_16"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/businessTLTV" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <include
+                        android:id="@+id/teamLeader_shimmer_container"
+                        layout="@layout/shimmer_container"
+                        android:visibility="visible" />
+
+                    <include
+                        android:id="@+id/teamLeaders_info_layout"
+                        layout="@layout/layout_error_with_retry" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.core.widget.NestedScrollView>
+
+            <TextView
+                android:id="@+id/submitBtn"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginEnd="@dimen/size_16"
+                android:layout_marginBottom="@dimen/size_16"
+                android:background="@drawable/app_gradient_button"
+                android:gravity="center"
+                android:minHeight="@dimen/size_36"
+                android:text="Next"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

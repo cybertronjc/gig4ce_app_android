@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootCardView"
+    android:layout_width="match_parent"
+    android:layout_marginTop="@dimen/size_12"
+    android:layout_marginStart="@dimen/size_16"
+    android:layout_marginEnd="@dimen/size_16"
+    android:layout_marginBottom="@dimen/size_4"
+    android:background="@drawable/giger_profile_card_background"
+    android:layout_height="wrap_content">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.gigforce.common_ui.views.GigforceImageView
+                android:id="@+id/companyLogo"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:scaleType="centerCrop"
+                android:layout_marginStart="@dimen/size_12"
+                android:layout_marginTop="@dimen/size_12"
+                android:layout_marginBottom="@dimen/size_12"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:shapeAppearanceOverlay="@style/circleImageView"
+                tools:srcCompat="@tools:sample/avatars" />
+
+            <TextView
+                android:id="@+id/companyName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size16"
+                android:text="Company Name"
+                android:fontFamily="@font/lato_bold"
+                android:textSize="14sp"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toEndOf="@+id/companyLogo"
+                app:layout_constraintTop_toTopOf="@+id/companyLogo" />
+
+            <TextView
+                android:id="@+id/jobProfileTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size16"
+                android:text="Swigy delivery"
+                android:layout_marginTop="@dimen/size_8"
+                android:fontFamily="@font/lato"
+                android:textSize="12sp"
+                android:textColor="@color/giger_card_text"
+                app:layout_constraintStart_toEndOf="@+id/companyLogo"
+                app:layout_constraintTop_toBottomOf="@+id/companyName" />
+
+            <TextView
+                android:id="@+id/status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size16"
+                android:text="Application submitted"
+                android:fontFamily="@font/lato"
+                android:textSize="12sp"
+                android:padding="@dimen/size_4"
+                android:background="@drawable/application_submitted_bg"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/companyName"
+                app:layout_constraintStart_toEndOf="@+id/companyName"
+                app:layout_constraintTop_toTopOf="@+id/companyName" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>
+</layout>

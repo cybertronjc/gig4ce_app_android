@@ -42,6 +42,7 @@ import com.gigforce.core.extensions.printDebugLog
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.landing_screen.landingscreen.LandingScreenFragment
+import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.modules.feature_chat.models.SharedFile
 import com.gigforce.modules.feature_chat.screens.ChatPageFragment
 import com.google.android.gms.tasks.OnCompleteListener
@@ -400,6 +401,16 @@ class MainActivity : AppCompatActivity(),
                         R.id.gigerVerificationFragment,
                         intent.extras
                 )
+            }
+            NotificationConstants.CLICK_ACTIONS.OPEN_JOINING_SCREEN -> {
+                Log.d("MainActivity", "redirecting to FRAGMENT_JOINING")
+                navController.popAllBackStates()
+                navigation.navigateTo(LeadManagementNavDestinations.FRAGMENT_JOINING)
+            }
+            NotificationConstants.CLICK_ACTIONS.OPEN_CALENDAR_HOME_SCREEN -> {
+                Log.d("MainActivity", "redirecting to OPEN_CALENDAR_HOME_SCREEN")
+                navController.popAllBackStates()
+                navController.navigate(R.id.homeScreenFragment)
             }
             NotificationConstants.CLICK_ACTIONS.OPEN_CHAT_PAGE -> {
                 Log.d("MainActivity", "redirecting to gig verification page")

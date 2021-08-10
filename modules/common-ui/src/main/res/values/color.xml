@@ -29,6 +29,7 @@
     <color name="lipstick_2">#e42c64</color>
     <color name="lipstick_3">#e53369</color>
 
+    <color name="lipstick_light">#ECAFC1</color>
 
     <!-- Theme Colors -->
     <color name="colorPrimary">@color/brandColor1</color>
@@ -100,5 +101,7 @@
     <color name="app_card_heading_color1">#292929</color>
 
     <color name="status_bar_pink">#e53369</color>
+    <color name="giger_card_text">#9D9D9D</color>
 
+    <color name="edit_action">#e42c64</color>
 </resources>

@@ -37,7 +37,7 @@
                     app:docinfotext="Please upload your PAN card or enter the details manually"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:missingdoctext="I don’t have a PAN Card"
+                    app:missingdoctext="I don’t have a PAN card"
                     app:title="PAN Card"
                     app:uppercaption="You need to upload" />
 
@@ -105,9 +105,11 @@
                         android:hint="Name"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/pan_til">
+                        app:layout_constraintTop_toBottomOf="@+id/pan_til"
+                        android:visibility="gone">
 
                         <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/nameInput"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/size_46"
                             android:padding="4dp"
@@ -125,9 +127,11 @@
                         android:hint="Father Name"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/name_til">
+                        app:layout_constraintTop_toBottomOf="@+id/name_til"
+                        android:visibility="gone">
 
                         <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/fatherInput"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/size_46"
                             android:padding="4dp"
@@ -146,7 +150,8 @@
                         app:layout_constraintBottom_toTopOf="@id/reupload_button_pan"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/father_name_til">
+                        app:layout_constraintTop_toBottomOf="@+id/father_name_til"
+                        android:visibility="gone">
 
                         <TextView
                             android:id="@+id/dateOfBirth"
@@ -157,7 +162,7 @@
                             android:gravity="center_vertical|start"
                             android:paddingLeft="@dimen/dp_sm1"
                             android:hint="Date of Birth"
-                            android:textColor="#333333"
+                            android:textColor="@color/textview_text_colors"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -216,7 +221,7 @@
             android:background="@drawable/submit_button_selector"
             android:gravity="center"
             android:minHeight="@dimen/size_36"
-            android:text="Next"
+            android:text="Skip"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

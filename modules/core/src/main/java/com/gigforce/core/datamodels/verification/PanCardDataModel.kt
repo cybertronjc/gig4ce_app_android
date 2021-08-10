@@ -11,7 +11,10 @@ data class PanCardDataModel(
     val panCardNo : String? = null,
     val state :Int = -1,
     val status : String? = null,
-    val verifiedString : String? = null
+    val verifiedString : String? = null,
+    val dob : String? = null,
+    val fathername : String? = null,
+    val name : String? = null
 ) : BaseFirestoreDataModel(TABLE_NAME){
 
     companion object {

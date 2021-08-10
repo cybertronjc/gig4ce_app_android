@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <com.gigforce.common_ui.views.GigforceToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?android:actionBarSize"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+            <com.gigforce.common_ui.components.cells.GigerProfileCardComponent
+                android:id="@+id/gigerProfileCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/nestedScrollView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:fillViewport="true"
+                app:layout_constraintTop_toBottomOf="@id/gigerProfileCard"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/submitBtn"
+                app:layout_constraintEnd_toEndOf="parent">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/shiftLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/selectTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/lato"
+                        android:textStyle="bold"
+                        android:textSize="14sp"
+                        android:textColor="@color/text_grey"
+                        android:letterSpacing="-0.01"
+                        android:lineSpacingExtra="3sp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:text="@string/need_to_select"
+                        />
+
+                    <TextView
+                        android:id="@+id/shiftTV"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:fontFamily="@font/lato"
+                        android:lineSpacingExtra="7sp"
+                        android:text="@string/shift_timing"
+                        android:textColor="#131415"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/selectTv" />
+
+                    <TextView
+                        android:id="@+id/selectShiftTV"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="30dp"
+                        android:layout_marginEnd="16dp"
+                        android:fontFamily="@font/lato"
+                        android:lineSpacingExtra="7sp"
+                        android:text="@string/select_shift"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/shiftTV" />
+
+                    <com.gigforce.common_ui.components.atoms.ChipGroupComponent
+                        android:id="@+id/shiftChipGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/size_8"
+                        android:layout_marginStart="@dimen/size_16"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/selectShiftTV"/>
+
+                    <TextView
+                        android:id="@+id/selectDaysTV"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="18dp"
+                        android:layout_marginEnd="16dp"
+                        android:fontFamily="@font/lato"
+                        android:lineSpacingExtra="7sp"
+                        android:text="Select working days*"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/shiftChipGroup" />
+
+                    <com.gigforce.common_ui.components.atoms.ChipGroupComponent
+                        android:id="@+id/workingDaysChipgroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/size_8"
+                        android:layout_marginStart="@dimen/size_16"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/selectDaysTV"/>
+
+
+
+                    <TextView
+                        android:id="@+id/expectedDateTV"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="56dp"
+                        android:layout_marginEnd="16dp"
+                        android:fontFamily="@font/lato"
+                        android:lineSpacingExtra="7sp"
+                        android:text="@string/expected_start_date"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/workingDaysChipgroup" />
+
+
+                        <TextView
+                            android:id="@+id/expectedDate"
+                            android:layout_width="match_parent"
+                            android:layout_height="36dp"
+                            android:layout_marginStart="24dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginEnd="16dp"
+                            android:layout_marginBottom="@dimen/size_16"
+                            android:background="@drawable/search_autocomplete_bg"
+                            android:hint="@string/date_format"
+                            android:fontFamily="@font/lato"
+                            android:gravity="center_vertical"
+                            android:paddingStart="8dp"
+                            android:textColor="@color/text_grey"
+                            android:textSize="14sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/expectedDateTV" />
+
+                        <ImageView
+                            android:id="@+id/calendarIcon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/size_16"
+                            android:src="@drawable/ic_baseline_calendar_today_24"
+                            app:layout_constraintTop_toTopOf="@id/expectedDate"
+                            app:layout_constraintBottom_toBottomOf="@id/expectedDate"
+                            app:layout_constraintEnd_toEndOf="@id/expectedDate"
+                            />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <include
+                    android:id="@+id/shift_shimmer_container"
+                    layout="@layout/shimmer_container"
+                    android:visibility="visible" />
+
+                    <include
+                        android:id="@+id/shift_info_layout"
+                        layout="@layout/layout_error_with_retry"
+                        app:layout_constraintBottom_toBottomOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.core.widget.NestedScrollView>
+
+            <TextView
+                android:id="@+id/submitBtn"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/app_gradient_button"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginEnd="@dimen/size_16"
+                android:layout_marginBottom="@dimen/size_16"
+                android:gravity="center"
+                android:minHeight="@dimen/size_36"
+                android:text="Next"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

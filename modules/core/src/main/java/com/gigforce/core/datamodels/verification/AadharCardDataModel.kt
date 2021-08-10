@@ -10,6 +10,8 @@ data class AadharCardDataModel(
         val backImage: String? = null,
         val verified: Boolean = false,
         val aadharCardNo : String? = null,
+        val name : String? = null,
+        val dob : String?=null,
         val state :Int = -1,
         val verifiedString : String? = null
 ) : BaseFirestoreDataModel(TABLE_NAME) {

@@ -316,6 +316,29 @@ class ProfileFirebaseRepository @Inject constructor() : BaseFirestoreDBRepositor
                 }
     }
 
+    suspend fun getProfileOrThrow(
+        userId: String
+    ): ProfileData = suspendCoroutine { cont ->
+
+        getCollectionReference()
+            .document(userId )
+            .get()
+            .addOnSuccessListener {
+
+                if (it.exists()) {
+                    val profileData = it.toObject(ProfileData::class.java)
+                        ?: throw  IllegalStateException("unable to parse profile object")
+                    profileData.id = it.id
+                    cont.resume(profileData)
+                } else {
+                    cont.resumeWithException(IllegalStateException("user-id $userId does not exist in profiles collection"))
+                }
+            }
+            .addOnFailureListener {
+                cont.resumeWithException(it)
+            }
+    }
+
     suspend fun getFirstProfileWithPhoneNumber(
             phoneNumber: String? = null
     ): ProfileData? {

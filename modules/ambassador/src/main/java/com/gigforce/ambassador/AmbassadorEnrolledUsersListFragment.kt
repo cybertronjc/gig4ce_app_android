@@ -191,7 +191,7 @@ class AmbassadorEnrolledUsersListFragment : Fragment(),
             })
         }
 
-        testingchipgrp.addChips(viewModel.getChipsData())
+        testingchipgrp.addChips(viewModel.getChipsData(), isSingleSelection = true, true)
         testingchipgrp.setOnCheckedChangeListener(object : ChipGroupComponent.OnCustomCheckedChangeListener{
             override fun onCheckedChangeListener(model: ChipGroupModel) {
                 if (model.chipId == 0) {
@@ -258,14 +258,16 @@ class AmbassadorEnrolledUsersListFragment : Fragment(),
         }
 
         create_profile_btn.setOnClickListener {
-            navigation.navigateTo("userinfo/checkMobileFragment")
+
+
+            navigation.navigateTo("LeadMgmt/gigerOnboarding")
 //            navigate(R.id.checkMobileFragment)
             isEditingDetails = false
             //navigate(R.id.checkMobileFragment)
         }
 
         createProfileBtn.setOnClickListener {
-            navigation.navigateTo("userinfo/checkMobileFragment")
+            navigation.navigateTo("LeadMgmt/gigerOnboarding")
 //            navigate(R.id.checkMobileFragment)
             isEditingDetails = false
             //navigate(R.id.checkMobileFragment)

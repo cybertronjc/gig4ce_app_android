@@ -103,7 +103,7 @@ class ConfirmOtpFragment : Fragment(), LocationUpdates.LocationUpdateCallbacks {
 
     private fun validateDataAndSubmit() {
         if (txt_otp.text?.length != 6) {
-            showAlertDialog("", "Enter a valid otp")
+            showAlertDialog("", "Enter a valid OTP")
             return
         }
 
@@ -154,7 +154,6 @@ class ConfirmOtpFragment : Fragment(), LocationUpdates.LocationUpdateCallbacks {
     private fun initViewModel() {
         viewModel.createProfile
             .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-
                 when (it) {
                     Lce.Loading -> {
                         submitBtn.invisible()
@@ -203,6 +202,7 @@ class ConfirmOtpFragment : Fragment(), LocationUpdates.LocationUpdateCallbacks {
                     }
                 }
             })
+
     }
 
 

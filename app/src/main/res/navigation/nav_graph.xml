@@ -935,6 +935,55 @@
         android:id="@+id/drivingLicenseFragment"
         android:name="com.gigforce.verification.mainverification.drivinglicense.DrivingLicenseFragment"
         android:label="DrivingLicenseFragment" />
+    <fragment
+        android:id="@+id/gigerOnboardingFragment"
+        android:name="com.gigforce.lead_management.ui.giger_onboarding.GigerOnboardingFragment"
+        android:label="GigerOnboardingFragment" />
+
+    <fragment
+        android:id="@+id/joiningListFragment"
+        android:name="com.gigforce.lead_management.ui.joining_list.JoiningListFragment"
+        android:label="JoiningListFragment" />
+    <fragment
+        android:id="@+id/gigerOtpVerification"
+        android:name="com.gigforce.lead_management.ui.giger_onboarding.GigerOtpVerification"
+        android:label="GigerOtpVerification" />
+    <fragment
+        android:id="@+id/selectGigApplicationToActivate"
+        android:name="com.gigforce.lead_management.ui.select_gig_application.SelectGigApplicationToActivate"
+        android:label="SelectGigApplicationToActivate" />
+    <fragment
+        android:id="@+id/selectGigLocationFragment"
+        android:name="com.gigforce.lead_management.ui.select_gig_location.SelectGigLocationFragment"
+        android:label="SelectGigLocationFragment" />
+    <fragment
+        android:id="@+id/selectTeamLeaderFragment"
+        android:name="com.gigforce.lead_management.ui.select_team_leader.SelectTeamLeaderFragment"
+        android:label="SelectTeamLeaderFragment" />
+    <fragment
+        android:id="@+id/shiftTimingFragment"
+        android:name="com.gigforce.lead_management.ui.select_shift_timing.ShiftTimingFragment"
+        android:label="ShiftTimingFragment" />
+    <fragment
+        android:id="@+id/referenceCheckFragment"
+        android:name="com.gigforce.lead_management.ui.reference_check.ReferenceCheckFragment"
+        android:label="ReferenceCheckFragment" />
+    <fragment
+        android:id="@+id/pickProfileForReferralFragment"
+        android:name="com.gigforce.lead_management.ui.share_application_link.PickJobProfileForReferralFragment"
+        android:label="ReferenceCheckFragment" />
+    <fragment
+        android:id="@+id/shareReferralLinkFragment"
+        android:name="com.gigforce.lead_management.ui.share_application_link.ShareApplicationLinkFragment"
+        android:label="ShareApplicationLinkFragment" />
+    <fragment
+        android:id="@+id/teamLeaderLoginDetailsFragment"
+        android:name="com.gigforce.giger_gigs.tl_login_details.TeamLeaderLoginDetailsFragment"
+        android:label="TeamLeaderLoginDetailsFragment" />
+    <fragment
+        android:id="@+id/addNewLoginSummaryFragment"
+        android:name="com.gigforce.giger_gigs.tl_login_details.AddNewLoginSummaryFragment"
+        android:label="AddNewLoginSummaryFragment" />
 
 
 </navigation>
