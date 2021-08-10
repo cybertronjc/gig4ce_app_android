@@ -7,11 +7,16 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.common_ui.ext.showToast
+import com.gigforce.core.utils.DateHelper
 import com.gigforce.giger_gigs.R
 import com.gigforce.giger_gigs.models.ListingTLModel
 import com.gigforce.giger_gigs.tl_login_details.TeamLeaderLoginDetailsFragment
 import com.gigforce.giger_gigs.tl_login_details.views.OnTlItemSelectedListener
 import kotlinx.android.synthetic.main.date_city_recycler_item_layout.view.*
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 
 class TLLoginSummaryAdapter(
@@ -48,9 +53,28 @@ class TLLoginSummaryAdapter(
 
         private val dateTV: TextView = view.dateTV
         private val cityTV: TextView = view.cityTV
+        private val gigerCount: TextView = view.gigerCount
         fun bindValues(listingTLModel: ListingTLModel, position: Int) {
-            dateTV.text = listingTLModel.date
+            try {
+                val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy", Locale.ENGLISH)
+                val date =  LocalDate.parse(listingTLModel.date, formatter)
+                val actualDate = Date.from(date.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+                dateTV.text = DateHelper.getDateInDDMMMYYYY(actualDate)
+            }catch (e: Exception){
+                dateTV.text = listingTLModel.date
+            }
+
             cityTV.text = listingTLModel.city.name
+
+            var totalCount = 0
+            listingTLModel.businessData.forEach {
+                it.gigerCount?.let {
+                    totalCount += it
+                }
+            }
+
+            gigerCount.setText("$totalCount Logins")
+
         }
 
         override fun onClick(p0: View?) {

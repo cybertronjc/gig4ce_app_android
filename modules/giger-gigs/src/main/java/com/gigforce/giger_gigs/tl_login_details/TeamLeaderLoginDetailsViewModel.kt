@@ -1,10 +1,12 @@
 package com.gigforce.giger_gigs.tl_login_details
 
+import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.repository.ProfileFirebaseRepository
+import com.gigforce.core.SingleLiveEvent
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
@@ -29,6 +31,11 @@ class TeamLeaderLoginDetailsViewModel @Inject constructor(
     private val firebaseAuthStateListener= FirebaseAuthStateListener.getInstance()
     private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository()
     //data
+    private val _observerProgress: SingleLiveEvent<Int> by lazy {
+        SingleLiveEvent<Int>()
+    }
+    val observerShowProgress: SingleLiveEvent<Int> get() = _observerProgress
+
     private var _cities = MutableLiveData<Lce<List<LoginSummaryCity>>>()
     var cities : LiveData<Lce<List<LoginSummaryCity>>> = _cities
 
@@ -46,11 +53,11 @@ class TeamLeaderLoginDetailsViewModel @Inject constructor(
     var isInitialDataLoaded = false
     private val limit: Int = 10
 
-    fun getListingForTL( searchCity: String, searchDate: String) = viewModelScope.launch {
+    fun getListingForTL(page: Int) = viewModelScope.launch {
         _loginListing.postValue(Lce.loading())
 
         try {
-            val response = tlLoginSummaryRepository.fetchListingForTL(searchCity,searchDate,0, 100)
+            val response = tlLoginSummaryRepository.fetchListingForTL(page, 100)
             _loginListing.value = Lce.content(response)
 
         }catch (e: Exception){
@@ -83,5 +90,9 @@ class TeamLeaderLoginDetailsViewModel @Inject constructor(
             e.printStackTrace()
             _businesses.value = Lce.error(e.message ?: "Unable to fetch businesses by city")
         }
+    }
+
+    fun showProgress(show: Boolean) {
+        observerShowProgress.value = if (show) View.VISIBLE else View.GONE
     }
 }
