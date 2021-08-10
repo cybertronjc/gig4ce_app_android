@@ -392,6 +392,7 @@ class DrivingLicenseFragment : Fragment(),
                         verifiedStatusViews(it)
                         viewBinding.belowLayout.visible()
                         setAlreadyfilledData(it, false)
+                        viewBinding.toplayoutblock.disableImageClick() //keep this line in end only
                     } else {
                         checkforStatusAndVerified(it)
                     }
