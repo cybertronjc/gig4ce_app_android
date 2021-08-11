@@ -299,12 +299,12 @@ class AddNewLoginSummaryFragment : Fragment() {
 //            navigation.navigateTo("gig/tlLoginDetails", bundleOf(
 //                LoginSummaryConstants.CAME_BACK_FROM_ADD to true
 //            ))
-            var navFragmentsData = activity as NavFragmentsData
-            navFragmentsData.setData(
-                bundleOf(
-                    LoginSummaryConstants.CAME_BACK_FROM_ADD to true
-                )
-            )
+//            var navFragmentsData = activity as NavFragmentsData
+//            navFragmentsData.setData(
+//                bundleOf(
+//                    LoginSummaryConstants.CAME_BACK_FROM_ADD to true
+//                )
+//            )
         }?.show()
 
 

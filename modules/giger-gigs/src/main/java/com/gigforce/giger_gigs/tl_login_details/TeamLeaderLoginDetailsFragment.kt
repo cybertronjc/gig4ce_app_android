@@ -66,33 +66,33 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(TeamLeaderLoginDetailsViewModel::class.java)
 
-        checkForAddUpdate()
+        //checkForAddUpdate()
         initToolbar()
         initializeViews()
         observer()
         listeners()
     }
 
-    private fun checkForAddUpdate() {
-        var navFragmentsData = activity as NavFragmentsData
-        if (navFragmentsData?.getData() != null) {
-            if (navFragmentsData?.getData()
-                    ?.getBoolean(LoginSummaryConstants.CAME_BACK_FROM_ADD, false) == true
-            ) {
-                didCamebackfromAdd = true
-                navFragmentsData?.setData(bundleOf())
-            }
-        }
-    }
+//    private fun checkForAddUpdate() {
+//        var navFragmentsData = activity as NavFragmentsData
+//        if (navFragmentsData?.getData() != null) {
+//            if (navFragmentsData?.getData()
+//                    ?.getBoolean(LoginSummaryConstants.CAME_BACK_FROM_ADD, false) == true
+//            ) {
+//                didCamebackfromAdd = true
+//                navFragmentsData?.setData(bundleOf())
+//            }
+//        }
+//    }
 
     private val INTERVAL_TIME: Long = 1000 * 5
     var hadler = Handler()
     fun refreshListHandler() {
         hadler.postDelayed({
             try {
-                if (didCamebackfromAdd) {
+                if (!onpaused) {
                     initializeViews()
-                    //refreshListHandler()
+                    refreshListHandler()
                 }
             } catch (e: Exception) {
 
@@ -185,6 +185,7 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
             Log.d("pag", "nonzero $currentPage, list : ${res.size}" )
             tlLoginSummaryAdapter.updateList(res)
             tlLoginSummaryAdapter.notifyDataSetChanged()
+            onpaused = false
             datecityRv.smoothScrollToPosition(tlLoginSummaryAdapter.itemCount/2)
 
         }
@@ -216,6 +217,7 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
                     //load next page
                     currentPage += 1
                     isLoading = false
+                    onpaused = true
                     progressBarBottom.visibility = View.VISIBLE
                     viewModel.getListingForTL(currentPage)
 
