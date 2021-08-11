@@ -65,30 +65,12 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(TeamLeaderLoginDetailsViewModel::class.java)
-        //getDataFromIntents(arguments, savedInstanceState)
+
         checkForAddUpdate()
         initToolbar()
         initializeViews()
         observer()
         listeners()
-    }
-
-    private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {
-        arguments?.let {
-            didCamebackfromAdd = it.getBoolean(LoginSummaryConstants.CAME_BACK_FROM_ADD)
-
-        }
-        savedInstanceState?.let {
-            didCamebackfromAdd = it.getBoolean(LoginSummaryConstants.CAME_BACK_FROM_ADD)
-
-
-        }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putBoolean(LoginSummaryConstants.CAME_BACK_FROM_ADD, didCamebackfromAdd)
-
     }
 
     private fun checkForAddUpdate() {

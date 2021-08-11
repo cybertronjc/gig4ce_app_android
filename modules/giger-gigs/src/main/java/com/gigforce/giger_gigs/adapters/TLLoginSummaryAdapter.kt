@@ -101,7 +101,7 @@ class TLLoginSummaryAdapter(
         val tempList = filteredList.toMutableList()
         tempList.addAll(list)
         this.submitList(tempList)
-        filteredList = tempList
+//        filteredList = tempList
 
     }
 
