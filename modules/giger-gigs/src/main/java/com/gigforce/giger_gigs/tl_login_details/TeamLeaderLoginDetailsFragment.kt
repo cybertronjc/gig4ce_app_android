@@ -214,9 +214,7 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
                 val currentItemsLatest = layoutManager.childCount
                 val totalItemsLatest = layoutManager.itemCount
 
-                if (layoutManager.findLastVisibleItemPosition() >= 6 && layoutManager.findFirstVisibleItemPosition()<=6){
-                    scrollingAdded = false
-                }
+
                 //Log.d("Scrolled", " isLoading: ${isLoading} , currentItemsLatest : $currentItemsLatest, lastVisibleItemPosition: $lastVisibleItemPosition, totalItemsLatest: $totalItemsLatest ")
                 //if (isLoading && (currentItemsLatest + lastVisibleItemPosition == totalItemsLatest) && (totalItemsLatest <= tlLoginSummaryAdapter.itemCount)   ) {
                 if ((currentPage < totalPages) && isLoading ){
@@ -228,6 +226,9 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
                     progressBarBottom.visibility = View.VISIBLE
                     viewModel.getListingForTL(currentPage)
 
+                }
+                if (!isLoading && layoutManager.findLastVisibleItemPosition() >= 6 && layoutManager.findFirstVisibleItemPosition()<=6){
+                    scrollingAdded = false
                 }
             }
         })
