@@ -1,33 +1,33 @@
 package com.gigforce.giger_gigs.tl_login_details
 
-import android.app.DatePickerDialog
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.os.Handler
 import android.text.format.DateUtils
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.DatePicker
+import android.widget.AbsListView
 import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.ext.showToast
-import com.gigforce.common_ui.listeners.PaginationScrollListener
 import com.gigforce.core.navigation.INavigation
-import com.gigforce.core.utils.DateHelper
 import com.gigforce.core.utils.Lce
+import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.giger_gigs.LoginSummaryConstants
 import com.gigforce.giger_gigs.adapters.TLLoginSummaryAdapter
 import com.gigforce.giger_gigs.databinding.TeamLeaderLoginDetailsFragmentBinding
 import com.gigforce.giger_gigs.models.ListingTLModel
 import com.gigforce.giger_gigs.tl_login_details.views.OnTlItemSelectedListener
 import dagger.hilt.android.AndroidEntryPoint
-import java.lang.Exception
 import java.util.*
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
@@ -46,7 +46,7 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
     var currentPage = PAGE_START
     var isLoading = false
     var isLastPage = false
-    val TOTAL_PAGES = 10
+    var didCamebackfromAdd = false
 
     private val tlLoginSummaryAdapter: TLLoginSummaryAdapter by lazy {
         TLLoginSummaryAdapter(requireContext(), this).apply {
@@ -65,10 +65,24 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(TeamLeaderLoginDetailsViewModel::class.java)
+
+        checkForAddUpdate()
         initToolbar()
         initializeViews()
         observer()
         listeners()
+    }
+
+    private fun checkForAddUpdate() {
+        var navFragmentsData = activity as NavFragmentsData
+        if (navFragmentsData?.getData() != null) {
+            if (navFragmentsData?.getData()
+                    ?.getBoolean(LoginSummaryConstants.CAME_BACK_FROM_ADD, false) == true
+            ) {
+                didCamebackfromAdd = true
+                navFragmentsData?.setData(bundleOf())
+            }
+        }
     }
 
     private val INTERVAL_TIME: Long = 1000 * 5
@@ -76,9 +90,9 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
     fun refreshListHandler() {
         hadler.postDelayed({
             try {
-                if (!onpaused) {
+                if (didCamebackfromAdd) {
                     initializeViews()
-                    refreshListHandler()
+                    //refreshListHandler()
                 }
             } catch (e: Exception) {
 
@@ -111,8 +125,10 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
     }
 
     private fun initializeViews() = viewBinding.apply {
-        //loadFirstPage()
-        viewModel.getListingForTL(0)
+        //loadFirstPage
+        currentPage = 1
+        isLoading = false
+        viewModel.getListingForTL(1)
     }
 
 
@@ -137,6 +153,7 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
 
                 is Lce.Content -> {
                     progressBar.visibility = View.GONE
+                    progressBarBottom.visibility = View.GONE
                     setupReyclerView(res.content)
                 }
 
@@ -148,59 +165,65 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
         })
     }
 
-    private fun setupReyclerView(res: List<ListingTLModel>) {
+
+
+    private fun setupReyclerView(res: List<ListingTLModel>)  = viewBinding.apply{
 
         if (res.isEmpty()) {
-            viewBinding.noData.visibility = View.VISIBLE
-            viewBinding.datecityRv.visibility = View.GONE
+            noData.visibility = View.VISIBLE
+            datecityRv.visibility = View.GONE
         } else {
-            viewBinding.noData.visibility = View.GONE
-            viewBinding.datecityRv.visibility = View.VISIBLE
+            noData.visibility = View.GONE
+            datecityRv.visibility = View.VISIBLE
         }
         val layoutManager = LinearLayoutManager(context)
-        viewBinding.datecityRv.layoutManager = layoutManager
-        tlLoginSummaryAdapter.submitList(res)
-        viewBinding.datecityRv.adapter = tlLoginSummaryAdapter
+        datecityRv.layoutManager = layoutManager
+        if (currentPage == 1){
+            Log.d("pag", "zero $currentPage, list : ${res.size}")
+            tlLoginSummaryAdapter.submitList(res)
+        }else {
+            Log.d("pag", "nonzero $currentPage, list : ${res.size}" )
+            tlLoginSummaryAdapter.updateList(res)
+            tlLoginSummaryAdapter.notifyDataSetChanged()
+            datecityRv.smoothScrollToPosition(tlLoginSummaryAdapter.itemCount/2)
 
-//        if (currentPage <= TOTAL_PAGES) {
-//            //show loader
-//            viewBinding.progressBarBottom.visibility = View.VISIBLE
-//        }
-//        else{
-//            isLastPage = true
-//        }
-//
-//        viewBinding.datecityRv.addOnScrollListener(object : PaginationScrollListener(layoutManager) {
-//            override fun isLastPage(): Boolean {
-//                return isLastPage
-//            }
-//
-//            override fun isLoading(): Boolean {
-//                return isLoading
-//            }
-//
-//            override fun loadMoreItems() {
-//                isLoading = true;
-//                currentPage += 1;
-//
-//                loadNextPage();
-//            }
-//
-//        })
+        }
+        datecityRv.adapter = tlLoginSummaryAdapter
+        val totalPages = res.get(0).totalPages
+
+
+        datecityRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+
+
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                    isLoading = true;
+                }
+
+            }
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                //Log.d("Scrolled", "onScrolled $dx ,: $dy")
+
+                val currentItemsLatest = layoutManager.childCount
+                val totalItemsLatest = layoutManager.itemCount
+
+                val lastVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+                //Log.d("Scrolled", " isLoading: ${isLoading} , currentItemsLatest : $currentItemsLatest, lastVisibleItemPosition: $lastVisibleItemPosition, totalItemsLatest: $totalItemsLatest ")
+                //if (isLoading && (currentItemsLatest + lastVisibleItemPosition == totalItemsLatest) && (totalItemsLatest <= tlLoginSummaryAdapter.itemCount)   ) {
+                if ((currentPage < totalPages) && isLoading ){
+                    //load next page
+                    currentPage += 1
+                    isLoading = false
+                    progressBarBottom.visibility = View.VISIBLE
+                    viewModel.getListingForTL(currentPage)
+
+                }
+            }
+        })
+
     }
-
-//    private fun loadNextPage() {
-////        onpaused = true
-////        viewBinding.progressBarBottom.visibility = View.GONE
-////        viewModel.getListingForTL(currentPage)
-//    }
-//
-//    private fun loadFirstPage(){
-//        Log.d("LIST", "loadFirstPage: ");
-//        currentPage = PAGE_START;
-//
-//        viewModel.getListingForTL(currentPage)
-//    }
 
     override fun onTlItemSelected(listingTLModel: ListingTLModel) {
         if (DateUtils.isToday(listingTLModel.dateTimestamp)) {

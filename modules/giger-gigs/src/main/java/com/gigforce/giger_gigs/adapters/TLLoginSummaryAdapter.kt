@@ -97,6 +97,14 @@ class TLLoginSummaryAdapter(
         notifyDataSetChanged()
     }
 
+    fun updateList(list: List<ListingTLModel>){
+        val tempList = filteredList.toMutableList()
+        tempList.addAll(list)
+        this.submitList(tempList)
+//        filteredList = tempList
+
+    }
+
 
     override fun getItemCount(): Int {
         return filteredList.size

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.core.os.bundleOf
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -14,12 +15,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.repository.ProfileFirebaseRepository
+import com.gigforce.core.StringConstants
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.invisible
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.DateHelper
 import com.gigforce.core.utils.Lce
+import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.giger_gigs.LoginSummaryConstants
 import com.gigforce.giger_gigs.R
 import com.gigforce.giger_gigs.databinding.AddNewLoginSummaryFragmentBinding
@@ -256,7 +259,15 @@ class AddNewLoginSummaryFragment : Fragment() {
             dialog.dismiss()
             viewBinding.progressBar.visibility = View.GONE
             navigation.popBackStack()
-
+//            navigation.navigateTo("gig/tlLoginDetails", bundleOf(
+//                LoginSummaryConstants.CAME_BACK_FROM_ADD to true
+//            ))
+            var navFragmentsData = activity as NavFragmentsData
+            navFragmentsData.setData(
+                bundleOf(
+                    LoginSummaryConstants.CAME_BACK_FROM_ADD to true
+                )
+            )
         }?.show()
 
 
@@ -321,7 +332,6 @@ class AddNewLoginSummaryFragment : Fragment() {
             val checkIn = it ?: return@Observer
             try {
                 if (mode == LoginSummaryConstants.MODE_ADD) {
-
                     if (checkIn.checkedIn) {
                         viewBinding.apply {
                             citySpinner.visibility = View.VISIBLE
