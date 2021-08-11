@@ -46,7 +46,7 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
     var currentPage = PAGE_START
     var isLoading = false
     var isLastPage = false
-    var didCamebackfromAdd = false
+    var scrollingAdded = false
 
     private val tlLoginSummaryAdapter: TLLoginSummaryAdapter by lazy {
         TLLoginSummaryAdapter(requireContext(), this).apply {
@@ -79,7 +79,7 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
 //            if (navFragmentsData?.getData()
 //                    ?.getBoolean(LoginSummaryConstants.CAME_BACK_FROM_ADD, false) == true
 //            ) {
-//                didCamebackfromAdd = true
+//                didCamebackfromAdd = false
 //                navFragmentsData?.setData(bundleOf())
 //            }
 //        }
@@ -90,7 +90,7 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
     fun refreshListHandler() {
         hadler.postDelayed({
             try {
-                if (!onpaused) {
+                if (!onpaused && !scrollingAdded) {
                     initializeViews()
                     refreshListHandler()
                 }
@@ -185,7 +185,7 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
             Log.d("pag", "nonzero $currentPage, list : ${res.size}" )
             tlLoginSummaryAdapter.updateList(res)
             tlLoginSummaryAdapter.notifyDataSetChanged()
-            onpaused = false
+            scrollingAdded = false
             datecityRv.smoothScrollToPosition(tlLoginSummaryAdapter.itemCount/2)
 
         }
@@ -217,7 +217,7 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
                     //load next page
                     currentPage += 1
                     isLoading = false
-                    onpaused = true
+                    scrollingAdded = true
                     progressBarBottom.visibility = View.VISIBLE
                     viewModel.getListingForTL(currentPage)
 
