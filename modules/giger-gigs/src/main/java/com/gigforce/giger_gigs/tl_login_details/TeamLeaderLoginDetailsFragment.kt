@@ -186,8 +186,7 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
             Log.d("pag", "nonzero $currentPage, list : ${res.size}" )
             tlLoginSummaryAdapter.updateList(res)
             tlLoginSummaryAdapter.notifyDataSetChanged()
-            val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
-            if (firstVisibleItemPosition == 6){
+            if (layoutManager.findLastVisibleItemPosition() >= 6 && layoutManager.findFirstVisibleItemPosition()<=6){
                 scrollingAdded = false
             }
 
