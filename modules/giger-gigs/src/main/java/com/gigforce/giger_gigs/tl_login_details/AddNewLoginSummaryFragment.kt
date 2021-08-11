@@ -232,7 +232,7 @@ class AddNewLoginSummaryFragment : Fragment() {
 
         viewBinding.citySpinner.onItemClickListener = object : AdapterView.OnItemClickListener {
             override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                if (p2 != 0){
+//                if (p2 != 0){
                     Log.d("cityModelArray", "cities $citiesModelArray  string array: $citiesArray")
                     if (p2 <= citiesModelArray.size){
                         val cityId = citiesModelArray.get(p2).id
@@ -244,10 +244,10 @@ class AddNewLoginSummaryFragment : Fragment() {
                         }
                     }
 
-                } else {
-                    viewBinding.businessRV.visibility = View.INVISIBLE
-                    viewBinding.submit.visibility = View.INVISIBLE
-                }
+//                } else {
+//                    viewBinding.businessRV.visibility = View.INVISIBLE
+//                    viewBinding.submit.visibility = View.INVISIBLE
+//                }
             }
 
         }
