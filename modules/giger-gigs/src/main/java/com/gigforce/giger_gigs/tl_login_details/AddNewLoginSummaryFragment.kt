@@ -197,6 +197,8 @@ class AddNewLoginSummaryFragment : Fragment() {
                 citiesArray.add(loginSummaryDetails?.city?.name.toString())
                 citiesModelArray.toMutableList().add(loginSummaryDetails?.city!!)
                 citySpinner.isEnabled = false
+                chooseCityImg.isEnabled = false
+                chooseCityImg.invisible()
                 citySpinner.invisible()
                 cityTextView.visible()
                 cityTextView.text = loginSummaryDetails?.city?.name.toString()
