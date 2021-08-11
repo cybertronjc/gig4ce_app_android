@@ -149,12 +149,6 @@ class AddNewLoginSummaryFragment : Fragment() {
 
     private fun listeners() = viewBinding.apply {
 
-
-
-
-
-
-
         arrayAdapter = context?.let {
             ArrayAdapter(
                 it,
@@ -163,6 +157,14 @@ class AddNewLoginSummaryFragment : Fragment() {
             )
         }
         citySpinner.setAdapter(arrayAdapter)
+        citySpinner.setOnFocusChangeListener { view, b ->
+            if (b){
+                citySpinner.showDropDown()
+            }
+        }
+        chooseCityImg.setOnClickListener {
+            citySpinner.showDropDown()
+        }
 
 //        citySpinner.adapter = arrayAdapter
 
@@ -191,7 +193,7 @@ class AddNewLoginSummaryFragment : Fragment() {
             viewModel.checkIfTLAttendanceMarked()
         } else {
             if (loginSummaryDetails != null) {
-                citiesArray.add("Choose City...")
+                //citiesArray.add("Choose City...")
                 citiesArray.add(loginSummaryDetails?.city?.name.toString())
                 citiesModelArray.toMutableList().add(loginSummaryDetails?.city!!)
                 citySpinner.isEnabled = false
@@ -228,34 +230,56 @@ class AddNewLoginSummaryFragment : Fragment() {
             }
         }
 
-        viewBinding.citySpinner.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                    if (p2 != 0){
-                        Log.d("cityModelArray", "cities $citiesModelArray  string array: $citiesArray")
-                        if (p2 <= citiesModelArray.size + 1){
-                            val cityId = citiesModelArray.get(p2 - 1).id
-                            selectedCity = citiesModelArray.get(p2 - 1)
-                            viewBinding.businessRV.visibility = View.VISIBLE
-                            viewBinding.submit.visibility = View.VISIBLE
-                            if (mode == LoginSummaryConstants.MODE_ADD) {
-                                viewModel.getBusinessByCity(cityId = cityId)
-                            }
+        viewBinding.citySpinner.onItemClickListener = object : AdapterView.OnItemClickListener {
+            override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                if (p2 != 0){
+                    Log.d("cityModelArray", "cities $citiesModelArray  string array: $citiesArray")
+                    if (p2 <= citiesModelArray.size){
+                        val cityId = citiesModelArray.get(p2).id
+                        selectedCity = citiesModelArray.get(p2)
+                        viewBinding.businessRV.visibility = View.VISIBLE
+                        viewBinding.submit.visibility = View.VISIBLE
+                        if (mode == LoginSummaryConstants.MODE_ADD) {
+                            viewModel.getBusinessByCity(cityId = cityId)
                         }
-
-                    } else {
-                        viewBinding.businessRV.visibility = View.INVISIBLE
-                        viewBinding.submit.visibility = View.INVISIBLE
                     }
 
-
+                } else {
+                    viewBinding.businessRV.visibility = View.INVISIBLE
+                    viewBinding.submit.visibility = View.INVISIBLE
                 }
-
-                override fun onNothingSelected(p0: AdapterView<*>?) {
-
-                }
-
             }
+
+        }
+
+//        viewBinding.citySpinner.onItemSelectedListener =
+//            object : AdapterView.OnItemSelectedListener {
+//                override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+//                    if (p2 != 0){
+//                        Log.d("cityModelArray", "cities $citiesModelArray  string array: $citiesArray")
+//                        if (p2 <= citiesModelArray.size + 1){
+//                            val cityId = citiesModelArray.get(p2 - 1).id
+//                            selectedCity = citiesModelArray.get(p2 - 1)
+//                            viewBinding.businessRV.visibility = View.VISIBLE
+//                            viewBinding.submit.visibility = View.VISIBLE
+//                            if (mode == LoginSummaryConstants.MODE_ADD) {
+//                                viewModel.getBusinessByCity(cityId = cityId)
+//                            }
+//                        }
+//
+//                    } else {
+//                        viewBinding.businessRV.visibility = View.INVISIBLE
+//                        viewBinding.submit.visibility = View.INVISIBLE
+//                    }
+//
+//
+//                }
+//
+//                override fun onNothingSelected(p0: AdapterView<*>?) {
+//
+//                }
+//
+//            }
     }
 
     private fun launchSuccessfullDialog(){
@@ -500,7 +524,7 @@ class AddNewLoginSummaryFragment : Fragment() {
     private fun processCities(content: List<LoginSummaryCity>) {
         citiesArray.clear()
         citiesModelArray.toMutableList().clear()
-        citiesArray.add("Choose City...")
+        //citiesArray.add("Choose City...")
         citiesModelArray = content
         citiesModelArray.forEach {
             citiesArray.add(it.name)
