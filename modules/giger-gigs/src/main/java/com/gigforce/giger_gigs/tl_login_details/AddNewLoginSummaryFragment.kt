@@ -66,6 +66,7 @@ class AddNewLoginSummaryFragment : Fragment() {
     var businessListToProcess = listOf<LoginSummaryBusiness>()
     private var loginSummaryDetails: ListingTLModel? = null
     var totalLoginsCount = 0
+    var citiesMap = mutableMapOf<String, Int>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -236,13 +237,14 @@ class AddNewLoginSummaryFragment : Fragment() {
             override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
 //                if (p2 != 0){
                     Log.d("cityModelArray", "cities $citiesModelArray  string array: $citiesArray")
-                    if (p2 <= citiesModelArray.size){
-                        val cityId = citiesModelArray.get(p2).id
-                        selectedCity = citiesModelArray.get(p2)
+                    if (p2 <= citiesModelArray.size && citySpinner.text.toString().isNotEmpty()){
+                        val actualIndex = citiesMap.get(citySpinner.text.toString().trim())
+                        val cityId = actualIndex?.let { citiesModelArray.get(it).id }
+                        selectedCity = actualIndex?.let { citiesModelArray.get(it) }!!
                         viewBinding.businessRV.visibility = View.VISIBLE
                         viewBinding.submit.visibility = View.VISIBLE
                         if (mode == LoginSummaryConstants.MODE_ADD) {
-                            viewModel.getBusinessByCity(cityId = cityId)
+                            cityId?.let { viewModel.getBusinessByCity(cityId = it) }
                         }
                     }
 
@@ -528,8 +530,10 @@ class AddNewLoginSummaryFragment : Fragment() {
         citiesModelArray.toMutableList().clear()
         //citiesArray.add("Choose City...")
         citiesModelArray = content
-        citiesModelArray.forEach {
-            citiesArray.add(it.name)
+        citiesModelArray.forEachIndexed { index, loginSummaryCity ->
+
+            citiesArray.add(loginSummaryCity.name)
+            citiesMap.put(loginSummaryCity.name, index)
         }
 
         arrayAdapter?.notifyDataSetChanged()
