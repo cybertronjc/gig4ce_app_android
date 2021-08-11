@@ -113,7 +113,11 @@ data class ListingTLModel(
     val dateTimestamp: Long,
 
     @SerializedName("id")
-    val id: String = ""
+    val id: String = "",
+
+    @SerializedName("totalPages")
+    val totalPages: Int = 1
+
 ) : Parcelable
 
 

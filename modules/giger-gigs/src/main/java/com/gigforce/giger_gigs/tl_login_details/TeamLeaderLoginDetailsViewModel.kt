@@ -57,7 +57,7 @@ class TeamLeaderLoginDetailsViewModel @Inject constructor(
         _loginListing.postValue(Lce.loading())
 
         try {
-            val response = tlLoginSummaryRepository.fetchListingForTL(page, 100)
+            val response = tlLoginSummaryRepository.fetchListingForTL(page, 10)
             _loginListing.value = Lce.content(response)
 
         }catch (e: Exception){
