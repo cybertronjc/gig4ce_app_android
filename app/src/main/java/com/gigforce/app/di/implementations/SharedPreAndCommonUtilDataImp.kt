@@ -190,6 +190,22 @@ class SharedPreAndCommonUtilDataImp @Inject constructor(@ActivityContext val act
         return ""
     }
 
+    override fun getCurrentVersionCode(): Int {
+        try {
+            val pInfo: PackageInfo =
+                activity?.applicationContext!!.packageManager.getPackageInfo(
+                    activity.getPackageName(),
+                    0
+                )
+
+            return pInfo.versionCode
+        } catch (e: PackageManager.NameNotFoundException) {
+            e.printStackTrace()
+        }
+        return 0
+    }
+
+
     override fun saveLoggedInUserName(username: String) {
         saveData(AppConstants.USER_NAME,username)
     }
