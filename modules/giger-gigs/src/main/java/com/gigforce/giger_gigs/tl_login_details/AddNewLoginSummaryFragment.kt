@@ -32,6 +32,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.add_new_login_summary_fragment.*
+import kotlinx.android.synthetic.main.gig_details_item.view.*
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
@@ -148,6 +149,12 @@ class AddNewLoginSummaryFragment : Fragment() {
 
     private fun listeners() = viewBinding.apply {
 
+
+
+
+
+
+
         arrayAdapter = context?.let {
             ArrayAdapter(
                 it,
@@ -155,7 +162,9 @@ class AddNewLoginSummaryFragment : Fragment() {
                 citiesArray
             )
         }
-        citySpinner.adapter = arrayAdapter
+        citySpinner.setAdapter(arrayAdapter)
+
+//        citySpinner.adapter = arrayAdapter
 
         submit.setOnClickListener {
             if (submit.text.equals("Check In")){
@@ -163,7 +172,7 @@ class AddNewLoginSummaryFragment : Fragment() {
                 navigation.navigateTo("gig/mygig")
             } else {
                 if (mode == LoginSummaryConstants.MODE_ADD) {
-                    if (citySpinner.selectedItem.toString().isEmpty()) {
+                    if (citySpinner.text.toString().isEmpty()) {
                         showToast("Select a city to continue")
                     } else {
                         //submit data
@@ -444,9 +453,9 @@ class AddNewLoginSummaryFragment : Fragment() {
                         jobProfileId = loginSummaryBusiness.jobProfileId.toString(),
                         jobProfileName = loginSummaryBusiness.jobProfileName.toString(),
                         loginCount = loginSummaryBusiness.loginCount,
-                        loginSummaryBusiness.updatedBy.toString(),
-                        viewModel,
-                        loginSummaryBusiness.itemMode
+                        updatedBy = loginSummaryBusiness.updatedBy.toString(),
+                        addNewLoginSummaryViewModel = viewModel,
+                        itemView = loginSummaryBusiness.itemMode
                     )
                 )
                 if (loginSummaryBusiness.loginCount != null){
