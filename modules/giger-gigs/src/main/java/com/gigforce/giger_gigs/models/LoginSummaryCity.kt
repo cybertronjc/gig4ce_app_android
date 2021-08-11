@@ -33,6 +33,12 @@ data class LoginSummaryBusiness(
     @SerializedName("legalName")
     val legalName: String,
 
+    @SerializedName("jobProfileId")
+    val jobProfileId: String? = null,
+
+    @SerializedName("jobProfileName")
+    val jobProfileName: String? = null,
+
     var loginCount: Int? = null,
 
     var updatedBy: String? = null,
@@ -72,6 +78,12 @@ data class BusinessDataReqModel(
     @SerializedName("city")
     val city: LoginSummaryCity = LoginSummaryCity(),
 
+    @SerializedName("jobProfileId")
+    val jobProfileId: String? = null,
+
+    @SerializedName("jobProfileName")
+    val jobProfileName: String? = null,
+
     @SerializedName("gigerCount")
     val gigerCount: Int? = null,
 
@@ -101,5 +113,19 @@ data class ListingTLModel(
     val dateTimestamp: Long,
 
     @SerializedName("id")
-    val id: String = ""
+    val id: String = "",
+
+    @SerializedName("totalPages")
+    val totalPages: Int = 1
+
+) : Parcelable
+
+
+@Parcelize
+data class CheckMark(
+    @SerializedName("checkedIn")
+    val checkedIn: Boolean = false,
+
+    @SerializedName("gigerId")
+    val gigerId: String = "",
 ) : Parcelable

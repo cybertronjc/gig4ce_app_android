@@ -1,21 +1,21 @@
 package com.gigforce.giger_gigs.tl_login_details
 
-import android.app.DatePickerDialog
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.os.Handler
 import android.text.format.DateUtils
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.DatePicker
+import android.widget.AbsListView
 import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.navigation.INavigation
-import com.gigforce.core.utils.DateHelper
 import com.gigforce.core.utils.Lce
 import com.gigforce.giger_gigs.LoginSummaryConstants
 import com.gigforce.giger_gigs.adapters.TLLoginSummaryAdapter
@@ -23,9 +23,9 @@ import com.gigforce.giger_gigs.databinding.TeamLeaderLoginDetailsFragmentBinding
 import com.gigforce.giger_gigs.models.ListingTLModel
 import com.gigforce.giger_gigs.tl_login_details.views.OnTlItemSelectedListener
 import dagger.hilt.android.AndroidEntryPoint
-import java.lang.Exception
-import java.util.*
+import kotlinx.android.synthetic.main.team_leader_login_details_fragment.*
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
@@ -39,6 +39,12 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
 
     private lateinit var viewModel: TeamLeaderLoginDetailsViewModel
     private lateinit var viewBinding: TeamLeaderLoginDetailsFragmentBinding
+
+    val PAGE_START = 1
+    var currentPage = PAGE_START
+    var isLoading = false
+    var isLastPage = false
+    var scrollingAdded = false
 
     private val tlLoginSummaryAdapter: TLLoginSummaryAdapter by lazy {
         TLLoginSummaryAdapter(requireContext(), this).apply {
@@ -57,34 +63,63 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(TeamLeaderLoginDetailsViewModel::class.java)
+
+        //checkForAddUpdate()
         initToolbar()
         initializeViews()
         observer()
         listeners()
     }
 
+//    private fun checkForAddUpdate() {
+//        var navFragmentsData = activity as NavFragmentsData
+//        if (navFragmentsData?.getData() != null) {
+//            if (navFragmentsData?.getData()
+//                    ?.getBoolean(LoginSummaryConstants.CAME_BACK_FROM_ADD, false) == true
+//            ) {
+//                didCamebackfromAdd = false
+//                navFragmentsData?.setData(bundleOf())
+//            }
+//        }
+//    }
+
     private val INTERVAL_TIME: Long = 1000 * 5
+    private val SWIPE_INTERVAL_TIME: Long = 1000 * 1
+
     var hadler = Handler()
+    var swipeToRefreshHandler = Handler()
+    var runnable : Runnable? = null
     fun refreshListHandler() {
-        hadler.postDelayed({
+        runnable = Runnable{
             try {
-                if (!onpaused) {
+                if (!onpaused && swipeToRefresh) {
                     initializeViews()
-                    refreshListHandler()
                 }
+                refreshListHandler()
             } catch (e: Exception) {
 
             }
 
-        }, INTERVAL_TIME)
+        }
+        hadler.postDelayed(runnable, INTERVAL_TIME)
 
+    }
+
+    fun stopSwipeToRefresh()
+    {
+        swipeToRefreshHandler.postDelayed({
+            viewBinding.swipeRefresh?.isRefreshing = false
+        },SWIPE_INTERVAL_TIME)
     }
 
     var onpaused = false
     override fun onPause() {
         super.onPause()
         onpaused = true
-        hadler.removeCallbacks(null)
+        runnable?.let {
+            hadler.removeCallbacks(runnable)
+        }
+
     }
 
     override fun onResume() {
@@ -94,41 +129,30 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
     }
 
     private fun initToolbar() = viewBinding.apply {
-        appBar.apply {
-            hideActionMenu()
-            showTitle("Login Summary")
+        appBarComp.apply {
             setBackButtonListener(View.OnClickListener {
                 activity?.onBackPressed()
             })
         }
+
     }
 
     private fun initializeViews() = viewBinding.apply {
-        viewModel.getListingForTL("", "")
-
+        //loadFirstPage
+        currentPage = 1
+        isLoading = false
+        viewModel.getListingForTL(1)
     }
 
-    private val datePicker: DatePickerDialog by lazy {
-        val cal = Calendar.getInstance()
-        val datePickerDialog = DatePickerDialog(
-            requireContext(),
-            DatePickerDialog.OnDateSetListener { _: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
-                val newCal = Calendar.getInstance()
-                newCal.set(Calendar.YEAR, year)
-                newCal.set(Calendar.MONTH, month)
-                newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                viewBinding.searchDate.text = DateHelper.getDateInDDMMYYYY(newCal.time)
-            },
-            2050,
-            cal.get(Calendar.MONTH),
-            cal.get(Calendar.DAY_OF_MONTH)
-        )
-
-        datePickerDialog.datePicker.maxDate = Calendar.getInstance().timeInMillis
-        datePickerDialog
-    }
 
     private fun listeners() = viewBinding.apply {
+
+        swipeRefresh.setOnRefreshListener {
+            swipeToRefresh = true
+            stopSwipeToRefresh()
+
+        }
+
         addNew.setOnClickListener {
             navigation.navigateTo(
                 "gig/addNewLoginSummary", bundleOf(
@@ -137,15 +161,6 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
             )
         }
 
-        searchDate.setOnClickListener {
-            datePicker.show()
-        }
-
-        searchButton.setOnClickListener {
-            val searchCityText = searchItem.text.toString().trim()
-            val searchDateText = searchDate.text.toString().trim()
-            viewModel.getListingForTL(searchCityText, searchDateText)
-        }
     }
 
     private fun observer() = viewBinding.apply {
@@ -158,6 +173,7 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
 
                 is Lce.Content -> {
                     progressBar.visibility = View.GONE
+                    progressBarBottom.visibility = View.GONE
                     setupReyclerView(res.content)
                 }
 
@@ -169,19 +185,73 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
         })
     }
 
-    private fun setupReyclerView(res: List<ListingTLModel>) {
+    var swipeToRefresh = true
+
+    private fun setupReyclerView(res: List<ListingTLModel>)  = viewBinding.apply{
 
         if (res.isEmpty()) {
-            viewBinding.noData.visibility = View.VISIBLE
-            viewBinding.datecityRv.visibility = View.GONE
+            noData.visibility = View.VISIBLE
+            datecityRv.visibility = View.GONE
         } else {
-            viewBinding.noData.visibility = View.GONE
-            viewBinding.datecityRv.visibility = View.VISIBLE
+            noData.visibility = View.GONE
+            datecityRv.visibility = View.VISIBLE
         }
-        viewBinding.datecityRv.layoutManager = LinearLayoutManager(context)
-        tlLoginSummaryAdapter.submitList(res)
-        viewBinding.datecityRv.adapter = tlLoginSummaryAdapter
+        val layoutManager = LinearLayoutManager(context)
+        datecityRv.layoutManager = layoutManager
+        if (currentPage == 1){
+            Log.d("pag", "zero $currentPage, list : ${res.size}")
+            tlLoginSummaryAdapter.submitList(res)
+        }else {
+            Log.d("pag", "nonzero $currentPage, list : ${res.size}" )
+            tlLoginSummaryAdapter.updateList(res)
+            tlLoginSummaryAdapter.notifyDataSetChanged()
+            if (layoutManager.findLastVisibleItemPosition() >= 6 && layoutManager.findFirstVisibleItemPosition()<=6){
+                scrollingAdded = false
+            }
+
+            datecityRv.smoothScrollToPosition(tlLoginSummaryAdapter.itemCount/2)
+
+        }
+        datecityRv.adapter = tlLoginSummaryAdapter
+        val totalPages = res.get(0).totalPages
+
+
+        datecityRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+
+
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                    isLoading = true
+                }
+
+            }
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                //Log.d("Scrolled", "onScrolled $dx ,: $dy")
+//                firstPageVisible = false
+                val currentItemsLatest = layoutManager.childCount
+                val totalItemsLatest = layoutManager.itemCount
+
+
+                //Log.d("Scrolled", " isLoading: ${isLoading} , currentItemsLatest : $currentItemsLatest, lastVisibleItemPosition: $lastVisibleItemPosition, totalItemsLatest: $totalItemsLatest ")
+                //if (isLoading && (currentItemsLatest + lastVisibleItemPosition == totalItemsLatest) && (totalItemsLatest <= tlLoginSummaryAdapter.itemCount)   ) {
+                if ((currentPage < totalPages) && isLoading ){
+                    //load next page
+                    currentPage += 1
+                    isLoading = false
+                    scrollingAdded = true
+                    swipeToRefresh = false
+                    progressBarBottom.visibility = View.VISIBLE
+                    viewModel.getListingForTL(currentPage)
+
+                }
+
+            }
+        })
+
     }
+
 
     override fun onTlItemSelected(listingTLModel: ListingTLModel) {
         if (DateUtils.isToday(listingTLModel.dateTimestamp)) {
