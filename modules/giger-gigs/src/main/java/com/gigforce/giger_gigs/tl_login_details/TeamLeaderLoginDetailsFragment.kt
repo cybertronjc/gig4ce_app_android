@@ -128,6 +128,7 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
         //loadFirstPage
         currentPage = 1
         isLoading = false
+        showToast("getting first page")
         viewModel.getListingForTL(1)
     }
 
@@ -185,7 +186,11 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
             Log.d("pag", "nonzero $currentPage, list : ${res.size}" )
             tlLoginSummaryAdapter.updateList(res)
             tlLoginSummaryAdapter.notifyDataSetChanged()
-            scrollingAdded = false
+            val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+            if (firstVisibleItemPosition == 6){
+                scrollingAdded = false
+            }
+
             datecityRv.smoothScrollToPosition(tlLoginSummaryAdapter.itemCount/2)
 
         }
@@ -199,7 +204,7 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
 
 
                 if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
-                    isLoading = true;
+                    isLoading = true
                 }
 
             }
@@ -210,11 +215,12 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
                 val currentItemsLatest = layoutManager.childCount
                 val totalItemsLatest = layoutManager.itemCount
 
-                val lastVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+
                 //Log.d("Scrolled", " isLoading: ${isLoading} , currentItemsLatest : $currentItemsLatest, lastVisibleItemPosition: $lastVisibleItemPosition, totalItemsLatest: $totalItemsLatest ")
                 //if (isLoading && (currentItemsLatest + lastVisibleItemPosition == totalItemsLatest) && (totalItemsLatest <= tlLoginSummaryAdapter.itemCount)   ) {
                 if ((currentPage < totalPages) && isLoading ){
                     //load next page
+                    showToast("getting next page")
                     currentPage += 1
                     isLoading = false
                     scrollingAdded = true
