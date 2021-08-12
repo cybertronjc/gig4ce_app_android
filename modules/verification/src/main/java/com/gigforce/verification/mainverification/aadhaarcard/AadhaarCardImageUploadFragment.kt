@@ -204,12 +204,15 @@ class AadhaarCardImageUploadFragment : Fragment(),
 
     }
 
+    var manuallyRequestBackpress = false
+
     private fun listeners() {
 
 
         viewBinding.submitButton.setOnClickListener {
 
             hideSoftKeyboard()
+            manuallyRequestBackpress = true
             activity?.onBackPressed()
         }
 
@@ -242,7 +245,7 @@ class AadhaarCardImageUploadFragment : Fragment(),
 
     override fun onBackPressed(): Boolean {
         if (FROM_CLIENT_ACTIVATON) {
-            if (verificationScreenStatus == VerificationScreenStatus.DEFAULT) {
+            if (!manuallyRequestBackpress) {
                 var navFragmentsData = activity as NavFragmentsData
                 navFragmentsData.setData(
                     bundleOf(

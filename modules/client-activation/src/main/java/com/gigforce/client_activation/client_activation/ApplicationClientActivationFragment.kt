@@ -219,8 +219,12 @@ class ApplicationClientActivationFragment : Fragment(),
 
     private fun checkForRedirection() {
         if (!viewModel.redirectToNextStep) return
-        for (i in adapter.items.indices) {
+
+
+
+        for (i in viewModel.itemClicked+1 until adapter.items.size) {
             if (!adapter.items[i].isDone) {
+
                 Log.d("type", adapter.items[i].toString())
                 when (adapter.items[i].type) {
                     "profile_pic" -> {
@@ -274,6 +278,7 @@ class ApplicationClientActivationFragment : Fragment(),
                         bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
                     )
                 }
+                viewModel.itemClicked = i
                 break
             }
         }
@@ -349,8 +354,9 @@ class ApplicationClientActivationFragment : Fragment(),
                 win?.setStatusBarColor(resources.getColor(R.color.status_bar_pink))
             }
 
-    override fun onItemClick(dependency: Dependency) {
+    override fun onItemClick(dependency: Dependency, position:Int) {
         viewModel.redirectToNextStep = true
+        viewModel.itemClicked = position
 
         when (dependency.type) {
             "profile_pic" -> {
