@@ -168,7 +168,9 @@ class AddNewLoginSummaryFragment : Fragment() {
                         businessDataReqModel.legalName,
                         businessDataReqModel.gigerCount,
                         businessDataReqModel.updatedBy,
-                        itemMode
+                        itemMode,
+                        businessDataReqModel.jobProfileId,
+                        businessDataReqModel.jobProfileName,
                     ))
                 }
                 viewModel.processBusinessList(list)
@@ -208,7 +210,10 @@ class AddNewLoginSummaryFragment : Fragment() {
                 loginSummaryBusiness.legalName,
                 loginSummaryBusiness.businessName,
                 selectedCity,
-                loginSummaryBusiness.loginCount
+                loginSummaryBusiness.loginCount,
+                null,
+                loginSummaryBusiness.jobProfileId,
+                loginSummaryBusiness.jobProfileName
             )
             businessList.add(businessDataReqModel)
         }

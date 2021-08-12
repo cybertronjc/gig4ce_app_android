@@ -3,104 +3,200 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".tl_login_details.TeamLeaderLoginDetailsFragment"
-        >
+        android:orientation="vertical"
+        tools:context=".tl_login_details.TeamLeaderLoginDetailsFragment">
 
-        <com.gigforce.common_ui.views.GigforceToolbar
+        <com.gigforce.common_ui.components.cells.AppBar
             android:id="@+id/appBar"
             android:layout_width="match_parent"
             android:layout_height="?android:attr/actionBarSize"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:backgroundType="WhiteBar"
+            app:titleText="Daily report" />
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/appBar"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            android:layout_weight="1">
 
             <TextView
                 android:id="@+id/teamLeaderName"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Team Leader name"
-                android:padding="6dp"
-                android:fontFamily="@font/lato_bold"
-                android:background="@drawable/border_option_grey"
                 android:layout_marginStart="@dimen/size_16"
+                android:layout_marginTop="@dimen/size_20"
                 android:layout_marginEnd="@dimen/size_16"
-                android:layout_marginTop="@dimen/size_16"
+                android:fontFamily="@font/lato_bold"
+                android:lineHeight="12sp"
+                android:textColor="#202325"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
-
-            <Spinner
-                android:id="@+id/citySpinner"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/size_46"
-                android:clickable="true"
-                android:inputType="none"
-                android:layout_marginTop="@dimen/size_16"
-                android:layout_marginStart="@dimen/size_16"
-                android:layout_marginEnd="@dimen/size_16"
-                app:layout_constraintTop_toBottomOf="@id/teamLeaderName"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                tools:text="Team Leader name" />
 
             <TextView
-                android:id="@+id/cityTextView"
+                android:id="@+id/date_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginTop="@dimen/size_20"
+                android:layout_marginEnd="@dimen/size_16"
+                android:fontFamily="@font/lato"
+                android:lineHeight="12sp"
+                android:textColor="#979c9e"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Team Leader name" />
+
+
+
+            <LinearLayout
+                android:id="@+id/city_job_profile_controls"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="City"
-                android:visibility="invisible"
-                android:padding="6dp"
-                android:fontFamily="@font/lato_bold"
-                android:background="@drawable/border_option_grey"
-                android:layout_marginTop="@dimen/size_16"
-                android:layout_marginStart="@dimen/size_16"
-                android:layout_marginEnd="@dimen/size_16"
-                app:layout_constraintTop_toBottomOf="@id/teamLeaderName"
+                android:orientation="vertical"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@id/teamLeaderName">
+
+                <LinearLayout
+                    android:id="@+id/city_spinner_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                   >
+
+                    <Spinner
+                        android:id="@+id/citySpinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size_46"
+                        android:layout_marginStart="@dimen/size_16"
+                        android:layout_marginTop="@dimen/size_16"
+                        android:layout_marginEnd="@dimen/size_16"
+                        android:background="@drawable/spinner_background_rectangle_round_pink"
+                        android:clickable="true"
+                        android:inputType="none" />
+
+                    <TextView
+                        android:id="@+id/cityTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size_46"
+                        android:layout_marginStart="@dimen/size_16"
+                        android:layout_marginTop="@dimen/size_16"
+                        android:layout_marginEnd="@dimen/size_16"
+                        android:gravity="center_vertical"
+                        android:paddingStart="10dp"
+                        android:textSize="16sp"
+                        android:textColor="@color/black"
+                        android:background="@drawable/spinner_background_rectangle_round_pink"
+                        />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/business_spinner_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <Spinner
+                        android:id="@+id/businessSpinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size_46"
+                        android:layout_marginStart="@dimen/size_16"
+                        android:layout_marginTop="@dimen/size_16"
+                        android:layout_marginEnd="@dimen/size_16"
+                        android:background="@drawable/spinner_background_rectangle_round_pink"
+                        android:clickable="true"
+                        android:inputType="none" />
+
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/job_profile_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <Spinner
+                        android:id="@+id/jobProfileSpinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size_46"
+                        android:layout_marginStart="@dimen/size_16"
+                        android:layout_marginTop="@dimen/size_16"
+                        android:layout_marginEnd="@dimen/size_16"
+                        android:background="@drawable/spinner_background_rectangle_round_pink"
+                        android:clickable="true"
+                        android:inputType="none" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/report_city_overview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:cardBackgroundColor="#FCEAF0"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:cardElevation="0dp"
+                android:layout_marginTop="24dp"
+                app:layout_constraintTop_toBottomOf="@id/city_job_profile_controls">
+
+                <TextView
+                    android:id="@+id/city_overview_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp"
+                    android:paddingStart="10dp"
+                    android:textColor="#202325"
+                    android:fontFamily="@font/lato"
+                    android:text=""/>
+
+            </com.google.android.material.card.MaterialCardView>
 
             <TextView
-                android:id="@+id/dateTV"
-                android:layout_width="match_parent"
+                android:id="@+id/add_details_label"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Date"
-                android:padding="6dp"
-                android:fontFamily="@font/lato_bold"
-                android:background="@drawable/border_option_grey"
                 android:layout_marginStart="@dimen/size_16"
-                android:layout_marginEnd="@dimen/size_16"
-                android:layout_marginTop="@dimen/size_16"
-                app:layout_constraintTop_toBottomOf="@id/citySpinner"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="6sp"
+                android:textColor="#202325"
+                android:textSize="12sp"
+                android:textStyle="normal"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@id/report_city_overview"
+                tools:text="Add Details" />
+
 
             <ScrollView
                 android:id="@+id/businessRV"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:layout_marginTop="@dimen/size_4"
                 android:orientation="vertical"
-                android:layout_marginTop="@dimen/size_16"
-                android:layout_marginStart="@dimen/size_16"
-                android:layout_marginEnd="@dimen/size_16"
-                app:layout_constraintTop_toBottomOf="@id/dateTV"
                 app:layout_constraintBottom_toTopOf="@id/submit"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+                app:layout_constraintTop_toBottomOf="@id/add_details_label">
 
                 <LinearLayout
                     android:id="@+id/bussiness_report_form_container_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"/>
+                    android:orientation="vertical" />
 
             </ScrollView>
 
@@ -109,18 +205,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginStart="@dimen/size_16"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="@dimen/size_16"
                 android:layout_marginBottom="@dimen/size_22"
                 android:gravity="center"
-                android:visibility="gone"
                 android:minHeight="@dimen/size_36"
                 android:text="No Data Found"
-                android:layout_marginTop="16dp"
                 android:textColor="@color/black"
-                app:layout_constraintTop_toBottomOf="@id/dateTV"
+                android:visibility="gone"
                 app:layout_constraintBottom_toTopOf="@id/submit"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintTop_toBottomOf="@id/dateTV" />
 
             <ProgressBar
                 android:id="@+id/progressBar"
@@ -128,28 +224,30 @@
                 android:layout_height="30dp"
                 android:layout_gravity="center"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/dateTV"
                 app:layout_constraintBottom_toTopOf="@id/submit"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@id/dateTV" />
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/submit"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:background="@drawable/app_gradient_button"
                 android:layout_marginStart="@dimen/size_16"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="@dimen/size_16"
                 android:layout_marginBottom="@dimen/size_22"
                 android:gravity="center"
                 android:minHeight="@dimen/size_36"
                 android:text="Submit"
-                android:layout_marginTop="16dp"
-                android:textColor="@color/white"
+                android:textColor="@color/lipstick_2"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:strokeColor="@color/lipstick_2"
+                app:strokeWidth="1dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 </layout>

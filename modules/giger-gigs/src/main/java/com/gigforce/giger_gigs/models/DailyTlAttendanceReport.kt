@@ -8,7 +8,8 @@ data class DailyTlAttendanceReport(
 	val uID: String? = null,
 
 	@field:SerializedName("city")
-	val city: City? = null,
+	val city: LoginSummaryCity? = null,
+
 
 	@field:SerializedName("businessData")
 	val businessData: List<BusinessDataItem?>? = null,
@@ -20,20 +21,7 @@ data class DailyTlAttendanceReport(
 	val id: String? = null
 )
 
-data class City(
 
-	@field:SerializedName("country_code")
-	val countryCode: String? = null,
-
-	@field:SerializedName("name")
-	val name: String? = null,
-
-	@field:SerializedName("id")
-	val id: String? = null,
-
-	@field:SerializedName("state_code")
-	val stateCode: String? = null
-)
 
 data class BusinessDataItem(
 
@@ -50,13 +38,13 @@ data class BusinessDataItem(
 	val absentToday: Int = 0,
 
 	@field:SerializedName("city")
-	val city: City? = null,
+	var city: LoginSummaryCity? = null,
 
 	@field:SerializedName("businessId")
-	val businessId: String? = null,
+	var businessId: String? = null,
 
 	@field:SerializedName("businessName")
-	val businessName: String? = null,
+	var businessName: String? = null,
 
 	@field:SerializedName("totalActive")
 	val totalActive: Int = 0,
@@ -68,7 +56,7 @@ data class BusinessDataItem(
 	val loginToday: Int = 0,
 
 	@field:SerializedName("legalName")
-	val legalName: String? = null,
+	var legalName: String? = null,
 
 	@field:SerializedName("resignedToday")
 	val resignedToday: Int = 0,
@@ -77,5 +65,13 @@ data class BusinessDataItem(
 	val inTrainingToday: Int = 0,
 
 	@field:SerializedName("totalLineupsForTomorrow")
-	val totalLineupsForTomorrow: Int = 0
+	val totalLineupsForTomorrow: Int = 0,
+
+	@field:SerializedName("jobProfileId")
+	var jobProfileId: String? = null,
+
+	@field:SerializedName("jobProfileName")
+	var jobProfileName: String? = null
+
+
 )

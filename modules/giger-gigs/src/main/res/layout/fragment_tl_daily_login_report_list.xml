@@ -8,136 +8,130 @@
         android:layout_height="match_parent"
         tools:context=".tl_login_details.TeamLeaderLoginDetailsFragment">
 
-        <com.gigforce.common_ui.views.GigforceToolbar
+        <!--        <com.gigforce.common_ui.views.GigforceToolbar-->
+        <!--            android:id="@+id/appBar"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="?android:attr/actionBarSize"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="parent" />-->
+
+        <com.gigforce.common_ui.components.cells.AppBar
             android:id="@+id/appBar"
             android:layout_width="match_parent"
             android:layout_height="?android:attr/actionBarSize"
+            app:backgroundType="WhiteBar"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:titleText="Daily report summary" />
+
+
+        <TextView
+            android:id="@+id/tl_name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/lato_bold"
+            android:lineSpacingExtra="-2sp"
+            android:text="Durga Parsad"
+            android:textColor="#202325"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/appBar" />
+
+        <TextView
+            android:id="@+id/dateTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/lato"
+            android:lineSpacingExtra="6sp"
+            android:textColor="#979c9e"
+            android:textSize="12sp"
+            android:textStyle="normal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tl_name_tv"
+            tools:text="12-July-2021" />
+
+
+        <TextView
+            android:id="@+id/change_date_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="92dp"
+            android:fontFamily="@font/lato"
+            android:lineSpacingExtra="6sp"
+            android:padding="8dp"
+            android:text="Change Date"
+            android:textColor="#e42c64"
+            android:textSize="12sp"
+            android:textStyle="normal"
+            app:layout_constraintStart_toEndOf="@id/dateTv"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/add_new"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="@dimen/size_16"
+            android:layout_marginBottom="@dimen/size_22"
+            android:gravity="center"
+            android:minHeight="@dimen/size_36"
+            android:text="Add New"
+            android:textAllCaps="false"
+            android:textColor="@color/lipstick_2"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/appBar">
-
-            <TextView
-                android:id="@+id/add_new"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginStart="@dimen/size_16"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="@dimen/size_16"
-                android:layout_marginBottom="@dimen/size_22"
-                android:background="@drawable/app_gradient_button"
-                android:gravity="center"
-                android:minHeight="@dimen/size_36"
-                android:text="Add New"
-                android:textColor="@color/white"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <EditText
-                android:id="@+id/search_item"
-                android:layout_width="0dp"
-                android:layout_height="36dp"
-                android:layout_marginStart="@dimen/size_16"
-                android:layout_marginTop="@dimen/size_16"
-                android:layout_marginEnd="@dimen/size_16"
-                android:background="@drawable/search_background"
-                android:hint="Search By City"
-                android:maxLines="1"
-                android:paddingStart="8dp"
-                android:singleLine="true"
-                android:textColor="@color/black"
-                android:textSize="13sp"
-                app:layout_constraintEnd_toStartOf="@+id/searchDate"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/add_new" />
-
-            <TextView
-                android:id="@+id/searchDate"
-                android:layout_width="0dp"
-                android:layout_height="36dp"
-                android:layout_marginStart="@dimen/size_16"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="@dimen/size_16"
-                android:background="@drawable/search_background"
-                android:gravity="start|center_vertical"
-                android:hint="Search By Date"
-                android:minHeight="@dimen/size_36"
-                android:paddingStart="6dp"
-                android:textColor="@color/black"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/search_item"
-                app:layout_constraintTop_toBottomOf="@id/add_new" />
-
-            <TextView
-                android:id="@+id/searchButton"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginStart="@dimen/size_16"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="@dimen/size_16"
-                android:layout_marginBottom="@dimen/size_22"
-                android:background="@drawable/app_gradient_button"
-                android:gravity="center"
-                android:minHeight="@dimen/size_36"
-                android:text="Search"
-                android:textColor="@color/white"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/searchDate" />
+            app:strokeColor="@color/lipstick_2"
+            app:strokeWidth="1dp" />
 
 
-            <ProgressBar
-                android:id="@+id/progressBar"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/searchButton" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/datecity_rv"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="28dp"
+            app:layout_constraintBottom_toTopOf="@id/add_new"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dateTv" />
 
-            <TextView
-                android:id="@+id/noData"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginStart="@dimen/size_16"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="@dimen/size_16"
-                android:layout_marginBottom="@dimen/size_22"
-                android:gravity="center"
-                android:minHeight="@dimen/size_36"
-                android:text="No Data Found"
-                android:textColor="@color/black"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/searchButton" />
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/datecity_rv"
+            app:layout_constraintEnd_toEndOf="@id/datecity_rv"
+            app:layout_constraintStart_toStartOf="@id/datecity_rv"
+            app:layout_constraintTop_toTopOf="@id/datecity_rv" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/datecity_rv"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginStart="@dimen/size_16"
-                android:layout_marginTop="@dimen/size_16"
-                android:layout_marginEnd="@dimen/size_16"
-                android:layout_marginBottom="@dimen/size_46"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/searchButton" />
+        <TextView
+            android:id="@+id/noData"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="@dimen/size_16"
+            android:layout_marginBottom="@dimen/size_22"
+            android:gravity="center"
+            android:minHeight="@dimen/size_36"
+            android:text="No Data Found"
+            android:textColor="@color/black"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/datecity_rv"
+            app:layout_constraintEnd_toEndOf="@id/datecity_rv"
+            app:layout_constraintStart_toStartOf="@id/datecity_rv"
+            app:layout_constraintTop_toTopOf="@id/datecity_rv" />
 
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

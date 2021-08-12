@@ -445,7 +445,12 @@ data class JobProfile(
         @get:PropertyName("title")
         @set:PropertyName("title")
         var title: String? = null
-) : Parcelable
+) : Parcelable{
+
+    override fun toString(): String {
+        return title ?: ""
+    }
+}
 
 
 @Parcelize

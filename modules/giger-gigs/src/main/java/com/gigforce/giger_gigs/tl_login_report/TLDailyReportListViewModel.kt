@@ -8,6 +8,7 @@ import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.core.utils.Lce
+import com.gigforce.giger_gigs.models.DailyLoginReport
 import com.gigforce.giger_gigs.models.ListingTLModel
 import com.gigforce.giger_gigs.models.LoginSummaryBusiness
 import com.gigforce.giger_gigs.models.LoginSummaryCity
@@ -31,8 +32,8 @@ class TLDailyReportListViewModel @Inject constructor(
     private var _cities = MutableLiveData<Lce<List<LoginSummaryCity>>>()
     var cities : LiveData<Lce<List<LoginSummaryCity>>> = _cities
 
-    private var _loginListing = MutableLiveData<Lce<List<ListingTLModel>>>()
-    var loginListing : LiveData<Lce<List<ListingTLModel>>> = _loginListing
+    private var _loginListing = MutableLiveData<Lce<List<DailyLoginReport>>>()
+    var loginListing : LiveData<Lce<List<DailyLoginReport>>> = _loginListing
 
 
     private var _businesses = MutableLiveData<Lce<List<LoginSummaryBusiness>>>()

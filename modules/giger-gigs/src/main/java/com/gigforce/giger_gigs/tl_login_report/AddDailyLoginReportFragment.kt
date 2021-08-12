@@ -2,33 +2,32 @@ package com.gigforce.giger_gigs.tl_login_report
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 import com.gigforce.core.base.BaseFragment2
-import com.gigforce.core.extensions.invisible
+import com.gigforce.core.datamodels.gigpage.JobProfile
+import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
-import com.gigforce.core.utils.DateHelper
 import com.gigforce.core.utils.Lce
 import com.gigforce.giger_gigs.LoginSummaryConstants
 import com.gigforce.giger_gigs.R
-import com.gigforce.giger_gigs.databinding.AddNewLoginSummaryFragmentBinding
 import com.gigforce.giger_gigs.databinding.FragmentAddNewLoginReportBinding
 import com.gigforce.giger_gigs.models.*
+import com.gigforce.giger_gigs.tl_login_report.views.DailyLoginReportItemEdit
 import com.gigforce.giger_gigs.tl_login_report.views.DailyLoginReportItemView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_add_new_login_report.*
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
@@ -36,7 +35,7 @@ import javax.inject.Inject
 class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBinding>(
     fragmentName = "AddDailyLoginReportFragment",
     layoutId = R.layout.fragment_add_new_login_report,
-    statusBarColor = R.color.lipstick_2
+    statusBarColor = R.color.white
 ) {
 
     companion object {
@@ -52,12 +51,13 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
 
     private var mode = -1
 
-    var arrayAdapter: ArrayAdapter<String>? = null
-    var citiesArray = arrayListOf<String>()
     var selectedCity: LoginSummaryCity = LoginSummaryCity()
     var citiesModelArray = listOf<LoginSummaryCity>()
     var businessListToSubmit = listOf<LoginSummaryBusiness>()
-    private  var loginSummaryDetails : ListingTLModel? = null
+    private var loginSummaryDetails: DailyLoginReport? = null
+    private val dateFormatter = SimpleDateFormat("dd-MMM-yyyy")
+    private val standardDateFormatter = SimpleDateFormat("dd-MM-yyyy")
+
 
     override fun viewCreated(
         viewBinding: FragmentAddNewLoginReportBinding,
@@ -94,26 +94,26 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
                 val userUid = FirebaseAuth.getInstance().uid
                 val profileData = profileFirebaseRepository.getProfileData(userUid)
                 viewBinding.teamLeaderName.text = profileData.name
-            }catch (e: Exception){
+            } catch (e: Exception) {
 
             }
         }
 
-        val c: Date = Calendar.getInstance().getTime()
-        viewBinding.dateTV.text = DateHelper.getDateInDDMMYYYY(c)
+        if (mode == LoginSummaryConstants.MODE_VIEW) {
+            viewBinding.submit.gone()
+            loginSummaryDetails?.let {
 
-        if (mode == LoginSummaryConstants.MODE_VIEW){
-            viewBinding.submit.invisible()
-        }else {
+                val date = standardDateFormatter.parse(it.date)
+                viewBinding.dateTextview.text = dateFormatter.format(date)
+            }
+        } else {
+            viewBinding.dateTextview.text = dateFormatter.format(Date()) //remove it from here
             viewBinding.submit.visible()
         }
-
     }
 
     private fun initToolbar() = viewBinding.apply {
         appBar.apply {
-            hideActionMenu()
-            showTitle("Add New Login Report")
             setBackButtonListener(View.OnClickListener {
                 activity?.onBackPressed()
             })
@@ -122,12 +122,10 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
 
     private fun listeners() = viewBinding.apply {
 
-        arrayAdapter = context?.let { ArrayAdapter(it,android.R.layout.simple_spinner_dropdown_item, citiesArray) }
-        citySpinner.setAdapter(arrayAdapter)
 
         submit.setOnClickListener {
-            if (mode == LoginSummaryConstants.MODE_ADD){
-                if (citySpinner.selectedItem.toString().isEmpty()){
+            if (mode == LoginSummaryConstants.MODE_ADD) {
+                if (citySpinner.selectedItem.toString().isEmpty()) {
                     showToast("Select a city to continue")
                 } else {
                     //submit data
@@ -140,83 +138,129 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
 
         }
 
-        if (mode == LoginSummaryConstants.MODE_ADD){
+        if (mode == LoginSummaryConstants.MODE_ADD) {
+            cityJobProfileControls.visible()
+            reportCityOverview.gone()
+            addDetailsLabel.text = "Add details"
+            cityTextView.gone()
+
             viewModel.getCities()
-        } else {
-            if (loginSummaryDetails != null){
-                citiesArray.add(loginSummaryDetails?.city?.name.toString())
+        } else if(mode == LoginSummaryConstants.MODE_EDIT) {
+            addDetailsLabel.text = "Details"
+            cityJobProfileControls.visible()
+            reportCityOverview.gone()
+
+            if (loginSummaryDetails != null) {
                 citiesModelArray.toMutableList().add(loginSummaryDetails?.city!!)
                 citySpinner.isEnabled = false
-                citySpinner.invisible()
-                cityTextView.visible()
-                cityTextView.setText(loginSummaryDetails?.city?.name.toString())
+                citySpinner.gone()
 
-                var itemMode = 0
-                if (mode == LoginSummaryConstants.MODE_VIEW){
-                    itemMode = 1
-                }
+                cityTextView.visible()
+                cityTextView.text = loginSummaryDetails?.city?.name ?: ""
+                cityOverviewTextview.gone()
 
                 //set businesses
-                val list = arrayListOf<LoginSummaryBusiness>()
-                loginSummaryDetails?.businessData?.forEachIndexed { index, businessDataReqModel ->
-                    list.add(LoginSummaryBusiness(
-                        businessDataReqModel.businessId,
-                        businessDataReqModel.businessName,
-                        businessDataReqModel.legalName,
-                        businessDataReqModel.gigerCount,
-                        businessDataReqModel.updatedBy,
-                        itemMode
-                    ))
+                if (loginSummaryDetails != null) {
+                    viewModel.processBusinessList(
+                        listOf(loginSummaryDetails!!.businessData!!)
+                    )
                 }
-                viewModel.processBusinessList(list)
+            }
+        } else {
+
+            addDetailsLabel.text = "Details"
+            cityJobProfileControls.gone()
+            reportCityOverview.visible()
+
+            if (loginSummaryDetails != null) {
+                citiesModelArray.toMutableList().add(loginSummaryDetails?.city!!)
+                citySpinner.isEnabled = false
+                citySpinner.gone()
+
+                cityOverviewTextview.text = "${loginSummaryDetails?.businessData?.jobProfileName} " +
+                        "at " +
+                        "${loginSummaryDetails?.businessData?.businessName} " +
+                        "- " +
+                        "${loginSummaryDetails?.city?.name}"
+
+                //set businesses
+                if (loginSummaryDetails != null) {
+                    viewModel.processBusinessList(
+                        listOf(loginSummaryDetails!!.businessData!!)
+                    )
+                }
             }
         }
 
-        viewBinding.citySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                val cityId = citiesModelArray.get(p2).id
-                selectedCity = citiesModelArray.get(p2)
-                if (mode == LoginSummaryConstants.MODE_ADD){
-                    viewModel.getBusinessByCity(cityId = cityId)
+        viewBinding.citySpinner.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                    val cityId = citiesModelArray.get(p2).id
+                    selectedCity = citiesModelArray.get(p2)
+                    if (mode == LoginSummaryConstants.MODE_ADD) {
+                        viewModel.getBusinessByCity(cityId = cityId)
+                    }
+
                 }
 
-            }
+                override fun onNothingSelected(p0: AdapterView<*>?) {
 
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-
+                }
             }
-        }
     }
 
     private fun submitLoginSummary() {
         val tlUID = FirebaseAuth.getInstance().currentUser?.uid
-        val businessList = arrayListOf<BusinessDataReqModel>()
-        var isUpdate = false
-        if (mode == LoginSummaryConstants.MODE_ADD){
-            isUpdate = false
-        } else {
-            isUpdate = true
-        }
-        businessListToSubmit = viewModel.getBusinessListForProcessingData()
-        businessListToSubmit.forEachIndexed { index, loginSummaryBusiness ->
-            val businessDataReqModel = BusinessDataReqModel(
-                loginSummaryBusiness.business_id,
-                loginSummaryBusiness.legalName,
-                loginSummaryBusiness.businessName,
-                selectedCity,
-                loginSummaryBusiness.loginCount
-            )
-            businessList.add(businessDataReqModel)
-        }
-        val addNewSummaryReqModel = AddNewSummaryReqModel(
-            tlUID.toString(),
-            selectedCity,
-            businessList,
-            isUpdate,
-            loginSummaryDetails?.id.toString()
+        if (viewBinding.jobProfileSpinner.childCount == 0) {
 
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Select job profile")
+                .setMessage("Select job profile please")
+                .setPositiveButton("Okay") { _, _ -> }
+                .show()
+            return
+        }
+
+        if (viewBinding.businessSpinner.childCount == 0) {
+
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Select business")
+                .setMessage("Select business please")
+                .setPositiveButton("Okay") { _, _ -> }
+                .show()
+            return
+        }
+
+
+        val businessSelected = viewBinding.businessSpinner.selectedItem as LoginSummaryBusiness
+        val jobProfile = viewBinding.jobProfileSpinner.selectedItem as JobProfile
+        val dailyTLReportList: MutableList<DailyTlAttendanceReport> = mutableListOf()
+        for (i in 0 until viewBinding.bussinessReportFormContainerLayout.childCount) {
+            val itemView =
+                viewBinding.bussinessReportFormContainerLayout.getChildAt(i) as DailyLoginReportItemEdit
+
+            val businessDataItem = itemView.getDailyReportItem()
+            businessDataItem.city = selectedCity
+            businessDataItem.jobProfileId = jobProfile.id
+            businessDataItem.jobProfileName = jobProfile.title
+            businessDataItem.businessId = businessSelected.business_id
+            businessDataItem.businessName = businessSelected.businessName
+            businessDataItem.legalName = businessSelected.legalName
+
+            dailyTLReportList.add(
+                DailyTlAttendanceReport(
+                    uID = tlUID.toString(),
+                    city = selectedCity,
+                    businessData = listOf(businessDataItem),
+                    update = false,
+                    loginSummaryDetails?.id.toString()
+                )
+            )
+        }
+
+        viewModel.submitLoginReportData(
+            addNewSummaryReqModel = dailyTLReportList
         )
-        viewModel.submitLoginSummaryData(addNewSummaryReqModel = addNewSummaryReqModel)
     }
 
     private fun observer() = viewBinding.apply {
@@ -229,7 +273,7 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
                 is Lce.Content -> {
                     showToast("getting cities")
 
-                    if (mode == LoginSummaryConstants.MODE_ADD){
+                    if (mode == LoginSummaryConstants.MODE_ADD) {
                         citySpinner.isEnabled = true
                         processCities(it.content)
 
@@ -266,7 +310,7 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
         viewModel.submitDataState.observe(viewLifecycleOwner, Observer {
             val result = it ?: return@Observer
 
-            when(result) {
+            when (result) {
                 "Loading" -> {
                     showToast("Submitting data")
                     viewBinding.progressBar.visibility = View.VISIBLE
@@ -292,34 +336,85 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
     }
 
 
-    private fun showBusinesses(businessList: List<LoginSummaryBusiness>)  = viewBinding.apply {
+    private fun showBusinesses(businessList: List<BusinessData>) = viewBinding.apply {
         Log.d("List", "Business list $businessList")
-        businessList.forEach {
-            val view = DailyLoginReportItemView(requireContext(),null)
-            bussinessReportFormContainerLayout.addView(view)
 
-            view.showData(
-                BusinessDataItem(
-                    city = City(
+        if(mode == LoginSummaryConstants.MODE_VIEW){
 
-                    ),
-                    businessId = it.business_id,
-                    businessName = it.businessName,
-                    legalName = it.legalName
+            bussinessReportFormContainerLayout.removeAllViews()
+            if (businessList.isNotEmpty()) {
+
+                val bussinessData = businessList.first()
+
+                val view = DailyLoginReportItemView(requireContext(), null)
+                bussinessReportFormContainerLayout.addView(view)
+
+                view.showData(
+                    bussinessData
                 )
+            }
+
+        } else {
+
+            val business = businessList.map {
+                LoginSummaryBusiness(
+                    business_id = it.businessId ?: "",
+                    businessName = it.businessName ?: "",
+                    legalName = it.legalName ?: ""
+                )
+            }.distinctBy {
+                it.business_id
+            }
+            val businessArrayAdapter = ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_spinner_dropdown_item,
+                business
             )
+            businessSpinner.setAdapter(businessArrayAdapter)
+
+            //show job profiles in view
+            val jobProfiles = businessList.map {
+                JobProfile(
+                    id = it.jobProfileId,
+                    title = it.jobProfileName
+                )
+            }.distinctBy {
+                it.id
+            }
+            val jobProfileArrayAdapter = ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_spinner_dropdown_item,
+                jobProfiles
+            )
+            jobProfileSpinner.setAdapter(jobProfileArrayAdapter)
+
+            bussinessReportFormContainerLayout.removeAllViews()
+            if (businessList.isNotEmpty()) {
+
+                val bussinessData = businessList.first()
+
+                val view = DailyLoginReportItemEdit(requireContext(), null)
+                bussinessReportFormContainerLayout.addView(view)
+
+                view.showData(
+                    bussinessData
+                )
+            }
         }
     }
 
     private fun processCities(content: List<LoginSummaryCity>) {
         citiesModelArray = content
-        citiesModelArray.forEach {
-            citiesArray.add(it.name)
+
+        val arrayAdapter = context?.let {
+            ArrayAdapter(
+                it,
+                android.R.layout.simple_spinner_dropdown_item,
+                citiesModelArray
+            )
         }
-        arrayAdapter?.notifyDataSetChanged()
+        citySpinner.setAdapter(arrayAdapter)
     }
-
-
 
 
 }

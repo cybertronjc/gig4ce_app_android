@@ -20,12 +20,17 @@ import com.gigforce.core.utils.DateHelper
 import com.gigforce.core.utils.Lce
 import com.gigforce.giger_gigs.LoginSummaryConstants
 import com.gigforce.giger_gigs.R
+import com.gigforce.giger_gigs.adapters.OnTlReportItemSelectedListener
+import com.gigforce.giger_gigs.adapters.TLLoginReportAdapter
 import com.gigforce.giger_gigs.adapters.TLLoginSummaryAdapter
 import com.gigforce.giger_gigs.databinding.FragmentTlDailyLoginReportListBinding
 import com.gigforce.giger_gigs.databinding.TeamLeaderLoginDetailsFragmentBinding
+import com.gigforce.giger_gigs.models.DailyLoginReport
 import com.gigforce.giger_gigs.models.ListingTLModel
 import com.gigforce.giger_gigs.tl_login_details.views.OnTlItemSelectedListener
 import dagger.hilt.android.AndroidEntryPoint
+import java.text.SimpleDateFormat
+import java.time.format.DateTimeFormatter
 import java.util.*
 import javax.inject.Inject
 
@@ -33,9 +38,8 @@ import javax.inject.Inject
 class TLDailyReportListFragment : BaseFragment2<FragmentTlDailyLoginReportListBinding>(
     fragmentName = "TLDailyReportListFragment",
     layoutId = R.layout.fragment_tl_daily_login_report_list,
-    statusBarColor = R.color.lipstick_2
-),
-    OnTlItemSelectedListener {
+    statusBarColor = R.color.white
+), OnTlReportItemSelectedListener {
 
     companion object {
         fun newInstance() = TLDailyReportListFragment()
@@ -44,9 +48,11 @@ class TLDailyReportListFragment : BaseFragment2<FragmentTlDailyLoginReportListBi
     @Inject
     lateinit var navigation: INavigation
     private val viewModel: TLDailyReportListViewModel by viewModels()
+    private val dateFormatter =  SimpleDateFormat("dd-MMM-yyyy")
+    private val standardDateFormatter =  SimpleDateFormat("dd-MM-yyyy")
 
-    private val tlLoginSummaryAdapter: TLLoginSummaryAdapter by lazy {
-        TLLoginSummaryAdapter().apply {
+    private val tlLoginSummaryAdapter: TLLoginReportAdapter by lazy {
+        TLLoginReportAdapter().apply {
             setOnTlItemSelectedListener(this@TLDailyReportListFragment)
         }
     }
@@ -64,8 +70,8 @@ class TLDailyReportListFragment : BaseFragment2<FragmentTlDailyLoginReportListBi
 
     private fun initToolbar() = viewBinding.apply {
         appBar.apply {
-            hideActionMenu()
-            showTitle("Login Report")
+//            hideActionMenu()
+//            showTitle("Login Report")
             setBackButtonListener(View.OnClickListener {
                 activity?.onBackPressed()
             })
@@ -73,8 +79,9 @@ class TLDailyReportListFragment : BaseFragment2<FragmentTlDailyLoginReportListBi
     }
 
     private fun initializeViews() = viewBinding.apply {
-            viewModel.getListingForTL("", "")
 
+        viewBinding.dateTv.text = dateFormatter.format(Date())
+        viewModel.getListingForTL("", standardDateFormatter.format(Date()))
     }
 
     private val datePicker: DatePickerDialog by lazy {
@@ -86,7 +93,9 @@ class TLDailyReportListFragment : BaseFragment2<FragmentTlDailyLoginReportListBi
                 newCal.set(Calendar.YEAR, year)
                 newCal.set(Calendar.MONTH, month)
                 newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                viewBinding.searchDate.text = DateHelper.getDateInDDMMYYYY(newCal.time)
+                viewBinding.dateTv.text = dateFormatter.format(newCal.time)
+
+                viewModel.getListingForTL("", standardDateFormatter.format(newCal.time))
             },
             2050,
             cal.get(Calendar.MONTH),
@@ -104,14 +113,8 @@ class TLDailyReportListFragment : BaseFragment2<FragmentTlDailyLoginReportListBi
             ))
         }
 
-        searchDate.setOnClickListener {
+        changeDateBtn.setOnClickListener {
             datePicker.show()
-        }
-
-        searchButton.setOnClickListener {
-            val searchCityText = searchItem.text.toString().trim()
-            val searchDateText = searchDate.text.toString().trim()
-            viewModel.getListingForTL(searchCityText, searchDateText)
         }
     }
 
@@ -136,7 +139,7 @@ class TLDailyReportListFragment : BaseFragment2<FragmentTlDailyLoginReportListBi
         })
     }
 
-    private fun setupReyclerView(res: List<ListingTLModel>) {
+    private fun setupReyclerView(res: List<DailyLoginReport>) {
 
         if (res.isEmpty()){
             viewBinding.noData.visibility = View.VISIBLE
@@ -150,7 +153,8 @@ class TLDailyReportListFragment : BaseFragment2<FragmentTlDailyLoginReportListBi
         viewBinding.datecityRv.adapter = tlLoginSummaryAdapter
     }
 
-    override fun onTlItemSelected(listingTLModel: ListingTLModel) {
+
+    override fun onTlReportSelected(listingTLModel: DailyLoginReport) {
         if (DateUtils.isToday(listingTLModel.dateTimestamp)){
             navigation.navigateTo("tlReport/addLoginReportFragment", bundleOf(
                 LoginSummaryConstants.INTENT_EXTRA_MODE to LoginSummaryConstants.MODE_EDIT,
@@ -162,5 +166,6 @@ class TLDailyReportListFragment : BaseFragment2<FragmentTlDailyLoginReportListBi
                 LoginSummaryConstants.INTENT_EXTRA_MODE to LoginSummaryConstants.MODE_VIEW
             ))
 
-        }}
+        }
+    }
 }

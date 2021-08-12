@@ -2,10 +2,7 @@ package com.gigforce.giger_gigs.repositories
 
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.retrofit.RetrofitFactory
-import com.gigforce.giger_gigs.models.AddNewSummaryReqModel
-import com.gigforce.giger_gigs.models.ListingTLModel
-import com.gigforce.giger_gigs.models.LoginSummaryBusiness
-import com.gigforce.giger_gigs.models.LoginSummaryCity
+import com.gigforce.giger_gigs.models.*
 import com.gigforce.giger_gigs.tl_login_details.LoginSummaryService
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
@@ -59,6 +56,23 @@ class TlLoginSummaryRepository (
         }
     }
 
+    suspend fun submitLoginReport(
+        addNewSummaryReqModel: List<DailyTlAttendanceReport>
+    ) {
+
+        addNewSummaryReqModel.forEach {
+
+            val response = loginSummaryService.submitLoginReport(
+                buildConfig.getBaseUrl() + "tlDailyReport/submit" ,
+                it
+            )
+
+            if (!response.isSuccessful){
+                throw Exception(response.message())
+            }
+        }
+    }
+
     suspend fun fetchListingForTL(searchCity: String,searchDate: String,page: Int, pageSize: Int): List<ListingTLModel> {
         val response = loginSummaryService.getListingForTL(buildConfig.getListingBaseUrl() + "/listingForTL/"+userUid, searchCity, searchDate, page, pageSize)
 
@@ -69,8 +83,14 @@ class TlLoginSummaryRepository (
         }
     }
 
-    suspend fun fetchTLDailyLoginReportListingForTL(searchCity: String,searchDate: String,page: Int, pageSize: Int): List<ListingTLModel> {
-        val response = loginSummaryService.getListingForTL(buildConfig.getBaseUrl() + "tlDailyReport/listingForTL/"+userUid, searchCity, searchDate, page, pageSize)
+    suspend fun fetchTLDailyLoginReportListingForTL(searchCity: String,searchDate: String,page: Int, pageSize: Int): List<DailyLoginReport> {
+        val response = loginSummaryService.getDailyLoginReportListingForTL(
+            buildConfig.getBaseUrl() + "tlDailyReport/listingForTL/" + userUid,
+            searchCity,
+            searchDate,
+            page,
+            pageSize
+        )
 
         if (!response.isSuccessful){
             throw Exception(response.message())

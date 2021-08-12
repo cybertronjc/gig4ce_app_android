@@ -8,11 +8,9 @@ import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.core.utils.Lce
-import com.gigforce.giger_gigs.models.AddNewSummaryReqModel
-import com.gigforce.giger_gigs.models.BusinessListRecyclerItemData
-import com.gigforce.giger_gigs.models.LoginSummaryBusiness
-import com.gigforce.giger_gigs.models.LoginSummaryCity
+import com.gigforce.giger_gigs.models.*
 import com.gigforce.giger_gigs.repositories.TlLoginSummaryRepository
+import com.google.gson.annotations.SerializedName
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -29,7 +27,7 @@ sealed class BusinessAppViewState {
     ) : BusinessAppViewState()
 
     data class BusinessListLoaded(
-        val businessList: List<LoginSummaryBusiness>
+        val businessList: List<BusinessData>
     ) : BusinessAppViewState()
 
 }
@@ -55,8 +53,8 @@ class AddDailyLoginReportViewModel @Inject constructor (
 
     var businessListForView = mutableListOf<BusinessListRecyclerItemData>()
 
-    private var businessList: List<LoginSummaryBusiness> = emptyList()
-    private var businessListShown: List<LoginSummaryBusiness> = emptyList()
+    private var businessList: List<BusinessData> = emptyList()
+    private var businessListShown: List<BusinessData> = emptyList()
 
     private val _viewState = MutableLiveData<BusinessAppViewState>()
     val viewState: LiveData<BusinessAppViewState> = _viewState
@@ -80,8 +78,17 @@ class AddDailyLoginReportViewModel @Inject constructor (
     fun getBusinessByCity(cityId: String) = viewModelScope.launch {
         _viewState.postValue(BusinessAppViewState.LoadingDataFromServer)
 
+
         try {
-            businessList = tlLoginSummaryRepository.getBusinessByCity(cityId)
+            businessList = tlLoginSummaryRepository.getBusinessByCity(cityId).map {
+                BusinessData(
+                    legalName = it.legalName,
+                    businessId = it.business_id,
+                    businessName = it.businessName,
+                    jobProfileId = it.jobProfileId,
+                    jobProfileName = it.jobProfileName
+                )
+            }
             businessListShown = businessList
 
             _viewState.postValue(
@@ -96,7 +103,7 @@ class AddDailyLoginReportViewModel @Inject constructor (
         }
     }
 
-    fun processBusinessList(businessListShown: List<LoginSummaryBusiness>) {
+    fun processBusinessList(businessListShown: List<BusinessData>) {
 
         businessListForView.clear()
 
@@ -115,20 +122,15 @@ class AddDailyLoginReportViewModel @Inject constructor (
 
 
 
-    fun submitLoginSummaryData(addNewSummaryReqModel: AddNewSummaryReqModel) = viewModelScope.launch{
+    fun submitLoginReportData(
+        addNewSummaryReqModel:  List<DailyTlAttendanceReport>
+    ) = viewModelScope.launch{
         _submitDataState.postValue("Loading")
         try {
-            val res = tlLoginSummaryRepository.submitLoginSummary(addNewSummaryReqModel)
-            if (res.code() == 201){
-                _submitDataState.postValue("Created")
-            }  else if (res.code() == 400) {
-                _submitDataState.postValue("Already Exists")
-            }
-            else if (res.code() == 500){
-                _submitDataState.postValue("Error")
-            } else {
-                _submitDataState.postValue("Error")
-            }
+            val res = tlLoginSummaryRepository.submitLoginReport(
+                addNewSummaryReqModel
+            )
+            _submitDataState.postValue("Created")
         }catch (e: Exception){
             e.printStackTrace()
             _submitDataState.postValue("Error")
