@@ -27,6 +27,8 @@ class VerificationMainViewModel @Inject constructor (private val iBuildConfigVM:
         getAllDocuments()
     }
 
+    var latestVerificationDoc : VerificationBaseModel? =null
+
     private fun getAllDocuments() {
 
         var allDocs = ArrayList<SimpleCardDVM>()
@@ -39,6 +41,7 @@ class VerificationMainViewModel @Inject constructor (private val iBuildConfigVM:
         verificationKycRepo.db.collection("Verification").document(verificationKycRepo.getUID()).addSnapshotListener { value, error ->
             value?.data?.let {
                 val doc = value.toObject(VerificationBaseModel::class.java)
+                latestVerificationDoc = doc
                 var allDocs = ArrayList<SimpleCardDVM>()
                 allDocs.add(SimpleCardDVM(title = "PAN Card",subtitle = getSubString(doc?.pan_card?.verified,doc?.pan_card?.status), image = R.drawable.ic_badge_black_24dp,navpath = "verification/pancardimageupload", color = getSubStringColor(doc?.pan_card?.verified,doc?.pan_card?.status)))
                 allDocs.add(SimpleCardDVM(title = "Driving licence",subtitle = getSubString(doc?.driving_license?.verified,doc?.driving_license?.status),image = R.drawable.ic_directions_car_black_24dp, navpath = "verification/drivinglicenseimageupload", color = getSubStringColor(doc?.driving_license?.verified,doc?.driving_license?.status)))
@@ -75,13 +78,19 @@ class VerificationMainViewModel @Inject constructor (private val iBuildConfigVM:
     fun getSubString(isVerified : Boolean ? =false, status : String? = "") : String{
             if(isVerified == true)return "Verified"
             if(status?.equals("started") == true) return "Pending"
+            if(status?.equals("failed") == true) return "Failed"
             return TAP_TO_SELECT
     }
 
     fun getSubStringColor(isVerified : Boolean ? =false, status : String? = "") : String{
         if(isVerified == true)return "GREEN"
         if(status?.equals("started") == true) return "YELLOW"
+        if(status?.equals("failed") == true) return "RED"
         return ""
+    }
+
+    fun isAllDocVerified(): Boolean {
+            return latestVerificationDoc?.bank_details?.verified == true && latestVerificationDoc?.pan_card?.verified == true && latestVerificationDoc?.aadhar_card?.verified == true && latestVerificationDoc?.driving_license?.verified == true
     }
 
 }

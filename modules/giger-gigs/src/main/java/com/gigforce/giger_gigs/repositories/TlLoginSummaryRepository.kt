@@ -1,20 +1,29 @@
 package com.gigforce.giger_gigs.repositories
 
+import android.util.Log
+import com.gigforce.common_ui.viewdatamodels.GigStatus
+import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.di.interfaces.IBuildConfigVM
+import com.gigforce.core.fb.BaseFirestoreDBRepository
 import com.gigforce.core.retrofit.RetrofitFactory
 import com.gigforce.giger_gigs.models.*
 import com.gigforce.giger_gigs.tl_login_details.LoginSummaryService
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 import okhttp3.ResponseBody
 import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class TlLoginSummaryRepository (
     private val buildConfig: IBuildConfigVM
 ) {
     companion object {
         private const val COLLECTION_PROFILE = "Profiles"
+        const val COLLECTION_GIGS = "Gigs"
     }
     private val loginSummaryService: LoginSummaryService = RetrofitFactory.createService(
         LoginSummaryService::class.java
@@ -47,12 +56,28 @@ class TlLoginSummaryRepository (
     }
 
     suspend fun submitLoginSummary(addNewSummaryReqModel: AddNewSummaryReqModel): Response<ResponseBody> {
-        val response = loginSummaryService.submitLoginSummary(buildConfig.getListingBaseUrl() + "/submit" ,addNewSummaryReqModel)
+
+        return loginSummaryService.submitLoginSummary(buildConfig.getListingBaseUrl() + "/submit" ,addNewSummaryReqModel)
+
+    }
+
+    suspend fun fetchListingForTL(page: Int, pageSize: Int): List<ListingTLModel> {
+        val response = loginSummaryService.getListingForTL(buildConfig.getListingBaseUrl() + "/listingForTL/"+userUid, page, pageSize)
 
         if (!response.isSuccessful){
             throw Exception(response.message())
         } else {
-            return response!!
+            return response.body()!!
+        }
+
+    }
+
+    suspend fun checkIfAttendanceMarked() : CheckMark {
+       val response = loginSummaryService.checkIfTLMarked(buildConfig.getListingBaseUrl() + "/gigerPresent/"+userUid)
+        if (!response.isSuccessful){
+            throw Exception(response.message())
+        } else {
+            return response.body()!!
         }
     }
 
@@ -73,15 +98,6 @@ class TlLoginSummaryRepository (
         }
     }
 
-    suspend fun fetchListingForTL(searchCity: String,searchDate: String,page: Int, pageSize: Int): List<ListingTLModel> {
-        val response = loginSummaryService.getListingForTL(buildConfig.getListingBaseUrl() + "/listingForTL/"+userUid, searchCity, searchDate, page, pageSize)
-
-        if (!response.isSuccessful){
-            throw Exception(response.message())
-        } else {
-            return response.body()!!
-        }
-    }
 
     suspend fun fetchTLDailyLoginReportListingForTL(searchCity: String,searchDate: String,page: Int, pageSize: Int): List<DailyLoginReport> {
         val response = loginSummaryService.getDailyLoginReportListingForTL(
@@ -98,5 +114,6 @@ class TlLoginSummaryRepository (
             return response.body()!!
         }
     }
+
 
 }

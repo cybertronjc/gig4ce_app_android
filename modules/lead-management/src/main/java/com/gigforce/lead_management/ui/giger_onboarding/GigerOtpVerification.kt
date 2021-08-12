@@ -134,7 +134,7 @@ class GigerOtpVerification : BaseFragment2<FragmentGigerOtpVerificationBinding>(
                         viewBinding.confirmingOtpPb.visible()
                     }
                     is Lce.Content -> {
-                        showToast("Otp Confirmed")
+                        showToast("OTP Confirmed")
 
                         navigation.navigateTo(
                             "userinfo/addUserDetailsFragment", bundleOf(
@@ -158,7 +158,7 @@ class GigerOtpVerification : BaseFragment2<FragmentGigerOtpVerificationBinding>(
 
     private fun validateDataAndSubmit() {
         if (viewBinding.txtOtp.text?.length != 6) {
-            showAlertDialog("", "Enter a valid otp")
+            showAlertDialog("", "Enter a valid OTP")
             return
         }
 

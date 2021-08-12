@@ -114,36 +114,40 @@
 
             <TextView
                 android:id="@+id/user_name_tv"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:lineHeight="19sp"
                 android:textColor="#646464"
                 android:textSize="16sp"
+                android:scrollHorizontally="true"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:layout_marginEnd="4dp"
                 android:fontFamily="@font/lato_bold"
                 app:layout_constraintStart_toEndOf="@id/user_image_iv"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="Rahulefefeav" />
+                app:layout_constraintEnd_toStartOf="@id/user_attendance_status_textview"
+                tools:text="Rahulefefefeffefefewfewfewfewffewwav" />
 
 
             <TextView
                 android:id="@+id/user_phone_number"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="6dp"
-                android:textColor="@color/dust_grey"
+                android:layout_marginTop="8dp"
+                tools:text="+91-7042760488"
                 android:fontFamily="@font/lato"
                 android:textSize="16sp"
+                android:scrollHorizontally="true"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/dust_grey"
                 app:layout_constraintStart_toEndOf="@id/user_image_iv"
-                app:layout_constraintTop_toBottomOf="@id/user_name_tv" />
+                app:layout_constraintTop_toBottomOf="@id/user_name_tv"
+                app:layout_constraintEnd_toStartOf="@id/call_giger_btn"/>
 
-            <androidx.constraintlayout.widget.Barrier
-                android:id="@+id/barrier1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:barrierDirection="end"
-                app:constraint_referenced_ids="user_name_tv" />
 
             <TextView
                 android:id="@+id/user_attendance_status_textview"
@@ -157,7 +161,6 @@
                 android:textColor="@color/white"
                 app:layout_constraintEnd_toStartOf="@id/call_giger_btn"
                 app:layout_constraintHorizontal_bias="0.008"
-                app:layout_constraintStart_toEndOf="@id/barrier1"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:background="@drawable/status_present_chip_background"
                 tools:text="Present" />

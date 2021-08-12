@@ -159,7 +159,6 @@ class DrivingLicenseFragment : Fragment(),
             }
         }
     }
-
     private fun checkForNextDoc() {
         if (allNavigationList.size == 0) {
             activity?.onBackPressed()
@@ -232,6 +231,16 @@ class DrivingLicenseFragment : Fragment(),
     }
     private fun goBackToUsersList() {
         findNavController().navigateUp()
+        var navigationsForBundleOld = ArrayList<String>()
+        navigationsForBundleOld.add("userinfo/addUserDrivingLicenseInfoFragment")
+        navigationsForBundleOld.add("userinfo/addUserAadharCardInfoFragment")
+        navigation.navigateTo(
+            "userinfo/addUserPanCardInfoFragment", bundleOf(
+                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName,
+                VerificationConstants.NAVIGATION_STRINGS to navigationsForBundleOld
+            )
+        )
     }
 
     var oldStateHolder = OLDStateHolder("")
@@ -319,7 +328,8 @@ class DrivingLicenseFragment : Fragment(),
         }
         viewBinding.appBarDl.apply {
             setBackButtonListener(View.OnClickListener {
-                navigation.popBackStack()
+//                navigation.popBackStack()
+                activity?.onBackPressed()
             })
         }
     }
@@ -345,8 +355,8 @@ class DrivingLicenseFragment : Fragment(),
                     if (!it.dateOfBirth.isNullOrBlank() || !it.dlNumber.isNullOrBlank() || !it.validTill.isNullOrBlank()) {
                         viewBinding.toplayoutblock.uploadStatusLayout(
                             AppConstants.UPLOAD_SUCCESS,
-                            "UPLOAD SUCCESSFUL",
-                            "Information of Driving License Captured Successfully."
+                            "Upload Successful",
+                            "Information of Driving License captured successfully."
                         )
                         if (!it.dateOfBirth.isNullOrBlank()) {
                             if (it.dateOfBirth.contains("/") || it.dateOfBirth.contains("-")) {
@@ -404,6 +414,7 @@ class DrivingLicenseFragment : Fragment(),
                         verifiedStatusViews(it)
                         viewBinding.belowLayout.visible()
                         setAlreadyfilledData(it, false)
+                        viewBinding.toplayoutblock.disableImageClick()//keep this line in end only
                     } else {
                         checkforStatusAndVerified(it)
                     }
@@ -772,8 +783,8 @@ class DrivingLicenseFragment : Fragment(),
         viewBinding.belowLayout.gone()
         viewBinding.toplayoutblock.uploadStatusLayout(
             AppConstants.UPLOAD_SUCCESS,
-            "VERIFICATION COMPLETED",
-            "The Driving License Details have been verified successfully."
+            "Verification Completed",
+            "The Driving License details have been verified successfully."
         )
         viewBinding.submitButton.visible()
         viewBinding.submitButton.text = "Next"
@@ -823,9 +834,12 @@ class DrivingLicenseFragment : Fragment(),
                                 viewBinding.toplayoutblock.uploadStatusLayout(
                                     AppConstants.UNABLE_TO_FETCH_DETAILS,
                                     "Verification in progress",
-                                    "Document will be verified soon. You can click Next to proceed."
+                                    "Document will be verified soon. You can click next to proceed."
                                 )
                                 viewBinding.toplayoutblock.setVerificationSuccessfulView("", "")
+                                viewBinding.belowLayout.visible()
+                                setAlreadyfilledData(drivingLicenseDataModel, false)
+                                viewBinding.toplayoutblock.disableImageClick()//keep this line in end only
                             }
                         } catch (e: Exception) {
 
@@ -834,6 +848,7 @@ class DrivingLicenseFragment : Fragment(),
                     }, WAITING_TIME)
                     viewBinding.belowLayout.visible()
                     setAlreadyfilledData(drivingLicenseDataModel, false)
+                    viewBinding.toplayoutblock.disableImageClick()//keep this line in end only
                 }
                 "failed" -> {
                     verificationScreenStatus = VerificationScreenStatus.FAILED
@@ -844,12 +859,19 @@ class DrivingLicenseFragment : Fragment(),
                         "Verification Failed",
                         "The details submitted are incorrect. Please try again."
                     )
-                    setAlreadyfilledData(drivingLicenseDataModel, true)
+                    var listData = setAlreadyfilledData(drivingLicenseDataModel, true)
+                    if(listData.isEmpty()){
+                        initializeImages()
+                    }else{
+                        //single if showing error
+                    }
+                    viewBinding.toplayoutblock.enableImageClick()//keep this line in end only
                 }
                 "" -> {
                     verificationScreenStatus = VerificationScreenStatus.DEFAULT
                     print("transaction reinitialized")
                     resetInitializeViews()
+                    viewBinding.toplayoutblock.enableImageClick()//keep this line in end only
                 }
                 else -> "unmatched status"
             }
@@ -859,7 +881,7 @@ class DrivingLicenseFragment : Fragment(),
     private fun setAlreadyfilledData(
         drivingLicenseDataModel: DrivingLicenseDataModel,
         enableFields: Boolean
-    ) {
+    ) : ArrayList<KYCImageModel> {
 
         viewBinding.nameTilDl.editText?.setText(drivingLicenseDataModel.name)
 
@@ -940,9 +962,18 @@ class DrivingLicenseFragment : Fragment(),
         viewBinding.nameTilDl.editText?.isEnabled = enableFields
         viewBinding.dlnoTil.editText?.isEnabled = enableFields
         viewBinding.dobDateRl.isEnabled = enableFields
-        viewBinding.issueDateRl.isEnabled = enableFields
-        viewBinding.expiryDateRl.isEnabled = enableFields
+        viewBinding.dobDate.isEnabled = enableFields
 
+        viewBinding.issueDateRl.isEnabled = enableFields
+        viewBinding.issueDate.isEnabled = enableFields
+        viewBinding.expiryDateRl.isEnabled = enableFields
+        viewBinding.expiryDate.isEnabled = enableFields
+        if (enableFields) {
+            viewBinding.textView10.visible()
+        } else {
+            viewBinding.textView10.gone()
+        }
+        return list
     }
 
     private fun resetInitializeViews() {

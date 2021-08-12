@@ -423,7 +423,7 @@
     <string name="why_do_we_need_this_pan">A PAN card is mandatory for profile verification. It helps verify your name and date of birth and also helps with payments to your wallet.</string>
     <string name="alert">Alert</string>
     <string name="you_are_reuploading_pan_card">You are re-uploading your PAN details. They will be verified once again, which may take up to 7 days.</string>
-    <string name="enter_valid_pan">Enter Valid PAN Card No</string>
+    <string name="enter_valid_pan">Enter valid PAN card no</string>
     <string name="click_select_pan_image">Click Or Select your Pan card Image first</string>
     <string name="pan_details_uploaded">Pan Card Details Uploaded</string>
     <string name="unable_to_capture_image">Unable to capture image</string>
@@ -445,10 +445,10 @@
     <string name="enter_valid_dl">Enter Valid Driving License</string>
     <string name="select_dl_state">Select Driving License State</string>
     <string name="why_we_need_this_bank">The bank details are mandatory to approve and send payments from gigs to your account. It also helps verify your name, address, date of birth, and other details.</string>
-    <string name="enter_valid_ifsc">Enter Valid IfSC Code</string>
-    <string name="enter_bank_name">Enter Bank Name</string>
+    <string name="enter_valid_ifsc">Enter valid IFSC code</string>
+    <string name="enter_bank_name">Enter bank name</string>
     <string name="bank_name_too_short">Bank name is too short</string>
-    <string name="enter_valid_acc_no">Enter A Valid Account No</string>
+    <string name="enter_valid_acc_no">Enter a valid account no</string>
     <string name="click_or_select_bank_passbook">Click Or Select your Passbook Image first</string>
     <string name="your_are_reuploading_bank_details">You are re-uploading your Bank details. They will be verified once again, which may take up to 7 days.</string>
     <string name="bank_details_uploaded">Bank details Uploaded</string>

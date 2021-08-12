@@ -26,8 +26,6 @@ interface LoginSummaryService {
     @GET
     suspend fun getListingForTL(
         @Url getListingUrl : String,
-        @Query("searchCity") searchCity: String,
-        @Query("searchDate") searchDate: String,
         @Query("page") page: Int,
         @Query("pagesize") pagesize: Int
     ) : Response<List<ListingTLModel>>
@@ -47,4 +45,10 @@ interface LoginSummaryService {
         @Url getSubmitUrl : String,
         @Body body: DailyTlAttendanceReport
     ) : Response<ResponseBody>
+
+
+    @GET
+    suspend fun checkIfTLMarked(
+        @Url getCheckUrl: String
+    ) : Response<CheckMark>
 }

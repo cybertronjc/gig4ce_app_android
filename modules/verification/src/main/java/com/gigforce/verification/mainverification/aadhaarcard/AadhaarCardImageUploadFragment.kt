@@ -36,6 +36,15 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 import javax.inject.Inject
 
+enum class VerificationScreenStatus {
+    OCR_COMPLETED,
+    VERIFIED,
+    STARTED_VERIFYING,
+    FAILED,
+    COMPLETED,
+    DEFAULT
+}
+
 @AndroidEntryPoint
 class AadhaarCardImageUploadFragment : Fragment(),
     IOnBackPressedOverride {
@@ -52,6 +61,8 @@ class AadhaarCardImageUploadFragment : Fragment(),
 
         private const val REQUEST_STORAGE_PERMISSION = 103
     }
+
+    var verificationScreenStatus = VerificationScreenStatus.DEFAULT
 
     @Inject
     lateinit var navigation: INavigation
@@ -74,8 +85,8 @@ class AadhaarCardImageUploadFragment : Fragment(),
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         viewBinding = AadhaarCardImageUploadFragmentBinding.inflate(inflater, container, false)
         return viewBinding.root
@@ -100,12 +111,18 @@ class AadhaarCardImageUploadFragment : Fragment(),
         viewBinding.toplayoutblock.showUploadHere()
         //ic_pan_illustration
         val frontUri = Uri.Builder()
-                .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
-                .authority(resources.getResourcePackageName(R.drawable.verification_doc_image))
-                .appendPath(resources.getResourceTypeName(R.drawable.verification_doc_image))
-                .appendPath(resources.getResourceEntryName(R.drawable.verification_doc_image))
-                .build()
-        val list = listOf(KYCImageModel(text = getString(R.string.upload_pan_card_new), imageIcon = frontUri, imageUploaded = false))
+            .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
+            .authority(resources.getResourcePackageName(R.drawable.verification_doc_image))
+            .appendPath(resources.getResourceTypeName(R.drawable.verification_doc_image))
+            .appendPath(resources.getResourceEntryName(R.drawable.verification_doc_image))
+            .build()
+        val list = listOf(
+            KYCImageModel(
+                text = getString(R.string.upload_pan_card_new),
+                imageIcon = frontUri,
+                imageUploaded = false
+            )
+        )
         viewBinding.toplayoutblock.setImageViewPager(list)
         viewBinding.toplayoutblock.setImageViewPager(emptyList())
     }
@@ -120,7 +137,10 @@ class AadhaarCardImageUploadFragment : Fragment(),
                 loadsImagesAutomatically = true
                 domStorageEnabled = true
             }
-            viewBinding.digilockerWebview.loadUrl("${iBuildConfig.getPanelBaseUrl()}/kyc/${FirebaseAuthStateListener.getInstance().getCurrentSignInUserInfoOrThrow().uid}")
+            viewBinding.digilockerWebview.loadUrl(
+                "${iBuildConfig.getPanelBaseUrl()}/kyc/${FirebaseAuthStateListener.getInstance()
+                    .getCurrentSignInUserInfoOrThrow().uid}"
+            )
             viewBinding.digilockerWebview.webViewClient = object : WebViewClient() {
                 override fun shouldOverrideUrlLoading(view: WebView, url: String?): Boolean {
                     url?.let {
@@ -129,7 +149,11 @@ class AadhaarCardImageUploadFragment : Fragment(),
                     return true
                 }
 
-                override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
+                override fun onReceivedError(
+                    view: WebView?,
+                    request: WebResourceRequest?,
+                    error: WebResourceError?
+                ) {
                     super.onReceivedError(view, request, error)
                     context?.let {
                         UtilMethods.showLongToast(it, error?.description.toString())
@@ -191,6 +215,7 @@ class AadhaarCardImageUploadFragment : Fragment(),
 
         viewBinding.appBarAadhar.apply {
             setBackButtonListener(View.OnClickListener {
+//                navigation.popBackStack()
                 activity?.onBackPressed()
             })
         }
@@ -202,17 +227,22 @@ class AadhaarCardImageUploadFragment : Fragment(),
         } else {
             var navigationsForBundle = emptyList<String>()
             if (allNavigationList.size > 1) {
-                navigationsForBundle = allNavigationList.slice(IntRange(1, allNavigationList.size - 1)).filter { it.length > 0 }
+                navigationsForBundle =
+                    allNavigationList.slice(IntRange(1, allNavigationList.size - 1))
+                        .filter { it.length > 0 }
             }
             navigation.popBackStack()
-            navigation.navigateTo(allNavigationList.get(0), bundleOf(VerificationConstants.NAVIGATION_STRINGS to navigationsForBundle))
+            navigation.navigateTo(
+                allNavigationList.get(0),
+                bundleOf(VerificationConstants.NAVIGATION_STRINGS to navigationsForBundle)
+            )
 
         }
     }
 
     override fun onBackPressed(): Boolean {
         if (FROM_CLIENT_ACTIVATON) {
-            if (isAadharVerified) {
+            if (verificationScreenStatus == VerificationScreenStatus.DEFAULT) {
                 var navFragmentsData = activity as NavFragmentsData
                 navFragmentsData.setData(
                     bundleOf(
@@ -221,12 +251,12 @@ class AadhaarCardImageUploadFragment : Fragment(),
                     )
                 )
             }
+
             return false
         }
         return false
     }
 
-    var isAadharVerified = false
     private fun observer() {
 
         viewModel.getVerifiedStatus() //getting userHasVerified status
@@ -234,24 +264,26 @@ class AadhaarCardImageUploadFragment : Fragment(),
             it?.let {
 
                 if (it.verified) {
-//                    verificationScreenStatus = VerificationScreenStatus.VERIFIED
+                    verificationScreenStatus = VerificationScreenStatus.VERIFIED
                     verifiedStatusViews()
                     viewBinding.belowLayout.visible()
                     setAlreadyfilledData(it, false)
-                }
-                else{
+                } else {
                     viewBinding.belowLayout.gone()
                 }
             }
         })
     }
 
-    private fun setAlreadyfilledData(aadharCardDataModel: AadharCardDataModel, enableFields: Boolean) {
+    private fun setAlreadyfilledData(
+        aadharCardDataModel: AadharCardDataModel,
+        enableFields: Boolean
+    ) {
 
-        viewBinding.aadharcardTil.editText?.setText(aadharCardDataModel.aadharCardNo?:"")
-        viewBinding.nameTilAadhar.editText?.setText(aadharCardDataModel.name?:"")
+        viewBinding.aadharcardTil.editText?.setText(aadharCardDataModel.aadharCardNo ?: "")
+        viewBinding.nameTilAadhar.editText?.setText(aadharCardDataModel.name ?: "")
         aadharCardDataModel.dob?.let {
-            if(it.isNotEmpty()){
+            if (it.isNotEmpty()) {
                 viewBinding.dateOfBirthAadhar.text = it
                 viewBinding.dobLabel.visible()
             }
@@ -260,6 +292,12 @@ class AadhaarCardImageUploadFragment : Fragment(),
         viewBinding.aadharcardTil.editText?.isEnabled = enableFields
         viewBinding.nameTilAadhar.editText?.isEnabled = enableFields
         viewBinding.dateRlAadhar.isEnabled = enableFields
+
+        if (enableFields) {
+            viewBinding.textView10.visible()
+        } else {
+            viewBinding.textView10.gone()
+        }
     }
 
     private fun verifiedStatusViews() {
@@ -267,9 +305,9 @@ class AadhaarCardImageUploadFragment : Fragment(),
         viewBinding.toplayoutblock.viewChangeOnVerified()
         viewBinding.belowLayout.gone()
         viewBinding.toplayoutblock.uploadStatusLayout(
-                AppConstants.UPLOAD_SUCCESS,
-                "VERIFICATION COMPLETED",
-                "The Aadhar card details have been verified successfully."
+            AppConstants.UPLOAD_SUCCESS,
+            "Verification Completed",
+            "The Aadhar card details have been verified successfully."
         )
         viewBinding.submitButton.visible()
         viewBinding.submitButton.text = "Next"
@@ -281,7 +319,10 @@ class AadhaarCardImageUploadFragment : Fragment(),
 
     override fun onResume() {
         super.onResume()
-        StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(resources, R.color.lipstick_2, null))
+        StatusBarUtil.setColorNoTranslucent(
+            requireActivity(),
+            ResourcesCompat.getColor(resources, R.color.lipstick_2, null)
+        )
     }
 
 }

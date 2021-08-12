@@ -124,7 +124,10 @@ class PanCardFragment : Fragment(),
     }
 
     private fun initviews() {
-        viewBinding.toplayoutblock.setIdonthaveDocContent(resources.getString(R.string.no_doc_title_pan),resources.getString(R.string.no_doc_subtitle_pan))
+        viewBinding.toplayoutblock.setIdonthaveDocContent(
+            resources.getString(R.string.no_doc_title_pan),
+            resources.getString(R.string.no_doc_subtitle_pan)
+        )
     }
 
     var allNavigationList = ArrayList<String>()
@@ -158,22 +161,30 @@ class PanCardFragment : Fragment(),
             activeLoader(false)
             it?.let {
                 if (it.status) {
-                    if (!it.panNumber.isNullOrBlank() || !it.name.isNullOrBlank() || !it.dateOfBirth.isNullOrBlank() || !it.fatherName.isNullOrBlank()) {
-                        viewBinding.toplayoutblock.uploadStatusLayout(
-                            AppConstants.UPLOAD_SUCCESS,
-                            "UPLOAD SUCCESSFUL",
-                            "Information of PAN card Captured Successfully."
-                        )
-                        if (!it.panNumber.isNullOrBlank())
+                    if (!it.panNumber.isNullOrBlank()) {
+                        if (VerificationValidations.isPanCardValid(it.panNumber)) {
                             viewBinding.panTil.editText?.setText(it.panNumber)
-                        if (!it.name.isNullOrBlank())
-                            viewBinding.nameTil.editText?.setText(it.name)
-                        if (!it.dateOfBirth.isNullOrBlank()) {
-                            if (it.dateOfBirth.contains("/") || it.dateOfBirth.contains("-")) {
-                                viewBinding.dateOfBirth.text = it.dateOfBirth
-                                viewBinding.dobLabel.visible()
-                            }
+                            viewBinding.toplayoutblock.uploadStatusLayout(
+                                AppConstants.UPLOAD_SUCCESS,
+                                "Upload Successful",
+                                "Information of PAN card captured successfully."
+                            )
+                        } else {
+                            viewBinding.toplayoutblock.uploadStatusLayout(
+                                AppConstants.UNABLE_TO_FETCH_DETAILS,
+                                "Unable to fetch information",
+                                "Enter the PAN details manually below"
+                            )
                         }
+
+//                        if (!it.name.isNullOrBlank())
+//                            viewBinding.nameTil.editText?.setText(it.name)
+//                        if (!it.dateOfBirth.isNullOrBlank()) {
+//                            if (it.dateOfBirth.contains("/") || it.dateOfBirth.contains("-")) {
+//                                viewBinding.dateOfBirth.text = it.dateOfBirth
+//                                viewBinding.dobLabel.visible()
+//                            }
+//                        }
 
                     } else {
                         viewBinding.toplayoutblock.uploadStatusLayout(
@@ -210,6 +221,7 @@ class PanCardFragment : Fragment(),
                         verifiedStatusViews(it)
                         viewBinding.belowLayout.visible()
                         setAlreadyfilledData(it, false)
+                        viewBinding.toplayoutblock.disableImageClick()//keep this line in end only
                     } else {
                         checkforStatusAndVerified(it)
                     }
@@ -292,9 +304,12 @@ class PanCardFragment : Fragment(),
 
         viewBinding.submitButton.setOnClickListener {
             hideSoftKeyboard()
-            if (viewBinding.toplayoutblock.isDocDontOptChecked() || verificationScreenStatus == VerificationScreenStatus.VERIFIED || verificationScreenStatus == VerificationScreenStatus.STARTED_VERIFYING || !anyDataEntered) {
+            if (viewBinding.toplayoutblock.isDocDontOptChecked() || !anyDataEntered || verificationScreenStatus == VerificationScreenStatus.VERIFIED || verificationScreenStatus == VerificationScreenStatus.STARTED_VERIFYING) {
                 checkForNextDoc()
             } else {
+                if (verificationScreenStatus == VerificationScreenStatus.FAILED) {
+                    viewBinding.toplayoutblock.statusDialogLayoutvisibilityGone()
+                }
                 val panCardNo =
                     viewBinding.panTil.editText?.text.toString().toUpperCase(Locale.getDefault())
                 if (!VerificationValidations.isPanCardValid(panCardNo)) {
@@ -318,13 +333,17 @@ class PanCardFragment : Fragment(),
         }
         viewBinding.appBarPan.apply {
             setBackButtonListener(View.OnClickListener {
-                navigation.popBackStack()
+//                navigation.popBackStack()
+                activity?.onBackPressed()
             })
         }
 
     }
 
-    private fun setAlreadyfilledData(panCardDataModel: PanCardDataModel, enableFields: Boolean) {
+    private fun setAlreadyfilledData(
+        panCardDataModel: PanCardDataModel,
+        enableFields: Boolean
+    ): ArrayList<KYCImageModel> {
 
         viewBinding.nameTil.editText?.setText(panCardDataModel.name)
 
@@ -361,11 +380,19 @@ class PanCardFragment : Fragment(),
         viewBinding.panTil.editText?.isEnabled = enableFields
         viewBinding.fatherNameTil.editText?.isEnabled = enableFields
         viewBinding.dateRl.isEnabled = enableFields
-
+        viewBinding.dateOfBirth.isEnabled = enableFields
+        if (enableFields) {
+            viewBinding.textView10.visible()
+        } else {
+            viewBinding.textView10.gone()
+        }
+        return list
     }
 
+    var manuallyRequestBackpress = false
     private fun checkForNextDoc() {
         if (allNavigationList.size == 0) {
+            manuallyRequestBackpress = true
             activity?.onBackPressed()
         } else {
             var navigationsForBundle = emptyList<String>()
@@ -535,10 +562,10 @@ class PanCardFragment : Fragment(),
 
     private fun callKycVerificationApi() {
         var list = listOf(
-            Data("name", viewBinding.nameTil.editText?.text.toString()),
-            Data("no", viewBinding.panTil.editText?.text.toString()),
-            Data("fathername", viewBinding.fatherNameTil.editText?.text.toString()),
-            Data("dob", viewBinding.dateOfBirth.text.toString())
+//            Data("name", viewBinding.nameTil.editText?.text.toString()),
+            Data("no", viewBinding.panTil.editText?.text.toString())
+//            Data("fathername", viewBinding.fatherNameTil.editText?.text.toString()),
+//            Data("dob", viewBinding.dateOfBirth.text.toString())
         )
         activeLoader(true)
         viewModel.getKycVerificationResult("pan", list)
@@ -639,7 +666,7 @@ class PanCardFragment : Fragment(),
         viewBinding.belowLayout.gone()
         viewBinding.toplayoutblock.uploadStatusLayout(
             AppConstants.UPLOAD_SUCCESS,
-            "VERIFICATION COMPLETED",
+            "Verification Completed",
             "The PAN card details have been verified successfully."
         )
         viewBinding.submitButton.visible()
@@ -693,9 +720,12 @@ class PanCardFragment : Fragment(),
                                 viewBinding.toplayoutblock.uploadStatusLayout(
                                     AppConstants.UNABLE_TO_FETCH_DETAILS,
                                     "Verification in progress",
-                                    "Document will be verified soon. You can click Next to proceed"
+                                    "Document will be verified soon. You can click next to proceed"
                                 )
                                 viewBinding.toplayoutblock.setVerificationSuccessfulView("", "")
+                                viewBinding.belowLayout.visible()
+                                setAlreadyfilledData(panCardDataModel, false)
+                                viewBinding.toplayoutblock.disableImageClick()//keep this line in end only
                             }
                         } catch (e: Exception) {
 
@@ -703,6 +733,7 @@ class PanCardFragment : Fragment(),
                     }, WAITING_TIME)
                     viewBinding.belowLayout.visible()
                     setAlreadyfilledData(panCardDataModel, false)
+                    viewBinding.toplayoutblock.disableImageClick()//keep this line in end only
                 }
                 "failed" -> {
                     verificationScreenStatus = VerificationScreenStatus.FAILED
@@ -712,11 +743,18 @@ class PanCardFragment : Fragment(),
                         "Verification Failed",
                         "The details submitted are incorrect. Please try again."
                     )
-                    setAlreadyfilledData(panCardDataModel, true)
+                    var listData = setAlreadyfilledData(panCardDataModel, true)
+                    if (listData.isEmpty()) {
+                        initializeImageViews()
+                    } else {
+                        //single if showing error
+                    }
+                    viewBinding.toplayoutblock.enableImageClick()//keep this line in end only
                 }
                 "" -> {
                     verificationScreenStatus = VerificationScreenStatus.DEFAULT
                     resetInitializeViews()
+                    viewBinding.toplayoutblock.enableImageClick()//keep this line in end only
                 }
                 else -> "unmatched status"
             }
@@ -763,7 +801,7 @@ class PanCardFragment : Fragment(),
 
     override fun onBackPressed(): Boolean {
         if (FROM_CLIENT_ACTIVATON) {
-            if (verificationScreenStatus == VerificationScreenStatus.VERIFIED) {
+            if (!manuallyRequestBackpress || viewBinding.toplayoutblock.isDocDontOptChecked() || (!anyDataEntered && (verificationScreenStatus == VerificationScreenStatus.DEFAULT || verificationScreenStatus == VerificationScreenStatus.FAILED))) {
                 var navFragmentsData = activity as NavFragmentsData
                 navFragmentsData.setData(
                     bundleOf(
@@ -772,7 +810,6 @@ class PanCardFragment : Fragment(),
                     )
                 )
             }
-            return false
         }
         return false
     }

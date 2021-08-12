@@ -8,12 +8,17 @@
         android:layout_height="match_parent"
         tools:context=".tl_login_details.TeamLeaderLoginDetailsFragment">
 
-        <com.gigforce.common_ui.views.GigforceToolbar
-            android:id="@+id/appBar"
+        <com.gigforce.common_ui.components.cells.AppBar
+            android:id="@+id/appBarComp"
             android:layout_width="match_parent"
-            android:layout_height="?android:attr/actionBarSize"
+            android:layout_height="wrap_content"
+            app:backgroundType="WhiteBar"
+            android:visibility="visible"
+            android:elevation="2dp"
+            app:titleText="Login Summary"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -21,78 +26,25 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/appBar">
+            app:layout_constraintTop_toBottomOf="@id/appBarComp">
+
 
             <TextView
-                android:id="@+id/add_new"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:id="@+id/previousLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/size_16"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="@dimen/size_16"
+                android:fontFamily="@font/lato_bold"
                 android:layout_marginBottom="@dimen/size_22"
-                android:background="@drawable/app_gradient_button"
-                android:gravity="center"
+                android:gravity="start|center_vertical"
                 android:minHeight="@dimen/size_36"
-                android:text="Add New"
-                android:textColor="@color/white"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:textSize="@dimen/font16"
+                android:text="Previous Records"
+                android:textColor="#202325"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-            <EditText
-                android:id="@+id/search_item"
-                android:layout_width="0dp"
-                android:layout_height="36dp"
-                android:layout_marginStart="@dimen/size_16"
-                android:layout_marginTop="@dimen/size_16"
-                android:layout_marginEnd="@dimen/size_16"
-                android:background="@drawable/search_background"
-                android:hint="Search By City"
-                android:maxLines="1"
-                android:paddingStart="8dp"
-                android:singleLine="true"
-                android:textColor="@color/black"
-                android:textSize="13sp"
-                app:layout_constraintEnd_toStartOf="@+id/searchDate"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/add_new" />
-
-            <TextView
-                android:id="@+id/searchDate"
-                android:layout_width="0dp"
-                android:layout_height="36dp"
-                android:layout_marginStart="@dimen/size_16"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="@dimen/size_16"
-                android:background="@drawable/search_background"
-                android:gravity="start|center_vertical"
-                android:hint="Search By Date"
-                android:minHeight="@dimen/size_36"
-                android:paddingStart="6dp"
-                android:textColor="@color/black"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/search_item"
-                app:layout_constraintTop_toBottomOf="@id/add_new" />
-
-            <TextView
-                android:id="@+id/searchButton"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginStart="@dimen/size_16"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="@dimen/size_16"
-                android:layout_marginBottom="@dimen/size_22"
-                android:background="@drawable/app_gradient_button"
-                android:gravity="center"
-                android:minHeight="@dimen/size_36"
-                android:text="Search"
-                android:textColor="@color/white"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/searchDate" />
 
 
             <ProgressBar
@@ -104,7 +56,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/searchButton" />
+                app:layout_constraintTop_toBottomOf="@id/previousLabel" />
 
             <TextView
                 android:id="@+id/noData"
@@ -122,20 +74,65 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/searchButton" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/datecity_rv"
+                app:layout_constraintTop_toBottomOf="@id/previousLabel" />
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/swipeRefresh"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginStart="@dimen/size_16"
                 android:layout_marginTop="@dimen/size_16"
                 android:layout_marginEnd="@dimen/size_16"
-                android:layout_marginBottom="@dimen/size_46"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="@dimen/size_16"
+                app:layout_constraintBottom_toTopOf="@id/progressBarBottom"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/searchButton" />
+                app:layout_constraintTop_toBottomOf="@id/previousLabel">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/datecity_rv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/datecity_rv1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginTop="@dimen/size_16"
+                android:layout_marginEnd="@dimen/size_16"
+                android:layout_marginBottom="@dimen/size_16"
+                app:layout_constraintBottom_toTopOf="@id/progressBarBottom"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/previousLabel" />
+
+            <ProgressBar
+                android:id="@+id/progressBarBottom"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                app:layout_constraintBottom_toTopOf="@id/addNew"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/datecity_rv" />
+
+            <Button
+                android:id="@+id/addNew"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/app_gradient_button"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginEnd="@dimen/size_16"
+                android:layout_marginBottom="@dimen/size_22"
+                android:gravity="center"
+                android:minHeight="@dimen/size_36"
+                android:text="Add New"
+                android:layout_marginTop="16dp"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

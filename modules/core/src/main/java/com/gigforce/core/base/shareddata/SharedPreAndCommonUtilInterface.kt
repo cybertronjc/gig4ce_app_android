@@ -26,6 +26,7 @@ interface SharedPreAndCommonUtilInterface {
     fun getInt(key: String?): Int
     fun updateResources(language: String)
     fun getCurrentVersion(): String
+    fun getCurrentVersionCode():Int
     fun saveLong(key: String?, value: Long)
     fun getLong(key: String?): Long
 

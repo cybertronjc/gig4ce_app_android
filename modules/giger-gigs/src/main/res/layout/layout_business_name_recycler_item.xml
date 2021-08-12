@@ -8,27 +8,62 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/size_6"
-        android:background="@drawable/border_option_grey">
+        android:elevation="2dp"
+        android:layout_marginEnd="@dimen/size_16"
+        android:layout_marginStart="@dimen/size_16"
+        android:layout_marginBottom="@dimen/size_2"
+        android:background="@drawable/default_grey_background">
 
         <TextView
             android:id="@+id/businessName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Business name"
-            android:padding="6dp"
+            android:padding="4dp"
+            android:textColor="#202325"
             android:fontFamily="@font/lato_bold"
+            android:layout_marginTop="@dimen/size_6"
             android:layout_marginStart="@dimen/size_16"
             android:layout_marginEnd="@dimen/size_16"
-            android:layout_marginTop="@dimen/size_16"
-            android:layout_marginBottom="@dimen/size_16"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="@dimen/size_6"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/jobProfileName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Job Profile Name"
+            android:padding="4dp"
+            android:textSize="@dimen/font_12"
+            android:fontFamily="@font/lato"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginEnd="@dimen/size_16"
+            android:layout_marginBottom="@dimen/size_6"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/businessName"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/enterQuantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enter"
+            android:padding="6dp"
+            android:textColor="#E42C64"
+            android:fontFamily="@font/lato_bold"
+            android:layout_marginBottom="@dimen/size_4"
+            android:layout_marginStart="@dimen/size_4"
+            android:layout_marginEnd="@dimen/size_16"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/plusMinusLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -51,10 +86,10 @@
                 android:fontFamily="@font/lato_bold"
                 android:inputType="number"
                 android:gravity="center"
-                android:textColor="@color/black"
+                android:background="@drawable/border_option_grey"
+                android:textColor="@color/lipstick"
                 android:layout_marginEnd="@dimen/size_8"
                 app:layout_constraintTop_toTopOf="parent"
-                android:background="@drawable/border_option_grey"
                 app:layout_constraintEnd_toStartOf="@+id/plusIcon"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/minusIcon" />
@@ -64,7 +99,7 @@
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:layout_marginEnd="@dimen/size_16"
-                android:src="@drawable/ic_add_pink"
+                android:src="@drawable/ic_add_new_black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/loginCount" />
