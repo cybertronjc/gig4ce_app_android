@@ -12,8 +12,10 @@ import android.widget.DatePicker
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.common_ui.ext.showToast
+import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.DateHelper
@@ -28,7 +30,9 @@ import com.gigforce.giger_gigs.databinding.TeamLeaderLoginDetailsFragmentBinding
 import com.gigforce.giger_gigs.models.DailyLoginReport
 import com.gigforce.giger_gigs.models.ListingTLModel
 import com.gigforce.giger_gigs.tl_login_details.views.OnTlItemSelectedListener
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -47,6 +51,7 @@ class TLDailyReportListFragment : BaseFragment2<FragmentTlDailyLoginReportListBi
 
     @Inject
     lateinit var navigation: INavigation
+    private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository()
     private val viewModel: TLDailyReportListViewModel by viewModels()
     private val dateFormatter =  SimpleDateFormat("dd-MMM-yyyy")
     private val standardDateFormatter =  SimpleDateFormat("dd-MM-yyyy")
@@ -79,6 +84,16 @@ class TLDailyReportListFragment : BaseFragment2<FragmentTlDailyLoginReportListBi
     }
 
     private fun initializeViews() = viewBinding.apply {
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                val userUid = FirebaseAuth.getInstance().uid
+                val profileData = profileFirebaseRepository.getProfileData(userUid)
+                viewBinding.tlNameTv.text = profileData.name
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
 
         viewBinding.dateTv.text = dateFormatter.format(Date())
         viewModel.getListingForTL("", standardDateFormatter.format(Date()))

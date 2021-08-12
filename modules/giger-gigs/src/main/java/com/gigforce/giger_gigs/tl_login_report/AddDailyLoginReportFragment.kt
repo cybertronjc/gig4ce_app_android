@@ -53,7 +53,8 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
 
     var selectedCity: LoginSummaryCity = LoginSummaryCity()
     var citiesModelArray = listOf<LoginSummaryCity>()
-    var businessListToSubmit = listOf<LoginSummaryBusiness>()
+
+    private var businessAndProfileList: List<BusinessData> ? = null
     private var loginSummaryDetails: DailyLoginReport? = null
     private val dateFormatter = SimpleDateFormat("dd-MMM-yyyy")
     private val standardDateFormatter = SimpleDateFormat("dd-MM-yyyy")
@@ -109,6 +110,48 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
         } else {
             viewBinding.dateTextview.text = dateFormatter.format(Date()) //remove it from here
             viewBinding.submit.visible()
+
+            viewBinding.businessSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+
+                    if(viewBinding.businessSpinner.childCount != 0){
+                        val businessSelected = viewBinding.businessSpinner.selectedItem as LoginSummaryBusiness?
+
+                        if(businessAndProfileList != null){
+
+                            val jobProfiles = businessAndProfileList!!
+                                .filter {
+                                    if(businessSelected == null )
+                                        true
+                                    else
+                                        it.businessId == businessSelected.business_id
+                                }
+                                .map {
+                                    JobProfile(
+                                        id = it.jobProfileId,
+                                        title = it.jobProfileName
+                                    )
+                                }.distinctBy {
+                                    it.id
+                                }
+                            val jobProfileArrayAdapter = ArrayAdapter(
+                                requireContext(),
+                                android.R.layout.simple_spinner_dropdown_item,
+                                jobProfiles
+                            )
+                            jobProfileSpinner.setAdapter(jobProfileArrayAdapter)
+
+                        }
+                    }
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+            }
         }
     }
 
@@ -200,7 +243,6 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
                     if (mode == LoginSummaryConstants.MODE_ADD) {
                         viewModel.getBusinessByCity(cityId = cityId)
                     }
-
                 }
 
                 override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -240,6 +282,46 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
                 viewBinding.bussinessReportFormContainerLayout.getChildAt(i) as DailyLoginReportItemEdit
 
             val businessDataItem = itemView.getDailyReportItem()
+
+            if(!businessDataItem.atLeastOneFieldFilled()){
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("Select at least one field")
+                    .setMessage("Please select at least one field in the form below")
+                    .setPositiveButton("Okay") { _, _ -> }
+                    .show()
+                return
+            }
+
+            if(businessDataItem.totalActive < businessDataItem.loginToday){
+
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("Login count greater than active")
+                    .setMessage("Login gigers count cannot be greater than active count")
+                    .setPositiveButton("Okay") { _, _ -> }
+                    .show()
+                return
+            }
+
+            if(businessDataItem.totalActive < businessDataItem.absentToday){
+
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("Absent count greater than active")
+                    .setMessage("Absent gigers count cannot be greater than active count")
+                    .setPositiveButton("Okay") { _, _ -> }
+                    .show()
+                return
+            }
+
+            if(businessDataItem.totalActive < (businessDataItem.absentToday + businessDataItem.loginToday)){
+
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("Absent + Login count greater than active")
+                    .setMessage("Absent and Login gigers count cannot be greater than active count")
+                    .setPositiveButton("Okay") { _, _ -> }
+                    .show()
+                return
+            }
+
             businessDataItem.city = selectedCity
             businessDataItem.jobProfileId = jobProfile.id
             businessDataItem.jobProfileName = jobProfile.title
@@ -338,6 +420,7 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
 
     private fun showBusinesses(businessList: List<BusinessData>) = viewBinding.apply {
         Log.d("List", "Business list $businessList")
+        businessAndProfileList = businessList
 
         if(mode == LoginSummaryConstants.MODE_VIEW){
 
@@ -365,6 +448,7 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
             }.distinctBy {
                 it.business_id
             }
+
             val businessArrayAdapter = ArrayAdapter(
                 requireContext(),
                 android.R.layout.simple_spinner_dropdown_item,
@@ -372,8 +456,17 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
             )
             businessSpinner.setAdapter(businessArrayAdapter)
 
+
+            val firstBussiness = business.firstOrNull()
             //show job profiles in view
-            val jobProfiles = businessList.map {
+            val jobProfiles = businessList
+                .filter {
+                    if(firstBussiness == null )
+                        true
+                    else
+                        it.businessId == firstBussiness.business_id
+                }
+                .map {
                 JobProfile(
                     id = it.jobProfileId,
                     title = it.jobProfileName

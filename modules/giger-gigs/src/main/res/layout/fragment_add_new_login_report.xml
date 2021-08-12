@@ -66,15 +66,14 @@
                     android:id="@+id/city_spinner_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                   >
+                    android:layout_marginTop="@dimen/size_40"
+                    android:orientation="vertical">
 
-                    <Spinner
+                    <com.toptoche.searchablespinnerlibrary.SearchableSpinner
                         android:id="@+id/citySpinner"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/size_46"
                         android:layout_marginStart="@dimen/size_16"
-                        android:layout_marginTop="@dimen/size_16"
                         android:layout_marginEnd="@dimen/size_16"
                         android:background="@drawable/spinner_background_rectangle_round_pink"
                         android:clickable="true"
@@ -170,7 +169,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/size_16"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="40dp"
                 android:fontFamily="@font/lato"
                 android:lineSpacingExtra="6sp"
                 android:textColor="#202325"

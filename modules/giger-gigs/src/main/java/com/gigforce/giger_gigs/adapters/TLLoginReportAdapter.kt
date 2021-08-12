@@ -53,8 +53,8 @@ class TLLoginReportAdapter() : RecyclerView.Adapter<TLLoginReportAdapter.TlLogin
         private val businessAndCityTV: TextView = view.businessAndcityTV
         private val profileNameTV: TextView = view.profile_name_tv
         fun bindValues(listingTLModel: DailyLoginReport, position: Int) {
-            profileNameTV.text = listingTLModel.businessData?.jobProfileName
-            businessAndCityTV.text = "${listingTLModel.businessData?.businessName} - ${listingTLModel.businessData?.city?.name}"
+            profileNameTV.text = listingTLModel.businessData?.businessName
+            businessAndCityTV.text = "${listingTLModel.businessData?.jobProfileName} - ${listingTLModel.businessData?.city?.name}"
         }
 
         override fun onClick(p0: View?) {
