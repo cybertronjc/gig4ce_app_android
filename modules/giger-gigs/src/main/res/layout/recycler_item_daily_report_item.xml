@@ -35,6 +35,7 @@
                 android:scrollHorizontally="true"
                 android:ellipsize="end"
                 android:maxLines="1"
+                android:paddingEnd="4dp"
                 app:layout_constraintEnd_toStartOf="@+id/view_details_label"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
