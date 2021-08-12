@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 import com.gigforce.core.di.interfaces.IBuildConfigVM
+import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.core.utils.Lce
 import com.gigforce.giger_gigs.models.*
@@ -38,9 +39,10 @@ class AddDailyLoginReportViewModel @Inject constructor (
 ) : ViewModel() {
 
     companion object {
-        private const val TAG = "AddNewLoginSummaryViewModel"
+        private const val TAG = "AddDailyLoginReportViewModel"
     }
 
+    private val logger = GigforceLogger()
     private val tlLoginSummaryRepository= TlLoginSummaryRepository(iBuildConfig)
     private val firebaseAuthStateListener= FirebaseAuthStateListener.getInstance()
     private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository()
@@ -127,11 +129,17 @@ class AddDailyLoginReportViewModel @Inject constructor (
     ) = viewModelScope.launch{
         _submitDataState.postValue("Loading")
         try {
+            logger.d(TAG,"Submitting login report ...${addNewSummaryReqModel}")
+
             val res = tlLoginSummaryRepository.submitLoginReport(
                 addNewSummaryReqModel
             )
+
+            logger.d(TAG,"Submitting login report submitted")
             _submitDataState.postValue("Created")
         }catch (e: Exception){
+            logger.e(TAG,"Submitting login report submitted",e)
+
             e.printStackTrace()
             _submitDataState.postValue("Error")
         }
