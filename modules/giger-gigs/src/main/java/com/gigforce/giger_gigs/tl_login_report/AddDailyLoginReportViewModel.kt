@@ -137,30 +137,4 @@ class AddDailyLoginReportViewModel @Inject constructor (
         }
     }
 
-
-
-    fun getBusinessListForProcessingData(): List<LoginSummaryBusiness> {
-        var list = arrayListOf<LoginSummaryBusiness>()
-
-        businessListForView.forEachIndexed { index, itemData ->
-            val data = itemData as BusinessListRecyclerItemData.BusinessRecyclerItemData
-            list.add(LoginSummaryBusiness(data.businessId, data.businessName, data.legalName, data.loginCount))
-        }
-
-        return list.toList()
-    }
-
-    fun updateList(businessId: String, text: String){
-        businessListForView.forEachIndexed { index, itemData ->
-            val data = itemData as BusinessListRecyclerItemData.BusinessRecyclerItemData
-            if (businessId.equals(data.businessId)){
-                if (text.isEmpty()){
-                    itemData.loginCount = null
-                } else {
-                    itemData.loginCount = text.toInt()
-                }
-
-            }
-        }
-    }
 }

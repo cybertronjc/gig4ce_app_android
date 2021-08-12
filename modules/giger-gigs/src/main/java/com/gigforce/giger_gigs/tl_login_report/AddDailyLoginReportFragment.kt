@@ -141,7 +141,7 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
                                 }
                             val jobProfileArrayAdapter = ArrayAdapter(
                                 requireContext(),
-                                android.R.layout.simple_spinner_dropdown_item,
+                                R.layout.item_spinner_text_pink,
                                 jobProfiles
                             )
                             jobProfileSpinner.setAdapter(jobProfileArrayAdapter)
@@ -451,7 +451,7 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
 
             val businessArrayAdapter = ArrayAdapter(
                 requireContext(),
-                android.R.layout.simple_spinner_dropdown_item,
+                R.layout.item_spinner_text_pink,
                 business
             )
             businessSpinner.setAdapter(businessArrayAdapter)
@@ -476,7 +476,7 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
             }
             val jobProfileArrayAdapter = ArrayAdapter(
                 requireContext(),
-                android.R.layout.simple_spinner_dropdown_item,
+                R.layout.item_spinner_text_pink,
                 jobProfiles
             )
             jobProfileSpinner.setAdapter(jobProfileArrayAdapter)
@@ -502,7 +502,7 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
         val arrayAdapter = context?.let {
             ArrayAdapter(
                 it,
-                android.R.layout.simple_spinner_dropdown_item,
+                R.layout.item_spinner_text_pink,
                 citiesModelArray
             )
         }

@@ -48,13 +48,7 @@ data class LoginSummaryBusiness(
 
     var updatedBy: String? = null,
 
-    var itemMode: Int = 0,
-
-    @SerializedName("jobProfileId")
-    val jobProfileId: String = "",
-
-    @SerializedName("jobProfileName")
-    val jobProfileName: String = ""
+    var itemMode: Int = 0
 ) : Parcelable {
 
     override fun toString(): String {
@@ -104,13 +98,7 @@ data class BusinessDataReqModel(
     val gigerCount: Int? = null,
 
     @SerializedName("updatedBy")
-    val updatedBy: String? = null,
-
-    @SerializedName("jobProfileId")
-    val jobProfileId: String,
-
-    @SerializedName("jobProfileName")
-    val jobProfileName: String
+    val updatedBy: String? = null
 
 ) : Parcelable
 

@@ -47,6 +47,8 @@ class TLDailyReportListFragment : BaseFragment2<FragmentTlDailyLoginReportListBi
 
     companion object {
         fun newInstance() = TLDailyReportListFragment()
+
+        private const val INTENT_EXTRA_DATE = "date"
     }
 
     @Inject
@@ -55,6 +57,7 @@ class TLDailyReportListFragment : BaseFragment2<FragmentTlDailyLoginReportListBi
     private val viewModel: TLDailyReportListViewModel by viewModels()
     private val dateFormatter =  SimpleDateFormat("dd-MMM-yyyy")
     private val standardDateFormatter =  SimpleDateFormat("dd-MM-yyyy")
+    private var currentlySelectedDate = Date()
 
     private val tlLoginSummaryAdapter: TLLoginReportAdapter by lazy {
         TLLoginReportAdapter().apply {
@@ -67,10 +70,31 @@ class TLDailyReportListFragment : BaseFragment2<FragmentTlDailyLoginReportListBi
         viewBinding: FragmentTlDailyLoginReportListBinding,
         savedInstanceState: Bundle?
     ) {
+        getDataFrom(
+            arguments,
+            savedInstanceState
+        )
         initToolbar()
         initializeViews()
         observer()
         listeners()
+    }
+
+    private fun getDataFrom(arguments: Bundle?, savedInstanceState: Bundle?) {
+        arguments?.let {
+            val serializedDate = it.getSerializable(INTENT_EXTRA_DATE) ?: return@let
+            currentlySelectedDate = serializedDate as Date
+        }
+
+        savedInstanceState?.let {
+            val serializedDate = it.getSerializable(INTENT_EXTRA_DATE) ?: return@let
+            currentlySelectedDate = serializedDate as Date
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putSerializable(INTENT_EXTRA_DATE,currentlySelectedDate)
     }
 
     private fun initToolbar() = viewBinding.apply {
@@ -95,8 +119,8 @@ class TLDailyReportListFragment : BaseFragment2<FragmentTlDailyLoginReportListBi
             }
         }
 
-        viewBinding.dateTv.text = dateFormatter.format(Date())
-        viewModel.getListingForTL("", standardDateFormatter.format(Date()))
+        viewBinding.dateTv.text = dateFormatter.format(currentlySelectedDate)
+        viewModel.getListingForTL("", standardDateFormatter.format(currentlySelectedDate))
     }
 
     private val datePicker: DatePickerDialog by lazy {
@@ -109,6 +133,7 @@ class TLDailyReportListFragment : BaseFragment2<FragmentTlDailyLoginReportListBi
                 newCal.set(Calendar.MONTH, month)
                 newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
                 viewBinding.dateTv.text = dateFormatter.format(newCal.time)
+                currentlySelectedDate = newCal.time
 
                 viewModel.getListingForTL("", standardDateFormatter.format(newCal.time))
             },
@@ -131,6 +156,10 @@ class TLDailyReportListFragment : BaseFragment2<FragmentTlDailyLoginReportListBi
         changeDateBtn.setOnClickListener {
             datePicker.show()
         }
+
+        swipeToRefresh.setOnRefreshListener {
+            viewModel.getListingForTL("", standardDateFormatter.format(currentlySelectedDate))
+        }
     }
 
     private fun observer() = viewBinding.apply {
@@ -138,17 +167,28 @@ class TLDailyReportListFragment : BaseFragment2<FragmentTlDailyLoginReportListBi
             val res = it ?: return@Observer
             when(res){
                 Lce.Loading -> {
-                    progressBar.visibility = View.VISIBLE
+                    if(tlLoginSummaryAdapter.itemCount != 0){
+                        swipeToRefresh.isRefreshing = true
+                    } else {
+                        progressBar.visibility = View.VISIBLE
+                    }
                 }
 
                 is Lce.Content -> {
                     progressBar.visibility = View.GONE
+                    if(swipeToRefresh.isRefreshing)
+                        swipeToRefresh.isRefreshing = false
+
                     setupReyclerView(res.content)
+                    showToast("Data refreshed")
                 }
 
                 is Lce.Error -> {
                     showToast("Error loading data")
                     progressBar.visibility = View.GONE
+
+                    if(swipeToRefresh.isRefreshing)
+                      swipeToRefresh.isRefreshing = false
                 }
             }
         })

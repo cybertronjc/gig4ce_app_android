@@ -91,16 +91,22 @@
             app:strokeColor="@color/lipstick_2"
             app:strokeWidth="1dp" />
 
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/datecity_rv"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_to_refresh"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="28dp"
             app:layout_constraintBottom_toTopOf="@id/add_new"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/dateTv" />
+            app:layout_constraintTop_toBottomOf="@id/dateTv">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/datecity_rv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="28dp" />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -108,10 +114,10 @@
             android:layout_height="30dp"
             android:layout_gravity="center"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@id/datecity_rv"
-            app:layout_constraintEnd_toEndOf="@id/datecity_rv"
-            app:layout_constraintStart_toStartOf="@id/datecity_rv"
-            app:layout_constraintTop_toTopOf="@id/datecity_rv" />
+            app:layout_constraintBottom_toBottomOf="@id/swipe_to_refresh"
+            app:layout_constraintEnd_toEndOf="@id/swipe_to_refresh"
+            app:layout_constraintStart_toStartOf="@id/swipe_to_refresh"
+            app:layout_constraintTop_toTopOf="@id/swipe_to_refresh" />
 
         <TextView
             android:id="@+id/noData"
@@ -126,10 +132,10 @@
             android:text="No Data Found"
             android:textColor="@color/black"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@id/datecity_rv"
-            app:layout_constraintEnd_toEndOf="@id/datecity_rv"
-            app:layout_constraintStart_toStartOf="@id/datecity_rv"
-            app:layout_constraintTop_toTopOf="@id/datecity_rv" />
+            app:layout_constraintBottom_toBottomOf="@id/swipe_to_refresh"
+            app:layout_constraintEnd_toEndOf="@id/swipe_to_refresh"
+            app:layout_constraintStart_toStartOf="@id/swipe_to_refresh"
+            app:layout_constraintTop_toTopOf="@id/swipe_to_refresh" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

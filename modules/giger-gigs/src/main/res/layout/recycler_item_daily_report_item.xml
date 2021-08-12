@@ -22,17 +22,20 @@
             android:layout_height="wrap_content"
             android:paddingStart="10dp"
             android:paddingTop="8dp"
-            android:paddingEnd="10dp"
             android:paddingBottom="8dp">
 
 
             <TextView
                 android:id="@+id/businessAndcityTV"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/lato_bold"
                 android:lineSpacingExtra="6sp"
                 android:textColor="#202325"
+                android:scrollHorizontally="true"
+                android:ellipsize="end"
+                android:maxLines="1"
+                app:layout_constraintEnd_toStartOf="@+id/view_details_label"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Gurgaon" />
