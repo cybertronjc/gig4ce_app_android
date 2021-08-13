@@ -90,7 +90,7 @@
                         android:paddingStart="10dp"
                         android:textSize="16sp"
                         android:textColor="@color/lipstick_2"
-                        android:background="@drawable/spinner_background_rectangle_round_pink"
+                        android:background="@drawable/background_rectangle_round_pink"
                         />
 
                 </LinearLayout>
@@ -113,6 +113,20 @@
                         android:clickable="true"
                         android:inputType="none" />
 
+                    <TextView
+                        android:id="@+id/bussinessTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size_46"
+                        android:layout_marginStart="@dimen/size_16"
+                        android:layout_marginTop="@dimen/size_16"
+                        android:layout_marginEnd="@dimen/size_16"
+                        android:gravity="center_vertical"
+                        android:paddingStart="10dp"
+                        android:textSize="16sp"
+                        android:textColor="@color/lipstick_2"
+                        android:background="@drawable/background_rectangle_round_pink"
+                        />
+
 
                 </LinearLayout>
 
@@ -133,6 +147,20 @@
                         android:background="@drawable/spinner_background_rectangle_round_pink"
                         android:clickable="true"
                         android:inputType="none" />
+
+                    <TextView
+                        android:id="@+id/jobProfileTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size_46"
+                        android:layout_marginStart="@dimen/size_16"
+                        android:layout_marginTop="@dimen/size_16"
+                        android:layout_marginEnd="@dimen/size_16"
+                        android:gravity="center_vertical"
+                        android:paddingStart="10dp"
+                        android:textSize="16sp"
+                        android:textColor="@color/lipstick_2"
+                        android:background="@drawable/background_rectangle_round_pink"
+                        />
 
                 </LinearLayout>
 
