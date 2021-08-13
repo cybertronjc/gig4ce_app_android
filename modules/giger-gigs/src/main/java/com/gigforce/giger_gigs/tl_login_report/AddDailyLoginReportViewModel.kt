@@ -61,8 +61,8 @@ class AddDailyLoginReportViewModel @Inject constructor (
     private val _viewState = MutableLiveData<BusinessAppViewState>()
     val viewState: LiveData<BusinessAppViewState> = _viewState
 
-    private val _submitDataState = MutableLiveData<String>()
-    val submitDataState: LiveData<String> = _submitDataState
+    private val _submitDataState = MutableLiveData<Lce<String>>()
+    val submitDataState: LiveData<Lce<String>> = _submitDataState
 
     fun getCities() = viewModelScope.launch {
         _cities.postValue(Lce.loading())
@@ -127,21 +127,25 @@ class AddDailyLoginReportViewModel @Inject constructor (
     fun submitLoginReportData(
         addNewSummaryReqModel:  List<DailyTlAttendanceReport>
     ) = viewModelScope.launch{
-        _submitDataState.postValue("Loading")
+        _submitDataState.postValue(Lce.loading())
         try {
             logger.d(TAG,"Submitting login report ...${addNewSummaryReqModel}")
 
-            val res = tlLoginSummaryRepository.submitLoginReport(
+            val response = tlLoginSummaryRepository.submitLoginReport(
                 addNewSummaryReqModel
             )
 
             logger.d(TAG,"Submitting login report submitted")
-            _submitDataState.postValue("Created")
+            _submitDataState.postValue(Lce.content(
+                response.message ?: "Record submitted"
+            ))
         }catch (e: Exception){
             logger.e(TAG,"Submitting login report submitted",e)
 
             e.printStackTrace()
-            _submitDataState.postValue("Error")
+            _submitDataState.postValue(Lce.error(
+                e.message ?: "Unable to submit, please try again"
+            ))
         }
     }
 

@@ -16,6 +16,7 @@ import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.Lce
+import com.gigforce.core.utils.Lse
 import com.gigforce.giger_gigs.LoginSummaryConstants
 import com.gigforce.giger_gigs.R
 import com.gigforce.giger_gigs.databinding.FragmentAddNewLoginReportBinding
@@ -359,7 +360,6 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
                 }
 
                 is Lce.Content -> {
-                    showToast("getting cities")
 
                     if (mode == LoginSummaryConstants.MODE_ADD) {
                         citySpinner.isEnabled = true
@@ -380,7 +380,6 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
             val state = it ?: return@Observer
             when (state) {
                 is BusinessAppViewState.LoadingDataFromServer -> {
-                    showToast("Loading businesses")
                 }
 
                 is BusinessAppViewState.BusinessListLoaded -> {
@@ -399,25 +398,24 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
             val result = it ?: return@Observer
 
             when (result) {
-                "Loading" -> {
-                    showToast("Submitting data")
-                    viewBinding.progressBar.visibility = View.VISIBLE
-                }
+                is Lce.Content -> {
 
-                "Created" -> {
-                    showToast("Data submitted successfully")
                     viewBinding.progressBar.visibility = View.GONE
+                    showToast(result.content)
                     navigation.popBackStack()
                 }
+                is Lce.Error -> {
 
-                "Already Exists" -> {
                     viewBinding.progressBar.visibility = View.GONE
-                    showToast("Data already exists")
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle("Unable to submit")
+                        .setMessage(result.error)
+                        .setPositiveButton("Okay"){_,_ -> }
+                        .show()
                 }
+                Lce.Loading -> {
 
-                "Error" -> {
-                    viewBinding.progressBar.visibility = View.GONE
-                    showToast("Error submitting data")
+                    viewBinding.progressBar.visibility = View.VISIBLE
                 }
             }
         })

@@ -180,7 +180,6 @@ class TLDailyReportListFragment : BaseFragment2<FragmentTlDailyLoginReportListBi
                         swipeToRefresh.isRefreshing = false
 
                     setupReyclerView(res.content)
-                    showToast("Data refreshed")
                 }
 
                 is Lce.Error -> {

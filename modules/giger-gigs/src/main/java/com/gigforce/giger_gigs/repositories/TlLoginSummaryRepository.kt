@@ -2,6 +2,7 @@ package com.gigforce.giger_gigs.repositories
 
 import android.util.Log
 import com.gigforce.common_ui.viewdatamodels.GigStatus
+import com.gigforce.common_ui.viewdatamodels.leadManagement.AssignGigResponse
 import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.fb.BaseFirestoreDBRepository
@@ -14,6 +15,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import okhttp3.ResponseBody
 import retrofit2.Response
+import java.io.IOException
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -83,18 +87,32 @@ class TlLoginSummaryRepository (
 
     suspend fun submitLoginReport(
         addNewSummaryReqModel: List<DailyTlAttendanceReport>
-    ) {
+    ): AssignGigResponse {
 
-        addNewSummaryReqModel.forEach {
-
+        try {
             val response = loginSummaryService.submitLoginReport(
                 buildConfig.getBaseUrl() + "tlDailyReport/submit" ,
-                it
+                addNewSummaryReqModel.first()
             )
 
-            if (!response.isSuccessful){
-                throw Exception(response.message())
+            if(response.isSuccessful){
+                return response.body()!!
+            } else if(response.code() == 400){
+                throw Exception(
+                    response.errorBody()?.string() ?: "Unable to submit record"
+                )
+            } else {
+                throw Exception("Unable to Submit record, please try again later")
             }
+        } catch (e : Exception )
+        {
+            when(e) {
+                is UnknownHostException, is SocketTimeoutException, is IOException -> {
+                    throw Exception("Unable to connect to server")
+                }
+                else -> throw e
+            }
+
         }
     }
 

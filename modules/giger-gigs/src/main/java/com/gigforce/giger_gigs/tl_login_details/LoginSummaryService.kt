@@ -1,5 +1,6 @@
 package com.gigforce.giger_gigs.tl_login_details
 
+import com.gigforce.common_ui.viewdatamodels.leadManagement.AssignGigResponse
 import com.gigforce.giger_gigs.models.*
 import okhttp3.ResponseBody
 import retrofit2.Response
@@ -44,7 +45,7 @@ interface LoginSummaryService {
     suspend fun submitLoginReport(
         @Url getSubmitUrl : String,
         @Body body: DailyTlAttendanceReport
-    ) : Response<ResponseBody>
+    ) : Response<AssignGigResponse>
 
 
     @GET

@@ -95,6 +95,7 @@
             android:id="@+id/swipe_to_refresh"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginTop="28dp"
             app:layout_constraintBottom_toTopOf="@id/add_new"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -104,7 +105,7 @@
                 android:id="@+id/datecity_rv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="28dp" />
+                 />
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
