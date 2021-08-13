@@ -8,6 +8,7 @@ import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.core.retrofit.RetrofitFactory
 import com.gigforce.core.retrofit.RetrofitServiceFactory
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
+import com.gigforce.giger_gigs.tl_login_details.LoginSummaryService
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Binds
 import dagger.Module
@@ -61,6 +62,13 @@ abstract class SingeltonBindings {
             retrofitServiceFactory : RetrofitServiceFactory
         ): ReferralService {
             return retrofitServiceFactory.prepareService(ReferralService::class.java)
+        }
+
+        @Provides
+        fun provideTlReportService(
+            retrofitServiceFactory : RetrofitServiceFactory
+        ): LoginSummaryService {
+            return retrofitServiceFactory.prepareService(LoginSummaryService::class.java)
         }
     }
 }
