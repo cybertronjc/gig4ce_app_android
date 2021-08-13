@@ -23,18 +23,22 @@ import com.gigforce.core.utils.GlideApp
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewmodels.ProfileViewModel
+import com.gigforce.core.navigation.INavigation
+import com.gigforce.verification.util.VerificationConstants
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.chip.Chip
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_profile_main_expanded.*
 import kotlinx.android.synthetic.main.fragment_profile_main_expanded.view.*
 import kotlinx.android.synthetic.main.profile_main_card_background.view.*
 import kotlinx.android.synthetic.main.verified_button.view.*
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class ProfileFragment : BaseFragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -43,18 +47,28 @@ class ProfileFragment : BaseFragment() {
 
 
     }
-
+    var allNavigationList = ArrayList<String>()
+    var intentBundle : Bundle? = null
     private fun getDataFromIntents(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
             FROM_CLIENT_ACTIVATION =
                 it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
             ACTION_TO_PERFORM = it.getInt(StringConstants.ACTION.value, -1)
+
+            it.getStringArrayList(StringConstants.NAVIGATION_STRING_ARRAY.value)?.let { arr ->
+                allNavigationList = arr
+            }
+            intentBundle = it
         }
 
         arguments?.let {
             FROM_CLIENT_ACTIVATION =
                 it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
             ACTION_TO_PERFORM = it.getInt(StringConstants.ACTION.value, -1)
+            it.getStringArrayList(StringConstants.NAVIGATION_STRING_ARRAY.value)?.let { arr ->
+                allNavigationList = arr
+            }
+            intentBundle = it
         }
     }
 
@@ -80,6 +94,9 @@ class ProfileFragment : BaseFragment() {
 
     private val gigerVerificationViewModel: GigVerificationViewModel by activityViewModels()
     val viewModel: ProfileViewModel by activityViewModels<ProfileViewModel>()
+
+    @Inject
+    lateinit var navigation : INavigation
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -601,7 +618,12 @@ class ProfileFragment : BaseFragment() {
             }
             if (ACTION_TO_PERFORM != -1) {
                 when (ACTION_TO_PERFORM) {
-                    UPLOAD_PROFILE_PIC -> popBackState()
+                    UPLOAD_PROFILE_PIC -> {
+                        checkForNextDoc()
+//                        popBackState()
+                    }
+
+
                 }
             }
         }
@@ -614,6 +636,27 @@ class ProfileFragment : BaseFragment() {
         }
     }
 
+    private fun checkForNextDoc() {
+        if (allNavigationList.size == 0) {
+            activity?.onBackPressed()
+        } else {
+            var navigationsForBundle = emptyList<String>()
+            if (allNavigationList.size > 1) {
+                navigationsForBundle =
+                    allNavigationList.slice(IntRange(1, allNavigationList.size - 1))
+                        .filter { it.length > 0 }
+            }
+            navigation.popBackStack()
+            intentBundle?.putStringArrayList(StringConstants.NAVIGATION_STRING_ARRAY.value,  ArrayList(navigationsForBundle))
+            navigation.navigateTo(
+                allNavigationList.get(0),intentBundle)
+//            navigation.navigateTo(
+//                allNavigationList.get(0),
+//                bundleOf(VerificationConstants.NAVIGATION_STRINGS to navigationsForBundle,if(FROM_CLIENT_ACTIVATION) StringConstants.FROM_CLIENT_ACTIVATON.value to true else StringConstants.FROM_CLIENT_ACTIVATON.value to false)
+//            )
+
+        }
+    }
 
 }
 
