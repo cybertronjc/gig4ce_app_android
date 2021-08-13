@@ -370,6 +370,7 @@ class QuestionnaireFragment : Fragment(), AdapterQuestionnaire.AdapterQuestionna
     }
 
     override fun onClickTakMeHome() {
-        navigation.popBackStack("landinghomefragment",inclusive = true)
+//        navigation.popBackStack("landinghomefragment",inclusive = true)
+        navigation.popBackStack()
     }
 }
