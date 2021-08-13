@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
 import com.gigforce.client_activation.R
 import com.gigforce.core.analytics.ClientActivationEvents
 import com.gigforce.core.datamodels.client_activation.Dependency
@@ -220,8 +219,6 @@ class ApplicationClientActivationFragment : Fragment(),
     private fun checkForRedirection() {
         if (!viewModel.redirectToNextStep) return
 
-
-
         for (i in viewModel.itemClicked+1 until adapter.items.size) {
             if (!adapter.items[i].isDone) {
 
@@ -358,60 +355,109 @@ class ApplicationClientActivationFragment : Fragment(),
         viewModel.redirectToNextStep = true
         viewModel.itemClicked = position
 
+        var navigationsForBundle = ArrayList<String>()
+        var adapterList = (rv_status_pending.adapter as AdapterApplicationClientActivation).items
+        var startCreateNavBundle = false
+        var title = ""
+        var typeForQuestionair = ""
+        var courseId = ""
+        adapterList.forEachIndexed{index,data->
+            if(startCreateNavBundle && !data.isDone){
+                navigationsForBundle.add(getNavigationStr(data))
+            }
+            if(data.type == dependency.type){
+                startCreateNavBundle = true
+            }
+            if(data.type == "questionnaire"){
+                title = dependency.title?:""
+                typeForQuestionair = data.type?:""
+            }
+            if(data.type == "learning"){
+                courseId = data.courseId
+            }
+            //code to get data for title type
+
+        }
+        var bundleForFragment = bundleOf(
+            StringConstants.NAVIGATION_STRING_ARRAY.value to navigationsForBundle,
+            StringConstants.FROM_CLIENT_ACTIVATON.value to true,
+            StringConstants.ACTION.value to UPLOAD_PROFILE_PIC,
+            StringConstants.JOB_PROFILE_ID.value to mJobProfileId,
+            StringConstants.TITLE.value to title,
+            StringConstants.TYPE.value to typeForQuestionair,
+            INTENT_EXTRA_COURSE_ID to courseId
+        )
         when (dependency.type) {
             "profile_pic" -> {
                 navigation.navigateTo(
-                        "profile", bundleOf(
-                        StringConstants.FROM_CLIENT_ACTIVATON.value to true,
-                        StringConstants.ACTION.value to UPLOAD_PROFILE_PIC
-
-                )
+                        "profile", bundleForFragment
                 )
 
             }
             "about_me" -> {
                 navigation.navigateTo(
-                        "profile/addBio", bundleOf(
-                        StringConstants.FROM_CLIENT_ACTIVATON.value to true
-                )
+                        "profile/addBio", bundleForFragment
                 )
             }
             "questionnaire" -> navigation.navigateTo(
-                    "learning/questionnair", bundleOf(
-                    StringConstants.JOB_PROFILE_ID.value to mJobProfileId,
-                    StringConstants.TITLE.value to dependency.title,
-                    StringConstants.TYPE.value to dependency.type,
-                    StringConstants.FROM_CLIENT_ACTIVATON.value to true
-            )
+                    "learning/questionnair", bundleForFragment
             )
             "driving_licence" -> navigation.navigateTo(
                     "verification/drivinglicenseimageupload",
-                    bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
+                bundleForFragment
             )
             "learning" ->
 
                 navigation.navigateTo(
                         "learning/coursedetails",
-                        bundleOf(
-                                INTENT_EXTRA_COURSE_ID to dependency.courseId,
-                                StringConstants.FROM_CLIENT_ACTIVATON.value to true
-                        )
+                    bundleForFragment
                 )
 
             "aadhar_card" -> navigation.navigateTo(
                 "verification/aadhaarcardimageupload",
-                bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
+
+                bundleForFragment
             )
 
             "pan_card" -> navigation.navigateTo(
                 "verification/pancardimageupload",
-                bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
+                bundleForFragment
             )
 
             "bank_account" -> navigation.navigateTo(
                 "verification/bank_account_fragment",
-                bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
+                bundleForFragment
             )
+        }
+    }
+
+    private fun getNavigationStr(data: Dependency): String {
+        when(data.type) {
+            "profile_pic" -> {
+                return "profile"
+            }
+            "about_me" -> {
+                return "profile/addBio"
+            }
+            "questionnaire" -> {
+                return "learning/questionnair"
+            }
+            "driving_licence" ->{
+                return "verification/drivinglicenseimageupload"
+            }
+            "learning" ->{
+                return "learning/coursedetails"
+            }
+            "aadhar_card" ->{
+                return "verification/aadhaarcardimageupload"
+            }
+            "pan_card" ->{
+                return "verification/pancardimageupload"
+            }
+            "bank_account" ->{
+                return "verification/bank_account_fragment"
+            }
+            else -> return ""
         }
     }
 

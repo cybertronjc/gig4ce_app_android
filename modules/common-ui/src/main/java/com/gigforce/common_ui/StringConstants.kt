@@ -50,6 +50,7 @@ enum class StringConstants(val value: String) {
     SELECTED_TIME_SLOT("SELECTED_TIME_SLOT"),
     SELECTED_DATE("SELECTED_DATE"),
     FROM_CLIENT_ACTIVATON("FROM_CLIENT_ACTIVATON"),
+    NAVIGATION_STRING_ARRAY("navigation_array"),
     TITLE("TITLE"),
     TYPE("TYPE"),
     ACTION("ACTION"),
