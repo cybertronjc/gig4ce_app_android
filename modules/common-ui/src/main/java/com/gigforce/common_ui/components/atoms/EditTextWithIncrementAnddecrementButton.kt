@@ -70,6 +70,10 @@ class EditTextWithIncrementAndDecrementButton (
         return actualEditText.text.toString().toIntOrNull() ?: 0
     }
 
+    fun getTextAsIntOrNull() : Int?{
+        return actualEditText.text.toString().toIntOrNull()
+    }
+
     fun setOnTextChangeListener(onTextChange: (String) -> Unit){
         actualEditText.onTextChanged(onTextChange)
     }

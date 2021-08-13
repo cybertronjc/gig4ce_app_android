@@ -292,7 +292,9 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
                 return
             }
 
-            if(businessDataItem.totalActive < businessDataItem.loginToday){
+            if(businessDataItem.totalActive != null &&
+                businessDataItem.loginToday != null &&
+                businessDataItem.totalActive  < businessDataItem.loginToday){
 
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle("Login count greater than active")
@@ -302,7 +304,9 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
                 return
             }
 
-            if(businessDataItem.totalActive < businessDataItem.absentToday){
+            if(businessDataItem.totalActive != null &&
+                businessDataItem.absentToday != null &&
+                businessDataItem.totalActive < businessDataItem.absentToday){
 
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle("Absent count greater than active")
@@ -312,7 +316,10 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
                 return
             }
 
-            if(businessDataItem.totalActive < (businessDataItem.absentToday + businessDataItem.loginToday)){
+            if(businessDataItem.totalActive != null &&
+                businessDataItem.absentToday != null &&
+                businessDataItem.loginToday != null &&
+                businessDataItem.totalActive < (businessDataItem.absentToday + businessDataItem.loginToday)){
 
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle("Absent + Login count greater than active")
@@ -334,8 +341,7 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
                     uID = tlUID.toString(),
                     city = selectedCity,
                     businessData = listOf(businessDataItem),
-                    update = false,
-                    loginSummaryDetails?.id.toString()
+                    update = false
                 )
             )
         }
