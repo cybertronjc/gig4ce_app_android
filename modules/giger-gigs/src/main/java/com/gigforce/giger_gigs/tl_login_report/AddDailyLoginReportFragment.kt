@@ -161,6 +161,13 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
             setBackButtonListener(View.OnClickListener {
                 activity?.onBackPressed()
             })
+
+            if(mode == LoginSummaryConstants.MODE_ADD)
+                this.setAppBarTitle("Add Login Report")
+            else if(mode == LoginSummaryConstants.MODE_EDIT)
+                this.setAppBarTitle("Edit Login Report")
+            else
+                this.setAppBarTitle("Login Report")
         }
     }
 
@@ -187,6 +194,8 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
             reportCityOverview.gone()
             addDetailsLabel.text = "Add details"
             cityTextView.gone()
+            bussinessTextView.gone()
+            jobProfileTextView.gone()
 
             viewModel.getCities()
         } else if(mode == LoginSummaryConstants.MODE_EDIT) {
@@ -196,11 +205,22 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
 
             if (loginSummaryDetails != null) {
                 citiesModelArray.toMutableList().add(loginSummaryDetails?.city!!)
+
                 citySpinner.isEnabled = false
                 citySpinner.gone()
-
                 cityTextView.visible()
                 cityTextView.text = loginSummaryDetails?.city?.name ?: ""
+
+                businessSpinner.isEnabled = false
+                businessSpinner.gone()
+                bussinessTextView.visible()
+                bussinessTextView.text = loginSummaryDetails?.businessData?.businessName ?: ""
+
+                jobProfileSpinner.isEnabled = false
+                jobProfileSpinner.gone()
+                jobProfileTextView.visible()
+                jobProfileTextView.text = loginSummaryDetails?.businessData?.jobProfileName ?: ""
+
                 cityOverviewTextview.gone()
 
                 //set businesses
@@ -254,7 +274,9 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
 
     private fun submitLoginSummary() {
         val tlUID = FirebaseAuth.getInstance().currentUser?.uid
-        if (viewBinding.jobProfileSpinner.childCount == 0) {
+        if (mode == LoginSummaryConstants.MODE_ADD &&
+            viewBinding.jobProfileSpinner.childCount == 0
+        ) {
 
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Select job profile")
@@ -264,7 +286,9 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
             return
         }
 
-        if (viewBinding.businessSpinner.childCount == 0) {
+        if (mode == LoginSummaryConstants.MODE_ADD &&
+            viewBinding.businessSpinner.childCount == 0
+        ) {
 
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Select business")
@@ -331,11 +355,32 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
             }
 
             businessDataItem.city = selectedCity
-            businessDataItem.jobProfileId = jobProfile.id
-            businessDataItem.jobProfileName = jobProfile.title
-            businessDataItem.businessId = businessSelected.business_id
-            businessDataItem.businessName = businessSelected.businessName
-            businessDataItem.legalName = businessSelected.legalName
+            businessDataItem.jobProfileId = if(mode == LoginSummaryConstants.MODE_ADD )
+                jobProfile.id
+            else
+                loginSummaryDetails?.businessData?.jobProfileId
+
+            businessDataItem.jobProfileName = if(mode == LoginSummaryConstants.MODE_ADD )
+                jobProfile.title
+            else
+                loginSummaryDetails?.businessData?.jobProfileName
+
+
+            businessDataItem.businessId = if(mode == LoginSummaryConstants.MODE_ADD )
+                businessSelected.business_id
+            else
+                loginSummaryDetails?.businessData?.businessId
+
+            businessDataItem.businessName = if(mode == LoginSummaryConstants.MODE_ADD )
+                businessSelected.businessName
+            else
+                loginSummaryDetails?.businessData?.businessName
+
+
+            businessDataItem.legalName = if(mode == LoginSummaryConstants.MODE_ADD )
+                businessSelected.legalName
+            else
+                loginSummaryDetails?.businessData?.legalName
 
             dailyTLReportList.add(
                 DailyTlAttendanceReport(
