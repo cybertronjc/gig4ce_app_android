@@ -194,7 +194,7 @@ class DailyLoginReportItemEdit(
         val newLogin = viewBinding.newLoginLayout.countEt.getTextAsIntOrNull()
         val openPositions = viewBinding.openPositionsLayout.countEt.getTextAsIntOrNull()
         val lineUpsForTomorrow = viewBinding.tomorrowLineupLayout.countEt.getTextAsIntOrNull()
-        val expectedForTommorrow = viewBinding.openPositionsLayout.countEt.getTextAsIntOrNull()
+        val expectedForTommorrow = viewBinding.expectedLoginTommorrowLayout.countEt.getTextAsIntOrNull()
 
         return BusinessDataItem(
             newLoginToday = newLogin,
