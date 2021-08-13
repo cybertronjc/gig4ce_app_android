@@ -43,21 +43,40 @@ class DailyLoginReportItemView(
     fun showData(businessDataItem: BusinessData) = viewBinding.apply {
 
 
-        this.activeRidersLayout.countEt.setText((businessDataItem.totalActive ?: 0).toString())
-        this.loginLayout.countEt.setText((businessDataItem.loginToday ?: 0).toString())
-        this.absentLayout.countEt.setText((businessDataItem.absentToday ?: 0).toString())
-        this.resignedLayout.countEt.setText((businessDataItem.resignedToday ?: 0).toString())
-        this.newOnboardingLayout.countEt.setText(
-            (businessDataItem.newOnboardingToday ?: 0).toString()
+        this.activeRidersLayout.countEt.setText(
+            formatData(businessDataItem.totalActive)
         )
-        this.inTrainingLayout.countEt.setText((businessDataItem.inTrainingToday ?: 0).toString())
-        this.newLoginLayout.countEt.setText((businessDataItem.newLoginToday ?: 0).toString())
-        this.openPositionsLayout.countEt.setText((businessDataItem.openPositions ?: 0).toString())
+        this.loginLayout.countEt.setText(
+            formatData(businessDataItem.loginToday)
+        )
+        this.absentLayout.countEt.setText(
+            formatData(businessDataItem.absentToday)
+        )
+        this.resignedLayout.countEt.setText(
+            formatData(businessDataItem.resignedToday)
+        )
+        this.newOnboardingLayout.countEt.setText(
+            formatData(businessDataItem.newOnboardingToday)
+        )
+        this.inTrainingLayout.countEt.setText(
+            formatData(businessDataItem.inTrainingToday)
+        )
+        this.newLoginLayout.countEt.setText(
+            formatData(businessDataItem.newLoginToday)
+        )
+        this.openPositionsLayout.countEt.setText(
+            formatData(businessDataItem.openPositions)
+        )
         this.tomorrowLineupLayout.countEt.setText(
-            (businessDataItem.totalLineupsForTomorrow ?: 0).toString()
+            formatData(businessDataItem.totalLineupsForTomorrow)
         )
         this.expectedLoginTommorrowLayout.countEt.setText(
-            (businessDataItem.expectedLoginsTomorrow ?: 0).toString()
+            formatData(businessDataItem.expectedLoginsTomorrow)
         )
+    }
+
+    private fun formatData(value : Int?) : String{
+        val finalValue = value ?: return "-"
+        return finalValue.toString()
     }
 }
