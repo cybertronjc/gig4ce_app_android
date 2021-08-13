@@ -22,7 +22,7 @@
             app:backgroundType="WhiteBar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:titleText="Daily report summary" />
+            app:titleText="Login Report" />
 
 
         <TextView
@@ -71,11 +71,12 @@
             app:layout_constraintStart_toEndOf="@id/dateTv"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.button.MaterialButton
+
+        <Button
             android:id="@+id/add_new"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="match_parent"
             android:layout_height="48dp"
+            android:background="@drawable/app_gradient_button"
             android:layout_marginStart="@dimen/size_16"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="@dimen/size_16"
@@ -84,12 +85,11 @@
             android:minHeight="@dimen/size_36"
             android:text="Add New"
             android:textAllCaps="false"
-            android:textColor="@color/lipstick_2"
+            android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:strokeColor="@color/lipstick_2"
-            app:strokeWidth="1dp" />
+            app:layout_constraintStart_toStartOf="parent" />
+
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipe_to_refresh"

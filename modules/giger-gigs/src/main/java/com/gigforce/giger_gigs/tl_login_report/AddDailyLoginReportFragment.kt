@@ -161,6 +161,13 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
             setBackButtonListener(View.OnClickListener {
                 activity?.onBackPressed()
             })
+
+            if(mode == LoginSummaryConstants.MODE_ADD)
+                this.setAppBarTitle("Add Login Report")
+            else if(mode == LoginSummaryConstants.MODE_EDIT)
+                this.setAppBarTitle("Edit Login Report")
+            else
+                this.setAppBarTitle("Login Report")
         }
     }
 
