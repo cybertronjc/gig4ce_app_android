@@ -90,7 +90,7 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
     fun refreshListHandler() {
         hadler.postDelayed({
             try {
-                if (!onpaused && !scrollingAdded) {
+                if (!onpaused) {
                     initializeViews()
                     refreshListHandler()
                 }
@@ -190,7 +190,7 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
                 scrollingAdded = false
             }
 
-            datecityRv.smoothScrollToPosition(tlLoginSummaryAdapter.itemCount/2)
+            //datecityRv.smoothScrollToPosition(tlLoginSummaryAdapter.itemCount/2)
 
         }
         datecityRv.adapter = tlLoginSummaryAdapter

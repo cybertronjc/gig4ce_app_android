@@ -142,4 +142,6 @@ dependencies {
 
     implementation 'com.github.yalantis:ucrop:2.2.4'
 
+    implementation 'com.github.CanHub:Android-Image-Cropper:3.2.2'
+
 }

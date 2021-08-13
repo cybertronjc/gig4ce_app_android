@@ -3,11 +3,14 @@ package com.gigforce.verification.mainverification.drivinglicense
 import android.Manifest
 import android.app.Activity
 import android.app.DatePickerDialog
+import android.app.Instrumentation
 import android.content.ContentResolver
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.graphics.Color.WHITE
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -20,15 +23,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
 import android.widget.DatePicker
+import androidx.activity.result.ActivityResult
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import com.canhub.cropper.CropImageContract
+import com.canhub.cropper.CropImageView
+import com.canhub.cropper.options
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.ext.showToast
+import com.gigforce.common_ui.utils.ImageCropActivity
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.AppConstants
@@ -36,6 +44,7 @@ import com.gigforce.core.StringConstants
 import com.gigforce.core.datamodels.verification.DrivingLicenseDataModel
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.setDarkStatusBarTheme
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.DateHelper
@@ -51,6 +60,7 @@ import com.gigforce.verification.util.VerificationConstants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jaeger.library.StatusBarUtil
 import com.yalantis.ucrop.UCrop
+import com.yalantis.ucrop.UCropActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.veri_screen_info_component.view.*
 import okhttp3.MediaType
@@ -126,6 +136,7 @@ class DrivingLicenseFragment : Fragment(),
         setViews()
         listeners()
         observer()
+        //checkForCroppedImage()
 
     }
 
@@ -155,6 +166,30 @@ class DrivingLicenseFragment : Fragment(),
             }
         }
     }
+
+    private fun checkForCroppedImage() {
+        var navFragmentsData = activity as NavFragmentsData
+        if (navFragmentsData?.getData() != null) {
+            if (navFragmentsData?.getData()?.getString(StringConstants.IMAGE_CROP_URI.value)?.isNotEmpty() == true) {
+                val imageUriResultCrop = Uri.parse(navFragmentsData?.getData()?.getString(StringConstants.IMAGE_CROPPED_URI.value, ""))
+                if (imageUriResultCrop != null) {
+                    Log.d("Result crop", "cropped uri : $imageUriResultCrop")
+                    if (DrivingLicenseSides.FRONT_SIDE == currentlyClickingImageOfSide) {
+                        dlFrontImagePath = imageUriResultCrop
+                        showFrontDrivingLicense(dlFrontImagePath!!)
+                    } else if (DrivingLicenseSides.BACK_SIDE == currentlyClickingImageOfSide) {
+                        dlBackImagePath = imageUriResultCrop
+                        showBackDrivingLicense(dlBackImagePath!!)
+                    }
+                }
+
+                    }
+            else {
+                navFragmentsData?.setData(bundleOf())
+            }
+        }
+    }
+
     var manuallyRequestBackpress = false
     private fun checkForNextDoc() {
         if (allNavigationList.size == 0) {
@@ -614,7 +649,8 @@ class DrivingLicenseFragment : Fragment(),
         if (requestCode == REQUEST_CAPTURE_IMAGE || requestCode == REQUEST_PICK_IMAGE) {
             val outputFileUri = ImagePicker.getImageFromResult(requireContext(), resultCode, data)
             if (outputFileUri != null) {
-                startCrop(outputFileUri)
+                //startCrop(outputFileUri)
+                startCropImage(outputFileUri)
             }
         } else if (requestCode == UCrop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
             val imageUriResultCrop: Uri? = UCrop.getOutput(data!!)
@@ -632,6 +668,16 @@ class DrivingLicenseFragment : Fragment(),
                 val bitmap = data.data as Bitmap
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
 
+            }
+        } else if (requestCode == 90 && resultCode == Activity.RESULT_OK){
+            val imageUriResultCrop: Uri? =  Uri.parse(data?.getStringExtra("croppedImage"))
+            Log.d("ImageUri", imageUriResultCrop.toString())
+            if (DrivingLicenseSides.FRONT_SIDE == currentlyClickingImageOfSide) {
+                dlFrontImagePath = imageUriResultCrop
+                showFrontDrivingLicense(dlFrontImagePath!!)
+            } else if (DrivingLicenseSides.BACK_SIDE == currentlyClickingImageOfSide) {
+                dlBackImagePath = imageUriResultCrop
+                showBackDrivingLicense(dlBackImagePath!!)
             }
         }
     }
@@ -695,6 +741,84 @@ class DrivingLicenseFragment : Fragment(),
 //        if (viewBinding.toplayoutblock.viewPager2.currentItem == 0) openCameraAndGalleryOptionForFrontSideImage() else openCameraAndGalleryOptionForBackSideImage()
 //    }
 
+    private fun startCropImage(imageUri: Uri): Unit {
+        Log.v("Start Crop", "started")
+        //can use this for a new name every time
+        val timeStamp = SimpleDateFormat(
+            "yyyyMMdd_HHmmss",
+            Locale.getDefault()
+        ).format(Date())
+        val imageFileName = PREFIX + "_" + timeStamp + "_"
+
+        // start cropping activity for pre-acquired image saved on the device and customize settings
+//        cropImage.launch(
+//            options(uri = imageUri) {
+//                setScaleType(CropImageView.ScaleType.FIT_CENTER)
+//                setCropShape(CropImageView.CropShape.RECTANGLE)
+//                setGuidelines(CropImageView.Guidelines.ON_TOUCH)
+//                setAspectRatio(1, 1)
+//                setMaxZoom(4)
+//                setAutoZoomEnabled(true)
+//                setMultiTouchEnabled(true)
+//                setCenterMoveEnabled(true)
+//                setShowCropOverlay(true)
+//                setAllowFlipping(true)
+//                setSnapRadius(3f)
+//                setTouchRadius(48f)
+//                setInitialCropWindowPaddingRatio(0.1f)
+//                setBorderLineThickness(3f)
+//                setBorderLineColor(Color.argb(170, 255, 255, 255))
+//                setBorderCornerThickness(2f)
+//                setBorderCornerOffset(5f)
+//                setBorderCornerLength(14f)
+//                setBorderCornerColor(BLACK)
+//                setGuidelinesThickness(1f)
+//                setDarkStatusBarTheme(true)
+//                setGuidelinesColor(R.color.black)
+//                setBackgroundColor(Color.argb(119, 0, 0, 0))
+//                setMinCropWindowSize(24, 24)
+//                setMinCropResultSize(20, 20)
+//                setMaxCropResultSize(99999, 99999)
+//                setActivityTitle("Crop and rotate")
+//                setActivityMenuIconColor(0)
+//                setOutputCompressFormat(Bitmap.CompressFormat.JPEG)
+//                setOutputCompressQuality(90)
+//                setRequestedSize(0, 0)
+//                setRequestedSize(0, 0, CropImageView.RequestSizeOptions.RESIZE_INSIDE)
+//                setInitialCropWindowRectangle(null)
+//                setInitialRotation(90)
+//                setAllowCounterRotation(false)
+//                setFlipHorizontally(false)
+//                setFlipVertically(false)
+//                setCropMenuCropButtonTitle(null)
+//                setCropMenuCropButtonIcon(0)
+//                setAllowRotation(true)
+//                setNoOutputImage(false)
+//                setFixAspectRatio(false)
+//            }
+//        )
+
+        val photoCropIntent = Intent(context, ImageCropActivity::class.java)
+        photoCropIntent.putExtra("outgoingUri", imageUri.toString())
+        startActivityForResult(photoCropIntent, 90)
+
+//        navigation.navigateTo("gig/imageCropFragment", bundleOf(
+//            StringConstants.IMAGE_CROP_URI.value to imageUri.toString()
+//        ))
+    }
+    private val cropImage = registerForActivityResult(CropImageContract()) { result ->
+        if (result.isSuccessful) {
+            // use the returned uri
+            val uriContent = result.uriContent
+            val uriFilePath = context?.let { result.getUriFilePath(it) } // optional usage
+            Log.d("returnedUri", "content : $uriContent , path: $uriFilePath")
+        } else {
+            // an error occurred
+            val exception = result.error
+            Log.d("returnedUriError", "error : $exception")
+        }
+    }
+
     private fun startCrop(uri: Uri): Unit {
         Log.v("Start Crop", "started")
         //can use this for a new name every time
@@ -730,8 +854,10 @@ class DrivingLicenseFragment : Fragment(),
         options.setCompressionQuality(70)
         options.setCompressionFormat(Bitmap.CompressFormat.PNG)
 //        options.setMaxBitmapSize(1000)
-        options.setHideBottomControls((false))
+
         options.setFreeStyleCropEnabled(true)
+//        options.setAllowedGestures(UCropActivity.SCALE, UCropActivity.SCALE, UCropActivity.SCALE)
+        options.setHideBottomControls(true)
         options.setStatusBarColor(ResourcesCompat.getColor(resources, R.color.topBarDark, null))
         options.setToolbarColor(ResourcesCompat.getColor(resources, R.color.topBarDark, null))
         options.setToolbarTitle(getString(R.string.crop_and_rotate))

@@ -295,6 +295,15 @@
         <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
     </style>
 
+    <style name="ImageCropper" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimaryDark">@color/topBarDark</item>
+        <item name="android:statusBarColor">@color/grey_photocrop_background</item>
+        <!--        windowbackground is loaded first, then colorBackground takes over. Both are needed to avoid flickering-->
+        <item name="android:windowBackground">@color/white</item>
+        <item name="android:colorBackground">@color/white</item>
+        <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
+    </style>
+
     <style name="VerificationSliderTheme">
         <item name="android:elevation">6dp</item>
         <item name="android:layout_height">wrap_content</item>
