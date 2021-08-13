@@ -1,5 +1,6 @@
 package com.gigforce.giger_gigs.tl_login_details
 
+import com.gigforce.common_ui.viewdatamodels.leadManagement.AssignGigResponse
 import com.gigforce.giger_gigs.models.*
 import okhttp3.ResponseBody
 import retrofit2.Response
@@ -28,8 +29,24 @@ interface LoginSummaryService {
         @Url getListingUrl : String,
         @Query("page") page: Int,
         @Query("pagesize") pagesize: Int
-
     ) : Response<List<ListingTLModel>>
+
+
+    @GET
+    suspend fun getDailyLoginReportListingForTL(
+        @Url getListingUrl : String,
+        @Query("searchCity") searchCity: String,
+        @Query("searchDate") searchDate: String,
+        @Query("page") page: Int,
+        @Query("pagesize") pagesize: Int
+    ) : Response<List<DailyLoginReport>>
+
+    @POST
+    suspend fun submitLoginReport(
+        @Url getSubmitUrl : String,
+        @Body body: DailyTlAttendanceReport
+    ) : Response<AssignGigResponse>
+
 
     @GET
     suspend fun checkIfTLMarked(

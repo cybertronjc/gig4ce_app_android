@@ -47,7 +47,7 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
     var scrollingAdded = false
 
     private val tlLoginSummaryAdapter: TLLoginSummaryAdapter by lazy {
-        TLLoginSummaryAdapter(requireContext(), this).apply {
+        TLLoginSummaryAdapter(requireContext(),this).apply {
             setOnTlItemSelectedListener(this@TeamLeaderLoginDetailsFragment)
         }
     }

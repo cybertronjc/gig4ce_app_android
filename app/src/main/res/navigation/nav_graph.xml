@@ -984,6 +984,14 @@
         android:id="@+id/addNewLoginSummaryFragment"
         android:name="com.gigforce.giger_gigs.tl_login_details.AddNewLoginSummaryFragment"
         android:label="AddNewLoginSummaryFragment" />
+    <fragment
+        android:id="@+id/addLoginReportFragment"
+        android:name="com.gigforce.giger_gigs.tl_login_report.AddDailyLoginReportFragment"
+        android:label="AddDailyLoginReportFragment" />
+    <fragment
+        android:id="@+id/loginReportListFragment"
+        android:name="com.gigforce.giger_gigs.tl_login_report.TLDailyReportListFragment"
+        android:label="TLDailyReportListFragment" />
 
 
 </navigation>

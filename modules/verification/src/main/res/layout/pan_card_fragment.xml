@@ -81,10 +81,12 @@
                         android:layout_marginLeft="@dimen/dp_sm1"
                         android:layout_marginTop="@dimen/dp_xl1"
                         android:layout_marginRight="@dimen/dp_sm1"
+                        android:layout_marginBottom="@dimen/dp_sm1"
                         android:hint="PAN Card Number"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView10">
+                        app:layout_constraintTop_toBottomOf="@+id/textView10"
+                        app:layout_constraintBottom_toTopOf="@+id/reupload_button_pan">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:layout_width="match_parent"

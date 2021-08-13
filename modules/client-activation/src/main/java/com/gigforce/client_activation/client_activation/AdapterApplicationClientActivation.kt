@@ -65,7 +65,7 @@ class AdapterApplicationClientActivation :
 //                if (position == items.size - 1) View.GONE else View.VISIBLE
            itemView.setOnClickListener {
                 if (adapterPosition == -1) return@setOnClickListener
-                callbacks?.onItemClick(dependency)
+                callbacks?.onItemClick(dependency,position)
 
             }
 
@@ -95,7 +95,7 @@ class AdapterApplicationClientActivation :
     }
 
     interface AdapterApplicationClientActivationCallbacks {
-        fun onItemClick(dependency: Dependency);
+        fun onItemClick(dependency: Dependency,position: Int);
 
     }
 

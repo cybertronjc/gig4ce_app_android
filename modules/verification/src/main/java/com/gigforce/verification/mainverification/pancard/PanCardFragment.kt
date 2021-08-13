@@ -131,6 +131,7 @@ class PanCardFragment : Fragment(),
     }
 
     var allNavigationList = ArrayList<String>()
+    var intentBundle : Bundle? = null
     private fun getDataFromIntent(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
             FROM_CLIENT_ACTIVATON =
@@ -138,6 +139,7 @@ class PanCardFragment : Fragment(),
             it.getStringArrayList(VerificationConstants.NAVIGATION_STRINGS)?.let { arr ->
                 allNavigationList = arr
             }
+            intentBundle = it
         } ?: run {
             arguments?.let {
                 FROM_CLIENT_ACTIVATON =
@@ -145,6 +147,7 @@ class PanCardFragment : Fragment(),
                 it.getStringArrayList(VerificationConstants.NAVIGATION_STRINGS)?.let { arrData ->
                     allNavigationList = arrData
                 }
+                intentBundle = it
             }
         }
 
@@ -392,7 +395,7 @@ class PanCardFragment : Fragment(),
     var manuallyRequestBackpress = false
     private fun checkForNextDoc() {
         if (allNavigationList.size == 0) {
-            manuallyRequestBackpress = true
+//            manuallyRequestBackpress = true
             activity?.onBackPressed()
         } else {
             var navigationsForBundle = emptyList<String>()
@@ -402,10 +405,17 @@ class PanCardFragment : Fragment(),
                         .filter { it.length > 0 }
             }
             navigation.popBackStack()
-            navigation.navigateTo(
-                allNavigationList.get(0),
-                bundleOf(VerificationConstants.NAVIGATION_STRINGS to navigationsForBundle)
+
+            intentBundle?.putStringArrayList(
+                com.gigforce.common_ui.StringConstants.NAVIGATION_STRING_ARRAY.value,
+                java.util.ArrayList(navigationsForBundle)
             )
+            navigation.navigateTo(
+                allNavigationList.get(0),intentBundle)
+//            navigation.navigateTo(
+//                allNavigationList.get(0),
+//                bundleOf(VerificationConstants.NAVIGATION_STRINGS to navigationsForBundle,if(FROM_CLIENT_ACTIVATON) StringConstants.FROM_CLIENT_ACTIVATON.value to true else StringConstants.FROM_CLIENT_ACTIVATON.value to false)
+//            )
 
         }
     }
@@ -801,12 +811,11 @@ class PanCardFragment : Fragment(),
 
     override fun onBackPressed(): Boolean {
         if (FROM_CLIENT_ACTIVATON) {
-            if (!manuallyRequestBackpress || viewBinding.toplayoutblock.isDocDontOptChecked() || (!anyDataEntered && (verificationScreenStatus == VerificationScreenStatus.DEFAULT || verificationScreenStatus == VerificationScreenStatus.FAILED))) {
+            if (!manuallyRequestBackpress) { // || viewBinding.toplayoutblock.isDocDontOptChecked() || (!anyDataEntered && (verificationScreenStatus == VerificationScreenStatus.DEFAULT || verificationScreenStatus == VerificationScreenStatus.FAILED))
                 var navFragmentsData = activity as NavFragmentsData
                 navFragmentsData.setData(
                     bundleOf(
                         StringConstants.BACK_PRESSED.value to true
-
                     )
                 )
             }
