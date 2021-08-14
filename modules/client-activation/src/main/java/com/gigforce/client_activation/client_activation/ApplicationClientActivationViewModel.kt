@@ -18,6 +18,7 @@ import kotlinx.coroutines.tasks.await
 import java.util.*
 
 class ApplicationClientActivationViewModel : ViewModel() {
+    var itemClicked: Int = -1
     var profileAvatarName: String = "avatar.jpg"
 
     val repository = ApplicationClientActivationRepository()

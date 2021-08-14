@@ -107,34 +107,39 @@ class QuestionnaireFragment : Fragment(), AdapterQuestionnaire.AdapterQuestionna
         return false
 
     }
-
+    var allNavigationList = ArrayList<String>()
+    var intentBundle : Bundle? = null
     private fun getDataFromIntents(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
+
             mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
             mType = it.getString(StringConstants.TYPE.value) ?: return@let
             mTitle = it.getString(StringConstants.TITLE.value) ?: return@let
             FROM_CLIENT_ACTIVATON =
                 it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
-
-
+            it.getStringArrayList(StringConstants.NAVIGATION_STRING_ARRAY.value)?.let { arr ->
+                allNavigationList = arr
+            }
+            intentBundle = it
         }
 
         arguments?.let {
+
             mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
             mType = it.getString(StringConstants.TYPE.value) ?: return@let
             mTitle = it.getString(StringConstants.TITLE.value) ?: return@let
             FROM_CLIENT_ACTIVATON =
                 it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
-
-
+            it.getStringArrayList(StringConstants.NAVIGATION_STRING_ARRAY.value)?.let { arr ->
+                allNavigationList = arr
+            }
+            intentBundle = it
         }
     }
 
 
     private fun initClicks() {
         val smoothScroller: SmoothScroller = object : LinearSmoothScroller(context) {
-
-
             override fun getHorizontalSnapPreference(): Int {
                 return SNAP_TO_START
             }
@@ -253,7 +258,8 @@ class QuestionnaireFragment : Fragment(), AdapterQuestionnaire.AdapterQuestionna
         viewModel.observableAddApplicationSuccess.observe(viewLifecycleOwner, Observer {
             pb_questionnaire.gone()
             if (it) {
-                navigation.popBackStack()
+                checkForNextDoc()
+//                navigation.popBackStack()
             }
         })
         viewModel.observableQuestionnaireResponse.observe(viewLifecycleOwner, Observer {
@@ -267,6 +273,28 @@ class QuestionnaireFragment : Fragment(), AdapterQuestionnaire.AdapterQuestionna
         }
 
 
+    }
+
+    private fun checkForNextDoc() {
+        if (allNavigationList.size == 0) {
+            activity?.onBackPressed()
+        } else {
+            var navigationsForBundle = emptyList<String>()
+            if (allNavigationList.size > 1) {
+                navigationsForBundle =
+                    allNavigationList.slice(IntRange(1, allNavigationList.size - 1))
+                        .filter { it.length > 0 }
+            }
+            navigation.popBackStack()
+            intentBundle?.putStringArrayList(StringConstants.NAVIGATION_STRING_ARRAY.value,  ArrayList(navigationsForBundle))
+            navigation.navigateTo(
+                allNavigationList.get(0),intentBundle)
+//            navigation.navigateTo(
+//                allNavigationList.get(0),
+//                bundleOf(StringConstants.NAVIGATION_STRING_ARRAY.value to navigationsForBundle,if(FROM_CLIENT_ACTIVATON) StringConstants.FROM_CLIENT_ACTIVATON.value to true else StringConstants.FROM_CLIENT_ACTIVATON.value to false)
+//            )
+
+        }
     }
 
     private fun setupRecycler() {
@@ -342,6 +370,7 @@ class QuestionnaireFragment : Fragment(), AdapterQuestionnaire.AdapterQuestionna
     }
 
     override fun onClickTakMeHome() {
-        navigation.popBackStack("landinghomefragment",inclusive = true)
+//        navigation.popBackStack("landinghomefragment",inclusive = true)
+        navigation.popBackStack()
     }
 }

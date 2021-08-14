@@ -130,14 +130,19 @@ class DrivingLicenseFragment : Fragment(),
     }
 
     private fun initviews() {
-        viewBinding.toplayoutblock.setIdonthaveDocContent(resources.getString(R.string.no_doc_title_dl),resources.getString(R.string.no_doc_subtitle_dl))
+        viewBinding.toplayoutblock.setIdonthaveDocContent(
+            resources.getString(R.string.no_doc_title_dl),
+            resources.getString(R.string.no_doc_subtitle_dl)
+        )
     }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, FROM_CLIENT_ACTIVATON)
     }
 
     var allNavigationList = ArrayList<String>()
+    var intentBundle : Bundle? = null
     private fun getDataFromIntents(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
             FROM_CLIENT_ACTIVATON =
@@ -145,6 +150,7 @@ class DrivingLicenseFragment : Fragment(),
             it.getStringArrayList(VerificationConstants.NAVIGATION_STRINGS)?.let { arr ->
                 allNavigationList = arr
             }
+            intentBundle = it
         } ?: run {
             arguments?.let {
                 FROM_CLIENT_ACTIVATON =
@@ -152,13 +158,15 @@ class DrivingLicenseFragment : Fragment(),
                 it.getStringArrayList(VerificationConstants.NAVIGATION_STRINGS)?.let { arrData ->
                     allNavigationList = arrData
                 }
+                intentBundle = it
             }
         }
     }
+
     var manuallyRequestBackpress = false
     private fun checkForNextDoc() {
         if (allNavigationList.size == 0) {
-            manuallyRequestBackpress = true
+//            manuallyRequestBackpress = true
             activity?.onBackPressed()
         } else {
             var navigationsForBundle = emptyList<String>()
@@ -168,17 +176,27 @@ class DrivingLicenseFragment : Fragment(),
                         .filter { it.length > 0 }
             }
             navigation.popBackStack()
-            navigation.navigateTo(
-                allNavigationList.get(0),
-                bundleOf(VerificationConstants.NAVIGATION_STRINGS to navigationsForBundle)
+            intentBundle?.putStringArrayList(
+                com.gigforce.common_ui.StringConstants.NAVIGATION_STRING_ARRAY.value,
+                java.util.ArrayList(navigationsForBundle)
             )
+            navigation.navigateTo(
+                allNavigationList.get(0),intentBundle)
+
+//            navigation.navigateTo(
+//                allNavigationList.get(0),
+//                bundleOf(
+//                    VerificationConstants.NAVIGATION_STRINGS to navigationsForBundle,
+//                    if (FROM_CLIENT_ACTIVATON) StringConstants.FROM_CLIENT_ACTIVATON.value to true else StringConstants.FROM_CLIENT_ACTIVATON.value to false
+//                )
+//            )
 
         }
     }
 
     override fun onBackPressed(): Boolean {
         if (FROM_CLIENT_ACTIVATON) {
-            if(!manuallyRequestBackpress || viewBinding.toplayoutblock.isDocDontOptChecked() || (!anyDataEntered &&  (verificationScreenStatus == VerificationScreenStatus.DEFAULT || verificationScreenStatus == VerificationScreenStatus.FAILED))){
+            if (!manuallyRequestBackpress) { // || viewBinding.toplayoutblock.isDocDontOptChecked() || (!anyDataEntered &&  (verificationScreenStatus == VerificationScreenStatus.DEFAULT || verificationScreenStatus == VerificationScreenStatus.FAILED))
                 var navFragmentsData = activity as NavFragmentsData
                 navFragmentsData.setData(
                     bundleOf(
@@ -828,9 +846,9 @@ class DrivingLicenseFragment : Fragment(),
                         "The details submitted are incorrect. Please try again."
                     )
                     var listData = setAlreadyfilledData(drivingLicenseDataModel, true)
-                    if(listData.isEmpty()){
+                    if (listData.isEmpty()) {
                         initializeImages()
-                    }else{
+                    } else {
                         //single if showing error
                     }
                     viewBinding.toplayoutblock.enableImageClick()//keep this line in end only
@@ -849,7 +867,7 @@ class DrivingLicenseFragment : Fragment(),
     private fun setAlreadyfilledData(
         drivingLicenseDataModel: DrivingLicenseDataModel,
         enableFields: Boolean
-    ) : ArrayList<KYCImageModel> {
+    ): ArrayList<KYCImageModel> {
 
         viewBinding.nameTilDl.editText?.setText(drivingLicenseDataModel.name)
 
