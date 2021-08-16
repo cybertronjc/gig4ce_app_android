@@ -246,9 +246,9 @@ class PhotoCrop : AppCompatActivity() {
         /**
          * Handles data which is a resultant from cropping activity
          */
-        else if (requestCode == 90 && resultCode == Activity.RESULT_OK) {
+        else if (requestCode == ImageCropActivity.CROP_RESULT_CODE && resultCode == Activity.RESULT_OK) {
 //            val imageUriResultCrop: Uri? = UCrop.getOutput((data!!))
-            val imageUriResultCrop: Uri? =  Uri.parse(data?.getStringExtra("croppedImage"))
+            val imageUriResultCrop: Uri? =  Uri.parse(data?.getStringExtra(ImageCropActivity.CROPPED_IMAGE_URL_EXTRA))
             Log.d("ImageUri", imageUriResultCrop.toString())
             if (imageUriResultCrop != null) {
                 resultIntent.putExtra("uri", imageUriResultCrop)
