@@ -711,7 +711,8 @@ class GigPage2Fragment : Fragment(),
         } else {
             listOf(
                 IDENTITY_CARD,
-                ATTENDANCE_HISTORY
+                ATTENDANCE_HISTORY,
+                OFFER_LETTER
             )
         }
 
@@ -762,6 +763,11 @@ class GigPage2Fragment : Fragment(),
             ID_DECLINE_GIG -> {
                 showDeclineGigDialog()
             }
+            ID_OFFER_LETTER -> {
+                //navigate to show offer letter
+                navigation.navigateToDocViewerActivity(requireActivity(), "http://www.africau.edu/images/default/sample.pdf")
+            }
+
             else -> {
 
             }
@@ -1167,6 +1173,7 @@ class GigPage2Fragment : Fragment(),
         private const val ID_IDENTITY_CARD = "apodZsdEbx"
         private const val ID_ATTENDANCE_HISTORY = "TnovE9tzXl"
         private const val ID_DECLINE_GIG = "knnp4f4ZUi"
+        private const val ID_OFFER_LETTER = "ID_OFFER_LETTER"
         private const val MAX_ALLOWED_LOCATION_FROM_GIG_IN_METERS = 200L
 
         const val REMOTE_CONFIG_SHOULD_USE_OLD_CAMERA = "should_use_old_camera"
@@ -1174,6 +1181,12 @@ class GigPage2Fragment : Fragment(),
         private val IDENTITY_CARD = OtherOption(
             id = ID_IDENTITY_CARD,
             name = "Identity Card",
+            icon = R.drawable.ic_identity_card
+        )
+
+        private val OFFER_LETTER = OtherOption(
+            id = ID_OFFER_LETTER,
+            name = "Offer Letter",
             icon = R.drawable.ic_identity_card
         )
 
