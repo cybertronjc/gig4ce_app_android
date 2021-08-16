@@ -49,6 +49,7 @@ class ClientActiExploreListViewModel constructor(
                                 toObjects.add(data)
                             }
                         } catch (e: Exception) {
+                            Log.e("ClientActivation",e.toString())
                             FirebaseCrashlytics.getInstance().log("Exception : Job profile data type format issues. Method : getJobProfiles  ${e.message} $e")
                             CrashlyticsLogger.e(
                                 "Client Activation",
@@ -60,7 +61,7 @@ class ClientActiExploreListViewModel constructor(
 
 
 //                val toObjects = items.toObjects(JobProfile::class.java)
-                for (i in 0 until toObjects.size - 1 ){
+                for (i in 0 until toObjects.size){
                     val obj = toObjects[i]
                     var jobProfileId = items.documents[i].id
                     obj.id = toObjects[i].profileId
