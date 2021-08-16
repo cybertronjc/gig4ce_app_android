@@ -12,6 +12,7 @@ import com.gigforce.common_ui.repository.gig.GigsRepository
 import com.gigforce.common_ui.viewdatamodels.GigStatus
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.datamodels.gigpage.Gig
+import com.gigforce.core.datamodels.gigpage.GigOrder
 import com.gigforce.core.datamodels.gigpage.models.AttendanceType
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.extensions.*
@@ -50,6 +51,8 @@ class GigViewModel constructor(
     private var mWatchTodaysGigRegistration: ListenerRegistration? = null
 
     var currentGig: Gig? = null
+
+    var gigOrder: GigOrder? = null
 
     private val currentUser: FirebaseUser by lazy {
         FirebaseAuth.getInstance().currentUser!!
@@ -356,7 +359,7 @@ class GigViewModel constructor(
                         }
                 }
             }
-
+            //val gigOrder1 = gigsRepository.getGigOrder(gig.gigOrderId)
             if (shouldGetContactdetails) {
                 val location = gigsRepository.getGigLocationFromGigOrder(gig.gigOrderId)
                 location?.let {
@@ -367,8 +370,17 @@ class GigViewModel constructor(
             }
 
             gig.gigUserFeedbackAttachments = gigAttachmentWithLinks
+
             gig
         }.onSuccess {
+
+//             gigOrder = try {
+//                 gigsRepository.getOfferLetterFromGigOrder(it.gigOrderId)
+//            }catch (e: Exception){
+//                null
+//            }
+            gigOrder = getGigOrder(it.gigOrderId)
+            Log.d("gigorderH", gigOrder.toString())
             _gigDetails.value = Lce.content(it)
         }.onFailure {
             it.message?.let { it1 -> _gigDetails.value = Lce.error(it1) }
@@ -407,6 +419,47 @@ class GigViewModel constructor(
                 _gigDetails.value = Lce.error(it.message!!)
             }
 
+    }
+
+     suspend fun getGigOrder(gigorderId: String) : GigOrder?{
+//        var gigOrder: GigOrder? = null
+//        try {
+//            gigOrder = gigsRepository.getGigOrder(gigorderId)
+//        }catch (e: Exception){
+//
+//        }
+//
+//        //val gigOrder = gigsRepository.getGigOrder(gigorderId)
+//         return gigOrder
+//         val getGigOrderQuery = gigsRepository.db.collection("Gig_Order")
+//             .document(gigorderId)
+//             .get().await()
+//
+////         if (!getGigOrderQuery.exists())
+////             return null
+//         val gigOrder2 = getGigOrderQuery.toObject(GigOrder::class.java)!!
+//
+//         return gigOrder2
+
+         try {
+             var myGIgOrder: GigOrder? = GigOrder()
+             val await = gigsRepository.db.collection("Gig_Order")
+                 .document(gigorderId)
+                 .get().await()
+             if (await.exists()) {
+                 myGIgOrder = await.toObject(GigOrder::class.java)
+                 Log.d("gigorder", myGIgOrder.toString())
+             }
+//             val toObjects = await.toObjects(::class.java)
+//             for (i in 0 until await.documents.size) {
+//                 toObjects[i].id = await.documents[i].id
+//             }
+
+             return myGIgOrder
+         }catch (e: Exception){
+             Log.d("gigorderE", e.toString())
+                return GigOrder()
+         }
     }
 
     suspend fun getGigNow(gigId: String) = suspendCoroutine<Gig> { cont ->

@@ -26,9 +26,14 @@ data class GigOrder(
         @set:PropertyName("locationType")
         var locationType: String = "",
 
+        @get:PropertyName("offerLetter")
+        @set:PropertyName("offerLetter")
+        var offerLetter: String? = null,
+
         @get:PropertyName("office")
         @set:PropertyName("office")
         var workOrderOffice: WorkOrderOffice? = null
+
 ) {
     @Exclude
     fun getGigOrderCity(): String? {

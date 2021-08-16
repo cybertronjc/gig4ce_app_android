@@ -939,7 +939,8 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
 //                fragment.startActivity(docIntent)
                 (fragment as ClientActivationFragment).navigation.navigateToDocViewerActivity(
                     activity,
-                    item.url
+                    item.url,
+                    ""
                 )
             } else {
                 if (FirebaseAuth.getInstance().currentUser?.uid == null) {

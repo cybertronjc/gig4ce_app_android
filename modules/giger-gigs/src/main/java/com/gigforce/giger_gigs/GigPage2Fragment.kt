@@ -21,6 +21,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -41,6 +42,7 @@ import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.datamodels.gigpage.ContactPerson
 import com.gigforce.core.datamodels.gigpage.Gig
+import com.gigforce.core.datamodels.gigpage.GigOrder
 import com.gigforce.core.datamodels.gigpage.models.AttendanceType
 import com.gigforce.core.datamodels.gigpage.models.OtherOption
 import com.gigforce.core.extensions.gone
@@ -86,6 +88,7 @@ import kotlinx.android.synthetic.main.fragment_gig_page_2_main.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_other_options.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_people_to_expect.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_toolbar.*
+import kotlinx.coroutines.launch
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 import java.text.SimpleDateFormat
@@ -470,6 +473,7 @@ class GigPage2Fragment : Fragment(),
                 }
             })
 
+
         viewModel.markingAttendanceState
             .observe(viewLifecycleOwner, Observer {
                 it ?: return@Observer
@@ -701,19 +705,36 @@ class GigPage2Fragment : Fragment(),
 
     private fun showOtherOptions(gig: Gig) {
         val status = GigStatus.fromGig(gig)
+        //get gigorder
 
-        val optionList = if (status == GigStatus.UPCOMING || status == GigStatus.PENDING) {
-            listOf(
-                IDENTITY_CARD,
-                ATTENDANCE_HISTORY,
-                DECLINE_GIG
-            )
+        var optionsList = mutableListOf<OtherOption>()
+        if (viewModel.gigOrder?.offerLetter?.isNotEmpty() == true) {
+            optionsList.add(OFFER_LETTER)
+        }
+        if (status == GigStatus.UPCOMING || status == GigStatus.PENDING) {
+            optionsList.add(OFFER_LETTER)
+            optionsList.add(ATTENDANCE_HISTORY)
+            optionsList.add(DECLINE_GIG)
         } else {
-            listOf(
-                IDENTITY_CARD,
-                ATTENDANCE_HISTORY,
-                OFFER_LETTER
-            )
+            optionsList.add(IDENTITY_CARD)
+            optionsList.add(ATTENDANCE_HISTORY)
+        }
+//        val optionList = if (status == GigStatus.UPCOMING || status == GigStatus.PENDING) {
+//            listOf(
+//                IDENTITY_CARD,
+//                ATTENDANCE_HISTORY,
+//                DECLINE_GIG
+//            )
+//        } else {
+//            listOf(
+//                IDENTITY_CARD,
+//                ATTENDANCE_HISTORY
+//            )
+//        }
+
+        Log.d("gigorderOption", "order: ${viewModel.gigOrder} , offer letter: ${viewModel.gigOrder?.offerLetter}" )
+        if (viewModel.gigOrder?.offerLetter?.isNotEmpty() == true) {
+            optionsList.toMutableList().add(OFFER_LETTER)
         }
 
         other_options_recycler_view.layoutManager = LinearLayoutManager(
@@ -723,7 +744,7 @@ class GigPage2Fragment : Fragment(),
         )
         val adapter = OtherOptionsAdapter(
             requireContext(),
-            optionList
+            optionsList
         ).apply {
             setListener(this@GigPage2Fragment)
         }
@@ -764,8 +785,15 @@ class GigPage2Fragment : Fragment(),
                 showDeclineGigDialog()
             }
             ID_OFFER_LETTER -> {
+                //getting current gig
+                //val gig = viewModel.currentGig ?: return
+                //get gigorder
+                var gigOrder: GigOrder? = GigOrder()
+//                viewLifecycleOwner.lifecycleScope.launch {
+//                    gigOrder = viewModel.getGigOrder(gig.gigOrderId)
+//                }
                 //navigate to show offer letter
-                navigation.navigateToDocViewerActivity(requireActivity(), "http://www.africau.edu/images/default/sample.pdf")
+                navigation.navigateToDocViewerActivity(requireActivity(),gigOrder?.offerLetter.toString() ?: "" , "OFFER_LETTER")
             }
 
             else -> {
