@@ -121,7 +121,7 @@ dependencies {
     implementation 'com.github.vipulasri:timelineview:1.1.5'
     implementation 'com.jaeger.statusbarutil:library:1.5.1'
 
-    implementation 'com.github.CanHub:Android-Image-Cropper:3.2.2'
+
 
     implementation 'pub.devrel:easypermissions:3.0.0'
 

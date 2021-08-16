@@ -22,6 +22,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.net.toUri
+import com.gigforce.common_image_picker.image_cropper.ImageCropActivity
 import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.common_ui.viewmodels.ProfileViewModel
 import com.gigforce.core.utils.GlideApp
@@ -234,7 +235,8 @@ class PhotoCrop : AppCompatActivity() {
             )
             outputFileUri = ImagePicker.getImageFromResult(this, resultCode, data);
             if (outputFileUri != null) {
-                outputFileUri?.let { it -> startCrop(it) }
+                //outputFileUri?.let { it -> startCrop(it) }
+                outputFileUri?.let { it -> startCropImage(it) }
 
             } else {
                 Toast.makeText(this, "Issue in capturing image!!", Toast.LENGTH_LONG).show()
@@ -244,8 +246,9 @@ class PhotoCrop : AppCompatActivity() {
         /**
          * Handles data which is a resultant from cropping activity
          */
-        else if (requestCode == UCrop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
-            val imageUriResultCrop: Uri? = UCrop.getOutput((data!!))
+        else if (requestCode == 90 && resultCode == Activity.RESULT_OK) {
+//            val imageUriResultCrop: Uri? = UCrop.getOutput((data!!))
+            val imageUriResultCrop: Uri? =  Uri.parse(data?.getStringExtra("croppedImage"))
             Log.d("ImageUri", imageUriResultCrop.toString())
             if (imageUriResultCrop != null) {
                 resultIntent.putExtra("uri", imageUriResultCrop)
@@ -263,7 +266,7 @@ class PhotoCrop : AppCompatActivity() {
 
                 var baos = ByteArrayOutputStream()
                 if (imageUriResultCrop == null) {
-                    var bitmap = data.data as Bitmap
+                    var bitmap = data!!.data as Bitmap
                     bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
                 }
                 var fvImage = imageUriResultCrop?.let { FirebaseVisionImage.fromFilePath(this, it) }
@@ -350,6 +353,12 @@ class PhotoCrop : AppCompatActivity() {
 //        uCrop.withMaxResultSize(size.width, size.height)
         uCrop.withOptions(getCropOptions())
         uCrop.start(this as AppCompatActivity)
+    }
+
+    private fun startCropImage(uri: Uri){
+        val photoCropIntent = Intent(this, ImageCropActivity::class.java)
+        photoCropIntent.putExtra("outgoingUri", uri.toString())
+        startActivityForResult(photoCropIntent, 90)
     }
 
     /**

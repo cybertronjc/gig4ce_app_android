@@ -986,7 +986,7 @@
         android:label="AddNewLoginSummaryFragment" />
     <fragment
         android:id="@+id/imageCropFragment"
-        android:name="com.gigforce.common_ui.utils.ImageCropFragment"
+        android:name="com.gigforce.common_image_picker.image_cropper.ImageCropFragment"
         android:label="ImageCropFragment" />
 
 
