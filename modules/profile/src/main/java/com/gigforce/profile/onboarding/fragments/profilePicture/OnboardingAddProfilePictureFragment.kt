@@ -18,6 +18,7 @@ import androidx.fragment.app.viewModels
 import com.gigforce.common_image_picker.CameraAndGalleryIntegrator
 import com.gigforce.common_image_picker.ImageCropCallback
 import com.gigforce.common_image_picker.ImageCropOptions
+import com.gigforce.common_image_picker.image_cropper.ImageCropActivity
 import com.gigforce.common_ui.shimmer.ShimmerHelper
 import com.gigforce.core.FragmentHelper
 import com.gigforce.core.IEventTracker
@@ -248,6 +249,8 @@ class OnboardingAddProfilePictureFragment() : Fragment(), ImageCropCallback, Onb
                     .load(profilePicRef)
                     .placeholder(ShimmerHelper.getShimmerDrawable())
                     .into(imageView13)
+            formCompletionListener?.checkForButtonText()
+
         } else {
             GlideApp.with(this.requireContext())
                     .load(R.drawable.ic_profile_avatar_pink)
@@ -315,7 +318,8 @@ class OnboardingAddProfilePictureFragment() : Fragment(), ImageCropCallback, Onb
         when (requestCode) {
             CameraAndGalleryIntegrator.REQUEST_CAPTURE_IMAGE,
             CameraAndGalleryIntegrator.REQUEST_PICK_IMAGE,
-            CameraAndGalleryIntegrator.REQUEST_CROP -> {
+            CameraAndGalleryIntegrator.REQUEST_CROP,
+            ImageCropActivity.CROP_RESULT_CODE-> {
 
                 if (resultCode == Activity.RESULT_OK) {
 

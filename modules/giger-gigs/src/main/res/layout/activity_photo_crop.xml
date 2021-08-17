@@ -79,6 +79,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <include layout="@layout/profile_photo_bottom_sheet"></include>
+    <include layout="@layout/profile_photo_bottom_sheet"
+        android:visibility="gone"></include>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
