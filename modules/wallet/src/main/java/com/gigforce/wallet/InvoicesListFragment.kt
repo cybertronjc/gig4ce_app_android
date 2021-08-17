@@ -162,6 +162,10 @@ class InvoiceListAdapter(private val context: Context, private val invoices: Arr
                 StringConstants.DOC_URL.value,
                 invoices.get(position).invoiceLink
             )
+            docIntent.putExtra(
+                StringConstants.DOC_PURPOSE.value,
+                "INVOICE"
+            )
             context.startActivity(docIntent)
         }
 

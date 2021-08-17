@@ -31,7 +31,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 class DocViewerActivity : AppCompatActivity() {
     private var pdfView: WebView? = null
     private var progress: ProgressBar? = null
-    var pageTitle: String? = null
+    //var pageTitle: String? = null
     private var win: Window? = null
     private val removePdfTopIcon =
         "javascript:(function() {" + "document.querySelector('[role=\"toolbar\"]').remove();})()"
@@ -43,7 +43,7 @@ class DocViewerActivity : AppCompatActivity() {
         progress = findViewById(R.id.pb_doc)
         val stringExtra = intent.getStringExtra(StringConstants.DOC_URL.value)
         val purposeExtra = intent.getStringExtra(StringConstants.DOC_PURPOSE.value) ?: ""
-        pageTitle = intent.getStringExtra(StringConstants.WEB_TITLE.value)
+        //pageTitle = intent.getStringExtra(StringConstants.WEB_TITLE.value)
         showPdfFile(stringExtra, stringExtra.contains(".jpg") || stringExtra.contains(".png"), stringExtra.contains(".pdf"));
         makeToolbarVisible(stringExtra.contains(".jpg") || stringExtra.contains(".png") || stringExtra.contains(".pdf"), purposeExtra)
         setListeners(stringExtra)
@@ -55,13 +55,19 @@ class DocViewerActivity : AppCompatActivity() {
            acceptLayout.gone()
        } else {
            changeStatusBarColor()
-           toolbar_doc.visible()
            acceptLayout.visible()
            if (purpose.equals("OFFER_LETTER")){
                toolbarTitle.text = "Offer Letter"
+               toolbar_doc.visible()
                toolbarDownload.visible()
                acceptLayout.gone()
-           }else {
+           }else if (purpose.equals("TERMS")) {
+               toolbarTitle.text = "Terms and Conditions"
+               toolbar_doc.visible()
+               toolbarDownload.gone()
+               acceptLayout.visible()
+           } else {
+               toolbar_doc.gone()
                toolbarDownload.gone()
                acceptLayout.gone()
            }
