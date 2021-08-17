@@ -34,6 +34,7 @@ class SyncContactsService : Service(), Loader.OnLoadCompleteListener<Cursor> {
     }
 
     private var isCurrentlySyncingContacts = false
+    private var shouldCallSyncAPI = false
 
     override fun onBind(intent: Intent): IBinder {
         return binder
@@ -45,6 +46,7 @@ class SyncContactsService : Service(), Loader.OnLoadCompleteListener<Cursor> {
         }
 
         isCurrentlySyncingContacts = true
+        shouldCallSyncAPI = intent?.getBooleanExtra(SHOULD_CALL_SYNC_API,false) ?: false
         Log.d(TAG,"Started Syncing Contacts....")
 
         if (ContextCompat.checkSelfPermission(
@@ -69,7 +71,7 @@ class SyncContactsService : Service(), Loader.OnLoadCompleteListener<Cursor> {
         cursorLoader.registerListener(CONTACTS_LOADER_ID,this)
         cursorLoader.startLoading()
 
-        return START_NOT_STICKY
+        return START_REDELIVER_INTENT
     }
 
     private fun cleanPhoneNo(phone: String): String {
@@ -130,7 +132,10 @@ class SyncContactsService : Service(), Loader.OnLoadCompleteListener<Cursor> {
             Log.d(TAG, "Contact Size after removing duplicate contacts : ${distinctContactList.size}")
             GlobalScope.launch {
                 try {
-                    chatContactsRepository.updateContacts(distinctContactList)
+                    chatContactsRepository.updateContacts(
+                        distinctContactList,
+                        shouldCallSyncAPI
+                        )
 
                     Log.e(TAG, "Contacts Synced")
                     isCurrentlySyncingContacts = false
@@ -161,6 +166,8 @@ class SyncContactsService : Service(), Loader.OnLoadCompleteListener<Cursor> {
     companion object{
         private const val TAG: String = "service/fetch/contacts"
         private const val CONTACTS_LOADER_ID = 2
+
+        const val SHOULD_CALL_SYNC_API = "call_sync_api"
 
         private val PROJECTION: Array<out String> = arrayOf(
                 ContactsContract.Contacts._ID,

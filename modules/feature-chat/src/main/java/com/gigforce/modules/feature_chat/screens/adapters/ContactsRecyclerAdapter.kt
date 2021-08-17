@@ -103,6 +103,7 @@ class ContactsRecyclerAdapter(
                 Glide.with(context)
                         .load(profilePathRef)
                         .placeholder(R.drawable.ic_user_2)
+                        .circleCrop()
                         .into(contactAvatarIV)
             } else if (!contact.imagePathInStorage.isNullOrBlank()) {
 
@@ -113,6 +114,7 @@ class ContactsRecyclerAdapter(
 
                 Glide.with(context)
                         .load(profilePathRef)
+                        .circleCrop()
                         .placeholder(R.drawable.ic_user_2)
                         .into(contactAvatarIV)
             } else if (!contact.imageUrl.isNullOrBlank()) {

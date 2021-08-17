@@ -186,7 +186,7 @@ class GroupChatViewModel constructor(
         if (groupContactsListener != null)
             return
 
-        groupContactsListener = chatContactsRepository.getUserContacts()
+        groupContactsListener = chatContactsRepository.getUserGigforceContacts()
                 .addSnapshotListener { snap, error ->
                     error?.let {
                         CrashlyticsLogger.e(TAG, "In addContactsChangeListener()", it)
