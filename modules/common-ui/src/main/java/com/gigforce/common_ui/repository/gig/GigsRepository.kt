@@ -297,12 +297,6 @@ open class GigsRepository : BaseFirestoreDBRepository() {
         }
     }
 
-    suspend fun getOfferLetterFromGigOrder(gigOrderId: String): String?{
-        val gigOrder = getGigOrder(gigOrderId) ?: return null
-        val order = gigOrder.offerLetter
-        return order
-    }
-
     suspend fun getGigOrder(gigOrderId: String): GigOrder? {
         val getGigOrderQuery = db.collection("Gig_Order")
             .document(gigOrderId)

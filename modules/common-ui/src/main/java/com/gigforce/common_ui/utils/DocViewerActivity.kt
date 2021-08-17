@@ -1,6 +1,7 @@
 package com.gigforce.common_ui.utils
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
@@ -24,6 +25,8 @@ import com.gigforce.core.extensions.visible
 import kotlinx.android.synthetic.main.acitivity_doc_viewer.*
 import java.net.URLEncoder
 import android.os.Environment.DIRECTORY_DOWNLOADS
+import androidx.core.content.ContentProviderCompat.requireContext
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class DocViewerActivity : AppCompatActivity() {
     private var pdfView: WebView? = null
@@ -79,8 +82,12 @@ class DocViewerActivity : AppCompatActivity() {
         }
 
         toolbarDownload.setOnClickListener {
-            Toast.makeText(this, "Download started, check notification", Toast.LENGTH_SHORT).show()
-            downloadFile(this, url.substring(url.lastIndexOf('/') + 1), ".pdf", DIRECTORY_DOWNLOADS, url)
+            if (url.isNotEmpty()){
+                showDownloadStartedDialog()
+                //Toast.makeText(this, "Download started, check notification", Toast.LENGTH_SHORT).show()
+                downloadFile(this, url.substring(url.lastIndexOf('/') + 1), ".pdf", DIRECTORY_DOWNLOADS, url)
+            }
+
         }
     }
     private fun changeStatusBarColor() {
@@ -165,5 +172,14 @@ class DocViewerActivity : AppCompatActivity() {
         downloadManager.enqueue(request)
     }
 
+    private fun showDownloadStartedDialog(){
+        AlertDialog.Builder(this)
+            .setTitle("Alert")
+            .setMessage("Download started, check notification")
+            .setPositiveButton("Okay") {dialog, which ->
+                dialog.dismiss()
+            }
+            .show()
+    }
 
 }

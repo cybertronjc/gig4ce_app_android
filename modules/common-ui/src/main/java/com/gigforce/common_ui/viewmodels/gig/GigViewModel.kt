@@ -359,7 +359,7 @@ class GigViewModel constructor(
                         }
                 }
             }
-            //val gigOrder1 = gigsRepository.getGigOrder(gig.gigOrderId)
+
             if (shouldGetContactdetails) {
                 val location = gigsRepository.getGigLocationFromGigOrder(gig.gigOrderId)
                 location?.let {
@@ -374,13 +374,12 @@ class GigViewModel constructor(
             gig
         }.onSuccess {
 
-//             gigOrder = try {
-//                 gigsRepository.getOfferLetterFromGigOrder(it.gigOrderId)
-//            }catch (e: Exception){
-//                null
-//            }
-            gigOrder = getGigOrder(it.gigOrderId)
-            Log.d("gigorderH", gigOrder.toString())
+             gigOrder = try {
+                 getGigOrder(it.gigOrderId)
+            }catch (e: Exception){
+                null
+            }
+            //gigOrder = getGigOrder(it.gigOrderId)
             _gigDetails.value = Lce.content(it)
         }.onFailure {
             it.message?.let { it1 -> _gigDetails.value = Lce.error(it1) }
@@ -422,25 +421,6 @@ class GigViewModel constructor(
     }
 
      suspend fun getGigOrder(gigorderId: String) : GigOrder?{
-//        var gigOrder: GigOrder? = null
-//        try {
-//            gigOrder = gigsRepository.getGigOrder(gigorderId)
-//        }catch (e: Exception){
-//
-//        }
-//
-//        //val gigOrder = gigsRepository.getGigOrder(gigorderId)
-//         return gigOrder
-//         val getGigOrderQuery = gigsRepository.db.collection("Gig_Order")
-//             .document(gigorderId)
-//             .get().await()
-//
-////         if (!getGigOrderQuery.exists())
-////             return null
-//         val gigOrder2 = getGigOrderQuery.toObject(GigOrder::class.java)!!
-//
-//         return gigOrder2
-
          try {
              var myGIgOrder: GigOrder? = GigOrder()
              val await = gigsRepository.db.collection("Gig_Order")
@@ -448,16 +428,10 @@ class GigViewModel constructor(
                  .get().await()
              if (await.exists()) {
                  myGIgOrder = await.toObject(GigOrder::class.java)
-                 Log.d("gigorder", myGIgOrder.toString())
              }
-//             val toObjects = await.toObjects(::class.java)
-//             for (i in 0 until await.documents.size) {
-//                 toObjects[i].id = await.documents[i].id
-//             }
 
              return myGIgOrder
          }catch (e: Exception){
-             Log.d("gigorderE", e.toString())
                 return GigOrder()
          }
     }

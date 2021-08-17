@@ -732,7 +732,6 @@ class GigPage2Fragment : Fragment(),
 //            )
 //        }
 
-        Log.d("gigorderOption", "order: ${viewModel.gigOrder} , offer letter: ${viewModel.gigOrder?.offerLetter}" )
         if (viewModel.gigOrder?.offerLetter?.isNotEmpty() == true) {
             optionsList.toMutableList().add(OFFER_LETTER)
         }
@@ -785,15 +784,8 @@ class GigPage2Fragment : Fragment(),
                 showDeclineGigDialog()
             }
             ID_OFFER_LETTER -> {
-                //getting current gig
-                //val gig = viewModel.currentGig ?: return
-                //get gigorder
-                var gigOrder: GigOrder? = GigOrder()
-//                viewLifecycleOwner.lifecycleScope.launch {
-//                    gigOrder = viewModel.getGigOrder(gig.gigOrderId)
-//                }
                 //navigate to show offer letter
-                navigation.navigateToDocViewerActivity(requireActivity(),gigOrder?.offerLetter.toString() ?: "" , "OFFER_LETTER")
+                navigation.navigateToDocViewerActivity(requireActivity(),viewModel.gigOrder?.offerLetter.toString() ?: "" , "OFFER_LETTER")
             }
 
             else -> {
@@ -1215,7 +1207,7 @@ class GigPage2Fragment : Fragment(),
         private val OFFER_LETTER = OtherOption(
             id = ID_OFFER_LETTER,
             name = "Offer Letter",
-            icon = R.drawable.ic_identity_card
+            icon = R.drawable.ic_offer_letter_pink
         )
 
         private val ATTENDANCE_HISTORY = OtherOption(
