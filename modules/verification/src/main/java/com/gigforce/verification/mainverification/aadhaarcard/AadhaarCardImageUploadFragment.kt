@@ -185,6 +185,7 @@ class AadhaarCardImageUploadFragment : Fragment(),
     }
 
     var allNavigationList = ArrayList<String>()
+    var intentBundle : Bundle? = null
     private fun getDataFromIntent(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
             FROM_CLIENT_ACTIVATON =
@@ -192,6 +193,7 @@ class AadhaarCardImageUploadFragment : Fragment(),
             it.getStringArrayList(VerificationConstants.NAVIGATION_STRINGS)?.let { arr ->
                 allNavigationList = arr
             }
+            intentBundle = it
         } ?: run {
             arguments?.let {
                 FROM_CLIENT_ACTIVATON =
@@ -199,10 +201,14 @@ class AadhaarCardImageUploadFragment : Fragment(),
                 it.getStringArrayList(VerificationConstants.NAVIGATION_STRINGS)?.let { arrData ->
                     allNavigationList = arrData
                 }
+                intentBundle = it
             }
+
         }
 
     }
+
+    var manuallyRequestBackpress = false
 
     private fun listeners() {
 
@@ -210,7 +216,9 @@ class AadhaarCardImageUploadFragment : Fragment(),
         viewBinding.submitButton.setOnClickListener {
 
             hideSoftKeyboard()
-            activity?.onBackPressed()
+//            manuallyRequestBackpress = true
+            checkForNextDoc()
+//            activity?.onBackPressed()
         }
 
         viewBinding.appBarAadhar.apply {
@@ -232,17 +240,24 @@ class AadhaarCardImageUploadFragment : Fragment(),
                         .filter { it.length > 0 }
             }
             navigation.popBackStack()
-            navigation.navigateTo(
-                allNavigationList.get(0),
-                bundleOf(VerificationConstants.NAVIGATION_STRINGS to navigationsForBundle)
+            intentBundle?.putStringArrayList(
+                com.gigforce.common_ui.StringConstants.NAVIGATION_STRING_ARRAY.value,
+                java.util.ArrayList(navigationsForBundle)
             )
+            navigation.navigateTo(
+                allNavigationList.get(0),intentBundle)
+
+//            navigation.navigateTo(
+//                allNavigationList.get(0),
+//                bundleOf(VerificationConstants.NAVIGATION_STRINGS to navigationsForBundle,if(FROM_CLIENT_ACTIVATON) StringConstants.FROM_CLIENT_ACTIVATON.value to true else StringConstants.FROM_CLIENT_ACTIVATON.value to false)
+//            )
 
         }
     }
 
     override fun onBackPressed(): Boolean {
         if (FROM_CLIENT_ACTIVATON) {
-            if (verificationScreenStatus == VerificationScreenStatus.DEFAULT) {
+            if (!manuallyRequestBackpress) {
                 var navFragmentsData = activity as NavFragmentsData
                 navFragmentsData.setData(
                     bundleOf(

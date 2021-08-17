@@ -21,6 +21,7 @@ object RetrofitFactory {
                     GsonBuilder()
                         .setLenient()
                         .disableHtmlEscaping()
+                        .serializeNulls()
                         .create()
                 )
         }

@@ -14,18 +14,16 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.Lce
-import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.giger_gigs.LoginSummaryConstants
 import com.gigforce.giger_gigs.adapters.TLLoginSummaryAdapter
 import com.gigforce.giger_gigs.databinding.TeamLeaderLoginDetailsFragmentBinding
 import com.gigforce.giger_gigs.models.ListingTLModel
 import com.gigforce.giger_gigs.tl_login_details.views.OnTlItemSelectedListener
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.*
+import kotlinx.android.synthetic.main.team_leader_login_details_fragment.*
 import javax.inject.Inject
 
 
@@ -49,7 +47,7 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
     var scrollingAdded = false
 
     private val tlLoginSummaryAdapter: TLLoginSummaryAdapter by lazy {
-        TLLoginSummaryAdapter(requireContext(), this).apply {
+        TLLoginSummaryAdapter(requireContext(),this).apply {
             setOnTlItemSelectedListener(this@TeamLeaderLoginDetailsFragment)
         }
     }
@@ -86,27 +84,42 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
 //    }
 
     private val INTERVAL_TIME: Long = 1000 * 5
+    private val SWIPE_INTERVAL_TIME: Long = 1000 * 1
+
     var hadler = Handler()
+    var swipeToRefreshHandler = Handler()
+    var runnable : Runnable? = null
     fun refreshListHandler() {
-        hadler.postDelayed({
+        runnable = Runnable{
             try {
-                if (!onpaused) {
+                if (!onpaused && swipeToRefresh) {
                     initializeViews()
-                    refreshListHandler()
                 }
+                refreshListHandler()
             } catch (e: Exception) {
 
             }
 
-        }, INTERVAL_TIME)
+        }
+        hadler.postDelayed(runnable, INTERVAL_TIME)
 
+    }
+
+    fun stopSwipeToRefresh()
+    {
+        swipeToRefreshHandler.postDelayed({
+            viewBinding.swipeRefresh?.isRefreshing = false
+        },SWIPE_INTERVAL_TIME)
     }
 
     var onpaused = false
     override fun onPause() {
         super.onPause()
         onpaused = true
-        hadler.removeCallbacks(null)
+        runnable?.let {
+            hadler.removeCallbacks(runnable)
+        }
+
     }
 
     override fun onResume() {
@@ -128,12 +141,18 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
         //loadFirstPage
         currentPage = 1
         isLoading = false
-        showToast("getting first page")
         viewModel.getListingForTL(1)
     }
 
 
     private fun listeners() = viewBinding.apply {
+
+        swipeRefresh.setOnRefreshListener {
+            swipeToRefresh = true
+            stopSwipeToRefresh()
+
+        }
+
         addNew.setOnClickListener {
             navigation.navigateTo(
                 "gig/addNewLoginSummary", bundleOf(
@@ -166,7 +185,7 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
         })
     }
 
-
+    var swipeToRefresh = true
 
     private fun setupReyclerView(res: List<ListingTLModel>)  = viewBinding.apply{
 
@@ -219,17 +238,15 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
                 //if (isLoading && (currentItemsLatest + lastVisibleItemPosition == totalItemsLatest) && (totalItemsLatest <= tlLoginSummaryAdapter.itemCount)   ) {
                 if ((currentPage < totalPages) && isLoading ){
                     //load next page
-                    showToast("getting next page")
                     currentPage += 1
                     isLoading = false
                     scrollingAdded = true
+                    swipeToRefresh = false
                     progressBarBottom.visibility = View.VISIBLE
                     viewModel.getListingForTL(currentPage)
 
                 }
-                if (!isLoading && layoutManager.findLastVisibleItemPosition() >= 6 && layoutManager.findFirstVisibleItemPosition()<=6){
-                    scrollingAdded = false
-                }
+
             }
         })
 

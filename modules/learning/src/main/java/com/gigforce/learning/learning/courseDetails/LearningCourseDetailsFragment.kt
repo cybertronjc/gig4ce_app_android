@@ -59,22 +59,32 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ) = inflater.inflate(R.layout.fragment_learning_course_details, container, false)
-
+    var allNavigationList = java.util.ArrayList<String>()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         savedInstanceState?.let {
-            FROM_CLIENT_ACTIVATION =
-                    it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
+
             mCourseId = it.getString(INTENT_EXTRA_COURSE_ID) ?: return@let
+            FROM_CLIENT_ACTIVATION =
+                it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
+            it.getStringArrayList(com.gigforce.common_ui.StringConstants.NAVIGATION_STRING_ARRAY.value)?.let { arr ->
+                allNavigationList = arr
             mModuleId = it.getString(INTENT_EXTRA_MODULE_ID) ?: return@let
+
+            }
+
         }
 
         arguments?.let {
-            FROM_CLIENT_ACTIVATION =
-                    it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
             mCourseId = it.getString(INTENT_EXTRA_COURSE_ID) ?: return@let
+            FROM_CLIENT_ACTIVATION =
+                it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
+            it.getStringArrayList(com.gigforce.common_ui.StringConstants.NAVIGATION_STRING_ARRAY.value)?.let { arr ->
+                allNavigationList = arr
+            }
             mModuleId = it.getString(INTENT_EXTRA_MODULE_ID) ?: return@let
+
         }
 
         initView()
@@ -89,6 +99,25 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
             // viewModel.getCourseModules(mCourseId)
 
             viewModel.getCourseDetailsAndModules(mCourseId)
+        }
+    }
+    // currently not any place to integrate this
+    private fun checkForNextDoc() {
+        if (allNavigationList.size == 0) {
+            activity?.onBackPressed()
+        } else {
+            var navigationsForBundle = emptyList<String>()
+            if (allNavigationList.size > 1) {
+                navigationsForBundle =
+                    allNavigationList.slice(IntRange(1, allNavigationList.size - 1))
+                        .filter { it.length > 0 }
+            }
+            navigation.popBackStack()
+            navigation.navigateTo(
+                allNavigationList.get(0),
+                bundleOf(com.gigforce.common_ui.StringConstants.NAVIGATION_STRING_ARRAY.value to navigationsForBundle,if(FROM_CLIENT_ACTIVATION) StringConstants.FROM_CLIENT_ACTIVATON.value to true else StringConstants.FROM_CLIENT_ACTIVATON.value to false)
+            )
+
         }
     }
 
@@ -759,8 +788,8 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
     override fun onBackPressed(): Boolean {
         if (FROM_CLIENT_ACTIVATION) {
             (activity as NavFragmentsData).setData(bundleOf(StringConstants.BACK_PRESSED.value to true))
-            navigation.popBackStack()
-            return true
+//            navigation.popBackStack()
+            return false
         }
         return false
     }

@@ -132,7 +132,10 @@ class DrivingLicenseFragment : Fragment(),
     }
 
     private fun initviews() {
-        viewBinding.toplayoutblock.setIdonthaveDocContent(resources.getString(R.string.no_doc_title_dl),resources.getString(R.string.no_doc_subtitle_dl))
+        viewBinding.toplayoutblock.setIdonthaveDocContent(
+            resources.getString(R.string.no_doc_title_dl),
+            resources.getString(R.string.no_doc_subtitle_dl)
+        )
     }
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -140,6 +143,7 @@ class DrivingLicenseFragment : Fragment(),
     }
 
     var allNavigationList = ArrayList<String>()
+    var intentBundle : Bundle? = null
     private fun getDataFromIntents(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
             FROM_CLIENT_ACTIVATON =
@@ -147,6 +151,7 @@ class DrivingLicenseFragment : Fragment(),
             it.getStringArrayList(VerificationConstants.NAVIGATION_STRINGS)?.let { arr ->
                 allNavigationList = arr
             }
+            intentBundle = it
         } ?: run {
             arguments?.let {
                 FROM_CLIENT_ACTIVATON =
@@ -154,6 +159,7 @@ class DrivingLicenseFragment : Fragment(),
                 it.getStringArrayList(VerificationConstants.NAVIGATION_STRINGS)?.let { arrData ->
                     allNavigationList = arrData
                 }
+                intentBundle = it
             }
         }
     }
@@ -184,7 +190,7 @@ class DrivingLicenseFragment : Fragment(),
     var manuallyRequestBackpress = false
     private fun checkForNextDoc() {
         if (allNavigationList.size == 0) {
-            manuallyRequestBackpress = true
+//            manuallyRequestBackpress = true
             activity?.onBackPressed()
         } else {
             var navigationsForBundle = emptyList<String>()
@@ -194,17 +200,27 @@ class DrivingLicenseFragment : Fragment(),
                         .filter { it.length > 0 }
             }
             navigation.popBackStack()
-            navigation.navigateTo(
-                allNavigationList.get(0),
-                bundleOf(VerificationConstants.NAVIGATION_STRINGS to navigationsForBundle)
+            intentBundle?.putStringArrayList(
+                com.gigforce.common_ui.StringConstants.NAVIGATION_STRING_ARRAY.value,
+                java.util.ArrayList(navigationsForBundle)
             )
+            navigation.navigateTo(
+                allNavigationList.get(0),intentBundle)
+
+//            navigation.navigateTo(
+//                allNavigationList.get(0),
+//                bundleOf(
+//                    VerificationConstants.NAVIGATION_STRINGS to navigationsForBundle,
+//                    if (FROM_CLIENT_ACTIVATON) StringConstants.FROM_CLIENT_ACTIVATON.value to true else StringConstants.FROM_CLIENT_ACTIVATON.value to false
+//                )
+//            )
 
         }
     }
 
     override fun onBackPressed(): Boolean {
         if (FROM_CLIENT_ACTIVATON) {
-            if(!manuallyRequestBackpress || viewBinding.toplayoutblock.isDocDontOptChecked() || (!anyDataEntered &&  (verificationScreenStatus == VerificationScreenStatus.DEFAULT || verificationScreenStatus == VerificationScreenStatus.FAILED))){
+            if (!manuallyRequestBackpress) { // || viewBinding.toplayoutblock.isDocDontOptChecked() || (!anyDataEntered &&  (verificationScreenStatus == VerificationScreenStatus.DEFAULT || verificationScreenStatus == VerificationScreenStatus.FAILED))
                 var navFragmentsData = activity as NavFragmentsData
                 navFragmentsData.setData(
                     bundleOf(
@@ -733,18 +749,9 @@ class DrivingLicenseFragment : Fragment(),
 //    }
 
     private fun startCropImage(imageUri: Uri): Unit {
-//        Log.v("Start Crop", "started")
-//        //can use this for a new name every time
-//        val timeStamp = SimpleDateFormat(
-//            "yyyyMMdd_HHmmss",
-//            Locale.getDefault()
-//        ).format(Date())
-//        val imageFileName = PREFIX + "_" + timeStamp + "_"
-
-        val photoCropIntent = Intent(context, ImageCropActivity::class.java)
+       val photoCropIntent = Intent(context, ImageCropActivity::class.java)
         photoCropIntent.putExtra("outgoingUri", imageUri.toString())
         startActivityForResult(photoCropIntent, 90)
-
     }
 
 
@@ -783,10 +790,8 @@ class DrivingLicenseFragment : Fragment(),
         options.setCompressionQuality(70)
         options.setCompressionFormat(Bitmap.CompressFormat.PNG)
 //        options.setMaxBitmapSize(1000)
-
+        options.setHideBottomControls((true))
         options.setFreeStyleCropEnabled(true)
-//        options.setAllowedGestures(UCropActivity.SCALE, UCropActivity.SCALE, UCropActivity.SCALE)
-        options.setHideBottomControls(true)
         options.setStatusBarColor(ResourcesCompat.getColor(resources, R.color.topBarDark, null))
         options.setToolbarColor(ResourcesCompat.getColor(resources, R.color.topBarDark, null))
         options.setToolbarTitle(getString(R.string.crop_and_rotate))
