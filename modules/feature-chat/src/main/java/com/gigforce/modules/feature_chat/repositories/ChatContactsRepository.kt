@@ -98,7 +98,6 @@ class ChatContactsRepository constructor(
             return
         }
 
-
         Log.d(TAG, "Sync Started...")
 
         val isUserTl = checkIfUserTl()
@@ -118,11 +117,13 @@ class ChatContactsRepository constructor(
                 //user has removed that phone contacts add to remove batch
 
                 if (!isUserTl) {
+
                     //Wont Delete Contacts in case of TL
                     userHasDeletedContactFromPhoneRemoveFromDB(oldContact)
                 }
             } else {
                 if (contactMatchInNewList.name != oldContact.name) {
+
                     //user has renamed the contact
                     updateContactsName(oldContact, contactMatchInNewList)
                 }

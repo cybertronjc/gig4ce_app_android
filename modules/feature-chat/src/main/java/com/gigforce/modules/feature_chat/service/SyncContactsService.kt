@@ -21,10 +21,6 @@ class SyncContactsService : Service(), Loader.OnLoadCompleteListener<Cursor> {
 
     private val binder: LocalBinder = LocalBinder()
 
-
-    // Defines the array to hold values that replace the ?
-
-
     private val chatContactsRepository: ChatContactsRepository by lazy {
         ChatContactsRepository(SyncPref.getInstance(applicationContext))
     }
@@ -74,11 +70,17 @@ class SyncContactsService : Service(), Loader.OnLoadCompleteListener<Cursor> {
         return START_REDELIVER_INTENT
     }
 
+    /**
+     * Cleans phone no to required format
+     * required format 919898989898
+     */
     private fun cleanPhoneNo(phone: String): String {
         var updatedPhoneNumber = phone.replace("\\s|\t|[(]|[)]|[-]".toRegex(), "")
         if (updatedPhoneNumber.startsWith('+')) {
             updatedPhoneNumber = updatedPhoneNumber.replace("[+]".toRegex(), "")
-        } else {
+        } else if (updatedPhoneNumber.startsWith("91") && updatedPhoneNumber.length > 10){
+            // Dont do anything no already in required format
+        } else{
             updatedPhoneNumber = updatedPhoneNumber.replace("^0".toRegex(), "")
             updatedPhoneNumber = "91${updatedPhoneNumber}"
         }
