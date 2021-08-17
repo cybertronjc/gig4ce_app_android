@@ -33,7 +33,9 @@ import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.AppConstants
+import com.gigforce.core.IEventTracker
 import com.gigforce.core.StringConstants
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.datamodels.verification.DrivingLicenseDataModel
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.gone
@@ -49,6 +51,7 @@ import com.gigforce.verification.mainverification.Data
 import com.gigforce.verification.mainverification.OLDStateHolder
 import com.gigforce.verification.mainverification.VerificationClickOrSelectImageBottomSheet
 import com.gigforce.verification.util.VerificationConstants
+import com.gigforce.verification.util.VerificationEvents
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jaeger.library.StatusBarUtil
 import com.yalantis.ucrop.UCrop
@@ -100,7 +103,9 @@ class DrivingLicenseFragment : Fragment(),
 
     @Inject
     lateinit var navigation: INavigation
+    @Inject
 
+    lateinit var eventTracker: IEventTracker
     @Inject
     lateinit var buildConfig: IBuildConfig
     private var FROM_CLIENT_ACTIVATON: Boolean = false
@@ -377,6 +382,17 @@ class DrivingLicenseFragment : Fragment(),
             it?.let {
                 if (it.status) {
                     if (!it.dateOfBirth.isNullOrBlank() || !it.dlNumber.isNullOrBlank() || !it.validTill.isNullOrBlank()) {
+                        var map = mapOf(
+                            "DL number" to it.dlNumber.toString(),
+                            "DoB" to it.dateOfBirth.toString(),
+                            "Expiry date" to it.validTill.toString()
+                        )
+                        eventTracker.pushEvent(
+                            TrackingEventArgs(
+                                eventName = VerificationEvents.DL_OCR_SUCCESS,
+                                props = map
+                            )
+                        )
                         viewBinding.toplayoutblock.uploadStatusLayout(
                             AppConstants.UPLOAD_SUCCESS,
                             "Upload Successful",
@@ -402,6 +418,12 @@ class DrivingLicenseFragment : Fragment(),
                         }
 
                     } else {
+                        eventTracker.pushEvent(
+                            TrackingEventArgs(
+                                eventName = VerificationEvents.DL_OCR_SUCCESS,
+                                props = mapOf("Data Captured" to false)
+                            )
+                        )
                         viewBinding.toplayoutblock.uploadStatusLayout(
                             AppConstants.UNABLE_TO_FETCH_DETAILS,
                             "Unable to fetch information",
@@ -409,6 +431,12 @@ class DrivingLicenseFragment : Fragment(),
                         )
                     }
                 } else {
+                    eventTracker.pushEvent(
+                        TrackingEventArgs(
+                            eventName = VerificationEvents.DL_OCR_FAILED,
+                            props = null
+                        )
+                    )
                     viewBinding.toplayoutblock.uploadStatusLayout(
                         AppConstants.UNABLE_TO_FETCH_DETAILS,
                         "Unable to fetch information",
@@ -430,6 +458,11 @@ class DrivingLicenseFragment : Fragment(),
                 viewBinding.screenLoaderBar.gone()
                 it?.let {
                     if (it.verified) {
+
+                        var props = HashMap<String, Any>()
+                        props.put("DL verified", true)
+                        eventTracker.setUserProperty(props)
+
                         verificationScreenStatus = VerificationScreenStatus.VERIFIED
                         verifiedStatusViews(it)
                         viewBinding.belowLayout.visible()
@@ -513,6 +546,7 @@ class DrivingLicenseFragment : Fragment(),
                 MultipartBody.Part.createFormData("file", file.name, requestFile)
         }
         image?.let {
+            eventTracker.pushEvent(TrackingEventArgs(VerificationEvents.DL_OCR_STARTED, null))
             viewModel.getKycOcrResult(
                 "DL",
                 if (currentlyClickingImageOfSide == DrivingLicenseSides.FRONT_SIDE) "front" else "back",
@@ -699,6 +733,22 @@ class DrivingLicenseFragment : Fragment(),
             Data("expirydate", viewBinding.expiryDate.text.toString()),
             Data("dob", viewBinding.dobDate.text.toString())
         )
+
+        var map = mapOf(
+            "DL number" to viewBinding.dlnoTil.editText?.text.toString(),
+            "DoB" to viewBinding.dobDate.text.toString(),
+            "Name" to viewBinding.nameTilDl.editText?.text.toString(),
+            "Issue date" to viewBinding.issueDate.text.toString(),
+            "Expiry date" to viewBinding.expiryDate.text.toString()
+        )
+
+        eventTracker.pushEvent(
+            TrackingEventArgs(
+                eventName = VerificationEvents.DL_DETAIL_SUBMITTED,
+                props = map
+            )
+        )
+
         activeLoader(true)
         viewModel.getKycVerificationResult("DL", list)
     }
@@ -751,7 +801,7 @@ class DrivingLicenseFragment : Fragment(),
     private fun startCropImage(imageUri: Uri): Unit {
        val photoCropIntent = Intent(context, ImageCropActivity::class.java)
         photoCropIntent.putExtra("outgoingUri", imageUri.toString())
-        startActivityForResult(photoCropIntent, 90)
+        startActivityForResult(photoCropIntent, ImageCropActivity.CROP_RESULT_CODE)
     }
 
 

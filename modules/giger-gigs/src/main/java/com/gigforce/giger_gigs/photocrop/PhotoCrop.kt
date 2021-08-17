@@ -530,11 +530,11 @@ class PhotoCrop : AppCompatActivity() {
         if (path == DEFAULT_PICTURE) disableRemoveProfilePicture()
         else enableRemoveProfilePicture()
         Log.d("PHOTO_CROP", "loading - " + path)
-        var profilePicRef: StorageReference =
-            storage.reference.child(folder).child(path)
-        GlideApp.with(this)
-            .load(profilePicRef)
-            .into(imageView)
+//        var profilePicRef: StorageReference =
+//            storage.reference.child(folder).child(path)
+//        GlideApp.with(this)
+//            .load(profilePicRef)
+//            .into(imageView)
     }
 
     /**
