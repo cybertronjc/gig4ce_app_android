@@ -189,12 +189,22 @@ class CameraAndGalleryIntegrator : ClickOrSelectImageBottomSheet.OnPickOrCapture
                     recordException(Exception("imageUriResultCrop found null from image cropping library"))
                 }
             } else {
+                Log.d("ImageUri", "working")
                 if (imageCropOptions.shouldDetectForFace) {
-
+                    Log.d("ImageUri", "working1")
                     val fvImage = FirebaseVisionImage.fromFilePath(context, imageUriResultCrop)
+                    Log.d("ImageUri", "working2")
+
                     detectFacesAndReturnResult(callback, imageUriResultCrop, fvImage)
-                } else
+                    Log.d("ImageUri", "working3")
+
+                } else {
+                    Log.d("ImageUri", "working4")
+
                     returnFileImage(callback, imageUriResultCrop)
+                    Log.d("ImageUri", "working5")
+
+                }
             }
         }
 
