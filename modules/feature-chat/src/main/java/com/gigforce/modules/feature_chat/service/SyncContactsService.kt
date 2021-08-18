@@ -37,34 +37,34 @@ class SyncContactsService : Service(), Loader.OnLoadCompleteListener<Cursor> {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if(isCurrentlySyncingContacts){
-           return START_NOT_STICKY
+        if (isCurrentlySyncingContacts) {
+            return START_NOT_STICKY
         }
 
         isCurrentlySyncingContacts = true
-        shouldCallSyncAPI = intent?.getBooleanExtra(SHOULD_CALL_SYNC_API,false) ?: false
-        Log.d(TAG,"Started Syncing Contacts....")
+        shouldCallSyncAPI = intent?.getBooleanExtra(SHOULD_CALL_SYNC_API, false) ?: false
+        Log.d(TAG, "Started Syncing Contacts....")
 
         if (ContextCompat.checkSelfPermission(
-                        this,
-                        android.Manifest.permission.READ_CONTACTS
-                )
-                != PackageManager.PERMISSION_GRANTED
+                this,
+                android.Manifest.permission.READ_CONTACTS
+            )
+            != PackageManager.PERMISSION_GRANTED
         ) {
             Log.v(TAG, "READ_CONTACTS Permission not granted, exiting...")
             isCurrentlySyncingContacts = false
             return START_NOT_STICKY
         }
 
-        val cursorLoader =  CursorLoader(
-                this,
-                ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                PROJECTION,
-                SELECTION,
-                SELECTION_ARGS,
-                null
+        val cursorLoader = CursorLoader(
+            this,
+            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+            PROJECTION,
+            SELECTION,
+            SELECTION_ARGS,
+            null
         )
-        cursorLoader.registerListener(CONTACTS_LOADER_ID,this)
+        cursorLoader.registerListener(CONTACTS_LOADER_ID, this)
         cursorLoader.startLoading()
 
         return START_REDELIVER_INTENT
@@ -78,9 +78,9 @@ class SyncContactsService : Service(), Loader.OnLoadCompleteListener<Cursor> {
         var updatedPhoneNumber = phone.replace("\\s|\t|[(]|[)]|[-]".toRegex(), "")
         if (updatedPhoneNumber.startsWith('+')) {
             updatedPhoneNumber = updatedPhoneNumber.replace("[+]".toRegex(), "")
-        } else if (updatedPhoneNumber.startsWith("91") && updatedPhoneNumber.length > 10){
+        } else if (updatedPhoneNumber.startsWith("91") && updatedPhoneNumber.length > 10) {
             // Dont do anything no already in required format
-        } else{
+        } else {
             updatedPhoneNumber = updatedPhoneNumber.replace("^0".toRegex(), "")
             updatedPhoneNumber = "91${updatedPhoneNumber}"
         }
@@ -100,16 +100,16 @@ class SyncContactsService : Service(), Loader.OnLoadCompleteListener<Cursor> {
         val contacts: ArrayList<ContactModel> = ArrayList()
         while (cursor.moveToNext()) {
             val name = cursor.getString(
-                    cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY)
+                cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY)
             )
             val phone = cursor.getString(
-                    cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
+                cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
             )
             val contactId = cursor.getString(
-                    cursor.getColumnIndex((ContactsContract.Contacts._ID))
+                cursor.getColumnIndex((ContactsContract.Contacts._ID))
             )
 
-            if(phone != null) {
+            if (phone != null) {
 
                 contacts.add(
                     ContactModel(
@@ -129,15 +129,22 @@ class SyncContactsService : Service(), Loader.OnLoadCompleteListener<Cursor> {
 
         cursor?.let {
             val contactsList = mapCursorToContacts(cursor)
-            val distinctContactList = contactsList.distinctBy { it.mobile }
+            val distinctContactList = contactsList
+                .distinctBy { it.mobile }
+                .filter {
+                    it.mobile.length >= 10
+                }
 
-            Log.d(TAG, "Contact Size after removing duplicate contacts : ${distinctContactList.size}")
+            Log.d(
+                TAG,
+                "Contact Size after removing duplicate contacts : ${distinctContactList.size}"
+            )
             GlobalScope.launch {
                 try {
                     chatContactsRepository.updateContacts(
                         distinctContactList,
                         shouldCallSyncAPI
-                        )
+                    )
 
                     Log.e(TAG, "Contacts Synced")
                     isCurrentlySyncingContacts = false
@@ -165,24 +172,25 @@ class SyncContactsService : Service(), Loader.OnLoadCompleteListener<Cursor> {
         fun getService(): SyncContactsService = this@SyncContactsService
     }
 
-    companion object{
+    companion object {
         private const val TAG: String = "service/fetch/contacts"
         private const val CONTACTS_LOADER_ID = 2
 
         const val SHOULD_CALL_SYNC_API = "call_sync_api"
 
         private val PROJECTION: Array<out String> = arrayOf(
-                ContactsContract.Contacts._ID,
-                ContactsContract.Contacts.LOOKUP_KEY,
-                ContactsContract.Contacts.DISPLAY_NAME_PRIMARY,
-                ContactsContract.Contacts.HAS_PHONE_NUMBER,
-                ContactsContract.CommonDataKinds.Phone.NUMBER
+            ContactsContract.Contacts._ID,
+            ContactsContract.Contacts.LOOKUP_KEY,
+            ContactsContract.Contacts.DISPLAY_NAME_PRIMARY,
+            ContactsContract.Contacts.HAS_PHONE_NUMBER,
+            ContactsContract.CommonDataKinds.Phone.NUMBER
         )
 
         private const val SEARCH_STRING = ""
         private val SELECTION_ARGS = arrayOf("%$SEARCH_STRING%")
 
-        private const val SELECTION: String = "${ContactsContract.Contacts.HAS_PHONE_NUMBER} > 0 and ${ContactsContract.Contacts.DISPLAY_NAME_PRIMARY} LIKE ?"
+        private const val SELECTION: String =
+            "${ContactsContract.Contacts.HAS_PHONE_NUMBER} > 0 and ${ContactsContract.Contacts.DISPLAY_NAME_PRIMARY} LIKE ?"
     }
 
 

@@ -322,7 +322,6 @@ class ChatGroupRepository constructor(
         val newFileName =
             "Doc-$groupId-${DateHelper.getFullDateTimeStamp()}.${getExtensionFromUri(context, uri)}"
 
-
         val pathOnServer = uploadChatAttachment(
             newFileName,
             uri,

@@ -3,7 +3,9 @@ package com.gigforce.app.notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.graphics.Color
+import android.media.AudioAttributes
 import android.os.Build
+import android.provider.Settings
 import androidx.annotation.RequiresApi
 
 
@@ -28,6 +30,17 @@ object NotificationChannels {
                     NotificationManager.IMPORTANCE_HIGH
                 )
 
+                val audioAttribution = AudioAttributes.Builder()
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                    .build()
+
+                channel.description = "Urgent Notifications"
+                channel.setSound(
+                    Settings.System.DEFAULT_NOTIFICATION_URI,
+                    audioAttribution
+                )
+
                 channel.enableLights(true)
                 channel.lightColor = Color.RED
                 channel.enableVibration(true)
@@ -42,7 +55,17 @@ object NotificationChannels {
                 val channel = NotificationChannel(
                         CHANNEL_CHAT_ID,
                         CHANNEL_CHAT,
-                        NotificationManager.IMPORTANCE_HIGH
+                        NotificationManager.IMPORTANCE_MAX
+                )
+
+                val audioAttribution = AudioAttributes.Builder()
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                    .build()
+                channel.description = "Chat Notifications"
+                channel.setSound(
+                    Settings.System.DEFAULT_NOTIFICATION_URI,
+                    audioAttribution
                 )
 
                 channel.enableLights(true)

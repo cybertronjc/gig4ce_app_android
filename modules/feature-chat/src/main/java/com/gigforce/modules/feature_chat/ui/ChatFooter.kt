@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.common_ui.chat.models.MentionUser
 import com.gigforce.common_ui.views.GigforceImageView
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 import com.gigforce.modules.feature_chat.R
 import com.gigforce.modules.feature_chat.models.GroupChatMember
 import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel
@@ -80,6 +82,20 @@ class ChatFooter(context: Context, attrs: AttributeSet) :
         this.viewModel = viewModel
     }
 
+    fun disableInput(
+        message : String
+    ){
+        replyLayout.gone()
+        replyBlockedLayout.visible()
+        replyBlockedLayout.text = message
+    }
+
+    fun enableInput(){
+        replyBlockedLayout.gone()
+        replyLayout.visible()
+        replyBlockedLayout.text = ""
+    }
+
     fun enableUserSuggestions(){
         et_message.tokenizer = WordTokenizer(tokenizerConfig)
         et_message.setQueryTokenReceiver(this)
@@ -120,6 +136,10 @@ class ChatFooter(context: Context, attrs: AttributeSet) :
         }
 
         return personMentions
+    }
+
+    fun isTypingEnabled() : Boolean{
+        return replyLayout.isVisible
     }
 
 

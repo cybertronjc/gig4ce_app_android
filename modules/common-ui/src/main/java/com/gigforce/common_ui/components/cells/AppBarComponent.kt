@@ -37,10 +37,11 @@ class AppBarComponent(context: Context, attrs: AttributeSet?) : FrameLayout(cont
 
 
     override fun bind(data: Any?) {
-
     }
 
     override fun onClick(v: View?) {
         navigation.navigateTo("chats/chatList")
     }
+
+
 }

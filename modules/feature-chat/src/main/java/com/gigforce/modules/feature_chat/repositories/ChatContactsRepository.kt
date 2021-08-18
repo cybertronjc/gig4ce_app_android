@@ -99,6 +99,7 @@ class ChatContactsRepository constructor(
         }
 
         Log.d(TAG, "Sync Started...")
+        syncPref.addContactSyncStartedPoint()
 
         val isUserTl = checkIfUserTl()
         Log.d(TAG, "Is UserTl : $isUserTl")
@@ -148,8 +149,6 @@ class ChatContactsRepository constructor(
         if(shouldCallSyncApiWhenDoneUploadingApiToDB) {
             callSyncContactsApi()
         }
-
-        syncPref.setContactsAsSynced()
     }
 
     private suspend fun callSyncContactsApi() {

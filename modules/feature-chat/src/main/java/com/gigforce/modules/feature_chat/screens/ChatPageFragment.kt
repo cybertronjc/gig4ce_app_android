@@ -87,7 +87,6 @@ class ChatPageFragment : Fragment(),
     //Views
     private lateinit var chatRecyclerView: CoreRecyclerView
     private lateinit var chatFooter: ChatFooter
-    private lateinit var userBlockedOrRemovedLayout: TextView
     private var cameFromLinkInOtherChat: Boolean = false
 
     private val viewModel: ChatPageViewModel by viewModels()
@@ -285,8 +284,6 @@ class ChatPageFragment : Fragment(),
     private fun adjustUiAccToOneToOneChat() {
 
         toolbar.showSubtitle("Offline")
-//        tv_lastSeenValue.visible()
-//        tv_lastSeenValue.text =
     }
 
     private fun adjustUiAccToGroupChat() {
@@ -323,36 +320,19 @@ class ChatPageFragment : Fragment(),
 
                     showGroupDetails(it)
                     if (it.groupDeactivated) {
-
-                        userBlockedOrRemovedLayout.visible()
-                        userBlockedOrRemovedLayout.text = "This group is deactivated by admin"
-                        chatFooter.gone()
+                        chatFooter.disableInput("This group is deactivated by admin")
                     } else if (it.currenUserRemovedFromGroup) {
-                        userBlockedOrRemovedLayout.gone()
-                        chatFooter.visible()
-
-                        chatFooter.replyLayout.gone()
-                        chatFooter.replyBlockedLayout.visible()
-                        chatFooter.replyBlockedLayout.text = "You have been removed from this group"
+                        chatFooter.disableInput("You have been removed from this group")
                     } else if (it.onlyAdminCanPostInGroup) {
-                        userBlockedOrRemovedLayout.gone()
                         chatFooter.visible()
 
                         if (groupChatViewModel.isUserGroupAdmin()) {
-                            chatFooter.replyBlockedLayout.gone()
-                            chatFooter.replyLayout.visible()
+                            chatFooter.enableInput()
                         } else {
-
-                            chatFooter.replyLayout.gone()
-                            chatFooter.replyBlockedLayout.visible()
-                            chatFooter.replyBlockedLayout.text = "Only admin can post in this group"
+                            chatFooter.disableInput("Only admin can post in this group")
                         }
                     } else {
-
-                        userBlockedOrRemovedLayout.gone()
-                        chatFooter.visible()
-                        chatFooter.replyBlockedLayout.gone()
-                        chatFooter.replyLayout.visible()
+                        chatFooter.enableInput()
                     }
                 })
 
@@ -396,21 +376,12 @@ class ChatPageFragment : Fragment(),
     }
 
     private fun findViews(view: View) {
-//        toolbarTitle = view.findViewById(R.id.tv_nameValueInChat)
-//        toolbarOverflowBtn = view.findViewById(R.id.iv_verticalDots)
-//        toolBackBtn = view.findViewById(R.id.iv_backArrowInChat)
-
         chatFooter = view.findViewById(R.id.chat_footer)
 
         chatRecyclerView = view.findViewById(R.id.rv_chat_messages)
         val layoutManager = LinearLayoutManager(requireContext())
         layoutManager.stackFromEnd = true
         chatRecyclerView.layoutManager = layoutManager
-
-//        toolbarUserImageIV = view.findViewById(R.id.user_image_iv)
-//
-//        lastSeenTV = view.findViewById(R.id.tv_lastSeenValue)
-        userBlockedOrRemovedLayout = view.findViewById(R.id.contact_blocked_label)
     }
 
     private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {
@@ -540,12 +511,9 @@ class ChatPageFragment : Fragment(),
                     }
 
                     if (it.isUserBlocked) {
-                        userBlockedOrRemovedLayout.visible()
-                        userBlockedOrRemovedLayout.text = "You've blocked this contact"
-                        chatFooter.gone()
+                        chatFooter.disableInput("You've blocked this contact")
                     } else {
-                        userBlockedOrRemovedLayout.gone()
-                        chatFooter.visible()
+                        chatFooter.enableInput()
                     }
                 })
 
@@ -566,12 +534,9 @@ class ChatPageFragment : Fragment(),
                 .observe(viewLifecycleOwner, {
 
                     if (it.isBlocked) {
-                        userBlockedOrRemovedLayout.visible()
-                        userBlockedOrRemovedLayout.text = "You've blocked this contact"
-                        chatFooter.gone()
+                        chatFooter.disableInput("You've blocked this contact")
                     } else {
-                        userBlockedOrRemovedLayout.gone()
-                        chatFooter.visible()
+                        chatFooter.enableInput()
                     }
 
                     if (it.isOtherUserOnline) {
@@ -627,16 +592,12 @@ class ChatPageFragment : Fragment(),
             popUp.setOnMenuItemClickListener(this)
             popUp.inflate(R.menu.menu_chat_toolbar)
             popUp.menu.findItem(R.id.action_block).title =
-                    if (chatFooter.isVisible)
+                    if (chatFooter.isTypingEnabled())
                         "Block"
                     else
                         "UnBlock"
             popUp.show()
         })
-
-//        toolbarOverflowBtn.setOnClickListener {
-//            manageMenu(it)
-//        }
 
         chatFooter.attachmentOptionButton.setOnClickListener {
             val popUpMenu = PopupMenu(requireContext(), it)
@@ -764,7 +725,7 @@ class ChatPageFragment : Fragment(),
     private fun manageNewMessageToContact() {
         chatFooter.btn_send.setOnClickListener {
             if (validateNewMessageTask()) {
-                val message = chatFooter.et_message.text.toString().capitalize().trim()
+                val message = chatFooter.et_message.text.toString().trim()
                 val usersMentioned = chatFooter.getMentionedPeopleInText()
 
                 chatFooter.et_message.setText("")

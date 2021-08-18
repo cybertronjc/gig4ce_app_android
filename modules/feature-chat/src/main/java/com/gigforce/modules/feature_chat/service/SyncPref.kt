@@ -26,7 +26,7 @@ class SyncPref private constructor(
         }
     }
 
-    fun setContactsAsSynced() {
+    fun addContactSyncStartedPoint() {
         contactsSharedPref.edit { putLong(LAST_CONTACT_SYNC_TIME, System.currentTimeMillis()) }
     }
 

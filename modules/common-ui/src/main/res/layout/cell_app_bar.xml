@@ -37,10 +37,14 @@
 
     <com.gigforce.common_ui.components.atoms.IconButton
         android:id="@+id/chat_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_marginRight="@dimen/size8"
         app:iconType="Chat"
+        android:scaleX="0.8"
+        android:scaleY="0.8"
+        android:scaleType="fitXY"
+        android:layout_marginEnd="16dp"
         app:layout_constraintBottom_toBottomOf="@+id/appProfileComponent"
         app:layout_constraintEnd_toStartOf="@+id/appProfileComponent"
         app:layout_constraintTop_toTopOf="@+id/appProfileComponent" />
@@ -56,5 +60,16 @@
         app:layout_constraintTop_toTopOf="parent" >
 
     </com.gigforce.common_ui.components.cells.AppProfilePicComponent>
+
+
+    <ImageView
+        android:id="@+id/unread_message_count_tv"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginRight="8dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toStartOf="@id/appProfileComponent"
+        app:layout_constraintTop_toTopOf="@id/appProfileComponent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
