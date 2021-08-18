@@ -31,17 +31,12 @@ import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.core.logger.GigforceLogger
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 import kotlin.Boolean as Boolean
 import com.yalantis.ucrop.util.FileUtils.getDataColumn
-
-
+import java.io.*
 
 
 @AndroidEntryPoint
@@ -205,10 +200,10 @@ class ImageCropActivity : AppCompatActivity() {
 
     private fun handleCropResult(result: CropImageView.CropResult?) {
         if (result != null && result?.error == null) {
-            val imageBitmap =
-                if (viewBinding.cropImageView.cropShape == CropImageView.CropShape.OVAL)
-                    result.bitmap?.let { CropImage.toOvalBitmap(it) }
-                else result.bitmap
+//            val imageBitmap =
+//                if (viewBinding.cropImageView.cropShape == CropImageView.CropShape.OVAL)
+//                    result.bitmap?.let { CropImage.toOvalBitmap(it) }
+//                else result.bitmap
 
 
 //            Log.v("File result", "result : ${result?.bitmap.toString()} , ${result?.cropRect.toString()}, ${result.uriContent.toString()} , :bimap , ${result.error}" )
@@ -219,10 +214,10 @@ class ImageCropActivity : AppCompatActivity() {
 //
 //            }
             result?.uriContent?.let {
-                val actualImage = getRealPath(it)
-                Log.v("File Path", "filepath ${result?.getUriFilePath(this)}, actual: $actualImage ")
+                val actualImage = getUriFromContentUri(it)
+                Log.v("File Path", "filepath ${result?.getUriFilePath(this)}, actual: ${actualImage.toString()} ")
                 val resultIntent = Intent()
-                resultIntent.putExtra(CROPPED_IMAGE_URL_EXTRA, actualImage)
+                resultIntent.putExtra(CROPPED_IMAGE_URL_EXTRA, it.toString())
                 setResult(Activity.RESULT_OK, resultIntent)
                 finish()
             }
@@ -235,6 +230,35 @@ class ImageCropActivity : AppCompatActivity() {
 
          Toast.makeText(this@ImageCropActivity, "Crop failed: ${result?.error?.message}", Toast.LENGTH_SHORT)
         }
+    }
+
+    private fun getUriFromContentUri(uri: Uri): Uri? {
+        var inputStream = contentResolver.openInputStream(uri)
+        val destinationFilename =
+            Environment.getExternalStorageDirectory().path + File.separatorChar.toString() + "abc.jpg"
+
+        var bis: BufferedInputStream? = null
+        var bos: BufferedOutputStream? = null
+
+        try {
+            bis = BufferedInputStream(inputStream)
+            bos = BufferedOutputStream(FileOutputStream(destinationFilename, false))
+            val buf = ByteArray(1024)
+            bis.read(buf)
+            do {
+                bos.write(buf)
+            } while (bis.read(buf) !== -1)
+        } catch (e: IOException) {
+            e.printStackTrace()
+        } finally {
+            try {
+                if (bis != null) bis.close()
+                if (bos != null) bos.close()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
+        return Uri.fromFile(File(destinationFilename))
     }
 
     fun getRealPathFromURI(contentUri: Uri?): String? {
