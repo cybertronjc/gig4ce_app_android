@@ -213,7 +213,13 @@ class ImageCropActivity : AppCompatActivity() {
 //
 //            }
             result?.uriContent?.let {
-                val actualImage = getUriFromContentUri(it)
+                var actualImage = it
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    getUriFromContentUri(it)?.let {
+                        actualImage = it
+                    }
+                }
+
 //                Log.v("File Path", "filepath ${result?.getUriFilePath(this)}, actual: ${actualImage.toString()} ")
                 val resultIntent = Intent()
                 resultIntent.putExtra(CROPPED_IMAGE_URL_EXTRA, actualImage.toString())
