@@ -18,6 +18,7 @@ import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.databinding.DataBindingUtil
 import com.canhub.cropper.CropImage
 import com.canhub.cropper.CropImageContract
+import com.canhub.cropper.CropImageOptions
 import com.canhub.cropper.CropImageView
 import com.gigforce.common_image_picker.R
 import com.gigforce.common_image_picker.databinding.ActivityImageCropBinding
@@ -96,7 +97,13 @@ class ImageCropActivity : AppCompatActivity() {
 
         okayImg.setOnClickListener {
             viewBinding.progressCircular.visibility = View.VISIBLE
-            cropImageView.getCroppedImageAsync()
+//            cropImageView.getCroppedImageAsync()
+            var options = CropImageOptions()
+            cropImageView.saveCroppedImageAsync(cropImageUri,options.outputCompressFormat,
+                options.outputCompressQuality,
+                40,
+                50,
+                options.outputRequestSizeOptions)
 
         }
         cropImageView.setOnCropImageCompleteListener(object : CropImageView.OnCropImageCompleteListener {

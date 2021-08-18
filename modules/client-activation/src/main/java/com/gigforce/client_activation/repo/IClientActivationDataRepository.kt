@@ -33,9 +33,9 @@ class ClientActivationDataRepository @Inject constructor():
                     val title = item?.get("cardTitle") as? String ?: "-"
                     val onlyTitle = item?.get("title") as? String ?: "-"
                     val cardImage = item?.get("cardImage") as? String
-                    val priority = item?.get("priority") as? Int ?: 0
+                    val priority = (item?.get("priority") as? Long) ?: 10000
                     _data.add(FeatureItemCardDVM(id=item.id,title = title, image = cardImage, navPath = "client_activation",args = bundleOf(
-                        StringConstants.JOB_PROFILE_ID.value to item?.id),priority = priority, eventName = onlyTitle +"_"+ ClientActivationEvents.EVENT_USER_CLICKED, props = mapOf(
+                        StringConstants.JOB_PROFILE_ID.value to item?.id),priority = priority.toInt(), eventName = onlyTitle +"_"+ ClientActivationEvents.EVENT_USER_CLICKED, props = mapOf(
                         "id" to item.id,
                         "title" to onlyTitle,
                         "screen_source" to "Client Activation"
@@ -53,6 +53,10 @@ class ClientActivationDataRepository @Inject constructor():
     override fun getData(): LiveData<List<Any>> {
         return data
     }
+
+
+
+
 
 }
 
