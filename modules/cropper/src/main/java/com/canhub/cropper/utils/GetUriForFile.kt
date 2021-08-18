@@ -27,7 +27,7 @@ import java.nio.file.Paths
  * Most of the devices will work fine, but if you worry about memory usage, please remember to clean
  * the cache from time to time,
  */
-internal fun getUriForFile(context: Context, file: File): Uri {
+fun getUriForFile(context: Context, file: File): Uri {
     val authority = context.packageName + CommonValues.authority
     try {
         Log.i("AIC", "Try get URI for scope storage - content://")

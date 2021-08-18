@@ -29,7 +29,6 @@ class BitmapCroppingWorkerJob(
     private val flipHorizontally: Boolean,
     private val flipVertically: Boolean,
     private val options: CropImageView.RequestSizeOptions,
-    private val saveUri: Uri?,
     private val saveCompressFormat: Bitmap.CompressFormat? = Bitmap.CompressFormat.JPEG,
     private val saveCompressQuality: Int
 ) : CoroutineScope {
@@ -81,28 +80,24 @@ class BitmapCroppingWorkerJob(
                     val resizedBitmap =
                         BitmapUtils.resizeBitmap(bitmapSampled.bitmap, reqWidth, reqHeight, options)
 
-                    if (saveUri == null)
-                        onPostExecute(Result(resizedBitmap, bitmapSampled.sampleSize))
-                    else
-                        launch(Dispatchers.IO) {
-                            BitmapUtils.writeBitmapToUri(
-                                context,
-                                resizedBitmap,
-                                saveUri,
-                                saveCompressFormat ?: Bitmap.CompressFormat.JPEG,
-                                saveCompressQuality
+                    launch(Dispatchers.IO) {
+                        val newUri = BitmapUtils.writeBitmapToUri(
+                            context,
+                            resizedBitmap,
+                            saveCompressFormat ?: Bitmap.CompressFormat.JPEG,
+                            saveCompressQuality
+                        )
+                        resizedBitmap.recycle()
+                        onPostExecute(
+                            Result(
+                                newUri, // saveUri,
+                                bitmapSampled.sampleSize
                             )
-                            resizedBitmap.recycle()
-                            onPostExecute(
-                                Result(
-                                    uri,
-                                    bitmapSampled.sampleSize
-                                )
-                            )
-                        }
+                        )
+                    }
                 }
             } catch (e: Exception) {
-                onPostExecute(Result(e, uri != null))
+                onPostExecute(Result(e, false))
             }
         }
     }
