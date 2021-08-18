@@ -26,8 +26,8 @@ data class GigOrder(
         @set:PropertyName("locationType")
         var locationType: String = "",
 
-        @get:PropertyName("offerLetter")
-        @set:PropertyName("offerLetter")
+        @get:PropertyName("olr")
+        @set:PropertyName("olr")
         var offerLetter: String? = null,
 
         @get:PropertyName("office")
