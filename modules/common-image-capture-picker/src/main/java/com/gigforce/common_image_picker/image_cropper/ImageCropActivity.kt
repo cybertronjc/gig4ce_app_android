@@ -232,9 +232,14 @@ class ImageCropActivity : AppCompatActivity() {
     }
 
     private fun getUriFromContentUri(uri: Uri): Uri? {
+        val timeStamp = SimpleDateFormat(
+            "yyyyMMdd_HHmmss",
+            Locale.getDefault()
+        ).format(Date())
+        val imageFileName = "IMG" + "_" + timeStamp + "_"
         var inputStream = contentResolver.openInputStream(uri)
         val destinationFilename =
-            Environment.getExternalStorageDirectory().path + File.separatorChar.toString() + "abc.jpg"
+            Environment.getExternalStorageDirectory().path + File.separatorChar.toString() +  imageFileName +".jpg"
 
         var bis: BufferedInputStream? = null
         var bos: BufferedOutputStream? = null
