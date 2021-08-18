@@ -16,6 +16,7 @@ import android.provider.MediaStore
 import android.util.Log
 import android.util.Size
 import android.view.View
+import android.view.ViewTreeObserver
 import android.view.Window
 import android.widget.*
 import androidx.activity.viewModels
@@ -23,8 +24,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.net.toUri
 import com.gigforce.common_image_picker.image_cropper.ImageCropActivity
-import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.common_ui.viewmodels.ProfileViewModel
+import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.ImageUtils
 import com.gigforce.giger_gigs.R
@@ -112,7 +113,7 @@ class PhotoCrop : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?): Unit {
         super.onCreate(savedInstanceState)
         if (Build.VERSION.SDK_INT != Build.VERSION_CODES.O) {
-            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
 
         this.setContentView(R.layout.activity_photo_crop)
@@ -148,8 +149,25 @@ class PhotoCrop : AppCompatActivity() {
         checkPermissions()
         imageView.setOnClickListener { toggleBottomSheet() }
         constLayout.setOnClickListener { toggleBottomSheet() }
-    }
 
+
+    }
+    private fun setProfilePicHeight() {
+        val vto: ViewTreeObserver = imageView.getViewTreeObserver()
+        vto.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+
+            override fun onGlobalLayout() {
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+                    imageView.getViewTreeObserver().removeGlobalOnLayoutListener(this)
+                } else {
+                    imageView.getViewTreeObserver().removeOnGlobalLayoutListener(this)
+                }
+                val width: Int = imageView.getMeasuredWidth()
+                val height: Int = imageView.getMeasuredHeight()
+                imageView.layoutParams = LinearLayout.LayoutParams(width, width)
+            }
+        })
+    }
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString("purpose", purpose)
@@ -233,7 +251,7 @@ class PhotoCrop : AppCompatActivity() {
                 "IMAGE_CAPTURE",
                 "request code=" + requestCode.toString() + "  ImURI: " + outputFileUri.toString()
             )
-            outputFileUri = ImagePicker.getImageFromResult(this, resultCode, data);
+            outputFileUri = ImagePicker.getImageFromResult(this, resultCode, data)
             if (outputFileUri != null) {
                 //outputFileUri?.let { it -> startCrop(it) }
                 outputFileUri?.let { it -> startCropImage(it) }
@@ -248,7 +266,8 @@ class PhotoCrop : AppCompatActivity() {
          */
         else if (requestCode == ImageCropActivity.CROP_RESULT_CODE && resultCode == Activity.RESULT_OK) {
 //            val imageUriResultCrop: Uri? = UCrop.getOutput((data!!))
-            val imageUriResultCrop: Uri? =  Uri.parse(data?.getStringExtra(ImageCropActivity.CROPPED_IMAGE_URL_EXTRA))
+            val imageUriResultCrop: Uri? =
+                Uri.parse(data?.getStringExtra(ImageCropActivity.CROPPED_IMAGE_URL_EXTRA))
             Log.d("ImageUri", imageUriResultCrop.toString())
             if (imageUriResultCrop != null) {
                 resultIntent.putExtra("uri", imageUriResultCrop)
@@ -309,7 +328,7 @@ class PhotoCrop : AppCompatActivity() {
     /**
      * To get uri from the data received when using the camera to capture image
      */
-     fun getImageUriFromBitmap(context: Context, bitmap: Bitmap): Uri {
+    fun getImageUriFromBitmap(context: Context, bitmap: Bitmap): Uri {
         val bytes = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, bytes)
         val path =
@@ -355,7 +374,7 @@ class PhotoCrop : AppCompatActivity() {
         uCrop.start(this as AppCompatActivity)
     }
 
-    private fun startCropImage(uri: Uri){
+    private fun startCropImage(uri: Uri) {
         val photoCropIntent = Intent(this, ImageCropActivity::class.java)
         photoCropIntent.putExtra("outgoingUri", uri.toString())
         startActivityForResult(photoCropIntent, 90)
@@ -450,7 +469,7 @@ class PhotoCrop : AppCompatActivity() {
                                     progress_circular.visibility = View.GONE
                                     val thumbNail: String = it.metadata?.reference?.name.toString()
                                     updateViewModel(purpose, thumbNail, true)
-                                    //loadImage(folder, fname)
+                                    loadImage(folder, fname)
                                     Toast.makeText(this, "Successfully Uploaded", Toast.LENGTH_LONG)
                                         .show()
                                     resultIntent.putExtra(
@@ -527,14 +546,19 @@ class PhotoCrop : AppCompatActivity() {
      *
      */
     private fun loadImage(folder: String, path: String) {
-        if (path == DEFAULT_PICTURE) disableRemoveProfilePicture()
-        else enableRemoveProfilePicture()
-        Log.d("PHOTO_CROP", "loading - " + path)
-//        var profilePicRef: StorageReference =
-//            storage.reference.child(folder).child(path)
-//        GlideApp.with(this)
-//            .load(profilePicRef)
-//            .into(imageView)
+        if (path == DEFAULT_PICTURE) {
+            disableRemoveProfilePicture()
+        } else {
+            enableRemoveProfilePicture()
+            setProfilePicHeight()
+            Log.d("PHOTO_CROP", "loading - " + path)
+            var profilePicRef: StorageReference =
+                storage.reference.child(folder).child(path)
+            GlideApp.with(this)
+                .load(profilePicRef)
+                .into(imageView)
+        }
+
     }
 
     /**
@@ -543,8 +567,8 @@ class PhotoCrop : AppCompatActivity() {
      */
     var outputFileUri: Uri? = null
     open fun getImageFromPhone() {
-        var chooseImageIntent = ImagePicker.getPickImageIntent(this);
-        startActivityForResult(chooseImageIntent, CODE_IMG_GALLERY);
+        var chooseImageIntent = ImagePicker.getPickImageIntent(this)
+        startActivityForResult(chooseImageIntent, CODE_IMG_GALLERY)
 
 
 //        val pickIntent = Intent()

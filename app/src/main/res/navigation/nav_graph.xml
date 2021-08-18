@@ -984,10 +984,7 @@
         android:id="@+id/addNewLoginSummaryFragment"
         android:name="com.gigforce.giger_gigs.tl_login_details.AddNewLoginSummaryFragment"
         android:label="AddNewLoginSummaryFragment" />
-    <fragment
-        android:id="@+id/imageCropFragment"
-        android:name="com.gigforce.common_image_picker.image_cropper.ImageCropFragment"
-        android:label="ImageCropFragment" />
+
     <fragment
         android:id="@+id/addLoginReportFragment"
         android:name="com.gigforce.giger_gigs.tl_login_report.AddDailyLoginReportFragment"

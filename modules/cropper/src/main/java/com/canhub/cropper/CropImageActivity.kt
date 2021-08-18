@@ -3,17 +3,13 @@ package com.canhub.cropper
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.BlendModeColorFilterCompat
@@ -23,9 +19,6 @@ import com.canhub.cropper.CropImageView.OnCropImageCompleteListener
 import com.canhub.cropper.CropImageView.OnSetImageUriCompleteListener
 import com.canhub.cropper.common.CommonVersionCheck
 import com.canhub.cropper.databinding.CropImageActivityBinding
-import com.canhub.cropper.utils.getUriForFile
-import java.io.File
-import java.io.IOException
 
 /**
  * Built-in activity for image cropping.<br></br>
@@ -49,9 +42,8 @@ open class CropImageActivity :
     /** The crop image view library widget used in the activity */
     private var cropImageView: CropImageView? = null
     private lateinit var binding: CropImageActivityBinding
-    private val pickImage = this.registerForActivityResult(PickImageContract()) { onPickImageResult(it) }
+    private val pickImage = registerForActivityResult(PickImageContract()) { onPickImageResult(it) }
 
-    @RequiresApi(Build.VERSION_CODES.M)
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -176,8 +168,8 @@ open class CropImageActivity :
             // For API >= 23 we need to check specifically that we have permissions to read external
             // storage.
             if (cropImageUri?.let {
-                CropImage.isReadExternalStoragePermissionsRequired(this, it)
-            } == true &&
+                    CropImage.isReadExternalStoragePermissionsRequired(this, it)
+                } == true &&
                 CommonVersionCheck.isAtLeastM23()
             ) {
                 // request permissions and handle the result in onRequestPermissionsResult()
@@ -236,8 +228,7 @@ open class CropImageActivity :
      */
     open fun cropImage() {
         if (options.noOutputImage) setResult(null, null, 1)
-        else cropImageView?.saveCroppedImageAsync(
-            outputUri,
+        else cropImageView?.croppedImageAsync(
             options.outputCompressFormat,
             options.outputCompressQuality,
             options.outputRequestWidth,
@@ -259,42 +250,6 @@ open class CropImageActivity :
     open fun rotateImage(degrees: Int) {
         cropImageView?.rotateImage(degrees)
     }
-
-    /**
-     * Get Android uri to save the cropped image into.<br></br>
-     * Use the given in options or create a temp file.
-     */
-    val outputUri: Uri?
-        get() {
-            var outputUri = options.outputUri
-            if (outputUri == null || outputUri == Uri.EMPTY) {
-                outputUri = try {
-                    val ext = when (options.outputCompressFormat) {
-                        Bitmap.CompressFormat.JPEG -> ".jpg"
-                        Bitmap.CompressFormat.PNG -> ".png"
-                        else -> ".webp"
-                    }
-                    // We have this because of a HUAWEI path bug when we use getUriForFile
-                    if (CommonVersionCheck.isAtLeastQ29()) {
-                        try {
-                            val file = File.createTempFile(
-                                "cropped",
-                                ext,
-                                getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-                            )
-                            getUriForFile(applicationContext, file)
-                        } catch (e: Exception) {
-                            Log.e("AIC", "${e.message}")
-                            val file = File.createTempFile("cropped", ext, cacheDir)
-                            getUriForFile(applicationContext, file)
-                        }
-                    } else Uri.fromFile(File.createTempFile("cropped", ext, cacheDir))
-                } catch (e: IOException) {
-                    throw RuntimeException("Failed to create temp file for output image", e)
-                }
-            }
-            return outputUri
-        }
 
     /**
      * Result with cropped image data or error if failed.

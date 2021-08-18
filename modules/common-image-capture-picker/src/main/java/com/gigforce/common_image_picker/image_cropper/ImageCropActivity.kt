@@ -2,11 +2,14 @@ package com.gigforce.common_image_picker.image_cropper
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.ActivityInfo
+import android.database.Cursor
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.provider.DocumentsContract
+import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.view.Window
@@ -20,19 +23,21 @@ import com.canhub.cropper.CropImage
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageOptions
 import com.canhub.cropper.CropImageView
+import com.canhub.cropper.common.CommonVersionCheck
+import com.canhub.cropper.utils.getUriForFile
 import com.gigforce.common_image_picker.R
 import com.gigforce.common_image_picker.databinding.ActivityImageCropBinding
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.core.logger.GigforceLogger
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 import kotlin.Boolean as Boolean
+import com.yalantis.ucrop.util.FileUtils.getDataColumn
+import java.io.*
+
 
 @AndroidEntryPoint
 class ImageCropActivity : AppCompatActivity() {
@@ -80,30 +85,12 @@ class ImageCropActivity : AppCompatActivity() {
         }
 
         closeImg.setOnClickListener {
-            //finish()
             onBackPressed()
-//            MaterialAlertDialogBuilder(this@ImageCropActivity)
-//                .setTitle("Alert")
-//                .setMessage("Are you sure you want to close?")
-//                .setPositiveButton("Yes") { dialog, _ ->
-//                    dialog.dismiss()
-//                    onBackPressed()
-//                }
-//                .setNegativeButton("No") { dialog, _ ->
-//                    dialog.dismiss()
-//                }
-                //.show()
         }
 
         okayImg.setOnClickListener {
             viewBinding.progressCircular.visibility = View.VISIBLE
-//            cropImageView.getCroppedImageAsync()
-            var options = CropImageOptions()
-            cropImageView.saveCroppedImageAsync(cropImageUri,options.outputCompressFormat,
-                options.outputCompressQuality,
-                40,
-                50,
-                options.outputRequestSizeOptions)
+            cropImageView.croppedImageAsync()
 
         }
         cropImageView.setOnCropImageCompleteListener(object : CropImageView.OnCropImageCompleteListener {
@@ -148,7 +135,7 @@ class ImageCropActivity : AppCompatActivity() {
      private fun setIncomingImage(incomingFile: String) = viewBinding.apply{
          if (incomingFile.isNotEmpty()){
              val incomingUri: Uri = Uri.parse(incomingFile)
-             logger.d(ImageCropFragment.logTag, "incomingFile uri : $incomingUri")
+             //logger.d(ImageCropFragment.logTag, "incomingFile uri : $incomingUri")
              viewBinding.progressCircular.visibility = View.VISIBLE
              cropImageUri = incomingUri
              cropImageView.setImageUriAsync(incomingUri)
@@ -164,13 +151,6 @@ class ImageCropActivity : AppCompatActivity() {
         viewBinding.cropImageView.rotateImage(90)
     }
 
-
-
-
-    private fun getCroppedImage(){
-        viewBinding.cropImageView.getCroppedImageAsync()
-    }
-
      private fun setCropImageControls(){
 
          viewBinding.cropImageView.apply {
@@ -180,7 +160,6 @@ class ImageCropActivity : AppCompatActivity() {
              setBackgroundColor(resources.getColor(R.color.warm_grey))
              setFixedAspectRatio(true)
              setMultiTouchEnabled(false)
-             isShowCropOverlay = true
          }
      }
 
@@ -188,31 +167,109 @@ class ImageCropActivity : AppCompatActivity() {
 
     private fun handleCropResult(result: CropImageView.CropResult?) {
         if (result != null && result?.error == null) {
-            val imageBitmap =
-                if (viewBinding.cropImageView.cropShape == CropImageView.CropShape.OVAL)
-                    result.bitmap?.let { CropImage.toOvalBitmap(it) }
-                else result.bitmap
-            Log.v("File Path", "filepath ${result?.getUriFilePath(this)} ")
-            Log.v("File result", "result : ${result?.bitmap.toString()} , ${result?.cropRect.toString()}, ${result.uriContent.toString()} , :bimap , ${result.error}" )
+//            val imageBitmap =
+//                if (viewBinding.cropImageView.cropShape == CropImageView.CropShape.OVAL)
+//                    result.bitmap?.let { CropImage.toOvalBitmap(it) }
+//                else result.bitmap
 
-            logger.d(ImageCropFragment.logTag, "cropped result  : ${result?.uriContent.toString() }")
-            //SCropResultActivity.start(this, imageBitmap, result.uriContent, result.sampleSize)
-            getUriFromBitmap(imageBitmap)?.let {
+
+//            Log.v("File result", "result : ${result?.bitmap.toString()} , ${result?.cropRect.toString()}, ${result.uriContent.toString()} , :bimap , ${result.error}" )
+//
+//            //logger.d(ImageCropFragment.logTag, "cropped result  : ${result?.uriContent.toString() }")
+//            //SCropResultActivity.start(this, imageBitmap, result.uriContent, result.sampleSize)
+//            getUriFromBitmap(imageBitmap)?.let {
+//
+//            }
+            result?.uriContent?.let {
+                var actualImage = it
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    getUriFromContentUri(it)?.let {
+                        actualImage = it
+                    }
+                }
+
+//                Log.v("File Path", "filepath ${result?.getUriFilePath(this)}, actual: ${actualImage.toString()} ")
                 val resultIntent = Intent()
-                resultIntent.putExtra(CROPPED_IMAGE_URL_EXTRA, it.toString())
+                resultIntent.putExtra(CROPPED_IMAGE_URL_EXTRA, actualImage.toString())
                 setResult(Activity.RESULT_OK, resultIntent)
                 finish()
             }
-            Log.v("File Path temp", "filepath ${getUriFromBitmap(imageBitmap)} ")
+
+            //Log.v("File Path temp", "filepath ${getUriFromBitmap(imageBitmap)} ")
 
         } else {
             Log.e("AIC", "Failed to crop image", result?.error)
-         logger.d(ImageCropFragment.logTag, "Failed to crop image", result?.error.toString())
+         //logger.d(ImageCropFragment.logTag, "Failed to crop image", result?.error.toString())
 
          Toast.makeText(this@ImageCropActivity, "Crop failed: ${result?.error?.message}", Toast.LENGTH_SHORT)
         }
     }
 
+    private fun getUriFromContentUri(uri: Uri): Uri? {
+        val timeStamp = SimpleDateFormat(
+            "yyyyMMdd_HHmmss",
+            Locale.getDefault()
+        ).format(Date())
+        val imageFileName = "IMG" + "_" + timeStamp + "_"
+        var inputStream = contentResolver.openInputStream(uri)
+        val destinationFilename =
+            Environment.getExternalStorageDirectory().path + File.separatorChar.toString() +  imageFileName +".jpg"
+
+        var bis: BufferedInputStream? = null
+        var bos: BufferedOutputStream? = null
+
+        try {
+            bis = BufferedInputStream(inputStream)
+            bos = BufferedOutputStream(FileOutputStream(destinationFilename, false))
+            val buf = ByteArray(1024)
+            bis.read(buf)
+            do {
+                bos.write(buf)
+            } while (bis.read(buf) !== -1)
+        } catch (e: IOException) {
+            e.printStackTrace()
+        } finally {
+            try {
+                if (bis != null) bis.close()
+                if (bos != null) bos.close()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
+        return getUriForFile(this, File(destinationFilename))
+        //return Uri.fromFile(File(destinationFilename))
+    }
+
+
+
+    fun getRealPathFromURI(contentUri: Uri?): String? {
+        var path: String? = null
+        val proj = arrayOf<String>(MediaStore.MediaColumns.DATA)
+        val cursor: Cursor? = contentResolver.query(contentUri!!, proj, null, null, null)
+        if (cursor?.moveToFirst() == true) {
+            val column_index: Int = cursor?.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA)
+            path = cursor?.getString(column_index)
+        }
+        cursor?.close()
+        return path
+    }
+
+
+
+    private fun getDefaultUri(): Uri? {
+        var tempDir: File = Environment.getExternalStorageDirectory()
+        tempDir = File(tempDir.getAbsolutePath().toString() + "/.temp/")
+        tempDir.mkdir()
+        val timeStamp = SimpleDateFormat(
+            "yyyyMMdd_HHmmss",
+            Locale.getDefault()
+        ).format(Date())
+        val imageFileName = PREFIX + "_" + timeStamp + "_"
+
+        val tempFile: File = File.createTempFile(imageFileName, ".jpg", tempDir)
+
+        return Uri.fromFile(tempFile)
+    }
     private fun getUriFromBitmap(bitmap: Bitmap?): Uri?{
 
            var tempDir: File = Environment.getExternalStorageDirectory()
@@ -253,4 +310,24 @@ class ImageCropActivity : AppCompatActivity() {
             }
             .show()
     }
+
+    private fun getRealPath(uri: Uri?): String? {
+        val docId: String = DocumentsContract.getDocumentId(uri)
+        val split = docId.split(":".toRegex()).toTypedArray()
+        val type = split[0]
+        val contentUri: Uri
+        contentUri = when (type) {
+            "image" -> MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+            "video" -> MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+            "audio" -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+            else -> MediaStore.Files.getContentUri("external")
+        }
+        val selection = "_id=?"
+        val selectionArgs = arrayOf(
+            split[1]
+        )
+
+        return getDataColumn(this, contentUri, selection, selectionArgs)
+    }
+
 }
