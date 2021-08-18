@@ -397,7 +397,7 @@ internal object BitmapUtils {
      */
     fun writeTempStateStoreBitmap(context: Context, bitmap: Bitmap?): Uri? =
         try {
-            writeBitmapToUri(context, bitmap!!, CompressFormat.JPEG, 95)
+            writeBitmapToUri(context, bitmap!!, CompressFormat.JPEG, 100)
         } catch (e: Exception) {
             Log.w(
                 "AIC",

@@ -192,7 +192,6 @@ class ImageCropActivity : AppCompatActivity() {
              setBackgroundColor(resources.getColor(R.color.warm_grey))
              setFixedAspectRatio(true)
              setMultiTouchEnabled(false)
-             isShowCropOverlay = true
          }
      }
 
@@ -214,10 +213,10 @@ class ImageCropActivity : AppCompatActivity() {
 //
 //            }
             result?.uriContent?.let {
-//                val actualImage = getUriFromContentUri(it)
+                val actualImage = getUriFromContentUri(it)
 //                Log.v("File Path", "filepath ${result?.getUriFilePath(this)}, actual: ${actualImage.toString()} ")
                 val resultIntent = Intent()
-                resultIntent.putExtra(CROPPED_IMAGE_URL_EXTRA, it.toString())
+                resultIntent.putExtra(CROPPED_IMAGE_URL_EXTRA, actualImage.toString())
                 setResult(Activity.RESULT_OK, resultIntent)
                 finish()
             }
@@ -258,8 +257,11 @@ class ImageCropActivity : AppCompatActivity() {
                 e.printStackTrace()
             }
         }
-        return Uri.fromFile(File(destinationFilename))
+        return getUriForFile(this, File(destinationFilename))
+        //return Uri.fromFile(File(destinationFilename))
     }
+
+
 
     fun getRealPathFromURI(contentUri: Uri?): String? {
         var path: String? = null

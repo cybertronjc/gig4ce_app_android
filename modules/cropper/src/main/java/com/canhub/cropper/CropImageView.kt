@@ -605,7 +605,7 @@ class CropImageView @JvmOverloads constructor(context: Context, attrs: Attribute
      */
     @JvmOverloads
     fun croppedImageAsync(
-        saveCompressFormat: CompressFormat = CompressFormat.JPEG,
+        saveCompressFormat: CompressFormat = CompressFormat.PNG,
         saveCompressQuality: Int = 0,
         reqWidth: Int = 0,
         reqHeight: Int = 0,
