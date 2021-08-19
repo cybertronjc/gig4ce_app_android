@@ -660,9 +660,8 @@ class PhotoCrop : AppCompatActivity() {
                     }
                 }
 
-                if (allPermsGranted)
-                    getImageFromPhone()
-                else {
+                if (!allPermsGranted)
+                    {
                     Toast.makeText(
                         applicationContext,
                         "Please Grant storage permission",
