@@ -12,26 +12,35 @@ import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.Log
 import android.util.Size
+import android.view.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.DatePicker
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
+import com.bumptech.glide.Glide
 import com.gigforce.client_activation.R
 import com.gigforce.client_activation.databinding.AadharApplicationDetailsFragmentBinding
 import com.gigforce.client_activation.ui.ClientActivationClickOrSelectImageBottomSheet
 import com.gigforce.common_ui.core.IOnBackPressedOverride
+import com.gigforce.common_ui.ext.getCircularProgressDrawable
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.widgets.ImagePicker
+import com.gigforce.core.datamodels.City
+import com.gigforce.core.datamodels.State
+import com.gigforce.core.datamodels.profile.AddressModel
+import com.gigforce.core.datamodels.verification.KYCdata
+import com.gigforce.core.datamodels.verification.VerificationBaseModel
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.DateHelper
 import com.gigforce.core.utils.GlideApp
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.storage.FirebaseStorage
+import com.skydoves.powermenu.kotlin.showAsDropDown
 import com.yalantis.ucrop.UCrop
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.ByteArrayOutputStream
@@ -39,6 +48,7 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, ClientActivationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener {
@@ -67,7 +77,19 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
 
     private val viewModel: AadharApplicationDetailsViewModel by viewModels()
     private lateinit var viewBinding: AadharApplicationDetailsFragmentBinding
+    private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
     private var aadharFrontImagePath: Uri? = null
+    private var win: Window? = null
+    var statesList = arrayListOf<State>()
+    var citiesList = arrayListOf<City>()
+    var arrayAdapter: ArrayAdapter<String>? = null
+    var citiesAdapter: ArrayAdapter<String>? = null
+    var citiesMap = mutableMapOf<String, Int>()
+    var statesesMap = mutableMapOf<String, Int>()
+    var citiesArray = arrayListOf<String>()
+    var statesArray = arrayListOf<String>()
+    var selectedCity = City()
+    var selectedState = State()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -81,19 +103,97 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
         super.onViewCreated(view, savedInstanceState)
         //getDataFromIntents(savedInstanceState)
         //initviews()
+        changeStatusBarColor()
         setViews()
         listeners()
         observer()
 
     }
 
-    private fun observer() {
+    private fun observer() = viewBinding.apply{
 
+
+        viewModel.statesResult.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            if (it.isNotEmpty()){
+                Log.d("States", it.toList().toString())
+                //getting states
+                val list = it as ArrayList<State>
+                processStates(list)
+
+            }
+        })
+
+
+        viewModel.citiesResult.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            if (it.isNotEmpty()){
+                Log.d("Cities", it.toList().toString())
+                //getting states
+                val list = it as ArrayList<City>
+                processCities(list)
+
+            }
+        })
+
+        viewModel.verificationResult.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            val kycData = it ?: return@Observer
+            Log.d("kycData", "data : $kycData")
+            processKycData(kycData)
+        })
+
+        viewModel.addressResult.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            val addressData = it ?: return@Observer
+            Log.d("addressData", "data : $addressData")
+            populateAddress(addressData)
+        })
+    }
+
+    private fun processKycData(kycData: VerificationBaseModel) = viewBinding.apply{
+        //set the values to views
+        kycData.aadhar_card?.let {
+            //set front image
+            aadharFrontImagePath = Uri.parse(it.frontImage?.toString())
+
+
+            if (it.frontImage != null) {
+                if (it.frontImage!!.startsWith("http", true)) {
+                    Glide.with(requireContext()).load(it.frontImage)
+                        .placeholder(getCircularProgressDrawable()).into(aadharCardFrontImg)
+                } else {
+                    firebaseStorage
+                        .reference
+                        .child("verification")
+                        .child(it.frontImage!!)
+                        .downloadUrl.addOnSuccessListener {
+                            Glide.with(requireContext()).load(it)
+                                .placeholder(getCircularProgressDrawable()).into(aadharCardFrontImg)
+                        }.addOnFailureListener {
+                            print("ee")
+                        }
+                }
+            }
+
+            it.aadharCardNo?.let {
+                aadharNo.editText?.setText(it)
+            }
+        }
+    }
+
+
+    private fun changeStatusBarColor() {
+        win = activity?.window
+        // clear FLAG_TRANSLUCENT_STATUS flag:
+        win?.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+
+// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        win?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+
+// finally change the color
+        win?.statusBarColor = resources.getColor(R.color.stateBarColor)
     }
 
     private fun listeners() = viewBinding.apply {
 
-
+        viewModel.getStates()
         aadharCardFrontImg.setOnClickListener {
             checkForPermissionElseShowCameraGalleryBottomSheet()
         }
@@ -109,13 +209,72 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
             })
         }
 
+        stateSpinner.onItemClickListener = object : AdapterView.OnItemClickListener {
+
+            override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                Log.d("selectedIndex", "ind: $p2")
+                //get the state code
+                if (p2 <= statesList.size && stateSpinner.text.toString().isNotEmpty()){
+                    val actualIndex = statesesMap.get(stateSpinner.text.toString().trim())
+                    //citySpinner.setText("")
+//                    citySpinner.postDelayed(Runnable {
+//
+//                    }, 10)
+                    citySpinner.setText("", false)
+//                    citySpinner.showDropDown()
+                    selectedState = actualIndex?.let { statesList.get(it) }!!
+                    Log.d("selected", "selected : $selectedState")
+                    //get the cities
+                    viewModel.getCities(selectedState.id)
+                }
+            }
+
+
+        }
+
+        citySpinner.onItemClickListener = object : AdapterView.OnItemClickListener {
+            override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                Log.d("selectedIndex", "ind: $p2")
+                //get the state code
+                if (p2 <= citiesList.size && citySpinner.text.toString().isNotEmpty()){
+                    val actualIndex = citiesMap.get(citySpinner.text.toString().trim())
+                    selectedCity = actualIndex?.let { citiesList.get(it) }!!
+                    Log.d("selected", "selected : $selectedCity")
+
+                }
+
+            }
+
+        }
+
+
+        arrayAdapter = context?.let { it1 -> ArrayAdapter(it1,android.R.layout.simple_spinner_dropdown_item, statesArray ) }
+        stateSpinner.setAdapter(arrayAdapter)
+        stateSpinner.threshold = 1
+
+
+        citiesAdapter = context?.let { it1 -> ArrayAdapter(it1,android.R.layout.simple_spinner_dropdown_item, citiesArray ) }
+        citySpinner.setAdapter(citiesAdapter)
+        citySpinner.threshold = 1
+
+//        stateSpinner.setOnClickListener {
+//            stateSpinner.showDropDown()
+//        }
+//        citySpinner.setOnClickListener {
+//            citySpinner.showDropDown()
+//        }
+
+        stateSpinner.setOnFocusChangeListener { view, b ->
+            if (b){
+                stateSpinner.showDropDown()
+            }
+        }
         submitButton.setOnClickListener {
 
-
-            if (aadharNo.editText?.text.toString().isBlank()) {
+            if (aadharNo.editText?.text.toString().isBlank() || aadharNo.editText?.text.toString().length != 12) {
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle(getString(R.string.alert))
-                    .setMessage("Enter aadhaar number")
+                    .setMessage("Enter valid aadhaar number")
                     .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                     .show()
                 return@setOnClickListener
@@ -174,7 +333,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
                 return@setOnClickListener
             }
 
-            if (pincodeInput.text.toString().isBlank() || pincodeInput.text.toString().length == 6) {
+            if (pincodeInput.text.toString().isBlank() || pincodeInput.text.toString().length != 6) {
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle(getString(R.string.alert))
                     .setMessage("Enter valid pincode")
@@ -192,7 +351,37 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
                 return@setOnClickListener
             }
 
+
+            //else submit the data
+            var permanentAddress = AddressModel(
+                addLine1Input.text.toString(),
+                addLine2Input.text.toString(),
+                landmarkInput.text.toString(),
+                selectedCity.name,
+                selectedState.name,
+                pincodeInput.text.toString()
+            )
         }
+    }
+
+    private fun populateAddress(address: AddressModel) = viewBinding.apply{
+        addLine1Input.setText(address.firstLine)
+        addLine2Input.setText(address.secondLine)
+        landmarkInput.setText(address.area)
+//        citySpinner.setText(address.city)
+//        stateSpinner.setText(address.state)
+        pincodeInput.setText(address.pincode)
+
+        stateSpinner.postDelayed(Runnable {
+            stateSpinner.setText(address.state, false)
+            //stateSpinner.showDropDown()
+        }, 5)
+
+        citySpinner.postDelayed(Runnable {
+            citySpinner.setText(address.city, false)
+            //citySpinner.showDropDown()
+        }, 5)
+
     }
 
     private fun getDDMMYYYYFormat(str: String): String {
@@ -209,7 +398,8 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
     }
 
     private fun setViews() {
-
+        viewModel.getVerificationData()
+        viewModel.getAddressData()
     }
 
 
@@ -390,5 +580,34 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
         startActivityForResult(intents, REQUEST_PICK_IMAGE)
     }
 
+    private fun processCities(content: ArrayList<City>) {
+        citiesArray.clear()
+        citiesList.toMutableList().clear()
+        //citiesArray.add("Choose City...")
+        citiesList = content
+        citiesMap.clear()
+        citiesList.forEachIndexed { index, city ->
+
+            citiesArray.add(city.name)
+            citiesMap.put(city.name, index)
+        }
+
+        citiesAdapter?.notifyDataSetChanged()
+    }
+
+    private fun processStates(content: ArrayList<State>) {
+        statesArray.clear()
+        statesList.toMutableList().clear()
+        //citiesArray.add("Choose City...")
+        statesList = content
+        statesesMap.clear()
+        statesList.forEachIndexed { index, city ->
+
+            statesArray.add(city.name)
+            statesesMap.put(city.name, index)
+        }
+
+        arrayAdapter?.notifyDataSetChanged()
+    }
 
 }
