@@ -6,9 +6,11 @@ import com.gigforce.common_ui.viewdatamodels.FeatureItemCard2DVM
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.retrofit.RetrofitFactory
+import com.gigforce.giger_app.datamodel.AppConfigsDM
 import com.gigforce.giger_app.service.APPRenderingService
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.gson.Gson
 import com.google.gson.JsonObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -79,23 +81,35 @@ class MainNavDataRepository @Inject constructor(
     private fun arrangeDataAndSetObserver(iconList: Any) {
         val list = iconList as? List<Map<String, Any>>
         list?.let {
-            val mainNavData = ArrayList<FeatureItemCard2DVM>()
-            for (item in list) {
-                val title = item.get("title") as? String ?: "-"
-                val index = (item.get("index") as? Long) ?: 500
-                val icon_type = item.get("icon") as? String
-                val navPath = item.get("navPath") as? String
-                mainNavData.add(
-                    FeatureItemCard2DVM(
-                        title = title,
-                        icon = icon_type,
-                        navPath = navPath,
-                        index = index.toInt()
-                    )
-                )
+            val appConfigList = arrayListOf<AppConfigsDM>()
 
+            for (item in list) {
+                var appConfig = Gson().fromJson(item.toString(), AppConfigsDM::class.java)
+                appConfigList.add(appConfig)
             }
+
+
+            val mainNavData = ArrayList<FeatureItemCard2DVM>()
+
+            appConfigList.forEach { config ->
+                if (config.active && (config.type == null || config.type == "")) {
+                    var subIconList = appConfigList.filter {
+                        it.active && (it.parentIcon ?: "") == config.title
+                    }
+                    mainNavData.add(
+                        FeatureItemCard2DVM(
+                            title = config.title,
+                            icon = config.icon,
+                            navPath = config.navPath,
+                            index = config.index.toInt()
+                        )
+                    )
+                }
+            }
+
             mainNavData.sortBy { it.index }
+
+
             data.value = mainNavData
             receivedNotifyToServer()
             reloadCount++
