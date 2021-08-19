@@ -250,7 +250,6 @@ class ProfileFragment : BaseFragment() {
 
 
         location_card.setOnClickListener {
-//            showToast("This is work in progress. Please check again in a few days")
             navigation.navigateTo("preferences/locationFragment")
         }
         // load user data
