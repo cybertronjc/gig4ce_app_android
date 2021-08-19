@@ -707,7 +707,7 @@ class GigPage2Fragment : Fragment(),
         val status = GigStatus.fromGig(gig)
         //get gigorder
 
-        var optionsList = mutableListOf<OtherOption>()
+        val optionsList = mutableListOf<OtherOption>()
         if (viewModel.gigOrder?.offerLetter?.isNotEmpty() == true) {
             optionsList.add(OFFER_LETTER)
         }
@@ -732,9 +732,9 @@ class GigPage2Fragment : Fragment(),
 //            )
 //        }
 
-        if (viewModel.gigOrder?.offerLetter?.isNotEmpty() == true) {
-            optionsList.toMutableList().add(OFFER_LETTER)
-        }
+//        if (viewModel.gigOrder?.offerLetter?.isNotEmpty() == true) {
+//            optionsList.toMutableList().add(OFFER_LETTER)
+//        }
 
         other_options_recycler_view.layoutManager = LinearLayoutManager(
             requireContext(),
