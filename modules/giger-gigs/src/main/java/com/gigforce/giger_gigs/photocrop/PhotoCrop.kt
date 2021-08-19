@@ -6,6 +6,7 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.media.ThumbnailUtils
@@ -22,6 +23,8 @@ import android.widget.*
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import com.gigforce.common_image_picker.image_cropper.ImageCropActivity
 import com.gigforce.common_ui.viewmodels.ProfileViewModel
@@ -64,6 +67,7 @@ class PhotoCrop : AppCompatActivity() {
 
         const val PURPOSE_VERIFICATION = "verification"
         const val PURPOSE_UPLOAD_SELFIE_IMAGE = "upload_selfie_image"
+        private const val REQUEST_STORAGE_PERMISSION = 102
     }
 
     private val CODE_IMG_GALLERY: Int = 1
@@ -605,8 +609,68 @@ class PhotoCrop : AppCompatActivity() {
      */
     private fun showBottomSheet() {
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-        linear_layout_bottomsheet.updateProfilePicture.setOnClickListener { getImageFromPhone() }
+        linear_layout_bottomsheet.updateProfilePicture.setOnClickListener {
+            if(hasStoragePermissions())
+            getImageFromPhone()
+            else
+                requestStoragePermission()
+        }
         linear_layout_bottomsheet.removeProfilePicture.setOnClickListener { confirmRemoval() }
+    }
+
+    private fun hasStoragePermissions(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            applicationContext,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+            applicationContext,
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+            applicationContext,
+            Manifest.permission.CAMERA
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun requestStoragePermission() {
+
+        requestPermissions(
+            arrayOf(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.CAMERA
+            ),
+            REQUEST_STORAGE_PERMISSION
+        )
+    }
+
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>, grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            REQUEST_STORAGE_PERMISSION -> {
+
+                var allPermsGranted = true
+                for (i in grantResults.indices) {
+                    if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                        allPermsGranted = false
+                        break
+                    }
+                }
+
+                if (allPermsGranted)
+                    getImageFromPhone()
+                else {
+                    Toast.makeText(
+                        applicationContext,
+                        "Please Grant storage permission",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
     }
 
     private fun toggleBottomSheet() {
