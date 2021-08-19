@@ -50,20 +50,22 @@ class DocViewerActivity : AppCompatActivity() {
     }
 
     private fun makeToolbarVisible(isImageOrPdf: Boolean, purpose: String) {
-       if (isImageOrPdf && !purpose.equals("OFFER_LETTER")){
-           toolbar_doc.gone()
-           acceptLayout.gone()
-       } else {
-           changeStatusBarColor()
-           acceptLayout.visible()
-           if (purpose.equals("OFFER_LETTER")){
+//       if (isImageOrPdf && !purpose.equals("OFFER_LETTER")){
+//           toolbar_doc.gone()
+//           acceptLayout.gone()
+//       } else {
+//           changeStatusBarColor()
+//           acceptLayout.visible()
+           if (purpose == "OFFER_LETTER" && isImageOrPdf){
                toolbarTitle.text = "Offer Letter"
                toolbar_doc.visible()
+               changeStatusBarColor()
                toolbarDownload.visible()
                acceptLayout.gone()
-           }else if (purpose.equals("TERMS")) {
+           }else if (purpose == "TERMS" && !isImageOrPdf) {
                toolbarTitle.text = "Terms and Conditions"
                toolbar_doc.visible()
+               changeStatusBarColor()
                toolbarDownload.gone()
                acceptLayout.visible()
            } else {
@@ -71,7 +73,7 @@ class DocViewerActivity : AppCompatActivity() {
                toolbarDownload.gone()
                acceptLayout.gone()
            }
-       }
+      // }
 
     }
 
