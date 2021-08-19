@@ -92,7 +92,6 @@ class DocViewerActivity : AppCompatActivity() {
         toolbarDownload.setOnClickListener {
             if (url.isNotEmpty()){
                 showDownloadStartedDialog()
-                //Toast.makeText(this, "Download started, check notification", Toast.LENGTH_SHORT).show()
                 downloadFile(this, url.substring(url.lastIndexOf('/') + 1), ".pdf", DIRECTORY_DOWNLOADS, url)
             }
 
@@ -183,7 +182,7 @@ class DocViewerActivity : AppCompatActivity() {
     private fun showDownloadStartedDialog(){
         AlertDialog.Builder(this)
             .setTitle("Alert")
-            .setMessage("Download started, check notification")
+            .setMessage("Downloading started, check notification")
             .setPositiveButton("Okay") {dialog, which ->
                 dialog.dismiss()
             }
