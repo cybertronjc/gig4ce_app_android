@@ -86,7 +86,6 @@ class MainNavDataRepository @Inject constructor(
 
             for (item in list) {
                 try {
-                    item.entries = Map.Entry
                     var appConfig = Gson().fromJson(JSONObject(item).toString(), FeatureItemCard2DVM::class.java)
                     appConfigList.add(appConfig)
                 }catch (e: Exception){
