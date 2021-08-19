@@ -56,5 +56,6 @@
     <string name="select_or_capture_both_sides_of_aadhar">Select or capture both sides of Aadhaar Card</string>
     <string name="enter_valid_aadhar_no">Enter Valid Aadhaar Card No</string>
     <string name="alert">Alert</string>
+    <string name="select_aadhar_state">Select State</string>
 
 </resources>

@@ -992,6 +992,10 @@
         android:id="@+id/loginReportListFragment"
         android:name="com.gigforce.giger_gigs.tl_login_report.TLDailyReportListFragment"
         android:label="TLDailyReportListFragment" />
+    <fragment
+        android:id="@+id/aadharApplicationDetailsFragment"
+        android:name="com.gigforce.client_activation.client_activation.AadharApplicationDetailsFragment"
+        android:label="AadharApplicationDetailsFragment" />
 
 
 </navigation>
