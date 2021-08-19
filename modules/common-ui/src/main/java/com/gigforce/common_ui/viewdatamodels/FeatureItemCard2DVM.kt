@@ -7,17 +7,19 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 class FeatureItemCard2DVM(
-    val active: Boolean? = true,
-    val borderCorner: Int? = 0,
-    val borderShadowRadius: Int? = 0,
-    val borderWidth: Int? = 0,
+    val active: Boolean = true,
+    val borderCorner: Long? = 0,
+    val borderShadowRadius: Long? = 0,
+    val borderWidth: Long? = 0,
     val borderWidthColor: String? = "",
     val backgroundColor: String? = "",
     val title: String,
-    val index: Int = 0,
-    val icon: String?,
+    val index: Long = 1000,
+    val icon: String? = "",
     val imageRes: Int? = null,
     val imageUrl: String? = null,
-    val navPath: String? = null
+    val navPath: String? = null,
+    val type: String? = null,
+    val parentIcon: String? = null
 ) :
     SimpleDVM(CommonViewTypes.VIEW_FEATURE_ITEM_CARD2, navPath), Parcelable
