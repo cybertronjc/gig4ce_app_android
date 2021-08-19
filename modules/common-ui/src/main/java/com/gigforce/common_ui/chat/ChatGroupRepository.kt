@@ -83,7 +83,13 @@ class ChatGroupRepository constructor(
             add(currentUserInfo)
         }
 
-        members.forEach { it.name = "" }
+        members.forEach {
+            if (!it.profileName.isNullOrBlank()) {
+                it.name = it.profileName
+            } else {
+                it.name = chatProfileFirebaseRepository.getProfileDataIfExist(it.uid)?.name ?: ""
+            }
+        }
 
         val group = createGroupData(groupName, members, currentUserInfo)
         val groupDocRef = db.collection(COLLECTION_GROUP_CHATS).addOrThrow(group)
