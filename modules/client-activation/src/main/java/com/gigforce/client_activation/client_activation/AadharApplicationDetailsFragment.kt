@@ -9,26 +9,23 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.Log
 import android.util.Size
 import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import androidx.fragment.app.Fragment
 import android.widget.DatePicker
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.bumptech.glide.Glide
 import com.gigforce.client_activation.R
 import com.gigforce.client_activation.client_activation.adapters.VerificationViewPagerAdapter
 import com.gigforce.client_activation.databinding.AadharApplicationDetailsFragmentBinding
 import com.gigforce.client_activation.ui.ClientActivationClickOrSelectImageBottomSheet
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.core.IOnBackPressedOverride
-import com.gigforce.common_ui.ext.getCircularProgressDrawable
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
@@ -36,22 +33,18 @@ import com.gigforce.core.datamodels.City
 import com.gigforce.core.datamodels.State
 import com.gigforce.core.datamodels.profile.AddressModel
 import com.gigforce.core.datamodels.verification.AadhaarDetailsDataModel
-import com.gigforce.core.datamodels.verification.KYCdata
 import com.gigforce.core.datamodels.verification.VerificationBaseModel
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.DateHelper
-import com.gigforce.core.utils.GlideApp
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.storage.FirebaseStorage
-import com.skydoves.powermenu.kotlin.showAsDropDown
 import com.yalantis.ucrop.UCrop
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.aadhar_application_details_fragment.*
-import java.io.ByteArrayOutputStream
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -64,7 +57,8 @@ enum class AadharCardSides {
 }
 
 @AndroidEntryPoint
-class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, ClientActivationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener {
+class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
+    ClientActivationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener {
 
     companion object {
         fun newInstance() = AadharApplicationDetailsFragment()
@@ -136,7 +130,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
     }
 
     var allNavigationList = java.util.ArrayList<String>()
-    var intentBundle : Bundle? = null
+    var intentBundle: Bundle? = null
 
     private fun getDataFromIntents(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
@@ -161,10 +155,10 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
         }
     }
 
-    private fun observer() = viewBinding.apply{
+    private fun observer() = viewBinding.apply {
 
         viewModel.statesResult.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-            if (it.isNotEmpty()){
+            if (it.isNotEmpty()) {
                 Log.d("States", it.toList().toString())
                 //getting states
                 val list = it as ArrayList<State>
@@ -175,7 +169,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
 
 
         viewModel.citiesResult.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-            if (it.isNotEmpty()){
+            if (it.isNotEmpty()) {
                 Log.d("Cities", it.toList().toString())
                 //getting states
                 val list = it as ArrayList<City>
@@ -200,7 +194,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
             val updated = it ?: return@Observer
             Log.d("updated", "up $updated")
             progressBar.visibility = View.GONE
-            if (updated){
+            if (updated) {
                 showToast("Data uploaded successfully")
             }
 
@@ -208,11 +202,13 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
 
 //        viewModel.observableAddApplicationSuccess.observe(viewLifecycleOwner, Obser
 //        )
-        viewModel.observableAddApplicationSuccess.observe(viewLifecycleOwner,androidx.lifecycle.Observer{
-                if(it) {
+        viewModel.observableAddApplicationSuccess.observe(
+            viewLifecycleOwner,
+            androidx.lifecycle.Observer {
+                if (it) {
                     checkForNextDoc()
                 }
-        }
+            }
         )
     }
 
@@ -228,11 +224,13 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
                         .filter { it.length > 0 }
             }
             navigation.popBackStack()
-            intentBundle?.putStringArrayList(StringConstants.NAVIGATION_STRING_ARRAY.value,
+            intentBundle?.putStringArrayList(
+                StringConstants.NAVIGATION_STRING_ARRAY.value,
                 java.util.ArrayList(navigationsForBundle)
             )
             navigation.navigateTo(
-                allNavigationList.get(0),intentBundle)
+                allNavigationList.get(0), intentBundle
+            )
 //            navigation.navigateTo(
 //                allNavigationList.get(0),
 //                bundleOf(StringConstants.NAVIGATION_STRING_ARRAY.value to navigationsForBundle,if(FROM_CLIENT_ACTIVATON) StringConstants.FROM_CLIENT_ACTIVATON.value to true else StringConstants.FROM_CLIENT_ACTIVATON.value to false)
@@ -241,7 +239,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
         }
     }
 
-    private fun processKycData(kycData: VerificationBaseModel) = viewBinding.apply{
+    private fun processKycData(kycData: VerificationBaseModel) = viewBinding.apply {
         //set the values to views
         kycData.aadhaar_card_questionnaire?.let {
             //set front image
@@ -274,40 +272,40 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
             }
             setImageViewPager(list)
 
-            it.aadhaarCardNo?.let {
+            it.aadhaarCardNo.let {
                 aadharNo.editText?.setText(it)
             }
-            it.dateOfBirth?.let {
-                dateOfBirth.setText(it)
+            it.dateOfBirth.let {
+                dateOfBirth.text = it
                 dobLabel.visible()
             }
-            it.fName?.let {
+            it.fName.let {
                 fatherNameTil.editText?.setText(it)
             }
-            it.addLine1?.let {
+            it.addLine1.let {
                 addLine1.editText?.setText(it)
             }
-            it.addLine2?.let {
+            it.addLine2.let {
                 addLine2.editText?.setText(it)
             }
-            it.state?.let {
+            it.state.let {
                 stateSpinner.setText(it, false)
-//                if (it.isNotEmpty()){
-//                    //get the value from states
-//                    stateSpinner.setText(it, false)
-////                    val index = statesesMap.get(it)
-////                    Log.d("index", "i: $index , map: $statesesMap")
-//                    //index?.let { it1 -> stateSpinner.setSelection(it1) }
-//                }
+        //                if (it.isNotEmpty()){
+        //                    //get the value from states
+        //                    stateSpinner.setText(it, false)
+        ////                    val index = statesesMap.get(it)
+        ////                    Log.d("index", "i: $index , map: $statesesMap")
+        //                    //index?.let { it1 -> stateSpinner.setSelection(it1) }
+        //                }
 
             }
-            it.city?.let {
+            it.city.let {
                 citySpinner.setText(it, false)
             }
-            it.pincode?.let {
+            it.pincode.let {
                 pincode.editText?.setText(it)
             }
-            it.landmark?.let {
+            it.landmark.let {
                 landmark.editText?.setText(it)
             }
         }
@@ -343,7 +341,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
             override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 Log.d("selectedIndex", "ind: $p2")
                 //get the state code
-                if (p2 <= statesList.size && stateSpinner.text.toString().isNotEmpty()){
+                if (p2 <= statesList.size && stateSpinner.text.toString().isNotEmpty()) {
                     val actualIndex = statesesMap.get(stateSpinner.text.toString().trim())
                     //citySpinner.setText("")
 //                    citySpinner.postDelayed(Runnable {
@@ -365,7 +363,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
             override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 Log.d("selectedIndex", "ind: $p2")
                 //get the state code
-                if (p2 <= citiesList.size && citySpinner.text.toString().isNotEmpty()){
+                if (p2 <= citiesList.size && citySpinner.text.toString().isNotEmpty()) {
                     val actualIndex = citiesMap.get(citySpinner.text.toString().trim())
                     selectedCity = actualIndex?.let { citiesList.get(it) }!!
                     Log.d("selected", "selected : $selectedCity")
@@ -378,7 +376,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
 
 
         stateSpinner.setOnFocusChangeListener { view, b ->
-            if (b){
+            if (b) {
                 stateSpinner.showDropDown()
             }
         }
@@ -402,7 +400,9 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
                 return@setOnClickListener
             }
 
-            if (aadharNo.editText?.text.toString().isBlank() || aadharNo.editText?.text.toString().length != 12) {
+            if (aadharNo.editText?.text.toString()
+                    .isBlank() || aadharNo.editText?.text.toString().length != 12
+            ) {
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle(getString(R.string.alert))
                     .setMessage("Enter valid aadhaar number")
@@ -464,7 +464,9 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
                 return@setOnClickListener
             }
 
-            if (pincodeInput.text.toString().isBlank() || pincodeInput.text.toString().length != 6) {
+            if (pincodeInput.text.toString()
+                    .isBlank() || pincodeInput.text.toString().length != 6
+            ) {
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle(getString(R.string.alert))
                     .setMessage("Enter valid pincode")
@@ -487,7 +489,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
         }
     }
 
-    private fun submitData() = viewBinding.apply{
+    private fun submitData() = viewBinding.apply {
         progressBar.visibility = View.VISIBLE
         //else submit the data
 //        var permanentAddress = AddressModel(
@@ -505,17 +507,17 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
             aadhaarCardNo = aadharNo.editText?.text.toString(),
             dateOfBirth = dateOfBirth.text.toString(),
             fName = fatherNameTil.editText?.text.toString(),
-            addLine1 =  addLine1Input.text.toString(),
+            addLine1 = addLine1Input.text.toString(),
             addLine2 = addLine2Input.text.toString(),
             state = stateSpinner.text.toString(),
             city = citySpinner.text.toString(),
             pincode = pincode.editText?.text.toString(),
             landmark = landmark.editText?.text.toString()
         )
-        viewModel.setAadhaarDetails(submitDataModel,mJobProfileId)
+        viewModel.setAadhaarDetails(submitDataModel, mJobProfileId)
     }
 
-    private fun populateAddress(address: AddressModel) = viewBinding.apply{
+    private fun populateAddress(address: AddressModel) = viewBinding.apply {
         addLine1Input.setText(address.firstLine)
         addLine2Input.setText(address.secondLine)
         landmarkInput.setText(address.area)
@@ -565,43 +567,50 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
                 text = "Please upload your AADHAR card Back side",
                 imageIcon = backUri,
                 imageUploaded = false
-        )
+            )
         )
         setImageViewPager(list)
     }
 
 
     private fun checkForPermissionElseShowCameraGalleryBottomSheet() {
-        if (hasStoragePermissions()){
-            Log.v("Start Crop", "started")
-        //can use this for a new name every time
-        val timeStamp = SimpleDateFormat(
-            "yyyyMMdd_HHmmss",
-            Locale.getDefault()
-        ).format(Date())
-        imageFileName = "verification/" + PREFIX + "_" + timeStamp + "_.jpg"
-        if (viewBinding.viewPager2.currentItem == 0){
-            currentlyClickingImageOfSide = AadharCardSides.FRONT_SIDE
-        }else {
-            currentlyClickingImageOfSide = AadharCardSides.BACK_SIDE
-        }
+        if (hasStoragePermissions()) {
 
-        val photoCropIntent = Intent()
-        photoCropIntent.putExtra(
-            "purpose",
-            ""
-        )
-        photoCropIntent.putExtra("fbDir", "/verification/")
-        photoCropIntent.putExtra("folder", "verification")
-        photoCropIntent.putExtra("detectFace", 0)
-        photoCropIntent.putExtra("uid", viewModel.uid)
-        photoCropIntent.putExtra("file", imageFileName)
-        navigation.navigateToPhotoCrop(
-            photoCropIntent,
-            REQUEST_CODE_UPLOAD_AADHAR, requireContext(), this@AadharApplicationDetailsFragment
-        )
-    }
-        else
+            ClientActivationClickOrSelectImageBottomSheet.launch(
+                parentFragmentManager,
+                "Upload Aadhar Card",
+                this
+            )
+
+
+//            Log.v("Start Crop", "started")
+//        //can use this for a new name every time
+//        val timeStamp = SimpleDateFormat(
+//            "yyyyMMdd_HHmmss",
+//            Locale.getDefault()
+//        ).format(Date())
+//        imageFileName = "verification/" + PREFIX + "_" + timeStamp + "_.jpg"
+//        if (viewBinding.viewPager2.currentItem == 0){
+//            currentlyClickingImageOfSide = AadharCardSides.FRONT_SIDE
+//        }else {
+//            currentlyClickingImageOfSide = AadharCardSides.BACK_SIDE
+//        }
+//
+//        val photoCropIntent = Intent()
+//        photoCropIntent.putExtra(
+//            "purpose",
+//            ""
+//        )
+//        photoCropIntent.putExtra("fbDir", "/verification/")
+//        photoCropIntent.putExtra("folder", "verification")
+//        photoCropIntent.putExtra("detectFace", 0)
+//        photoCropIntent.putExtra("uid", viewModel.uid)
+//        photoCropIntent.putExtra("file", imageFileName)
+//        navigation.navigateToPhotoCrop(
+//            photoCropIntent,
+//            REQUEST_CODE_UPLOAD_AADHAR, requireContext(), this@AadharApplicationDetailsFragment
+//        )
+        } else
             requestStoragePermission()
     }
 
@@ -643,35 +652,97 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-
         if (requestCode == REQUEST_CAPTURE_IMAGE || requestCode == REQUEST_PICK_IMAGE) {
             val outputFileUri = ImagePicker.getImageFromResult(requireContext(), resultCode, data)
             if (outputFileUri != null) {
-                //startCrop(outputFileUri)
-            }
-        } else if (requestCode == REQUEST_CODE_UPLOAD_AADHAR && resultCode == Activity.RESULT_OK) {
-
-            val imageUriResultCrop: String? = data?.getStringExtra("image_url")
-            val fileName: String? = data?.getStringExtra("filename")
-            Log.d("fileName", fileName.toString())
-            Log.d("ImageUri1", imageUriResultCrop.toString())
-            if (imageUriResultCrop != null){
-            if (AadharCardSides.FRONT_SIDE == currentlyClickingImageOfSide) {
-                    aadharFrontImagePath = "verification/"+fileName
-                    showFrontAadhar(imageUriResultCrop)
-            }
-            else if (AadharCardSides.BACK_SIDE == currentlyClickingImageOfSide) {
-                    aadharBackImagePath = "verification/"+fileName
-                    showBackAadhar(imageUriResultCrop)
-            }
+                startCrop(outputFileUri)
             }
         }
+        else if(requestCode == UCrop.REQUEST_CROP && resultCode == Activity.RESULT_OK){
+            val imageUriResultCrop: Uri? = UCrop.getOutput(data!!)
+            imageUriResultCrop?.let {
+                firebaseStorage.reference
+                    .child("verification")
+                    .child(fileName)
+                    .putFile(it).addOnSuccessListener {
+                        if (imageUriResultCrop != null) {
+                            if (viewBinding.viewPager2.currentItem == 0) {
+                                aadharFrontImagePath = it.metadata?.path
+                                showAadharImage(imageUriResultCrop,0)
+                            } else if (viewBinding.viewPager2.currentItem == 1) {
+                                aadharBackImagePath = it.metadata?.path
+                                showAadharImage(imageUriResultCrop,1)
+                            }
+                        }
+                    }
+            }
+
+
+
+        }
+//        else if (requestCode == REQUEST_CODE_UPLOAD_AADHAR && resultCode == Activity.RESULT_OK) {
+//
+//            val imageUriResultCrop: String? = data?.getStringExtra("image_url")
+//            val fileName: String? = data?.getStringExtra("filename")
+//            Log.d("fileName", fileName.toString())
+//            Log.d("ImageUri1", imageUriResultCrop.toString())
+//            if (imageUriResultCrop != null) {
+//                if (AadharCardSides.FRONT_SIDE == currentlyClickingImageOfSide) {
+//                    aadharFrontImagePath = "verification/" + fileName
+//                    showFrontAadhar(imageUriResultCrop)
+//                } else if (AadharCardSides.BACK_SIDE == currentlyClickingImageOfSide) {
+//                    aadharBackImagePath = "verification/" + fileName
+//                    showBackAadhar(imageUriResultCrop)
+//                }
+//            }
+//        }
+    }
+
+    private fun showAadharImage(uri: Uri, position: Int ) {
+            if(position in 0..1)
+            setDocumentImage(position, uri)
+
+    }
+    var fileName :String = ""
+    private fun startCrop(uri: Uri): Unit {
+        Log.v("Start Crop", "started")
+        //can use this for a new name every time
+        val timeStamp = SimpleDateFormat(
+            "yyyyMMdd_HHmmss",
+            Locale.getDefault()
+        ).format(Date())
+        val imageFileName = PREFIX + "_" + timeStamp + "_"
+        val uCrop: UCrop = UCrop.of(
+            uri,
+            Uri.fromFile(File(requireContext().cacheDir, imageFileName + EXTENSION))
+        )
+        fileName = imageFileName + EXTENSION
+        val resultIntent: Intent = Intent()
+        resultIntent.putExtra("filename", imageFileName + EXTENSION)
+        val size = getImageDimensions(uri)
+        uCrop.withAspectRatio(size.width.toFloat(), size.height.toFloat())
+        uCrop.withMaxResultSize(1920, 1080)
+        uCrop.withOptions(getCropOptions())
+        uCrop.start(requireContext(), this)
+    }
+
+    private fun getCropOptions(): UCrop.Options {
+        val options: UCrop.Options = UCrop.Options()
+        options.setCompressionQuality(70)
+        options.setCompressionFormat(Bitmap.CompressFormat.PNG)
+//        options.setMaxBitmapSize(1000)
+        options.setHideBottomControls((false))
+        options.setFreeStyleCropEnabled(true)
+        options.setStatusBarColor(ResourcesCompat.getColor(resources, R.color.topBarDark, null))
+        options.setToolbarColor(ResourcesCompat.getColor(resources, R.color.topBarDark, null))
+        options.setToolbarTitle(getString(R.string.crop_and_rotate))
+        return options
     }
 
     private fun showBackAadhar(image: String?) {
         Log.d("image", "im $image")
         image?.let {
-            val uri  = Uri.parse(it)
+            val uri = Uri.parse(it)
             setDocumentImage(1, uri)
         }
 
@@ -691,7 +762,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
         return Size(imageWidth, imageHeight)
     }
 
-    fun setImageViewPager(list: List<KYCImageModel>) = viewBinding.apply{
+    fun setImageViewPager(list: List<KYCImageModel>) = viewBinding.apply {
 
         if (list.isEmpty()) {
             viewPager2.gone()
@@ -716,8 +787,8 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
 
     private fun showFrontAadhar(path: String) {
         Log.d("image", "im $path")
-        path?.let {
-            val uri  = Uri.parse(it)
+        path.let {
+            val uri = Uri.parse(it)
             setDocumentImage(0, uri)
         }
     }
@@ -774,7 +845,13 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
             citiesMap.put(city.name, index)
         }
 
-        citiesAdapter = context?.let { it1 -> ArrayAdapter(it1,android.R.layout.simple_spinner_dropdown_item, citiesArray ) }
+        citiesAdapter = context?.let { it1 ->
+            ArrayAdapter(
+                it1,
+                android.R.layout.simple_spinner_dropdown_item,
+                citiesArray
+            )
+        }
         citySpinner.setAdapter(citiesAdapter)
         citySpinner.threshold = 1
 
@@ -792,7 +869,13 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
             statesArray.add(city.name)
             statesesMap.put(city.name, index)
         }
-        arrayAdapter = context?.let { it1 -> ArrayAdapter(it1,android.R.layout.simple_spinner_dropdown_item, statesArray ) }
+        arrayAdapter = context?.let { it1 ->
+            ArrayAdapter(
+                it1,
+                android.R.layout.simple_spinner_dropdown_item,
+                statesArray
+            )
+        }
         stateSpinner.setAdapter(arrayAdapter)
         stateSpinner.threshold = 1
 
