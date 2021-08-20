@@ -291,14 +291,25 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
                 addLine2.editText?.setText(it)
             }
             it.state?.let {
-                stateSpinner.setText(it, false)
-//                if (it.isNotEmpty()){
-//                    //get the value from states
-//                    stateSpinner.setText(it, false)
-////                    val index = statesesMap.get(it)
-////                    Log.d("index", "i: $index , map: $statesesMap")
-//                    //index?.let { it1 -> stateSpinner.setSelection(it1) }
-//                }
+                if (it.isNotEmpty()){
+                    //get the value from states
+                    stateSpinner.setText(it, false)
+//                    val index = statesesMap.get(it)
+//                    Log.d("index", "i: $index , map: $statesesMap")
+                    //index?.let { it1 -> stateSpinner.setSelection(it1) }
+                    //get the state_id for this state
+//                    if (statesesMap.containsKey(it)){
+                        val index = statesesMap.get(it)
+                        val stateModel = index?.let { it1 -> statesList.get(it1) }
+                        Log.d("index", "i: $index , map: $stateModel")
+                        if (stateModel?.id.toString().isNotEmpty()){
+                            viewModel.getCities(stateModel?.id.toString())
+                            Log.d("index", "i: $index , map: ${stateModel?.id}")
+                        }
+//                    }else {
+//                        Log.d("index", "i:  , doesnt contains key")
+//                    }
+                }
 
             }
             it.city?.let {
@@ -375,7 +386,13 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
             }
 
         }
+        arrayAdapter = context?.let { it1 -> ArrayAdapter(it1,android.R.layout.simple_spinner_dropdown_item, statesArray ) }
+        stateSpinner.setAdapter(arrayAdapter)
+        stateSpinner.threshold = 1
 
+        citiesAdapter = context?.let { it1 -> ArrayAdapter(it1,android.R.layout.simple_spinner_dropdown_item, citiesArray ) }
+        citySpinner.setAdapter(citiesAdapter)
+        citySpinner.threshold = 1
 
         stateSpinner.setOnFocusChangeListener { view, b ->
             if (b){
@@ -429,23 +446,6 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
                 return@setOnClickListener
             }
 
-            if (stateSpinner.text.toString().isEmpty()) {
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(getString(R.string.alert))
-                    .setMessage(getString(R.string.select_aadhar_state))
-                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                    .show()
-                return@setOnClickListener
-            }
-
-            if (citySpinner.text.toString().isEmpty()) {
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(getString(R.string.alert))
-                    .setMessage("Select City")
-                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                    .show()
-                return@setOnClickListener
-            }
             if (addLine1Input.text.toString().isBlank()) {
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle(getString(R.string.alert))
@@ -463,6 +463,25 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
                     .show()
                 return@setOnClickListener
             }
+
+            if (stateSpinner.text.toString().isEmpty() || !statesArray.contains(stateSpinner.text.toString())) {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(getString(R.string.alert))
+                    .setMessage(getString(R.string.select_aadhar_state))
+                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                    .show()
+                return@setOnClickListener
+            }
+
+            if (citySpinner.text.toString().isEmpty() || !citiesArray.contains(citySpinner.text.toString())) {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(getString(R.string.alert))
+                    .setMessage("Select City")
+                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                    .show()
+                return@setOnClickListener
+            }
+
 
             if (pincodeInput.text.toString().isBlank() || pincodeInput.text.toString().length != 6) {
                 MaterialAlertDialogBuilder(requireContext())
@@ -774,11 +793,11 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
             citiesMap.put(city.name, index)
         }
 
-        citiesAdapter = context?.let { it1 -> ArrayAdapter(it1,android.R.layout.simple_spinner_dropdown_item, citiesArray ) }
-        citySpinner.setAdapter(citiesAdapter)
-        citySpinner.threshold = 1
+
 
         citiesAdapter?.notifyDataSetChanged()
+
+        Log.d("adapter", "adapter : ${citiesAdapter.count}")
     }
 
     private fun processStates(content: ArrayList<State>) {
@@ -792,9 +811,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
             statesArray.add(city.name)
             statesesMap.put(city.name, index)
         }
-        arrayAdapter = context?.let { it1 -> ArrayAdapter(it1,android.R.layout.simple_spinner_dropdown_item, statesArray ) }
-        stateSpinner.setAdapter(arrayAdapter)
-        stateSpinner.threshold = 1
+
 
         arrayAdapter?.notifyDataSetChanged()
     }
