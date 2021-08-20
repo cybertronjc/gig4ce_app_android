@@ -162,11 +162,11 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
             processKycData(kycData)
         })
 
-        viewModel.addressResult.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-            val addressData = it ?: return@Observer
-            Log.d("addressData", "data : $addressData")
-            populateAddress(addressData)
-        })
+//        viewModel.addressResult.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+//            val addressData = it ?: return@Observer
+//            Log.d("addressData", "data : $addressData")
+//            populateAddress(addressData)
+//        })
 
         viewModel.updatedResult.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             val updated = it ?: return@Observer
@@ -227,11 +227,18 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
                 addLine2.editText?.setText(it)
             }
             it.state?.let {
-                stateSpinner.setText(it, false)
+                if (it.isNotEmpty()){
+                    //get the value from states
+                    //stateSpinner.setText(it, false)
+                    val index = statesesMap.get(it)
+                    Log.d("index", "i: $index , map: $statesesMap")
+                    //index?.let { it1 -> stateSpinner.setSelection(it1) }
+                }
+
             }
-            it.city?.let {
-                citySpinner.setText(it, false)
-            }
+//            it.city?.let {
+//                citySpinner.setText(it, false)
+//            }
             it.pincode?.let {
                 pincode.editText?.setText(it)
             }
@@ -255,13 +262,9 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
 
     private fun listeners() = viewBinding.apply {
 
-        viewModel.getStates()
-
         dateOfBirthLabel.setOnClickListener {
             dateOfBirthPicker.show()
         }
-
-
 
         appBarAadhar.apply {
             setBackButtonListener(View.OnClickListener {
@@ -307,16 +310,6 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
             }
 
         }
-
-
-        arrayAdapter = context?.let { it1 -> ArrayAdapter(it1,android.R.layout.simple_spinner_dropdown_item, statesArray ) }
-        stateSpinner.setAdapter(arrayAdapter)
-        stateSpinner.threshold = 1
-
-
-        citiesAdapter = context?.let { it1 -> ArrayAdapter(it1,android.R.layout.simple_spinner_dropdown_item, citiesArray ) }
-        citySpinner.setAdapter(citiesAdapter)
-        citySpinner.threshold = 1
 
 
         stateSpinner.setOnFocusChangeListener { view, b ->
@@ -483,8 +476,8 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
     }
 
     private fun setViews() {
+        viewModel.getStates()
         viewModel.getVerificationData()
-        viewModel.getAddressData()
 
         val frontUri = Uri.Builder()
             .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
@@ -582,55 +575,6 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
         datePickerDialog.datePicker.maxDate = Calendar.getInstance().timeInMillis
         datePickerDialog
     }
-
-//    override fun onRequestPermissionsResult(
-//        requestCode: Int,
-//        permissions: Array<String>, grantResults: IntArray
-//    ) {
-//        when (requestCode) {
-//            REQUEST_STORAGE_PERMISSION -> {
-//
-//                var allPermsGranted = true
-//                for (i in grantResults.indices) {
-//                    if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
-//                        allPermsGranted = false
-//                        break
-//                    }
-//                }
-//
-//                if (allPermsGranted){
-////                    ClientActivationClickOrSelectImageBottomSheet.launch(
-////                        parentFragmentManager,
-////                        "Upload Driving License",
-////                        this
-////                    )
-//                    Log.v("Start Crop", "started")
-//                //can use this for a new name every time
-//                val timeStamp = SimpleDateFormat(
-//                    "yyyyMMdd_HHmmss",
-//                    Locale.getDefault()
-//                ).format(Date())
-//                val imageFileName = PREFIX + "_" + timeStamp + "_.jpg"
-//                val photoCropIntent = Intent()
-//                photoCropIntent.putExtra(
-//                    "purpose",
-//                    "verification"
-//                )
-//                photoCropIntent.putExtra("fbDir", "/verification/")
-//                photoCropIntent.putExtra("folder", "verification")
-//                photoCropIntent.putExtra("detectFace", 0)
-//                photoCropIntent.putExtra("uid", viewModel.uid)
-//                photoCropIntent.putExtra("file", imageFileName)
-//                navigation.navigateToPhotoCrop(photoCropIntent,
-//                    REQUEST_CODE_UPLOAD_AADHAR, requireContext(),this@AadharApplicationDetailsFragment)
-//                }
-//
-//                else {
-//                    showToast("Please grant storage permission")
-//                }
-//            }
-//        }
-//    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -766,6 +710,10 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
             citiesMap.put(city.name, index)
         }
 
+        citiesAdapter = context?.let { it1 -> ArrayAdapter(it1,android.R.layout.simple_spinner_dropdown_item, citiesArray ) }
+        citySpinner.setAdapter(citiesAdapter)
+        citySpinner.threshold = 1
+
         citiesAdapter?.notifyDataSetChanged()
     }
 
@@ -780,6 +728,9 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
             statesArray.add(city.name)
             statesesMap.put(city.name, index)
         }
+        arrayAdapter = context?.let { it1 -> ArrayAdapter(it1,android.R.layout.simple_spinner_dropdown_item, statesArray ) }
+        stateSpinner.setAdapter(arrayAdapter)
+        stateSpinner.threshold = 1
 
         arrayAdapter?.notifyDataSetChanged()
     }
