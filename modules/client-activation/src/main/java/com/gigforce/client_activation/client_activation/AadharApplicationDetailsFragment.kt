@@ -249,6 +249,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
 
             var list = ArrayList<KYCImageModel>()
             it.frontImagePath?.let {
+                aadharFrontImagePath = it
                 getDBImageUrl(it).let {
                     list.add(
                         KYCImageModel(
@@ -257,10 +258,11 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
                             imageUploaded = true
                         )
                     )
-                    aadharFrontImagePath = it
+
                 }
             }
             it.backImagePath?.let {
+                aadharBackImagePath = it
                 getDBImageUrl(it).let {
                     list.add(
                         KYCImageModel(
@@ -269,7 +271,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
                             imageUploaded = true
                         )
                     )
-                    aadharBackImagePath = it
+
                 }
             }
             setImageViewPager(list)
@@ -294,21 +296,14 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
                 if (it.isNotEmpty()) {
                     //get the value from states
                     stateSpinner.setText(it, false)
-        //                    val index = statesesMap.get(it)
-        //                    Log.d("index", "i: $index , map: $statesesMap")
-                    //index?.let { it1 -> stateSpinner.setSelection(it1) }
-                    //get the state_id for this state
-        //                    if (statesesMap.containsKey(it)){
                     val index = statesesMap.get(it)
                     val stateModel = index?.let { it1 -> statesList.get(it1) }
                     Log.d("index", "i: $index , map: $stateModel")
                     if (stateModel?.id.toString().isNotEmpty()) {
                         viewModel.getCities(stateModel?.id.toString())
+                        progressBar.visibility = View.VISIBLE
                         Log.d("index", "i: $index , map: ${stateModel?.id}")
                     }
-        //                    }else {
-        //                        Log.d("index", "i:  , doesnt contains key")
-        //                    }
                 }
 
             }
@@ -365,11 +360,10 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
                     selectedState = actualIndex?.let { statesList.get(it) }!!
                     Log.d("selected", "selected : $selectedState")
                     //get the cities
+                    progressBar.visibility = View.VISIBLE
                     viewModel.getCities(selectedState.id)
                 }
             }
-
-
         }
 
         citySpinner.onItemClickListener = object : AdapterView.OnItemClickListener {
@@ -905,7 +899,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
             statesesMap.put(city.name, index)
         }
 
-
+        progressBar.visibility = View.GONE
         arrayAdapter?.notifyDataSetChanged()
     }
 
