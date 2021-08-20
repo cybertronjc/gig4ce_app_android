@@ -299,6 +299,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
                 if (it.isNotEmpty()) {
                     stateSpinner.setText(it, false)
                     //viewModel.getStates()
+                    getCitiesWhenStateNotEmpty(it)
                 }
             }
             it.city.let {
@@ -639,7 +640,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
 
     private fun setViews() {
         viewModel.getStates()
-        viewModel.getVerificationData()
+
 
         val frontUri = Uri.Builder()
             .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
@@ -967,7 +968,8 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
         }
         Log.d("map", "$statesesMap")
         arrayAdapter?.notifyDataSetChanged()
-        getCitiesWhenStateNotEmpty(viewBinding.stateSpinner.text.toString().trim())
+        viewModel.getVerificationData()
+        //getCitiesWhenStateNotEmpty(viewBinding.stateSpinner.text.toString().trim())
     }
 
 }
