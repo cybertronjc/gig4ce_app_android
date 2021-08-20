@@ -25,7 +25,7 @@ class NavForClientActivatonModule(
         baseImplementation.registerRoute("${moduleName}/doc_sub_doc", R.id.fragment_doc_sub)
         baseImplementation.registerRoute("${moduleName}/gig_detail", R.id.clientActiExploreList)
         baseImplementation.registerRoute(
-            "${moduleName}/aadharDetailsFragment",
+            "${moduleName}/aadharDetailsQuestionnaireFragment",
             R.id.aadharApplicationDetailsFragment
         )
 

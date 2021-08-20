@@ -282,7 +282,6 @@ class ApplicationClientActivationViewModel : ViewModel() {
         }
         return JpApplication()
 
-
     }
 
     suspend fun checkForQuestionnaire(jobProfileId: String, type: String, title: String): Boolean {
