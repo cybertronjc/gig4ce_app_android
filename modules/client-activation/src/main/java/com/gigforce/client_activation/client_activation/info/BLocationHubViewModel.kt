@@ -1,5 +1,6 @@
 package com.gigforce.client_activation.client_activation.info
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -49,8 +50,22 @@ class BLocationHubViewModel : ViewModel() {
 
     }
 
-    fun loadStates(businessId : String)= viewModelScope.launch{
-        var businessLocactionsSnapshot = FirebaseFirestore.getInstance().collection("Business_Locations").whereEqualTo("business_id","pYCDZ5hqfPPMOYuyCjtt").whereEqualTo("type","office").getOrThrow()
+    fun loadStates(mJobProfileId: String)= viewModelScope.launch{
+
+        val jobProfile = FirebaseFirestore.getInstance().collection("Job_Profiles").whereEqualTo("profileId",mJobProfileId).getOrThrow()
+        if(jobProfile == null) {
+            _states.value = emptyList()
+            return@launch
+        }
+        val jpDoc = jobProfile.documents[0]
+        var businessId = jpDoc.get("businessId").toString()
+        Log.d("businessId_data",businessId)
+        val businessLocactionsSnapshot = FirebaseFirestore.getInstance().collection("Business_Locations").whereEqualTo("business_id",businessId).whereEqualTo("type","office").getOrThrow()
+        if(businessLocactionsSnapshot == null)
+        {
+            _states.value = emptyList()
+            return@launch
+        }
         val businessLocactions = arrayListOf<BusinessLocationDM>()
         businessLocactionsSnapshot?.let { querySnapshot ->
             querySnapshot.forEach{ snaphot->

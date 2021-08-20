@@ -38,7 +38,6 @@ import com.gigforce.core.datamodels.profile.AddressModel
 import com.gigforce.core.datamodels.verification.AadhaarDetailsDataModel
 import com.gigforce.core.datamodels.verification.VerificationBaseModel
 import com.gigforce.core.di.interfaces.IBuildConfig
-import com.gigforce.core.extensions.getTextChangeAsStateFlow
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
@@ -314,7 +313,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
         }
     }
 
-    private fun getCitiesWhenStateNotEmpty(stateStr: String){
+    private fun getCitiesWhenStateNotEmpty(stateStr: String) {
         //get the value from states
 
         val index = statesesMap.get(stateStr)
@@ -540,7 +539,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
 
                 submitData()
 
-            }else {
+            } else {
                 checkForNextDoc()
             }
         }
@@ -559,29 +558,29 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
 
         override fun afterTextChanged(text: Editable?) {
             context?.let { cxt ->
-                    text?.let {
+                text?.let {
 
-                        if (viewBinding.aadharNo.editText?.text.toString()
-                                .isNullOrBlank() && viewBinding.dateOfBirth.text.toString()
-                                .isNullOrBlank() && viewBinding.fatherNameTil.editText?.text.toString()
-                                .isNullOrBlank() && viewBinding.addLine1.editText?.text.toString()
-                                .isNullOrBlank() && viewBinding.addLine2.editText?.text.toString()
-                                .isNullOrBlank() && viewBinding.stateSpinner.text.toString()
-                                .isNullOrBlank() && viewBinding.citySpinner.text.toString()
-                                .isNullOrBlank() && viewBinding.pincode.editText?.text.toString()
-                                .isNullOrBlank() && viewBinding.landmark.editText?.text.toString()
-                                .isNullOrBlank()
-                        ) {
-                            viewBinding.submitButton.text = "Skip"
-                            anyDataEntered = false
-                        } else {
-                            viewBinding.submitButton.text = "Submit"
-                            anyDataEntered = true
-                        }
-
+                    if (viewBinding.aadharNo.editText?.text.toString()
+                            .isNullOrBlank() && viewBinding.dateOfBirth.text.toString()
+                            .isNullOrBlank() && viewBinding.fatherNameTil.editText?.text.toString()
+                            .isNullOrBlank() && viewBinding.addLine1.editText?.text.toString()
+                            .isNullOrBlank() && viewBinding.addLine2.editText?.text.toString()
+                            .isNullOrBlank() && viewBinding.stateSpinner.text.toString()
+                            .isNullOrBlank() && viewBinding.citySpinner.text.toString()
+                            .isNullOrBlank() && viewBinding.pincode.editText?.text.toString()
+                            .isNullOrBlank() && viewBinding.landmark.editText?.text.toString()
+                            .isNullOrBlank()
+                    ) {
+                        viewBinding.submitButton.text = "Skip"
+                        anyDataEntered = false
+                    } else {
+                        viewBinding.submitButton.text = "Submit"
+                        anyDataEntered = true
                     }
+
                 }
             }
+        }
 
 
     }
@@ -757,10 +756,12 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
         } else if (requestCode == UCrop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
             val imageUriResultCrop: Uri? = UCrop.getOutput(data!!)
             imageUriResultCrop?.let {
+                progressBar.visible()
                 firebaseStorage.reference
                     .child("verification")
                     .child(fileName)
                     .putFile(it).addOnSuccessListener {
+                        progressBar.gone()
                         if (imageUriResultCrop != null) {
                             if (viewBinding.viewPager2.currentItem == 0) {
                                 aadharFrontImagePath = it.metadata?.path
@@ -770,7 +771,9 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
                                 showAadharImage(imageUriResultCrop, 1)
                             }
                         }
-                    }
+                    }.addOnFailureListener {
+                        progressBar.gone()
+                    }.addOnCanceledListener { progressBar.gone() }
             }
 
 

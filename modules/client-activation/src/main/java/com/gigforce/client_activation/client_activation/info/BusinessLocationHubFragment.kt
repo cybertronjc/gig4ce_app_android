@@ -15,6 +15,7 @@ import androidx.lifecycle.Observer
 import com.gigforce.client_activation.R
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.core.IOnBackPressedOverride
+import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.NavFragmentsData
@@ -99,6 +100,7 @@ class BusinessLocationHubFragment : Fragment(), IOnBackPressedOverride {
             setHubData(it)
         })
         viewModel._states.observe(viewLifecycleOwner, Observer {
+            progressBar.gone()
             viewModel.loadHubData(mJobProfileId)
             stateList.clear()
             stateList.addAll(it)
@@ -143,7 +145,8 @@ class BusinessLocationHubFragment : Fragment(), IOnBackPressedOverride {
     var stateList = arrayListOf<String>()
     var hubList = arrayListOf<String>()
     private fun initialize() {
-        viewModel.loadStates("")
+        progressBar.visible()
+        viewModel.loadStates(mJobProfileId)
         initState()
         initHub()
 
