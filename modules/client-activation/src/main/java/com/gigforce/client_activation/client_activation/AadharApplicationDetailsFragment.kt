@@ -18,6 +18,7 @@ import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.gigforce.client_activation.R
@@ -39,6 +40,7 @@ import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.DateHelper
+import com.gigforce.core.utils.NavFragmentsData
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.storage.FirebaseStorage
@@ -289,14 +291,25 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
                 addLine2.editText?.setText(it)
             }
             it.state.let {
-                stateSpinner.setText(it, false)
-        //                if (it.isNotEmpty()){
-        //                    //get the value from states
-        //                    stateSpinner.setText(it, false)
-        ////                    val index = statesesMap.get(it)
-        ////                    Log.d("index", "i: $index , map: $statesesMap")
-        //                    //index?.let { it1 -> stateSpinner.setSelection(it1) }
-        //                }
+                if (it.isNotEmpty()) {
+                    //get the value from states
+                    stateSpinner.setText(it, false)
+        //                    val index = statesesMap.get(it)
+        //                    Log.d("index", "i: $index , map: $statesesMap")
+                    //index?.let { it1 -> stateSpinner.setSelection(it1) }
+                    //get the state_id for this state
+        //                    if (statesesMap.containsKey(it)){
+                    val index = statesesMap.get(it)
+                    val stateModel = index?.let { it1 -> statesList.get(it1) }
+                    Log.d("index", "i: $index , map: $stateModel")
+                    if (stateModel?.id.toString().isNotEmpty()) {
+                        viewModel.getCities(stateModel?.id.toString())
+                        Log.d("index", "i: $index , map: ${stateModel?.id}")
+                    }
+        //                    }else {
+        //                        Log.d("index", "i:  , doesnt contains key")
+        //                    }
+                }
 
             }
             it.city.let {
@@ -373,7 +386,25 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
             }
 
         }
+        arrayAdapter = context?.let { it1 ->
+            ArrayAdapter(
+                it1,
+                android.R.layout.simple_spinner_dropdown_item,
+                statesArray
+            )
+        }
+        stateSpinner.setAdapter(arrayAdapter)
+        stateSpinner.threshold = 1
 
+        citiesAdapter = context?.let { it1 ->
+            ArrayAdapter(
+                it1,
+                android.R.layout.simple_spinner_dropdown_item,
+                citiesArray
+            )
+        }
+        citySpinner.setAdapter(citiesAdapter)
+        citySpinner.threshold = 1
 
         stateSpinner.setOnFocusChangeListener { view, b ->
             if (b) {
@@ -429,23 +460,6 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
                 return@setOnClickListener
             }
 
-            if (stateSpinner.text.toString().isEmpty()) {
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(getString(R.string.alert))
-                    .setMessage(getString(R.string.select_aadhar_state))
-                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                    .show()
-                return@setOnClickListener
-            }
-
-            if (citySpinner.text.toString().isEmpty()) {
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(getString(R.string.alert))
-                    .setMessage("Select City")
-                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                    .show()
-                return@setOnClickListener
-            }
             if (addLine1Input.text.toString().isBlank()) {
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle(getString(R.string.alert))
@@ -459,6 +473,28 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle(getString(R.string.alert))
                     .setMessage("Enter Address Line 2")
+                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                    .show()
+                return@setOnClickListener
+            }
+
+            if (stateSpinner.text.toString()
+                    .isEmpty() || !statesArray.contains(stateSpinner.text.toString())
+            ) {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(getString(R.string.alert))
+                    .setMessage(getString(R.string.select_aadhar_state))
+                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                    .show()
+                return@setOnClickListener
+            }
+
+            if (citySpinner.text.toString()
+                    .isEmpty() || !citiesArray.contains(citySpinner.text.toString())
+            ) {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(getString(R.string.alert))
+                    .setMessage("Select City")
                     .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                     .show()
                 return@setOnClickListener
@@ -657,8 +693,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
             if (outputFileUri != null) {
                 startCrop(outputFileUri)
             }
-        }
-        else if(requestCode == UCrop.REQUEST_CROP && resultCode == Activity.RESULT_OK){
+        } else if (requestCode == UCrop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
             val imageUriResultCrop: Uri? = UCrop.getOutput(data!!)
             imageUriResultCrop?.let {
                 firebaseStorage.reference
@@ -668,15 +703,14 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
                         if (imageUriResultCrop != null) {
                             if (viewBinding.viewPager2.currentItem == 0) {
                                 aadharFrontImagePath = it.metadata?.path
-                                showAadharImage(imageUriResultCrop,0)
+                                showAadharImage(imageUriResultCrop, 0)
                             } else if (viewBinding.viewPager2.currentItem == 1) {
                                 aadharBackImagePath = it.metadata?.path
-                                showAadharImage(imageUriResultCrop,1)
+                                showAadharImage(imageUriResultCrop, 1)
                             }
                         }
                     }
             }
-
 
 
         }
@@ -698,12 +732,13 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
 //        }
     }
 
-    private fun showAadharImage(uri: Uri, position: Int ) {
-            if(position in 0..1)
+    private fun showAadharImage(uri: Uri, position: Int) {
+        if (position in 0..1)
             setDocumentImage(position, uri)
 
     }
-    var fileName :String = ""
+
+    var fileName: String = ""
     private fun startCrop(uri: Uri): Unit {
         Log.v("Start Crop", "started")
         //can use this for a new name every time
@@ -819,7 +854,15 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
     }
 
     override fun onBackPressed(): Boolean {
+        if (FROM_CLIENT_ACTIVATON) {
+            var navFragmentsData = activity as NavFragmentsData
+            navFragmentsData.setData(
+                bundleOf(
+                    com.gigforce.core.StringConstants.BACK_PRESSED.value to true
 
+                )
+            )
+        }
         return false
     }
 
@@ -845,17 +888,9 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
             citiesMap.put(city.name, index)
         }
 
-        citiesAdapter = context?.let { it1 ->
-            ArrayAdapter(
-                it1,
-                android.R.layout.simple_spinner_dropdown_item,
-                citiesArray
-            )
-        }
-        citySpinner.setAdapter(citiesAdapter)
-        citySpinner.threshold = 1
 
         citiesAdapter?.notifyDataSetChanged()
+
     }
 
     private fun processStates(content: ArrayList<State>) {
@@ -869,15 +904,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
             statesArray.add(city.name)
             statesesMap.put(city.name, index)
         }
-        arrayAdapter = context?.let { it1 ->
-            ArrayAdapter(
-                it1,
-                android.R.layout.simple_spinner_dropdown_item,
-                statesArray
-            )
-        }
-        stateSpinner.setAdapter(arrayAdapter)
-        stateSpinner.threshold = 1
+
 
         arrayAdapter?.notifyDataSetChanged()
     }

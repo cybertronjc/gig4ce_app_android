@@ -9,7 +9,6 @@ import com.gigforce.core.extensions.getOrThrow
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
-import java.util.*
 
 class BLocationHubViewModel : ViewModel() {
     val _states = MutableLiveData<List<String>>()
@@ -22,8 +21,36 @@ class BLocationHubViewModel : ViewModel() {
     val allBusinessLocactionsList : LiveData<List<BusinessLocationDM>> = _allBusinessLocactionsList
     private val _observableAddApplicationSuccess: MutableLiveData<Boolean> = MutableLiveData()
     val observableAddApplicationSuccess: MutableLiveData<Boolean> = _observableAddApplicationSuccess
+
+    val _hubLiveData = MutableLiveData<HubServerDM>()
+    val hubLiveData : LiveData<HubServerDM> = _hubLiveData
+
+    fun loadHubData(mJobProfileId: String){
+        FirebaseFirestore.getInstance().collection("JP_Applications")
+            .whereEqualTo("jpid", mJobProfileId)
+            .whereEqualTo(
+                "gigerId",
+                FirebaseAuthStateListener.getInstance().getCurrentSignInUserInfoOrThrow().uid
+            ).get().addOnSuccessListener {
+                if(it!=null && !it.isEmpty && !it.documents.isNullOrEmpty())
+                FirebaseFirestore.getInstance().collection("JP_Applications")
+                    .document(it.documents[0].id)
+                    .collection("Submissions")
+                    .whereEqualTo("type","hub_location").get().addOnSuccessListener {
+                        if(it!=null && !it.isEmpty && !it.documents.isNullOrEmpty())
+                            try {
+                                _hubLiveData.value = it.documents[0].toObject(HubServerDM::class.java)
+                            }catch (e: Exception){
+
+                            }
+                    }
+            }
+
+
+    }
+
     fun loadStates(businessId : String)= viewModelScope.launch{
-        var businessLocactionsSnapshot = FirebaseFirestore.getInstance().collection("Business_Locations").whereEqualTo("business_id","pA75fdO9CpWzEtCR7lPe").whereEqualTo("type","office").getOrThrow()
+        var businessLocactionsSnapshot = FirebaseFirestore.getInstance().collection("Business_Locations").whereEqualTo("business_id","pYCDZ5hqfPPMOYuyCjtt").whereEqualTo("type","office").getOrThrow()
         val businessLocactions = arrayListOf<BusinessLocationDM>()
         businessLocactionsSnapshot?.let { querySnapshot ->
             querySnapshot.forEach{ snaphot->
@@ -58,7 +85,11 @@ class BLocationHubViewModel : ViewModel() {
        return _allBusinessLocactionsList.value?.filter { it.state?.name == state && it.name == hub }?.get(0)?.id
     }
 
-    fun saveHubLocationData(state : String,hub:String,title : String,mJobProfileId: String) {
+    fun getStateId(state : String,hub:String):String?{
+        return _allBusinessLocactionsList.value?.filter { it.state?.name == state && it.name == hub }?.get(0)?.state?.id
+    }
+
+    fun saveHubLocationData(state : String, hub:String, type : String, mJobProfileId: String) {
         FirebaseFirestore.getInstance().collection("JP_Applications")
             .whereEqualTo("jpid", mJobProfileId)
             .whereEqualTo(
@@ -77,6 +108,7 @@ class BLocationHubViewModel : ViewModel() {
                                         "hubId" to getHubDocId(state,hub),
                                         "hubName" to hub,
                                         "stateName" to state,
+                                        "stateId" to getStateId(state,hub),
                                         "type" to "hub_location"
                                     )
                                 ).addOnCompleteListener { complete ->
@@ -86,7 +118,7 @@ class BLocationHubViewModel : ViewModel() {
                                             val jpApplication =
                                                 jp_application.toObjects(JpApplication::class.java)[0]
                                             jpApplication.application.forEach { draft ->
-                                                if (draft.type == title) {
+                                                if (draft.type == type) {
                                                     draft.isDone = true
                                                 }
                                             }
@@ -112,6 +144,7 @@ class BLocationHubViewModel : ViewModel() {
                                         "hubId" to getHubDocId(state,hub),
                                         "hubName" to hub,
                                         "stateName" to state,
+                                        "stateId" to getStateId(state,hub),
                                         "type" to "hub_location"
                                     )
                                 )
@@ -120,7 +153,7 @@ class BLocationHubViewModel : ViewModel() {
                                         val jpApplication =
                                             jp_application.toObjects(JpApplication::class.java)[0]
                                         jpApplication.application.forEach { draft ->
-                                            if (draft.type == title) {
+                                            if (draft.type == type) {
                                                 draft.isDone = true
                                             }
                                         }
