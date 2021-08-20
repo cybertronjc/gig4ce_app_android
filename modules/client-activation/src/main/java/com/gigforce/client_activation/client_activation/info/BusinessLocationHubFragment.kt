@@ -1,6 +1,8 @@
 package com.gigforce.client_activation.client_activation.info
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +15,7 @@ import androidx.lifecycle.Observer
 import com.gigforce.client_activation.R
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.core.IOnBackPressedOverride
+import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.NavFragmentsData
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -87,7 +90,8 @@ class BusinessLocationHubFragment : Fragment(), IOnBackPressedOverride {
             intentBundle = it
         }
     }
-    var serverHubData : HubServerDM? = null
+
+    var serverHubData: HubServerDM? = null
     private fun observer() {
 
         viewModel.hubLiveData.observe(viewLifecycleOwner, Observer {
@@ -112,8 +116,8 @@ class BusinessLocationHubFragment : Fragment(), IOnBackPressedOverride {
             hubAdapter?.notifyDataSetChanged()
 
             serverHubData?.let {
-                if(it.once == true && !it.hubName.isNullOrBlank() && hubList.contains(it.hubName)){
-                    hub.setText(it.hubName,false)
+                if (it.once == true && !it.hubName.isNullOrBlank() && hubList.contains(it.hubName)) {
+                    hub.setText(it.hubName, false)
                 }
             }
 
@@ -201,32 +205,39 @@ class BusinessLocationHubFragment : Fragment(), IOnBackPressedOverride {
 
     private fun listener() {
         submit_button.setOnClickListener {
+            if (!anyDataEntered) {
+                checkForNextDoc()
+            } else {
 
-            if (state.text.isNullOrBlank() || !stateList.contains(state.text.toString())) {
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(getString(R.string.alert))
-                    .setMessage("Please select state")
-                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                    .show()
-                return@setOnClickListener
+                if (state.text.isNullOrBlank() || !stateList.contains(state.text.toString())) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert))
+                        .setMessage("Please select state")
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .show()
+                    return@setOnClickListener
+                }
+
+                if (hub.text.isNullOrBlank() || !hubList.contains(hub.text.toString())) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert))
+                        .setMessage("Please select hub")
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .show()
+                    return@setOnClickListener
+                }
+
+                progressBar.visible()
+                viewModel.saveHubLocationData(
+                    state.text.toString(),
+                    hub.text.toString(),
+                    type = "jp_hub_location",
+                    mJobProfileId = mJobProfileId
+                )
             }
-
-            if (hub.text.isNullOrBlank() || !hubList.contains(hub.text.toString())) {
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(getString(R.string.alert))
-                    .setMessage("Please select hub")
-                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                    .show()
-                return@setOnClickListener
-            }
-
-            viewModel.saveHubLocationData(
-                state.text.toString(),
-                hub.text.toString(),
-                type = "jp_hub_location",
-                mJobProfileId = mJobProfileId
-            )
         }
+        state.addTextChangedListener(ValidationTextWatcher())
+        hub.addTextChangedListener(ValidationTextWatcher())
     }
 
     private fun checkForNextDoc() {
@@ -268,5 +279,34 @@ class BusinessLocationHubFragment : Fragment(), IOnBackPressedOverride {
         return false
     }
 
+    var anyDataEntered = false
+
+    inner class ValidationTextWatcher : TextWatcher {
+        override fun afterTextChanged(text: Editable?) {
+            context?.let { cxt ->
+                text?.let {
+
+                    if (state.text
+                            .isNullOrBlank() && hub.text.toString().isNullOrBlank()
+                    ) {
+                        submit_button.text = "Skip"
+                        anyDataEntered = false
+                    } else {
+                        submit_button.text = "Submit"
+                        anyDataEntered = true
+                    }
+
+                }
+
+            }
+        }
+
+        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+        }
+
+        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+        }
+
+    }
 
 }
