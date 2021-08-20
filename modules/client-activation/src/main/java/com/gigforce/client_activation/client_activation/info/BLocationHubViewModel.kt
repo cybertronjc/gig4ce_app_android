@@ -23,7 +23,7 @@ class BLocationHubViewModel : ViewModel() {
     private val _observableAddApplicationSuccess: MutableLiveData<Boolean> = MutableLiveData()
     val observableAddApplicationSuccess: MutableLiveData<Boolean> = _observableAddApplicationSuccess
     fun loadStates(businessId : String)= viewModelScope.launch{
-        var businessLocactionsSnapshot = FirebaseFirestore.getInstance().collection("Business_Locations").whereEqualTo("business_id","pYCDZ5hqfPPMOYuyCjtt").whereEqualTo("type","office").getOrThrow()
+        var businessLocactionsSnapshot = FirebaseFirestore.getInstance().collection("Business_Locations").whereEqualTo("business_id","pA75fdO9CpWzEtCR7lPe").whereEqualTo("type","office").getOrThrow()
         val businessLocactions = arrayListOf<BusinessLocationDM>()
         businessLocactionsSnapshot?.let { querySnapshot ->
             querySnapshot.forEach{ snaphot->
