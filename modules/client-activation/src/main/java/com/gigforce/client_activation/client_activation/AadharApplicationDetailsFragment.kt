@@ -252,22 +252,24 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
                 getDBImageUrl(it).let {
                     list.add(
                         KYCImageModel(
-                            text = "Please upload your AADHAR card\\nFront side",
+                            text = "Please upload your AADHAR card Front side",
                             imagePath = it,
                             imageUploaded = true
                         )
                     )
+                    aadharFrontImagePath = it
                 }
             }
             it.backImagePath?.let {
                 getDBImageUrl(it).let {
                     list.add(
                         KYCImageModel(
-                            text = "Please upload your AADHAR card\\nBack side",
+                            text = "Please upload your AADHAR card Back side",
                             imagePath = it,
                             imageUploaded = true
                         )
                     )
+                    aadharBackImagePath = it
                 }
             }
             setImageViewPager(list)
@@ -289,18 +291,19 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
                 addLine2.editText?.setText(it)
             }
             it.state?.let {
-                if (it.isNotEmpty()){
-                    //get the value from states
-                    //stateSpinner.setText(it, false)
-                    val index = statesesMap.get(it)
-                    Log.d("index", "i: $index , map: $statesesMap")
-                    //index?.let { it1 -> stateSpinner.setSelection(it1) }
-                }
+                stateSpinner.setText(it, false)
+//                if (it.isNotEmpty()){
+//                    //get the value from states
+//                    stateSpinner.setText(it, false)
+////                    val index = statesesMap.get(it)
+////                    Log.d("index", "i: $index , map: $statesesMap")
+//                    //index?.let { it1 -> stateSpinner.setSelection(it1) }
+//                }
 
             }
-//            it.city?.let {
-//                citySpinner.setText(it, false)
-//            }
+            it.city?.let {
+                citySpinner.setText(it, false)
+            }
             it.pincode?.let {
                 pincode.editText?.setText(it)
             }
@@ -426,7 +429,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
                 return@setOnClickListener
             }
 
-            if (stateSpinner.text.toString().isEmpty() || !statesArray.contains(stateSpinner.text.toString())) {
+            if (stateSpinner.text.toString().isEmpty()) {
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle(getString(R.string.alert))
                     .setMessage(getString(R.string.select_aadhar_state))
@@ -435,7 +438,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
                 return@setOnClickListener
             }
 
-            if (citySpinner.text.toString().isEmpty() || !citiesArray.contains(citySpinner.text.toString())) {
+            if (citySpinner.text.toString().isEmpty()) {
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle(getString(R.string.alert))
                     .setMessage("Select City")
@@ -487,14 +490,14 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
     private fun submitData() = viewBinding.apply{
         progressBar.visibility = View.VISIBLE
         //else submit the data
-        var permanentAddress = AddressModel(
-            addLine1Input.text.toString(),
-            addLine2Input.text.toString(),
-            landmarkInput.text.toString(),
-            selectedCity.name,
-            selectedState.name,
-            pincodeInput.text.toString()
-        )
+//        var permanentAddress = AddressModel(
+//            addLine1Input.text.toString(),
+//            addLine2Input.text.toString(),
+//            landmarkInput.text.toString(),
+//            selectedCity.name,
+//            selectedState.name,
+//            pincodeInput.text.toString()
+//        )
 
         var submitDataModel = AadhaarDetailsDataModel(
             aadharFrontImagePath,
@@ -555,12 +558,12 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
             .build()
         val list = listOf(
             KYCImageModel(
-                text = "Please upload your AADHAR card\\nFront side",
+                text = "Please upload your AADHAR card Front side",
                 imageIcon = frontUri,
                 imageUploaded = false
             ),
             KYCImageModel(
-                text = "Please upload your AADHAR card\\nBack side",
+                text = "Please upload your AADHAR card Back side",
                 imageIcon = backUri,
                 imageUploaded = false
         )

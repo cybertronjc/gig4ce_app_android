@@ -129,6 +129,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/size_46"
                         android:padding="4dp"
+                        android:maxLength="12"
                         android:inputType="number"
                         android:singleLine="true"/>
 
