@@ -8,12 +8,15 @@ import com.gigforce.client_activation.client_activation.repository.AadhaarDetail
 import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 import com.gigforce.core.datamodels.City
 import com.gigforce.core.datamodels.State
+import com.gigforce.core.datamodels.client_activation.JpApplication
 import com.gigforce.core.datamodels.profile.AddressModel
 import com.gigforce.core.datamodels.verification.AadhaarDetailsDataModel
 import com.gigforce.core.datamodels.verification.KYCdata
 import com.gigforce.core.datamodels.verification.VerificationBaseModel
 import com.gigforce.core.di.interfaces.IBuildConfigVM
+import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -81,13 +84,30 @@ class AadharApplicationDetailsViewModel @Inject constructor(
         }
     }
 
-    fun setAadhaarDetails(data: AadhaarDetailsDataModel) = viewModelScope.launch {
+    fun setAadhaarDetails(data: AadhaarDetailsDataModel,mJobProfileId : String) = viewModelScope.launch {
         try {
             val updated = aadharDetailsRepo.setAadhaarDetails(uid, data)
             updatedResult.postValue(updated)
 
-            _observableAddApplicationSuccess.value =
-                true
+            FirebaseFirestore.getInstance().collection("JP_Applications")
+                .whereEqualTo("jpid", mJobProfileId)
+                .whereEqualTo(
+                    "gigerId",
+                    FirebaseAuthStateListener.getInstance().getCurrentSignInUserInfoOrThrow().uid
+                ).addSnapshotListener { jp_application, _ ->
+
+                    jp_application?.let {
+                        val jpApplication =
+                            it.toObjects(JpApplication::class.java)[0]
+                        jpApplication.application.forEach { draft ->
+                            if (draft.type == "aadhar_card_questionnaire") {
+                                draft.isDone = true
+                            }
+                        }
+                                    _observableAddApplicationSuccess.value = true
+                    }
+                }
+
 
         } catch (e: Exception) {
             e.printStackTrace()
