@@ -428,6 +428,8 @@ class ApplicationClientActivationFragment : Fragment(),
                 "verification/bank_account_fragment",
                 bundleForFragment
             )
+
+            "aadhar_card_questionnaire" -> navigation.navigateTo("")
         }
     }
 

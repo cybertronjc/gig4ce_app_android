@@ -111,7 +111,8 @@ class BSCalendarScreenViewModel : ViewModel() {
                     "primary_no",
                     arrayListOf(phoneNumber, phoneNumber2, phoneNumber3, phoneNumber4)
                 )
-                .getOrThrow()
+                .
+                getOrThrow()
 
             _isUserTlCheck.postValue(getBussinessContactQuery.size() > 0)
         } catch (e: Exception) {

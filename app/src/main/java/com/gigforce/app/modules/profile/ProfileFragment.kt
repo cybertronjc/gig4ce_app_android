@@ -250,6 +250,7 @@ class ProfileFragment : BaseFragment() {
 
 
         location_card.setOnClickListener {
+            navigation.navigateTo("client_activation/fragment_business_loc_hub")
             showToast("This is work in progress. Please check again in a few days")
         }
         // load user data
