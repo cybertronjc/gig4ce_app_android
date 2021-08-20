@@ -298,7 +298,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
             it.state.let {
                 if (it.isNotEmpty()) {
                     stateSpinner.setText(it, false)
-                    viewModel.getStates()
+                    //viewModel.getStates()
                 }
             }
             it.city.let {
@@ -320,7 +320,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
         val stateModel = index?.let { it1 -> statesList.get(it1) }
         Log.d("index", "i: $index , map: $statesesMap")
         if (stateModel?.id.toString().isNotEmpty()) {
-            progressBar.visibility = View.VISIBLE
+            //progressBar.visibility = View.VISIBLE
             viewModel.getCities(stateModel?.id.toString())
             Log.d("index", "i: $index , map: ${stateModel?.id}")
         } else {
@@ -369,7 +369,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
                     selectedState = actualIndex?.let { statesList.get(it) }!!
                     Log.d("selected", "selected : $selectedState")
                     //get the cities
-                    progressBar.visibility = View.VISIBLE
+                    //progressBar.visibility = View.VISIBLE
                     viewModel.getCities(selectedState.id)
                 }
             }
@@ -948,7 +948,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
             citiesMap.put(city.name, index)
         }
         Log.d("map", "$citiesMap")
-        viewBinding.progressBar.visibility = View.GONE
+        //viewBinding.progressBar.visibility = View.GONE
         citiesAdapter?.notifyDataSetChanged()
 
     }
