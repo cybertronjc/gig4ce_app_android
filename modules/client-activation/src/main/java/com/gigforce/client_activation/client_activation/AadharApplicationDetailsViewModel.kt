@@ -104,7 +104,15 @@ class AadharApplicationDetailsViewModel @Inject constructor(
                                 draft.isDone = true
                             }
                         }
-                                    _observableAddApplicationSuccess.value = true
+                        FirebaseFirestore.getInstance().collection("JP_Applications")
+                            .document(jp_application.documents[0].id)
+                            .update("application", jpApplication.application)
+                            .addOnCompleteListener {
+                                if (it.isSuccessful) {
+                                    _observableAddApplicationSuccess.value =
+                                        true
+                                }
+                            }
                     }
                 }
 
