@@ -9,6 +9,7 @@ import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 import com.gigforce.core.datamodels.City
 import com.gigforce.core.datamodels.State
 import com.gigforce.core.datamodels.profile.AddressModel
+import com.gigforce.core.datamodels.verification.AadhaarDetailsDataModel
 import com.gigforce.core.datamodels.verification.KYCdata
 import com.gigforce.core.datamodels.verification.VerificationBaseModel
 import com.gigforce.core.di.interfaces.IBuildConfigVM
@@ -34,6 +35,7 @@ class AadharApplicationDetailsViewModel @Inject constructor(
     val citiesResult: MutableLiveData<MutableList<City>> = MutableLiveData<MutableList<City>>()
 
     val verificationResult: MutableLiveData<VerificationBaseModel> = MutableLiveData<VerificationBaseModel>()
+    val updatedResult: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
 
     val addressResult: MutableLiveData<AddressModel> = MutableLiveData<AddressModel>()
 
@@ -72,6 +74,15 @@ class AadharApplicationDetailsViewModel @Inject constructor(
         try {
             val addressData = profileFirebaseRepository.getProfileData(userId = uid).address.home
             addressResult.postValue(addressData)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    fun setAadhaarDetails(data: AadhaarDetailsDataModel) = viewModelScope.launch {
+        try {
+            val updated = aadharDetailsRepo.setAadhaarDetails(uid, data)
+            updatedResult.postValue(updated)
         } catch (e: Exception) {
             e.printStackTrace()
         }

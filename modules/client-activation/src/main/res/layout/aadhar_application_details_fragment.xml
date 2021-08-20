@@ -13,7 +13,7 @@
             app:backgroundType="PinkBar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:titleText="Enter Aadhaar Details" />
+            app:titleText="Enter Aadhar Details" />
 
         <ScrollView
             android:layout_width="match_parent"
@@ -36,23 +36,48 @@
                     android:layout_marginLeft="@dimen/dp_sm1"
                     android:layout_marginTop="@dimen/dp_large"
                     android:layout_marginRight="@dimen/dp_sm1"
-                    android:text="Please upload your aadhaar card here "
+                    android:text="Please upload your aadhar card here "
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />
 
-                <ImageView
-                    android:id="@+id/aadharCardFrontImg"
+<!--                <ImageView-->
+<!--                    android:id="@+id/aadharCardFrontImg"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:scaleType="centerCrop"-->
+<!--                    android:layout_margin="@dimen/size_16"-->
+<!--                    android:background="@drawable/aadhar_details_image_bg"-->
+<!--                    android:src="@drawable/ic_aadhar_front"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/textView9"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    />-->
+
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/viewPager2"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginTop="@dimen/dp_large"
+                    android:layout_marginEnd="@dimen/size_16"
+                    android:layout_marginStart="@dimen/size_16"
+                    android:orientation="horizontal"
+                    android:visibility="visible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textView9" />
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tabLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:scaleType="centerCrop"
-                    android:layout_margin="@dimen/size_16"
-                    android:background="@drawable/aadhar_details_image_bg"
-                    android:src="@drawable/ic_aadhar_front"
-                    app:layout_constraintTop_toBottomOf="@id/textView9"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:visibility="visible"
                     app:layout_constraintEnd_toEndOf="parent"
-                    />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/viewPager2"
+                    app:tabBackground="@drawable/tab_selector_viewpager"
+                    app:tabGravity="center"
+                    app:tabIndicatorHeight="0dp" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/below_layout"
@@ -61,7 +86,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/aadharCardFrontImg">
+                app:layout_constraintTop_toBottomOf="@+id/tabLayout">
 
                 <com.gigforce.common_ui.components.atoms.GrayLine
                     android:id="@+id/grayLine3"
@@ -95,7 +120,7 @@
                     android:layout_marginTop="@dimen/size_16"
                     android:layout_marginRight="@dimen/size_16"
                     android:layout_marginBottom="@dimen/size_16"
-                    android:hint="AADHAAR Card Number"
+                    android:hint="AADHAR Card Number"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView10">
@@ -133,7 +158,8 @@
                         android:gravity="center_vertical|start"
                         android:paddingLeft="@dimen/dp_sm1"
                         android:hint="Date of Birth"
-                        android:textColor="@color/warm_grey"
+                        android:textColorHint="@color/warm_grey"
+                        android:textColor="@color/black"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -142,11 +168,11 @@
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:layout_marginRight="@dimen/dp_xsm1"
+                        android:layout_marginEnd="@dimen/dp_xsm1"
                         android:src="@drawable/ic_sharp_event"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintEnd_toEndOf="@+id/dateOfBirth"
+                        app:layout_constraintTop_toTopOf="@+id/dateOfBirth" />
 
                     <TextView
                         android:id="@+id/dobLabel"
@@ -169,7 +195,7 @@
                     android:layout_marginLeft="@dimen/size_16"
                     android:layout_marginTop="@dimen/size_16"
                     android:layout_marginRight="@dimen/size_16"
-                    android:hint="Father Name"
+                    android:hint="Father's Name"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/dateOfBirthLabel"
@@ -344,6 +370,18 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
         <TextView
             android:id="@+id/submit_button"
             android:layout_width="match_parent"
