@@ -3,6 +3,7 @@ package com.gigforce.client_activation.client_activation
 import android.Manifest
 import android.app.Activity
 import android.app.DatePickerDialog
+import android.content.ContentResolver
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -22,27 +23,33 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.gigforce.client_activation.R
+import com.gigforce.client_activation.client_activation.adapters.VerificationViewPagerAdapter
 import com.gigforce.client_activation.databinding.AadharApplicationDetailsFragmentBinding
 import com.gigforce.client_activation.ui.ClientActivationClickOrSelectImageBottomSheet
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.getCircularProgressDrawable
 import com.gigforce.common_ui.ext.showToast
+import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.datamodels.City
 import com.gigforce.core.datamodels.State
 import com.gigforce.core.datamodels.profile.AddressModel
+import com.gigforce.core.datamodels.verification.AadhaarDetailsDataModel
 import com.gigforce.core.datamodels.verification.KYCdata
 import com.gigforce.core.datamodels.verification.VerificationBaseModel
 import com.gigforce.core.di.interfaces.IBuildConfig
+import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.DateHelper
 import com.gigforce.core.utils.GlideApp
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.storage.FirebaseStorage
 import com.skydoves.powermenu.kotlin.showAsDropDown
 import com.yalantis.ucrop.UCrop
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.aadhar_application_details_fragment.*
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.text.SimpleDateFormat
@@ -50,16 +57,20 @@ import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
+enum class AadharCardSides {
+    FRONT_SIDE,
+    BACK_SIDE
+}
+
 @AndroidEntryPoint
 class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, ClientActivationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener {
 
     companion object {
         fun newInstance() = AadharApplicationDetailsFragment()
-        const val REQUEST_CODE_UPLOAD_AADHAR = 2333
+        const val REQUEST_CODE_UPLOAD_AADHAR = 2331
 
         const val INTENT_EXTRA_CLICKED_IMAGE_FRONT = "front_image"
-        const val INTENT_EXTRA_STATE = "state"
-        const val INTENT_EXTRA_AADHAR_NO = "aadhar_no"
+        const val INTENT_EXTRA_CLICKED_IMAGE_BACK = "back_image"
         private const val REQUEST_CAPTURE_IMAGE = 1011
         private const val REQUEST_PICK_IMAGE = 1012
 
@@ -78,7 +89,16 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
     private val viewModel: AadharApplicationDetailsViewModel by viewModels()
     private lateinit var viewBinding: AadharApplicationDetailsFragmentBinding
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
-    private var aadharFrontImagePath: Uri? = null
+    private var aadharFrontImagePath: String? = null
+    private var aadharBackImagePath: String? = null
+    lateinit var adapter: VerificationViewPagerAdapter
+    var pageClickListener: View.OnClickListener? = null
+    private var currentlyClickingImageOfSide: AadharCardSides? = null
+
+    fun setPrimaryClick(pageClickListener: View.OnClickListener) {
+        this.pageClickListener = pageClickListener
+    }
+
     private var win: Window? = null
     var statesList = arrayListOf<State>()
     var citiesList = arrayListOf<City>()
@@ -90,6 +110,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
     var statesArray = arrayListOf<String>()
     var selectedCity = City()
     var selectedState = State()
+    var imageFileName = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -107,6 +128,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
         setViews()
         listeners()
         observer()
+        //showFrontAadhar("file:///data/user/0/com.gigforce.app.staging/cache/d5ToQmOn6sdAcPWvjsBuhYWm9kF3_20210820_120708_.jpg")
 
     }
 
@@ -145,39 +167,79 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
             Log.d("addressData", "data : $addressData")
             populateAddress(addressData)
         })
+
+        viewModel.updatedResult.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            val updated = it ?: return@Observer
+            Log.d("updated", "up $updated")
+            progressBar.visibility = View.GONE
+            if (updated){
+                showToast("Data uploaded successfully")
+            }
+
+        })
     }
 
     private fun processKycData(kycData: VerificationBaseModel) = viewBinding.apply{
         //set the values to views
-        kycData.aadhar_card?.let {
+        kycData.aadhaar_card_questionnaire?.let {
             //set front image
-            aadharFrontImagePath = Uri.parse(it.frontImage?.toString())
 
 
-            if (it.frontImage != null) {
-                if (it.frontImage!!.startsWith("http", true)) {
-                    Glide.with(requireContext()).load(it.frontImage)
-                        .placeholder(getCircularProgressDrawable()).into(aadharCardFrontImg)
-                } else {
-                    firebaseStorage
-                        .reference
-                        .child("verification")
-                        .child(it.frontImage!!)
-                        .downloadUrl.addOnSuccessListener {
-                            Glide.with(requireContext()).load(it)
-                                .placeholder(getCircularProgressDrawable()).into(aadharCardFrontImg)
-                        }.addOnFailureListener {
-                            print("ee")
-                        }
+            var list = ArrayList<KYCImageModel>()
+            it.frontImagePath?.let {
+                getDBImageUrl(it).let {
+                    list.add(
+                        KYCImageModel(
+                            text = "Please upload your AADHAR card\\nFront side",
+                            imagePath = it,
+                            imageUploaded = true
+                        )
+                    )
                 }
             }
+            it.backImagePath?.let {
+                getDBImageUrl(it).let {
+                    list.add(
+                        KYCImageModel(
+                            text = "Please upload your AADHAR card\\nBack side",
+                            imagePath = it,
+                            imageUploaded = true
+                        )
+                    )
+                }
+            }
+            setImageViewPager(list)
 
-            it.aadharCardNo?.let {
+            it.aadhaarCardNo?.let {
                 aadharNo.editText?.setText(it)
+            }
+            it.dateOfBirth?.let {
+                dateOfBirth.setText(it)
+                dobLabel.visible()
+            }
+            it.fName?.let {
+                fatherNameTil.editText?.setText(it)
+            }
+            it.addLine1?.let {
+                addLine1.editText?.setText(it)
+            }
+            it.addLine2?.let {
+                addLine2.editText?.setText(it)
+            }
+            it.state?.let {
+                stateSpinner.setText(it, false)
+            }
+            it.city?.let {
+                citySpinner.setText(it, false)
+            }
+            it.pincode?.let {
+                pincode.editText?.setText(it)
+            }
+            it.landmark?.let {
+                landmark.editText?.setText(it)
             }
         }
     }
-
 
     private fun changeStatusBarColor() {
         win = activity?.window
@@ -194,13 +256,12 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
     private fun listeners() = viewBinding.apply {
 
         viewModel.getStates()
-        aadharCardFrontImg.setOnClickListener {
-            checkForPermissionElseShowCameraGalleryBottomSheet()
-        }
 
         dateOfBirthLabel.setOnClickListener {
             dateOfBirthPicker.show()
         }
+
+
 
         appBarAadhar.apply {
             setBackButtonListener(View.OnClickListener {
@@ -208,7 +269,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
                 activity?.onBackPressed()
             })
         }
-
+        val cityText = citySpinner.text.toString()
         stateSpinner.onItemClickListener = object : AdapterView.OnItemClickListener {
 
             override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
@@ -257,12 +318,6 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
         citySpinner.setAdapter(citiesAdapter)
         citySpinner.threshold = 1
 
-//        stateSpinner.setOnClickListener {
-//            stateSpinner.showDropDown()
-//        }
-//        citySpinner.setOnClickListener {
-//            citySpinner.showDropDown()
-//        }
 
         stateSpinner.setOnFocusChangeListener { view, b ->
             if (b){
@@ -270,6 +325,24 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
             }
         }
         submitButton.setOnClickListener {
+
+            if (aadharFrontImagePath == null || aadharFrontImagePath?.isEmpty() == true) {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(getString(R.string.alert))
+                    .setMessage("Upload aadhaar card front photo")
+                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                    .show()
+                return@setOnClickListener
+            }
+
+            if (aadharBackImagePath == null || aadharBackImagePath?.isEmpty() == true) {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(getString(R.string.alert))
+                    .setMessage("Upload aadhaar card back photo")
+                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                    .show()
+                return@setOnClickListener
+            }
 
             if (aadharNo.editText?.text.toString().isBlank() || aadharNo.editText?.text.toString().length != 12) {
                 MaterialAlertDialogBuilder(requireContext())
@@ -298,7 +371,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
                 return@setOnClickListener
             }
 
-            if (stateSpinner.text.equals("Select State")) {
+            if (stateSpinner.text.toString().isEmpty() || !statesArray.contains(stateSpinner.text.toString())) {
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle(getString(R.string.alert))
                     .setMessage(getString(R.string.select_aadhar_state))
@@ -307,7 +380,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
                 return@setOnClickListener
             }
 
-            if (citySpinner.text.equals("Select City")) {
+            if (citySpinner.text.toString().isEmpty() || !citiesArray.contains(citySpinner.text.toString())) {
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle(getString(R.string.alert))
                     .setMessage("Select City")
@@ -351,36 +424,48 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
                 return@setOnClickListener
             }
 
+            submitData()
 
-            //else submit the data
-            var permanentAddress = AddressModel(
-                addLine1Input.text.toString(),
-                addLine2Input.text.toString(),
-                landmarkInput.text.toString(),
-                selectedCity.name,
-                selectedState.name,
-                pincodeInput.text.toString()
-            )
         }
+    }
+
+    private fun submitData() = viewBinding.apply{
+        progressBar.visibility = View.VISIBLE
+        //else submit the data
+        var permanentAddress = AddressModel(
+            addLine1Input.text.toString(),
+            addLine2Input.text.toString(),
+            landmarkInput.text.toString(),
+            selectedCity.name,
+            selectedState.name,
+            pincodeInput.text.toString()
+        )
+
+        var submitDataModel = AadhaarDetailsDataModel(
+            aadharFrontImagePath,
+            aadharBackImagePath,
+            aadhaarCardNo = aadharNo.editText?.text.toString(),
+            dateOfBirth = dateOfBirth.text.toString(),
+            fName = fatherNameTil.editText?.text.toString(),
+            addLine1 =  addLine1Input.text.toString(),
+            addLine2 = addLine2Input.text.toString(),
+            state = stateSpinner.text.toString(),
+            city = citySpinner.text.toString(),
+            pincode = pincode.editText?.text.toString(),
+            landmark = landmark.editText?.text.toString()
+        )
+
+        viewModel.setAadhaarDetails(submitDataModel)
     }
 
     private fun populateAddress(address: AddressModel) = viewBinding.apply{
         addLine1Input.setText(address.firstLine)
         addLine2Input.setText(address.secondLine)
         landmarkInput.setText(address.area)
-//        citySpinner.setText(address.city)
-//        stateSpinner.setText(address.state)
         pincodeInput.setText(address.pincode)
+        stateSpinner.setText(address.state, false)
+        citySpinner.setText(address.city, false)
 
-        stateSpinner.postDelayed(Runnable {
-            stateSpinner.setText(address.state, false)
-            //stateSpinner.showDropDown()
-        }, 5)
-
-        citySpinner.postDelayed(Runnable {
-            citySpinner.setText(address.city, false)
-            //citySpinner.showDropDown()
-        }, 5)
 
     }
 
@@ -400,18 +485,81 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
     private fun setViews() {
         viewModel.getVerificationData()
         viewModel.getAddressData()
+
+        val frontUri = Uri.Builder()
+            .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
+            .authority(resources.getResourcePackageName(R.drawable.ic_aadhar_front))
+            .appendPath(resources.getResourceTypeName(R.drawable.ic_aadhar_front))
+            .appendPath(resources.getResourceEntryName(R.drawable.ic_aadhar_front))
+            .build()
+        val backUri = Uri.Builder()
+            .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
+            .authority(resources.getResourcePackageName(R.drawable.ic_aadhar_front))
+            .appendPath(resources.getResourceTypeName(R.drawable.ic_aadhar_front))
+            .appendPath(resources.getResourceEntryName(R.drawable.ic_aadhar_front))
+            .build()
+        val list = listOf(
+            KYCImageModel(
+                text = "Please upload your AADHAR card\\nFront side",
+                imageIcon = frontUri,
+                imageUploaded = false
+            ),
+            KYCImageModel(
+                text = "Please upload your AADHAR card\\nBack side",
+                imageIcon = backUri,
+                imageUploaded = false
+        )
+        )
+        setImageViewPager(list)
     }
 
 
     private fun checkForPermissionElseShowCameraGalleryBottomSheet() {
-        if (hasStoragePermissions())
-            ClientActivationClickOrSelectImageBottomSheet.launch(
-                parentFragmentManager,
-                "Upload Driving License",
-                this
-            )
+        if (hasStoragePermissions()){
+            Log.v("Start Crop", "started")
+        //can use this for a new name every time
+        val timeStamp = SimpleDateFormat(
+            "yyyyMMdd_HHmmss",
+            Locale.getDefault()
+        ).format(Date())
+        imageFileName = "verification/" + PREFIX + "_" + timeStamp + "_.jpg"
+        if (viewBinding.viewPager2.currentItem == 0){
+            currentlyClickingImageOfSide = AadharCardSides.FRONT_SIDE
+        }else {
+            currentlyClickingImageOfSide = AadharCardSides.BACK_SIDE
+        }
+
+        val photoCropIntent = Intent()
+        photoCropIntent.putExtra(
+            "purpose",
+            ""
+        )
+        photoCropIntent.putExtra("fbDir", "/verification/")
+        photoCropIntent.putExtra("folder", "verification")
+        photoCropIntent.putExtra("detectFace", 0)
+        photoCropIntent.putExtra("uid", viewModel.uid)
+        photoCropIntent.putExtra("file", imageFileName)
+        navigation.navigateToPhotoCrop(
+            photoCropIntent,
+            REQUEST_CODE_UPLOAD_AADHAR, requireContext(), this@AadharApplicationDetailsFragment
+        )
+    }
         else
             requestStoragePermission()
+    }
+
+    fun getDBImageUrl(imagePath: String): String? {
+        if (imagePath.isNotBlank()) {
+            try {
+                var modifiedString = imagePath
+                if (!imagePath.startsWith("/"))
+                    modifiedString = "/$imagePath"
+                return buildConfig.getStorageBaseUrl() + modifiedString
+            } catch (egetDBImageUrl: Exception) {
+                return null
+            }
+        }
+        return null
     }
 
     private val dateOfBirthPicker: DatePickerDialog by lazy {
@@ -424,7 +572,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
                 newCal.set(Calendar.MONTH, month)
                 newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
                 viewBinding.dateOfBirth.text = DateHelper.getDateInDDMMYYYYHiphen(newCal.time)
-                viewBinding.dateOfBirthLabel.visible()
+                viewBinding.dobLabel.visible()
             },
             1990,
             cal.get(Calendar.MONTH),
@@ -435,33 +583,54 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
         datePickerDialog
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>, grantResults: IntArray
-    ) {
-        when (requestCode) {
-            REQUEST_STORAGE_PERMISSION -> {
-
-                var allPermsGranted = true
-                for (i in grantResults.indices) {
-                    if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
-                        allPermsGranted = false
-                        break
-                    }
-                }
-
-                if (allPermsGranted)
-                    ClientActivationClickOrSelectImageBottomSheet.launch(
-                        parentFragmentManager,
-                        "Upload Driving License",
-                        this
-                    )
-                else {
-                    showToast("Please grant storage permission")
-                }
-            }
-        }
-    }
+//    override fun onRequestPermissionsResult(
+//        requestCode: Int,
+//        permissions: Array<String>, grantResults: IntArray
+//    ) {
+//        when (requestCode) {
+//            REQUEST_STORAGE_PERMISSION -> {
+//
+//                var allPermsGranted = true
+//                for (i in grantResults.indices) {
+//                    if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+//                        allPermsGranted = false
+//                        break
+//                    }
+//                }
+//
+//                if (allPermsGranted){
+////                    ClientActivationClickOrSelectImageBottomSheet.launch(
+////                        parentFragmentManager,
+////                        "Upload Driving License",
+////                        this
+////                    )
+//                    Log.v("Start Crop", "started")
+//                //can use this for a new name every time
+//                val timeStamp = SimpleDateFormat(
+//                    "yyyyMMdd_HHmmss",
+//                    Locale.getDefault()
+//                ).format(Date())
+//                val imageFileName = PREFIX + "_" + timeStamp + "_.jpg"
+//                val photoCropIntent = Intent()
+//                photoCropIntent.putExtra(
+//                    "purpose",
+//                    "verification"
+//                )
+//                photoCropIntent.putExtra("fbDir", "/verification/")
+//                photoCropIntent.putExtra("folder", "verification")
+//                photoCropIntent.putExtra("detectFace", 0)
+//                photoCropIntent.putExtra("uid", viewModel.uid)
+//                photoCropIntent.putExtra("file", imageFileName)
+//                navigation.navigateToPhotoCrop(photoCropIntent,
+//                    REQUEST_CODE_UPLOAD_AADHAR, requireContext(),this@AadharApplicationDetailsFragment)
+//                }
+//
+//                else {
+//                    showToast("Please grant storage permission")
+//                }
+//            }
+//        }
+//    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -470,45 +639,40 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
         if (requestCode == REQUEST_CAPTURE_IMAGE || requestCode == REQUEST_PICK_IMAGE) {
             val outputFileUri = ImagePicker.getImageFromResult(requireContext(), resultCode, data)
             if (outputFileUri != null) {
-                startCrop(outputFileUri)
+                //startCrop(outputFileUri)
             }
-        } else if (requestCode == UCrop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
-            val imageUriResultCrop: Uri? = UCrop.getOutput(data!!)
-            Log.d("ImageUri", imageUriResultCrop.toString())
+        } else if (requestCode == REQUEST_CODE_UPLOAD_AADHAR && resultCode == Activity.RESULT_OK) {
 
-                aadharFrontImagePath = imageUriResultCrop
-                showFrontAadhar(aadharFrontImagePath!!)
-
-
-            val baos = ByteArrayOutputStream()
-            if (imageUriResultCrop == null) {
-                val bitmap = data.data as Bitmap
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
-
+            val imageUriResultCrop: String? = data?.getStringExtra("image_url")
+            val fileName: String? = data?.getStringExtra("filename")
+            Log.d("fileName", fileName.toString())
+            Log.d("ImageUri1", imageUriResultCrop.toString())
+            if (imageUriResultCrop != null){
+            if (AadharCardSides.FRONT_SIDE == currentlyClickingImageOfSide) {
+                    aadharFrontImagePath = "verification/"+fileName
+                    showFrontAadhar(imageUriResultCrop)
+            }
+            else if (AadharCardSides.BACK_SIDE == currentlyClickingImageOfSide) {
+                    aadharBackImagePath = "verification/"+fileName
+                    showBackAadhar(imageUriResultCrop)
+            }
             }
         }
     }
 
-    private fun startCrop(uri: Uri): Unit {
-        Log.v("Start Crop", "started")
-        //can use this for a new name every time
-        val timeStamp = SimpleDateFormat(
-            "yyyyMMdd_HHmmss",
-            Locale.getDefault()
-        ).format(Date())
-        val imageFileName = PREFIX + "_" + timeStamp + "_"
-        val uCrop: UCrop = UCrop.of(
-            uri,
-            Uri.fromFile(File(requireContext().cacheDir, imageFileName + EXTENSION))
-        )
-        val resultIntent: Intent = Intent()
-        resultIntent.putExtra("filename", imageFileName + EXTENSION)
-        val size = getImageDimensions(uri)
-        uCrop.withAspectRatio(size.width.toFloat(), size.height.toFloat())
-        uCrop.withMaxResultSize(1920, 1080)
-        uCrop.withOptions(getCropOptions())
-        uCrop.start(requireContext(), this)
+    private fun showBackAadhar(image: String?) {
+        Log.d("image", "im $image")
+        image?.let {
+            val uri  = Uri.parse(it)
+            setDocumentImage(1, uri)
+        }
+
     }
+
+    fun setDocumentImage(position: Int, uri: Uri) {
+        adapter.updateData(position, uri)
+    }
+
 
     private fun getImageDimensions(uri: Uri): Size {
         val options: BitmapFactory.Options = BitmapFactory.Options()
@@ -519,24 +683,34 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
         return Size(imageWidth, imageHeight)
     }
 
-    private fun getCropOptions(): UCrop.Options {
-        val options: UCrop.Options = UCrop.Options()
-        options.setCompressionQuality(70)
-        options.setCompressionFormat(Bitmap.CompressFormat.PNG)
-//        options.setMaxBitmapSize(1000)
-        options.setHideBottomControls((false))
-        options.setFreeStyleCropEnabled(true)
-        options.setStatusBarColor(ResourcesCompat.getColor(resources, R.color.topBarDark, null))
-        options.setToolbarColor(ResourcesCompat.getColor(resources, R.color.topBarDark, null))
-        options.setToolbarTitle("Crop or rotate")
-        return options
+    fun setImageViewPager(list: List<KYCImageModel>) = viewBinding.apply{
+
+        if (list.isEmpty()) {
+            viewPager2.gone()
+            tabLayout.gone()
+        } else {
+            viewPager2.visible()
+            tabLayout.visible()
+            adapter = VerificationViewPagerAdapter {
+                checkForPermissionElseShowCameraGalleryBottomSheet()
+            }
+            adapter.setItem(list)
+            viewPager2.adapter = adapter
+            if (list.size == 1) {
+                tabLayout.gone()
+            }
+            Log.d("adapter", "" + adapter.itemCount + " list: " + list.toString())
+            TabLayoutMediator(tabLayout, viewPager2) { tab, position ->
+            }.attach()
+        }
+
     }
 
-    private fun showFrontAadhar(aadharFrontImagePath: Uri) {
-        context?.let {
-            GlideApp.with(it)
-                .load(aadharFrontImagePath)
-                .into(viewBinding.aadharCardFrontImg)
+    private fun showFrontAadhar(path: String) {
+        Log.d("image", "im $path")
+        path?.let {
+            val uri  = Uri.parse(it)
+            setDocumentImage(0, uri)
         }
     }
 
@@ -567,7 +741,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
 
     override fun onBackPressed(): Boolean {
 
-        return true
+        return false
     }
 
     override fun onClickPictureThroughCameraClicked() {
