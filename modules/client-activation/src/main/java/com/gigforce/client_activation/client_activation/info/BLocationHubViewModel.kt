@@ -76,7 +76,8 @@ class BLocationHubViewModel : ViewModel() {
                                     mapOf(
                                         "hubId" to getHubDocId(state,hub),
                                         "hubName" to hub,
-                                        "stateName" to state
+                                        "stateName" to state,
+                                        "type" to "hub_location"
                                     )
                                 ).addOnCompleteListener { complete ->
                                     run {
@@ -110,7 +111,8 @@ class BLocationHubViewModel : ViewModel() {
                                     mapOf(
                                         "hubId" to getHubDocId(state,hub),
                                         "hubName" to hub,
-                                        "stateName" to state
+                                        "stateName" to state,
+                                        "type" to "hub_location"
                                     )
                                 )
                                 .addOnCompleteListener { complete ->

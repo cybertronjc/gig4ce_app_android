@@ -208,6 +208,12 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
 
 //        viewModel.observableAddApplicationSuccess.observe(viewLifecycleOwner, Obser
 //        )
+        viewModel.observableAddApplicationSuccess.observe(viewLifecycleOwner,androidx.lifecycle.Observer{
+                if(it) {
+                    checkForNextDoc()
+                }
+        }
+        )
     }
 
 
