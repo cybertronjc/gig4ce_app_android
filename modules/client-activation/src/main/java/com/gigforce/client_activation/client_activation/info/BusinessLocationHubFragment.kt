@@ -238,6 +238,13 @@ class BusinessLocationHubFragment : Fragment(), IOnBackPressedOverride {
         }
         state.addTextChangedListener(ValidationTextWatcher())
         hub.addTextChangedListener(ValidationTextWatcher())
+
+        appBar.apply {
+            setBackButtonListener(View.OnClickListener {
+//                navigation.popBackStack()
+                activity?.onBackPressed()
+            })
+        }
     }
 
     private fun checkForNextDoc() {

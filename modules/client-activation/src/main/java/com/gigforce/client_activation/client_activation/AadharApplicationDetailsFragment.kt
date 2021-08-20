@@ -38,6 +38,7 @@ import com.gigforce.core.datamodels.profile.AddressModel
 import com.gigforce.core.datamodels.verification.AadhaarDetailsDataModel
 import com.gigforce.core.datamodels.verification.VerificationBaseModel
 import com.gigforce.core.di.interfaces.IBuildConfig
+import com.gigforce.core.extensions.getTextChangeAsStateFlow
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
@@ -296,18 +297,11 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
             }
             it.state.let {
                 if (it.isNotEmpty()) {
-                    //get the value from states
                     stateSpinner.setText(it, false)
-                    val index = statesesMap.get(it)
-                    val stateModel = index?.let { it1 -> statesList.get(it1) }
-                    Log.d("index", "i: $index , map: $stateModel")
-                    if (stateModel?.id.toString().isNotEmpty()) {
-                        progressBar.visibility = View.VISIBLE
-                        viewModel.getCities(stateModel?.id.toString())
-                        Log.d("index", "i: $index , map: ${stateModel?.id}")
-                    }
+                    viewModel.getStates()
+                } else {
+                    viewModel.getStates()
                 }
-
             }
             it.city.let {
                 citySpinner.setText(it, false)
@@ -318,6 +312,21 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
             it.landmark.let {
                 landmark.editText?.setText(it)
             }
+        }
+    }
+
+    private fun getCitiesWhenStateNotEmpty(stateStr: String){
+        //get the value from states
+
+        val index = statesesMap.get(stateStr)
+        val stateModel = index?.let { it1 -> statesList.get(it1) }
+        Log.d("index", "i: $index , map: $statesesMap")
+        if (stateModel?.id.toString().isNotEmpty()) {
+            progressBar.visibility = View.VISIBLE
+            viewModel.getCities(stateModel?.id.toString())
+            Log.d("index", "i: $index , map: ${stateModel?.id}")
+        } else {
+            Log.d("index", "empty id")
         }
     }
 
@@ -631,7 +640,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
     }
 
     private fun setViews() {
-        viewModel.getStates()
+
         viewModel.getVerificationData()
 
         val frontUri = Uri.Builder()
@@ -940,7 +949,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
             citiesArray.add(city.name)
             citiesMap.put(city.name, index)
         }
-
+        Log.d("map", "$citiesMap")
         viewBinding.progressBar.visibility = View.GONE
         citiesAdapter?.notifyDataSetChanged()
 
@@ -952,14 +961,15 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
         //citiesArray.add("Choose City...")
         statesList = content
         statesesMap.clear()
-        statesList.forEachIndexed { index, city ->
+        statesList.forEachIndexed { index, state ->
 
-            statesArray.add(city.name)
-            statesesMap.put(city.name, index)
+            statesArray.add(state.name)
+            statesesMap.put(state.name, index)
+
         }
-
-
+        Log.d("map", "$statesesMap")
         arrayAdapter?.notifyDataSetChanged()
+        getCitiesWhenStateNotEmpty(viewBinding.stateSpinner.text.toString().trim())
     }
 
 }
