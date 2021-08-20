@@ -26,6 +26,7 @@ import com.gigforce.client_activation.R
 import com.gigforce.client_activation.client_activation.adapters.VerificationViewPagerAdapter
 import com.gigforce.client_activation.databinding.AadharApplicationDetailsFragmentBinding
 import com.gigforce.client_activation.ui.ClientActivationClickOrSelectImageBottomSheet
+import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.getCircularProgressDrawable
 import com.gigforce.common_ui.ext.showToast
@@ -94,6 +95,8 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
     lateinit var adapter: VerificationViewPagerAdapter
     var pageClickListener: View.OnClickListener? = null
     private var currentlyClickingImageOfSide: AadharCardSides? = null
+    private lateinit var mJobProfileId: String
+    private var FROM_CLIENT_ACTIVATON: Boolean = false
 
     fun setPrimaryClick(pageClickListener: View.OnClickListener) {
         this.pageClickListener = pageClickListener
@@ -122,7 +125,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //getDataFromIntents(savedInstanceState)
+        getDataFromIntents(savedInstanceState)
         //initviews()
         changeStatusBarColor()
         setViews()
@@ -132,8 +135,33 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
 
     }
 
-    private fun observer() = viewBinding.apply{
+    var allNavigationList = java.util.ArrayList<String>()
+    var intentBundle : Bundle? = null
 
+    private fun getDataFromIntents(savedInstanceState: Bundle?) {
+        savedInstanceState?.let {
+
+            mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
+            FROM_CLIENT_ACTIVATON =
+                it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
+            it.getStringArrayList(StringConstants.NAVIGATION_STRING_ARRAY.value)?.let { arr ->
+                allNavigationList = arr
+            }
+            intentBundle = it
+        }
+
+        arguments?.let {
+            mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
+            FROM_CLIENT_ACTIVATON =
+                it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
+            it.getStringArrayList(StringConstants.NAVIGATION_STRING_ARRAY.value)?.let { arr ->
+                allNavigationList = arr
+            }
+            intentBundle = it
+        }
+    }
+
+    private fun observer() = viewBinding.apply{
 
         viewModel.statesResult.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             if (it.isNotEmpty()){
@@ -177,6 +205,34 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
             }
 
         })
+
+//        viewModel.observableAddApplicationSuccess.observe(viewLifecycleOwner, Obser
+//        )
+    }
+
+
+    private fun checkForNextDoc() {
+        if (allNavigationList.size == 0) {
+            activity?.onBackPressed()
+        } else {
+            var navigationsForBundle = emptyList<String>()
+            if (allNavigationList.size > 1) {
+                navigationsForBundle =
+                    allNavigationList.slice(IntRange(1, allNavigationList.size - 1))
+                        .filter { it.length > 0 }
+            }
+            navigation.popBackStack()
+            intentBundle?.putStringArrayList(StringConstants.NAVIGATION_STRING_ARRAY.value,
+                java.util.ArrayList(navigationsForBundle)
+            )
+            navigation.navigateTo(
+                allNavigationList.get(0),intentBundle)
+//            navigation.navigateTo(
+//                allNavigationList.get(0),
+//                bundleOf(StringConstants.NAVIGATION_STRING_ARRAY.value to navigationsForBundle,if(FROM_CLIENT_ACTIVATON) StringConstants.FROM_CLIENT_ACTIVATON.value to true else StringConstants.FROM_CLIENT_ACTIVATON.value to false)
+//            )
+
+        }
     }
 
     private fun processKycData(kycData: VerificationBaseModel) = viewBinding.apply{

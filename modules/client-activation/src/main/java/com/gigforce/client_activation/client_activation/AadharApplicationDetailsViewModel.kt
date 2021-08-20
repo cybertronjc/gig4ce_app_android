@@ -39,6 +39,8 @@ class AadharApplicationDetailsViewModel @Inject constructor(
 
     val addressResult: MutableLiveData<AddressModel> = MutableLiveData<AddressModel>()
 
+    private val _observableAddApplicationSuccess: MutableLiveData<Boolean> = MutableLiveData()
+    val observableAddApplicationSuccess: MutableLiveData<Boolean> = _observableAddApplicationSuccess
 
      fun getStates() = viewModelScope.launch {
         try {
@@ -83,6 +85,10 @@ class AadharApplicationDetailsViewModel @Inject constructor(
         try {
             val updated = aadharDetailsRepo.setAadhaarDetails(uid, data)
             updatedResult.postValue(updated)
+
+            _observableAddApplicationSuccess.value =
+                true
+
         } catch (e: Exception) {
             e.printStackTrace()
         }
