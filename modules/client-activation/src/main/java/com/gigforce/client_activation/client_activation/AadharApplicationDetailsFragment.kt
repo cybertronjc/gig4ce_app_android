@@ -10,6 +10,8 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.util.Size
 import android.view.*
@@ -300,8 +302,8 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
                     val stateModel = index?.let { it1 -> statesList.get(it1) }
                     Log.d("index", "i: $index , map: $stateModel")
                     if (stateModel?.id.toString().isNotEmpty()) {
-                        viewModel.getCities(stateModel?.id.toString())
                         progressBar.visibility = View.VISIBLE
+                        viewModel.getCities(stateModel?.id.toString())
                         Log.d("index", "i: $index , map: ${stateModel?.id}")
                     }
                 }
@@ -405,118 +407,175 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
                 stateSpinner.showDropDown()
             }
         }
+
+        aadharNo.editText?.addTextChangedListener(ValidationTextWatcher())
+        fatherNameTil.editText?.addTextChangedListener(ValidationTextWatcher())
+        dateOfBirth.addTextChangedListener(ValidationTextWatcher())
+        stateSpinner.addTextChangedListener(ValidationTextWatcher())
+        citySpinner.addTextChangedListener(ValidationTextWatcher())
+        addLine1.editText?.addTextChangedListener(ValidationTextWatcher())
+        addLine2.editText?.addTextChangedListener(ValidationTextWatcher())
+        pincode.editText?.addTextChangedListener(ValidationTextWatcher())
+        landmark.editText?.addTextChangedListener(ValidationTextWatcher())
+
+
         submitButton.setOnClickListener {
+            if (submitButton.text.toString() == "Submit") {
+                if (aadharFrontImagePath == null || aadharFrontImagePath?.isEmpty() == true) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert))
+                        .setMessage("Upload aadhaar card front photo")
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .show()
+                    return@setOnClickListener
+                }
 
-            if (aadharFrontImagePath == null || aadharFrontImagePath?.isEmpty() == true) {
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(getString(R.string.alert))
-                    .setMessage("Upload aadhaar card front photo")
-                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                    .show()
-                return@setOnClickListener
+                if (aadharBackImagePath == null || aadharBackImagePath?.isEmpty() == true) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert))
+                        .setMessage("Upload aadhaar card back photo")
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .show()
+                    return@setOnClickListener
+                }
+
+                if (aadharNo.editText?.text.toString()
+                        .isBlank() || aadharNo.editText?.text.toString().length != 12
+                ) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert))
+                        .setMessage("Enter valid aadhaar number")
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .show()
+                    return@setOnClickListener
+                }
+
+                if (dateOfBirth.text.toString().isBlank()) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert))
+                        .setMessage("Select date of birth")
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .show()
+                    return@setOnClickListener
+                }
+
+                if (fatherNameTil.editText?.text.toString().isBlank()) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert))
+                        .setMessage("Enter father name")
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .show()
+                    return@setOnClickListener
+                }
+
+
+
+                if (addLine1Input.text.toString().isBlank()) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert))
+                        .setMessage("Enter Address Line 1")
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .show()
+                    return@setOnClickListener
+                }
+
+                if (addLine2Input.text.toString().isBlank()) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert))
+                        .setMessage("Enter Address Line 2")
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .show()
+                    return@setOnClickListener
+                }
+
+                if (stateSpinner.text.toString()
+                        .isEmpty() || !statesArray.contains(stateSpinner.text.toString())
+                ) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert))
+                        .setMessage(getString(R.string.select_aadhar_state))
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .show()
+                    return@setOnClickListener
+                }
+
+                if (citySpinner.text.toString()
+                        .isEmpty() || !citiesArray.contains(citySpinner.text.toString())
+                ) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert))
+                        .setMessage("Select City")
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .show()
+                    return@setOnClickListener
+                }
+
+                if (pincodeInput.text.toString()
+                        .isBlank() || pincodeInput.text.toString().length != 6
+                ) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert))
+                        .setMessage("Enter valid pincode")
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .show()
+                    return@setOnClickListener
+                }
+
+                if (landmarkInput.text.toString().isBlank()) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert))
+                        .setMessage("Enter Landmark")
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .show()
+                    return@setOnClickListener
+                }
+
+                submitData()
+
+            }else {
+                checkForNextDoc()
             }
+        }
+    }
 
-            if (aadharBackImagePath == null || aadharBackImagePath?.isEmpty() == true) {
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(getString(R.string.alert))
-                    .setMessage("Upload aadhaar card back photo")
-                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                    .show()
-                return@setOnClickListener
-            }
+    var anyDataEntered = false
 
-            if (aadharNo.editText?.text.toString()
-                    .isBlank() || aadharNo.editText?.text.toString().length != 12
-            ) {
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(getString(R.string.alert))
-                    .setMessage("Enter valid aadhaar number")
-                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                    .show()
-                return@setOnClickListener
-            }
-
-            if (fatherNameTil.editText?.text.toString().isBlank()) {
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(getString(R.string.alert))
-                    .setMessage("Enter father name")
-                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                    .show()
-                return@setOnClickListener
-            }
-
-            if (dateOfBirth.text.toString().isBlank()) {
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(getString(R.string.alert))
-                    .setMessage("Select date of birth")
-                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                    .show()
-                return@setOnClickListener
-            }
-
-            if (addLine1Input.text.toString().isBlank()) {
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(getString(R.string.alert))
-                    .setMessage("Enter Address Line 1")
-                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                    .show()
-                return@setOnClickListener
-            }
-
-            if (addLine2Input.text.toString().isBlank()) {
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(getString(R.string.alert))
-                    .setMessage("Enter Address Line 2")
-                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                    .show()
-                return@setOnClickListener
-            }
-
-            if (stateSpinner.text.toString()
-                    .isEmpty() || !statesArray.contains(stateSpinner.text.toString())
-            ) {
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(getString(R.string.alert))
-                    .setMessage(getString(R.string.select_aadhar_state))
-                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                    .show()
-                return@setOnClickListener
-            }
-
-            if (citySpinner.text.toString()
-                    .isEmpty() || !citiesArray.contains(citySpinner.text.toString())
-            ) {
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(getString(R.string.alert))
-                    .setMessage("Select City")
-                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                    .show()
-                return@setOnClickListener
-            }
-
-            if (pincodeInput.text.toString()
-                    .isBlank() || pincodeInput.text.toString().length != 6
-            ) {
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(getString(R.string.alert))
-                    .setMessage("Enter valid pincode")
-                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                    .show()
-                return@setOnClickListener
-            }
-
-            if (landmarkInput.text.toString().isBlank()) {
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(getString(R.string.alert))
-                    .setMessage("Enter Landmark")
-                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                    .show()
-                return@setOnClickListener
-            }
-
-            submitData()
+    inner class ValidationTextWatcher : TextWatcher {
+        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
         }
+
+        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+        }
+
+        override fun afterTextChanged(text: Editable?) {
+            context?.let { cxt ->
+                    text?.let {
+
+                        if (viewBinding.aadharNo.editText?.text.toString()
+                                .isNullOrBlank() && viewBinding.dateOfBirth.text.toString()
+                                .isNullOrBlank() && viewBinding.fatherNameTil.editText?.text.toString()
+                                .isNullOrBlank() && viewBinding.addLine1.editText?.text.toString()
+                                .isNullOrBlank() && viewBinding.addLine2.editText?.text.toString()
+                                .isNullOrBlank() && viewBinding.stateSpinner.text.toString()
+                                .isNullOrBlank() && viewBinding.citySpinner.text.toString()
+                                .isNullOrBlank() && viewBinding.pincode.editText?.text.toString()
+                                .isNullOrBlank() && viewBinding.landmark.editText?.text.toString()
+                                .isNullOrBlank()
+                        ) {
+                            viewBinding.submitButton.text = "Skip"
+                            anyDataEntered = false
+                        } else {
+                            viewBinding.submitButton.text = "Submit"
+                            anyDataEntered = true
+                        }
+
+                    }
+                }
+            }
+
+
     }
 
     private fun submitData() = viewBinding.apply {
@@ -882,7 +941,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
             citiesMap.put(city.name, index)
         }
 
-
+        viewBinding.progressBar.visibility = View.GONE
         citiesAdapter?.notifyDataSetChanged()
 
     }
@@ -899,7 +958,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
             statesesMap.put(city.name, index)
         }
 
-        progressBar.visibility = View.GONE
+
         arrayAdapter?.notifyDataSetChanged()
     }
 
