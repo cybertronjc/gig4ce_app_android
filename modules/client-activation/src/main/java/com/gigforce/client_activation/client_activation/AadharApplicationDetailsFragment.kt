@@ -510,7 +510,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
             landmark = landmark.editText?.text.toString()
         )
 
-        viewModel.setAadhaarDetails(submitDataModel)
+        viewModel.setAadhaarDetails(submitDataModel,mJobProfileId)
     }
 
     private fun populateAddress(address: AddressModel) = viewBinding.apply{
