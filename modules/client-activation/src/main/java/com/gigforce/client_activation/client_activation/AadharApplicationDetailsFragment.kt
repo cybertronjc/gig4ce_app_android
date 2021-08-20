@@ -299,8 +299,6 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
                 if (it.isNotEmpty()) {
                     stateSpinner.setText(it, false)
                     viewModel.getStates()
-                } else {
-                    viewModel.getStates()
                 }
             }
             it.city.let {
@@ -640,7 +638,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
     }
 
     private fun setViews() {
-
+        viewModel.getStates()
         viewModel.getVerificationData()
 
         val frontUri = Uri.Builder()
