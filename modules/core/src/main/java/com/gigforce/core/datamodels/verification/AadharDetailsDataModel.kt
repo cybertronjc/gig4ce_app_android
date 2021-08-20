@@ -11,6 +11,6 @@ data class AadhaarDetailsDataModel (
     var state: String = "",
     var city: String = "",
     var pincode: String = "",
-    var landmark :String = "",
+    var landmark :String = ""
 ) {
 }

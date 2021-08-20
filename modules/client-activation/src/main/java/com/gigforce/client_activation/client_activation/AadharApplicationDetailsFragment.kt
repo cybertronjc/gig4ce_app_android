@@ -512,7 +512,6 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride, Cli
             pincode = pincode.editText?.text.toString(),
             landmark = landmark.editText?.text.toString()
         )
-
         viewModel.setAadhaarDetails(submitDataModel,mJobProfileId)
     }
 
