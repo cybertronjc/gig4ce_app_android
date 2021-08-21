@@ -1,6 +1,9 @@
 package com.gigforce.common_ui.utils
 
 import android.app.Activity
+import android.app.AlertDialog
+import android.app.DownloadManager
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
@@ -21,11 +24,14 @@ import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import kotlinx.android.synthetic.main.acitivity_doc_viewer.*
 import java.net.URLEncoder
+import android.os.Environment.DIRECTORY_DOWNLOADS
+import androidx.core.content.ContentProviderCompat.requireContext
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class DocViewerActivity : AppCompatActivity() {
     private var pdfView: WebView? = null
     private var progress: ProgressBar? = null
-    var pageTitle: String? = null
+    //var pageTitle: String? = null
     private var win: Window? = null
     private val removePdfTopIcon =
         "javascript:(function() {" + "document.querySelector('[role=\"toolbar\"]').remove();})()"
@@ -36,34 +42,59 @@ class DocViewerActivity : AppCompatActivity() {
         pdfView = findViewById(R.id.webview)
         progress = findViewById(R.id.pb_doc)
         val stringExtra = intent.getStringExtra(StringConstants.DOC_URL.value)
-        pageTitle = intent.getStringExtra(StringConstants.WEB_TITLE.value)
+        val purposeExtra = intent.getStringExtra(StringConstants.DOC_PURPOSE.value) ?: ""
+        //pageTitle = intent.getStringExtra(StringConstants.WEB_TITLE.value)
         showPdfFile(stringExtra, stringExtra.contains(".jpg") || stringExtra.contains(".png"), stringExtra.contains(".pdf"));
-        makeToolbarVisible(stringExtra.contains(".jpg") || stringExtra.contains(".png") || stringExtra.contains(".pdf"))
-        setListeners()
+        makeToolbarVisible(stringExtra.contains(".jpg") || stringExtra.contains(".png") || stringExtra.contains(".pdf"), purposeExtra)
+        setListeners(stringExtra)
     }
 
-    private fun makeToolbarVisible(isImageOrPdf: Boolean) {
-       if (isImageOrPdf){
-           toolbar_doc.gone()
-           acceptLayout.gone()
-       } else {
-           changeStatusBarColor()
-           toolbar_doc.visible()
-           acceptLayout.visible()
-       }
+    private fun makeToolbarVisible(isImageOrPdf: Boolean, purpose: String) {
+//       if (isImageOrPdf && !purpose.equals("OFFER_LETTER")){
+//           toolbar_doc.gone()
+//           acceptLayout.gone()
+//       } else {
+//           changeStatusBarColor()
+//           acceptLayout.visible()
+           if (purpose == "OFFER_LETTER" && isImageOrPdf){
+               toolbarTitle.text = "Offer Letter"
+               toolbar_doc.visible()
+               changeStatusBarColor()
+               toolbarDownload.visible()
+               acceptLayout.gone()
+           }else if (purpose == "TERMS" && !isImageOrPdf) {
+               toolbarTitle.text = "Terms and Conditions"
+               toolbar_doc.visible()
+               changeStatusBarColor()
+               toolbarDownload.gone()
+               acceptLayout.visible()
+           } else {
+               toolbar_doc.gone()
+               toolbarDownload.gone()
+               acceptLayout.gone()
+           }
+      // }
 
     }
 
-    private fun setListeners() {
+    private fun setListeners(url: String) {
 
         toolbarBack.setOnClickListener {
             onBackPressed()
         }
-        toolbarTitle.text = pageTitle
+        //toolbarTitle.text = pageTitle
         accept.setOnClickListener {
             val intent = Intent()
             setResult(Activity.RESULT_OK, intent)
             finish()
+        }
+
+        toolbarDownload.setOnClickListener {
+            if (url.isNotEmpty()){
+                showDownloadStartedDialog()
+                downloadFile(this, url.substring(url.lastIndexOf('/') + 1), ".pdf", DIRECTORY_DOWNLOADS, url)
+            }
+
         }
     }
     private fun changeStatusBarColor() {
@@ -130,5 +161,32 @@ class DocViewerActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
+    private fun downloadFile(
+        context: Context,
+        fileName: String,
+        fileExtension: String,
+        destination: String,
+        url: String
+    ) {
+        val downloadManager: DownloadManager =
+            context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+        val uri = Uri.parse(url)
+        val request: DownloadManager.Request = DownloadManager.Request(uri)
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+        request.setDestinationInExternalFilesDir(context, destination, fileName + fileExtension)
+        request.setTitle(fileName)
+        request.setMimeType("application/pdf")
+        downloadManager.enqueue(request)
+    }
+
+    private fun showDownloadStartedDialog(){
+        AlertDialog.Builder(this)
+            .setTitle("Alert")
+            .setMessage("Downloading started, check notification")
+            .setPositiveButton("Okay") {dialog, which ->
+                dialog.dismiss()
+            }
+            .show()
+    }
 
 }
