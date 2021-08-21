@@ -1,6 +1,7 @@
 package com.gigforce.core.datamodels.verification
 
 import androidx.annotation.Keep
+
 @Keep
 data class VerificationBaseModel(
         var pan_card: PanCardDataModel? = null,
@@ -9,5 +10,6 @@ data class VerificationBaseModel(
         var driving_license: DrivingLicenseDataModel? = null,
         var selfie_video: SelfieVideoDataModel? = null,
         var sync_status: Boolean = false,
-        var contract: Contract? = null
+        var contract: Contract? = null,
+        var aadhaar_card_questionnaire: AadhaarDetailsDataModel? = null
 )

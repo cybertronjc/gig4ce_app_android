@@ -61,6 +61,7 @@ class ClientActiExploreListViewModel constructor(
 
 
 //                val toObjects = items.toObjects(JobProfile::class.java)
+                toObjects.sortBy{it.priority}
                 for (i in 0 until toObjects.size){
                     val obj = toObjects[i]
                     var jobProfileId = items.documents[i].id

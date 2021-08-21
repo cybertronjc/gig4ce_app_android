@@ -247,8 +247,6 @@ class ProfileFragment : BaseFragment() {
         gigerVerificationViewModel.startListeningForGigerVerificationStatusChanges()
 
 
-
-
         location_card.setOnClickListener {
             showToast("This is work in progress. Please check again in a few days")
         }
