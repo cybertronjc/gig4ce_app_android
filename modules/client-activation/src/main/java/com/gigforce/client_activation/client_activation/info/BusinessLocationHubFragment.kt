@@ -233,8 +233,8 @@ class BusinessLocationHubFragment : Fragment(), IOnBackPressedOverride {
 
                 progressBar.visible()
                 viewModel.saveHubLocationData(
-                    state.text.toString(),
-                    hub.text.toString(),
+                    state = state.text.toString(),
+                    hub = hub.text.toString(),
                     type = "jp_hub_location",
                     mJobProfileId = mJobProfileId
                 )
