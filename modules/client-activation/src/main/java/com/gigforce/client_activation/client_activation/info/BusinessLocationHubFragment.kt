@@ -115,6 +115,7 @@ class BusinessLocationHubFragment : Fragment(), IOnBackPressedOverride {
         viewModel._hub.observe(viewLifecycleOwner, Observer {
             hubList.clear()
             hubList.addAll(it)
+            hub.setText("",false)
             hubAdapter?.notifyDataSetChanged()
 
             serverHubData?.let {

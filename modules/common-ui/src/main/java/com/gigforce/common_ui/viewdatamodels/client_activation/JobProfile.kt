@@ -21,7 +21,8 @@ data class JobProfile(
     var totalSteps: Int = 0,
     var cardImage: String = "",
     var cardTitle:String = "",
-    var subTitle: String = ""
+    var subTitle: String = "",
+    var priority : Long?  = 10000
 //        var tags: List<String> = listOf()
 ) : Parcelable {
     constructor(parcel: Parcel) : this(

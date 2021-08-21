@@ -330,7 +330,10 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
                         )
                     )
                 }
+                if(cityList.size>0)
                 adapterPreferredLocation?.setData(cityList)
+                else
+                    rl_pref_loc.gone()
             }
             tv_earning_client_activation.text = Html.fromHtml(it.payoutNote)
             ll_role_desc.removeAllViews()
@@ -476,15 +479,18 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
 
 
     private fun initializeLearningModule(lessons: List<Media>) {
-        viewModel.observableCoursesLce.observe(viewLifecycleOwner, Observer {
-            when (it) {
-                Lce.Loading -> showLearningAsLoading()
-                is Lce.Content -> showUserLearningCourses(it.content)
-                is Lce.Error -> showErrorWhileLoadingCourse(it.error)
-            }
-        })
-        viewModel.getCoursesList(lessons)
-
+        if(lessons.size>0) {
+            viewModel.observableCoursesLce.observe(viewLifecycleOwner, Observer {
+                when (it) {
+                    Lce.Loading -> showLearningAsLoading()
+                    is Lce.Content -> showUserLearningCourses(it.content)
+                    is Lce.Error -> showErrorWhileLoadingCourse(it.error)
+                }
+            })
+            viewModel.getCoursesList(lessons)
+        }else {
+            learning_cl.gone()
+        }
 
     }
 
