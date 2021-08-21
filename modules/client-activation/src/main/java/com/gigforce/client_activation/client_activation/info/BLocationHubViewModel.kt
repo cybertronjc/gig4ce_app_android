@@ -9,6 +9,7 @@ import com.gigforce.core.datamodels.client_activation.JpApplication
 import com.gigforce.core.extensions.getOrThrow
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.launch
 
 class BLocationHubViewModel : ViewModel() {
@@ -105,6 +106,7 @@ class BLocationHubViewModel : ViewModel() {
     }
 
     fun saveHubLocationData(state : String, hub:String, type : String, mJobProfileId: String) {
+        var listener: ListenerRegistration? = null
         FirebaseFirestore.getInstance().collection("JP_Applications")
             .whereEqualTo("jpid", mJobProfileId)
             .whereEqualTo(
@@ -112,10 +114,11 @@ class BLocationHubViewModel : ViewModel() {
                 FirebaseAuthStateListener.getInstance().getCurrentSignInUserInfoOrThrow().uid
             ).addSnapshotListener { jp_application, _ ->
 
-                FirebaseFirestore.getInstance().collection("JP_Applications")
+                listener = FirebaseFirestore.getInstance().collection("JP_Applications")
                     .document(jp_application?.documents!![0].id).collection("Submissions")
                     .whereEqualTo("type", "hub_location")
                     .addSnapshotListener { questionnaire, err_ ->
+                        listener?.remove()
                         if (questionnaire?.documents.isNullOrEmpty()) {
                             FirebaseFirestore.getInstance().collection("JP_Applications")
                                 .document(jp_application.documents[0].id).collection("Submissions").document().set(
