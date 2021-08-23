@@ -165,7 +165,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
             if (it.isNotEmpty()) {
                 Log.d("States", it.toList().toString())
                 //getting states
-                val list = it as ArrayList<State>
+                var list = it as ArrayList<State>
                 processStates(list)
 
             }
@@ -944,7 +944,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
         citiesArray.clear()
         citiesList.toMutableList().clear()
         //citiesArray.add("Choose City...")
-        citiesList = content
+        citiesList = ArrayList(content.sortedBy { it.name })
         citiesMap.clear()
         citiesList.forEachIndexed { index, city ->
 
@@ -961,7 +961,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
         statesArray.clear()
         statesList.toMutableList().clear()
         //citiesArray.add("Choose City...")
-        statesList = content
+        statesList = ArrayList(content.sortedBy { it.name })
         statesesMap.clear()
         statesList.forEachIndexed { index, state ->
 
