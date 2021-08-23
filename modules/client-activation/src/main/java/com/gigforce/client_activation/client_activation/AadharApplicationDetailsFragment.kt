@@ -178,7 +178,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
             if (it.isNotEmpty()) {
                 Log.d("States", it.toList().toString())
                 //getting states
-                var list = it as ArrayList<State>
+                val list = it as ArrayList<State>
                 processStates(list)
             }
         })
