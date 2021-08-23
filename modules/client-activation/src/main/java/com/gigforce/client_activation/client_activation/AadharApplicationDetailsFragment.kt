@@ -997,6 +997,12 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
     }
 
     private fun startCropImage(imageUri: Uri): Unit {
+        val timeStamp = SimpleDateFormat(
+            "yyyyMMdd_HHmmss",
+            Locale.getDefault()
+        ).format(Date())
+        val imageFileName = PREFIX + "_" + timeStamp + "_"
+        fileName = imageFileName + EXTENSION
         val photoCropIntent = Intent(context, ImageCropActivity::class.java)
         photoCropIntent.putExtra("outgoingUri", imageUri.toString())
         startActivityForResult(photoCropIntent, ImageCropActivity.CROP_RESULT_CODE)
