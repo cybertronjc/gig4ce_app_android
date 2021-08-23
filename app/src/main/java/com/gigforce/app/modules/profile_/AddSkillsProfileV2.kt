@@ -50,10 +50,10 @@ class AddSkillsProfileV2 : BaseFragment() {
             tv_save_add_skills.isVisible = isChecked
         }
         listOf(
-                "Singing",
-                "Coding",
-                "Story Telling",
-                "Driving"
+                getString(R.string.singing),
+                getString(R.string.coding),
+                getString(R.string.story_telling),
+                getString(R.string.driving)
         ).forEach { element ->
             val chip = Chip(requireContext())
             val drawable = ChipDrawable.createFromAttributes(

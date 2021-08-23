@@ -109,7 +109,7 @@ class CaptureLocationActivity : AppCompatActivity(), OnMapReadyCallback,
             if (allPermsGranted) {
                //Okay
             } else
-                Toast.makeText(this, "Please Grant Location Permission", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.please_grant_location_permission), Toast.LENGTH_SHORT).show()
         }
     }
 

@@ -309,13 +309,13 @@ class UserAadhaarCardFragment : Fragment(), UserDetailsFilledDialogFragmentResul
         viewBinding.belowLayout.gone()
         viewBinding.toplayoutblock.uploadStatusLayout(
             AppConstants.UPLOAD_SUCCESS,
-            "Verification Completed",
-            "The Aadhar card details have been verified successfully."
+            getString(R.string.verification_completed),
+            getString(R.string.aadhar_details_verified)
         )
         viewBinding.submitButton.visible()
         viewBinding.submitButton.text = "Next"
         viewBinding.progressBar.gone()
-        viewBinding.toplayoutblock.setVerificationSuccessfulView("Aadhaar card verified")
+        viewBinding.toplayoutblock.setVerificationSuccessfulView(getString(R.string.aadhar_card_verified))
 
 
     }

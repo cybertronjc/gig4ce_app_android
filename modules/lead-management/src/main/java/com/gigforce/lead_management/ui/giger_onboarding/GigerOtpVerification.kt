@@ -88,7 +88,7 @@ class GigerOtpVerification : BaseFragment2<FragmentGigerOtpVerificationBinding>(
     }
 
     private fun initListeners() {
-        viewBinding.weWillSendOtpLabel.text = "Code is sent to +91 - $mobileNo"
+        viewBinding.weWillSendOtpLabel.text = getString(R.string.code_is_sent_to) + mobileNo
 
         viewBinding.submitButton.setOnClickListener {
             validateDataAndSubmit()
@@ -134,7 +134,7 @@ class GigerOtpVerification : BaseFragment2<FragmentGigerOtpVerificationBinding>(
                         viewBinding.confirmingOtpPb.visible()
                     }
                     is Lce.Content -> {
-                        showToast("OTP Confirmed")
+                        showToast(getString(R.string.otp_confirmed))
 
                         navigation.navigateTo(
                             "userinfo/addUserDetailsFragment", bundleOf(
@@ -158,7 +158,7 @@ class GigerOtpVerification : BaseFragment2<FragmentGigerOtpVerificationBinding>(
 
     private fun validateDataAndSubmit() {
         if (viewBinding.txtOtp.text?.length != 6) {
-            showAlertDialog("", "Enter a valid OTP")
+            showAlertDialog("", getString(R.string.enter_valid_otp))
             return
         }
 
@@ -174,7 +174,7 @@ class GigerOtpVerification : BaseFragment2<FragmentGigerOtpVerificationBinding>(
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(title)
             .setMessage(message)
-            .setPositiveButton("Okay") { _, _ -> }
+            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
             .show()
     }
 

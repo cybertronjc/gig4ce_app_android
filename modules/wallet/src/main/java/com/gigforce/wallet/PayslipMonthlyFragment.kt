@@ -104,9 +104,9 @@ class PayslipMonthlyFragment : Fragment() {
                         UtilMethods.hideLoading()
 
                         MaterialAlertDialogBuilder(requireContext())
-                            .setTitle("Alert")
+                            .setTitle(getString(R.string.alert))
                             .setMessage(it.error)
-                            .setPositiveButton("Okay") { _, _ -> }
+                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                             .show()
                     }
                 }
@@ -169,11 +169,11 @@ class PayslipMonthlyFragment : Fragment() {
                 try {
                     startActivity(this)
                 } catch (e: Exception) {
-                    showErrorDialog("Unable to open")
+                    showErrorDialog(getString(R.string.unable_to_open))
                 }
             }
         } else {
-            showErrorDialog("file_doesnt_exist")
+            showErrorDialog(getString(R.string.file_doesnt_exist))
         }
     }
 

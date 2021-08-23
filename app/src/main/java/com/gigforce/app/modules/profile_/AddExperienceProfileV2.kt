@@ -109,10 +109,10 @@ class AddExperienceProfileV2 : BaseFragment() {
 
     private fun intLangChipGroup() {
         val listOf = listOf(
-                "Other",
-                "Warehouse Helper",
-                "Delivery Executive",
-                "Driver"
+                getString(R.string.other),
+                getString(R.string.warehouse_helper),
+                getString(R.string.delivery_executive),
+                getString(R.string.driver)
         )
         listOf.forEach { element ->
             val chip = Chip(requireContext())

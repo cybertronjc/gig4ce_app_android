@@ -230,7 +230,7 @@ class ProfileFragment : BaseFragment() {
                 layout.main_expanded_is_verified.verification_status_cardview.strokeColor =
                     ResourcesCompat.getColor(resources, R.color.app_orange, null)
             } else {
-                layout.main_expanded_is_verified.verification_status_tv.text = "Not Verified"
+                layout.main_expanded_is_verified.verification_status_tv.text = getString(R.string.not_verified)
                 layout.main_expanded_is_verified.verification_status_tv.setTextColor(
                     ResourcesCompat.getColor(
                         resources,
@@ -250,7 +250,7 @@ class ProfileFragment : BaseFragment() {
 
 
         location_card.setOnClickListener {
-            showToast("This is work in progress. Please check again in a few days")
+            showToast(getString(R.string.work_in_progress))
         }
         // load user data
         viewModel.ambassadorProfilePicUpdate.observe(viewLifecycleOwner, Observer {

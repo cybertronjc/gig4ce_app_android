@@ -150,9 +150,9 @@ class AmbassadorEnrolledUsersListFragment : Fragment(),
         }
 
         toolbar_layout.apply {
-            showTitle("Gigforce Ambassador")
+            showTitle(context.getString(R.string.gigforce_ambassador))
             hideActionMenu()
-            showSearchOption("Search Users")
+            showSearchOption(context.getString(R.string.search_users))
 
             setOnSearchTextChangeListener(object : GigforceToolbar.SearchTextChangeListener {
 
@@ -198,7 +198,7 @@ class AmbassadorEnrolledUsersListFragment : Fragment(),
                     //hide chip
                     user_details_layout.gone()
                     enrolled_users_rv.visible()
-                    toolbar_layout.showSearchOption("Search User")
+                    toolbar_layout.showSearchOption(getString(R.string.search_user))
                     toolbar_layout.hideSubTitle()
 
                     if (enrolledUserAdapter.itemCount != 0) {
@@ -232,7 +232,7 @@ class AmbassadorEnrolledUsersListFragment : Fragment(),
 
                 user_details_layout.gone()
                 enrolled_users_rv.visible()
-                toolbar_layout.showSearchOption("Search User")
+                toolbar_layout.showSearchOption(getString(R.string.search_user))
                 toolbar_layout.hideSubTitle()
 
                 if (enrolledUserAdapter.itemCount != 0) {
@@ -325,7 +325,7 @@ class AmbassadorEnrolledUsersListFragment : Fragment(),
                         it.count { it.enrollmentStepsCompleted.allStepsCompleted().not() }
 
                     total_complete_profile_tv.text = buildSpannedString {
-                        append("Total Completed Profile : ")
+                        append(getString(R.string.total_completed_profile))
                         bold {
                             color(
                                 ResourcesCompat.getColor(
@@ -341,7 +341,7 @@ class AmbassadorEnrolledUsersListFragment : Fragment(),
 
 
                     total_incomplete_profile_tv.text = buildSpannedString {
-                        append("Total Incomplete Profile : ")
+                        append(getString(R.string.total_incomplete_profile))
                         bold {
                             color(ResourcesCompat.getColor(resources, R.color.text_orange, null)) {
                                 append(totalInCompleteProfiles.toString())
@@ -440,8 +440,8 @@ class AmbassadorEnrolledUsersListFragment : Fragment(),
             .setIosParameters(DynamicLink.IosParameters.Builder("com.gigforce.ios").build())
             .setSocialMetaTagParameters(
                 DynamicLink.SocialMetaTagParameters.Builder()
-                    .setTitle("Gigforce")
-                    .setDescription("Flexible work and learning platform")
+                    .setTitle(getString(R.string.gigforce))
+                    .setDescription(getString(R.string.gigforce_desc))
                     .setImageUrl(Uri.parse("https://firebasestorage.googleapis.com/v0/b/gig4ce-app.appspot.com/o/app_assets%2Fgigforce.jpg?alt=media&token=f7d4463b-47e4-4b8e-9b55-207594656161"))
                     .build()
             ).buildDynamicLink()

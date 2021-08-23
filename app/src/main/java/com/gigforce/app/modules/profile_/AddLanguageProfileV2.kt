@@ -53,7 +53,7 @@ class AddLanguageProfileV2 : BaseFragment() {
                 act_langs_add_lang_profile_v2.setText("")
                 language_chip_group_add_language.children.forEach {
                     if (it.tag == chipToAdd.tag) {
-                        showToast("Language Already Added!!!")
+                        showToast(getString(R.string.language_already_added))
                         return@run
                     }
                 }
@@ -70,14 +70,14 @@ class AddLanguageProfileV2 : BaseFragment() {
             tv_save_add_lang.isVisible = isChecked
         }
         listOf(
-                "English",
-                "Hindi",
-                "Telugu",
-                "Kannada",
-                "Bengali",
-                "Bhojpuri",
-                "Tamil",
-                "Marathi"
+                getString(R.string.english),
+            getString(R.string.hindi),
+                getString(R.string.telugu),
+            getString(R.string.kannada),
+                getString(R.string.bengali),
+                getString(R.string.bhojpuri),
+                getString(R.string.tamil),
+            getString(R.string.marathi)
         ).forEach { element ->
             language_chip_group_add_language.addView(getChipToAdd(element), 0)
         }

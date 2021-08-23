@@ -89,7 +89,7 @@ class ConfirmOtpFragment : Fragment(), LocationUpdates.LocationUpdateCallbacks {
     }
 
     private fun initListeners() {
-        we_will_send_otp_label.text = "We sent it to the number +91 - $mobileNo"
+        we_will_send_otp_label.text = getString(R.string.sent_otp_to_the_number) + mobileNo
 
         submitBtn.setOnClickListener {
             validateDataAndSubmit()
@@ -103,7 +103,7 @@ class ConfirmOtpFragment : Fragment(), LocationUpdates.LocationUpdateCallbacks {
 
     private fun validateDataAndSubmit() {
         if (txt_otp.text?.length != 6) {
-            showAlertDialog("", "Enter a valid OTP")
+            showAlertDialog("", getString(R.string.enter_valid_otp))
             return
         }
 
@@ -147,7 +147,7 @@ class ConfirmOtpFragment : Fragment(), LocationUpdates.LocationUpdateCallbacks {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(title)
             .setMessage(message)
-            .setPositiveButton("Okay") { _, _ -> }
+            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
             .show()
     }
 
@@ -160,7 +160,7 @@ class ConfirmOtpFragment : Fragment(), LocationUpdates.LocationUpdateCallbacks {
                         confirming_otp_pb.visible()
                     }
                     is Lce.Content -> {
-                        showToast("OTP Confirmed, Profile Created")
+                        showToast(getString(R.string.otp_confimed))
 
                         if (mode == EnrollmentConstants.MODE_EDIT) {
                             navigation.navigateTo(

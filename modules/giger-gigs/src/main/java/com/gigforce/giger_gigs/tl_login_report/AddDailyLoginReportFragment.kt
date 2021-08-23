@@ -163,11 +163,11 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
             })
 
             if(mode == LoginSummaryConstants.MODE_ADD)
-                this.setAppBarTitle("Add Login Report")
+                this.setAppBarTitle(context.getString(R.string.add_login_report))
             else if(mode == LoginSummaryConstants.MODE_EDIT)
-                this.setAppBarTitle("Edit Login Report")
+                this.setAppBarTitle(context.getString(R.string.edit_login_report))
             else
-                this.setAppBarTitle("Login Report")
+                this.setAppBarTitle(context.getString(R.string.login_report))
         }
     }
 
@@ -177,7 +177,7 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
         submit.setOnClickListener {
             if (mode == LoginSummaryConstants.MODE_ADD) {
                 if (citySpinner.selectedItem.toString().isEmpty()) {
-                    showToast("Select a city to continue")
+                    showToast(getString(R.string.select_city_to_continue))
                 } else {
                     //submit data
                     submitLoginSummary()
@@ -192,14 +192,14 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
         if (mode == LoginSummaryConstants.MODE_ADD) {
             cityJobProfileControls.visible()
             reportCityOverview.gone()
-            addDetailsLabel.text = "Add details"
+            addDetailsLabel.text = getString(R.string.add_details)
             cityTextView.gone()
             bussinessTextView.gone()
             jobProfileTextView.gone()
 
             viewModel.getCities()
         } else if(mode == LoginSummaryConstants.MODE_EDIT) {
-            addDetailsLabel.text = "Details"
+            addDetailsLabel.text = getString(R.string.details)
             cityJobProfileControls.visible()
             reportCityOverview.gone()
 
@@ -232,7 +232,7 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
             }
         } else {
 
-            addDetailsLabel.text = "Details"
+            addDetailsLabel.text = getString(R.string.details)
             cityJobProfileControls.gone()
             reportCityOverview.visible()
 
@@ -279,9 +279,9 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
         ) {
 
             MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Select job profile")
-                .setMessage("Select job profile please")
-                .setPositiveButton("Okay") { _, _ -> }
+                .setTitle(getString(R.string.select_job_profile))
+                .setMessage(getString(R.string.select_job_please))
+                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                 .show()
             return
         }
@@ -291,9 +291,9 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
         ) {
 
             MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Select business")
-                .setMessage("Select business please")
-                .setPositiveButton("Okay") { _, _ -> }
+                .setTitle(getString(R.string.select_business))
+                .setMessage(getString(R.string.select_business_please))
+                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                 .show()
             return
         }
@@ -310,9 +310,9 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
 
             if(!businessDataItem.atLeastOneFieldFilled()){
                 MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Select at least one field")
-                    .setMessage("Please select at least one field in the form below")
-                    .setPositiveButton("Okay") { _, _ -> }
+                    .setTitle(getString(R.string.select_one_filed))
+                    .setMessage(getString(R.string.please_select_atleast_one_field))
+                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                     .show()
                 return
             }
@@ -322,9 +322,9 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
                 businessDataItem.totalActive  < businessDataItem.loginToday){
 
                 MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Login count greater than active")
-                    .setMessage("Login gigers count cannot be greater than active count")
-                    .setPositiveButton("Okay") { _, _ -> }
+                    .setTitle(getString(R.string.login_count_greater))
+                    .setMessage(getString(R.string.login_could_be_greater))
+                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                     .show()
                 return
             }
@@ -334,9 +334,9 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
                 businessDataItem.totalActive < businessDataItem.absentToday){
 
                 MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Absent count greater than active")
-                    .setMessage("Absent gigers count cannot be greater than active count")
-                    .setPositiveButton("Okay") { _, _ -> }
+                    .setTitle(getString(R.string.absent_greater))
+                    .setMessage(getString(R.string.absent_gigers_could_greater))
+                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                     .show()
                 return
             }
@@ -347,9 +347,9 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
                 businessDataItem.totalActive < (businessDataItem.absentToday + businessDataItem.loginToday)){
 
                 MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Absent + Login count greater than active")
-                    .setMessage("Absent and Login gigers count cannot be greater than active count")
-                    .setPositiveButton("Okay") { _, _ -> }
+                    .setTitle(getString(R.string.absent_login_greater))
+                    .setMessage(getString(R.string.absent_login_could_greater))
+                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                     .show()
                 return
             }
@@ -434,7 +434,7 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
 
                 is BusinessAppViewState.ErrorInLoadingDataFromServer -> {
 
-                    showToast("Error loading businesses")
+                    showToast(getString(R.string.error_loading_businesses))
                 }
             }
         })
@@ -453,9 +453,9 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
 
                     viewBinding.progressBar.visibility = View.GONE
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Unable to submit")
+                        .setTitle(getString(R.string.unable_to_submit))
                         .setMessage(result.error)
-                        .setPositiveButton("Okay"){_,_ -> }
+                        .setPositiveButton(getString(R.string.okay)){_,_ -> }
                         .show()
                 }
                 Lce.Loading -> {

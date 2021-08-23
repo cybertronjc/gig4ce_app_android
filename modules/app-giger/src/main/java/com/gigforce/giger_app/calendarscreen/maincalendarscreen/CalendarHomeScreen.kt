@@ -475,9 +475,9 @@ class CalendarHomeScreen : Fragment(),
                 }
                 is Lce.Error -> {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Alert")
-                        .setMessage("Unable to fetch todays gig list, ${it.error}")
-                        .setPositiveButton("Okay") { _, _ -> }
+                        .setTitle(getString(R.string.alert))
+                        .setMessage(getString(R.string.unable_to_fetch_todays_gig) + it.error)
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                         .show()
                 }
             }
@@ -1133,7 +1133,7 @@ class CalendarHomeScreen : Fragment(),
 
         view.findViewById<TextView>(R.id.dialog_message_tv)
             .text =
-            "You have $gigOnDay Active Gig(s) on this day. All Gigs will be declined for selected day."
+            getString(R.string.you_have) + gigOnDay + getString(R.string.active_gig_on_this_date)
 
         view.findViewById<View>(R.id.yesBtn)
             .setOnClickListener {

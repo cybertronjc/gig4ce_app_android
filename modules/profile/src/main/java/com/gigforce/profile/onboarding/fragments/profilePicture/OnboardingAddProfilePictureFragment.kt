@@ -155,7 +155,7 @@ class OnboardingAddProfilePictureFragment() : Fragment(), ImageCropCallback, Onb
         MaterialAlertDialogBuilder(requireContext())
                 .setTitle(title)
                 .setMessage(message)
-                .setPositiveButton("Okay".capitalize()) { _, _ -> }
+                .setPositiveButton(getString(R.string.okay).capitalize()) { _, _ -> }
                 .show()
     }
 
@@ -221,7 +221,7 @@ class OnboardingAddProfilePictureFragment() : Fragment(), ImageCropCallback, Onb
                             eventTracker.setProfileProperty(ProfilePropArgs("\$avatar",it.content))
                             Toast.makeText(
                                     requireContext(),
-                                    "Profile Pic uploaded",
+                                    getString(R.string.profile_uploaded),
                                     Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -230,7 +230,7 @@ class OnboardingAddProfilePictureFragment() : Fragment(), ImageCropCallback, Onb
                             shimmerFrameLayout.gone()
                             imageView13.visible()
 
-                            showAlertDialog("could not submit info", it.error)
+                            showAlertDialog(getString(R.string.could_not_submit_info), it.error)
                         }
                     }
                 })
@@ -301,7 +301,7 @@ class OnboardingAddProfilePictureFragment() : Fragment(), ImageCropCallback, Onb
                 else {
                     Toast.makeText(
                             requireContext(),
-                            "Please Grant storage permission",
+                            getString(R.string.grant_storage_permission),
                             Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -338,9 +338,9 @@ class OnboardingAddProfilePictureFragment() : Fragment(), ImageCropCallback, Onb
 
     override fun errorWhileCapturingOrPickingImage(e: Exception) {
         MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Alert")
-                .setMessage("Unable to click Photo, ${e.message}")
-                .setPositiveButton("Okay") { _, _ -> }
+                .setTitle(getString(R.string.alert))
+                .setMessage(getString(R.string.unable_to_click_photo) + e.message)
+                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                 .show()
 
         CrashlyticsLogger.e("ProfilePicture", "WhileClickingProfilePicture", e)

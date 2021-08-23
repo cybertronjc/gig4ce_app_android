@@ -29,17 +29,17 @@ class DailyLoginReportItemEdit(
     init {
         viewBinding.apply {
 
-            this.activeRidersLayout.titleTextview.text = "Active riders/gigers"
-            this.loginLayout.titleTextview.text = "Login"
-            this.absentLayout.titleTextview.text = "Absent"
-            this.resignedLayout.titleTextview.text = "Resigned"
-            this.newOnboardingLayout.titleTextview.text = "New onboarding"
-            this.inTrainingLayout.titleTextview.text = "In-training"
-            this.newLoginLayout.titleTextview.text = "New login"
-            this.openPositionsLayout.titleTextview.text = "Open positions"
-            this.tomorrowLineupLayout.titleTextview.text = "Lineup for tomorrow/ Next day"
+            this.activeRidersLayout.titleTextview.text = context.getString(R.string.active_riders)
+            this.loginLayout.titleTextview.text = context.getString(R.string.login)
+            this.absentLayout.titleTextview.text = context.getString(R.string.absent)
+            this.resignedLayout.titleTextview.text = context.getString(R.string.resigned)
+            this.newOnboardingLayout.titleTextview.text = context.getString(R.string.new_onboarding)
+            this.inTrainingLayout.titleTextview.text = context.getString(R.string.in_training)
+            this.newLoginLayout.titleTextview.text = context.getString(R.string.new_login)
+            this.openPositionsLayout.titleTextview.text = context.getString(R.string.open_positions)
+            this.tomorrowLineupLayout.titleTextview.text = context.getString(R.string.lineup_for_tomorrow)
             this.expectedLoginTommorrowLayout.titleTextview.text =
-                "Expected logins tomorrow/ Next day"
+                context.getString(R.string.expencted_logins)
 
             this.activeRidersLayout.enterQuantity.setOnClickListener{
                 showEditTextAndEnterBtn(it)

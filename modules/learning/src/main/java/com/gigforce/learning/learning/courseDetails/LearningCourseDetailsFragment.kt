@@ -435,16 +435,16 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
                 }
 
                 complitionStatusTv.text =
-                        "$lessonsCompleted/$totalLessons Lessons Completed"
+                    lessonsCompleted.toString() + "/" + totalLessons + getString(R.string.lessons_completed)
                 assessmentCountTv.text =
                         if (viewModel.currentAssessments?.size == null || totalAssignments == 0)
-                            "0 Assessments"
+                            getString(R.string.zero_assessments)
                         else if (assignmentsCompleted == 1)
-                            "$assignmentsCompleted/$totalAssignments Assessment Completed"
+                            assignmentsCompleted.toString() + "/" + totalAssignments + getString(R.string.assessment_completed)
                         else
-                            "$assignmentsCompleted/$totalAssignments Assessments Completed"
+                            assignmentsCompleted.toString() + "/" + totalAssignments + getString(R.string.assessments_completed)
 
-                lessonsLabel.text = "Lesson (${viewModel.currentlySelectedModule?.title})"
+                lessonsLabel.text = getString(R.string.lesson) + viewModel.currentlySelectedModule?.title + ")"
             }
         }
     }
@@ -668,7 +668,8 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
                     FeatureItemCardDVM(
                             image = e.coverPicture,
                             title = e.title,
-                            subtitle = "${e.lessonsCompleted} / ${e.totalLessons} Completed"
+                            subtitle = e.lessonsCompleted.toString() + " / " + e.totalLessons + getString(
+                                                            R.string.complted)
                     )
             )
         }

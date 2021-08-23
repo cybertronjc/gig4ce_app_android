@@ -355,8 +355,8 @@ class DrivingLicenseFragment : Fragment(),
                     if (!it.dateOfBirth.isNullOrBlank() || !it.dlNumber.isNullOrBlank() || !it.validTill.isNullOrBlank()) {
                         viewBinding.toplayoutblock.uploadStatusLayout(
                             AppConstants.UPLOAD_SUCCESS,
-                            "Upload Successful",
-                            "Information of Driving License captured successfully."
+                            getString(R.string.upload_succes),
+                            getString(R.string.dl_captured)
                         )
                         if (!it.dateOfBirth.isNullOrBlank()) {
                             if (it.dateOfBirth.contains("/") || it.dateOfBirth.contains("-")) {
@@ -380,15 +380,15 @@ class DrivingLicenseFragment : Fragment(),
                     } else {
                         viewBinding.toplayoutblock.uploadStatusLayout(
                             AppConstants.UNABLE_TO_FETCH_DETAILS,
-                            "Unable to fetch information",
-                            "Enter the Driving License details manually below"
+                            getString(R.string.unable_to_fetch_info),
+                            getString(R.string.dl_manually)
                         )
                     }
                 } else {
                     viewBinding.toplayoutblock.uploadStatusLayout(
                         AppConstants.UNABLE_TO_FETCH_DETAILS,
-                        "Unable to fetch information",
-                        "Enter the Driving License details manually below"
+                        getString(R.string.unable_to_fetch_info),
+                        getString(R.string.dl_manually)
                     )
                     showToast("Ocr status " + it.message)
                 }
@@ -511,7 +511,7 @@ class DrivingLicenseFragment : Fragment(),
         if (hasStoragePermissions())
             VerificationClickOrSelectImageBottomSheet.launch(
                 parentFragmentManager,
-                "Upload Driving License",
+                getString(R.string.upload_dl),
                 this
             )
         else
@@ -624,11 +624,11 @@ class DrivingLicenseFragment : Fragment(),
                 if (allPermsGranted)
                     VerificationClickOrSelectImageBottomSheet.launch(
                         parentFragmentManager,
-                        "Upload Driving License",
+                        getString(R.string.upload_dl),
                         this
                     )
                 else {
-                    showToast("Please grant storage permission")
+                    showToast(getString(R.string.grant_storage))
                 }
             }
         }
@@ -783,14 +783,14 @@ class DrivingLicenseFragment : Fragment(),
         viewBinding.belowLayout.gone()
         viewBinding.toplayoutblock.uploadStatusLayout(
             AppConstants.UPLOAD_SUCCESS,
-            "Verification Completed",
-            "The Driving License details have been verified successfully."
+            getString(R.string.verification_completed),
+            getString(R.string.dl_verified_success)
         )
         viewBinding.submitButton.visible()
         viewBinding.submitButton.text = "Next"
         viewBinding.submitButton.isEnabled = true
         viewBinding.progressBar.gone()
-        viewBinding.toplayoutblock.setVerificationSuccessfulView("Driving License verified")
+        viewBinding.toplayoutblock.setVerificationSuccessfulView(getString(R.string.dl_verified))
 
         var list = ArrayList<KYCImageModel>()
         drivingLicenseDataModel?.frontImage?.let {
@@ -833,8 +833,8 @@ class DrivingLicenseFragment : Fragment(),
                                 verifiedStatusViews(null)
                                 viewBinding.toplayoutblock.uploadStatusLayout(
                                     AppConstants.UNABLE_TO_FETCH_DETAILS,
-                                    "Verification in progress",
-                                    "Document will be verified soon. You can click next to proceed."
+                                    getString(R.string.verification_progress),
+                                    getString(R.string.doc_verified_soon)
                                 )
                                 viewBinding.toplayoutblock.setVerificationSuccessfulView("", "")
                                 viewBinding.belowLayout.visible()
@@ -856,8 +856,8 @@ class DrivingLicenseFragment : Fragment(),
                     resetInitializeViews()
                     viewBinding.toplayoutblock.uploadStatusLayout(
                         AppConstants.DETAILS_MISMATCH,
-                        "Verification Failed",
-                        "The details submitted are incorrect. Please try again."
+                        getString(R.string.verification_failed),
+                        getString(R.string.details_incorrect)
                     )
                     var listData = setAlreadyfilledData(drivingLicenseDataModel, true)
                     if(listData.isEmpty()){
@@ -982,8 +982,8 @@ class DrivingLicenseFragment : Fragment(),
         viewBinding.submitButton.isEnabled = true
         viewBinding.belowLayout.visible()
         viewBinding.toplayoutblock.setVerificationSuccessfulView(
-            "Driving License",
-            "You need to upload"
+            getString(R.string.driving_license),
+            getString(R.string.need_to_upload)
         )
         initializeImages()
         viewBinding.toplayoutblock.resetAllViews()
@@ -1026,8 +1026,8 @@ class DrivingLicenseFragment : Fragment(),
         viewBinding.progressBar.gone()
         viewBinding.belowLayout.gone()
         viewBinding.toplayoutblock.setVerificationSuccessfulView(
-            "Driving License pending for verification",
-            "Verifying"
+            getString(R.string.verification_pending),
+            getString(R.string.verifying)
         )
         var list = ArrayList<KYCImageModel>()
         drivingLicenseDataModel.frontImage?.let {

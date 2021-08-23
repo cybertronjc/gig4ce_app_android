@@ -314,8 +314,8 @@ class ReferralsFragment : Fragment(),
             .setIosParameters(DynamicLink.IosParameters.Builder("com.gigforce.ios").build())
             .setSocialMetaTagParameters(
                 DynamicLink.SocialMetaTagParameters.Builder()
-                    .setTitle("Gigforce")
-                    .setDescription("Flexible work and learning platform")
+                    .setTitle(getString(R.string.gigforce))
+                    .setDescription(getString(R.string.gigforce_desc))
                     .setImageUrl(Uri.parse("https://firebasestorage.googleapis.com/v0/b/gig4ce-app.appspot.com/o/app_assets%2Fgigforce.jpg?alt=media&token=f7d4463b-47e4-4b8e-9b55-207594656161"))
                     .build()
             ).buildDynamicLink()

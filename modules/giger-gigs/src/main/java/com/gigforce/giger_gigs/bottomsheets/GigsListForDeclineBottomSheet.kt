@@ -127,7 +127,7 @@ class GigsListForDeclineBottomSheet : BottomSheetDialogFragment(),
                     this@GigsListForDeclineBottomSheet
                 )
             } else {
-                Toast.makeText(requireContext(), "Please Select Gig", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), getString(R.string.select_gig), Toast.LENGTH_SHORT)
                     .show()
             }
         }
@@ -183,13 +183,13 @@ class GigsListForDeclineBottomSheet : BottomSheetDialogFragment(),
             content.size == 1 -> {
                 gig_error.gone()
                 decline_slider_btn.visible()
-                "Alright, No new Gigs will be assigned to you this day. However, you have already 1 gig assigned"
+                getString(R.string.no_new_gigs_will_e_assigned)
             }
             else -> {
                 gig_error.gone()
                 decline_slider_btn.visible()
 
-                "Alright, No new Gigs will be assigned to you this day. However, you have already ${content.size} gigs assigned"
+                getString(R.string.no_new_gig_assigned) + content.size + getString(R.string.gigs_assigned)
             }
         }
 
@@ -204,7 +204,7 @@ class GigsListForDeclineBottomSheet : BottomSheetDialogFragment(),
     }
 
     override fun gigDeclined() {
-        Toast.makeText(requireContext(), "Gig Declined", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), getString(R.string.gig_declined), Toast.LENGTH_SHORT).show()
     }
 
     private fun disableSubmitButton() {

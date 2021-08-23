@@ -131,7 +131,7 @@ class ReferenceCheckFragment : BaseFragment2<ReferenceCheckFragmentBinding>(
         viewBinding: ReferenceCheckFragmentBinding
     ) = viewBinding.toolbar.apply {
 
-        showTitle("Reference Check")
+        showTitle(context.getString(R.string.reference_check))
         hideActionMenu()
         setBackButtonListener {
             activity?.onBackPressed()
@@ -210,7 +210,7 @@ class ReferenceCheckFragment : BaseFragment2<ReferenceCheckFragmentBinding>(
     }
 
     private fun showReferenceSubmittingState() = viewBinding.apply {
-        showToast("Reference data submitted")
+        showToast(getString(R.string.reference_submitted))
 //        submitButton.showProgress {
 //            this.buttonText = "Submitting..."
 //            this.progressColor = R.color.white
@@ -224,9 +224,9 @@ class ReferenceCheckFragment : BaseFragment2<ReferenceCheckFragmentBinding>(
 //        submitButton.hideProgress("Submit")
 
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Unable to submit")
+            .setTitle(getString(R.string.unable_to_submit))
             .setMessage(error)
-            .setPositiveButton("Okay") { _, _ -> }
+            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
             .show()
     }
 

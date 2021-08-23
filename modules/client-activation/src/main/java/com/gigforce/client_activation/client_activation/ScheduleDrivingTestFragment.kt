@@ -170,7 +170,7 @@ class ScheduleDrivingTestFragment : Fragment(), IOnBackPressedOverride,
                     is Lce.Content -> {
                         UtilMethods.hideLoading()
                         generate_otp.gone()
-                        showToast("OTP sent")
+                        showToast(getString(R.string.otp_sent))
                         note_msg.gone()
                         verify_otp_button_schedule.visible()
                         otp_screen.visible()

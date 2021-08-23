@@ -135,11 +135,11 @@ class AddNewLoginSummaryFragment : Fragment() {
 
         appBarComp.apply {
             if (mode == LoginSummaryConstants.MODE_VIEW) {
-                setAppBarTitle("Login Summary".toString())
+                setAppBarTitle(context.getString(R.string.login_summary))
             } else if (mode == LoginSummaryConstants.MODE_EDIT) {
-                setAppBarTitle("Edit Login Summary".toString())
+                setAppBarTitle(context.getString(R.string.edit_login_summary).toString())
             } else {
-                setAppBarTitle("Add New Login Summary".toString())
+                setAppBarTitle(context.getString(R.string.add_new_login_summary).toString())
             }
             setBackButtonListener(View.OnClickListener {
                 activity?.onBackPressed()
@@ -176,7 +176,7 @@ class AddNewLoginSummaryFragment : Fragment() {
             } else {
                 if (mode == LoginSummaryConstants.MODE_ADD) {
                     if (citySpinner.text.toString().isEmpty()) {
-                        showToast("Select a city to continue")
+                        showToast(getString(R.string.select_a_city_to_continue))
                     } else {
                         //submit data
                         submitLoginSummary()
@@ -292,7 +292,7 @@ class AddNewLoginSummaryFragment : Fragment() {
             .inflate(R.layout.login_data_submitted_dialog_layout, null, false)
 
         viewBinding.root.foreground.alpha = 200
-        dialog?.setView(customView)?.setCancelable(false)?.setPositiveButton("Done"){ dialog, _ ->
+        dialog?.setView(customView)?.setCancelable(false)?.setPositiveButton(getString(R.string.done)){ dialog, _ ->
             dialog.dismiss()
             viewBinding.progressBar.visibility = View.GONE
             navigation.popBackStack()
@@ -348,7 +348,7 @@ class AddNewLoginSummaryFragment : Fragment() {
                 }
 
                 is Lce.Content -> {
-                    showToast("getting cities")
+                    showToast(getString(R.string.getting_cities))
 
                     if (mode == LoginSummaryConstants.MODE_ADD) {
                         citySpinner.isEnabled = true
@@ -398,7 +398,7 @@ class AddNewLoginSummaryFragment : Fragment() {
             val state = it ?: return@Observer
             when (state) {
                 is BusinessAppViewState.LoadingDataFromServer -> {
-                    showToast("Loading businesses")
+                    showToast(getString(R.string.loading_businesses))
                 }
 
                 is BusinessAppViewState.BusinessListLoaded -> {
@@ -408,7 +408,7 @@ class AddNewLoginSummaryFragment : Fragment() {
 
                 is BusinessAppViewState.ErrorInLoadingDataFromServer -> {
 
-                    showToast("Error loading businesses")
+                    showToast(getString(R.string.error_loading_businesses))
                 }
             }
         })
@@ -418,23 +418,23 @@ class AddNewLoginSummaryFragment : Fragment() {
 
             when (result) {
                 "Loading" -> {
-                    showToast("Submitting data")
+                    showToast(getString(R.string.submitting_data))
                     viewBinding.progressBar.visibility = View.VISIBLE
                 }
 
                 "Created" -> {
-                    showToast("Data submitted successfully")
+                    showToast(getString(R.string.data_submitted_successfully))
                     launchSuccessfullDialog()
                 }
 
                 "Already Exists" -> {
                     viewBinding.progressBar.visibility = View.GONE
-                    showToast("Data already exists")
+                    showToast(getString(R.string.data_already_exists))
                 }
 
                 "Error" -> {
                     viewBinding.progressBar.visibility = View.GONE
-                    showToast("Error submitting data")
+                    showToast(getString(R.string.error_submitting_data))
                 }
 
                 else -> {

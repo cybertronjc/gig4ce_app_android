@@ -1012,28 +1012,28 @@ class LandingScreenFragment : Fragment() {
         var datalist: ArrayList<TitleSubtitleModel> = ArrayList<TitleSubtitleModel>()
         datalist.add(
             TitleSubtitleModel(
-                "Delivery",
+                getString(R.string.delivery),
                 "",
                 "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Findustry.jpg?alt=media&token=039ddf50-9597-4ee4-bc12-0abdea74fd16"
             )
         )
         datalist.add(
             TitleSubtitleModel(
-                "Retail",
+                getString(R.string.retail),
                 "",
                 "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Findustry3.jpg?alt=media&token=1813f5dd-5596-4a04-a0e1-3c8400a3d82d"
             )
         )
         datalist.add(
             TitleSubtitleModel(
-                "Quick Service Restuarant",
+                getString(R.string.quick_service),
                 "",
                 "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Findustry1.jpg?alt=media&token=2634019b-9777-4dbb-9103-1d63eb44df97"
             )
         )
         datalist.add(
             TitleSubtitleModel(
-                "Telesales and Support",
+                getString(R.string.telesales),
                 "",
                 "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Findustry2.jpg?alt=media&token=00412b0a-fbbe-4790-9a9b-050fefaf5d02"
             )

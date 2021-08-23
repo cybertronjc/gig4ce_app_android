@@ -119,7 +119,7 @@ class DeclineGigDialogFragment : DialogFragment() {
                     progressBar.visible()
                 }
                 Lse.Success -> {
-                    Toast.makeText(requireContext(), "Gig Declined", Toast.LENGTH_LONG)
+                    Toast.makeText(requireContext(), getString(R.string.gig_declined), Toast.LENGTH_LONG)
                         .show()
                     mDeclineGigDialogFragmentResultListener?.gigDeclined()
                     if (gigId != null) sharedGigViewModel.gigDeclined(gigId!!)
@@ -129,9 +129,9 @@ class DeclineGigDialogFragment : DialogFragment() {
                     progressBar.invisible()
                     declineGigMainLayout.visible()
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Alert")
-                        .setMessage("Unable to decline gig, ${it.error}")
-                        .setPositiveButton("Okay") { _, _ -> }
+                        .setTitle(getString(R.string.alert))
+                        .setMessage(getString(R.string.unable_to_deline_gig) + it.error)
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                         .show()
                 }
             }
@@ -196,9 +196,9 @@ class DeclineGigDialogFragment : DialogFragment() {
             if (checkedRadioButtonId == -1) {
 
                 MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Alert")
-                    .setMessage("Please select the reason")
-                    .setPositiveButton("Okay") { _, _ -> }
+                    .setTitle(getString(R.string.alert))
+                    .setMessage(getString(R.string.select_the_reason))
+                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                     .show()
 
                 return@setOnClickListener
@@ -207,9 +207,9 @@ class DeclineGigDialogFragment : DialogFragment() {
             ) {
 
                 MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Alert")
-                    .setMessage("Please type the reason")
-                    .setPositiveButton("Okay") { _, _ -> }
+                    .setTitle(getString(R.string.alert))
+                    .setMessage(getString(R.string.select_the_reason))
+                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                     .show()
 
                 return@setOnClickListener

@@ -88,9 +88,9 @@ class NotInGigRangeDialogFragment : DialogFragment() {
         }
 
         val distanceFromgig = if (distanceFromGig > 1000L) {
-            "You are ${(distanceFromGig / 1000).roundTo(2)} Km(s) away from gig location"
+            getString(R.string.you_are) + (distanceFromGig / 1000).roundTo(2) + getString(R.string.km_away)
         } else {
-            "You are ${distanceFromGig.roundTo(2)} Mtr(s) away from gig location"
+            getString(R.string.you_are) + distanceFromGig.roundTo(2) + getString(R.string.mtr_away)
         }
         location_from_gig_tv.text = distanceFromgig
     }

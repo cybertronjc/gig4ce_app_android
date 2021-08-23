@@ -94,7 +94,7 @@ class ReportUserDialogFragment : DialogFragment() {
                     progressBar.visible()
                 }
                 Lse.Success -> {
-                    Toast.makeText(requireContext(), "User reported", Toast.LENGTH_LONG)
+                    Toast.makeText(requireContext(), getString(R.string.user_reported), Toast.LENGTH_LONG)
                             .show()
                     dismiss()
                 }
@@ -102,9 +102,9 @@ class ReportUserDialogFragment : DialogFragment() {
                     progressBar.gone()
                     reportUserMainLayout.visible()
                     MaterialAlertDialogBuilder(requireContext())
-                            .setTitle("Alert")
-                            .setMessage("Unable to report user, ${it.error}")
-                            .setPositiveButton("Okay") { _, _ -> }
+                            .setTitle(getString(R.string.alert))
+                            .setMessage(getString(R.string.unable_to_report_user) + it.error)
+                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                             .show()
                 }
             }
@@ -157,9 +157,9 @@ class ReportUserDialogFragment : DialogFragment() {
 
                 confirm_decline_cb.isChecked = false
                 MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Alert")
-                        .setMessage("Please select the reason")
-                        .setPositiveButton("Okay") { _, _ -> }
+                        .setTitle(getString(R.string.alert))
+                        .setMessage(getString(R.string.select_a_reason))
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                         .show()
 
                 return@setOnClickListener
@@ -169,9 +169,9 @@ class ReportUserDialogFragment : DialogFragment() {
 
                 confirm_decline_cb.isChecked = false
                 MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Alert")
-                        .setMessage("Please type the reason")
-                        .setPositiveButton("Okay") { _, _ -> }
+                        .setTitle(getString(R.string.alert))
+                        .setMessage(getString(R.string.type_reason))
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                         .show()
 
                 return@setOnClickListener

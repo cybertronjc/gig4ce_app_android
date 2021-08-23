@@ -154,7 +154,7 @@ class AlternateAddressUpload : Fragment(), IOnBackPressedOverride {
                         photoCropIntent.putExtra("folder", "/verification/dl/")
                         Toast.makeText(
                             context,
-                            "Upload DL",
+                            getString(R.string.upload_dl),
                             Toast.LENGTH_LONG
                         ).show()
                     }
@@ -165,7 +165,7 @@ class AlternateAddressUpload : Fragment(), IOnBackPressedOverride {
                         photoCropIntent.putExtra("folder", "/verification/passport/")
                         Toast.makeText(
                             context,
-                            "Upload Passport",
+                            getString(R.string.upload_passport),
                             Toast.LENGTH_LONG
                         ).show()
                     }
@@ -176,7 +176,7 @@ class AlternateAddressUpload : Fragment(), IOnBackPressedOverride {
                         photoCropIntent.putExtra("folder", "/verification/voterid/")
                         Toast.makeText(
                             context,
-                            "Upload VoterID",
+                            getString(R.string.upload_voterid),
                             Toast.LENGTH_LONG
                         ).show()
                     }
@@ -186,7 +186,7 @@ class AlternateAddressUpload : Fragment(), IOnBackPressedOverride {
             override fun onNothingSelected(parent: AdapterView<*>) {
                 Toast.makeText(
                     context,
-                    "Please select which doc to be uploaded",
+                    getString(R.string.select_which_doc_to_be_uploaded),
                     Toast.LENGTH_LONG
                 ).show()
             }
@@ -204,7 +204,7 @@ class AlternateAddressUpload : Fragment(), IOnBackPressedOverride {
             if (ddFront.drawable == null) {
                 Toast.makeText(
                     this.context,
-                    "Please upload the front side first!",
+                    getString(R.string.upload_front_side_first),
                     Toast.LENGTH_LONG
                 ).show()
             } else {
@@ -243,7 +243,7 @@ class AlternateAddressUpload : Fragment(), IOnBackPressedOverride {
             } else {
                 Toast.makeText(
                     this.context,
-                    "Please upload the doc before proceeding",
+                    getString(R.string.upload_doc_before_proceeding),
                     Toast.LENGTH_LONG
                 ).show()
             }
@@ -268,7 +268,7 @@ class AlternateAddressUpload : Fragment(), IOnBackPressedOverride {
                         .addOnSuccessListener {
                             Toast.makeText(
                                 this.context,
-                                "Document successfully uploaded!",
+                                getString(R.string.document_successfully_uploaded),
                                 Toast.LENGTH_SHORT
                             ).show()
                             Log.d("REPOSITORY", "Aadhaar added successfully!")
@@ -277,7 +277,7 @@ class AlternateAddressUpload : Fragment(), IOnBackPressedOverride {
                             Log.d("Repository", exception.toString())
                             Toast.makeText(
                                 this.context,
-                                "Some failure, please retry!",
+                                getString(R.string.failure_retry),
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -289,7 +289,7 @@ class AlternateAddressUpload : Fragment(), IOnBackPressedOverride {
                 }
                 )
         } else {
-            UtilMethods.showLongToast(this.context!!, "No Internet Connection!")
+            UtilMethods.showLongToast(this.context!!, getString(R.string.no_internet))
         }
     }
 

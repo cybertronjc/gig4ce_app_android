@@ -123,9 +123,9 @@ class ShareApplicationLinkFragment : BaseFragment2<FragmentLeadManagementReferra
 
     private fun initToolbar(toolbar: GigforceToolbar) = toolbar.apply{
         val shareTitle = if (shareType == ShareReferralType.SHARE_JOB_PROFILE_LINK) {
-            "Share Job Profile"
+            context.getString(R.string.share_job)
         } else {
-            "Share Application Link"
+            context.getString(R.string.share_app_link)
         }
         showTitle(shareTitle)
         hideActionMenu()
@@ -204,7 +204,7 @@ class ShareApplicationLinkFragment : BaseFragment2<FragmentLeadManagementReferra
                         viewBinding.pbReferralsFrag.gone()
 
                         Toast.makeText(requireContext(),
-                            "Link Shared",
+                            getString(R.string.link_shared),
                             Toast.LENGTH_SHORT
                         ).show()
                         ReferralLinkSharedResultDialogFragment.launchSuccess(childFragmentManager,referralState.shareLink)
@@ -213,9 +213,9 @@ class ShareApplicationLinkFragment : BaseFragment2<FragmentLeadManagementReferra
                         viewBinding.pbReferralsFrag.gone()
 
                         MaterialAlertDialogBuilder(requireContext())
-                            .setTitle("Unable to share")
+                            .setTitle(getString(R.string.unable_to_share))
                             .setMessage(referralState.error)
-                            .setPositiveButton("Okay") { _, _ -> }
+                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                             .show()
                     }
                     ShareReferralViewState.SharingAndUpdatingJoiningDocument -> {
@@ -232,9 +232,9 @@ class ShareApplicationLinkFragment : BaseFragment2<FragmentLeadManagementReferra
                     is ShareReferralViewState.UnableToCreateShareLink -> {
                         viewBinding.pbReferralsFrag.gone()
                         MaterialAlertDialogBuilder(requireContext())
-                            .setTitle("Unable to share")
+                            .setTitle(getString(R.string.unable_to_share))
                             .setMessage(referralState.error)
-                            .setPositiveButton("Okay") { _, _ -> }
+                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                             .show()
                     }
                 }

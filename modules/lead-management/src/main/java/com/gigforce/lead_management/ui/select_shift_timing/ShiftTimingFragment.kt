@@ -155,7 +155,7 @@ class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
     private fun initListeners() = viewBinding.apply {
         toolbar.apply {
             hideActionMenu()
-            showTitle("Shift Timings")
+            showTitle(context.getString(R.string.shift_timings))
             setBackButtonListener(View.OnClickListener {
                 navigation.popBackStack()
             })
@@ -179,20 +179,20 @@ class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
             when {
                 selectedShifts.isEmpty() -> {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setMessage("Select at least one shift to continue")
-                        .setPositiveButton("Okay") { _, _ -> }
+                        .setMessage(getString(R.string.select_atleast_one_shift))
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                         .show()
                 }
                 selectedWorkingDays.isEmpty() -> {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setMessage("Select at least one working days option")
-                        .setPositiveButton("Okay") { _, _ -> }
+                        .setMessage(getString(R.string.select_one_working_day))
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                         .show()
                 }
                 expectedDate.text.isEmpty() -> {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setMessage("Select expected date to continue")
-                        .setPositiveButton("Okay") { _, _ -> }
+                        .setMessage(getString(R.string.select_expected_date))
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                         .show()
                 }
                 else -> {
@@ -311,7 +311,7 @@ class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
         shiftInfoLayout.root.visible()
         shiftLayout.gone()
         shiftInfoLayout.infoIv.loadImage(R.drawable.ic_no_joining_found)
-        shiftInfoLayout.infoMessageTv.text = "No Gig Shifts Found"
+        shiftInfoLayout.infoMessageTv.text = getString(R.string.no_gig_shift)
     }
 
     private fun showGigShiftAsLoading() = viewBinding.apply{

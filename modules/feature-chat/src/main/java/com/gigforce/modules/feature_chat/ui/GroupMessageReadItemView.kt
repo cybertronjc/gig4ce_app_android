@@ -69,7 +69,7 @@ class GroupMessageReadItemView(
                 } else {
                     contextImageView.loadImage(R.drawable.ic_user_2)
                 }
-                txtSubtitle.text = "Read on ${formatDate(chatHeader.readOn)}"
+                txtSubtitle.text = context.getString(R.string.read_on) + formatDate(chatHeader.readOn)
             }
         }
     }

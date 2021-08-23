@@ -53,7 +53,8 @@ class ClickOrSelectImageBottomSheet : BottomSheetDialogFragment() {
 
 
     private fun initView() {
-        change_photo_label.text= if (isProfilePicPresent) "Change Photo" else "Upload Photo"
+        change_photo_label.text= if (isProfilePicPresent) getString(R.string.change_photo) else getString(
+                    R.string.upload_photo)
         //remove_profile_pic.visibility = if (isProfilePicPresent) View.VISIBLE else View.GONE
         //change_photo_label.text = if (isProfilePicPresent) "Change Photo" else "Upload Photo"
         camera_layout.setOnClickListener {

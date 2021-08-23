@@ -108,9 +108,9 @@ class OnboardingFragmentNew : Fragment(){
         activity?.let {
             onboarding_pager.adapter =
                     MutlifragmentAdapter(it)
-            appBar.setSteps("Step 1/${(onboarding_pager.adapter as MutlifragmentAdapter).fragmentArr.size}")
+            appBar.setSteps(getString(R.string.step_1) + (onboarding_pager.adapter as MutlifragmentAdapter).fragmentArr.size)
             steps.text =
-                    "Step 1/${(onboarding_pager.adapter as MutlifragmentAdapter).fragmentArr.size}"
+                getString(R.string.step_1) + (onboarding_pager.adapter as MutlifragmentAdapter).fragmentArr.size
         }
         next.setOnClickListener {
             if (isFragmentActionNotExists()) {
@@ -118,7 +118,7 @@ class OnboardingFragmentNew : Fragment(){
 
                 onboarding_pager.currentItem = onboarding_pager.currentItem + 1
                 //steps.text = "Steps ${onboarding_pager.currentItem + 1}/9"
-                appBar.setSteps("Steps ${onboarding_pager.currentItem + 1}/9")
+                appBar.setSteps(getString(R.string.steps) + (onboarding_pager.currentItem + 1) + "/9")
 
                 if (onboarding_pager.currentItem == 8) {
                     val fragmentAdapter = onboarding_pager.adapter as MutlifragmentAdapter
@@ -299,7 +299,7 @@ class OnboardingFragmentNew : Fragment(){
         var jobPreferenceFragment =
                 (((onboarding_pager.adapter as MutlifragmentAdapter).getFragment(onboarding_pager.currentItem)) as JobPreferenceFragment)
         var fullTimeJob = jobPreferenceFragment.fullTimeJob
-        var fullTimePartime = if (fullTimeJob) "Full Time" else "Part Time"
+        var fullTimePartime = if (fullTimeJob) getString(R.string.full_time) else getString(R.string.part_time)
         if (!fullTimeJob) {
             viewModel.saveJobPreference(fullTimePartime, jobPreferenceFragment.getWorkingDays(), jobPreferenceFragment.getTimeSlots())
 

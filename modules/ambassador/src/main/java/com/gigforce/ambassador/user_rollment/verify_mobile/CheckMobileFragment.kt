@@ -53,12 +53,12 @@ class CheckMobileFragment : Fragment(), UserAlreadyExistDialogFragmentActionList
     private fun validateDataAndsubmit() {
 
         if (mobile_no_et.text.length != 10) {
-            showAlertDialog("", "Enter a valid Mobile No")
+            showAlertDialog("", getString(R.string.enter_valid_mobile))
             return
         }
         val mobileNo = mobile_no_et.text.toString()
         if (!INDIAN_MOBILE_NUMBER.matcher(mobileNo).matches()) {
-            showAlertDialog("", "Enter a valid Mobile No")
+            showAlertDialog("", getString(R.string.enter_valid_mobile))
             return
         }
 
@@ -71,7 +71,7 @@ class CheckMobileFragment : Fragment(), UserAlreadyExistDialogFragmentActionList
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(title)
             .setMessage(message)
-            .setPositiveButton("Okay") { _, _ -> }
+            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
             .show()
     }
 
@@ -85,7 +85,7 @@ class CheckMobileFragment : Fragment(), UserAlreadyExistDialogFragmentActionList
                     }
                     is Lce.Content -> {
                         UtilMethods.hideLoading()
-                        showToast("OTP sent")
+                        showToast(getString(R.string.otp_sent))
 
                         if (it.content.isUserAlreadyRegistered) {
                             //show user already registered dialog

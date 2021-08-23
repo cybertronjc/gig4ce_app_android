@@ -349,7 +349,7 @@ class Login : Fragment() {
             login_button.isEnabled = true
             login_button.background = resources.getDrawable(R.drawable.gradient_button)
         } else if (!termsCheckbox.isChecked){
-            showToast("Accept Terms and Conditions to continue")
+            showToast(getString(R.string.accept_terms))
         }
         else {
             viewModel.sendVerificationCode(phoneNumber)

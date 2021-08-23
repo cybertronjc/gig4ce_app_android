@@ -39,5 +39,20 @@
     <string name="browse_all_help_topic">Browse all help topic</string>
     <string name="contact_us">Contact Us</string>
     <string name="invite_your_contacts">Invite your contacts</string>
+    <string name="work_in_progress">This is work in progress. Please check again in a few days</string>
+    <string name="my_gig">My Gig</string>
+    <string name="wallet">Wallet</string>
+    <string name="profile">Profile</string>
+    <string name="learning">Learning</string>
+    <string name="settings">Settings</string>
+    <string name="chat">Chat</string>
+    <string name="verification">Verification</string>
+    <string name="invoices">Invoices</string>
+    <string name="gigers_attendance">Gigers Attendance</string>
+    <string name="alert">Alert</string>
+    <string name="unable_to_fetch_todays_gig">\"Unable to fetch todays gig list, \"</string>
+    <string name="you_have">\"You have \"</string>
+    <string name="active_gig_on_this_date">\" Active Gig(s) on this day. All Gigs will be declined for selected day.\"</string>
+    <string name="as_per_contract">As per contract</string>
 
 </resources>

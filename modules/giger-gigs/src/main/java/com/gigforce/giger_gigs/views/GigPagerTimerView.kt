@@ -102,7 +102,7 @@ class GigPagerTimerView(
 //                ResourcesCompat.getColor(resources, R.color.gig_timer_upcoming_pink, null)
 //        )
         gigTimerTV.text = "- -hrs: - -mins"
-        gigCheckInTimeTV.text = "Checkin Not Marked"
+        gigCheckInTimeTV.text = context.getString(R.string.checkin_not_marked)
 
         gigDateTV.text = formatGigDateForTimer(gig.startDateTime)
     }
@@ -115,7 +115,7 @@ class GigPagerTimerView(
 //                ResourcesCompat.getColor(resources, R.color.gig_timer_no_show_red, null)
 //        )
         gigTimerTV.text = "- -hrs: - -mins"
-        gigCheckInTimeTV.text = "You've missed this gig"
+        gigCheckInTimeTV.text = context.getString(R.string.missed_the_gig)
 
         gigDateTV.text = formatGigDateForTimer(gig.startDateTime)
     }
@@ -128,7 +128,7 @@ class GigPagerTimerView(
 //                ResourcesCompat.getColor(resources, R.color.gig_timer_declined_red, null)
 //        )
         gigTimerTV.text = "- -hrs: - -mins"
-        gigCheckInTimeTV.text = "Check-in Pending"
+        gigCheckInTimeTV.text = context.getString(R.string.checkin_pending)
 
         gigDateTV.text = formatGigDateForTimer(gig.startDateTime)
     }
@@ -179,7 +179,7 @@ class GigPagerTimerView(
             startCountDownTimer(gig.startDateTime.toDate())
         }
 
-        gigCheckInTimeTV.text = "Left for the gig start"
+        gigCheckInTimeTV.text = context.getString(R.string.left_for_gig_start)
         gigDateTV.text = formatGigDateForTimer(gig.startDateTime)
 
     }
@@ -240,7 +240,7 @@ class GigPagerTimerView(
 //                ResourcesCompat.getColor(resources, R.color.gig_timer_declined_red, null)
 //        )
         gigTimerTV.text = "- -hrs: - -mins"
-        gigCheckInTimeTV.text = "Declined Reason : ${gig.declineReason}"
+        gigCheckInTimeTV.text = context.getString(R.string.declined_reason) + gig.declineReason
 
         gigDateTV.text = formatGigDateForTimer(gig.startDateTime)
     }

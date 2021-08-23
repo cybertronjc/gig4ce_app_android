@@ -125,7 +125,7 @@ class ContactsFragment : DialogFragment(),
                     contactsToolbarSubTitle.text = "${contactsAdapter.itemCount} Contact(s)"
 
                     userSelectedLayout.isVisible = false
-                    selectedUserCountTV.text = "0 Contact(s) Selected"
+                    selectedUserCountTV.text = getString(R.string.zero_contacts_selected)
 
                     createGroupFab.gone()
                 } else {
@@ -210,7 +210,7 @@ class ContactsFragment : DialogFragment(),
 
     private fun startLoaderForGettingContacts() {
         contactsPermissionLayout.gone()
-        showToast("Refreshing...")
+        showToast(getString(R.string.refreshing))
         requireActivity().startService(Intent(requireContext(), SyncContactsService::class.java))
     }
 
@@ -240,9 +240,9 @@ class ContactsFragment : DialogFragment(),
         }
 
         if (shouldReturnToPreviousScreen) {
-            createGroupLabel.text = "Add To Group"
+            createGroupLabel.text = getString(R.string.add_to_group)
         } else {
-            createGroupLabel.text = "Create Group"
+            createGroupLabel.text = getString(R.string.create_group)
         }
 
         askPermissionView.setOnClickListener {
@@ -373,7 +373,7 @@ class ContactsFragment : DialogFragment(),
         refreshingUserHorizontalProgressBar.gone()
         refreshingUserCenterProgressBar.gone()
 
-        showToast("Contacts Synced")
+        showToast(getString(R.string.contacts_synced))
     }
 
     private fun errorInSyncingContacts(error: String) {
@@ -382,7 +382,7 @@ class ContactsFragment : DialogFragment(),
 
         MaterialAlertDialogBuilder(requireContext())
                 .setMessage(error)
-                .setTitle("Unable to sync contacts")
+                .setTitle(getString(R.string.unable_to_sync_contacts))
                 .setPositiveButton("Okay") { _, _ -> }
                 .show()
     }
@@ -428,7 +428,7 @@ class ContactsFragment : DialogFragment(),
     fun stateCreateNewGroup() {
         contactsToolbarSubTitle.visible()
         contactsToolbarLabel.text = getString(R.string.select_members)
-        contactsToolbarSubTitle.text = "Tap to Select"
+        contactsToolbarSubTitle.text = getString(R.string.tap_to_select)
         user_selected_layout.visible()
         create_group_layout.gone()
         contactsAdapter.getSelectedItems().clear()
@@ -496,10 +496,10 @@ class ContactsFragment : DialogFragment(),
             if (permissionSnackBar == null) {
                 permissionSnackBar = Snackbar.make(
                         rootContactsLayout,
-                        "Grant contacts permission to sync contacts",
+                        getString(R.string.grant_contacts_permission),
                         Snackbar.LENGTH_INDEFINITE
                 )
-                permissionSnackBar?.setAction("Okay") {
+                permissionSnackBar?.setAction(getString(R.string.okay)) {
                     startAppSettingsPage()
                 }
             }
@@ -561,7 +561,7 @@ class ContactsFragment : DialogFragment(),
                 true
             }
             else -> {
-                showToast("Coming soon")
+                showToast(getString(R.string.coming_soon))
                 false
             }
         }

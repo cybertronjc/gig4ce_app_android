@@ -170,9 +170,9 @@ class GigContactPersonBottomSheet : BottomSheetDialogFragment() {
                             startChatScreen(it.content!!.id!!)
                         } else {
                             MaterialAlertDialogBuilder(requireContext())
-                                .setTitle("Alert")
-                                .setMessage("Looks like user is not on gig force App")
-                                .setPositiveButton("Okay") { _, _ -> }
+                                .setTitle(getString(R.string.alert))
+                                .setMessage(getString(R.string.user_not_on_app))
+                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                                 .show()
                         }
                     }
@@ -181,9 +181,9 @@ class GigContactPersonBottomSheet : BottomSheetDialogFragment() {
                         message_card_view.visible()
 
                         MaterialAlertDialogBuilder(requireContext())
-                            .setTitle("Alert")
-                            .setMessage("Unable to fetch user details, ${it.error}")
-                            .setPositiveButton("Okay") { _, _ -> }
+                            .setTitle(getString(R.string.alert))
+                            .setMessage(getString(R.string.unable_to_fetch_user_details) + it.error)
+                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                             .show()
                     }
                 }

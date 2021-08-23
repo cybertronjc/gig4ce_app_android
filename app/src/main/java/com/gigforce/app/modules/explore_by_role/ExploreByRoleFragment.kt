@@ -56,10 +56,10 @@ class ExploreByRoleFragment : BaseFragment(), AdapterExploreByRole.AdapterExplor
             popBackState()
         }
         iv_search_explore_by_role.setOnClickListener {
-            showToast("Coming Soon!!")
+            showToast(getString(R.string.coming_soon))
         }
         tv_sort_explore_by_role.setOnClickListener {
-            showToast("Coming Soon!!")
+            showToast(getString(R.string.coming_soon))
         }
 
     }

@@ -165,7 +165,7 @@ class UserDetailsFilledDialogFragment : DialogFragment() {
                     is Lse.Error -> {
                         Toast.makeText(
                             requireContext(),
-                            "Unable to send invite link to user",
+                            getString(R.string.unable_to_send_invite),
                             Toast.LENGTH_SHORT
                         ).show()
                         showDocumentUploadedCard()

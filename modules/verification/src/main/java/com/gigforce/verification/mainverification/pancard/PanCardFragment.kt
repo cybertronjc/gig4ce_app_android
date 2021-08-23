@@ -169,14 +169,14 @@ class PanCardFragment : Fragment(),
                             viewBinding.panTil.editText?.setText(it.panNumber)
                             viewBinding.toplayoutblock.uploadStatusLayout(
                                 AppConstants.UPLOAD_SUCCESS,
-                                "Upload Successful",
-                                "Information of PAN card captured successfully."
+                                getString(R.string.upload_success),
+                                getString(R.string.pan_info_captured)
                             )
                         } else {
                             viewBinding.toplayoutblock.uploadStatusLayout(
                                 AppConstants.UNABLE_TO_FETCH_DETAILS,
-                                "Unable to fetch information",
-                                "Enter the PAN details manually below"
+                                getString(R.string.unable_to_fetch_info),
+                                getString(R.string.enter_pan_details_manually)
                             )
                         }
 
@@ -192,16 +192,16 @@ class PanCardFragment : Fragment(),
                     } else {
                         viewBinding.toplayoutblock.uploadStatusLayout(
                             AppConstants.UNABLE_TO_FETCH_DETAILS,
-                            "Unable to fetch information",
-                            "Enter the PAN details manually below"
+                            getString(R.string.unable_to_fetch_info),
+                            getString(R.string.enter_pan_details_manually)
                         )
                     }
 
                 } else {
                     viewBinding.toplayoutblock.uploadStatusLayout(
                         AppConstants.UNABLE_TO_FETCH_DETAILS,
-                        "Unable to fetch information",
-                        "Enter the PAN details manually below"
+                        getString(R.string.unable_to_fetch_info),
+                        getString(R.string.enter_pan_details_manually)
                     )
                     showToast("Ocr status " + it.message)
                 }
@@ -443,7 +443,7 @@ class PanCardFragment : Fragment(),
         if (hasStoragePermissions())
             VerificationClickOrSelectImageBottomSheet.launch(
                 parentFragmentManager,
-                "Upload PAN Card",
+                getString(R.string.upload_pan_card),
                 this
             )
         else
@@ -543,11 +543,11 @@ class PanCardFragment : Fragment(),
                 if (allPermsGranted)
                     VerificationClickOrSelectImageBottomSheet.launch(
                         parentFragmentManager,
-                        "Upload PAN Card",
+                        getString(R.string.upload_pan_card),
                         this
                     )
                 else {
-                    showToast("Please grant storage permission")
+                    showToast(getString(R.string.grant_storage_permission))
                 }
             }
         }
@@ -676,14 +676,14 @@ class PanCardFragment : Fragment(),
         viewBinding.belowLayout.gone()
         viewBinding.toplayoutblock.uploadStatusLayout(
             AppConstants.UPLOAD_SUCCESS,
-            "Verification Completed",
-            "The PAN card details have been verified successfully."
+            getString(R.string.verification_completed),
+            getString(R.string.pan_verified_successfully)
         )
         viewBinding.submitButton.visible()
         viewBinding.submitButton.text = "Next"
         viewBinding.submitButton.isEnabled = true
         viewBinding.progressBar.gone()
-        viewBinding.toplayoutblock.setVerificationSuccessfulView("PAN card verified")
+        viewBinding.toplayoutblock.setVerificationSuccessfulView(getString(R.string.pan_verified))
 
         var list = ArrayList<KYCImageModel>()
         panCardDataModel?.panCardImagePath?.let {
@@ -729,8 +729,8 @@ class PanCardFragment : Fragment(),
                                 verifiedStatusViews(null)
                                 viewBinding.toplayoutblock.uploadStatusLayout(
                                     AppConstants.UNABLE_TO_FETCH_DETAILS,
-                                    "Verification in progress",
-                                    "Document will be verified soon. You can click next to proceed"
+                                    getString(R.string.verification_progress),
+                                    getString(R.string.doc_verified_soon)
                                 )
                                 viewBinding.toplayoutblock.setVerificationSuccessfulView("", "")
                                 viewBinding.belowLayout.visible()
@@ -750,8 +750,8 @@ class PanCardFragment : Fragment(),
                     resetInitializeViews()
                     viewBinding.toplayoutblock.uploadStatusLayout(
                         AppConstants.DETAILS_MISMATCH,
-                        "Verification Failed",
-                        "The details submitted are incorrect. Please try again."
+                        getString(R.string.verification_failed),
+                        getString(R.string.details_incorrect)
                     )
                     var listData = setAlreadyfilledData(panCardDataModel, true)
                     if (listData.isEmpty()) {
@@ -777,8 +777,8 @@ class PanCardFragment : Fragment(),
         viewBinding.submitButton.isEnabled = true
         viewBinding.belowLayout.visible()
         viewBinding.toplayoutblock.setVerificationSuccessfulView(
-            "PAN card",
-            "You need to upload"
+            getString(R.string.pan_card),
+            getString(R.string.you_need_to_upload)
         )
         initializeImageViews()
         viewBinding.toplayoutblock.resetAllViews()
@@ -791,8 +791,8 @@ class PanCardFragment : Fragment(),
         viewBinding.progressBar.gone()
         viewBinding.belowLayout.gone()
         viewBinding.toplayoutblock.setVerificationSuccessfulView(
-            "PAN card pending for verify",
-            "Verifying"
+            getString(R.string.pan_pending_for_verification),
+            getString(R.string.verifying)
         )
         var list = ArrayList<KYCImageModel>()
         panCardDataModel.panCardImagePath?.let {

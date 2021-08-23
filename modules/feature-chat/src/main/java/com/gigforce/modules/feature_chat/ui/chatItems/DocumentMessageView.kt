@@ -184,7 +184,7 @@ abstract class DocumentMessageView(
             try {
                 context.startActivity(this)
             } catch (e: Exception) {
-                Toast.makeText(context, "Unable to open", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, context.getString(R.string.unable_to_open), Toast.LENGTH_SHORT).show()
             }
         }
     }

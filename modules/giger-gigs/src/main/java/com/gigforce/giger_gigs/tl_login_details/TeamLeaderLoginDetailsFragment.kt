@@ -18,6 +18,7 @@ import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.Lce
 import com.gigforce.giger_gigs.LoginSummaryConstants
+import com.gigforce.giger_gigs.R
 import com.gigforce.giger_gigs.adapters.TLLoginSummaryAdapter
 import com.gigforce.giger_gigs.databinding.TeamLeaderLoginDetailsFragmentBinding
 import com.gigforce.giger_gigs.models.ListingTLModel
@@ -178,7 +179,7 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
                 }
 
                 is Lce.Error -> {
-                    showToast("Error loading data")
+                    showToast(getString(R.string.error_loading_data))
                     progressBar.visibility = View.GONE
                 }
             }

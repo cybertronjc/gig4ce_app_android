@@ -197,8 +197,8 @@ class VideoWithTextFragment : Fragment() {
             showText(mDescription)
         }
 
-        video_slide_title_tv.text = "Video Title"
-        video_slide_desc_tv.text = "Video description"
+        video_slide_title_tv.text = getString(R.string.video_title)
+        video_slide_desc_tv.text = getString(R.string.video_desc)
 
 
         //     slideVideoPlayerView.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FILL

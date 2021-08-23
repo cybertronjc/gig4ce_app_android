@@ -400,16 +400,16 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
         )
         if (isRegistered) {
             if (delete) {
-                showToast("Registered Number Cannot Be Deleted")
+                showToast(getString(R.string.reg_no_cannot_delete))
             } else {
                 showAddContactDialog(false, isRegistered, bundle)
 
             }
         } else {
             if (delete) {
-                showConfirmationDialogType3("Are You Sure!!!",
+                showConfirmationDialogType3(getString(R.string.you_sure),
                         "You want to delete $number from your contacts!!!",
-                        "Yes", "No", object :
+                        getString(R.string.yes), getString(R.string.no), object :
                         ConfirmationDialogOnClickListener {
                     override fun clickedOnYes(dialog: Dialog?) {
                         contactEdit(
@@ -439,9 +439,9 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
 
     override fun editEmail(email: String, delete: Boolean) {
         if (delete) {
-            showConfirmationDialogType3("Are You Sure!!!",
+            showConfirmationDialogType3(getString(R.string.you_sure),
                     "You want to delete $email from your emails!!!",
-                    "Yes", "No", object :
+                getString(R.string.yes), getString(R.string.no), object :
                     ConfirmationDialogOnClickListener {
                 override fun clickedOnYes(dialog: Dialog?) {
                     emailEdit(

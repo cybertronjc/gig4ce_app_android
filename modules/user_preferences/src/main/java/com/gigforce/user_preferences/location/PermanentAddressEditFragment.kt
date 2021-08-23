@@ -69,7 +69,7 @@ class PermanentAddressEditFragment : Fragment() {
     }
 
     private fun verificationViewsInitialize() {
-        textView90.text = Html.fromHtml("To Update Permanent address , you have to upload new address proofs. <font color='#E02020'>Click Here</font>")
+        textView90.text = Html.fromHtml(getString(R.string.upload_new_address))
     }
 
     private fun populateAddress(address: AddressModel) {
@@ -117,7 +117,7 @@ class PermanentAddressEditFragment : Fragment() {
     }
     fun addressIsValid(view:EditText):Boolean{
         if(view.text.toString().trim().length<3){
-            view.setError("More detail require!!")
+            view.setError(getString(R.string.more_details_required))
             return false
         }
         return true
@@ -134,7 +134,7 @@ class PermanentAddressEditFragment : Fragment() {
         if(!addressIsValid(state))
             return false
         if(pincode.text.toString().length<6){
-            pincode.setError("Pincode is not correct!!")
+            pincode.setError(getString(R.string.pincode_incorrect))
             return false
         }
         return true

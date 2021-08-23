@@ -224,7 +224,7 @@ class GigMonthlyAttendanceFragment : Fragment(), GigAttendanceAdapterClickListen
         adapter.updateAttendanceList(content)
         if (content.isEmpty()) {
             attendance_monthly_learning_error.visible()
-            attendance_monthly_learning_error.text = "No Gigs assigned in selected month!"
+            attendance_monthly_learning_error.text = getString(R.string.no_gigs_assigned)
         } else {
             attendance_monthly_learning_error.gone()
         }

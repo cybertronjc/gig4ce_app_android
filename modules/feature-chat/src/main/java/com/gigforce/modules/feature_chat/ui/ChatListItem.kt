@@ -159,7 +159,7 @@ class ChatListItem(
                 if(chatHeader.lastMessageDeleted){
                     lastMessageType.visible()
                     lastMessageType.setImageResource(R.drawable.ic_delete_forever_12)
-                    txtSubtitle.text = "Message has been deleted"
+                    txtSubtitle.text = context.getString(R.string.message_deleted)
                     txtSubtitle.setTypeface(null,Typeface.ITALIC)
                 } else {
 
@@ -173,22 +173,22 @@ class ChatListItem(
                         ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO -> {
                             lastMessageType.visible()
                             lastMessageType.setImageResource(R.drawable.ic_chat_video_2)
-                            txtSubtitle.text = "$messagePrefix Video"
+                            txtSubtitle.text = messagePrefix + context.getString(R.string.video)
                         }
                         ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT -> {
                             lastMessageType.visible()
                             lastMessageType.setImageResource(R.drawable.ic_chat_document_2)
-                            txtSubtitle.text = "$messagePrefix Document"
+                            txtSubtitle.text = messagePrefix + context.getString(R.string.document)
                         }
                         ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE -> {
                             lastMessageType.visible()
                             lastMessageType.setImageResource(R.drawable.ic_chat_image_2)
-                            txtSubtitle.text = "$messagePrefix Image"
+                            txtSubtitle.text = messagePrefix + context.getString(R.string.image)
                         }
                         ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION -> {
                             lastMessageType.visible()
                             lastMessageType.setImageResource(R.drawable.ic_chat_location_2)
-                            txtSubtitle.text = "$messagePrefix Location"
+                            txtSubtitle.text = messagePrefix + context.getString(R.string.location)
                         }
                         else -> {
                             //   lastMessageType.gone()

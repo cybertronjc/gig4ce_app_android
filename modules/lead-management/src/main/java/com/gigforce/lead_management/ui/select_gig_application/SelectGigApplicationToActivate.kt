@@ -62,7 +62,7 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
         viewBinding: SelectGigApplicationToActivateFragmentBinding
     ) = viewBinding.toolbar.apply {
         hideSearchOption()
-        showTitle("Gig Application")
+        showTitle(context.getString(R.string.gig_application))
         hideSubTitle()
         setBackButtonListener {
             navigation.popBackStack()
@@ -148,9 +148,9 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
                 is SelectGigAppViewState.ErrorInStartingJoiningProcess -> {
 
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Unable to start Joining")
+                        .setTitle(getString(R.string.unable_to_start_joining))
                         .setMessage(state.error)
-                        .setPositiveButton("Okay") { _, _ -> }
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                         .show()
                 }
                 SelectGigAppViewState.FetchingDataToStartJoiningProcess -> {
@@ -178,7 +178,7 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
                     submitBtn.background = resources.getDrawable(R.drawable.app_gradient_button_disabled)
                 }
             }else {
-                submitBtn.text = "Share Referral Link"
+                submitBtn.text = getString(R.string.share_referral_link)
                 submitBtn.isEnabled = true
                 submitBtn.background = resources.getDrawable(R.drawable.app_gradient_button)
             }
@@ -222,7 +222,7 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
 
         viewBinding.toolbar.apply {
             hideActionMenu()
-            showTitle("Gig Application")
+            showTitle(getString(R.string.gig_application))
             setBackButtonListener(View.OnClickListener {
                 navigation.popBackStack()
             })

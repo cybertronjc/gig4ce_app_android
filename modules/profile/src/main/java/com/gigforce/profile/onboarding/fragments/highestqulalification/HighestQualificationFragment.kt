@@ -63,19 +63,19 @@ class HighestQualificationFragment() : Fragment(),OnboardingFragmentNew.Fragment
         imageTextCardMol_.setOnClickListener{
             resetAll()
             setSelected(icon_, option_, imageTextCardMol_)
-            selectedHighestQualification = "Diploma"
+            selectedHighestQualification = getString(R.string.diploma)
             validateForm()
         }
         imageTextCardMol4_.setOnClickListener{
             resetAll()
             setSelected(icon1_, option1_, imageTextCardMol4_)
-            selectedHighestQualification = "Graduated"
+            selectedHighestQualification = getString(R.string.graduated)
             validateForm()
         }
         imageTextCardMol3_.setOnClickListener{
             resetAll()
             setSelected(icon2_, option2_, imageTextCardMol3_)
-            selectedHighestQualification = "Post Graduated"
+            selectedHighestQualification = getString(R.string.post_graduated)
             validateForm()
         }
     }

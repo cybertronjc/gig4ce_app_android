@@ -23,4 +23,15 @@
     <string name="check_out">Check Out</string>
     <string name="check_in">Check In</string>
     <string name="see_more">see more</string>
+    <string name="driving_certificate">Driving Certificate</string>
+    <string name="downloading_driving_certificate">Downloading Driving Certificate</string>
+    <string name="dc_downloading">Your Driving Certificate is Downloading</string>
+    <string name="network_error_retry">NetWork Error. Please try again</string>
+    <string name="downloading_dc_wait">Downloading Driving Certificate, Please Wait...</string>
+    <string name="compelted_100">Completed 100%</string>
+    <string name="replay">Re-play</string>
+    <string name="completed_0">Completed 0%</string>
+    <string name="play">Play</string>
+    <string name="completed">\"Completed \"</string>
+    <string name="resume">Resume</string>
 </resources>

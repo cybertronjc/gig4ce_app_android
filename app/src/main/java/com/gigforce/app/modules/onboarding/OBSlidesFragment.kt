@@ -142,7 +142,7 @@ class OBSlidesViewPagerAdapter(val viewpager:ViewPager2,
 
                 titleTextView.setText(R.string.ob_slide3_title)
                 subTitleTextView.setText(R.string.ob_slide3_subtitle)
-                nextButton.setText("Get Started")
+                nextButton.setText(context.getString(R.string.get_started))
             }
         }
     }

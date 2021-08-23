@@ -96,9 +96,9 @@ class GigersAttendanceUnderManagerFragment : Fragment(), AttendanceSwipeHandler.
         lifecycleScope.launch {
 
             viewBinding.toolbar.apply {
-                showTitle("Gigers Attendance")
+                showTitle(context.getString(R.string.gigers_attendance))
                 hideActionMenu()
-                showSearchOption("Search Name")
+                showSearchOption(context.getString(R.string.search_name))
                 viewBinding.toolbar.hideSubTitle()
                 getSearchTextChangeAsFlow()
                         .debounce(300)
@@ -120,7 +120,7 @@ class GigersAttendanceUnderManagerFragment : Fragment(), AttendanceSwipeHandler.
 
                 slotCalendar.isVisible = !slotCalendar.isVisible
             }
-            selectedSlotTv.text = "Today"
+            selectedSlotTv.text = getString(R.string.today)
             slotCalendar.selectedDate = CalendarDay.today()
             slotCalendar.setOnDateChangedListener { _, date, _ ->
 
@@ -240,7 +240,7 @@ class GigersAttendanceUnderManagerFragment : Fragment(), AttendanceSwipeHandler.
 
                     when (it) {
                         is AttendanceUnderManagerSharedViewState.GigDeclined -> {
-                            showSnackBar("User Marked Absent")
+                            showSnackBar(getString(R.string.user_marked_absent))
                             viewModel.gigDeclinedUpdateGigerStatusInView(it.gigId)
                         }
                         else -> {
@@ -254,9 +254,9 @@ class GigersAttendanceUnderManagerFragment : Fragment(), AttendanceSwipeHandler.
     ) {
 
         MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Unable to mark present")
+                .setTitle(getString(R.string.unable_to_mark_present))
                 .setMessage(error)
-                .setPositiveButton("Okay") { _, _ -> }
+                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                 .show()
     }
 
@@ -469,7 +469,7 @@ class GigersAttendanceUnderManagerFragment : Fragment(), AttendanceSwipeHandler.
 
         this.attendanceRecyclerView.collection = emptyList()
         this.errorInfoLayout.visible()
-        this.gigersUnderManagerMainError.text = "No Attendance Found"
+        this.gigersUnderManagerMainError.text = getString(R.string.no_attendance_found)
 
         this.businessSpinner.gone()
         this.businessLabel.gone()

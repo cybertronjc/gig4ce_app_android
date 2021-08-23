@@ -111,7 +111,7 @@ class AddUserInterestFragment : Fragment(),IOnBackPressedOverride {
             if (interest_chipgroup.checkedChipIds.size > 3) {
 
                 MaterialAlertDialogBuilder(requireContext())
-                        .setMessage("You can select only max 3 Chips")
+                        .setMessage(getString(R.string.select_only_3_chips))
                         .setPositiveButton(
                                 getString(R.string.okay).capitalize()
                         ) { _, _ -> }.show()
@@ -186,7 +186,8 @@ class AddUserInterestFragment : Fragment(),IOnBackPressedOverride {
                             user_interest_main_layout.gone()
                             user_interest_error.visible()
 
-                            user_interest_error.text = "Unable to fetch interest detail, ${it.error}"
+                            user_interest_error.text =
+                                getString(R.string.unable_to_fetch_interest_details) + it.error
                         }
                     }
                 })
@@ -290,10 +291,10 @@ class AddUserInterestFragment : Fragment(),IOnBackPressedOverride {
 
     private fun showGoBackConfirmationDialog() {
         MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Alert")
-                .setMessage("Are you sure you want to go back")
-                .setPositiveButton("Yes") { _, _ -> goBackToUsersList() }
-                .setNegativeButton("No") { _, _ -> }
+                .setTitle(getString(R.string.alert))
+                .setMessage(getString(R.string.sure_to_go_back))
+                .setPositiveButton(getString(R.string.yes)) { _, _ -> goBackToUsersList() }
+                .setNegativeButton(getString(R.string.no)) { _, _ -> }
                 .show()
     }
 

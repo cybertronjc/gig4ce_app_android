@@ -788,7 +788,7 @@ class BSCalendarScreenFragment : Fragment() {
         override fun onClick(v: View?) {
             //val gig = (rv.adapter as RecyclerGenericAdapter<Gig>).list.get(position)
 
-            showToast("This is work in progress. Please check again in a few days")
+            showToast(getString(R.string.work_in_progress))
 
 //            navigate(R.id.gigPageNavigationFragment, Bundle().apply {
 //                this.putString(GigPageNavigationFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
@@ -873,40 +873,40 @@ class BSCalendarScreenFragment : Fragment() {
             isUserTl : Boolean
     ) {
         var datalist: ArrayList<FeatureModel> = ArrayList<FeatureModel>()
-        datalist.add(FeatureModel("My Gig", R.drawable.mygig, navigationPath = "gig/mygig"))
+        datalist.add(FeatureModel(getString(R.string.my_gig), R.drawable.mygig, navigationPath = "gig/mygig"))
         datalist.add(
             FeatureModel(
-                "Wallet",
+                getString(R.string.wallet),
                 R.drawable.wallet,
                 navigationPath = "payslipMonthlyFragment"
             )
         )
-        datalist.add(FeatureModel("Profile", R.drawable.profile, navigationPath = "profile"))
+        datalist.add(FeatureModel(getString(R.string.profile), R.drawable.profile, navigationPath = "profile"))
         datalist.add(
             FeatureModel(
-                "Learning",
+                getString(R.string.learning),
                 R.drawable.learning,
                 navigationPath = "learning/main"
             )
         )
-        datalist.add(FeatureModel("Settings", R.drawable.settings, navigationPath = "setting"))
+        datalist.add(FeatureModel(getString(R.string.settings), R.drawable.settings, navigationPath = "setting"))
         datalist.add(
             FeatureModel(
-                "Chat",
+                getString(R.string.chat),
                 R.drawable.ic_homescreen_chat,
                 navigationPath = "chats/chatList"
             )
         )
         datalist.add(
             FeatureModel(
-                "Verification",
+                getString(R.string.verification),
                 R.drawable.ic_shield_black,
                 navigationPath = "verification/main"
             )
         )
         datalist.add(
             FeatureModel(
-                "Invoices",
+                getString(R.string.invoices),
                 R.drawable.wallet,
                 navigationPath = "wallet/invoicesList"
             )
@@ -916,7 +916,7 @@ class BSCalendarScreenFragment : Fragment() {
 
             datalist.add(
                     FeatureModel(
-                            "Gigers Attendance",
+                            getString(R.string.gigers_attendance),
                             R.drawable.ic_group_black,
                             navigationPath = "gig/gigerAttendanceUnderManagerFragment"
                     )

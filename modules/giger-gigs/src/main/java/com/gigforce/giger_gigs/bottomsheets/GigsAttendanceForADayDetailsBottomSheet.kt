@@ -148,7 +148,7 @@ class GigsAttendanceForADayDetailsBottomSheet : BottomSheetDialogFragment() {
         } else {
 
             if (gig.hasRequestRegularisation()) {
-                regularisation_text.text = "Your regularisation request is sent to your supervisor."
+                regularisation_text.text = getString(R.string.request_sent_to_supervisor)
                 punch_in_time.text = "Punch In\n--:--"
                 gig_timer_tv.text = "00 : 00 mins"
                 punch_out_time.text = "Punch Out\n--:--"
@@ -168,13 +168,13 @@ class GigsAttendanceForADayDetailsBottomSheet : BottomSheetDialogFragment() {
                             gig_timer_tv.text = "00 : 00 mins"
                             punch_out_time.text = "Punch Out\n--:--"
                             regularisation_text.text =
-                                "Looks like you forgot to Checkout. Regularise"
+                                getString(R.string.looks_forgot_to_checkout)
                         } else {
                             punch_in_time.text = "Punch In\n--:--"
                             gig_timer_tv.text = "00 : 00 mins"
                             punch_out_time.text = "Punch Out\n--:--"
                             regularisation_text.text =
-                                "Looks like you forgot to Checkout. Regularise"
+                                getString(R.string.looks_forgot_to_checkout)
                         }
                     } else {
                         //Not eligible

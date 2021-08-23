@@ -92,7 +92,7 @@ class GigDetailsFragment : Fragment(),
         }
 
 
-        roleBasedLearningTV.text = "Related Learnings"
+        roleBasedLearningTV.text = getString(R.string.related_learnings)
         iv_options_gig_details.setOnClickListener {
             openPopupMenu(
                 it,
@@ -386,7 +386,7 @@ class GigDetailsFragment : Fragment(),
             gig_chip_group,
             false
         ) as Chip
-        chip.text = if (gig.isMonthlyGig) "Monthly" else "Daily"
+        chip.text = if (gig.isMonthlyGig) getString(R.string.monthly) else getString(R.string.daily)
         gig_chip_group.addView(chip)
 
 
@@ -536,7 +536,7 @@ class GigDetailsFragment : Fragment(),
                 true
             }
             R.id.action_share -> {
-                showToast("This feature is under development")
+                showToast(getString(R.string.under_development))
                 true
             }
             R.id.action_decline_gig -> {
@@ -547,8 +547,8 @@ class GigDetailsFragment : Fragment(),
                     //Past or ongoing gig
 
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Alert")
-                        .setMessage("Cannot decline past or ongoing gig")
+                        .setTitle(getString(R.string.alert))
+                        .setMessage(getString(R.string.cannot_decline_past_gigs))
                         .setPositiveButton(getString(R.string.okay_text)) { _, _ -> }
                         .show()
 

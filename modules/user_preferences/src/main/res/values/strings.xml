@@ -116,5 +116,8 @@
     <string name="none">None</string>
     <string name="pincode_not_correct">Pincode is not correct!!</string>
     <string name="more_detail">More detail require!!</string>
+    <string name="upload_new_address"><![CDATA[To Update Permanent address , you have to upload new address proofs. <font color=\'#E02020\'>Click Here</font>]]></string>
+    <string name="more_details_required">More detail require!!</string>
+    <string name="pincode_incorrect">Pincode is not correct!!</string>
 
 </resources>

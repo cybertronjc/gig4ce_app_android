@@ -70,7 +70,7 @@ class MonthlyPayslipsAdapter constructor(
 
         fun binTo(paySlip: Payslip) {
             roleTV.text = paySlip.profile.capitalize()
-            serialNoTV.text = "Serial No: ${paySlip.serialNumber}"
+            serialNoTV.text = context.getString(R.string.serial_no) + paySlip.serialNumber
             monthYearTV.text = "${paySlip.monthOfPayment} ${paySlip.yearOfPayment}"
             totalPayslipAmountTV.text = "Rs. ${paySlip.totalPayout}"
         }

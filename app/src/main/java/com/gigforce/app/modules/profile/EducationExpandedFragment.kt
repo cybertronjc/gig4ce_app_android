@@ -100,7 +100,8 @@ class EducationExpandedFragment : ProfileBaseFragment() {
                     education_top_profile.about_me_verification_layout.status_iv.setImageResource(R.drawable.ic_clock_orange)
                     education_top_profile.about_me_verification_layout.verification_status_cardview.strokeColor = ResourcesCompat.getColor(resources,R.color.app_orange,null)
                 } else{
-                    education_top_profile.about_me_verification_layout.verification_status_tv.text = "Not Verified"
+                    education_top_profile.about_me_verification_layout.verification_status_tv.text = getString(
+                                            R.string.not_verified)
                     education_top_profile.about_me_verification_layout.verification_status_tv.setTextColor(
                         ResourcesCompat.getColor(resources,R.color.red,null))
                     education_top_profile.about_me_verification_layout.status_iv.setImageResource(R.drawable.ic_cross_red)

@@ -26,5 +26,25 @@
     <string name="w_my_wallet">My wallet</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="set_monthly_goal">How to set monthly goal?</string>
+    <string name="click_on_monthly_goal">click on monthly goal card in wallet screen.</string>
+    <string name="what_is_wallet_balance">What is wallet balance?</string>
+    <string name="amount_in_wallet">amount in your wallet</string>
+    <string name="transfer_fund_to_account">How to transfer fund to my account?</string>
+    <string name="manual_transfer">Manual transfer is not supported yet.</string>
+    <string name="gig_id">\"Gig ID: \"</string>
+    <string name="invoice_generated">\"Invoice Generated: \"</string>
+    <string name="end_date">\"End Date: \"</string>
+    <string name="start_date">\"Start Date: \"</string>
+    <string name="generated">Invoice Generated</string>
+    <string name="invoice_pending">Invoice Pending</string>
+    <string name="something_wrong">something wrong</string>
+    <string name="doing_really_great">You are doing really great</string>
+    <string name="havent_set_monthly_goal">You haven\'t set your monthly goal</string>
+    <string name="serial_no">\"Serial No: \"</string>
+    <string name="alert">Alert</string>
+    <string name="okay">Okay</string>
+    <string name="unable_to_open">Unable to open</string>
+    <string name="file_doesnt_exist">file_doesnt_exist</string>
 
 </resources>

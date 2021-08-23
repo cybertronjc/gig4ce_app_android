@@ -90,7 +90,7 @@ class AssessmentListFragment : Fragment(), AssessmentClickListener {
 
         if(assessments.isEmpty()){
             asssessment_error.visible()
-            asssessment_error.text = "No Assessment Found"
+            asssessment_error.text = getString(R.string.no_assessment_found)
         }else {
 
             assessmentListRV.visible()

@@ -115,7 +115,7 @@ class JoiningRecyclerItemView(
         office: String
     ) {
         if (office.isEmpty()) {
-            viewBinding.userPhoneNumber.text = "Office : N/A"
+            viewBinding.userPhoneNumber.text = context.getString(R.string.office_na)
         } else {
             viewBinding.userPhoneNumber.text = office
         }

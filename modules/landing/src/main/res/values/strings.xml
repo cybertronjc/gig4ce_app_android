@@ -1521,4 +1521,8 @@
     <string name="password">Password</string>
     <string name="select_language">Language</string>
     <string name="step_language">Step 01/09</string>
+    <string name="delivery">Delivery</string>
+    <string name="retail">Retail</string>
+    <string name="quick_service">Quick Service Restuarant</string>
+    <string name="telesales">Telesales and Support</string>
 </resources>

@@ -123,9 +123,9 @@ class PickJobProfileForReferralFragment : BaseFragment2<FragmentPickJobProfileFo
         if (selectedJobProfile == null) {
 
             MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Select Job Profile")
-                .setMessage("Please select at least one job profile")
-                .setPositiveButton("okay") { _, _ -> }
+                .setTitle(getString(R.string.select_job_profile))
+                .setMessage(getString(R.string.select_atleast_one_profile))
+                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                 .show()
 
             return@apply
@@ -134,7 +134,7 @@ class PickJobProfileForReferralFragment : BaseFragment2<FragmentPickJobProfileFo
         val userName = gigersNameET.text.toString().capitalize()
         if (userName.isEmpty()) {
             nameErrorTv.visible()
-            nameErrorTv.text = "Please fill user name"
+            nameErrorTv.text = getString(R.string.fill_user_name)
             return@apply
         } else {
             nameErrorTv.gone()

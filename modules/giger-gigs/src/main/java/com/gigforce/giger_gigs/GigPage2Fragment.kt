@@ -362,7 +362,7 @@ class GigPage2Fragment : Fragment(),
     ) {
 
         if (imageClickedPath == null) {
-            showAlertDialog("Image has not been captured")
+            showAlertDialog(getString(R.string.image_not_captured))
             return
         }
 
@@ -440,9 +440,9 @@ class GigPage2Fragment : Fragment(),
 
     private fun showAlertDialog(message: String) {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Alert")
+            .setTitle(getString(R.string.alert))
             .setMessage(message)
-            .setPositiveButton("Okay") { _, _ -> }
+            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
             .show()
     }
 
@@ -482,11 +482,11 @@ class GigPage2Fragment : Fragment(),
                         checkInCheckOutSliderBtn.isEnabled = true
 
                         if (it.content == AttendanceType.CHECK_OUT) {
-                            showToast("Checkout Marked.")
+                            showToast(getString(R.string.checkout_marked))
                             //showFeedbackBottomSheet()
                             showReviewFlow(reviewInfo)
                         } else {
-                            showToast("Check-in marked")
+                            showToast(getString(R.string.checkin_marked))
                             plantLocationTrackers()
                             eventTracker.pushEvent(
                                 TrackingEventArgs(
@@ -500,7 +500,7 @@ class GigPage2Fragment : Fragment(),
                     }
                     is Lce.Error -> {
                         checkInCheckOutSliderBtn.isEnabled = true
-                        showAlertDialog("Error while marking attendance, $it")
+                        showAlertDialog(getString(R.string.error_marking_attendance) + it)
                     }
                     else -> {
                     }
@@ -644,7 +644,7 @@ class GigPage2Fragment : Fragment(),
         gig_title_tv.text = gig.getGigTitle()
         gig_company_name_tv.text = "${gig.getFullCompanyName()}"
 
-        gig_type.text = if (gig.isFullDay) ": Full time" else ": Part time"
+        gig_type.text = if (gig.isFullDay) getString(R.string.full_time) else getString(R.string.part_time)
 
         gig_duration.text =
             ": ${timeFormatter.format(gig.startDateTime.toDate())} - ${
@@ -695,7 +695,7 @@ class GigPage2Fragment : Fragment(),
         }
 
         userFeedbackTV.isVisible = !gig.gigUserFeedback.isNullOrBlank()
-        userFeedbackTV.text = "User feedback : ${gig.gigUserFeedback}"
+        userFeedbackTV.text = getString(R.string.user_feedback) + gig.gigUserFeedback
         userFeedbackRatingBar.rating = gig.gigRating
     }
 
@@ -782,7 +782,7 @@ class GigPage2Fragment : Fragment(),
                 true
             }
             R.id.action_share -> {
-                showToast("This feature is under development")
+                showToast(getString(R.string.feature_under_development))
                 true
             }
             R.id.action_decline_gig -> {
@@ -793,8 +793,8 @@ class GigPage2Fragment : Fragment(),
                     //Past or ongoing gig
 
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Alert")
-                        .setMessage("Cannot decline past or ongoing gig")
+                        .setTitle(getString(R.string.alert))
+                        .setMessage(getString(R.string.cannot_decline_past_gigs))
                         .setPositiveButton(getString(R.string.okay_text)) { _, _ -> }
                         .show()
 
@@ -847,7 +847,7 @@ class GigPage2Fragment : Fragment(),
     }
 
     override fun gigDeclined() {
-        showToast("Gig Declined")
+        showToast(getString(R.string.gig_declined))
     }
 
 
@@ -909,9 +909,9 @@ class GigPage2Fragment : Fragment(),
 
     private fun showRedirectToGpsPageDialog() {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Gps not turned on")
-            .setMessage("Please turn on location service and set Gps Accuracy to High")
-            .setPositiveButton("Okay") { _, _ ->
+            .setTitle(getString(R.string.gps_not_on))
+            .setMessage(getString(R.string.please_turn_on_gps))
+            .setPositiveButton(getString(R.string.okay)) { _, _ ->
 
                 val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                 startActivityForResult(
@@ -987,7 +987,7 @@ class GigPage2Fragment : Fragment(),
         } else {
             EasyPermissions.requestPermissions(
                 this,
-                "You need to accept camera,storage and location permissions to use this app.",
+                getString(R.string.need_to_accept_permission),
                 REQUEST_PERMISSIONS_DEV_REL_LIB,
                 Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.ACCESS_FINE_LOCATION,
@@ -1009,7 +1009,7 @@ class GigPage2Fragment : Fragment(),
             Manifest.permission.CAMERA
         )
         if (!cameraPermissionGranted) {
-            permissionRequiredAndTheirReasons.put("CAMERA", "To click image for check-in")
+            permissionRequiredAndTheirReasons.put("CAMERA", getString(R.string.to_click_image_for_checkin))
         }
 
         val storagePermissionGranted = EasyPermissions.hasPermissions(
@@ -1020,7 +1020,7 @@ class GigPage2Fragment : Fragment(),
         if (!storagePermissionGranted) {
             permissionRequiredAndTheirReasons.put(
                 "STORAGE",
-                "To store image captured while check-in"
+                getString(R.string.to_store_image_while_checkin)
             )
         }
 
@@ -1033,7 +1033,7 @@ class GigPage2Fragment : Fragment(),
         if (!locationPermissionGranted) {
             permissionRequiredAndTheirReasons.put(
                 "LOCATION",
-                "To capture location for check-in, suggest gigs based on your location"
+                getString(R.string.to_capture_location_for_checkin)
             )
         }
 

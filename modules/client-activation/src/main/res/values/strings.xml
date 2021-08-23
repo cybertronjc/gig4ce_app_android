@@ -56,5 +56,10 @@
     <string name="select_or_capture_both_sides_of_aadhar">Select or capture both sides of Aadhaar Card</string>
     <string name="enter_valid_aadhar_no">Enter Valid Aadhaar Card No</string>
     <string name="alert">Alert</string>
+    <string name="gigforce">Gigforce</string>
+    <string name="gigforce_desc">Flexible work and learning platform</string>
+    <string name="gigforce">Gigforce</string>
+    <string name="gigforce_desc">Flexible work and learning platform</string>
+    <string name="otp_sent">OTP sent</string>
 
 </resources>

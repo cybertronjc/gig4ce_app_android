@@ -68,6 +68,30 @@
     <string name="next_camel_case">Next</string>
     <string name="current_state">Current State</string>
     <string name="current_city">Current City</string>
+    <string name="unable_to_save_state">Unable to save state</string>
+    <string name="unable_to_mark_assessment">Unable to mark assessment as complete</string>
+    <string name="okay">Okay</string>
+    <string name="alert">Alert</string>
+    <string name="no_assessment_found">No Assessment Found</string>
+    <string name="lessons_completed">\" Lessons Completed\"</string>
+    <string name="assessment_completed">\" Assessment Completed\"</string>
+    <string name="assessments_completed">\" Assessments Completed\"</string>
+    <string name="zero_assessments">0 Assessments</string>
+    <string name="lesson">Lesson (</string>
+    <string name="complted">\" Completed\"</string>
+    <string name="completed_100">Completed 100%</string>
+    <string name="replay">Re-play</string>
+    <string name="pending_0">Pending 0%</string>
+    <string name="play">Play</string>
+    <string name="completed">\"Completed \"</string>
+    <string name="resume">Resume</string>
+    <string name="completed_0">Completed 0%</string>
+    <string name="completedspace">\"Completed \"</string>
+    <string name="provide_lession_rating">Please provide lesson rating in stars</string>
+    <string name="slided_marked">Slides marked as complete</string>
+    <string name="unable_to_save_progress">\"Unable to save progress \"</string>
+    <string name="video_title">Video Title</string>
+    <string name="video_desc">Video description</string>
 
 
 </resources>

@@ -197,7 +197,7 @@ class GigRegulariseAttendanceFragment : Fragment() {
     }
 
     private fun regularisationRequestSubmitted() {
-        showToast("Regularisation request submitted")
+        showToast(getString(R.string.regularisation_submitted))
         activity?.onBackPressed()
     }
 
@@ -206,8 +206,8 @@ class GigRegulariseAttendanceFragment : Fragment() {
         regularise_main_layout.visible()
 
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Alert")
-            .setMessage("Unable to submit regularisation request , $error")
+            .setTitle(getString(R.string.alert))
+            .setMessage(getString(R.string.unable_to_submit_request) + error)
             .setPositiveButton(R.string.okay_text) { _, _ ->
 
             }.show()
@@ -216,8 +216,8 @@ class GigRegulariseAttendanceFragment : Fragment() {
     private fun submitRegularisationRequest() {
         if (punchInTime == null) {
             MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Alert")
-                .setMessage("Select Punch-in time")
+                .setTitle(getString(R.string.alert))
+                .setMessage(getString(R.string.select_punchin_time))
                 .setPositiveButton(R.string.okay_text) { _, _ ->
 
                 }.show()
@@ -227,8 +227,8 @@ class GigRegulariseAttendanceFragment : Fragment() {
 
         if (punchOutTime == null) {
             MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Alert")
-                .setMessage("Select Punch-out time")
+                .setTitle(getString(R.string.alert))
+                .setMessage(getString(R.string.select_punchout_time))
                 .setPositiveButton(R.string.okay_text) { _, _ ->
 
                 }.show()
@@ -241,8 +241,8 @@ class GigRegulariseAttendanceFragment : Fragment() {
 
         if (punchIn.isAfter(punchOut) || punchIn.isEqual(punchOut)) {
             MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Alert")
-                .setMessage("Punch-out time should be greater than punch-in time")
+                .setTitle(getString(R.string.alert))
+                .setMessage(getString(R.string.punchout_time_should_be_greater))
                 .setPositiveButton(R.string.okay_text) { _, _ ->
                 }.show()
 

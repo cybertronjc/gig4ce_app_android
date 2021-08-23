@@ -275,7 +275,7 @@ class MainActivity : AppCompatActivity(),
         val filesSelectedUris = intent.getParcelableArrayListExtra<Uri>(Intent.EXTRA_STREAM)
 
         if (filesSelectedUris.size > 10) {
-            Toast.makeText(this, "Max 10 files can be shared at once", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.max_10_files), Toast.LENGTH_SHORT).show()
             proceedWithNormalNavigation()
             return
         }
@@ -550,7 +550,7 @@ class MainActivity : AppCompatActivity(),
         }
 
         this.doubleBackToExitPressedOnce = true
-        Toast.makeText(this, "Press back again to close the app", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, getString(R.string.press_back_again), Toast.LENGTH_SHORT).show()
 
         Handler().postDelayed(Runnable { doubleBackToExitPressedOnce = false }, 2000)
     }
@@ -609,13 +609,13 @@ class MainActivity : AppCompatActivity(),
                         // Request the update.
                         requestUpdate(appUpdateInfo, AppUpdateType.FLEXIBLE)
                         appUpdateManager.registerListener(this@MainActivity)
-                        showToast("Update Available", this)
+                        showToast(getString(R.string.update_available), this)
 
                     } else if (currentPriority == 1 /* immediate priority */
                             && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
                         //request for immediate update
                         requestUpdate(appUpdateInfo, AppUpdateType.IMMEDIATE)
-                        showToast("Update Available", this)
+                        showToast(getString(R.string.update_available), this)
                     }
                 } else if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_NOT_AVAILABLE) {
                     //showToast("Update not available", this)
@@ -678,7 +678,7 @@ class MainActivity : AppCompatActivity(),
                     Log.d("Update", "" + "Result Ok")
                     eventTracker.pushEvent(TrackingEventArgs("Update Requested by User", null))
                     if (currentPriority == 0) {
-                        showToast("Update is being downloaded in background", this)
+                        showToast(getString(R.string.update_in_bakground), this)
                     }
                 }
                 RESULT_CANCELED -> {
@@ -735,10 +735,10 @@ class MainActivity : AppCompatActivity(),
                     // notify the user to complete the update.
                     if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
                         showRestartDialog()
-                        showToast("Update Downloaded", this)
+                        showToast(getString(R.string.update_downloaded), this)
                     } else if (appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS && currentPriority == 1
                     ) {
-                        showToast("Update download in progress", this)
+                        showToast(getString(R.string.download_in_progress), this)
                         // If an in-app update is already running, resume the update.
                         requestUpdate(appUpdateInfo, AppUpdateType.IMMEDIATE)
                     }
@@ -780,7 +780,7 @@ class MainActivity : AppCompatActivity(),
 
     override fun onStateUpdate(state: InstallState) {
         if (state.installStatus() == InstallStatus.DOWNLOADED) {
-            showToast("download completed", this)
+            showToast(getString(R.string.download_completed), this)
             showRestartDialog()
             appUpdateManager?.unregisterListener(this)
 //            currentPriority?.let {

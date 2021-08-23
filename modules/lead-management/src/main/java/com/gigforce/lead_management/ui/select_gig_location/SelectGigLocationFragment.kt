@@ -148,7 +148,7 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentLayoutB
     private fun initListeners() = viewBinding.apply{
         toolbar.apply {
             hideActionMenu()
-            showTitle("Gig Location")
+            showTitle(context.getString(R.string.gig_location))
             setBackButtonListener(View.OnClickListener {
                 navigation.popBackStack()
             })
@@ -181,8 +181,8 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentLayoutB
             }
             if (assignGigRequest.cityId.isEmpty()) {
                 MaterialAlertDialogBuilder(requireContext())
-                    .setMessage("Select a City to continue")
-                    .setPositiveButton("Okay") { _, _ -> }
+                    .setMessage(getString(R.string.select_city_to_continue))
+                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                     .show()
             } else {
                 logger.d(TAG, "AssignGigRequest $assignGigRequest")
@@ -376,7 +376,7 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentLayoutB
         )
 
         locationInfoLayout.infoIv.loadImage(R.drawable.ic_no_joining_found)
-        locationInfoLayout.infoMessageTv.text = "No Gig Location Found"
+        locationInfoLayout.infoMessageTv.text = getString(R.string.no_gig_locations)
     }
 
     private fun showErrorInLoadingGigLocation(error: String) = viewBinding.apply{

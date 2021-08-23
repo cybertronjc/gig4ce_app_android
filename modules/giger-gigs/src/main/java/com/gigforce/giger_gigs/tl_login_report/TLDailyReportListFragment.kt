@@ -183,7 +183,7 @@ class TLDailyReportListFragment : BaseFragment2<FragmentTlDailyLoginReportListBi
                 }
 
                 is Lce.Error -> {
-                    showToast("Error loading data")
+                    showToast(getString(R.string.error_loading_data))
                     progressBar.visibility = View.GONE
 
                     if(swipeToRefresh.isRefreshing)

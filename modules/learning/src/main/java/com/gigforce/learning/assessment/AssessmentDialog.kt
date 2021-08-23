@@ -89,9 +89,9 @@ class AssessmentDialog : DialogFragment() {
                     }
                     is Lce.Error -> {
                         MaterialAlertDialogBuilder(requireContext())
-                            .setTitle("Unable to save state")
-                            .setMessage("Unable to mark assessment as complete")
-                            .setPositiveButton("Okay") { _, _ -> }
+                            .setTitle(getString(R.string.unable_to_save_state))
+                            .setMessage(getString(R.string.unable_to_mark_assessment))
+                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                             .show()
                         pb_assessment_dialog.gone()
 

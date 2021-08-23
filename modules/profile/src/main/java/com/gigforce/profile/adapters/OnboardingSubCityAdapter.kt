@@ -86,7 +86,7 @@ class OnboardingSubCityAdapter(
             val subCity = originalSubCityList.get(adapterPosition)
             if (selectedSubCityList.size == 3 && isChecked){
                 subCityCheckbox.isChecked = false
-                Toast.makeText(context, "Maximum three localities can be selected!!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, context.getString(R.string.max_three_localities), Toast.LENGTH_SHORT).show()
             } else {
                 onSubCitySelectedListener?.onSubCitySelected(isChecked, subCity.name)
             }

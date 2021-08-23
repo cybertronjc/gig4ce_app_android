@@ -60,7 +60,7 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
                     ?: ""
             val querytextstr =
                 styledAttributeSet.getString(R.styleable.VeriScreenInfoComponent_querytext)
-                    ?: "Why we need this"
+                    ?: context.getString(R.string.why_we_need_this)
             val missingdoctext =
                 styledAttributeSet.getString(R.styleable.VeriScreenInfoComponent_missingdoctext)
                     ?: ""
@@ -217,7 +217,7 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
                 uppercaption.gone()
             }
         } ?: run {
-            uppercaption.text = "Congratulation"
+            uppercaption.text = context.getString(R.string.congratulations)
         }
         uploadHereText.gone()
     }

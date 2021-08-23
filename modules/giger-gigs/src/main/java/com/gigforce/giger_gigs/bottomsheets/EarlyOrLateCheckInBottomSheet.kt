@@ -105,33 +105,33 @@ class EarlyOrLateCheckInBottomSheet : BottomSheetDialogFragment() {
 
         when (checkInType) {
             CHECK_IN_TYPE_EARLY -> {
-                title_bar.text = "Early Checkin"
-                actual_checkin_time_tv.text = "Gig Check-in"
-                check_in_label.text = "You are checking in early for this gig."
+                title_bar.text = getString(R.string.early_checkin)
+                actual_checkin_time_tv.text = getString(R.string.gig_checkin)
+                check_in_label.text = getString(R.string.checking_in_early)
 
                 your_checkin_layout.gone()
             }
             CHECK_IN_TYPE_LATE -> {
-                title_bar.text = "Late Checkin"
-                actual_checkin_time_tv.text = "Gig Check-in"
-                your_checkin_time_tv.text = "Your Check-in"
-                check_in_label.text = "You are Checking in late for this Gig. This will be notified to your manager."
+                title_bar.text = getString(R.string.late_checkin)
+                actual_checkin_time_tv.text = getString(R.string.gig_checkin)
+                your_checkin_time_tv.text = getString(R.string.your_checkin)
+                check_in_label.text = getString(R.string.checking_in_late)
 
                 your_checkin_layout.visible()
             }
             CHECK_OUT_TYPE_EARLY -> {
-                title_bar.text = "Early Checkout"
-                actual_checkin_time_tv.text = "Gig Check-out"
+                title_bar.text = getString(R.string.early_checkout)
+                actual_checkin_time_tv.text = getString(R.string.gig_checkout)
 
-                check_in_label.text = "You are checking out early for this gig."
+                check_in_label.text = getString(R.string.checking_out_early)
                 your_checkin_layout.gone()
             }
             CHECK_OUT_TYPE_LATE -> {
-                title_bar.text = "Late Checkout"
-                actual_checkin_time_tv.text = "Gig Check-out"
-                your_checkin_time_tv.text = "Your Check-out"
+                title_bar.text = getString(R.string.late_checkout)
+                actual_checkin_time_tv.text = getString(R.string.gig_checkout)
+                your_checkin_time_tv.text = getString(R.string.your_checkin)
 
-                check_in_label.text = "You are Checking out late for this Gig. This will be notified to your manager."
+                check_in_label.text = getString(R.string.checking_out_late_notified)
                 your_checkin_layout.visible()
             }
             else -> {

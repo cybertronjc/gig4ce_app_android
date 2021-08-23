@@ -195,7 +195,7 @@ class GigerIdFragment : Fragment() {
             iv_brand_logo_giger_id.setImageDrawable(drawable)
         }
         tv_brand_name_giger_id.text = "@${gig.getFullCompanyName()}"
-        tv_gig_id_giger_id.text = "Activation Code: ${gig.profile.activationCode ?: "NA"}"
+        tv_gig_id_giger_id.text = getString(R.string.activation_code) + (gig.profile.activationCode ?: "NA")
 
         tv_gig_date_giger_id.text = parseTime("dd MMM yyyy", gigOrder.endDate.toDate())
         gig.assignedOn.let {
@@ -215,7 +215,7 @@ class GigerIdFragment : Fragment() {
             val clip: ClipData = ClipData.newPlainText("activation_code", gigActivationCode)
             clipboard?.setPrimaryClip(clip)
 
-            showToast("Activation code copied")
+            showToast(getString(R.string.activation_code_copied))
         }
     }
 
@@ -266,7 +266,7 @@ class GigerIdFragment : Fragment() {
             document.add(img)
             document.close()
             viewModelGigerID.showProgress(false)
-            Toast.makeText(requireContext(), "File Downloaded At Path $dirPath", Toast.LENGTH_LONG)
+            Toast.makeText(requireContext(), getString(R.string.file_downloaded_path) + dirPath, Toast.LENGTH_LONG)
                 .show()
             return File(dirPath)
         } catch (ignored: Exception) {

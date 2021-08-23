@@ -277,7 +277,7 @@ class ProfilePicUploadActivity : AppCompatActivity(),
         dialog.setCancelable(false)
         dialog.setContentView(R.layout.confirmation_custom_alert_type1)
         val titleDialog = dialog.findViewById(R.id.title) as TextView
-        titleDialog.text = "Are sure you want to Remove the picture ?"
+        titleDialog.text = getString(R.string.sure_to_remove)
         val noBtn = dialog.findViewById(R.id.yes) as TextView
         noBtn.text = "No"
         val yesBtn = dialog.findViewById(R.id.cancel) as TextView

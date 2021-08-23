@@ -96,7 +96,7 @@ class GigerOnboardingFragment : BaseFragment2<GigerOnboardingFragmentBinding>(
 
                 val mobileNo = viewBinding.mobileNoEt.text.toString()
                 if (!INDIAN_MOBILE_NUMBER.matcher(mobileNo).matches()) {
-                    showAlertDialog("", "Enter a valid Mobile No")
+                    showAlertDialog("", getString(R.string.enter_valid_mobile))
                     return@setOnClickListener
                 }
 
@@ -168,7 +168,7 @@ class GigerOnboardingFragment : BaseFragment2<GigerOnboardingFragmentBinding>(
         viewBinding: GigerOnboardingFragmentBinding
     ) = viewBinding.toolbarOnboarding.apply {
         this.hideActionMenu()
-        this.showTitle("Mobile Number")
+        this.showTitle(context.getString(R.string.mobile_number))
         this.setBackButtonListener{
             activity?.onBackPressed()
         }
@@ -177,12 +177,12 @@ class GigerOnboardingFragment : BaseFragment2<GigerOnboardingFragmentBinding>(
     private fun validateDataAndsubmit() {
 
         if (viewBinding.mobileNoEt.text.length != 10) {
-            showAlertDialog("", "Enter a valid Mobile No")
+            showAlertDialog("", getString(R.string.enter_valid_mobile))
             return
         }
         val mobileNo = viewBinding.mobileNoEt.text.toString()
         if (!INDIAN_MOBILE_NUMBER.matcher(mobileNo).matches()) {
-            showAlertDialog("", "Enter a valid Mobile No")
+            showAlertDialog("", getString(R.string.enter_valid_mobile))
             return
         }
 
@@ -195,7 +195,7 @@ class GigerOnboardingFragment : BaseFragment2<GigerOnboardingFragmentBinding>(
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(title)
             .setMessage(message)
-            .setPositiveButton("Okay") { _, _ -> }
+            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
             .show()
     }
 
@@ -245,9 +245,9 @@ class GigerOnboardingFragment : BaseFragment2<GigerOnboardingFragmentBinding>(
                             }
                         } else {
                             MaterialAlertDialogBuilder(requireContext())
-                                .setTitle("Unable to check user")
-                                .setMessage("Unable to check if user is already registered or not")
-                                .setPositiveButton("Okay") { _, _ -> }
+                                .setTitle(getString(R.string.unable_to_check_user))
+                                .setMessage(getString(R.string.unable_to_check_already_registered))
+                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                                 .show()
                             logger.d(
                                 TAG,
@@ -274,7 +274,7 @@ class GigerOnboardingFragment : BaseFragment2<GigerOnboardingFragmentBinding>(
                     }
                     is Lce.Content -> {
                         UtilMethods.hideLoading()
-                        showToast("OTP sent")
+                        showToast(getString(R.string.otp_sent))
 
                         if (viewBinding.mobileNoEt.text.toString().isNotEmpty()) {
                             navigation.navigateTo(
@@ -304,7 +304,7 @@ class GigerOnboardingFragment : BaseFragment2<GigerOnboardingFragmentBinding>(
         viewBinding.enterMobileLabel.setText(getString(R.string.giger_not_registered))
         viewBinding.tvPleaseEnter.setText(getString(R.string.joining_failed))
         viewBinding.makeSureText.setText(getString(R.string.not_signed_up))
-        viewBinding.submitButton.setText("Share Referral Link")
+        viewBinding.submitButton.setText(getString(R.string.share_referral_link))
         viewBinding.submitButton.tag = REFERRAL_TAG
     }
 

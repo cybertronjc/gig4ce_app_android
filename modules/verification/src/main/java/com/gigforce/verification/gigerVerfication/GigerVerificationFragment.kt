@@ -449,8 +449,8 @@ class GigerVerificationFragment : Fragment(), IOnBackPressedOverride {
         val downloadmanager = context?.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         val uri = Uri.parse(url)
         val request = DownloadManager.Request(uri)
-        request.setTitle("Contract")
-        request.setDescription("Downloading Contract")
+        request.setTitle(getString(R.string.contract))
+        request.setDescription(getString(R.string.downloading_contract))
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
         request.setVisibleInDownloadsUi(false)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -468,19 +468,19 @@ class GigerVerificationFragment : Fragment(), IOnBackPressedOverride {
             try {
                 Toast.makeText(
                     context,
-                    "Your Contract is Downloading",
+                    getString(R.string.contract_is_downloading),
                     Toast.LENGTH_SHORT
                 ).show()
                 downloadmanager.enqueue(request)
             } catch (e: Exception) {
-                Toast.makeText(context, "NetWork Error. Please try again", Toast.LENGTH_SHORT)
+                Toast.makeText(context, getString(R.string.network_error_retry), Toast.LENGTH_SHORT)
                     .show()
             }
         } else {
-            Toast.makeText(context, "Network Error. Please try again", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, getString(R.string.network_error_retry), Toast.LENGTH_SHORT).show()
         }
         val progressBarDialog = ProgressDialog(context)
-        progressBarDialog.setTitle("Downloading Contract, Please Wait...")
+        progressBarDialog.setTitle(getString(R.string.downloading_contract_wait))
         progressBarDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL)
         progressBarDialog.setButton(
             DialogInterface.BUTTON_POSITIVE, "OK"

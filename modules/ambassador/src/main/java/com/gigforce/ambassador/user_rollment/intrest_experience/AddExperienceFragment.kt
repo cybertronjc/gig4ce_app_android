@@ -248,9 +248,9 @@ class AddUserExperienceFragment : Fragment(), IOnBackPressedOverride {
             }
 
             if (year_exp_spinner.selectedItemPosition == 0) {
-                experience_error.text = "Please Select Experience Years"
+                experience_error.text = getString(R.string.please_select_experience_years)
             } else if (months_exp_spinner.selectedItemPosition == 0) {
-                experience_error.text = "Please Select Experience Months"
+                experience_error.text = getString(R.string.please_select_experience_months)
             } else {
                 experience_error.text = null
             }
