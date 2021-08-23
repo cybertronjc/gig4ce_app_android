@@ -1,78 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cv_msgContainer"
-    layout_height="wrap_content"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_alignParentStart="true"
-    android:layout_gravity="left"
     app:cardCornerRadius="@dimen/chat_item_corner_radius"
     app:cardElevation="0dp"
-    android:layout_marginTop="2dp"
-    android:layout_marginBottom="2dp"
-    >
+    app:strokeColor="@color/white"
+    app:strokeWidth="1dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/ll_msgContainer"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="16dp"
-        android:paddingEnd="8dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:background="@drawable/background_reply_message_out"
-        >
+        android:orientation="horizontal">
 
-        <com.gigforce.common_ui.views.GigforceImageView
-            android:id="@+id/message_image"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:visibility="gone"
-            android:src="@drawable/rect_assessment_status_pending"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteY="8dp" />
-
-
-        <TextView
-            android:id="@+id/user_name_tv"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/lato"
-            android:letterSpacing="0"
-            android:paddingBottom="2dp"
-            android:textColor="@color/lipstick"
-            android:textSize="16sp"
-            android:scrollHorizontally="true"
-            android:ellipsize="end"
-            android:maxLines="1"
-            app:layout_constraintEnd_toStartOf="@id/message_image"
+        <View
+            android:id="@+id/side_bar_layout"
+            android:layout_width="@dimen/size_6"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Himanshu" />
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/tv_msgValue"
-            android:layout_width="0dp"
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ll_msgContainer"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/lato"
-            android:letterSpacing="0"
-            android:maxWidth="250dp"
-            android:linksClickable="true"
-            android:textColor="#333333"
-            android:textColorLink="@android:color/black"
-            android:textSize="16sp"
-            android:scrollHorizontally="true"
-            android:ellipsize="end"
-            android:maxLines="1"
-            app:layout_constraintEnd_toStartOf="@id/message_image"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/user_name_tv"
-            tools:text="ddwdewdeewdd wdsdfdsfdsfdsdsfdewde" />
+            android:padding="8dp">
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <com.gigforce.common_ui.views.GigforceImageView
+                android:id="@+id/message_image"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/rect_assessment_status_pending"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:layout_editor_absoluteY="8dp" />
 
-</androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/user_name_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:fontFamily="@font/lato"
+                android:letterSpacing="0"
+                android:maxLines="1"
+                android:paddingBottom="2dp"
+                android:scrollHorizontally="true"
+                android:textColor="@color/lipstick"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@id/message_image"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Himanshu" />
+
+            <LinearLayout
+                android:id="@+id/msg_container"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:maxWidth="250dp"
+                android:maxLines="1"
+                android:layout_marginTop="4dp"
+                android:gravity="center_vertical"
+                app:layout_constraintEnd_toStartOf="@id/message_image"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/user_name_tv"
+                >
+
+
+                <com.gigforce.common_ui.views.GigforceImageView
+                    android:id="@+id/message_type_iv"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginEnd="6dp"
+                    android:visibility="gone"
+                    tools:src="@drawable/ic_chat_image"/>
+
+                <TextView
+                    android:id="@+id/tv_msgValue"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/lato"
+                    android:letterSpacing="0"
+                    android:linksClickable="true"
+                    android:maxWidth="250dp"
+                    android:maxLines="1"
+                    android:scrollHorizontally="true"
+                    android:textColor="#333333"
+                    android:textColorLink="@android:color/black"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toStartOf="@id/message_image"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/user_name_tv"
+                    tools:text="ddwdewdeewdd wdsdfdsfdsfddededdedededsdsfdewde" />
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

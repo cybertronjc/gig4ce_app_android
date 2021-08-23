@@ -68,7 +68,7 @@ abstract class ImageMessageView(
     private lateinit var attachmentDownloadingProgressBar: ProgressBar
     private lateinit var receivedStatusIV: ImageView
     private lateinit var imageContainerFrameLayout: FrameLayout
-    private lateinit var quotedMessagePreviewContainer: LinearLayout
+//    private lateinit var quotedMessagePreviewContainer: LinearLayout
 
     //Data
     private lateinit var chatMessage: ChatMessage
@@ -92,7 +92,7 @@ abstract class ImageMessageView(
         attachmentDownloadingProgressBar = this.findViewById(R.id.attachment_downloading_pb)
         imageContainerFrameLayout = this.findViewById(R.id.image_container_layout)
         messageTV = this.findViewById(R.id.messageTV)
-        quotedMessagePreviewContainer = this.findViewById(R.id.reply_messages_quote_container_layout)
+//        quotedMessagePreviewContainer = this.findViewById(R.id.reply_messages_quote_container_layout)
     }
 
     fun setDefault() {
@@ -109,7 +109,7 @@ abstract class ImageMessageView(
     private fun setOnClickListeners() {
         imageContainerFrameLayout.setOnClickListener(this)
         cardView.setOnLongClickListener(this)
-        quotedMessagePreviewContainer.setOnClickListener(this)
+        //quotedMessagePreviewContainer.setOnClickListener(this)
     }
 
     private fun handleImageNotDownloaded() {
@@ -225,13 +225,13 @@ abstract class ImageMessageView(
         adjustImageSizeAcc(msg)
         handleImage(msg)
         setReceivedStatus(msg)
-        setQuotedMessageOnView(
-            context =  context,
-            firebaseAuthStateListener = firebaseAuthStateListener,
-            type = type,
-            chatMessage = message,
-            quotedMessagePreviewContainer = quotedMessagePreviewContainer
-        )
+//        setQuotedMessageOnView(
+//            context =  context,
+//            firebaseAuthStateListener = firebaseAuthStateListener,
+//            type = type,
+//            chatMessage = message,
+//            quotedMessagePreviewContainer = quotedMessagePreviewContainer
+//        )
     }
 
     private fun adjustImageSizeAcc(msg: ChatMessage) {
