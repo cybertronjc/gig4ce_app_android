@@ -59,5 +59,6 @@
     <string name="select_aadhar_state">Select State</string>
 
     <string name="crop_and_rotate">Crop and Rotate</string>
+    <string name="same_as_permanent">Same as permanent address</string>
 
 </resources>

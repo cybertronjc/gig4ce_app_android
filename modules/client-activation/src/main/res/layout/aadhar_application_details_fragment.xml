@@ -369,18 +369,31 @@
 
                     </com.google.android.material.textfield.TextInputLayout>
 
+                    <TextView
+                        android:id="@+id/current_add_tv"
+                        style="@style/TitleL"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/size_16"
+                        android:layout_marginTop="@dimen/dp_large"
+                        android:layout_marginRight="@dimen/size_16"
+                        android:text="Current Address"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/landmark" />
+
                     <androidx.appcompat.widget.AppCompatCheckBox
                         android:id="@+id/current_add_checkbox"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Same as parmanent address"
+                        android:text="@string/same_as_permanent"
                         android:checked="true"
-                        android:textSize="@dimen/dp_sm1"
+                        android:textSize="@dimen/dp_sm3"
                         android:layout_marginLeft="@dimen/size_16"
-                        android:layout_marginTop="@dimen/size_16"
+                        android:layout_marginTop="@dimen/size_8"
                         android:layout_marginRight="@dimen/size_16"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/landmark" />
+                        app:layout_constraintTop_toBottomOf="@+id/current_add_tv" />
 
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -391,31 +404,20 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/current_add_checkbox"
                         android:visibility="gone">
-                        <TextView
-                            android:id="@+id/current_add_tv"
-                            style="@style/Title"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/size_16"
-                            android:layout_marginTop="@dimen/dp_large"
-                            android:layout_marginRight="@dimen/size_16"
-                            android:text="Current Address"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/ca_addLine1"
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/dp_sm1"
-                            android:layout_marginTop="@dimen/size_16"
+                            android:layout_marginTop="@dimen/size_4"
                             android:layout_marginRight="@dimen/dp_sm1"
                             android:hint="Address Line 1"
                             android:visibility="visible"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/current_add_tv">
+                            app:layout_constraintTop_toTopOf="parent">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/ca_addLine1Input"
