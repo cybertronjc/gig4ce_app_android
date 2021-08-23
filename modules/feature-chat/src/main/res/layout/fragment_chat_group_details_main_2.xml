@@ -145,7 +145,7 @@
                             android:background="@color/red"
                             android:gravity="center_vertical"
                             android:paddingLeft="12dp"
-                            android:text="This group is deactivated"
+                            android:text="@string/this_group_is_deactivated"
                             android:textColor="@android:color/white" />
 
                     </LinearLayout>
@@ -178,7 +178,7 @@
                             android:lineHeight="17sp"
                             android:paddingTop="6dp"
                             android:paddingBottom="6dp"
-                            android:text="Group Controls"
+                            android:text="@string/group_controls"
                             android:textColor="@android:color/black"
                             android:textSize="16sp"
                             android:textStyle="normal"
@@ -204,7 +204,7 @@
                                 android:lineHeight="17sp"
                                 android:paddingTop="6dp"
 
-                                android:text="Only admins can post in group"
+                                android:text="@string/only_admins_can_post_in_group"
                                 android:textColor="@color/black_two"
                                 android:textSize="14sp"
                                 android:textStyle="normal"
@@ -251,7 +251,7 @@
                             android:lineHeight="17sp"
                             android:paddingTop="16dp"
                             android:paddingBottom="20dp"
-                            android:text="Media"
+                            android:text="@string/media"
                             android:textColor="@android:color/black"
                             android:textSize="16sp"
                             android:textStyle="normal" />
@@ -312,7 +312,7 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="16dp"
                         android:fontFamily="@font/lato"
-                        android:text="Gigers"
+                        android:text="@string/gigers"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
                         android:textStyle="normal"
@@ -364,7 +364,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:background="@null"
-                            android:hint="Search Giger" />
+                            android:hint="@string/search_giger" />
 
                         <ImageView
                             android:layout_width="14dp"
@@ -410,7 +410,7 @@
                             android:layout_marginStart="8dp"
                             android:fontFamily="@font/lato"
                             android:lineHeight="17sp"
-                            android:text="Add new Giger "
+                            android:text="@string/add_new_giger"
                             android:textColor="@android:color/black"
                             android:textSize="14sp"
                             android:textStyle="normal" />
@@ -437,7 +437,7 @@
                         android:layout_marginTop="12dp"
                         android:layout_marginEnd="16dp"
                         android:padding="8dp"
-                        android:text="Deactivate Group"
+                        android:text="@string/deactivate_group"
                         android:textAllCaps="false"
                         app:layout_constraintTop_toBottomOf="@id/user_list_recyclerview"
                         app:strokeColor="@color/colorPrimary" />

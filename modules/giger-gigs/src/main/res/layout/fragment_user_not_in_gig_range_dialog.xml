@@ -45,7 +45,7 @@
                     android:layout_marginStart="10dp"
                     android:fontFamily="@font/lato"
                     android:letterSpacing="0"
-                    android:text="Attendance location not correct"
+                    android:text="@string/attendance_location_not_correct"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -62,7 +62,7 @@
                 android:letterSpacing="0"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
-                android:text="You are currently not at gig location.This will be reported to your supervisor"
+                android:text="@string/you_are_currently_not_at_gig_location_this_will_be_reported_to_your_supervisor"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/titleLayout" />
@@ -94,7 +94,7 @@
                 android:gravity="center"
                 android:minWidth="120dp"
                 android:minHeight="@dimen/size_46"
-                android:text="Try Later"
+                android:text="@string/try_later"
                 android:layout_marginStart="10dp"
                 android:textAllCaps="false"
                 android:textColor="@color/lipstick"
@@ -116,7 +116,7 @@
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 android:layout_marginEnd="10dp"
-                android:text="Continue Attendance"
+                android:text="@string/continue_attendance"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -33,7 +33,7 @@
                 android:id="@+id/text_kyc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="kyc is not done. click here to complete." />
+                android:text="@string/kyc_not_done" />
         </androidx.cardview.widget.CardView>
 
         <Button
@@ -46,7 +46,7 @@
             android:outlineAmbientShadowColor="@color/colorAccent"
             android:outlineSpotShadowColor="@color/colorAccent"
             android:shadowColor="@color/colorAccent"
-            android:text="my profile"
+            android:text="@string/my_profile"
             android:textColor="@color/cardview_light_background"
             android:textColorHighlight="@color/colorAccent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -69,7 +69,7 @@
                 android:id="@+id/text_kyc_video"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Complete your video resume" />
+                android:text="@string/complete_your_video_resume" />
         </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -80,7 +80,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
         android:gravity="center"
-        android:text="CLICK HERE" />
+        android:text="@string/click_here" />
 
     <include layout="@layout/bottom_home" />
 

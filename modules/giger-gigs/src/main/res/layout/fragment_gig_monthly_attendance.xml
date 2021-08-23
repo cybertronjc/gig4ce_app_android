@@ -64,7 +64,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toEndOf="@id/calendar_iv"
             android:layout_marginStart="8dp"
-            android:text="Overview" />
+            android:text="@string/overview" />
 
 
         <TextView
@@ -78,7 +78,7 @@
             android:fontFamily="@font/lato"
             app:layout_constraintTop_toBottomOf="@id/calendar_iv"
             app:layout_constraintStart_toStartOf="parent"
-            android:text="Total Present Days" />
+            android:text="@string/total_present_days" />
 
         <TextView
             android:id="@+id/total_days_tv"
@@ -105,7 +105,7 @@
             android:fontFamily="@font/lato"
             app:layout_constraintTop_toBottomOf="@id/total_days_tv"
             app:layout_constraintStart_toStartOf="parent"
-            android:text="Total Absent Days" />
+            android:text="@string/total_absent_days" />
 
         <TextView
             android:id="@+id/total_working_days_tv"
@@ -119,7 +119,7 @@
             app:layout_constraintTop_toBottomOf="@id/total_days_tv"
             app:layout_constraintStart_toEndOf="@id/total_days_label"
             android:layout_marginStart="18dp"
-            android:text=": 0 days" />
+            android:text="@string/_0_days" />
 
 
 
@@ -141,7 +141,7 @@
             style="@style/AttendanceSingleChoiceChip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="All"
+            android:text="@string/all"
             android:fontFamily="@font/lato_bold"
             android:textAlignment="center"
             android:minWidth="82dp"
@@ -154,7 +154,7 @@
             style="@style/AttendanceSingleChoiceChip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Worked"
+            android:text="@string/worked"
             android:fontFamily="@font/lato_bold"
             android:textAlignment="center"
             android:minWidth="82dp"
@@ -167,7 +167,7 @@
             style="@style/AttendanceSingleChoiceChip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Off"
+            android:text="@string/off"
             android:fontFamily="@font/lato_bold"
             android:textAlignment="center"
             android:minWidth="82dp"

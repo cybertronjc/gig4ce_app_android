@@ -40,7 +40,7 @@
                     android:layout_alignParentStart="true"
                     android:layout_toStartOf="@+id/tv_contract_status"
                     android:gravity="start|center_vertical"
-                    android:text="Contract Status"
+                    android:text="@string/contract_status"
                     android:textColor="@color/black_85"
                     android:textSize="14sp" />
 

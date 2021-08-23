@@ -17,7 +17,7 @@
         android:layout_marginStart="15dp"
         android:fontFamily="@font/lato"
         android:letterSpacing="0"
-        android:text="Assessments based on learnings"
+        android:text="@string/assessments_based_on_learnings"
         android:textColor="#080808"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"

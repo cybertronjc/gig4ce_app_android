@@ -76,7 +76,7 @@
                 style="@style/RoundedSquaredChips"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="My Details"
+                android:text="@string/my_details"
                 app:chipStrokeWidth="1dp" />
 
 
@@ -265,7 +265,7 @@
                             android:layout_weight="1"
                             android:fontFamily="@font/lato"
                             android:lineSpacingExtra="3sp"
-                            android:text="Local Address"
+                            android:text="@string/local_address"
                             android:textColor="@color/black"
                             android:textSize="14sp"
                             android:textStyle="normal" />

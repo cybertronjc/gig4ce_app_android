@@ -32,7 +32,7 @@
                 android:fontFamily="@font/lato_bold"
                 android:letterSpacing="0"
                 android:layout_marginStart="22dp"
-                android:text="Oops !!"
+                android:text="@string/oops"
                 android:textColor="@color/white"
                 android:textSize="16sp" />
         </LinearLayout>
@@ -61,7 +61,7 @@
             android:layout_marginEnd="16dp"
             android:lineSpacingExtra="3sp"
             android:gravity="center_horizontal"
-            android:text="This mobile number is already registered\nwith Gig4ce."
+            android:text="@string/this_mobile_number_is_already_registered_nwith_gig4ce"
 
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -79,7 +79,7 @@
                         android:layout_marginLeft="@dimen/dp_sm1"
                         android:layout_marginTop="@dimen/dp_large"
                         android:layout_marginRight="@dimen/dp_sm1"
-                        android:text="Please confirm the following information "
+                        android:text="@string/please_confirm_the_following_information"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/grayLine3" />
@@ -92,7 +92,7 @@
                         android:layout_marginLeft="@dimen/dp_sm1"
                         android:layout_marginTop="@dimen/dp_xl1"
                         android:layout_marginRight="@dimen/dp_sm1"
-                        android:hint="Aadhaar Card Number"
+                        android:hint="@string/aadhaar_card_number"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView10">
@@ -112,7 +112,7 @@
                         android:layout_marginLeft="@dimen/dp_sm1"
                         android:layout_marginTop="@dimen/dp_xl1"
                         android:layout_marginRight="@dimen/dp_sm1"
-                        android:hint="Name"
+                        android:hint="@string/name"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/aadharcard_til">
@@ -168,7 +168,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/dp_sm1"
                             android:background="@color/white"
-                            android:text="   Date of birth   "
+                            android:text="@string/date_of_birth_"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -184,7 +184,7 @@
                         android:background="@drawable/next_button_outlined"
                         android:gravity="center"
                         android:minHeight="@dimen/size_36"
-                        android:text="Upload Again"
+                        android:text="@string/upload_again"
                         android:textColor="@color/outlined_button_text"
                         android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -208,7 +208,7 @@
             android:background="@drawable/submit_button_selector"
             android:gravity="center"
             android:minHeight="@dimen/size_36"
-            android:text="Skip"
+            android:text="@string/skip"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

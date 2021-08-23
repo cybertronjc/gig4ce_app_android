@@ -90,7 +90,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="24dp"
                 android:fontFamily="@font/lato"
-                android:text="Gigforce "
+                android:text="@string/gigforce"
                 android:textColor="@color/colorPrimary"
                 android:textSize="16sp"
                 android:textStyle="bold"

@@ -60,7 +60,7 @@
             android:drawableTop="@drawable/ic_cross_grey"
             android:drawablePadding="10dp"
             android:visibility="gone"
-            android:text="Unable to load your stuff" />
+            android:text="@string/unable_to_load_your_stuff" />
 
     </FrameLayout>
 

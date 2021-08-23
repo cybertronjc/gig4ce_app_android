@@ -63,7 +63,7 @@
             android:fontFamily="@font/lato_italic"
             android:lineHeight="19sp"
             android:lineSpacingExtra="3sp"
-            android:text="  (max 3)"
+            android:text="@string/max_3"
             android:textColor="#333333"
             android:textSize="14sp"
             android:textStyle="normal" />

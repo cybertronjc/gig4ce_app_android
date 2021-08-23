@@ -12,7 +12,7 @@
         android:layout_height="128dp"
         android:layout_width="match_parent"
         android:background="@color/colorAccent"
-        android:text="Create Profile"
+        android:text="@string/create_profile"
         android:textColor="@color/cardview_light_background"
         android:textSize="40dp"
         tools:ignore="PrivateResource">

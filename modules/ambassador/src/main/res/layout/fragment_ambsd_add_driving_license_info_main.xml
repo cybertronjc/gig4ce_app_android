@@ -226,7 +226,7 @@
                         android:minHeight="36dp"
                         android:maxLines="1"
                         android:lineSpacingExtra="3sp"
-                        android:hint="Enter driving license number"
+                        android:hint="@string/enter_driving_license_number"
                         android:textAllCaps="true"
                         android:textSize="@dimen/font_14"
                         android:paddingTop="4dp"

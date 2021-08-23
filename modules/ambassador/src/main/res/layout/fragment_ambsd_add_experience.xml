@@ -182,7 +182,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/lato_bold"
                     android:lineSpacingExtra="3sp"
-                    android:text="Select Role"
+                    android:text="@string/select_role"
                     android:textColor="#333333"
                     android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -219,7 +219,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/lato_bold"
                     android:lineSpacingExtra="3sp"
-                    android:text="Company Name"
+                    android:text="@string/company_name"
                     android:layout_marginTop="24dp"
                     android:textColor="#333333"
                     android:textSize="14sp"
@@ -233,7 +233,7 @@
                     android:layout_marginTop="8dp"
                     android:background="@drawable/rectangle_round_grey"
                     android:fontFamily="@font/lato"
-                    android:hint="Company Name"
+                    android:hint="@string/company_name"
                     android:lineSpacingExtra="3sp"
                     android:minHeight="36dp"
                     android:paddingStart="8dp"
@@ -264,7 +264,7 @@
                     android:layout_marginTop="24dp"
                     android:fontFamily="@font/lato_bold"
                     android:lineSpacingExtra="3sp"
-                    android:text="Total Experience"
+                    android:text="@string/total_experience"
                     android:textColor="#333333"
                     android:textSize="14sp"
                     android:textStyle="normal"
@@ -403,7 +403,7 @@
                     android:layout_marginTop="20dp"
                     android:fontFamily="@font/lato"
                     android:lineSpacingExtra="3sp"
-                    android:text="Which vehicle you own?"
+                    android:text="@string/which_vehicle_you_own"
                     android:textColor="#333333"
                     android:textSize="14sp"
                     android:textStyle="normal" />
@@ -437,7 +437,7 @@
                         style="@style/AppSingleChoiceChip2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Car"
+                        android:text="@string/car"
                         app:chipStrokeWidth="1dp" />
 
                     <com.google.android.material.chip.Chip
@@ -445,7 +445,7 @@
                         style="@style/AppSingleChoiceChip2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Truck"
+                        android:text="@string/truck"
                         app:chipStrokeWidth="1dp" />
 
                     <com.google.android.material.chip.Chip
@@ -453,7 +453,7 @@
                         style="@style/AppSingleChoiceChip2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Autorickshaw"
+                        android:text="@string/autorickshaw"
                         app:chipStrokeWidth="1dp" />
 
                     <com.google.android.material.chip.Chip
@@ -461,7 +461,7 @@
                         style="@style/AppSingleChoiceChip2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Bike"
+                        android:text="@string/bike"
                         app:chipStrokeWidth="1dp" />
 
 
@@ -490,7 +490,7 @@
                     android:layout_marginTop="20dp"
                     android:fontFamily="@font/lato"
                     android:lineSpacingExtra="3sp"
-                    android:text="Which vehicle you own?"
+                    android:text="@string/which_vehicle_you_own"
                     android:textColor="#333333"
                     android:textSize="14sp"
                     android:textStyle="normal" />
@@ -521,7 +521,7 @@
                         style="@style/AppSingleChoiceChip2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Car"
+                        android:text="@string/car"
                         app:chipStrokeWidth="1dp" />
 
                     <com.google.android.material.chip.Chip
@@ -529,7 +529,7 @@
                         style="@style/AppSingleChoiceChip2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Truck"
+                        android:text="@string/truck"
                         app:chipStrokeWidth="1dp" />
 
                     <com.google.android.material.chip.Chip
@@ -537,7 +537,7 @@
                         style="@style/AppSingleChoiceChip2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Scooty"
+                        android:text="@string/scooty"
                         app:chipStrokeWidth="1dp" />
 
                     <com.google.android.material.chip.Chip
@@ -545,7 +545,7 @@
                         style="@style/AppSingleChoiceChip2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Bike"
+                        android:text="@string/bike"
                         app:chipStrokeWidth="1dp" />
 
 

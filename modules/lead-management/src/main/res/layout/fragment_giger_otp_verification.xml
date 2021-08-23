@@ -115,7 +115,7 @@
             android:layout_marginBottom="@dimen/size_22"
             android:gravity="center"
             android:minHeight="@dimen/size_36"
-            android:text="Submit"
+            android:text="@string/submit"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

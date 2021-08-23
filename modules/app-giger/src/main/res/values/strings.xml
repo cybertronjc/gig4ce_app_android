@@ -54,5 +54,29 @@
     <string name="you_have">\"You have \"</string>
     <string name="active_gig_on_this_date">\" Active Gig(s) on this day. All Gigs will be declined for selected day.\"</string>
     <string name="as_per_contract">As per contract</string>
+    <string name="learning">Learning</string>
+    <string name="april_2020">April 2020</string>
+    <string name="gig_title">GIG TITLE</string>
+    <string name="gig_timings">gig timings</string>
+    <string name="gig_title_">Gig Title</string>
+    <string name="gig_timings_">Gig Timings</string>
+    <string name="april_2020">April 2020</string>
+    <string name="day">Day</string>
+    <string name="date">Date</string>
+    <string name="are_sure_you_want_to_decline_this_gig">Are sure you want to decline this gig ?</string>
+    <string name="are_you_sure">" Are sure you want to decline this gig ?"</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+    <string name="mygig">MyGig</string>
+    <string name="kyc_not_done">kyc is not done. click here to complete.</string>
+    <string name="my_profile">my profile</string>
+    <string name="complete_your_video_resume">Complete your video resume</string>
+    <string name="click_here">CLICK HERE</string>
+    <string name="select_langauge">Select Language</string>
+    <string name="next">Next</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+    <string name="do_you_really_want_to_change_availability">Do you really want to change availability</string>
+    <string name="dialog_content">Dialog Content</string>
 
 </resources>

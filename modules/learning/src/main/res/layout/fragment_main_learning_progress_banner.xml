@@ -23,7 +23,7 @@
         android:fontFamily="@font/lato_bold"
         android:letterSpacing="0"
         android:textSize="16sp"
-        android:text="Keep it up"
+        android:text="@string/keep_it_up_"
         android:textColor="@color/black"
         app:layout_constraintStart_toEndOf="@id/learning_progress_image"
         app:layout_constraintTop_toTopOf="parent" />
@@ -36,7 +36,7 @@
         android:layout_marginTop="9dp"
         android:fontFamily="@font/lato"
         android:letterSpacing="0"
-        android:text="You've have completed 80% of your\nlearnings"
+        android:text="@string/you_ve_have_completed_80_of_your_nlearnings"
         android:textColor="@color/black_85"
         android:textSize="12sp"
         app:layout_constraintStart_toEndOf="@id/learning_progress_image"

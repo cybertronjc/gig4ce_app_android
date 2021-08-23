@@ -11,7 +11,7 @@
         android:id="@+id/title_bar"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:text="Late Check-in"
+        android:text="@string/late_check_in"
         android:paddingStart="16dp"
         android:fontFamily="@font/lato"
         android:textSize="16sp"
@@ -50,7 +50,7 @@
             android:textColor="@color/black"
             android:padding="16dp"
             android:lineSpacingExtra="3sp"
-            android:text="Gig Checkin Time : "
+            android:text="@string/gig_checkin_time"
             />
 
         <TextView
@@ -86,7 +86,7 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:lineSpacingExtra="3sp"
-            android:text="Your Checkin Time : "
+            android:text="@string/your_checkin_time"
             />
 
         <TextView
@@ -102,7 +102,7 @@
             android:layout_below="@id/your_checkin_time_tv"
             android:paddingEnd="16dp"
             android:lineSpacingExtra="3sp"
-            android:text="Change Time"
+            android:text="@string/change_time"
             />
 
         <TextView

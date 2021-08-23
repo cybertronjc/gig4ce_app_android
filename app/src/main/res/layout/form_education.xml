@@ -15,7 +15,7 @@
         android:layout_marginStart="0dp"
         android:layout_marginTop="32dp"
         android:layout_marginBottom="16dp"
-        android:text="New Education" />
+        android:text="@string/new_education" />
 
     <EditText
         android:id="@+id/editTextTextPersonName"
@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:ems="10"
-        android:hint="School or College Name"
+        android:hint="@string/school_or_college_name"
         android:inputType="textPersonName" />
 
     <EditText
@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:ems="10"
-        android:hint="Degree"
+        android:hint="@string/degree"
         android:inputType="textPersonName" />
 
     <Button
@@ -41,5 +41,5 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:minHeight="@dimen/size_36"
-        android:text="Add New" />
+        android:text="@string/add_new" />
 </LinearLayout>

@@ -15,7 +15,7 @@
         android:layout_marginTop="10dp"
         android:fontFamily="@font/lato"
         android:letterSpacing="0"
-        android:text="You have rated this gig as"
+        android:text="@string/you_have_rated_this_gig_as"
         android:textColor="@color/black"
         android:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"
@@ -40,7 +40,7 @@
         android:layout_marginTop="10dp"
         android:fontFamily="@font/lato"
         android:letterSpacing="0"
-        android:text="User Feedback : "
+        android:text="@string/user_feedback_"
         android:textColor="@color/black"
         android:visibility="gone"
  />

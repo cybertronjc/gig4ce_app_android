@@ -46,5 +46,13 @@
     <string name="okay">Okay</string>
     <string name="unable_to_open">Unable to open</string>
     <string name="file_doesnt_exist">file_doesnt_exist</string>
+    <string name="invoice_status">Invoice Status</string>
+    <string name="balance">Balance</string>
+    <string name="dummy_question">DUMMY QUESTION?</string>
+    <string name="dummy_answer">DUMMY ANSWER</string>
+    <string name="invoices">Invoices</string>
+    <string name="no_invoices_to_show">No Invoices to show!</string>
+    <string name="payslips">Payslips</string>
+    <string name="close">close</string>
 
 </resources>

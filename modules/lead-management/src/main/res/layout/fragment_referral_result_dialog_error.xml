@@ -29,7 +29,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/lato_bold"
-                android:text="Referral Link Shared"
+                android:text="@string/referral_link_shared"
                 android:textColor="@color/blackDark"
                 android:textSize="18sp"
                 android:layout_marginTop="12dp"
@@ -44,7 +44,7 @@
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/lato"
                 android:gravity="center"
-                android:text="Ask the giger to signup and submit Gig application."
+                android:text="@string/ask_giger_to_signup"
                 android:textColor="@color/blackDark"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -63,7 +63,7 @@
                 android:fontFamily="@font/lato"
                 android:gravity="center"
                 android:minHeight="@dimen/size_36"
-                android:text="Okay"
+                android:text="@string/okay"
                 android:textColor="@color/white"
                 app:layout_constraintTop_toBottomOf="@id/gigs_assigned_label" />
 

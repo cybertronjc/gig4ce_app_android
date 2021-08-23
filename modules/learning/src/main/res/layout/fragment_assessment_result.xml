@@ -165,7 +165,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:minHeight="@dimen/size_36"
-                android:text="Next Lesson"
+                android:text="@string/next_lesson"
                 android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/rv_question_wise_sum_assess_frag"
                 app:strokeColor="@color/colorPrimary" />
@@ -229,7 +229,7 @@
                     android:layout_marginTop="@dimen/size_24"
                     android:layout_marginEnd="@dimen/size_16"
                     android:letterSpacing="0"
-                    android:text="Lessons to Retake"
+                    android:text="@string/lessons_to_retake"
                     android:textColor="@color/black"
                     android:textSize="@dimen/font_18" />
 

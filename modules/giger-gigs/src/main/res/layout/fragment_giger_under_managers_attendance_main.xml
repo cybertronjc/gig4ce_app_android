@@ -54,7 +54,7 @@
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/lato_bold"
                 android:lineSpacingExtra="3sp"
-                android:text="Slot Date"
+                android:text="@string/slot_date"
                 android:textColor="#333333"
                 android:textSize="14sp"
                 android:textStyle="bold"
@@ -117,7 +117,7 @@
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/lato_bold"
                 android:lineSpacingExtra="3sp"
-                android:text="Business"
+                android:text="@string/business"
                 android:textColor="#333333"
                 android:textSize="14sp"
                 android:textStyle="bold"
@@ -134,7 +134,7 @@
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/lato_bold"
                 android:lineSpacingExtra="3sp"
-                android:text="Shift"
+                android:text="@string/shift"
                 android:visibility="gone"
                 android:textColor="#333333"
                 android:textSize="14sp"
@@ -184,7 +184,7 @@
             android:layout_marginStart="16dp"
             android:fontFamily="@font/lato"
             android:textColor="@color/black"
-            android:text="Swipe right to mark present,left to mark absent"
+            android:text="@string/swipe_right_to_mark_present_left_to_mark_absent"
             />
 
         <FrameLayout
@@ -224,7 +224,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:gravity="center"
-                    android:text="Unable to load your stuff"
+                    android:text="@string/unable_to_load_your_stuff"
                     />
 
             </LinearLayout>

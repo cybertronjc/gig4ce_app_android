@@ -119,5 +119,19 @@
     <string name="upload_new_address"><![CDATA[To Update Permanent address , you have to upload new address proofs. <font color=\'#E02020\'>Click Here</font>]]></string>
     <string name="more_details_required">More detail require!!</string>
     <string name="pincode_incorrect">Pincode is not correct!!</string>
+    <string name="_0_km">0 KM</string>
+    <string name="_20_km">20 KM</string>
+    <string name="hurray">Hurray !!!</string>
+    <string name="new_preferences_have_been_set">New preferences have been set.</string>
+    <string name="okay">OKAY</string>
+    <string name="preferred_no_of_days_of_work">Preferred no. of days of work</string>
+    <string name="_00_04_days">00-04 Days</string>
+    <string name="_04_08_days">04-08 Days</string>
+    <string name="_08_15_days">08-15 Days</string>
+    <string name="_15_30_days">15-30 Days</string>
+    <string name="change_current_location">To change your current location please update your current address</string>
+    <string name="okay">OKAY</string>
+    <string name="slots">Slots</string>
+    <string name="dummy_test">Dummy Test</string>
 
 </resources>

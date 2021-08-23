@@ -57,7 +57,7 @@
                 android:gravity="center_horizontal"
                 android:letterSpacing="0"
                 android:paddingBottom="2dp"
-                android:text="April 2020"
+                android:text="@string/april_2020"
                 android:textColor="#333333"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"

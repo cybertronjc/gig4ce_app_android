@@ -61,7 +61,7 @@
             android:layout_width="125dp"
             android:layout_height="wrap_content"
             android:minHeight="@dimen/size_36"
-            android:text="Send"></Button>
+            android:text="@string/send"></Button>
     </LinearLayout>
 
     <!--<ScrollView

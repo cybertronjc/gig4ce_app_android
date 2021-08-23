@@ -93,7 +93,7 @@
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@+id/textView41"
             app:layout_constraintTop_toBottomOf="@+id/seaprator1"
-            android:text="Contact Person" />
+            android:text="@string/contact_person" />
 
 
 
@@ -156,7 +156,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
             android:letterSpacing="0"
-            android:text="Contact Person"
+            android:text="@string/contact_person"
             android:textColor="@color/black"
             android:textSize="12sp"
             app:layout_constraintEnd_toStartOf="@id/callCardView"
@@ -183,7 +183,7 @@
             android:background="@drawable/edittext_border_grey"
             android:letterSpacing="0"
             android:padding="10dp"
-            android:text="Navigate"
+            android:text="@string/navigate"
             android:clickable="true"
             android:focusable="true"
             android:visibility="gone"
@@ -206,7 +206,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginBottom="15dp"
             android:background="@drawable/gradient_button"
-            android:text="Checked-In"
+            android:text="@string/checked_in"
             android:textAllCaps="false"
             android:clickable="true"
             android:focusable="true"

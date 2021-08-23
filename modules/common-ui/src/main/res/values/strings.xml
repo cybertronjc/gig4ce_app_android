@@ -34,4 +34,22 @@
     <string name="play">Play</string>
     <string name="completed">\"Completed \"</string>
     <string name="resume">Resume</string>
+    <string name="web_title">Web Title</string>
+    <string name="accept">Accept</string>
+    <string name="app_bar_title">App Bar Title</string>
+    <string name="step_01_06">Step 01/06</string>
+    <string name="search">Search</string>
+    <string name="hello">Hello</string>
+    <string name="card_title">Card Title</string>
+    <string name="description_here">Description here</string>
+    <string name="now">Now</string>
+    <string name="title">Title</string>
+    <string name="subtittle_here">Subtittle Here</string>
+    <string name="login_summary">Login Summary</string>
+    <string name="unable_to_load">Unable to load your stuff</string>
+    <string name="contact_person">Contact Person</string>
+    <string name="navigate">Navigate</string>
+    <string name="checked_in">Checked-In</string>
+    <string name="giger_name">Giger Name</string>
+    <string name="job_profile">Job Profile</string>
 </resources>

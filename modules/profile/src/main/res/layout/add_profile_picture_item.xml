@@ -25,7 +25,7 @@
             android:fontFamily="@font/lato"
             android:lineHeight="17sp"
             android:lineSpacingExtra="3sp"
-            android:text="Upload Your Profile Picture"
+            android:text="@string/upload_your_profile_picture"
             android:textColor="#333333"
             android:textSize="14sp"
             android:textStyle="normal" />

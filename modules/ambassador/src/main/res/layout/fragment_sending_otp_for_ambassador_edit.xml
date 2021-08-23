@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/lato_bold"
                 android:letterSpacing="0"
-                android:text="Edit Profile !!!"
+                android:text="@string/edit_profile"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
 
@@ -66,7 +66,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/congrats_image"
-            android:text="Verification Code will be sent to registered number to edit profile. "
+            android:text="@string/verification_code_will_be_sent_to_registered_number_to_edit_profile"
              />
 
 

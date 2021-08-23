@@ -78,7 +78,7 @@
         android:layout_marginTop="36dp"
         android:fontFamily="@font/lato"
         android:letterSpacing="0"
-        android:text="Select Language"
+        android:text="@string/select_langauge"
         android:textColor="#131415"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -136,7 +136,7 @@
         android:layout_marginBottom="@dimen/size16"
         android:layout_centerVertical="true"
         android:gravity="center"
-        android:text="Next"
+        android:text="@string/next"
         app:layout_constraintBottom_toBottomOf="parent"
         android:visibility="visible" />
 

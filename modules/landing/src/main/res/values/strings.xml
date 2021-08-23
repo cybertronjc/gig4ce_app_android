@@ -1525,4 +1525,26 @@
     <string name="retail">Retail</string>
     <string name="quick_service">Quick Service Restuarant</string>
     <string name="telesales">Telesales and Support</string>
+    <string name="retail">Retail</string>
+    <string name="lorem_ipsum_is_simply_dummy">Lorem Ipsum is simply dummy</string>
+    <string name="sort_by_popular">Sort by : Popular</string>
+    <string name="filter_role">Filter : Role</string>
+    <string name="driver">Driver</string>
+    <string name="a_driver_works_in_various_industries"><![CDATA[A driver works in various industries to transport people, goods or products from one place to the next.]]></string>
+    <string name="add_as_interest">Add as interest</string>
+    <string name="activated">Activated</string>
+    <string name="delivery">Delivery</string>
+    <string name="delivery_executive_transport">Delivery executives transport goods or people from one location to another safely and drop them the destinations.</string>
+    <string name="add_as_interest">Add as interest</string>
+    <string name="activated">Activated</string>
+    <string name="retail_sales_executive">Retail Sales Executive</string>
+    <string name="sales_executive_promote">Sales executives promote products and services to customers and negotiate contracts with the aim of maximizing profits.</string>
+    <string name="add_as_interest">Add as interest</string>
+    <string name="activate">Activate</string>
+    <string name="barista">Barista</string>
+    <string name="promote_coffee"><![CDATA[Promotes coffee consumption by educating customers; selling coffee and coffee accessories; preparing and serving a variety of coffee drinks, along with pastries and cookies.]]></string>
+    <string name="add_as_interest">Add as interest</string>
+    <string name="activated">Activated</string>
+    <string name="gigforce_tip">Gigforce Tip</string>
+    <string name="having_an_experience_can_help_you_start_earning_fast">Having an experience can help you start earning fast</string>
 </resources>

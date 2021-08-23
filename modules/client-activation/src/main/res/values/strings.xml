@@ -61,5 +61,21 @@
     <string name="gigforce">Gigforce</string>
     <string name="gigforce_desc">Flexible work and learning platform</string>
     <string name="otp_sent">OTP sent</string>
+    <string name="all">All</string>
+    <string name="new">New</string>
+    <string name="approved">Approved</string>
+    <string name="pending">Pending</string>
+    <string name="applied">Applied</string>
+    <string name="rejected">Rejected</string>
+    <string name="no_gigs_to_show">No Gigs to show!</string>
+    <string name="application_in_progress">Application In progress!!</string>
+    <string name="application_check_pending">Application check : Pending</string>
+    <string name="thanks_for_applying_at_21north_we_will_contact_you_soon">Thanks for applying at 21North. We will contact you soon</string>
+    <string name="refer_a_friend">Refer a Friend</string>
+    <string name="team_leader_must_have_contact">Your Team Leader must have or will contact you to share onboarding date and location.</string>
+    <string name="team_leader_s_details">Team Leader’s Details</string>
+    <string name="chat">Chat</string>
+    <string name="call">Call</string>
+    <string name="i_have_submitted_all_documents_to_team_leader">I have submitted all Documents to team leader.</string>
 
 </resources>

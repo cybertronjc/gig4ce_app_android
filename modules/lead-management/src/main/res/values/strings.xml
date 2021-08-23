@@ -70,5 +70,25 @@
     <string name="select_one_working_day">Select at least one working days option</string>
     <string name="select_expected_date">Select expected date to continue</string>
     <string name="no_gig_shift">No Gig Shifts Found</string>
+    <string name="please_wait">Please wait...</string>
+    <string name="assigning_gigs">Assigning gigs</string>
+    <string name="congratulations">Congratulations</string>
+    <string name="giger_has_been_activated_successfully">Giger has been activated successfully.</string>
+    <string name="submit">Submit</string>
+    <string name="add_new">Add New</string>
+    <string name="start_referring_now">Start referring now</string>
+    <string name="send_via_whatsapp">Send via Whatsapp</string>
+    <string name="send_via_other_apps">Send via other apps</string>
+    <string name="number_already_registered">This mobile number is already registered with Gig4ce.</string>
+    <string name="gigers_name">Giger\'s Name</string>
+    <string name="select_gig">Select Gig</string>
+    <string name="search_by_business_name_profile">Search by business name/profile</string>
+    <string name="send_referral_link">Send Referral Link</string>
+    <string name="referral_link_shared">Referral Link Shared</string>
+    <string name="ask_giger_to_signup">Ask the giger to signup and submit Gig application.</string>
+    <string name="referral_link_shared">Referral Link Shared</string>
+    <string name="ask_the_giger_to_signup_and_submit_gig_application">Ask the giger to signup and submit Gig application.</string>
+    <string name="create_profile_now">Create Profile Now</string>
+    <string name="next">Next</string>
 
 </resources>

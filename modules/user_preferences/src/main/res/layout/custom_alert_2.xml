@@ -20,7 +20,7 @@
             android:letterSpacing="0"
             android:paddingLeft="18dp"
             android:paddingTop="24dp"
-            android:text="Preferred no. of days of work"
+            android:text="@string/preferred_no_of_days_of_work"
             android:textColor="#000000"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -45,7 +45,7 @@
                 android:hint="00-04"
                 android:letterSpacing="0"
                 android:paddingLeft="15dp"
-                android:text="00-04 Days"
+                android:text="@string/_00_04_days"
                 android:textColor="@color/black"
                 android:textSize="14sp" />
 
@@ -57,7 +57,7 @@
                 android:hint="04-08"
                 android:letterSpacing="0"
                 android:paddingLeft="15dp"
-                android:text="04-08 Days"
+                android:text="@string/_04_08_days"
                 android:textColor="@color/black"
                 android:textSize="14sp" />
 
@@ -69,7 +69,7 @@
                 android:hint="08-15"
                 android:letterSpacing="0"
                 android:paddingLeft="15dp"
-                android:text="08-15 Days"
+                android:text="@string/_08_15_days"
                 android:textColor="@color/black"
                 android:textSize="14sp" />
 
@@ -81,7 +81,7 @@
                 android:hint="15-30"
                 android:letterSpacing="0"
                 android:paddingLeft="15dp"
-                android:text="15-30 Days"
+                android:text="@string/_15_30_days"
                 android:textColor="@color/black"
                 android:textSize="14sp" />
         </RadioGroup>

@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
-        android:text="Confirm OTP"
+        android:text="@string/confirm_otp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Confirm OTP" />
@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="178dp"
-        android:text="Please Enter OTP Received"
+        android:text="@string/please_enter_otp_received"
         app:layout_constraintStart_toStartOf="@+id/line2view"
         app:layout_constraintTop_toBottomOf="@+id/line2view" />
 
@@ -35,7 +35,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:ems="10"
-        android:hint="Enter OTP Here"
+        android:hint="@string/enter_otp_here"
         android:inputType="numberPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/areaview"
@@ -47,7 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:minHeight="@dimen/size_36"
-        android:text="Confirm"
+        android:text="@string/confirm"
         app:layout_constraintEnd_toEndOf="@+id/edit_otp"
         app:layout_constraintTop_toBottomOf="@+id/edit_otp" />
 

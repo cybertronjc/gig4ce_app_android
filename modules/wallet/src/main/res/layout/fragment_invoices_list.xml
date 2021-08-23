@@ -43,7 +43,7 @@
                 android:layout_toEndOf="@+id/iv_back_invoices"
                 android:fontFamily="@font/lato"
                 android:gravity="center_horizontal"
-                android:text="Invoices"
+                android:text="@string/invoices"
                 android:textColor="@color/white"
                 android:textSize="@dimen/font_20"
                 android:textStyle="normal" />
@@ -64,7 +64,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            android:text="No Invoices to show!"
+            android:text="@string/no_invoices_to_show"
             android:textSize="@dimen/size_24"
             android:textColor="@color/lipstick"
             app:layout_constraintEnd_toEndOf="parent"

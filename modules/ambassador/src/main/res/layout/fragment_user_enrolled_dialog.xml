@@ -116,7 +116,7 @@ Soon gigs will assign to him, and you will receive your incentive." />
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/lato"
                 android:letterSpacing="0"
-                android:text="Oops !!"
+                android:text="@string/oops"
                 android:gravity="center"
                 android:textColor="@color/white"
                 android:textSize="16sp" />
@@ -141,8 +141,7 @@ Soon gigs will assign to him, and you will receive your incentive." />
             android:fontFamily="@font/lato"
             android:gravity="center_horizontal"
             android:lineSpacingExtra="3sp"
-            android:text="To earn incentive for the profile created,
-atleast One document is mandatory "
+            android:text="@string/to_earn_incentive_for_the_profile_created_atleast_one_document_is_mandatory"
             android:textColor="#d9000000"
             android:textSize="14sp"
             android:textStyle="normal"

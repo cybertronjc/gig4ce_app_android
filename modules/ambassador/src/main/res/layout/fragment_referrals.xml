@@ -129,7 +129,7 @@
             android:textColor="@color/lipstick"
             android:lineSpacingExtra="3sp"
             android:layout_marginTop="14dp"
-            android:text="Start referring Now"
+            android:text="@string/start_referring_now"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iv_share_joy_referrals_frag"
@@ -172,7 +172,7 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/lato"
                     android:lineSpacingExtra="3sp"
-                    android:text="Send direct message"
+                    android:text="@string/send_dm"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:textStyle="normal" />
@@ -210,7 +210,7 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/lato"
                     android:lineSpacingExtra="3sp"
-                    android:text="Send via Whatsapp"
+                    android:text="@string/send_whatsapp"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:textStyle="normal" />
@@ -248,7 +248,7 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/lato"
                     android:lineSpacingExtra="3sp"
-                    android:text="Send via other apps"
+                    android:text="@string/send_other_apps"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:textStyle="normal" />

@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/lato"
         android:letterSpacing="0"
-        android:text="Are sure you want to decline this gig ?"
+        android:text="@string/are_sure_you_want_to_decline_this_gig"
         android:textColor="@color/colorText"
         android:textSize="16sp" />
 
@@ -27,7 +27,7 @@
         android:letterSpacing="0"
         android:textColor="@color/battle_ship_grey"
         android:textSize="12sp"
-        tools:text=" Are sure you want to decline this gig ?" />
+        tools:text="@string/are_you_sure" />
 
 
     <LinearLayout
@@ -47,7 +47,7 @@
             android:minHeight="@dimen/size_36"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
-            android:text="No"
+            android:text="@string/no"
             android:textAlignment="center"
             app:strokeColor="@color/colorPrimary" />
 
@@ -65,7 +65,7 @@
             android:focusable="true"
             android:letterSpacing="0"
             android:minHeight="@dimen/size_36"
-            android:text="Yes"
+            android:text="@string/yes"
             android:textAlignment="center"
             android:textColor="@color/white" />
 
