@@ -406,7 +406,7 @@ class PanCardFragment : Fragment(),
 
         panCardDataModel.panCardImagePath?.let {
 
-            (it)?.let {
+            getDBImageUrl(it)?.let {
                 list.add(
                     KYCImageModel(
                         text = getString(R.string.upload_pan_card_new),
