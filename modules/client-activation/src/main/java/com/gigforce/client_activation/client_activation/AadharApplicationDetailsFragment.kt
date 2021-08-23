@@ -33,6 +33,7 @@ import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
+import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.datamodels.City
 import com.gigforce.core.datamodels.State
 import com.gigforce.core.datamodels.profile.AddressModel
@@ -47,6 +48,7 @@ import com.gigforce.core.utils.DateHelper
 import com.gigforce.core.utils.NavFragmentsData
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.storage.FirebaseStorage
 import com.yalantis.ucrop.UCrop
 import dagger.hilt.android.AndroidEntryPoint
@@ -265,7 +267,8 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
 
         }
     }
-    var aadhaarDetailsDataModel : AadhaarDetailsDataModel? = null
+
+    var aadhaarDetailsDataModel: AadhaarDetailsDataModel? = null
     private fun processKycData(kycData: VerificationBaseModel) = viewBinding.apply {
         aadhaarDetailsDataModel = kycData.aadhaar_card_questionnaire
         //set the values to views
@@ -322,20 +325,20 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
                 if (it.isNotEmpty()) {
                     stateSpinner.setText(it, false)
                     //viewModel.getStates()
-                    getCitiesWhenStateNotEmpty(it,true)
+                    getCitiesWhenStateNotEmpty(it, true)
                 }
             }
             currentAddCheckbox.isChecked = it.currentAddSameAsParmanent
             if (!it.currentAddSameAsParmanent) {
-                it.currentAddress?.let { curradd->
+                it.currentAddress?.let { curradd ->
                     caAddLine1Input.setText(curradd.addLine1)
                     caAddLine2Input.setText(curradd.addLine2)
                     caPincodeInput.setText(curradd.pincode)
                     caLandmarkInput.setText(curradd.landmark)
 
-                    if(curradd.state.isNotBlank()){
-                        caStateSpinner.setText(curradd.state,false)
-                        getCitiesWhenStateNotEmpty(curradd.state,false)
+                    if (curradd.state.isNotBlank()) {
+                        caStateSpinner.setText(curradd.state, false)
+                        getCitiesWhenStateNotEmpty(curradd.state, false)
                     }
                 }
             }
@@ -351,16 +354,16 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
         }
     }
 
-    private fun getCitiesWhenStateNotEmpty(stateStr: String, parmanentCity : Boolean = true) {
+    private fun getCitiesWhenStateNotEmpty(stateStr: String, parmanentCity: Boolean = true) {
         //get the value from states
 
         val index = statesesMap.get(stateStr)
         val stateModel = index?.let { it1 -> statesList.get(it1) }
         Log.d("index", "i: $index , map: $statesesMap")
         if (stateModel?.id.toString().isNotEmpty()) {
-            if(parmanentCity) {
+            if (parmanentCity) {
                 viewModel.getCities(stateModel?.id.toString())
-            }else{
+            } else {
                 viewModel.getCurrentAddCities(stateModel?.id.toString())
             }
             Log.d("index", "i: $index , map: ${stateModel?.id}")
@@ -931,29 +934,34 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
             val imageUriResultCrop: Uri? = UCrop.getOutput(data!!)
             imageUriResultCrop?.let {
                 progressBar.visible()
-                firebaseStorage.reference
-                    .child("verification")
-                    .child(fileName)
-                    .putFile(it).addOnSuccessListener {
-                        progressBar.gone()
-                        if (imageUriResultCrop != null) {
-                            if (viewBinding.viewPager2.currentItem == 0) {
-                                aadharFrontImagePath = it.metadata?.path
-                                showAadharImage(imageUriResultCrop, 0)
-                            } else if (viewBinding.viewPager2.currentItem == 1) {
-                                aadharBackImagePath = it.metadata?.path
-                                showAadharImage(imageUriResultCrop, 1)
+                try {
+                    firebaseStorage.reference
+                        .child("verification")
+                        .child(fileName)
+                        .putFile(it).addOnSuccessListener {
+                            progressBar.gone()
+                            if (imageUriResultCrop != null) {
+                                if (viewBinding.viewPager2.currentItem == 0) {
+                                    aadharFrontImagePath = it.metadata?.path
+                                    showAadharImage(imageUriResultCrop, 0)
+                                } else if (viewBinding.viewPager2.currentItem == 1) {
+                                    aadharBackImagePath = it.metadata?.path
+                                    showAadharImage(imageUriResultCrop, 1)
+                                }
                             }
-                        }
-                    }.addOnFailureListener {
-                        progressBar.gone()
-                    }.addOnCanceledListener { progressBar.gone() }
+                        }.addOnFailureListener {
+                            progressBar.gone()
+                        }.addOnCanceledListener { progressBar.gone() }
+                } catch (e: Exception) {
+                    CrashlyticsLogger.d("Aadhar Application Detail Fragment", "${e.message} $it")
+                    FirebaseCrashlytics.getInstance().log("Exception : Aadhar Application Detail Fragment ${e.message} $it")
+                }
             }
 
 
-        }
-        else if (requestCode == ImageCropActivity.CROP_RESULT_CODE && resultCode == Activity.RESULT_OK) {
-            val imageUriResultCrop: Uri? =  Uri.parse(data?.getStringExtra(ImageCropActivity.CROPPED_IMAGE_URL_EXTRA))
+        } else if (requestCode == ImageCropActivity.CROP_RESULT_CODE && resultCode == Activity.RESULT_OK) {
+            val imageUriResultCrop: Uri? =
+                Uri.parse(data?.getStringExtra(ImageCropActivity.CROPPED_IMAGE_URL_EXTRA))
             imageUriResultCrop?.let {
                 progressBar.visible()
                 firebaseStorage.reference
@@ -1169,6 +1177,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
         citiesAdapter?.notifyDataSetChanged()
 
     }
+
     var caCityFilled = false
     private fun processCACities(content: ArrayList<City>) {
 
@@ -1186,8 +1195,14 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
         //viewBinding.progressBar.visibility = View.GONE
         caCitiesAdapter?.notifyDataSetChanged()
 
-        if(!caCityFilled && caCitiesArray.contains(aadhaarDetailsDataModel?.currentAddress?.city?:"")){
-            viewBinding.caCitySpinner.setText(aadhaarDetailsDataModel?.currentAddress?.city?:"",false)
+        if (!caCityFilled && caCitiesArray.contains(
+                aadhaarDetailsDataModel?.currentAddress?.city ?: ""
+            )
+        ) {
+            viewBinding.caCitySpinner.setText(
+                aadhaarDetailsDataModel?.currentAddress?.city ?: "",
+                false
+            )
             caCityFilled = true
         }
 
