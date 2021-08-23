@@ -37,6 +37,8 @@ class AadharApplicationDetailsViewModel @Inject constructor(
     val _citiesResult = MutableLiveData<City>()
     val citiesResult: MutableLiveData<MutableList<City>> = MutableLiveData<MutableList<City>>()
 
+    val caCitiesResult: MutableLiveData<MutableList<City>> = MutableLiveData<MutableList<City>>()
+
     val verificationResult: MutableLiveData<VerificationBaseModel> = MutableLiveData<VerificationBaseModel>()
     val updatedResult: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
 
@@ -60,6 +62,16 @@ class AadharApplicationDetailsViewModel @Inject constructor(
         try {
             val cities = aadharDetailsRepo.getCities(stateCode)
             citiesResult.postValue(cities)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+    }
+
+    fun getCurrentAddCities(stateCode: String) = viewModelScope.launch {
+        try {
+            val cities = aadharDetailsRepo.getCities(stateCode)
+            caCitiesResult.postValue(cities)
         } catch (e: Exception) {
             e.printStackTrace()
         }

@@ -36,6 +36,7 @@ import com.gigforce.core.datamodels.City
 import com.gigforce.core.datamodels.State
 import com.gigforce.core.datamodels.profile.AddressModel
 import com.gigforce.core.datamodels.verification.AadhaarDetailsDataModel
+import com.gigforce.core.datamodels.verification.CurrentAddressDetailDataModel
 import com.gigforce.core.datamodels.verification.VerificationBaseModel
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.gone
@@ -101,17 +102,29 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
     }
 
     private var win: Window? = null
+
+    //parmanent address variables (state variables is common with current add)
     var statesList = arrayListOf<State>()
+    var stateAdapter: ArrayAdapter<String>? = null
+    var statesesMap = mutableMapOf<String, Int>()
+    var statesArray = arrayListOf<String>()
+//    var selectedState = State()
+
     var citiesList = arrayListOf<City>()
-    var arrayAdapter: ArrayAdapter<String>? = null
     var citiesAdapter: ArrayAdapter<String>? = null
     var citiesMap = mutableMapOf<String, Int>()
-    var statesesMap = mutableMapOf<String, Int>()
     var citiesArray = arrayListOf<String>()
-    var statesArray = arrayListOf<String>()
     var selectedCity = City()
-    var selectedState = State()
+
     var imageFileName = ""
+
+    // current address
+    var caCitiesList = arrayListOf<City>()
+    var caCitiesAdapter: ArrayAdapter<String>? = null
+    var caCitiesMap = mutableMapOf<String, Int>()
+    var caCitiesArray = arrayListOf<String>()
+    var caSelectedCity = City()
+    var caSelectedState = State()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -167,7 +180,6 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
                 //getting states
                 var list = it as ArrayList<State>
                 processStates(list)
-
             }
         })
 
@@ -178,6 +190,16 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
                 //getting states
                 val list = it as ArrayList<City>
                 processCities(list)
+
+            }
+        })
+
+        viewModel.caCitiesResult.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            if (it.isNotEmpty()) {
+                Log.d("Cities", it.toList().toString())
+                //getting states
+                val list = it as ArrayList<City>
+                processCACities(list)
 
             }
         })
@@ -242,8 +264,9 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
 
         }
     }
-
+    var aadhaarDetailsDataModel : AadhaarDetailsDataModel? = null
     private fun processKycData(kycData: VerificationBaseModel) = viewBinding.apply {
+        aadhaarDetailsDataModel = kycData.aadhaar_card_questionnaire
         //set the values to views
         kycData.aadhaar_card_questionnaire?.let {
             //set front image
@@ -298,7 +321,21 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
                 if (it.isNotEmpty()) {
                     stateSpinner.setText(it, false)
                     //viewModel.getStates()
-                    getCitiesWhenStateNotEmpty(it)
+                    getCitiesWhenStateNotEmpty(it,true)
+                }
+            }
+            currentAddCheckbox.isChecked = it.currentAddSameAsParmanent
+            if (!it.currentAddSameAsParmanent) {
+                it.currentAddress?.let { curradd->
+                    caAddLine1Input.setText(curradd.addLine1)
+                    caAddLine2Input.setText(curradd.addLine2)
+                    caPincodeInput.setText(curradd.pincode)
+                    caLandmarkInput.setText(curradd.landmark)
+
+                    if(curradd.state.isNotBlank()){
+                        caStateSpinner.setText(curradd.state,false)
+                        getCitiesWhenStateNotEmpty(curradd.state,false)
+                    }
                 }
             }
             it.city.let {
@@ -313,18 +350,19 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
         }
     }
 
-    private fun getCitiesWhenStateNotEmpty(stateStr: String) {
+    private fun getCitiesWhenStateNotEmpty(stateStr: String, parmanentCity : Boolean = true) {
         //get the value from states
 
         val index = statesesMap.get(stateStr)
         val stateModel = index?.let { it1 -> statesList.get(it1) }
         Log.d("index", "i: $index , map: $statesesMap")
         if (stateModel?.id.toString().isNotEmpty()) {
-            //progressBar.visibility = View.VISIBLE
-            viewModel.getCities(stateModel?.id.toString())
+            if(parmanentCity) {
+                viewModel.getCities(stateModel?.id.toString())
+            }else{
+                viewModel.getCurrentAddCities(stateModel?.id.toString())
+            }
             Log.d("index", "i: $index , map: ${stateModel?.id}")
-        } else {
-            Log.d("index", "empty id")
         }
     }
 
@@ -352,7 +390,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
                 activity?.onBackPressed()
             })
         }
-        val cityText = citySpinner.text.toString()
+
         stateSpinner.onItemClickListener = object : AdapterView.OnItemClickListener {
 
             override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
@@ -366,7 +404,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
 //                    }, 10)
                     citySpinner.setText("", false)
 //                    citySpinner.showDropDown()
-                    selectedState = actualIndex?.let { statesList.get(it) }!!
+                    var selectedState = actualIndex?.let { statesList.get(it) }!!
                     Log.d("selected", "selected : $selectedState")
                     //get the cities
                     //progressBar.visibility = View.VISIBLE
@@ -389,15 +427,53 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
             }
 
         }
-        arrayAdapter = context?.let { it1 ->
+
+
+        // current address state and city
+        caStateSpinner.onItemClickListener = object : AdapterView.OnItemClickListener {
+
+            override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                Log.d("selectedIndex", "ind: $p2")
+                //get the state code
+                if (p2 <= statesList.size && caStateSpinner.text.toString().isNotEmpty()) {
+                    val actualIndex = statesesMap.get(caStateSpinner.text.toString().trim())
+                    caCitySpinner.setText("", false)
+                    var selectedState = actualIndex?.let { statesList.get(it) }!!
+                    Log.d("selected", "selected : $selectedState")
+                    viewModel.getCurrentAddCities(selectedState.id)
+                }
+            }
+        }
+
+        caCitySpinner.onItemClickListener = object : AdapterView.OnItemClickListener {
+            override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                Log.d("selectedIndex", "ind: $p2")
+                //get the state code
+                if (p2 <= caCitiesList.size && caCitySpinner.text.toString().isNotEmpty()) {
+                    val actualIndex = caCitiesMap.get(caCitySpinner.text.toString().trim())
+                    caSelectedCity = actualIndex?.let { caCitiesList.get(it) }!!
+                    Log.d("selected", "selected : $caSelectedCity")
+
+                }
+
+            }
+        }
+
+        stateAdapter = context?.let { it1 ->
             ArrayAdapter(
                 it1,
                 android.R.layout.simple_spinner_dropdown_item,
                 statesArray
             )
         }
-        stateSpinner.setAdapter(arrayAdapter)
+        stateSpinner.setAdapter(stateAdapter)
         stateSpinner.threshold = 1
+        stateSpinner.setOnFocusChangeListener { view, b ->
+            if (b) {
+                stateSpinner.showDropDown()
+            }
+        }
+
 
         citiesAdapter = context?.let { it1 ->
             ArrayAdapter(
@@ -409,11 +485,26 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
         citySpinner.setAdapter(citiesAdapter)
         citySpinner.threshold = 1
 
-        stateSpinner.setOnFocusChangeListener { view, b ->
+
+        // current address state (state adapter is same as parmanent add) and city
+        caStateSpinner.setAdapter((stateAdapter))
+        caStateSpinner.threshold = 1
+        caStateSpinner.setOnFocusChangeListener { view, b ->
             if (b) {
-                stateSpinner.showDropDown()
+                caStateSpinner.showDropDown()
             }
         }
+
+        caCitiesAdapter = context?.let { it1 ->
+            ArrayAdapter(
+                it1,
+                android.R.layout.simple_spinner_dropdown_item,
+                caCitiesArray
+            )
+        }
+        caCitySpinner.setAdapter(caCitiesAdapter)
+        caCitySpinner.threshold = 1
+
 
         aadharNo.editText?.addTextChangedListener(ValidationTextWatcher())
         fatherNameTil.editText?.addTextChangedListener(ValidationTextWatcher())
@@ -536,6 +627,69 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
                         .show()
                     return@setOnClickListener
                 }
+                //current address validation
+                if (!currentAddCheckbox.isChecked) {
+
+                    if (caAddLine1Input.text.toString().isBlank()) {
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert))
+                            .setMessage("Enter Current Address Line 1")
+                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .show()
+                        return@setOnClickListener
+                    }
+
+                    if (caAddLine2Input.text.toString().isBlank()) {
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert))
+                            .setMessage("Enter Current Address Line 2")
+                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .show()
+                        return@setOnClickListener
+                    }
+
+                    if (caStateSpinner.text.toString()
+                            .isEmpty() || !statesArray.contains(caStateSpinner.text.toString())
+                    ) {
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert))
+                            .setMessage(getString(R.string.select_aadhar_state))
+                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .show()
+                        return@setOnClickListener
+                    }
+
+                    if (caCitySpinner.text.toString()
+                            .isEmpty() || !caCitiesArray.contains(caCitySpinner.text.toString())
+                    ) {
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert))
+                            .setMessage("Select City")
+                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .show()
+                        return@setOnClickListener
+                    }
+
+                    if (caPincodeInput.text.toString()
+                            .isBlank() || caPincodeInput.text.toString().length != 6
+                    ) {
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert))
+                            .setMessage("Enter valid pincode")
+                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .show()
+                        return@setOnClickListener
+                    }
+
+                    if (caLandmarkInput.text.toString().isBlank()) {
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert))
+                            .setMessage("Enter Landmark")
+                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .show()
+                        return@setOnClickListener
+                    }
+                }
 
                 submitData()
 
@@ -543,6 +697,15 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
                 checkForNextDoc()
             }
         }
+
+        viewBinding.currentAddCheckbox.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                viewBinding.currentAddLayout.gone()
+            } else {
+                viewBinding.currentAddLayout.visible()
+            }
+        }
+
     }
 
     var anyDataEntered = false
@@ -608,7 +771,16 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
             state = stateSpinner.text.toString(),
             city = citySpinner.text.toString(),
             pincode = pincode.editText?.text.toString(),
-            landmark = landmark.editText?.text.toString()
+            landmark = landmark.editText?.text.toString(),
+            currentAddSameAsParmanent = currentAddCheckbox.isChecked,
+            currentAddress = if (!currentAddCheckbox.isChecked) CurrentAddressDetailDataModel(
+                addLine1 = caAddLine1Input.text.toString(),
+                addLine2 = caAddLine2Input.text.toString(),
+                state = caStateSpinner.text.toString(),
+                city = caCitySpinner.text.toString(),
+                pincode = caPincodeInput.text.toString(),
+                landmark = caLandmarkInput.text.toString()
+            ) else null
         )
         viewModel.setAadhaarDetails(submitDataModel, mJobProfileId)
     }
@@ -941,10 +1113,11 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
     }
 
     private fun processCities(content: ArrayList<City>) {
-        citiesArray.clear()
+
         citiesList.toMutableList().clear()
-        //citiesArray.add("Choose City...")
         citiesList = ArrayList(content.sortedBy { it.name })
+
+        citiesArray.clear()
         citiesMap.clear()
         citiesList.forEachIndexed { index, city ->
 
@@ -956,12 +1129,36 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
         citiesAdapter?.notifyDataSetChanged()
 
     }
+    var caCityFilled = false
+    private fun processCACities(content: ArrayList<City>) {
+
+        caCitiesList.toMutableList().clear()
+        caCitiesList = ArrayList(content.sortedBy { it.name })
+
+        caCitiesArray.clear()
+        caCitiesMap.clear()
+        caCitiesList.forEachIndexed { index, city ->
+
+            caCitiesArray.add(city.name)
+            caCitiesMap.put(city.name, index)
+        }
+        Log.d("map", "$citiesMap")
+        //viewBinding.progressBar.visibility = View.GONE
+        caCitiesAdapter?.notifyDataSetChanged()
+
+        if(!caCityFilled && caCitiesArray.contains(aadhaarDetailsDataModel?.currentAddress?.city?:"")){
+            viewBinding.caCitySpinner.setText(aadhaarDetailsDataModel?.currentAddress?.city?:"",false)
+            caCityFilled = true
+        }
+
+    }
 
     private fun processStates(content: ArrayList<State>) {
-        statesArray.clear()
+
         statesList.toMutableList().clear()
-        //citiesArray.add("Choose City...")
         statesList = ArrayList(content.sortedBy { it.name })
+
+        statesArray.clear()
         statesesMap.clear()
         statesList.forEachIndexed { index, state ->
 
@@ -970,7 +1167,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
 
         }
         Log.d("map", "$statesesMap")
-        arrayAdapter?.notifyDataSetChanged()
+        stateAdapter?.notifyDataSetChanged()
         viewModel.getVerificationData()
         //getCitiesWhenStateNotEmpty(viewBinding.stateSpinner.text.toString().trim())
     }
