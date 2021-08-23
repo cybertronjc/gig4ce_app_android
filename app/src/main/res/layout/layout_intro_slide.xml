@@ -23,7 +23,7 @@
         android:letterSpacing="0"
         android:fontFamily="@font/lato"
         android:textSize="24sp"
-        android:text="Welcome to Gigforce" />
+        android:text="@string/welcome_to_gigforce" />
 
     <TextView
         android:id="@+id/tv_subtitle"
@@ -40,7 +40,7 @@
         android:textColor="#80000000"
         android:letterSpacing="0"
         android:textSize="18sp"
-        android:text="The Future of Work" />
+        android:text="@string/the_future_of_work" />
 
     <ImageView
         android:id="@+id/iv_bottom_art"
@@ -58,7 +58,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="54dp"
         android:layout_marginBottom="25dp"
-        android:text="Get Started"
+        android:text="@string/get_started"
         android:paddingLeft="10dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"

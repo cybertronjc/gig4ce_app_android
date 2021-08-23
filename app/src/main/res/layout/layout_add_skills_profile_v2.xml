@@ -42,7 +42,7 @@
                 android:layout_centerVertical="true"
                 android:layout_toEndOf="@+id/iv_back_application_add_skills"
                 android:fontFamily="@font/lato"
-                android:text="Add Skills"
+                android:text="@string/add_skills"
                 android:textColor="@color/white"
                 android:textSize="@dimen/font_20"
                 android:textStyle="normal" />

@@ -104,7 +104,6 @@
     <string name="settings">Settings</string>
     <string name="preferences">PREFERENCES</string>
     <string name="schedules">Schedules</string>
-    <string name="slots">Slots</string>
     <string name="weekday">Weekday</string>
     <string name="days_caps">Days</string>
     <string name="are_you_sure">Are you sure?</string>
@@ -130,7 +129,6 @@
     <string name="_08_15_days">08-15 Days</string>
     <string name="_15_30_days">15-30 Days</string>
     <string name="change_current_location">To change your current location please update your current address</string>
-    <string name="okay">OKAY</string>
     <string name="slots">Slots</string>
     <string name="dummy_test">Dummy Test</string>
 

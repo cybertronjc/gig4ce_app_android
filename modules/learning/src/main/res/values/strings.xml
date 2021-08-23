@@ -13,7 +13,6 @@
     <string name="assessment_dialog_background">Assessment Dialog Background</string>
     <string name="keep_learning">Keep Learning !!!</string>
     <string name="you_have_complete_the_two_lessons_successfully_would_you_like_to_complete_the_pending_lessons_of_this_module">You have complete the lessons successfully, would you like to complete the pending lessons of this module.</string>
-    <string name="next_lesson">Next Lesson</string>
     <string name="skip_underline"><u>Skip</u></string>
     <string name="okay_text">Okay</string>
     <string name="okay_text_cap">OKAY</string>
@@ -72,7 +71,6 @@
     <string name="unable_to_mark_assessment">Unable to mark assessment as complete</string>
     <string name="okay">Okay</string>
     <string name="alert">Alert</string>
-    <string name="no_assessment_found">No Assessment Found</string>
     <string name="lessons_completed">\" Lessons Completed\"</string>
     <string name="assessment_completed">\" Assessment Completed\"</string>
     <string name="assessments_completed">\" Assessments Completed\"</string>
@@ -84,7 +82,6 @@
     <string name="pending_0">Pending 0%</string>
     <string name="play">Play</string>
     <string name="completed">\"Completed \"</string>
-    <string name="resume">Resume</string>
     <string name="completed_0">Completed 0%</string>
     <string name="completedspace">\"Completed \"</string>
     <string name="provide_lession_rating">Please provide lesson rating in stars</string>
@@ -92,17 +89,14 @@
     <string name="unable_to_save_progress">\"Unable to save progress \"</string>
     <string name="video_title">Video Title</string>
     <string name="video_desc">Video description</string>
-    <string name="assessment_1">Assessment 1</string>
     <string name="next_lesson">Next Lesson</string>
     <string name="lessons_to_retake">Lessons to Retake</string>
     <string name="assessment_title">Assessment Title</string>
-    <string name="assessment">Assessment</string>
     <string name="start">Start</string>
     <string name="you_have_completed_the_lesson">You have completed the lesson</string>
     <string name="mark_slides_as_complete">Mark Slides As Complete</string>
     <string name="do_s">Do\'s</string>
     <string name="don_t_s">Don\'t s</string>
-    <string name="slide_title">Slide Title</string>
     <string name="slide_title">Slide Title</string>
     <string name="play_now">Play now</string>
     <string name="assessment_1">Assessment 1</string>
@@ -134,8 +128,6 @@
     <string name="how_useful_is_the_lesson">How useful is the lesson?</string>
     <string name="what_else_did_you_like">What else did you like ?</string>
     <string name="explantion_by_the_educator">Explantion by the educator</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
     <string name="completeness_of_the_topic">Completeness of the topic</string>
     <string name="easy_to_understand">Easy to understand</string>
     <string name="video_quality">Video quality</string>

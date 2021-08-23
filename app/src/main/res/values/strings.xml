@@ -1647,5 +1647,34 @@
     <string name="profile_pic">profile picture</string>
     <string name="send">Send</string>
     <string name="play">Play</string>
+    <string name="hi">Hi</string>
+    <string name="retail_sales_executive">Retail Sales Executive</string>
+    <string name="nunc_justo_eros_vehicula_vel_vehicula_ut_lacinia_a_erat_nam_fringilla_eros">Nunc justo eros, vehicula vel vehicula ut,lacinia a erat. Nam fringilla eros.</string>
+    <string name="nunc_justo_eros_vehicula_vel_vehicula_ut_lacinia_a_erat_nam_fringilla_eros">Nunc justo eros, vehicula vel vehicula ut,lacinia a erat. Nam fringilla eros.</string>
+    <string name="add_skills">Add Skills</string>
+    <string name="onboarding">Onboarding</string>
+    <string name="how_to_1">How to - 1</string>
+    <string name="giger_name">Giger Name</string>
+    <string name="_4_stars">4 stars</string>
+    <string name="signout">SignOut</string>
+    <string name="check_day_view">Check Day View</string>
+    <string name="kyc_is_not_done_click_here_to_complete">kyc is not done. click here to complete.</string>
+    <string name="complete_your_video_resume">Complete your video resume</string>
+    <string name="learning_pending">Learning pending</string>
+    <string name="the_future_of_work">The Future of Work</string>
+    <string name="get_started">Get Started</string>
+    <string name="earn_upto_2000_day_by_working_as_retail_executive">Earn upto 2000 /Day by working as Retail Executive</string>
+    <string name="monthly_earn_up_to_rs_31000">Monthly earn up to Rs. 31000</string>
+    <string name="sales_associate_responsibilitu">As the public face of the company the Sales Associate is responsible for dealing with any and all customer questions about the products and services the company offers. A Sales Associate is expected to be</string>
+    <string name="report_block">Report and Block</string>
+    <string name="image">Image</string>
+    <string name="video">Video</string>
+    <string name="document">Document</string>
+    <string name="message_user">Message User</string>
+    <string name="remove_from_group">Remove from group</string>
+    <string name="public">Public</string>
+    <string name="name">Name</string>
+    <string name="title">Title</string>
+    <string name="mock_name">MOCK NAME</string>
 
 </resources>

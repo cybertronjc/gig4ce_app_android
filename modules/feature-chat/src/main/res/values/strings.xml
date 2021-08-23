@@ -28,21 +28,17 @@
     <string name="zero_contacts_selected">0 Contact(s) Selected</string>
     <string name="refreshing">Refreshing...</string>
     <string name="add_to_group">Add To Group</string>
-    <string name="create_group">Create Group</string>
     <string name="contacts_synced">Contacts Synced</string>
     <string name="unable_to_sync_contacts">Unable to sync contacts</string>
     <string name="tap_to_select">Tap to Select</string>
     <string name="grant_contacts_permission">Grant contacts permission to sync contacts</string>
     <string name="coming_soon">Coming soon</string>
     <string name="group_created">Group Created</string>
-    <string name="alert">Alert</string>
     <string name="unable_to_create_group">\"Unable to create group, \"</string>
     <string name="enter_a_group_name">Please enter a group name</string>
     <string name="position">\"   position  \"</string>
-    <string name="unable_to_open">Unable to open</string>
     <string name="unable_to_activate_group">Unable to activate/deactivate group</string>
     <string name="activate_group">Activate Group</string>
-    <string name="deactivate_group">Deactivate Group</string>
     <string name="unable_to_open">Unable to open</string>
     <string name="enter_new_group_name">Enter a new group name</string>
     <string name="change_group_name">Change group name</string>
@@ -70,7 +66,6 @@
     <string name="this_group_is_deactivated">This group is deactivated</string>
     <string name="group_controls">Group Controls</string>
     <string name="only_admins_can_post_in_group">Only admins can post in group</string>
-    <string name="media">Media</string>
     <string name="gigers">Gigers</string>
     <string name="search_giger">Search Giger</string>
     <string name="add_new_giger">Add new Giger</string>
@@ -79,9 +74,7 @@
     <string name="no_chat">No Chat …</string>
     <string name="oops_it_looks_like_you_have_not_started_chat_with_anyone">Oops…it looks like you have not started chat with anyone.</string>
     <string name="contacts">Contacts</string>
-    <string name="_0_contacts_s">0 Contacts(s)</string>
     <string name="search_gigers">Search Gigers</string>
-    <string name="create_group">Create Group</string>
     <string name="no_contact_found">No Contact Found</string>
     <string name="it_seems_there_is_no_contact_registered_with_gigforce">It seems there is no contact registered with Gigforce</string>
     <string name="invite_now">Invite Now</string>
@@ -91,7 +84,6 @@
     <string name="go_to_settings">Go To Settings</string>
     <string name="create_group">Create Group</string>
     <string name="enter_group_name">Enter a group name</string>
-    <string name="cancel">Cancel</string>
     <string name="create">Create</string>
     <string name="report_this_user">Report this User</string>
     <string name="please_let_us_know_your_reason_to_report_the_user">Please let us know your reason to report the user</string>

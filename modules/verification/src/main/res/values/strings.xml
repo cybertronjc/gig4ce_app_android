@@ -102,7 +102,6 @@
     <string name="do_you_have_aadhar_card">Do you have Aadhaar Card ?</string>
     <string name="reupload"><u>Reupload</u></string>
     <string name="save_all_caps">SAVE</string>
-    <string name="upload_pan_card">Upload PAN Card</string>
     <string name="please_confirm_the_following_information">Please confirm the following information</string>
     <string name="name_with_colon">Name :</string>
     <string name="father_s_name_with_colon">Father\'s Name :</string>
@@ -111,8 +110,6 @@
     <string name="yes_i_confirm_the_data_is_correct">Yes, I confirm the data is correct.</string>
     <string name="please_upload_your_pan">Please upload your PAN Card for\nyour verification</string>
     <string name="pan_card_image">PAN Card Image</string>
-
-
     <string name="you_are_reuploading_pan_card">You are re-uploading your PAN details. They will be verified once again, which may take up to 7 days.</string>
     <string name="enter_valid_pan">Enter valid PAN card no</string>
     <string name="click_select_pan_image">Click or select your PAN card image first</string>
@@ -143,11 +140,9 @@
     <string name="ready_to_wotk_on_field">Ready to work on field?</string>
     <string name="crop_and_rotate">Crop and Rotate</string>
     <string name="issue_in_cap_image">Issue in capturing or selecting Image</string>
-
     <string name="selfie_video">Selfie Video *</string>
     <string name="tap_to_upload">Tap To Upload</string>
     <string name="bank_details">Bank Details</string>
-    <string name="driving_license">Driving License</string>
     <string name="aadhar_card">Aadhaar Card *</string>
     <string name="pan_card">PAN Card</string>
     <string name="do_you_have_pan_card">Do you have PAN Card ?</string>
@@ -156,7 +151,6 @@
     <string name="do_you_have_driving_license">Do you have Driving License ?</string>
     <string name="yes_i_have_driving_license">Yes, I have Driving License</string>
     <string name="no_i_don_t_have_driving_license">No, I don\'t have Driving License</string>
-
     <string name="date_of_birth_without_colon">Date Of Birth</string>
     <string name="gender_wo_colon">Gender</string>
     <string name="address_line">Address Line</string>
@@ -192,7 +186,6 @@
     <string name="all_set_for_test">All Set for Driving Test</string>
     <string name="change_slot">Change Slot</string>
     <string name="i_will_submit_dl_and_cheque_in_same_centre_only">I will submit DL and cheque in same centre only</string>
-    <string name="confirm">Confirm</string>
     <string name="schedule_driving_test">Schedule Driving Test</string>
     <string name="driving_test_certification_and_doc_submission">Driving test certification and Doc submission</string>
     <string name="i_have_completed_my_driving_test">I have completed my driving test.</string>
@@ -208,9 +201,6 @@
     <string name="err_driving_license">Error : Uploaded Image is not a Driving License Image</string>
     <string name="please_provide_following_details">Please provide following details.</string>
     <string name="ifsc_eg_sbin0000572_bkid0000048">IFSC* (Eg: SBIN0000572, BKID0000048)</string>
-
-
-
     <string name="ifsc">IFSC *</string>
     <string name="bank_name">Bank Name *</string>
     <string name="account_no">Account No *</string>
@@ -287,7 +277,6 @@
 
     <string name="no_doc_title_bank">Bank details not available!</string>
     <string name="no_doc_subtitle_bank">No Worries! Once you own Bank details you can untick the checkbox to verify it</string>
-    <string name="verification_completed">Verification Completed</string>
     <string name="aadhar_verified">The Aadhar card details have been verified successfully.</string>
     <string name="aadhar_verified_success">Aadhaar card verified</string>
     <string name="upload_front_side_first">Please upload the front side first!</string>
@@ -298,33 +287,19 @@
     <string name="upload_dl">Upload DL</string>
     <string name="upload_passport">Upload Passport</string>
     <string name="upload_voterid">Upload VoterID</string>
-    <string name="select_which_doc_to_be_uploaded">Please select which doc to be uploaded</string>
-    <string name="upload_front_side_first">Please upload the front side first!</string>
     <string name="upload_doc_before_proceeding">Please upload the doc before proceeding</string>
     <string name="document_successfully_uploaded">Document successfully uploaded!</string>
-    <string name="failure_retry">Some failure, please retry!</string>
-    <string name="no_internet">No Internet Connection!</string>
-    <string name="upload_success">Upload Successful</string>
     <string name="bank_info_success">Information of Bank Captured Successfully.</string>
-    <string name="unable_to_fetch_info">Unable to fetch information</string>
     <string name="enter_bank_details_manually">Enter the Bank details manually below</string>
     <string name="ocr_status">\"Ocr status \"</string>
     <string name="bank_verification_pending">Bank account verification is pending</string>
-    <string name="verifying">Verifying</string>
-    <string name="verification_completed">Verification Completed</string>
     <string name="bank_details_verified">The bank details have been verified successfully.</string>
     <string name="bank_verified">Bank account verified</string>
     <string name="verification_progress">Verification in progress</string>
     <string name="verified_soon">Document will be verified soon. You can click Next to proceed.</string>
-    <string name="verification_failed">Verification Failed</string>
-    <string name="details_incorrect">The details submitted are incorrect. Please try again.</string>
     <string name="bank_account">Bank Account</string>
-    <string name="you_need_to_upload">You need to upload</string>
-    <string name="bank_verification_pending">Bank account verification is pending</string>
-    <string name="verifying">Verifying</string>
     <string name="want_to_reenter_bank_details">Do you want to re-enter Bank details?</string>
     <string name="upload_passbook">Upload Bank Passbook</string>
-    <string name="grant_storage_permission">Please grant storage permission</string>
     <string name="want_to_wait">Do you want to wait?</string>
     <string name="enter_bank_ac_name">Please enter Bank Ac Name</string>
     <string name="enter_valid_bank_ac_name">Please enter valid Bank Ac Name</string>
@@ -334,21 +309,14 @@
     <string name="enter_bank_ifsc">Please enter Bank IFSC</string>
     <string name="enter_valid_bank_ifsc">Please enter valid Bank IFSC</string>
     <string name="fill_up_missing_fields">Please fill up all the missing fields</string>
-    <string name="upload_success">Upload Successful</string>
     <string name="info_of_dl_success">Information of Driving License captured successfully.</string>
-    <string name="unable_to_fetch_info">Unable to fetch information</string>
     <string name="enter_dl_details">Enter the Driving License details manually below</string>
     <string name="upload_driving">Upload Driving License</string>
-    <string name="grant_storage_permission">Please grant storage permission</string>
-    <string name="verification_completed">Verification Completed</string>
     <string name="dl_details_verified">The Driving License details have been verified successfully.</string>
     <string name="dl_verified">Driving License verified</string>
-    <string name="verification_progress">Verification in progress</string>
     <string name="document_verified_soon">Document will be verified soon. You can click next to proceed.</string>
-    <string name="verification_failed">Verification Failed</string>
     <string name="details_incorrect">The details submitted are incorrect. Please try again.</string>
     <string name="driving_license">Driving License</string>
-    <string name="you_need_to_upload">You need to upload</string>
     <string name="dl_pending_verification">Driving License pending for verification</string>
     <string name="verifying">Verifying</string>
     <string name="contract">Contract</string>
@@ -365,15 +333,10 @@
     <string name="verification_completed">Verification Completed</string>
     <string name="pan_verified_successfully">The PAN card details have been verified successfully.</string>
     <string name="pan_verified">PAN card verified</string>
-    <string name="verification_progress">Verification in progress</string>
     <string name="doc_verified_soon">Document will be verified soon. You can click next to proceed</string>
     <string name="verification_failed">Verification Failed</string>
-    <string name="details_incorrect">The details submitted are incorrect. Please try again.</string>
     <string name="pan_pending_for_verification">PAN card pending for verify</string>
     <string name="upload_pan_before">Please upload the Pan before proceeding</string>
-    <string name="document_successfully_uploaded">Document successfully uploaded!</string>
-    <string name="failure_retry">Some failure, please retry!</string>
-    <string name="no_internet">No Internet Connection!</string>
     <string name="load_dl">Upload DL</string>
     <string name="select_which_doc_to_be_uploaded">Please select which doc to be uploaded</string>
     <string name="enter_add1">Please enter address1</string>
@@ -387,33 +350,25 @@
     <string name="enter_valid_pincode">Please enter valid pincode</string>
     <string name="fill_missing_fileds">Please fill up all the missing fields</string>
     <string name="why_we_need_this">Why we need this</string>
-    <string name="please_confirm_the_following_information">Please confirm the following information</string>
     <string name="aadhaar_card_number">Aadhaar Card Number</string>
-    <string name="name">Name</string>
     <string name="date_of_birth_">"   Date of birth   "</string>
-    <string name="upload_again">Upload Again</string>
     <string name="skip">Skip</string>
     <string name="you_need_to_upload">You need to upload</string>
     <string name="aadhaar_card">Aadhaar Card</string>
-    <string name="why_we_need_this">Why we need this</string>
     <string name="select_the_method_you_want_for_verifying_your_aadhaar_card">Select the method you want for verifying your Aadhaar Card</string>
     <string name="or">OR</string>
     <string name="next_step">Next Step</string>
     <string name="verify_aadhar_with_phone_number">Verify Aadhar with Phone Number</string>
     <string name="enter_aadhaar_number">Enter Aadhaar Number</string>
     <string name="enter_aadhar_and_verify">Enter Aadhaar Card number and then verify details with a 6-Digit OTP sent on the registered Phone Number.</string>
-    <string name="skip">Skip</string>
     <string name="confirm_beneficiary">Please confirm the beneficiary name</string>
     <string name="beneficiary_name">Beneficiary Name</string>
     <string name="confirm">Confirm</string>
     <string name="confirm_following_info">Please confirm the following information</string>
-    <string name="account_number">Account Number</string>
     <string name="bank_name_">Bank Name</string>
     <string name="ifsc_code_">IFSC Code</string>
     <string name="upload_again">Upload Again</string>
     <string name="please_confirm">Please confirm the following information</string>
-    <string name="state">State</string>
-    <string name="name">Name</string>
     <string name="dl_number">DL Number</string>
     <string name="father_name">Father Name</string>
     <string name="dob">Date of Birth</string>
@@ -422,12 +377,9 @@
     <string name="issue_date_">"   Issue Date   "</string>
     <string name="expiry_date">Expiry Date</string>
     <string name="expiry_date_">"   Expiry Date   "</string>
-    <string name="upload_again">Upload Again</string>
-    <string name="skip">Skip</string>
     <string name="house_no_3601">House no 3601</string>
     <string name="preet_vihar">Preet Vihar</string>
     <string name="new_delhi">New Delhi</string>
     <string name="license_number">License Number</string>
     <string name="contract_status">Contract Status</string>
-
 </resources>

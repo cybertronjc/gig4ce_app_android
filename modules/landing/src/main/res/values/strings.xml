@@ -755,11 +755,8 @@
     <string name="industry_based">Industry Based</string>
     <string name="apply_driving_license">How to apply for driving license?</string>
     <string name="role_based">Role Based</string>
-    <string name="retail_sales_executive">Retail Sales Executive</string>
     <string name="demonstrate_products">Demonstrate products to customers</string>
-    <string name="driver">Driver</string>
     <string name="accept_ride">How to accept a ride</string>
-    <string name="delivery">Delivery</string>
     <string name="maintaining_safety">Maintaining hygiene and safety at gig</string>
     <string name="cook">Cook</string>
     <string name="cook_salt_meals">How to cook low salt meals</string>
@@ -1004,7 +1001,6 @@
     <string name="application_submission_successfull">Your application is successfully submitted</string>
     <string name="role_activated">Your role is activated.</string>
     <string name="note_if_any_of_the_doc_i_e_adhar_dl_any_one_pan_selfie_video_bank_details_is_not_completed_there_should_be_a_note_to_show_complete_your_verification_for_quick_activation_of_profile">Note: If any of the doc i.e. adhar/DL(any one), PAN, Selfie video, Bank details is not completed, there should be a note to show “Complete your Verification for quick Activation of Profile</string>
-    <string name="activated">Activated</string>
     <string name="applied">Applied</string>
     <string name="apply_now">Apply Now</string>
     <string name="you_will_be_soon_sent_an_invite">You’ll be soon be sent an invite to suitable gigs around you.</string>
@@ -1287,7 +1283,6 @@
     <string name="your_location_details_will_help_us_find_you_best_gig_near_you">Your location details will help us find best Gig near you</string>
     <string name="allow_access_location">Allow Access Location</string>
     <string name="location_error">There is some problem in fetching your location ,Please enable it to continue</string>
-    <string name="activate">Activate</string>
     <string name="resend_message"><![CDATA[If you didn’t receive the OTP, <font color=\'#d72467\'>RESEND</font>]]></string>
     //new strings
     <string name="what_does_a_ambassador_do">What does a Ambassador do ?</string>
@@ -1525,26 +1520,17 @@
     <string name="retail">Retail</string>
     <string name="quick_service">Quick Service Restuarant</string>
     <string name="telesales">Telesales and Support</string>
-    <string name="retail">Retail</string>
     <string name="lorem_ipsum_is_simply_dummy">Lorem Ipsum is simply dummy</string>
-    <string name="sort_by_popular">Sort by : Popular</string>
     <string name="filter_role">Filter : Role</string>
     <string name="driver">Driver</string>
     <string name="a_driver_works_in_various_industries"><![CDATA[A driver works in various industries to transport people, goods or products from one place to the next.]]></string>
     <string name="add_as_interest">Add as interest</string>
     <string name="activated">Activated</string>
-    <string name="delivery">Delivery</string>
     <string name="delivery_executive_transport">Delivery executives transport goods or people from one location to another safely and drop them the destinations.</string>
-    <string name="add_as_interest">Add as interest</string>
-    <string name="activated">Activated</string>
     <string name="retail_sales_executive">Retail Sales Executive</string>
     <string name="sales_executive_promote">Sales executives promote products and services to customers and negotiate contracts with the aim of maximizing profits.</string>
-    <string name="add_as_interest">Add as interest</string>
     <string name="activate">Activate</string>
-    <string name="barista">Barista</string>
     <string name="promote_coffee"><![CDATA[Promotes coffee consumption by educating customers; selling coffee and coffee accessories; preparing and serving a variety of coffee drinks, along with pastries and cookies.]]></string>
-    <string name="add_as_interest">Add as interest</string>
-    <string name="activated">Activated</string>
     <string name="gigforce_tip">Gigforce Tip</string>
     <string name="having_an_experience_can_help_you_start_earning_fast">Having an experience can help you start earning fast</string>
 </resources>

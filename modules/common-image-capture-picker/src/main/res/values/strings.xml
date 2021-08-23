@@ -10,7 +10,6 @@
     <string name="okay">Okay</string>
     <string name="permission_denied">Permission request denied</string>
     <string name="following_permission_are_required_to_click_image">Following permission are required to click image</string>
-    <string name="okay">Okay</string>
     <string name="click_or_pick_image">Click or Pick Image</string>
     <string name="camera">Camera</string>
     <string name="gallery">Gallery</string>

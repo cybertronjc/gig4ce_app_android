@@ -29,7 +29,6 @@
     <string name="pending_bold"><![CDATA[<b>Pending</b>]]></string>
     <string name="rejected_bold"><![CDATA[<b>Rejected </b>]]></string>
     <string name="take_me_to_home">Take me to Home</string>
-    <string name="refer_a_friend">Refer a Friend</string>
     <string name="meanwhile_you_can_refer_your_contacts_who_can_be_eligible_for_this_role">Meanwhile you can refer your contacts who can be eligible for this role</string>
     <string name="you_can_reapply_for_this_role_once_you_are_eligible_we_are_always_here_to_help_you">You can reapply for this role once you are eligible.We are always here to help you.</string>
     <string name="no_worries">No Worries!!</string>
@@ -56,8 +55,6 @@
     <string name="select_or_capture_both_sides_of_aadhar">Select or capture both sides of Aadhaar Card</string>
     <string name="enter_valid_aadhar_no">Enter Valid Aadhaar Card No</string>
     <string name="alert">Alert</string>
-    <string name="gigforce">Gigforce</string>
-    <string name="gigforce_desc">Flexible work and learning platform</string>
     <string name="gigforce">Gigforce</string>
     <string name="gigforce_desc">Flexible work and learning platform</string>
     <string name="otp_sent">OTP sent</string>

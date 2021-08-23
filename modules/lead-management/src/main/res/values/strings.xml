@@ -15,7 +15,6 @@
     <string name="not_signed_up">The input number has not signed up on Gigforce app yet</string>
     <string name="not_registered">Giger can only be activated if giger has created profile on Gigforce app</string>
     <string name="verification_code">Verification Code</string>
-    <string name="gig_location">Gig Location</string>
     <string name="add_city">Select City*</string>
     <string name="select_location">Select Location</string>
     <string name="search_or_select">Search and Choose from this list</string>
@@ -57,13 +56,11 @@
     <string name="gig_location">Gig Location</string>
     <string name="select_city_to_continue">Select a City to continue</string>
     <string name="no_gig_locations">No Gig Location Found</string>
-    <string name="team_leaders">Team Leaders</string>
     <string name="select_gf_tl_to_continue">Select Gigforce Team Leader to continue</string>
     <string name="no_team_leaders">No Team Leaders Found</string>
     <string name="share_job">Share Job Profile</string>
     <string name="share_app_link">Share Application Link</string>
     <string name="link_shared">Link Shared</string>
-    <string name="unable_to_share">Unable to share</string>
     <string name="unable_to_share">Unable to share</string>
     <string name="shift_timings">Shift Timings</string>
     <string name="select_atleast_one_shift">Select at least one shift to continue</string>
@@ -86,7 +83,6 @@
     <string name="send_referral_link">Send Referral Link</string>
     <string name="referral_link_shared">Referral Link Shared</string>
     <string name="ask_giger_to_signup">Ask the giger to signup and submit Gig application.</string>
-    <string name="referral_link_shared">Referral Link Shared</string>
     <string name="ask_the_giger_to_signup_and_submit_gig_application">Ask the giger to signup and submit Gig application.</string>
     <string name="create_profile_now">Create Profile Now</string>
     <string name="next">Next</string>
