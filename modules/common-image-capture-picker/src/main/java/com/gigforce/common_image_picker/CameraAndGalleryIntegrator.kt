@@ -15,6 +15,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
+import com.gigforce.common_image_picker.image_cropper.ImageCropActivity
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
@@ -139,7 +140,8 @@ class CameraAndGalleryIntegrator : ClickOrSelectImageBottomSheet.OnPickOrCapture
             } else {
 
                 if (imageCropOptions.shouldOpenImageCropper) {
-                    startImageCropper(outputFileUri, imageCropOptions)
+//                    startImageCropper(outputFileUri, imageCropOptions)
+                    startCropImage(outputFileUri)
                 } else if (imageCropOptions.shouldDetectForFace) {
                     val fVisionImage = FirebaseVisionImage.fromFilePath(context, outputFileUri)
                     detectFacesAndReturnResult(callback, outputFileUri, fVisionImage)
@@ -171,8 +173,49 @@ class CameraAndGalleryIntegrator : ClickOrSelectImageBottomSheet.OnPickOrCapture
                     returnFileImage(callback, imageUriResultCrop)
             }
         }
-    }
+        else if (requestCode == ImageCropActivity.CROP_RESULT_CODE && resultCode == Activity.RESULT_OK) {
+            val imageUriResultCrop: Uri? =  Uri.parse(data?.getStringExtra(ImageCropActivity.CROPPED_IMAGE_URL_EXTRA))
+            Log.d("ImageUri", imageUriResultCrop.toString())
 
+            if (imageUriResultCrop == null) {
+                callback.errorWhileCapturingOrPickingImage(
+                    Exception(
+                        "Unable to capture or pick Image"
+                    )
+                )
+
+                FirebaseCrashlytics.getInstance().apply {
+                    log("Got no results from imagecrop")
+                    recordException(Exception("imageUriResultCrop found null from image cropping library"))
+                }
+            } else {
+                Log.d("ImageUri", "working")
+                if (imageCropOptions.shouldDetectForFace) {
+                    Log.d("ImageUri", "working1")
+                    val fvImage = FirebaseVisionImage.fromFilePath(context, imageUriResultCrop)
+                    Log.d("ImageUri", "working2")
+
+                    detectFacesAndReturnResult(callback, imageUriResultCrop, fvImage)
+                    Log.d("ImageUri", "working3")
+
+                } else {
+                    Log.d("ImageUri", "working4")
+
+                    returnFileImage(callback, imageUriResultCrop)
+                    Log.d("ImageUri", "working5")
+
+                }
+            }
+        }
+
+    }
+    private fun startCropImage(imageUri: Uri): Unit {
+        val photoCropIntent = Intent(context, ImageCropActivity::class.java)
+        photoCropIntent.putExtra("outgoingUri", imageUri.toString())
+        fragment?.let {
+            it.startActivityForResult(photoCropIntent, ImageCropActivity.CROP_RESULT_CODE)
+        }
+    }
     private fun returnFileImage(callback: ImageCropCallback, outputFileUri: Uri) {
         callback.imageResult(outputFileUri)
     }

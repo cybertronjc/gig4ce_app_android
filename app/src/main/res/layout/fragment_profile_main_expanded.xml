@@ -72,6 +72,7 @@
                 android:layout_height="78dp"
                 android:layout_marginTop="10dp"
                 android:paddingLeft="42dp"
+                app:titleMarginStart="@dimen/dp_xl3"
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 

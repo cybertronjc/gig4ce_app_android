@@ -24,13 +24,16 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.gigforce.common_image_picker.image_cropper.ImageCropActivity
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.AppConstants
+import com.gigforce.core.IEventTracker
 import com.gigforce.core.StringConstants
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.datamodels.verification.BankDetailsDataModel
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.gone
@@ -45,6 +48,7 @@ import com.gigforce.verification.mainverification.Data
 import com.gigforce.verification.mainverification.OLDStateHolder
 import com.gigforce.verification.mainverification.VerificationClickOrSelectImageBottomSheet
 import com.gigforce.verification.util.VerificationConstants
+import com.gigforce.verification.util.VerificationEvents
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jaeger.library.StatusBarUtil
 import com.yalantis.ucrop.UCrop
@@ -91,7 +95,8 @@ class BankAccountFragment : Fragment(),
 
     @Inject
     lateinit var navigation: INavigation
-
+    @Inject
+    lateinit var eventTracker: IEventTracker
     @Inject
     lateinit var buildConfig: IBuildConfig
     private var FROM_CLIENT_ACTIVATON: Boolean = false
@@ -177,6 +182,17 @@ class BankAccountFragment : Fragment(),
             it?.let {
                 if (it.status) {
                     if (!it.accountNumber.isNullOrBlank() || !it.ifscCode.isNullOrBlank() || !it.bankName.isNullOrBlank()) {
+                        var map = mapOf(
+                            "Account number" to it.accountNumber.toString(),
+                            "IFSC code" to it.ifscCode.toString(),
+                            "Bank name" to it.bankName.toString()
+                        )
+                        eventTracker.pushEvent(
+                            TrackingEventArgs(
+                                eventName = VerificationEvents.BANK_OCR_SUCCESS,
+                                props = map
+                            )
+                        )
                         viewBinding.toplayoutblock.uploadStatusLayout(
                             AppConstants.UPLOAD_SUCCESS,
                             "Upload Successful",
@@ -189,6 +205,12 @@ class BankAccountFragment : Fragment(),
                         if (!it.bankName.isNullOrBlank())
                             viewBinding.bankNameTil.editText?.setText(it.bankName)
                     } else {
+                        eventTracker.pushEvent(
+                            TrackingEventArgs(
+                                eventName = VerificationEvents.BANK_OCR_SUCCESS,
+                                props = mapOf("Data Captured" to false)
+                            )
+                        )
                         viewBinding.toplayoutblock.uploadStatusLayout(
                             AppConstants.UNABLE_TO_FETCH_DETAILS,
                             "Unable to fetch information",
@@ -197,6 +219,12 @@ class BankAccountFragment : Fragment(),
 
                     }
                 } else {
+                    eventTracker.pushEvent(
+                        TrackingEventArgs(
+                            eventName = VerificationEvents.BANK_OCR_FAILED,
+                            props = null
+                        )
+                    )
                     viewBinding.toplayoutblock.uploadStatusLayout(
                         AppConstants.UNABLE_TO_FETCH_DETAILS,
                         "Unable to fetch information",
@@ -608,6 +636,15 @@ class BankAccountFragment : Fragment(),
             })
         }
         viewBinding.confirmButton.setOnClickListener {
+            var props = HashMap<String, Any>()
+            props.put("Bank verified", true)
+            eventTracker.setUserProperty(props)
+            eventTracker.pushEvent(
+                TrackingEventArgs(
+                    eventName = VerificationEvents.BANK_VERIFIED,
+                    props = null
+                )
+            )
             viewModel.setVerificationStatusInDB(true)
             viewBinding.toplayoutblock.hideOnVerifiedDocuments()
         }
@@ -615,6 +652,12 @@ class BankAccountFragment : Fragment(),
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Do you want to re-enter Bank details?")
                 .setPositiveButton(getString(R.string.yes)) { _, _ ->
+                    eventTracker.pushEvent(
+                        TrackingEventArgs(
+                            eventName = VerificationEvents.BANK_MISMATCH,
+                            props = null
+                        )
+                    )
                     viewModel.setVerificationStatusStringToBlank()
                 }
                 .setNegativeButton(getString(R.string.no)) { dialog, _ ->
@@ -773,7 +816,8 @@ class BankAccountFragment : Fragment(),
             val outputFileUri =
                 ImagePicker.getImageFromResult(requireContext(), resultCode, data)
             if (outputFileUri != null) {
-                startCrop(outputFileUri)
+//                startCrop(outputFileUri)
+                startCropImage(outputFileUri)
             }
         } else if (requestCode == UCrop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
             val imageUriResultCrop: Uri? = UCrop.getOutput(data!!)
@@ -786,10 +830,20 @@ class BankAccountFragment : Fragment(),
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
 
             }
+        }else if (requestCode == ImageCropActivity.CROP_RESULT_CODE && resultCode == Activity.RESULT_OK) {
+            val imageUriResultCrop: Uri? =  Uri.parse(data?.getStringExtra(ImageCropActivity.CROPPED_IMAGE_URL_EXTRA))
+            Log.d("ImageUri", imageUriResultCrop.toString())
+            clickedImagePath = imageUriResultCrop
+            showPassbookInfoCard(clickedImagePath!!)
         }
 
     }
 
+    private fun startCropImage(imageUri: Uri): Unit {
+        val photoCropIntent = Intent(context, ImageCropActivity::class.java)
+        photoCropIntent.putExtra("outgoingUri", imageUri.toString())
+        startActivityForResult(photoCropIntent, ImageCropActivity.CROP_RESULT_CODE)
+    }
 
     private fun showWhyWeNeedThisDialog() {
         WhyWeNeedThisBottomSheet.launch(
@@ -806,6 +860,17 @@ class BankAccountFragment : Fragment(),
             Data("ifsccode", viewBinding.ifscCode.editText?.text.toString())
         )
         activeLoader(true)
+        var map = mapOf(
+            "Account number" to viewBinding.bankAccNumberItl.editText?.text.toString(),
+            "IFSC code" to viewBinding.ifscCode.editText?.text.toString(),
+            "Bank name" to viewBinding.bankNameTil.editText?.text.toString()
+        )
+        eventTracker.pushEvent(
+            TrackingEventArgs(
+                eventName = VerificationEvents.BANK_DETAIL_SUBMITTED,
+                props = map
+            )
+        )
         viewModel.getKycVerificationResult("bank", list)
     }
 
