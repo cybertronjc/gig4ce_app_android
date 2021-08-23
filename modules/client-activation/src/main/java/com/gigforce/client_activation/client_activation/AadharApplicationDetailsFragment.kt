@@ -27,6 +27,7 @@ import com.gigforce.client_activation.R
 import com.gigforce.client_activation.client_activation.adapters.VerificationViewPagerAdapter
 import com.gigforce.client_activation.databinding.AadharApplicationDetailsFragmentBinding
 import com.gigforce.client_activation.ui.ClientActivationClickOrSelectImageBottomSheet
+import com.gigforce.common_image_picker.image_cropper.ImageCropActivity
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.showToast
@@ -923,7 +924,8 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
         if (requestCode == REQUEST_CAPTURE_IMAGE || requestCode == REQUEST_PICK_IMAGE) {
             val outputFileUri = ImagePicker.getImageFromResult(requireContext(), resultCode, data)
             if (outputFileUri != null) {
-                startCrop(outputFileUri)
+//                startCrop(outputFileUri)
+                startCropImage(outputFileUri)
             }
         } else if (requestCode == UCrop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
             val imageUriResultCrop: Uri? = UCrop.getOutput(data!!)
@@ -950,6 +952,32 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
 
 
         }
+        else if (requestCode == ImageCropActivity.CROP_RESULT_CODE && resultCode == Activity.RESULT_OK) {
+            val imageUriResultCrop: Uri? =  Uri.parse(data?.getStringExtra(ImageCropActivity.CROPPED_IMAGE_URL_EXTRA))
+            imageUriResultCrop?.let {
+                progressBar.visible()
+                firebaseStorage.reference
+                    .child("verification")
+                    .child(fileName)
+                    .putFile(it).addOnSuccessListener {
+                        progressBar.gone()
+                        if (imageUriResultCrop != null) {
+                            if (viewBinding.viewPager2.currentItem == 0) {
+                                aadharFrontImagePath = it.metadata?.path
+                                showAadharImage(imageUriResultCrop, 0)
+                            } else if (viewBinding.viewPager2.currentItem == 1) {
+                                aadharBackImagePath = it.metadata?.path
+                                showAadharImage(imageUriResultCrop, 1)
+                            }
+                        }
+                    }.addOnFailureListener {
+                        progressBar.gone()
+                    }.addOnCanceledListener { progressBar.gone() }
+            }
+
+
+        }
+
 //        else if (requestCode == REQUEST_CODE_UPLOAD_AADHAR && resultCode == Activity.RESULT_OK) {
 //
 //            val imageUriResultCrop: String? = data?.getStringExtra("image_url")
@@ -966,6 +994,12 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
 //                }
 //            }
 //        }
+    }
+
+    private fun startCropImage(imageUri: Uri): Unit {
+        val photoCropIntent = Intent(context, ImageCropActivity::class.java)
+        photoCropIntent.putExtra("outgoingUri", imageUri.toString())
+        startActivityForResult(photoCropIntent, ImageCropActivity.CROP_RESULT_CODE)
     }
 
     private fun showAadharImage(uri: Uri, position: Int) {
