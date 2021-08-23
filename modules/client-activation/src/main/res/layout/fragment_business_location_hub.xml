@@ -15,47 +15,61 @@
         app:layout_constraintTop_toTopOf="parent"
         app:titleText="Enter Hub Details" />
 
-    <TextView
-        android:id="@+id/textView10"
-        style="@style/Title"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp_sm1"
-        android:layout_marginTop="@dimen/dp_large"
-        android:layout_marginRight="@dimen/dp_sm1"
-        android:text="Please enter the Hub allocated for the Flipkart Delivery Gig"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBar" />
-
-    <AutoCompleteTextView
-        android:id="@+id/state"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/size_46"
-        android:layout_marginStart="@dimen/size_16"
-        android:layout_marginTop="@dimen/size_16"
-        android:layout_marginEnd="@dimen/size_16"
-        android:background="@drawable/rect_outline_lipstick"
-        android:hint="State"
-        android:paddingStart="@dimen/size_6"
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/size_16"
+        app:layout_constraintBottom_toTopOf="@id/submit_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView10" />
+        app:layout_constraintTop_toBottomOf="@id/appBar">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/textView10"
+            style="@style/Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_sm1"
+            android:layout_marginTop="@dimen/dp_large"
+            android:layout_marginRight="@dimen/dp_sm1"
+            android:text="Please enter the Hub allocated for the Flipkart Delivery Gig"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <AutoCompleteTextView
+            android:id="@+id/state"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_46"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginTop="@dimen/size_16"
+            android:layout_marginEnd="@dimen/size_16"
+            android:background="@drawable/rect_outline_lipstick"
+            android:hint="State"
+            android:paddingStart="@dimen/size_6"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
 
-    <AutoCompleteTextView
-        android:id="@+id/hub"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/size_46"
-        android:layout_marginStart="@dimen/size_16"
-        android:layout_marginTop="@dimen/size_16"
-        android:layout_marginEnd="@dimen/size_16"
-        android:background="@drawable/rect_outline_lipstick"
-        android:hint="Hub name"
-        android:paddingStart="@dimen/size_6"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/state" />
+        <AutoCompleteTextView
+            android:id="@+id/hub"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_46"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginTop="@dimen/size_16"
+            android:layout_marginEnd="@dimen/size_16"
+            android:background="@drawable/rect_outline_lipstick"
+            android:hint="Hub name"
+            android:paddingStart="@dimen/size_6"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/state" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
     <TextView
         android:id="@+id/submit_button"

@@ -11,6 +11,17 @@ data class AadhaarDetailsDataModel (
     var state: String = "",
     var city: String = "",
     var pincode: String = "",
-    var landmark :String = ""
+    var landmark :String = "",
+    var currentAddSameAsParmanent : Boolean = true,
+    var currentAddress : CurrentAddressDetailDataModel? = null
 ) {
 }
+
+data class CurrentAddressDetailDataModel(
+    var addLine1: String = "",
+    var addLine2: String = "",
+    var state: String = "",
+    var city: String = "",
+    var pincode: String = "",
+    var landmark :String = ""
+)

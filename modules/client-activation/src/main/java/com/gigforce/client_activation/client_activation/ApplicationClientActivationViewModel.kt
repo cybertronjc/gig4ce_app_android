@@ -19,7 +19,6 @@ import java.util.*
 
 class ApplicationClientActivationViewModel : ViewModel() {
     var itemClicked: Int = -1
-    var profileAvatarName: String = "avatar.jpg"
 
     val repository = ApplicationClientActivationRepository()
 
@@ -97,23 +96,11 @@ class ApplicationClientActivationViewModel : ViewModel() {
                 model.application = dependency.toMutableList()
 
             }
+
             model.application.forEach {
                 if (!it.isDone || it.refresh) {
                     Log.d("type", it.toString())
                     when (it.type) {
-                        "profile_pic" -> {
-                            val profileModel = getProfile()
-                            profileAvatarName = profileModel?.profileAvatarName ?: ""
-                            it.isDone =
-                                !profileModel?.profileAvatarName.isNullOrEmpty() && profileModel?.profileAvatarName != "avatar.jpg"
-
-                        }
-                        "about_me" -> {
-                            val profileModel = getProfile()
-                            it.isDone = !profileModel?.aboutMe.isNullOrEmpty()
-
-                        }
-
                         "questionnaire" -> {
                             it.isDone =
                                 checkForQuestionnaire(
@@ -122,48 +109,53 @@ class ApplicationClientActivationViewModel : ViewModel() {
                                 )
                         }
                         "learning" -> {
-
                             it.isDone = checkIfCourseCompleted(it.moduleId)
                             if (it.isDone) {
                                 model.applicationLearningCompletionDate = Date()
                             }
                         }
-
-
                     }
                 }
             }
 
 
-            // need to change for KYC
+            // need to change for KYC, profile pic and about_me
+            val profileModel = getProfile()
+            val verification = getVerification()
             model.application.forEach {
                 when (it.type) {
+                    "profile_pic" -> {
+                        it.isDone =
+                            !profileModel?.profileAvatarName.isNullOrEmpty() && profileModel?.profileAvatarName != "avatar.jpg"
+                    }
+                    "about_me" -> {
+                        it.isDone = !profileModel?.aboutMe.isNullOrEmpty()
+                    }
                     "driving_licence" -> {
-                        val verification = getVerification()
                         it.isDone =
                             verification?.driving_license != null && (verification.driving_license?.status?.equals(
                                 "started"
                             ) ?: false || verification.driving_license?.verified ?: false)
                     }
                     "aadhar_card" -> {
-                        val verification = getVerification()
                         it.isDone =
                             verification?.aadhar_card != null && (verification.aadhar_card?.verified
                                 ?: false)
                     }
                     "pan_card" -> {
-                        val verification = getVerification()
                         it.isDone =
                             verification?.pan_card != null && (verification.pan_card?.status?.equals(
                                 "started"
                             ) ?: false || verification.pan_card?.verified ?: false)
                     }
                     "bank_account" -> {
-                        val verification = getVerification()
                         it.isDone =
                             verification?.bank_details != null && (verification.bank_details?.status?.equals(
                                 "started"
                             ) ?: false || verification.bank_details?.verified ?: false)
+                    }
+                    "aadhar_card_questionnaire" ->{
+                        it.isDone = verification?.aadhaar_card_questionnaire !=null && verification?.aadhaar_card_questionnaire?.aadhaarCardNo?.length == 12
                     }
                 }
             }
