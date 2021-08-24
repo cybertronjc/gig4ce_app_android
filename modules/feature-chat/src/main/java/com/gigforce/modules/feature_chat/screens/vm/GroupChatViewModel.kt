@@ -93,6 +93,9 @@ class GroupChatViewModel constructor(
     private val _createGroup: MutableLiveData<Lce<String>> = MutableLiveData()
     val createGroup: LiveData<Lce<String>> = _createGroup
 
+    private var _scrollToMessage = MutableLiveData<Int?>()
+    val scrollToMessage: LiveData<Int?> = _scrollToMessage
+
     fun createGroup(
             groupName: String,
             groupMembers: List<ContactModel>
@@ -396,6 +399,11 @@ class GroupChatViewModel constructor(
                     matchInContact.name ?: ""
                 }
             }
+
+            if(groupMessage.isAReplyToOtherMessage && groupMessage.replyForMessageId != null){
+                groupMessage.replyForMessage = grpMessages!!.find { it.id == groupMessage.replyForMessageId }
+            }
+
         }.sortBy {
             it.timestamp!!.seconds
         }
@@ -433,7 +441,8 @@ class GroupChatViewModel constructor(
 
     fun sendNewText(
             text: String,
-            mentionUsers: List<MentionUser>
+            mentionUsers: List<MentionUser>,
+            replyToMessage : ChatMessage?
     ) = viewModelScope.launch {
 
         try {
@@ -446,13 +455,21 @@ class GroupChatViewModel constructor(
                     flowType = ChatConstants.FLOW_TYPE_OUT,
                     content = text,
                     timestamp = Timestamp.now(),
-                    mentionedUsersInfo = mentionUsers
+                    mentionedUsersInfo = mentionUsers,
+                    isAReplyToOtherMessage = replyToMessage != null,
+                    replyForMessageId = replyToMessage?.id,
+                    replyForMessage = replyToMessage
             )
 
             chatGroupRepository.sendTextMessage(groupId, message)
         } catch (e: Exception) {
             e.printStackTrace()
-            //handle error
+
+            CrashlyticsLogger.e(
+                TAG,
+                "while sending text message",
+                e
+            )
         }
     }
 
@@ -954,10 +971,17 @@ class GroupChatViewModel constructor(
         }
     }
 
-
+    fun scrollToMessage(
+        replyMessage: ChatMessage
+    ){
+        val messageList =  grpMessages ?: return
+        val index =  messageList.indexOf(replyMessage)
+        if(index != -1){
+            _scrollToMessage.value = index
+            _scrollToMessage.value = null
+        }
+    }
     companion object {
         const val TAG: String = "GroupChatVM"
     }
-
-
 }

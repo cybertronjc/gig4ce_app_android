@@ -366,7 +366,7 @@ class PanCardFragment : Fragment(),
 
         panCardDataModel.panCardImagePath?.let {
 
-            getDBImageUrl(it)?.let {
+            (it)?.let {
                 list.add(
                     KYCImageModel(
                         text = getString(R.string.upload_pan_card_new),
@@ -708,7 +708,7 @@ class PanCardFragment : Fragment(),
                 if (!imagePath.startsWith("/"))
                     modifiedString = "/$imagePath"
                 return buildConfig.getStorageBaseUrl() + modifiedString
-            } catch (e: Exception) {
+            } catch (egetDBImageUrl: Exception) {
                 return null
             }
         }

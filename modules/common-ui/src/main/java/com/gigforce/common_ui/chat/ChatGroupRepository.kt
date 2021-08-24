@@ -607,6 +607,7 @@ class ChatGroupRepository constructor(
                 .document(groupId)
                 .collection(COLLECTION_GROUP_EVENTS)
                 .addOrThrow(EventInfo(
+                        groupId = groupId,
                         showEventToUsersWithUid = arrayListOf(uid),
                         eventDoneByUserUid = currentUser.uid,
                         eventText = "You're now an admin"
@@ -631,6 +632,7 @@ class ChatGroupRepository constructor(
             .document(groupId)
             .collection(COLLECTION_GROUP_EVENTS)
             .addOrThrow(EventInfo(
+                    groupId = groupId,
                     showEventToUsersWithUid = arrayListOf(uid),
                     eventDoneByUserUid = currentUser.uid,
                     eventText = "You've been dismissed as admin"

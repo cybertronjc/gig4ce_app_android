@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".client_activation.info.BusinessLocationHubFragment">
+
+    <com.gigforce.common_ui.components.cells.AppBar
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:backgroundType="PinkBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:titleText="Enter Hub Details" />
+
+    <TextView
+        android:id="@+id/textView10"
+        style="@style/Title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_sm1"
+        android:layout_marginTop="@dimen/dp_large"
+        android:layout_marginRight="@dimen/dp_sm1"
+        android:text="Please enter the Hub allocated for the Flipkart Delivery Gig"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBar" />
+
+    <AutoCompleteTextView
+        android:id="@+id/state"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_46"
+        android:layout_marginStart="@dimen/size_16"
+        android:layout_marginTop="@dimen/size_16"
+        android:layout_marginEnd="@dimen/size_16"
+        android:background="@drawable/rect_outline_lipstick"
+        android:hint="State"
+        android:paddingStart="@dimen/size_6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView10" />
+
+
+    <AutoCompleteTextView
+        android:id="@+id/hub"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_46"
+        android:layout_marginStart="@dimen/size_16"
+        android:layout_marginTop="@dimen/size_16"
+        android:layout_marginEnd="@dimen/size_16"
+        android:background="@drawable/rect_outline_lipstick"
+        android:hint="Hub name"
+        android:paddingStart="@dimen/size_6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/state" />
+
+    <TextView
+        android:id="@+id/submit_button"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginStart="@dimen/size_16"
+        android:layout_marginEnd="@dimen/size_16"
+        android:layout_marginBottom="@dimen/size_22"
+        android:background="@drawable/submit_button_selector"
+        android:gravity="center"
+        android:minHeight="@dimen/size_36"
+        android:text="Skip"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/progressBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:elevation="@dimen/dp_xsm2"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ProgressBar
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

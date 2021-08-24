@@ -716,7 +716,10 @@
         android:name="com.gigforce.client_activation.client_activation.ClientActivationFragment"
         android:label="fragment_client_activation"
         tools:layout="@layout/layout_fragment_client_activation" />
-
+    <fragment
+        android:id="@+id/fragment_business_loc_hub"
+        android:name="com.gigforce.client_activation.client_activation.info.BusinessLocationHubFragment"
+        />
     <fragment
         android:id="@+id/fragment_application_client_activation"
         android:name="com.gigforce.client_activation.client_activation.ApplicationClientActivationFragment"
@@ -992,6 +995,10 @@
         android:id="@+id/loginReportListFragment"
         android:name="com.gigforce.giger_gigs.tl_login_report.TLDailyReportListFragment"
         android:label="TLDailyReportListFragment" />
+    <fragment
+        android:id="@+id/aadharApplicationDetailsFragment"
+        android:name="com.gigforce.client_activation.client_activation.AadharApplicationDetailsFragment"
+        android:label="AadharApplicationDetailsFragment" />
 
 
 </navigation>

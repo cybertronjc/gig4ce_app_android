@@ -75,9 +75,13 @@ class ChatPageViewModel constructor(
     private var _otherUserInfo = MutableLiveData<ContactModel>()
     val otherUserInfo: LiveData<ContactModel> = _otherUserInfo
 
+    private var _scrollToMessage = MutableLiveData<Int?>()
+    val scrollToMessage: LiveData<Int?> = _scrollToMessage
+
     private var messagesListener: ListenerRegistration? = null
     private var headerInfoChangeListener: ListenerRegistration? = null
     private var contactInfoChangeListener: ListenerRegistration? = null
+    private var currentChatHeader : ChatHeader? = null
 
 
     fun setRequiredDataAndStartListeningToMessages(
@@ -138,7 +142,8 @@ class ChatPageViewModel constructor(
                         id = it.id
                     }
 
-                    _headerInfo.value = chatHeader
+                        currentChatHeader = chatHeader
+                        _headerInfo.value = chatHeader
 
                     if (chatHeader.unseenCount != 0) {
                         setMessagesUnseenCountToZero()
@@ -236,29 +241,32 @@ class ChatPageViewModel constructor(
             return
         }
 
-        /*
-                Things to handle in this:
-                - Status Change in Message
-                - Lazy / Paginated Load
-                - Performance Optimization for Change in Message (loop over Documents should not be everytime)
-         */
-
         messagesListener = getReference(headerId)
             .orderBy("timestamp", Query.Direction.ASCENDING)
             .addSnapshotListener { snapshot, exception ->
                 Log.v(TAG, "new Snapshot Received")
                 Log.v(TAG, "${snapshot?.documents?.size} Documents")
 
-                snapshot?.let {
-                    val messages = it.documents.map {
-                        it.toObject(ChatMessage::class.java)!!.apply {
-                            this.id = it.id
-                            this.chatType = ChatConstants.CHAT_TYPE_USER
+                    snapshot?.let {
+                        val messages = it.documents.map {
+                            it.toObject(ChatMessage::class.java)!!.apply {
+                                this.id = it.id
+                                this.chatType = ChatConstants.CHAT_TYPE_USER
+                            }
                         }
-                    }
-                    this.chatMessages = messages.toMutableList()
 
-                    chatMessages?.let {
+                        messages.forEach { message ->
+                            if(message.isAReplyToOtherMessage && message.replyForMessageId != null){
+                                message.replyForMessage = messages.find { it.id == message.replyForMessageId || message.replyForMessageId == it.otherUsersMessageId}
+                            }
+
+                            if(message.flowType == ChatConstants.FLOW_TYPE_IN){
+                                message.senderInfo.name = currentChatHeader?.otherUser?.name ?: ""
+                            }
+                        }
+
+                        this.chatMessages = messages.toMutableList()
+                        chatMessages?.let {
 
                         val unreadMessages = it.filter {
                             it.flowType == ChatConstants.FLOW_TYPE_IN &&
@@ -268,16 +276,18 @@ class ChatPageViewModel constructor(
                         setMessagesAsRead(unreadMessages)
                     }
 
-                    _messages.postValue(messages)
+
+                        _messages.postValue(messages)
+                    }
                 }
-            }
     }
 
     private var _sendingMessage = MutableLiveData<ChatMessage>()
     val sendingMessageOld: LiveData<ChatMessage> = _sendingMessage
 
     fun sendNewText(
-        text: String
+            text: String,
+            replyToMessage : ChatMessage?
     ) = viewModelScope.launch {
 
         try {
@@ -288,20 +298,23 @@ class ChatPageViewModel constructor(
             }
 
             val message = ChatMessage(
-                id = UUID.randomUUID().toString(),
-                headerId = headerId,
-                senderInfo = UserInfo(
-                    id = currentUser.uid,
-                    mobileNo = currentUser.phoneNumber!!
-                ),
-                receiverInfo = UserInfo(
-                    id = otherUserId
-                ),
-                flowType = "out",
-                chatType = ChatConstants.CHAT_TYPE_USER,
-                type = ChatConstants.MESSAGE_TYPE_TEXT,
-                content = text,
-                timestamp = Timestamp.now()
+                    id = UUID.randomUUID().toString(),
+                    headerId = headerId,
+                    senderInfo = UserInfo(
+                            id = currentUser.uid,
+                            mobileNo = currentUser.phoneNumber!!
+                    ),
+                    receiverInfo = UserInfo(
+                            id = otherUserId
+                    ),
+                    flowType = "out",
+                    chatType = ChatConstants.CHAT_TYPE_USER,
+                    type = ChatConstants.MESSAGE_TYPE_TEXT,
+                    content = text,
+                    timestamp = Timestamp.now(),
+                    isAReplyToOtherMessage = replyToMessage != null,
+                    replyForMessageId = replyToMessage?.id,
+                    replyForMessage = replyToMessage
             )
             getReference(headerId).document(message.id).setOrThrow(message)
 
@@ -892,5 +905,16 @@ class ChatPageViewModel constructor(
                 e
             )
         }
+    }
+
+    fun scrollToMessage(
+        replyMessage: ChatMessage
+    ){
+       val messageList =  chatMessages ?: return
+       val index =  messageList.indexOf(replyMessage)
+       if(index != -1){
+            _scrollToMessage.value = index
+            _scrollToMessage.value = null
+       }
     }
 }
