@@ -50,6 +50,7 @@ import com.gigforce.core.StringConstants
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.date.DateHelper
 import com.gigforce.core.extensions.toDisplayText
+import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.recyclerView.CoreRecyclerView
 import com.gigforce.modules.feature_chat.ChatNavigation
@@ -332,6 +333,7 @@ class ChatPageFragment : Fragment(),
             .observe(viewLifecycleOwner, {
 
                     showGroupDetails(it)
+
                     if (it.groupDeactivated) {
                         chatFooter.disableInput("This group is deactivated by an admin")
                         messageSwipeController.disableSwipe()
@@ -345,7 +347,7 @@ class ChatPageFragment : Fragment(),
                             chatFooter.enableInput()
                             messageSwipeController.enableSwipe()
                         } else {
-                            chatFooter.disableInput("Only admin can post in this group")
+                            chatFooter.disableInput("Only admins can post in this group")
                             messageSwipeController.disableSwipe()
                         }
                     } else {
