@@ -26,6 +26,7 @@ import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
 import java.util.*
@@ -159,6 +160,7 @@ class UserDetailsViewModel @Inject constructor(
             }
 
             _submitUserDetailsState.postValue(Lse.success())
+            delay(150)
             _submitUserDetailsState.postValue(null)
 
             Log.v("ProfilePicture", "Sucess")

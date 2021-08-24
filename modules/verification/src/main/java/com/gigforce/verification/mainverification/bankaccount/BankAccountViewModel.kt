@@ -64,6 +64,18 @@ class BankAccountViewModel @Inject constructor(
             }
     }
 
+    fun getBankDetailsStatus() {
+        verificationKycRepo.db.collection("Verification").document(verificationKycRepo.getUID())
+            .addSnapshotListener { value, error ->
+                value?.data?.let {
+                    val doc = value.toObject(VerificationBaseModel::class.java)
+                    doc?.bank_details?.let {
+                        _bankDetailedObject.value = it
+                    }
+                }
+            }
+    }
+
     fun setVerificationStatusInDB(status: Boolean) =
         viewModelScope.launch {
             try {

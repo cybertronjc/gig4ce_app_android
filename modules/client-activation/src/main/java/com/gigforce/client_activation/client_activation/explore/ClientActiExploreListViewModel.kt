@@ -7,7 +7,9 @@ import com.gigforce.common_ui.viewdatamodels.client_activation.JobProfile
 import com.gigforce.client_activation.client_activation.models.JpExplore
 import com.gigforce.client_activation.client_activation.repository.ClientActiExploreRepository
 import com.gigforce.core.SingleLiveEvent
+import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.datamodels.client_activation.JpApplication
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
@@ -38,16 +40,41 @@ class ClientActiExploreListViewModel constructor(
                 if (items.documents.isNullOrEmpty()){
                     _observableJobProfile.value = allClientActivations
                 }
-                val toObjects = items.toObjects(JobProfile::class.java)
-                for (i in 0..toObjects.size - 1 ){
+
+                var toObjects = ArrayList<JobProfile>()
+                items.documents.forEach {
+                        try {
+                            var obj = it.toObject(JobProfile::class.java)
+                            obj?.let { data ->
+                                toObjects.add(data)
+                            }
+                        } catch (e: Exception) {
+                            Log.e("ClientActivation",e.toString())
+                            FirebaseCrashlytics.getInstance().log("Exception : Job profile data type format issues. Method : getJobProfiles  ${e.message} $e")
+                            CrashlyticsLogger.e(
+                                "Client Activation",
+                                "Parsing data from DB. Method : getJobProfiles ",
+                                e
+                            )
+                        }
+                    }
+
+
+//                val toObjects = items.toObjects(JobProfile::class.java)
+                toObjects.sortBy{it.priority}
+                for (i in 0 until toObjects.size){
                     val obj = toObjects[i]
-                    var jobProfileId = items.documents.get(i).id
+                    var jobProfileId = items.documents[i].id
                     obj.id = toObjects[i].profileId
                     if (obj.id != null){
                         Log.d("profileId", obj.id!!)
                         val jpObject = getJPApplication(obj.id!!)
                         Log.d("object", jpObject.toString())
-                        val jpExplore = JpExplore(jobProfileId,jpId = jpObject.id, profileId = obj.profileId, obj.profileName,  obj.cardTitle, obj.cardImage, jpObject.status, obj.title)
+                        val jpExplore = JpExplore(jobProfileId,jpId = jpObject.id, profileId = obj.profileId,
+                            profileName = obj.profileName,
+                            title = obj.cardTitle, image = obj.cardImage,
+                            status = jpObject.status, jobProfileTitle = obj.title
+                        )
                         allClientActivations.add(jpExplore)
                     }
                 }
@@ -55,6 +82,7 @@ class ClientActiExploreListViewModel constructor(
 
             }catch (e: Exception){
                 _observableError.value = e.message
+                _observableJobProfile.value = ArrayList()
             }
 
         }

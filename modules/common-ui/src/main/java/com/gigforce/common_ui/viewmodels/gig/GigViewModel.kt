@@ -10,7 +10,9 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.repository.gig.GigerProfileFirebaseRepository
 import com.gigforce.common_ui.repository.gig.GigsRepository
 import com.gigforce.common_ui.viewdatamodels.GigStatus
+import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.datamodels.gigpage.Gig
+import com.gigforce.core.datamodels.gigpage.GigOrder
 import com.gigforce.core.datamodels.gigpage.models.AttendanceType
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.extensions.*
@@ -49,6 +51,8 @@ class GigViewModel constructor(
     private var mWatchTodaysGigRegistration: ListenerRegistration? = null
 
     var currentGig: Gig? = null
+
+    var gigOrder: GigOrder? = null
 
     private val currentUser: FirebaseUser by lazy {
         FirebaseAuth.getInstance().currentUser!!
@@ -199,9 +203,20 @@ class GigViewModel constructor(
     }
 
     private fun extractGigs(querySnapshot: QuerySnapshot): MutableList<Gig> {
-        return querySnapshot.documents.map { t ->
-            t.toObject(Gig::class.java)!!
-        }.toMutableList()
+
+        val gigs = mutableListOf<Gig>()
+         querySnapshot.documents.map { t ->
+            try {
+                t.toObject(Gig::class.java)?.let {
+                    it.gigId = t.id
+                    gigs.add(it)
+                }
+            } catch (e: Exception) {
+                CrashlyticsLogger.e("GigViewModel - extractGigs","while desearializing gig data",e)
+            }
+        }
+
+        return gigs
     }
 
 
@@ -355,8 +370,16 @@ class GigViewModel constructor(
             }
 
             gig.gigUserFeedbackAttachments = gigAttachmentWithLinks
+
             gig
         }.onSuccess {
+
+             gigOrder = try {
+                 getGigOrder(it.gigOrderId)
+            }catch (e: Exception){
+                null
+            }
+            //gigOrder = getGigOrder(it.gigOrderId)
             _gigDetails.value = Lce.content(it)
         }.onFailure {
             it.message?.let { it1 -> _gigDetails.value = Lce.error(it1) }
@@ -395,6 +418,22 @@ class GigViewModel constructor(
                 _gigDetails.value = Lce.error(it.message!!)
             }
 
+    }
+
+     suspend fun getGigOrder(gigorderId: String) : GigOrder?{
+         try {
+             var myGIgOrder: GigOrder? = GigOrder()
+             val await = gigsRepository.db.collection("Gig_Order")
+                 .document(gigorderId)
+                 .get().await()
+             if (await.exists()) {
+                 myGIgOrder = await.toObject(GigOrder::class.java)
+             }
+
+             return myGIgOrder
+         }catch (e: Exception){
+                return GigOrder()
+         }
     }
 
     suspend fun getGigNow(gigId: String) = suspendCoroutine<Gig> { cont ->

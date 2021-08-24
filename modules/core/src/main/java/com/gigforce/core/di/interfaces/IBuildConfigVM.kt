@@ -14,4 +14,7 @@ interface IBuildConfigVM {
     fun getVerificationKycOcrResult():String
     fun getKycVerificationUrl(): String
     fun getEventBridgeUrl(): String
+    fun getListingBaseUrl(): String
+    fun getBaseUrl(): String
+
 }

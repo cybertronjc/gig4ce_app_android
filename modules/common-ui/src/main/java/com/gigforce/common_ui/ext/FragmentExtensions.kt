@@ -2,15 +2,14 @@ package com.gigforce.common_ui.ext
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.facebook.shimmer.ShimmerFrameLayout
-import com.gigforce.common_ui.R
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
-import com.gigforce.common_ui.utils.dp2Px
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 
@@ -19,20 +18,29 @@ fun Fragment.showToast(string: String) {
 }
 
 fun Fragment.startShimmer(
-    ll_shimmer: LinearLayout,
+    shimmerContainerLayout: View,
     shimmerModel: ShimmerDataModel,
     shimmerId: Int
 ) {
-    ll_shimmer.removeAllViews()
-    ll_shimmer.visible()
-    ll_shimmer.orientation = shimmerModel.orientation
+
+    val shimmerItemsContainer : LinearLayout
+    if(shimmerContainerLayout is LinearLayout){
+        shimmerItemsContainer = shimmerContainerLayout
+    } else {
+        throw IllegalStateException("shimmerContainerLayout should be a LinearLayout")
+    }
+
+
+    shimmerItemsContainer.removeAllViews()
+    shimmerItemsContainer.visible()
+    shimmerItemsContainer.orientation = shimmerModel.orientation
     for (i in 0 until shimmerModel.itemsToBeDrawn) {
         val view = LayoutInflater.from(requireContext()).inflate(
                 shimmerModel.cardRes,
                 null
         )
 
-        ll_shimmer.addView(view)
+        shimmerItemsContainer.addView(view)
         val layoutParams: LinearLayout.LayoutParams = view.layoutParams as LinearLayout.LayoutParams
 
         layoutParams.height = if(shimmerModel.minHeight == LinearLayout.LayoutParams.MATCH_PARENT){
@@ -57,15 +65,23 @@ fun Fragment.startShimmer(
     }
 }
 
-fun Fragment.stopShimmer(view: LinearLayout, shimmerId: Int) {
+fun Fragment.stopShimmer(shimmerContainerLayout: View, shimmerId: Int) {
 
-    for (i in 0 until view.childCount) {
-        val nestedView = view.getChildAt(i)
+    val shimmerItemsContainer : LinearLayout
+    if(shimmerContainerLayout is LinearLayout){
+        shimmerItemsContainer = shimmerContainerLayout
+    } else {
+        throw IllegalStateException("shimmerContainerLayout should be a LinearLayout")
+    }
+
+
+    for (i in 0 until shimmerItemsContainer.childCount) {
+        val nestedView = shimmerItemsContainer.getChildAt(i)
         val shimmerLayout = nestedView.findViewById<ShimmerFrameLayout>(shimmerId)
         shimmerLayout.stopShimmer()//Animation()
     }
-    view.removeAllViews()
-    view.gone()
+    shimmerItemsContainer.removeAllViews()
+    shimmerItemsContainer.gone()
 }
 
 

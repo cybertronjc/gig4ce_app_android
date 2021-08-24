@@ -73,6 +73,8 @@ class NavManagerImpl @Inject constructor(
         NavForPreferencesModule(this)
         NavUserDetailsInfo(this)
         NavForProfileModule(this)
+        NavForLeadManagmentModule(this)
+        NavForTLReportModule(this)
     }
 
     private fun registerForWalletAndPayouts() {
@@ -80,7 +82,7 @@ class NavManagerImpl @Inject constructor(
         this.registerRoute("${moduleName}/main", R.id.walletBalancePage)
     }
 
-    override fun navigateToDocViewerActivity(activity: Activity, url: String) {
+    override fun navigateToDocViewerActivity(activity: Activity, url: String, purpose: String) {
         val docIntent = Intent(
             activity,
             DocViewerActivity::class.java
@@ -88,6 +90,10 @@ class NavManagerImpl @Inject constructor(
         docIntent.putExtra(
             StringConstants.DOC_URL.value,
             url
+        )
+        docIntent.putExtra(
+            StringConstants.DOC_PURPOSE.value,
+            purpose
         )
         activity.startActivity(docIntent)
     }

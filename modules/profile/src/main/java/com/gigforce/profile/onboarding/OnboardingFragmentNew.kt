@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.RadioButton
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -41,6 +42,7 @@ import javax.inject.Inject
 import com.android.installreferrer.api.ReferrerDetails
 import com.android.installreferrer.api.InstallReferrerClient
 import com.android.installreferrer.api.InstallReferrerStateListener
+import com.gigforce.core.AppConstants
 import com.gigforce.core.StringConstants
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.utils.NavFragmentsData
@@ -276,7 +278,11 @@ class OnboardingFragmentNew : Fragment(){
 
     private fun navigateToLoaderScreen() {
         navigation.popAllBackStates()
-        navigation.navigateTo("loader_screen")
+        navigation.navigateTo("loader_screen",
+            bundleOf(
+                AppConstants.SHOULD_CHECK_FOR_JOININGS_APPLICATIONS to true
+            )
+        )
     }
 
     private fun setAssetsData() {

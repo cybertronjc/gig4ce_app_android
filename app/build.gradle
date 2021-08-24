@@ -81,8 +81,8 @@ android {
 
             applicationId "com.gigforce.app"
             resValue "string", "app_name", "Gigforce"
-            versionCode 134
-            versionName "1.32.5"
+            versionCode 138
+            versionName "1.32.9"
             buildConfigField "String", 'REFERRAL_BASE_URL', '"https://gig4ce.page.link/"'
             buildConfigField "String", 'GENERATE_PAYSLIP_URL', '"https://45nydq0i5g.execute-api.ap-south-1.amazonaws.com/default/get-or-create-payment-advice-prod"'
             buildConfigField "String", 'DRIVING_CERTIFICATE_URL', '"https://d1rdwfmrsl.execute-api.ap-south-1.amazonaws.com/default/"'
@@ -101,8 +101,11 @@ android {
             buildConfigField "String", 'KYC_OCR_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/prod/kyc/upload"'
             buildConfigField "String", 'KYC_VERIFY_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/prod/kyc/verify"'
             buildConfigField "String", 'EVENT_BRIDGE_URL','"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/prod/updatestatus/sendToEventBridge"'
+            buildConfigField "String", 'LISTING_BASE_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/prod/gigerAttendanceReport"'
             buildConfigField "String", 'STORAGE_BASE_URL','"gs://gig4ce-app.appspot.com"'
             buildConfigField "String", 'PANEL_BASE_URL', '"http://gigforce.in"'
+            buildConfigField "String", 'BASE_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/prod/"'
+            buildConfigField "String", 'API_BASE_URL','"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/prod/iconsVisibility/sendToIconsEventBus"'
         }
 
         /**
@@ -135,19 +138,22 @@ android {
             buildConfigField "String", 'KYC_OCR_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/kyc/upload"'
             buildConfigField "String", 'KYC_VERIFY_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/kyc/verify"'
             buildConfigField "String", 'EVENT_BRIDGE_URL','"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/updatestatus/sendToEventBridge"'
+            buildConfigField "String", 'LISTING_BASE_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/gigerAttendanceReport"'
             buildConfigField "String", 'STORAGE_BASE_URL','"gs://gigforce-dev.appspot.com"'
             buildConfigField "String", 'PANEL_BASE_URL', '"http://staging.gigforce.in"'
+            buildConfigField "String", 'API_BASE_URL','"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/iconsVisibility/sendToIconsEventBus"'
+            buildConfigField "String", 'BASE_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/"'
         }
 
         staging {
             dimension "default"
             applicationId "com.gigforce.app.staging"
             resValue "string", "app_name", "Gigforce Staging"
-            versionCode 1
+            versionCode 137
             versionName "1.0.0"
             versionNameSuffix '-Staging'
             signingConfig signingConfigs.staging
-            buildConfigField "String", 'REFERRAL_BASE_URL', '"https://gigforce.page.link/"'
+            buildConfigField "String", 'REFERRAL_BASE_URL', '"https://gig4cestaging.page.link"'
             buildConfigField "String", 'GENERATE_PAYSLIP_URL', '"https://d38v9ehujf.execute-api.ap-south-1.amazonaws.com/default/get-or-create-payment-advice-dev"'
             buildConfigField "String", 'DRIVING_CERTIFICATE_URL', '"https://qwny706375.execute-api.ap-south-1.amazonaws.com/default/"'
             buildConfigField "String", 'DRIVING_CERTIFICATE_METHOD', '"DrivingCertificate-Dev"'
@@ -165,8 +171,11 @@ android {
             buildConfigField "String", 'KYC_OCR_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/kyc/upload"'
             buildConfigField "String", 'KYC_VERIFY_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/kyc/verify"'
             buildConfigField "String", 'EVENT_BRIDGE_URL','"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/updatestatus/sendToEventBridge"'
+            buildConfigField "String", 'LISTING_BASE_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/gigerAttendanceReport"'
             buildConfigField "String", 'STORAGE_BASE_URL','"gs://gigforce-staging.appspot.com"'
             buildConfigField "String", 'PANEL_BASE_URL', '"http://staging.gigforce.in"'
+            buildConfigField "String", 'API_BASE_URL','"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/iconsVisibility/sendToIconsEventBus"'
+            buildConfigField "String", 'BASE_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/"'
         }
     }
 
@@ -203,6 +212,7 @@ dependencies {
     implementation project(path: ':modules:app-giger')
     implementation project(path: ':modules:learning')
     implementation project(path: ':modules:client-activation')
+    implementation project(path: ':modules:lead-management')
     implementation project(path: ':modules:profile')
     implementation project(path: ':modules:user_profile')
     implementation project(path: ':modules:wallet')
@@ -211,6 +221,7 @@ dependencies {
     implementation project(path: ':modules:landing')
     implementation project(path: ':modules:common-image-capture-picker')
     implementation project(path: ':modules:user-tracking')
+
 
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.9'
 
@@ -432,4 +443,5 @@ dependencies {
     implementation "com.moengage:moe-android-sdk:$moengageVersion"
 
     implementation "androidx.work:work-runtime-ktx:2.5.0"
+    implementation 'com.jakewharton.timber:timber:4.7.1'
 }

@@ -48,16 +48,16 @@
     <string name="enter_valid_dl">Enter Valid Driving License</string>
     <string name="select_dl_state">Select Driving License State</string>
     <string name="select_dl_image">Upload Driving License Image</string>
-    <string name="select_dl_no">Select Driving License Number</string>
-    <string name="select_dl_dob">Select Date of Birth</string>
+    <string name="select_dl_no">Enter driving license number</string>
+    <string name="select_dl_dob">Select date of birth</string>
     <string name="why_we_need_this_bank">The bank details are mandatory to approve and send payments from gigs to your account. It also helps verify your name, address, date of birth, and other details.</string>
-    <string name="enter_valid_ifsc">Enter Valid IfSC Code</string>
-    <string name="enter_bank_name">Enter Bank Name</string>
+    <string name="enter_valid_ifsc">Enter valid IFSC code</string>
+    <string name="enter_bank_name">Enter bank name</string>
     <string name="bank_name_too_short">Bank name is too short</string>
-    <string name="enter_valid_acc_no">Enter A Valid Account No</string>
-    <string name="click_or_select_bank_passbook">Click Or Select your Passbook Image first</string>
+    <string name="enter_valid_acc_no">Enter a valid account no</string>
+    <string name="click_or_select_bank_passbook">Click or select your passbook image first</string>
     <string name="your_are_reuploading_bank_details">You are re-uploading your Bank details. They will be verified once again, which may take up to 7 days.</string>
-    <string name="bank_details_uploaded">Bank details Uploaded</string>
+    <string name="bank_details_uploaded">Bank details uploaded</string>
     <string name="cancel">CANCEL</string>
     <string name="why_do_we_need_this">Why we need this ?</string>
     <string name="why_do_we_need_this_dl">A driving license is mandatory for driving and delivery gigs</string>
@@ -95,7 +95,7 @@
     <string name="upload_aadhar_card_front_side_new">Upload your Aadhaar Card\nFRONT Side</string>
     <string name="upload_pan_card_new">Please upload your PAN Card\nfor verification</string>
     <string name="upload_bank_account_new">Upload your Bank Passbook\nFront Page</string>
-    <string name="upload_driving_license_back_side_new">Upload your Driving License\nback Side</string>
+    <string name="upload_driving_license_back_side_new">Upload the Driving License\nback side(optional)</string>
     <string name="upload_driving_license_front_side_new">Upload your Driving License\nfront Side</string>
     <string name="no_i_don_t_have_aadhar_card">No, I don\'t have Aadhaar Card</string>
     <string name="yes_i_have_aadhar_card">Yes, I have Aadhaar Card</string>
@@ -114,14 +114,14 @@
 
 
     <string name="you_are_reuploading_pan_card">You are re-uploading your PAN details. They will be verified once again, which may take up to 7 days.</string>
-    <string name="enter_valid_pan">Enter Valid PAN Card No</string>
-    <string name="click_select_pan_image">Click Or Select your PAN card Image first</string>
-    <string name="pan_details_uploaded">PAN Card Details Uploaded</string>
+    <string name="enter_valid_pan">Enter valid PAN card no</string>
+    <string name="click_select_pan_image">Click or select your PAN card image first</string>
+    <string name="pan_details_uploaded">PAN card details uploaded</string>
     <string name="unable_to_capture_image">Unable to capture image</string>
     <string name="got_it">Got it</string>
     <string name="why_do_we_need_this_pan">A PAN card is mandatory for profile verification. It helps verify your name and date of birth and also helps with payments to your wallet.</string>
     <string name="why_do_we_need_this_aadhar">A Aadhaar card is mandatory for profile verification. It helps verify your name and date of birth and also helps with payments to your wallet.</string>
-    <string name="how_to_record_selfie_video">How to Record Selfie Video?</string>
+    <string name="how_to_record_selfie_video">How to record selfie video?</string>
     <string name="how_to_rec_selfie_video_content">\nRecord a 10-second video of yourself\nFace the camera and say “Hi, I’m (your name) and I like to do (mention 2 things you like to do.)</string>
     <string name="video_recorded">Video Recorded</string>
 
@@ -277,5 +277,15 @@
 
     <string name="veri_done_text">As your documents will get verified, you will be able to start your gigs.</string>
     <string name="congratulations">Congratulations !</string>
+    <string name="change_text"><u>Change</u></string>
+
+    <string name="no_doc_title_pan">PAN not available!</string>
+    <string name="no_doc_subtitle_pan">No Worries! Once you own PAN you can untick the checkbox to verify it</string>
+
+    <string name="no_doc_title_dl">Driving License not available!</string>
+    <string name="no_doc_subtitle_dl">No Worries! Once you own Driving License you can untick the checkbox to verify it</string>
+
+    <string name="no_doc_title_bank">Bank details not available!</string>
+    <string name="no_doc_subtitle_bank">No Worries! Once you own Bank details you can untick the checkbox to verify it</string>
 
 </resources>

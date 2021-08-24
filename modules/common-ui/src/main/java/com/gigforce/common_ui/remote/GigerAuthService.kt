@@ -1,7 +1,6 @@
 package com.gigforce.common_ui.remote
 
-import com.gigforce.common_ui.viewdatamodels.UserAuthStatusModel
-import com.gigforce.common_ui.viewdatamodels.gig.GigerAttendance
+import com.gigforce.core.datamodels.auth.UserAuthStatusModel
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -14,4 +13,6 @@ interface GigerAuthService {
         @Url getGigersAuthUrl : String,
         @Query("mobile") mobile: String
     ): Response<UserAuthStatusModel>
+
+
 }

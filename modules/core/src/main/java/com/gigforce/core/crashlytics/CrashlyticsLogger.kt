@@ -13,8 +13,23 @@ object CrashlyticsLogger {
         tag: String,
         msg: String
     ) {
-        Log.d(tag, msg)
         firebaseCrashlytics.log("$tag : $msg")
+    }
+
+    fun d(
+        tag: String,
+        msg: String,
+        e: Throwable
+    ) {
+        firebaseCrashlytics.log("$tag : $msg")
+        firebaseCrashlytics.recordException(e)
+    }
+
+    fun e(
+        tag: String,
+        message: String
+    ) {
+        firebaseCrashlytics.log("$tag : $message")
     }
 
     fun e(
@@ -24,6 +39,5 @@ object CrashlyticsLogger {
     ) {
         firebaseCrashlytics.log("$tag :, Occurred when: $occurredWhen")
         firebaseCrashlytics.recordException(e)
-        Log.e(tag,"Occurred when: $occurredWhen", e)
     }
 }

@@ -19,9 +19,8 @@ class MainNavigationComponent(context: Context, attrs: AttributeSet?) :
 
     @Inject
     lateinit var repository: IMainNavDataRepository
-
     init {
-        this.setOrientationAndRows(0, 2)
+        this.setOrientationAndRows(1, 4)
     }
 
     override fun bind(data: Any?) {
@@ -31,6 +30,7 @@ class MainNavigationComponent(context: Context, attrs: AttributeSet?) :
                     super.bind(FeatureLayoutDVM(data.imageUrl, data.title, it))
                 }catch (e:Exception){}
             }
+            super.bind(FeatureLayoutDVM(data.imageUrl, data.title, repository.getDefaultData()))
         }
 
     }

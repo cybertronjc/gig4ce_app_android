@@ -41,8 +41,6 @@ open class CoreRecyclerAdapter(
 
     override fun getItemViewType(position: Int): Int {
         val data = collection.get(position)
-        Log.i("Core/RV", (data).toString())
-        Log.i("Core/RV", (data is IDataViewTypeGetter).toString())
         if(data is IDataViewTypeGetter){
             return data.getViewType()
         }
