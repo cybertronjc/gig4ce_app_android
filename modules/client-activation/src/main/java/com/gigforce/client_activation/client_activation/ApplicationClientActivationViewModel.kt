@@ -248,8 +248,9 @@ class ApplicationClientActivationViewModel : ViewModel() {
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
 //                        observableApplicationStatus.value = true
+                        //need to comment : navigating to Application submitted screen
                     } else {
-//                        observableError.value = it.exception?.message ?: ""
+                        observableError.value = it.exception?.message ?: ""
                     }
                 }
         }
