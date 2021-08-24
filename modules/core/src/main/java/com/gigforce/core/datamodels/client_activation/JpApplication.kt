@@ -11,7 +11,7 @@ data class JpApplication(
         var gigerId: String = "",
         var rejectedBy: String = "",
         var rejectedOn: String = "",
-        var status: String = "Interested",
+        var status: String = "",
         var submitOn: String = "",
         @SerializedName("application") var application: MutableList<Dependency> = mutableListOf(),
         @SerializedName("activation") var activation: MutableList<Dependency> = mutableListOf(),

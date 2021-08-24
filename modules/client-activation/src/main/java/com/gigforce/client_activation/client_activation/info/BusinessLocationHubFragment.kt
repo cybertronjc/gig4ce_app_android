@@ -104,6 +104,7 @@ class BusinessLocationHubFragment : Fragment(), IOnBackPressedOverride {
             viewModel.loadHubData(mJobProfileId)
             stateList.clear()
             stateList.addAll(it)
+            stateList.sort()
             stateList.forEachIndexed { index, data ->
                 stateMap.put(data, index)
             }
@@ -115,6 +116,7 @@ class BusinessLocationHubFragment : Fragment(), IOnBackPressedOverride {
         viewModel._hub.observe(viewLifecycleOwner, Observer {
             hubList.clear()
             hubList.addAll(it)
+            hubList.sort()
             hub.setText("",false)
             hubAdapter?.notifyDataSetChanged()
 

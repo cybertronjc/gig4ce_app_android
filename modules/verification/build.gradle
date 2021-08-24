@@ -44,7 +44,9 @@ android {
 dependencies {
     implementation project(path: ':modules:core')
     implementation project(path: ':modules:common-ui')
+    implementation project(path: ':modules:common-image-capture-picker')
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.1'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -141,5 +143,7 @@ dependencies {
     implementation 'com.otaliastudios:transcoder:0.9.1'
 
     implementation 'com.github.yalantis:ucrop:2.2.4'
+
+    //implementation 'com.github.CanHub:Android-Image-Cropper:3.2.2'
 
 }

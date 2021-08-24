@@ -32,6 +32,7 @@ import com.gigforce.ambassador.R
 import com.gigforce.ambassador.databinding.UserDrivingLicenseFragmentBinding
 import com.gigforce.ambassador.user_rollment.documents.DrivingLicenseSides
 import com.gigforce.ambassador.user_rollment.kycdocs.*
+import com.gigforce.common_image_picker.image_cropper.ImageCropActivity
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.ext.showToast
@@ -641,7 +642,8 @@ class DrivingLicenseFragment : Fragment(),
         if (requestCode == REQUEST_CAPTURE_IMAGE || requestCode == REQUEST_PICK_IMAGE) {
             val outputFileUri = ImagePicker.getImageFromResult(requireContext(), resultCode, data)
             if (outputFileUri != null) {
-                startCrop(outputFileUri)
+//                startCrop(outputFileUri)
+                startCropImage(outputFileUri)
             }
         } else if (requestCode == UCrop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
             val imageUriResultCrop: Uri? = UCrop.getOutput(data!!)
@@ -660,7 +662,24 @@ class DrivingLicenseFragment : Fragment(),
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
 
             }
+        }else if (requestCode == ImageCropActivity.CROP_RESULT_CODE && resultCode == Activity.RESULT_OK){
+            val imageUriResultCrop: Uri? =  Uri.parse(data?.getStringExtra(ImageCropActivity.CROPPED_IMAGE_URL_EXTRA))
+            Log.d("ImageUri", imageUriResultCrop.toString())
+            if (DrivingLicenseSides.FRONT_SIDE == currentlyClickingImageOfSide) {
+                dlFrontImagePath = imageUriResultCrop
+                showFrontDrivingLicense(dlFrontImagePath!!)
+            } else if (DrivingLicenseSides.BACK_SIDE == currentlyClickingImageOfSide) {
+                dlBackImagePath = imageUriResultCrop
+                showBackDrivingLicense(dlBackImagePath!!)
+            }
         }
+    }
+
+    private fun startCropImage(imageUri: Uri): Unit {
+        val photoCropIntent = Intent(context, ImageCropActivity::class.java)
+        photoCropIntent.putExtra("outgoingUri", imageUri.toString())
+        startActivityForResult(photoCropIntent, ImageCropActivity.CROP_RESULT_CODE)
+
     }
 
     private fun callKycVerificationApi() {

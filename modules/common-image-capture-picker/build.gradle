@@ -20,6 +20,10 @@ android {
         consumerProguardFiles "consumer-rules.pro"
     }
 
+    buildFeatures {
+        dataBinding true
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -39,6 +43,7 @@ dependencies {
 
     implementation project(path: ':modules:core')
     implementation project(path: ':modules:common-ui')
+    implementation project(path: ':modules:cropper')
 
     implementation 'com.google.android.material:material:1.2.1'
     testImplementation 'junit:junit:4.+'
@@ -77,4 +82,8 @@ dependencies {
 
     //Camera View
     implementation 'com.otaliastudios:cameraview:2.6.2'
+
+    //implementation 'com.github.CanHub:Android-Image-Cropper:3.2.2'
+
+    implementation "androidx.activity:activity-ktx:1.3.1"
 }

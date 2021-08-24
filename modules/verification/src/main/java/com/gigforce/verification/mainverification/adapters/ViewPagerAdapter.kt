@@ -10,10 +10,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
+import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.verification.R
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.storage.FirebaseStorage
+import java.lang.Exception
 
 
 class ViewPagerAdapter(private val itemClickListener: (View) -> (Unit)) : RecyclerView.Adapter<ViewPagerAdapter.ViewPagerViewHolder>() {
@@ -78,10 +81,16 @@ class ViewPagerAdapter(private val itemClickListener: (View) -> (Unit)) : Recycl
             }
             else{
                 kYCImageModel.imagePath?.let {
-                    val gsReference = FirebaseStorage.getInstance().getReferenceFromUrl(it)
-                    GlideApp.with(itemView.context)
-                        .load(gsReference)
-                        .into(backgroundImage)
+                    try {
+                        val gsReference = FirebaseStorage.getInstance().getReferenceFromUrl(it)
+                        GlideApp.with(itemView.context)
+                            .load(gsReference)
+                            .into(backgroundImage)
+                    }catch (e: Exception){
+                        CrashlyticsLogger.d("Viewpager KYC", "${e.message} $it")
+                        FirebaseCrashlytics.getInstance().log("Exception : Viewpager KYC ${e.message} $it")
+                    }
+
                 }
             }
             if (kYCImageModel.imageUploaded) {
