@@ -81,6 +81,7 @@ class ChatPageViewModel constructor(
     private var messagesListener: ListenerRegistration? = null
     private var headerInfoChangeListener: ListenerRegistration? = null
     private var contactInfoChangeListener: ListenerRegistration? = null
+    private var currentChatHeader : ChatHeader? = null
 
 
     fun setRequiredDataAndStartListeningToMessages(
@@ -141,6 +142,7 @@ class ChatPageViewModel constructor(
                             id = it.id
                         }
 
+                        currentChatHeader = chatHeader
                         _headerInfo.value = chatHeader
 
                         if (chatHeader.unseenCount != 0) {
@@ -239,13 +241,6 @@ class ChatPageViewModel constructor(
             return
         }
 
-        /*
-                Things to handle in this:
-                - Status Change in Message
-                - Lazy / Paginated Load
-                - Performance Optimization for Change in Message (loop over Documents should not be everytime)
-         */
-
         messagesListener = getReference(headerId)
                 .orderBy("timestamp", Query.Direction.ASCENDING)
                 .addSnapshotListener { snapshot, exception ->
@@ -263,6 +258,10 @@ class ChatPageViewModel constructor(
                         messages.forEach { message ->
                             if(message.isAReplyToOtherMessage && message.replyForMessageId != null){
                                 message.replyForMessage = messages.find { it.id == message.replyForMessageId || message.replyForMessageId == it.otherUsersMessageId}
+                            }
+
+                            if(message.flowType == ChatConstants.FLOW_TYPE_IN){
+                                message.senderInfo.name = currentChatHeader?.otherUser?.name ?: ""
                             }
                         }
 

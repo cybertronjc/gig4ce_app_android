@@ -78,8 +78,6 @@ class PresenceManager : LifecycleObserver {
                                         appStatus =  APP_STATUS_ACTIVE
                                     ))
                                 }
-                            } else{
-                                usrRef?.removeValue()
                             }
                         }
                     })
