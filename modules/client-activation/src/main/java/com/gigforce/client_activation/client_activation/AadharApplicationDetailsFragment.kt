@@ -1211,7 +1211,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
     private fun processStates(content: ArrayList<State>) {
 
         statesList.toMutableList().clear()
-        statesList = ArrayList(content.sortedBy { it.name })
+        statesList = ArrayList(content.filter { it.name != "" }.sortedBy { it.name })
 
         statesArray.clear()
         statesesMap.clear()
