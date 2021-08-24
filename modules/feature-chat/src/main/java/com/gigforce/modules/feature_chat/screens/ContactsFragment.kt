@@ -45,7 +45,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_contacts.*
-import okhttp3.MultipartBody
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -125,7 +124,7 @@ class ContactsFragment : DialogFragment(),
                     contactsToolbarSubTitle.text = "${contactsAdapter.itemCount} Contact(s)"
 
                     userSelectedLayout.isVisible = false
-                    selectedUserCountTV.text = getString(R.string.zero_contacts_selected)
+                    selectedUserCountTV.text = getString(R.string.zero_contacts_selected_chat)
 
                     createGroupFab.gone()
                 } else {
@@ -210,7 +209,7 @@ class ContactsFragment : DialogFragment(),
 
     private fun startLoaderForGettingContacts() {
         contactsPermissionLayout.gone()
-        showToast(getString(R.string.refreshing))
+        showToast(getString(R.string.refreshing_chat))
         requireActivity().startService(Intent(requireContext(), SyncContactsService::class.java))
     }
 
@@ -240,9 +239,9 @@ class ContactsFragment : DialogFragment(),
         }
 
         if (shouldReturnToPreviousScreen) {
-            createGroupLabel.text = getString(R.string.add_to_group)
+            createGroupLabel.text = getString(R.string.add_to_group_chat)
         } else {
-            createGroupLabel.text = getString(R.string.create_group)
+            createGroupLabel.text = getString(R.string.create_group_chat)
         }
 
         askPermissionView.setOnClickListener {
@@ -266,7 +265,7 @@ class ContactsFragment : DialogFragment(),
 
         createGroupFab.setOnClickListener {
             if (contactsAdapter.getSelectedContact().isEmpty()) {
-                showToast(getString(R.string.select_at_least_one_contact))
+                showToast(getString(R.string.select_at_least_one_contact_chat))
                 return@setOnClickListener
             }
 
@@ -373,7 +372,7 @@ class ContactsFragment : DialogFragment(),
         refreshingUserHorizontalProgressBar.gone()
         refreshingUserCenterProgressBar.gone()
 
-        showToast(getString(R.string.contacts_synced))
+        showToast(getString(R.string.contacts_synced_chat))
     }
 
     private fun errorInSyncingContacts(error: String) {
@@ -382,7 +381,7 @@ class ContactsFragment : DialogFragment(),
 
         MaterialAlertDialogBuilder(requireContext())
                 .setMessage(error)
-                .setTitle(getString(R.string.unable_to_sync_contacts))
+                .setTitle(getString(R.string.unable_to_sync_contacts_chat))
                 .setPositiveButton("Okay") { _, _ -> }
                 .show()
     }
@@ -427,8 +426,8 @@ class ContactsFragment : DialogFragment(),
 
     fun stateCreateNewGroup() {
         contactsToolbarSubTitle.visible()
-        contactsToolbarLabel.text = getString(R.string.select_members)
-        contactsToolbarSubTitle.text = getString(R.string.tap_to_select)
+        contactsToolbarLabel.text = getString(R.string.select_members_chat)
+        contactsToolbarSubTitle.text = getString(R.string.tap_to_select_chat)
         user_selected_layout.visible()
         create_group_layout.gone()
         contactsAdapter.getSelectedItems().clear()
@@ -496,10 +495,10 @@ class ContactsFragment : DialogFragment(),
             if (permissionSnackBar == null) {
                 permissionSnackBar = Snackbar.make(
                         rootContactsLayout,
-                        getString(R.string.grant_contacts_permission),
+                        getString(R.string.grant_contacts_permission_chat),
                         Snackbar.LENGTH_INDEFINITE
                 )
-                permissionSnackBar?.setAction(getString(R.string.okay)) {
+                permissionSnackBar?.setAction(getString(R.string.okay_chat)) {
                     startAppSettingsPage()
                 }
             }
@@ -561,7 +560,7 @@ class ContactsFragment : DialogFragment(),
                 true
             }
             else -> {
-                showToast(getString(R.string.coming_soon))
+                showToast(getString(R.string.coming_soon_chat))
                 false
             }
         }

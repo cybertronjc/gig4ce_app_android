@@ -159,7 +159,7 @@ class ChatListItem(
                 if(chatHeader.lastMessageDeleted){
                     lastMessageType.visible()
                     lastMessageType.setImageResource(R.drawable.ic_delete_forever_12)
-                    txtSubtitle.text = context.getString(R.string.message_deleted)
+                    txtSubtitle.text = context.getString(R.string.message_deleted_chat)
                     txtSubtitle.setTypeface(null,Typeface.ITALIC)
                 } else {
 
@@ -173,22 +173,22 @@ class ChatListItem(
                         ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO -> {
                             lastMessageType.visible()
                             lastMessageType.setImageResource(R.drawable.ic_chat_video_2)
-                            txtSubtitle.text = messagePrefix + context.getString(R.string.video)
+                            txtSubtitle.text = messagePrefix + context.getString(R.string.video_chat)
                         }
                         ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT -> {
                             lastMessageType.visible()
                             lastMessageType.setImageResource(R.drawable.ic_chat_document_2)
-                            txtSubtitle.text = messagePrefix + context.getString(R.string.document)
+                            txtSubtitle.text = messagePrefix + context.getString(R.string.document_chat)
                         }
                         ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE -> {
                             lastMessageType.visible()
                             lastMessageType.setImageResource(R.drawable.ic_chat_image_2)
-                            txtSubtitle.text = messagePrefix + context.getString(R.string.image)
+                            txtSubtitle.text = messagePrefix + context.getString(R.string.image_chat)
                         }
                         ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION -> {
                             lastMessageType.visible()
                             lastMessageType.setImageResource(R.drawable.ic_chat_location_2)
-                            txtSubtitle.text = messagePrefix + context.getString(R.string.location)
+                            txtSubtitle.text = messagePrefix + context.getString(R.string.location_chat)
                         }
                         else -> {
                             //   lastMessageType.gone()

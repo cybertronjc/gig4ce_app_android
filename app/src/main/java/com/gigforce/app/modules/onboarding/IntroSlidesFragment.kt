@@ -167,7 +167,7 @@ class IntroSlidesViewPagerAdapter(
                     .into(mainArtImageView)
                 titleTextView.setText(R.string.intro_slide3_title)
                 subTitleTextView.setText(R.string.intro_slide3_subtitle)
-                nextButton.setText(context.getString(R.string.get_started))
+                nextButton.setText("Get Started")
                 nextButton.visibility = View.VISIBLE
                 right_arrow.visibility = View.VISIBLE
             }

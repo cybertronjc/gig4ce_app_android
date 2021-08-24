@@ -35,8 +35,6 @@ import com.gigforce.core.AppConstants
 import com.gigforce.core.StringConstants
 import com.gigforce.core.datamodels.verification.PanCardDataModel
 import com.gigforce.core.di.interfaces.IBuildConfig
-import com.gigforce.core.extensions.gone
-import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.DateHelper
 import com.gigforce.core.utils.NavFragmentsData
@@ -318,9 +316,9 @@ class PanCardFragment : Fragment(),
                 if (!VerificationValidations.isPanCardValid(panCardNo)) {
 
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage(getString(R.string.enter_valid_pan))
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setTitle(getString(R.string.alert_veri))
+                        .setMessage(getString(R.string.enter_valid_pan_veri))
+                        .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
                         .show()
                     return@setOnClickListener
                 }
@@ -369,7 +367,7 @@ class PanCardFragment : Fragment(),
             getDBImageUrl(it)?.let {
                 list.add(
                     KYCImageModel(
-                        text = getString(R.string.upload_pan_card_new),
+                        text = getString(R.string.upload_pan_card_new_veri),
                         imagePath = it,
                         imageUploaded = true
                     )
@@ -431,7 +429,7 @@ class PanCardFragment : Fragment(),
             .build()
         val list = listOf(
             KYCImageModel(
-                text = getString(R.string.upload_pan_card_new),
+                text = getString(R.string.upload_pan_card_new_veri),
                 imageIcon = frontUri,
                 imageUploaded = false
             )
@@ -614,8 +612,8 @@ class PanCardFragment : Fragment(),
     private fun showWhyWeNeedThisDialog() {
         WhyWeNeedThisBottomSheet.launch(
             childFragmentManager = childFragmentManager,
-            title = getString(R.string.why_do_we_need_this),
-            content = getString(R.string.why_do_we_need_this_pan)
+            title = getString(R.string.why_do_we_need_this_veri),
+            content = getString(R.string.why_do_we_need_this_pan_veri)
         )
     }
 
@@ -658,7 +656,7 @@ class PanCardFragment : Fragment(),
         options.setFreeStyleCropEnabled(false)
         options.setStatusBarColor(ResourcesCompat.getColor(resources, R.color.topBarDark, null))
         options.setToolbarColor(ResourcesCompat.getColor(resources, R.color.topBarDark, null))
-        options.setToolbarTitle(getString(R.string.crop_and_rotate))
+        options.setToolbarTitle(getString(R.string.crop_and_rotate_veri))
         return options
     }
 
@@ -690,7 +688,7 @@ class PanCardFragment : Fragment(),
             getDBImageUrl(it)?.let {
                 list.add(
                     KYCImageModel(
-                        text = getString(R.string.upload_pan_card_new),
+                        text = getString(R.string.upload_pan_card_new_veri),
                         imagePath = it,
                         imageUploaded = true
                     )
@@ -777,7 +775,7 @@ class PanCardFragment : Fragment(),
         viewBinding.submitButton.isEnabled = true
         viewBinding.belowLayout.visible()
         viewBinding.toplayoutblock.setVerificationSuccessfulView(
-            getString(R.string.pan_card),
+            getString(R.string.pan_card_veri),
             getString(R.string.you_need_to_upload)
         )
         initializeImageViews()
@@ -799,7 +797,7 @@ class PanCardFragment : Fragment(),
             getDBImageUrl(it)?.let {
                 list.add(
                     KYCImageModel(
-                        text = getString(R.string.upload_pan_card_new),
+                        text = getString(R.string.upload_pan_card_new_veri),
                         imagePath = it,
                         imageUploaded = true
                     )

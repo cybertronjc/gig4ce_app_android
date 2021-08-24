@@ -106,7 +106,7 @@
                 android:letterSpacing="0"
                 android:minWidth="120dp"
                 android:minHeight="@dimen/size_36"
-                android:text="@string/no"
+                android:text="@string/no_app"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

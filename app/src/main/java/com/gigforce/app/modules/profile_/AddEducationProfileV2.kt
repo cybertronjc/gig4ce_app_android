@@ -59,7 +59,7 @@ class AddEducationProfileV2 : BaseFragment(), PopupMenu.OnMenuItemClickListener 
         val spinnerDialog = SpinnerDialog(
             requireActivity(),
             years,
-            getString(R.string.select_year),
+            getString(R.string.select_year_app),
             "close"
         ) // With No Animation
         spinnerDialog.setCancellable(true) // for cancellable
@@ -82,7 +82,7 @@ class AddEducationProfileV2 : BaseFragment(), PopupMenu.OnMenuItemClickListener 
         val spinnerDialog2 = SpinnerDialog(
             requireActivity(),
             months,
-            getString(R.string.select_year),
+            getString(R.string.select_year_app),
             "close"
         ) // With No Animation
         spinnerDialog2.setCancellable(true) // for cancellable
@@ -102,7 +102,7 @@ class AddEducationProfileV2 : BaseFragment(), PopupMenu.OnMenuItemClickListener 
         tv_add_certification_add_education.setOnClickListener {
             if (ll_pdf_view_add_education.visibility == View.VISIBLE) {
                 ll_pdf_view_add_education.gone()
-                tv_add_certification_add_education.text = getString(R.string.add_media)
+                tv_add_certification_add_education.text = getString(R.string.add_media_app)
             } else {
                 pickFile()
             }
@@ -122,12 +122,12 @@ class AddEducationProfileV2 : BaseFragment(), PopupMenu.OnMenuItemClickListener 
 
     private fun intLangChipGroup() {
         val listOf = listOf(
-            getString(R.string.below_10th),
-            getString(R.string.post_grad),
-            getString(R.string.grad),
+            getString(R.string.below_10th_app),
+            getString(R.string.post_grad_app),
+            getString(R.string.grad_app),
             getString(R.string.diploma),
-            getString(R.string.pass_12th),
-            getString(R.string.pass_10th)
+            getString(R.string.pass_12th_app),
+            getString(R.string.pass_10th_app)
         )
         listOf.forEach { element ->
             val chip = Chip(requireContext())
@@ -168,8 +168,8 @@ class AddEducationProfileV2 : BaseFragment(), PopupMenu.OnMenuItemClickListener 
 
     private fun showViewsAsPerSelection(education: String) {
         when (education) {
-            getString(R.string.below_10th) -> rl_education_details_add_education.gone()
-            getString(R.string.post_grad), getString(R.string.grad), getString(R.string.diploma) -> {
+            getString(R.string.below_10th_app) -> rl_education_details_add_education.gone()
+            getString(R.string.post_grad_app), getString(R.string.grad_app), getString(R.string.diploma) -> {
                 rl_education_details_add_education.visible()
                 showViews(
                     true,
@@ -184,7 +184,7 @@ class AddEducationProfileV2 : BaseFragment(), PopupMenu.OnMenuItemClickListener 
                     tv_label_completion_date_add_education
                 )
             }
-            getString(R.string.pass_10th), getString(R.string.pass_12th) -> {
+            getString(R.string.pass_10th_app), getString(R.string.pass_12th_app) -> {
                 rl_education_details_add_education.visible()
                 showViews(
                     false,
@@ -247,7 +247,7 @@ class AddEducationProfileV2 : BaseFragment(), PopupMenu.OnMenuItemClickListener 
             .load()
         pdfView_add_education.zoomTo(1.75f)
         tv_file_name_add_education.text = getFileName(uri!!)
-        tv_add_certification_add_education.text = getString(R.string.delete_media)
+        tv_add_certification_add_education.text = getString(R.string.delete_media_app)
 
     }
 

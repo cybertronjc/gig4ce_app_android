@@ -35,7 +35,7 @@ class AddSkillsProfileV2 : BaseFragment() {
 //        act_add_skills_profile_v2.setAdapter(
 //                resources.getStringArray(R.array.lang_array).toList()
 //        )
-        act_add_skills_profile_v2.setHint(getString(R.string.search_lang))
+        act_add_skills_profile_v2.setHint(getString(R.string.search_lang_app))
         act_add_skills_profile_v2.setContentPadding(
                 paddingTop = resources.getDimensionPixelSize(
                         R.dimen.size_15

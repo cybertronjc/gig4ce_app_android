@@ -8,7 +8,6 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.gone
@@ -16,10 +15,8 @@ import com.gigforce.core.extensions.invisible
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.Lce
-import com.gigforce.lead_management.LeadManagementConstants
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.FragmentGigerOtpVerificationBinding
-import com.gigforce.lead_management.ui.giger_onboarding.GigerOnboardingViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -88,7 +85,7 @@ class GigerOtpVerification : BaseFragment2<FragmentGigerOtpVerificationBinding>(
     }
 
     private fun initListeners() {
-        viewBinding.weWillSendOtpLabel.text = getString(R.string.code_is_sent_to) + mobileNo
+        viewBinding.weWillSendOtpLabel.text = getString(R.string.code_is_sent_to_lead) + mobileNo
 
         viewBinding.submitButton.setOnClickListener {
             validateDataAndSubmit()
@@ -134,7 +131,7 @@ class GigerOtpVerification : BaseFragment2<FragmentGigerOtpVerificationBinding>(
                         viewBinding.confirmingOtpPb.visible()
                     }
                     is Lce.Content -> {
-                        showToast(getString(R.string.otp_confirmed))
+                        showToast(getString(R.string.otp_confirmed_lead))
 
                         navigation.navigateTo(
                             "userinfo/addUserDetailsFragment", bundleOf(
@@ -158,7 +155,7 @@ class GigerOtpVerification : BaseFragment2<FragmentGigerOtpVerificationBinding>(
 
     private fun validateDataAndSubmit() {
         if (viewBinding.txtOtp.text?.length != 6) {
-            showAlertDialog("", getString(R.string.enter_valid_otp))
+            showAlertDialog("", getString(R.string.enter_valid_otp_lead))
             return
         }
 
@@ -174,7 +171,7 @@ class GigerOtpVerification : BaseFragment2<FragmentGigerOtpVerificationBinding>(
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(title)
             .setMessage(message)
-            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+            .setPositiveButton(getString(R.string.okay_lead)) { _, _ -> }
             .show()
     }
 

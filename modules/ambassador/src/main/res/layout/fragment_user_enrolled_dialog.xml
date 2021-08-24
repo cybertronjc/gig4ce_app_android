@@ -34,7 +34,7 @@
                 android:layout_marginStart="22dp"
                 android:fontFamily="@font/lato"
                 android:letterSpacing="0"
-                android:text="@string/congratulations_exclamation"
+                android:text="@string/congratulations_exclamation_amb"
                 android:textColor="@color/white"
                 android:textSize="16sp" />
 
@@ -81,7 +81,7 @@ Soon gigs will assign to him, and you will receive your incentive." />
             android:fontFamily="@font/lato_bold"
             android:gravity="center"
             android:minHeight="@dimen/size_36"
-            android:text="@string/okay_text"
+            android:text="@string/okay_text_amb"
             android:textAllCaps="false"
             android:textColor="@color/white"
             app:layout_constraintTop_toBottomOf="@id/congrats_text"
@@ -116,7 +116,7 @@ Soon gigs will assign to him, and you will receive your incentive." />
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/lato"
                 android:letterSpacing="0"
-                android:text="@string/oops"
+                android:text="@string/oops_amb"
                 android:gravity="center"
                 android:textColor="@color/white"
                 android:textSize="16sp" />
@@ -141,7 +141,7 @@ Soon gigs will assign to him, and you will receive your incentive." />
             android:fontFamily="@font/lato"
             android:gravity="center_horizontal"
             android:lineSpacingExtra="3sp"
-            android:text="@string/to_earn_incentive_for_the_profile_created_atleast_one_document_is_mandatory"
+            android:text="@string/to_earn_incentive_for_the_profile_created_atleast_one_document_is_mandatory_amb"
             android:textColor="#d9000000"
             android:textSize="14sp"
             android:textStyle="normal"
@@ -160,7 +160,7 @@ Soon gigs will assign to him, and you will receive your incentive." />
             android:background="@drawable/gradient_button"
             android:fontFamily="@font/lato_bold"
             android:gravity="center"
-            android:text="@string/upload_documents"
+            android:text="@string/upload_documents_amb"
             android:textAllCaps="false"
             android:textColor="@color/white"
             app:layout_constraintTop_toBottomOf="@id/congrats_text"
@@ -177,7 +177,7 @@ Soon gigs will assign to him, and you will receive your incentive." />
             android:background="@drawable/gradient_button"
             android:fontFamily="@font/lato_bold"
             android:gravity="center"
-            android:text="@string/i_will_do_it_later"
+            android:text="@string/i_will_do_it_later_amb"
             android:textAllCaps="false"
             app:layout_constraintTop_toBottomOf="@id/congrats_text"
             app:layout_goneMarginTop="56dp" />

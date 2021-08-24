@@ -128,7 +128,7 @@ class AssessmentSlideFragment : Fragment() {
 
         MaterialAlertDialogBuilder(requireContext())
             .setView(dialogView)
-            .setPositiveButton(R.string.okay_text) { _, _ -> }
+            .setPositiveButton(R.string.okay_text_learning) { _, _ -> }
             .show()
     }
 }

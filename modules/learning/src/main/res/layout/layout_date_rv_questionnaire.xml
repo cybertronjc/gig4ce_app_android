@@ -20,7 +20,7 @@
         android:layout_marginStart="@dimen/size_16"
         android:layout_marginEnd="@dimen/size_16"
         android:layout_marginBottom="@dimen/size_16"
-        android:text="@string/select_date"
+        android:text="@string/select_date_learning"
         android:textColor="@color/black"
         android:textSize="@dimen/font_16" />
 

@@ -22,24 +22,24 @@ class RosterTopBar : MaterialCardView {
     val datetime = LocalDateTime.now()
 
     var monthTemplate = ArrayList<String>(
-            listOf(context.getString(R.string.jan), context.getString(R.string.feb), context.getString(R.string.mar), context.getString(
-                    R.string.apr), context.getString(R.string.may),
-                    context.getString(R.string.june), context.getString(R.string.july), context.getString(R.string.aug), context.getString(
-                    R.string.sep), context.getString(R.string.oct),
-                    context.getString(R.string.nov), context.getString(R.string.dec))
+            listOf(context.getString(R.string.jan_app_giger), context.getString(R.string.feb_app_giger), context.getString(R.string.mar_app_giger), context.getString(
+                    R.string.apr_app_giger), context.getString(R.string.may_app_giger),
+                    context.getString(R.string.june_app_giger), context.getString(R.string.july_app_giger), context.getString(R.string.aug_app_giger), context.getString(
+                    R.string.sep_app_giger), context.getString(R.string.oct_app_giger),
+                    context.getString(R.string.nov_app_giger), context.getString(R.string.dec_app_giger))
     )
 
     var months = ArrayList<String>(
-            listOf(context.getString(R.string.jan), context.getString(R.string.feb), context.getString(R.string.mar), context.getString(
-                    R.string.apr), context.getString(R.string.may),
-                    context.getString(R.string.june), context.getString(R.string.july), context.getString(R.string.aug), context.getString(
-                    R.string.sep), context.getString(R.string.oct),
-                    context.getString(R.string.nov), context.getString(R.string.dec)))
+            listOf(context.getString(R.string.jan_app_giger), context.getString(R.string.feb_app_giger), context.getString(R.string.mar_app_giger), context.getString(
+                    R.string.apr_app_giger), context.getString(R.string.may_app_giger),
+                    context.getString(R.string.june_app_giger), context.getString(R.string.july_app_giger), context.getString(R.string.aug_app_giger), context.getString(
+                    R.string.sep_app_giger), context.getString(R.string.oct_app_giger),
+                    context.getString(R.string.nov_app_giger), context.getString(R.string.dec_app_giger)))
 
     var days = ArrayList<String>(
-            listOf(context.getString(R.string.mon), context.getString(R.string.tue), context.getString(R.string.wed), context.getString(
-                    R.string.thur), context.getString(R.string.fri), context.getString(R.string.sat), context.getString(
-                    R.string.sun))
+            listOf(context.getString(R.string.mon_app_giger), context.getString(R.string.tue_app_giger), context.getString(R.string.wed_app_giger), context.getString(
+                    R.string.thur_app_giger), context.getString(R.string.fri_app_giger), context.getString(R.string.sat_app_giger), context.getString(
+                    R.string.sun_app_giger))
     )
 
     init {

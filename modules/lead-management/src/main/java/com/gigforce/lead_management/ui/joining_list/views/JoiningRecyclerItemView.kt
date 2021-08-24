@@ -20,7 +20,6 @@ import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.RecyclerRowJoiningItemBinding
 import com.gigforce.lead_management.models.JoiningListRecyclerItemData
-import com.google.firebase.Timestamp
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -115,7 +114,7 @@ class JoiningRecyclerItemView(
         office: String
     ) {
         if (office.isEmpty()) {
-            viewBinding.userPhoneNumber.text = context.getString(R.string.office_na)
+            viewBinding.userPhoneNumber.text = context.getString(R.string.office_na_lead)
         } else {
             viewBinding.userPhoneNumber.text = office
         }

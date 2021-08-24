@@ -121,7 +121,7 @@ class AddUserCurrentAddressFragment : Fragment(), IOnBackPressedOverride {
             validateDataAndSubmit()
         }
 
-        toolbar_layout.showTitle(getString(R.string.user_local_address))
+        toolbar_layout.showTitle(getString(R.string.user_local_address_amb))
         toolbar_layout.hideActionMenu()
         toolbar_layout.setBackButtonListener(View.OnClickListener {
             showGoBackConfirmationDialog()
@@ -252,7 +252,7 @@ class AddUserCurrentAddressFragment : Fragment(), IOnBackPressedOverride {
 
         if (state_spinner.childCount == 0 || state_spinner.selectedItemPosition == 0) {
             state_error.visible()
-            state_error.text = getString(R.string.select_state_name)
+            state_error.text = getString(R.string.select_state_name_amb)
             return
         } else {
             state_error.gone()
@@ -262,7 +262,7 @@ class AddUserCurrentAddressFragment : Fragment(), IOnBackPressedOverride {
         if (city_spinner.childCount == 0 || city_spinner.selectedItemPosition == 0) {
 
             city_error.visible()
-            city_error.text = getString(R.string.select_district_name)
+            city_error.text = getString(R.string.select_district_name_amb)
             return
         } else {
             city_error.gone()
@@ -271,7 +271,7 @@ class AddUserCurrentAddressFragment : Fragment(), IOnBackPressedOverride {
 
         if (permanent_address_layout.isVisible && (permanent_state_spinner.childCount == 0 || permanent_state_spinner.selectedItemPosition == 0)) {
             permanent_state_error.visible()
-            permanent_state_error.text = getString(R.string.select_state_name)
+            permanent_state_error.text = getString(R.string.select_state_name_amb)
             return
         } else {
             permanent_state_error.gone()
@@ -280,7 +280,7 @@ class AddUserCurrentAddressFragment : Fragment(), IOnBackPressedOverride {
 
         if (permanent_address_layout.isVisible && (permanent_city_spinner.childCount == 0 || permanent_city_spinner.selectedItemPosition == 0)) {
             permanent_city_error.visible()
-            permanent_city_error.text = getString(R.string.select_state_name)
+            permanent_city_error.text = getString(R.string.select_state_name_amb)
             return
         } else {
             permanent_city_error.gone()
@@ -383,10 +383,10 @@ class AddUserCurrentAddressFragment : Fragment(), IOnBackPressedOverride {
                         // UtilMethods.hideLoading()
 
                         if (userId == null) {
-                            showToast(getString(R.string.current_address_details_submitted))
+                            showToast(getString(R.string.current_address_details_submitted_amb))
                             activity?.onBackPressed()
                         } else {
-                            showToast(getString(R.string.user_current_add_details_submitted))
+                            showToast(getString(R.string.user_current_add_details_submitted_amb))
                             navigation.navigateTo(
                                 "userinfo/addUserBankDetailsInfoFragment", bundleOf(
                                     EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
@@ -404,7 +404,7 @@ class AddUserCurrentAddressFragment : Fragment(), IOnBackPressedOverride {
                     }
                     is Lse.Error -> {
                         //  UtilMethods.hideLoading()
-                        showAlertDialog(getString(R.string.could_not_submit_address_info), it.error)
+                        showAlertDialog(getString(R.string.could_not_submit_address_info_amb), it.error)
                     }
                 }
             })
@@ -423,7 +423,7 @@ class AddUserCurrentAddressFragment : Fragment(), IOnBackPressedOverride {
                     }
                     is Lse.Error -> {
                         UtilMethods.hideLoading()
-                        showToast(getString(R.string.unable_to_load_cities_and_states))
+                        showToast(getString(R.string.unable_to_load_cities_and_states_amb))
                     }
                 }
             }
@@ -521,10 +521,10 @@ class AddUserCurrentAddressFragment : Fragment(), IOnBackPressedOverride {
 
     private fun showGoBackConfirmationDialog() {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle(getString(R.string.alert))
-            .setMessage(getString(R.string.sure_to_go_back))
-            .setPositiveButton(getString(R.string.yes)) { _, _ -> goBackToUsersList() }
-            .setNegativeButton(getString(R.string.no)) { _, _ -> }
+            .setTitle(getString(R.string.alert_amb))
+            .setMessage(getString(R.string.sure_to_go_back_amb))
+            .setPositiveButton(getString(R.string.yes_amb)) { _, _ -> goBackToUsersList() }
+            .setNegativeButton(getString(R.string.no_amb)) { _, _ -> }
             .show()
     }
 
@@ -537,7 +537,7 @@ class AddUserCurrentAddressFragment : Fragment(), IOnBackPressedOverride {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(title)
             .setMessage(message)
-            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+            .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
             .show()
     }
 
@@ -547,7 +547,7 @@ class AddUserCurrentAddressFragment : Fragment(), IOnBackPressedOverride {
         }.sortedBy {
             it.name
         }.toMutableList().apply {
-            add(0, City(name = getString(R.string.select_district)))
+            add(0, City(name = getString(R.string.select_district_amb)))
         }
 
         val cityAdapter: ArrayAdapter<City> =

@@ -3,18 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_pick_image"
-        android:title="@string/image"
+        android:title="@string/image_app"
         android:icon="@drawable/ic_photo_landscape"
         app:showAsAction="collapseActionView" />
     <item
         android:id="@+id/action_video"
-        android:title="@string/video"
+        android:title="@string/video_app"
         android:icon="@drawable/ic_play_black"
         app:showAsAction="collapseActionView" />
     <item
         android:id="@+id/action_document"
         android:orderInCategory="100"
-        android:title="@string/document"
+        android:title="@string/document_app"
         android:icon="@drawable/ic_document_outlined_black"
         app:showAsAction="collapseActionView" />
 

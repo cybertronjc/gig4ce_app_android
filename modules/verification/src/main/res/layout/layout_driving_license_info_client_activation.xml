@@ -51,7 +51,7 @@
             android:letterSpacing="-0.01"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
-            android:text="@string/why_do_we_need_this"
+            android:text="@string/why_do_we_need_this_veri"
             android:textColor="@color/battle_ship_grey"
             android:textSize="12sp"
             app:layout_constraintEnd_toStartOf="@+id/helpIconViewIV"
@@ -69,7 +69,7 @@
             app:layout_constraintEnd_toStartOf="@+id/editLayout"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/drivingLicenseLabel"
-            tools:text="@string/under_verification" />
+            tools:text="@string/under_verification_veri" />
 
         <LinearLayout
             android:id="@+id/editLayout"
@@ -93,7 +93,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:fontFamily="@font/lato"
-                android:text="@string/edit"
+                android:text="@string/edit_veri"
                 android:textColor="@color/black" />
 
 
@@ -107,7 +107,7 @@
             android:layout_marginTop="20dp"
             android:fontFamily="@font/lato"
             android:letterSpacing="-0.01"
-            android:text="@string/driving_license_front_image"
+            android:text="@string/driving_license_front_image_veri"
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/statusTV" />
@@ -143,7 +143,7 @@
             android:layout_marginTop="16dp"
             android:fontFamily="@font/lato"
             android:letterSpacing="-0.01"
-            android:text="@string/driving_license_back_image"
+            android:text="@string/driving_license_back_image_veri"
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/dlFrontErrorMessage" />
@@ -184,7 +184,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/lato_bold"
                 android:letterSpacing="0"
-                android:text="@string/dl_no_w_colon"
+                android:text="@string/dl_no_w_colon_veri"
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -224,7 +224,7 @@
                 android:layout_marginTop="15dp"
                 android:fontFamily="@font/lato_bold"
                 android:letterSpacing="0"
-                android:text="@string/dl_state_w_colon"
+                android:text="@string/dl_state_w_colon_veri"
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"

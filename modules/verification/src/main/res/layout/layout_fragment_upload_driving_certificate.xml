@@ -52,7 +52,7 @@
                 android:layout_toEndOf="@+id/iv_back_application_client_activation"
                 android:fontFamily="@font/lato"
                 android:gravity="center_horizontal"
-                android:text="@string/upload_driving_certificate"
+                android:text="@string/upload_driving_certificate_veri"
                 android:textColor="@color/white"
                 android:textSize="@dimen/font_20"
                 android:textStyle="normal" />
@@ -128,7 +128,7 @@
             android:paddingTop="@dimen/size_10"
             android:paddingEnd="@dimen/size_30"
             android:paddingBottom="@dimen/size_9"
-            android:text="@string/schedule_test"
+            android:text="@string/schedule_test_veri"
             android:textColor="@color/white"
             android:textSize="@dimen/font_14"
             android:textStyle="normal"

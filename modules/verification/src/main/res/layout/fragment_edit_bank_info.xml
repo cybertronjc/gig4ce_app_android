@@ -23,7 +23,7 @@
             android:layout_marginTop="22dp"
             android:fontFamily="@font/lato_bold"
             android:letterSpacing="0"
-            android:text="@string/edit"
+            android:text="@string/edit_veri"
             android:textColor="@color/black"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -43,7 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/name"
+            android:text="@string/name_veri"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/editLabel" />
 
@@ -62,7 +62,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/father_s_name"
+            android:text="@string/father_s_name_veri"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/nameET" />
 
@@ -82,7 +82,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/cif_number"
+            android:text="@string/cif_number_veri"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/fathersNameET" />
 
@@ -101,7 +101,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/account_number"
+            android:text="@string/account_number_veri"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cifNumberET" />
 
@@ -141,7 +141,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/address_line"
+            android:text="@string/address_line_veri"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ifscET" />
 
@@ -167,7 +167,7 @@
                 android:id="@+id/areaLabel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/area_"
+                android:text="@string/area__veri"
                 app:layout_constraintEnd_toStartOf="@+id/locationLabel"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -177,7 +177,7 @@
                 android:id="@+id/locationLabel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/location"
+                android:text="@string/location_veri"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/areaLabel"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -220,7 +220,7 @@
                 android:id="@+id/stateLabel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/state_"
+                android:text="@string/state__veri"
                 app:layout_constraintEnd_toStartOf="@+id/pinLabel"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -230,7 +230,7 @@
                 android:id="@+id/pinLabel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/pincode_"
+                android:text="@string/pincode__veri"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/stateLabel"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -270,7 +270,7 @@
             android:layout_marginTop="33dp"
             android:background="@color/lipstick"
             android:minHeight="@dimen/size_36"
-            android:text="@string/update"
+            android:text="@string/update_veri"
             android:textColor="@color/lipstick"
             app:layout_constraintTop_toBottomOf="@id/statePinLayout" />
 

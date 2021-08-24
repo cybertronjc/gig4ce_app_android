@@ -43,7 +43,7 @@
                 android:layout_centerVertical="true"
                 android:layout_toEndOf="@+id/iv_back_application_add_language_v2"
                 android:fontFamily="@font/lato"
-                android:text="@string/add_language"
+                android:text="@string/add_language_app"
                 android:textColor="@color/white"
                 android:textSize="@dimen/font_20"
                 android:textStyle="normal" />
@@ -78,7 +78,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/iv_content_illustration_add_language"
         app:layout_constraintTop_toTopOf="@+id/iv_content_illustration_add_language"
-        android:text="@string/let_people_lang" />
+        android:text="@string/let_people_lang_app" />
 
 
     <LinearLayout
@@ -101,7 +101,7 @@
             android:layout_margin="@dimen/size_16"
             android:fontFamily="@font/lato"
             android:lineSpacingExtra="3sp"
-            android:text="@string/select_languages"
+            android:text="@string/select_languages_app"
             android:textColor="#333333"
             android:textSize="14sp"
 
@@ -124,7 +124,7 @@
                 style="@style/AppSingleChoiceChip2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/others_"
+                android:text="@string/others_app"
                 app:chipIcon="@drawable/ic_landinghome_search"
                 app:chipIconEnabled="true"
                 app:chipStrokeWidth="1dp"
@@ -144,7 +144,7 @@
                 android:backgroundTint="#68979797"
                 android:focusableInTouchMode="true"
                 android:fontFamily="@font/lato"
-                android:hint="@string/search_language"
+                android:hint="@string/search_language_app"
                 android:inputType="text|textNoSuggestions|textMultiLine"
                 android:lineSpacingExtra="1dp"
                 android:paddingTop="@dimen/size_7"

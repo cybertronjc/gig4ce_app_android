@@ -21,7 +21,7 @@
         android:layout_marginTop="41dp"
         android:fontFamily="@font/lato_bold"
         android:letterSpacing="0"
-        android:text="@string/thank_you"
+        android:text="@string/thank_you_amb"
         android:textColor="#000000"
         android:textSize="18sp" />
 
@@ -34,7 +34,7 @@
         android:fontFamily="@font/lato"
         android:gravity="center_horizontal"
         android:letterSpacing="0"
-        android:text="@string/documents_uploaded_long"
+        android:text="@string/documents_uploaded_long_amb"
         android:textColor="#000000"
         android:textSize="14sp" />
 
@@ -49,7 +49,7 @@
         android:background="@drawable/gradient_button"
         android:minHeight="@dimen/size_36"
         android:padding="15dp"
-        android:text="@string/let_s_go"
+        android:text="@string/let_s_go_amb"
         android:textColor="@color/white" />
 
 </LinearLayout>

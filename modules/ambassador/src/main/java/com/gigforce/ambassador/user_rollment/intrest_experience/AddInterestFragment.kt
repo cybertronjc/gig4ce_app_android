@@ -100,9 +100,9 @@ class AddUserInterestFragment : Fragment(),IOnBackPressedOverride {
 
             if (interest_chipgroup.checkedChipIds.isEmpty()) {
                 MaterialAlertDialogBuilder(requireContext())
-                        .setMessage(getString(R.string.please_select_atleast_one_chip))
+                        .setMessage(getString(R.string.please_select_atleast_one_chip_amb))
                         .setPositiveButton(
-                                getString(R.string.okay).capitalize()
+                                getString(R.string.okay_amb).capitalize()
                         ) { _, _ -> }.show()
 
                 return@setOnClickListener
@@ -111,9 +111,9 @@ class AddUserInterestFragment : Fragment(),IOnBackPressedOverride {
             if (interest_chipgroup.checkedChipIds.size > 3) {
 
                 MaterialAlertDialogBuilder(requireContext())
-                        .setMessage(getString(R.string.select_only_3_chips))
+                        .setMessage(getString(R.string.select_only_3_chips_amb))
                         .setPositiveButton(
-                                getString(R.string.okay).capitalize()
+                                getString(R.string.okay_amb).capitalize()
                         ) { _, _ -> }.show()
 
                 return@setOnClickListener
@@ -141,7 +141,7 @@ class AddUserInterestFragment : Fragment(),IOnBackPressedOverride {
         }
 
         toolbar_layout.apply {
-            showTitle(getString(R.string.add_interest))
+            showTitle(getString(R.string.add_interest_amb))
             hideActionMenu()
             setBackButtonListener(View.OnClickListener {
                 showGoBackConfirmationDialog()
@@ -187,7 +187,7 @@ class AddUserInterestFragment : Fragment(),IOnBackPressedOverride {
                             user_interest_error.visible()
 
                             user_interest_error.text =
-                                getString(R.string.unable_to_fetch_interest_details) + it.error
+                                getString(R.string.unable_to_fetch_interest_details_amb) + it.error
                         }
                     }
                 })
@@ -220,9 +220,9 @@ class AddUserInterestFragment : Fragment(),IOnBackPressedOverride {
                         is Lse.Error -> {
 
                             MaterialAlertDialogBuilder(requireContext())
-                                    .setMessage(getString(R.string.unable_to_submit_interest))
+                                    .setMessage(getString(R.string.unable_to_submit_interest_amb))
                                     .setMessage(it.error)
-                                    .setPositiveButton(getString(R.string.okay).capitalize()) { _, _ -> }
+                                    .setPositiveButton(getString(R.string.okay_amb).capitalize()) { _, _ -> }
                                     .show()
                         }
                     }
@@ -291,10 +291,10 @@ class AddUserInterestFragment : Fragment(),IOnBackPressedOverride {
 
     private fun showGoBackConfirmationDialog() {
         MaterialAlertDialogBuilder(requireContext())
-                .setTitle(getString(R.string.alert))
-                .setMessage(getString(R.string.sure_to_go_back))
-                .setPositiveButton(getString(R.string.yes)) { _, _ -> goBackToUsersList() }
-                .setNegativeButton(getString(R.string.no)) { _, _ -> }
+                .setTitle(getString(R.string.alert_amb))
+                .setMessage(getString(R.string.sure_to_go_back_amb))
+                .setPositiveButton(getString(R.string.yes_amb)) { _, _ -> goBackToUsersList() }
+                .setNegativeButton(getString(R.string.no_amb)) { _, _ -> }
                 .show()
     }
 

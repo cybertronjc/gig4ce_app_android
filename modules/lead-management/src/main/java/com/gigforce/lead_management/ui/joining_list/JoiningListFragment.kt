@@ -68,12 +68,12 @@ class JoiningListFragment : BaseFragment2<FragmentJoiningListBinding>(
         viewBinding: FragmentJoiningListBinding
     ) = viewBinding.toolbar.apply {
         this.hideActionMenu()
-        this.showTitle(context.getString(R.string.joinings))
+        this.showTitle(context.getString(R.string.joinings_lead))
         this.setBackButtonListener {
             activity?.onBackPressed()
         }
 
-        this.showSearchOption(context.getString(R.string.search_joinings))
+        this.showSearchOption(context.getString(R.string.search_joinings_lead))
         lifecycleScope.launchWhenCreated {
             getSearchTextChangeAsFlow()
                 .collect { viewModel.searchJoinings(it) }
@@ -140,7 +140,7 @@ class JoiningListFragment : BaseFragment2<FragmentJoiningListBinding>(
         joiningListInfoLayout.root.visible()
 
         joiningListInfoLayout.infoIv.loadImage(R.drawable.ic_no_joining_found)
-        joiningListInfoLayout.infoMessageTv.text = getString(R.string.no_job_profiles_found)
+        joiningListInfoLayout.infoMessageTv.text = getString(R.string.no_job_profiles_found_lead)
     }
 
     private fun showErrorInLoadingJoinings(

@@ -92,7 +92,7 @@
             android:layout_marginTop="@dimen/size_16"
             android:layout_marginRight="@dimen/size16"
             android:layout_marginLeft="@dimen/size16"
-            android:text="@string/see_more"
+            android:text="@string/see_more_common_ui"
             android:visibility="gone" />
 
         <TextView
@@ -102,7 +102,7 @@
             android:layout_gravity="center"
             android:drawableTop="@drawable/ic_cross_grey"
             android:drawablePadding="10dp"
-            android:text="@string/unable_to_load"
+            android:text="@string/unable_to_load_common_ui"
             android:visibility="gone" />
 
     </LinearLayout>

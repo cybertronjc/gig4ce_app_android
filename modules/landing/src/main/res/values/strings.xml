@@ -816,7 +816,7 @@
     <string name="four_to_eight">04-08 Days</string>
     <string name="eight_to_fifteen">08-15 Days</string>
     <string name="fifteen_to_thirty">15-30 Days</string>
-    <string name="working">working</string>
+    <string name="working_landing">working</string>
     <string name="prefered_no_days_work">Preferred no. of days of work in a month</string>
     <string name="daily_goal">Daily Goal</string>
     <string name="rs0_rs2000">Rs0 - Rs2000</string>
@@ -1065,7 +1065,7 @@
     <string name="cancel_lower_case">Cancel</string>
     <string name="no_time_slot">No Time Slot Selected</string>
     <string name="okay_lower_case">Okay</string>
-    <string name="checkout">Checkout</string>
+    <string name="checkout_landing">Checkout</string>
     <string name="driving_test_details">Driving Test Details</string>
     <string name="all_set_for_test">All Set for Driving Test</string>
     <string name="change_slot">Change Slot</string>
@@ -1232,7 +1232,7 @@
     <string name="let_us_know_your_interest_so_that_we_can_show_the_best_jobs_for_you">Let us know your interest so that we can show the best jobs for you</string>
     <string name="select_jobs_you_are_interested_in">Select Jobs you are interested in</string>
     <string name="bike_rider">Bike Rider</string>
-    <string name="delivery_executive">Delivery Executive</string>
+    <string name="delivery_executive_landing">Delivery Executive</string>
     <string name="warehouse_helper">Warehouse Helper</string>
     <string name="operator">Operator</string>
     <string name="technician">Technician</string>
@@ -1305,7 +1305,7 @@
     <string name="i_will_do_it_later"><u>I will do it later</u></string>
     <string name="upload_documents">Upload Documents</string>
     <string name="send_invite_link">Send Invite Link</string>
-    <string name="chat">Chat</string>
+    <string name="chat_landing">Chat</string>
     <string name="call">Call</string>
     <string name="feedback">Feedback</string>
 
@@ -1313,11 +1313,11 @@
     <string name="keep_learning">Keep Learning !!!</string>
     <string name="you_have_complete_the_two_lessons_successfully_would_you_like_to_complete_the_pending_lessons_of_this_module">You have complete the lessons successfully, would you like to complete the pending lessons of this module.</string>
     <string name="next_lesson">Next Lesson</string>
-    <string name="skip_underline"><u>Skip</u></string>
+    <string name="skip_underline_landing"><u>Skip</u></string>
     <string name="create_new_group">Create New Group</string>
-    <string name="select_members">Select Members</string>
+    <string name="select_members_landing">Select Members</string>
     <string name="contacts_selected">Contacts ( selected )</string>
-    <string name="select_at_least_one_contact">Select at least one contact</string>
+    <string name="select_at_least_one_contact_landing">Select at least one contact</string>
     <string name="no_more_gig">No more Gig !</string>
     <string name="no_scheduled_gig_on_this_day">No scheduled Gig on this Day.</string>
     <string name="enter_your_mobile_number">Enter your mobile number</string>
@@ -1325,7 +1325,7 @@
     <string name="_91">+91-</string>
     <string name="_0000000000">0000000000</string>
     <string name="you_have_entered_invalid_mobile_number_please_re_enter_valid_mobile_number">You have entered invalid Mobile Number. Please re-enter valid Mobile Number.</string>
-    <string name="note">Note :</string>
+    <string name="note_landing">Note :</string>
     <string name="this_mobile_no_will_be_used_to_call_you_for_various_job_opportunities">This mobile no. will be used to call you for various job opportunities.</string>
     <string name="this_overrides_any_dnd_requests_with_your_operator">This overrides any DND requests with your operator.</string>
     <string name="verify_account">Verify Account</string>
@@ -1393,9 +1393,9 @@
     <string name="select_month">Select Month</string>
     <string name="delete_media">Delete Media</string>
     <string name="add_media">Add Media</string>
-    <string name="change_photo">Change Photo</string>
-    <string name="camera">Camera</string>
-    <string name="gallery">Gallery</string>
+    <string name="change_photo_landing">Change Photo</string>
+    <string name="camera_landing">Camera</string>
+    <string name="gallery_landing">Gallery</string>
     <string name="no_face">No Face Detected!!!!!</string>
     <string name="adding_experience_profile_v2">Adding Experience will make profile stronger by 25 %.</string>
     <string name="search_role">Search Role</string>
@@ -1404,7 +1404,7 @@
     <string name="enter_earnings">Enter Earnings</string>
     <string name="no_of_years">No of Years</string>
     <string name="no_of_months">No of Months</string>
-    <string name="company_name">Company Name</string>
+    <string name="company_name_landing">Company Name</string>
     <string name="description_optional">Description (optional)</string>
     <string name="let_people_know_what_all_skills_you_have">Let people Know what all skills you have</string>
     <string name="select_skills_you_have">Select Skills you have</string>
@@ -1512,7 +1512,7 @@
     </string-array>
 
 
-    <string name="cancel_underlined"><u>Cancel</u></string>
+    <string name="cancel_underlined_landing"><u>Cancel</u></string>
     <string name="password">Password</string>
     <string name="select_language">Language</string>
     <string name="step_language">Step 01/09</string>

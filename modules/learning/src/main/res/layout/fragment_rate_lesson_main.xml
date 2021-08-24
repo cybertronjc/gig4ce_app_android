@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:letterSpacing="0"
-            android:text="@string/lesson_completed"
+            android:text="@string/lesson_completed_learning"
             android:textColor="@color/black_85"
             android:textSize="@dimen/font_20"
             android:textStyle="bold"
@@ -37,7 +37,7 @@
             android:gravity="center_horizontal"
             android:letterSpacing="0"
             android:padding="@dimen/size_8"
-            android:text="@string/how_useful_is_the_lesson"
+            android:text="@string/how_useful_is_the_lesson_learning"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -67,7 +67,7 @@
             android:gravity="center_horizontal"
             android:letterSpacing="0"
             android:padding="@dimen/size_8"
-            android:text="@string/what_else_did_you_like"
+            android:text="@string/what_else_did_you_like_learning"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -94,7 +94,7 @@
                 android:layout_weight="1"
                 android:fontFamily="@font/lato"
                 android:gravity="center_vertical"
-                android:text="@string/explantion_by_the_educator"
+                android:text="@string/explantion_by_the_educator_learning"
                 android:textColor="@color/black" />
 
 
@@ -112,14 +112,14 @@
                     style="@style/Widget.MaterialComponents.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/yes" />
+                    android:text="@string/yes_learning" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/explanation_no_chip"
                     style="@style/Widget.MaterialComponents.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/no" />
+                    android:text="@string/no_learning" />
 
             </com.google.android.material.chip.ChipGroup>
         </LinearLayout>
@@ -146,7 +146,7 @@
                 android:layout_weight="1"
                 android:fontFamily="@font/lato"
                 android:gravity="center_vertical"
-                android:text="@string/completeness_of_the_topic"
+                android:text="@string/completeness_of_the_topic_learning"
                 android:textColor="@color/black" />
 
 
@@ -164,14 +164,14 @@
                     style="@style/Widget.MaterialComponents.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/yes" />
+                    android:text="@string/yes_learning" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/completeness_no_chip"
                     style="@style/Widget.MaterialComponents.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/no" />
+                    android:text="@string/no_learning" />
 
             </com.google.android.material.chip.ChipGroup>
         </LinearLayout>
@@ -198,7 +198,7 @@
                 android:layout_weight="1"
                 android:fontFamily="@font/lato"
                 android:gravity="center_vertical"
-                android:text="@string/easy_to_understand"
+                android:text="@string/easy_to_understand_learning"
                 android:textColor="@color/black" />
 
 
@@ -216,14 +216,14 @@
                     style="@style/Widget.MaterialComponents.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/yes" />
+                    android:text="@string/yes_learning" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/easy_to_understand_no_chip"
                     style="@style/Widget.MaterialComponents.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/no" />
+                    android:text="@string/no_learning" />
 
             </com.google.android.material.chip.ChipGroup>
         </LinearLayout>
@@ -250,7 +250,7 @@
                 android:layout_weight="1"
                 android:fontFamily="@font/lato"
                 android:gravity="center_vertical"
-                android:text="@string/video_quality"
+                android:text="@string/video_quality_learning"
                 android:textColor="@color/black" />
 
 
@@ -268,14 +268,14 @@
                     style="@style/Widget.MaterialComponents.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/yes" />
+                    android:text="@string/yes_learning" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/video_quality_no_chip"
                     style="@style/Widget.MaterialComponents.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/no" />
+                    android:text="@string/no_learning" />
 
             </com.google.android.material.chip.ChipGroup>
         </LinearLayout>
@@ -291,7 +291,7 @@
             android:fontFamily="@font/lato_bold"
             android:gravity="center"
             android:minHeight="@dimen/size_36"
-            android:text="@string/submit"
+            android:text="@string/submit_learning"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/video_quality_layout" />
@@ -309,7 +309,7 @@
             android:fontFamily="@font/lato_bold"
             android:gravity="center"
             android:minHeight="@dimen/size_36"
-            android:text="@string/skip"
+            android:text="@string/skip_learning"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/submitBtn" />

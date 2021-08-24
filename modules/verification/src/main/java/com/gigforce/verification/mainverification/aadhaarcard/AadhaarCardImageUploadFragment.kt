@@ -118,7 +118,7 @@ class AadhaarCardImageUploadFragment : Fragment(),
             .build()
         val list = listOf(
             KYCImageModel(
-                text = getString(R.string.upload_pan_card_new),
+                text = getString(R.string.upload_pan_card_new_veri),
                 imageIcon = frontUri,
                 imageUploaded = false
             )

@@ -16,7 +16,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/create_group"
+            android:text="@string/create_group_chat"
             android:textColor="@android:color/black"
             android:textSize="22sp" />
 
@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="@string/enter_group_name"
+            android:text="@string/enter_group_name_chat"
             android:textSize="20sp" />
 
         <androidx.appcompat.widget.AppCompatEditText
@@ -48,14 +48,14 @@
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/cancel" />
+                android:text="@string/cancel_chat" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/create_button"
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/create" />
+                android:text="@string/create_chat" />
 
         </LinearLayout>
 

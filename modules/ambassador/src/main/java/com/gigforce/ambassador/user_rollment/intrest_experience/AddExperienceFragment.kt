@@ -183,7 +183,7 @@ class AddUserExperienceFragment : Fragment(), IOnBackPressedOverride {
 
 
         toolbar_layout.apply {
-            showTitle(getString(R.string.add_experience))
+            showTitle(getString(R.string.add_experience_amb))
             hideActionMenu()
             setBackButtonListener(View.OnClickListener { showGoBackConfirmationDialog() })
 //            setBackButtonListener {
@@ -204,13 +204,13 @@ class AddUserExperienceFragment : Fragment(), IOnBackPressedOverride {
     private fun validateDataAndSubmit() {
 
         if (currentInterestName == null) {
-            showAlertDialog(getString(R.string.wait), getString(R.string.interest_not_loaded_yet))
+            showAlertDialog(getString(R.string.wait_amb), getString(R.string.interest_not_loaded_yet_amb))
             return
         }
 
         if (exp_chipgroup.checkedChipId == -1) {
             have_exp_error.visible()
-            have_exp_error.text = getString(R.string.select_experience_or_not)
+            have_exp_error.text = getString(R.string.select_experience_or_not_amb)
             return
         } else {
             have_exp_error.gone()
@@ -226,7 +226,7 @@ class AddUserExperienceFragment : Fragment(), IOnBackPressedOverride {
             ) {
 
                 role_error.visible()
-                role_error.text = getString(R.string.please_select_role)
+                role_error.text = getString(R.string.please_select_role_amb)
 
                 return
             } else {
@@ -238,7 +238,7 @@ class AddUserExperienceFragment : Fragment(), IOnBackPressedOverride {
             if (company_name_et.text.isBlank()) {
 
                 company_name_error.visible()
-                company_name_error.text = getString(R.string.please_select_company)
+                company_name_error.text = getString(R.string.please_select_company_amb)
 
                 return
             } else {
@@ -248,9 +248,9 @@ class AddUserExperienceFragment : Fragment(), IOnBackPressedOverride {
             }
 
             if (year_exp_spinner.selectedItemPosition == 0) {
-                experience_error.text = getString(R.string.please_select_experience_years)
+                experience_error.text = getString(R.string.please_select_experience_years_amb)
             } else if (months_exp_spinner.selectedItemPosition == 0) {
-                experience_error.text = getString(R.string.please_select_experience_months)
+                experience_error.text = getString(R.string.please_select_experience_months_amb)
             } else {
                 experience_error.text = null
             }
@@ -331,7 +331,7 @@ class AddUserExperienceFragment : Fragment(), IOnBackPressedOverride {
         MaterialAlertDialogBuilder(requireContext())
                 .setTitle(title)
                 .setMessage(message)
-                .setPositiveButton(getString(R.string.okay).capitalize()) { _, _ -> }
+                .setPositiveButton(getString(R.string.okay_amb).capitalize()) { _, _ -> }
                 .show()
     }
 
@@ -372,7 +372,7 @@ class AddUserExperienceFragment : Fragment(), IOnBackPressedOverride {
                                 Lce.Loading -> {
                                 }
                                 is Lce.Content -> {
-                                    showToast(currentInterestName.toString() + " " + getString(R.string.experience_submitted))
+                                    showToast(currentInterestName.toString() + " " + getString(R.string.experience_submitted_amb))
 
                                     if (it.content == null) {
                                         //All Exps filled
@@ -485,7 +485,7 @@ class AddUserExperienceFragment : Fragment(), IOnBackPressedOverride {
     ) {
         currentInterestName = content
         do_you_have_exp_label.text = buildSpannedString {
-            append(getString(R.string.do_u_have_experience_in))
+            append(getString(R.string.do_u_have_experience_in_amb))
             color(ResourcesCompat.getColor(resources, R.color.colorPrimary, null)) {
                 append(" $content ?")
             }
@@ -649,10 +649,10 @@ class AddUserExperienceFragment : Fragment(), IOnBackPressedOverride {
 
     private fun showGoBackConfirmationDialog() {
         MaterialAlertDialogBuilder(requireContext())
-                .setTitle(getString(R.string.alert))
-                .setMessage(getString(R.string.are_u_sure_u_want_to_go_back))
-                .setPositiveButton(getString(R.string.yes)) { _, _ -> goBackToUsersList() }
-                .setNegativeButton(getString(R.string.no)) { _, _ -> }
+                .setTitle(getString(R.string.alert_amb))
+                .setMessage(getString(R.string.are_u_sure_u_want_to_go_back_amb))
+                .setPositiveButton(getString(R.string.yes_amb)) { _, _ -> goBackToUsersList() }
+                .setNegativeButton(getString(R.string.no_amb)) { _, _ -> }
                 .show()
     }
 

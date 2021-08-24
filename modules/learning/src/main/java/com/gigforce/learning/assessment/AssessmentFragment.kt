@@ -189,7 +189,7 @@ class AssessmentFragment : Fragment(), IOnBackPressedOverride,
                 tv_scenario_value_assess_frag.text = it.scenario
                 tv_scenario_value_header_assess_frag.text = it.scenario
 
-                tv_level_assess_frag.text = "${getString(R.string.level)} ${it.level}"
+                tv_level_assess_frag.text = "${getString(R.string.level_learning)} ${it.level}"
                 tv_designation_assess_frag.text = it.Name
                 h_pb_assess_frag.max = it.assessment?.size!!
                 h_pb_assess_frag.progress = 0
@@ -213,7 +213,7 @@ class AssessmentFragment : Fragment(), IOnBackPressedOverride,
 
     fun setDataAsPerPosition(it: AssementQuestionsReponse) {
         tv_ques_no_assess_frag.text =
-            "${getString(R.string.ques)} ${selectedPosition + 1}/${it.assessment?.size} :"
+            "${getString(R.string.ques_learning)} ${selectedPosition + 1}/${it.assessment?.size} :"
         tv_ques_assess_frag.text = it.assessment!![selectedPosition].question
         adapter?.addData(it.assessment!![selectedPosition].options!!, false, "")
         try {
@@ -233,7 +233,7 @@ class AssessmentFragment : Fragment(), IOnBackPressedOverride,
 
     private fun initTb() {
 //        iv_options_menu_tb.visibility = View.VISIBLE
-        tv_title_toolbar.text = getString(R.string.assessment)
+        tv_title_toolbar.text = getString(R.string.assessment_learning)
     }
 
     private fun initialize() {
@@ -256,7 +256,7 @@ class AssessmentFragment : Fragment(), IOnBackPressedOverride,
                     pushfinalEvent = true
                     return
                 }
-                showToast(getString(R.string.time_is_up))
+                showToast(getString(R.string.time_is_up_learning))
                 timeTaken = millis.toInt()
                 viewModelAssessmentFragment.observableAssessmentData.value?.timeTakenInMillis =
                     timeTaken.toLong()
@@ -329,7 +329,7 @@ class AssessmentFragment : Fragment(), IOnBackPressedOverride,
                     ) ?: false
                 ) return
                 if (!viewModelAssessmentFragment.observableAssessmentData.value?.assessment!![selectedPosition].answered) {
-                    showToast(getString(R.string.answer_the_ques))
+                    showToast(getString(R.string.answer_the_ques_learning))
                     return
                 }
 
@@ -377,7 +377,7 @@ class AssessmentFragment : Fragment(), IOnBackPressedOverride,
             if (selectedPosition == viewModelAssessmentFragment.observableAssessmentData.value?.assessment!!.size - 1) {
                 if (viewModelAssessmentFragment.observableAssessmentData.value?.assessment!![selectedPosition].answered) {
                     h_pb_assess_frag.progress = h_pb_assess_frag.max
-                    tv_percent_assess_frag.text = getString(R.string.hundred_percent)
+                    tv_percent_assess_frag.text = getString(R.string.hundred_percent_learning)
                     viewModelAssessmentFragment.observableAssessmentData.value?.timeTakenInMillis =
                         timeTaken.toLong()
                     pb_assessment.visible()
@@ -386,14 +386,14 @@ class AssessmentFragment : Fragment(), IOnBackPressedOverride,
                     }
 
                 } else {
-                    showToast(getString(R.string.answer_the_ques))
+                    showToast(getString(R.string.answer_the_ques_learning))
                 }
 
             } else {
                 if (viewModelAssessmentFragment.observableAssessmentData.value?.assessment!![selectedPosition].answered) {
                     switchPosition(true)
                 } else {
-                    showToast(getString(R.string.answer_the_ques))
+                    showToast(getString(R.string.answer_the_ques_learning))
                 }
             }
         }
@@ -415,7 +415,7 @@ class AssessmentFragment : Fragment(), IOnBackPressedOverride,
         if (pushfinalEvent) {
             pushfinalEvent = false
             Handler().postDelayed({
-                showToast(getString(R.string.time_is_up))
+                showToast(getString(R.string.time_is_up_learning))
                 viewModelAssessmentFragment.observableAssessmentData.value?.timeTakenInMillis =
                     timeTaken.toLong()
                 pb_assessment.visible()
@@ -562,8 +562,8 @@ class AssessmentFragment : Fragment(), IOnBackPressedOverride,
         adapter?.addData(
             optionsArr ?: arrayListOf(),
             true,
-            if (isCorrect) getString(R.string.woe_you_are_correct) else getString(
-                R.string.you_are_incorrect
+            if (isCorrect) getString(R.string.woe_you_are_correct_learning) else getString(
+                R.string.you_are_incorrect_learning
             )
         )
 

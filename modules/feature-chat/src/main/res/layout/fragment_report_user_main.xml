@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:letterSpacing="0"
-                android:text="@string/report_this_user"
+                android:text="@string/report_this_user_chat"
                 android:textColor="@android:color/white"
                 android:textSize="16sp" />
         </LinearLayout>
@@ -48,7 +48,7 @@
             android:layout_marginEnd="24dp"
             android:layout_marginTop="18dp"
             android:letterSpacing="0"
-            android:text="@string/please_let_us_know_your_reason_to_report_the_user"
+            android:text="@string/please_let_us_know_your_reason_to_report_the_user_chat"
             android:textColor="#313131"
             android:textSize="14sp"
             app:layout_constraintTop_toBottomOf="@id/titleLayout" />
@@ -73,7 +73,7 @@
                 android:paddingTop="8dp"
                 style="@style/Theme.RadioButtonLipstickPink"
                 android:layout_height="wrap_content"
-                android:text="@string/person_is_abusive_in_nature" />
+                android:text="@string/person_is_abusive_in_nature_chat" />
 
             <RadioButton
                 android:id="@+id/reason_on_leave"
@@ -83,7 +83,7 @@
                 android:paddingBottom="8dp"
                 android:paddingTop="8dp"
                 style="@style/Theme.RadioButtonLipstickPink"
-                android:text="@string/person_is_sharing_inappropriate_content"  />
+                android:text="@string/person_is_sharing_inappropriate_content_chat"  />
 
             <RadioButton
                 android:id="@+id/reason_others"
@@ -93,7 +93,7 @@
                 android:paddingTop="8dp"
                 android:minHeight="0dp"
                 style="@style/Theme.RadioButtonLipstickPink"
-                android:text="@string/others" />
+                android:text="@string/others_chat" />
 
         </RadioGroup>
 
@@ -105,7 +105,7 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="10dp"
             android:letterSpacing="0"
-            android:text="@string/reason"
+            android:text="@string/reason_chat"
             android:textColor="#313131"
             android:textSize="14sp"
             android:visibility="gone"
@@ -141,7 +141,7 @@
             android:layout_marginTop="18dp"
             android:letterSpacing="0"
 
-            android:text="@string/yes_i_confirm_that_i_want_to_report_this_user"
+            android:text="@string/yes_i_confirm_that_i_want_to_report_this_user_chat"
             app:layout_constraintTop_toBottomOf="@id/reason_et"
             app:layout_constraintVertical_bias="0.98"
             tools:layout_editor_absoluteX="0dp" />

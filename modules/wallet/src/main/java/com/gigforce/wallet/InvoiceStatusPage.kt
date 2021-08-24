@@ -41,11 +41,11 @@ class InvoiceStatusPage : WalletBaseFragment() {
 
         TabLayoutMediator(tabs, pager) { tab, position ->
             if (position == 0)
-                tab.text = getString(R.string.generated)
+                tab.text = getString(R.string.generated_wallet)
             else if (position == 1)
-                tab.text = getString(R.string.invoice_pending)
+                tab.text = getString(R.string.invoice_pending_wallet)
             else
-                tab.text = getString(R.string.something_wrong)
+                tab.text = getString(R.string.something_wrong_wallet)
         }.attach()
 
         back_button.setOnClickListener {

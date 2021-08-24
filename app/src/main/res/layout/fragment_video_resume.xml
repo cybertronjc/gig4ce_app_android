@@ -121,7 +121,7 @@
             android:minHeight="@dimen/size_36"
 
             android:gravity="center"
-            android:text="@string/play" />
+            android:text="@string/play_app" />
     </LinearLayout>
 
     <Chronometer

@@ -475,8 +475,8 @@ class CalendarHomeScreen : Fragment(),
                 }
                 is Lce.Error -> {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage(getString(R.string.unable_to_fetch_todays_gig) + it.error)
+                        .setTitle(getString(R.string.alert_app_giger))
+                        .setMessage(getString(R.string.unable_to_fetch_todays_gig_app_giger) + it.error)
                         .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                         .show()
                 }
@@ -1133,7 +1133,7 @@ class CalendarHomeScreen : Fragment(),
 
         view.findViewById<TextView>(R.id.dialog_message_tv)
             .text =
-            getString(R.string.you_have) + gigOnDay + getString(R.string.active_gig_on_this_date)
+            getString(R.string.you_have_app_giger) + gigOnDay + getString(R.string.active_gig_on_this_date_app_giger)
 
         view.findViewById<View>(R.id.yesBtn)
             .setOnClickListener {

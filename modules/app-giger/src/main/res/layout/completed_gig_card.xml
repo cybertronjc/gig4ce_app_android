@@ -91,7 +91,7 @@
                     android:layout_marginStart="12dp"
                     android:layout_marginTop="12dp"
                     style="@style/LatoBold14"
-                    android:text="@string/gig_title" />
+                    android:text="@string/gig_title_app_giger" />
 
                 <TextView
                     android:id="@+id/gig_timing"
@@ -102,7 +102,7 @@
                     android:textSize="10sp"
                     android:textColor="#979797"
                     android:layout_marginBottom="8dp"
-                    android:text="@string/gig_timings" />
+                    android:text="@string/gig_timings_app_giger" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 

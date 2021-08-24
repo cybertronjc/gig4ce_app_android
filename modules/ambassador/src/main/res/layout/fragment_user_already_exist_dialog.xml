@@ -32,7 +32,7 @@
                 android:fontFamily="@font/lato_bold"
                 android:letterSpacing="0"
                 android:layout_marginStart="22dp"
-                android:text="@string/oops"
+                android:text="@string/oops_amb"
                 android:textColor="@color/white"
                 android:textSize="16sp" />
         </LinearLayout>
@@ -61,7 +61,7 @@
             android:layout_marginEnd="16dp"
             android:lineSpacingExtra="3sp"
             android:gravity="center_horizontal"
-            android:text="@string/this_mobile_number_is_already_registered_nwith_gig4ce"
+            android:text="@string/this_mobile_number_is_already_registered_nwith_gig4ce_amb"
 
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -81,7 +81,7 @@
             android:fontFamily="@font/lato_bold"
             app:layout_goneMarginTop="56dp"
             android:textAllCaps="false"
-            android:text="@string/okay_text"
+            android:text="@string/okay_text_amb"
             android:textColor="@color/white"
             app:layout_constraintTop_toBottomOf="@id/congrats_text" />
 

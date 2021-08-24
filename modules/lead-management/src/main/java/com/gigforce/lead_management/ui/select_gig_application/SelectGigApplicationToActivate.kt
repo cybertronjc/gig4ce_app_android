@@ -62,7 +62,7 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
         viewBinding: SelectGigApplicationToActivateFragmentBinding
     ) = viewBinding.toolbar.apply {
         hideSearchOption()
-        showTitle(context.getString(R.string.gig_application))
+        showTitle(context.getString(R.string.gig_application_lead))
         hideSubTitle()
         setBackButtonListener {
             navigation.popBackStack()
@@ -148,9 +148,9 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
                 is SelectGigAppViewState.ErrorInStartingJoiningProcess -> {
 
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.unable_to_start_joining))
+                        .setTitle(getString(R.string.unable_to_start_joining_lead))
                         .setMessage(state.error)
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setPositiveButton(getString(R.string.okay_lead)) { _, _ -> }
                         .show()
                 }
                 SelectGigAppViewState.FetchingDataToStartJoiningProcess -> {
@@ -178,7 +178,7 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
                     submitBtn.background = resources.getDrawable(R.drawable.app_gradient_button_disabled)
                 }
             }else {
-                submitBtn.text = getString(R.string.share_referral_link)
+                submitBtn.text = getString(R.string.share_referral_link_lead)
                 submitBtn.isEnabled = true
                 submitBtn.background = resources.getDrawable(R.drawable.app_gradient_button)
             }
@@ -222,7 +222,7 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
 
         viewBinding.toolbar.apply {
             hideActionMenu()
-            showTitle(getString(R.string.gig_application))
+            showTitle(getString(R.string.gig_application_lead))
             setBackButtonListener(View.OnClickListener {
                 navigation.popBackStack()
             })

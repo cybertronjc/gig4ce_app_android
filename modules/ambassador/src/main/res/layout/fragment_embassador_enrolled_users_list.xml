@@ -68,7 +68,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="@string/profile"
+                android:text="@string/profile_amb"
                 app:chipStrokeWidth="1dp" />
 
             <com.google.android.material.chip.Chip
@@ -76,7 +76,7 @@
                 style="@style/RoundedSquaredChips"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/my_details"
+                android:text="@string/my_details_amb"
                 app:chipStrokeWidth="1dp" />
 
 
@@ -97,7 +97,7 @@
         android:gravity="center"
         android:letterSpacing="0"
         android:minHeight="@dimen/size_36"
-        android:text="@string/create_profile"
+        android:text="@string/create_profile_amb"
         android:textColor="@color/white"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent" />
@@ -129,7 +129,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/size_8"
             android:fontFamily="@font/lato"
-            android:text="@string/send_invite_link"
+            android:text="@string/send_invite_link_amb"
             android:textColor="@color/lipstick_two"
             android:textSize="@dimen/font_14"
             android:textStyle="normal"
@@ -225,7 +225,7 @@
                             android:layout_weight="1"
                             android:fontFamily="@font/lato"
                             android:lineSpacingExtra="3sp"
-                            android:text="@string/profile_photo"
+                            android:text="@string/profile_photo_amb"
                             android:textColor="@color/black"
                             android:textSize="14sp"
                             android:textStyle="normal" />
@@ -265,7 +265,7 @@
                             android:layout_weight="1"
                             android:fontFamily="@font/lato"
                             android:lineSpacingExtra="3sp"
-                            android:text="@string/local_address"
+                            android:text="@string/local_address_amb"
                             android:textColor="@color/black"
                             android:textSize="14sp"
                             android:textStyle="normal" />
@@ -305,7 +305,7 @@
                             android:layout_weight="1"
                             android:fontFamily="@font/lato"
                             android:lineSpacingExtra="3sp"
-                            android:text="@string/bank_details"
+                            android:text="@string/bank_details_amb"
                             android:textColor="@color/black"
                             android:textSize="14sp"
                             android:textStyle="normal" />
@@ -349,7 +349,7 @@
                 android:layout_marginTop="30dp"
                 android:fontFamily="@font/lato_bold"
                 android:lineSpacingExtra="4sp"
-                android:text="@string/all_good_here"
+                android:text="@string/all_good_here_amb"
                 android:textColor="#333333"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -363,7 +363,7 @@
                 android:fontFamily="@font/lato"
                 android:letterSpacing="-0.01"
                 android:lineSpacingExtra="3sp"
-                android:text="@string/there_are_no_profiles_to_show"
+                android:text="@string/there_are_no_profiles_to_show_amb"
                 android:textColor="#333333"
                 android:textSize="14sp"
                 android:textStyle="normal" />
@@ -381,7 +381,7 @@
                 android:minHeight="@dimen/size_44"
                 android:paddingTop="@dimen/size_8"
                 android:paddingBottom="@dimen/size_8"
-                android:text="@string/create_profile"
+                android:text="@string/create_profile_amb"
                 android:textAllCaps="false"
                 app:layout_constraintBottom_toBottomOf="parent" />
 
@@ -412,7 +412,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/size_8"
                     android:fontFamily="@font/lato"
-                    android:text="@string/send_invite_link"
+                    android:text="@string/send_invite_link_amb"
                     android:textColor="@color/lipstick_two"
                     android:textSize="@dimen/font_14"
                     android:textStyle="normal"

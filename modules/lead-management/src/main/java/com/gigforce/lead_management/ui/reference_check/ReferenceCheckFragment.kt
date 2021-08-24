@@ -20,7 +20,6 @@ import com.gigforce.lead_management.databinding.ReferenceCheckFragmentBinding
 import com.gigforce.lead_management.ui.assign_gig_dialog.AssignGigsDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -131,7 +130,7 @@ class ReferenceCheckFragment : BaseFragment2<ReferenceCheckFragmentBinding>(
         viewBinding: ReferenceCheckFragmentBinding
     ) = viewBinding.toolbar.apply {
 
-        showTitle(context.getString(R.string.reference_check))
+        showTitle(context.getString(R.string.reference_check_lead))
         hideActionMenu()
         setBackButtonListener {
             activity?.onBackPressed()
@@ -145,12 +144,12 @@ class ReferenceCheckFragment : BaseFragment2<ReferenceCheckFragmentBinding>(
 //        bindProgressButton(viewBinding.submitButton)
 //        viewBinding.submitButton.attachTextChangeAnimator()
 
-        lifecycleScope.launchWhenCreated {
-            viewBinding.contactNoET.getTextChangeAsStateFlow()
-                .collect {
-                    viewBinding.callGigerBtn.isEnabled = ValidationHelper.isValidIndianMobileNo(it)
-                }
-        }
+//        lifecycleScope.launchWhenCreated {
+//            viewBinding.contactNoET.getTextChangeAsStateFlow()
+//                .collect { text ->
+//                    viewBinding.callGigerBtn.isEnabled = ValidationHelper.isValidIndianMobileNo(text)
+//                }
+//        }
 
         viewBinding.callGigerBtn.setOnClickListener {
 
@@ -210,7 +209,7 @@ class ReferenceCheckFragment : BaseFragment2<ReferenceCheckFragmentBinding>(
     }
 
     private fun showReferenceSubmittingState() = viewBinding.apply {
-        showToast(getString(R.string.reference_submitted))
+        showToast(getString(R.string.reference_submitted_lead))
 //        submitButton.showProgress {
 //            this.buttonText = "Submitting..."
 //            this.progressColor = R.color.white
@@ -224,9 +223,9 @@ class ReferenceCheckFragment : BaseFragment2<ReferenceCheckFragmentBinding>(
 //        submitButton.hideProgress("Submit")
 
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle(getString(R.string.unable_to_submit))
+            .setTitle(getString(R.string.unable_to_submit_lead))
             .setMessage(error)
-            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+            .setPositiveButton(getString(R.string.okay_lead)) { _, _ -> }
             .show()
     }
 

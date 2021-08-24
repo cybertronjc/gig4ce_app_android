@@ -33,8 +33,6 @@ import com.gigforce.core.AppConstants
 import com.gigforce.core.StringConstants
 import com.gigforce.core.datamodels.verification.BankDetailsDataModel
 import com.gigforce.core.di.interfaces.IBuildConfig
-import com.gigforce.core.extensions.gone
-import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.core.utils.VerificationValidations
@@ -252,7 +250,7 @@ class BankAccountFragment : Fragment(),
             getDBImageUrl(it)?.let {
                 list.add(
                     KYCImageModel(
-                        text = getString(R.string.upload_pan_card_new),
+                        text = getString(R.string.upload_pan_card_new_veri),
                         imagePath = it,
                         imageUploaded = true
                     )
@@ -283,7 +281,7 @@ class BankAccountFragment : Fragment(),
             getDBImageUrl(it)?.let {
                 list.add(
                     KYCImageModel(
-                        text = getString(R.string.upload_pan_card_new),
+                        text = getString(R.string.upload_pan_card_new_veri),
                         imagePath = it,
                         imageUploaded = true
                     )
@@ -381,7 +379,7 @@ class BankAccountFragment : Fragment(),
 
                         KYCImageModel(
 
-                            text = getString(R.string.upload_pan_card_new),
+                            text = getString(R.string.upload_pan_card_new_veri),
 
                             imagePath = it,
 
@@ -446,7 +444,7 @@ class BankAccountFragment : Fragment(),
                     getDBImageUrl(it)?.let {
                         list.add(
                             KYCImageModel(
-                                text = getString(R.string.upload_pan_card_new),
+                                text = getString(R.string.upload_pan_card_new_veri),
                                 imagePath = it,
                                 imageUploaded = true
                             )
@@ -557,35 +555,35 @@ class BankAccountFragment : Fragment(),
                 if (!VerificationValidations.isIfSCValid(ifsc)) {
 
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage(getString(R.string.enter_valid_ifsc))
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setTitle(getString(R.string.alert_veri))
+                        .setMessage(getString(R.string.enter_valid_ifsc_veri))
+                        .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
                         .show()
                     return@setOnClickListener
                 }
 
                 if (viewBinding.bankNameTil.editText?.text.toString().isNullOrBlank()) {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage(getString(R.string.enter_bank_name))
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setTitle(getString(R.string.alert_veri))
+                        .setMessage(getString(R.string.enter_bank_name_veri))
+                        .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
                         .show()
                     return@setOnClickListener
                 }
                 if (viewBinding.bankNameTil.editText?.text.toString().length < 3) {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage(getString(R.string.bank_name_too_short))
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setTitle(getString(R.string.alert_veri))
+                        .setMessage(getString(R.string.bank_name_too_short_veri))
+                        .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
                         .show()
                     return@setOnClickListener
                 }
 
                 if (viewBinding.bankAccNumberItl.editText?.text.toString().length < 4) {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage(getString(R.string.enter_valid_acc_no))
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setTitle(getString(R.string.alert_veri))
+                        .setMessage(getString(R.string.enter_valid_acc_no_veri))
+                        .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
                         .show()
                     return@setOnClickListener
                 }
@@ -614,10 +612,10 @@ class BankAccountFragment : Fragment(),
         viewBinding.notConfirmButton.setOnClickListener {
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle(getString(R.string.want_to_reenter_bank_details))
-                .setPositiveButton(getString(R.string.yes)) { _, _ ->
+                .setPositiveButton(getString(R.string.yes_veri)) { _, _ ->
                     viewModel.setVerificationStatusStringToBlank()
                 }
-                .setNegativeButton(getString(R.string.no)) { dialog, _ ->
+                .setNegativeButton(getString(R.string.no_veri)) { dialog, _ ->
                     dialog.dismiss()
                 }
                 .show()
@@ -661,7 +659,7 @@ class BankAccountFragment : Fragment(),
         val list =
             listOf(
                 KYCImageModel(
-                    text = getString(R.string.upload_bank_account_new),
+                    text = getString(R.string.upload_bank_account_new_veri),
                     imageIcon = frontUri,
                     imageUploaded = false
                 )
@@ -794,8 +792,8 @@ class BankAccountFragment : Fragment(),
     private fun showWhyWeNeedThisDialog() {
         WhyWeNeedThisBottomSheet.launch(
             childFragmentManager = childFragmentManager,
-            title = getString(R.string.why_do_we_need_this),
-            content = getString(R.string.why_do_we_need_this_bank)
+            title = getString(R.string.why_do_we_need_this_veri),
+            content = getString(R.string.why_do_we_need_this_bank_veri)
         )
     }
 
@@ -864,7 +862,7 @@ class BankAccountFragment : Fragment(),
         options.setFreeStyleCropEnabled(false)
         options.setStatusBarColor(ResourcesCompat.getColor(resources, R.color.topBarDark, null))
         options.setToolbarColor(ResourcesCompat.getColor(resources, R.color.topBarDark, null))
-        options.setToolbarTitle(getString(R.string.crop_and_rotate))
+        options.setToolbarTitle(getString(R.string.crop_and_rotate_veri))
         return options
     }
 
@@ -879,10 +877,10 @@ class BankAccountFragment : Fragment(),
     private fun reContinueDialog() {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(getString(R.string.want_to_wait))
-            .setPositiveButton(getString(R.string.yes)) { dialog, _ ->
+            .setPositiveButton(getString(R.string.yes_veri)) { dialog, _ ->
                 dialog.dismiss()
             }
-            .setNegativeButton(getString(R.string.no)) { dialog, _ ->
+            .setNegativeButton(getString(R.string.no_veri)) { dialog, _ ->
                 navigation.popBackStack()
             }
             .show()

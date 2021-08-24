@@ -47,7 +47,7 @@
                     android:layout_marginStart="12dp"
                     android:fontFamily="@font/lato"
                     android:letterSpacing="0"
-                    android:text="@string/contacts"
+                    android:text="@string/contacts_chat"
                     android:textColor="@android:color/white"
                     android:textSize="20sp" />
 
@@ -59,7 +59,7 @@
                     android:layout_marginTop="4dp"
                     android:fontFamily="@font/lato"
                     android:letterSpacing="0"
-                    android:text="@string/_0_contacts_s"
+                    android:text="@string/_0_contacts_s_chat"
                     android:textColor="@android:color/white"
                     android:textSize="12sp" />
             </LinearLayout>
@@ -116,7 +116,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@null"
-                    android:hint="@string/search_gigers"
+                    android:hint="@string/search_gigers_chat"
                     android:maxLines="1"
                     android:paddingStart="12dp"
                     android:textColor="#888888"
@@ -174,7 +174,7 @@
                 android:id="@+id/create_group_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/create_group"
+                android:text="@string/create_group_chat"
                 android:textColor="@color/lipstick"
                 android:textSize="14sp"
                 android:textStyle="normal" />
@@ -254,7 +254,7 @@
                 android:layout_marginBottom="12dp"
                 android:fontFamily="@font/lato"
                 android:gravity="center"
-                android:text="@string/no_contact_found"
+                android:text="@string/no_contact_found_chat"
                 android:textColor="@color/lipstick"
                 android:textSize="24sp"
                 android:textStyle="bold" />
@@ -266,7 +266,7 @@
                 android:gravity="center_horizontal"
                 android:letterSpacing="0"
                 android:lineSpacingExtra="3sp"
-                android:text="@string/it_seems_there_is_no_contact_registered_with_gigforce"
+                android:text="@string/it_seems_there_is_no_contact_registered_with_gigforce_chat"
                 android:textColor="#333333"
                 android:textSize="16sp"
                 android:textStyle="normal" />
@@ -277,7 +277,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="44dp"
                 android:layout_marginTop="24dp"
-                android:text="@string/invite_now"
+                android:text="@string/invite_now_chat"
                 android:textColor="@color/lipstick"
                 app:strokeColor="@color/lipstick" />
 
@@ -304,7 +304,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="12dp"
                 android:gravity="center"
-                android:text="@string/contacts_syncing"
+                android:text="@string/contacts_syncing_chat"
                 android:textColor="@color/lipstick"
                 android:textSize="24sp"
                 android:textStyle="bold" />
@@ -317,7 +317,7 @@
                 android:gravity="center_horizontal"
                 android:letterSpacing="0"
                 android:lineSpacingExtra="3sp"
-                android:text="@string/please_wait_while_contacts_are_getting_synced"
+                android:text="@string/please_wait_while_contacts_are_getting_synced_chat"
                 android:textColor="#333333"
                 android:textSize="16sp"
                 android:textStyle="normal" />
@@ -345,7 +345,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="12dp"
                 android:gravity="center"
-                android:text="@string/provide_read_contacts_permission"
+                android:text="@string/provide_read_contacts_permission_chat"
                 android:textColor="@android:color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -356,7 +356,7 @@
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/go_to_settings"
+                android:text="@string/go_to_settings_chat"
                 android:textColor="@color/colorPrimary"
                 app:strokeColor="@color/colorPrimary" />
 

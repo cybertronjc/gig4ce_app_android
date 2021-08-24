@@ -35,8 +35,6 @@ import com.gigforce.core.AppConstants
 import com.gigforce.core.StringConstants
 import com.gigforce.core.datamodels.verification.DrivingLicenseDataModel
 import com.gigforce.core.di.interfaces.IBuildConfig
-import com.gigforce.core.extensions.gone
-import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.DateHelper
 import com.gigforce.core.utils.NavFragmentsData
@@ -291,27 +289,27 @@ class DrivingLicenseFragment : Fragment(),
             } else {
                 if (viewBinding.stateSpinner.text.equals("Select State")) {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage(getString(R.string.select_dl_state))
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setTitle(getString(R.string.alert_veri))
+                        .setMessage(getString(R.string.select_dl_state_veri))
+                        .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
                         .show()
                     return@setOnClickListener
                 }
 
                 if (viewBinding.dlnoTil.editText?.text.toString().isBlank()) {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage(getString(R.string.select_dl_no))
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setTitle(getString(R.string.alert_veri))
+                        .setMessage(getString(R.string.select_dl_no_veri))
+                        .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
                         .show()
                     return@setOnClickListener
                 }
 
                 if (viewBinding.dobDate.text.toString().isBlank()) {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage(getString(R.string.select_dl_dob))
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setTitle(getString(R.string.alert_veri))
+                        .setMessage(getString(R.string.select_dl_dob_veri))
+                        .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
                         .show()
                     return@setOnClickListener
                 }
@@ -462,12 +460,12 @@ class DrivingLicenseFragment : Fragment(),
             .build()
         val list = listOf(
             KYCImageModel(
-                text = getString(R.string.upload_driving_license_front_side_new),
+                text = getString(R.string.upload_driving_license_front_side_new_veri),
                 imageIcon = frontUri,
                 imageUploaded = false
             ),
             KYCImageModel(
-                text = getString(R.string.upload_driving_license_back_side_new),
+                text = getString(R.string.upload_driving_license_back_side_new_veri),
                 imageIcon = backUri,
                 imageUploaded = false
             )
@@ -681,8 +679,8 @@ class DrivingLicenseFragment : Fragment(),
     private fun showWhyWeNeedThisDialog() {
         WhyWeNeedThisBottomSheet.launch(
             childFragmentManager = childFragmentManager,
-            title = getString(R.string.why_do_we_need_this),
-            content = getString(R.string.why_do_we_need_this_dl)
+            title = getString(R.string.why_do_we_need_this_veri),
+            content = getString(R.string.why_do_we_need_this_dl_veri)
         )
     }
 
@@ -752,7 +750,7 @@ class DrivingLicenseFragment : Fragment(),
         options.setFreeStyleCropEnabled(true)
         options.setStatusBarColor(ResourcesCompat.getColor(resources, R.color.topBarDark, null))
         options.setToolbarColor(ResourcesCompat.getColor(resources, R.color.topBarDark, null))
-        options.setToolbarTitle(getString(R.string.crop_and_rotate))
+        options.setToolbarTitle(getString(R.string.crop_and_rotate_veri))
         return options
     }
 
@@ -783,7 +781,7 @@ class DrivingLicenseFragment : Fragment(),
             getDBImageUrl(it)?.let {
                 list.add(
                     KYCImageModel(
-                        text = getString(R.string.upload_driving_license_front_side_new),
+                        text = getString(R.string.upload_driving_license_front_side_new_veri),
                         imagePath = it,
                         imageUploaded = true
                     )
@@ -794,7 +792,7 @@ class DrivingLicenseFragment : Fragment(),
             getDBImageUrl(it)?.let {
                 list.add(
                     KYCImageModel(
-                        text = getString(R.string.upload_driving_license_back_side_new),
+                        text = getString(R.string.upload_driving_license_back_side_new_veri),
                         imagePath = it,
                         imageUploaded = true
                     )
@@ -907,7 +905,7 @@ class DrivingLicenseFragment : Fragment(),
 
                     KYCImageModel(
 
-                        text = getString(R.string.upload_driving_license_front_side_new),
+                        text = getString(R.string.upload_driving_license_front_side_new_veri),
 
                         imagePath = it,
 
@@ -929,7 +927,7 @@ class DrivingLicenseFragment : Fragment(),
 
                     KYCImageModel(
 
-                        text = getString(R.string.upload_driving_license_back_side_new),
+                        text = getString(R.string.upload_driving_license_back_side_new_veri),
 
                         imagePath = it,
 
@@ -991,12 +989,12 @@ class DrivingLicenseFragment : Fragment(),
             .build()
         val list = listOf(
             KYCImageModel(
-                text = getString(R.string.upload_driving_license_front_side_new),
+                text = getString(R.string.upload_driving_license_front_side_new_veri),
                 imageIcon = frontUri,
                 imageUploaded = false
             ),
             KYCImageModel(
-                text = getString(R.string.upload_driving_license_back_side_new),
+                text = getString(R.string.upload_driving_license_back_side_new_veri),
                 imageIcon = backUri,
                 imageUploaded = false
             )
@@ -1020,7 +1018,7 @@ class DrivingLicenseFragment : Fragment(),
             getDBImageUrl(it)?.let {
                 list.add(
                     KYCImageModel(
-                        text = getString(R.string.upload_driving_license_front_side_new),
+                        text = getString(R.string.upload_driving_license_front_side_new_veri),
                         imagePath = it,
                         imageUploaded = true
                     )
@@ -1031,7 +1029,7 @@ class DrivingLicenseFragment : Fragment(),
             getDBImageUrl(it)?.let {
                 list.add(
                     KYCImageModel(
-                        text = getString(R.string.upload_driving_license_back_side_new),
+                        text = getString(R.string.upload_driving_license_back_side_new_veri),
                         imagePath = it,
                         imageUploaded = true
                     )

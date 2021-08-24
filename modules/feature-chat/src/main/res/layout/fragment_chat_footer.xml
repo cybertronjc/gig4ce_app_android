@@ -69,7 +69,7 @@
                 android:layout_weight="1"
                 android:background="#00000000"
                 android:focusableInTouchMode="true"
-                android:hint="@string/type_a_message"
+                android:hint="@string/type_a_message_chat"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:textColor="#585858"

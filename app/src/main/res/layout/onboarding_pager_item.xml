@@ -69,7 +69,7 @@
         android:layout_marginLeft="24dp"
         android:layout_marginRight="24dp"
         android:ems="20"
-        android:hint="@string/name"
+        android:hint="@string/name_app"
         android:gravity="center"
         android:maxLength="20"
         android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"

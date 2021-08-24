@@ -145,7 +145,7 @@ class EnrolledUsersRecyclerAdapter constructor(
             val userEnrolledDate = user.enrolledOn.toLocalDate()
             if (userEnrolledDate.equals(LocalDate.now())) {
                 // enrolled today
-                userAddedTimeTV.text = itemView.resources.getString(R.string.added_today)
+                userAddedTimeTV.text = itemView.resources.getString(R.string.added_today_amb)
             } else {
                 //
                 val daysDiff = Duration.between(
@@ -153,9 +153,9 @@ class EnrolledUsersRecyclerAdapter constructor(
                     LocalDate.now().atStartOfDay()
                 ).toDays()
                 userAddedTimeTV.text =
-                    "${itemView.resources.getString(R.string.added)} $daysDiff ${
+                    "${itemView.resources.getString(R.string.added_amb)} $daysDiff ${
                     itemView.resources.getString(
-                        R.string.days_ago
+                        R.string.days_ago_amb
                     )
                     }"
             }

@@ -152,7 +152,7 @@ class SelectTeamLeaderFragment : BaseFragment2<SelectTeamLeaderFragmentBinding>(
     private fun initListeners() {
         viewBinding.toolbar.apply {
             hideActionMenu()
-            showTitle(context.getString(R.string.team_leaders))
+            showTitle(context.getString(R.string.team_leaders_lead))
             setBackButtonListener(View.OnClickListener {
                 navigation.popBackStack()
             })
@@ -189,8 +189,8 @@ class SelectTeamLeaderFragment : BaseFragment2<SelectTeamLeaderFragmentBinding>(
                 )
             } else {
                 MaterialAlertDialogBuilder(requireContext())
-                    .setMessage(getString(R.string.select_gf_tl_to_continue))
-                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                    .setMessage(getString(R.string.select_gf_tl_to_continue_lead))
+                    .setPositiveButton(getString(R.string.okay_lead)) { _, _ -> }
                     .show()
             }
         }
@@ -278,7 +278,7 @@ class SelectTeamLeaderFragment : BaseFragment2<SelectTeamLeaderFragmentBinding>(
         teamLeadersInfoLayout.root.visible()
         teamLeadersLayout.gone()
         teamLeadersInfoLayout.infoIv.loadImage(R.drawable.ic_no_joining_found)
-        teamLeadersInfoLayout.infoMessageTv.text = getString(R.string.no_team_leaders)
+        teamLeadersInfoLayout.infoMessageTv.text = getString(R.string.no_team_leaders_lead)
     }
 
     private fun showGigTeamLeadersAsLoading() = viewBinding.apply {

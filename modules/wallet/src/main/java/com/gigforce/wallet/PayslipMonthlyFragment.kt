@@ -9,7 +9,6 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -104,9 +103,9 @@ class PayslipMonthlyFragment : Fragment() {
                         UtilMethods.hideLoading()
 
                         MaterialAlertDialogBuilder(requireContext())
-                            .setTitle(getString(R.string.alert))
+                            .setTitle(getString(R.string.alert_wallet))
                             .setMessage(it.error)
-                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .setPositiveButton(getString(R.string.okay_wallet)) { _, _ -> }
                             .show()
                     }
                 }
@@ -169,11 +168,11 @@ class PayslipMonthlyFragment : Fragment() {
                 try {
                     startActivity(this)
                 } catch (e: Exception) {
-                    showErrorDialog(getString(R.string.unable_to_open))
+                    showErrorDialog(getString(R.string.unable_to_open_wallet))
                 }
             }
         } else {
-            showErrorDialog(getString(R.string.file_doesnt_exist))
+            showErrorDialog(getString(R.string.file_doesnt_exist_wallet))
         }
     }
 

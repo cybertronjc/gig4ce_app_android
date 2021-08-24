@@ -89,9 +89,9 @@ class AssessmentDialog : DialogFragment() {
                     }
                     is Lce.Error -> {
                         MaterialAlertDialogBuilder(requireContext())
-                            .setTitle(getString(R.string.unable_to_save_state))
-                            .setMessage(getString(R.string.unable_to_mark_assessment))
-                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .setTitle(getString(R.string.unable_to_save_state_learning))
+                            .setMessage(getString(R.string.unable_to_mark_assessment_learning))
+                            .setPositiveButton(getString(R.string.okay_learning)) { _, _ -> }
                             .show()
                         pb_assessment_dialog.gone()
 
@@ -123,33 +123,33 @@ class AssessmentDialog : DialogFragment() {
                 )
                 tv_message_assess_dialog.layoutParams = lp
                 tv_do_it_later_assess_dialog.visibility = View.VISIBLE
-                tv_message_assess_dialog.text = getString(R.string.good_luck)
+                tv_message_assess_dialog.text = getString(R.string.good_luck_learning)
                 tv_assess_name_assess_dialog.text =
                     "${arguments?.getString(StringConstants.ASSESSMENT_NAME.value)}"
 
                 tv_level_assess_dialog.text =
-                    "${getString(R.string.level)} ${arguments?.getInt(StringConstants.LEVEL.value)}"
-                tv_action_assess_dialog.text = getString(R.string.start_assessment)
+                    "${getString(R.string.level_learning)} ${arguments?.getInt(StringConstants.LEVEL.value)}"
+                tv_action_assess_dialog.text = getString(R.string.start_assessment_learning)
 
                 tv_ques_count_assess_dialog.text =
-                    "${getString(R.string.total_questions)} : ${arguments?.getInt(StringConstants.QUESTIONS_COUNT.value)} "
+                    "${getString(R.string.total_questions_learning)} : ${arguments?.getInt(StringConstants.QUESTIONS_COUNT.value)} "
                 val dateFormatter = SimpleDateFormat("hh:mm:ss")
                 val calInstance = Calendar.getInstance()
                 calInstance.time =
                     dateFormatter.parse(arguments?.getString(StringConstants.DURATION.value))
 
                 tv_time_assess_dialog.text =
-                    if (calInstance.get(Calendar.HOUR) == 0) "${getString(R.string.time_duration)} : ${
+                    if (calInstance.get(Calendar.HOUR) == 0) "${getString(R.string.time_duration_learning)} : ${
                         calInstance.get(
                             Calendar.MINUTE
                         )
                     } ${
                         getString(
-                            R.string.mins
+                            R.string.mins_learning
                         )
-                    } ${calInstance.get(Calendar.SECOND)} ${getString(R.string.seconds)}" else "${
+                    } ${calInstance.get(Calendar.SECOND)} ${getString(R.string.seconds_learning)}" else "${
                         getString(
-                            R.string.time_duration
+                            R.string.time_duration_learning
                         )
                     } : ${
                         calInstance.get(
@@ -161,9 +161,9 @@ class AssessmentDialog : DialogFragment() {
                         )
                     } ${
                         getString(
-                            R.string.mins
+                            R.string.mins_learning
                         )
-                    } ${calInstance.get(Calendar.SECOND)} ${getString(R.string.seconds)}"
+                    } ${calInstance.get(Calendar.SECOND)} ${getString(R.string.seconds_learning)}"
 
 
             }
@@ -180,15 +180,15 @@ class AssessmentDialog : DialogFragment() {
         tv_assessment_result__assess_dialog.visibility = View.VISIBLE
         val builder = SpannableStringBuilder()
         val spannableString = SpannableString(
-            "${getString(R.string.u_attempt)} ${arguments?.getInt(StringConstants.QUESTIONS_COUNT.value)} ${
+            "${getString(R.string.u_attempt_learning)} ${arguments?.getInt(StringConstants.QUESTIONS_COUNT.value)} ${
                 getString(
-                    R.string.questions
+                    R.string.questions_learning
                 )
             }"
         )
         spannableString.setSpan(
             ForegroundColorSpan(Color.parseColor("#e94b81")),
-            spannableString.indexOf(getString(R.string.attempt)) + 7,
+            spannableString.indexOf(getString(R.string.attempt_learning)) + 7,
             spannableString.length,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
@@ -196,23 +196,23 @@ class AssessmentDialog : DialogFragment() {
 
         builder.append(spannableString)
         val spanable2 = SpannableString(
-            " ${getString(R.string.and_from)} ${getString(R.string.that)}  ${
+            " ${getString(R.string.and_from_learning)} ${getString(R.string.that_learning)}  ${
                 arguments?.getInt(
                     StringConstants.RIGHT_ANSWERS.value
                 )
-            } ${getString(R.string.answer_is_correct)}"
+            } ${getString(R.string.answer_is_correct_learning)}"
         )
         spanable2.setSpan(
             ForegroundColorSpan(Color.parseColor("#e94b81")),
-            spanable2.indexOf(getString(R.string.that)) + 4,
-            spanable2.indexOf(getString(R.string.is_string)),
+            spanable2.indexOf(getString(R.string.that_learning)) + 4,
+            spanable2.indexOf(getString(R.string.is_string_learning)),
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
         builder.append(spanable2)
         tv_assessment_result__assess_dialog.setText(builder, TextView.BufferType.SPANNABLE)
-        tv_message_assess_dialog.text = getString(R.string.oops)
-        tv_assess_name_assess_dialog.text = getString(R.string.assessment_not_completed)
-        tv_action_assess_dialog.text = getString(R.string.scorecard)
+        tv_message_assess_dialog.text = getString(R.string.oops_learning)
+        tv_assess_name_assess_dialog.text = getString(R.string.assessment_not_completed_learning)
+        tv_action_assess_dialog.text = getString(R.string.scorecard_learning)
         val constraintSet = ConstraintSet()
         constraintSet.clone(parent_access_dialog)
         constraintSet.connect(
@@ -236,15 +236,15 @@ class AssessmentDialog : DialogFragment() {
         val builder = SpannableStringBuilder()
 
         val spannableString = SpannableString(
-            "${getString(R.string.u_attempt)} ${arguments?.getInt(StringConstants.QUESTIONS_COUNT.value)} ${
+            "${getString(R.string.u_attempt_learning)} ${arguments?.getInt(StringConstants.QUESTIONS_COUNT.value)} ${
                 getString(
-                    R.string.questions
+                    R.string.questions_learning
                 )
             }"
         )
         spannableString.setSpan(
             ForegroundColorSpan(Color.parseColor("#e94b81")),
-            spannableString.indexOf(getString(R.string.attempt)) + 7,
+            spannableString.indexOf(getString(R.string.attempt_learning)) + 7,
             spannableString.length,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
@@ -252,23 +252,23 @@ class AssessmentDialog : DialogFragment() {
 
         builder.append(spannableString)
         val spanable2 = SpannableString(
-            " ${getString(R.string.and_from)} ${getString(R.string.that)}  ${
+            " ${getString(R.string.and_from_learning)} ${getString(R.string.that_learning)}  ${
                 arguments?.getInt(
                     StringConstants.RIGHT_ANSWERS.value
                 )
-            } ${getString(R.string.answer_is_correct)}"
+            } ${getString(R.string.answer_is_correct_learning)}"
         )
         spanable2.setSpan(
             ForegroundColorSpan(Color.parseColor("#e94b81")),
-            spanable2.indexOf(getString(R.string.that)) + 4,
-            spanable2.indexOf(getString(R.string.is_string)),
+            spanable2.indexOf(getString(R.string.that_learning)) + 4,
+            spanable2.indexOf(getString(R.string.is_string_learning)),
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
         builder.append(spanable2)
         tv_assessment_result__assess_dialog.setText(builder, TextView.BufferType.SPANNABLE)
-        tv_message_assess_dialog.text = getString(R.string.congrats)
-        tv_assess_name_assess_dialog.text = getString(R.string.assess_complete)
-        tv_action_assess_dialog.text = getString(R.string.scorecard)
+        tv_message_assess_dialog.text = getString(R.string.congrats_learning)
+        tv_assess_name_assess_dialog.text = getString(R.string.assess_complete_learning)
+        tv_action_assess_dialog.text = getString(R.string.scorecard_learning)
         val constraintSet = ConstraintSet()
         constraintSet.clone(parent_access_dialog)
         constraintSet.connect(

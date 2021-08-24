@@ -435,16 +435,16 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
                 }
 
                 complitionStatusTv.text =
-                    lessonsCompleted.toString() + "/" + totalLessons + getString(R.string.lessons_completed)
+                    lessonsCompleted.toString() + "/" + totalLessons + getString(R.string.lessons_completed_learning)
                 assessmentCountTv.text =
                         if (viewModel.currentAssessments?.size == null || totalAssignments == 0)
-                            getString(R.string.zero_assessments)
+                            getString(R.string.zero_assessments_learning)
                         else if (assignmentsCompleted == 1)
-                            assignmentsCompleted.toString() + "/" + totalAssignments + getString(R.string.assessment_completed)
+                            assignmentsCompleted.toString() + "/" + totalAssignments + getString(R.string.assessment_completed_learning)
                         else
-                            assignmentsCompleted.toString() + "/" + totalAssignments + getString(R.string.assessments_completed)
+                            assignmentsCompleted.toString() + "/" + totalAssignments + getString(R.string.assessments_completed_learning)
 
-                lessonsLabel.text = getString(R.string.lesson) + viewModel.currentlySelectedModule?.title + ")"
+                lessonsLabel.text = getString(R.string.lesson_learning) + viewModel.currentlySelectedModule?.title + ")"
             }
         }
     }
@@ -669,7 +669,7 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
                             image = e.coverPicture,
                             title = e.title,
                             subtitle = e.lessonsCompleted.toString() + " / " + e.totalLessons + getString(
-                                                            R.string.complted)
+                                                            R.string.complted_learning)
                     )
             )
         }

@@ -170,7 +170,7 @@ class ScheduleDrivingTestFragment : Fragment(), IOnBackPressedOverride,
                     is Lce.Content -> {
                         UtilMethods.hideLoading()
                         generate_otp.gone()
-                        showToast(getString(R.string.otp_sent))
+                        showToast(getString(R.string.otp_sent_client))
                         note_msg.gone()
                         verify_otp_button_schedule.visible()
                         otp_screen.visible()
@@ -280,7 +280,7 @@ class ScheduleDrivingTestFragment : Fragment(), IOnBackPressedOverride,
         }
 //        resend_otp.paintFlags = resend_otp.paintFlags or Paint.UNDERLINE_TEXT_FLAG;
         otpnotcorrect_schedule_test.text =
-            Html.fromHtml(getString(R.string.resend_message))
+            Html.fromHtml(getString(R.string.resend_message_client))
 
 
         verify_otp_button_schedule?.setOnClickListener {

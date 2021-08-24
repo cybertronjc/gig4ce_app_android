@@ -203,8 +203,8 @@ class GroupDetailsFragment : Fragment(),
 
                             MaterialAlertDialogBuilder(requireContext())
                                     .setMessage(it.error)
-                                    .setTitle(getString(R.string.unable_to_activate_group))
-                                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                                    .setTitle(getString(R.string.unable_to_activate_group_chat))
+                                    .setPositiveButton(getString(R.string.okay_chat)) { _, _ -> }
                                     .show()
                         }
                     }
@@ -281,10 +281,10 @@ class GroupDetailsFragment : Fragment(),
             if (content.groupDeactivated) {
                 add_giger_layout.isVisible = false
                 deactivate_group_btn.isVisible = true
-                deactivate_group_btn.text = getString(R.string.activate_group)
+                deactivate_group_btn.text = getString(R.string.activate_group_chat)
                 group_deactivated_container.visible()
             } else {
-                deactivate_group_btn.text = getString(R.string.deactivate_group)
+                deactivate_group_btn.text = getString(R.string.deactivate_group_chat)
                 add_giger_layout.isVisible = true
                 deactivate_group_btn.isVisible = true
                 group_deactivated_container.gone()
@@ -327,7 +327,7 @@ class GroupDetailsFragment : Fragment(),
             try {
                 requireContext().startActivity(this)
             } catch (e: Exception) {
-                Toast.makeText(context, getString(R.string.unable_to_open), Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, getString(R.string.unable_to_open_chat), Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -373,22 +373,22 @@ class GroupDetailsFragment : Fragment(),
             layout.addView(groupNameEt)
 
             MaterialAlertDialogBuilder(requireContext())
-                    .setMessage(getString(R.string.enter_new_group_name))
-                    .setTitle(getString(R.string.change_group_name))
+                    .setMessage(getString(R.string.enter_new_group_name_chat))
+                    .setTitle(getString(R.string.change_group_name_chat))
                     .setView(layout)
-                    .setPositiveButton(getString(R.string.okay)) { _, _ ->
+                    .setPositiveButton(getString(R.string.okay_chat)) { _, _ ->
 
                         if (groupNameEt.length() == 0) {
                             Toast.makeText(
                                     requireContext(),
-                                    getString(R.string.enter_valid_group_name),
+                                    getString(R.string.enter_valid_group_name_chat),
                                     Toast.LENGTH_SHORT
                             ).show()
                         } else {
                             viewModel.changeGroupName(groupNameEt.text.toString().capitalize())
                         }
                     }
-                    .setNegativeButton(getString(R.string.cancel)) { _, _ ->
+                    .setNegativeButton(getString(R.string.cancel_chat)) { _, _ ->
 
                     }.show()
         }
@@ -400,10 +400,10 @@ class GroupDetailsFragment : Fragment(),
                     ?: return@setOnCheckedChangeListener
             if (isChecked && currentGroup.onlyAdminCanPostInGroup.not()) {
                 viewModel.limitPostingToAdminsInGroup()
-                showToast(getString(R.string.post_limited_to_admin))
+                showToast(getString(R.string.post_limited_to_admin_chat))
             } else if (!isChecked && currentGroup.onlyAdminCanPostInGroup) {
                 viewModel.allowEveryoneToPostInThisGroup()
-                showToast(getString(R.string.everyone_can_post_in_group))
+                showToast(getString(R.string.everyone_can_post_in_group_chat))
             }
         }
     }
@@ -512,9 +512,9 @@ class GroupDetailsFragment : Fragment(),
             popUp.menu.findItem(R.id.action_make_admin).also {
                 it.isVisible = true
                 it.title = if (contact.isUserGroupManager)
-                    getString(R.string.dismiss_as_admin)
+                    getString(R.string.dismiss_as_admin_chat)
                 else
-                    getString(R.string.make_group_admin)
+                    getString(R.string.make_group_admin_chat)
 
             }
         } else {

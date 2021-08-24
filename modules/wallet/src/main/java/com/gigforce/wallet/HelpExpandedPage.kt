@@ -48,16 +48,16 @@ class HelpExpandedPage : WalletBaseFragment() {
         val qas = ArrayList(
             listOf(
                 QA(
-                    question = getString(R.string.set_monthly_goal),
-                    answer = getString(R.string.click_on_monthly_goal)
+                    question = getString(R.string.set_monthly_goal_wallet),
+                    answer = getString(R.string.click_on_monthly_goal_wallet)
                 ),
                 QA(
-                    question = getString(R.string.what_is_wallet_balance),
-                    answer = getString(R.string.amount_in_wallet)
+                    question = getString(R.string.what_is_wallet_balance_wallet),
+                    answer = getString(R.string.amount_in_wallet_wallet)
                 ),
                 QA(
-                    question = getString(R.string.transfer_fund_to_account),
-                    answer = getString(R.string.manual_transfer)
+                    question = getString(R.string.transfer_fund_to_account_wallet),
+                    answer = getString(R.string.manual_transfer_wallet)
                 )
             )
         )

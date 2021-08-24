@@ -94,6 +94,6 @@ public class CustomSelectionCallback implements ActionMode.Callback {
         ClipData clipData = ClipData.newPlainText("selected text label", selectedTxt);
         assert clipboardManager != null;
         clipboardManager.setPrimaryClip(clipData);
-        Toast.makeText(mContext, selectedTxt.toString() + mContext.getString(R.string.position) , Toast.LENGTH_LONG).show();
+        Toast.makeText(mContext, selectedTxt.toString() + mContext.getString(R.string.position_chat) , Toast.LENGTH_LONG).show();
     }
 }

@@ -41,7 +41,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/close"
+                android:text="@string/close_app"
                 android:textSize="16sp"
                 android:fontFamily="@font/lato"
                 android:textColor="@color/white" />

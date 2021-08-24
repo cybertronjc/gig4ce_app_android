@@ -203,7 +203,7 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
             viewModel.sharedFiles = null
         }
 
-        toolbar.showTitle(getString(R.string.chats))
+        toolbar.showTitle(getString(R.string.chats_chat))
         toolbar.hideActionMenu()
         toolbar.setBackButtonListener {
 

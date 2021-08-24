@@ -86,11 +86,11 @@ class SlidesCompletedFragment : Fragment() {
                     slideProgressSavingPB.visible()
                 }
                 Lse.Success -> {
-                    Toast.makeText(requireContext(), getString(R.string.slided_marked), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), getString(R.string.slided_marked_learning), Toast.LENGTH_SHORT).show()
                     activity?.onBackPressed()
                 }
                 is Lse.Error -> {
-                    Toast.makeText(requireContext(), getString(R.string.unable_to_save_progress) + it.error, Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireContext(), getString(R.string.unable_to_save_progress_learning) + it.error, Toast.LENGTH_LONG).show()
                 }
             }
         })

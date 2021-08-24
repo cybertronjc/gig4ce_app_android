@@ -94,7 +94,7 @@
             android:letterSpacing="0"
             android:paddingTop="@dimen/size_10"
             android:paddingBottom="@dimen/size_9"
-            android:text="@string/submit"
+            android:text="@string/submit_client"
             android:textColor="@color/white"
             android:textSize="@dimen/font_14"
             android:visibility="gone"

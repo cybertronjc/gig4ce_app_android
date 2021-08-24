@@ -69,7 +69,7 @@ class PermanentAddressEditFragment : Fragment() {
     }
 
     private fun verificationViewsInitialize() {
-        textView90.text = Html.fromHtml(getString(R.string.upload_new_address))
+        textView90.text = Html.fromHtml(getString(R.string.upload_new_address_pref))
     }
 
     private fun populateAddress(address: AddressModel) {
@@ -85,7 +85,7 @@ class PermanentAddressEditFragment : Fragment() {
     private fun convertAddressToString(address: AddressModel?): String {
         Log.e("ADDRESS", address!!.firstLine)
         return if (address!!.isEmpty() || address == null)
-            getString(R.string.add_address)
+            getString(R.string.add_address_pref)
         else
             address.firstLine + "," + address.secondLine + "," + address.city + "," + address.state + ". " + address.pincode
     }
@@ -117,7 +117,7 @@ class PermanentAddressEditFragment : Fragment() {
     }
     fun addressIsValid(view:EditText):Boolean{
         if(view.text.toString().trim().length<3){
-            view.setError(getString(R.string.more_details_required))
+            view.setError(getString(R.string.more_details_required_pref))
             return false
         }
         return true
@@ -134,7 +134,7 @@ class PermanentAddressEditFragment : Fragment() {
         if(!addressIsValid(state))
             return false
         if(pincode.text.toString().length<6){
-            pincode.setError(getString(R.string.pincode_incorrect))
+            pincode.setError(getString(R.string.pincode_incorrect_pref))
             return false
         }
         return true

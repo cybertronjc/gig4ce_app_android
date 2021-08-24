@@ -232,7 +232,7 @@ object PermissionUtils {
                     ) {
                         Toast.makeText(
                             context,
-                            context.getString(R.string.provide_permission),
+                            context.getString(R.string.provide_permission_core),
                             Toast.LENGTH_SHORT
                         ).show()
                         goToAppSettings(
@@ -290,7 +290,7 @@ object PermissionUtils {
                     ) {
                         Toast.makeText(
                             context.requireContext(),
-                            context.getString(R.string.provide_permission),
+                            context.getString(R.string.provide_permission_core),
                             Toast.LENGTH_SHORT
                         ).show()
                         goToAppSettings(

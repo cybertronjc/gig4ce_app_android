@@ -19,7 +19,6 @@ import com.gigforce.common_image_picker.CameraAndGalleryIntegrator
 import com.gigforce.common_image_picker.ImageCropCallback
 import com.gigforce.common_image_picker.ImageCropOptions
 import com.gigforce.common_ui.shimmer.ShimmerHelper
-import com.gigforce.core.FragmentHelper
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.ProfilePropArgs
 import com.gigforce.core.TrackingEventArgs
@@ -29,7 +28,6 @@ import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.Lce
-import com.gigforce.core.utils.Lse
 import com.gigforce.profile.R
 import com.gigforce.profile.analytics.OnboardingEvents
 import com.gigforce.profile.models.OnboardingProfileData
@@ -155,7 +153,7 @@ class OnboardingAddProfilePictureFragment() : Fragment(), ImageCropCallback, Onb
         MaterialAlertDialogBuilder(requireContext())
                 .setTitle(title)
                 .setMessage(message)
-                .setPositiveButton(getString(R.string.okay).capitalize()) { _, _ -> }
+                .setPositiveButton(getString(R.string.okay_profile).capitalize()) { _, _ -> }
                 .show()
     }
 
@@ -221,7 +219,7 @@ class OnboardingAddProfilePictureFragment() : Fragment(), ImageCropCallback, Onb
                             eventTracker.setProfileProperty(ProfilePropArgs("\$avatar",it.content))
                             Toast.makeText(
                                     requireContext(),
-                                    getString(R.string.profile_uploaded),
+                                    getString(R.string.profile_uploaded_profile),
                                     Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -230,7 +228,7 @@ class OnboardingAddProfilePictureFragment() : Fragment(), ImageCropCallback, Onb
                             shimmerFrameLayout.gone()
                             imageView13.visible()
 
-                            showAlertDialog(getString(R.string.could_not_submit_info), it.error)
+                            showAlertDialog(getString(R.string.could_not_submit_info_profile_profile), it.error)
                         }
                     }
                 })
@@ -301,7 +299,7 @@ class OnboardingAddProfilePictureFragment() : Fragment(), ImageCropCallback, Onb
                 else {
                     Toast.makeText(
                             requireContext(),
-                            getString(R.string.grant_storage_permission),
+                            getString(R.string.grant_storage_permission_profile),
                             Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -338,9 +336,9 @@ class OnboardingAddProfilePictureFragment() : Fragment(), ImageCropCallback, Onb
 
     override fun errorWhileCapturingOrPickingImage(e: Exception) {
         MaterialAlertDialogBuilder(requireContext())
-                .setTitle(getString(R.string.alert))
-                .setMessage(getString(R.string.unable_to_click_photo) + e.message)
-                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                .setTitle(getString(R.string.alert_profile))
+                .setMessage(getString(R.string.unable_to_click_photo_profile) + e.message)
+                .setPositiveButton(getString(R.string.okay_profile)) { _, _ -> }
                 .show()
 
         CrashlyticsLogger.e("ProfilePicture", "WhileClickingProfilePicture", e)

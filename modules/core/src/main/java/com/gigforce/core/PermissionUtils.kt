@@ -212,7 +212,7 @@ object PermissionUtils {
                     if (hasAskedForPermission(context, permission)) {
                         Toast.makeText(
                             context,
-                            context.getString(R.string.provide_permission),
+                            context.getString(R.string.provide_permission_core),
                             Toast.LENGTH_SHORT
                         ).show()
                         goToAppSettings(context)
@@ -260,7 +260,7 @@ object PermissionUtils {
                     if (hasAskedForPermission(context.requireActivity(), permission)) {
                         Toast.makeText(
                             context.requireContext(),
-                            context.getString(R.string.provide_permission),
+                            context.getString(R.string.provide_permission_core),
                             Toast.LENGTH_SHORT
                         ).show()
                         goToAppSettings(context.requireActivity())

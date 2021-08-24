@@ -66,13 +66,13 @@
             android:ems="10"
             android:inputType="textPersonName"
             android:layout_marginTop="8dp"
-            android:text="@string/name" />
+            android:text="@string/name_app" />
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/company_name"
+            android:text="@string/company_name_app"
             android:layout_marginTop="8dp"/>
 
         <EditText
@@ -109,7 +109,7 @@
             android:id="@+id/textView42"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/location"
+            android:text="@string/location_app"
             android:layout_marginTop="16dp"/>
 
         <EditText

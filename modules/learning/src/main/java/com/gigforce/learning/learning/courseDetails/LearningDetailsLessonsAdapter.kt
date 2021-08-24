@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.example.learning.R
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
@@ -147,16 +146,16 @@ class LearningDetailsLessonsAdapter constructor(
 
             if (videoModel.completed) {
 //                setMarker(holder, R.drawable.ic_marker, R.color.colorPrimary)
-                holder.lessonCompletionPercentage.text = context.getString(R.string.completed_100)
-                holder.lessonsSeeMoreButton.text = context.getString(R.string.replay)
+                holder.lessonCompletionPercentage.text = context.getString(R.string.completed_100_learning)
+                holder.lessonsSeeMoreButton.text = context.getString(R.string.replay_learning)
                 holder.lessonCompletionPercentage.setTextColor(ResourcesCompat.getColor(context.resources, R.color.text_green, null))
             } else /*if (videoModel.currentlyOnGoing)*/ {
                 if (videoModel.completionProgress == 0L) {
                     //Not even started
                     //Not even started
                     //                  setMarker(holder, R.drawable.ic_marker_active, R.color.colorPrimary)
-                    holder.lessonCompletionPercentage.text = context.getString(R.string.pending_0)
-                    holder.lessonsSeeMoreButton.text = context.getString(R.string.play)
+                    holder.lessonCompletionPercentage.text = context.getString(R.string.pending_0_learning)
+                    holder.lessonsSeeMoreButton.text = context.getString(R.string.play_learning)
                     holder.lessonCompletionPercentage.setTextColor(ResourcesCompat.getColor(context.resources, R.color.text_yellow, null))
                 } else {
                     //Currently going on
@@ -168,8 +167,8 @@ class LearningDetailsLessonsAdapter constructor(
                         0
 
                     holder.lessonCompletionPercentage.text =
-                        context.getString(R.string.completed) + completedPercentage + "%"
-                    holder.lessonsSeeMoreButton.text = context.getString(R.string.resume)
+                        context.getString(R.string.completed_learning) + completedPercentage + "%"
+                    holder.lessonsSeeMoreButton.text = context.getString(R.string.resume_learning)
                     holder.lessonCompletionPercentage.setTextColor(ResourcesCompat.getColor(context.resources, R.color.text_orange, null))
                 }
             }
@@ -221,16 +220,16 @@ class LearningDetailsLessonsAdapter constructor(
 
             if (videoModel.completed) {
                 //        setMarker(holder, R.drawable.ic_marker, R.color.colorPrimary)
-                holder.lessonCompletionPercentage.text = context.getString(R.string.completed_100)
-                holder.lessonsSeeMoreButton.text = context.getString(R.string.replay)
+                holder.lessonCompletionPercentage.text = context.getString(R.string.completed_100_learning)
+                holder.lessonsSeeMoreButton.text = context.getString(R.string.replay_learning)
                 holder.lessonCompletionPercentage.setTextColor(ResourcesCompat.getColor(context.resources, R.color.text_green, null))
             } else /*if (videoModel.currentlyOnGoing) */ {
 
                 if (videoModel.completionProgress == 0L) {
                     //Not even started
                     //          setMarker(holder, R.drawable.ic_marker_active, R.color.colorPrimary)
-                    holder.lessonCompletionPercentage.text = context.getString(R.string.completed_0)
-                    holder.lessonsSeeMoreButton.text = context.getString(R.string.play)
+                    holder.lessonCompletionPercentage.text = context.getString(R.string.completed_0_learning)
+                    holder.lessonsSeeMoreButton.text = context.getString(R.string.play_learning)
                     holder.lessonCompletionPercentage.setTextColor(ResourcesCompat.getColor(context.resources, R.color.text_yellow, null))
                 } else {
                     //Currently going on
@@ -242,8 +241,8 @@ class LearningDetailsLessonsAdapter constructor(
                         0
 
                     holder.lessonCompletionPercentage.text =
-                        context.getString(R.string.completedspace) + completedPercentage + "%"
-                    holder.lessonsSeeMoreButton.text = context.getString(R.string.resume)
+                        context.getString(R.string.completedspace_learning) + completedPercentage + "%"
+                    holder.lessonsSeeMoreButton.text = context.getString(R.string.resume_learning)
                     holder.lessonCompletionPercentage.setTextColor(ResourcesCompat.getColor(context.resources, R.color.text_orange, null))
                 }
             }

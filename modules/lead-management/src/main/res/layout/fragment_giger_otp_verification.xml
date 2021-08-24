@@ -12,7 +12,7 @@
             android:layout_height="wrap_content"
             android:minHeight="@dimen/size_56"
             app:backgroundType="PinkBar"
-            app:titleText="@string/verification_code"
+            app:titleText="@string/verification_code_lead"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
@@ -48,7 +48,7 @@
                     android:layout_marginTop="24dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:text="@string/please_enter"
+                    android:text="@string/please_enter_lead"
                     />
 
                 <TextView
@@ -60,7 +60,7 @@
                     android:layout_marginEnd="16dp"
                     android:fontFamily="@font/lato"
                     android:lineSpacingExtra="7sp"
-                    android:text="@string/verification_code"
+                    android:text="@string/verification_code_lead"
                     android:textColor="#131415"
                     android:textSize="24sp"
                     android:textStyle="bold"
@@ -115,7 +115,7 @@
             android:layout_marginBottom="@dimen/size_22"
             android:gravity="center"
             android:minHeight="@dimen/size_36"
-            android:text="@string/submit"
+            android:text="@string/submit_lead"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

@@ -19,7 +19,7 @@
             android:fontFamily="@font/lato_bold"
             android:gravity="center"
             android:minHeight="@dimen/size_36"
-            android:text="@string/no"
+            android:text="@string/no_app"
             android:textColor="@color/colorLightAccent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/yes"

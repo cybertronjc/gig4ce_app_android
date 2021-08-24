@@ -44,7 +44,7 @@ class AddLanguageProfileV2 : BaseFragment() {
     private fun initSearchAutoComplete() {
         val arrayAdapter = ArrayAdapter<String>(requireContext(), android.R.layout.simple_dropdown_item_1line,resources.getStringArray(R.array.lang_array))
         act_langs_add_lang_profile_v2.setAdapter(arrayAdapter)
-        act_langs_add_lang_profile_v2.hint = getString(R.string.search_lang)
+        act_langs_add_lang_profile_v2.hint = getString(R.string.search_lang_app)
 
         act_langs_add_lang_profile_v2.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
             run {

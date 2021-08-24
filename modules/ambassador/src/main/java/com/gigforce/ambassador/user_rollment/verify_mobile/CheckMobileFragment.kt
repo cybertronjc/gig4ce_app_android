@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.gigforce.ambassador.R
 import com.gigforce.common_ui.ext.showToast
@@ -53,12 +52,12 @@ class CheckMobileFragment : Fragment(), UserAlreadyExistDialogFragmentActionList
     private fun validateDataAndsubmit() {
 
         if (mobile_no_et.text.length != 10) {
-            showAlertDialog("", getString(R.string.enter_valid_mobile))
+            showAlertDialog("", getString(R.string.enter_valid_mobile_amb))
             return
         }
         val mobileNo = mobile_no_et.text.toString()
         if (!INDIAN_MOBILE_NUMBER.matcher(mobileNo).matches()) {
-            showAlertDialog("", getString(R.string.enter_valid_mobile))
+            showAlertDialog("", getString(R.string.enter_valid_mobile_amb))
             return
         }
 
@@ -71,7 +70,7 @@ class CheckMobileFragment : Fragment(), UserAlreadyExistDialogFragmentActionList
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(title)
             .setMessage(message)
-            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+            .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
             .show()
     }
 
@@ -85,7 +84,7 @@ class CheckMobileFragment : Fragment(), UserAlreadyExistDialogFragmentActionList
                     }
                     is Lce.Content -> {
                         UtilMethods.hideLoading()
-                        showToast(getString(R.string.otp_sent))
+                        showToast(getString(R.string.otp_sent_amb))
 
                         if (it.content.isUserAlreadyRegistered) {
                             //show user already registered dialog

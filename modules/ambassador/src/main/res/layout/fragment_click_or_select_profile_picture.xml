@@ -22,7 +22,7 @@
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:text="@string/upload_profile_photo" />
+        android:text="@string/upload_profile_photo_amb" />
 
     <LinearLayout
         android:id="@+id/remove_profile_pic"
@@ -48,7 +48,7 @@
             android:fontFamily="@font/lato"
             android:gravity="center_horizontal"
             android:lineSpacingExtra="3sp"
-            android:text="@string/remove_photo"
+            android:text="@string/remove_photo_amb"
             android:textColor="#333333"
             android:textSize="12sp"
             android:textStyle="normal" />
@@ -78,7 +78,7 @@
             android:fontFamily="@font/lato"
             android:gravity="center_horizontal"
             android:lineSpacingExtra="3sp"
-            android:text="@string/camera"
+            android:text="@string/camera_amb"
             android:textColor="#333333"
             android:textSize="12sp"
             android:textStyle="normal" />
@@ -110,7 +110,7 @@
             android:fontFamily="@font/lato"
             android:gravity="center_horizontal"
             android:lineSpacingExtra="3sp"
-            android:text="@string/gallery"
+            android:text="@string/gallery_amb"
             android:textColor="#333333"
             android:textSize="12sp"
             android:textStyle="normal" />

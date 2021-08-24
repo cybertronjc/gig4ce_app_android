@@ -51,7 +51,7 @@ class GroupMessageViewInfoFragment : Fragment() {
 
     private fun initView() {
         viewBinding.toolbar.apply {
-            showTitle(context.getString(R.string.message_info))
+            showTitle(context.getString(R.string.message_info_chat))
             hideActionMenu()
             setBackButtonListener {
                 activity?.onBackPressed()
@@ -84,7 +84,7 @@ class GroupMessageViewInfoFragment : Fragment() {
         viewModel.messageReadingInfo
             .observe(viewLifecycleOwner, {
 
-                viewBinding.toolbar.showSubtitle(getString(R.string.viewed_by) + it.readingInfo.size + "/ " + it.totalMembers)
+                viewBinding.toolbar.showSubtitle(getString(R.string.viewed_by_chat) + it.readingInfo.size + "/ " + it.totalMembers)
                 viewBinding.messageViewedRecyclerView.collection = it.readingInfo
             })
     }

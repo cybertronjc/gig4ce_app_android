@@ -133,7 +133,7 @@ class LocationUpdates {
                 }
 
                 if (locationResult == null) {
-                    Toast.makeText(context, context.getString(R.string.location_cant_be_found), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Location can't be found", Toast.LENGTH_SHORT).show()
                     return
 
 

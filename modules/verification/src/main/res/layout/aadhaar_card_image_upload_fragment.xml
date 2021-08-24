@@ -79,7 +79,7 @@
                         android:layout_marginLeft="@dimen/dp_sm1"
                         android:layout_marginTop="@dimen/dp_large"
                         android:layout_marginRight="@dimen/dp_sm1"
-                        android:text="@string/please_confirm_the_following_information"
+                        android:text="@string/please_confirm_the_following_information_veri"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/grayLine3" />
@@ -112,7 +112,7 @@
                         android:layout_marginLeft="@dimen/dp_sm1"
                         android:layout_marginTop="@dimen/dp_xl1"
                         android:layout_marginRight="@dimen/dp_sm1"
-                        android:hint="@string/name"
+                        android:hint="@string/name_veri"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/aadharcard_til">
@@ -168,7 +168,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/dp_sm1"
                             android:background="@color/white"
-                            android:text="@string/date_of_birth_"
+                            android:text="@string/date_of_birth_veri"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 

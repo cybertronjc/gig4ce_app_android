@@ -31,26 +31,26 @@ class InvoiceCollapsedCard: MaterialCardView {
     var gigId: String = "123"
         set(value) {
             field = value
-            gig_id_text.text = context.getString(R.string.gig_id) + gigId
+            gig_id_text.text = context.getString(R.string.gig_id_wallet) + gigId
         }
 
     var isInvoiceGenerated: Boolean = true
         set(value) {
             field = value
-            start_date_text.text = context.getString(R.string.invoice_generated) + startDate
+            start_date_text.text = context.getString(R.string.invoice_generated_wallet) + startDate
             end_date_text.text = ""
         }
 
     var startDate: String = "XX-XX-XXXX"
         set(value) {
             field = value
-            start_date_text.text = context.getString(R.string.start_date) + startDate
+            start_date_text.text = context.getString(R.string.start_date_wallet) + startDate
         }
 
     var endDate: String = "XX-XX-XXXX"
         set(value) {
             field = value
-            end_date_text.text = context.getString(R.string.end_date) + endDate
+            end_date_text.text = context.getString(R.string.end_date_wallet) + endDate
         }
 
     var gigAmount: Int = 2000

@@ -24,7 +24,6 @@ import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewmodels.ProfileViewModel
 import com.gigforce.core.navigation.INavigation
-import com.gigforce.verification.util.VerificationConstants
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.chip.Chip
 import com.google.firebase.storage.FirebaseStorage
@@ -250,7 +249,7 @@ class ProfileFragment : BaseFragment() {
 
 
         location_card.setOnClickListener {
-            showToast(getString(R.string.work_in_progress))
+            showToast(getString(R.string.work_in_progress_app))
         }
         // load user data
         viewModel.ambassadorProfilePicUpdate.observe(viewLifecycleOwner, Observer {

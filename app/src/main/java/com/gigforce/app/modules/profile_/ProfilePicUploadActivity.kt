@@ -89,14 +89,14 @@ class ProfilePicUploadActivity : AppCompatActivity(),
                         viewModelUser.getProfileForUser(viewModel.profileID)
                         Toast.makeText(
                             this,
-                            getString(R.string.profile_pic_uploaded),
+                            getString(R.string.profile_pic_uploaded_app),
                             Toast.LENGTH_LONG
                         ).show()
 
                     }
                     is Lse.Error -> {
                         progress_bar_upload.gone()
-                        showAlertDialog(getString(R.string.could_not_submit_info), it.error)
+                        showAlertDialog(getString(R.string.could_not_submit_info_app), it.error)
                     }
                 }
             })
@@ -143,7 +143,7 @@ class ProfilePicUploadActivity : AppCompatActivity(),
             if (outputFileUri != null) {
                 startCrop(outputFileUri)
             } else {
-                Toast.makeText(this, getString(R.string.issue_in_cap_image), Toast.LENGTH_LONG)
+                Toast.makeText(this, getString(R.string.issue_in_cap_image_app), Toast.LENGTH_LONG)
                     .show()
             }
         } else if (requestCode == UCrop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
@@ -165,14 +165,14 @@ class ProfilePicUploadActivity : AppCompatActivity(),
                     if (faces.size > 0) {
                         Toast.makeText(
                             this,
-                            getString(R.string.face_detected_upload),
+                            getString(R.string.face_detected_upload_app),
                             Toast.LENGTH_LONG
                         ).show()
                         imageClickedOrSelectedNowUpload(imageUriResultCrop, baos.toByteArray())
                     } else {
                         Toast.makeText(
                             this,
-                            getString(R.string.something_seems_of),
+                            getString(R.string.something_seems_of_app),
                             Toast.LENGTH_LONG
                         ).show()
                     }
@@ -181,7 +181,7 @@ class ProfilePicUploadActivity : AppCompatActivity(),
                     // Task failed with an exception
                     Toast.makeText(
                         this,
-                        getString(R.string.no_face),
+                        getString(R.string.no_face_app),
                         Toast.LENGTH_LONG
                     ).show()
                 }
@@ -218,7 +218,7 @@ class ProfilePicUploadActivity : AppCompatActivity(),
         options.setFreeStyleCropEnabled(false)
         options.setStatusBarColor(ResourcesCompat.getColor(resources, R.color.topBarDark, null))
         options.setToolbarColor(ResourcesCompat.getColor(resources, R.color.topBarDark, null))
-        options.setToolbarTitle(getString(R.string.crop_and_rotate))
+        options.setToolbarTitle(getString(R.string.crop_and_rotate_app))
         return options
     }
 

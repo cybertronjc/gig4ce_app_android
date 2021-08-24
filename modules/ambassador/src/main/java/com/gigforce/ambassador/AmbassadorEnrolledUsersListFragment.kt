@@ -16,7 +16,6 @@ import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import androidx.core.text.color
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,7 +23,6 @@ import com.gigforce.ambassador.user_rollment.verify_mobile.ConfirmOtpFragment
 import com.gigforce.ambassador.user_rollment.verify_mobile.EditProfileConsentAndSendOtpDialogFragment
 import com.gigforce.ambassador.user_rollment.verify_mobile.UserDetailsFilledDialogFragmentResultListener
 import com.gigforce.common_ui.StringConstants
-import com.gigforce.common_ui.components.atoms.ChipComponent
 import com.gigforce.common_ui.components.atoms.ChipGroupComponent
 import com.gigforce.common_ui.components.atoms.models.ChipGroupModel
 import com.gigforce.common_ui.components.cells.SearchTextChangeListener
@@ -150,9 +148,9 @@ class AmbassadorEnrolledUsersListFragment : Fragment(),
         }
 
         toolbar_layout.apply {
-            showTitle(context.getString(R.string.gigforce_ambassador))
+            showTitle(context.getString(R.string.gigforce_ambassador_amb))
             hideActionMenu()
-            showSearchOption(context.getString(R.string.search_users))
+            showSearchOption(context.getString(R.string.search_users_amb))
 
             setOnSearchTextChangeListener(object : GigforceToolbar.SearchTextChangeListener {
 
@@ -198,7 +196,7 @@ class AmbassadorEnrolledUsersListFragment : Fragment(),
                     //hide chip
                     user_details_layout.gone()
                     enrolled_users_rv.visible()
-                    toolbar_layout.showSearchOption(getString(R.string.search_user))
+                    toolbar_layout.showSearchOption(getString(R.string.search_user_amb))
                     toolbar_layout.hideSubTitle()
 
                     if (enrolledUserAdapter.itemCount != 0) {
@@ -232,7 +230,7 @@ class AmbassadorEnrolledUsersListFragment : Fragment(),
 
                 user_details_layout.gone()
                 enrolled_users_rv.visible()
-                toolbar_layout.showSearchOption(getString(R.string.search_user))
+                toolbar_layout.showSearchOption(getString(R.string.search_user_amb))
                 toolbar_layout.hideSubTitle()
 
                 if (enrolledUserAdapter.itemCount != 0) {
@@ -325,7 +323,7 @@ class AmbassadorEnrolledUsersListFragment : Fragment(),
                         it.count { it.enrollmentStepsCompleted.allStepsCompleted().not() }
 
                     total_complete_profile_tv.text = buildSpannedString {
-                        append(getString(R.string.total_completed_profile))
+                        append(getString(R.string.total_completed_profile_amb))
                         bold {
                             color(
                                 ResourcesCompat.getColor(
@@ -341,7 +339,7 @@ class AmbassadorEnrolledUsersListFragment : Fragment(),
 
 
                     total_incomplete_profile_tv.text = buildSpannedString {
-                        append(getString(R.string.total_incomplete_profile))
+                        append(getString(R.string.total_incomplete_profile_amb))
                         bold {
                             color(ResourcesCompat.getColor(resources, R.color.text_orange, null)) {
                                 append(totalInCompleteProfiles.toString())
@@ -440,8 +438,8 @@ class AmbassadorEnrolledUsersListFragment : Fragment(),
             .setIosParameters(DynamicLink.IosParameters.Builder("com.gigforce.ios").build())
             .setSocialMetaTagParameters(
                 DynamicLink.SocialMetaTagParameters.Builder()
-                    .setTitle(getString(R.string.gigforce))
-                    .setDescription(getString(R.string.gigforce_desc))
+                    .setTitle(getString(R.string.gigforce_amb))
+                    .setDescription(getString(R.string.gigforce_desc_amb))
                     .setImageUrl(Uri.parse("https://firebasestorage.googleapis.com/v0/b/gig4ce-app.appspot.com/o/app_assets%2Fgigforce.jpg?alt=media&token=f7d4463b-47e4-4b8e-9b55-207594656161"))
                     .build()
             ).buildDynamicLink()
@@ -452,7 +450,7 @@ class AmbassadorEnrolledUsersListFragment : Fragment(),
     private fun shareToAnyApp(url: String) {
         if (!isAdded) return
 
-        val shareMessage = getString(R.string.looking_for_dynamic_working_hours) + " " + url
+        val shareMessage = getString(R.string.looking_for_dynamic_working_hour_amb) + " " + url
         navigation.navigateTo("referrals",bundleOf(
             AppConstants.INTENT_EXTRA_REFERRAL_LINK_WITH_TEXT to shareMessage,
             AppConstants.INTENT_EXTRA_REFERRAL_LINK to url

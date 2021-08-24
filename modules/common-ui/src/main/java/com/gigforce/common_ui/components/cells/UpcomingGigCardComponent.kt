@@ -187,11 +187,11 @@ class UpcomingGigCardComponent(context: Context, attrs: AttributeSet?) :  FrameL
                     } else if (obj.isCheckInMarked()) {
                         checkInTV.isEnabled = true
                         checkInTV.text =
-                            context.getString(R.string.check_out)
+                            context.getString(R.string.check_out_common_ui)
                     } else {
                         checkInTV.isEnabled = true
                         checkInTV.text =
-                            context.getString(R.string.check_in)
+                            context.getString(R.string.check_in_common_ui)
                     }
                 }
             }

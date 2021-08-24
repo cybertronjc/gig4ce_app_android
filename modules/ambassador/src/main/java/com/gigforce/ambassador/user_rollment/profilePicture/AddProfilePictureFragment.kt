@@ -17,7 +17,6 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.gigforce.ambassador.EnrollmentConstants
@@ -203,7 +202,7 @@ class AddProfilePictureFragment : Fragment(),
         }
 
         toolbar_layout.apply {
-            showTitle(getString(R.string.upload_profile_picture))
+            showTitle(getString(R.string.upload_profile_picture_amb))
             hideActionMenu()
             setBackButtonListener(View.OnClickListener {
                 if (userId == null) {
@@ -275,7 +274,7 @@ class AddProfilePictureFragment : Fragment(),
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(title)
             .setMessage(message)
-            .setPositiveButton(getString(R.string.okay).capitalize()) { _, _ -> }
+            .setPositiveButton(getString(R.string.okay_amb).capitalize()) { _, _ -> }
             .show()
     }
 
@@ -339,14 +338,14 @@ class AddProfilePictureFragment : Fragment(),
                         submitBtn.text = "Next"
 //                            }
 
-                        showToast(getString(R.string.profile_pic_uploaded))
+                        showToast(getString(R.string.profile_pic_uploaded_amb))
                     }
                     is Lse.Error -> {
                         shimmerFrameLayout.stopShimmer()
                         shimmerFrameLayout.gone()
                         imageView13.visible()
 
-                        showAlertDialog(getString(R.string.could_not_submit_info), it.error)
+                        showAlertDialog(getString(R.string.could_not_submit_info_amb), it.error)
                     }
                 }
             })
@@ -391,7 +390,7 @@ class AddProfilePictureFragment : Fragment(),
                 if (allPermsGranted)
                     ClickOrSelectImageBottomSheet.launch(childFragmentManager, false, this)
                 else {
-                    showToast(getString(R.string.please_grant_storage_permission))
+                    showToast(getString(R.string.please_grant_storage_permission_amb))
                 }
             }
         }
@@ -419,7 +418,7 @@ class AddProfilePictureFragment : Fragment(),
             if (outputFileUri != null) {
                 startCrop(outputFileUri)
             } else {
-                showToast(getString(R.string.issue_in_cap_image))
+                showToast(getString(R.string.issue_in_cap_image_amb))
             }
         } else if (requestCode == UCrop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
             val imageUriResultCrop: Uri? = UCrop.getOutput(data!!)
@@ -440,14 +439,14 @@ class AddProfilePictureFragment : Fragment(),
                     if (faces.size > 0) {
                         Toast.makeText(
                             requireContext(),
-                            getString(R.string.face_detected_upload),
+                            getString(R.string.face_detected_upload_amb),
                             Toast.LENGTH_LONG
                         ).show()
                         imageClickedOrSelectedNowUpload(imageUriResultCrop, baos.toByteArray())
                     } else {
                         Toast.makeText(
                             requireContext(),
-                            getString(R.string.something_seems_of),
+                            getString(R.string.something_seems_of_amb),
                             Toast.LENGTH_LONG
                         ).show()
                     }
@@ -494,7 +493,7 @@ class AddProfilePictureFragment : Fragment(),
         options.setFreeStyleCropEnabled(false)
         options.setStatusBarColor(ResourcesCompat.getColor(resources, R.color.topBarDark, null))
         options.setToolbarColor(ResourcesCompat.getColor(resources, R.color.topBarDark, null))
-        options.setToolbarTitle(getString(R.string.crop_and_rotate))
+        options.setToolbarTitle(getString(R.string.crop_and_rotate_amb))
         return options
     }
 
@@ -514,10 +513,10 @@ class AddProfilePictureFragment : Fragment(),
 
     private fun showGoBackConfirmationDialog() {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle(getString(R.string.alert))
-            .setMessage(getString(R.string.are_u_sure_u_want_to_go_back))
-            .setPositiveButton(getString(R.string.yes)) { _, _ -> goBackToUsersList() }
-            .setNegativeButton(getString(R.string.no)) { _, _ -> }
+            .setTitle(getString(R.string.alert_amb))
+            .setMessage(getString(R.string.are_u_sure_u_want_to_go_back_amb))
+            .setPositiveButton(getString(R.string.yes_amb)) { _, _ -> goBackToUsersList() }
+            .setNegativeButton(getString(R.string.no_amb)) { _, _ -> }
             .show()
     }
 

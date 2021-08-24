@@ -15,7 +15,7 @@
         android:layout_marginTop="24dp"
         android:fontFamily="@font/lato_bold"
         android:letterSpacing="0"
-        android:text="@string/suggested_assessments"
+        android:text="@string/suggested_assessments_learning"
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -37,7 +37,7 @@
         android:layout_marginTop="24dp"
         android:fontFamily="@font/lato_bold"
         android:letterSpacing="0"
-        android:text="@string/completed_assessments"
+        android:text="@string/completed_assessments_learning"
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -73,7 +73,7 @@
             android:layout_gravity="center"
             android:drawableTop="@drawable/ic_cross_grey"
             android:drawablePadding="10dp"
-            android:text="@string/no_assessment_found" />
+            android:text="@string/no_assessment_found_learning" />
 
     </FrameLayout>
 

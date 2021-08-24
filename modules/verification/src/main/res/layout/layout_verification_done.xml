@@ -37,7 +37,7 @@
             android:layout_marginTop="375dp"
             android:backgroundTint="@android:color/white"
             android:minHeight="@dimen/size_36"
-            android:text="@string/okay_text_cap"
+            android:text="@string/okay_text_cap_veri"
             android:textAlignment="center"
             android:textColor="@color/colorAccent"
             android:textSize="24sp" />

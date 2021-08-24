@@ -32,7 +32,7 @@
             android:fontFamily="@font/lato"
             android:lineHeight="17sp"
             android:lineSpacingExtra="3sp"
-            android:text="@string/let_us_know_your_interest_so_that_we_can_show_the_best_jobs_for_you"
+            android:text="@string/let_us_know_your_interest_so_that_we_can_show_the_best_jobs_for_you_amb"
             android:textColor="#333333"
             android:textSize="14sp"
             android:textStyle="normal" />
@@ -52,7 +52,7 @@
             android:layout_marginStart="16dp"
             android:fontFamily="@font/lato"
             android:lineSpacingExtra="3sp"
-            android:text="@string/select_jobs_you_are_interested_in"
+            android:text="@string/select_jobs_you_are_interested_in_amb"
             android:textColor="#333333"
             android:textSize="14sp"
             android:textStyle="bold" />
@@ -63,7 +63,7 @@
             android:fontFamily="@font/lato_italic"
             android:lineHeight="19sp"
             android:lineSpacingExtra="3sp"
-            android:text="@string/max_3"
+            android:text="@string/max_3_amb"
             android:textColor="#333333"
             android:textSize="14sp"
             android:textStyle="normal" />
@@ -92,7 +92,7 @@
         android:enabled="true"
         android:fontFamily="@font/lato"
         android:gravity="center"
-        android:text="@string/next_camel_case"
+        android:text="@string/next_camel_case_amb"
         android:textAllCaps="false"
         app:strokeColor="@color/lipstick"
         app:strokeWidth="1dp" />
@@ -112,7 +112,7 @@
         android:minHeight="0dp"
         android:paddingBottom="0dp"
         android:paddingTop="0dp"
-        android:text="@string/skip_underline"
+        android:text="@string/skip_underline_amb"
         android:textAllCaps="false"
         android:textColor="@color/warm_grey"
         android:visibility="gone"

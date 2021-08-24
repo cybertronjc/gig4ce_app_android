@@ -44,7 +44,7 @@
             android:layout_marginTop="10dp"
             android:fontFamily="@font/lato_bold"
             android:letterSpacing="0"
-            android:text="@string/you_have_completed_the_lesson"
+            android:text="@string/you_have_completed_the_lesson_learning"
             android:textColor="@color/white"
             android:textSize="24sp" />
 
@@ -55,7 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:minHeight="@dimen/size_36"
-            android:text="@string/mark_slides_as_complete"
+            android:text="@string/mark_slides_as_complete_learning"
             android:textColor="@color/white"
             app:rippleColor="@color/white"
             app:strokeColor="@color/white" />

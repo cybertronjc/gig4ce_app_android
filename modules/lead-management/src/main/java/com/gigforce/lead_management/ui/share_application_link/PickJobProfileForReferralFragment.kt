@@ -2,7 +2,6 @@ package com.gigforce.lead_management.ui.share_application_link
 
 import android.os.Bundle
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -11,12 +10,9 @@ import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.utils.PushDownAnim
-import com.gigforce.common_ui.utils.UtilMethods
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfileOverview
-import com.gigforce.common_ui.viewdatamodels.leadManagement.JoiningSignUpInitiatedMode
 import com.gigforce.common_ui.views.GigforceToolbar
 import com.gigforce.core.base.BaseFragment2
-import com.gigforce.core.extensions.getTextChangeAsStateFlow
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
@@ -28,7 +24,6 @@ import com.gigforce.lead_management.databinding.FragmentPickJobProfileForReferra
 import com.gigforce.lead_management.models.GigAppListRecyclerItemData
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -109,12 +104,12 @@ class PickJobProfileForReferralFragment : BaseFragment2<FragmentPickJobProfileFo
             validateDataAndOpenReferralScreen()
         }
 
-        lifecycleScope.launchWhenCreated {
-            searchGigET.getTextChangeAsStateFlow()
-                .collect {
-                    viewModel.searchJobProfiles(it)
-                }
-        }
+//        lifecycleScope.launchWhenCreated {
+//            searchGigET.getTextChangeAsStateFlow()
+//                .collect {
+//                    viewModel.searchJobProfiles(it)
+//                }
+//        }
     }
 
     private fun validateDataAndOpenReferralScreen() = viewBinding.apply {
@@ -123,9 +118,9 @@ class PickJobProfileForReferralFragment : BaseFragment2<FragmentPickJobProfileFo
         if (selectedJobProfile == null) {
 
             MaterialAlertDialogBuilder(requireContext())
-                .setTitle(getString(R.string.select_job_profile))
-                .setMessage(getString(R.string.select_atleast_one_profile))
-                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                .setTitle(getString(R.string.select_job_profile_lead))
+                .setMessage(getString(R.string.select_atleast_one_profile_lead))
+                .setPositiveButton(getString(R.string.okay_lead)) { _, _ -> }
                 .show()
 
             return@apply
@@ -134,7 +129,7 @@ class PickJobProfileForReferralFragment : BaseFragment2<FragmentPickJobProfileFo
         val userName = gigersNameET.text.toString().capitalize()
         if (userName.isEmpty()) {
             nameErrorTv.visible()
-            nameErrorTv.text = getString(R.string.fill_user_name)
+            nameErrorTv.text = getString(R.string.fill_user_name_lead)
             return@apply
         } else {
             nameErrorTv.gone()

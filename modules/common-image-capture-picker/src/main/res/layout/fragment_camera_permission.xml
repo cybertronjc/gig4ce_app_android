@@ -26,7 +26,7 @@
         android:textColor="#333333"
         android:textSize="16sp"
         android:textStyle="normal"
-        android:text="@string/following_permission_are_required_to_click_image" />
+        android:text="@string/following_permission_are_required_to_click_image_common" />
 
 
     <TextView
@@ -43,7 +43,7 @@
         android:layout_marginTop="16dp"
         android:background="@color/lipstick"
         android:textColor="@color/white"
-        android:text="@string/okay"/>
+        android:text="@string/okay_common"/>
 
 
 </LinearLayout>

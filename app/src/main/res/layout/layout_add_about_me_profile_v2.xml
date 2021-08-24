@@ -42,7 +42,7 @@
                 android:layout_centerVertical="true"
                 android:layout_toEndOf="@+id/iv_back_application_add_about_me_v2"
                 android:fontFamily="@font/lato"
-                android:text="@string/add_about_me"
+                android:text="@string/add_about_me_app"
                 android:textColor="@color/white"
                 android:textSize="@dimen/font_20"
                 android:textStyle="normal" />
@@ -116,7 +116,7 @@
                     android:background="@null"
                     android:fontFamily="@font/lato"
                     android:gravity="top|center_vertical"
-                    android:hint="@string/add_about_me"
+                    android:hint="@string/add_about_me_app"
                     android:imeOptions="actionNone"
                     android:lineSpacingExtra="@dimen/size_38"
                     android:lines="5"

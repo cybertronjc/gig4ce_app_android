@@ -98,7 +98,7 @@
                     android:id="@+id/money_received"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:content_help="@string/money_received_info"
+                    app:content_help="@string/money_received_info_wallet"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -107,7 +107,7 @@
                     android:id="@+id/money_withdrawn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:content_help="@string/money_withdrawn_info"
+                    app:content_help="@string/money_withdrawn_info_wallet"
                     app:layout_constraintTop_toBottomOf="@id/money_received"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"/>
@@ -116,7 +116,7 @@
                     android:id="@+id/earning"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:content_help="@string/earning_info"
+                    app:content_help="@string/earning_info_wallet"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/money_withdrawn" />
@@ -125,7 +125,7 @@
                     android:id="@+id/wallet_balance"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:content_help="@string/wallet_balance_info"
+                    app:content_help="@string/wallet_balance_info_wallet"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/earning" />
@@ -134,7 +134,7 @@
                     android:id="@+id/monthly_earning"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:content_help="@string/monthly_earning_info"
+                    app:content_help="@string/monthly_earning_info_wallet"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/wallet_balance" />
@@ -143,7 +143,7 @@
                     android:id="@+id/monthly_goal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:content_help="@string/monthly_goal_info"
+                    app:content_help="@string/monthly_goal_info_wallet"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/monthly_earning" />
@@ -153,7 +153,7 @@
                     android:id="@+id/payment_due"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:content_help="@string/payment_due_info"
+                    app:content_help="@string/payment_due_info_wallet"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/monthly_goal" />
@@ -163,7 +163,7 @@
                     android:id="@+id/invoice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:content_help="@string/invoice_info"
+                    app:content_help="@string/invoice_info_wallet"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/payment_due" />
@@ -172,7 +172,7 @@
                     android:id="@+id/invoice_generated"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:content_help="@string/invoice_generated_info"
+                    app:content_help="@string/invoice_generated_info_wallet"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/invoice" />
@@ -182,7 +182,7 @@
                     android:id="@+id/pending_invoice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:content_help="@string/pending_invoice_info"
+                    app:content_help="@string/pending_invoice_info_wallet"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/invoice_generated" />

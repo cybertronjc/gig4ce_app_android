@@ -58,7 +58,7 @@
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/lato"
                 android:letterSpacing="0"
-                android:text="@string/less_than_tenth"
+                android:text="@string/less_than_tenth_profile"
                 android:textColor="#333333"
                 android:textSize="14sp"
                 app:layout_constraintLeft_toLeftOf="parent"

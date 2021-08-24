@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="chat">Chat</string>
-    <string name="call">Call</string>
+    <string name="call_giger">Call</string>
     <string name="punch_in">Punch In</string>
     <string name="past">Past</string>
     <string name="upcoming">Upcoming</string>
@@ -19,8 +19,8 @@
     <string name="gig_id">Gig Id :</string>
     <string name="please_let_us_know_more_about_your_gig">Please let us know more about your Gig .</string>
     <string name="okay_text">Okay</string>
-    <string name="no_scheduled_gig_on_this_day">No scheduled Gig on this Day.</string>
-    <string name="no_more_gig">No more Gig !</string>
+    <string name="no_scheduled_gig_on_this_day_giger">No scheduled Gig on this Day.</string>
+    <string name="no_more_gig_giger">No more Gig !</string>
     <string name="download_id_card">Download Id Card</string>
     <string name="plus_see_more">+ see more</string>
     <string name="back_button">Back Button</string>
@@ -110,7 +110,7 @@
     <string name="checking_out_late_notified">You are Checking out late for this Gig. This will be notified to your manager.</string>
     <string name="user_not_on_app">Looks like user is not on gig force App</string>
     <string name="unable_to_fetch_user_details">\"Unable to fetch user details, \"</string>
-    <string name="related_learnings">Related Learnings</string>
+    <string name="related_learnings_giger_gigs">Related Learnings</string>
     <string name="monthly">Monthly</string>
     <string name="daily">Daily</string>
     <string name="under_development">This feature is under development</string>

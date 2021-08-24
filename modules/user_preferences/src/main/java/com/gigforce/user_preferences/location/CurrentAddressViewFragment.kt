@@ -106,7 +106,7 @@ class CurrentAddressViewFragment: Fragment() {
     private fun convertAddressToString(address: AddressModel?): String {
         Log.e("ADDRESS",address!!.firstLine)
         return if (address!!.isEmpty() || address == null)
-            getString(R.string.add_address)
+            getString(R.string.add_address_pref)
         else
             address.firstLine + "," + address.secondLine + "," + address.city + "," + address.state + ". " + address.pincode
     }

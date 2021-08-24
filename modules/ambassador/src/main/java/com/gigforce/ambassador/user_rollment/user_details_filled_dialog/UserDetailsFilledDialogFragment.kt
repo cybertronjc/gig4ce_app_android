@@ -10,7 +10,6 @@ import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.ambassador.EnrollmentConstants
@@ -111,16 +110,16 @@ class UserDetailsFilledDialogFragment : DialogFragment() {
     private fun initView() {
 
         congrats_text.text = buildSpannedString {
-            append(getString(R.string.you_have) + " ")
+            append(getString(R.string.you_have_amb) + " ")
             bold {
-                append(getString(R.string.successfully) + " ")
+                append(getString(R.string.successfully_amb) + " ")
             }
-            append(getString(R.string.submitted))
+            append(getString(R.string.submitted_amb))
             bold {
                 append(" $userName's ")
             }
             append(
-                getString(R.string.details_exclamation) + "\n" +
+                getString(R.string.details_exclamation_amb) + "\n" +
                         "\n"
             )
             append("Invite link will be shared via SMS on registered number.")
@@ -165,7 +164,7 @@ class UserDetailsFilledDialogFragment : DialogFragment() {
                     is Lse.Error -> {
                         Toast.makeText(
                             requireContext(),
-                            getString(R.string.unable_to_send_invite),
+                            getString(R.string.unable_to_send_invite_amb),
                             Toast.LENGTH_SHORT
                         ).show()
                         showDocumentUploadedCard()

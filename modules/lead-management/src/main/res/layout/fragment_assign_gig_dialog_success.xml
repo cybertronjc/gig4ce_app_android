@@ -29,7 +29,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/lato_bold"
-                android:text="@string/congratulations"
+                android:text="@string/congratulations_lead"
                 android:textColor="@color/blackDark"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -43,7 +43,7 @@
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/lato"
                 android:gravity="center"
-                android:text="@string/giger_has_been_activated_successfully"
+                android:text="@string/giger_has_been_activated_successfully_lead"
                 android:textColor="@color/blackDark"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -62,7 +62,7 @@
                 android:fontFamily="@font/lato"
                 android:gravity="center"
                 android:minHeight="@dimen/size_36"
-                android:text="@string/okay"
+                android:text="@string/okay_lead"
                 android:textColor="@color/white"
                 app:layout_constraintTop_toBottomOf="@id/gigs_assigned_label" />
 

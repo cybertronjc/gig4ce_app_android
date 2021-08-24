@@ -70,12 +70,12 @@ class LocationFragment : Fragment() {
         textView81.text = convertAddressToString(viewModel.getCurrentAddress())
         if (viewModel.getCurrentAddress()!!.isEmpty()) {
             arroundCurrentAddSwitch.isEnabled = false
-            preferredDistanceTV.text = getString(R.string.add_current_address)
+            preferredDistanceTV.text = getString(R.string.add_current_address_pref)
         } else {
             arroundCurrentAddSwitch.isEnabled = true
             preferredDistanceTV.text =
                 viewModel.getCurrentAddress()?.preferred_distance.toString() + " " + getString(
-                    R.string.km_around
+                    R.string.km_around_pref
                 )
         }
         arroundCurrentAddSwitch.isChecked = viewModel.getCurrentAddress()?.preferredDistanceActive!!
@@ -84,7 +84,7 @@ class LocationFragment : Fragment() {
     private fun convertAddressToString(address: AddressModel?): String {
         Log.e("ADDRESS", address!!.firstLine)
         return if (address!!.isEmpty() || address == null)
-            getString(R.string.add_address)
+            getString(R.string.add_address_pref)
         else
             address.firstLine + "," + address.secondLine + "," + address.city + "," + address.state + ". " + address.pincode
     }
@@ -119,7 +119,7 @@ class LocationFragment : Fragment() {
             if (!viewModel.getCurrentAddress()!!.isEmpty()) {
                 navigation.navigateTo("preferences/arrountCurrentAddress") //navigate(R.id.arrountCurrentAddress)
             } else {
-                showToast(getString(R.string.please_add_current_address))
+                showToast(getString(R.string.please_add_current_address_pref))
             }
         }
         arroundCurrentAddSwitch.setOnClickListener { view ->

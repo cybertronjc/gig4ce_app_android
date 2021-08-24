@@ -21,12 +21,10 @@ import com.gigforce.core.datamodels.profile.ContactEmail
 import com.gigforce.core.datamodels.profile.ContactPhone
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.common_ui.StringConstants
-import com.gigforce.common_ui.datamodels.GigerVerificationStatus
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.utils.ViewModelProviderFactory
 import com.gigforce.core.AppConstants.INTENT_EXTRA_ACTION
 import com.gigforce.core.AppConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.contact_edit_warning_dialog.*
 import kotlinx.android.synthetic.main.fragment_profile_about_expanded.*
 import kotlinx.android.synthetic.main.fragment_profile_about_expanded.view.*
@@ -409,7 +407,7 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
             if (delete) {
                 showConfirmationDialogType3(getString(R.string.you_sure),
                         "You want to delete $number from your contacts!!!",
-                        getString(R.string.yes), getString(R.string.no), object :
+                        getString(R.string.yes), getString(R.string.no_app), object :
                         ConfirmationDialogOnClickListener {
                     override fun clickedOnYes(dialog: Dialog?) {
                         contactEdit(
@@ -441,7 +439,7 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
         if (delete) {
             showConfirmationDialogType3(getString(R.string.you_sure),
                     "You want to delete $email from your emails!!!",
-                getString(R.string.yes), getString(R.string.no), object :
+                getString(R.string.yes), getString(R.string.no_app), object :
                     ConfirmationDialogOnClickListener {
                 override fun clickedOnYes(dialog: Dialog?) {
                     emailEdit(

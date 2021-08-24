@@ -23,7 +23,7 @@
             android:layout_marginTop="10dp"
             android:fontFamily="@font/lato_bold"
             android:letterSpacing="0"
-            android:text="@string/slide_title"
+            android:text="@string/slide_title_learning"
             android:textColor="@color/white"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"

@@ -1,7 +1,6 @@
 package com.gigforce.profile.onboarding
 
 import android.app.Activity
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.RemoteException
 import android.util.Log
@@ -37,7 +36,6 @@ import kotlinx.android.synthetic.main.experience_item.*
 import kotlinx.android.synthetic.main.name_gender_item.view.*
 import kotlinx.android.synthetic.main.onboarding_fragment_new_fragment.*
 import kotlinx.android.synthetic.main.onboarding_fragment_new_fragment_greeting_layout.*
-import org.json.JSONException
 import javax.inject.Inject
 import com.android.installreferrer.api.ReferrerDetails
 import com.android.installreferrer.api.InstallReferrerClient
@@ -108,9 +106,9 @@ class OnboardingFragmentNew : Fragment(){
         activity?.let {
             onboarding_pager.adapter =
                     MutlifragmentAdapter(it)
-            appBar.setSteps(getString(R.string.step_1) + (onboarding_pager.adapter as MutlifragmentAdapter).fragmentArr.size)
+            appBar.setSteps(getString(R.string.step_1_profile) + (onboarding_pager.adapter as MutlifragmentAdapter).fragmentArr.size)
             steps.text =
-                getString(R.string.step_1) + (onboarding_pager.adapter as MutlifragmentAdapter).fragmentArr.size
+                getString(R.string.step_1_profile) + (onboarding_pager.adapter as MutlifragmentAdapter).fragmentArr.size
         }
         next.setOnClickListener {
             if (isFragmentActionNotExists()) {
@@ -118,7 +116,7 @@ class OnboardingFragmentNew : Fragment(){
 
                 onboarding_pager.currentItem = onboarding_pager.currentItem + 1
                 //steps.text = "Steps ${onboarding_pager.currentItem + 1}/9"
-                appBar.setSteps(getString(R.string.steps) + (onboarding_pager.currentItem + 1) + "/9")
+                appBar.setSteps(getString(R.string.steps_profile) + (onboarding_pager.currentItem + 1) + "/9")
 
                 if (onboarding_pager.currentItem == 8) {
                     val fragmentAdapter = onboarding_pager.adapter as MutlifragmentAdapter
@@ -299,7 +297,7 @@ class OnboardingFragmentNew : Fragment(){
         var jobPreferenceFragment =
                 (((onboarding_pager.adapter as MutlifragmentAdapter).getFragment(onboarding_pager.currentItem)) as JobPreferenceFragment)
         var fullTimeJob = jobPreferenceFragment.fullTimeJob
-        var fullTimePartime = if (fullTimeJob) getString(R.string.full_time) else getString(R.string.part_time)
+        var fullTimePartime = if (fullTimeJob) getString(R.string.full_time_profile) else getString(R.string.part_time_profile)
         if (!fullTimeJob) {
             viewModel.saveJobPreference(fullTimePartime, jobPreferenceFragment.getWorkingDays(), jobPreferenceFragment.getTimeSlots())
 

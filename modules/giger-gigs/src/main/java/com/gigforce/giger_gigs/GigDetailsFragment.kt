@@ -92,7 +92,7 @@ class GigDetailsFragment : Fragment(),
         }
 
 
-        roleBasedLearningTV.text = getString(R.string.related_learnings)
+        roleBasedLearningTV.text = getString(R.string.related_learnings_giger_gigs)
         iv_options_gig_details.setOnClickListener {
             openPopupMenu(
                 it,

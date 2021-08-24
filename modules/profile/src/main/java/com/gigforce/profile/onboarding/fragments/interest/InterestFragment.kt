@@ -140,7 +140,7 @@ class InterestFragment() :
                         } else {
                             Toast.makeText(
                                 context,
-                                getString(R.string.max_three_interests),
+                                getString(R.string.max_three_interests_profile),
                                 Toast.LENGTH_SHORT
                             ).show()
                         }

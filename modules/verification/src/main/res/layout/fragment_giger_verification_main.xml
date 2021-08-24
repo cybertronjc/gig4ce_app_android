@@ -58,7 +58,7 @@
                     android:paddingTop="@dimen/size_7"
                     android:paddingEnd="@dimen/size_16"
                     android:paddingBottom="@dimen/size_8"
-                    android:text="@string/unsigned"
+                    android:text="@string/unsigned_veri"
                     android:textColor="@color/fa6400"
                     android:textSize="12sp" />
 
@@ -109,7 +109,7 @@
                     android:layout_marginTop="8dp"
                     android:fontFamily="@font/lato"
                     android:letterSpacing="0"
-                    android:text="@string/giger_verification_desc"
+                    android:text="@string/giger_verification_desc_veri"
                     android:textColor="@color/black" />
 
             </LinearLayout>

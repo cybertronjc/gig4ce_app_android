@@ -51,7 +51,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_weight="1"
                 android:letterSpacing="0"
-                android:text="@string/kyc_verification_not_done"
+                android:text="@string/kyc_verification_not_done_app_giger"
                 android:textColor="#4a4a4a"
                 android:textSize="13sp" />
 
@@ -87,7 +87,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_weight="1"
                 android:letterSpacing="0"
-                android:text="@string/video_resume_pending"
+                android:text="@string/video_resume_pending_app_giger"
                 android:textColor="#4a4a4a"
                 android:textSize="13sp" />
 
@@ -108,7 +108,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="18dp"
         android:letterSpacing="0"
-        android:text="@string/upcoming_gig_"
+        android:text="@string/upcoming_gig__app_giger"
         android:textColor="#080808"
         android:textSize="16sp" />
 
@@ -129,7 +129,7 @@
         android:layout_gravity="center"
         android:fontFamily="@font/lato_bold"
         android:letterSpacing="0"
-        android:text="@string/features"
+        android:text="@string/features_app_giger"
         android:textColor="#080808"
         android:textSize="18sp" />
 
@@ -255,7 +255,7 @@
             android:layout_marginLeft="8dp"
             android:fontFamily="@font/lato_bold"
             android:letterSpacing="0"
-            android:text="@string/my_interest"
+            android:text="@string/my_interest_app_giger"
             android:textColor="@color/white"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="@+id/imageView33"
@@ -269,7 +269,7 @@
             android:layout_marginTop="6dp"
             android:fontFamily="@font/lato"
             android:letterSpacing="0"
-            android:text="@string/explore_gigs_start_earning"
+            android:text="@string/explore_gigs_start_earning_app_giger"
             android:textColor="@color/white"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="@+id/textView109"
@@ -343,7 +343,7 @@
         android:layout_marginTop="@dimen/size_24"
         android:fontFamily="@font/lato_bold"
         android:letterSpacing="0"
-        android:text="@string/learning"
+        android:text="@string/learning_app_giger"
         android:textColor="#080808"
         android:textSize="16sp" />
 
@@ -396,7 +396,7 @@
             android:layout_marginTop="22dp"
             android:fontFamily="@font/lato"
             android:letterSpacing="0"
-            android:text="@string/explore_by_role_"
+            android:text="@string/explore_by_role__app_giger"
             android:textColor="#080808"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -426,7 +426,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:text="@string/see_more_underline"
+                android:text="@string/see_more_underline_app_giger"
                 android:textColor="@color/lipstick"
                 android:textSize="@dimen/font_14" />
         </LinearLayout>
@@ -517,7 +517,7 @@
             android:layout_marginTop="@dimen/size_24"
             android:fontFamily="@font/lato"
             android:letterSpacing="0"
-            android:text="@string/explore_by_industry"
+            android:text="@string/explore_by_industry_app_giger"
             android:textColor="#080808"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -624,7 +624,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="24dp"
             android:letterSpacing="0"
-            android:text="@string/browse_all_help_topic"
+            android:text="@string/browse_all_help_topic_app_giger"
             android:textColor="#000000"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="@+id/action_image"
@@ -679,7 +679,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="24dp"
             android:letterSpacing="0"
-            android:text="@string/contact_us"
+            android:text="@string/contact_us_app_giger"
             android:textColor="#000000"
             android:textSize="14sp"
             android:visibility="gone"
@@ -731,7 +731,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="24dp"
             android:letterSpacing="0"
-            android:text="@string/invite_your_contacts"
+            android:text="@string/invite_your_contacts_app_giger"
             android:textColor="#000000"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="@+id/invite_icon_bs_calendar_screen"

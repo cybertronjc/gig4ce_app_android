@@ -94,7 +94,7 @@ class UploadPanCard : Fragment(), SelectImageSourceBottomSheetActionListener,
 
     private fun initViews() {
         panImageHolder.setDocumentUploadLabel(getString(R.string.upload_pan_card))
-        panImageHolder.setDocumentUploadSubLabel(getString(R.string.please_upload_your_pan))
+        panImageHolder.setDocumentUploadSubLabel(getString(R.string.please_upload_your_pan_veri))
 //        panImageHolder.documentUploadLabelTV.text = getString(R.string.upload_pan_card)
 //        panImageHolder.documentUploadSubLabelTV.text = getString(R.string.please_upload_your_pan)
         panSubmitSliderBtn.isEnabled = false
@@ -130,7 +130,7 @@ class UploadPanCard : Fragment(), SelectImageSourceBottomSheetActionListener,
             launchSelectImageSourceDialog()
         }
 
-        panImageHolder.uploadImageLayout.imageLabelTV.text = getString(R.string.pan_card_image)
+        panImageHolder.uploadImageLayout.imageLabelTV.text = getString(R.string.pan_card_image_veri)
 
         panCardAvailaibilityOptionRG.setOnCheckedChangeListener { _, checkedId ->
 
@@ -138,7 +138,7 @@ class UploadPanCard : Fragment(), SelectImageSourceBottomSheetActionListener,
                 showPanImageLayout()
                 showImageInfoLayout()
 
-                if (panDataCorrectCB.isChecked && (panSubmitSliderBtn.text == getString(R.string.update)
+                if (panDataCorrectCB.isChecked && (panSubmitSliderBtn.text == getString(R.string.update_veri)
                             || clickedImagePath != null)
                 ) {
                     enableSubmitButton()
@@ -163,7 +163,7 @@ class UploadPanCard : Fragment(), SelectImageSourceBottomSheetActionListener,
 
             if (isChecked) {
 
-                if (panYesRB.isChecked && (panSubmitSliderBtn.text == getString(R.string.update) || clickedImagePath != null))
+                if (panYesRB.isChecked && (panSubmitSliderBtn.text == getString(R.string.update_veri) || clickedImagePath != null))
                     enableSubmitButton()
                 else if (panNoRB.isChecked)
                     enableSubmitButton()
@@ -176,9 +176,9 @@ class UploadPanCard : Fragment(), SelectImageSourceBottomSheetActionListener,
         editLayout.setOnClickListener {
 
             MaterialAlertDialogBuilder(requireContext())
-                .setTitle(getString(R.string.alert))
-                .setMessage(getString(R.string.you_are_reuploading_pan_card))
-                .setPositiveButton(getString(R.string.okay)) { _, _ ->
+                .setTitle(getString(R.string.alert_veri))
+                .setMessage(getString(R.string.you_are_reuploading_pan_card_veri))
+                .setPositiveButton(getString(R.string.okay_veri)) { _, _ ->
 
                     panViewLayout1.gone()
                     panMainLayout1.visible()
@@ -187,31 +187,31 @@ class UploadPanCard : Fragment(), SelectImageSourceBottomSheetActionListener,
                     panCardAvailaibilityOptionRG.check(R.id.panYesRB)
                     panSubmitSliderBtn.isEnabled = true
                 }
-                .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
+                .setNegativeButton(getString(R.string.cancel_veri)) { _, _ -> }
                 .show()
         }
 
         panSubmitSliderBtn.setOnClickListener {
-                    if (panYesRB.isChecked || panSubmitSliderBtn.text == getString(R.string.update)) {
+                    if (panYesRB.isChecked || panSubmitSliderBtn.text == getString(R.string.update_veri)) {
                         val panCardNo =
                             panCardEditText.text.toString().toUpperCase(Locale.getDefault())
                         if (!VerificationValidations.isPanCardValid(panCardNo)) {
 
                             MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert))
-                                .setMessage(getString(R.string.enter_valid_pan))
-                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                                .setTitle(getString(R.string.alert_veri))
+                                .setMessage(getString(R.string.enter_valid_pan_veri))
+                                .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
                                 .show()
 
                             return@setOnClickListener
                         }
 
-                        if (panSubmitSliderBtn.text != getString(R.string.update) && clickedImagePath == null) {
+                        if (panSubmitSliderBtn.text != getString(R.string.update_veri) && clickedImagePath == null) {
 
                             MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert))
-                                .setMessage(getString(R.string.click_select_pan_image))
-                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                                .setTitle(getString(R.string.alert_veri))
+                                .setMessage(getString(R.string.click_select_pan_image_veri))
+                                .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
                                 .show()
                             return@setOnClickListener
                         }
@@ -227,8 +227,8 @@ class UploadPanCard : Fragment(), SelectImageSourceBottomSheetActionListener,
     private fun showWhyWeNeedThisDialog() {
         WhyWeNeedThisBottomSheet.launch(
             childFragmentManager = childFragmentManager,
-            title = getString(R.string.why_do_we_need_this),
-            content = getString(R.string.why_do_we_need_this_pan)
+            title = getString(R.string.why_do_we_need_this_veri),
+            content = getString(R.string.why_do_we_need_this_pan_veri)
         )
     }
 
@@ -336,7 +336,7 @@ class UploadPanCard : Fragment(), SelectImageSourceBottomSheetActionListener,
         panImageHolder.visible()
 
         val panData = it ?: return
-        panSubmitSliderBtn.text = getString(R.string.update)
+        panSubmitSliderBtn.text = getString(R.string.update_veri)
 
         panCardEditText.setText(panData.panCardNo)
 
@@ -362,14 +362,14 @@ class UploadPanCard : Fragment(), SelectImageSourceBottomSheetActionListener,
         panViewLayout1.gone()
 
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle(getString(R.string.alert))
+            .setTitle(getString(R.string.alert_veri))
             .setMessage(error)
-            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+            .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
             .show()
     }
 
     private fun panCardDocumentUploaded() {
-        showToast(getString(R.string.pan_details_uploaded))
+        showToast(getString(R.string.pan_details_uploaded_veri))
         navigation.popBackStack()
     }
 

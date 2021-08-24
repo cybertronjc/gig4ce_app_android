@@ -41,5 +41,5 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:minHeight="@dimen/size_36"
-        android:text="@string/add_new" />
+        android:text="@string/add_new_app" />
 </LinearLayout>
