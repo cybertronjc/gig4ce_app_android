@@ -165,7 +165,7 @@ class ApplicationClientActivationViewModel : ViewModel() {
                 repository.db.collection("JP_Applications").document().set(model)
                     .addOnCompleteListener {
                         if (it.isSuccessful) {
-
+                            draftApplication(mJobProfileId)
                             observableJpApplication.value = model
                             observableInitApplication.value = true
 
@@ -238,7 +238,7 @@ class ApplicationClientActivationViewModel : ViewModel() {
 
     fun draftApplication(jobProfileId: String) = viewModelScope.launch {
         val application = getJPApplication(jobProfileId)
-        if (application.status == "") {
+        if (application.status == "" && application.id != "" ) {
             repository.db.collection("JP_Applications").document(application.id)
                 .update(
                     mapOf(
@@ -247,9 +247,9 @@ class ApplicationClientActivationViewModel : ViewModel() {
                 )
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
-                        observableApplicationStatus.value = true
+//                        observableApplicationStatus.value = true
                     } else {
-                        observableError.value = it.exception?.message ?: ""
+//                        observableError.value = it.exception?.message ?: ""
                     }
                 }
         }

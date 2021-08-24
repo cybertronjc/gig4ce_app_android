@@ -73,7 +73,6 @@ class ApplicationClientActivationFragment : Fragment(),
         initObservers()
         initClicks()
         viewModel.draftApplication(mJobProfileId)
-
     }
 
 
