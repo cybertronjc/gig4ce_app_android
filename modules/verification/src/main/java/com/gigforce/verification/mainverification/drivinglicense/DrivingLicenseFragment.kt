@@ -35,6 +35,8 @@ import com.gigforce.core.AppConstants
 import com.gigforce.core.StringConstants
 import com.gigforce.core.datamodels.verification.DrivingLicenseDataModel
 import com.gigforce.core.di.interfaces.IBuildConfig
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.DateHelper
 import com.gigforce.core.utils.NavFragmentsData
@@ -129,8 +131,8 @@ class DrivingLicenseFragment : Fragment(),
 
     private fun initviews() {
         viewBinding.toplayoutblock.setIdonthaveDocContent(
-            resources.getString(R.string.no_doc_title_dl),
-            resources.getString(R.string.no_doc_subtitle_dl)
+            resources.getString(R.string.no_doc_title_dl_veri),
+            resources.getString(R.string.no_doc_subtitle_dl_veri)
         )
     }
 
@@ -353,8 +355,8 @@ class DrivingLicenseFragment : Fragment(),
                     if (!it.dateOfBirth.isNullOrBlank() || !it.dlNumber.isNullOrBlank() || !it.validTill.isNullOrBlank()) {
                         viewBinding.toplayoutblock.uploadStatusLayout(
                             AppConstants.UPLOAD_SUCCESS,
-                            getString(R.string.upload_success),
-                            getString(R.string.info_of_dl_success)
+                            getString(R.string.upload_success_veri),
+                            getString(R.string.info_of_dl_success_veri)
                         )
                         if (!it.dateOfBirth.isNullOrBlank()) {
                             if (it.dateOfBirth.contains("/") || it.dateOfBirth.contains("-")) {
@@ -378,15 +380,15 @@ class DrivingLicenseFragment : Fragment(),
                     } else {
                         viewBinding.toplayoutblock.uploadStatusLayout(
                             AppConstants.UNABLE_TO_FETCH_DETAILS,
-                            getString(R.string.unable_to_fetch_info),
-                            getString(R.string.enter_dl_details)
+                            getString(R.string.unable_to_fetch_info_veri),
+                            getString(R.string.enter_dl_details_veri)
                         )
                     }
                 } else {
                     viewBinding.toplayoutblock.uploadStatusLayout(
                         AppConstants.UNABLE_TO_FETCH_DETAILS,
-                        getString(R.string.unable_to_fetch_info),
-                        getString(R.string.enter_dl_details)
+                        getString(R.string.unable_to_fetch_info_veri),
+                        getString(R.string.enter_dl_details_veri)
                     )
                     showToast("Ocr status " + it.message)
                 }
@@ -500,7 +502,7 @@ class DrivingLicenseFragment : Fragment(),
         if (hasStoragePermissions())
             VerificationClickOrSelectImageBottomSheet.launch(
                 parentFragmentManager,
-                getString(R.string.upload_driving),
+                getString(R.string.upload_driving_veri),
                 this
             )
         else
@@ -613,11 +615,11 @@ class DrivingLicenseFragment : Fragment(),
                 if (allPermsGranted)
                     VerificationClickOrSelectImageBottomSheet.launch(
                         parentFragmentManager,
-                        getString(R.string.upload_driving),
+                        getString(R.string.upload_driving_veri),
                         this
                     )
                 else {
-                    showToast(getString(R.string.grant_storage_permission))
+                    showToast(getString(R.string.grant_storage_permission_veri))
                 }
             }
         }
@@ -767,14 +769,14 @@ class DrivingLicenseFragment : Fragment(),
         viewBinding.belowLayout.gone()
         viewBinding.toplayoutblock.uploadStatusLayout(
             AppConstants.UPLOAD_SUCCESS,
-            getString(R.string.verification_completed),
-            getString(R.string.dl_details_verified)
+            getString(R.string.verification_completed_veri),
+            getString(R.string.dl_details_verified_veri)
         )
         viewBinding.submitButton.visible()
         viewBinding.submitButton.text = "Next"
         viewBinding.submitButton.isEnabled = true
         viewBinding.progressBar.gone()
-        viewBinding.toplayoutblock.setVerificationSuccessfulView(getString(R.string.dl_verified))
+        viewBinding.toplayoutblock.setVerificationSuccessfulView(getString(R.string.dl_verified_veri))
 
         var list = ArrayList<KYCImageModel>()
         drivingLicenseDataModel?.frontImage?.let {
@@ -817,8 +819,8 @@ class DrivingLicenseFragment : Fragment(),
                                 verifiedStatusViews(null)
                                 viewBinding.toplayoutblock.uploadStatusLayout(
                                     AppConstants.UNABLE_TO_FETCH_DETAILS,
-                                    getString(R.string.verification_progress),
-                                    getString(R.string.document_verified_soon)
+                                    getString(R.string.verification_progress_veri),
+                                    getString(R.string.document_verified_soon_veri)
                                 )
                                 viewBinding.toplayoutblock.setVerificationSuccessfulView("", "")
                                 viewBinding.belowLayout.visible()
@@ -840,8 +842,8 @@ class DrivingLicenseFragment : Fragment(),
                     resetInitializeViews()
                     viewBinding.toplayoutblock.uploadStatusLayout(
                         AppConstants.DETAILS_MISMATCH,
-                        getString(R.string.verification_failed),
-                        getString(R.string.details_incorrect)
+                        getString(R.string.verification_failed_veri),
+                        getString(R.string.details_incorrect_veri)
                     )
                     var listData = setAlreadyfilledData(drivingLicenseDataModel, true)
                     if (listData.isEmpty()) {
@@ -966,8 +968,8 @@ class DrivingLicenseFragment : Fragment(),
         viewBinding.submitButton.isEnabled = true
         viewBinding.belowLayout.visible()
         viewBinding.toplayoutblock.setVerificationSuccessfulView(
-            getString(R.string.driving_license),
-            getString(R.string.you_need_to_upload)
+            getString(R.string.driving_license_veri),
+            getString(R.string.you_need_to_upload_veri)
         )
         initializeImages()
         viewBinding.toplayoutblock.resetAllViews()
@@ -1010,8 +1012,8 @@ class DrivingLicenseFragment : Fragment(),
         viewBinding.progressBar.gone()
         viewBinding.belowLayout.gone()
         viewBinding.toplayoutblock.setVerificationSuccessfulView(
-            getString(R.string.dl_pending_verification),
-            getString(R.string.verifying)
+            getString(R.string.dl_pending_verification_veri),
+            getString(R.string.verifying_veri)
         )
         var list = ArrayList<KYCImageModel>()
         drivingLicenseDataModel.frontImage?.let {

@@ -688,10 +688,10 @@ class MainActivity : AppCompatActivity(),
                     if (currentPriority == 1) {
                         //request the update again
                         appDialogsInterface.showConfirmationDialogType3(
-                                getString(com.gigforce.landing_screen.R.string.new_version_available),
-                                getString(com.gigforce.landing_screen.R.string.new_version_available_detail),
-                                getString(com.gigforce.landing_screen.R.string.update_now),
-                                getString(com.gigforce.landing_screen.R.string.cancel_update),
+                                getString(R.string.new_version_available),
+                                getString(R.string.new_version_available_detail),
+                                getString(R.string.update_now),
+                                getString(R.string.cancel_update),
                                 object :
                                         ConfirmationDialogOnClickListener {
                                     override fun clickedOnYes(dialog: Dialog?) {

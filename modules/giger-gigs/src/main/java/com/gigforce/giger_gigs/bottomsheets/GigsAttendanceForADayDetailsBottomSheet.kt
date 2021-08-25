@@ -148,7 +148,7 @@ class GigsAttendanceForADayDetailsBottomSheet : BottomSheetDialogFragment() {
         } else {
 
             if (gig.hasRequestRegularisation()) {
-                regularisation_text.text = getString(R.string.request_sent_to_supervisor)
+                regularisation_text.text = getString(R.string.request_sent_to_supervisor_giger_gigs)
                 punch_in_time.text = "Punch In\n--:--"
                 gig_timer_tv.text = "00 : 00 mins"
                 punch_out_time.text = "Punch Out\n--:--"
@@ -168,13 +168,13 @@ class GigsAttendanceForADayDetailsBottomSheet : BottomSheetDialogFragment() {
                             gig_timer_tv.text = "00 : 00 mins"
                             punch_out_time.text = "Punch Out\n--:--"
                             regularisation_text.text =
-                                getString(R.string.looks_forgot_to_checkout)
+                                getString(R.string.looks_forgot_to_checkout_giger_gigs)
                         } else {
                             punch_in_time.text = "Punch In\n--:--"
                             gig_timer_tv.text = "00 : 00 mins"
                             punch_out_time.text = "Punch Out\n--:--"
                             regularisation_text.text =
-                                getString(R.string.looks_forgot_to_checkout)
+                                getString(R.string.looks_forgot_to_checkout_giger_gigs)
                         }
                     } else {
                         //Not eligible

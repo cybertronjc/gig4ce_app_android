@@ -104,7 +104,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/lato"
                     android:letterSpacing="0"
-                    android:text="@string/check_in_"
+                    android:text="@string/check_in__giger_gigs"
                     android:textColor="@color/black_85"
                     app:layout_constraintEnd_toStartOf="@+id/view40"
                     app:layout_constraintStart_toEndOf="@id/presentGigcheckInIV"

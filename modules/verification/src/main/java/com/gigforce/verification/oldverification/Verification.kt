@@ -71,33 +71,33 @@ class Verification: Fragment() {
         //TODO Instead of toast msg we can put text msg on top of missing edit text or turn the edit text box to red!
         if (address1.isEmpty())
         {
-            showToast(getString(R.string.enter_add1))
+            showToast(getString(R.string.enter_add1_veri))
             layout?.add_veri_address_line1?.highlightColor = resources.getColor(R.color.colorAccent)
             return false
         }
         else if (address2.isEmpty())
         {
-            showToast(getString(R.string.emter_add2))
+            showToast(getString(R.string.emter_add2_veri))
             return false
         }
         else{
             match = Regexes.ADDRESS.matcher("$address1 $address2");
             if(!match.matches()) {
-                showToast(getString(R.string.enter_valid_add1_add2))
+                showToast(getString(R.string.enter_valid_add1_add2_veri))
                 Log.d("Verification: ", "$address1 $address2")
                 return false
             }
         }
         if(city.isEmpty())
         {
-            showToast(getString(R.string.enter_city))
+            showToast(getString(R.string.enter_city_veri))
             return false
         }
         else
         {
             match = Regexes.CITY_STATE.matcher(city);
             if(!match.matches()) {
-                showToast(getString(R.string.enter_valid_city))
+                showToast(getString(R.string.enter_valid_city_veri))
                 Log.d("Verification: ", city)
                 return false
             }
@@ -105,14 +105,14 @@ class Verification: Fragment() {
 
         if(state.isEmpty())
         {
-            showToast(getString(R.string.enter_state))
+            showToast(getString(R.string.enter_state_veri))
             return false
         }
         else
         {
             match = Regexes.CITY_STATE.matcher(state);
             if(!match.matches()) {
-                showToast(getString(R.string.enter_valid_state))
+                showToast(getString(R.string.enter_valid_state_veri))
                 Log.d("Verification: ", state)
                 return false
             }
@@ -120,14 +120,14 @@ class Verification: Fragment() {
 
         if(pincode.isEmpty())
         {
-            showToast(getString(R.string.enter_pincode))
+            showToast(getString(R.string.enter_pincode_veri))
             return false
         }
         else
         {
             match = Regexes.PINCODE.matcher(pincode);
             if(!match.matches()) {
-                showToast(getString(R.string.enter_valid_pincode))
+                showToast(getString(R.string.enter_valid_pincode_veri))
                 Log.d("Verification: ", pincode)
                 return false
             }
@@ -166,7 +166,7 @@ class Verification: Fragment() {
             //TODO Is this check needed?
             //if(!areValid)
             {
-                    showToast(getString(R.string.fill_missing_fileds));
+                    showToast(getString(R.string.fill_missing_fileds_veri));
             }
             else{
                 addNewContact()

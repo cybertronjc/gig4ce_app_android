@@ -72,7 +72,7 @@ class AddPanCardInfoFragment : Fragment(), SelectImageSourceBottomSheetActionLis
     }
 
     private fun initViews() {
-        panImageHolder.setDocumentUploadLabel(getString(R.string.upload_pan_card))
+        panImageHolder.setDocumentUploadLabel(getString(R.string.upload_pan_card_veri))
         panImageHolder.setDocumentUploadSubLabel(getString(R.string.please_upload_your_pan_veri))
 //        panImageHolder.documentUploadLabelTV.text = getString(R.string.upload_pan_card)
 //        panImageHolder.documentUploadSubLabelTV.text = getString(R.string.please_upload_your_pan)

@@ -33,6 +33,8 @@ import com.gigforce.core.AppConstants
 import com.gigforce.core.StringConstants
 import com.gigforce.core.datamodels.verification.BankDetailsDataModel
 import com.gigforce.core.di.interfaces.IBuildConfig
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.core.utils.VerificationValidations
@@ -119,8 +121,8 @@ class BankAccountFragment : Fragment(),
 
     private fun initViews() {
         viewBinding.toplayoutblock.setIdonthaveDocContent(
-            resources.getString(R.string.no_doc_title_bank),
-            resources.getString(R.string.no_doc_subtitle_bank)
+            resources.getString(R.string.no_doc_title_bank_veri),
+            resources.getString(R.string.no_doc_subtitle_bank_veri)
         )
 
     }
@@ -177,8 +179,8 @@ class BankAccountFragment : Fragment(),
                     if (!it.accountNumber.isNullOrBlank() || !it.ifscCode.isNullOrBlank() || !it.bankName.isNullOrBlank()) {
                         viewBinding.toplayoutblock.uploadStatusLayout(
                             AppConstants.UPLOAD_SUCCESS,
-                            getString(R.string.upload_success),
-                            getString(R.string.bank_info_success)
+                            getString(R.string.upload_success_veri),
+                            getString(R.string.bank_info_success_veri)
                         )
                         if (!it.accountNumber.isNullOrBlank())
                             viewBinding.bankAccNumberItl.editText?.setText(it.accountNumber)
@@ -189,18 +191,18 @@ class BankAccountFragment : Fragment(),
                     } else {
                         viewBinding.toplayoutblock.uploadStatusLayout(
                             AppConstants.UNABLE_TO_FETCH_DETAILS,
-                            getString(R.string.unable_to_fetch_info),
-                            getString(R.string.enter_bank_details_manually)
+                            getString(R.string.unable_to_fetch_info_veri),
+                            getString(R.string.enter_bank_details_manually_veri)
                         )
 
                     }
                 } else {
                     viewBinding.toplayoutblock.uploadStatusLayout(
                         AppConstants.UNABLE_TO_FETCH_DETAILS,
-                        getString(R.string.unable_to_fetch_info),
-                        getString(R.string.enter_bank_details_manually)
+                        getString(R.string.unable_to_fetch_info_veri),
+                        getString(R.string.enter_bank_details_manually_veri)
                     )
-                    showToast(getString(R.string.ocr_status) + it.message)
+                    showToast(getString(R.string.ocr_status_veri) + it.message)
                 }
             }
             ocrOrVerificationRquested = false
@@ -242,8 +244,8 @@ class BankAccountFragment : Fragment(),
         viewBinding.belowLayout.gone()
         viewBinding.toplayoutblock.toggleChangeTextView(false)
         viewBinding.toplayoutblock.setVerificationSuccessfulView(
-            getString(R.string.bank_verification_pending),
-            getString(R.string.verifying)
+            getString(R.string.bank_verification_pending_veri),
+            getString(R.string.verifying_veri)
         )
         var list = ArrayList<KYCImageModel>()
         bankDetailsDataModel.passbookImagePath?.let {
@@ -267,14 +269,14 @@ class BankAccountFragment : Fragment(),
         viewBinding.confirmBeneficiaryLayout.gone()
         viewBinding.toplayoutblock.uploadStatusLayout(
             AppConstants.UPLOAD_SUCCESS,
-            getString(R.string.verification_completed),
-            getString(R.string.bank_details_verified)
+            getString(R.string.verification_completed_veri),
+            getString(R.string.bank_details_verified_veri)
         )
         viewBinding.submitButton.visible()
         viewBinding.submitButton.text = "Next"
         viewBinding.submitButton.isEnabled = true
         viewBinding.progressBar.gone()
-        viewBinding.toplayoutblock.setVerificationSuccessfulView(getString(R.string.bank_verified))
+        viewBinding.toplayoutblock.setVerificationSuccessfulView(getString(R.string.bank_verified_veri))
 
         var list = ArrayList<KYCImageModel>()
         bankDetailsDataModel?.passbookImagePath?.let {
@@ -306,8 +308,8 @@ class BankAccountFragment : Fragment(),
                                 verifiedStatusViews(null)
                                 viewBinding.toplayoutblock.uploadStatusLayout(
                                     AppConstants.UNABLE_TO_FETCH_DETAILS,
-                                    getString(R.string.verification_progress),
-                                    getString(R.string.verified_soon)
+                                    getString(R.string.verification_progress_veri),
+                                    getString(R.string.verified_soon_veri)
                                 )
                                 viewBinding.toplayoutblock.setVerificationSuccessfulView("", "")
 //                                viewBinding.editBankDetail.visible()
@@ -328,8 +330,8 @@ class BankAccountFragment : Fragment(),
                     resetInitializeViews()
                     viewBinding.toplayoutblock.uploadStatusLayout(
                         AppConstants.DETAILS_MISMATCH,
-                        getString(R.string.verification_failed),
-                        getString(R.string.details_incorrect)
+                        getString(R.string.verification_failed_veri),
+                        getString(R.string.details_incorrect_veri)
                     )
                     var listData = setAlreadyfilledData(obj, true)
                     if (listData.isEmpty()) {
@@ -415,8 +417,8 @@ class BankAccountFragment : Fragment(),
         viewBinding.confirmBeneficiaryLayout.gone()
         viewBinding.toplayoutblock.toggleChangeTextView(false)
         viewBinding.toplayoutblock.setVerificationSuccessfulView(
-            getString(R.string.bank_account),
-            getString(R.string.you_need_to_upload)
+            getString(R.string.bank_account_veri),
+            getString(R.string.you_need_to_upload_veri)
         )
         initializeImages()
         viewBinding.toplayoutblock.resetAllViews()
@@ -436,8 +438,8 @@ class BankAccountFragment : Fragment(),
                 viewBinding.progressBar.gone()
                 viewBinding.beneficiaryName.text = beneficiary
                 viewBinding.toplayoutblock.setVerificationSuccessfulView(
-                    getString(R.string.bank_verification_pending),
-                    getString(R.string.verifying)
+                    getString(R.string.bank_verification_pending_veri),
+                    getString(R.string.verifying_veri)
                 )
                 var list = ArrayList<KYCImageModel>()
                 obj.passbookImagePath?.let {
@@ -611,7 +613,7 @@ class BankAccountFragment : Fragment(),
         }
         viewBinding.notConfirmButton.setOnClickListener {
             MaterialAlertDialogBuilder(requireContext())
-                .setTitle(getString(R.string.want_to_reenter_bank_details))
+                .setTitle(getString(R.string.want_to_reenter_bank_details_veri))
                 .setPositiveButton(getString(R.string.yes_veri)) { _, _ ->
                     viewModel.setVerificationStatusStringToBlank()
                 }
@@ -688,7 +690,7 @@ class BankAccountFragment : Fragment(),
         if (hasStoragePermissions())
             VerificationClickOrSelectImageBottomSheet.launch(
                 parentFragmentManager,
-                getString(R.string.upload_passbook),
+                getString(R.string.upload_passbook_veri),
                 this
             )
         else
@@ -754,11 +756,11 @@ class BankAccountFragment : Fragment(),
                 if (allPermsGranted)
                     VerificationClickOrSelectImageBottomSheet.launch(
                         parentFragmentManager,
-                        getString(R.string.upload_passbook),
+                        getString(R.string.upload_passbook_veri),
                         this
                     )
                 else {
-                    showToast(getString(R.string.grant_storage_permission))
+                    showToast(getString(R.string.grant_storage_permission_veri))
                 }
             }
         }
@@ -876,7 +878,7 @@ class BankAccountFragment : Fragment(),
 
     private fun reContinueDialog() {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle(getString(R.string.want_to_wait))
+            .setTitle(getString(R.string.want_to_wait_veri))
             .setPositiveButton(getString(R.string.yes_veri)) { dialog, _ ->
                 dialog.dismiss()
             }

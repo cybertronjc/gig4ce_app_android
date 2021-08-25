@@ -154,7 +154,7 @@ class AlternateAddressUpload : Fragment(), IOnBackPressedOverride {
                         photoCropIntent.putExtra("folder", "/verification/dl/")
                         Toast.makeText(
                             context,
-                            getString(R.string.upload_dl),
+                            getString(R.string.upload_dl_veri),
                             Toast.LENGTH_LONG
                         ).show()
                     }
@@ -165,7 +165,7 @@ class AlternateAddressUpload : Fragment(), IOnBackPressedOverride {
                         photoCropIntent.putExtra("folder", "/verification/passport/")
                         Toast.makeText(
                             context,
-                            getString(R.string.upload_passport),
+                            getString(R.string.upload_passport_veri),
                             Toast.LENGTH_LONG
                         ).show()
                     }
@@ -176,7 +176,7 @@ class AlternateAddressUpload : Fragment(), IOnBackPressedOverride {
                         photoCropIntent.putExtra("folder", "/verification/voterid/")
                         Toast.makeText(
                             context,
-                            getString(R.string.upload_voterid),
+                            getString(R.string.upload_voterid_veri),
                             Toast.LENGTH_LONG
                         ).show()
                     }
@@ -186,7 +186,7 @@ class AlternateAddressUpload : Fragment(), IOnBackPressedOverride {
             override fun onNothingSelected(parent: AdapterView<*>) {
                 Toast.makeText(
                     context,
-                    getString(R.string.select_which_doc_to_be_uploaded),
+                    getString(R.string.select_which_doc_to_be_uploaded_veri),
                     Toast.LENGTH_LONG
                 ).show()
             }
@@ -204,7 +204,7 @@ class AlternateAddressUpload : Fragment(), IOnBackPressedOverride {
             if (ddFront.drawable == null) {
                 Toast.makeText(
                     this.context,
-                    getString(R.string.upload_front_side_first),
+                    getString(R.string.upload_front_side_first_veri),
                     Toast.LENGTH_LONG
                 ).show()
             } else {
@@ -243,7 +243,7 @@ class AlternateAddressUpload : Fragment(), IOnBackPressedOverride {
             } else {
                 Toast.makeText(
                     this.context,
-                    getString(R.string.upload_doc_before_proceeding),
+                    getString(R.string.upload_doc_before_proceeding_veri),
                     Toast.LENGTH_LONG
                 ).show()
             }
@@ -268,7 +268,7 @@ class AlternateAddressUpload : Fragment(), IOnBackPressedOverride {
                         .addOnSuccessListener {
                             Toast.makeText(
                                 this.context,
-                                getString(R.string.document_successfully_uploaded),
+                                getString(R.string.document_successfully_uploaded_veri),
                                 Toast.LENGTH_SHORT
                             ).show()
                             Log.d("REPOSITORY", "Aadhaar added successfully!")
@@ -277,7 +277,7 @@ class AlternateAddressUpload : Fragment(), IOnBackPressedOverride {
                             Log.d("Repository", exception.toString())
                             Toast.makeText(
                                 this.context,
-                                getString(R.string.failure_retry),
+                                getString(R.string.failure_retry_veri),
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -289,7 +289,7 @@ class AlternateAddressUpload : Fragment(), IOnBackPressedOverride {
                 }
                 )
         } else {
-            UtilMethods.showLongToast(this.context!!, getString(R.string.no_internet))
+            UtilMethods.showLongToast(this.context!!, getString(R.string.no_internet_veri))
         }
     }
 

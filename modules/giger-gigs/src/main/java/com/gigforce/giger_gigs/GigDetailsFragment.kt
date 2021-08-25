@@ -114,11 +114,11 @@ class GigDetailsFragment : Fragment(),
                         viewModel.currentGig!!.gigRequirements.size
                     )
                 )
-                gigRequirementsSeeMoreTV.text = getString(R.string.plus_see_less)
+                gigRequirementsSeeMoreTV.text = getString(R.string.plus_see_less_giger_gigs)
             } else {
                 //Expanded
                 gig_req_container.removeViews(4, gig_req_container.childCount - 4)
-                gigRequirementsSeeMoreTV.text = getString(R.string.plus_see_more)
+                gigRequirementsSeeMoreTV.text = getString(R.string.plus_see_more_giger_gigs)
             }
         }
 
@@ -386,7 +386,7 @@ class GigDetailsFragment : Fragment(),
             gig_chip_group,
             false
         ) as Chip
-        chip.text = if (gig.isMonthlyGig) getString(R.string.monthly) else getString(R.string.daily)
+        chip.text = if (gig.isMonthlyGig) getString(R.string.monthly_giger_gigs) else getString(R.string.daily_giger_gigs)
         gig_chip_group.addView(chip)
 
 
@@ -536,7 +536,7 @@ class GigDetailsFragment : Fragment(),
                 true
             }
             R.id.action_share -> {
-                showToast(getString(R.string.under_development))
+                showToast(getString(R.string.under_development_giger_gigs))
                 true
             }
             R.id.action_decline_gig -> {
@@ -547,9 +547,9 @@ class GigDetailsFragment : Fragment(),
                     //Past or ongoing gig
 
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage(getString(R.string.cannot_decline_past_gigs))
-                        .setPositiveButton(getString(R.string.okay_text)) { _, _ -> }
+                        .setTitle(getString(R.string.alert_giger_gigs))
+                        .setMessage(getString(R.string.cannot_decline_past_gigs_giger_gigs))
+                        .setPositiveButton(getString(R.string.okay_text_giger_gigs)) { _, _ -> }
                         .show()
 
                     return true

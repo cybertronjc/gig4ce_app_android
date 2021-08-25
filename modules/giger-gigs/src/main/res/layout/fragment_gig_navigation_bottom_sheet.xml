@@ -36,7 +36,7 @@
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/sheetEdge"
-            android:text="@string/_1_hour_20_mins" />
+            android:text="@string/_1_hour_20_mins_giger_gigs" />
 
 
         <TextView
@@ -50,7 +50,7 @@
             android:letterSpacing="0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/estimateTimeToReachTV"
-            android:text="@string/to_reach_tarang_shopping_complex" />
+            android:text="@string/to_reach_tarang_shopping_complex_giger_gigs" />
 
 
         <View
@@ -80,7 +80,7 @@
             android:layout_marginTop="15dp"
             android:letterSpacing="0"
 
-            android:text="@string/contact_person"
+            android:text="@string/contact_person_giger_gigs"
             android:textColor="@color/upcoming_gig_time"
             android:textSize="12sp"
             app:layout_constraintStart_toEndOf="@id/contactPersonIV"
@@ -149,7 +149,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
             android:letterSpacing="0"
-            android:text="@string/contact_person"
+            android:text="@string/contact_person_giger_gigs"
             android:textColor="@color/black_85"
             android:textSize="12sp"
             app:layout_constraintEnd_toStartOf="@+id/callCardView"
@@ -174,7 +174,7 @@
             android:layout_marginTop="16dp"
             android:fontFamily="@font/lato_bold"
             android:letterSpacing="0.02"
-            android:text="@string/location"
+            android:text="@string/location_giger_gigs"
             android:textColor="#d9000000"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -204,7 +204,7 @@
             android:layout_height="69dp"
             android:layout_marginTop="20dp"
             app:layout_constraintTop_toBottomOf="@+id/locationImageScrollView"
-            android:text="@string/start_navigation" />
+            android:text="@string/start_navigation_giger_gigs" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

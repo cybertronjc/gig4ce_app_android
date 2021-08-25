@@ -114,7 +114,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/license_number"
+            android:text="@string/license_number_veri"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/dobET" />
 
@@ -192,7 +192,7 @@
                 android:id="@+id/areaLabel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/area"
+                android:text="@string/area_veri"
                 app:layout_constraintEnd_toStartOf="@+id/locationLabel"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

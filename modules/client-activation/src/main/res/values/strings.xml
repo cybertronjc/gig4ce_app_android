@@ -73,5 +73,32 @@
     <string name="chat_client">Chat</string>
     <string name="call_client">Call</string>
     <string name="i_have_submitted_all_documents_to_team_leader_client">I have submitted all Documents to team leader.</string>
-
+    <string name="_21_north_driver_client">21 North - Driver</string>
+    <string name="you_have_successfully_completed_all_the_check_points_required_for_the_application_you_can_submit_yourapplication_now_client">You have successfully completed all the check- -points required for the application. You can submit yourApplication now.</string>
+    <string name="submit_your_application_client">Submit your Application</string>
+    <string name="review_your_application_client">Review your Application</string>
+    <string name="driving_license_is_mandatory_for_the_driver_role_you_will_not_be_eligible_to_submit_application_client">Driving License is mandatory for the Driver role. You will not be eligible to submit application.</string>
+    <string name="dl_hint_square_bracket_client">Driving License Number*\n(Accepted DL formats are : RJ-13/DLC/12/123456, RJ1320120123456, RJ-052009123456, and GJ18N2012123456. For other formats please call your supervisor for help.)</string>
+    <string name="enter_driving_license_number_client">Enter Driving License Number</string>
+    <string name="application_status_client">Application Status</string>
+    <string name="requirements_for_the_role_client">Requirements for the role</string>
+    <string name="please_enter_the_otp_received_on_driving_school_parnter_client">Please enter the OTP received on Driving School parnter</string>
+    <string name="confirm_otp_client">Confirm OTP</string>
+    <string name="resend_otp_client">Resend OTP</string>
+    <string name="generate_otp_client">Generate OTP</string>
+    <string name="upload_driving_certificate_client">Upload Driving Certificate</string>
+    <string name="schedule_test_client">Schedule test</string>
+    <string name="upload_driving_license_client">Upload Driving License</string>
+    <string name="questionnaire_client">Questionnaire</string>
+    <string name="driving_license_client">Driving License</string>
+    <string name="edit_client">Edit</string>
+    <string name="do_you_have_driving_license_client">Do you have Driving License ?</string>
+    <string name="yes_i_have_driving_license_client">Yes, I have Driving License</string>
+    <string name="no_i_don_t_have_driving_license_client">No, I don\'t have Driving License</string>
+    <string name="please_confirm_the_following_information_client">Please confirm the following information</string>
+    <string name="do_you_have_pan_card_client">Do you have PAN Card ?</string>
+    <string name="yes_i_have_pan_card_client">Yes, I have Pan Card.</string>
+    <string name="no_i_don_t_have_pan_card_client">No, I don\'t have Pan Card.</string>
+    <string name="under_verification">Under Verification</string>
+    <string name="learning">Learning</string>
 </resources>

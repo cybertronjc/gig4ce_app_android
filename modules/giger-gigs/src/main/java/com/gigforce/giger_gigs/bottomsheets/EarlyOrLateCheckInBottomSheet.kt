@@ -105,33 +105,33 @@ class EarlyOrLateCheckInBottomSheet : BottomSheetDialogFragment() {
 
         when (checkInType) {
             CHECK_IN_TYPE_EARLY -> {
-                title_bar.text = getString(R.string.early_checkin)
-                actual_checkin_time_tv.text = getString(R.string.gig_checkin)
-                check_in_label.text = getString(R.string.checking_in_early)
+                title_bar.text = getString(R.string.early_checkin_giger_gigs)
+                actual_checkin_time_tv.text = getString(R.string.gig_checkin_giger_gigs)
+                check_in_label.text = getString(R.string.checking_in_early_giger_gigs)
 
                 your_checkin_layout.gone()
             }
             CHECK_IN_TYPE_LATE -> {
-                title_bar.text = getString(R.string.late_checkin)
-                actual_checkin_time_tv.text = getString(R.string.gig_checkin)
-                your_checkin_time_tv.text = getString(R.string.your_checkin)
-                check_in_label.text = getString(R.string.checking_in_late)
+                title_bar.text = getString(R.string.late_checkin_giger_gigs)
+                actual_checkin_time_tv.text = getString(R.string.gig_checkin_giger_gigs)
+                your_checkin_time_tv.text = getString(R.string.your_checkin_giger_gigs)
+                check_in_label.text = getString(R.string.checking_in_late_giger_gigs)
 
                 your_checkin_layout.visible()
             }
             CHECK_OUT_TYPE_EARLY -> {
-                title_bar.text = getString(R.string.early_checkout)
-                actual_checkin_time_tv.text = getString(R.string.gig_checkout)
+                title_bar.text = getString(R.string.early_checkout_giger_gigs)
+                actual_checkin_time_tv.text = getString(R.string.gig_checkout_giger_gigs)
 
-                check_in_label.text = getString(R.string.checking_out_early)
+                check_in_label.text = getString(R.string.checking_out_early_giger_gigs)
                 your_checkin_layout.gone()
             }
             CHECK_OUT_TYPE_LATE -> {
-                title_bar.text = getString(R.string.late_checkout)
-                actual_checkin_time_tv.text = getString(R.string.gig_checkout)
-                your_checkin_time_tv.text = getString(R.string.your_checkin)
+                title_bar.text = getString(R.string.late_checkout_giger_gigs)
+                actual_checkin_time_tv.text = getString(R.string.gig_checkout_giger_gigs)
+                your_checkin_time_tv.text = getString(R.string.your_checkin_giger_gigs)
 
-                check_in_label.text = getString(R.string.checking_out_late_notified)
+                check_in_label.text = getString(R.string.checking_out_late_notified_giger_gigs)
                 your_checkin_layout.visible()
             }
             else -> {

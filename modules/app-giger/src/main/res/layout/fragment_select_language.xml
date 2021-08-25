@@ -49,7 +49,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
                 android:textSize="20sp"
-                android:text="@string/select_language" />
+                android:text="@string/select_language_app_giger" />
 <!--            <TextView-->
 <!--                android:id="@+id/steps_text"-->
 <!--                android:layout_width="wrap_content"-->
@@ -108,7 +108,7 @@
             android:fontFamily="@font/lato"
             android:lineHeight="17sp"
             android:lineSpacingExtra="3sp"
-            android:text="@string/glad_to_know_about_your_interest_give_a_bit_more_details_to_show_best_gigs_to_you"
+            android:text="@string/glad_to_know_about_your_interest_give_a_bit_more_details_to_show_best_gigs_to_you_app_giger"
             android:textColor="#333333"
             android:textSize="14sp"
             android:textStyle="normal" />

@@ -179,7 +179,7 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
                 }
 
                 is Lce.Error -> {
-                    showToast(getString(R.string.error_loading_data))
+                    showToast(getString(R.string.error_loading_data_giger_gigs))
                     progressBar.visibility = View.GONE
                 }
             }

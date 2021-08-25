@@ -355,5 +355,8 @@
     <string name="permanent_address_amb">Permanent Address</string>
     <string name="crop_and_rotate_amb">Crop or rotate</string>
     <string name="to_earn_incentive_for_the_profile_created_atleast_one_document_is_mandatory_amb">To earn incentive for the profile created, atleast One document is mandatory</string>
-
+    <string name="upload_aadhar_card_back_side_new_amb">Upload aadhar card back side</string>
+    <string name="do_you_have_pan_card">Do you have PAN Card ?</string>
+    <string name="yes_i_have_pan_card">Yes, I have Pan Card.</string>
+    <string name="no_i_don_t_have_pan_card">No, I don\'t have Pan Card.</string>
 </resources>

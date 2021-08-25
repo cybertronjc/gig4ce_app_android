@@ -73,5 +73,17 @@
     <string name="next_giger_app_giger">Next</string>
     <string name="do_you_really_want_to_change_availability_app_giger">Do you really want to change availability</string>
     <string name="dialog_content_app_giger">Dialog Content</string>
-
+    <string name="retail_sale_executive_app_giger">Retail sales executive</string>
+    <string name="okay_app_giger">OKAY</string>
+    <string name="not_working_app_giger">Not working</string>
+    <string name="marked_working_app_giger">Marked working</string>
+    <string name="version_app_giger">version</string>
+    <string name="video_resume_pending_html_app_giger"><![CDATA[Your Video resume is Pending , <font color=\'#060606\'><u>Click here</u></font> to  complete.]]></string>
+    <string name="select_language_app_giger">Language</string>
+    <string name="glad_to_know_about_your_interest_give_a_bit_more_details_to_show_best_gigs_to_you_app_giger">Glad to know about your interest. Give a bit more details to show best Gigs to you</string>
+    <string name="explore_gigs_app_giger">Explore Gigs</string>
+    <string name="new_version_available_app_giger">New Version Available</string>
+    <string name="new_version_available_detail_app_giger">Please, update app to new version to continue reposting</string>
+    <string name="cancel_update_app_giger">Cancel</string>
+    <string name="update_now_app_giger">Update now</string>
 </resources>

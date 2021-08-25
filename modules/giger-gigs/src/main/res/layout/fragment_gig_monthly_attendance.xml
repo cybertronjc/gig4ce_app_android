@@ -64,7 +64,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toEndOf="@id/calendar_iv"
             android:layout_marginStart="8dp"
-            android:text="@string/overview" />
+            android:text="@string/overview_giger_gigs" />
 
 
         <TextView
@@ -78,7 +78,7 @@
             android:fontFamily="@font/lato"
             app:layout_constraintTop_toBottomOf="@id/calendar_iv"
             app:layout_constraintStart_toStartOf="parent"
-            android:text="@string/total_present_days" />
+            android:text="@string/total_present_days_giger_gigs" />
 
         <TextView
             android:id="@+id/total_days_tv"
@@ -105,7 +105,7 @@
             android:fontFamily="@font/lato"
             app:layout_constraintTop_toBottomOf="@id/total_days_tv"
             app:layout_constraintStart_toStartOf="parent"
-            android:text="@string/total_absent_days" />
+            android:text="@string/total_absent_days_giger_gigs" />
 
         <TextView
             android:id="@+id/total_working_days_tv"
@@ -119,7 +119,7 @@
             app:layout_constraintTop_toBottomOf="@id/total_days_tv"
             app:layout_constraintStart_toEndOf="@id/total_days_label"
             android:layout_marginStart="18dp"
-            android:text="@string/_0_days" />
+            android:text="@string/_0_days_giger_gigs" />
 
 
 
@@ -141,7 +141,7 @@
             style="@style/AttendanceSingleChoiceChip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/all"
+            android:text="@string/all_giger_gigs"
             android:fontFamily="@font/lato_bold"
             android:textAlignment="center"
             android:minWidth="82dp"
@@ -154,7 +154,7 @@
             style="@style/AttendanceSingleChoiceChip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/worked"
+            android:text="@string/worked_giger_gigs"
             android:fontFamily="@font/lato_bold"
             android:textAlignment="center"
             android:minWidth="82dp"
@@ -167,7 +167,7 @@
             style="@style/AttendanceSingleChoiceChip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/off"
+            android:text="@string/off_giger_gigs"
             android:fontFamily="@font/lato_bold"
             android:textAlignment="center"
             android:minWidth="82dp"

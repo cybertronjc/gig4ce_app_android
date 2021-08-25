@@ -22,7 +22,7 @@
             android:layout_marginTop="22dp"
             android:fontFamily="@font/lato_bold"
             android:letterSpacing="0"
-            android:text="@string/driving_license"
+            android:text="@string/driving_license_veri"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintLeft_toLeftOf="parent"

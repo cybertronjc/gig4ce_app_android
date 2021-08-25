@@ -7,7 +7,6 @@ import android.widget.FrameLayout
 import com.gigforce.giger_gigs.R
 import com.gigforce.giger_gigs.databinding.ItemViewTlLoginReportViewBinding
 import com.gigforce.giger_gigs.models.BusinessData
-import com.gigforce.giger_gigs.models.BusinessDataItem
 
 class DailyLoginReportItemView(
     context: Context,
@@ -26,17 +25,17 @@ class DailyLoginReportItemView(
     init {
         viewBinding.apply {
 
-            this.activeRidersLayout.titleTextview.text = context.getString(R.string.active_riders)
-            this.loginLayout.titleTextview.text = context.getString(R.string.login)
-            this.absentLayout.titleTextview.text = context.getString(R.string.absent)
-            this.resignedLayout.titleTextview.text = context.getString(R.string.resigned)
-            this.newOnboardingLayout.titleTextview.text = context.getString(R.string.new_onboarding)
-            this.inTrainingLayout.titleTextview.text = context.getString(R.string.in_training)
-            this.newLoginLayout.titleTextview.text = context.getString(R.string.new_login)
-            this.openPositionsLayout.titleTextview.text = context.getString(R.string.open_positions)
-            this.tomorrowLineupLayout.titleTextview.text = context.getString(R.string.lineup_for_tomorrow)
+            this.activeRidersLayout.titleTextview.text = context.getString(R.string.active_riders_giger_gigs)
+            this.loginLayout.titleTextview.text = context.getString(R.string.login_giger_gigs)
+            this.absentLayout.titleTextview.text = context.getString(R.string.absent_giger_gigs)
+            this.resignedLayout.titleTextview.text = context.getString(R.string.resigned_giger_gigs)
+            this.newOnboardingLayout.titleTextview.text = context.getString(R.string.new_onboarding_giger_gigs)
+            this.inTrainingLayout.titleTextview.text = context.getString(R.string.in_training_giger_gigs)
+            this.newLoginLayout.titleTextview.text = context.getString(R.string.new_login_giger_gigs)
+            this.openPositionsLayout.titleTextview.text = context.getString(R.string.open_positions_giger_gigs)
+            this.tomorrowLineupLayout.titleTextview.text = context.getString(R.string.lineup_for_tomorrow_giger_gigs)
             this.expectedLoginTommorrowLayout.titleTextview.text =
-                context.getString(R.string.expencted_logins)
+                context.getString(R.string.expencted_logins_giger_gigs)
         }
     }
 

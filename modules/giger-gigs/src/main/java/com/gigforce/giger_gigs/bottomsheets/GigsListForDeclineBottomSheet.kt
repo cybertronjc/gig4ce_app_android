@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.Toast
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -127,7 +126,7 @@ class GigsListForDeclineBottomSheet : BottomSheetDialogFragment(),
                     this@GigsListForDeclineBottomSheet
                 )
             } else {
-                Toast.makeText(requireContext(), getString(R.string.select_gig), Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), getString(R.string.select_gig_giger_gigs), Toast.LENGTH_SHORT)
                     .show()
             }
         }
@@ -183,13 +182,13 @@ class GigsListForDeclineBottomSheet : BottomSheetDialogFragment(),
             content.size == 1 -> {
                 gig_error.gone()
                 decline_slider_btn.visible()
-                getString(R.string.no_new_gigs_will_e_assigned)
+                getString(R.string.no_new_gigs_will_e_assigned_giger_gigs)
             }
             else -> {
                 gig_error.gone()
                 decline_slider_btn.visible()
 
-                getString(R.string.no_new_gig_assigned) + content.size + getString(R.string.gigs_assigned)
+                getString(R.string.no_new_gig_assigned_giger_gigs) + content.size + getString(R.string.gigs_assigned_giger_gigs)
             }
         }
 
@@ -204,7 +203,7 @@ class GigsListForDeclineBottomSheet : BottomSheetDialogFragment(),
     }
 
     override fun gigDeclined() {
-        Toast.makeText(requireContext(), getString(R.string.gig_declined), Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), getString(R.string.gig_declined_giger_gigs), Toast.LENGTH_SHORT).show()
     }
 
     private fun disableSubmitButton() {

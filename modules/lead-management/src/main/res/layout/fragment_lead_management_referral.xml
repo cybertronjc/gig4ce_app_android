@@ -41,7 +41,7 @@
                 android:layout_marginEnd="@dimen/size_46"
                 android:gravity="center_horizontal"
                 android:letterSpacing="0"
-                android:text="@string/share_the_joy_of_working_with_gigforce_and_invite_your_friends"
+                android:text="@string/share_the_joy_of_working_with_gigforce_and_invite_your_friends_lead"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"

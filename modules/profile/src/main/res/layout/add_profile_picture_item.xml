@@ -103,7 +103,7 @@
         android:enabled="true"
         android:fontFamily="@font/lato"
         android:gravity="center"
-        android:text="@string/next_camel_case"
+        android:text="@string/next_camel_case_profile"
         android:textAllCaps="false"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"

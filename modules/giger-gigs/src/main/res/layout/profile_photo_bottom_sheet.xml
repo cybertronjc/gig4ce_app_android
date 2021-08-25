@@ -33,7 +33,7 @@
         android:fontFamily="@font/lato_bold"
         android:textSize="22sp"
         android:textStyle="bold"
-        android:text="@string/document_picture"
+        android:text="@string/document_picture_giger_gigs"
         android:textColor="@color/black"/>
 
     <TextView
@@ -47,7 +47,7 @@
 
         android:textSize="17sp"
         android:textColor="@color/text_color"
-        android:text="@string/update_document_picture" />
+        android:text="@string/update_document_picture_giger_gigs" />
 
     <View style="@style/Divider"
         android:layout_marginRight="20dp"
@@ -65,6 +65,6 @@
         android:fontFamily="@font/lato_bold"
 
         android:textColor="@color/text_color"
-        android:text="@string/remove_document_picture" />
+        android:text="@string/remove_document_picture_giger_gigs" />
 
 </LinearLayout>

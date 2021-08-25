@@ -1,13 +1,9 @@
 package com.gigforce.giger_gigs.tl_login_report
 
 import android.app.DatePickerDialog
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.text.format.DateUtils
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.DatePicker
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
@@ -18,23 +14,17 @@ import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.navigation.INavigation
-import com.gigforce.core.utils.DateHelper
 import com.gigforce.core.utils.Lce
 import com.gigforce.giger_gigs.LoginSummaryConstants
 import com.gigforce.giger_gigs.R
 import com.gigforce.giger_gigs.adapters.OnTlReportItemSelectedListener
 import com.gigforce.giger_gigs.adapters.TLLoginReportAdapter
-import com.gigforce.giger_gigs.adapters.TLLoginSummaryAdapter
 import com.gigforce.giger_gigs.databinding.FragmentTlDailyLoginReportListBinding
-import com.gigforce.giger_gigs.databinding.TeamLeaderLoginDetailsFragmentBinding
 import com.gigforce.giger_gigs.models.DailyLoginReport
-import com.gigforce.giger_gigs.models.ListingTLModel
-import com.gigforce.giger_gigs.tl_login_details.views.OnTlItemSelectedListener
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.time.format.DateTimeFormatter
 import java.util.*
 import javax.inject.Inject
 
@@ -183,7 +173,7 @@ class TLDailyReportListFragment : BaseFragment2<FragmentTlDailyLoginReportListBi
                 }
 
                 is Lce.Error -> {
-                    showToast(getString(R.string.error_loading_data))
+                    showToast(getString(R.string.error_loading_data_giger_gigs))
                     progressBar.visibility = View.GONE
 
                     if(swipeToRefresh.isRefreshing)

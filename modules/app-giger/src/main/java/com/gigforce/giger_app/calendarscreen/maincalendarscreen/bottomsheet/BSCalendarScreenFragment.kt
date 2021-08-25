@@ -365,7 +365,7 @@ class BSCalendarScreenFragment : Fragment() {
 
 //        initializeAssessmentBottomSheet()
         application_version.text =
-            getString(R.string.version) + " " + sharedPreAndCommonUtilInterface.getCurrentVersion()
+            getString(R.string.version_app_giger) + " " + sharedPreAndCommonUtilInterface.getCurrentVersion()
         listener()
         initializeExploreByRole()
 //        initializeExploreByIndustry()
@@ -381,7 +381,7 @@ class BSCalendarScreenFragment : Fragment() {
         kyc_tv.text =
             Html.fromHtml(getString(R.string.kyc_not_done_app_giger))
         video_resume_tv.text =
-            Html.fromHtml(getString(R.string.video_resume_pending_html))
+            Html.fromHtml(getString(R.string.video_resume_pending_html_app_giger))
     }
 
     private fun listener() {

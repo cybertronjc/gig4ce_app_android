@@ -237,7 +237,7 @@ class PhotoCrop : AppCompatActivity() {
                 outputFileUri?.let { it -> startCrop(it) }
 
             } else {
-                Toast.makeText(this, getString(R.string.issue_capturing_image), Toast.LENGTH_LONG).show()
+                Toast.makeText(this, getString(R.string.issue_capturing_image_giger_gigs), Toast.LENGTH_LONG).show()
             }
         }
 
@@ -276,7 +276,7 @@ class PhotoCrop : AppCompatActivity() {
                             if (faces.size > 0) {
                                 Toast.makeText(
                                     this,
-                                    getString(R.string.face_detected),
+                                    getString(R.string.face_detected_giger_gigs),
                                     Toast.LENGTH_LONG
                                 ).show()
                                 upload(imageUriResultCrop, baos.toByteArray(), CLOUD_OUTPUT_FOLDER)
@@ -284,7 +284,7 @@ class PhotoCrop : AppCompatActivity() {
                             } else {
                                 Toast.makeText(
                                     this,
-                                    getString(R.string.something_seems_off),
+                                    getString(R.string.something_seems_off_giger_gigs),
                                     Toast.LENGTH_LONG
                                 ).show()
                             }
@@ -364,7 +364,7 @@ class PhotoCrop : AppCompatActivity() {
         options.setFreeStyleCropEnabled(false)
         options.setStatusBarColor(resources.getColor(R.color.topBarDark))
         options.setToolbarColor(resources.getColor(R.color.topBarDark))
-        options.setToolbarTitle(getString(R.string.crop_or_rotate))
+        options.setToolbarTitle(getString(R.string.crop_or_rotate_giger_gigs))
         return options
     }
 
@@ -442,7 +442,7 @@ class PhotoCrop : AppCompatActivity() {
                                     val thumbNail: String = it.metadata?.reference?.name.toString()
                                     updateViewModel(purpose, thumbNail, true)
                                     //loadImage(folder, fname)
-                                    Toast.makeText(this, getString(R.string.upload_success), Toast.LENGTH_LONG)
+                                    Toast.makeText(this, getString(R.string.upload_success_giger_gigs), Toast.LENGTH_LONG)
                                         .show()
                                     resultIntent.putExtra(
                                         "image_url",
@@ -455,7 +455,7 @@ class PhotoCrop : AppCompatActivity() {
                                 }
 
                             } else {
-                                Toast.makeText(this, getString(R.string.some_seems_off), Toast.LENGTH_LONG).show()
+                                Toast.makeText(this, getString(R.string.some_seems_off_giger_gigs), Toast.LENGTH_LONG).show()
 
                             }
                         } catch (e: Exception) {
@@ -474,7 +474,7 @@ class PhotoCrop : AppCompatActivity() {
                     }
                     progress_circular.visibility = View.GONE
                     //loadImage(folder, fname)
-                    Toast.makeText(this, getString(R.string.upload_success), Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, getString(R.string.upload_success_giger_gigs), Toast.LENGTH_LONG).show()
                 }
 
                 updateViewModel(purpose, fname, false)
@@ -632,7 +632,7 @@ class PhotoCrop : AppCompatActivity() {
         dialog.setCancelable(false)
         dialog.setContentView(R.layout.confirmation_custom_alert_type1)
         val titleDialog = dialog.findViewById(R.id.title) as TextView
-        titleDialog.text = getString(R.string.sure_to_remove_picture)
+        titleDialog.text = getString(R.string.sure_to_remove_picture_giger_gigs)
         val noBtn = dialog.findViewById(R.id.yes) as TextView
         noBtn.text = "No"
         val yesBtn = dialog.findViewById(R.id.cancel) as TextView

@@ -16,7 +16,6 @@ import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.Lce
-import com.gigforce.core.utils.Lse
 import com.gigforce.giger_gigs.LoginSummaryConstants
 import com.gigforce.giger_gigs.R
 import com.gigforce.giger_gigs.databinding.FragmentAddNewLoginReportBinding
@@ -163,11 +162,11 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
             })
 
             if(mode == LoginSummaryConstants.MODE_ADD)
-                this.setAppBarTitle(context.getString(R.string.add_login_report))
+                this.setAppBarTitle(context.getString(R.string.add_login_report_giger_gigs))
             else if(mode == LoginSummaryConstants.MODE_EDIT)
-                this.setAppBarTitle(context.getString(R.string.edit_login_report))
+                this.setAppBarTitle(context.getString(R.string.edit_login_report_giger_gigs))
             else
-                this.setAppBarTitle(context.getString(R.string.login_report))
+                this.setAppBarTitle(context.getString(R.string.login_report_giger_gigs))
         }
     }
 
@@ -177,7 +176,7 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
         submit.setOnClickListener {
             if (mode == LoginSummaryConstants.MODE_ADD) {
                 if (citySpinner.selectedItem.toString().isEmpty()) {
-                    showToast(getString(R.string.select_city_to_continue))
+                    showToast(getString(R.string.select_city_to_continue_giger_gigs))
                 } else {
                     //submit data
                     submitLoginSummary()
@@ -192,14 +191,14 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
         if (mode == LoginSummaryConstants.MODE_ADD) {
             cityJobProfileControls.visible()
             reportCityOverview.gone()
-            addDetailsLabel.text = getString(R.string.add_details)
+            addDetailsLabel.text = getString(R.string.add_details_giger_gigs)
             cityTextView.gone()
             bussinessTextView.gone()
             jobProfileTextView.gone()
 
             viewModel.getCities()
         } else if(mode == LoginSummaryConstants.MODE_EDIT) {
-            addDetailsLabel.text = getString(R.string.details)
+            addDetailsLabel.text = getString(R.string.details_giger_gigs)
             cityJobProfileControls.visible()
             reportCityOverview.gone()
 
@@ -232,7 +231,7 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
             }
         } else {
 
-            addDetailsLabel.text = getString(R.string.details)
+            addDetailsLabel.text = getString(R.string.details_giger_gigs)
             cityJobProfileControls.gone()
             reportCityOverview.visible()
 
@@ -279,9 +278,9 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
         ) {
 
             MaterialAlertDialogBuilder(requireContext())
-                .setTitle(getString(R.string.select_job_profile))
-                .setMessage(getString(R.string.select_job_please))
-                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                .setTitle(getString(R.string.select_job_profile_giger_gigs))
+                .setMessage(getString(R.string.select_job_please_giger_gigs))
+                .setPositiveButton(getString(R.string.okay_giger_gigs)) { _, _ -> }
                 .show()
             return
         }
@@ -291,9 +290,9 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
         ) {
 
             MaterialAlertDialogBuilder(requireContext())
-                .setTitle(getString(R.string.select_business))
-                .setMessage(getString(R.string.select_business_please))
-                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                .setTitle(getString(R.string.select_business_giger_gigs))
+                .setMessage(getString(R.string.select_business_please_giger_gigs))
+                .setPositiveButton(getString(R.string.okay_giger_gigs)) { _, _ -> }
                 .show()
             return
         }
@@ -310,9 +309,9 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
 
             if(!businessDataItem.atLeastOneFieldFilled()){
                 MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(getString(R.string.select_one_filed))
-                    .setMessage(getString(R.string.please_select_atleast_one_field))
-                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                    .setTitle(getString(R.string.select_one_filed_giger_gigs))
+                    .setMessage(getString(R.string.please_select_atleast_one_field_giger_gigs))
+                    .setPositiveButton(getString(R.string.okay_giger_gigs)) { _, _ -> }
                     .show()
                 return
             }
@@ -322,9 +321,9 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
                 businessDataItem.totalActive  < businessDataItem.loginToday){
 
                 MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(getString(R.string.login_count_greater))
-                    .setMessage(getString(R.string.login_could_be_greater))
-                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                    .setTitle(getString(R.string.login_count_greater_giger_gigs))
+                    .setMessage(getString(R.string.login_could_be_greater_giger_gigs))
+                    .setPositiveButton(getString(R.string.okay_giger_gigs)) { _, _ -> }
                     .show()
                 return
             }
@@ -334,9 +333,9 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
                 businessDataItem.totalActive < businessDataItem.absentToday){
 
                 MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(getString(R.string.absent_greater))
-                    .setMessage(getString(R.string.absent_gigers_could_greater))
-                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                    .setTitle(getString(R.string.absent_greater_giger_gigs))
+                    .setMessage(getString(R.string.absent_gigers_could_greater_giger_gigs))
+                    .setPositiveButton(getString(R.string.okay_giger_gigs)) { _, _ -> }
                     .show()
                 return
             }
@@ -347,9 +346,9 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
                 businessDataItem.totalActive < (businessDataItem.absentToday + businessDataItem.loginToday)){
 
                 MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(getString(R.string.absent_login_greater))
-                    .setMessage(getString(R.string.absent_login_could_greater))
-                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                    .setTitle(getString(R.string.absent_login_greater_giger_gigs))
+                    .setMessage(getString(R.string.absent_login_could_greater_giger_gigs))
+                    .setPositiveButton(getString(R.string.okay_giger_gigs)) { _, _ -> }
                     .show()
                 return
             }
@@ -434,7 +433,7 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
 
                 is BusinessAppViewState.ErrorInLoadingDataFromServer -> {
 
-                    showToast(getString(R.string.error_loading_businesses))
+                    showToast(getString(R.string.error_loading_businesses_giger_gigs))
                 }
             }
         })
@@ -453,9 +452,9 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
 
                     viewBinding.progressBar.visibility = View.GONE
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.unable_to_submit))
+                        .setTitle(getString(R.string.unable_to_submit_giger_gigs))
                         .setMessage(result.error)
-                        .setPositiveButton(getString(R.string.okay)){_,_ -> }
+                        .setPositiveButton(getString(R.string.okay_giger_gigs)){ _, _ -> }
                         .show()
                 }
                 Lce.Loading -> {

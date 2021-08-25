@@ -100,7 +100,7 @@ class PermissionRequiredBottomSheet : BottomSheetDialogFragment() {
 
         val imageToShow = imageToShow ?: R.drawable.ic_location_permission
         val permissionLabelText =
-            permissionLabelText ?: getString(R.string.permission_required)
+            permissionLabelText ?: getString(R.string.permission_required_giger_gigs)
 
         val permissionAndReasonText = buildSpannedString {
             permissionList.forEach {

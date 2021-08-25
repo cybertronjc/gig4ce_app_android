@@ -95,7 +95,7 @@ class AadhaarUpload : Fragment() {
         }
         AadhaarBack.setOnClickListener {
             if (AadhaarFront.drawable == null) {
-                showToast(getString(R.string.upload_front_side_first))
+                showToast(getString(R.string.upload_front_side_first_veri))
             } else {
                 photoCropIntent.putExtra("file", "adback.jpg")
 //                startActivityForResult(photoCropIntent, PHOTO_CROP)
@@ -113,7 +113,7 @@ class AadhaarUpload : Fragment() {
 //                findNavController().navigate(R.id.uploadDropDown)
                 navigation.navigateTo("verification/uploadDropDown")
             } else {
-                showToast(getString(R.string.upload_aadhar_before_processding))
+                showToast(getString(R.string.upload_aadhar_before_processding_veri))
             }
         }
     }
@@ -144,12 +144,12 @@ class AadhaarUpload : Fragment() {
                     firebaseDB.collection("Verification")
                         .document(uid).update("Aadhaar", FieldValue.arrayUnion(extractionOutput))
                         .addOnSuccessListener {
-                            showToast(getString(R.string.document_success))
+                            showToast(getString(R.string.document_success_veri))
                             Log.d("REPOSITORY", "Aadhaar added successfully!")
                         }
                         .addOnFailureListener { exception ->
                             Log.d("Repository", exception.toString())
-                            showToast(getString(R.string.failure_retry))
+                            showToast(getString(R.string.failure_retry_veri))
                         }
                     /** response is response data class*/
                 }, { error ->
@@ -158,7 +158,7 @@ class AadhaarUpload : Fragment() {
                 }
                 )
         } else {
-            UtilMethods.showLongToast(this.context!!, getString(R.string.no_internet))
+            UtilMethods.showLongToast(this.context!!, getString(R.string.no_internet_veri))
         }
     }
 

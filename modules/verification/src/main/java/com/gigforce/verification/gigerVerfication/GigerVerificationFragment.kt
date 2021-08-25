@@ -247,7 +247,7 @@ class GigerVerificationFragment : Fragment(), IOnBackPressedOverride {
             .load(R.drawable.ic_dl)
             .into(drivingLayout.optionIconIV)
 
-        drivingLayout.optionTitleTV.text = getString(R.string.driving_license)
+        drivingLayout.optionTitleTV.text = getString(R.string.driving_license_veri)
         drivingLayout.descTitleTV.text = getString(R.string.tap_to_upload_veri)
 
 
@@ -449,8 +449,8 @@ class GigerVerificationFragment : Fragment(), IOnBackPressedOverride {
         val downloadmanager = context?.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         val uri = Uri.parse(url)
         val request = DownloadManager.Request(uri)
-        request.setTitle(getString(R.string.contract))
-        request.setDescription(getString(R.string.downloading_contract))
+        request.setTitle(getString(R.string.contract_veri))
+        request.setDescription(getString(R.string.downloading_contract_veri))
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
         request.setVisibleInDownloadsUi(false)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -468,19 +468,19 @@ class GigerVerificationFragment : Fragment(), IOnBackPressedOverride {
             try {
                 Toast.makeText(
                     context,
-                    getString(R.string.contract_is_downloading),
+                    getString(R.string.contract_is_downloading_veri),
                     Toast.LENGTH_SHORT
                 ).show()
                 downloadmanager.enqueue(request)
             } catch (e: Exception) {
-                Toast.makeText(context, getString(R.string.network_error_retry), Toast.LENGTH_SHORT)
+                Toast.makeText(context, getString(R.string.network_error_retry_veri), Toast.LENGTH_SHORT)
                     .show()
             }
         } else {
-            Toast.makeText(context, getString(R.string.network_error_retry), Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, getString(R.string.network_error_retry_veri), Toast.LENGTH_SHORT).show()
         }
         val progressBarDialog = ProgressDialog(context)
-        progressBarDialog.setTitle(getString(R.string.downloading_contract_wait))
+        progressBarDialog.setTitle(getString(R.string.downloading_contract_wait_veri))
         progressBarDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL)
         progressBarDialog.setButton(
             DialogInterface.BUTTON_POSITIVE, "OK"

@@ -102,7 +102,7 @@ class GigPagerTimerView(
 //                ResourcesCompat.getColor(resources, R.color.gig_timer_upcoming_pink, null)
 //        )
         gigTimerTV.text = "- -hrs: - -mins"
-        gigCheckInTimeTV.text = context.getString(R.string.checkin_not_marked)
+        gigCheckInTimeTV.text = context.getString(R.string.checkin_not_marked_giger_gigs)
 
         gigDateTV.text = formatGigDateForTimer(gig.startDateTime)
     }
@@ -115,7 +115,7 @@ class GigPagerTimerView(
 //                ResourcesCompat.getColor(resources, R.color.gig_timer_no_show_red, null)
 //        )
         gigTimerTV.text = "- -hrs: - -mins"
-        gigCheckInTimeTV.text = context.getString(R.string.missed_the_gig)
+        gigCheckInTimeTV.text = context.getString(R.string.missed_the_gig_giger_gigs)
 
         gigDateTV.text = formatGigDateForTimer(gig.startDateTime)
     }
@@ -128,7 +128,7 @@ class GigPagerTimerView(
 //                ResourcesCompat.getColor(resources, R.color.gig_timer_declined_red, null)
 //        )
         gigTimerTV.text = "- -hrs: - -mins"
-        gigCheckInTimeTV.text = context.getString(R.string.checkin_pending)
+        gigCheckInTimeTV.text = context.getString(R.string.checkin_pending_giger_gigs)
 
         gigDateTV.text = formatGigDateForTimer(gig.startDateTime)
     }
@@ -179,7 +179,7 @@ class GigPagerTimerView(
             startCountDownTimer(gig.startDateTime.toDate())
         }
 
-        gigCheckInTimeTV.text = context.getString(R.string.left_for_gig_start)
+        gigCheckInTimeTV.text = context.getString(R.string.left_for_gig_start_giger_gigs)
         gigDateTV.text = formatGigDateForTimer(gig.startDateTime)
 
     }
@@ -240,7 +240,7 @@ class GigPagerTimerView(
 //                ResourcesCompat.getColor(resources, R.color.gig_timer_declined_red, null)
 //        )
         gigTimerTV.text = "- -hrs: - -mins"
-        gigCheckInTimeTV.text = context.getString(R.string.declined_reason) + gig.declineReason
+        gigCheckInTimeTV.text = context.getString(R.string.declined_reason_giger_gigs) + gig.declineReason
 
         gigDateTV.text = formatGigDateForTimer(gig.startDateTime)
     }

@@ -15,7 +15,7 @@
         android:layout_marginBottom="10dp"
         android:elevation="5dp"
         android:fontFamily="@font/lato"
-        android:text="@string/check_in"
+        android:text="@string/check_in_giger_gigs"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent" />
 

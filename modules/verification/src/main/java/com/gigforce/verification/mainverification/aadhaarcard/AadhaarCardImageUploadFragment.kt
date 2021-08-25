@@ -321,13 +321,13 @@ class AadhaarCardImageUploadFragment : Fragment(),
         viewBinding.belowLayout.gone()
         viewBinding.toplayoutblock.uploadStatusLayout(
             AppConstants.UPLOAD_SUCCESS,
-            getString(R.string.verification_completed),
-            getString(R.string.aadhar_verified)
+            getString(R.string.verification_completed_veri),
+            getString(R.string.aadhar_verified_veri)
         )
         viewBinding.submitButton.visible()
-        viewBinding.submitButton.text = getString(R.string.next)
+        viewBinding.submitButton.text = getString(R.string.next_veri)
         viewBinding.progressBar.gone()
-        viewBinding.toplayoutblock.setVerificationSuccessfulView(getString(R.string.aadhar_verified_success))
+        viewBinding.toplayoutblock.setVerificationSuccessfulView(getString(R.string.aadhar_verified_success_veri))
 
 
     }

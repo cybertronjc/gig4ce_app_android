@@ -1,12 +1,10 @@
 <resources>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment_learning">Hello blank fragment</string>
     <string name="lessons_learning">Lessons</string>
     <string name="see_more_learning">See more</string>
     <string name="assessment__learning">Assessment</string>
     <string name="learning_assign_to_you_learning">Learning assigned to you</string>
     <string name="why_learning_is_important_learning">Why Learning is Important?</string>
-
     <string name="increase_your_knowlegde_learning">Increase Your Knowlegde</string>
     <string name="anytime_anywhere_learning">ANYTIME ANYWHERE</string>
     <string name="skip_learning">Skip</string>
@@ -133,6 +131,6 @@
     <string name="video_quality_learning">Video quality</string>
     <string name="submit_learning">SUBMIT</string>
     <string name="back_learning">Back</string>
-
-
+    <string name="feedback_learning">Feedback</string>
+    <string name="help">Help</string>
 </resources>

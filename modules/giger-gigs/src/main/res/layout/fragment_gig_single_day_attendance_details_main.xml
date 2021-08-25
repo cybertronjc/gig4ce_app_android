@@ -168,7 +168,7 @@
         android:textSize="16sp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="@string/choose_an_action" />
+        android:text="@string/choose_an_action_giger_gigs" />
 
     <View
         android:layout_width="match_parent"
@@ -193,7 +193,7 @@
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:text="@string/i_need_to_change_my_check_in_or_check_out_time" />
+            android:text="@string/i_need_to_change_my_check_in_or_check_out_time_giger_gigs" />
 
         <TextView
             android:id="@+id/you_can_label"
@@ -205,7 +205,7 @@
             android:layout_marginTop="4dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/I_need_checkin_label"
-            android:text="@string/you_can_always_manage_your_monthly"
+            android:text="@string/you_can_always_manage_your_monthly_giger_gigs"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -232,7 +232,7 @@
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:text="@string/i_did_not_work_on_this_day" />
+            android:text="@string/i_did_not_work_on_this_day_giger_gigs" />
 
         <TextView
             android:id="@+id/you_can_chnage_label"
@@ -244,7 +244,7 @@
             android:layout_marginTop="4dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/I_did_not_work_label"
-            android:text="@string/you_can_always_manage_your_monthly"
+            android:text="@string/you_can_always_manage_your_monthly_giger_gigs"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

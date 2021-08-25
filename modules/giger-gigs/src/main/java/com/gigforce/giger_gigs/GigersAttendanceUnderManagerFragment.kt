@@ -96,9 +96,9 @@ class GigersAttendanceUnderManagerFragment : Fragment(), AttendanceSwipeHandler.
         lifecycleScope.launch {
 
             viewBinding.toolbar.apply {
-                showTitle(context.getString(R.string.gigers_attendance))
+                showTitle(context.getString(R.string.gigers_attendance_giger_gigs))
                 hideActionMenu()
-                showSearchOption(context.getString(R.string.search_name))
+                showSearchOption(context.getString(R.string.search_name_giger_gigs))
                 viewBinding.toolbar.hideSubTitle()
                 getSearchTextChangeAsFlow()
                         .debounce(300)
@@ -120,7 +120,7 @@ class GigersAttendanceUnderManagerFragment : Fragment(), AttendanceSwipeHandler.
 
                 slotCalendar.isVisible = !slotCalendar.isVisible
             }
-            selectedSlotTv.text = getString(R.string.today)
+            selectedSlotTv.text = getString(R.string.today_giger_gigs)
             slotCalendar.selectedDate = CalendarDay.today()
             slotCalendar.setOnDateChangedListener { _, date, _ ->
 
@@ -240,7 +240,7 @@ class GigersAttendanceUnderManagerFragment : Fragment(), AttendanceSwipeHandler.
 
                     when (it) {
                         is AttendanceUnderManagerSharedViewState.GigDeclined -> {
-                            showSnackBar(getString(R.string.user_marked_absent))
+                            showSnackBar(getString(R.string.user_marked_absent_giger_gigs))
                             viewModel.gigDeclinedUpdateGigerStatusInView(it.gigId)
                         }
                         else -> {
@@ -254,9 +254,9 @@ class GigersAttendanceUnderManagerFragment : Fragment(), AttendanceSwipeHandler.
     ) {
 
         MaterialAlertDialogBuilder(requireContext())
-                .setTitle(getString(R.string.unable_to_mark_present))
+                .setTitle(getString(R.string.unable_to_mark_present_giger_gigs))
                 .setMessage(error)
-                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                .setPositiveButton(getString(R.string.okay_giger_gigs)) { _, _ -> }
                 .show()
     }
 
@@ -469,7 +469,7 @@ class GigersAttendanceUnderManagerFragment : Fragment(), AttendanceSwipeHandler.
 
         this.attendanceRecyclerView.collection = emptyList()
         this.errorInfoLayout.visible()
-        this.gigersUnderManagerMainError.text = getString(R.string.no_attendance_found)
+        this.gigersUnderManagerMainError.text = getString(R.string.no_attendance_found_giger_gigs)
 
         this.businessSpinner.gone()
         this.businessLabel.gone()

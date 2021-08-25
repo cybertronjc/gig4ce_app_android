@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_sm1"
         android:layout_marginTop="@dimen/dp_xl3"
-        android:text="@string/submit_docs"
+        android:text="@string/submit_docs_veri"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/appBar2" />
 

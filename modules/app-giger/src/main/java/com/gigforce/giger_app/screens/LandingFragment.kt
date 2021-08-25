@@ -115,10 +115,10 @@ class LandingFragment : Fragment() {
                 if (latestAPPUpdateModel.active && isNotLatestVersion(latestAPPUpdateModel))
                 //doubt
                     appDialogsInterface.showConfirmationDialogType3(
-                        getString(com.gigforce.landing_screen.R.string.new_version_available),
-                        getString(com.gigforce.landing_screen.R.string.new_version_available_detail),
-                        getString(com.gigforce.landing_screen.R.string.update_now),
-                        getString(com.gigforce.landing_screen.R.string.cancel_update),
+                        getString(R.string.new_version_available_app_giger),
+                        getString(R.string.new_version_available_detail_app_giger),
+                        getString(R.string.update_now_app_giger),
+                        getString(R.string.cancel_update_app_giger),
                         object :
                             ConfirmationDialogOnClickListener {
                             override fun clickedOnYes(dialog: Dialog?) {
