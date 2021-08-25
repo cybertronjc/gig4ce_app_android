@@ -93,16 +93,19 @@
 
         <TextView
             android:id="@+id/textView79"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:letterSpacing="-0.01"
             android:layout_marginTop="2dp"
             android:textColor="#6d7278"
             android:textSize="10sp"
+            android:maxLines="1"
+            android:ellipsize="end"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView22"
             app:layout_constraintTop_toBottomOf="@+id/textView78"
+            app:layout_constraintEnd_toStartOf="@+id/arrow1"
             android:text="#1223 , sector 23 , HSR layout" />
 
         <ImageView
@@ -155,16 +158,19 @@
 
         <TextView
             android:id="@+id/textView81"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:letterSpacing="-0.01"
             android:textColor="#6d7278"
             android:layout_marginTop="2dp"
             android:textSize="10sp"
+            android:maxLines="1"
+            android:ellipsize="end"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView23"
             app:layout_constraintTop_toBottomOf="@+id/textView80"
+            app:layout_constraintEnd_toStartOf="@+id/arrow2"
             android:text="@string/same_as_permanent_address" />
 
         <ImageView
