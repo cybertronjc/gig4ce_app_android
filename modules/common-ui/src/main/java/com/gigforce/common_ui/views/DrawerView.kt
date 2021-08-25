@@ -35,15 +35,15 @@ internal class DrawerView(
     private val paths: MutableList<Path> = LinkedList()
     private var tmpPath: Path? = null
 
-    private var _maxX: Float = -1.0f
-    private var _minX: Float = -1.0f
-    private var _maxY: Float = -1.0f
-    private var _minY: Float = -1.0f
+    private var _right: Float = -1.0f
+    private var _left: Float = -1.0f
+    private var _top: Float = -1.0f
+    private var _bottom: Float = -1.0f
 
-    val userDrawnRight : Float get() = _maxX
-    val userDrawnLeft : Float get() = _minX
-    val userDrawnTop : Float get() = _maxY
-    val userDrawnBottom : Float get() = _minY
+    val userDrawnRight : Float get() = _right
+    val userDrawnLeft : Float get() = _left
+    val userDrawnTop : Float get() = _top
+    val userDrawnBottom : Float get() = _bottom
 
     init {
         setupPaint() // same as before
@@ -62,7 +62,7 @@ internal class DrawerView(
         paint.style = Paint.Style.STROKE
         paint.strokeJoin = Paint.Join.ROUND
         paint.strokeCap = Paint.Cap.ROUND
-        paint.style = Paint.Style.STROKE // change to fill
+        paint.style = Paint.Style.STROKE
         return paint
     }
 
@@ -86,23 +86,23 @@ internal class DrawerView(
         val pointY = event.y
         Log.d(TAG,"new x : $pointX, new y : $pointY, ")
 
-        if (_maxX == -1.0f || pointX > _maxX) {
-            _maxX = pointX
+        if (_right == -1.0f || pointX > _right) {
+            _right = pointX
             Log.d(TAG,"new Max x : $pointX")
         }
 
-        if (_minX == -1.0f || pointX < _minX){
-            _minX = pointX
+        if (_left == -1.0f || pointX < _left){
+            _left = pointX
             Log.d(TAG,"new min x : $pointX")
         }
 
-        if (_maxY == -1.0f || pointY > _maxY) {
-            _maxY = pointY
+        if (_top == -1.0f || pointY > _top) {
+            _top = pointY
             Log.d(TAG,"new max y : $pointY")
         }
 
-        if (_minY == -1.0f || pointY < _minY) {
-            _minY = pointY
+        if (_bottom == -1.0f || pointY < _bottom) {
+            _bottom = pointY
             Log.d(TAG,"new min y : $pointY")
         }
 
