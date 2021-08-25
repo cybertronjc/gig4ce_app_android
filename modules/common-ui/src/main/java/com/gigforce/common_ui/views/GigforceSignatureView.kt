@@ -15,6 +15,7 @@ import com.gigforce.common_ui.R
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.util.*
 
 class GigforceSignatureView(
     context: Context,
@@ -39,14 +40,7 @@ class GigforceSignatureView(
             undoLayout = this.findViewById(R.id.undo_layout)
 
             undoLayout.setOnClickListener {
-
-//                val i = getSignatureFullImage()
-//                Log.d("TAG", "d")
-
-
-                val i2 = getSignatureImageCroppedToSignature()
-                Log.d("TAG", "d")
-                // drawerView.undoDrawnStuff()
+                drawerView.undoDrawnStuff()
             }
         }
     }
