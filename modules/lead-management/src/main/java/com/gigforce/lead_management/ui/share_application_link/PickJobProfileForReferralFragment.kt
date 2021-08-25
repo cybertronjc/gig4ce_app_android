@@ -13,6 +13,7 @@ import com.gigforce.common_ui.utils.PushDownAnim
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfileOverview
 import com.gigforce.common_ui.views.GigforceToolbar
 import com.gigforce.core.base.BaseFragment2
+import com.gigforce.core.extensions.getTextChangeAsStateFlow
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
@@ -24,6 +25,13 @@ import com.gigforce.lead_management.databinding.FragmentPickJobProfileForReferra
 import com.gigforce.lead_management.models.GigAppListRecyclerItemData
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -96,6 +104,7 @@ class PickJobProfileForReferralFragment : BaseFragment2<FragmentPickJobProfileFo
         gigsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
     }
 
+
     private fun initListeners(
         viewBinding: FragmentPickJobProfileForReferralBinding
     ) = viewBinding.apply {
@@ -104,12 +113,16 @@ class PickJobProfileForReferralFragment : BaseFragment2<FragmentPickJobProfileFo
             validateDataAndOpenReferralScreen()
         }
 
-//        lifecycleScope.launchWhenCreated {
-//            searchGigET.getTextChangeAsStateFlow()
-//                .collect {
-//                    viewModel.searchJobProfiles(it)
-//                }
-//        }
+
+        lifecycleScope.launch {
+            searchGigET.getTextChangeAsStateFlow()
+                .debounce(300)
+                .distinctUntilChanged()
+                .flowOn(Dispatchers.Default)
+                .collect {
+                    viewModel.searchJobProfiles(it)
+                }
+        }
     }
 
     private fun validateDataAndOpenReferralScreen() = viewBinding.apply {

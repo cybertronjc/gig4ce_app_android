@@ -20,6 +20,11 @@ import com.gigforce.lead_management.databinding.ReferenceCheckFragmentBinding
 import com.gigforce.lead_management.ui.assign_gig_dialog.AssignGigsDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -144,12 +149,15 @@ class ReferenceCheckFragment : BaseFragment2<ReferenceCheckFragmentBinding>(
 //        bindProgressButton(viewBinding.submitButton)
 //        viewBinding.submitButton.attachTextChangeAnimator()
 
-//        lifecycleScope.launchWhenCreated {
-//            viewBinding.contactNoET.getTextChangeAsStateFlow()
-//                .collect { text ->
-//                    viewBinding.callGigerBtn.isEnabled = ValidationHelper.isValidIndianMobileNo(text)
-//                }
-//        }
+        lifecycleScope.launch {
+            viewBinding.contactNoET.getTextChangeAsStateFlow()
+                .debounce(300)
+                .distinctUntilChanged()
+                .flowOn(Dispatchers.Default)
+                .collect {
+                    viewBinding.callGigerBtn.isEnabled = ValidationHelper.isValidIndianMobileNo(it)
+                }
+        }
 
         viewBinding.callGigerBtn.setOnClickListener {
 
