@@ -154,7 +154,7 @@ android {
             applicationId "com.gigforce.app.staging"
             resValue "string", "app_name", "Gigforce Staging"
             versionCode 139
-            versionName "4.0.0"
+            versionName "5.0.2"
             versionNameSuffix '-Staging'
             signingConfig signingConfigs.staging
             buildConfigField "String", 'REFERRAL_BASE_URL', '"https://gig4cestaging.page.link"'
