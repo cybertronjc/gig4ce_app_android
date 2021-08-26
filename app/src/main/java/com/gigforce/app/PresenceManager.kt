@@ -19,6 +19,7 @@ import java.util.*
 data class PresenceData(
     var status: String,
     var appStatus: String,
+    var webStatus: String,
     var lastUpdatedOn: Long = Date().time
 )
 
@@ -64,19 +65,22 @@ class PresenceManager : LifecycleObserver {
 
                             if(isConnected) {
 
-                                usrRef?.onDisconnect()?.setValue(
-                                    PresenceData(
-                                        status = OFFLINE,
-                                        lastUpdatedOn = Date().time,
-                                        appStatus = APP_STATUS_DISCONNECTED
+                                usrRef?.onDisconnect()?.updateChildren(
+
+                                    mapOf(
+                                        "status" to OFFLINE,
+                                        "lastUpdatedOn" to Date().time,
+                                        "appStatus" to APP_STATUS_DISCONNECTED
                                     )
                                 )?.continueWith {
 
-                                    usrRef?.setValue(PresenceData(
-                                        status = ONLINE,
-                                        lastUpdatedOn = Date().time,
-                                        appStatus =  APP_STATUS_ACTIVE
-                                    ))
+                                    usrRef?.updateChildren(
+                                        mapOf(
+                                            "status" to ONLINE,
+                                            "lastUpdatedOn" to Date().time,
+                                            "appStatus" to APP_STATUS_ACTIVE
+                                        )
+                                    )
                                 }
                             }
                         }
@@ -87,22 +91,22 @@ class PresenceManager : LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
     fun onBackground() {
-        usrRef?.setValue(
-            PresenceData(
-                status = OFFLINE,
-                lastUpdatedOn = Date().time,
-                appStatus = APP_STATUS_INACTIVE
+        usrRef?.updateChildren(
+            mapOf(
+                "status" to OFFLINE,
+                "lastUpdatedOn" to Date().time,
+                "appStatus" to APP_STATUS_INACTIVE
             )
         )
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun onForeGround() {
-        usrRef?.setValue(
-            PresenceData(
-                status = ONLINE,
-                lastUpdatedOn = Date().time,
-                appStatus = APP_STATUS_ACTIVE
+        usrRef?.updateChildren(
+            mapOf(
+                "status" to ONLINE,
+                "lastUpdatedOn" to Date().time,
+                "appStatus" to APP_STATUS_ACTIVE
             )
         )
     }
