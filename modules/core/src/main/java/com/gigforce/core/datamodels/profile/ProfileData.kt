@@ -40,6 +40,7 @@ data class ProfileData(
     var invited: ArrayList<Invites>? = null,
     var role_interests: ArrayList<RoleInterests>? = null,
     var gigerStatus: String = "lead",
+    var pfesic: PFESICDataModel? = null,
 
     @get:PropertyName("companies")
     @set:PropertyName("companies")
@@ -96,6 +97,7 @@ data class ProfileData(
     @get:PropertyName("reference")
     @set:PropertyName("reference")
     var reference: Reference? = null
+
 ) {
 
     @Exclude

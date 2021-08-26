@@ -33,6 +33,7 @@ class NavForClientActivatonModule(
             "${moduleName}/fragment_business_loc_hub",
             R.id.fragment_business_loc_hub
         )
+        baseImplementation.registerRoute("${moduleName}/pfesicFragment", R.id.pFESICFormDetailsFragment)
 
     }
 }
