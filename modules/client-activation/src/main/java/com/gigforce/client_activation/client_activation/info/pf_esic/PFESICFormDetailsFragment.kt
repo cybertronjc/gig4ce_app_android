@@ -6,7 +6,6 @@ import android.app.DatePickerDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -16,17 +15,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.gigforce.client_activation.R
-import com.gigforce.client_activation.client_activation.AadharApplicationDetailsFragment
-import com.gigforce.client_activation.databinding.AadharApplicationDetailsFragmentBinding
 import com.gigforce.client_activation.databinding.PfesicFormDetailsFragmentBinding
 import com.gigforce.client_activation.ui.ClientActivationClickOrSelectImageBottomSheet
 import com.gigforce.common_image_picker.image_cropper.ImageCropActivity
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.shimmer.ShimmerHelper
-import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
-import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.datamodels.profile.PFESICDataModel
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.gone
@@ -34,20 +29,16 @@ import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.DateHelper
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.storage.FirebaseStorage
-import com.yalantis.ucrop.UCrop
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.aadhar_application_details_fragment.*
 import kotlinx.android.synthetic.main.pfesic_form_details_fragment.*
-import kotlinx.android.synthetic.main.pfesic_form_details_fragment.progressBar
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class PFESICFormDetailsFragment : Fragment(), IOnBackPressedOverride,
-    ClientActivationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener{
+    ClientActivationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener {
 
     companion object {
         fun newInstance() = PFESICFormDetailsFragment()
@@ -67,6 +58,7 @@ class PFESICFormDetailsFragment : Fragment(), IOnBackPressedOverride,
     private val viewModel: PFESICFormDetailsViewModel by viewModels()
     private lateinit var viewBinding: PfesicFormDetailsFragmentBinding
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
+
     @Inject
     lateinit var navigation: INavigation
 
@@ -117,8 +109,8 @@ class PFESICFormDetailsFragment : Fragment(), IOnBackPressedOverride,
 
     private fun processpfEsicData(pfEsicData: PFESICDataModel) = viewBinding.apply {
 
-        pfEsicData?.isAlreadyExists?.let {
-            if (it){
+        pfEsicData.isAlreadyExists.let {
+            if (it) {
                 checkedLayout.visibility = View.VISIBLE
                 uncheckedLayout.visibility = View.GONE
                 pfesicCheckbox.isChecked = true
@@ -129,31 +121,31 @@ class PFESICFormDetailsFragment : Fragment(), IOnBackPressedOverride,
             }
         }
 
-        pfEsicData?.esicNumber?.let {
+        pfEsicData.esicNumber?.let {
             esicNumber.editText?.setText(it)
         }
 
-         pfEsicData?.uanNumber?.let {
+        pfEsicData.uanNumber?.let {
             uanNumber.editText?.setText(it)
         }
 
-         pfEsicData?.pfNumber?.let {
+        pfEsicData.pfNumber?.let {
             pfNumber.editText?.setText(it)
         }
 
-         pfEsicData?.nomineeName?.let {
+        pfEsicData.nomineeName?.let {
             nomineeName.editText?.setText(it)
         }
 
-         pfEsicData?.rNomineeName?.let {
+        pfEsicData.rNomineeName?.let {
             relationNominee.editText?.setText(it)
         }
 
-        pfEsicData?.dobNominee?.let {
-            dateOfBirth?.setText(it)
+        pfEsicData.dobNominee?.let {
+            dateOfBirth?.text = it
         }
 
-        pfEsicData?.signature?.let {
+        pfEsicData.signature?.let {
             signaturePath = it
             getDBImageUrl(it).let {
                 showSignatureImage(it)
@@ -162,7 +154,10 @@ class PFESICFormDetailsFragment : Fragment(), IOnBackPressedOverride,
     }
 
     private fun showSignatureImage(signature: String?) {
-        context?.let { Glide.with(it).load(signature).placeholder(ShimmerHelper.getShimmerDrawable()).into(viewBinding.signatureImage) }
+        context?.let {
+            Glide.with(it).load(signature).placeholder(ShimmerHelper.getShimmerDrawable())
+                .into(viewBinding.signatureImage)
+        }
     }
 
     private fun setViews() {
@@ -183,7 +178,7 @@ class PFESICFormDetailsFragment : Fragment(), IOnBackPressedOverride,
         }
 
         pfesicCheckbox.setOnCheckedChangeListener { compoundButton, b ->
-            if (b){
+            if (b) {
                 checkedLayout.visibility = View.VISIBLE
                 uncheckedLayout.visibility = View.GONE
             } else {
@@ -193,7 +188,7 @@ class PFESICFormDetailsFragment : Fragment(), IOnBackPressedOverride,
         }
 
         submitButton.setOnClickListener {
-            if (pfesicCheckbox.isChecked){
+            if (pfesicCheckbox.isChecked) {
                 if (esicNumber.editText?.text?.isEmpty() == true) {
                     MaterialAlertDialogBuilder(requireContext())
                         .setTitle(getString(R.string.alert))
@@ -223,7 +218,7 @@ class PFESICFormDetailsFragment : Fragment(), IOnBackPressedOverride,
 
                 submitData()
             } else {
-                 if (nomineeName.editText?.text?.isEmpty() == true) {
+                if (nomineeName.editText?.text?.isEmpty() == true) {
                     MaterialAlertDialogBuilder(requireContext())
                         .setTitle(getString(R.string.alert))
                         .setMessage("Enter nominee name")
@@ -310,7 +305,7 @@ class PFESICFormDetailsFragment : Fragment(), IOnBackPressedOverride,
         return null
     }
 
-    private fun submitData() = viewBinding.apply{
+    private fun submitData() = viewBinding.apply {
 
         //creating datamodel for data submission
         val pfesicDataModel = PFESICDataModel(

@@ -137,7 +137,8 @@ class AddDailyLoginReportFragment : BaseFragment2<FragmentAddNewLoginReportBindi
                                         id = it.jobProfileId,
                                         title = it.jobProfileName
                                     )
-                                }.distinctBy {
+                                }.
+                                distinctBy {
                                     it.id
                                 }
                             val jobProfileArrayAdapter = ArrayAdapter(

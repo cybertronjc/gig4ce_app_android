@@ -12,6 +12,8 @@ data class ProfileData(
     var aboutMe: String = "",
     var email: String = "",
     var bio: String = "",
+    var maritalStatus : String = "",
+    var emergencyContact : String = "",
     var profileAvatarName: String = "avatar.jpg",
     var isVerified: Boolean = false,
     var educations: ArrayList<Education>? = ArrayList<Education>(),

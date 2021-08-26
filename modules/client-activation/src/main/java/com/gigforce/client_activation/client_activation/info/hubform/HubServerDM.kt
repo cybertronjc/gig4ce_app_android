@@ -6,7 +6,7 @@ class HubServerDM(
     val stateId: String? = "",
     val stateName: String? = "",
     val cityId : String? = "",
-    val cityName : String?="",
+    val hubCity : String?="",
     val type: String? = "",
     var once:Boolean?=true
 )

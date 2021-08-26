@@ -454,7 +454,10 @@ class ApplicationClientActivationFragment : Fragment(),
                 bundleForFragment
             )
 
-            "pf_esic" -> navigation.navigateTo("", bundleForFragment)
+            "pf_esic" -> navigation.navigateTo(
+                "client_activation/pfesicFragment",
+                bundleForFragment
+            )
         }
     }
 
@@ -491,10 +494,10 @@ class ApplicationClientActivationFragment : Fragment(),
                 return "client_activation/fragment_business_loc_hub"
             }
             "aadhar_hub_questionnaire" -> {
-                return ""
+                return "client_activation/joining_form"
             }
             "pf_esic" -> {
-                return "client_activation/joining_form"
+                return "client_activation/pfesicFragment"
             }
             else -> return ""
         }

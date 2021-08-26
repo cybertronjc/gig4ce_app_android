@@ -20,6 +20,7 @@ import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.datamodels.City
 import com.gigforce.core.datamodels.State
+import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.datamodels.verification.AadhaarDetailsDataModel
 import com.gigforce.core.datamodels.verification.CurrentAddressDetailDataModel
 import com.gigforce.core.datamodels.verification.VerificationBaseModel
@@ -98,11 +99,19 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
         initViews()
         observer()
     }
+
     var serverHubData: HubServerDM? = null
     var hubCityFilled = false
     var hubNameFilled = false
     private fun observer() {
-
+        viewModel.dojObserver.observe(viewLifecycleOwner,{
+            it?.dateOfJoining?.let {
+                viewBinding.dateOfJoining.setText(DateHelper.getDateInDDMMYYYYHiphen(it))
+            }
+        })
+        viewModel.profileData.observe(viewLifecycleOwner, {
+            setProfileRelatedDataToField(it)
+        })
         viewModel.updatedResult.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             val updated = it ?: return@Observer
             Log.d("updated", "up $updated")
@@ -110,7 +119,7 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
             if (updated) {
                 showToast("Data uploaded successfully")
                 checkForNextDoc()
-            }else{
+            } else {
                 showToast("Data not uploaded successfully!! Try again!!")
             }
 
@@ -121,7 +130,7 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
             setHubState()
         })
 
-        viewModel.statesResult.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+        viewModel.statesResult.observe(viewLifecycleOwner, {
             if (it.isNotEmpty()) {
                 Log.d("States", it.toList().toString())
                 //getting states
@@ -130,7 +139,7 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
             }
         })
 
-        viewModel.citiesResult.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+        viewModel.citiesResult.observe(viewLifecycleOwner, {
             if (it.isNotEmpty()) {
                 Log.d("Cities", it.toList().toString())
                 //getting states
@@ -140,7 +149,7 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
             }
         })
 
-        viewModel.caCitiesResult.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+        viewModel.caCitiesResult.observe(viewLifecycleOwner, {
             if (it.isNotEmpty()) {
                 Log.d("Cities", it.toList().toString())
                 //getting states
@@ -160,7 +169,7 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
             viewBinding.progressBar.gone()
             viewModel.loadHubData(mJobProfileId)   //need to uncomment
             hubStatesArray.clear()
-            hubStatesArray.addAll(it)
+            hubStatesArray.addAll(it.distinct())
             hubStatesArray.sort()
             hubStatesArray.forEachIndexed { index, data ->
                 hubStatesMap.put(data, index)
@@ -171,12 +180,12 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
         viewModel.hub_cities.observe(viewLifecycleOwner, {
             viewBinding.progressBar.gone()
             hubCitiesArray.clear()
-            hubCitiesArray.addAll(it)
+            hubCitiesArray.addAll(it.distinct())
             hubCitiesArray.forEachIndexed { index, data ->
                 hubCitiesMap.put(data, index)
             }
             hubCitiesAdapter?.notifyDataSetChanged()
-            if(!hubCityFilled){
+            if (!hubCityFilled) {
                 hubCityFilled = true
                 setHubCity()
             }
@@ -185,12 +194,12 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
         viewModel.hub_names.observe(viewLifecycleOwner, {
             viewBinding.progressBar.gone()
             hubNameArray.clear()
-            hubNameArray.addAll(it)
+            hubNameArray.addAll(it.distinct())
             hubNameArray.forEachIndexed { index, data ->
                 hubNameMap.put(data, index)
             }
             hubNameAdapter?.notifyDataSetChanged()
-            if(!hubNameFilled){
+            if (!hubNameFilled) {
                 hubNameFilled = true
                 setHubName()
             }
@@ -198,23 +207,31 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
 
     }
 
-    private fun setHubName(){
+    private fun setProfileRelatedDataToField(profileData: ProfileData?) {
+        viewBinding.emailId.editText?.setText(profileData?.email)
+        viewBinding.emergencyContact.editText?.setText(profileData?.emergencyContact)
+        viewBinding.maritalStatusSpinner.setSelection(
+            resources.getStringArray(R.array.marital_status).indexOf(profileData?.maritalStatus)
+        )
+    }
+
+    private fun setHubName() {
         serverHubData?.hubName?.let {
-            viewBinding.hubName.setText(it,false)
+            viewBinding.hubName.setText(it, false)
         }
     }
 
     private fun setHubState() {
         serverHubData?.stateName?.let {
-            viewBinding.hubState.setText(it,false)
+            viewBinding.hubState.setText(it, false)
             viewModel.loadHubCities(it)
         }
     }
 
     private fun setHubCity() {
-        serverHubData?.cityName?.let {
-            viewBinding.hubCity.setText(it,false)
-            viewModel.loadHubNames(viewBinding.hubState.text.toString(),it)
+        serverHubData?.hubCity?.let {
+            viewBinding.hubCity.setText(it, false)
+            viewModel.loadHubNames(viewBinding.hubState.text.toString(), it)
         }
     }
 
@@ -254,7 +271,7 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
 
                     if (curradd.state?.isNotBlank() == true) {
                         caStateSpinner.setText(curradd.state, false)
-                        getCitiesWhenStateNotEmpty(curradd.state?:"", false)
+                        getCitiesWhenStateNotEmpty(curradd.state ?: "", false)
                     }
                 }
             }
@@ -350,8 +367,11 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
     private fun initViews() {
         viewModel.getStates()
         viewModel.loadHubStates(mJobProfileId)
+        viewModel.loadProfileData()
+        viewModel.loadApplicationDataDOJ(mJobProfileId)
     }
 
+    var selectedDOB: Date? = null
     private val dateOfBirthPicker: DatePickerDialog by lazy {
         val cal = Calendar.getInstance()
         val datePickerDialog = DatePickerDialog(
@@ -361,6 +381,7 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
                 newCal.set(Calendar.YEAR, year)
                 newCal.set(Calendar.MONTH, month)
                 newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                selectedDOB = newCal.time
                 viewBinding.dateOfBirth.text = DateHelper.getDateInDDMMYYYYHiphen(newCal.time)
                 viewBinding.dobLabel.visible()
             },
@@ -373,14 +394,40 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
         datePickerDialog
     }
 
+    private val dateOfJoiningPicker: DatePickerDialog by lazy {
+        val cal = Calendar.getInstance()
+        val datePickerDialog = DatePickerDialog(
+            requireContext(),
+            { _: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
+                val newCal = Calendar.getInstance()
+                newCal.set(Calendar.YEAR, year)
+                newCal.set(Calendar.MONTH, month)
+                newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                viewBinding.dateOfJoining.text = DateHelper.getDateInDDMMYYYYHiphen(newCal.time)
+                viewBinding.dojLabel.visible()
+            },
+            cal.get(Calendar.YEAR),
+            cal.get(Calendar.MONTH),
+            cal.get(Calendar.DAY_OF_MONTH)
+        )
+
+        datePickerDialog.datePicker.maxDate = Calendar.getInstance().timeInMillis
+        datePickerDialog
+    }
+
     private fun listener() = viewBinding.apply {
         dateOfBirthLabel.setOnClickListener {
             dateOfBirthPicker.show()
         }
+
+        dateOfJoiningLabel.setOnClickListener {
+            dateOfJoiningPicker.show()
+        }
+
         appBar.apply {
-            setBackButtonListener(View.OnClickListener {
+            setBackButtonListener {
                 activity?.onBackPressed()
-            })
+            }
         }
 
         stateSpinner.onItemClickListener = object : AdapterView.OnItemClickListener {
@@ -452,6 +499,8 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
             override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 if (p2 <= hubStatesArray.size && hubState.text.toString().isNotBlank()) {
                     val actualIndex = hubStatesMap.get(hubState.text.toString().trim())
+                    hubCity.setText("", false)
+                    hubName.setText("", false)
                     actualIndex?.let {
                         if (it >= 0) {
                             viewModel.loadHubCities(hubStatesArray.get(it))
@@ -465,9 +514,10 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
             override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 if (p2 <= hubCitiesArray.size && hubCity.text.toString().isNotBlank()) {
                     val actualIndex = hubCitiesMap.get(hubCity.text.toString().trim())
+                    hubName.setText("", false)
                     actualIndex?.let {
                         if (it >= 0) {
-                            viewModel.loadHubNames(hubState.text.toString() ,hubCitiesArray.get(it))
+                            viewModel.loadHubNames(hubState.text.toString(), hubCitiesArray.get(it))
                         }
                     }
                 }
@@ -598,12 +648,11 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
 
         submitButton.setOnClickListener {
             if (anyDataEntered) {
-                if (aadharNo.editText?.text.toString()
-                        .isBlank() || aadharNo.editText?.text.toString().length != 12
-                ) {
+
+                if (fatherName.editText?.text.toString().isBlank()) {
                     MaterialAlertDialogBuilder(requireContext())
                         .setTitle(getString(R.string.alert))
-                        .setMessage("Enter valid aadhaar number")
+                        .setMessage("Enter father name")
                         .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                         .show()
                     return@setOnClickListener
@@ -618,15 +667,54 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
                     return@setOnClickListener
                 }
 
-                if (fatherName.editText?.text.toString().isBlank()) {
+                if (dateOfJoining.text.toString().isBlank()) {
                     MaterialAlertDialogBuilder(requireContext())
                         .setTitle(getString(R.string.alert))
-                        .setMessage("Enter father name")
+                        .setMessage("Select date of joining")
                         .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                         .show()
                     return@setOnClickListener
                 }
 
+                if (maritalStatusSpinner.selectedItem.toString() == resources.getStringArray(R.array.marital_status)[0]) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert))
+                        .setMessage("Select marital status")
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .show()
+                    return@setOnClickListener
+                }
+
+                if (emailId.editText?.text.toString().isBlank()) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert))
+                        .setMessage("Enter email")
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .show()
+                    return@setOnClickListener
+                }
+
+                if (emergencyContact.editText?.text.toString()
+                        .isBlank() || emergencyContact.editText?.text.toString().length != 10
+                ) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert))
+                        .setMessage("Enter emergency contact number")
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .show()
+                    return@setOnClickListener
+                }
+
+                if (aadharNo.editText?.text.toString()
+                        .isBlank() || aadharNo.editText?.text.toString().length != 12
+                ) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert))
+                        .setMessage("Enter valid aadhaar number")
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .show()
+                    return@setOnClickListener
+                }
 
 
                 if (addLine1Input.text.toString().isBlank()) {
@@ -741,8 +829,7 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
                 }
 
                 submitData()
-            }
-            else{
+            } else {
                 checkForNextDoc()
             }
         }
@@ -823,7 +910,7 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
 
 
     private fun submitData() = viewBinding.apply {
-        progressBar.visibility = View.VISIBLE
+
         var submitDataModel = AadhaarDetailsDataModel(
             aadhaarCardNo = aadharNo.editText?.text.toString(),
             dateOfBirth = dateOfBirth.text.toString(),
@@ -840,7 +927,27 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
                 city = caCitySpinner.text.toString(),
             ) else null
         )
-        viewModel.submitJoiningFormData(submitDataModel, mJobProfileId,hubState.text.toString(),hubCity.text.toString(),hubName.text.toString())
+        var dob = selectedDOB ?: DateHelper.getDateFromDDMMYYYY(dateOfBirth.text.toString())
+        var doj = DateHelper.getDateFromDDMMYYYY(dateOfJoining.text.toString())
+
+        doj?.let { dojObj ->
+            dob?.let {
+                progressBar.visibility = View.VISIBLE
+                viewModel.submitJoiningFormData(
+                    submitDataModel,
+                    mJobProfileId,
+                    hubState.text.toString(),
+                    hubCity.text.toString(),
+                    hubName.text.toString(),
+                    emailId.editText?.text.toString(),
+                    it,
+                    fatherName.editText?.text.toString(),
+                    maritalStatusSpinner.selectedItem.toString(),
+                    emergencyContact.editText?.text.toString(),
+                    dojObj
+                )
+            }
+        }
     }
 
     private fun checkForNextDoc() {

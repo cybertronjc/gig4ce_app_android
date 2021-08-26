@@ -5,10 +5,13 @@ import com.gigforce.core.datamodels.State
 import com.gigforce.core.datamodels.profile.AddressModel
 import com.gigforce.core.datamodels.verification.AadhaarDetailsDataModel
 import com.gigforce.core.datamodels.verification.VerificationBaseModel
+import com.gigforce.core.extensions.toFirebaseTimeStamp
 import com.gigforce.core.extensions.updateOrThrow
 import com.gigforce.core.fb.BaseFirestoreDBRepository
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.tasks.await
+import java.util.*
 import javax.inject.Inject
 
 class AadhaarDetailsRepository @Inject constructor() : BaseFirestoreDBRepository() {
@@ -103,7 +106,10 @@ class AadhaarDetailsRepository @Inject constructor() : BaseFirestoreDBRepository
         }
     }
 
-    suspend fun setAadhaarDetailsFromJoiningForm(uid: String, aadhaardetails: AadhaarDetailsDataModel): Boolean {
+    suspend fun setAadhaarDetailsFromJoiningForm(
+        uid: String,
+        aadhaardetails: AadhaarDetailsDataModel
+    ): Boolean {
         try {
             db.collection(verificationCollectionName).document(uid).updateOrThrow(
                 mapOf(
@@ -125,6 +131,30 @@ class AadhaarDetailsRepository @Inject constructor() : BaseFirestoreDBRepository
             return true
         } catch (e: Exception) {
             return false
+        }
+    }
+
+    suspend fun setProfileRelatedData(
+        uid: String,
+        email: String,
+        dateOfBirth: Date,
+        fName: String,
+        maritalStatus: String,
+        emergencyContact: String
+    ): Boolean {
+        return try {
+            db.collection("Profiles").document(uid).updateOrThrow(
+                mapOf(
+                    "email" to email,
+                    "dateOfBirth" to dateOfBirth.toFirebaseTimeStamp(),
+                    "fName" to fName,
+                    "maritalStatus" to maritalStatus,
+                    "emergencyContact" to emergencyContact
+                )
+            )
+            true
+        } catch (e: Exception) {
+            false
         }
     }
 

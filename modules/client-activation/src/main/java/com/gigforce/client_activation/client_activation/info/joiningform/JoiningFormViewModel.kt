@@ -6,25 +6,32 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.client_activation.client_activation.info.HubSubmissionRepository
+import com.gigforce.client_activation.client_activation.info.JPApplicationDOJ
 import com.gigforce.client_activation.client_activation.info.hubform.BusinessLocationDM
 import com.gigforce.client_activation.client_activation.info.hubform.HubServerDM
 import com.gigforce.client_activation.client_activation.repository.AadhaarDetailsRepository
 import com.gigforce.core.datamodels.City
 import com.gigforce.core.datamodels.State
 import com.gigforce.core.datamodels.client_activation.JpApplication
+import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.datamodels.verification.AadhaarDetailsDataModel
 import com.gigforce.core.datamodels.verification.VerificationBaseModel
 import com.gigforce.core.extensions.getOrThrow
+import com.gigforce.core.extensions.toFirebaseTimeStamp
 import com.gigforce.core.extensions.updateOrThrow
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.launch
+import java.util.*
 
 class JoiningFormViewModel : ViewModel() {
     var uid = FirebaseAuth.getInstance().currentUser?.uid!!
     val updatedResult: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
+
+    val _dojObserver : MutableLiveData<JPApplicationDOJ> = MutableLiveData<JPApplicationDOJ>()
+    val dojObserver : LiveData<JPApplicationDOJ> = _dojObserver
 //    private val _observableAddApplicationSuccess: MutableLiveData<Boolean> = MutableLiveData()
 //    val observableAddApplicationSuccess: MutableLiveData<Boolean> = _observableAddApplicationSuccess
 
@@ -49,6 +56,8 @@ class JoiningFormViewModel : ViewModel() {
     val _hub_submitted_data = MutableLiveData<HubServerDM>()
     val hub_submitted_data : LiveData<HubServerDM> = _hub_submitted_data
 
+    val _profileData = MutableLiveData<ProfileData>()
+    val profileData : LiveData<ProfileData> = _profileData
     val _allBusinessLocactionsList = MutableLiveData<List<BusinessLocationDM>>()
     val allBusinessLocactionsList: LiveData<List<BusinessLocationDM>> = _allBusinessLocactionsList
 
@@ -180,10 +189,17 @@ class JoiningFormViewModel : ViewModel() {
     }
 
 
-    fun submitJoiningFormData(data: AadhaarDetailsDataModel, mJobProfileId : String,state:String,city:String,hubname:String) = viewModelScope.launch {
+    fun submitJoiningFormData(data: AadhaarDetailsDataModel, mJobProfileId : String, state:String, city:String, hubname:String, email: String,
+                              dateOfBirth: Date,
+                              fName: String,
+                              maritalStatus: String,
+                              emergencyContact: String,
+                                dateOfJoining : Date) = viewModelScope.launch {
         try {
-            val aadharDetailUpdated = aadharDetailsRepo.setAadhaarDetailsFromJoiningForm(uid, data)
-
+            var aadharDetailUpdated = aadharDetailsRepo.setAadhaarDetailsFromJoiningForm(uid, data)
+            if(aadharDetailUpdated){
+                aadharDetailUpdated = aadharDetailsRepo.setProfileRelatedData(uid,email,dateOfBirth,fName,maritalStatus,emergencyContact)
+            }
             if(aadharDetailUpdated) {
                 val hubSubmissionUpdated = hubSubmissionRepo.submitHubData(
                     state,
@@ -206,6 +222,12 @@ class JoiningFormViewModel : ViewModel() {
                         .updateOrThrow(
                             "application",
                             hubSubmissionUpdated.application
+                        )
+                    FirebaseFirestore.getInstance()
+                        .collection("JP_Applications")
+                        .document(hubSubmissionUpdated?.id)
+                        .updateOrThrow(
+                            mapOf("dateOfJoining" to dateOfJoining.toFirebaseTimeStamp())
                         )
                     updatedResult.postValue(true)
                 }else
@@ -231,6 +253,39 @@ class JoiningFormViewModel : ViewModel() {
 
     fun getCityId(state: String,city:String, hub: String):String?{
         return _allBusinessLocactionsList.value?.filter { it.state?.name == state && it.name == hub && it.city?.name == city }?.get(0)?.city?.id
+    }
+
+    fun loadProfileData()= viewModelScope.launch {
+        try {
+            var profileDataSnapShot = FirebaseFirestore.getInstance().collection("Profiles").document(uid).getOrThrow()
+            var profileData = profileDataSnapShot.toObject(ProfileData::class.java)
+            profileData?.let {
+                _profileData.postValue(it)
+            }
+
+        }
+        catch (e:Exception){
+
+        }
+
+    }
+
+     fun loadApplicationDataDOJ(mJobProfileId: String) = viewModelScope.launch {
+         try {
+             var jpApplicationSnapshot =
+                 FirebaseFirestore.getInstance().collection("JP_Applications")
+                     .whereEqualTo("jpid", mJobProfileId)
+                     .whereEqualTo(
+                         "gigerId",
+                         FirebaseAuthStateListener.getInstance()
+                             .getCurrentSignInUserInfoOrThrow().uid
+                     ).getOrThrow()
+             var jpApplication =  jpApplicationSnapshot.toObjects(JPApplicationDOJ::class.java)[0]
+             _dojObserver.postValue(jpApplication)
+         }catch (e:Exception){
+
+         }
+
     }
 
 }

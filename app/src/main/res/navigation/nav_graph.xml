@@ -1005,7 +1005,7 @@
         android:name="com.gigforce.client_activation.client_activation.info.aadhardetailform.AadharApplicationDetailsFragment"
         android:label="AadharApplicationDetailsFragment" />
     <fragment
-        android:id="@+id/pFESICFormDetailsFragment"
+        android:id="@+id/pfesicFormDetailsFragment"
         android:name="com.gigforce.client_activation.client_activation.info.pf_esic.PFESICFormDetailsFragment"
         android:label="PFESICFormDetailsFragment" />
 

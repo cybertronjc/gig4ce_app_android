@@ -39,8 +39,8 @@ class HubSubmissionRepository {
                                 "hubName" to hub,
                                 "stateName" to state,
                                 "stateId" to stateId,
-                                "cityId" to cityId,
-                                "city" to city,
+                                "hubCityId" to cityId,
+                                "hubCity" to city,
                                 "type" to "hub_location"
                             )
                         )
@@ -54,8 +54,8 @@ class HubSubmissionRepository {
                                 "hubName" to hub,
                                 "stateName" to state,
                                 "stateId" to stateId,
-                                "cityId" to cityId,
-                                "city" to city,
+                                "hubCityId" to cityId,
+                                "hubCity" to city,
                                 "type" to "hub_location"
                             )
                         )

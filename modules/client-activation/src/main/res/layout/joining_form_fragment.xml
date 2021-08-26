@@ -186,6 +186,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:entries="@array/marital_status"
+
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -232,6 +233,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/size_46"
                         android:padding="4dp"
+                        android:inputType="number"
                         android:singleLine="true" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -254,6 +256,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/size_46"
                         android:padding="4dp"
+                        android:inputType="number"
                         android:singleLine="true" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -499,49 +502,73 @@
                     </com.google.android.material.textfield.TextInputLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-                <AutoCompleteTextView
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/hub_statecl"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/size_16"
+                    android:layout_marginTop="@dimen/size_16"
+                    android:layout_marginRight="@dimen/size_16"
+                    android:hint="Select hub state"
+                    android:visibility="visible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/current_add_layout">
+                <androidx.appcompat.widget.AppCompatAutoCompleteTextView
                     android:id="@+id/hub_state"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/size_46"
-                    android:layout_marginStart="@dimen/size_16"
+                    android:clickable="true"
+                    android:inputType="none"
+                    android:padding="4dp"
+                    tools:ignore="KeyboardInaccessibleWidget" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/hub_citycl"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/size_16"
                     android:layout_marginTop="@dimen/size_16"
-                    android:layout_marginEnd="@dimen/size_16"
-                    android:background="@drawable/rect_outline_lipstick"
-                    android:hint="@string/hub_state"
-                    android:paddingStart="@dimen/size_6"
+                    android:layout_marginRight="@dimen/size_16"
+                    android:hint="Select hub city"
+                    android:visibility="visible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/current_add_layout" />
-
-                <AutoCompleteTextView
+                    app:layout_constraintTop_toBottomOf="@+id/hub_statecl">
+                <androidx.appcompat.widget.AppCompatAutoCompleteTextView
                     android:id="@+id/hub_city"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/size_46"
-                    android:layout_marginStart="@dimen/size_16"
+                    android:clickable="true"
+                    android:inputType="none"
+                    android:padding="4dp"
+                    tools:ignore="KeyboardInaccessibleWidget"  />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/hub_namecl"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/size_16"
                     android:layout_marginTop="@dimen/size_16"
-                    android:layout_marginEnd="@dimen/size_16"
-                    android:background="@drawable/rect_outline_lipstick"
-                    android:hint="@string/hub_city"
-                    android:paddingStart="@dimen/size_6"
+                    android:layout_marginRight="@dimen/size_16"
+                    android:hint="Select hub city"
+                    android:visibility="visible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/hub_state" />
-
-                <AutoCompleteTextView
+                    app:layout_constraintTop_toBottomOf="@+id/hub_citycl">
+                <androidx.appcompat.widget.AppCompatAutoCompleteTextView
                     android:id="@+id/hub_name"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/size_46"
-                    android:layout_marginStart="@dimen/size_16"
-                    android:layout_marginTop="@dimen/size_16"
-                    android:layout_marginEnd="@dimen/size_16"
-                    android:background="@drawable/rect_outline_lipstick"
-                    android:hint="@string/hub_name"
-                    android:paddingStart="@dimen/size_6"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/hub_city" />
-
+                    android:clickable="true"
+                    android:inputType="none"
+                    android:padding="4dp"
+                    tools:ignore="KeyboardInaccessibleWidget" />
+                </com.google.android.material.textfield.TextInputLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
