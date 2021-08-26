@@ -118,12 +118,14 @@ class PFESICFormDetailsFragment : Fragment(), IOnBackPressedOverride,
     private fun processpfEsicData(pfEsicData: PFESICDataModel) = viewBinding.apply {
 
         pfEsicData?.isAlreadyExists?.let {
-            if (it == true){
+            if (it){
                 checkedLayout.visibility = View.VISIBLE
                 uncheckedLayout.visibility = View.GONE
+                pfesicCheckbox.isChecked = true
             } else {
                 checkedLayout.visibility = View.GONE
                 uncheckedLayout.visibility = View.VISIBLE
+                pfesicCheckbox.isChecked = false
             }
         }
 
@@ -164,7 +166,7 @@ class PFESICFormDetailsFragment : Fragment(), IOnBackPressedOverride,
     }
 
     private fun setViews() {
-
+        viewModel.getDetails()
     }
 
     private fun listeners() = viewBinding.apply {
@@ -412,7 +414,7 @@ class PFESICFormDetailsFragment : Fragment(), IOnBackPressedOverride,
     }
 
     override fun onBackPressed(): Boolean {
-        TODO("Not yet implemented")
+        return false
     }
 
 }
