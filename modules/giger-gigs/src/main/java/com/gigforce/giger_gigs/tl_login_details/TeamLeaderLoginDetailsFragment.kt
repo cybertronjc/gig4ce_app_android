@@ -209,7 +209,7 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
                 scrollingAdded = false
             }
 
-            datecityRv.smoothScrollToPosition(tlLoginSummaryAdapter.itemCount/2)
+            //datecityRv.smoothScrollToPosition(tlLoginSummaryAdapter.itemCount/2)
 
         }
         datecityRv.adapter = tlLoginSummaryAdapter
@@ -229,7 +229,7 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 //Log.d("Scrolled", "onScrolled $dx ,: $dy")
-//                firstPageVisible = false
+
                 val currentItemsLatest = layoutManager.childCount
                 val totalItemsLatest = layoutManager.itemCount
 
@@ -251,7 +251,6 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
         })
 
     }
-
 
     override fun onTlItemSelected(listingTLModel: ListingTLModel) {
         if (DateUtils.isToday(listingTLModel.dateTimestamp)) {

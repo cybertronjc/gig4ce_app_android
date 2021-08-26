@@ -36,7 +36,7 @@ class DrivingLicenseViewModel @Inject constructor(
                 try {
                     _kycOcrResult.value = verificationKycRepo.getVerificationOcrResult(type, subType, image)
                 } catch (e: Exception) {
-                    KycOcrResultModel(status = false, message = e.message)
+                    _kycOcrResult.value = KycOcrResultModel(status = false, message = e.message)
                 }
                 Log.d("result", kycOcrResultModel.toString())
             }
@@ -46,7 +46,7 @@ class DrivingLicenseViewModel @Inject constructor(
                 try {
                     _kycVerifyResult.value = verificationKycRepo.getKycVerification(type, list)
                 } catch (e: Exception) {
-                    KycOcrResultModel(status = false, message = e.message)
+                    _kycVerifyResult.value = KycOcrResultModel(status = false, message = e.message)
                 }
                 Log.d("result", kycOcrResultModel.toString())
             }

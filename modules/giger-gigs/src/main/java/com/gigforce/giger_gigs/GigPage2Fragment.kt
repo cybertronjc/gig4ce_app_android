@@ -711,30 +711,13 @@ class GigPage2Fragment : Fragment(),
         if (viewModel.gigOrder?.offerLetter?.isNotEmpty() == true) {
             optionsList.add(OFFER_LETTER)
         }
-        if (status == GigStatus.UPCOMING || status == GigStatus.PENDING) {
-            optionsList.add(OFFER_LETTER)
-            optionsList.add(ATTENDANCE_HISTORY)
-            optionsList.add(DECLINE_GIG)
-        } else {
-            optionsList.add(IDENTITY_CARD)
-            optionsList.add(ATTENDANCE_HISTORY)
-        }
-//        val optionList = if (status == GigStatus.UPCOMING || status == GigStatus.PENDING) {
-//            listOf(
-//                IDENTITY_CARD,
-//                ATTENDANCE_HISTORY,
-//                DECLINE_GIG
-//            )
-//        } else {
-//            listOf(
-//                IDENTITY_CARD,
-//                ATTENDANCE_HISTORY
-//            )
-//        }
 
-//        if (viewModel.gigOrder?.offerLetter?.isNotEmpty() == true) {
-//            optionsList.toMutableList().add(OFFER_LETTER)
-//        }
+        optionsList.add(IDENTITY_CARD)
+        optionsList.add(ATTENDANCE_HISTORY)
+
+        if (status == GigStatus.UPCOMING || status == GigStatus.PENDING) {
+            optionsList.add(DECLINE_GIG)
+        }
 
         other_options_recycler_view.layoutManager = LinearLayoutManager(
             requireContext(),

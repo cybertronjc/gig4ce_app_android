@@ -200,6 +200,12 @@
         <item name="android:textAppearance">?attr/textAppearanceSubtitle1</item>
     </style>
 
+    <style name="TitleL" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:textAppearance">?attr/textAppearanceBody1</item>
+        <item name="fontFamily">@font/lato_bold</item>
+        <item name="textcolor">@color/blackDark</item>
+    </style>
+
     <style name="Title" parent="TextAppearance.MaterialComponents.Body2">
         <item name="android:textAppearance">?attr/textAppearanceBody2</item>
         <item name="fontFamily">@font/lato_bold</item>
