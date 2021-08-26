@@ -1,4 +1,4 @@
-package com.gigforce.client_activation.client_activation.info
+package com.gigforce.client_activation.client_activation.info.hubform
 
 class HubServerDM(
     val hubId: String? = "",

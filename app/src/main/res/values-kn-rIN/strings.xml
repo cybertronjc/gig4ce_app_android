@@ -918,7 +918,7 @@
     <string name="in_your_assessment">ನಿಮ್ಮ ಮೌಲ್ಯಮಾಪನದಲ್ಲಿ</string>
     <string name="new_cert_added_underlined"><u> ಪ್ರೊಫೈಲ್‌ಗೆ ಹೊಸ ಪ್ರಮಾಣಪತ್ರವನ್ನು ಸೇರಿಸಲಾಗಿದೆ. </u></string>
     <string name="watch_lesson_again">ಪಾಠವನ್ನು ಮತ್ತೆ ವೀಕ್ಷಿಸಿ</string>
-    <string name="skip">ಬಿಟ್ಟುಬಿಡಿ</string>
+    <string name="skip_client">ಬಿಟ್ಟುಬಿಡಿ</string>
     <string name="new_bio">ಹೊಸ ಬಯೋ</string>
     <string name="signed">ಸಹಿ</string>
     <string name="unsigned">ಸಹಿ ಮಾಡಲಾಗಿಲ್ಲ</string>

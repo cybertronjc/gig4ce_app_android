@@ -1,4 +1,4 @@
-package com.gigforce.client_activation.client_activation
+package com.gigforce.client_activation.client_activation.info.aadhardetailform
 
 import android.Manifest
 import android.app.Activity
@@ -522,7 +522,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
 
 
         submitButton.setOnClickListener {
-            if (submitButton.text.toString() == "Submit") {
+            if (anyDataEntered) {
                 if (aadharFrontImagePath == null || aadharFrontImagePath?.isEmpty() == true) {
                     MaterialAlertDialogBuilder(requireContext())
                         .setTitle(getString(R.string.alert))
