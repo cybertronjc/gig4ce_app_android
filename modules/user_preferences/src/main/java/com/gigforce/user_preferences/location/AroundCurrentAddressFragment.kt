@@ -18,6 +18,7 @@ import com.gigforce.common_ui.viewmodels.userpreferences.SharedPreferenceViewMod
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import kotlinx.android.synthetic.main.around_current_address_fragment.*
+import java.lang.Exception
 
 class AroundCurrentAddressFragment : Fragment(), IOnBackPressedOverride {
 
@@ -42,10 +43,14 @@ class AroundCurrentAddressFragment : Fragment(), IOnBackPressedOverride {
     var SEEKBAR_REFRESH : Long= 500
     private fun listener() {
         Handler().postDelayed({
-            arround_current_add_seekbar.progress = 0
+            try {
+                arround_current_add_seekbar.progress = 0
 
-            val progress = viewModel.getCurrentAddress()?.preferred_distance!!
-            arround_current_add_seekbar.progress = progress
+                val progress = viewModel.getCurrentAddress()?.preferred_distance!!
+                arround_current_add_seekbar.progress = progress
+            }catch (e:Exception){
+
+            }
         }, SEEKBAR_REFRESH)
 
         arround_current_add_seekbar.setOnSeekBarChangeListener(object :
