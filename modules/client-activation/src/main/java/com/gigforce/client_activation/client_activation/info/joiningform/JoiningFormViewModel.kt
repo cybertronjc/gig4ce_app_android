@@ -5,19 +5,31 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.client_activation.client_activation.info.HubSubmissionRepository
 import com.gigforce.client_activation.client_activation.info.hubform.BusinessLocationDM
 import com.gigforce.client_activation.client_activation.info.hubform.HubServerDM
 import com.gigforce.client_activation.client_activation.repository.AadhaarDetailsRepository
 import com.gigforce.core.datamodels.City
 import com.gigforce.core.datamodels.State
+import com.gigforce.core.datamodels.client_activation.JpApplication
+import com.gigforce.core.datamodels.verification.AadhaarDetailsDataModel
 import com.gigforce.core.datamodels.verification.VerificationBaseModel
 import com.gigforce.core.extensions.getOrThrow
+import com.gigforce.core.extensions.updateOrThrow
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.launch
 
 class JoiningFormViewModel : ViewModel() {
+    var uid = FirebaseAuth.getInstance().currentUser?.uid!!
+    val updatedResult: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
+//    private val _observableAddApplicationSuccess: MutableLiveData<Boolean> = MutableLiveData()
+//    val observableAddApplicationSuccess: MutableLiveData<Boolean> = _observableAddApplicationSuccess
+
     val aadharDetailsRepo = AadhaarDetailsRepository()
+    val hubSubmissionRepo = HubSubmissionRepository()
     val statesResult: MutableLiveData<MutableList<State>> = MutableLiveData<MutableList<State>>()
     val citiesResult: MutableLiveData<MutableList<City>> = MutableLiveData<MutableList<City>>()
 
@@ -166,4 +178,59 @@ class JoiningFormViewModel : ViewModel() {
 
 
     }
+
+
+    fun submitJoiningFormData(data: AadhaarDetailsDataModel, mJobProfileId : String,state:String,city:String,hubname:String) = viewModelScope.launch {
+        try {
+            val aadharDetailUpdated = aadharDetailsRepo.setAadhaarDetailsFromJoiningForm(uid, data)
+
+            if(aadharDetailUpdated) {
+                val hubSubmissionUpdated = hubSubmissionRepo.submitHubData(
+                    state,
+                    getStateId(state, city, hubname) ?: "",
+                    city,
+                    getCityId(state, city, hubname) ?: "",
+                    hubname,
+                    getHubDocId(state, city, hubname) ?: "",
+                    mJobProfileId
+                )
+                if(hubSubmissionUpdated?.id?.isNotBlank() == true){
+                    hubSubmissionUpdated.application.forEach { draft ->
+                        if (draft.type == "jp_hub_location" || draft.type == "aadhar_hub_questionnaire") {
+                            draft.isDone = true
+                        }
+                    }
+                    FirebaseFirestore.getInstance()
+                        .collection("JP_Applications")
+                        .document(hubSubmissionUpdated?.id)
+                        .updateOrThrow(
+                            "application",
+                            hubSubmissionUpdated.application
+                        )
+                    updatedResult.postValue(true)
+                }else
+                updatedResult.postValue(false)
+            }
+            else updatedResult.postValue(false)
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            updatedResult.postValue(false)
+        }
+    }
+
+    fun getHubDocId(state: String,city:String, hub: String): String? {
+        return _allBusinessLocactionsList.value?.filter { it.state?.name == state && it.name == hub && it.city?.name == city}
+            ?.get(0)?.id
+    }
+
+    fun getStateId(state: String,city:String, hub: String): String? {
+        return _allBusinessLocactionsList.value?.filter { it.state?.name == state && it.name == hub && it.city?.name == city }
+            ?.get(0)?.state?.id
+    }
+
+    fun getCityId(state: String,city:String, hub: String):String?{
+        return _allBusinessLocactionsList.value?.filter { it.state?.name == state && it.name == hub && it.city?.name == city }?.get(0)?.city?.id
+    }
+
 }

@@ -17,17 +17,19 @@ import com.gigforce.client_activation.client_activation.info.hubform.HubServerDM
 import com.gigforce.client_activation.databinding.JoiningFormFragmentBinding
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.core.IOnBackPressedOverride
+import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.datamodels.City
 import com.gigforce.core.datamodels.State
 import com.gigforce.core.datamodels.verification.AadhaarDetailsDataModel
+import com.gigforce.core.datamodels.verification.CurrentAddressDetailDataModel
 import com.gigforce.core.datamodels.verification.VerificationBaseModel
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.DateHelper
 import com.gigforce.core.utils.NavFragmentsData
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_business_location_hub.*
 import java.util.*
 import javax.inject.Inject
 
@@ -100,6 +102,20 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
     var hubCityFilled = false
     var hubNameFilled = false
     private fun observer() {
+
+        viewModel.updatedResult.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            val updated = it ?: return@Observer
+            Log.d("updated", "up $updated")
+            viewBinding.progressBar.visibility = View.GONE
+            if (updated) {
+                showToast("Data uploaded successfully")
+                checkForNextDoc()
+            }else{
+                showToast("Data not uploaded successfully!! Try again!!")
+            }
+
+        })
+
         viewModel.hub_submitted_data.observe(viewLifecycleOwner, {
             serverHubData = it
             setHubState()
@@ -141,7 +157,7 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
         })
 
         viewModel.hub_states.observe(viewLifecycleOwner, {
-            progressBar.gone()
+            viewBinding.progressBar.gone()
             viewModel.loadHubData(mJobProfileId)   //need to uncomment
             hubStatesArray.clear()
             hubStatesArray.addAll(it)
@@ -153,7 +169,7 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
         })
 
         viewModel.hub_cities.observe(viewLifecycleOwner, {
-            progressBar.gone()
+            viewBinding.progressBar.gone()
             hubCitiesArray.clear()
             hubCitiesArray.addAll(it)
             hubCitiesArray.forEachIndexed { index, data ->
@@ -167,7 +183,7 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
         })
 
         viewModel.hub_names.observe(viewLifecycleOwner, {
-            progressBar.gone()
+            viewBinding.progressBar.gone()
             hubNameArray.clear()
             hubNameArray.addAll(it)
             hubNameArray.forEachIndexed { index, data ->
@@ -236,9 +252,9 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
                     caAddLine1Input.setText(curradd.addLine1)
                     caAddLine2Input.setText(curradd.addLine2)
 
-                    if (curradd.state.isNotBlank()) {
+                    if (curradd.state?.isNotBlank() == true) {
                         caStateSpinner.setText(curradd.state, false)
-                        getCitiesWhenStateNotEmpty(curradd.state, false)
+                        getCitiesWhenStateNotEmpty(curradd.state?:"", false)
                     }
                 }
             }
@@ -582,7 +598,152 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
 
         submitButton.setOnClickListener {
             if (anyDataEntered) {
+                if (aadharNo.editText?.text.toString()
+                        .isBlank() || aadharNo.editText?.text.toString().length != 12
+                ) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert))
+                        .setMessage("Enter valid aadhaar number")
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .show()
+                    return@setOnClickListener
+                }
 
+                if (dateOfBirth.text.toString().isBlank()) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert))
+                        .setMessage("Select date of birth")
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .show()
+                    return@setOnClickListener
+                }
+
+                if (fatherName.editText?.text.toString().isBlank()) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert))
+                        .setMessage("Enter father name")
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .show()
+                    return@setOnClickListener
+                }
+
+
+
+                if (addLine1Input.text.toString().isBlank()) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert))
+                        .setMessage("Enter Address Line 1")
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .show()
+                    return@setOnClickListener
+                }
+
+                if (addLine2Input.text.toString().isBlank()) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert))
+                        .setMessage("Enter Address Line 2")
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .show()
+                    return@setOnClickListener
+                }
+
+                if (stateSpinner.text.toString()
+                        .isEmpty() || !statesArray.contains(stateSpinner.text.toString())
+                ) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert))
+                        .setMessage(getString(R.string.select_aadhar_state))
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .show()
+                    return@setOnClickListener
+                }
+
+                if (citySpinner.text.toString()
+                        .isEmpty() || !citiesArray.contains(citySpinner.text.toString())
+                ) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert))
+                        .setMessage("Select City")
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .show()
+                    return@setOnClickListener
+                }
+
+                //current address validation
+                if (!currentAddCheckbox.isChecked) {
+
+                    if (caAddLine1Input.text.toString().isBlank()) {
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert))
+                            .setMessage("Enter Current Address Line 1")
+                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .show()
+                        return@setOnClickListener
+                    }
+
+                    if (caAddLine2Input.text.toString().isBlank()) {
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert))
+                            .setMessage("Enter Current Address Line 2")
+                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .show()
+                        return@setOnClickListener
+                    }
+
+                    if (caStateSpinner.text.toString()
+                            .isEmpty() || !statesArray.contains(caStateSpinner.text.toString())
+                    ) {
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert))
+                            .setMessage(getString(R.string.select_aadhar_state))
+                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .show()
+                        return@setOnClickListener
+                    }
+
+                    if (caCitySpinner.text.toString()
+                            .isEmpty() || !caCitiesArray.contains(caCitySpinner.text.toString())
+                    ) {
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert))
+                            .setMessage("Select City")
+                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .show()
+                        return@setOnClickListener
+                    }
+                }
+
+                if (hubState.text.isNullOrBlank() || !hubStatesArray.contains(hubState.text.toString())) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert))
+                        .setMessage("Please select hub state")
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .show()
+                    return@setOnClickListener
+                }
+
+                if (hubCity.text.isNullOrBlank() || !hubCitiesArray.contains(hubCity.text.toString())) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert))
+                        .setMessage("Please select hub city")
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .show()
+                    return@setOnClickListener
+                }
+
+                if (hubName.text.isNullOrBlank() || !hubNameArray.contains(hubName.text.toString())) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert))
+                        .setMessage("Please select hub name")
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .show()
+                    return@setOnClickListener
+                }
+
+                submitData()
+            }
+            else{
+                checkForNextDoc()
             }
         }
 
@@ -658,6 +819,28 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
             }
             intentBundle = it
         }
+    }
+
+
+    private fun submitData() = viewBinding.apply {
+        progressBar.visibility = View.VISIBLE
+        var submitDataModel = AadhaarDetailsDataModel(
+            aadhaarCardNo = aadharNo.editText?.text.toString(),
+            dateOfBirth = dateOfBirth.text.toString(),
+            fName = fatherName.editText?.text.toString(),
+            addLine1 = addLine1Input.text.toString(),
+            addLine2 = addLine2Input.text.toString(),
+            state = stateSpinner.text.toString(),
+            city = citySpinner.text.toString(),
+            currentAddSameAsParmanent = currentAddCheckbox.isChecked,
+            currentAddress = if (!currentAddCheckbox.isChecked) CurrentAddressDetailDataModel(
+                addLine1 = caAddLine1Input.text.toString(),
+                addLine2 = caAddLine2Input.text.toString(),
+                state = caStateSpinner.text.toString(),
+                city = caCitySpinner.text.toString(),
+            ) else null
+        )
+        viewModel.submitJoiningFormData(submitDataModel, mJobProfileId,hubState.text.toString(),hubCity.text.toString(),hubName.text.toString())
     }
 
     private fun checkForNextDoc() {

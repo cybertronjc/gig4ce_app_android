@@ -336,9 +336,9 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
                     caPincodeInput.setText(curradd.pincode)
                     caLandmarkInput.setText(curradd.landmark)
 
-                    if (curradd.state.isNotBlank()) {
+                    if (curradd.state?.isNotBlank() == true) {
                         caStateSpinner.setText(curradd.state, false)
-                        getCitiesWhenStateNotEmpty(curradd.state, false)
+                        getCitiesWhenStateNotEmpty(curradd.state?:"", false)
                     }
                 }
             }

@@ -54,7 +54,7 @@
                     android:hint="@string/father_name_client"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView10">
+                    app:layout_constraintTop_toBottomOf="@+id/textView9">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
@@ -226,7 +226,7 @@
                     android:hint="@string/emergency_contact_client"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/maritalStatusCl">
+                    app:layout_constraintTop_toBottomOf="@+id/emailId">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
@@ -248,7 +248,7 @@
                     android:hint="@string/aadharno_label_client"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/maritalStatusCl">
+                    app:layout_constraintTop_toBottomOf="@+id/emergencyContact">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
@@ -378,7 +378,7 @@
                     android:text="@string/curr_add_client"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/landmark" />
+                    app:layout_constraintTop_toBottomOf="@+id/cityLayout" />
 
                 <androidx.appcompat.widget.AppCompatCheckBox
                     android:id="@+id/current_add_checkbox"
@@ -512,7 +512,7 @@
                     android:paddingStart="@dimen/size_6"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView10" />
+                    app:layout_constraintTop_toBottomOf="@+id/current_add_layout" />
 
                 <AutoCompleteTextView
                     android:id="@+id/hub_city"
