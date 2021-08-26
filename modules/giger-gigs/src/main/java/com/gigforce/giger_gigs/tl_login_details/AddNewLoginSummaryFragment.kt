@@ -330,7 +330,7 @@ class AddNewLoginSummaryFragment : Fragment() {
             selectedCity,
             businessList,
             isUpdate,
-            loginSummaryDetails?.id.toString()
+            loginSummaryDetails?._id.toString()
 
         )
         viewModel.submitLoginSummaryData(addNewSummaryReqModel = addNewSummaryReqModel)
@@ -365,6 +365,7 @@ class AddNewLoginSummaryFragment : Fragment() {
             val checkIn = it ?: return@Observer
             try {
                 if (mode == LoginSummaryConstants.MODE_ADD) {
+                    //viewModel.getCities()
                     if (checkIn.checkedIn) {
                         viewBinding.apply {
                             citySpinner.visibility = View.VISIBLE

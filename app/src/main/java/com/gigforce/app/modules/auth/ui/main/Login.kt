@@ -303,16 +303,7 @@ class Login : Fragment() {
         }
 
         termsTextView.setOnClickListener {
-            val docIntent = Intent(
-                activity,
-                DocViewerActivity::class.java
-            )
-            docIntent.putExtra(
-                StringConstants.DOC_URL.value,
-                "https://gigforce.in/terms-of-use "
-            )
-            docIntent.putExtra(StringConstants.WEB_TITLE.value, "Terms and Conditions")
-            startActivityForResult(docIntent, TERMS_REQUEST_CODE)
+            navigation.navigateToDocViewerActivity(requireActivity(),"https://gigforce.in/terms-of-use" , "TERMS")
         }
 
     }

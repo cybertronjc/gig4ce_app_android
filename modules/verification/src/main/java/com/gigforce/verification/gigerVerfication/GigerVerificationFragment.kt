@@ -136,7 +136,7 @@ class GigerVerificationFragment : Fragment(), IOnBackPressedOverride {
 //                                    url
 //                                )
 //                                startActivity(docIntent)
-                                navigation.navigateToDocViewerActivity(requireActivity(),url)
+                                navigation.navigateToDocViewerActivity(requireActivity(),url, "")
                             }
 
 

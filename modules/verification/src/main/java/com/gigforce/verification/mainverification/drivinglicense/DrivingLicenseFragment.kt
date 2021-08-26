@@ -26,13 +26,16 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import com.gigforce.common_image_picker.image_cropper.ImageCropActivity
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.AppConstants
+import com.gigforce.core.IEventTracker
 import com.gigforce.core.StringConstants
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.datamodels.verification.DrivingLicenseDataModel
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.gone
@@ -48,6 +51,7 @@ import com.gigforce.verification.mainverification.Data
 import com.gigforce.verification.mainverification.OLDStateHolder
 import com.gigforce.verification.mainverification.VerificationClickOrSelectImageBottomSheet
 import com.gigforce.verification.util.VerificationConstants
+import com.gigforce.verification.util.VerificationEvents
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jaeger.library.StatusBarUtil
 import com.yalantis.ucrop.UCrop
@@ -99,7 +103,9 @@ class DrivingLicenseFragment : Fragment(),
 
     @Inject
     lateinit var navigation: INavigation
+    @Inject
 
+    lateinit var eventTracker: IEventTracker
     @Inject
     lateinit var buildConfig: IBuildConfig
     private var FROM_CLIENT_ACTIVATON: Boolean = false
@@ -126,6 +132,7 @@ class DrivingLicenseFragment : Fragment(),
         setViews()
         listeners()
         observer()
+        //checkForCroppedImage()
 
     }
 
@@ -135,7 +142,6 @@ class DrivingLicenseFragment : Fragment(),
             resources.getString(R.string.no_doc_subtitle_dl_veri)
         )
     }
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, FROM_CLIENT_ACTIVATON)
@@ -159,6 +165,29 @@ class DrivingLicenseFragment : Fragment(),
                     allNavigationList = arrData
                 }
                 intentBundle = it
+            }
+        }
+    }
+
+    private fun checkForCroppedImage() {
+        var navFragmentsData = activity as NavFragmentsData
+        if (navFragmentsData?.getData() != null) {
+            if (navFragmentsData?.getData()?.getString(StringConstants.IMAGE_CROP_URI.value)?.isNotEmpty() == true) {
+                val imageUriResultCrop = Uri.parse(navFragmentsData?.getData()?.getString(StringConstants.IMAGE_CROPPED_URI.value, ""))
+                if (imageUriResultCrop != null) {
+                    Log.d("Result crop", "cropped uri : $imageUriResultCrop")
+                    if (DrivingLicenseSides.FRONT_SIDE == currentlyClickingImageOfSide) {
+                        dlFrontImagePath = imageUriResultCrop
+                        showFrontDrivingLicense(dlFrontImagePath!!)
+                    } else if (DrivingLicenseSides.BACK_SIDE == currentlyClickingImageOfSide) {
+                        dlBackImagePath = imageUriResultCrop
+                        showBackDrivingLicense(dlBackImagePath!!)
+                    }
+                }
+
+                    }
+            else {
+                navFragmentsData?.setData(bundleOf())
             }
         }
     }
@@ -353,6 +382,17 @@ class DrivingLicenseFragment : Fragment(),
             it?.let {
                 if (it.status) {
                     if (!it.dateOfBirth.isNullOrBlank() || !it.dlNumber.isNullOrBlank() || !it.validTill.isNullOrBlank()) {
+                        var map = mapOf(
+                            "DL number" to it.dlNumber.toString(),
+                            "DoB" to it.dateOfBirth.toString(),
+                            "Expiry date" to it.validTill.toString()
+                        )
+                        eventTracker.pushEvent(
+                            TrackingEventArgs(
+                                eventName = VerificationEvents.DL_OCR_SUCCESS,
+                                props = map
+                            )
+                        )
                         viewBinding.toplayoutblock.uploadStatusLayout(
                             AppConstants.UPLOAD_SUCCESS,
                             getString(R.string.upload_success_veri),
@@ -378,6 +418,12 @@ class DrivingLicenseFragment : Fragment(),
                         }
 
                     } else {
+                        eventTracker.pushEvent(
+                            TrackingEventArgs(
+                                eventName = VerificationEvents.DL_OCR_SUCCESS,
+                                props = mapOf("Data Captured" to false)
+                            )
+                        )
                         viewBinding.toplayoutblock.uploadStatusLayout(
                             AppConstants.UNABLE_TO_FETCH_DETAILS,
                             getString(R.string.unable_to_fetch_info_veri),
@@ -385,6 +431,12 @@ class DrivingLicenseFragment : Fragment(),
                         )
                     }
                 } else {
+                    eventTracker.pushEvent(
+                        TrackingEventArgs(
+                            eventName = VerificationEvents.DL_OCR_FAILED,
+                            props = null
+                        )
+                    )
                     viewBinding.toplayoutblock.uploadStatusLayout(
                         AppConstants.UNABLE_TO_FETCH_DETAILS,
                         getString(R.string.unable_to_fetch_info_veri),
@@ -406,6 +458,11 @@ class DrivingLicenseFragment : Fragment(),
                 viewBinding.screenLoaderBar.gone()
                 it?.let {
                     if (it.verified) {
+
+                        var props = HashMap<String, Any>()
+                        props.put("DL verified", true)
+                        eventTracker.setUserProperty(props)
+
                         verificationScreenStatus = VerificationScreenStatus.VERIFIED
                         verifiedStatusViews(it)
                         viewBinding.belowLayout.visible()
@@ -489,6 +546,7 @@ class DrivingLicenseFragment : Fragment(),
                 MultipartBody.Part.createFormData("file", file.name, requestFile)
         }
         image?.let {
+            eventTracker.pushEvent(TrackingEventArgs(VerificationEvents.DL_OCR_STARTED, null))
             viewModel.getKycOcrResult(
                 "DL",
                 if (currentlyClickingImageOfSide == DrivingLicenseSides.FRONT_SIDE) "front" else "back",
@@ -632,7 +690,8 @@ class DrivingLicenseFragment : Fragment(),
         if (requestCode == REQUEST_CAPTURE_IMAGE || requestCode == REQUEST_PICK_IMAGE) {
             val outputFileUri = ImagePicker.getImageFromResult(requireContext(), resultCode, data)
             if (outputFileUri != null) {
-                startCrop(outputFileUri)
+                //startCrop(outputFileUri)
+                startCropImage(outputFileUri)
             }
         } else if (requestCode == UCrop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
             val imageUriResultCrop: Uri? = UCrop.getOutput(data!!)
@@ -651,6 +710,16 @@ class DrivingLicenseFragment : Fragment(),
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
 
             }
+        } else if (requestCode == ImageCropActivity.CROP_RESULT_CODE && resultCode == Activity.RESULT_OK){
+            val imageUriResultCrop: Uri? =  Uri.parse(data?.getStringExtra(ImageCropActivity.CROPPED_IMAGE_URL_EXTRA))
+            Log.d("ImageUri", imageUriResultCrop.toString())
+            if (DrivingLicenseSides.FRONT_SIDE == currentlyClickingImageOfSide) {
+                dlFrontImagePath = imageUriResultCrop
+                showFrontDrivingLicense(dlFrontImagePath!!)
+            } else if (DrivingLicenseSides.BACK_SIDE == currentlyClickingImageOfSide) {
+                dlBackImagePath = imageUriResultCrop
+                showBackDrivingLicense(dlBackImagePath!!)
+            }
         }
     }
 
@@ -664,6 +733,22 @@ class DrivingLicenseFragment : Fragment(),
             Data("expirydate", viewBinding.expiryDate.text.toString()),
             Data("dob", viewBinding.dobDate.text.toString())
         )
+
+        var map = mapOf(
+            "DL number" to viewBinding.dlnoTil.editText?.text.toString(),
+            "DoB" to viewBinding.dobDate.text.toString(),
+            "Name" to viewBinding.nameTilDl.editText?.text.toString(),
+            "Issue date" to viewBinding.issueDate.text.toString(),
+            "Expiry date" to viewBinding.expiryDate.text.toString()
+        )
+
+        eventTracker.pushEvent(
+            TrackingEventArgs(
+                eventName = VerificationEvents.DL_DETAIL_SUBMITTED,
+                props = map
+            )
+        )
+
         activeLoader(true)
         viewModel.getKycVerificationResult("DL", list)
     }
@@ -713,6 +798,13 @@ class DrivingLicenseFragment : Fragment(),
 //        if (viewBinding.toplayoutblock.viewPager2.currentItem == 0) openCameraAndGalleryOptionForFrontSideImage() else openCameraAndGalleryOptionForBackSideImage()
 //    }
 
+    private fun startCropImage(imageUri: Uri): Unit {
+       val photoCropIntent = Intent(context, ImageCropActivity::class.java)
+        photoCropIntent.putExtra("outgoingUri", imageUri.toString())
+        startActivityForResult(photoCropIntent, ImageCropActivity.CROP_RESULT_CODE)
+    }
+
+
     private fun startCrop(uri: Uri): Unit {
         Log.v("Start Crop", "started")
         //can use this for a new name every time
@@ -748,7 +840,7 @@ class DrivingLicenseFragment : Fragment(),
         options.setCompressionQuality(70)
         options.setCompressionFormat(Bitmap.CompressFormat.PNG)
 //        options.setMaxBitmapSize(1000)
-        options.setHideBottomControls((false))
+        options.setHideBottomControls((true))
         options.setFreeStyleCropEnabled(true)
         options.setStatusBarColor(ResourcesCompat.getColor(resources, R.color.topBarDark, null))
         options.setToolbarColor(ResourcesCompat.getColor(resources, R.color.topBarDark, null))
@@ -846,9 +938,9 @@ class DrivingLicenseFragment : Fragment(),
                         getString(R.string.details_incorrect_veri)
                     )
                     var listData = setAlreadyfilledData(drivingLicenseDataModel, true)
-                    if (listData.isEmpty()) {
+                    if(listData.isEmpty()){
                         initializeImages()
-                    } else {
+                    }else{
                         //single if showing error
                     }
                     viewBinding.toplayoutblock.enableImageClick()//keep this line in end only
@@ -867,7 +959,7 @@ class DrivingLicenseFragment : Fragment(),
     private fun setAlreadyfilledData(
         drivingLicenseDataModel: DrivingLicenseDataModel,
         enableFields: Boolean
-    ): ArrayList<KYCImageModel> {
+    ) : ArrayList<KYCImageModel> {
 
         viewBinding.nameTilDl.editText?.setText(drivingLicenseDataModel.name)
 

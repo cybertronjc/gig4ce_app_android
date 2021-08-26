@@ -159,7 +159,7 @@
         app:halfOffset="350dp"
         app:hideable="false"
         app:layout_behavior="com.riningan.widget.ExtendedBottomSheetBehavior"
-        app:peekHeight="200dp"
+        app:peekHeight="290dp"
         android:overScrollMode="never">
 <!--        android:name="com.gigforce.giger_app.calendarscreen.maincalendarscreen.bottomsheet.BSCalendarScreenFragment"-->
         <fragment

@@ -101,4 +101,8 @@
     <string name="no_i_don_t_have_pan_card_client">No, I don\'t have Pan Card.</string>
     <string name="under_verification">Under Verification</string>
     <string name="learning">Learning</string>
+    <string name="select_aadhar_state">Select State</string>
+
+    <string name="crop_and_rotate">Crop and Rotate</string>
+    <string name="same_as_permanent">Same as perma
 </resources>

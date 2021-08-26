@@ -111,24 +111,7 @@ class OnboardingFragmentNew : Fragment(){
                 getString(R.string.step_1_profile) + (onboarding_pager.adapter as MutlifragmentAdapter).fragmentArr.size
         }
         next.setOnClickListener {
-            if (isFragmentActionNotExists()) {
-                saveDataToDB(onboarding_pager.currentItem)
-
-                onboarding_pager.currentItem = onboarding_pager.currentItem + 1
-                //steps.text = "Steps ${onboarding_pager.currentItem + 1}/9"
-                appBar.setSteps(getString(R.string.steps_profile) + (onboarding_pager.currentItem + 1) + "/9")
-
-                if (onboarding_pager.currentItem == 8) {
-                    val fragmentAdapter = onboarding_pager.adapter as MutlifragmentAdapter
-                    val fragment =
-                            fragmentAdapter.getFragment(onboarding_pager.currentItem) as OnboardingAddProfilePictureFragment
-                    if (!fragment.hasUserUploadedPhoto()) {
-                        fragment.showCameraSheetIfNotShown()
-                    } else {
-                    }
-                }
-            }
-            setNextButtonForCurrentFragment()
+            clickOnNextButton()
         }
 
 
@@ -164,20 +147,55 @@ class OnboardingFragmentNew : Fragment(){
 
                 val fragmentAdapter = onboarding_pager.adapter as MutlifragmentAdapter
                 if (position == 8) {
-                    val fragment =
-                            fragmentAdapter.getFragment(position) as OnboardingAddProfilePictureFragment
-                    fragment.showCameraSheetIfNotShown()
-
+//                    val fragment =
+//                            fragmentAdapter.getFragment(position) as OnboardingAddProfilePictureFragment
+//                    fragment.showCameraSheetIfNotShown()
                     enableNextButton(true)
                 } else {
                     next.text = "Next"
-                    var fragmentInterface = fragmentAdapter.getFragment(position) as SetInterfaceListener
-                    fragmentInterface.setInterface(communicator)
                 }
+                var fragmentInterface = fragmentAdapter.getFragment(position) as SetInterfaceListener
+                fragmentInterface.setInterface(communicator)
             }
         })
     }
 
+    private fun clickOnNextButton(skip : Boolean?=false){
+        if (isFragmentActionNotExists()) {
+            if(onboarding_pager.currentItem == 8 && skip == false){
+                val fragment = getProfilePicFragment()
+                if (!fragment.hasUserUploadedPhoto()) {
+                    fragment.showCameraSheetIfNotShown()
+                    return
+                }
+            }
+            saveDataToDB(onboarding_pager.currentItem) // this will close the onboarding process itself if last fragment is open
+            if(onboarding_pager.currentItem == 8){
+                return
+            }
+            onboarding_pager.currentItem = onboarding_pager.currentItem + 1
+            //steps.text = "Steps ${onboarding_pager.currentItem + 1}/9"
+            appBar.setSteps(getString(R.string.steps_profile) + (onboarding_pager.currentItem + 1) + "/9")
+
+            if (onboarding_pager.currentItem == 8) {
+                val fragment = getProfilePicFragment()
+                if (!fragment.hasUserUploadedPhoto()) {
+                    next.text = "Upload Photo"
+                    fragment.showCameraSheetIfNotShown()
+                }else {
+                    next.text = "Next"
+                }
+            }
+        }
+        setNextButtonForCurrentFragment()
+    }
+
+    fun getProfilePicFragment() : OnboardingAddProfilePictureFragment{
+        val fragmentAdapter = onboarding_pager.adapter as MutlifragmentAdapter
+        val fragment =
+            fragmentAdapter.getFragment(onboarding_pager.currentItem) as OnboardingAddProfilePictureFragment
+        return fragment
+    }
 
     fun setNextButtonForCurrentFragment() {
         var currentFragment =
@@ -499,7 +517,7 @@ class OnboardingFragmentNew : Fragment(){
         }
 
         override fun profilePictureSkipPressed() {
-            //completet this
+            clickOnNextButton(true)
         }
 
         override fun checkForButtonText() {
@@ -507,14 +525,11 @@ class OnboardingFragmentNew : Fragment(){
 
             if (onboarding_pager.currentItem == 8) {
 
-                val fragmentAdapter = onboarding_pager.adapter as MutlifragmentAdapter
-                val fragment =
-                        fragmentAdapter.getFragment(onboarding_pager.currentItem) as OnboardingAddProfilePictureFragment
+                val fragment = getProfilePicFragment()
 
                 if (!fragment.hasUserUploadedPhoto()) {
                     next.text = "Upload Photo"
                     enableNextButton(true)
-                    fragment.showCameraSheetIfNotShown()
                 } else {
                     enableNextButton(true)
                     next.text = "Next"

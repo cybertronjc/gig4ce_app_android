@@ -246,10 +246,9 @@ class ProfileFragment : BaseFragment() {
         gigerVerificationViewModel.startListeningForGigerVerificationStatusChanges()
 
 
-
-
         location_card.setOnClickListener {
-            showToast(getString(R.string.work_in_progress_app))
+            navigation.navigateTo("preferences/locationFragment")
+//            showToast(getString(R.string.work_in_progress_app))
         }
         // load user data
         viewModel.ambassadorProfilePicUpdate.observe(viewLifecycleOwner, Observer {
