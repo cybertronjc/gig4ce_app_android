@@ -54,5 +54,17 @@
     <string name="no_invoices_to_show_wallet">No Invoices to show!</string>
     <string name="payslips_wallet">Payslips</string>
     <string name="close_wallet">close</string>
+    <string name="jan_wallet">January</string>
+    <string name="feb_wallet">February</string>
+    <string name="march_wallet">March</string>
+    <string name="apr_wallet">April</string>
+    <string name="may_wallet">May</string>
+    <string name="jun_wallet">June</string>
+    <string name="jul_wallet">July</string>
+    <string name="aug_wallet">August</string>
+    <string name="sept_wallet">September</string>
+    <string name="oct_wallet">October</string>
+    <string name="nov_wallet">November</string>
+    <string name="dec_wallet">December</string>
 
 </resources>

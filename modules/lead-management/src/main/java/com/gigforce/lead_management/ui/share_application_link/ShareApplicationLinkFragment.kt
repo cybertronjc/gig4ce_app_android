@@ -334,7 +334,7 @@ class ShareApplicationLinkFragment : BaseFragment2<FragmentLeadManagementReferra
                 )
             )
             startActivityForResult(
-                Intent.createChooser(shareIntent, "choose one"),
+                Intent.createChooser(shareIntent, getString(R.string.choose_one_lead)),
                 REQUEST_CODE_SHARE_VIA_OTHER_APPS
                 )
         } catch (e: Exception) {

@@ -43,8 +43,9 @@ class ApplicationSubmittedFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         getDataFromIntents(savedInstanceState)
-        pending_tv.text = Html.fromHtml("Application check : <b>Pending</b>")
-        thanks_msg.text = Html.fromHtml("Thanks for applying at ${bussinessName}. We will contact you soon.")
+        pending_tv.text = Html.fromHtml(getString(R.string.application_check_client))
+        thanks_msg.text = Html.fromHtml(getString(R.string.thanks_applying_client) + bussinessName + getString(
+                    R.string.contact_soon_client))
 
         listener()
     }
@@ -134,7 +135,7 @@ class ApplicationSubmittedFragment : Fragment() {
                     outputFile
             )
             )
-            startActivity(Intent.createChooser(shareIntent, "choose one"))
+            startActivity(Intent.createChooser(shareIntent, getString(R.string.choose_one_client)))
             pb_client_activation.gone()
         } catch (e: Exception) {
             //e.toString();

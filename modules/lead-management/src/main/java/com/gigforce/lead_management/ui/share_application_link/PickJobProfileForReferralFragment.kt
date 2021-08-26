@@ -91,7 +91,7 @@ class PickJobProfileForReferralFragment : BaseFragment2<FragmentPickJobProfileFo
 
 
     private fun initToolbar(toolbar: GigforceToolbar) {
-        toolbar.showTitle("Share Application Link")
+        toolbar.showTitle(getString(R.string.share_application_link_lead))
         toolbar.hideActionMenu()
         toolbar.setBackButtonListener{
             activity?.onBackPressed()
@@ -213,8 +213,8 @@ class PickJobProfileForReferralFragment : BaseFragment2<FragmentPickJobProfileFo
             GigAppListRecyclerItemData.GigAppRecyclerItemData(
                 status = "",
                 jobProfileId = it.jobProfileId,
-                tradeName = it.tradeName ?: "Trade name N/A",
-                profileName = it.profileName ?: "Profile N/A",
+                tradeName = it.tradeName ?: getString(R.string.trade_name_lead),
+                profileName = it.profileName ?: getString(R.string.profile_lead),
                 companyLogo = it.companyLogo ?: "",
                 it.ongoing,
                 selected = it.isSelected,

@@ -589,7 +589,7 @@ class GigPage2Fragment : Fragment(),
         if (!gig.isCheckInMarked()) {
 
             checkInCheckOutSliderBtn.visible()
-            checkInCheckOutSliderBtn.text = "Check-in"
+            checkInCheckOutSliderBtn.text = getString(R.string.check_in_giger_gigs)
         } else if (!gig.isCheckOutMarked()) {
 
             val checkInTime = gig.attendance!!.checkInTime?.toLocalDateTime()

@@ -87,5 +87,9 @@
     <string name="create_profile_now_lead">Create Profile Now</string>
     <string name="next_lead">Next</string>
     <string name="share_the_joy_of_working_with_gigforce_and_invite_your_friends_lead">Share the joy of working with Gigforce and invite your friends.</string>
+    <string name="share_application_link_lead">Share Application Link</string>
+    <string name="trade_name_lead">Trade name N/A</string>
+    <string name="profile_lead">Profile N/A</string>
+    <string name="choose_one_lead">choose one</string>
 
 </resources>

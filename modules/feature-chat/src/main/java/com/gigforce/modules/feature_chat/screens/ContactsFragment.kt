@@ -382,7 +382,7 @@ class ContactsFragment : DialogFragment(),
         MaterialAlertDialogBuilder(requireContext())
                 .setMessage(error)
                 .setTitle(getString(R.string.unable_to_sync_contacts_chat))
-                .setPositiveButton("Okay") { _, _ -> }
+                .setPositiveButton(getString(R.string.okay_chat)) { _, _ -> }
                 .show()
     }
 

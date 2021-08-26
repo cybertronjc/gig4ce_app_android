@@ -313,7 +313,7 @@ class UserAadhaarCardFragment : Fragment(), UserDetailsFilledDialogFragmentResul
             getString(R.string.aadhar_details_verified_amb)
         )
         viewBinding.submitButton.visible()
-        viewBinding.submitButton.text = "Next"
+        viewBinding.submitButton.text = getString(R.string.next_amb)
         viewBinding.progressBar.gone()
         viewBinding.toplayoutblock.setVerificationSuccessfulView(getString(R.string.aadhar_card_verified_amb))
 

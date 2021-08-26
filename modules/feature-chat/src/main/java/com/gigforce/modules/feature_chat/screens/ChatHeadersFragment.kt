@@ -219,7 +219,7 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
     }
 
     private fun initListeners() {
-        toolbar.showSearchOption("Search Chats")
+        toolbar.showSearchOption(getString(R.string.search_chat_chat))
         toolbar.setOnSearchTextChangeListener(this)
 
         requireActivity().onBackPressedDispatcher.addCallback(

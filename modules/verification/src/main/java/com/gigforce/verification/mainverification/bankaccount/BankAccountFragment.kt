@@ -95,8 +95,10 @@ class BankAccountFragment : Fragment(),
 
     @Inject
     lateinit var navigation: INavigation
+
     @Inject
     lateinit var eventTracker: IEventTracker
+
     @Inject
     lateinit var buildConfig: IBuildConfig
     private var FROM_CLIENT_ACTIVATON: Boolean = false
@@ -138,7 +140,7 @@ class BankAccountFragment : Fragment(),
     }
 
     var allNavigationList = ArrayList<String>()
-    var intentBundle : Bundle? = null
+    var intentBundle: Bundle? = null
     private fun getDataFromIntent(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
             FROM_CLIENT_ACTIVATON =
@@ -162,7 +164,7 @@ class BankAccountFragment : Fragment(),
 
     override fun onBackPressed(): Boolean {
         if (FROM_CLIENT_ACTIVATON) {
-            if(!manuallyRequestBackpress){ //|| viewBinding.toplayoutblock.isDocDontOptChecked() || (!anyDataEntered &&  (verificationScreenStatus == VerificationScreenStatus.DEFAULT || verificationScreenStatus == VerificationScreenStatus.FAILED) )
+            if (!manuallyRequestBackpress) { //|| viewBinding.toplayoutblock.isDocDontOptChecked() || (!anyDataEntered &&  (verificationScreenStatus == VerificationScreenStatus.DEFAULT || verificationScreenStatus == VerificationScreenStatus.FAILED) )
                 var navFragmentsData = activity as NavFragmentsData
                 navFragmentsData.setData(
                     bundleOf(
@@ -301,7 +303,7 @@ class BankAccountFragment : Fragment(),
             getString(R.string.bank_details_verified_veri)
         )
         viewBinding.submitButton.visible()
-        viewBinding.submitButton.text = "Next"
+        viewBinding.submitButton.text = getString(R.string.next_camel_veri)
         viewBinding.submitButton.isEnabled = true
         viewBinding.progressBar.gone()
         viewBinding.toplayoutblock.setVerificationSuccessfulView(getString(R.string.bank_verified_veri))
@@ -438,7 +440,7 @@ class BankAccountFragment : Fragment(),
 
     private fun resetInitializeViews() {
         viewBinding.submitButton.visible()
-        viewBinding.submitButton.text = "Skip"
+        viewBinding.submitButton.text = getString(R.string.skip_veri)
         viewBinding.submitButton.isEnabled = true
         viewBinding.belowLayout.visible()
         viewBinding.progressBar.gone()
@@ -524,10 +526,10 @@ class BankAccountFragment : Fragment(),
                                 .isNullOrBlank() && viewBinding.ifscCode.editText?.text.toString()
                                 .isNullOrBlank()
                         ) {
-                            viewBinding.submitButton.text = "Skip"
+                            viewBinding.submitButton.text = getString(R.string.skip_veri)
                             anyDataEntered = false
                         } else {
-                            viewBinding.submitButton.text = "Submit"
+                            viewBinding.submitButton.text = getString(R.string.submit_veri)
                             anyDataEntered = true
                         }
                     }
@@ -548,7 +550,7 @@ class BankAccountFragment : Fragment(),
         viewBinding.toplayoutblock.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { p1, b1 ->
             if (b1) {
                 oldStateHolder.submitButtonCta = viewBinding.submitButton.text.toString()
-                viewBinding.submitButton.text = "Skip"
+                viewBinding.submitButton.text = getString(R.string.skip_veri)
                 viewBinding.belowLayout.gone()
             } else {
                 viewBinding.submitButton.text = oldStateHolder.submitButtonCta
@@ -571,7 +573,7 @@ class BankAccountFragment : Fragment(),
             viewBinding.toplayoutblock.toggleChangeTextView(false)
             setAlreadyfilledData(null, true)
             verificationScreenStatus = VerificationScreenStatus.DEFAULT
-            viewBinding.submitButton.text = "Skip"
+            viewBinding.submitButton.text = getString(R.string.skip_veri)
         })
 
         viewBinding.submitButton.setOnClickListener {
@@ -650,290 +652,291 @@ class BankAccountFragment : Fragment(),
         }
         viewBinding.notConfirmButton.setOnClickListener {
             MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Do you want to re-enter Bank details?")
-                .setPositiveButton(getString(R.string.yes)) { _, _ ->
+                .setTitle(getString(R.string.want_to_reenter_bank_details_veri))
+                .setPositiveButton(getString(R.string.yes_veri)) { _, _ ->
                     eventTracker.pushEvent(
                         TrackingEventArgs(
                             eventName = VerificationEvents.BANK_MISMATCH,
                             props = null
                         )
                     )
-                .setTitle(getString(R.string.want_to_reenter_bank_details_veri))
-                .setPositiveButton(getString(R.string.yes_veri)) { _, _ ->
                     viewModel.setVerificationStatusStringToBlank()
                 }
                 .setNegativeButton(getString(R.string.no_veri)) { dialog, _ ->
                     dialog.dismiss()
                 }
                 .show()
+                }
         }
-    }
-    var manuallyRequestBackpress = false
-    private fun checkForNextDoc() {
-        if (allNavigationList.size == 0) {
+
+        var manuallyRequestBackpress = false
+        private fun checkForNextDoc() {
+            if (allNavigationList.size == 0) {
 //            manuallyRequestBackpress = true
-            activity?.onBackPressed()
-        } else {
-            var navigationsForBundle = emptyList<String>()
-            if (allNavigationList.size > 1) {
-                navigationsForBundle =
-                    allNavigationList.slice(IntRange(1, allNavigationList.size - 1))
-                        .filter { it.length > 0 }
-            }
-            navigation.popBackStack()
-            intentBundle?.putStringArrayList(
-                com.gigforce.common_ui.StringConstants.NAVIGATION_STRING_ARRAY.value,
-                java.util.ArrayList(navigationsForBundle)
-            )
-            navigation.navigateTo(
-                allNavigationList.get(0),intentBundle)
+                activity?.onBackPressed()
+            } else {
+                var navigationsForBundle = emptyList<String>()
+                if (allNavigationList.size > 1) {
+                    navigationsForBundle =
+                        allNavigationList.slice(IntRange(1, allNavigationList.size - 1))
+                            .filter { it.length > 0 }
+                }
+                navigation.popBackStack()
+                intentBundle?.putStringArrayList(
+                    com.gigforce.common_ui.StringConstants.NAVIGATION_STRING_ARRAY.value,
+                    java.util.ArrayList(navigationsForBundle)
+                )
+                navigation.navigateTo(
+                    allNavigationList.get(0), intentBundle
+                )
 //            navigation.navigateTo(
 //                allNavigationList.get(0),
 //                bundleOf(VerificationConstants.NAVIGATION_STRINGS to navigationsForBundle,if(FROM_CLIENT_ACTIVATON) StringConstants.FROM_CLIENT_ACTIVATON.value to true else StringConstants.FROM_CLIENT_ACTIVATON.value to false)
 //            )
 
+            }
         }
-    }
 
-    private fun initializeImages() {
-        // verification_doc_image ic_passbook_illustration
-        val frontUri = Uri.Builder()
-            .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
-            .authority(resources.getResourcePackageName(R.drawable.verification_doc_image))
-            .appendPath(resources.getResourceTypeName(R.drawable.verification_doc_image))
-            .appendPath(resources.getResourceEntryName(R.drawable.verification_doc_image))
-            .build()
-        val list =
-            listOf(
-                KYCImageModel(
-                    text = getString(R.string.upload_bank_account_new_veri),
-                    imageIcon = frontUri,
-                    imageUploaded = false
+        private fun initializeImages() {
+            // verification_doc_image ic_passbook_illustration
+            val frontUri = Uri.Builder()
+                .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
+                .authority(resources.getResourcePackageName(R.drawable.verification_doc_image))
+                .appendPath(resources.getResourceTypeName(R.drawable.verification_doc_image))
+                .appendPath(resources.getResourceEntryName(R.drawable.verification_doc_image))
+                .build()
+            val list =
+                listOf(
+                    KYCImageModel(
+                        text = getString(R.string.upload_bank_account_new_veri),
+                        imageIcon = frontUri,
+                        imageUploaded = false
+                    )
                 )
-            )
-        viewBinding.toplayoutblock.setImageViewPager(list)
-    }
-
-    private fun callKycOcrApi(path: Uri) {
-        ocrOrVerificationRquested = true
-        var image: MultipartBody.Part? = null
-        if (path != null) {
-            val file = File(URI(path.toString()))
-            Log.d("Register", "Nombre del archivo " + file.name)
-            // create RequestBody instance from file
-            val requestFile: RequestBody =
-                RequestBody.create(MediaType.parse("image/png"), file)
-            // MultipartBody.Part is used to send also the actual file name
-            image =
-                MultipartBody.Part.createFormData("file", file.name, requestFile)
+            viewBinding.toplayoutblock.setImageViewPager(list)
         }
-        image?.let { viewModel.getKycOcrResult("bank", "dummy", it) }
-    }
+
+        private fun callKycOcrApi(path: Uri) {
+            ocrOrVerificationRquested = true
+            var image: MultipartBody.Part? = null
+            if (path != null) {
+                val file = File(URI(path.toString()))
+                Log.d("Register", "Nombre del archivo " + file.name)
+                // create RequestBody instance from file
+                val requestFile: RequestBody =
+                    RequestBody.create(MediaType.parse("image/png"), file)
+                // MultipartBody.Part is used to send also the actual file name
+                image =
+                    MultipartBody.Part.createFormData("file", file.name, requestFile)
+            }
+            image?.let { viewModel.getKycOcrResult("bank", "dummy", it) }
+        }
 
 
-    private fun checkForPermissionElseShowCameraGalleryBottomSheet() {
-        if (hasStoragePermissions())
-            VerificationClickOrSelectImageBottomSheet.launch(
-                parentFragmentManager,
-                getString(R.string.upload_passbook_veri),
-                this
+        private fun checkForPermissionElseShowCameraGalleryBottomSheet() {
+            if (hasStoragePermissions())
+                VerificationClickOrSelectImageBottomSheet.launch(
+                    parentFragmentManager,
+                    getString(R.string.upload_passbook_veri),
+                    this
+                )
+            else
+                requestStoragePermission()
+        }
+
+        private fun requestStoragePermission() {
+
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.CAMERA
+                ),
+                REQUEST_STORAGE_PERMISSION
             )
-        else
-            requestStoragePermission()
-    }
+        }
 
-    private fun requestStoragePermission() {
-
-        requestPermissions(
-            arrayOf(
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
+        private fun hasStoragePermissions(): Boolean {
+            return ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                requireContext(),
                 Manifest.permission.CAMERA
-            ),
-            REQUEST_STORAGE_PERMISSION
-        )
-    }
+            ) == PackageManager.PERMISSION_GRANTED
+        }
 
-    private fun hasStoragePermissions(): Boolean {
-        return ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.READ_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.CAMERA
-        ) == PackageManager.PERMISSION_GRANTED
-    }
+        private fun showCameraAndGalleryOption() {
+            val photoCropIntent = Intent()
+            photoCropIntent.putExtra(
+                "purpose",
+                "verification"
+            )
+            photoCropIntent.putExtra("fbDir", "/verification/")
+            photoCropIntent.putExtra("folder", "verification")
+            photoCropIntent.putExtra("detectFace", 0)
+            photoCropIntent.putExtra("file", "pan_card.jpg")
+            navigation.navigateToPhotoCrop(
+                photoCropIntent,
+                REQUEST_CODE_CAPTURE_BANK_PHOTO, requireContext(), this
+            )
+        }
 
-    private fun showCameraAndGalleryOption() {
-        val photoCropIntent = Intent()
-        photoCropIntent.putExtra(
-            "purpose",
-            "verification"
-        )
-        photoCropIntent.putExtra("fbDir", "/verification/")
-        photoCropIntent.putExtra("folder", "verification")
-        photoCropIntent.putExtra("detectFace", 0)
-        photoCropIntent.putExtra("file", "pan_card.jpg")
-        navigation.navigateToPhotoCrop(
-            photoCropIntent,
-            REQUEST_CODE_CAPTURE_BANK_PHOTO, requireContext(), this
-        )
-    }
+        override fun onRequestPermissionsResult(
+            requestCode: Int,
+            permissions: Array<String>, grantResults: IntArray
+        ) {
+            when (requestCode) {
+                REQUEST_STORAGE_PERMISSION -> {
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>, grantResults: IntArray
-    ) {
-        when (requestCode) {
-            REQUEST_STORAGE_PERMISSION -> {
+                    var allPermsGranted = true
+                    for (i in grantResults.indices) {
+                        if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                            allPermsGranted = false
+                            break
+                        }
+                    }
 
-                var allPermsGranted = true
-                for (i in grantResults.indices) {
-                    if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
-                        allPermsGranted = false
-                        break
+                    if (allPermsGranted)
+                        VerificationClickOrSelectImageBottomSheet.launch(
+                            parentFragmentManager,
+                            getString(R.string.upload_passbook_veri),
+                            this
+                        )
+                    else {
+                        showToast(getString(R.string.grant_storage_permission_veri))
                     }
                 }
-
-                if (allPermsGranted)
-                    VerificationClickOrSelectImageBottomSheet.launch(
-                        parentFragmentManager,
-                        getString(R.string.upload_passbook_veri),
-                        this
-                    )
-                else {
-                    showToast(getString(R.string.grant_storage_permission_veri))
-                }
             }
         }
-    }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
+        override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+            super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == REQUEST_CAPTURE_IMAGE || requestCode == REQUEST_PICK_IMAGE) {
-            val outputFileUri =
-                ImagePicker.getImageFromResult(requireContext(), resultCode, data)
-            if (outputFileUri != null) {
+            if (requestCode == REQUEST_CAPTURE_IMAGE || requestCode == REQUEST_PICK_IMAGE) {
+                val outputFileUri =
+                    ImagePicker.getImageFromResult(requireContext(), resultCode, data)
+                if (outputFileUri != null) {
 //                startCrop(outputFileUri)
-                startCropImage(outputFileUri)
-            }
-        } else if (requestCode == UCrop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
-            val imageUriResultCrop: Uri? = UCrop.getOutput(data!!)
-            Log.d("ImageUri", imageUriResultCrop.toString())
-            clickedImagePath = imageUriResultCrop
-            showPassbookInfoCard(clickedImagePath!!)
-            val baos = ByteArrayOutputStream()
-            if (imageUriResultCrop == null) {
-                val bitmap = data.data as Bitmap
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
+                    startCropImage(outputFileUri)
+                }
+            } else if (requestCode == UCrop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
+                val imageUriResultCrop: Uri? = UCrop.getOutput(data!!)
+                Log.d("ImageUri", imageUriResultCrop.toString())
+                clickedImagePath = imageUriResultCrop
+                showPassbookInfoCard(clickedImagePath!!)
+                val baos = ByteArrayOutputStream()
+                if (imageUriResultCrop == null) {
+                    val bitmap = data.data as Bitmap
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
 
+                }
+            } else if (requestCode == ImageCropActivity.CROP_RESULT_CODE && resultCode == Activity.RESULT_OK) {
+                val imageUriResultCrop: Uri? =
+                    Uri.parse(data?.getStringExtra(ImageCropActivity.CROPPED_IMAGE_URL_EXTRA))
+                Log.d("ImageUri", imageUriResultCrop.toString())
+                clickedImagePath = imageUriResultCrop
+                showPassbookInfoCard(clickedImagePath!!)
             }
-        }else if (requestCode == ImageCropActivity.CROP_RESULT_CODE && resultCode == Activity.RESULT_OK) {
-            val imageUriResultCrop: Uri? =  Uri.parse(data?.getStringExtra(ImageCropActivity.CROPPED_IMAGE_URL_EXTRA))
-            Log.d("ImageUri", imageUriResultCrop.toString())
-            clickedImagePath = imageUriResultCrop
-            showPassbookInfoCard(clickedImagePath!!)
+
         }
 
-    }
+        private fun startCropImage(imageUri: Uri): Unit {
+            val photoCropIntent = Intent(context, ImageCropActivity::class.java)
+            photoCropIntent.putExtra("outgoingUri", imageUri.toString())
+            startActivityForResult(photoCropIntent, ImageCropActivity.CROP_RESULT_CODE)
+        }
 
-    private fun startCropImage(imageUri: Uri): Unit {
-        val photoCropIntent = Intent(context, ImageCropActivity::class.java)
-        photoCropIntent.putExtra("outgoingUri", imageUri.toString())
-        startActivityForResult(photoCropIntent, ImageCropActivity.CROP_RESULT_CODE)
-    }
-
-    private fun showWhyWeNeedThisDialog() {
-        WhyWeNeedThisBottomSheet.launch(
-            childFragmentManager = childFragmentManager,
-            title = getString(R.string.why_do_we_need_this_veri),
-            content = getString(R.string.why_do_we_need_this_bank_veri)
-        )
-    }
-
-    private fun callKycVerificationApi() {
-        var list = listOf(
-            Data("name", viewBinding.bankNameTil.editText?.text.toString()),
-            Data("no", viewBinding.bankAccNumberItl.editText?.text.toString()),
-            Data("ifsccode", viewBinding.ifscCode.editText?.text.toString())
-        )
-        activeLoader(true)
-        var map = mapOf(
-            "Account number" to viewBinding.bankAccNumberItl.editText?.text.toString(),
-            "IFSC code" to viewBinding.ifscCode.editText?.text.toString(),
-            "Bank name" to viewBinding.bankNameTil.editText?.text.toString()
-        )
-        eventTracker.pushEvent(
-            TrackingEventArgs(
-                eventName = VerificationEvents.BANK_DETAIL_SUBMITTED,
-                props = map
+        private fun showWhyWeNeedThisDialog() {
+            WhyWeNeedThisBottomSheet.launch(
+                childFragmentManager = childFragmentManager,
+                title = getString(R.string.why_do_we_need_this_veri),
+                content = getString(R.string.why_do_we_need_this_bank_veri)
             )
-        )
-        viewModel.getKycVerificationResult("bank", list)
-    }
+        }
 
-    private fun showPassbookInfoCard(bankInfoPath: Uri) {
-        viewBinding.toplayoutblock.setDocumentImage(0, bankInfoPath)
-        activeLoader(true)
-        callKycOcrApi(bankInfoPath)
-    }
+        private fun callKycVerificationApi() {
+            var list = listOf(
+                Data("name", viewBinding.bankNameTil.editText?.text.toString()),
+                Data("no", viewBinding.bankAccNumberItl.editText?.text.toString()),
+                Data("ifsccode", viewBinding.ifscCode.editText?.text.toString())
+            )
+            activeLoader(true)
+            var map = mapOf(
+                "Account number" to viewBinding.bankAccNumberItl.editText?.text.toString(),
+                "IFSC code" to viewBinding.ifscCode.editText?.text.toString(),
+                "Bank name" to viewBinding.bankNameTil.editText?.text.toString()
+            )
+            eventTracker.pushEvent(
+                TrackingEventArgs(
+                    eventName = VerificationEvents.BANK_DETAIL_SUBMITTED,
+                    props = map
+                )
+            )
+            viewModel.getKycVerificationResult("bank", list)
+        }
 
-    override fun onClickPictureThroughCameraClicked() {
-        val intents = ImagePicker.getCaptureImageIntentsOnly(requireContext())
-        startActivityForResult(intents, REQUEST_CAPTURE_IMAGE)
-    }
+        private fun showPassbookInfoCard(bankInfoPath: Uri) {
+            viewBinding.toplayoutblock.setDocumentImage(0, bankInfoPath)
+            activeLoader(true)
+            callKycOcrApi(bankInfoPath)
+        }
 
-    override fun onPickImageThroughCameraClicked() {
-        val intents = ImagePicker.getPickImageIntentsOnly(requireContext())
-        startActivityForResult(intents, REQUEST_PICK_IMAGE)
-    }
+        override fun onClickPictureThroughCameraClicked() {
+            val intents = ImagePicker.getCaptureImageIntentsOnly(requireContext())
+            startActivityForResult(intents, REQUEST_CAPTURE_IMAGE)
+        }
 
-    private fun startCrop(uri: Uri): Unit {
-        Log.v("Start Crop", "started")
-        //can use this for a new name every time
-        val timeStamp = SimpleDateFormat(
-            "yyyyMMdd_HHmmss",
-            Locale.getDefault()
-        ).format(Date())
-        val imageFileName = PREFIX + "_" + timeStamp + "_"
-        val uCrop: UCrop = UCrop.of(
-            uri,
-            Uri.fromFile(File(requireContext().cacheDir, imageFileName + EXTENSION))
-        )
-        val resultIntent: Intent = Intent()
-        resultIntent.putExtra("filename", imageFileName + EXTENSION)
-        val size = getImageDimensions(uri)
-        uCrop.withAspectRatio(size.width.toFloat(), size.height.toFloat())
-        uCrop.withMaxResultSize(1920, 1080)
-        uCrop.withOptions(getCropOptions())
-        uCrop.start(requireContext(), this)
-    }
+        override fun onPickImageThroughCameraClicked() {
+            val intents = ImagePicker.getPickImageIntentsOnly(requireContext())
+            startActivityForResult(intents, REQUEST_PICK_IMAGE)
+        }
 
-    private fun getImageDimensions(uri: Uri): Size {
-        val options: BitmapFactory.Options = BitmapFactory.Options()
-        options.inJustDecodeBounds = true
-        BitmapFactory.decodeFile(File(uri.path).absolutePath, options)
-        val imageHeight: Int = options.outHeight
-        val imageWidth: Int = options.outWidth
-        return Size(imageWidth, imageHeight)
-    }
+        private fun startCrop(uri: Uri): Unit {
+            Log.v("Start Crop", "started")
+            //can use this for a new name every time
+            val timeStamp = SimpleDateFormat(
+                "yyyyMMdd_HHmmss",
+                Locale.getDefault()
+            ).format(Date())
+            val imageFileName = PREFIX + "_" + timeStamp + "_"
+            val uCrop: UCrop = UCrop.of(
+                uri,
+                Uri.fromFile(File(requireContext().cacheDir, imageFileName + EXTENSION))
+            )
+            val resultIntent: Intent = Intent()
+            resultIntent.putExtra("filename", imageFileName + EXTENSION)
+            val size = getImageDimensions(uri)
+            uCrop.withAspectRatio(size.width.toFloat(), size.height.toFloat())
+            uCrop.withMaxResultSize(1920, 1080)
+            uCrop.withOptions(getCropOptions())
+            uCrop.start(requireContext(), this)
+        }
 
-    private fun getCropOptions(): UCrop.Options {
-        val options: UCrop.Options = UCrop.Options()
-        options.setCompressionQuality(70)
-        options.setCompressionFormat(Bitmap.CompressFormat.PNG)
+        private fun getImageDimensions(uri: Uri): Size {
+            val options: BitmapFactory.Options = BitmapFactory.Options()
+            options.inJustDecodeBounds = true
+            BitmapFactory.decodeFile(File(uri.path).absolutePath, options)
+            val imageHeight: Int = options.outHeight
+            val imageWidth: Int = options.outWidth
+            return Size(imageWidth, imageHeight)
+        }
+
+        private fun getCropOptions(): UCrop.Options {
+            val options: UCrop.Options = UCrop.Options()
+            options.setCompressionQuality(70)
+            options.setCompressionFormat(Bitmap.CompressFormat.PNG)
 //        options.setMaxBitmapSize(1000)
-        options.setHideBottomControls((false))
-        options.setFreeStyleCropEnabled(false)
-        options.setStatusBarColor(ResourcesCompat.getColor(resources, R.color.topBarDark, null))
-        options.setToolbarColor(ResourcesCompat.getColor(resources, R.color.topBarDark, null))
-        options.setToolbarTitle(getString(R.string.crop_and_rotate_veri))
-        return options
-    }
+            options.setHideBottomControls((false))
+            options.setFreeStyleCropEnabled(false)
+            options.setStatusBarColor(ResourcesCompat.getColor(resources, R.color.topBarDark, null))
+            options.setToolbarColor(ResourcesCompat.getColor(resources, R.color.topBarDark, null))
+            options.setToolbarTitle(getString(R.string.crop_and_rotate_veri))
+            return options
+        }
 
 //    override fun onBackPressed(): Boolean {
 //        if (verificationScreenStatus == VerificationScreenStatus.STARTED_VERIFYING) {
@@ -943,23 +946,23 @@ class BankAccountFragment : Fragment(),
 //
 //    }
 
-    private fun reContinueDialog() {
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle(getString(R.string.want_to_wait_veri))
-            .setPositiveButton(getString(R.string.yes_veri)) { dialog, _ ->
-                dialog.dismiss()
-            }
-            .setNegativeButton(getString(R.string.no_veri)) { dialog, _ ->
-                navigation.popBackStack()
-            }
-            .show()
-    }
+        private fun reContinueDialog() {
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle(getString(R.string.want_to_wait_veri))
+                .setPositiveButton(getString(R.string.yes_veri)) { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .setNegativeButton(getString(R.string.no_veri)) { dialog, _ ->
+                    navigation.popBackStack()
+                }
+                .show()
+        }
 
-    override fun onResume() {
-        super.onResume()
-        StatusBarUtil.setColorNoTranslucent(
-            requireActivity(),
-            ResourcesCompat.getColor(resources, R.color.lipstick_2, null)
-        )
+        override fun onResume() {
+            super.onResume()
+            StatusBarUtil.setColorNoTranslucent(
+                requireActivity(),
+                ResourcesCompat.getColor(resources, R.color.lipstick_2, null)
+            )
+        }
     }
-}

@@ -204,7 +204,7 @@ class EnrolledUsersRecyclerAdapter constructor(
                                 ContextCompat.getDrawable(
                                     context,
                                     R.drawable.md_transparent
-                                )!!, "Call"
+                                )!!, context.getString(R.string.call_amb)
                             )
                         )
                         .addItem(
@@ -212,7 +212,7 @@ class EnrolledUsersRecyclerAdapter constructor(
                                 ContextCompat.getDrawable(
                                     context,
                                     R.drawable.md_transparent
-                                )!!, "Chat"
+                                )!!, context.getString(R.string.chat_amb)
                             )
                         ).setShowBackground(false)
                         .setOnMenuItemClickListener(object :

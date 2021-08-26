@@ -1028,4 +1028,8 @@
     <string name="update_now">Update now</string>
     <string name="skip">Skip</string>
     <string name="activated">Activated</string>
+    <string name="want_to_delete_app">\"You want to delete \"</string>
+    <string name="from_contacts_app">\" from your contacts!!!\"</string>
+    <string name="from_emails_app">\" from your emails!!!\"</string>
+    <string name="know_lang_app">\"Language known: \"</string>
 </resources>

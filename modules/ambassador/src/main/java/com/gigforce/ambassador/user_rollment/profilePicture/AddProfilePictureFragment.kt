@@ -109,11 +109,11 @@ class AddProfilePictureFragment : Fragment(),
             shimmerFrameLayout.gone()
             submitBtn.visible()
             skipButton.gone()
-            submitBtn.text = "Upload Photo"
+            submitBtn.text = getString(R.string.upload_photo_amb)
             editLayout.gone()
         } else {
             val isRequirementMode = mode != EnrollmentConstants.MODE_ENROLLMENT_REQUIREMENT
-            submitBtn.text = if (isRequirementMode) "Change Photo" else "Next"
+            submitBtn.text = if (isRequirementMode) getString(R.string.change_photo_amb) else getString(R.string.next_amb)
             skipButton.isVisible = isRequirementMode
             viewModel.getProfileForUser(userId)
         }
@@ -300,7 +300,7 @@ class AddProfilePictureFragment : Fragment(),
                         } else {
                             skipButton.gone()
                             editLayout.gone()
-                            submitBtn.text = "Upload Photo"
+                            submitBtn.text = getString(R.string.upload_photo_amb)
                         }
                     }
                     is Lce.Error -> {
@@ -335,7 +335,7 @@ class AddProfilePictureFragment : Fragment(),
 //                                //Normal User login
 //                                submitBtn.text = "Back"
 //                            } else {
-                        submitBtn.text = "Next"
+                        submitBtn.text = getString(R.string.next_amb)
 //                            }
 
                         showToast(getString(R.string.profile_pic_uploaded_amb))

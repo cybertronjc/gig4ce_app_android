@@ -287,10 +287,10 @@ class PanCardFragment : Fragment(),
                                 .isNullOrBlank() && viewBinding.dateOfBirth.text.toString()
                                 .isNullOrBlank()
                         ) {
-                            viewBinding.submitButton.text = "Skip"
+                            viewBinding.submitButton.text = getString(R.string.skip_veri)
                             anyDataEntered = false
                         } else {
-                            viewBinding.submitButton.text = "Submit"
+                            viewBinding.submitButton.text = getString(R.string.submit_veri)
                             anyDataEntered = true
                         }
                     }
@@ -313,7 +313,7 @@ class PanCardFragment : Fragment(),
         viewBinding.toplayoutblock.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { p1, b1 ->
             if (b1) {
                 oldStateHolder.submitButtonCta = viewBinding.submitButton.text.toString()
-                viewBinding.submitButton.text = "Skip"
+                viewBinding.submitButton.text = getString(R.string.skip_veri)
                 viewBinding.belowLayout.gone()
             } else {
                 viewBinding.submitButton.text = oldStateHolder.submitButtonCta
@@ -743,7 +743,7 @@ class PanCardFragment : Fragment(),
             getString(R.string.pan_verified_successfully_veri)
         )
         viewBinding.submitButton.visible()
-        viewBinding.submitButton.text = "Next"
+        viewBinding.submitButton.text = getString(R.string.next_camel_veri)
         viewBinding.submitButton.isEnabled = true
         viewBinding.progressBar.gone()
         viewBinding.toplayoutblock.setVerificationSuccessfulView(getString(R.string.pan_verified_veri))
@@ -836,7 +836,7 @@ class PanCardFragment : Fragment(),
 
     private fun resetInitializeViews() {
         viewBinding.submitButton.visible()
-        viewBinding.submitButton.text = "Skip"
+        viewBinding.submitButton.text = getString(R.string.skip_veri)
         viewBinding.submitButton.isEnabled = true
         viewBinding.belowLayout.visible()
         viewBinding.toplayoutblock.setVerificationSuccessfulView(

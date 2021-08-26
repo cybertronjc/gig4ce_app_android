@@ -157,10 +157,10 @@ class AssessmentResultFragment : Fragment(), IOnBackPressedOverride,
                     next_lesson_btn.isVisible = isContentPresent
 
                     next_lesson_btn.text = when (nextLesson?.type) {
-                        CourseContent.TYPE_ASSESSMENT -> "Next Assessment"
-                        CourseContent.TYPE_VIDEO -> "Next Lesson"
-                        CourseContent.TYPE_SLIDE -> "Next Slide"
-                        else -> "Okay"
+                        CourseContent.TYPE_ASSESSMENT -> getString(R.string.next_assessment_learning)
+                        CourseContent.TYPE_VIDEO -> getString(R.string.next_lesson_learning)
+                        CourseContent.TYPE_SLIDE -> getString(R.string.next_slide_learning)
+                        else -> getString(R.string.okay_learning)
                     }
                 }
                 is Lce.Error -> {

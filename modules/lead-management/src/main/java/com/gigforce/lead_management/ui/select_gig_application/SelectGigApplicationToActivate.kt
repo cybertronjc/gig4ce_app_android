@@ -169,7 +169,7 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
         viewModel.selectedJobProfileOverview.observe(viewLifecycleOwner, Observer {
             logger.d(TAG, "selected job profile $it")
             if (it.ongoing) {
-                submitBtn.text = "Next"
+                submitBtn.text = getString(R.string.next_lead)
                 if (it.submitted) {
                     submitBtn.isEnabled = true
                     submitBtn.background = resources.getDrawable(R.drawable.app_gradient_button)

@@ -133,7 +133,7 @@ class LocationUpdates {
                 }
 
                 if (locationResult == null) {
-                    Toast.makeText(context, "Location can't be found", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, context.getString(com.gigforce.common_ui.R.string.location_not_found_common_ui), Toast.LENGTH_SHORT).show()
                     return
 
 

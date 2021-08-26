@@ -253,10 +253,10 @@ class DrivingLicenseFragment : Fragment(),
                                 .isNullOrBlank() && viewBinding.dobDate.text.toString()
                                 .isNullOrBlank()
                         ) {
-                            viewBinding.submitButton.text = "Skip"
+                            viewBinding.submitButton.text = getString(R.string.skip_veri)
                             anyDataEntered = false
                         } else {
-                            viewBinding.submitButton.text = "Submit"
+                            viewBinding.submitButton.text = getString(R.string.submit_veri)
                             anyDataEntered = true
                         }
 
@@ -278,7 +278,7 @@ class DrivingLicenseFragment : Fragment(),
         viewBinding.toplayoutblock.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { p1, b1 ->
             if (b1) {
                 oldStateHolder.submitButtonCta = viewBinding.submitButton.text.toString()
-                viewBinding.submitButton.text = "Skip"
+                viewBinding.submitButton.text = getString(R.string.skip_veri)
                 viewBinding.belowLayout.gone()
             } else {
                 viewBinding.submitButton.text = oldStateHolder.submitButtonCta
@@ -1056,7 +1056,7 @@ class DrivingLicenseFragment : Fragment(),
 
     private fun resetInitializeViews() {
         viewBinding.submitButton.visible()
-        viewBinding.submitButton.text = "Skip"
+        viewBinding.submitButton.text = getString(R.string.skip_veri)
         viewBinding.submitButton.isEnabled = true
         viewBinding.belowLayout.visible()
         viewBinding.toplayoutblock.setVerificationSuccessfulView(

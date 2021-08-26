@@ -728,7 +728,7 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
                     outputFile
                 )
             )
-            startActivity(Intent.createChooser(shareIntent, "choose one"))
+            startActivity(Intent.createChooser(shareIntent, getString(R.string.choose_one_client)))
         } catch (e: Exception) {
             //e.toString();
         }

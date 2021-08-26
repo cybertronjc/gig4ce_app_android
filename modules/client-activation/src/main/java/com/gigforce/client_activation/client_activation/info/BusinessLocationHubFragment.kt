@@ -217,18 +217,18 @@ class BusinessLocationHubFragment : Fragment(), IOnBackPressedOverride {
 
                 if (state.text.isNullOrBlank() || !stateList.contains(state.text.toString())) {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
+                        .setTitle(getString(R.string.alert_client))
                         .setMessage("Please select state")
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setPositiveButton(getString(R.string.okay_client)) { _, _ -> }
                         .show()
                     return@setOnClickListener
                 }
 
                 if (hub.text.isNullOrBlank() || !hubList.contains(hub.text.toString())) {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
+                        .setTitle(getString(R.string.alert_client))
                         .setMessage("Please select hub")
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setPositiveButton(getString(R.string.okay_client)) { _, _ -> }
                         .show()
                     return@setOnClickListener
                 }

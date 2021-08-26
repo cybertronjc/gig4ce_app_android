@@ -406,7 +406,7 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
         } else {
             if (delete) {
                 showConfirmationDialogType3(getString(R.string.you_sure),
-                        "You want to delete $number from your contacts!!!",
+                    getString(R.string.want_to_delete_app) + number + getString(R.string.from_contacts_app),
                         getString(R.string.yes), getString(R.string.no_app), object :
                         ConfirmationDialogOnClickListener {
                     override fun clickedOnYes(dialog: Dialog?) {
@@ -438,7 +438,7 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
     override fun editEmail(email: String, delete: Boolean) {
         if (delete) {
             showConfirmationDialogType3(getString(R.string.you_sure),
-                    "You want to delete $email from your emails!!!",
+                getString(R.string.want_to_delete_app) + email + getString(R.string.from_emails_app),
                 getString(R.string.yes), getString(R.string.no_app), object :
                     ConfirmationDialogOnClickListener {
                 override fun clickedOnYes(dialog: Dialog?) {

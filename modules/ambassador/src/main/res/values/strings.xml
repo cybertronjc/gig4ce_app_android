@@ -359,4 +359,9 @@
     <string name="do_you_have_pan_card">Do you have PAN Card ?</string>
     <string name="yes_i_have_pan_card">Yes, I have Pan Card.</string>
     <string name="no_i_don_t_have_pan_card">No, I don\'t have Pan Card.</string>
+    <string name="call_amb">Call</string>
+    <string name="chat_amb">Chat</string>
+    <string name="choose_one_amb">choose one</string>
+    <string name="next_amb">Next</string>
+    <string name="invite_link_amb">Invite link will be shared via SMS on registered number.</string>
 </resources>

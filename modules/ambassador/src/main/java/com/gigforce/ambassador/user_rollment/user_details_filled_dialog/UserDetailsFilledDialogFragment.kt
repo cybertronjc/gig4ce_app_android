@@ -122,7 +122,7 @@ class UserDetailsFilledDialogFragment : DialogFragment() {
                 getString(R.string.details_exclamation_amb) + "\n" +
                         "\n"
             )
-            append("Invite link will be shared via SMS on registered number.")
+            append(getString(R.string.invite_link_amb))
         }
 
         submitBtn.setOnClickListener {

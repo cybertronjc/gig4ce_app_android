@@ -199,9 +199,9 @@ class OnboardingAddProfilePictureFragment() : Fragment(), ImageCropCallback, Onb
                             if (it.content.hasUserUploadedProfilePicture()) {
                                 displayImage(it.content.profileAvatarName)
                                 // formCompletionListener.changeTextButton("Upload Photo")
-                                skip_edit_textview.text = "Change"
+                                skip_edit_textview.text = getString(R.string.change_profile)
                             } else {
-                                skip_edit_textview.text = "Skip"
+                                skip_edit_textview.text = getString(R.string.skip_profile)
 
                             }
 

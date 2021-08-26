@@ -131,5 +131,15 @@
     <string name="change_current_location_pref">To change your current location please update your current address</string>
     <string name="slots_pref">Slots</string>
     <string name="dummy_test_pref">Dummy Test</string>
+    <string name="all_pref">All</string>
+    <string name="monday_pref">Monday</string>
+    <string name="tuesday_pref">Tuesday</string>
+    <string name="wednesday_pref">Wednesday</string>
+    <string name="thursday_pref">Thursday</string>
+    <string name="friday_pref">Friday</string>
+    <string name="days_capital_pref">Days</string>
+    <string name="done_pref">DONE</string>
+    <string name="saturday_pref">Saturday</string>
+    <string name="sunday_pref">Sunday</string>
 
 </resources>

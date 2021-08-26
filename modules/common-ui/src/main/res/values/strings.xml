@@ -50,4 +50,12 @@
     <string name="checked_in_common_ui">Checked-In</string>
     <string name="giger_name_common_ui">Giger Name</string>
     <string name="job_profile_common_ui">Job Profile</string>
+    <string name="checkedout_common_ui">Checked Out</string>
+    <string name="check_common_ui">Checked In</string>
+    <string name="offer_letter_common_ui">Offer Letter</string>
+    <string name="terms_common_ui">Terms and Conditions</string>
+    <string name="error_loading_page_common_ui">Error while loading page</string>
+    <string name="alert_common_ui">Alert</string>
+    <string name="download_started_common_ui">Downloading started, check notification</string>
+    <string name="location_not_found_common_ui">Location can\'t be found</string>
 </resources>

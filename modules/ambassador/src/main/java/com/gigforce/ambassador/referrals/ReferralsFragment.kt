@@ -393,7 +393,7 @@ class ReferralsFragment : Fragment(),
                     outputFile
                 )
             )
-            startActivity(Intent.createChooser(shareIntent, "choose one"))
+            startActivity(Intent.createChooser(shareIntent, getString(R.string.choose_one_amb)))
         } catch (e: Exception) {
             //e.toString();
         }

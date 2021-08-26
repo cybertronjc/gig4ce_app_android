@@ -57,13 +57,13 @@ class DocViewerActivity : AppCompatActivity() {
 //           changeStatusBarColor()
 //           acceptLayout.visible()
            if (purpose == "OFFER_LETTER" && isImageOrPdf){
-               toolbarTitle.text = "Offer Letter"
+               toolbarTitle.text = getString(R.string.offer_letter_common_ui)
                toolbar_doc.visible()
                changeStatusBarColor()
                toolbarDownload.visible()
                acceptLayout.gone()
            }else if (purpose == "TERMS" && !isImageOrPdf) {
-               toolbarTitle.text = "Terms and Conditions"
+               toolbarTitle.text = getString(R.string.terms_common_ui)
                toolbar_doc.visible()
                changeStatusBarColor()
                toolbarDownload.gone()
@@ -144,7 +144,7 @@ class DocViewerActivity : AppCompatActivity() {
             }
 
             override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
-                Toast.makeText(this@DocViewerActivity, "Error while loading page", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@DocViewerActivity, getString(R.string.error_loading_page_common_ui), Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -181,9 +181,9 @@ class DocViewerActivity : AppCompatActivity() {
 
     private fun showDownloadStartedDialog(){
         AlertDialog.Builder(this)
-            .setTitle("Alert")
-            .setMessage("Downloading started, check notification")
-            .setPositiveButton("Okay") {dialog, which ->
+            .setTitle(getString(R.string.alert_common_ui))
+            .setMessage(getString(R.string.download_started_common_ui))
+            .setPositiveButton(getString(R.string.okay_common_ui)) {dialog, which ->
                 dialog.dismiss()
             }
             .show()

@@ -312,10 +312,10 @@ class AddUserDetailsFragment : Fragment(), OnDatePickedListener, IOnBackPressedO
 
         if (showEditActions) {
             skip_btn.visible()
-            submitBtn.text = "Update"
+            submitBtn.text = getString(R.string.update_amb)
         } else {
             skip_btn.gone()
-            submitBtn.text = "Next"
+            submitBtn.text = getString(R.string.next_amb)
         }
     }
 

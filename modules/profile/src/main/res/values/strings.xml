@@ -67,6 +67,9 @@
     <string name="other_cities_profile">Other Cities</string>
     <string name="locality_profile">Locality</string>
     <string name="delhi_ncr_profile">Delhi - NCR</string>
-    <string name="next_profile">Next</string>
     <string name="next_camel_case_profile">Next</string>
+    <string name="next_profile">Next</string>
+    <string name="upload_photo_profile">Upload Photo</string>
+    <string name="change_profile">Change</string>
+    <string name="skip_profile">Skip</string>
 </resources>

@@ -387,8 +387,10 @@
 <!--    <string name="veriScreenTitle">Hello Giger!</string>-->
     <string name="veri_address_title">"Step 1 : Please add your Address"</string>
     <string name="veri_add_address">"Address"</string>
+    <string name="upload_photo_veri">Upload Photo</string>
+    <string name="next_camel_veri">Next</string>
 
-<!--    <string name="veri_add_doc_front">"Front Side"</string>-->
+    <!--    <string name="veri_add_doc_front">"Front Side"</string>-->
 <!--    <string name="veri_add_doc_back">"Back Side"</string>-->
 <!--    <string name="veri_pan_title">"Step 5 : Upload your Pan"</string>-->
 <!--    <string name="veri_aadhaar_title">"Step 2 : Upload your Aadhaar"</string>-->

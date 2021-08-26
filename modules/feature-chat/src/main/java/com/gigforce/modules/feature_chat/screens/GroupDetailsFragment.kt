@@ -222,7 +222,7 @@ class GroupDetailsFragment : Fragment(),
     private fun showGroupDetails(content: ChatGroup) {
         group_name_tv.text = content.name
         group_creation_date_tv.text =
-                "Created On : ${dateFormatter.format(content.creationDetails!!.createdOn.toDate())}"
+            getString(R.string.created_on_chat) + dateFormatter.format(content.creationDetails!!.createdOn.toDate())
 
         media_count_tv.text = content.groupMedia.size.toString()
         gigers_count_tv.text = content.groupMembers.size.toString()
@@ -500,7 +500,7 @@ class GroupDetailsFragment : Fragment(),
         if (viewModel.isUserGroupAdmin()) {
             popUp.menu.findItem(R.id.action_remove_user).also { item ->
                 item.isVisible = true
-                item.title = "Remove ${contact.name}"
+                item.title = getString(R.string.remove_chat) + contact.name
             }
         } else {
             popUp.menu.findItem(R.id.action_remove_user).also {

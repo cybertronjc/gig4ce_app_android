@@ -118,7 +118,7 @@ class GigerOnboardingFragment : BaseFragment2<GigerOnboardingFragmentBinding>(
             viewBinding.mobileNoEt.requestFocus()
             viewBinding.createProfileBtn.gone()
             viewBinding.submitButton.tag = "next"
-            viewBinding.submitButton.setText("Next")
+            viewBinding.submitButton.setText(getString(R.string.next_lead))
             viewBinding.notRegisteredLayout.gone()
             viewBinding.tvPleaseEnter.setText(resources.getString(R.string.please_enter_lead))
             viewBinding.makeSureText.setText(resources.getString(R.string.registered_lead))

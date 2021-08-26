@@ -152,7 +152,7 @@ class OnboardingFragmentNew : Fragment(){
 //                    fragment.showCameraSheetIfNotShown()
                     enableNextButton(true)
                 } else {
-                    next.text = "Next"
+                    next.text = getString(R.string.next_profile)
                 }
                 var fragmentInterface = fragmentAdapter.getFragment(position) as SetInterfaceListener
                 fragmentInterface.setInterface(communicator)
@@ -180,10 +180,10 @@ class OnboardingFragmentNew : Fragment(){
             if (onboarding_pager.currentItem == 8) {
                 val fragment = getProfilePicFragment()
                 if (!fragment.hasUserUploadedPhoto()) {
-                    next.text = "Upload Photo"
+                    next.text = getString(R.string.upload_photo_profile)
                     fragment.showCameraSheetIfNotShown()
                 }else {
-                    next.text = "Next"
+                    next.text = getString(R.string.next_profile)
                 }
             }
         }
@@ -528,11 +528,11 @@ class OnboardingFragmentNew : Fragment(){
                 val fragment = getProfilePicFragment()
 
                 if (!fragment.hasUserUploadedPhoto()) {
-                    next.text = "Upload Photo"
+                    next.text = getString(R.string.upload_photo_profile)
                     enableNextButton(true)
                 } else {
                     enableNextButton(true)
-                    next.text = "Next"
+                    next.text = getString(R.string.next_profile)
                 }
             }
         }

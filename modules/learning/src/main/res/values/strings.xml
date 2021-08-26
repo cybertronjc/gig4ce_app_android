@@ -87,7 +87,6 @@
     <string name="unable_to_save_progress_learning">\"Unable to save progress \"</string>
     <string name="video_title_learning">Video Title</string>
     <string name="video_desc_learning">Video description</string>
-    <string name="next_lesson_learning">Next Lesson</string>
     <string name="lessons_to_retake_learning">Lessons to Retake</string>
     <string name="assessment_title_learning">Assessment Title</string>
     <string name="start_learning">Start</string>
@@ -133,4 +132,12 @@
     <string name="back_learning">Back</string>
     <string name="feedback_learning">Feedback</string>
     <string name="help">Help</string>
+    <string name="next_assessment_learning">Next Assessment</string>
+    <string name="next_lesson_learning">Next Lesson</string>
+    <string name="next_slide_learning">Next Slide</string>
+    <string name="module_learning">\"Module \"</string>
+    <string name="of_learning">\" of \"</string>
+    <string name="journey_learning">Journey</string>
+    <string name="learning_learning">Learning</string>
+    <string name="assessments_learning">Assessments</string>
 </resources>

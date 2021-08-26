@@ -522,7 +522,7 @@ class BankAccountFragment : Fragment(),
             viewBinding.toplayoutblock.toggleChangeTextView(false)
             setAlreadyfilledData(null, true)
             verificationScreenStatus = VerificationScreenStatus.DEFAULT
-            viewBinding.submitButton.text = "Skip"
+            viewBinding.submitButton.text = getString(R.string.skip_amb)
         })
 
         viewBinding.submitButton.setOnClickListener {

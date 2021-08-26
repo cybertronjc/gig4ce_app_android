@@ -19,7 +19,6 @@
     <string name="last_seen_today_chat">\"Last seen today at: \"</string>
     <string name="last_seen_chat">\"Last seen \"</string>
     <string name="message_chat">Message</string>
-    <string name="okay_chat">Okay</string>
     <string name="block_chat">Block</string>
     <string name="unblock_chat">UnBlock</string>
     <string name="no_app_found_to_pick_video_chat">No App found to pick Video</string>
@@ -92,4 +91,8 @@
     <string name="others_chat">Others</string>
     <string name="reason_chat">Reason</string>
     <string name="yes_i_confirm_that_i_want_to_report_this_user_chat">Yes, I confirm that I want to report this user</string>
+    <string name="search_chat_chat">Search Chats</string>
+    <string name="okay_chat">Okay</string>
+    <string name="created_on_chat">\"Created On : \"</string>
+    <string name="remove_chat">\"Remove \"</string>
 </resources>

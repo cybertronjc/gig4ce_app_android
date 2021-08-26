@@ -330,7 +330,7 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
         }
 
         tv1HS1.text = course.name
-        levelTV.text = "Module $mCurrentModuleNo of ${course.moduleCount}"
+        levelTV.text = getString(R.string.module_learning) + mCurrentModuleNo + getString(R.string.of_learning) + course.moduleCount
     }
 
     private fun prepareDescription(description: String): SpannableString {
@@ -407,7 +407,7 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
                     viewModel.currentModules!!.indexOf(viewModel.currentlySelectedModule!!) + 1
                 } else 0
 
-        levelTV.text = "Module $moduleNo Of ${viewModel.currentModules?.size}"
+        levelTV.text = getString(R.string.module_learning) + moduleNo + getString(R.string.of_learning) + viewModel.currentModules?.size
 
         var lessonsCompleted = 0
         var totalLessons = 0

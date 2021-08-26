@@ -664,7 +664,7 @@ class PhotoCrop : AppCompatActivity() {
                     {
                     Toast.makeText(
                         applicationContext,
-                        "Please Grant storage permission",
+                        getString(R.string.grant_permission_giger_gigs),
                         Toast.LENGTH_SHORT
                     ).show()
                 }

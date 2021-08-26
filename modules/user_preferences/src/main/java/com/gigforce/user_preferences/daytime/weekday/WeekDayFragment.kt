@@ -132,7 +132,9 @@ class WeekDayFragment : Fragment() {
     }
 
     fun showDaysAlert() {
-        val items = arrayOf("All", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday")
+        val items = arrayOf(getString(R.string.all_pref), getString(R.string.monday_pref), getString(
+                    R.string.tuesday_pref), getString(R.string.wednesday_pref), getString(R.string.thursday_pref), getString(
+                                R.string.friday_pref))
         val indexItem = arrayOf(0, 1, 2, 3, 4, 5)
         var isSectionSelected = BooleanArray(items.size)
         var selectedList = ArrayList<Int>()
@@ -154,7 +156,7 @@ class WeekDayFragment : Fragment() {
 
         val builder = MaterialAlertDialogBuilder(requireContext())
         val view = layoutInflater.inflate(R.layout.fragment_settings_slots, null)
-        view.dialogTitleTV.text = "Days"
+        view.dialogTitleTV.text = getString(R.string.days_capital_pref)
         builder.setView(view)
 
         val rv: RecyclerView = view.findViewById(R.id.slotsRV)
@@ -164,7 +166,7 @@ class WeekDayFragment : Fragment() {
         rv.adapter = slotsRecyclerAdapter
 
 
-        builder.setPositiveButton("DONE") { dialogInterface, i ->
+        builder.setPositiveButton(getString(R.string.done_pref)) { dialogInterface, i ->
             val selectedStrings = ArrayList<String>()
             for (j in selectedList.indices) {
                 selectedStrings.add(items[selectedList[j]])
@@ -265,7 +267,7 @@ class WeekDayFragment : Fragment() {
 
         val builder = MaterialAlertDialogBuilder(requireContext())
         val view = layoutInflater.inflate(R.layout.fragment_settings_slots, null)
-        view.dialogTitleTV.text = "Slots"
+        view.dialogTitleTV.text = getString(R.string.slots_pref)
         builder.setView(view)
 
         val rv: RecyclerView = view.findViewById(R.id.slotsRV)

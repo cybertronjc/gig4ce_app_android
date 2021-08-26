@@ -125,7 +125,8 @@ class WeekEndFragment : Fragment() {
     }
 
     fun showDaysAlert() {
-        val items = arrayOf("All", "Saturday", "Sunday")
+        val items = arrayOf(getString(R.string.all_pref), getString(R.string.saturday_pref), getString(
+                    R.string.sunday_pref))
         val indexItem = arrayOf(0, 1, 2)
         var isSectionSelected = BooleanArray(items.size)
         var selectedList = ArrayList<Int>()
@@ -147,7 +148,7 @@ class WeekEndFragment : Fragment() {
 
         val builder = MaterialAlertDialogBuilder(requireContext())
         val view = layoutInflater.inflate(R.layout.fragment_settings_slots, null)
-        view.dialogTitleTV.text = "Days"
+        view.dialogTitleTV.text = getString(R.string.days_capital_pref)
         builder.setView(view)
 
         val rv: RecyclerView = view.findViewById(R.id.slotsRV)
@@ -157,7 +158,7 @@ class WeekEndFragment : Fragment() {
         rv.adapter = slotsRecyclerAdapter
 
 
-        builder.setPositiveButton("DONE") { dialogInterface, i ->
+        builder.setPositiveButton(getString(R.string.done_pref)) { dialogInterface, i ->
             val selectedStrings = ArrayList<String>()
             for (j in selectedList.indices) {
                 selectedStrings.add(items[selectedList[j]])
@@ -259,7 +260,7 @@ class WeekEndFragment : Fragment() {
 
         val builder = MaterialAlertDialogBuilder(requireContext())
         val view = layoutInflater.inflate(R.layout.fragment_settings_slots, null)
-        view.dialogTitleTV.text = "Slots"
+        view.dialogTitleTV.text = getString(R.string.slots_pref)
         builder.setView(view)
 
         val rv: RecyclerView = view.findViewById(R.id.slotsRV)
@@ -269,7 +270,7 @@ class WeekEndFragment : Fragment() {
         rv.adapter = slotsRecyclerAdapter
 
 
-        builder.setPositiveButton("DONE") { dialogInterface, i ->
+        builder.setPositiveButton(getString(R.string.done_pref)) { dialogInterface, i ->
             val selectedItemsForDB = ArrayList<String>()
             val selectedItemForView = ArrayList<String>()
             for (j in selectedList.indices) {

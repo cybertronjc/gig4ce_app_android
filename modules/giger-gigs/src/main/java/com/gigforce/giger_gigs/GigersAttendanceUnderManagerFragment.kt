@@ -291,7 +291,7 @@ class GigersAttendanceUnderManagerFragment : Fragment(), AttendanceSwipeHandler.
                             add(
                                     0, AttendanceFilterItemShift(
                                     shift = "",
-                                    shiftTimeForView = "Select Shift"
+                                    shiftTimeForView = getString(R.string.select_shift_giger_gigs)
                             )
                             )
                         }
@@ -309,7 +309,7 @@ class GigersAttendanceUnderManagerFragment : Fragment(), AttendanceSwipeHandler.
                         requireContext(),
                         android.R.layout.simple_spinner_item,
                         business.toMutableList().apply {
-                            add(0, "Select Company")
+                            add(0, getString(R.string.select_company_giger_gigs))
                         }
                 )
         businessAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)

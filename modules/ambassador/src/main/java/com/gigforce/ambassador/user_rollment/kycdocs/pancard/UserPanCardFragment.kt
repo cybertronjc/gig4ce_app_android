@@ -247,10 +247,10 @@ class PanCardFragment : Fragment(),
                                 .isNullOrBlank() && viewBinding.dateOfBirth.text.toString()
                                 .isNullOrBlank()
                         ) {
-                            viewBinding.submitButton.text = "Skip"
+                            viewBinding.submitButton.text = getString(R.string.skip_amb)
                             anyDataEntered = false
                         } else {
-                            viewBinding.submitButton.text = "Submit"
+                            viewBinding.submitButton.text = getString(R.string.submit_amb)
                             anyDataEntered = true
                         }
                     }
@@ -273,7 +273,7 @@ class PanCardFragment : Fragment(),
         viewBinding.toplayoutblock.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { p1, b1 ->
             if (b1) {
                 oldStateHolder.submitButtonCta = viewBinding.submitButton.text.toString()
-                viewBinding.submitButton.text = "Skip"
+                viewBinding.submitButton.text =  getString(R.string.skip_amb)
                 viewBinding.belowLayout.gone()
             } else {
                 viewBinding.submitButton.text = oldStateHolder.submitButtonCta
@@ -693,7 +693,7 @@ class PanCardFragment : Fragment(),
             getString(R.string.pan_verified_success_amb)
         )
         viewBinding.submitButton.visible()
-        viewBinding.submitButton.text = "Next"
+        viewBinding.submitButton.text = getString(R.string.next_amb)
         viewBinding.submitButton.isEnabled = true
         viewBinding.progressBar.gone()
         viewBinding.toplayoutblock.setVerificationSuccessfulView(getString(R.string.pan_verified_amb))

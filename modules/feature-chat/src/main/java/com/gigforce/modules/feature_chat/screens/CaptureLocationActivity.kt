@@ -175,7 +175,7 @@ class CaptureLocationActivity : AppCompatActivity(), OnMapReadyCallback,
         googleMap?.clear()
 
         // create marker
-        marker.position(LatLng(latitude, longitude)).title("Current locaton")
+        marker.position(LatLng(latitude, longitude)).title("Current location")
 
         // adding marker
         googleMap?.addMarker(marker)

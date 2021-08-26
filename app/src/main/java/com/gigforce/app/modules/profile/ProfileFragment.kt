@@ -330,7 +330,7 @@ class ProfileFragment : BaseFragment() {
                 // TODO: Add a generic way for string formatting.
                 for ((index, language) in languages.withIndex()) {
                     mainAboutString += if (index == 0)
-                        "Language known: " + language.name + " (" +
+                        getString(R.string.know_lang_app) + language.name + " (" +
                                 getLanguageLevel(language.speakingSkill.toInt()) + ")\n"
                     else
                         "\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + language.name + " (" +

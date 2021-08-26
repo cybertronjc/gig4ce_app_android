@@ -177,7 +177,7 @@ class AddUserCurrentAddressFragment : Fragment(), IOnBackPressedOverride {
                     }.sortedBy {
                         it.name
                     }.toMutableList().apply {
-                        add(0, City(name = "Select District"))
+                        add(0, City(name = getString(R.string.select_district_amb)))
                     }
 
                     val permanentCityAdapter: ArrayAdapter<City> =
@@ -486,7 +486,7 @@ class AddUserCurrentAddressFragment : Fragment(), IOnBackPressedOverride {
             .states
             .sortedWith(compareBy { it.name })
             .toMutableList().apply {
-                add(0, State(name = "Select State"))
+                add(0, State(name = getString(R.string.select_state_amb)))
             }
 
         val adapter: ArrayAdapter<State> =
@@ -495,7 +495,7 @@ class AddUserCurrentAddressFragment : Fragment(), IOnBackPressedOverride {
         permanent_state_spinner.adapter = adapter
 
         val cities = viewModel.cities.sortedWith(compareBy { it.name }).toMutableList().apply {
-            add(0, City(name = "Select District"))
+            add(0, City(name = getString(R.string.select_district_amb)))
         }
         val cityAdapter: ArrayAdapter<City> =
             ArrayAdapter(requireContext(), R.layout.layout_spinner_item, cities)

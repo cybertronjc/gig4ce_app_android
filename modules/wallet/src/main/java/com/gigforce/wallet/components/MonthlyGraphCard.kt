@@ -30,8 +30,9 @@ class MonthlyGraphCard : MaterialCardView {
 
     var months = ArrayList<String>(
         listOf(
-            "-", "January", "February", "March", "April", "May", "June", "July",
-            "August", "September", "October", "November", "December"
+            "-", context.getString(R.string.jan_wallet), context.getString(R.string.feb_wallet), context.getString(
+                            R.string.march_wallet), context.getString(R.string.apr_wallet), context.getString(R.string.may_wallet), context.getString(R.string.jun_wallet), context.getString(R.string.jul_wallet),
+            context.getString(R.string.aug_wallet), context.getString(R.string.sept_wallet), context.getString(R.string.oct_wallet), context.getString(R.string.nov_wallet), context.getString(R.string.dec_wallet)
         )
     )
 
