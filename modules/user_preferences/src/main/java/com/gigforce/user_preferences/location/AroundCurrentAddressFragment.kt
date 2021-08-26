@@ -1,19 +1,24 @@
 package com.gigforce.user_preferences.location
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProviders
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.datamodels.profile.AddressModel
 import com.gigforce.user_preferences.R
 import com.gigforce.common_ui.viewmodels.userpreferences.SharedPreferenceViewModel
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 import kotlinx.android.synthetic.main.around_current_address_fragment.*
+import java.lang.Exception
 
 class AroundCurrentAddressFragment : Fragment(), IOnBackPressedOverride {
 
@@ -21,7 +26,7 @@ class AroundCurrentAddressFragment : Fragment(), IOnBackPressedOverride {
         fun newInstance() = AroundCurrentAddressFragment()
     }
 
-    private lateinit var viewModel: SharedPreferenceViewModel
+    private val viewModel: SharedPreferenceViewModel by viewModels()
     private var preferredDistanceActive: Boolean = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,20 +35,36 @@ class AroundCurrentAddressFragment : Fragment(), IOnBackPressedOverride {
         return inflater.inflate(R.layout.around_current_address_fragment, container,false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(SharedPreferenceViewModel::class.java)
-        initializeAll()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         listener()
+        initializeAll()
     }
-
+    var SEEKBAR_REFRESH : Long= 500
     private fun listener() {
+        Handler().postDelayed({
+            try {
+                arround_current_add_seekbar.progress = 0
+
+                val progress = viewModel.getCurrentAddress()?.preferred_distance!!
+                arround_current_add_seekbar.progress = progress
+            }catch (e:Exception){
+
+            }
+        }, SEEKBAR_REFRESH)
+
         arround_current_add_seekbar.setOnSeekBarChangeListener(object :
             SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 val value = (progress * (seekBar.getWidth() - 2 * seekBar.getThumbOffset())) / seekBar.getMax()
-                seekbardependent.text = progress.toString() + " " + getString(R.string.km)
-                seekbardependent.setX(seekBar.getX() + value + seekBar.getThumbOffset() / 2)
+                if(progress>0 && value>0) {
+                    seekbardependent.visible()
+                    seekbardependent.text = progress.toString() + " " + getString(R.string.km)
+                    seekbardependent.setX(seekBar.getX() + value + seekBar.getThumbOffset() / 2)
+                }
+                else{
+                    seekbardependent.gone()
+                }
                 //textView.setY(100); just added a value set this properly using screen with height aspect ratio , if you do not set it by default it will be there below seek bar
             }
 
@@ -68,17 +89,9 @@ class AroundCurrentAddressFragment : Fragment(), IOnBackPressedOverride {
         preferredDistanceActive = viewModel.getCurrentAddress()?.preferredDistanceActive!!
         arround_current_add_seekbar.progress = 0
 
-        val progress = viewModel.getCurrentAddress()?.preferred_distance!!
-        arround_current_add_seekbar.progress = progress
-       //TODO : Extract String Resource
-        val value =
+//        val progress = viewModel.getCurrentAddress()?.preferred_distance!!
+//        arround_current_add_seekbar.progress = progress
 
-            (progress * (arround_current_add_seekbar.getWidth() - 2 * arround_current_add_seekbar.getThumbOffset())) / arround_current_add_seekbar.getMax()
-        seekbardependent.text = progress.toString() +" "  +"Km"
-        seekbardependent.setX(arround_current_add_seekbar.getX() + value + arround_current_add_seekbar.getThumbOffset() / 2)
-
-
-//        arround_current_add_seekbar.setOtherView(seekbardependent,false,"Km")
         populateAddress(viewModel.getCurrentAddress()!!)
         setVisibilityAroundCurrAdd()
     }
