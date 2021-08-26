@@ -34,6 +34,7 @@ class ApplicationClientActivationFragment : Fragment(),
     ReviewApplicationDialogClientActivation.ReviewApplicationDialogCallbacks {
     private var dialog: ReviewApplicationDialogClientActivation? = null
     private lateinit var viewModel: ApplicationClientActivationViewModel
+
     @Inject
     lateinit var navigation: INavigation
 
@@ -80,7 +81,7 @@ class ApplicationClientActivationFragment : Fragment(),
         var navFragmentsData = activity as NavFragmentsData
         if (navFragmentsData.getData() != null) {
             if (navFragmentsData.getData()
-                .getBoolean(StringConstants.BACK_PRESSED.value, false) == true
+                    .getBoolean(StringConstants.BACK_PRESSED.value, false) == true
             ) {
                 viewModel.redirectToNextStep = false
                 navFragmentsData.setData(bundleOf())
@@ -448,6 +449,12 @@ class ApplicationClientActivationFragment : Fragment(),
                 bundleForFragment
             )
 
+            "aadhar_hub_questionnaire" -> navigation.navigateTo(
+                "client_activation/joining_form",
+                bundleForFragment
+            )
+
+            "pf_esic" -> navigation.navigateTo("", bundleForFragment)
         }
     }
 
@@ -482,6 +489,12 @@ class ApplicationClientActivationFragment : Fragment(),
             }
             "jp_hub_location" -> {
                 return "client_activation/fragment_business_loc_hub"
+            }
+            "aadhar_hub_questionnaire" -> {
+                return ""
+            }
+            "pf_esic" -> {
+                return "client_activation/joining_form"
             }
             else -> return ""
         }

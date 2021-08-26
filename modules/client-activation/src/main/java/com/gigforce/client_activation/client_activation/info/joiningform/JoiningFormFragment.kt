@@ -13,10 +13,10 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.gigforce.client_activation.R
+import com.gigforce.client_activation.client_activation.info.hubform.HubServerDM
 import com.gigforce.client_activation.databinding.JoiningFormFragmentBinding
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.core.IOnBackPressedOverride
-import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.core.datamodels.City
 import com.gigforce.core.datamodels.State
 import com.gigforce.core.datamodels.verification.AadhaarDetailsDataModel
@@ -27,6 +27,7 @@ import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.DateHelper
 import com.gigforce.core.utils.NavFragmentsData
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_business_location_hub.*
 import java.util.*
 import javax.inject.Inject
 
@@ -60,8 +61,23 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
     var caSelectedCity = City()
 
 
+    // Hub state,city, name
+    var hubStateAdapter: ArrayAdapter<String>? = null
+    var hubStatesMap = mutableMapOf<String, Int>()
+    var hubStatesArray = arrayListOf<String>()
+
+    var hubCitiesAdapter: ArrayAdapter<String>? = null
+    var hubCitiesMap = mutableMapOf<String, Int>()
+    var hubCitiesArray = arrayListOf<String>()
+
+    var hubNameAdapter: ArrayAdapter<String>? = null
+    var hubNameMap = mutableMapOf<String, Int>()
+    var hubNameArray = arrayListOf<String>()
+
+
     var aadhaarDetailsDataModel: AadhaarDetailsDataModel? = null
     private lateinit var viewBinding: JoiningFormFragmentBinding
+
     @Inject
     lateinit var navigation: INavigation
     override fun onCreateView(
@@ -80,8 +96,15 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
         initViews()
         observer()
     }
-
+    var serverHubData: HubServerDM? = null
+    var hubCityFilled = false
+    var hubNameFilled = false
     private fun observer() {
+        viewModel.hub_submitted_data.observe(viewLifecycleOwner, {
+            serverHubData = it
+            setHubState()
+        })
+
         viewModel.statesResult.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             if (it.isNotEmpty()) {
                 Log.d("States", it.toList().toString())
@@ -117,6 +140,66 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
             processKycData(kycData)
         })
 
+        viewModel.hub_states.observe(viewLifecycleOwner, {
+            progressBar.gone()
+            viewModel.loadHubData(mJobProfileId)   //need to uncomment
+            hubStatesArray.clear()
+            hubStatesArray.addAll(it)
+            hubStatesArray.sort()
+            hubStatesArray.forEachIndexed { index, data ->
+                hubStatesMap.put(data, index)
+            }
+            hubStateAdapter?.notifyDataSetChanged()
+        })
+
+        viewModel.hub_cities.observe(viewLifecycleOwner, {
+            progressBar.gone()
+            hubCitiesArray.clear()
+            hubCitiesArray.addAll(it)
+            hubCitiesArray.forEachIndexed { index, data ->
+                hubCitiesMap.put(data, index)
+            }
+            hubCitiesAdapter?.notifyDataSetChanged()
+            if(!hubCityFilled){
+                hubCityFilled = true
+                setHubCity()
+            }
+        })
+
+        viewModel.hub_names.observe(viewLifecycleOwner, {
+            progressBar.gone()
+            hubNameArray.clear()
+            hubNameArray.addAll(it)
+            hubNameArray.forEachIndexed { index, data ->
+                hubNameMap.put(data, index)
+            }
+            hubNameAdapter?.notifyDataSetChanged()
+            if(!hubNameFilled){
+                hubNameFilled = true
+                setHubName()
+            }
+        })
+
+    }
+
+    private fun setHubName(){
+        serverHubData?.hubName?.let {
+            viewBinding.hubName.setText(it,false)
+        }
+    }
+
+    private fun setHubState() {
+        serverHubData?.stateName?.let {
+            viewBinding.hubState.setText(it,false)
+            viewModel.loadHubCities(it)
+        }
+    }
+
+    private fun setHubCity() {
+        serverHubData?.cityName?.let {
+            viewBinding.hubCity.setText(it,false)
+            viewModel.loadHubNames(viewBinding.hubState.text.toString(),it)
+        }
     }
 
 
@@ -247,8 +330,10 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
         stateAdapter?.notifyDataSetChanged()
         viewModel.getVerificationData()
     }
+
     private fun initViews() {
         viewModel.getStates()
+        viewModel.loadHubStates(mJobProfileId)
     }
 
     private val dateOfBirthPicker: DatePickerDialog by lazy {
@@ -345,6 +430,37 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
             }
         }
 
+        // hub related onitemclick
+
+        hubState.onItemClickListener = object : AdapterView.OnItemClickListener {
+            override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                if (p2 <= hubStatesArray.size && hubState.text.toString().isNotBlank()) {
+                    val actualIndex = hubStatesMap.get(hubState.text.toString().trim())
+                    actualIndex?.let {
+                        if (it >= 0) {
+                            viewModel.loadHubCities(hubStatesArray.get(it))
+                        }
+                    }
+                }
+            }
+        }
+
+        hubCity.onItemClickListener = object : AdapterView.OnItemClickListener {
+            override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                if (p2 <= hubCitiesArray.size && hubCity.text.toString().isNotBlank()) {
+                    val actualIndex = hubCitiesMap.get(hubCity.text.toString().trim())
+                    actualIndex?.let {
+                        if (it >= 0) {
+                            viewModel.loadHubNames(hubState.text.toString() ,hubCitiesArray.get(it))
+                        }
+                    }
+                }
+            }
+        }
+
+        // hub related onitemclick end
+
+
         stateAdapter = context?.let { it1 ->
             ArrayAdapter(
                 it1,
@@ -391,6 +507,62 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
         caCitySpinner.setAdapter(caCitiesAdapter)
         caCitySpinner.threshold = 1
 
+
+        // Hub state city name
+        //state
+        hubStateAdapter = context?.let { it1 ->
+            ArrayAdapter(
+                it1,
+                android.R.layout.simple_spinner_dropdown_item,
+                hubStatesArray
+            )
+        }
+        hubState.setAdapter(hubStateAdapter)
+        hubState.threshold = 1
+        hubState.setOnFocusChangeListener { view, b ->
+            if (b) {
+                hubState.showDropDown()
+            }
+        }
+
+        // city
+        hubCitiesAdapter = context?.let { it1 ->
+            ArrayAdapter(
+                it1,
+                android.R.layout.simple_spinner_dropdown_item,
+                hubCitiesArray
+            )
+        }
+        hubCity.setAdapter(hubCitiesAdapter)
+        hubCity.threshold = 1
+        hubCity.setOnFocusChangeListener { view, b ->
+            if (b) {
+                hubCity.showDropDown()
+            }
+        }
+
+        // name
+        hubNameAdapter = context?.let { it1 ->
+            ArrayAdapter(
+                it1,
+                android.R.layout.simple_spinner_dropdown_item,
+                hubNameArray
+            )
+        }
+        hubName.setAdapter(hubNameAdapter)
+        hubName.threshold = 1
+        hubName.setOnFocusChangeListener { view, b ->
+            if (b) {
+                hubName.showDropDown()
+            }
+        }
+
+
+
+
+
+
+
         fatherName.editText?.addTextChangedListener(ValidationTextWatcher())
         emailId.editText?.addTextChangedListener(ValidationTextWatcher())
         emergencyContact.editText?.addTextChangedListener(ValidationTextWatcher())
@@ -415,12 +587,12 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
         }
 
         currentAddCheckbox.setOnCheckedChangeListener { buttonView, isChecked ->
-                if (isChecked) {
-                    viewBinding.currentAddLayout.gone()
-                } else {
-                    viewBinding.currentAddLayout.visible()
-                }
+            if (isChecked) {
+                viewBinding.currentAddLayout.gone()
+            } else {
+                viewBinding.currentAddLayout.visible()
             }
+        }
     }
 
     var anyDataEntered = false
@@ -437,12 +609,14 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
         override fun afterTextChanged(text: Editable?) {
             context?.let { cxt ->
                 text?.let {
-                    if(false)//need to work on this
+                    if (false)//need to work on this
                     {
-                        viewBinding.submitButton.text = resources.getString(R.string.skip_client)//"Skip"
+                        viewBinding.submitButton.text =
+                            resources.getString(R.string.skip_client)//"Skip"
                         anyDataEntered = false
                     } else {
-                        viewBinding.submitButton.text = resources.getString(R.string.submit_client)//"Submit"
+                        viewBinding.submitButton.text =
+                            resources.getString(R.string.submit_client)//"Submit"
                         anyDataEntered = true
                     }
 

@@ -13,8 +13,8 @@ import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.launch
 
 class BLocationHubViewModel : ViewModel() {
-    val _states = MutableLiveData<List<String>>()
-    val states: LiveData<List<String>> = _states
+    val _hub_states = MutableLiveData<List<String>>()
+    val states: LiveData<List<String>> = _hub_states
 
     val _hub = MutableLiveData<List<String>>()
     val hub: LiveData<List<String>> = _hub
@@ -57,7 +57,7 @@ class BLocationHubViewModel : ViewModel() {
         val jobProfile = FirebaseFirestore.getInstance().collection("Job_Profiles")
             .whereEqualTo("profileId", mJobProfileId).getOrThrow()
         if (jobProfile == null) {
-            _states.value = emptyList()
+            _hub_states.value = emptyList()
             return@launch
         }
         val jpDoc = jobProfile.documents[0]
@@ -67,7 +67,7 @@ class BLocationHubViewModel : ViewModel() {
             FirebaseFirestore.getInstance().collection("Business_Locations")
                 .whereEqualTo("business_id", businessId).whereEqualTo("type", "office").getOrThrow()
         if (businessLocactionsSnapshot == null) {
-            _states.value = emptyList()
+            _hub_states.value = emptyList()
             return@launch
         }
         val businessLocactions = arrayListOf<BusinessLocationDM>()
@@ -85,7 +85,7 @@ class BLocationHubViewModel : ViewModel() {
                 bLocationsList.add(it)
             }
         }
-        _states.value = bLocationsList.distinct()
+        _hub_states.value = bLocationsList.distinct()
     }
 
     fun loadHub(state: String) {

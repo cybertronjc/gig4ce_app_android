@@ -99,7 +99,7 @@ class BusinessLocationHubFragment : Fragment(), IOnBackPressedOverride {
             serverHubData = it
             setHubData(it)
         })
-        viewModel._states.observe(viewLifecycleOwner, Observer {
+        viewModel._hub_states.observe(viewLifecycleOwner, Observer {
             progressBar.gone()
             viewModel.loadHubData(mJobProfileId)
             stateList.clear()
