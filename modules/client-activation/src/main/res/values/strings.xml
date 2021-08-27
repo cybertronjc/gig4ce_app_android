@@ -77,5 +77,7 @@
     <string name="skip_client">Skip</string>
     <string name="submit_client">Submit</string>
     <string name="alreay_have_pfesicregistered">I already have registered PF and ESIC</string>
+    <string name="marital_status">Marital Status</string>
+    <string name="signature">Signature</string>
 
 </resources>

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.util.Patterns
 import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -32,6 +33,7 @@ import com.gigforce.core.utils.NavFragmentsData
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
+import java.util.regex.Pattern
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -684,15 +686,17 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
                         .show()
                     return@setOnClickListener
                 }
-
-                if (emailId.editText?.text.toString().isBlank()) {
+                if(emailId.editText?.text.toString().isBlank() || !Patterns.EMAIL_ADDRESS.matcher(emailId.editText?.text.toString()).matches() ){
                     MaterialAlertDialogBuilder(requireContext())
                         .setTitle(getString(R.string.alert))
-                        .setMessage("Enter email")
+                        .setMessage("Enter a valid email")
                         .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                         .show()
                     return@setOnClickListener
                 }
+//                if (emailId.editText?.text.toString().isBlank() && emailId.editText?.text.toString().contains("@") && emailId.editText?.text.toString().contains(".") && emailId.editText?.text.toString().length>) {
+//
+//                }
 
                 if (emergencyContact.editText?.text.toString()
                         .isBlank() || emergencyContact.editText?.text.toString().length != 10

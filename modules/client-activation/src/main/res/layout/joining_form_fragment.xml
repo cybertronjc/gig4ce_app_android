@@ -60,6 +60,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/size_46"
                         android:padding="4dp"
+                        android:maxLength="30"
+                        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
                         android:singleLine="true" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -169,24 +171,36 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+                <TextView
+                    android:id="@+id/maritalStatusLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/size_16"
+                    android:layout_marginTop="@dimen/size_20"
+                    android:layout_marginRight="@dimen/size_16"
+                    android:text="@string/marital_status"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/dateOfJoiningLabel"/>
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/maritalStatusCl"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/size_16"
-                    android:layout_marginTop="@dimen/size_16"
+                    android:layout_marginTop="@dimen/size_4"
                     android:layout_marginRight="@dimen/size_16"
                     android:layout_marginBottom="@dimen/size_16"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/dateOfJoiningLabel">
+                    app:layout_constraintTop_toBottomOf="@+id/maritalStatusLabel">
 
                     <androidx.appcompat.widget.AppCompatSpinner
                         android:id="@+id/maritalStatusSpinner"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:entries="@array/marital_status"
-
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -199,7 +213,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/size_16"
-                    android:layout_marginTop="@dimen/size_16"
+                    android:layout_marginTop="@dimen/size_20"
                     android:layout_marginRight="@dimen/size_16"
                     android:layout_marginBottom="@dimen/size_16"
                     android:hint="@string/emailid_client"
@@ -211,6 +225,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/size_46"
                         android:padding="4dp"
+                        android:inputType="textEmailAddress"
                         android:singleLine="true" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -233,6 +248,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/size_46"
                         android:padding="4dp"
+                        android:maxLength="10"
                         android:inputType="number"
                         android:singleLine="true" />
 
@@ -256,6 +272,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/size_46"
                         android:padding="4dp"
+                        android:maxLength="12"
                         android:inputType="number"
                         android:singleLine="true" />
 
