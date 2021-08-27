@@ -60,5 +60,24 @@
 
     <string name="crop_and_rotate">Crop and Rotate</string>
     <string name="same_as_permanent">Same as permanent address</string>
+    <string name="joining_form_title_client">Please enter the below details to complete your Onboarding process.</string>
+    <string name="joining_form_client">Joining Form</string>
+    <string name="father_name_client">Father\'s name</string>
+    <string name="doj_space_client">" Date of Joining   "</string>
+    <string name="doj_label_client">Date of Joining</string>
+    <string name="dob_space_client">" Date of birth   "</string>
+    <string name="dob_label_client">Date of Birth</string>
+    <string name="emailid_client">Email ID</string>
+    <string name="emergency_contact_client">Emergency contact number</string>
+    <string name="aadharno_label_client">Aadhar number</string>
+    <string name="curr_add_client">Current Address</string>
+    <string name="hub_state">Hub state</string>
+    <string name="hub_city">Hub city</string>
+    <string name="hub_name">Hub name</string>
+    <string name="skip_client">Skip</string>
+    <string name="submit_client">Submit</string>
+    <string name="alreay_have_pfesicregistered">I already have registered PF and ESIC</string>
+    <string name="marital_status">Marital Status</string>
+    <string name="signature">Signature</string>
 
 </resources>

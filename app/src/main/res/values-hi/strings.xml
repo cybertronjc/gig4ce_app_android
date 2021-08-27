@@ -835,7 +835,7 @@
     <string name="in_your_assessment">आपके आकलन में</string>
     <string name="new_cert_added_underlined"><u> प्रोफ़ाइल में नया प्रमाणपत्र जोड़ा गया है। </u></string>
     <string name="watch_lesson_again">फिर से अध्याय देखें</string>
-    <string name="skip">छोड़ें</string>
+    <string name="skip_client">छोड़ें</string>
     <string name="new_bio">नई परिचय</string>
     <string name="signed">हस्ताक्षर किए</string>
     <string name="unsigned">अहस्ताक्षरित</string>

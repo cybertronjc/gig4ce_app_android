@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
@@ -24,10 +25,12 @@ import com.gigforce.common_ui.core.TextDrawable
 import com.gigforce.common_ui.deviceInfo_permission.DeviceInfoGatherer
 import com.gigforce.common_ui.utils.BsBackgroundAndLocationAccess
 import com.gigforce.core.extensions.visible
+import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.giger_app.R
 import com.gigforce.giger_app.vm.LandingViewModel
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.google.firebase.firestore.FirebaseFirestore
 import com.jaeger.library.StatusBarUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.calendar_home_screen.*
@@ -299,7 +302,34 @@ class LandingFragment : Fragment(),
             )
         )
 
+        trySyncingUnsyncedFirebaseData()
+    }
 
+    private fun trySyncingUnsyncedFirebaseData() {
+        FirebaseFirestore
+            .getInstance()
+            .waitForPendingWrites()
+            .addOnSuccessListener {
+                Log.d(
+                    "LandingFragment",
+                    "Success no pending writes found"
+                )
+                CrashlyticsLogger.d(
+                    "LandingFragment",
+                    "Success no pending writes found"
+                )
+            }.addOnFailureListener {
+                Log.e(
+                    "LandingFragment",
+                    "while syncning data to server",
+                    it
+                )
+                CrashlyticsLogger.e(
+                    "LandingFragment",
+                    "while syncning data to server",
+                    it
+                )
+            }
     }
 
     override fun onRequestLocationPermissionButtonClicked() {

@@ -1,4 +1,4 @@
-package com.gigforce.client_activation.client_activation
+package com.gigforce.client_activation.client_activation.info.aadhardetailform
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

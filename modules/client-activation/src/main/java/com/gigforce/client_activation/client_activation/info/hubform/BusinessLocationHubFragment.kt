@@ -1,4 +1,4 @@
-package com.gigforce.client_activation.client_activation.info
+package com.gigforce.client_activation.client_activation.info.hubform
 
 import android.os.Bundle
 import android.text.Editable
@@ -99,7 +99,7 @@ class BusinessLocationHubFragment : Fragment(), IOnBackPressedOverride {
             serverHubData = it
             setHubData(it)
         })
-        viewModel._states.observe(viewLifecycleOwner, Observer {
+        viewModel._hub_states.observe(viewLifecycleOwner, Observer {
             progressBar.gone()
             viewModel.loadHubData(mJobProfileId)
             stateList.clear()
