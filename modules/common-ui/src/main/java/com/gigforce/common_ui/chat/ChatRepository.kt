@@ -371,23 +371,32 @@ class ChatRepository constructor(
             val senderId = unreadMessage.senderInfo.id
             val headerId = unreadMessage.headerId
 
-
             val headerRef = FirebaseFirestore.getInstance()
-                    .collection(ChatGroupRepository.COLLECTION_CHATS)
-                    .document(senderId)
-                    .collection(COLLECTION_CHAT_HEADERS)
-                    .document(headerId)
+                .collection(ChatGroupRepository.COLLECTION_CHATS)
+                .document(senderId)
+                .collection(COLLECTION_CHAT_HEADERS)
+                .document(headerId);
 
-            val chatMessageCollection = headerRef
-                    .collection(COLLECTION_CHATS_MESSAGES)
+            val chatHeader = headerRef.getOrThrow();
+            val lastMessageIdInHeader = chatHeader.getString("lastMsgId");
+
+            val chatMessageCollection = headerRef.collection(COLLECTION_CHATS_MESSAGES);
 
             val batch = db.batch()
+            if(lastMessageIdInHeader != null) {
+                val shouldUpdateInHeader = getChatMessagesCollectionRef(headerId)
+                    .document(lastMessageIdInHeader)
+                    .getOrThrow()
+                    .exists()
 
-            batch.update(
-                    headerRef, mapOf(
-                    "status" to ChatConstants.MESSAGE_STATUS_READ_BY_USER
-            )
-            )
+                if (shouldUpdateInHeader) {
+                    batch.update(
+                        headerRef, mapOf(
+                            "status" to ChatConstants.MESSAGE_STATUS_READ_BY_USER
+                        )
+                    )
+                }
+            }
 
             unreadMessages.forEach {
 
@@ -395,8 +404,7 @@ class ChatRepository constructor(
                 batch.update(
                         messageRef, mapOf(
                         "status" to ChatConstants.MESSAGE_STATUS_READ_BY_USER
-                )
-                )
+                ))
             }
 
             batch.commitOrThrow()
@@ -450,6 +458,9 @@ class ChatRepository constructor(
                 .collection(COLLECTION_CHAT_HEADERS)
                 .document(headerId)
 
+        val chatHeader = headerRef.getOrThrow()
+        val lastMessageIdInHeader = chatHeader.getString("lastMsgId")
+
         val chatCollectionRef = headerRef.collection(COLLECTION_CHATS_MESSAGES)
         val querySnap = chatCollectionRef
                 .whereLessThan("status", ChatConstants.MESSAGE_STATUS_RECEIVED_BY_USER)
@@ -459,21 +470,33 @@ class ChatRepository constructor(
         if (querySnap.size() > 0) {
 
             val batch = db.batch()
-            batch.update(
-                    headerRef, mapOf(
-                    "status" to ChatConstants.MESSAGE_STATUS_RECEIVED_BY_USER
-            )
-            )
-
             querySnap.documents.forEach {
+                val blockedDuringMessageWasSent = it.getBoolean("wasUserBlockedByOtherUserWhenMessageWasSent") ?: false
 
-                Log.d("ChatRepo", "Message Id - ${it.id}")
-                val messageDocRef = chatCollectionRef.document(it.id)
-                batch.update(
+                if(!blockedDuringMessageWasSent) {
+                    Log.d("ChatRepo", "Message Id - ${it.id}")
+                    val messageDocRef = chatCollectionRef.document(it.id)
+                    batch.update(
                         messageDocRef, mapOf(
-                        "status" to ChatConstants.MESSAGE_STATUS_RECEIVED_BY_USER
-                )
-                )
+                            "status" to ChatConstants.MESSAGE_STATUS_RECEIVED_BY_USER
+                        )
+                    )
+                }
+            }
+
+            if(lastMessageIdInHeader != null) {
+               val shouldUpdateInHeader = getChatMessagesCollectionRef(headerId)
+                    .document(lastMessageIdInHeader)
+                    .getOrThrow()
+                    .exists()
+
+                if (shouldUpdateInHeader) {
+                    batch.update(
+                        headerRef, mapOf(
+                            "status" to ChatConstants.MESSAGE_STATUS_RECEIVED_BY_USER
+                        )
+                    )
+                }
             }
 
             batch.commitOrThrow()

@@ -23,7 +23,7 @@ class NewContactsViewModel constructor(
     fun startListeningForContactChanges() {
 
         contactsChangeListener = chatContactsRepository
-            .getUserContacts()
+            .getUserGigforceContacts()
             .addSnapshotListener { value, error ->
                 error?.printStackTrace()
 

@@ -17,7 +17,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class ChatHeadersViewModel constructor(
-        private val chatRepository: ChatRepository = ChatRepository()
+    private val chatRepository: ChatRepository = ChatRepository()
 ) : ViewModel() {
 
     private var _chatHeaders: MutableLiveData<List<ChatHeader>> = MutableLiveData()
@@ -29,7 +29,9 @@ class ChatHeadersViewModel constructor(
     private val uid = FirebaseAuth.getInstance().currentUser?.uid!!
     private var firebaseDB = FirebaseFirestore.getInstance()
     private var chatHeadersSnapshotListener: ListenerRegistration? = null
-    var sharedFiles : Bundle? = null
+    var sharedFiles: Bundle? = null
+    private var chatHeadersList: List<ChatHeader> = emptyList()
+    private var currentSearchTerm: String? = null
 
     init {
         startWatchingChatHeaders()
@@ -37,58 +39,85 @@ class ChatHeadersViewModel constructor(
 
     fun startWatchingChatHeaders() {
         val reference = firebaseDB
-                .collection("chats")
-                .document(uid)
-                .collection("headers")
-                .orderBy("lastMsgTimestamp", Query.Direction.DESCENDING)
+            .collection("chats")
+            .document(uid)
+            .collection("headers")
+            .orderBy("lastMsgTimestamp", Query.Direction.DESCENDING)
 
         chatHeadersSnapshotListener = reference
-                .addSnapshotListener { querySnapshot, exception ->
-                    exception?.let {
-                        Log.e("chatheaders/viewmodel", exception.message!!)
-                        return@addSnapshotListener
-                    }
-                    querySnapshot?.let {
-                        Log.e("chat/header/viewmodel", "Data Loaded from Server")
-
-                        val messages = it.documents.map { docSnap ->
-                            docSnap.toObject(ChatHeader::class.java)!!.apply {
-                                this.id = docSnap.id
-                            }
-                        }
-
-                        _chatHeaders.postValue(messages)
-
-                        var unreadMessageCount = 0
-                        messages.forEach { chatHeader ->
-                            unreadMessageCount += chatHeader.unseenCount
-
-                            if (chatHeader.unseenCount != 0) {
-
-                                if (chatHeader.chatType == ChatConstants.CHAT_TYPE_USER) {
-                                    setMessagesAsDeliveredForChat(
-                                            chatHeader.id,
-                                            chatHeader.otherUserId
-                                    )
-                                }
-                            }
-                        }
-                        _unreadMessageCount.postValue(unreadMessageCount)
-                    }
+            .addSnapshotListener { querySnapshot, exception ->
+                exception?.let {
+                    Log.e("chatheaders/viewmodel", exception.message!!)
+                    return@addSnapshotListener
                 }
+                querySnapshot?.let {
+                    Log.e("chat/header/viewmodel", "Data Loaded from Server")
+
+                    val messages = it.documents.map { docSnap ->
+                        docSnap.toObject(ChatHeader::class.java)!!.apply {
+                            this.id = docSnap.id
+                        }
+                    }
+
+                    chatHeadersList = messages
+                    filterChatHeadersAndEmit()
+
+                    var unreadMessageCount = 0
+                    messages.forEach { chatHeader ->
+                        unreadMessageCount += chatHeader.unseenCount
+
+                        if (chatHeader.unseenCount != 0) {
+
+                            if (chatHeader.chatType == ChatConstants.CHAT_TYPE_USER) {
+                                setMessagesAsDeliveredForChat(
+                                    chatHeader.id,
+                                    chatHeader.otherUserId
+                                )
+                            }
+                        }
+                    }
+                    _unreadMessageCount.postValue(unreadMessageCount)
+                }
+            }
     }
 
     private fun setMessagesAsDeliveredForChat(
-            chatHeader: String,
-            otherUserId: String
+        chatHeader: String,
+        otherUserId: String
     ) = GlobalScope.launch {
 
         try {
 
-                chatRepository.sentMessagesSentMessageAsDelivered(chatHeader, otherUserId)
+            chatRepository.sentMessagesSentMessageAsDelivered(chatHeader, otherUserId)
 
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    fun filterChatList(newText: String) {
+        currentSearchTerm = newText
+        filterChatHeadersAndEmit()
+    }
+
+    private fun filterChatHeadersAndEmit() {
+        if (currentSearchTerm.isNullOrBlank()) {
+            _chatHeaders.postValue(chatHeadersList)
+            return
+        }
+
+        val finalHeadersToShownOnView = chatHeadersList.filter {
+            it.groupName.contains(
+                currentSearchTerm!!, true
+            )
+                    || it.otherUser?.name?.contains(
+                currentSearchTerm!!, true
+            ) ?: false
+                    || it.lastMsgText.contains(
+                currentSearchTerm!!, true
+            )
+        }
+
+        _chatHeaders.postValue(finalHeadersToShownOnView)
     }
 }
