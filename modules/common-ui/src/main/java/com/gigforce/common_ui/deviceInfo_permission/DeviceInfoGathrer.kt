@@ -4,8 +4,6 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.content.ContextCompat
-import com.gigforce.core.extensions.setOrThrow
-import com.gigforce.core.extensions.setOrUpdateOrThrow
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseUser
@@ -61,17 +59,17 @@ object DeviceInfoGatherer {
             PackageManager.GET_PERMISSIONS
         )
         val permissionListedInManifest = packageInfo.requestedPermissions
-        val permissions = mutableMapOf<String,Boolean>()
+        val permissions = mutableMapOf<String, String>()
 
         permissionListedInManifest.forEach {
-            if(it.isNullOrBlank()) return@forEach
+            if (it.isNullOrBlank()) return@forEach
 
             val permissionGranted = ContextCompat.checkSelfPermission(
                 appContext,
                 it
             ) == PackageManager.PERMISSION_GRANTED
 
-            permissions["permissions.${formatPermissionName(it)}"] = permissionGranted
+            permissions["permissions-${formatPermissionName(it)}"] = permissionGranted.toString()
         }
 
         return permissions
@@ -79,9 +77,25 @@ object DeviceInfoGatherer {
 
     private fun formatPermissionName(
         it: String
-    ): String = if(it.contains('.')){
+    ): String = if (it.contains('.')) {
         it.substringAfterLast('.')
-    } else{
+    } else {
         it
+    }
+
+    fun setPermissionAsDeniedAndDontAskAgain(
+        permission: List<String>
+    ) {
+
+        val permissionDenied = mutableMapOf<String,Any>()
+        permission.forEach {
+            permissionDenied["permission-${formatPermissionName(it)}"] = "deny_dont_ask_again"
+        }
+
+        firebaseFirestore.collection(
+            "Device_Version_info"
+        ).document(
+            currentUser.uid
+        ).update(permissionDenied)
     }
 }

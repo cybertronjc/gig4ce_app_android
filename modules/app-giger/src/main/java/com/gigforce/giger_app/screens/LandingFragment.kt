@@ -8,7 +8,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,9 +37,10 @@ class LandingFragment : Fragment(),
     BsBackgroundAndLocationAccess.OnLocationOkayButtonPressClickListener {
     val viewModel: LandingViewModel by viewModels()
 
-    private val requestPermissionContract = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissionsAndResult ->
-        handlePermissionResults(permissionsAndResult)
-    }
+    private val requestPermissionContract =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissionsAndResult ->
+            handlePermissionResults(permissionsAndResult)
+        }
 
     private fun handlePermissionResults(permissionsAndResult: MutableMap<String, Boolean>) {
         val hasFinePermission =
@@ -68,6 +68,13 @@ class LandingFragment : Fragment(),
                     //Permission denied but user didn;t check dont ask again
                 } else {
                     //Permission denied and checked dont ask again ,redirect to settings
+                    DeviceInfoGatherer.setPermissionAsDeniedAndDontAskAgain(
+                        listOf(
+                            "Manifest.permission.ACCESS_COARSE_LOCATION",
+                            "Manifest.permission.ACCESS_FINE_LOCATION"
+                        )
+                    )
+
                     openSettingsPage()
                 }
             }
@@ -90,6 +97,14 @@ class LandingFragment : Fragment(),
                 } else {
                     //Permission denied and checked dont ask again
                     //redirect to settings
+
+                    DeviceInfoGatherer.setPermissionAsDeniedAndDontAskAgain(
+                        listOf(
+                            "Manifest.permission.ACCESS_COARSE_LOCATION",
+                            "Manifest.permission.ACCESS_FINE_LOCATION",
+                            "Manifest.permission.ACCESS_BACKGROUND_LOCATION"
+                        )
+                    )
                     openSettingsPage()
                 }
             }
@@ -143,7 +158,7 @@ class LandingFragment : Fragment(),
         )
 
         if (!locationPermissionGranted) {
-                showLocationDialog()
+            showLocationDialog()
         }
     }
 
