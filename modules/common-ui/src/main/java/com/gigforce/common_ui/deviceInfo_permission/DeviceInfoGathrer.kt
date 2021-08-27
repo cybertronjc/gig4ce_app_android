@@ -4,21 +4,12 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.content.ContextCompat
+import com.gigforce.core.extensions.setOrThrow
+import com.gigforce.core.extensions.setOrUpdateOrThrow
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
-
-data class DeviceInfoAndPermissionInfo(
-        val device: String,
-        val model: String,
-        val osVersionInt: Int,
-        val osVersion: String,
-        val permissionsOnApp: List<String>,
-        val permissionsGrantedByUser: List<String>,
-        val updatedOn: Timestamp,
-        val currentVersionUserIsUsing: String
-)
 
 object DeviceInfoGatherer {
 
@@ -31,7 +22,7 @@ object DeviceInfoGatherer {
     }
 
     fun updateDeviceInfoAndPermissionGranted(
-            appContext: Context
+        appContext: Context
     ) {
 
         val device = Build.DEVICE
@@ -46,46 +37,51 @@ object DeviceInfoGatherer {
             ""
         }
 
-        val permissions = getListedAndGrantedPermissions(appContext)
+        val finalMap = mutableMapOf(
+            "device" to device,
+            "model" to model,
+            "osVersionInt" to osVersionInt,
+            "osVersion" to osVersion,
+            "updatedOn" to Timestamp.now(),
+            "currentVersionUserIsUsing" to currentAppVersion
+        ) + getListedAndGrantedPermissions(appContext)
+
         firebaseFirestore.collection(
-                "Device_Version_info"
+            "Device_Version_info"
         ).document(
-                currentUser.uid
-        ).set(
-                DeviceInfoAndPermissionInfo(
-                        device = device,
-                        model = model,
-                        osVersionInt = osVersionInt,
-                        osVersion = osVersion,
-                        permissionsOnApp = permissions.first,
-                        permissionsGrantedByUser = permissions.second,
-                        updatedOn = Timestamp.now(),
-                        currentVersionUserIsUsing = currentAppVersion
-                )
-        )
+            currentUser.uid
+        ).set(finalMap)
     }
 
     private fun getListedAndGrantedPermissions(
-            appContext: Context
-    ): Pair<List<String>, List<String>> {
+        appContext: Context
+    ): Map<String, Any> {
         val packageInfo = appContext.packageManager.getPackageInfo(
-                appContext.packageName,
-                PackageManager.GET_PERMISSIONS
+            appContext.packageName,
+            PackageManager.GET_PERMISSIONS
         )
         val permissionListedInManifest = packageInfo.requestedPermissions
-        val grantedPermissions = mutableListOf<String>()
+        val permissions = mutableMapOf<String,Boolean>()
 
         permissionListedInManifest.forEach {
+            if(it.isNullOrBlank()) return@forEach
 
-            if (ContextCompat.checkSelfPermission(
-                            appContext,
-                            it
-                    ) == PackageManager.PERMISSION_GRANTED) {
-                grantedPermissions.add(it)
-            }
+            val permissionGranted = ContextCompat.checkSelfPermission(
+                appContext,
+                it
+            ) == PackageManager.PERMISSION_GRANTED
+
+            permissions["permissions.${formatPermissionName(it)}"] = permissionGranted
         }
 
-        return permissionListedInManifest.toList() to grantedPermissions
+        return permissions
     }
 
+    private fun formatPermissionName(
+        it: String
+    ): String = if(it.contains('.')){
+        it.substringAfterLast('.')
+    } else{
+        it
+    }
 }
