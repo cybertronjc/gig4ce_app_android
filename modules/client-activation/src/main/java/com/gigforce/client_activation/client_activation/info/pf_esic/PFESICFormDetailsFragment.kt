@@ -11,6 +11,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.*
+import android.widget.CompoundButton
 import android.widget.DatePicker
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
@@ -200,7 +201,10 @@ class PFESICFormDetailsFragment : Fragment(), IOnBackPressedOverride,
     }
 
     private fun listeners() = viewBinding.apply {
-
+        pfesicCheckbox.setOnCheckedChangeListener { buttonView, isChecked -> setSkipOrSubmitText() }
+        pfesicCheckbox.setOnClickListener{
+            setSkipOrSubmitText()
+        }
         esicNumber.editText?.addTextChangedListener(ValidationTextWatcher())
 
         uanNumber.editText?.addTextChangedListener(ValidationTextWatcher())
@@ -522,21 +526,25 @@ class PFESICFormDetailsFragment : Fragment(), IOnBackPressedOverride,
         override fun afterTextChanged(text: Editable?) {
             context?.let { cxt ->
                 text?.let {
-                    if (esicNumber.editText?.text.toString()
-                            .isNullOrBlank() && uanNumber.editText?.text.toString()
-                            .isNullOrBlank() && pfNumber.editText?.text.toString()
-                            .isNullOrBlank() && nomineeName.editText?.text.toString()
-                            .isNullOrBlank() && relationNominee.editText?.text.toString()
-                            .isNullOrBlank()
-                    ) {
-                        viewBinding.submitButton.text = "Skip"
-                        anyDataEntered = false
-                    } else {
-                        viewBinding.submitButton.text = "Submit"
-                        anyDataEntered = true
-                    }
+                    setSkipOrSubmitText()
                 }
             }
+        }
+    }
+
+    fun setSkipOrSubmitText(){
+        if (if(pfesicCheckbox.isChecked)  esicNumber.editText?.text.toString()
+                .isNullOrBlank() && uanNumber.editText?.text.toString()
+                .isNullOrBlank() && pfNumber.editText?.text.toString()
+                .isNullOrBlank() else nomineeName.editText?.text.toString()
+                .isNullOrBlank() && relationNominee.editText?.text.toString()
+                .isNullOrBlank()
+        ) {
+            viewBinding.submitButton.text = "Skip"
+            anyDataEntered = false
+        } else {
+            viewBinding.submitButton.text = "Submit"
+            anyDataEntered = true
         }
     }
 
