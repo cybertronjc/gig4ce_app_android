@@ -17,9 +17,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.common_ui.AppDialogsInterface
 import com.gigforce.common_ui.ConfirmationDialogOnClickListener
+import com.gigforce.common_ui.chat.ChatHeadersViewModel
 import com.gigforce.common_ui.configrepository.ConfigRepository
+import com.gigforce.common_ui.core.TextDrawable
 import com.gigforce.common_ui.deviceInfo_permission.DeviceInfoGatherer
 import com.gigforce.common_ui.utils.BsBackgroundAndLocationAccess
+import com.gigforce.core.extensions.visible
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.giger_app.R
@@ -28,6 +31,7 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.FirebaseFirestore
 import com.jaeger.library.StatusBarUtil
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.calendar_home_screen.*
 import kotlinx.android.synthetic.main.fragment_landing.*
 import pub.devrel.easypermissions.EasyPermissions
 import javax.inject.Inject
@@ -45,6 +49,7 @@ class LandingFragment : Fragment() {
 
     @Inject
     lateinit var appDialogsInterface: AppDialogsInterface
+    private val chatHeadersViewModel: ChatHeadersViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -66,6 +71,26 @@ class LandingFragment : Fragment() {
         })
         checkforForceupdate()
         logDeviceAndPermissionInfo()
+        checkForChatCounts()
+    }
+
+    private fun checkForChatCounts() {
+        unread_message_count_tv.visible()
+        chatHeadersViewModel.unreadMessageCount
+            .observe(viewLifecycleOwner, Observer {
+
+                if (it == 0) {
+                    unread_message_count_tv.setImageDrawable(null)
+                } else {
+                    val drawable = TextDrawable.builder().buildRound(
+                        it.toString(),
+                        ResourcesCompat.getColor(requireContext().resources, R.color.lipstick, null)
+                    )
+                    unread_message_count_tv.setImageDrawable(drawable)
+                }
+            })
+
+        chatHeadersViewModel.startWatchingChatHeaders()
     }
 
     private fun checkForLocationPermission() {

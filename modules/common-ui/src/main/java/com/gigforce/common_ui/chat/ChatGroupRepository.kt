@@ -83,7 +83,13 @@ class ChatGroupRepository constructor(
             add(currentUserInfo)
         }
 
-        members.forEach { it.name = "" }
+        members.forEach {
+            if (!it.profileName.isNullOrBlank()) {
+                it.name = it.profileName
+            } else {
+                it.name = chatProfileFirebaseRepository.getProfileDataIfExist(it.uid)?.name ?: ""
+            }
+        }
 
         val group = createGroupData(groupName, members, currentUserInfo)
         val groupDocRef = db.collection(COLLECTION_GROUP_CHATS).addOrThrow(group)
@@ -321,7 +327,6 @@ class ChatGroupRepository constructor(
     ) {
         val newFileName =
             "Doc-$groupId-${DateHelper.getFullDateTimeStamp()}.${getExtensionFromUri(context, uri)}"
-
 
         val pathOnServer = uploadChatAttachment(
             newFileName,
@@ -602,6 +607,7 @@ class ChatGroupRepository constructor(
                 .document(groupId)
                 .collection(COLLECTION_GROUP_EVENTS)
                 .addOrThrow(EventInfo(
+                        groupId = groupId,
                         showEventToUsersWithUid = arrayListOf(uid),
                         eventDoneByUserUid = currentUser.uid,
                         eventText = "You're now an admin"
@@ -626,6 +632,7 @@ class ChatGroupRepository constructor(
             .document(groupId)
             .collection(COLLECTION_GROUP_EVENTS)
             .addOrThrow(EventInfo(
+                    groupId = groupId,
                     showEventToUsersWithUid = arrayListOf(uid),
                     eventDoneByUserUid = currentUser.uid,
                     eventText = "You've been dismissed as admin"

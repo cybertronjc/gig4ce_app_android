@@ -11,6 +11,12 @@ interface DownloadChatAttachmentService {
 
     @GET
     suspend fun downloadAttachment(
-        @Url fullAttachmentUrl : String
-    ) : Response<ResponseBody>
+        @Url fullAttachmentUrl: String
+    ): Response<ResponseBody>
+
+
+    @GET("https://qslv7bpakk.execute-api.ap-south-1.amazonaws.com/default/sync-user-uploaded-contacts_with_gig_force_users_prod")
+    suspend fun trySyncingContacts(
+        @Query("uid") uid: String
+    ): Response<ResponseBody>
 }
