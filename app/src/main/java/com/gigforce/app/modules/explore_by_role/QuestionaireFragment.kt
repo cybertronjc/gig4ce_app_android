@@ -87,7 +87,7 @@ class QuestionaireFragment : BaseFragment() {
 
 
         }
-        ll_next_questionnaire_fragment.tv_cancel.text = getString(R.string.skip)
+        ll_next_questionnaire_fragment.tv_cancel.text = getString(R.string.skip_client)
         ll_next_questionnaire_fragment.tv_cancel.setOnClickListener {
             navFragmentsData?.setData(
                 bundleOf(

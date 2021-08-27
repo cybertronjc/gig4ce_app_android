@@ -17,11 +17,13 @@ import com.bumptech.glide.Glide
 import com.gigforce.common_ui.chat.ChatConstants
 import com.gigforce.common_ui.chat.models.ChatMessage
 import com.gigforce.common_ui.shimmer.ShimmerHelper
+import com.gigforce.common_ui.views.GigforceImageView
 import com.gigforce.core.extensions.dp
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toDisplayText
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.modules.feature_chat.ChatNavigation
 import com.gigforce.modules.feature_chat.R
 import com.gigforce.modules.feature_chat.screens.GroupMessageViewInfoFragment
@@ -41,13 +43,19 @@ abstract class ImageMessageView(
 ) : MediaMessage(
         context,
         attrs
-), View.OnClickListener, View.OnLongClickListener, PopupMenu.OnMenuItemClickListener {
+), View.OnClickListener,
+    View.OnLongClickListener,
+    PopupMenu.OnMenuItemClickListener {
 
     @Inject
     lateinit var navigation: INavigation
 
     private val chatNavigation: ChatNavigation by lazy {
         ChatNavigation(navigation)
+    }
+
+    private val firebaseAuthStateListener: FirebaseAuthStateListener by lazy {
+        FirebaseAuthStateListener.getInstance()
     }
 
     private lateinit var senderNameTV: TextView
@@ -60,6 +68,7 @@ abstract class ImageMessageView(
     private lateinit var attachmentDownloadingProgressBar: ProgressBar
     private lateinit var receivedStatusIV: ImageView
     private lateinit var imageContainerFrameLayout: FrameLayout
+//    private lateinit var quotedMessagePreviewContainer: LinearLayout
 
     //Data
     private lateinit var chatMessage: ChatMessage
@@ -83,6 +92,7 @@ abstract class ImageMessageView(
         attachmentDownloadingProgressBar = this.findViewById(R.id.attachment_downloading_pb)
         imageContainerFrameLayout = this.findViewById(R.id.image_container_layout)
         messageTV = this.findViewById(R.id.messageTV)
+//        quotedMessagePreviewContainer = this.findViewById(R.id.reply_messages_quote_container_layout)
     }
 
     fun setDefault() {
@@ -99,6 +109,7 @@ abstract class ImageMessageView(
     private fun setOnClickListeners() {
         imageContainerFrameLayout.setOnClickListener(this)
         cardView.setOnLongClickListener(this)
+        //quotedMessagePreviewContainer.setOnClickListener(this)
     }
 
     private fun handleImageNotDownloaded() {
@@ -214,6 +225,13 @@ abstract class ImageMessageView(
         adjustImageSizeAcc(msg)
         handleImage(msg)
         setReceivedStatus(msg)
+//        setQuotedMessageOnView(
+//            context =  context,
+//            firebaseAuthStateListener = firebaseAuthStateListener,
+//            type = type,
+//            chatMessage = message,
+//            quotedMessagePreviewContainer = quotedMessagePreviewContainer
+//        )
     }
 
     private fun adjustImageSizeAcc(msg: ChatMessage) {
@@ -256,12 +274,17 @@ abstract class ImageMessageView(
     }
 
     override fun onClick(v: View?) {
-        val file = returnFileIfAlreadyDownloadedElseNull()
+        val view = v ?: return
 
-        if (file != null) {
-            chatNavigation.openFullScreenImageViewDialogFragment(file.toUri())
+        if(view.id == R.id.reply_messages_quote_container_layout){
         } else {
-            downloadAttachment()
+
+            val file = returnFileIfAlreadyDownloadedElseNull()
+            if (file != null) {
+                chatNavigation.openFullScreenImageViewDialogFragment(file.toUri())
+            } else {
+                downloadAttachment()
+            }
         }
     }
 
@@ -292,7 +315,6 @@ abstract class ImageMessageView(
                     .into(receivedStatusIV)
         }
     }
-
 
     private fun downloadAttachment() = GlobalScope.launch {
 
@@ -356,6 +378,10 @@ abstract class ImageMessageView(
                     message.id
             )
         }
+    }
+
+    override fun getCurrentChatMessageOrThrow(): ChatMessage {
+        return message
     }
 }
 

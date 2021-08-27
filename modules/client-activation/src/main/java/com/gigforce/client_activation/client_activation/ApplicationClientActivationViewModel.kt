@@ -154,8 +154,14 @@ class ApplicationClientActivationViewModel : ViewModel() {
                                 "started"
                             ) ?: false || verification.bank_details?.verified ?: false)
                     }
-                    "aadhar_card_questionnaire" ->{
-                        it.isDone = verification?.aadhaar_card_questionnaire !=null && verification?.aadhaar_card_questionnaire?.aadhaarCardNo?.length == 12
+                    "aadhar_card_questionnaire" -> {
+                        it.isDone =
+                            verification?.aadhaar_card_questionnaire != null && verification.aadhaar_card_questionnaire?.aadhaarCardNo?.length == 12
+                    }
+
+                    "pf_esic" -> {
+                        it.isDone =
+                            (profileModel?.pfesic?.dobNominee?.isNotBlank() == true && profileModel.pfesic?.rNomineeName?.isNotBlank() == true && profileModel.pfesic?.nomineeName?.isNotBlank() == true && profileModel.pfesic?.signature?.isNotBlank() == true) || (profileModel?.pfesic?.uanNumber?.isNotBlank() == true && profileModel.pfesic?.pfNumber?.isNotBlank() == true && profileModel.pfesic?.esicNumber?.isNotBlank() == true)
                     }
                 }
             }
@@ -238,7 +244,7 @@ class ApplicationClientActivationViewModel : ViewModel() {
 
     fun draftApplication(jobProfileId: String) = viewModelScope.launch {
         val application = getJPApplication(jobProfileId)
-        if (application.status == "" && application.id != "" ) {
+        if (application.status == "" && application.id != "") {
             repository.db.collection("JP_Applications").document(application.id)
                 .update(
                     mapOf(
