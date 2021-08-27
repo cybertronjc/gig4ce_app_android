@@ -7,9 +7,12 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -31,8 +34,75 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class LandingFragment : Fragment() {
+class LandingFragment : Fragment(),
+    BsBackgroundAndLocationAccess.OnLocationOkayButtonPressClickListener {
     val viewModel: LandingViewModel by viewModels()
+
+    private val requestPermissionContract = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissionsAndResult ->
+        handlePermissionResults(permissionsAndResult)
+    }
+
+    private fun handlePermissionResults(permissionsAndResult: MutableMap<String, Boolean>) {
+        val hasFinePermission =
+            permissionsAndResult[Manifest.permission.ACCESS_FINE_LOCATION] ?: false
+        val permissionRationaleFinePermission =
+            requireActivity().shouldShowRequestPermissionRationale(
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
+
+        val hasCoarsePermission =
+            permissionsAndResult[Manifest.permission.ACCESS_COARSE_LOCATION] ?: false
+        val permissionRationaleCoarsePermission =
+            requireActivity().shouldShowRequestPermissionRationale(
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            )
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            //Below Android 10 Background permission access is not required
+
+            if (hasFinePermission && hasCoarsePermission) {
+                //we got the permission, don;t do anything
+            } else {
+                //Permission denied
+                if (permissionRationaleFinePermission) {
+                    //Permission denied but user didn;t check dont ask again
+                } else {
+                    //Permission denied and checked dont ask again ,redirect to settings
+                    openSettingsPage()
+                }
+            }
+        } else {
+            val hasBackgroundLocationPermission =
+                permissionsAndResult[Manifest.permission.ACCESS_BACKGROUND_LOCATION] ?: false
+            val permissionRationaleBckPermission =
+                requireActivity().shouldShowRequestPermissionRationale(
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                )
+            if (hasFinePermission && hasCoarsePermission && hasBackgroundLocationPermission) {
+                // Has foreground and background both location access
+            } else if (hasFinePermission && hasCoarsePermission) {
+                //Just foreground location access
+            } else {
+
+                //Permission denied
+                if (permissionRationaleFinePermission) {
+                    //Permission denied but didn;t check dont ask again
+                } else {
+                    //Permission denied and checked dont ask again
+                    //redirect to settings
+                    openSettingsPage()
+                }
+            }
+        }
+    }
+
+    private fun openSettingsPage() {
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+        val uri = Uri.fromParts("package", requireContext().packageName, null)
+        intent.data = uri
+        startActivity(intent)
+    }
+
     private val locationAccessDialog: BsBackgroundAndLocationAccess by lazy {
         BsBackgroundAndLocationAccess()
     }
@@ -66,30 +136,22 @@ class LandingFragment : Fragment() {
     }
 
     private fun checkForLocationPermission() {
-        val locationPermissionGranted = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-            EasyPermissions.hasPermissions(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            )
-        } else {
-            EasyPermissions.hasPermissions(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_BACKGROUND_LOCATION
-            )
-        }
+        val locationPermissionGranted = EasyPermissions.hasPermissions(
+            requireContext(),
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        )
 
         if (!locationPermissionGranted) {
                 showLocationDialog()
         }
-
     }
 
     private fun showLocationDialog() {
+
         if (locationAccessDialog.dialog == null || locationAccessDialog.dialog?.isShowing == false) {
             locationAccessDialog.isCancelable = false
+            locationAccessDialog.setOnLocationOkayClickListener(this)
             locationAccessDialog.show(
                 childFragmentManager,
                 BsBackgroundAndLocationAccess::class.simpleName
@@ -200,4 +262,23 @@ class LandingFragment : Fragment() {
 
     }
 
+    override fun onRequestLocationPermissionButtonClicked() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            requestPermissionContract.launch(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                )
+            )
+        } else {
+
+            requestPermissionContract.launch(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                )
+            )
+        }
+    }
 }
