@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,10 +20,12 @@ import com.gigforce.common_ui.ConfirmationDialogOnClickListener
 import com.gigforce.common_ui.configrepository.ConfigRepository
 import com.gigforce.common_ui.deviceInfo_permission.DeviceInfoGatherer
 import com.gigforce.common_ui.utils.BsBackgroundAndLocationAccess
+import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.giger_app.R
 import com.gigforce.giger_app.vm.LandingViewModel
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.google.firebase.firestore.FirebaseFirestore
 import com.jaeger.library.StatusBarUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_landing.*
@@ -197,7 +200,34 @@ class LandingFragment : Fragment() {
             )
         )
 
+        trySyncingUnsyncedFirebaseData()
+    }
 
+    private fun trySyncingUnsyncedFirebaseData() {
+        FirebaseFirestore
+            .getInstance()
+            .waitForPendingWrites()
+            .addOnSuccessListener {
+                Log.d(
+                    "LandingFragment",
+                    "Success no pending writes found"
+                )
+                CrashlyticsLogger.d(
+                    "LandingFragment",
+                    "Success no pending writes found"
+                )
+            }.addOnFailureListener {
+                Log.e(
+                    "LandingFragment",
+                    "while syncning data to server",
+                    it
+                )
+                CrashlyticsLogger.e(
+                    "LandingFragment",
+                    "while syncning data to server",
+                    it
+                )
+            }
     }
 
 }
