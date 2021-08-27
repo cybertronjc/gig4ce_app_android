@@ -171,39 +171,52 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <TextView
-                    android:id="@+id/maritalStatusLabel"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/size_16"
-                    android:layout_marginTop="@dimen/size_20"
-                    android:layout_marginRight="@dimen/size_16"
-                    android:text="@string/marital_status"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/dateOfJoiningLabel"/>
+
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/maritalStatusCl"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/size_16"
-                    android:layout_marginTop="@dimen/size_4"
+                    android:layout_marginTop="@dimen/size_16"
                     android:layout_marginRight="@dimen/size_16"
                     android:layout_marginBottom="@dimen/size_16"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/maritalStatusLabel">
+                    app:layout_constraintTop_toBottomOf="@+id/dateOfJoiningLabel">
+                    <View
+                        android:id="@+id/below_layout_marital_status"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:background="@drawable/rect_border_grey"
+                        android:paddingLeft="@dimen/dp_sm1"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                    <TextView
+                        android:id="@+id/maritalStatusLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/marital_status"
+                        android:textStyle="bold"
+                        android:layout_marginLeft="@dimen/dp_xsm1"
+                        android:paddingLeft="@dimen/dp_xsm2"
+                        android:background="@color/white"
+                        app:layout_constraintTop_toTopOf="@+id/below_layout_marital_status"
+                        app:layout_constraintBottom_toTopOf="@+id/below_layout_marital_status"
+                        app:layout_constraintStart_toStartOf="parent"/>
 
                     <androidx.appcompat.widget.AppCompatSpinner
                         android:id="@+id/maritalStatusSpinner"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:entries="@array/marital_status"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:layout_marginLeft="@dimen/dp_xsm2"
+                        app:layout_constraintEnd_toEndOf="@+id/below_layout_marital_status"
+                        app:layout_constraintStart_toStartOf="@+id/below_layout_marital_status"
+                        app:layout_constraintTop_toTopOf="@+id/below_layout_marital_status"
+                        app:layout_constraintBottom_toBottomOf="@+id/below_layout_marital_status"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -213,7 +226,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/size_16"
-                    android:layout_marginTop="@dimen/size_20"
+                    android:layout_marginTop="@dimen/size_8"
                     android:layout_marginRight="@dimen/size_16"
                     android:layout_marginBottom="@dimen/size_16"
                     android:hint="@string/emailid_client"
