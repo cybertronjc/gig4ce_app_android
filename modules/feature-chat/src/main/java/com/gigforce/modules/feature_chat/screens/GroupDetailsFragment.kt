@@ -3,6 +3,7 @@ package com.gigforce.modules.feature_chat.screens
 import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
+import android.text.InputFilter
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -367,6 +368,7 @@ class GroupDetailsFragment : Fragment(),
         edit_group_name_iv.setOnClickListener {
 
             val groupNameEt = EditText(requireContext())
+            groupNameEt.filters = arrayOf<InputFilter>(InputFilter.LengthFilter(25))
 
             val layout = FrameLayout(requireContext())
             layout.setPaddingRelative(45, 15, 45, 0)
