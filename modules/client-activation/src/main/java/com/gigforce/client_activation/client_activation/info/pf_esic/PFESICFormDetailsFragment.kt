@@ -7,10 +7,13 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.*
 import android.widget.DatePicker
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
@@ -18,6 +21,7 @@ import com.gigforce.client_activation.R
 import com.gigforce.client_activation.databinding.PfesicFormDetailsFragmentBinding
 import com.gigforce.client_activation.ui.ClientActivationClickOrSelectImageBottomSheet
 import com.gigforce.common_image_picker.image_cropper.ImageCropActivity
+import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.shimmer.ShimmerHelper
@@ -28,6 +32,8 @@ import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.DateHelper
+import com.gigforce.core.utils.GlideApp
+import com.gigforce.core.utils.NavFragmentsData
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,6 +46,10 @@ import javax.inject.Inject
 class PFESICFormDetailsFragment : Fragment(), IOnBackPressedOverride,
     ClientActivationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener {
 
+    private lateinit var mJobProfileId: String
+    private var FROM_CLIENT_ACTIVATON: Boolean = false
+    var allNavigationList = ArrayList<String>()
+    var intentBundle: Bundle? = null
     companion object {
         fun newInstance() = PFESICFormDetailsFragment()
         const val REQUEST_CODE_UPLOAD_AADHAR = 2331
@@ -79,7 +89,7 @@ class PFESICFormDetailsFragment : Fragment(), IOnBackPressedOverride,
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //getDataFromIntents(savedInstanceState)
+        getDataFromIntents(savedInstanceState)
         //initviews()
         changeStatusBarColor()
         setViews()
@@ -88,7 +98,28 @@ class PFESICFormDetailsFragment : Fragment(), IOnBackPressedOverride,
 
 
     }
+    private fun getDataFromIntents(savedInstanceState: Bundle?) {
+        savedInstanceState?.let {
 
+            mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
+            FROM_CLIENT_ACTIVATON =
+                it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
+            it.getStringArrayList(StringConstants.NAVIGATION_STRING_ARRAY.value)?.let { arr ->
+                allNavigationList = arr
+            }
+            intentBundle = it
+        }
+
+        arguments?.let {
+            mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
+            FROM_CLIENT_ACTIVATON =
+                it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
+            it.getStringArrayList(StringConstants.NAVIGATION_STRING_ARRAY.value)?.let { arr ->
+                allNavigationList = arr
+            }
+            intentBundle = it
+        }
+    }
     private fun observer() {
 
         viewModel.pfEsicSumbitResult.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
@@ -97,6 +128,7 @@ class PFESICFormDetailsFragment : Fragment(), IOnBackPressedOverride,
             progressBar.visibility = View.GONE
             if (updated) {
                 showToast("Data uploaded successfully")
+                checkForNextDoc()
             }
         })
 
@@ -142,7 +174,7 @@ class PFESICFormDetailsFragment : Fragment(), IOnBackPressedOverride,
         }
 
         pfEsicData.dobNominee?.let {
-            dateOfBirth?.text = it
+            dateOfBirth.text = it
         }
 
         pfEsicData.signature?.let {
@@ -155,8 +187,11 @@ class PFESICFormDetailsFragment : Fragment(), IOnBackPressedOverride,
 
     private fun showSignatureImage(signature: String?) {
         context?.let {
-            Glide.with(it).load(signature).placeholder(ShimmerHelper.getShimmerDrawable())
-                .into(viewBinding.signatureImage)
+            signature?.let { signature->
+                Glide.with(it).load(FirebaseStorage.getInstance().getReferenceFromUrl(signature)).placeholder(ShimmerHelper.getShimmerDrawable())
+                    .into(viewBinding.signatureImage)
+            }
+
         }
     }
 
@@ -165,6 +200,17 @@ class PFESICFormDetailsFragment : Fragment(), IOnBackPressedOverride,
     }
 
     private fun listeners() = viewBinding.apply {
+
+        esicNumber.editText?.addTextChangedListener(ValidationTextWatcher())
+
+        uanNumber.editText?.addTextChangedListener(ValidationTextWatcher())
+
+        pfNumber.editText?.addTextChangedListener(ValidationTextWatcher())
+
+        nomineeName.editText?.addTextChangedListener(ValidationTextWatcher())
+
+        relationNominee.editText?.addTextChangedListener(ValidationTextWatcher())
+
 
         dateOfBirthLabel.setOnClickListener {
             dateOfBirthPicker.show()
@@ -188,68 +234,102 @@ class PFESICFormDetailsFragment : Fragment(), IOnBackPressedOverride,
         }
 
         submitButton.setOnClickListener {
-            if (pfesicCheckbox.isChecked) {
-                if (esicNumber.editText?.text?.isEmpty() == true) {
-                    MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage("Enter ESIC number")
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                        .show()
-                    return@setOnClickListener
-                }
+            if(anyDataEntered) {
+                if (pfesicCheckbox.isChecked) {
+                    if (esicNumber.editText?.text?.isEmpty() == true) {
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert))
+                            .setMessage("Enter ESIC number")
+                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .show()
+                        return@setOnClickListener
+                    }
 
-                if (uanNumber.editText?.text?.isEmpty() == true) {
-                    MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage("Enter UAN number")
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                        .show()
-                    return@setOnClickListener
-                }
+                    if (uanNumber.editText?.text?.isEmpty() == true) {
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert))
+                            .setMessage("Enter UAN number")
+                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .show()
+                        return@setOnClickListener
+                    }
 
-                if (pfNumber.editText?.text?.isEmpty() == true) {
-                    MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage("Enter PF number")
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                        .show()
-                    return@setOnClickListener
-                }
+                    if (pfNumber.editText?.text?.isEmpty() == true) {
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert))
+                            .setMessage("Enter PF number")
+                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .show()
+                        return@setOnClickListener
+                    }
 
-                submitData()
-            } else {
-                if (nomineeName.editText?.text?.isEmpty() == true) {
-                    MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage("Enter nominee name")
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                        .show()
-                    return@setOnClickListener
-                }
+                    submitData()
+                } else {
+                    if (nomineeName.editText?.text?.isEmpty() == true) {
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert))
+                            .setMessage("Enter nominee name")
+                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .show()
+                        return@setOnClickListener
+                    }
 
-                if (relationNominee.editText?.text?.isEmpty() == true) {
-                    MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage("Enter relation with nominee")
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                        .show()
-                    return@setOnClickListener
-                }
+                    if (relationNominee.editText?.text?.isEmpty() == true) {
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert))
+                            .setMessage("Enter relation with nominee")
+                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .show()
+                        return@setOnClickListener
+                    }
 
-                if (dateOfBirth.text?.isEmpty() == true) {
-                    MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage("Select DoB of nominee")
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                        .show()
-                    return@setOnClickListener
+                    if (dateOfBirth.text?.isEmpty() == true) {
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert))
+                            .setMessage("Select DoB of nominee")
+                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .show()
+                        return@setOnClickListener
+                    }
+
+                    if(signaturePath.isBlank()){
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert))
+                            .setMessage("Upload signature image")
+                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .show()
+                        return@setOnClickListener
+                    }
+                    submitData()
                 }
-                submitData()
+            }else{
+                checkForNextDoc()
             }
         }
 
         signatureImage.setOnClickListener {
             checkForPermissionElseShowCameraGalleryBottomSheet()
+        }
+    }
+
+    private fun checkForNextDoc() {
+        if (allNavigationList.size == 0) {
+            activity?.onBackPressed()
+        } else {
+            var navigationsForBundle = emptyList<String>()
+            if (allNavigationList.size > 1) {
+                navigationsForBundle =
+                    allNavigationList.slice(IntRange(1, allNavigationList.size - 1))
+                        .filter { it.length > 0 }
+            }
+            navigation.popBackStack()
+            intentBundle?.putStringArrayList(
+                StringConstants.NAVIGATION_STRING_ARRAY.value,
+                java.util.ArrayList(navigationsForBundle)
+            )
+            navigation.navigateTo(
+                allNavigationList.get(0), intentBundle
+            )
         }
     }
 
@@ -309,6 +389,7 @@ class PFESICFormDetailsFragment : Fragment(), IOnBackPressedOverride,
 
         //creating datamodel for data submission
         val pfesicDataModel = PFESICDataModel(
+            isAlreadyExists = pfesicCheckbox.isChecked,
             esicNumber = esicNumber.editText?.text?.toString(),
             uanNumber = uanNumber.editText?.text?.toString(),
             pfNumber = pfNumber.editText?.text?.toString(),
@@ -370,12 +451,18 @@ class PFESICFormDetailsFragment : Fragment(), IOnBackPressedOverride,
             imageUriResultCrop?.let {
                 progressBar.visible()
                 firebaseStorage.reference
-                    .child("profile_pics")
+                    .child("verification")
                     .child(fileName)
                     .putFile(it).addOnSuccessListener {
                         progressBar.gone()
                         if (imageUriResultCrop != null) {
                             signaturePath = it.metadata?.path.toString()
+                            context?.let {
+                                GlideApp.with(it)
+                                    .load(imageUriResultCrop)
+                                    .into(viewBinding.signatureImage)
+                            }
+
                         }
                     }.addOnFailureListener {
                         progressBar.gone()
@@ -409,7 +496,48 @@ class PFESICFormDetailsFragment : Fragment(), IOnBackPressedOverride,
     }
 
     override fun onBackPressed(): Boolean {
+        if (FROM_CLIENT_ACTIVATON) {
+            var navFragmentsData = activity as NavFragmentsData
+            navFragmentsData.setData(
+                bundleOf(
+                    com.gigforce.core.StringConstants.BACK_PRESSED.value to true
+
+                )
+            )
+        }
         return false
+    }
+
+    var anyDataEntered = false
+
+    inner class ValidationTextWatcher : TextWatcher {
+        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+        }
+
+        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+        }
+
+        override fun afterTextChanged(text: Editable?) {
+            context?.let { cxt ->
+                text?.let {
+                    if (esicNumber.editText?.text.toString()
+                            .isNullOrBlank() && uanNumber.editText?.text.toString()
+                            .isNullOrBlank() && pfNumber.editText?.text.toString()
+                            .isNullOrBlank() && nomineeName.editText?.text.toString()
+                            .isNullOrBlank() && relationNominee.editText?.text.toString()
+                            .isNullOrBlank()
+                    ) {
+                        viewBinding.submitButton.text = "Skip"
+                        anyDataEntered = false
+                    } else {
+                        viewBinding.submitButton.text = "Submit"
+                        anyDataEntered = true
+                    }
+                }
+            }
+        }
     }
 
 }
