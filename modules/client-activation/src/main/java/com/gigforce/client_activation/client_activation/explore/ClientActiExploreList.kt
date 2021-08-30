@@ -59,7 +59,7 @@ class ClientActiExploreList : Fragment(), IOnBackPressedOverride, OnJobSelectedL
     var pending_selected = false
     var applied_selected = false
     var rejected_selected = false
-
+    var currentlySearchString = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -124,7 +124,7 @@ class ClientActiExploreList : Fragment(), IOnBackPressedOverride, OnJobSelectedL
             )
             explore_rv.adapter = clientActiExploreAdapter
             clientActiExploreAdapter.setData(jobProfiles)
-
+            swipeRefresh.isRefreshing = false
         }
     }
 
@@ -153,6 +153,10 @@ class ClientActiExploreList : Fragment(), IOnBackPressedOverride, OnJobSelectedL
             clientActiExploreAdapter.filter.filter(text)
         }
 
+        swipeRefresh.setOnRefreshListener {
+            viewModel.getJobProfiles()
+        }
+
         appBar.setOnSearchClickListener(object : AppBarClicks.OnSearchClickListener{
             override fun onSearchClick(v: View) {
                 clientActiExploreAdapter.filter.filter("")
@@ -161,7 +165,9 @@ class ClientActiExploreList : Fragment(), IOnBackPressedOverride, OnJobSelectedL
         })
         appBar.setOnSearchTextChangeListener(object : SearchTextChangeListener {
             override fun onSearchTextChanged(text: String) {
-                clientActiExploreAdapter.filter.filter(text)
+                //clientActiExploreAdapter.filter.filter(text)
+                Log.d("text", text)
+                //viewModel.getJobProfiles(text)
             }
 
         })

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <com.gigforce.common_ui.components.cells.AppBar
         android:id="@+id/appBar"
@@ -15,84 +16,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/tb_explore_fragment"
-        android:layout_width="0dp"
-        android:layout_height="56dp"
-        android:background="@drawable/toolbar_bg_client_activation"
-        android:minHeight="@dimen/size_56"
-        android:visibility="gone"
-        app:contentInsetLeft="0dp"
-        app:contentInsetStart="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-
-            <ImageView
-                android:id="@+id/iv_back_explore_fragment"
-                android:layout_width="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_height="wrap_content"
-                app:tint="@color/white"
-                app:srcCompat="@drawable/ic_baseline_arrow_back_24"
-                android:layout_centerVertical="true"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                />
-
-            <TextView
-                android:id="@+id/explore_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toEndOf="@id/iv_back_explore_fragment"
-                android:textAlignment="center"
-                android:visibility="visible"
-                android:layout_centerVertical="true"
-                android:textColor="@color/white"
-                android:layout_marginStart="8dp"
-                android:textSize="20sp"
-                android:text="@string/explore_gigs" />
-
-            <EditText
-                android:id="@+id/search_item"
-                android:layout_width="wrap_content"
-                android:layout_height="36dp"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:paddingStart="8dp"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:textSize="13sp"
-                android:visibility="gone"
-                android:layout_toEndOf="@id/iv_back_explore_fragment"
-                android:layout_toStartOf="@id/iv_search_explore"
-                android:background="@drawable/bg_search_item"
-                android:hint="@string/search_jobs" />
-
-            <ImageView
-                android:id="@+id/iv_search_explore"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                app:tint="@color/white"
-                app:srcCompat="@drawable/ic_baseline_search_24"
-                android:layout_centerVertical="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                />
-
-        </RelativeLayout>
-    </androidx.appcompat.widget.Toolbar>
-
-
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -293,14 +216,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/explore_rv"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clipToPadding="false"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/explore_rv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clipToPadding="false"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    />
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -309,3 +232,4 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
