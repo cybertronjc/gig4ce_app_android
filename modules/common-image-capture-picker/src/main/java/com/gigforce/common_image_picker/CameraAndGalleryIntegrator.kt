@@ -116,11 +116,11 @@ class CameraAndGalleryIntegrator : ClickOrSelectImageBottomSheet.OnPickOrCapture
     }
 
     fun parseResults(
-            requestCode: Int,
-            resultCode: Int,
-            data: Intent?,
-            imageCropOptions: ImageCropOptions,
-            callback: ImageCropCallback
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?,
+        imageCropOptions: ImageCropOptions,
+        callback: ImageCropCallback
     ) {
 
         val context: Context = if (fragment != null) {
@@ -135,13 +135,13 @@ class CameraAndGalleryIntegrator : ClickOrSelectImageBottomSheet.OnPickOrCapture
             if (outputFileUri == null) {
 
                 callback.errorWhileCapturingOrPickingImage(
-                        Exception("Unable to capture results")
+                    Exception("Unable to capture results")
                 )
             } else {
 
                 if (imageCropOptions.shouldOpenImageCropper) {
 //                    startImageCropper(outputFileUri, imageCropOptions)
-                    startCropImage(outputFileUri)
+                    startCropImage(outputFileUri,imageCropOptions)
                 } else if (imageCropOptions.shouldDetectForFace) {
                     val fVisionImage = FirebaseVisionImage.fromFilePath(context, outputFileUri)
                     detectFacesAndReturnResult(callback, outputFileUri, fVisionImage)
@@ -155,9 +155,9 @@ class CameraAndGalleryIntegrator : ClickOrSelectImageBottomSheet.OnPickOrCapture
 
             if (imageUriResultCrop == null) {
                 callback.errorWhileCapturingOrPickingImage(
-                        Exception(
-                                "Unable to capture or pick Image"
-                        )
+                    Exception(
+                        "Unable to capture or pick Image"
+                    )
                 )
 
                 FirebaseCrashlytics.getInstance().apply {
@@ -209,11 +209,28 @@ class CameraAndGalleryIntegrator : ClickOrSelectImageBottomSheet.OnPickOrCapture
         }
 
     }
-    private fun startCropImage(imageUri: Uri): Unit {
+    private fun startCropImage(
+        imageUri: Uri,
+        imageCropOptions: ImageCropOptions
+    ) {
         val photoCropIntent = Intent(context, ImageCropActivity::class.java)
         photoCropIntent.putExtra("outgoingUri", imageUri.toString())
-        fragment?.let {
-            it.startActivityForResult(photoCropIntent, ImageCropActivity.CROP_RESULT_CODE)
+        photoCropIntent.putExtra(ImageCropActivity.INTENT_EXTRA_DESTINATION_URI,imageCropOptions.outputFileUri)
+
+        val outputFileUri = if(imageCropOptions.outputFileUri == null ) {
+            Uri.fromFile(File(context.cacheDir, "IMG_" + System.currentTimeMillis() + EXTENSION))
+        }
+        else {
+            imageCropOptions.outputFileUri!!
+        }
+        photoCropIntent.putExtra(ImageCropActivity.INTENT_EXTRA_DESTINATION_URI,outputFileUri)
+        photoCropIntent.putExtra(ImageCropActivity.INTENT_EXTRA_ENABLE_FREE_CROP,imageCropOptions.freeCropEnabled)
+
+
+        if (fragment != null) {
+            fragment!!.startActivityForResult(photoCropIntent, ImageCropActivity.CROP_RESULT_CODE)
+        } else {
+            activity.startActivityForResult(photoCropIntent, ImageCropActivity.CROP_RESULT_CODE)
         }
     }
     private fun returnFileImage(callback: ImageCropCallback, outputFileUri: Uri) {
@@ -225,20 +242,20 @@ class CameraAndGalleryIntegrator : ClickOrSelectImageBottomSheet.OnPickOrCapture
         //can use this for a new name every time
 
         val timeStamp = SimpleDateFormat(
-                "yyyyMMdd_HHmmss",
-                Locale.getDefault()
+            "yyyyMMdd_HHmmss",
+            Locale.getDefault()
         ).format(Date())
 
         val imageFileName = "IMG_${timeStamp}_"
         val uCrop: UCrop = if (imageCropOptions.outputFileUri == null) {
             UCrop.of(
-                    uri,
-                    Uri.fromFile(File(context.cacheDir, imageFileName + EXTENSION))
+                uri,
+                Uri.fromFile(File(context.cacheDir, imageFileName + EXTENSION))
             )
         } else {
             UCrop.of(
-                    uri,
-                    imageCropOptions.outputFileUri!!
+                uri,
+                imageCropOptions.outputFileUri!!
             )
         }
 
@@ -271,27 +288,27 @@ class CameraAndGalleryIntegrator : ClickOrSelectImageBottomSheet.OnPickOrCapture
         options.setHideBottomControls((false))
         options.setFreeStyleCropEnabled(false)
         options.setStatusBarColor(
-                ResourcesCompat.getColor(
-                        context.resources,
-                        R.color.topBarDark,
-                        null
-                )
+            ResourcesCompat.getColor(
+                context.resources,
+                R.color.topBarDark,
+                null
+            )
         )
         options.setToolbarColor(
-                ResourcesCompat.getColor(
-                        context.resources,
-                        R.color.topBarDark,
-                        null
-                )
+            ResourcesCompat.getColor(
+                context.resources,
+                R.color.topBarDark,
+                null
+            )
         )
         options.setToolbarTitle(context.getString(R.string.crop_and_rotate))
         return options
     }
 
     private fun detectFacesAndReturnResult(
-            callback: ImageCropCallback,
-            outputFileUri: Uri,
-            firebaseVisionImage: FirebaseVisionImage
+        callback: ImageCropCallback,
+        outputFileUri: Uri,
+        firebaseVisionImage: FirebaseVisionImage
     ) = detector.detectInImage(firebaseVisionImage).addOnSuccessListener { faces ->
         // Task completed successfully
 
@@ -299,9 +316,9 @@ class CameraAndGalleryIntegrator : ClickOrSelectImageBottomSheet.OnPickOrCapture
             returnFileImage(callback, outputFileUri)
         } else {
             callback.errorWhileCapturingOrPickingImage(
-                    Exception(
-                            "No Face Detected"
-                    )
+                Exception(
+                    "No Face Detected"
+                )
             )
         }
     }.addOnFailureListener { e ->

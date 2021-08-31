@@ -279,7 +279,7 @@ public class ImagePicker {
     @Nullable
     public static File getTempFile(Context context) {
 //        File imageFile = new File(Environment.getExternalStorageDirectory() + File.separator + context.getPackageName(), TEMP_IMAGE_NAME);
-        File folder = context.getExternalFilesDir("photos");
+        File folder = context.getFilesDir();
         if (folder != null && !folder.exists()) {
             folder.mkdir();
         }
