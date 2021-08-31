@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.bumptech.glide.Glide
+import com.gigforce.client_activation.client_activation.dataviewmodel.JobProfileDVM
 import com.gigforce.client_activation.client_activation.models.JpExplore
 import com.gigforce.client_activation.databinding.LayoutJobProfileCardComponentBinding
 import com.gigforce.common_ui.shimmer.ShimmerHelper
@@ -43,21 +44,30 @@ class JobProfileCardComponent(
 
     }
 
-    fun bindData(jpExplore: JpExplore?) = viewBinding.apply {
+    fun bindData(jpExplore: JobProfileDVM?) = viewBinding.apply {
         jpExplore?.let {
-            gigTitle.text = it.title ?: "Title N/A"
-            Glide.with(context).load(it.image).placeholder(ShimmerHelper.getShimmerDrawable()).into(cardImage)
+            if (it.title?.isNotBlank() == true){
+                if (it.subTitle?.isNotBlank() == true){
+                    gigTitle.text = it.title + " - " + it.subTitle
+                }else{
+                    gigTitle.text = it.title
+                }
+            }else {
+                gigTitle.text = "Profile N/A"
+            }
 
-            if (it.status == "")
+            Glide.with(context).load(it.cardImage).placeholder(ShimmerHelper.getShimmerDrawable()).into(cardImage)
+
+            if (it.jp_applicationStatus == "")
                 gigStatus.gone()
             else{
                 gigStatus.visible()}
 
-            gigStatus.text = if (it.status == "Interested" || it.status == "Inprocess") "Pending" else it.status
+            gigStatus.text = if (it.jp_applicationStatus == "Interested" || it.jp_applicationStatus == "Inprocess") "Pending" else it.jp_applicationStatus
 
             var actionButtonText =
-                if (it.status == "Interested") "Complete Application" else if (it.status == "Inprocess") "Complete Application"
-                else if (it.status == "") "Apply Now"  else ""
+                if (it.jp_applicationStatus == "Interested") "Complete Application" else if (it.jp_applicationStatus == "Inprocess") "Complete Application"
+                else if (it.jp_applicationStatus == "") "Apply Now"  else ""
             Log.d("actionText", actionButtonText)
             if (actionButtonText == ""){
                 dividerOne.invisible()

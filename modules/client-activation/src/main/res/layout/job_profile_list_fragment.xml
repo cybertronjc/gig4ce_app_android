@@ -52,112 +52,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/all_tv"
-                    android:layout_width="wrap_content"
+                <com.gigforce.common_ui.components.atoms.ChipGroupComponent
+                    android:id="@+id/filtersChipGroup"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:background="@drawable/explore_filter_selected"
-                    android:paddingStart="16dp"
-                    android:paddingTop="8dp"
-                    android:paddingEnd="16dp"
-                    android:paddingBottom="8dp"
-                    android:text="All"
-                    android:textColor="@color/filter_text"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/new_tv"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-                <TextView
-                    android:id="@+id/new_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:background="@drawable/bg_explore_filter"
-                    android:paddingStart="8dp"
-                    android:paddingTop="8dp"
-                    android:paddingEnd="8dp"
-                    android:visibility="gone"
-                    android:paddingBottom="8dp"
-                    android:text="New"
-                    android:textColor="@color/filter_text"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/approved_tv"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@id/all_tv" />
-
-                <TextView
-                    android:id="@+id/approved_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:background="@drawable/bg_explore_filter"
-                    android:paddingStart="8dp"
-                    android:paddingTop="8dp"
-                    android:paddingEnd="8dp"
-                    android:visibility="gone"
-                    android:paddingBottom="8dp"
-                    android:text="Approved"
-                    android:textColor="@color/filter_text"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/pending_tv"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/new_tv" />
-
-                <TextView
-                    android:id="@+id/pending_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:background="@drawable/bg_explore_filter"
-                    android:paddingStart="8dp"
-                    android:paddingTop="8dp"
-                    android:visibility="gone"
-                    android:paddingEnd="8dp"
-                    android:paddingBottom="8dp"
-                    android:text="Pending"
-                    android:textColor="@color/filter_text"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/applied_tv"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/approved_tv" />
-
-                <TextView
-                    android:id="@+id/applied_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:background="@drawable/bg_explore_filter"
-                    android:paddingStart="8dp"
-                    android:paddingTop="8dp"
-                    android:visibility="gone"
-                    android:paddingEnd="8dp"
-                    android:paddingBottom="8dp"
-                    android:text="Applied"
-                    android:textColor="@color/filter_text"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/rejected_tv"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/pending_tv" />
-
-                <TextView
-                    android:id="@+id/rejected_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:background="@drawable/bg_explore_filter"
-                    android:paddingStart="8dp"
-                    android:paddingTop="8dp"
-                    android:visibility="gone"
-                    android:paddingEnd="8dp"
-                    android:paddingBottom="8dp"
-                    android:text="Rejected"
-                    android:textColor="@color/filter_text"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/approved_tv"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/applied_tv" />
+                    android:layout_marginTop="@dimen/size_16"
+                    android:layout_marginStart="@dimen/size_16"
+                    android:visibility="visible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </HorizontalScrollView>
@@ -196,7 +100,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                android:text="No Gigs to show!"
+                android:text="No Job Profiles to show!"
                 android:textSize="@dimen/size_24"
                 android:textColor="@color/lipstick"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -222,9 +126,21 @@
                     android:layout_height="match_parent"
                     android:clipToPadding="false"
                     android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
                     android:layout_marginStart="8dp"
                     />
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+            <ProgressBar
+                android:id="@+id/progressBarBottom"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                android:layout_marginBottom="24dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
