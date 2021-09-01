@@ -1,2 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="withdrawn_wallet">वापस लिया गया</string>
+    <string name="received_wallet">प्राप्त</string>
+    <string name="current_month_wallet">वर्तमान माह</string>
+    <string name="total_balance_wallet">कुल शेष</string>
+    <string name="money_received_info_wallet"><b>पैसा प्राप्त हुआ:</b> पूरे किए गए गिग्स के लिए क्लाइंट से गिगफोर्स वॉलेट में प्राप्त राशि।</string>
+    <string name="money_withdrawn_info_wallet"><em>पैसा निकाला गया:</em> गिगफोर्स वॉलेट से गिगर के खाते में ट्रांसफर की गई राशि।</string>
+    <string name="earning_info_wallet"><b>आय:</b> इस महीने में पूरे किए गए गिग्स के लिए प्राप्त राशि का योग + इस महीने में पूर्ण किए गए गिग्स के लिए अभी तक प्राप्त होने वाली राशि का योग</string>
+    <string name="wallet_balance_info_wallet">वॉलेट बैलेंस: गिगफोर्स वॉलेट में अब तक प्राप्त राशि का योग - आज तक किसी भी स्थानान्तरण के माध्यम से वॉलेट से घटाई गई राशि का योग</string>
+    <string name="monthly_earning_info_wallet"><b>मासिक कमाई:</b> एक महीने में प्राप्त कुल राशि और पूरे किए गए गिग्स के लिए भुगतान की जाने वाली राशि।</string>
+    <string name="monthly_goal_info_wallet"><b>मासिक लक्ष्य या मासिक कमाई लक्ष्य:</b> मासिक कमाई के लिए उपयोगकर्ता द्वारा निर्धारित लक्ष्य। यह गिगर दिखाने का आधार है</string>
+    <string name="payment_due_info_wallet"><b>विवादित भुगतान / देय भुगतान:</b> एक पूर्ण टमटम के लिए भुगतान की जाने वाली राशि जो ग्राहक द्वारा अनुमोदित नहीं है।</string>
+    <string name="invoice_info_wallet"><b>चालान:</b> टमटम के पूरा होने की रसीद और गीजर को किए जाने वाले भुगतान की पावती।</string>
+    <string name="invoice_generated_info_wallet"><b>इनवॉइस जेनरेट किया गया:</b> गिग जहां गिग के पूरा होने की रसीद और गिगर को किए जाने वाले भुगतान की पावती।</string>
+    <string name="pending_invoice_info_wallet"><b>इनवॉइस लंबित:</b> गिग्स जो पूरे हो गए हैं लेकिन इनवॉइस जेनरेट नहीं हुआ है।</string>
+    <string name="sample_info_wallet"><b>Lorem Ipsum</b> प्रिंटिंग और टाइपसेटिंग उद्योग का केवल डमी टेक्स्ट है। लोरेम इप्सम 1500 के दशक से उद्योग का मानक डमी टेक्स्ट रहा है, जब एक अज्ञात प्रिंटर ने गैली का प्रकार लिया और एक प्रकार की नमूना पुस्तक बनाने के लिए इसे हाथापाई की।</string>
+    <string name="giger_wallet">गिगर</string>
+    <string name="w_my_wallet_balance_wallet">माई वॉलेट बैलेंस</string>
+    <string name="looks_like_you_have_not_explored_much_wallet">ऐसा लगता है कि आपने ज्यादा खोजबीन नहीं की</string>
+    <string name="explore_now_wallet">अभी एक्सप्लोर करें</string>
+    <string name="transactions_wallet">लेनदेन</string>
+    <string name="no_transactions_yet_wallet">अभी तक कोई लेनदेन नहीं</string>
+    <string name="see_all_wallet">सभी देखें</string>
+    <string name="monthly_goal_wallet">मासिक लक्ष्य</string>
+    <string name="w_my_wallet">मेरा बटुआ</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment_wallet">नमस्ते खाली फ्रेगमेंट</string>
+    <string name="set_monthly_goal_wallet">मासिक लक्ष्य कैसे निर्धारित करें?</string>
+    <string name="click_on_monthly_goal_wallet">वॉलेट स्क्रीन में मासिक लक्ष्य कार्ड पर क्लिक करें।</string>
+    <string name="what_is_wallet_balance_wallet">वॉलेट बैलेंस क्या है?</string>
+    <string name="amount_in_wallet_wallet">आपके बटुए में राशि</string>
+    <string name="transfer_fund_to_account_wallet">मेरे खाते में फंड कैसे ट्रांसफर करें?</string>
+    <string name="manual_transfer_wallet">मैन्युअल स्थानांतरण अभी तक समर्थित नहीं है।</string>
+    <string name="gig_id_wallet">\"गिग आईडी: \"</string>
+    <string name="invoice_generated_wallet">\"चालान जनरेट किया गया: \"</string>
+    <string name="end_date_wallet">\"अंतिम तिथि: \"</string>
+    <string name="start_date_wallet">\"आरंभ करने की तिथि: \"</string>
+    <string name="generated_wallet">चालान उत्पन्न</string>
+    <string name="invoice_pending_wallet">चालान लंबित</string>
+    <string name="something_wrong_wallet">कुछ गड़बड़</string>
+    <string name="doing_really_great_wallet">आप वाकई बहुत अच्छा कर रहे हैं</string>
+    <string name="havent_set_monthly_goal_wallet">आपने अपना मासिक लक्ष्य निर्धारित नहीं किया है</string>
+    <string name="serial_no_wallet">\"सीरीयल नम्बर: \"</string>
+    <string name="alert_wallet">चेतावनी</string>
+    <string name="okay_wallet">ठीक</string>
+    <string name="unable_to_open_wallet">खोलने में असमर्थ</string>
+    <string name="file_doesnt_exist_wallet">file_doesnt_exist</string>
+    <string name="invoice_status_wallet">चालान स्थिति</string>
+    <string name="balance_wallet">संतुलन</string>
+    <string name="dummy_question_wallet">डमी प्रश्न?</string>
+    <string name="dummy_answer_wallet">डमी उत्तर:</string>
+    <string name="invoices_wallet">चालान</string>
+    <string name="no_invoices_to_show_wallet">दिखाने के लिए कोई चालान नहीं!</string>
+    <string name="payslips_wallet">भुगतान पर्ची</string>
+    <string name="close_wallet">बंद करे</string>
+    <string name="jan_wallet">जनवरी</string>
+    <string name="feb_wallet">फ़रवरी</string>
+    <string name="march_wallet">जुलूस</string>
+    <string name="apr_wallet">अप्रैल</string>
+    <string name="may_wallet">मई</string>
+    <string name="jun_wallet">जून</string>
+    <string name="jul_wallet">जुलाई</string>
+    <string name="aug_wallet">अगस्त</string>
+    <string name="sept_wallet">सितंबर</string>
+    <string name="oct_wallet">अक्टूबर</string>
+    <string name="nov_wallet">नवंबर</string>
+    <string name="dec_wallet">दिसंबर</string>
+
+</resources>
