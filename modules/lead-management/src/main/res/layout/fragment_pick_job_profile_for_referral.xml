@@ -27,7 +27,7 @@
                 android:layout_marginTop="56dp"
                 android:fontFamily="@font/lato_bold"
                 android:lineHeight="19sp"
-                android:text="Giger's Name"
+                android:text="Giger's Name*"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
@@ -72,7 +72,7 @@
             android:layout_marginTop="30dp"
             android:fontFamily="@font/lato_bold"
             android:lineHeight="19sp"
-            android:text="Select Gig"
+            android:text="Select Gig*"
             android:textColor="@color/black"
             android:textSize="16sp" />
 
@@ -85,7 +85,7 @@
             android:layout_marginEnd="16dp"
             android:background="@drawable/rectangle_round_grey"
             android:fontFamily="@font/lato"
-            android:hint="Search by business name/profile"
+            android:hint="Search by business name / Job Profile"
             android:lineSpacingExtra="3sp"
             android:minHeight="36dp"
             android:paddingStart="8dp"

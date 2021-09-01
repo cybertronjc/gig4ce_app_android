@@ -6,6 +6,7 @@ import android.widget.LinearLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.gigforce.common_ui.components.atoms.ChipGroupComponent
 import com.gigforce.common_ui.components.atoms.models.ChipGroupModel
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.startShimmer
@@ -16,6 +17,7 @@ import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfileDetails
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JobTeamLeader
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.selectChipsWithText
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.Lce
@@ -23,6 +25,7 @@ import com.gigforce.lead_management.LeadManagementConstants
 import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.SelectTeamLeaderFragmentBinding
+import com.google.android.material.chip.ChipGroup
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
@@ -237,6 +240,8 @@ class SelectTeamLeaderFragment : BaseFragment2<SelectTeamLeaderFragmentBinding>(
             isSingleSelection = true,
             true
         )
+
+
         logger.d(TAG, "Gigforce team leaders ${gigforceTeamLeaderChips.toArray()}")
 
         businessTeamLeaderChips.clear()
@@ -251,7 +256,24 @@ class SelectTeamLeaderFragment : BaseFragment2<SelectTeamLeaderFragmentBinding>(
             isSingleSelection = false,
             false
         )
+
         logger.d(TAG, "Business team leaders ${businessTeamLeaderChips.toArray()}")
+
+        if(selectedBusinessTLs.isNotEmpty()){
+            viewBinding.businessTLChipGroup.selectChipsWithText(
+                selectedBusinessTLs.map {
+                    it.name!!
+                }
+            )
+        }
+
+        if(selectedGigforceTLs.isNotEmpty()){
+            viewBinding.gigforceTLChipGroup.selectChipsWithText(
+                selectedGigforceTLs.map {
+                    it.name!!
+                }
+            )
+        }
 
     }
 

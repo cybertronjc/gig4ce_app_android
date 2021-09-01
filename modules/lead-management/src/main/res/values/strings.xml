@@ -22,7 +22,7 @@
     <string name="need_to_select">You need to select</string>
     <string name="team_leaders">Team Leaders</string>
     <string name="gigforce_tls">Gigforce TeamLeader*</string>
-    <string name="business_tls">Business Leader(optional)</string>
+    <string name="business_tls">Business TeamLeader(optional)</string>
     <string name="shift_timing">Shift timings</string>
     <string name="select_shift">Select shift*</string>
     <string name="expected_start_date">Expected start date*</string>

@@ -288,6 +288,10 @@ class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
             viewBinding.workingDaysChipgroup.addChips(workingDaysChips, isSingleSelection = true, setFirstChecked = true)
             logger.d(TAG, "working day chips set ,count: ${workingDays.size}")
         }
+
+        if(assignGigRequest.assignGigsFrom != ""){
+            viewBinding.expectedDate.text = assignGigRequest.assignGigsFrom
+        }
     }
 
     private fun showErrorInLoadingGigShifts(error: String) = viewBinding.apply{

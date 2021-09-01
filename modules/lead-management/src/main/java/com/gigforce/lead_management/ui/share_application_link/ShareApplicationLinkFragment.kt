@@ -207,7 +207,19 @@ class ShareApplicationLinkFragment : BaseFragment2<FragmentLeadManagementReferra
                             "Link Shared",
                             Toast.LENGTH_SHORT
                         ).show()
-                        ReferralLinkSharedResultDialogFragment.launchSuccess(childFragmentManager,referralState.shareLink)
+
+                        val referralText = if (shareType == ShareReferralType.SHARE_JOB_PROFILE_LINK) {
+                            "Ask the Giger to apply and submit Gig application"
+                        } else {
+                            "Ask the giger to signup and submit Gig application."
+                        }
+
+                        ReferralLinkSharedResultDialogFragment.launchSuccess(
+                            childFragmentManager,
+                            referralState.shareLink,
+                            referralText
+                        )
+
                     }
                     is ShareReferralViewState.ErrorInCreatingOrUpdatingDocument -> {
                         viewBinding.pbReferralsFrag.gone()
@@ -223,7 +235,18 @@ class ShareApplicationLinkFragment : BaseFragment2<FragmentLeadManagementReferra
                     }
                     is ShareReferralViewState.OpenWhatsAppToShareDocumentSharingDocument -> {
                         viewBinding.pbReferralsFrag.gone()
-                        ReferralLinkSharedResultDialogFragment.launchError(childFragmentManager,referralState.shareLink)
+
+                        val referralText = if (shareType == ShareReferralType.SHARE_JOB_PROFILE_LINK) {
+                            "Ask the Giger to apply and submit Gig application"
+                        } else {
+                            "Ask the giger to signup and submit Gig application."
+                        }
+
+                        ReferralLinkSharedResultDialogFragment.launchError(
+                            childFragmentManager,
+                            referralState.shareLink,
+                            referralText
+                            )
                     }
                     is ShareReferralViewState.OpenOtherAppsToShareDocumentSharingDocument -> {
                         viewBinding.pbReferralsFrag.gone()
