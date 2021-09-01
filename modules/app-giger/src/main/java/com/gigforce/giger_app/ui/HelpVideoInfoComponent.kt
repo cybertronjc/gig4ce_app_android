@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.gigforce.common_ui.components.cells.FeatureLayoutComponent
 import com.gigforce.common_ui.viewdatamodels.FeatureLayoutDVM
+import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
@@ -25,6 +26,7 @@ class HelpVideoInfoComponent(context: Context, attrs: AttributeSet?) :
     @Inject
     lateinit var repository: IHelpVideosDataRepository
 
+    @Inject lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
     init {
         this.setOrientationAndRows(1, 1)
     }
@@ -40,7 +42,23 @@ class HelpVideoInfoComponent(context: Context, attrs: AttributeSet?) :
                         if(it.size>videoToShow){
                             enableSeemoreButton()
                         }
-                        super.bind(FeatureLayoutDVM(data.imageUrl, data.title, it.slice(IntRange(0, videoToShow - 1))))
+                        if(sharedPreAndCommonUtilInterface.getAppLanguageCode() == "hi") {
+                            super.bind(
+                                FeatureLayoutDVM(
+                                    data.imageUrl,
+                                    data.hi?.title?:data.title,
+                                    it.slice(IntRange(0, videoToShow - 1))
+                                )
+                            )
+                        }else {
+                            super.bind(
+                                FeatureLayoutDVM(
+                                    data.imageUrl,
+                                    data.title,
+                                    it.slice(IntRange(0, videoToShow - 1))
+                                )
+                            )
+                        }
 
                     }
                 } else {

@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="36dp"
             android:fontFamily="@font/lato"
-            android:text="Set Your preferences"
+            android:text="@string/set_your_preferences_profile"
             android:textColor="#131415"
             android:textSize="24sp"
             android:textStyle="bold"
@@ -43,7 +43,7 @@
                 android:fontFamily="@font/lato"
                 android:gravity="center_vertical"
                 android:paddingStart="@dimen/size16"
-                android:text="Job preference"
+                android:text="@string/job_preferences_profile"
                 android:textColor="#333333"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -90,7 +90,7 @@
                     android:layout_marginTop="8dp"
                     android:fontFamily="@font/lato"
                     android:letterSpacing="0"
-                    android:text="Full Time"
+                    android:text="@string/full_time_profile"
                     android:textColor="#2e2f30"
                     android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -128,7 +128,7 @@
                     android:layout_marginTop="8dp"
                     android:fontFamily="@font/lato"
                     android:letterSpacing="0"
-                    android:text="Part Time"
+                    android:text="@string/part_time_profile"
                     android:textColor="#2e2f30"
                     android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -154,7 +154,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="36dp"
             android:fontFamily="@font/lato"
-            android:text="Set Your preferences"
+            android:text="@string/set_your_preferences_profile"
             android:textColor="#333333"
             android:textSize="24sp"
             android:textStyle="bold"
@@ -171,7 +171,7 @@
             android:fontFamily="@font/lato"
             android:gravity="center_vertical"
             android:paddingStart="@dimen/size16"
-            android:text="Work Days"
+            android:text="@string/work_days_profile"
             android:textColor="#333333"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -201,7 +201,7 @@
                     android:layout_marginBottom="12dp"
                     android:layout_marginEnd="@dimen/size16"
                     android:background="@drawable/experience_options_background"
-                    android:text="Monday"
+                    android:text="@string/monday_profile"
                     android:checked="true"
                     style="@style/Theme.CheckBoxLipstickPink"/>
 
@@ -218,7 +218,7 @@
                     android:background="@drawable/experience_options_background"
                     android:tag="Tuesday"
                     android:layout_weight="1"
-                    android:text="Tuesday"
+                    android:text="@string/tuesday_profile"
                     android:checked="true"
                     style="@style/Theme.CheckBoxLipstickPink"/>
 
@@ -234,7 +234,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="@dimen/size16"
                     android:tag="Wednesday"
-                    android:text="Wednesday"
+                    android:text="@string/wednesday_profile"
                     android:checked="true"
                     style="@style/Theme.CheckBoxLipstickPink"/>
 
@@ -248,7 +248,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="@dimen/size16"
                     android:tag="Thursday"
-                    android:text="Thursday"
+                    android:text="@string/thursday_profile"
                     android:checked="true"
                     style="@style/Theme.CheckBoxLipstickPink"/>
 
@@ -264,7 +264,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="@dimen/size16"
                     android:tag="Friday"
-                    android:text="Friday"
+                    android:text="@string/friday_profile"
                     android:checked="true"
                     style="@style/Theme.CheckBoxLipstickPink"/>
 
@@ -280,7 +280,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="@dimen/size16"
                     android:tag="Saturday"
-                    android:text="Saturday"
+                    android:text="@string/saturday_profile"
                     android:checked="true"
                     style="@style/Theme.CheckBoxLipstickPink"/>
 
@@ -295,7 +295,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="@dimen/size16"
                     android:tag="Sunday"
-                    android:text="Sunday"
+                    android:text="@string/sunday_profile"
                     android:checked="true"
                     style="@style/Theme.CheckBoxLipstickPink"/>
 
@@ -316,7 +316,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="36dp"
             android:fontFamily="@font/lato"
-            android:text="Set Your preferences"
+            android:text="@string/set_your_preferences_profile"
             android:textColor="#333333"
             android:textSize="24sp"
             android:textStyle="bold"
@@ -333,7 +333,7 @@
             android:fontFamily="@font/lato"
             android:gravity="center_vertical"
             android:paddingStart="@dimen/size16"
-            android:text="Time Slots"
+            android:text="@string/time_slots_profile"
             android:textColor="#333333"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -360,7 +360,7 @@
                     android:background="@drawable/experience_options_background"
                     android:layout_marginBottom="@dimen/size16"
                     android:layout_marginEnd="@dimen/size16"
-                    android:text="5 am - 8 am"
+                    android:text="@string/_5am_8am_profile"
                     android:tag="5 am - 8 am"
                     android:checked="true"
                     style="@style/Theme.CheckBoxLipstickPink"/>

@@ -183,6 +183,7 @@
                         android:background="@drawable/experience_options_background"
                         android:paddingStart="@dimen/size16"
                         android:text="@string/no_experience_profile"
+                        android:tag="@string/no_experience_tag_profile"
                         android:textColor="#333333"
                         android:textSize="16sp"
                         android:textStyle="normal" />
@@ -198,6 +199,7 @@
                         android:fontFamily="@font/lato"
                         android:paddingStart="@dimen/size16"
                         android:text="@string/_0_1_years_profile"
+                        android:tag="@string/_0_1_years_tag_profile"
                         android:textColor="#333333"
                         android:textSize="16sp"
                         android:textStyle="normal" />
@@ -212,6 +214,7 @@
                         android:paddingStart="@dimen/size16"
                         android:layout_marginEnd="16dp"
                         android:text="@string/_1_3_years_profile"
+                        android:tag="@string/_1_3_years_tag_profile"
                         android:background="@drawable/experience_options_background"
                         android:textColor="#333333"
                         android:textSize="16sp"
@@ -228,6 +231,7 @@
                         android:paddingStart="@dimen/size16"
                         android:background="@drawable/experience_options_background"
                         android:text="@string/_3_5_years_profile"
+                        android:tag="@string/_3_5_years_tag_profile"
                         android:textColor="#333333"
                         android:textSize="16sp"
                         android:textStyle="normal" />
@@ -243,6 +247,7 @@
                         android:fontFamily="@font/lato"
                         android:paddingStart="@dimen/size16"
                         android:text="@string/_5_years_profile"
+                        android:tag="@string/_5_years_tag_profile"
                         android:textColor="#333333"
                         android:textSize="16sp"
                         android:textStyle="normal" />
