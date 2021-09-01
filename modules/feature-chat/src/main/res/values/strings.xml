@@ -95,4 +95,20 @@
     <string name="okay_chat">Okay</string>
     <string name="created_on_chat">\"Created On : \"</string>
     <string name="remove_chat">\"Remove \"</string>
+    <string name="copy_propercase">Copy</string>
+    <string name="delete_propercase">Delete</string>
+    <string name="message_info">Message Info</string>
+    <string name="report_and_block">Report and Block</string>
+    <string name="image_propercase">Image</string>
+    <string name="video_propercase">Video</string>
+    <string name="document_propercase">Document</string>
+    <string name="location_propercase">Location</string>
+    <string name="new_group_propercase">New group</string>
+    <string name="invite_a_friend">Invite a friend</string>
+    <string name="refresh_propercase">Refresh</string>
+    <string name="message_user">Message User</string>
+    <string name="make_group_admin">Make group Admin</string>
+    <string name="remove_from_group">Remove from group</string>
+    <string name="share_propercase">Share</string>
+    <string name="contacts_with_space"> Contact(s)</string>
 </resources>

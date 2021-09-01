@@ -17,7 +17,7 @@
             app:backgroundType="WhiteBar"
             android:visibility="visible"
             android:elevation="2dp"
-            app:titleText="Add Login Summary"
+            app:titleText="@string/add_login_summary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>

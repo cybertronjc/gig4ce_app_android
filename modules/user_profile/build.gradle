@@ -44,4 +44,5 @@ dependencies {
 
     implementation "androidx.constraintlayout:constraintlayout:2.0.0-beta6"
     implementation "com.splitwise:tokenautocomplete:3.0.1@aar"
+    implementation 'com.akexorcist:localization:1.2.10'
 }

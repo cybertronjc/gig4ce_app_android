@@ -58,4 +58,20 @@
     <string name="alert_common_ui">चेतावनी</string>
     <string name="download_started_common_ui">डाउनलोडिंग शुरू हो गई है, नोटिफिकेशन चेक करें</string>
     <string name="location_not_found_common_ui">स्थान नहीं मिल सका</string>
+    <string name="upcoming_common_ui">आगामी</string>
+    <string name="declined_common_ui">अस्वीकृत</string>
+    <string name="cancelled_common_ui">रद्द</string>
+    <string name="ongoing_common_ui">चल रही है</string>
+    <string name="noshow_common_ui">कोई शो नहीं</string>
+    <string name="completed_gig_common_ui">समाप्त</string>
+    <string name="missed_common_ui">चुक गया</string>
+    <string name="pending_common_ui">लंबित</string>
+    <string name="status_common_ui">स्थिति</string>
+    <string name="signup_pending">साइन अप लंबित</string>
+    <string name="application_pending">आवेदन लंबित</string>
+    <string name="joining_pending">ज्वाइनिंग पेंडिंग</string>
+    <string name="joined">जुड़ जाया</string>
+    <string name="contact_person">संपर्क व्यक्ति</string>
+    <string name="checked_out">उपस्थिति हो गई</string>
+
 </resources>

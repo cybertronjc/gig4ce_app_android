@@ -34,6 +34,7 @@ import com.gigforce.common_ui.viewdatamodels.landing.VersionUpdateInfo
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.INavigationProvider
 import com.gigforce.core.TrackingEventArgs
+import com.gigforce.core.base.BaseActivity
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.datamodels.profile.ProfileData
@@ -67,7 +68,7 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(),
+class MainActivity : BaseActivity(),
         NavFragmentsData,
         INavigationProvider, InstallStateUpdatedListener {
 

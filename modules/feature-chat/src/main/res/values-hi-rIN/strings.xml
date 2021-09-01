@@ -95,4 +95,20 @@
     <string name="okay_chat">ठीक</string>
     <string name="created_on_chat">\"को निर्मित : \"</string>
     <string name="remove_chat">\"हटाना \"</string>
+    <string name="copy_propercase">कॉपी</string>
+    <string name="delete_propercase">इसे मिटाओ</string>
+    <string name="message_info">संदेश की जानकारी</string>
+    <string name="report_and_block">रिपोर्ट और ब्लॉक</string>
+    <string name="image_propercase">चित्र</string>
+    <string name="video_propercase">वीडियो</string>
+    <string name="document_propercase">दस्तावेज़</string>
+    <string name="location_propercase">स्थान</string>
+    <string name="new_group_propercase">नया समूह</string>
+    <string name="invite_a_friend">किसी मित्र को आमंत्रित करें</string>
+    <string name="refresh_propercase">ताज़ा करना</string>
+    <string name="message_user">संदेश उपयोगकर्ता</string>
+    <string name="make_group_admin">ग्रुप को एडमिन बनाएं</string>
+    <string name="remove_from_group">समूह से हटा दें</string>
+    <string name="share_propercase">साझा करना</string>
+    <string name="contacts_with_space"> संपर्क</string>
 </resources>

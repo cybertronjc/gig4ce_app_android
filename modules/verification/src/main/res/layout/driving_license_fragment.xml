@@ -15,7 +15,7 @@
             app:backgroundType="PinkBar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:titleText="Driving License" />
+            app:titleText="@string/driving_license_veri" />
 
         <ScrollView
             android:layout_width="match_parent"
@@ -35,12 +35,12 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/size_16"
                     android:layout_marginTop="@dimen/dp_xl1"
-                    app:docinfotext="Please upload your Driving License or enter the details manually"
+                    app:docinfotext="@string/please_upload_driving_license"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:missingdoctext="I don’t have an Driving License"
-                    app:title="Driving License"
-                    app:uppercaption="You need to upload" />
+                    app:missingdoctext="@string/no_i_don_t_have_driving_license_veri"
+                    app:title="@string/driving_license_veri"
+                    app:uppercaption="@string/you_need_to_upload_veri" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/below_layout"

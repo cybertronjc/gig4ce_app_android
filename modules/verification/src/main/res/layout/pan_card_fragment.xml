@@ -14,7 +14,7 @@
             app:backgroundType="PinkBar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:titleText="PAN Card" />
+            app:titleText="@string/pan_card_veri" />
 
         <ScrollView
             android:layout_width="match_parent"
@@ -34,12 +34,12 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp_sm1"
                     android:layout_marginTop="@dimen/dp_xl1"
-                    app:docinfotext="Please upload your PAN card or enter the details manually"
+                    app:docinfotext="@string/please_upload_pan_card"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:missingdoctext="I don’t have a PAN card"
-                    app:title="PAN Card"
-                    app:uppercaption="You need to upload" />
+                    app:missingdoctext="@string/no_i_don_t_have_pan_card_veri"
+                    app:title="@string/pan_card_veri"
+                    app:uppercaption="@string/you_need_to_upload_veri" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/below_layout"
@@ -68,7 +68,7 @@
                         android:layout_marginLeft="@dimen/dp_sm1"
                         android:layout_marginTop="@dimen/dp_large"
                         android:layout_marginRight="@dimen/dp_sm1"
-                        android:text="Please confirm the following information "
+                        android:text="@string/please_confirm_the_following_information_veri"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/grayLine3" />
@@ -82,7 +82,7 @@
                         android:layout_marginTop="@dimen/dp_xl1"
                         android:layout_marginRight="@dimen/dp_sm1"
                         android:layout_marginBottom="@dimen/dp_sm1"
-                        android:hint="PAN Card Number"
+                        android:hint="@string/pan_card_number"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView10"

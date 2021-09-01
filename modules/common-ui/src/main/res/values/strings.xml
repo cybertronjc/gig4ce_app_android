@@ -58,4 +58,20 @@
     <string name="alert_common_ui">Alert</string>
     <string name="download_started_common_ui">Downloading started, check notification</string>
     <string name="location_not_found_common_ui">Location can\'t be found</string>
+    <string name="upcoming_common_ui">Upcoming</string>
+    <string name="declined_common_ui">Declined</string>
+    <string name="cancelled_common_ui">Cancelled</string>
+    <string name="ongoing_common_ui">Ongoing</string>
+    <string name="noshow_common_ui">Noshow</string>
+    <string name="completed_gig_common_ui">Completed</string>
+    <string name="missed_common_ui">Missed</string>
+    <string name="pending_common_ui">Pending</string>
+    <string name="status_common_ui">Status</string>
+    <string name="joined">Joined</string>
+    <string name="joining_pending">Joining Pending</string>
+    <string name="signup_pending">Signup Pending</string>
+    <string name="application_pending">Application Pending</string>
+    <string name="contact_person">Contact Person</string>
+    <string name="checked_out">Checked Out</string>
+
 </resources>

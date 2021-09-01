@@ -7,7 +7,6 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
-import com.franmontiel.localechanger.LocaleChanger
 import kotlinx.android.synthetic.main.fragment_select_language.*
 import java.util.*
 import com.gigforce.core.analytics.LanguageEvents
@@ -57,10 +56,6 @@ class LanguageSelectFragment : Fragment(), LanguageAdapter.LanguageAdapterClickL
 //        this.setDarkStatusBarTheme(true)
         //StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(resources, com.gigforce.modules.feature_chat.R.color.lipstick_2,null))
 
-        try {
-            LocaleChanger.initialize(this.context, SUPPORTED_LOCALES)
-        } catch (e: Exception) {
-        }
         return inflater.inflate(R.layout.fragment_select_language, container,false)
     }
 
@@ -214,7 +209,6 @@ class LanguageSelectFragment : Fragment(), LanguageAdapter.LanguageAdapterClickL
 
 
     override fun onDestroyView() {
-        LocaleChanger.resetLocale()
         super.onDestroyView()
     }
 

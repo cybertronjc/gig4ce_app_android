@@ -2,6 +2,7 @@ package com.gigforce.common_ui.viewdatamodels
 
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import com.gigforce.common_ui.R
 import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.extensions.toLocalDateTime
@@ -22,6 +23,19 @@ enum class GigStatus constructor(
 
     fun getStatusCapitalized(): String {
         return this.string.capitalize()
+    }
+
+    @StringRes
+    fun getStatusStringRes() : Int = when(this.string){
+        "upcoming" -> R.string.upcoming_common_ui
+        "declined" -> R.string.declined_common_ui
+        "cancelled" ->R.string.cancelled_common_ui
+        "ongoing" -> R.string.ongoing_common_ui
+        "pending" ->R.string.pending_common_ui
+        "noshow" ->R.string.noshow_common_ui
+        "completed" ->R.string.completed_gig_common_ui
+        "missed" -> R.string.missed_common_ui
+        else -> R.string.status_common_ui
     }
 
     fun getStatusString(): String {

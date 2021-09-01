@@ -1,5 +1,6 @@
 package com.gigforce.ambassador
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -35,10 +36,10 @@ class AmbassadorEnrollViewModel @Inject constructor(
     init {
         startWatchingEnrolledUsersList()
     }
-    fun getChipsData(): List<ChipGroupModel> {
+    fun getChipsData(context : Context): List<ChipGroupModel> {
         var chips = arrayListOf<ChipGroupModel>()
-        chips.add(ChipGroupModel("Profile", R.drawable.ic_gig_success_icon,0))
-        chips.add(ChipGroupModel("My Details", R.drawable.ic_gig_success_icon,1))
+        chips.add(ChipGroupModel(context.getString(com.gigforce.ambassador.R.string.profile_amb), R.drawable.ic_gig_success_icon,0))
+        chips.add(ChipGroupModel(context.getString(com.gigforce.ambassador.R.string.my_details_amb), R.drawable.ic_gig_success_icon,1))
         return chips
     }
     private fun startWatchingEnrolledUsersList() {

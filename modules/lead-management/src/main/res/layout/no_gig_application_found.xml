@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_alignTop="@id/errorImg"
             android:layout_toEndOf="@id/errorImg"
-            android:text="No Applications"
+            android:text="@string/no_applications"
             android:fontFamily="@font/lato_bold"
             android:textColor="@color/black" />
 
@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/errorImg"
             android:layout_toEndOf="@id/errorImg"
-            android:text="No Profiles"
+            android:text="@string/no_profiles"
             android:textColor="@color/text_grey" />
     </RelativeLayout>
     </com.google.android.material.card.MaterialCardView>

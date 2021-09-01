@@ -277,4 +277,25 @@
     <string name="select_shift_giger_gigs">Select Shift</string>
     <string name="select_company_giger_gigs">Select Company</string>
     <string name="grant_permission_giger_gigs">Please Grant storage permission</string>
+    <string name="add_login_summary">Add Login Summary</string>
+    <string name="login_summary">Login Summary</string>
+    <string name="previous_records">Previous Records</string>
+    <string name="add_new">Add New</string>
+    <string name="enter_propercase">Enter</string>
+    <string name="login_report">Login Report</string>
+    <string name="view_details">View Details</string>
+    <string name="days">Days</string>
+    <string name="punch_in">Punch In</string>
+    <string name="punch_out">Punch Out</string>
+    <string name="hrs_mins">- -hrs: - -mins</string>
+    <string name="today">Today</string>
+    <string name="tomorrow">Tomorrow</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="hrs">Hrs</string>
+    <string name="mins">Mins</string>
+    <string name="seconds">Sec</string>
+    <string name="decline_gig">Decline Gig</string>
+    <string name="attendance_history">Attendance History</string>
+    <string name="offer_letter">Offer Letter</string>
+    <string name="identity_card">Identity Card</string>
 </resources>

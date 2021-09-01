@@ -368,6 +368,18 @@
     <string name="veri_add_address">पता</string>
     <string name="upload_photo_veri">फोटो अपलोड करें</string>
     <string name="next_camel_veri">अगला</string>
+    <string name="document_verification">दस्तावेज़ सत्यापन</string>
+    <string name="need_to_verify_your_information">हमें आपकी जानकारी को सत्यापित करने की आवश्यकता है। नीचे दिए गए दस्तावेज़ों का चयन करें जो सत्यापित करने के लिए तैयार हैं</string>
+    <string name="pan_card">पैन कार्ड</string>
+    <string name="driving_license">ड्राइविंग लाइसेंस</string>
+    <string name="bank_details">बैंक विवरण</string>
+    <string name="aadhar_card">आधार कार्ड</string>
+    <string name="tap_to_select">चुनने के लिए टैप करें</string>
+    <string name="please_upload_driving_license">कृपया अपना ड्राइविंग लाइसेंस अपलोड करें या मैन्युअल रूप से विवरण दर्ज करें</string>
+    <string name="pan_card_number">पैन कार्ड नंबर</string>
+    <string name="please_upload_pan_card">कृपया अपना पैन कार्ड अपलोड करें या मैन्युअल रूप से विवरण दर्ज करें</string>
+    <string name="please_upload_bank">कृपया अपनी पासबुक/चेक अपलोड करें या मैन्युअल रूप से विवरण दर्ज करें</string>
+
     <!--    <string name="veri_add_doc_front">सामने की ओर</string>-->
     <!--    <string name="veri_add_doc_back">पीछे की ओर</string>-->
     <!--    <string name="veri_pan_title">चरण 5: अपना पैन अपलोड करें</string>-->

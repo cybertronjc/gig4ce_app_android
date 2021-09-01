@@ -389,6 +389,17 @@
     <string name="veri_add_address">"Address"</string>
     <string name="upload_photo_veri">Upload Photo</string>
     <string name="next_camel_veri">Next</string>
+    <string name="document_verification">Document Verification</string>
+    <string name="need_to_verify_your_information">We need to verify your information. Select the documents below that are ready to verify</string>
+    <string name="pan_card">PAN Card</string>
+    <string name="driving_license">Driving licence</string>
+    <string name="bank_details">Bank Details</string>
+    <string name="aadhar_card">Aadhaar Card</string>
+    <string name="tap_to_select">Tap to select</string>
+    <string name="please_upload_driving_license">Please upload your Driving License or enter the details manually</string>
+    <string name="pan_card_number">PAN Card Number</string>
+    <string name="please_upload_pan_card">Please upload your PAN card or enter the details manually</string>
+    <string name="please_upload_bank">Please upload your passbook/cheque or enter the details manually</string>
 
     <!--    <string name="veri_add_doc_front">"Front Side"</string>-->
 <!--    <string name="veri_add_doc_back">"Back Side"</string>-->

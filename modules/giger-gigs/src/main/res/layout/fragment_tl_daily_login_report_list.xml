@@ -22,7 +22,7 @@
             app:backgroundType="WhiteBar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:titleText="Login Report" />
+            app:titleText="@string/login_report" />
 
 
         <TextView
