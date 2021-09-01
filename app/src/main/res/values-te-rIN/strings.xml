@@ -917,7 +917,7 @@
     <string name="in_your_assessment">మీ అంచనాలో</string>
     <string name="new_cert_added_underlined"><u> క్రొత్త ప్రమాణపత్రం ప్రొఫైల్‌కు జోడించబడింది. </u></string>
     <string name="watch_lesson_again">పాఠం మళ్ళీ చూడండి</string>
-    <string name="skip">దాటవేయి</string>
+    <string name="skip_client">దాటవేయి</string>
     <string name="new_bio">కొత్త బయో</string>
     <string name="signed">సంతకం చేశారు</string>
     <string name="unsigned">సంతకం చేయలేదు</string>

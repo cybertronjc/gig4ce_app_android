@@ -45,7 +45,7 @@ abstract class DocumentMessageView(
         IViewHolder,
     View.OnClickListener,
     View.OnLongClickListener,
-    PopupMenu.OnMenuItemClickListener {
+    PopupMenu.OnMenuItemClickListener{
 
     @Inject
     lateinit var navigation: INavigation
@@ -270,6 +270,10 @@ abstract class DocumentMessageView(
                 message.id
             )
         }
+    }
+
+    override fun getCurrentChatMessageOrThrow(): ChatMessage {
+        return message
     }
 }
 

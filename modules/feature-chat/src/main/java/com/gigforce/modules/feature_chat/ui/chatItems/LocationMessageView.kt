@@ -36,7 +36,10 @@ abstract class LocationMessageView(
     attrs: AttributeSet?
 ) : RelativeLayout(context, attrs),
     IViewHolder,
-    View.OnClickListener, View.OnLongClickListener, PopupMenu.OnMenuItemClickListener {
+    View.OnClickListener,
+    View.OnLongClickListener,
+    PopupMenu.OnMenuItemClickListener,
+    BaseChatMessageItemView{
 
     @Inject
     lateinit var navigation : INavigation
@@ -253,7 +256,9 @@ abstract class LocationMessageView(
         }
     }
 
-
+    override fun getCurrentChatMessageOrThrow(): ChatMessage {
+        return message
+    }
 }
 
 

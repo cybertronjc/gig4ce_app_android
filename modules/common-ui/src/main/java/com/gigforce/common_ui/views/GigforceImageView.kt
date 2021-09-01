@@ -114,13 +114,19 @@ class GigforceImageView(
     }
 
     fun loadImage(
-            @DrawableRes image: Int
+            @DrawableRes image: Int,
+            centerCrop: Boolean = false
     ) {
 
-        Glide.with(context)
+        var glideRequestManager = Glide.with(context)
                 .load(image)
                 .error(getErrorImage())
-                .into(this)
+
+        if(centerCrop){
+            glideRequestManager = glideRequestManager.centerCrop()
+        }
+
+        glideRequestManager.into(this)
     }
 
     fun loadImage(

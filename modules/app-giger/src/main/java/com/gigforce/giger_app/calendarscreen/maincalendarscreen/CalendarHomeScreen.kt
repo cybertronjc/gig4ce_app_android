@@ -45,6 +45,7 @@ import com.gigforce.core.IEventTracker
 import com.gigforce.core.ProfilePropArgs
 import com.gigforce.core.base.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.core.base.genericadapter.RecyclerGenericAdapter
+import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.datamodels.custom_gig_preferences.UnavailableDataModel
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
@@ -59,6 +60,7 @@ import com.gigforce.giger_app.roster.RosterDayFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.jaeger.library.StatusBarUtil
@@ -203,7 +205,37 @@ class CalendarHomeScreen : Fragment(),
             requireActivity(),
             ResourcesCompat.getColor(resources, R.color.white, null)
         )
+        trySyncingUnsyncedFirebaseData()
     }
+
+    private fun trySyncingUnsyncedFirebaseData() {
+        FirebaseFirestore
+            .getInstance()
+            .waitForPendingWrites()
+            .addOnSuccessListener {
+                Log.d(
+                    "CalendarHomeScreen",
+                    "Success no pending writes found"
+                )
+                CrashlyticsLogger.d(
+                    "CalendarHomeScreen",
+                    "Success no pending writes found"
+                )
+            }.addOnFailureListener {
+                Log.e(
+                    "CalendarHomeScreen",
+                    "while syncning data to server",
+                    it
+                )
+                CrashlyticsLogger.e(
+                    "CalendarHomeScreen",
+                    "while syncning data to server",
+                    it
+                )
+            }
+    }
+
+
 
     private fun isNotLatestVersion(latestAPPUpdateModel: ConfigRepository.LatestAPPUpdateModel): Boolean {
         try {

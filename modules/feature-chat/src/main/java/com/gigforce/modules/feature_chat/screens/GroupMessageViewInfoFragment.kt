@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.modules.feature_chat.R
 import com.gigforce.modules.feature_chat.databinding.FragmentMessageViewedInfoBinding
 import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel
@@ -57,6 +58,8 @@ class GroupMessageViewInfoFragment : Fragment() {
                 activity?.onBackPressed()
             }
         }
+
+        viewBinding.messageViewedRecyclerView.layoutManager = LinearLayoutManager(requireContext())
     }
 
     private fun getDataFrom(

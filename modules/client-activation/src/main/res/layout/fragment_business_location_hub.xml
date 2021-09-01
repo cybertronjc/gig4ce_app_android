@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".client_activation.info.BusinessLocationHubFragment">
+    tools:context=".client_activation.info.hubform.BusinessLocationHubFragment">
 
     <com.gigforce.common_ui.components.cells.AppBar
         android:id="@+id/appBar"

@@ -2,6 +2,7 @@ package com.gigforce.user_preferences
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,15 +19,20 @@ import com.gigforce.core.analytics.AuthEvents
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
+import com.gigforce.core.datamodels.login.LoginResponse
 import com.gigforce.core.extensions.setDarkStatusBarTheme
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.GlideApp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.preferences_fragment.*
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 
 @AndroidEntryPoint
@@ -248,7 +254,7 @@ class PreferencesFragment : Fragment() {
                 )
             )
 
-            FirebaseAuth.getInstance().signOut()
+            unregisterCurrentFirebaseToken()
             eventTracker.logoutUserFromAnalytics()
             sharedPreAndCommonUtilInterface.removeIntroComplete()
             navigation.popBackStack("preferences/settingFragment")//popFragmentFromStack(R.id.settingFragment)
@@ -257,6 +263,27 @@ class PreferencesFragment : Fragment() {
 
         noBtn.setOnClickListener { dialog.dismiss() }
         dialog.show()
+    }
+
+    private fun unregisterCurrentFirebaseToken() {
+        FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener {
+            val token = it.token
+
+            FirebaseFirestore
+                .getInstance()
+                .collection("firebase_tokens")
+                .document(token)
+                .delete()
+                .addOnSuccessListener {
+                    Log.d("S","Token deleted")
+                    FirebaseAuth.getInstance().signOut()
+                }.addOnFailureListener {
+                    Log.d("S","Token deleted")
+                    FirebaseAuth.getInstance().signOut()
+                }
+        }.addOnFailureListener {
+            FirebaseAuth.getInstance().signOut()
+        }
     }
 
 }

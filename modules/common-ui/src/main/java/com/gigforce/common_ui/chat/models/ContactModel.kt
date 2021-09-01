@@ -26,6 +26,10 @@ data class ContactModel(
         @set:PropertyName("name")
         var name: String? = null,
 
+        @get:PropertyName("profileName")
+        @set:PropertyName("profileName")
+        var profileName: String? = null,
+
         @get:PropertyName("contactId")
         @set:PropertyName("contactId")
         var contactId: String? = null,

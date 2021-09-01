@@ -28,7 +28,7 @@
                 android:layout_width="22dp"
                 android:layout_height="22dp"
                 android:layout_marginStart="22dp"
- />
+                />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -69,8 +69,8 @@
                 android:id="@+id/reason_sick_leave"
                 android:layout_width="match_parent"
                 android:minHeight="0dp"
-                android:paddingBottom="8dp"
-                android:paddingTop="8dp"
+                android:paddingBottom="6dp"
+                android:paddingTop="6dp"
                 style="@style/Theme.RadioButtonLipstickPink"
                 android:layout_height="wrap_content"
                 android:text="@string/person_is_abusive_in_nature_chat" />
@@ -80,8 +80,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="0dp"
-                android:paddingBottom="8dp"
-                android:paddingTop="8dp"
+                android:paddingBottom="6dp"
+                android:paddingTop="6dp"
                 style="@style/Theme.RadioButtonLipstickPink"
                 android:text="@string/person_is_sharing_inappropriate_content_chat"  />
 
@@ -89,8 +89,8 @@
                 android:id="@+id/reason_others"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="8dp"
-                android:paddingTop="8dp"
+                android:paddingBottom="6dp"
+                android:paddingTop="6dp"
                 android:minHeight="0dp"
                 style="@style/Theme.RadioButtonLipstickPink"
                 android:text="@string/others_chat" />
@@ -121,9 +121,10 @@
             android:layout_marginTop="12dp"
             android:layout_marginEnd="24dp"
             android:background="@drawable/edittext_border_lipstick"
-            android:inputType="textMultiLine"
+            android:inputType="text"
             android:minHeight="76dp"
             android:padding="5dp"
+            android:maxLines="3"
             android:textColor="#313131"
             android:textSize="14sp"
             android:visibility="gone"
@@ -156,6 +157,8 @@
             android:layout_marginEnd="24dp"
             android:gravity="center"
             android:enabled="false"
+            android:text="Report"
+            android:background="@drawable/gradient_button"
             android:textColor="@android:color/white"
             app:layout_constraintTop_toBottomOf="@id/confirm_decline_cb" />
 

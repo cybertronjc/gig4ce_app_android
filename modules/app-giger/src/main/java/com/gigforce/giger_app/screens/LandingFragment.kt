@@ -7,32 +7,124 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.common_ui.AppDialogsInterface
 import com.gigforce.common_ui.ConfirmationDialogOnClickListener
+import com.gigforce.common_ui.chat.ChatHeadersViewModel
 import com.gigforce.common_ui.configrepository.ConfigRepository
+import com.gigforce.common_ui.core.TextDrawable
 import com.gigforce.common_ui.deviceInfo_permission.DeviceInfoGatherer
 import com.gigforce.common_ui.utils.BsBackgroundAndLocationAccess
+import com.gigforce.core.extensions.visible
+import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.giger_app.R
 import com.gigforce.giger_app.vm.LandingViewModel
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.google.firebase.firestore.FirebaseFirestore
 import com.jaeger.library.StatusBarUtil
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.calendar_home_screen.*
 import kotlinx.android.synthetic.main.fragment_landing.*
 import pub.devrel.easypermissions.EasyPermissions
 import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class LandingFragment : Fragment() {
+class LandingFragment : Fragment(),
+    BsBackgroundAndLocationAccess.OnLocationOkayButtonPressClickListener {
     val viewModel: LandingViewModel by viewModels()
+
+    private val requestPermissionContract =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissionsAndResult ->
+            handlePermissionResults(permissionsAndResult)
+        }
+
+    private fun handlePermissionResults(permissionsAndResult: MutableMap<String, Boolean>) {
+        val hasFinePermission =
+            permissionsAndResult[Manifest.permission.ACCESS_FINE_LOCATION] ?: false
+        val permissionRationaleFinePermission =
+            requireActivity().shouldShowRequestPermissionRationale(
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
+
+        val hasCoarsePermission =
+            permissionsAndResult[Manifest.permission.ACCESS_COARSE_LOCATION] ?: false
+        val permissionRationaleCoarsePermission =
+            requireActivity().shouldShowRequestPermissionRationale(
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            )
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            //Below Android 10 Background permission access is not required
+
+            if (hasFinePermission && hasCoarsePermission) {
+                //we got the permission, don;t do anything
+            } else {
+                //Permission denied
+                if (permissionRationaleFinePermission) {
+                    //Permission denied but user didn;t check dont ask again
+                } else {
+                    //Permission denied and checked dont ask again ,redirect to settings
+                    DeviceInfoGatherer.setPermissionAsDeniedAndDontAskAgain(
+                        listOf(
+                            "Manifest.permission.ACCESS_COARSE_LOCATION",
+                            "Manifest.permission.ACCESS_FINE_LOCATION"
+                        )
+                    )
+
+                    openSettingsPage()
+                }
+            }
+        } else {
+            val hasBackgroundLocationPermission =
+                permissionsAndResult[Manifest.permission.ACCESS_BACKGROUND_LOCATION] ?: false
+            val permissionRationaleBckPermission =
+                requireActivity().shouldShowRequestPermissionRationale(
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                )
+            if (hasFinePermission && hasCoarsePermission && hasBackgroundLocationPermission) {
+                // Has foreground and background both location access
+            } else if (hasFinePermission && hasCoarsePermission) {
+                //Just foreground location access
+            } else {
+
+                //Permission denied
+                if (permissionRationaleFinePermission) {
+                    //Permission denied but didn;t check dont ask again
+                } else {
+                    //Permission denied and checked dont ask again
+                    //redirect to settings
+
+                    DeviceInfoGatherer.setPermissionAsDeniedAndDontAskAgain(
+                        listOf(
+                            "Manifest.permission.ACCESS_COARSE_LOCATION",
+                            "Manifest.permission.ACCESS_FINE_LOCATION",
+                            "Manifest.permission.ACCESS_BACKGROUND_LOCATION"
+                        )
+                    )
+                    openSettingsPage()
+                }
+            }
+        }
+    }
+
+    private fun openSettingsPage() {
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+        val uri = Uri.fromParts("package", requireContext().packageName, null)
+        intent.data = uri
+        startActivity(intent)
+    }
+
     private val locationAccessDialog: BsBackgroundAndLocationAccess by lazy {
         BsBackgroundAndLocationAccess()
     }
@@ -42,6 +134,7 @@ class LandingFragment : Fragment() {
 
     @Inject
     lateinit var appDialogsInterface: AppDialogsInterface
+    private val chatHeadersViewModel: ChatHeadersViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -63,33 +156,45 @@ class LandingFragment : Fragment() {
         })
         checkforForceupdate()
         logDeviceAndPermissionInfo()
+        checkForChatCounts()
+    }
+
+    private fun checkForChatCounts() {
+        unread_message_count_tv.visible()
+        chatHeadersViewModel.unreadMessageCount
+            .observe(viewLifecycleOwner, Observer {
+
+                if (it == 0) {
+                    unread_message_count_tv.setImageDrawable(null)
+                } else {
+                    val drawable = TextDrawable.builder().buildRound(
+                        it.toString(),
+                        ResourcesCompat.getColor(requireContext().resources, R.color.lipstick, null)
+                    )
+                    unread_message_count_tv.setImageDrawable(drawable)
+                }
+            })
+
+        chatHeadersViewModel.startWatchingChatHeaders()
     }
 
     private fun checkForLocationPermission() {
-        val locationPermissionGranted = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-            EasyPermissions.hasPermissions(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            )
-        } else {
-            EasyPermissions.hasPermissions(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_BACKGROUND_LOCATION
-            )
-        }
+        val locationPermissionGranted = EasyPermissions.hasPermissions(
+            requireContext(),
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        )
 
         if (!locationPermissionGranted) {
-                showLocationDialog()
+            showLocationDialog()
         }
-
     }
 
     private fun showLocationDialog() {
+
         if (locationAccessDialog.dialog == null || locationAccessDialog.dialog?.isShowing == false) {
             locationAccessDialog.isCancelable = false
+            locationAccessDialog.setOnLocationOkayClickListener(this)
             locationAccessDialog.show(
                 childFragmentManager,
                 BsBackgroundAndLocationAccess::class.simpleName
@@ -197,7 +302,53 @@ class LandingFragment : Fragment() {
             )
         )
 
-
+        trySyncingUnsyncedFirebaseData()
     }
 
+    private fun trySyncingUnsyncedFirebaseData() {
+        FirebaseFirestore
+            .getInstance()
+            .waitForPendingWrites()
+            .addOnSuccessListener {
+                Log.d(
+                    "LandingFragment",
+                    "Success no pending writes found"
+                )
+                CrashlyticsLogger.d(
+                    "LandingFragment",
+                    "Success no pending writes found"
+                )
+            }.addOnFailureListener {
+                Log.e(
+                    "LandingFragment",
+                    "while syncning data to server",
+                    it
+                )
+                CrashlyticsLogger.e(
+                    "LandingFragment",
+                    "while syncning data to server",
+                    it
+                )
+            }
+    }
+
+    override fun onRequestLocationPermissionButtonClicked() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            requestPermissionContract.launch(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                )
+            )
+        } else {
+
+            requestPermissionContract.launch(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                )
+            )
+        }
+    }
 }

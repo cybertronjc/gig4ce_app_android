@@ -1,4 +1,4 @@
-package com.gigforce.client_activation.client_activation
+package com.gigforce.client_activation.client_activation.info.aadhardetailform
 
 import android.Manifest
 import android.app.Activity
@@ -336,9 +336,9 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
                     caPincodeInput.setText(curradd.pincode)
                     caLandmarkInput.setText(curradd.landmark)
 
-                    if (curradd.state.isNotBlank()) {
+                    if (curradd.state?.isNotBlank() == true) {
                         caStateSpinner.setText(curradd.state, false)
-                        getCitiesWhenStateNotEmpty(curradd.state, false)
+                        getCitiesWhenStateNotEmpty(curradd.state?:"", false)
                     }
                 }
             }
@@ -522,7 +522,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
 
 
         submitButton.setOnClickListener {
-            if (submitButton.text.toString() == "Submit") {
+            if (anyDataEntered) {
                 if (aadharFrontImagePath == null || aadharFrontImagePath?.isEmpty() == true) {
                     MaterialAlertDialogBuilder(requireContext())
                         .setTitle(getString(R.string.alert_client))

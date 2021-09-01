@@ -82,7 +82,7 @@
             android:layout_marginRight="16dp"
             android:scaleX="0.8"
             android:scaleY="0.8"
-              app:srcCompat="@drawable/ic_homescreen_chat"
+            app:srcCompat="@drawable/ic_chat_black"
             app:layout_constraintBottom_toBottomOf="@+id/cardView"
             app:layout_constraintEnd_toStartOf="@+id/cardView"
             app:layout_constraintTop_toTopOf="@+id/cardView" />
