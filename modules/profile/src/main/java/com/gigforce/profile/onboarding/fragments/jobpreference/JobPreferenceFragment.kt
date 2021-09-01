@@ -55,13 +55,13 @@ class JobPreferenceFragment() :
 
     fun getAllWorkingDays(): ArrayList<String> {
         var workingDaysList = ArrayList<String>()
-        workingDaysList.add((getString(R.string.monday_profile)))
-        workingDaysList.add((getString(R.string.tuesday_profile)))
-        workingDaysList.add((getString(R.string.wednesday_profile)))
-        workingDaysList.add((getString(R.string.thursday_profile)))
-        workingDaysList.add((getString(R.string.friday_profile)))
-        workingDaysList.add((getString(R.string.saturday_profile)))
-        workingDaysList.add((getString(R.string.sunday_profile)))
+        workingDaysList.add("Monday")
+        workingDaysList.add("Tuesday")
+        workingDaysList.add("Wednesday")
+        workingDaysList.add("Thursday")
+        workingDaysList.add("Friday")
+        workingDaysList.add("Saturday")
+        workingDaysList.add("Sunday")
         return workingDaysList
     }
 
