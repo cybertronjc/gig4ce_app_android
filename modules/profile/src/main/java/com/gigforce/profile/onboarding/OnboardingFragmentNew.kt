@@ -106,9 +106,9 @@ class OnboardingFragmentNew : Fragment(){
         activity?.let {
             onboarding_pager.adapter =
                     MutlifragmentAdapter(it)
-            appBar.setSteps(getString(R.string.steps_profile)+" " + (onboarding_pager.adapter as MutlifragmentAdapter).fragmentArr.size)
+            appBar.setSteps(getString(R.string.steps_profile)+" 1/" + (onboarding_pager.adapter as MutlifragmentAdapter).fragmentArr.size)
             steps.text =
-                getString(R.string.steps_profile) +" "+ (onboarding_pager.adapter as MutlifragmentAdapter).fragmentArr.size
+                getString(R.string.steps_profile) +" 1/"+ (onboarding_pager.adapter as MutlifragmentAdapter).fragmentArr.size
         }
         next.setOnClickListener {
             clickOnNextButton()
