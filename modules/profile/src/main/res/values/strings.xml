@@ -54,7 +54,7 @@
     <string name="are_you_currently_working_profile">Are You currently working?</string>
     <string name="working_profile_profile">Working</string>
     <string name="not_working_profile">Not Working</string>
-    <string name="your_total_work_experience_profile">Your Total Work Experience</string>
+    <string name="your_total_work_experience_profile">Your total work experience</string>
     <string name="no_experience_profile">No Experience</string>
     <string name="_0_1_years_profile">0-1 Years</string>
     <string name="_1_3_years_profile">1-3 Years</string>
@@ -72,4 +72,35 @@
     <string name="upload_photo_profile">Upload Photo</string>
     <string name="change_profile">Change</string>
     <string name="skip_profile">Skip</string>
+    <string name="hi_there_profile">Hi There !!</string>
+    <string name="lets_know_you_better_profile">Before we start, Let’s know you better</string>
+    <string name="lets_started_profile">Let\'s Get Started</string>
+    <string name="what_s_your_name_profile">What is your Name?</string>
+    <string name="what_s_your_gender_profile">What is your Gender ?</string>
+    <string name="male_profile">Male</string>
+    <string name="female_profile">Female</string>
+    <string name="_14_18_years_tag_profile">14-18 Years</string>
+    <string name="_19_23_years_tag_profile">19-23 years</string>
+    <string name="_24_28_years_tag_profile">24-28 years</string>
+    <string name="_29_33_years_tag_profile">29-33 years</string>
+    <string name="_34_38_years_tag_profile">34-38 years</string>
+    <string name="above_38_years_tag_profile">Above 38 years</string>
+    <string name="tenth_pass_profile">10th pass</string>
+    <string name="twelth_pass_profile">12th pass</string>
+
+    <string name="no_experience_tag_profile">No Experience</string>
+    <string name="_0_1_years_tag_profile">0-1 Years</string>
+    <string name="_1_3_years_tag_profile">1-3 Years</string>
+    <string name="_3_5_years_tag_profile">3-5 Years</string>
+    <string name="_5_years_tag_profile">5+ Years</string>
+    <string name="interest_profile">Interest</string>
+    <string name="set_your_preferences_profile">Set your preferences</string>
+    <string name="job_preferences_profile">Job preference</string>
+    <string name="work_days_profile">Work Days</string>
+    <string name="time_slots_profile">Time Slots</string>
+    <string name="_5am_8am_profile">5 am - 8 am</string>
+    <string name="select_max_3_profile">" ( select max 3) "</string>
+    <string name="highest_qualification_profile">Highest Qualification</string>
+
+
 </resources>

@@ -13,12 +13,12 @@ import kotlinx.android.synthetic.main.verification_fragment_click_or_select_imag
 
 class VerificationClickOrSelectImageBottomSheet : BottomSheetDialogFragment() {
 
-    private var sheetTitle: String = getString(R.string.upload_photo_veri)
+    private var sheetTitle: String? = ""
     private var listener: OnPickOrCaptureImageClickListener? = null
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString(StringConstants.PHOTO_PIC_TITLE.value, sheetTitle)
+        outState.putString(StringConstants.PHOTO_PIC_TITLE.value, resources.getString(R.string.upload_photo_veri))
     }
 
     private fun getDataFromIntents(savedInstanceState: Bundle?) {
@@ -49,7 +49,7 @@ class VerificationClickOrSelectImageBottomSheet : BottomSheetDialogFragment() {
 
 
     private fun initView() {
-        change_photo_label.text= sheetTitle
+        change_photo_label.text= sheetTitle?:resources.getString(R.string.upload_photo_veri)
         camera_layout.setOnClickListener {
             listener?.onClickPictureThroughCameraClicked()
             dismiss()

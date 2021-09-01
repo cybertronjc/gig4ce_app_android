@@ -14,6 +14,7 @@ import androidx.core.view.isVisible
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.viewdatamodels.StandardActionCardDVM
 import com.gigforce.core.IViewHolder
+import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
@@ -67,6 +68,8 @@ open class StandardActionCardComponent(context: Context, attrs: AttributeSet?) :
 
     @Inject
     lateinit var navigation: INavigation
+
+    @Inject lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
 
     init {
         this.layoutParams =
@@ -229,13 +232,23 @@ open class StandardActionCardComponent(context: Context, attrs: AttributeSet?) :
         secondary_action.gone()
         applyMargin = false
         if (data is StandardActionCardDVM) {
-            tv_title.text = data.title
-            tv_desc.text = data.desc
+            if(sharedPreAndCommonUtilInterface.getAppLanguageCode() == "hi"){
+                tv_title.text = data.hi?.title?:data.title
+                tv_desc.text = data.hi?.desc?:data.desc
+            }else {
+                tv_title.text = data.title
+                tv_desc.text = data.desc
+            }
             setImage(data)
 
             data.action1?.let {
                 primary_action.visible()
-                primary_action.text = it.title ?: ""
+                if(sharedPreAndCommonUtilInterface.getAppLanguageCode() == "hi") {
+                    primary_action.text = data.hi?.action1?.title ?: it.title?:""
+                }
+                else{
+                    primary_action.text = it.title?:""
+                }
                 primary_action.setOnClickListener { it2 ->
                     it.type?.let { it1 ->
                         when (it1) {

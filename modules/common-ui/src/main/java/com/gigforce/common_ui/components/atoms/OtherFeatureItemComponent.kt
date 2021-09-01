@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.viewdatamodels.OtherFeatureItemDVM
 import com.gigforce.core.IViewHolder
+import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
@@ -25,6 +26,8 @@ class OtherFeatureItemComponent(context: Context, attrs: AttributeSet?) :
     IViewHolder {
     val view: View
     @Inject lateinit var navigation : INavigation
+    @Inject lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
+
     init {
         this.layoutParams =
             FrameLayout.LayoutParams(
@@ -51,7 +54,11 @@ class OtherFeatureItemComponent(context: Context, attrs: AttributeSet?) :
 
     override fun bind(data: Any?) {
         if(data is OtherFeatureItemDVM){
-            view.findViewById<TextView>(R.id.action_title).text = data.title
+            if(sharedPreAndCommonUtilInterface.getAppLanguageCode() == "hi") {
+                view.findViewById<TextView>(R.id.action_title).text = data.hi?.title?:data.title
+            }else{
+                view.findViewById<TextView>(R.id.action_title).text = data.title
+            }
             setSectionIcon(data.image)
             view.setOnClickListener{
                 navigation.navigateTo(data.navPath)

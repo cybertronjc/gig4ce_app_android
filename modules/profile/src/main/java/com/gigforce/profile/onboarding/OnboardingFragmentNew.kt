@@ -106,9 +106,9 @@ class OnboardingFragmentNew : Fragment(){
         activity?.let {
             onboarding_pager.adapter =
                     MutlifragmentAdapter(it)
-            appBar.setSteps(getString(R.string.step_1_profile) + (onboarding_pager.adapter as MutlifragmentAdapter).fragmentArr.size)
+            appBar.setSteps(getString(R.string.steps_profile)+" 1/" + (onboarding_pager.adapter as MutlifragmentAdapter).fragmentArr.size)
             steps.text =
-                getString(R.string.step_1_profile) + (onboarding_pager.adapter as MutlifragmentAdapter).fragmentArr.size
+                getString(R.string.steps_profile) +" 1/"+ (onboarding_pager.adapter as MutlifragmentAdapter).fragmentArr.size
         }
         next.setOnClickListener {
             clickOnNextButton()
@@ -175,7 +175,7 @@ class OnboardingFragmentNew : Fragment(){
             }
             onboarding_pager.currentItem = onboarding_pager.currentItem + 1
             //steps.text = "Steps ${onboarding_pager.currentItem + 1}/9"
-            appBar.setSteps(getString(R.string.steps_profile) + (onboarding_pager.currentItem + 1) + "/9")
+            appBar.setSteps(getString(R.string.steps_profile) +" "+ (onboarding_pager.currentItem + 1) + "/9")
 
             if (onboarding_pager.currentItem == 8) {
                 val fragment = getProfilePicFragment()
@@ -315,7 +315,7 @@ class OnboardingFragmentNew : Fragment(){
         var jobPreferenceFragment =
                 (((onboarding_pager.adapter as MutlifragmentAdapter).getFragment(onboarding_pager.currentItem)) as JobPreferenceFragment)
         var fullTimeJob = jobPreferenceFragment.fullTimeJob
-        var fullTimePartime = if (fullTimeJob) getString(R.string.full_time_profile) else getString(R.string.part_time_profile)
+        var fullTimePartime = if (fullTimeJob) "Full Time" else "Part Time"
         if (!fullTimeJob) {
             viewModel.saveJobPreference(fullTimePartime, jobPreferenceFragment.getWorkingDays(), jobPreferenceFragment.getTimeSlots())
 
@@ -364,7 +364,7 @@ class OnboardingFragmentNew : Fragment(){
         var total_experience_rg = experienceFragment.total_experience_rg
         val selectedId = total_experience_rg.checkedRadioButtonId
         var radioButton = onboarding_pager.findViewById(selectedId) as RadioButton
-        viewModel.saveTotalExperience(radioButton.text.toString())
+        viewModel.saveTotalExperience(radioButton.tag.toString())
     }
 
 
@@ -378,8 +378,10 @@ class OnboardingFragmentNew : Fragment(){
         // find the radiobutton by returned id
         var radioButton = onboarding_pager.findViewById(selectedId) as RadioButton
 
-        return radioButton.text.toString()
-//        return ""
+        return radioButton.tag.toString()
+//        return radioButton.text.toString()
+
+    //        return ""
     }
 
     private fun getSelectedHighestQualification(): String {
