@@ -2,7 +2,6 @@
 <resources>
     <string name="plus_more_client">+more</string>
     <string name="steps_pending_client">Steps Pending</string>
-    <string name="submit_client">Submit</string>
     <string name="looking_for_dynamic_working_hours_client">\Looking for flexible working hours? Join me at Gigforce :</string>
     <string name="share_client">Share</string>
     <string name="apply_now_client">Apply Now</string>
@@ -121,7 +120,6 @@
     <string name="curr_add2_client">Enter Current Address Line 2</string>
     <string name="select_city_client">Select City</string>
     <string name="valid_pin_client">Enter valid pincode</string>
-    <string name="skip_client">Skip</string>
     <string name="uplaod_aadhar_client">Upload Aadhar Card</string>
     <string name="choose_one_client">choose one</string>
     <string name="thanks_applying_client">\"Thanks for applying at \"</string>

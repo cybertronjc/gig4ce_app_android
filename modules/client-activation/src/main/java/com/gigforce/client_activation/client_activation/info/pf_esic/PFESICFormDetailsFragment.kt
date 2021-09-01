@@ -242,27 +242,27 @@ class PFESICFormDetailsFragment : Fragment(), IOnBackPressedOverride,
                 if (pfesicCheckbox.isChecked) {
                     if (esicNumber.editText?.text?.isEmpty() == true) {
                         MaterialAlertDialogBuilder(requireContext())
-                            .setTitle(getString(R.string.alert))
+                            .setTitle(getString(R.string.alert_client))
                             .setMessage("Enter ESIC number")
-                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .setPositiveButton(getString(R.string.okay_client)) { _, _ -> }
                             .show()
                         return@setOnClickListener
                     }
 
                     if (uanNumber.editText?.text?.isEmpty() == true) {
                         MaterialAlertDialogBuilder(requireContext())
-                            .setTitle(getString(R.string.alert))
+                            .setTitle(getString(R.string.alert_client))
                             .setMessage("Enter UAN number")
-                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .setPositiveButton(getString(R.string.okay_client)) { _, _ -> }
                             .show()
                         return@setOnClickListener
                     }
 
                     if (pfNumber.editText?.text?.isEmpty() == true) {
                         MaterialAlertDialogBuilder(requireContext())
-                            .setTitle(getString(R.string.alert))
+                            .setTitle(getString(R.string.alert_client))
                             .setMessage("Enter PF number")
-                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .setPositiveButton(getString(R.string.okay_client)) { _, _ -> }
                             .show()
                         return@setOnClickListener
                     }
@@ -271,36 +271,36 @@ class PFESICFormDetailsFragment : Fragment(), IOnBackPressedOverride,
                 } else {
                     if (nomineeName.editText?.text?.isEmpty() == true) {
                         MaterialAlertDialogBuilder(requireContext())
-                            .setTitle(getString(R.string.alert))
+                            .setTitle(getString(R.string.alert_client))
                             .setMessage("Enter nominee name")
-                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .setPositiveButton(getString(R.string.okay_client)) { _, _ -> }
                             .show()
                         return@setOnClickListener
                     }
 
                     if (relationNominee.editText?.text?.isEmpty() == true) {
                         MaterialAlertDialogBuilder(requireContext())
-                            .setTitle(getString(R.string.alert))
+                            .setTitle(getString(R.string.alert_client))
                             .setMessage("Enter relation with nominee")
-                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .setPositiveButton(getString(R.string.okay_client)) { _, _ -> }
                             .show()
                         return@setOnClickListener
                     }
 
                     if (dateOfBirth.text?.isEmpty() == true) {
                         MaterialAlertDialogBuilder(requireContext())
-                            .setTitle(getString(R.string.alert))
+                            .setTitle(getString(R.string.alert_client))
                             .setMessage("Select DoB of nominee")
-                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .setPositiveButton(getString(R.string.okay_client)) { _, _ -> }
                             .show()
                         return@setOnClickListener
                     }
 
                     if(signaturePath.isBlank()){
                         MaterialAlertDialogBuilder(requireContext())
-                            .setTitle(getString(R.string.alert))
+                            .setTitle(getString(R.string.alert_client))
                             .setMessage("Upload signature image")
-                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .setPositiveButton(getString(R.string.okay_client)) { _, _ -> }
                             .show()
                         return@setOnClickListener
                     }
