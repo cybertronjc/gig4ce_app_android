@@ -162,7 +162,7 @@ class LanguageSelectFragment : Fragment(), LanguageAdapter.LanguageAdapterClickL
             var language = languageAdapter.getSelectedLanguage()
             sharedPreAndCommonUtilInterface.updateResources(language.languageCode)
             sharedPreAndCommonUtilInterface.saveAppLanuageCode(language.languageCode)
-            sharedPreAndCommonUtilInterface.saveAppLanguageName(language.languageCode)
+            sharedPreAndCommonUtilInterface.saveAppLanguageName(language.languageName)
 
             languageCode = language.languageCode
             var props = HashMap<String, Any>()

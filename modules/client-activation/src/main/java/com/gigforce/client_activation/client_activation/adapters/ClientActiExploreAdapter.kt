@@ -149,8 +149,9 @@ class ClientActiExploreAdapter(
             }
 
             var actionButtonText =
-                if (jobProfile.status == "Interested") "Complete Application" else if (jobProfile.status == "Inprocess") "Complete Application"
-                else if (jobProfile.status == "") "Apply Now"  else ""
+                if (jobProfile.status == "Interested") context.resources.getString(R.string.complete_application_client) else if (jobProfile.status == "Inprocess") context.resources.getString(R.string.complete_application_client)
+                else if (jobProfile.status == "") context.resources.getString(R.string.apply_now_client)  else ""
+
             Log.d("actionText", actionButtonText)
             if (actionButtonText == ""){
                 divider_one.invisible()
