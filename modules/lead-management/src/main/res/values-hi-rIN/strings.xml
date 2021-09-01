@@ -91,5 +91,10 @@
     <string name="trade_name_lead">व्यापार का नाम एन/ए</string>
     <string name="profile_lead">प्रोफाइल एन/ए</string>
     <string name="choose_one_lead">एक चुनो</string>
+    <string name="no_profiles">कोई प्रोफ़ाइल नहीं</string>
+    <string name="no_applications">कोई आवेदन नहीं</string>
+    <string name="ongoing_applications">चल रहे आवेदन</string>
+    <string name="other_applications">अन्य अनुप्रयोगों</string>
+    <string name="search_by_business_name_job_profile">व्यवसाय के नाम / जॉब प्रोफाइल के आधार पर खोजें</string>
 
 </resources>

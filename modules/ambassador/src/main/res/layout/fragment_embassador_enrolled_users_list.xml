@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 app:isSearchVisible="true"
                 app:backgroundType="PinkBar"
-                app:titleText="Gigforce Ambassador"
+                app:titleText="@string/gigforce_ambassador_amb"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>

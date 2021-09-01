@@ -196,7 +196,7 @@ class EnrolledUsersRecyclerAdapter constructor(
                                 ContextCompat.getDrawable(
                                     context,
                                     R.drawable.md_transparent
-                                )!!, "Edit"
+                                )!!, context.getString(R.string.edit_propercase)
                             )
                         )
                         .addItem(

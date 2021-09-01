@@ -15,7 +15,7 @@
             app:backgroundType="PinkBar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:titleText="Bank Account" />
+            app:titleText="@string/bank_details_veri" />
 
         <TextView
             android:id="@+id/submit_button"
@@ -51,12 +51,12 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/size16"
                     android:layout_marginTop="@dimen/dp_xl1"
-                    app:docinfotext="Please upload your passbook/cheque  or enter the details manually"
+                    app:docinfotext="@string/please_upload_bank"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:missingdoctext="I don’t have a Bank Account"
-                    app:title="Bank Account"
-                    app:uppercaption="You need to upload" />
+                    app:missingdoctext="@string/no_i_dont_have_bank_passbook_veri"
+                    app:title="@string/bank_account_veri"
+                    app:uppercaption="@string/you_need_to_upload_veri" />
 
 
                 <androidx.constraintlayout.widget.ConstraintLayout

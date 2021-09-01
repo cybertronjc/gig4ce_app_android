@@ -1,5 +1,6 @@
 package com.gigforce.verification.mainverification
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,11 +11,14 @@ import com.gigforce.core.datamodels.verification.VerificationBaseModel
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.verification.R
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class VerificationMainViewModel @Inject constructor (private val iBuildConfigVM: IBuildConfigVM) : ViewModel() {
+class VerificationMainViewModel @Inject constructor (
+    @ApplicationContext private val appContext : Context,
+    private val iBuildConfigVM: IBuildConfigVM) : ViewModel() {
     var _allDocumentsData = MutableLiveData<List<SimpleCardDVM>>()
     var allDocumentsData : LiveData<List<SimpleCardDVM>> = _allDocumentsData
 
@@ -32,10 +36,10 @@ class VerificationMainViewModel @Inject constructor (private val iBuildConfigVM:
     private fun getAllDocuments() {
 
         var allDocs = ArrayList<SimpleCardDVM>()
-        allDocs.add(SimpleCardDVM("PAN Card","Tap to select", R.drawable.ic_badge_black_24dp,"verification/pancardimageupload",false))
-        allDocs.add(SimpleCardDVM("Driving licence","Tap to select",R.drawable.ic_directions_car_black_24dp, "verification/drivinglicenseimageupload", false))
-        allDocs.add(SimpleCardDVM("Bank Details","Tap to select",R.drawable.ic_account_balance_black_24dp, "verification/bank_account_fragment", false))
-        allDocs.add(SimpleCardDVM("Aadhaar Card","Tap to select",R.drawable.ic_account_box_black_24dp, "verification/aadhaarcardimageupload", false))
+        allDocs.add(SimpleCardDVM(appContext.getString(R.string.pan_card),appContext.getString(R.string.tap_to_select), R.drawable.ic_badge_black_24dp,"verification/pancardimageupload",false))
+        allDocs.add(SimpleCardDVM(appContext.getString(R.string.driving_license),appContext.getString(R.string.tap_to_select),R.drawable.ic_directions_car_black_24dp, "verification/drivinglicenseimageupload", false))
+        allDocs.add(SimpleCardDVM(appContext.getString(R.string.bank_details),appContext.getString(R.string.tap_to_select),R.drawable.ic_account_balance_black_24dp, "verification/bank_account_fragment", false))
+        allDocs.add(SimpleCardDVM(appContext.getString(R.string.aadhar_card),appContext.getString(R.string.tap_to_select),R.drawable.ic_account_box_black_24dp, "verification/aadhaarcardimageupload", false))
         _allDocumentsData.value = allDocs
 
         verificationKycRepo.db.collection("Verification").document(verificationKycRepo.getUID()).addSnapshotListener { value, error ->
@@ -43,10 +47,10 @@ class VerificationMainViewModel @Inject constructor (private val iBuildConfigVM:
                 val doc = value.toObject(VerificationBaseModel::class.java)
                 latestVerificationDoc = doc
                 var allDocs = ArrayList<SimpleCardDVM>()
-                allDocs.add(SimpleCardDVM(title = "PAN Card",subtitle = getSubString(doc?.pan_card?.verified,doc?.pan_card?.status), image = R.drawable.ic_badge_black_24dp,navpath = "verification/pancardimageupload", color = getSubStringColor(doc?.pan_card?.verified,doc?.pan_card?.status)))
-                allDocs.add(SimpleCardDVM(title = "Driving licence",subtitle = getSubString(doc?.driving_license?.verified,doc?.driving_license?.status),image = R.drawable.ic_directions_car_black_24dp, navpath = "verification/drivinglicenseimageupload", color = getSubStringColor(doc?.driving_license?.verified,doc?.driving_license?.status)))
-                allDocs.add(SimpleCardDVM(title = "Bank Details",subtitle = getSubString(doc?.bank_details?.verified,doc?.bank_details?.status),image = R.drawable.ic_account_balance_black_24dp, navpath = "verification/bank_account_fragment", color = getSubStringColor(doc?.bank_details?.verified,doc?.bank_details?.status)))
-                allDocs.add(SimpleCardDVM(title = "Aadhaar Card",subtitle = getSubString(doc?.aadhar_card?.verified,""),image = R.drawable.ic_account_box_black_24dp, navpath = "verification/aadhaarcardimageupload", color = getSubStringColor(doc?.aadhar_card?.verified,"")))
+                allDocs.add(SimpleCardDVM(title = appContext.getString(R.string.pan_card),subtitle = getSubString(doc?.pan_card?.verified,doc?.pan_card?.status), image = R.drawable.ic_badge_black_24dp,navpath = "verification/pancardimageupload", color = getSubStringColor(doc?.pan_card?.verified,doc?.pan_card?.status)))
+                allDocs.add(SimpleCardDVM(title = appContext.getString(R.string.driving_license),subtitle = getSubString(doc?.driving_license?.verified,doc?.driving_license?.status),image = R.drawable.ic_directions_car_black_24dp, navpath = "verification/drivinglicenseimageupload", color = getSubStringColor(doc?.driving_license?.verified,doc?.driving_license?.status)))
+                allDocs.add(SimpleCardDVM(title = appContext.getString(R.string.bank_details),subtitle = getSubString(doc?.bank_details?.verified,doc?.bank_details?.status),image = R.drawable.ic_account_balance_black_24dp, navpath = "verification/bank_account_fragment", color = getSubStringColor(doc?.bank_details?.verified,doc?.bank_details?.status)))
+                allDocs.add(SimpleCardDVM(title = appContext.getString(R.string.aadhar_card),subtitle = getSubString(doc?.aadhar_card?.verified,""),image = R.drawable.ic_account_box_black_24dp, navpath = "verification/aadhaarcardimageupload", color = getSubStringColor(doc?.aadhar_card?.verified,"")))
                 _allDocumentsData.value = allDocs
                 doc?.let {
                     var allVerified = true
@@ -79,7 +83,7 @@ class VerificationMainViewModel @Inject constructor (private val iBuildConfigVM:
             if(isVerified == true)return "Verified"
             if(status?.equals("started") == true) return "Pending"
             if(status?.equals("failed") == true) return "Failed"
-            return TAP_TO_SELECT
+            return appContext.getString(R.string.tap_to_select)
     }
 
     fun getSubStringColor(isVerified : Boolean ? =false, status : String? = "") : String{

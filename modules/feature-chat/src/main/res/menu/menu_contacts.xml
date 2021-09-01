@@ -5,18 +5,18 @@
     <item
         android:id="@+id/action_new_group"
         android:orderInCategory="100"
-        android:title="New group"
+        android:title="@string/new_group_propercase"
         app:showAsAction="collapseActionView" />
 
     <item
         android:id="@+id/action_invite_friends"
         android:orderInCategory="100"
-        android:title="Invite a friend"
+        android:title="@string/invite_a_friend"
         app:showAsAction="collapseActionView" />
     <item
         android:id="@+id/action_referesh"
         android:orderInCategory="100"
-        android:title="Refresh"
+        android:title="@string/refresh_propercase"
         app:showAsAction="collapseActionView" />
 
 </menu>

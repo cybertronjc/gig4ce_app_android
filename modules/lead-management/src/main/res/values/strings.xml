@@ -91,5 +91,10 @@
     <string name="trade_name_lead">Trade name N/A</string>
     <string name="profile_lead">Profile N/A</string>
     <string name="choose_one_lead">choose one</string>
+    <string name="no_profiles">No Profiles</string>
+    <string name="no_applications">No Applications</string>
+    <string name="ongoing_applications">Ongoing Applications</string>
+    <string name="other_applications">Other Applications</string>
+    <string name="search_by_business_name_job_profile">Search by business name / Job Profile</string>
 
 </resources>

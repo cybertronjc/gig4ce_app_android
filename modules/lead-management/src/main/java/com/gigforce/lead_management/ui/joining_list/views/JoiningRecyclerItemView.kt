@@ -93,7 +93,7 @@ class JoiningRecyclerItemView(
 
         val joiningStatus = JoiningStatus.fromValue(status)
         viewBinding.userAttendanceStatusTextview.isVisible = joiningStatus != JoiningStatus.JOINED
-        viewBinding.userAttendanceStatusTextview.text = joiningStatus.getStatusFormattedString()
+        viewBinding.userAttendanceStatusTextview.text = context.getString(joiningStatus.getStatusFormattedStringRes())
 
         when (joiningStatus) {
             JoiningStatus.SIGN_UP_PENDING -> {
