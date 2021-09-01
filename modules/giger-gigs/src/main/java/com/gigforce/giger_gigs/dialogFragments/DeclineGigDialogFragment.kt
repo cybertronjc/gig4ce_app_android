@@ -119,7 +119,11 @@ class DeclineGigDialogFragment : DialogFragment() {
                     progressBar.visible()
                 }
                 Lse.Success -> {
-                    Toast.makeText(requireContext(), getString(R.string.gig_declined_giger_gigs), Toast.LENGTH_LONG)
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.gig_declined_giger_gigs),
+                        Toast.LENGTH_LONG
+                    )
                         .show()
                     mDeclineGigDialogFragmentResultListener?.gigDeclined()
                     if (gigId != null) sharedGigViewModel.gigDeclined(gigId!!)
@@ -152,7 +156,7 @@ class DeclineGigDialogFragment : DialogFragment() {
 
 
     private fun initView() {
-        declineGigLabel.text = if(isAnyUserOtherThanGigerIsDecliningTheGig)
+        declineGigLabel.text = if (isAnyUserOtherThanGigerIsDecliningTheGig)
             getString(R.string.please_let_us_know_your_reason_why_giger_declining_this_gig_giger_gigs)
         else
             getString(R.string.please_let_us_know_your_reason_why_are_you_declining_this_gig_giger_gigs)
@@ -218,11 +222,37 @@ class DeclineGigDialogFragment : DialogFragment() {
             val reason = if (checkedRadioButtonId == R.id.reason_others) {
                 reason_et.text.toString()
             } else {
-                reason_radio_group.findViewById<RadioButton>(checkedRadioButtonId).text.toString()
+
+                if (checkedRadioButtonId == R.id.reason_sick_leave) {
+
+                    if (isAnyUserOtherThanGigerIsDecliningTheGig)
+                        "Giger is on sick leave"
+                    else
+                        "Iam on sick leave"
+                } else if (checkedRadioButtonId == R.id.reason_on_leave) {
+
+                    if (isAnyUserOtherThanGigerIsDecliningTheGig)
+                        "Giger have some personal work"
+                    else
+                        "I have some personal work"
+                } else if (checkedRadioButtonId == R.id.reason_cant_reach_location) {
+
+                    if (isAnyUserOtherThanGigerIsDecliningTheGig)
+                        "Giger can't reach work location"
+                    else
+                        "I can't reach work location"
+                } else if (checkedRadioButtonId == R.id.reason_gig_unsuitable) {
+
+                    if (isAnyUserOtherThanGigerIsDecliningTheGig)
+                        "This gig is unsuitable for giger"
+                    else
+                        "This gig is unsuitable for me"
+                } else
+                    reason_radio_group.findViewById<RadioButton>(checkedRadioButtonId).text.toString()
             }
 
             if (gigId != null)
-                viewModel.declineGig(gigId!!, reason,isAnyUserOtherThanGigerIsDecliningTheGig)
+                viewModel.declineGig(gigId!!, reason, isAnyUserOtherThanGigerIsDecliningTheGig)
             else if (!gigIds.isNullOrEmpty())
                 viewModel.declineGigs(gigIds!!, reason)
         }

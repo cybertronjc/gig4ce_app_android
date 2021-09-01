@@ -109,6 +109,7 @@ class GigPage2Fragment : Fragment(),
     EarlyOrLateCheckInBottomSheet.OnEarlyOrLateCheckInBottomSheetClickListener,
     EasyPermissions.PermissionCallbacks {
 
+
     private val gigSharedViewModel: SharedGigViewModel by activityViewModels()
     private val viewModel: GigViewModel by viewModels()
     private lateinit var gigId: String
@@ -707,6 +708,31 @@ class GigPage2Fragment : Fragment(),
         val status = GigStatus.fromGig(gig)
         //get gigorder
 
+         val IDENTITY_CARD = OtherOption(
+            id = ID_IDENTITY_CARD,
+            name = getString(R.string.identity_card),
+            icon = R.drawable.ic_identity_card
+        )
+
+         val OFFER_LETTER = OtherOption(
+            id = ID_OFFER_LETTER,
+            name = getString(R.string.offer_letter),
+            icon = R.drawable.ic_offer_letter_pink
+        )
+
+         val ATTENDANCE_HISTORY = OtherOption(
+            id = ID_ATTENDANCE_HISTORY,
+            name = getString(R.string.attendance_history),
+            icon = R.drawable.ic_attendance
+        )
+
+         val DECLINE_GIG = OtherOption(
+            id = ID_DECLINE_GIG,
+            name = getString(R.string.decline_gig),
+            icon = R.drawable.ic_gig_decline
+        )
+
+
         val optionsList = mutableListOf<OtherOption>()
         if (viewModel.gigOrder?.offerLetter?.isNotEmpty() == true) {
             optionsList.add(OFFER_LETTER)
@@ -932,11 +958,11 @@ class GigPage2Fragment : Fragment(),
 
 
     override fun onPeopleToExpectClicked(option: ContactPerson) {
-        navigation.navigateTo(
-            "gigContactPersonBottomSheet", bundleOf(
-                GigContactPersonBottomSheet.INTENT_GIG_CONTACT_PERSON_DETAILS to option
-            )
-        )
+//        navigation.navigateTo(
+//            "gigContactPersonBottomSheet", bundleOf(
+//                GigContactPersonBottomSheet.INTENT_GIG_CONTACT_PERSON_DETAILS to option
+//            )
+//        )
     }
 
     override fun onCallManagerClicked(manager: ContactPerson) {
@@ -1181,29 +1207,7 @@ class GigPage2Fragment : Fragment(),
 
         const val REMOTE_CONFIG_SHOULD_USE_OLD_CAMERA = "should_use_old_camera"
 
-        private val IDENTITY_CARD = OtherOption(
-            id = ID_IDENTITY_CARD,
-            name = "Identity Card",
-            icon = R.drawable.ic_identity_card
-        )
 
-        private val OFFER_LETTER = OtherOption(
-            id = ID_OFFER_LETTER,
-            name = "Offer Letter",
-            icon = R.drawable.ic_offer_letter_pink
-        )
-
-        private val ATTENDANCE_HISTORY = OtherOption(
-            id = ID_ATTENDANCE_HISTORY,
-            name = "Attendance History",
-            icon = R.drawable.ic_attendance
-        )
-
-        private val DECLINE_GIG = OtherOption(
-            id = ID_DECLINE_GIG,
-            name = "Decline Gig",
-            icon = R.drawable.ic_gig_decline
-        )
     }
 
 

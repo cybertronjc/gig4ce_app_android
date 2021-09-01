@@ -121,5 +121,5 @@ dependencies {
     implementation 'com.google.firebase:firebase-dynamic-links-ktx:19.1.0'
     implementation 'com.google.firebase:firebase-analytics-ktx:17.5.0'
     implementation "com.github.skydoves:powermenu:2.1.9"
-
+    implementation 'com.akexorcist:localization:1.2.10'
 }

@@ -15,7 +15,7 @@
             app:backgroundType="PinkBar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:titleText="Aadhaar Card" />
+            app:titleText="@string/aadhaar_card_veri" />
 
         <WebView
             android:id="@+id/digilocker_webview"

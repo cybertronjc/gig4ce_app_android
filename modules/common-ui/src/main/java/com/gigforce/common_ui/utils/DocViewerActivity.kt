@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.Window
@@ -26,9 +27,11 @@ import kotlinx.android.synthetic.main.acitivity_doc_viewer.*
 import java.net.URLEncoder
 import android.os.Environment.DIRECTORY_DOWNLOADS
 import androidx.core.content.ContentProviderCompat.requireContext
+import com.gigforce.core.base.BaseActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import java.util.*
 
-class DocViewerActivity : AppCompatActivity() {
+class DocViewerActivity : BaseActivity() {
     private var pdfView: WebView? = null
     private var progress: ProgressBar? = null
     //var pageTitle: String? = null
@@ -48,6 +51,7 @@ class DocViewerActivity : AppCompatActivity() {
         makeToolbarVisible(stringExtra.contains(".jpg") || stringExtra.contains(".png") || stringExtra.contains(".pdf"), purposeExtra)
         setListeners(stringExtra)
     }
+
 
     private fun makeToolbarVisible(isImageOrPdf: Boolean, purpose: String) {
 //       if (isImageOrPdf && !purpose.equals("OFFER_LETTER")){

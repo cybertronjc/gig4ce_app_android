@@ -122,7 +122,7 @@ class ContactsFragment : DialogFragment(),
 
                     contactsAdapter.stateCreateGroup(false)
                     contactsAdapter.clearSelectedContacts()
-                    contactsToolbarSubTitle.text = "${contactsAdapter.itemCount} Contact(s)"
+                    contactsToolbarSubTitle.text = "${contactsAdapter.itemCount} ${getString(R.string.contacts_with_space)}"
 
                     userSelectedLayout.isVisible = false
                     selectedUserCountTV.text = getString(R.string.zero_contacts_selected_chat)
@@ -418,7 +418,7 @@ class ContactsFragment : DialogFragment(),
                 noContactsLayout.gone()
                 contactsSyncingLayout.visible()
             } else {
-                contactsToolbarSubTitle.text = "${contacts.size} Contact(s)"
+                contactsToolbarSubTitle.text = "${contacts.size} ${getString(R.string.contacts_with_space)}"
 
                 contactsAdapter.setData(contacts)
                 noContactsLayout.visible()
@@ -428,7 +428,7 @@ class ContactsFragment : DialogFragment(),
             contactsSyncingLayout.gone()
             noContactsLayout.gone()
 
-            contactsToolbarSubTitle.text = "${contacts.size} Contact(s)"
+            contactsToolbarSubTitle.text = "${contacts.size} ${getString(R.string.contacts_with_space)}"
             contactsAdapter.setData(contacts)
         }
 
@@ -447,7 +447,7 @@ class ContactsFragment : DialogFragment(),
         createGroupFab.show()
         contactsAdapter.stateCreateGroup(true)
 
-        selectedUserCountTV.text = "0 Contact(s) Selected"
+        selectedUserCountTV.text = getString(R.string._0_contacts_s_chat)
 
         onBackPressCallback.isEnabled = true
     }

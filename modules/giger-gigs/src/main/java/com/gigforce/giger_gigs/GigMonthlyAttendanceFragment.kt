@@ -217,8 +217,8 @@ class GigMonthlyAttendanceFragment : Fragment(), GigAttendanceAdapterClickListen
             }
         }
 
-        total_days_tv.text = ": ${completedGigsCount} Days"
-        total_working_days_tv.text = ": ${absentGigsCount} Days"
+        total_days_tv.text = "  : ${completedGigsCount} ${getString(R.string.days)}"
+        total_working_days_tv.text = "  : ${absentGigsCount} ${getString(R.string.days)}"
 
         attendance_type_chipgroup.check(R.id.attendance_all_chip)
         adapter.updateAttendanceList(content)

@@ -242,13 +242,13 @@
     <string name="gigforce_ambassador_amb">Gigforce Ambassador</string>
     <string name="search_users_amb">Search Users</string>
     <string name="search_user_amb">Search User</string>
-    <string name="total_completed_profile_amb">\"Total Completed Profile : \"</string>
-    <string name="total_incomplete_profile_amb">\"Total Incomplete Profile : \"</string>
+    <string name="total_completed_profile_amb">Total Completed Profile : </string>
+    <string name="total_incomplete_profile_amb">Total Incomplete Profile : </string>
     <string name="enter_valid_mobile_amb">Enter a valid Mobile No</string>
     <string name="otp_sent_amb">OTP sent</string>
     <string name="change_photo_amb">Change Photo</string>
     <string name="upload_photo_amb">Upload Photo</string>
-    <string name="sent_otp_to_the_number_amb">\"We sent it to the number +91 - \"</string>
+    <string name="sent_otp_to_the_number_amb">We sent it to the number +91 - </string>
     <string name="enter_valid_otp_amb">Enter a valid OTP</string>
     <string name="otp_confimed_amb">OTP Confirmed, Profile Created</string>
     <string name="verification_code_sent_to_mobile_amb">Verification Code will be sent to registered number to edit profile.</string>
@@ -364,4 +364,5 @@
     <string name="choose_one_amb">choose one</string>
     <string name="next_amb">Next</string>
     <string name="invite_link_amb">Invite link will be shared via SMS on registered number.</string>
+    <string name="edit_propercase">Edit</string>
 </resources>

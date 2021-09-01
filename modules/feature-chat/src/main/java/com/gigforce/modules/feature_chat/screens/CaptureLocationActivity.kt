@@ -15,6 +15,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.gigforce.core.base.BaseActivity
 import com.gigforce.core.date.DateHelper
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
@@ -32,7 +33,7 @@ import kotlinx.android.synthetic.main.activity_capture_location.*
 import java.io.File
 
 
-class CaptureLocationActivity : AppCompatActivity(), OnMapReadyCallback,
+class CaptureLocationActivity : BaseActivity(), OnMapReadyCallback,
         LocationUpdates.LocationUpdateCallbacks {
 
 

@@ -44,7 +44,7 @@ class GigStatusCardView(
 
     fun setGigData(status: GigStatus) {
 
-        gigStatusTV.text = status.getStatusCapitalized()
+        gigStatusTV.text = resources.getString(status.getStatusStringRes())
         Glide.with(context).load(status.getIconForStatus()).into(gigStatusIV)
         statusCardView.strokeColor = ResourcesCompat.getColor(
             context.resources,

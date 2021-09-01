@@ -275,4 +275,26 @@
     <string name="select_shift_giger_gigs">शिफ्ट का चयन करें</string>
     <string name="select_company_giger_gigs">कंपनी का चयन करें</string>
     <string name="grant_permission_giger_gigs">कृपया भंडारण की अनुमति दें</string>
+    <string name="add_login_summary">लॉगिन सारांश जोड़ें</string>
+    <string name="login_summary">लॉगिन सारांश</string>
+    <string name="previous_records">पिछला रिकॉर्ड</string>
+    <string name="add_new">नया जोड़ो</string>
+    <string name="enter_propercase">दाखिल करना</string>
+    <string name="login_report">लॉगिन रिपोर्ट</string>
+    <string name="view_details">विवरण देखें</string>
+    <string name="days">दिन</string>
+    <string name="punch_in">चेक इन</string>
+    <string name="punch_out">चेक आउट</string>
+    <string name="hrs_mins">- -घंटे: - -मिनट</string>
+    <string name="today">आज</string>
+    <string name="tomorrow">कल</string>
+    <string name="yesterday">बीता हुआ कल</string>
+    <string name="hrs">घंटे</string>
+    <string name="mins">मिनट</string>
+    <string name="seconds">सेकंड</string>
+    <string name="decline_gig">गिग अस्वीकार करें</string>
+    <string name="attendance_history">उपस्थिति इतिहास</string>
+    <string name="offer_letter">प्रस्ताव पत्र</string>
+    <string name="identity_card">पहचान पत्र</string>
+
 </resources>
