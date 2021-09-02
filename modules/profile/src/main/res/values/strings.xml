@@ -101,6 +101,11 @@
     <string name="_5am_8am_profile">5 am - 8 am</string>
     <string name="select_max_3_profile">" ( select max 3) "</string>
     <string name="highest_qualification_profile">Highest Qualification</string>
+    <string name="delivery_executive_profile">Delivery executive</string>
+    <string name="have_done_delivery_job_profile">Have you done Delivery Job Before?</string>
+    <string name="yes_i_have_profile">Yes, I have</string>
+    <string name="no_i_have_not_profile">No, I haven’t</string>
+    <string name="what_have_you_deliver_before_profile">What have you delivered earlier?</string>
 
 
 </resources>
