@@ -1,12 +1,15 @@
 package com.gigforce.giger_gigs.tl_login_details
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.EditText
 import androidx.core.os.bundleOf
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
@@ -462,6 +465,8 @@ class AddNewLoginSummaryFragment : Fragment() {
             businessLoginLayout.removeAllViews()
             map.clear()
             submit.setText("Submit")
+
+            var gotAViewToFocusOn = false
             businessList.forEachIndexed { index, loginSummaryBusiness ->
                 val view = BusinessRecyclerItemView(requireContext(), null)
                 businessLoginLayout.addView(view)
@@ -489,6 +494,13 @@ class AddNewLoginSummaryFragment : Fragment() {
                 )
                 if (loginSummaryBusiness.loginCount != null){
                     map.put(index.toString(), loginSummaryBusiness.loginCount.toString())
+
+                    if(!gotAViewToFocusOn) {
+                        view.findViewById<EditText>(R.id.loginCount).requestFocus()
+                        val imm: InputMethodManager = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                        imm.toggleSoftInput( InputMethodManager.SHOW_FORCED,0)
+                        gotAViewToFocusOn = true
+                    }
                 }
             }
             setTotalSumFromMap()
@@ -503,6 +515,7 @@ class AddNewLoginSummaryFragment : Fragment() {
         }
         Log.d("count", "count $count , map: $map")
 
+        viewBinding.submit.isEnabled = count != 0
         viewBinding.submit.setText("Submit ($count Logins)")
         viewBinding.loginsCount.setText("$count")
 
