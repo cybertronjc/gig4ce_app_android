@@ -86,4 +86,5 @@
     <string name="new_version_available_detail_app_giger">Please, update app to new version to continue reposting</string>
     <string name="cancel_update_app_giger">Cancel</string>
     <string name="update_now_app_giger">Update now</string>
+    <string name="decline_gigs">Decline Gigs</string>
 </resources>

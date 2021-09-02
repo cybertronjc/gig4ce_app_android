@@ -68,7 +68,7 @@
                 android:layout_marginBottom="@dimen/size_22"
                 android:gravity="center"
                 android:minHeight="@dimen/size_36"
-                android:text="No Data Found"
+                android:text="@string/no_data_found_giger_gigs"
                 android:textColor="@color/black"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"

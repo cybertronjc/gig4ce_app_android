@@ -160,5 +160,9 @@
     <string name="alreay_have_pfesicregistered">I already have registered PF and ESIC</string>
     <string name="marital_status">Marital Status</string>
     <string name="signature">Signature</string>
+    <string name="pending">Pending</string>
+    <string name="active_locations">Active locations</string>
+    <string name="please_enter_the_hub_allocated_for_the_flipkart_delivery_gig">Please enter the Hub allocated for the Flipkart Delivery Gig</string>
+    <string name="state">State</string>
 
 </resources>

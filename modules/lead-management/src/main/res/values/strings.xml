@@ -96,5 +96,11 @@
     <string name="ongoing_applications">Ongoing Applications</string>
     <string name="other_applications">Other Applications</string>
     <string name="search_by_business_name_job_profile">Search by business name / Job Profile</string>
+    <string name="select_working_days">Select working days*</string>
+    <string name="you_can_perform_a">You can perform a</string>
+    <string name="reference_check">Reference Check</string>
+    <string name="name_propercase">Name</string>
+    <string name="relation">Relation</string>
+    <string name="contact_number">Contact Number</string>
 
 </resources>

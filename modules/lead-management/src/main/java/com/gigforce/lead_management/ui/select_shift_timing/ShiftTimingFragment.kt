@@ -39,7 +39,6 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 import javax.inject.Inject
 
-@RequiresApi(Build.VERSION_CODES.N)
 @AndroidEntryPoint
 class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
     fragmentName = "ShiftTimingFragment",
