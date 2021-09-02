@@ -140,6 +140,6 @@
     <string name="days_capital_pref">दिन</string>
     <string name="done_pref">किया हुआ</string>
     <string name="saturday_pref">शनिवार</string>
-    <string name="sunday_pref">रविवार का दिन</string>
+    <string name="sunday_pref">रविवार</string>
 
 </resources>
