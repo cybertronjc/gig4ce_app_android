@@ -101,6 +101,7 @@ class PreferencesFragment : Fragment() {
             viewLifecycleOwner,
             Observer { configDataModel1 ->
                 viewModel.setConfiguration(configDataModel1)
+                viewModel.getAllData()
             })
         viewModel.getConfiguration()
     }

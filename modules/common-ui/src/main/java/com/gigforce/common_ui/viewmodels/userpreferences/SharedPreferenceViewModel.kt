@@ -58,9 +58,9 @@ class SharedPreferenceViewModel : ViewModel {
         profileDataModelObj = profileDataModel
     }
 
-    init {
-        getAllData()
-    }
+//    init {
+//        getAllData()
+//    }
 
     fun getAllData() {
         preferencesRepository.getDBCollection()
@@ -69,7 +69,7 @@ class SharedPreferenceViewModel : ViewModel {
                     return@EventListener
                 }
                 if (value?.data == null) {
-//                    if (configDataModel != null) {
+                    if (configDataModel != null) {
                         var defaultData =
                             PreferencesDataModel()
                         var slots = getAllSlots()
@@ -80,7 +80,7 @@ class SharedPreferenceViewModel : ViewModel {
                         defaultData.selectedweekends.addAll(getAllWeekendsDays())
                         defaultData.selectedweekendslots.addAll(slots)
                         preferencesRepository.setDefaultData(defaultData)
-//                    }
+                    }
 
                 } else {
                     preferenceDataModel.postValue(
