@@ -73,5 +73,14 @@
     <string name="joined">जुड़ जाया</string>
     <string name="contact_person">संपर्क व्यक्ति</string>
     <string name="checked_out">उपस्थिति हो गई</string>
+    <string name="delivery_executive_profile">वितरण कर्मचारी</string>
+    <string name="have_done_delivery_job_profile">क्या आपने पहले डिलीवरी का काम किया है?</string>
+    <string name="yes_i_have_profile">हां</string>
+    <string name="no_i_have_not_profile">नहीं</string>
+    <string name="what_have_you_deliver_before_profile">आपने पहले क्या किया है?</string>
+
+
+
+
 
 </resources>
