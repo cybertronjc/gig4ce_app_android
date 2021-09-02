@@ -301,5 +301,7 @@
     <string name="profile_picture">प्रोफ़ाइल फोटो</string>
     <string name="no">नहीं</string>
     <string name="yes">हां</string>
+    <string name="logins_gigs">लॉगिन</string>
+
 
 </resources>

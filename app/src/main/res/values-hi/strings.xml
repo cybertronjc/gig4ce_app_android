@@ -596,7 +596,7 @@
     <string name="select_at_least_one_contact_app">कम से कम एक संपर्क चुनें</string>
     <string name="no_more_gig_app">कोई और गीग!</string>
     <string name="no_scheduled_gig_on_this_day_app">इस दिन कोई निर्धारित टमटम नहीं।</string>
-    <string name="enter_your_mobile_number_app">अपना मोबाइल नंबर दर्ज करे</string>
+    <string name="enter_your_mobile_number_app">अपना मोबाइल नंबर दर्ज करें</string>
     <string name="we_will_send_an_b_otp_b_on_this_number_app">हम इस नंबर पर एक <b>OTP</b> भेजेंगे।</string>
     <string name="_91_app">+91-</string>
     <string name="_0000000000_app">0</string>

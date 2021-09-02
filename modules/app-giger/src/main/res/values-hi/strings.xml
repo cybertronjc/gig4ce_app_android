@@ -87,4 +87,7 @@
     <string name="cancel_update_app_giger">रद्द करें</string>
     <string name="update_now_app_giger">अभी अद्यतन करें</string>
     <string name="decline_gigs">गिग्स को अस्वीकार करें</string>
+    <string name="no_gig_assigned_giger">कोई गिग्स असाइन नहीं है</string>
+    <string name="marked_not_working">काम नहीं कर रहा चिह्नित करें</string>
+
 </resources>

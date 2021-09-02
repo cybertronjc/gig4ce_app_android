@@ -850,6 +850,10 @@ class CalendarHomeScreen : Fragment(),
                             } else {
 
                                 activity?.let {
+                                    (viewHolder.getView(R.id.title) as TextView).text =
+                                    getString(R.string.no_gig_assigned_giger)
+//                                viewHolder.getView(R.id.subtitle).gone()
+
                                     viewHolder.getView(R.id.daydatecard).setBackgroundColor(
                                         ContextCompat.getColor(
                                             it.applicationContext,
