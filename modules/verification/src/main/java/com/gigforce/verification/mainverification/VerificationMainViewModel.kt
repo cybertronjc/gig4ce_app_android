@@ -80,9 +80,9 @@ class VerificationMainViewModel @Inject constructor (
     }
 
     fun getSubString(isVerified : Boolean ? =false, status : String? = "") : String{
-            if(isVerified == true)return "Verified"
-            if(status?.equals("started") == true) return "Pending"
-            if(status?.equals("failed") == true) return "Failed"
+            if(isVerified == true)return appContext.getString(R.string.verified_status_veri)//"Verified"
+            if(status?.equals("started") == true) return appContext.getString(R.string.pending_status_veri)//"Pending"
+            if(status?.equals("failed") == true) return appContext.getString(R.string.failed_status_veri)//"Failed"
             return appContext.getString(R.string.tap_to_select)
     }
 

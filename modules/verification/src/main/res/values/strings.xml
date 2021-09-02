@@ -400,6 +400,9 @@
     <string name="pan_card_number">PAN Card Number</string>
     <string name="please_upload_pan_card">Please upload your PAN card or enter the details manually</string>
     <string name="please_upload_bank">Please upload your passbook/cheque or enter the details manually</string>
+    <string name="verified_status_veri">Verified</string>
+    <string name="pending_status_veri">Pending</string>
+    <string name="failed_status_veri">Failed</string>
 
     <!--    <string name="veri_add_doc_front">"Front Side"</string>-->
 <!--    <string name="veri_add_doc_back">"Back Side"</string>-->

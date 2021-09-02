@@ -379,6 +379,10 @@
     <string name="pan_card_number">पैन कार्ड नंबर</string>
     <string name="please_upload_pan_card">कृपया अपना पैन कार्ड अपलोड करें या मैन्युअल रूप से विवरण दर्ज करें</string>
     <string name="please_upload_bank">कृपया अपनी पासबुक/चेक अपलोड करें या मैन्युअल रूप से विवरण दर्ज करें</string>
+    <string name="verified_status_veri">जांच हो गई है</string>
+    <string name="pending_status_veri">लंबित है</string>
+    <string name="failed_status_veri">फ़ेल है</string>
+
 
     <!--    <string name="veri_add_doc_front">सामने की ओर</string>-->
     <!--    <string name="veri_add_doc_back">पीछे की ओर</string>-->
