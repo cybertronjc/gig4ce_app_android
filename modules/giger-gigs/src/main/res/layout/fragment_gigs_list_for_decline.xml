@@ -77,7 +77,7 @@
         android:layout_marginBottom="10dp"
         android:elevation="5dp"
         android:fontFamily="@font/lato"
-        android:text="DECLINE"
+        android:text="@string/decline_giger_gigs"
         android:enabled="true"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -109,7 +109,7 @@
             android:fontFamily="@font/lato"
             android:gravity="center_horizontal"
             android:lineSpacingExtra="5sp"
-            android:text="@string/no_more_gig"
+            android:text="@string/no_more_gig_giger_giger_gigs"
             android:textColor="@color/lipstick"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -121,7 +121,7 @@
             android:fontFamily="@font/lato"
             android:gravity="center_horizontal"
             android:lineSpacingExtra="3sp"
-            android:text="@string/no_scheduled_gig_on_this_day"
+            android:text="@string/no_scheduled_gig_on_this_day_giger_giger_gigs"
             android:textColor="#333333"
             android:textSize="16sp"
             android:textStyle="normal" />
@@ -140,7 +140,7 @@
             android:minHeight="@dimen/size_36"
             android:paddingTop="@dimen/size_10"
             android:paddingBottom="@dimen/size_10"
-            android:text="@string/okay_text"
+            android:text="@string/okay_text_giger_gigs"
             android:textColor="@color/darkish_pink_two"
             android:textSize="12sp"
             android:textStyle="bold" />

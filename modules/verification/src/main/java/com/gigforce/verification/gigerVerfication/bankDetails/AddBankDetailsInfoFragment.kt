@@ -32,7 +32,6 @@ import com.gigforce.core.utils.Lse
 import com.gigforce.verification.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
-import com.ncorti.slidetoact.SlideToActView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_add_bank_details_info_2.*
 import kotlinx.android.synthetic.main.fragment_add_bank_details_info_main_2.*
@@ -93,13 +92,13 @@ class AddBankDetailsInfoFragment : Fragment(), IOnBackPressedOverride {
 
     private fun initViews() {
         passbookImageHolder.documentUploadLabelTV.text =
-            getString(R.string.upload_bank_passbook)
+            getString(R.string.upload_bank_passbook_veri)
         passbookImageHolder.documentUploadSubLabelTV.text =
-            getString(R.string.upload_bank_passbook_sublabel)
+            getString(R.string.upload_bank_passbook_sublabel_veri)
 
         toolbar.apply {
             hideActionMenu()
-            showTitle(getString(R.string.giger_verification))
+            showTitle(getString(R.string.giger_verification_veri))
             setBackButtonListener(object : View.OnClickListener{
                 override fun onClick(p0: View?) {
                     if (didUserCameFromAmbassadorScreen) {
@@ -122,7 +121,7 @@ class AddBankDetailsInfoFragment : Fragment(), IOnBackPressedOverride {
         }
 
         appBarComp.apply {
-            setAppBarTitle(getString(R.string.giger_verification))
+            setAppBarTitle(getString(R.string.giger_verification_veri))
             setBackButtonListener(object : View.OnClickListener{
                 override fun onClick(v: View?) {
                     if (didUserCameFromAmbassadorScreen) {
@@ -162,7 +161,7 @@ class AddBankDetailsInfoFragment : Fragment(), IOnBackPressedOverride {
         }
 
         passbookImageHolder.uploadImageLayout.imageLabelTV.text =
-            getString(R.string.bank_passbook_front_image)
+            getString(R.string.bank_passbook_front_image_veri)
 
         passbookAvailaibilityOptionRG.setOnCheckedChangeListener { _, checkedId ->
 
@@ -171,7 +170,7 @@ class AddBankDetailsInfoFragment : Fragment(), IOnBackPressedOverride {
                 showPassbookInfoLayout()
 
                 if (bankDetailsDataConfirmationCB.isChecked
-                    && (passbookSubmitSliderBtn.text == getString(R.string.update)
+                    && (passbookSubmitSliderBtn.text == getString(R.string.update_veri)
                             || clickedImagePath != null)
 
                 ) {
@@ -202,7 +201,7 @@ class AddBankDetailsInfoFragment : Fragment(), IOnBackPressedOverride {
                 if (passbookAvailaibilityOptionRG.checkedRadioButtonId == R.id.passbookNoRB)
                     enableSubmitButton()
                 else if (passbookAvailaibilityOptionRG.checkedRadioButtonId == R.id.passbookYesRB &&
-                    (passbookSubmitSliderBtn.text == getString(R.string.update) || clickedImagePath != null)
+                    (passbookSubmitSliderBtn.text == getString(R.string.update_veri) || clickedImagePath != null)
                 )
                     enableSubmitButton()
                 else
@@ -218,15 +217,15 @@ class AddBankDetailsInfoFragment : Fragment(), IOnBackPressedOverride {
 
         passbookSubmitSliderBtn.setOnClickListener  {
 
-                    if (passbookYesRB.isChecked || passbookSubmitSliderBtn.text == getString(R.string.update)) {
+                    if (passbookYesRB.isChecked || passbookSubmitSliderBtn.text == getString(R.string.update_veri)) {
 
                         val ifsc = ifscEditText.text.toString().toUpperCase(Locale.getDefault())
                         if (!VerificationValidations.isIfSCValid(ifsc)) {
 
                             MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert))
-                                .setMessage(getString(R.string.enter_valid_ifsc))
-                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                                .setTitle(getString(R.string.alert_veri))
+                                .setMessage(getString(R.string.enter_valid_ifsc_veri))
+                                .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
                                 .show()
 
                             return@setOnClickListener
@@ -235,9 +234,9 @@ class AddBankDetailsInfoFragment : Fragment(), IOnBackPressedOverride {
                         if (bankNameEditText.text.isNullOrBlank()) {
 
                             MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert))
-                                .setMessage(getString(R.string.enter_bank_name))
-                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                                .setTitle(getString(R.string.alert_veri))
+                                .setMessage(getString(R.string.enter_bank_name_veri))
+                                .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
                                 .show()
 
                             return@setOnClickListener
@@ -246,9 +245,9 @@ class AddBankDetailsInfoFragment : Fragment(), IOnBackPressedOverride {
                         if (bankNameEditText.text.toString().length < 3) {
 
                             MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert))
-                                .setMessage(getString(R.string.bank_name_too_short))
-                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                                .setTitle(getString(R.string.alert_veri))
+                                .setMessage(getString(R.string.bank_name_too_short_veri))
+                                .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
                                 .show()
 
                             return@setOnClickListener
@@ -257,9 +256,9 @@ class AddBankDetailsInfoFragment : Fragment(), IOnBackPressedOverride {
                         if (accountNoEditText.text.toString().length < 4) {
 
                             MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert))
-                                .setMessage(getString(R.string.enter_valid_acc_no))
-                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                                .setTitle(getString(R.string.alert_veri))
+                                .setMessage(getString(R.string.enter_valid_acc_no_veri))
+                                .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
                                 .show()
 
                             return@setOnClickListener
@@ -304,9 +303,9 @@ class AddBankDetailsInfoFragment : Fragment(), IOnBackPressedOverride {
         editLayout.setOnClickListener {
 
             MaterialAlertDialogBuilder(requireContext())
-                .setTitle(getString(R.string.alert))
-                .setMessage(getString(R.string.your_are_reuploading_bank_details))
-                .setPositiveButton(getString(R.string.okay)) { _, _ ->
+                .setTitle(getString(R.string.alert_veri))
+                .setMessage(getString(R.string.your_are_reuploading_bank_details_veri))
+                .setPositiveButton(getString(R.string.okay_veri)) { _, _ ->
 
                     bankViewLayout.gone()
                     bankEditLayout.visible()
@@ -315,7 +314,7 @@ class AddBankDetailsInfoFragment : Fragment(), IOnBackPressedOverride {
                     passbookAvailaibilityOptionRG.check(R.id.passbookYesRB)
                     passbookSubmitSliderBtn.isEnabled = false
                 }
-                .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
+                .setNegativeButton(getString(R.string.cancel_veri)) { _, _ -> }
                 .show()
         }
 
@@ -324,8 +323,8 @@ class AddBankDetailsInfoFragment : Fragment(), IOnBackPressedOverride {
     private fun showWhyWeNeedThisDialog() {
         WhyWeNeedThisBottomSheet.launch(
             childFragmentManager = childFragmentManager,
-            title = getString(R.string.why_do_we_need_this),
-            content = getString(R.string.why_we_need_this_bank)
+            title = getString(R.string.why_do_we_need_this_veri),
+            content = getString(R.string.why_we_need_this_bank_veri)
         )
     }
 
@@ -443,7 +442,7 @@ class AddBankDetailsInfoFragment : Fragment(), IOnBackPressedOverride {
         }
 
         val bankData = it ?: return
-        passbookSubmitSliderBtn.text = getString(R.string.update)
+        passbookSubmitSliderBtn.text = getString(R.string.update_veri)
         ifscEditText.setText(bankData.ifscCode)
         bankNameEditText.setText(bankData.bankName)
         accountNoEditText.setText(bankData.accountNo)
@@ -486,14 +485,14 @@ class AddBankDetailsInfoFragment : Fragment(), IOnBackPressedOverride {
         bankEditLayout.visibility = View.VISIBLE
 
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle(getString(R.string.alert))
+            .setTitle(getString(R.string.alert_veri))
             .setMessage(error)
-            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+            .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
             .show()
     }
 
     private fun documentsUploaded() {
-        showToast(getString(R.string.bank_details_updated))
+        showToast(getString(R.string.bank_details_updated_veri))
 
 
         if (didUserCameFromAmbassadorScreen) {

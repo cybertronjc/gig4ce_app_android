@@ -1,5 +1,9 @@
 package com.gigforce.common_ui.viewdatamodels.leadManagement
 
+import android.content.Context
+import androidx.annotation.StringRes
+import com.gigforce.common_ui.R
+
 enum class JoiningStatus constructor(
     private val string: String
 ) {
@@ -21,6 +25,17 @@ enum class JoiningStatus constructor(
         }
     }
 
+
+    @StringRes
+    fun getStatusFormattedStringRes(): Int {
+        return when (this) {
+            SIGN_UP_PENDING -> R.string.signup_pending
+            APPLICATION_PENDING -> R.string.application_pending
+            JOINING_PENDING -> R.string.joining_pending
+            JOINED -> R.string.joined
+        }
+    }
+
     /**
      * returns overall status
      * - Joined
@@ -31,6 +46,14 @@ enum class JoiningStatus constructor(
             "Joined"
         else
             "Joining Pending"
+    }
+
+    @StringRes
+    fun getOverallStatusStringRes(): Int {
+        return if (this == JOINED)
+            R.string.joined
+        else
+            R.string.joining_pending
     }
 
     companion object {

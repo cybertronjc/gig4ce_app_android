@@ -87,9 +87,9 @@ class DayTimeFragment : Fragment() {
 
     private fun setWeekDaysText() {
         var subTitle = ""
-        var daysStr = getString(R.string.day)
+        var daysStr = getString(R.string.day_pref)
         if (preferencesDataModel.selecteddays.size == 0) {
-            subTitle = getString(R.string.none)
+            subTitle = getString(R.string.none_pref)
         } else if (preferencesDataModel.selecteddays.size > 1) {
             var totalDays = preferencesDataModel.selecteddays.size
             if (totalDays == 6)
@@ -97,7 +97,7 @@ class DayTimeFragment : Fragment() {
             subTitle = totalDays.toString()
         } else if (preferencesDataModel.selecteddays.size == 1) {
             subTitle =
-                preferencesDataModel.selecteddays.size.toString() + " " + getString(R.string.days)
+                preferencesDataModel.selecteddays.size.toString() + " " + getString(R.string.days_pref)
         }
         textView51.text = subTitle
     }
@@ -105,9 +105,9 @@ class DayTimeFragment : Fragment() {
 
     private fun getYesNoforWeekend(): String {
         if (preferencesDataModel.isweekendenabled) {
-            return getString(R.string.yes)
+            return getString(R.string.yes_pref)
         } else {
-            return getString(R.string.no)
+            return getString(R.string.no_pref)
         }
     }
 

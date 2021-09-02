@@ -157,10 +157,10 @@ class AssessmentResultFragment : Fragment(), IOnBackPressedOverride,
                     next_lesson_btn.isVisible = isContentPresent
 
                     next_lesson_btn.text = when (nextLesson?.type) {
-                        CourseContent.TYPE_ASSESSMENT -> "Next Assessment"
-                        CourseContent.TYPE_VIDEO -> "Next Lesson"
-                        CourseContent.TYPE_SLIDE -> "Next Slide"
-                        else -> "Okay"
+                        CourseContent.TYPE_ASSESSMENT -> getString(R.string.next_assessment_learning)
+                        CourseContent.TYPE_VIDEO -> getString(R.string.next_lesson_learning)
+                        CourseContent.TYPE_SLIDE -> getString(R.string.next_slide_learning)
+                        else -> getString(R.string.okay_learning)
                     }
                 }
                 is Lce.Error -> {
@@ -194,7 +194,7 @@ class AssessmentResultFragment : Fragment(), IOnBackPressedOverride,
                 tv_sug_learnings_label_assess_frag.isVisible = true
                 rv_sug_learnings_assess_result.visible()
                 tv_new_cert_asses_frag.text =
-                        getString(R.string.you_will_be_soon_sent_an_invite)
+                        getString(R.string.you_will_be_soon_sent_an_invite_learning)
                 learningViewModel.getAllCourses()
             }
         } else {
@@ -566,9 +566,9 @@ class AssessmentResultFragment : Fragment(), IOnBackPressedOverride,
     private var userPassed = false
     private fun initUI() {
         userPassed = arguments?.getBoolean(StringConstants.ASSESSMENT_PASSED.value) ?: false
-        tv_title_toolbar.text = getString(R.string.assessment)
+        tv_title_toolbar.text = getString(R.string.assessment_learning)
         tv_kp_it_up_assess_result.text =
-                if (userPassed) getString(R.string.keep_it_up) else getString(R.string.watch_lesson_again)
+                if (userPassed) getString(R.string.keep_it_up_learning) else getString(R.string.watch_lesson_again_learning)
         iv_options_menu_tb.visibility = View.VISIBLE
         var correctAns = 0
         arguments?.getBooleanArray(StringConstants.ANSWERS_ARR.value)?.forEach { item ->
@@ -581,9 +581,9 @@ class AssessmentResultFragment : Fragment(), IOnBackPressedOverride,
                 (((correctAns / arguments?.getBooleanArray(StringConstants.ANSWERS_ARR.value)?.size?.toFloat()!!) * 100))
         ) + " %"
         tv_score_assess_result.text =
-                Html.fromHtml("${getString(R.string.you_have_scored)} <b>${percent}</b> ${getString(R.string.in_your_assessment)}")
+                Html.fromHtml("${getString(R.string.you_have_scored_learning)} <b>${percent}</b> ${getString(R.string.in_your_assessment_learning)}")
         tv_new_cert_asses_frag.text =
-                Html.fromHtml(getString(R.string.new_cert_added_underlined))
+                Html.fromHtml(getString(R.string.new_cert_added_underlined_learning))
 
         viewModelAssessmentResult.checkIfUserPassed(userPassed)
 
@@ -596,7 +596,7 @@ class AssessmentResultFragment : Fragment(), IOnBackPressedOverride,
 
         val timeTaken = arguments?.getInt(StringConstants.TIME_TAKEN.value)?.toLong()!!
         tv_time_taken_value_assess_frag.text = String.format(
-                " %02d ${getString(R.string.hours)} %02d ${getString(R.string.mins)}  %02d ${getString(R.string.secs)} ",
+                " %02d ${getString(R.string.hours_learning)} %02d ${getString(R.string.mins_learning)}  %02d ${getString(R.string.secs_learning)} ",
                 TimeUnit.MILLISECONDS.toHours(timeTaken),
                 TimeUnit.MILLISECONDS.toMinutes(timeTaken) % TimeUnit.HOURS.toMinutes(1),
                 TimeUnit.MILLISECONDS.toSeconds(timeTaken) % TimeUnit.MINUTES.toSeconds(1)

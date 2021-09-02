@@ -100,7 +100,7 @@
         android:minHeight="@dimen/size_36"
         android:paddingTop="15dp"
         android:paddingBottom="15dp"
-        android:text="@string/next"
+        android:text="@string/next_app"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

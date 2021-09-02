@@ -199,7 +199,7 @@ class QuestionnaireFragment : Fragment(), AdapterQuestionnaire.AdapterQuestionna
 
 
                 } else {
-                    showToast(getString(R.string.answer_the_ques))
+                    showToast(getString(R.string.answer_the_ques_learning))
 
                 }
             })
@@ -229,7 +229,7 @@ class QuestionnaireFragment : Fragment(), AdapterQuestionnaire.AdapterQuestionna
     private fun initObservers() {
         viewModel.observableStates.observe(viewLifecycleOwner, Observer {
             if (it.isNullOrEmpty()) return@Observer
-            val stateHeader = getString(R.string.current_state)
+            val stateHeader = getString(R.string.current_state_learning)
             if (it[0] != States(name = stateHeader)) {
                 it.add(0, States(name = stateHeader))
             }
@@ -238,7 +238,7 @@ class QuestionnaireFragment : Fragment(), AdapterQuestionnaire.AdapterQuestionna
 
         viewModel.observableCities.observe(viewLifecycleOwner, Observer {
 
-            val cityHeader = getString(R.string.current_city)
+            val cityHeader = getString(R.string.current_city_learning)
             if (it.isNullOrEmpty()) {
                 adapter.setCities(mutableListOf(Cities(name = cityHeader)), parentPosition)
             } else if (it[0] != Cities(name = cityHeader)) {

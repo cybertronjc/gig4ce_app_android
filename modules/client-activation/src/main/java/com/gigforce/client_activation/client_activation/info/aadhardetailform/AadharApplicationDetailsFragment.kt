@@ -224,7 +224,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
             Log.d("updated", "up $updated")
             progressBar.visibility = View.GONE
             if (updated) {
-                showToast("Data uploaded successfully")
+                showToast(getString(R.string.data_uploaded_client))
             }
 
         })
@@ -282,7 +282,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
                 getDBImageUrl(it).let {
                     list.add(
                         KYCImageModel(
-                            text = "Please upload your AADHAR card Front side",
+                            text = getString(R.string.upload_front_first_client),
                             imagePath = it,
                             imageUploaded = true
                         )
@@ -295,7 +295,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
                 getDBImageUrl(it).let {
                     list.add(
                         KYCImageModel(
-                            text = "Please upload your AADHAR card Back side",
+                            text = getString(R.string.upload_back_side_client),
                             imagePath = it,
                             imageUploaded = true
                         )
@@ -525,18 +525,18 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
             if (anyDataEntered) {
                 if (aadharFrontImagePath == null || aadharFrontImagePath?.isEmpty() == true) {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage("Upload aadhaar card front photo")
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setTitle(getString(R.string.alert_client))
+                        .setMessage(getString(R.string.upload_aadhar_front_client))
+                        .setPositiveButton(getString(R.string.okay_client)) { _, _ -> }
                         .show()
                     return@setOnClickListener
                 }
 
                 if (aadharBackImagePath == null || aadharBackImagePath?.isEmpty() == true) {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage("Upload aadhaar card back photo")
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setTitle(getString(R.string.alert_client))
+                        .setMessage(getString(R.string.upload_aadhar_back_client))
+                        .setPositiveButton(getString(R.string.okay_client)) { _, _ -> }
                         .show()
                     return@setOnClickListener
                 }
@@ -545,27 +545,27 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
                         .isBlank() || aadharNo.editText?.text.toString().length != 12
                 ) {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage("Enter valid aadhaar number")
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setTitle(getString(R.string.alert_client))
+                        .setMessage(getString(R.string.enter_valid_aadhar_client))
+                        .setPositiveButton(getString(R.string.okay_client)) { _, _ -> }
                         .show()
                     return@setOnClickListener
                 }
 
                 if (dateOfBirth.text.toString().isBlank()) {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage("Select date of birth")
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setTitle(getString(R.string.alert_client))
+                        .setMessage(getString(R.string.select_dob_client))
+                        .setPositiveButton(getString(R.string.okay_client)) { _, _ -> }
                         .show()
                     return@setOnClickListener
                 }
 
                 if (fatherNameTil.editText?.text.toString().isBlank()) {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage("Enter father name")
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setTitle(getString(R.string.alert_client))
+                        .setMessage(getString(R.string.enter_father_name_client))
+                        .setPositiveButton(getString(R.string.okay_client)) { _, _ -> }
                         .show()
                     return@setOnClickListener
                 }
@@ -574,18 +574,18 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
 
                 if (addLine1Input.text.toString().isBlank()) {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage("Enter Address Line 1")
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setTitle(getString(R.string.alert_client))
+                        .setMessage(getString(R.string.enter_add1_client))
+                        .setPositiveButton(getString(R.string.okay_client)) { _, _ -> }
                         .show()
                     return@setOnClickListener
                 }
 
                 if (addLine2Input.text.toString().isBlank()) {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage("Enter Address Line 2")
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setTitle(getString(R.string.alert_client))
+                        .setMessage(getString(R.string.enter_add2_client))
+                        .setPositiveButton(getString(R.string.okay_client)) { _, _ -> }
                         .show()
                     return@setOnClickListener
                 }
@@ -594,9 +594,9 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
                         .isEmpty() || !statesArray.contains(stateSpinner.text.toString())
                 ) {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
+                        .setTitle(getString(R.string.alert_client))
                         .setMessage(getString(R.string.select_aadhar_state))
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setPositiveButton(getString(R.string.okay_client)) { _, _ -> }
                         .show()
                     return@setOnClickListener
                 }
@@ -605,9 +605,9 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
                         .isEmpty() || !citiesArray.contains(citySpinner.text.toString())
                 ) {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage("Select City")
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setTitle(getString(R.string.alert_client))
+                        .setMessage(getString(R.string.select_city_client))
+                        .setPositiveButton(getString(R.string.okay_client)) { _, _ -> }
                         .show()
                     return@setOnClickListener
                 }
@@ -616,18 +616,18 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
                         .isBlank() || pincodeInput.text.toString().length != 6
                 ) {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage("Enter valid pincode")
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setTitle(getString(R.string.alert_client))
+                        .setMessage(getString(R.string.enter_valid_pin_client))
+                        .setPositiveButton(getString(R.string.okay_client)) { _, _ -> }
                         .show()
                     return@setOnClickListener
                 }
 
                 if (landmarkInput.text.toString().isBlank()) {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage("Enter Landmark")
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setTitle(getString(R.string.alert_client))
+                        .setMessage(getString(R.string.enter_landmark_client))
+                        .setPositiveButton(getString(R.string.okay_client)) { _, _ -> }
                         .show()
                     return@setOnClickListener
                 }
@@ -636,18 +636,18 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
 
                     if (caAddLine1Input.text.toString().isBlank()) {
                         MaterialAlertDialogBuilder(requireContext())
-                            .setTitle(getString(R.string.alert))
-                            .setMessage("Enter Current Address Line 1")
-                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .setTitle(getString(R.string.alert_client))
+                            .setMessage(getString(R.string.curr_add1_client))
+                            .setPositiveButton(getString(R.string.okay_client)) { _, _ -> }
                             .show()
                         return@setOnClickListener
                     }
 
                     if (caAddLine2Input.text.toString().isBlank()) {
                         MaterialAlertDialogBuilder(requireContext())
-                            .setTitle(getString(R.string.alert))
-                            .setMessage("Enter Current Address Line 2")
-                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .setTitle(getString(R.string.alert_client))
+                            .setMessage(getString(R.string.curr_add2_client))
+                            .setPositiveButton(getString(R.string.okay_client)) { _, _ -> }
                             .show()
                         return@setOnClickListener
                     }
@@ -656,9 +656,9 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
                             .isEmpty() || !statesArray.contains(caStateSpinner.text.toString())
                     ) {
                         MaterialAlertDialogBuilder(requireContext())
-                            .setTitle(getString(R.string.alert))
+                            .setTitle(getString(R.string.alert_client))
                             .setMessage(getString(R.string.select_aadhar_state))
-                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .setPositiveButton(getString(R.string.okay_client)) { _, _ -> }
                             .show()
                         return@setOnClickListener
                     }
@@ -667,9 +667,9 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
                             .isEmpty() || !caCitiesArray.contains(caCitySpinner.text.toString())
                     ) {
                         MaterialAlertDialogBuilder(requireContext())
-                            .setTitle(getString(R.string.alert))
-                            .setMessage("Select City")
-                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .setTitle(getString(R.string.alert_client))
+                            .setMessage(getString(R.string.select_city_client))
+                            .setPositiveButton(getString(R.string.okay_client)) { _, _ -> }
                             .show()
                         return@setOnClickListener
                     }
@@ -678,18 +678,18 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
                             .isBlank() || caPincodeInput.text.toString().length != 6
                     ) {
                         MaterialAlertDialogBuilder(requireContext())
-                            .setTitle(getString(R.string.alert))
-                            .setMessage("Enter valid pincode")
-                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .setTitle(getString(R.string.alert_client))
+                            .setMessage(getString(R.string.valid_pin_client))
+                            .setPositiveButton(getString(R.string.okay_client)) { _, _ -> }
                             .show()
                         return@setOnClickListener
                     }
 
                     if (caLandmarkInput.text.toString().isBlank()) {
                         MaterialAlertDialogBuilder(requireContext())
-                            .setTitle(getString(R.string.alert))
-                            .setMessage("Enter Landmark")
-                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .setTitle(getString(R.string.alert_client))
+                            .setMessage(getString(R.string.enter_landmark_client))
+                            .setPositiveButton(getString(R.string.okay_client)) { _, _ -> }
                             .show()
                         return@setOnClickListener
                     }
@@ -738,10 +738,10 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
                             .isNullOrBlank() && viewBinding.landmark.editText?.text.toString()
                             .isNullOrBlank()
                     ) {
-                        viewBinding.submitButton.text = "Skip"
+                        viewBinding.submitButton.text = getString(R.string.skip_client)
                         anyDataEntered = false
                     } else {
-                        viewBinding.submitButton.text = "Submit"
+                        viewBinding.submitButton.text = getString(R.string.submit_client)
                         anyDataEntered = true
                     }
 
@@ -831,12 +831,12 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
             .build()
         val list = listOf(
             KYCImageModel(
-                text = "Please upload your AADHAR card Front side",
+                text = getString(R.string.upload_aadhar_card_front_side_client),
                 imageIcon = frontUri,
                 imageUploaded = false
             ),
             KYCImageModel(
-                text = "Please upload your AADHAR card Back side",
+                text = getString(R.string.upload_aadhar_card_back_side_client),
                 imageIcon = backUri,
                 imageUploaded = false
             )
@@ -850,7 +850,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
 
             ClientActivationClickOrSelectImageBottomSheet.launch(
                 parentFragmentManager,
-                "Upload Aadhar Card",
+                getString(R.string.uplaod_aadhar_client),
                 this
             )
 

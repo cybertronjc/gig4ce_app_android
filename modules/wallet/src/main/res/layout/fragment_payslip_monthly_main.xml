@@ -28,7 +28,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"
         android:id="@+id/payslip_label"
-        android:text="Payslips"/>
+        android:text="@string/payslips_wallet"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/payslip_recycler_view"

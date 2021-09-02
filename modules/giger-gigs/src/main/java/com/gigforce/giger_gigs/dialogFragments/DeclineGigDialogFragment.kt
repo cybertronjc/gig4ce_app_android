@@ -119,7 +119,11 @@ class DeclineGigDialogFragment : DialogFragment() {
                     progressBar.visible()
                 }
                 Lse.Success -> {
-                    Toast.makeText(requireContext(), "Gig Declined", Toast.LENGTH_LONG)
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.gig_declined_giger_gigs),
+                        Toast.LENGTH_LONG
+                    )
                         .show()
                     mDeclineGigDialogFragmentResultListener?.gigDeclined()
                     if (gigId != null) sharedGigViewModel.gigDeclined(gigId!!)
@@ -129,9 +133,9 @@ class DeclineGigDialogFragment : DialogFragment() {
                     progressBar.invisible()
                     declineGigMainLayout.visible()
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Alert")
-                        .setMessage("Unable to decline gig, ${it.error}")
-                        .setPositiveButton("Okay") { _, _ -> }
+                        .setTitle(getString(R.string.alert_giger_gigs))
+                        .setMessage(getString(R.string.unable_to_deline_gig_giger_gigs) + it.error)
+                        .setPositiveButton(getString(R.string.okay_giger_gigs)) { _, _ -> }
                         .show()
                 }
             }
@@ -152,30 +156,30 @@ class DeclineGigDialogFragment : DialogFragment() {
 
 
     private fun initView() {
-        declineGigLabel.text = if(isAnyUserOtherThanGigerIsDecliningTheGig)
-            getString(R.string.please_let_us_know_your_reason_why_giger_declining_this_gig)
+        declineGigLabel.text = if (isAnyUserOtherThanGigerIsDecliningTheGig)
+            getString(R.string.please_let_us_know_your_reason_why_giger_declining_this_gig_giger_gigs)
         else
-            getString(R.string.please_let_us_know_your_reason_why_are_you_declining_this_gig)
+            getString(R.string.please_let_us_know_your_reason_why_are_you_declining_this_gig_giger_gigs)
 
         reason_sick_leave.text = if (isAnyUserOtherThanGigerIsDecliningTheGig)
-            getString(R.string.giger_on_sick_leave_today)
+            getString(R.string.giger_on_sick_leave_today_giger_gigs)
         else
-            getString(R.string.i_m_on_sick_leave_today)
+            getString(R.string.i_m_on_sick_leave_today_giger_gigs)
 
         reason_on_leave.text = if (isAnyUserOtherThanGigerIsDecliningTheGig)
-            getString(R.string.giger_have_some_personal_work)
+            getString(R.string.giger_have_some_personal_work_giger_gigs)
         else
-            getString(R.string.i_have_some_personal_work)
+            getString(R.string.i_have_some_personal_work_giger_gigs)
 
         reason_cant_reach_location.text = if (isAnyUserOtherThanGigerIsDecliningTheGig)
-            getString(R.string.giger_can_t_reach_the_location_today)
+            getString(R.string.giger_can_t_reach_the_location_today_giger_gigs)
         else
-            getString(R.string.i_can_t_reach_the_location_today)
+            getString(R.string.i_can_t_reach_the_location_today_giger_gigs)
 
         reason_gig_unsuitable.text = if (isAnyUserOtherThanGigerIsDecliningTheGig)
-            getString(R.string.this_gig_is_unsuitable_for_giger)
+            getString(R.string.this_gig_is_unsuitable_for_giger_giger_gigs)
         else
-            getString(R.string.this_gig_is_unsuitable_for_me)
+            getString(R.string.this_gig_is_unsuitable_for_me_giger_gigs)
 
         reason_radio_group.setOnCheckedChangeListener { _, checkedId ->
             submitBtn.isEnabled = true
@@ -196,9 +200,9 @@ class DeclineGigDialogFragment : DialogFragment() {
             if (checkedRadioButtonId == -1) {
 
                 MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Alert")
-                    .setMessage("Please select the reason")
-                    .setPositiveButton("Okay") { _, _ -> }
+                    .setTitle(getString(R.string.alert_giger_gigs))
+                    .setMessage(getString(R.string.select_the_reason_giger_gigs))
+                    .setPositiveButton(getString(R.string.okay_giger_gigs)) { _, _ -> }
                     .show()
 
                 return@setOnClickListener
@@ -207,9 +211,9 @@ class DeclineGigDialogFragment : DialogFragment() {
             ) {
 
                 MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Alert")
-                    .setMessage("Please type the reason")
-                    .setPositiveButton("Okay") { _, _ -> }
+                    .setTitle(getString(R.string.alert_giger_gigs))
+                    .setMessage(getString(R.string.select_the_reason_giger_gigs))
+                    .setPositiveButton(getString(R.string.okay_giger_gigs)) { _, _ -> }
                     .show()
 
                 return@setOnClickListener
@@ -218,11 +222,37 @@ class DeclineGigDialogFragment : DialogFragment() {
             val reason = if (checkedRadioButtonId == R.id.reason_others) {
                 reason_et.text.toString()
             } else {
-                reason_radio_group.findViewById<RadioButton>(checkedRadioButtonId).text.toString()
+
+                if (checkedRadioButtonId == R.id.reason_sick_leave) {
+
+                    if (isAnyUserOtherThanGigerIsDecliningTheGig)
+                        "Giger is on sick leave"
+                    else
+                        "Iam on sick leave"
+                } else if (checkedRadioButtonId == R.id.reason_on_leave) {
+
+                    if (isAnyUserOtherThanGigerIsDecliningTheGig)
+                        "Giger have some personal work"
+                    else
+                        "I have some personal work"
+                } else if (checkedRadioButtonId == R.id.reason_cant_reach_location) {
+
+                    if (isAnyUserOtherThanGigerIsDecliningTheGig)
+                        "Giger can't reach work location"
+                    else
+                        "I can't reach work location"
+                } else if (checkedRadioButtonId == R.id.reason_gig_unsuitable) {
+
+                    if (isAnyUserOtherThanGigerIsDecliningTheGig)
+                        "This gig is unsuitable for giger"
+                    else
+                        "This gig is unsuitable for me"
+                } else
+                    reason_radio_group.findViewById<RadioButton>(checkedRadioButtonId).text.toString()
             }
 
             if (gigId != null)
-                viewModel.declineGig(gigId!!, reason,isAnyUserOtherThanGigerIsDecliningTheGig)
+                viewModel.declineGig(gigId!!, reason, isAnyUserOtherThanGigerIsDecliningTheGig)
             else if (!gigIds.isNullOrEmpty())
                 viewModel.declineGigs(gigIds!!, reason)
         }

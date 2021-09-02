@@ -297,7 +297,7 @@ class ChatPageFragment : Fragment(),
 
     private fun adjustUiAccToOneToOneChat() {
 
-        toolbar.showSubtitle("Offline")
+        toolbar.showSubtitle(getString(R.string.offline_chat))
     }
 
     private fun adjustUiAccToGroupChat() {
@@ -305,7 +305,7 @@ class ChatPageFragment : Fragment(),
         chatFooter.setGroupViewModel(groupChatViewModel)
         chatFooter.enableUserSuggestions()
 
-        toolbar.showSubtitle("Tap to open details")
+        toolbar.showSubtitle(getString(R.string.tap_to_open_details_chat))
         toolbar.setSubtitleClickListener(View.OnClickListener {
 
             val groupId = chatHeaderOrGroupId ?: return@OnClickListener
@@ -333,13 +333,14 @@ class ChatPageFragment : Fragment(),
             .observe(viewLifecycleOwner, {
 
                     showGroupDetails(it)
-
                     if (it.groupDeactivated) {
                         chatFooter.disableInput("This group is deactivated by an admin")
                         messageSwipeController.disableSwipe()
+                    //                        userBlockedOrRemovedLayout.text = getString(R.string.group_deactivated_by_admin_chat)
                     } else if (it.currenUserRemovedFromGroup) {
                         chatFooter.disableInput("You have been removed from this group")
                         messageSwipeController.disableSwipe()
+                    //                        chatFooter.replyBlockedLayout.text = getString(R.string.removed_from_group_chat)
                     } else if (it.onlyAdminCanPostInGroup) {
                         chatFooter.visible()
 
@@ -349,6 +350,7 @@ class ChatPageFragment : Fragment(),
                         } else {
                             chatFooter.disableInput("Only admins can post in this group")
                             messageSwipeController.disableSwipe()
+//                                                    chatFooter.replyBlockedLayout.text = getString(R.string.only_admin_can_post_chat)
                         }
                     } else {
                         chatFooter.enableInput()
@@ -545,6 +547,8 @@ class ChatPageFragment : Fragment(),
                     if (it.isUserBlocked) {
                         chatFooter.disableInput("You've blocked this contact")
                         messageSwipeController.disableSwipe()
+//                        userBlockedOrRemovedLayout.text = getString(R.string.you_have_blocked_chat)
+
                     } else {
                         chatFooter.enableInput()
                         messageSwipeController.enableSwipe()
@@ -570,28 +574,30 @@ class ChatPageFragment : Fragment(),
                     if (it.isBlocked) {
                         chatFooter.disableInput("You've blocked this contact")
                         messageSwipeController.disableSwipe()
+//                        userBlockedOrRemovedLayout.text = getString(R.string.you_have_blocked_chat)
                     } else {
                         chatFooter.enableInput()
                         messageSwipeController.enableSwipe()
                     }
 
-                if (it.isOtherUserOnline) {
-                    toolbar.showSubtitle("Online")
-                } else {
-                    if (it.lastUserStatusActivityAt != 0L) {
+                    if (it.isOtherUserOnline) {
+                        toolbar.showSubtitle("Online")
+//                        toolbar.showSubtitle(getString(R.string.offline_chat))
+                    } else {
+                        if (it.lastUserStatusActivityAt != 0L) {
 
                         val timeStamp = Timestamp(it.lastUserStatusActivityAt)
                         val date = Date(timeStamp.time)
 
                         var timeToDisplayText = ""
                         timeToDisplayText = if (DateUtils.isToday(date.time)) {
-                            "Last seen today at: ${date.toDisplayText()}"
+                            getString(R.string.last_seen_today_chat)+"${date.toDisplayText()}"
                         } else {
-                            "Last seen ${SimpleDateFormat("MMM dd yyyy").format(date)}"
+                            getString(R.string.last_seen_chat) +"${SimpleDateFormat("MMM dd yyyy").format(date)}"
                         }
                         toolbar.showSubtitle(timeToDisplayText)
                     } else {
-                        toolbar.showSubtitle("Offline")
+                        toolbar.showSubtitle(getString(R.string.offline_chat))
                     }
                 }
             })
@@ -606,10 +612,10 @@ class ChatPageFragment : Fragment(),
 
     private fun showErrorDialog(error: String) {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Message")
-            .setMessage(error)
-            .setPositiveButton("Okay") { _, _ -> }
-            .show()
+                .setTitle(getString(R.string.message_chat))
+                .setMessage(error)
+                .setPositiveButton(getString(R.string.okay_chat)) { _, _ -> }
+                .show()
     }
 
 
@@ -636,9 +642,9 @@ class ChatPageFragment : Fragment(),
             popUp.inflate(R.menu.menu_chat_toolbar)
             popUp.menu.findItem(R.id.action_block).title =
                     if (chatFooter.isTypingEnabled())
-                        "Block"
+                        getString(R.string.block_chat)
                     else
-                        "UnBlock"
+                        getString(R.string.unblock_chat)
             popUp.show()
         })
 
@@ -735,7 +741,7 @@ class ChatPageFragment : Fragment(),
                 startActivityForResult(this, REQUEST_PICK_VIDEO)
             }
         } catch (e: ActivityNotFoundException) {
-            showErrorDialog("No App found to pick Video")
+            showErrorDialog(getString(R.string.no_app_found_to_pick_video_chat))
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().apply {
                 log("Unable to pick video")
@@ -836,9 +842,9 @@ class ChatPageFragment : Fragment(),
                 }
             } else
                 Toast.makeText(
-                    requireContext(),
-                    "Please grant storage permission",
-                    Toast.LENGTH_SHORT
+                        requireContext(),
+                        getString(R.string.grant_storage_permission_chat),
+                        Toast.LENGTH_SHORT
                 ).show()
         }
     }
@@ -1097,16 +1103,16 @@ class ChatPageFragment : Fragment(),
                 ContactsContract.PhoneLookup.DISPLAY_NAME
             )
             val cur: Cursor? = requireActivity().contentResolver.query(
-                lookupUri,
-                mPhoneNumberProjection,
-                null,
-                null,
-                null
+                    lookupUri,
+                    mPhoneNumberProjection,
+                    null,
+                    null,
+                    null
             )
             cur.use { cur ->
                 if (cur?.moveToFirst() == true) {
                     nameFromDB =
-                        cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY))
+                            cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY))
 
                 }
             }
@@ -1121,7 +1127,7 @@ class ChatPageFragment : Fragment(),
         val activity = activity ?: return
 
         val inputMethodManager =
-            activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(activity.currentFocus?.windowToken, 0)
     }
 
@@ -1131,7 +1137,7 @@ class ChatPageFragment : Fragment(),
     //-------------------------
 
     override fun errorWhileCapturingOrPickingImage(e: Exception) {
-        showErrorDialog(e.message ?: "Unable to capture and click image")
+        showErrorDialog(e.message ?: getString(R.string.unable_to_capture_and_click_chat))
         FirebaseCrashlytics.getInstance().apply {
             log("Unable to click or capture image")
             recordException(e)
@@ -1141,27 +1147,27 @@ class ChatPageFragment : Fragment(),
 
     override fun imageResult(uri: Uri) {
         sendImageMessage(
-            uri,
-            sharedFile?.text ?: ""
+                uri,
+                sharedFile?.text ?: ""
         )
         sharedFile = null
     }
 
     private fun sendImageMessage(
-        uri: Uri,
-        text: String
+            uri: Uri,
+            text: String
     ) {
         if (chatType == ChatConstants.CHAT_TYPE_USER)
             viewModel.sendNewImageMessage(
-                context = requireContext().applicationContext,
-                text = text,
-                uri = uri
+                    context = requireContext().applicationContext,
+                    text = text,
+                    uri = uri
             )
         else {
             groupChatViewModel.sendNewImageMessage(
-                context = requireContext().applicationContext,
-                text = text,
-                uri = uri
+                    context = requireContext().applicationContext,
+                    text = text,
+                    uri = uri
             )
         }
     }
@@ -1190,6 +1196,4 @@ class ChatPageFragment : Fragment(),
         private const val REQUEST_GET_LOCATION = 207
         private const val REQUEST_STORAGE_PERMISSION = 205
     }
-
-
 }

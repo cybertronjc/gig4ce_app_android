@@ -49,7 +49,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
                 android:textSize="20sp"
-                android:text="@string/select_language" />
+                android:text="@string/select_language_app_giger" />
 <!--            <TextView-->
 <!--                android:id="@+id/steps_text"-->
 <!--                android:layout_width="wrap_content"-->
@@ -78,7 +78,7 @@
         android:layout_marginTop="36dp"
         android:fontFamily="@font/lato"
         android:letterSpacing="0"
-        android:text="Select Language"
+        android:text="@string/select_langauge_app_giger"
         android:textColor="#131415"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -108,7 +108,7 @@
             android:fontFamily="@font/lato"
             android:lineHeight="17sp"
             android:lineSpacingExtra="3sp"
-            android:text="@string/glad_to_know_about_your_interest_give_a_bit_more_details_to_show_best_gigs_to_you"
+            android:text="@string/glad_to_know_about_your_interest_give_a_bit_more_details_to_show_best_gigs_to_you_app_giger"
             android:textColor="#333333"
             android:textSize="14sp"
             android:textStyle="normal" />
@@ -136,7 +136,7 @@
         android:layout_marginBottom="@dimen/size16"
         android:layout_centerVertical="true"
         android:gravity="center"
-        android:text="Next"
+        android:text="@string/next_giger_app_giger"
         app:layout_constraintBottom_toBottomOf="parent"
         android:visibility="visible" />
 

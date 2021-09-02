@@ -26,7 +26,7 @@
             android:layout_marginStart="22dp"
             android:layout_marginTop="276dp"
             android:foregroundTint="@color/colorAccent"
-            android:text="@string/veri_done"
+            android:text="@string/done_veri_veri"
             android:textSize="16sp" />
 
         <Button
@@ -37,7 +37,7 @@
             android:layout_marginTop="375dp"
             android:backgroundTint="@android:color/white"
             android:minHeight="@dimen/size_36"
-            android:text="@string/okay_text_cap"
+            android:text="@string/okay_text_cap_veri"
             android:textAlignment="center"
             android:textColor="@color/colorAccent"
             android:textSize="24sp" />

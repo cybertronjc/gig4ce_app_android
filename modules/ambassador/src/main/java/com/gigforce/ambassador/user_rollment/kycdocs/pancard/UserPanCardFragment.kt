@@ -120,7 +120,7 @@ class PanCardFragment : Fragment(),
 
     private fun initviews() {
         viewBinding.toplayoutblock.setIdonthaveDocContent(
-            resources.getString(R.string.no_doc_title_pan),
+            resources.getString(R.string.no_doc_title_pan_amb),
             ""
         )
     }
@@ -164,14 +164,14 @@ class PanCardFragment : Fragment(),
                             viewBinding.panTil.editText?.setText(it.panNumber)
                             viewBinding.toplayoutblock.uploadStatusLayout(
                                 AppConstants.UPLOAD_SUCCESS,
-                                "Upload Successful",
-                                "Information of PAN card captured successfully."
+                                getString(R.string.upload_succcess_amb),
+                                getString(R.string.pan_captured_amb)
                             )
                         } else {
                             viewBinding.toplayoutblock.uploadStatusLayout(
                                 AppConstants.UNABLE_TO_FETCH_DETAILS,
-                                "Unable to fetch information",
-                                "Enter the PAN details manually below"
+                                getString(R.string.unable_to_fetch_info_amb),
+                                getString(R.string.pan_manually_amb)
                             )
                         }
 
@@ -188,16 +188,16 @@ class PanCardFragment : Fragment(),
                     } else {
                         viewBinding.toplayoutblock.uploadStatusLayout(
                             AppConstants.UNABLE_TO_FETCH_DETAILS,
-                            "Unable to fetch information",
-                            "Enter the PAN details manually below"
+                            getString(R.string.unable_to_fetch_info_amb),
+                            getString(R.string.pan_manually_amb)
                         )
                     }
 
                 } else {
                     viewBinding.toplayoutblock.uploadStatusLayout(
                         AppConstants.UNABLE_TO_FETCH_DETAILS,
-                        "Unable to fetch information",
-                        "Enter the PAN details manually below"
+                        getString(R.string.unable_to_fetch_info_amb),
+                        getString(R.string.pan_manually_amb)
                     )
                     showToast("Ocr status " + it.message)
                 }
@@ -247,10 +247,10 @@ class PanCardFragment : Fragment(),
                                 .isNullOrBlank() && viewBinding.dateOfBirth.text.toString()
                                 .isNullOrBlank()
                         ) {
-                            viewBinding.submitButton.text = "Skip"
+                            viewBinding.submitButton.text = getString(R.string.skip_amb)
                             anyDataEntered = false
                         } else {
-                            viewBinding.submitButton.text = "Submit"
+                            viewBinding.submitButton.text = getString(R.string.submit_amb)
                             anyDataEntered = true
                         }
                     }
@@ -273,7 +273,7 @@ class PanCardFragment : Fragment(),
         viewBinding.toplayoutblock.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { p1, b1 ->
             if (b1) {
                 oldStateHolder.submitButtonCta = viewBinding.submitButton.text.toString()
-                viewBinding.submitButton.text = "Skip"
+                viewBinding.submitButton.text =  getString(R.string.skip_amb)
                 viewBinding.belowLayout.gone()
             } else {
                 viewBinding.submitButton.text = oldStateHolder.submitButtonCta
@@ -318,9 +318,9 @@ class PanCardFragment : Fragment(),
                 if (!VerificationValidations.isPanCardValid(panCardNo)) {
 
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage(getString(R.string.enter_valid_pan))
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setTitle(getString(R.string.alert_amb))
+                        .setMessage(getString(R.string.enter_valid_pan_amb))
+                        .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
                         .show()
                     return@setOnClickListener
                 }
@@ -369,7 +369,7 @@ class PanCardFragment : Fragment(),
             getDBImageUrl(it)?.let {
                 list.add(
                     KYCImageModel(
-                        text = getString(R.string.upload_pan_card_new),
+                        text = getString(R.string.upload_pan_card_new_amb),
                         imagePath = it,
                         imageUploaded = true
                     )
@@ -425,7 +425,7 @@ class PanCardFragment : Fragment(),
             .build()
         val list = listOf(
             KYCImageModel(
-                text = getString(R.string.upload_pan_card_new),
+                text = getString(R.string.upload_pan_card_new_amb),
                 imageIcon = frontUri,
                 imageUploaded = false
             )
@@ -437,7 +437,7 @@ class PanCardFragment : Fragment(),
         if (hasStoragePermissions())
             VerificationClickOrSelectImageBottomSheet.launch(
                 parentFragmentManager,
-                "Upload PAN Card",
+                getString(R.string.upload_pan_amb),
                 this
             )
         else
@@ -542,11 +542,11 @@ class PanCardFragment : Fragment(),
                 if (allPermsGranted)
                     VerificationClickOrSelectImageBottomSheet.launch(
                         parentFragmentManager,
-                        "Upload PAN Card",
+                        getString(R.string.upload_pan_amb),
                         this
                     )
                 else {
-                    showToast("Please grant storage permission")
+                    showToast(getString(R.string.grant_storage_amb))
                 }
             }
         }
@@ -627,8 +627,8 @@ class PanCardFragment : Fragment(),
     private fun showWhyWeNeedThisDialog() {
         WhyWeNeedThisBottomSheet.launch(
             childFragmentManager = childFragmentManager,
-            title = getString(R.string.why_do_we_need_this),
-            content = getString(R.string.why_do_we_need_this_pan)
+            title = getString(R.string.why_do_we_need_this_amb),
+            content = getString(R.string.why_do_we_need_this_pan_amb)
         )
     }
 
@@ -671,7 +671,7 @@ class PanCardFragment : Fragment(),
         options.setFreeStyleCropEnabled(false)
         options.setStatusBarColor(ResourcesCompat.getColor(resources, R.color.topBarDark, null))
         options.setToolbarColor(ResourcesCompat.getColor(resources, R.color.topBarDark, null))
-        options.setToolbarTitle(getString(R.string.crop_and_rotate))
+        options.setToolbarTitle(getString(R.string.crop_and_rotate_amb))
         return options
     }
 
@@ -689,21 +689,21 @@ class PanCardFragment : Fragment(),
         viewBinding.belowLayout.gone()
         viewBinding.toplayoutblock.uploadStatusLayout(
             AppConstants.UPLOAD_SUCCESS,
-            "Verification Completed",
-            "The PAN card details have been verified successfully."
+            getString(R.string.verification_completed_amb),
+            getString(R.string.pan_verified_success_amb)
         )
         viewBinding.submitButton.visible()
-        viewBinding.submitButton.text = "Next"
+        viewBinding.submitButton.text = getString(R.string.next_amb)
         viewBinding.submitButton.isEnabled = true
         viewBinding.progressBar.gone()
-        viewBinding.toplayoutblock.setVerificationSuccessfulView("PAN card verified")
+        viewBinding.toplayoutblock.setVerificationSuccessfulView(getString(R.string.pan_verified_amb))
 
         var list = ArrayList<KYCImageModel>()
         panCardDataModel?.panCardImagePath?.let {
             getDBImageUrl(it)?.let {
                 list.add(
                     KYCImageModel(
-                        text = getString(R.string.upload_pan_card_new),
+                        text = getString(R.string.upload_pan_card_new_amb),
                         imagePath = it,
                         imageUploaded = true
                     )
@@ -742,8 +742,8 @@ class PanCardFragment : Fragment(),
                                 verifiedStatusViews(null)
                                 viewBinding.toplayoutblock.uploadStatusLayout(
                                     AppConstants.UNABLE_TO_FETCH_DETAILS,
-                                    "Verification in progress",
-                                    "Document will be verified soon. You can click next to proceed"
+                                    getString(R.string.verification_progress_amb),
+                                    getString(R.string.doc_verified_soon_amb)
                                 )
                                 viewBinding.toplayoutblock.setVerificationSuccessfulView("", "")
                                 viewBinding.belowLayout.visible()
@@ -763,8 +763,8 @@ class PanCardFragment : Fragment(),
                     resetInitializeViews()
                     viewBinding.toplayoutblock.uploadStatusLayout(
                         AppConstants.DETAILS_MISMATCH,
-                        "Verification Failed",
-                        "The details submitted are incorrect. Please try again."
+                        getString(R.string.verification_failed_amb),
+                        getString(R.string.details_incorrect_amb)
                     )
                     var listData = setAlreadyfilledData(panCardDataModel, true)
                     if (listData.isEmpty()) {
@@ -790,8 +790,8 @@ class PanCardFragment : Fragment(),
         viewBinding.submitButton.isEnabled = true
         viewBinding.belowLayout.visible()
         viewBinding.toplayoutblock.setVerificationSuccessfulView(
-            "PAN card",
-            "You need to upload"
+            getString(R.string.pan_card_amb),
+            getString(R.string.need_to_upload_amb)
         )
         initializeImageViews()
         viewBinding.toplayoutblock.resetAllViews()
@@ -804,15 +804,15 @@ class PanCardFragment : Fragment(),
         viewBinding.progressBar.gone()
         viewBinding.belowLayout.gone()
         viewBinding.toplayoutblock.setVerificationSuccessfulView(
-            "PAN card pending for verify",
-            "Verifying"
+            getString(R.string.pending_to_verify_amb),
+            getString(R.string.verifying_amb)
         )
         var list = ArrayList<KYCImageModel>()
         panCardDataModel.panCardImagePath?.let {
             getDBImageUrl(it)?.let {
                 list.add(
                     KYCImageModel(
-                        text = getString(R.string.upload_pan_card_new),
+                        text = getString(R.string.upload_pan_card_new_amb),
                         imagePath = it,
                         imageUploaded = true
                     )
@@ -829,10 +829,10 @@ class PanCardFragment : Fragment(),
 
     private fun showGoBackConfirmationDialog() {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle(getString(R.string.alert))
-            .setMessage(getString(R.string.are_u_sure_u_want_to_go_back))
-            .setPositiveButton(getString(R.string.yes)) { _, _ -> goBackToUsersList() }
-            .setNegativeButton(getString(R.string.no)) { _, _ -> }
+            .setTitle(getString(R.string.alert_amb))
+            .setMessage(getString(R.string.are_u_sure_u_want_to_go_back_amb))
+            .setPositiveButton(getString(R.string.yes_amb)) { _, _ -> goBackToUsersList() }
+            .setNegativeButton(getString(R.string.no_amb)) { _, _ -> }
             .show()
     }
 

@@ -23,7 +23,7 @@
             android:layout_marginTop="22dp"
             android:fontFamily="@font/lato_bold"
             android:letterSpacing="0"
-            android:text="@string/aadhar_card"
+            android:text="@string/aadhar_card_veri"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -53,7 +53,7 @@
             android:letterSpacing="-0.01"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
-            android:text="@string/why_do_we_need_this"
+            android:text="@string/why_do_we_need_this_veri"
             android:textColor="@color/battle_ship_grey"
             android:textSize="12sp"
             app:layout_constraintEnd_toStartOf="@+id/helpIconIV"
@@ -67,7 +67,7 @@
             android:layout_marginTop="4dp"
             android:fontFamily="@font/lato"
             android:letterSpacing="-0.01"
-            tools:text="@string/under_verification"
+            tools:text="@string/under_verification_veri"
             android:textColor="@color/yellow"
             android:textSize="12sp"
             app:layout_constraintEnd_toStartOf="@+id/editLayout"
@@ -96,7 +96,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:fontFamily="@font/lato"
-                android:text="@string/edit"
+                android:text="@string/edit_veri"
                 android:textColor="@color/black" />
 
 
@@ -113,7 +113,7 @@
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/statusTV"
-            android:text="@string/aadhar_card_front_image" />
+            android:text="@string/aadhar_card_front_image_veri" />
 
         <ImageView
             android:id="@+id/aadharViewFrontImageIV"
@@ -149,7 +149,7 @@
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/aadharViewFrontErrorMessage"
-            android:text="@string/aadhar_card_back_image" />
+            android:text="@string/aadhar_card_back_image_veri" />
 
         <ImageView
             android:id="@+id/aadharViewBackImageIV"
@@ -189,7 +189,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/lato_bold"
                 android:letterSpacing="0"
-                android:text="@string/aadhar_number_with_colon"
+                android:text="@string/aadhar_number_with_colon_veri"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

@@ -2,7 +2,6 @@ package com.gigforce.lead_management.ui.select_gig_location
 
 import android.os.Bundle
 import android.view.View
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import androidx.core.os.bundleOf
@@ -12,7 +11,6 @@ import androidx.lifecycle.lifecycleScope
 import com.gigforce.common_ui.components.atoms.ChipGroupComponent
 import com.gigforce.common_ui.components.atoms.models.ChipGroupModel
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
-import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.viewdatamodels.GigerProfileCardDVM
@@ -148,7 +146,7 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentLayoutB
     private fun initListeners() = viewBinding.apply{
         toolbar.apply {
             hideActionMenu()
-            showTitle("Gig Location")
+            showTitle(context.getString(R.string.gig_location_lead))
             setBackButtonListener(View.OnClickListener {
                 navigation.popBackStack()
             })
@@ -181,8 +179,8 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentLayoutB
             }
             if (assignGigRequest.cityId.isEmpty()) {
                 MaterialAlertDialogBuilder(requireContext())
-                    .setMessage("Select a City to continue")
-                    .setPositiveButton("Okay") { _, _ -> }
+                    .setMessage(getString(R.string.select_city_to_continue_lead))
+                    .setPositiveButton(getString(R.string.okay_lead)) { _, _ -> }
                     .show()
             } else {
                 logger.d(TAG, "AssignGigRequest $assignGigRequest")
@@ -376,7 +374,7 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentLayoutB
         )
 
         locationInfoLayout.infoIv.loadImage(R.drawable.ic_no_joining_found)
-        locationInfoLayout.infoMessageTv.text = "No Gig Location Found"
+        locationInfoLayout.infoMessageTv.text = getString(R.string.no_gig_locations_lead)
     }
 
     private fun showErrorInLoadingGigLocation(error: String) = viewBinding.apply{

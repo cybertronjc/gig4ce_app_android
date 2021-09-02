@@ -29,6 +29,7 @@ import androidx.core.net.toUri
 import com.gigforce.common_image_picker.image_cropper.ImageCropActivity
 import com.gigforce.common_ui.viewmodels.ProfileViewModel
 import com.gigforce.common_ui.widgets.ImagePicker
+import com.gigforce.core.base.BaseActivity
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.ImageUtils
 import com.gigforce.giger_gigs.R
@@ -50,7 +51,7 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
-class PhotoCrop : AppCompatActivity() {
+class PhotoCrop : BaseActivity() {
 
     companion object {
         var profilePictureOptionsBottomSheetFragment: ProfilePictureOptionsBottomSheetFragment =
@@ -261,7 +262,7 @@ class PhotoCrop : AppCompatActivity() {
                 outputFileUri?.let { it -> startCropImage(it) }
 
             } else {
-                Toast.makeText(this, "Issue in capturing image!!", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, getString(R.string.issue_capturing_image_giger_gigs), Toast.LENGTH_LONG).show()
             }
         }
 
@@ -302,7 +303,7 @@ class PhotoCrop : AppCompatActivity() {
                             if (faces.size > 0) {
                                 Toast.makeText(
                                     this,
-                                    "Face Detected. Uploading...",
+                                    getString(R.string.face_detected_giger_gigs),
                                     Toast.LENGTH_LONG
                                 ).show()
                                 upload(imageUriResultCrop, baos.toByteArray(), CLOUD_OUTPUT_FOLDER)
@@ -310,7 +311,7 @@ class PhotoCrop : AppCompatActivity() {
                             } else {
                                 Toast.makeText(
                                     this,
-                                    "Something seems off. Please take a smart selfie with good lights.",
+                                    getString(R.string.something_seems_off_giger_gigs),
                                     Toast.LENGTH_LONG
                                 ).show()
                             }
@@ -396,7 +397,7 @@ class PhotoCrop : AppCompatActivity() {
         options.setFreeStyleCropEnabled(false)
         options.setStatusBarColor(resources.getColor(R.color.topBarDark))
         options.setToolbarColor(resources.getColor(R.color.topBarDark))
-        options.setToolbarTitle("Crop and Rotate")
+        options.setToolbarTitle(getString(R.string.crop_or_rotate_giger_gigs))
         return options
     }
 
@@ -474,7 +475,7 @@ class PhotoCrop : AppCompatActivity() {
                                     val thumbNail: String = it.metadata?.reference?.name.toString()
                                     updateViewModel(purpose, thumbNail, true)
                                     loadImage(folder, fname)
-                                    Toast.makeText(this, "Successfully Uploaded", Toast.LENGTH_LONG)
+                                    Toast.makeText(this, getString(R.string.upload_success_giger_gigs), Toast.LENGTH_LONG)
                                         .show()
                                     resultIntent.putExtra(
                                         "image_url",
@@ -487,7 +488,7 @@ class PhotoCrop : AppCompatActivity() {
                                 }
 
                             } else {
-                                Toast.makeText(this, "Some Seems Off", Toast.LENGTH_LONG).show()
+                                Toast.makeText(this, getString(R.string.some_seems_off_giger_gigs), Toast.LENGTH_LONG).show()
 
                             }
                         } catch (e: Exception) {
@@ -506,7 +507,7 @@ class PhotoCrop : AppCompatActivity() {
                     }
                     progress_circular.visibility = View.GONE
                     //loadImage(folder, fname)
-                    Toast.makeText(this, "Successfully Uploaded", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, getString(R.string.upload_success_giger_gigs), Toast.LENGTH_LONG).show()
                 }
 
                 updateViewModel(purpose, fname, false)
@@ -664,7 +665,7 @@ class PhotoCrop : AppCompatActivity() {
                     {
                     Toast.makeText(
                         applicationContext,
-                        "Please Grant storage permission",
+                        getString(R.string.grant_permission_giger_gigs),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -728,11 +729,11 @@ class PhotoCrop : AppCompatActivity() {
         dialog.setCancelable(false)
         dialog.setContentView(R.layout.confirmation_custom_alert_type1)
         val titleDialog = dialog.findViewById(R.id.title) as TextView
-        titleDialog.text = "Are sure you want to Remove the picture ?"
+        titleDialog.text = getString(R.string.sure_to_remove_picture_giger_gigs)
         val noBtn = dialog.findViewById(R.id.yes) as TextView
-        noBtn.text = "No"
+        noBtn.text = getString(R.string.no)
         val yesBtn = dialog.findViewById(R.id.cancel) as TextView
-        yesBtn.text = "Yes"
+        yesBtn.text = getString(R.string.yes)
         yesBtn.setOnClickListener()
         {
             defaultProfilePicture()

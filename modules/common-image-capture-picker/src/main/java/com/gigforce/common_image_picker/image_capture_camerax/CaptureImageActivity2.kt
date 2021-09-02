@@ -18,9 +18,10 @@ import com.gigforce.common_image_picker.R
 import com.gigforce.common_image_picker.image_capture_camerax.fragments.CameraFragment
 import com.gigforce.common_image_picker.image_capture_camerax.fragments.ImageViewerFragment
 import com.gigforce.common_image_picker.image_capture_camerax.fragments.PermissionsFragment
+import com.gigforce.core.base.BaseActivity
 import java.io.File
 
-class CameraActivity : AppCompatActivity() {
+class CameraActivity : BaseActivity() {
 
     private val sharedCameraViewModel: CaptureImageSharedViewModel by lazy {
         ViewModelProvider(this).get(CaptureImageSharedViewModel::class.java)

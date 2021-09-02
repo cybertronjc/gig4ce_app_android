@@ -184,9 +184,9 @@ class AdapterGigHistory(
                         val hours = (durationCalculated / (1000 * 60 * 60))
                         val mins = (durationCalculated / (1000 * 60)).toInt() % 60
                         holder.itemView.tv_time_rv_gig_hist.text =
-                            "${hours}${viewHolderGigDetails.itemView.context.getString(R.string.hours)} : ${mins}${
+                            "${hours}${viewHolderGigDetails.itemView.context.getString(R.string.hours_giger_gigs)} : ${mins}${
                                 viewHolderGigDetails.itemView.context.getString(
-                                    R.string.mins
+                                    R.string.mins_giger_gigs
                                 )
                             }"
                     }

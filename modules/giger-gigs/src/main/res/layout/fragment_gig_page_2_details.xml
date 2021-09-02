@@ -209,7 +209,7 @@
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/lato_bold"
                 android:letterSpacing="0.02"
-                android:text="Requirements"
+                android:text="@string/requirements_giger_gigs"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 app:layout_constraintStart_toEndOf="@id/gig_req_iv"
@@ -236,7 +236,7 @@
                 android:fontFamily="@font/lato"
                 android:gravity="center_vertical"
                 android:letterSpacing="0"
-                android:text="@string/plus_see_more"
+                android:text="@string/plus_see_more_giger_gigs"
                 android:textColor="@color/colorPrimary"
                 app:layout_constraintTop_toBottomOf="@id/gig_req_container" />
 
@@ -267,7 +267,7 @@
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/lato_bold"
                 android:letterSpacing="0.02"
-                android:text="Responsibilities"
+                android:text="@string/responsibilities_giger_gigs"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 app:layout_constraintStart_toEndOf="@id/gig_resp_iv"
@@ -293,7 +293,7 @@
                 android:fontFamily="@font/lato"
                 android:gravity="center_vertical"
                 android:letterSpacing="0"
-                android:text="@string/plus_see_more"
+                android:text="@string/plus_see_more_giger_gigs"
                 android:textColor="@color/colorPrimary"
                 app:layout_constraintTop_toBottomOf="@id/gig_resp_container" />
 
@@ -325,7 +325,7 @@
                 android:fontFamily="@font/lato_bold"
                 android:letterSpacing="0.02"
 
-                android:text="Earnings"
+                android:text="@string/earnings_giger_gigs"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 app:layout_constraintStart_toEndOf="@id/gig_earning_iv"
@@ -369,7 +369,7 @@
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/lato_bold"
                 android:letterSpacing="0.02"
-                android:text="Others"
+                android:text="@string/others_giger_gigs"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:visibility="gone"
@@ -418,7 +418,7 @@
                 android:fontFamily="@font/lato_bold"
                 android:letterSpacing="0.02"
 
-                android:text="Frequently Asked Questions"
+                android:text="@string/frequently_asked_questions_giger_gigs"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:visibility="gone"

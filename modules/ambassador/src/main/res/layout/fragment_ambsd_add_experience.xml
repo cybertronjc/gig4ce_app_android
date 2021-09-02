@@ -27,7 +27,7 @@
         android:enabled="true"
         android:fontFamily="@font/lato_bold"
         android:gravity="center"
-        android:text="@string/skip_underline"
+        android:text="@string/skip_underline_amb"
         android:textColor="@color/warm_grey"
         android:textAllCaps="false"
         android:minHeight="0dp"
@@ -49,7 +49,7 @@
         android:fontFamily="@font/lato"
         android:gravity="center"
         android:textAllCaps="false"
-        android:text="@string/next_camel_case"
+        android:text="@string/next_camel_case_amb"
         app:strokeColor="@color/lipstick"
         app:strokeWidth="1dp"
         app:layout_constraintBottom_toTopOf="@id/skip_btn" />
@@ -93,7 +93,7 @@
                     android:fontFamily="@font/lato"
                     android:lineHeight="17sp"
                     android:lineSpacingExtra="3sp"
-                    android:text="@string/glad_to_know_about_your_interest_give_a_bit_more_details_to_show_best_gigs_to_you"
+                    android:text="@string/glad_to_know_about_your_interest_give_a_bit_more_details_to_show_best_gigs_to_you_amb"
                     android:textColor="#333333"
                     android:textSize="14sp"
                     android:textStyle="normal" />
@@ -114,7 +114,7 @@
                 android:lineHeight="19sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/breifing_layout"
-                tools:text="@string/do_you_have_experience_in_delivery_executive" />
+                tools:text="@string/do_you_have_experience_in_delivery_executive_amb" />
 
 
             <TextView
@@ -150,7 +150,7 @@
                     style="@style/AppSingleChoiceChip2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/yes_i_have_an_experience"
+                    android:text="@string/yes_i_have_an_experience_amb"
                     app:chipStrokeWidth="1dp" />
 
                 <com.google.android.material.chip.Chip
@@ -158,7 +158,7 @@
                     style="@style/AppSingleChoiceChip2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/no_i_don_t_have"
+                    android:text="@string/no_i_don_t_have_amb"
                     app:chipStrokeWidth="1dp" />
 
 
@@ -182,7 +182,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/lato_bold"
                     android:lineSpacingExtra="3sp"
-                    android:text="Select Role"
+                    android:text="@string/select_role_amb"
                     android:textColor="#333333"
                     android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -219,7 +219,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/lato_bold"
                     android:lineSpacingExtra="3sp"
-                    android:text="Company Name"
+                    android:text="@string/company_name_amb"
                     android:layout_marginTop="24dp"
                     android:textColor="#333333"
                     android:textSize="14sp"
@@ -233,7 +233,7 @@
                     android:layout_marginTop="8dp"
                     android:background="@drawable/rectangle_round_grey"
                     android:fontFamily="@font/lato"
-                    android:hint="Company Name"
+                    android:hint="@string/company_name_amb"
                     android:lineSpacingExtra="3sp"
                     android:minHeight="36dp"
                     android:paddingStart="8dp"
@@ -264,7 +264,7 @@
                     android:layout_marginTop="24dp"
                     android:fontFamily="@font/lato_bold"
                     android:lineSpacingExtra="3sp"
-                    android:text="Total Experience"
+                    android:text="@string/total_experience_amb"
                     android:textColor="#333333"
                     android:textSize="14sp"
                     android:textStyle="normal"
@@ -360,7 +360,7 @@
                     android:minHeight="36dp"
                     android:paddingStart="8dp"
                     style="@style/Theme.CheckBoxLipstickPink"
-                    android:text="@string/currently_working_here"
+                    android:text="@string/currently_working_here_amb"
                     android:textColor="#979797"
                     android:textSize="14sp"
                     android:textStyle="normal"
@@ -403,7 +403,7 @@
                     android:layout_marginTop="20dp"
                     android:fontFamily="@font/lato"
                     android:lineSpacingExtra="3sp"
-                    android:text="Which vehicle you own?"
+                    android:text="@string/which_vehicle_you_own_amb"
                     android:textColor="#333333"
                     android:textSize="14sp"
                     android:textStyle="normal" />
@@ -437,7 +437,7 @@
                         style="@style/AppSingleChoiceChip2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Car"
+                        android:text="@string/car_amb"
                         app:chipStrokeWidth="1dp" />
 
                     <com.google.android.material.chip.Chip
@@ -445,7 +445,7 @@
                         style="@style/AppSingleChoiceChip2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Truck"
+                        android:text="@string/truck_amb"
                         app:chipStrokeWidth="1dp" />
 
                     <com.google.android.material.chip.Chip
@@ -453,7 +453,7 @@
                         style="@style/AppSingleChoiceChip2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Autorickshaw"
+                        android:text="@string/autorickshaw_amb"
                         app:chipStrokeWidth="1dp" />
 
                     <com.google.android.material.chip.Chip
@@ -461,7 +461,7 @@
                         style="@style/AppSingleChoiceChip2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Bike"
+                        android:text="@string/bike_amb"
                         app:chipStrokeWidth="1dp" />
 
 
@@ -490,7 +490,7 @@
                     android:layout_marginTop="20dp"
                     android:fontFamily="@font/lato"
                     android:lineSpacingExtra="3sp"
-                    android:text="Which vehicle you own?"
+                    android:text="@string/which_vehicle_you_own_amb"
                     android:textColor="#333333"
                     android:textSize="14sp"
                     android:textStyle="normal" />
@@ -521,7 +521,7 @@
                         style="@style/AppSingleChoiceChip2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Car"
+                        android:text="@string/car_amb"
                         app:chipStrokeWidth="1dp" />
 
                     <com.google.android.material.chip.Chip
@@ -529,7 +529,7 @@
                         style="@style/AppSingleChoiceChip2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Truck"
+                        android:text="@string/truck_amb"
                         app:chipStrokeWidth="1dp" />
 
                     <com.google.android.material.chip.Chip
@@ -537,7 +537,7 @@
                         style="@style/AppSingleChoiceChip2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Scooty"
+                        android:text="@string/scooty_amb"
                         app:chipStrokeWidth="1dp" />
 
                     <com.google.android.material.chip.Chip
@@ -545,7 +545,7 @@
                         style="@style/AppSingleChoiceChip2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Bike"
+                        android:text="@string/bike_amb"
                         app:chipStrokeWidth="1dp" />
 
 

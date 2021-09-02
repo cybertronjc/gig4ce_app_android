@@ -93,4 +93,5 @@ dependencies {
     testImplementation "androidx.test:runner:$androidXTestVersion"
     debugImplementation "androidx.fragment:fragment-testing:$androidXFragmentVersion"
     testImplementation "org.robolectric:robolectric:$robolectricVersion"
+    implementation 'com.akexorcist:localization:1.2.10'
 }

@@ -11,10 +11,8 @@ import android.widget.SeekBar
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.utils.MDUtil.textChanged
 import com.gigforce.ambassador.EnrollmentConstants
 import com.gigforce.ambassador.R
@@ -136,7 +134,7 @@ class AddCurrentAddressFragment : Fragment(),IOnBackPressedOverride {
 
         toolbar_layout.apply {
 
-            showTitle(getString(R.string.user_local_address))
+            showTitle(getString(R.string.user_local_address_amb))
             hideActionMenu()
             setBackButtonListener(View.OnClickListener {
                 if (userId == null) {
@@ -177,7 +175,7 @@ class AddCurrentAddressFragment : Fragment(),IOnBackPressedOverride {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 val value =
                     (progress * (seekBar.width - 2 * seekBar.thumbOffset)) / seekBar.max
-                seekbardependent.text = progress.toString() + " " + getString(R.string.km)
+                seekbardependent.text = progress.toString() + " " + getString(R.string.km_amb)
                 seekbardependent.x = seekBar.x + value + seekBar.thumbOffset / 2
                 //textView.setY(100); just added a value set this properly using screen with height aspect ratio , if you do not set it by default it will be there below seek bar
             }
@@ -222,7 +220,7 @@ class AddCurrentAddressFragment : Fragment(),IOnBackPressedOverride {
                 val cities = viewModel.cities.filter {
                     it.stateCode == id
                 }.toMutableList().apply {
-                    add(0, City(name = getString(R.string.select_district)))
+                    add(0, City(name = getString(R.string.select_district_amb)))
                 }
 
                 val cityAdapter: ArrayAdapter<City> =
@@ -242,40 +240,40 @@ class AddCurrentAddressFragment : Fragment(),IOnBackPressedOverride {
     private fun validateDataAndSubmit() {
         if (pin_code_et.text.isNotBlank() && pin_code_et.text.toString().toInt() < 10_00_00) {
             showAlertDialog(
-                getString(R.string.invalid_pincode),
-                getString(R.string.provide_valid_pincode)
+                getString(R.string.invalid_pincode_amb),
+                getString(R.string.provide_valid_pincode_amb)
             )
             return
         }
 
         if (address_line_1_et.text.isBlank()) {
             showAlertDialog(
-                getString(R.string.provide_address_line_1),
-                getString(R.string.please_provide_address_line_1)
+                getString(R.string.provide_address_line_1_amb),
+                getString(R.string.please_provide_address_line_1_amb)
             )
             return
         }
 
         if (address_line_2_et.text.isBlank()) {
             showAlertDialog(
-                getString(R.string.provide_address_line_2),
-                getString(R.string.please_provide_address_line)
+                getString(R.string.provide_address_line_2_amb),
+                getString(R.string.please_provide_address_line_amb)
             )
             return
         }
 
         if (state_spinner.childCount == 0 || state_spinner.selectedItemPosition == 0) {
             showAlertDialog(
-                getString(R.string.provide_state),
-                getString(R.string.please_select_state_name)
+                getString(R.string.provide_state_amb),
+                getString(R.string.please_select_state_name_amb)
             )
             return
         }
 
         if (city_spinner.childCount == 0 || city_spinner.selectedItemPosition == 0) {
             showAlertDialog(
-                getString(R.string.provide_city),
-                getString(R.string.please_select_district_name)
+                getString(R.string.provide_city_amb),
+                getString(R.string.please_select_district_name_amb)
             )
             return
         }
@@ -283,7 +281,7 @@ class AddCurrentAddressFragment : Fragment(),IOnBackPressedOverride {
         if (userId != null) {
 
             if (ready_to_change_location_chipgroup.checkedChipId == -1) {
-                showAlertDialog("", getString(R.string.change_your_location))
+                showAlertDialog("", getString(R.string.change_your_location_amb))
                 return
             }
         }
@@ -314,10 +312,10 @@ class AddCurrentAddressFragment : Fragment(),IOnBackPressedOverride {
                         // UtilMethods.hideLoading()
 
                         if (userId == null) {
-                            showToast(getString(R.string.current_address_details_sub))
+                            showToast(getString(R.string.current_address_details_sub_amb))
                             navigation.popBackStack()
                         } else {
-                            showToast(getString(R.string.user_current_address_details_sub))
+                            showToast(getString(R.string.user_current_address_details_sub_amb))
                             navigation.navigateTo("userinfo/addUserBankDetailsInfoFragment",bundleOf(
                                 EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
                                 EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName,
@@ -333,7 +331,7 @@ class AddCurrentAddressFragment : Fragment(),IOnBackPressedOverride {
                     }
                     is Lse.Error -> {
                         //  UtilMethods.hideLoading()
-                        showAlertDialog(getString(R.string.could_not_submit_address_info), it.error)
+                        showAlertDialog(getString(R.string.could_not_submit_address_info_amb), it.error)
 
                     }
                 }
@@ -353,7 +351,7 @@ class AddCurrentAddressFragment : Fragment(),IOnBackPressedOverride {
                     }
                     is Lse.Error -> {
                         UtilMethods.hideLoading()
-                        showToast(getString(R.string.unable_to_load_cities_and_states))
+                        showToast(getString(R.string.unable_to_load_cities_and_states_amb))
                     }
                 }
             }
@@ -423,7 +421,7 @@ class AddCurrentAddressFragment : Fragment(),IOnBackPressedOverride {
 
     private fun populateStateAndCitySpinner() {
         val states = viewModel.states.toMutableList().apply {
-            add(0, State(name = getString(R.string.select_state)))
+            add(0, State(name = getString(R.string.select_state_amb)))
         }
 
         val adapter: ArrayAdapter<State> =
@@ -432,7 +430,7 @@ class AddCurrentAddressFragment : Fragment(),IOnBackPressedOverride {
         state_spinner.adapter = adapter
 
         val cities = viewModel.cities.toMutableList().apply {
-            add(0, City(name = getString(R.string.select_district)))
+            add(0, City(name = getString(R.string.select_district_amb)))
         }
         val cityAdapter: ArrayAdapter<City> =
             ArrayAdapter<City>(requireContext(), android.R.layout.simple_spinner_item, cities)
@@ -457,10 +455,10 @@ class AddCurrentAddressFragment : Fragment(),IOnBackPressedOverride {
 
     private fun showGoBackConfirmationDialog() {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle(getString(R.string.alert))
-            .setMessage(getString(R.string.are_u_sure_u_want_to_go_back))
-            .setPositiveButton(getString(R.string.yes)) { _, _ -> goBackToUsersList() }
-            .setNegativeButton(getString(R.string.no)) { _, _ -> }
+            .setTitle(getString(R.string.alert_amb))
+            .setMessage(getString(R.string.are_u_sure_u_want_to_go_back_amb))
+            .setPositiveButton(getString(R.string.yes_amb)) { _, _ -> goBackToUsersList() }
+            .setNegativeButton(getString(R.string.no_amb)) { _, _ -> }
             .show()
     }
 
@@ -477,7 +475,7 @@ class AddCurrentAddressFragment : Fragment(),IOnBackPressedOverride {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(title)
             .setMessage(message)
-            .setPositiveButton(getString(R.string.okay).capitalize()) { _, _ -> }
+            .setPositiveButton(getString(R.string.okay_amb).capitalize()) { _, _ -> }
             .show()
     }
 }

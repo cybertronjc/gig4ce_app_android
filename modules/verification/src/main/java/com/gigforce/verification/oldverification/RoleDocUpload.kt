@@ -154,7 +154,7 @@ class RoleDocUpload : Fragment() {
                         photoCropIntent.putExtra("folder", "/verification/dl/")
                         Toast.makeText(
                             context,
-                            "Upload DL",
+                            getString(R.string.load_dl_veri),
                             Toast.LENGTH_LONG
                         ).show()
                     }
@@ -186,7 +186,7 @@ class RoleDocUpload : Fragment() {
             override fun onNothingSelected(parent: AdapterView<*>) {
                 Toast.makeText(
                     context,
-                    "Please select which doc to be uploaded",
+                    getString(R.string.select_which_doc_to_be_uploaded_veri),
                     Toast.LENGTH_LONG
                 ).show()
             }
@@ -201,7 +201,7 @@ class RoleDocUpload : Fragment() {
             if (ddFront.drawable == null) {
                 Toast.makeText(
                     this.context,
-                    "Please upload the front side first!",
+                    getString(R.string.upload_front_side_first_veri),
                     Toast.LENGTH_LONG
                 ).show()
             } else {
@@ -240,7 +240,7 @@ class RoleDocUpload : Fragment() {
             } else {
                 Toast.makeText(
                     this.context,
-                    "Please upload the doc before proceeding",
+                    getString(R.string.upload_doc_before_proceeding_veri),
                     Toast.LENGTH_LONG
                 ).show()
             }
@@ -265,7 +265,7 @@ class RoleDocUpload : Fragment() {
                         .addOnSuccessListener {
                             Toast.makeText(
                                 this.context,
-                                "Document successfully uploaded!",
+                                getString(R.string.document_successfully_uploaded_veri),
                                 Toast.LENGTH_SHORT
                             ).show()
                             Log.d("REPOSITORY", "Aadhaar added successfully!")
@@ -274,7 +274,7 @@ class RoleDocUpload : Fragment() {
                             Log.d("Repository", exception.toString())
                             Toast.makeText(
                                 this.context,
-                                "Some failure, please retry!",
+                                getString(R.string.failure_retry_veri),
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -286,7 +286,7 @@ class RoleDocUpload : Fragment() {
                 }
                 )
         } else {
-            UtilMethods.showLongToast(this.context!!, "No Internet Connection!")
+            UtilMethods.showLongToast(this.context!!, getString(R.string.no_internet_veri))
         }
     }
 

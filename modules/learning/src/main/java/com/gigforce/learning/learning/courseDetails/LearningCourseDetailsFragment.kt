@@ -330,7 +330,7 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
         }
 
         tv1HS1.text = course.name
-        levelTV.text = "Module $mCurrentModuleNo of ${course.moduleCount}"
+        levelTV.text = getString(R.string.module_learning) + mCurrentModuleNo + getString(R.string.of_learning) + course.moduleCount
     }
 
     private fun prepareDescription(description: String): SpannableString {
@@ -407,7 +407,7 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
                     viewModel.currentModules!!.indexOf(viewModel.currentlySelectedModule!!) + 1
                 } else 0
 
-        levelTV.text = "Module $moduleNo Of ${viewModel.currentModules?.size}"
+        levelTV.text = getString(R.string.module_learning) + moduleNo + getString(R.string.of_learning) + viewModel.currentModules?.size
 
         var lessonsCompleted = 0
         var totalLessons = 0
@@ -435,16 +435,16 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
                 }
 
                 complitionStatusTv.text =
-                        "$lessonsCompleted/$totalLessons Lessons Completed"
+                    lessonsCompleted.toString() + "/" + totalLessons + getString(R.string.lessons_completed_learning)
                 assessmentCountTv.text =
                         if (viewModel.currentAssessments?.size == null || totalAssignments == 0)
-                            "0 Assessments"
+                            getString(R.string.zero_assessments_learning)
                         else if (assignmentsCompleted == 1)
-                            "$assignmentsCompleted/$totalAssignments Assessment Completed"
+                            assignmentsCompleted.toString() + "/" + totalAssignments + getString(R.string.assessment_completed_learning)
                         else
-                            "$assignmentsCompleted/$totalAssignments Assessments Completed"
+                            assignmentsCompleted.toString() + "/" + totalAssignments + getString(R.string.assessments_completed_learning)
 
-                lessonsLabel.text = "Lesson (${viewModel.currentlySelectedModule?.title})"
+                lessonsLabel.text = getString(R.string.lesson_learning) + viewModel.currentlySelectedModule?.title + ")"
             }
         }
     }
@@ -668,7 +668,8 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
                     FeatureItemCardDVM(
                             image = e.coverPicture,
                             title = e.title,
-                            subtitle = "${e.lessonsCompleted} / ${e.totalLessons} Completed"
+                            subtitle = e.lessonsCompleted.toString() + " / " + e.totalLessons + getString(
+                                                            R.string.complted_learning)
                     )
             )
         }

@@ -225,8 +225,9 @@ class TrackingService : LifecycleService() {
                         null
                     )
                    )
-                .setContentTitle("Fetching location for $fullCompanyName Gig")
-                .setContentText("Tap for details")
+                .setContentTitle(getString(R.string.fetching_location_tracking) + fullCompanyName + getString(
+                                    R.string.gig_tracking))
+                .setContentText(getString(R.string.tap_for_details_tracking))
                 .setContentIntent(getMainActivityPendingIntent())
 
         startForeground(NOTIFICATION_ID, notificationBuilder.build())

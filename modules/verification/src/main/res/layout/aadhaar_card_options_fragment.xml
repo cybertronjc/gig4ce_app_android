@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_sm1"
         android:layout_marginTop="@dimen/dp_xl1"
-        android:text="You need to upload"
+        android:text="@string/you_need_to_upload_veri"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/appBarAadharOption"/>
 
@@ -31,7 +31,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_xsm1"
-        android:text="Aadhaar Card"
+        android:text="@string/aadhaar_card_veri"
         app:layout_constraintStart_toStartOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
@@ -50,7 +50,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/dp_xsm1"
-        android:text="Why we need this"
+        android:text="@string/why_we_need_this_veri"
         app:layout_constraintEnd_toStartOf="@+id/iconwhyweneed"
         app:layout_constraintTop_toTopOf="@+id/iconwhyweneed" />
 
@@ -71,7 +71,7 @@
         android:layout_marginLeft="@dimen/dp_sm1"
         android:layout_marginRight="@dimen/dp_sm1"
         android:layout_marginTop="@dimen/dp_large"
-        android:text="Select the method you want for verifying your Aadhaar Card"
+        android:text="@string/select_the_method_you_want_for_verifying_your_aadhaar_card_veri"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/grayLine2" />
@@ -91,7 +91,7 @@
         android:id="@+id/or_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="OR"
+        android:text="@string/or_veri"
         style="@style/Caption2"
         android:layout_marginTop="@dimen/dp_xsm1"
         app:layout_constraintStart_toStartOf="parent"
@@ -114,7 +114,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/button_style"
-        android:text="Next Step"
+        android:text="@string/next_step_veri"
         android:padding="@dimen/dp_sm1"
         android:layout_marginBottom="@dimen/dp_xl1"
         app:layout_constraintBottom_toBottomOf="parent"

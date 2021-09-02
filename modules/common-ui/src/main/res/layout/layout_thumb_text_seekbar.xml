@@ -19,7 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/size_9"
-        android:text="@string/low"
+        android:text="@string/low_common_ui"
         android:textColor="#7f7f7f"
         android:textSize="@dimen/font_12" />
 </merge>

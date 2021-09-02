@@ -88,7 +88,7 @@ class CompletedGigCard(
         amount = value
 
         if (value == 0.0) {
-            rupee_value.text = "As per contract"
+            rupee_value.text = context.getString(R.string.as_per_contract_app_giger)
         } else {
             rupee_value.text = if (isMonthlyGig) "Rs. $value /month" else "Rs. $value /hr"
         }
