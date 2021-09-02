@@ -101,7 +101,7 @@
     <string name="kannada_pref">जाति</string>
     <string name="adhaar_card__pref">आधार कार्ड</string>
     <string name="document_under_verification__pref">सत्यापन के तहत दस्तावेज़</string>
-    <string name="settings_pref">समायोजन</string>
+    <string name="settings_pref">सेटिंग</string>
     <string name="preferences_pref">पसंद</string>
     <string name="schedules_pref">अनुसूचियों</string>
     <string name="weekday_pref">काम करने के दिन</string>

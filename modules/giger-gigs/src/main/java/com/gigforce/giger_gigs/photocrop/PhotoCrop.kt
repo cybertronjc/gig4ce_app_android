@@ -29,6 +29,7 @@ import androidx.core.net.toUri
 import com.gigforce.common_image_picker.image_cropper.ImageCropActivity
 import com.gigforce.common_ui.viewmodels.ProfileViewModel
 import com.gigforce.common_ui.widgets.ImagePicker
+import com.gigforce.core.base.BaseActivity
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.ImageUtils
 import com.gigforce.giger_gigs.R
@@ -50,7 +51,7 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
-class PhotoCrop : AppCompatActivity() {
+class PhotoCrop : BaseActivity() {
 
     companion object {
         var profilePictureOptionsBottomSheetFragment: ProfilePictureOptionsBottomSheetFragment =
@@ -730,9 +731,9 @@ class PhotoCrop : AppCompatActivity() {
         val titleDialog = dialog.findViewById(R.id.title) as TextView
         titleDialog.text = getString(R.string.sure_to_remove_picture_giger_gigs)
         val noBtn = dialog.findViewById(R.id.yes) as TextView
-        noBtn.text = "No"
+        noBtn.text = getString(R.string.no)
         val yesBtn = dialog.findViewById(R.id.cancel) as TextView
-        yesBtn.text = "Yes"
+        yesBtn.text = getString(R.string.yes)
         yesBtn.setOnClickListener()
         {
             defaultProfilePicture()

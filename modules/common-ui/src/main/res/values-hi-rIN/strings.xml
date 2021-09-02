@@ -73,5 +73,10 @@
     <string name="joined">जुड़ जाया</string>
     <string name="contact_person">संपर्क व्यक्ति</string>
     <string name="checked_out">उपस्थिति हो गई</string>
+    <string name="none">कोई नहीं</string>
+    <string name="days_with_space"> दिन</string>
+    <string name="day_with_space"> दिन</string>
+    <string name="work_from_home">घर से काम</string>
+
 
 </resources>

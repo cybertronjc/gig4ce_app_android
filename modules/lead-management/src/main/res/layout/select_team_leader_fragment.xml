@@ -197,7 +197,7 @@
                 android:background="@drawable/app_gradient_button"
                 android:gravity="center"
                 android:minHeight="@dimen/size_36"
-                android:text="Next"
+                android:text="@string/next_camel_case_common_ui"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -73,5 +73,9 @@
     <string name="application_pending">Application Pending</string>
     <string name="contact_person">Contact Person</string>
     <string name="checked_out">Checked Out</string>
+    <string name="none">None</string>
+    <string name="days_with_space"> days</string>
+    <string name="day_with_space"> day</string>
+    <string name="work_from_home">Work from home</string>
 
 </resources>

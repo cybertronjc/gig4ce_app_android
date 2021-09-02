@@ -51,9 +51,9 @@
     <string name="reference_check_lead">संदर्भ जांच</string>
     <string name="reference_submitted_lead">संदर्भ डेटा सबमिट किया गया</string>
     <string name="unable_to_submit_lead">सबमिट करने में असमर्थ</string>
-    <string name="gig_application_lead">टमटम आवेदन</string>
+    <string name="gig_application_lead">गिग आवेदन</string>
     <string name="unable_to_start_joining_lead">शामिल होना प्रारंभ करने में असमर्थ</string>
-    <string name="gig_location_lead">टमटम स्थान</string>
+    <string name="gig_location_lead">गिग स्थान</string>
     <string name="select_city_to_continue_lead">जारी रखने के लिए एक शहर चुनें</string>
     <string name="no_gig_locations_lead">कोई गिग स्थान नहीं मिला</string>
     <string name="select_gf_tl_to_continue_lead">जारी रखने के लिए गिगफोर्स टीम लीडर चुनें</string>
@@ -67,7 +67,7 @@
     <string name="select_one_working_day_lead">कम से कम एक कार्य दिवस विकल्प चुनें</string>
     <string name="select_expected_date_lead">जारी रखने के लिए अपेक्षित तिथि चुनें</string>
     <string name="no_gig_shift_lead">कोई गिग शिफ्ट नहीं मिला</string>
-    <string name="please_wait_lead">कृपया प्रतीक्षा करें...</string>
+    <string name="please_wait_lead">कृपया प्रतीक्षा करें…</string>
     <string name="assigning_gigs_lead">गिग्स असाइन करना</string>
     <string name="congratulations_lead">बधाई हो</string>
     <string name="giger_has_been_activated_successfully_lead">Giger को सफलतापूर्वक सक्रिय कर दिया गया है।</string>
@@ -96,5 +96,11 @@
     <string name="ongoing_applications">चल रहे आवेदन</string>
     <string name="other_applications">अन्य अनुप्रयोगों</string>
     <string name="search_by_business_name_job_profile">व्यवसाय के नाम / जॉब प्रोफाइल के आधार पर खोजें</string>
+    <string name="select_working_days">कार्य दिवस चुनें*</string>
+    <string name="you_can_perform_a">आप कर सकते हैं</string>
+    <string name="reference_check">संदर्भ जांच</string>
+    <string name="name_propercase">नाम</string>
+    <string name="relation">रिश्ता</string>
+    <string name="contact_number">संपर्क नंबर</string>
 
 </resources>

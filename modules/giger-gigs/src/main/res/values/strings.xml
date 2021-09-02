@@ -298,4 +298,9 @@
     <string name="attendance_history">Attendance History</string>
     <string name="offer_letter">Offer Letter</string>
     <string name="identity_card">Identity Card</string>
+    <string name="record_submitted">Record Submitted</string>
+    <string name="the_details_filled_by_you_has_been_submitted_successfully">The details filled by you has been submitted successfully</string>
+    <string name="profile_picture">Profile Picture</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
 </resources>

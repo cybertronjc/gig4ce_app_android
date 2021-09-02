@@ -184,14 +184,14 @@ class PreferencesFragment : Fragment() {
             PreferencesScreenItem(
                 R.drawable.ic_clock_black,
                 getString(R.string.day_and_time_pref),
-                viewModel.getDateTimeSubtitle()
+                viewModel.getDateTimeSubtitle(requireContext())
             )
         )
         prefrencesItems.add(
             PreferencesScreenItem(
                 R.drawable.ic_location_pin_black,
                 getString(R.string.location_pref),
-                viewModel.getLocation()
+                viewModel.getLocation(requireContext())
             )
         )
         prefrencesItems.add(
