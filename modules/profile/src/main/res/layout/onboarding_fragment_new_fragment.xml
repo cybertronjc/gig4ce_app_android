@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             app:backgroundType="PinkBar"
             app:isStepsVisible="true"
-            app:titleText="Introduction"
+            app:titleText="@string/introduction_profile"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
@@ -57,10 +57,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/size16"
                 android:fontFamily="@font/lato"
-                android:text="Introduction"
+                android:text="@string/introduction_profile"
                 android:textColor="@color/white"
                 android:textSize="20sp"
-
                 android:textStyle="normal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/backpressicon"

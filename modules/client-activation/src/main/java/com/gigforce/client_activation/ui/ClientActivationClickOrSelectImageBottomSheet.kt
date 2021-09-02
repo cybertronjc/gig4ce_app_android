@@ -14,24 +14,24 @@ import kotlinx.android.synthetic.main.client_activation_click_or_select_image.*
 
 class ClientActivationClickOrSelectImageBottomSheet : BottomSheetDialogFragment() {
 
-    private var sheetTitle: String = getString(R.string.upload_photo_client)
+    private var sheetTitle: String? = ""
     private var listener: OnPickOrCaptureImageClickListener? = null
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString(StringConstants.PHOTO_PIC_TITLE.value, sheetTitle)
+        outState.putString(StringConstants.PHOTO_PIC_TITLE.value, resources.getString(R.string.upload_photo_client))
     }
 
     private fun getDataFromIntents(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
             sheetTitle =
-                it.getString(StringConstants.PHOTO_PIC_TITLE.value, getString(R.string.upload_photo_client))
+                it.getString(StringConstants.PHOTO_PIC_TITLE.value, resources.getString(R.string.upload_photo_client))
 
         }
 
         arguments?.let {
             sheetTitle =
-                it.getString(StringConstants.PHOTO_PIC_TITLE.value, getString(R.string.upload_photo_client))
+                it.getString(StringConstants.PHOTO_PIC_TITLE.value, resources.getString(R.string.upload_photo_client))
 
         }
     }

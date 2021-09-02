@@ -11,7 +11,7 @@
         app:isSearchVisible="true"
         app:backgroundType="PinkBar"
         app:searchHint="Search Business/ Job"
-        app:titleText="Explore Gigs"
+        app:titleText="@string/explore_gigs_client"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>

@@ -7,6 +7,7 @@ import com.gigforce.client_activation.repo.IClientActivationDataRepository
 import com.gigforce.common_ui.components.cells.FeatureLayoutComponent
 import com.gigforce.common_ui.viewdatamodels.FeatureLayoutDVM
 import com.gigforce.common_ui.viewdatamodels.SeeMoreItemDVM
+import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.navigation.INavigation
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -19,7 +20,7 @@ class ClientActivationLayoutComponent(context: Context, attrs: AttributeSet?) :
 
     @Inject
     lateinit var navigation: INavigation
-
+    @Inject lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
     override fun bind(data: Any?) {
         if (data is ClientActivationLayoutDVM) {
             repository.getData().observeForever {
@@ -37,7 +38,12 @@ class ClientActivationLayoutComponent(context: Context, attrs: AttributeSet?) :
                         )
                         val list1 = list.toMutableList()
                         list1.add(SeeMoreItemDVM("", "", data.seeMoreNav))
-                        super.bind(FeatureLayoutDVM(data.image, data.title, list1))
+                        if(sharedPreAndCommonUtilInterface.getAppLanguageCode() == "hi") {
+                            super.bind(FeatureLayoutDVM(data.image, data.hi?.title?: data.title, list1))
+                        }
+                        else {
+                            super.bind(FeatureLayoutDVM(data.image, data.title, list1))
+                        }
 
                     }
                     else{
