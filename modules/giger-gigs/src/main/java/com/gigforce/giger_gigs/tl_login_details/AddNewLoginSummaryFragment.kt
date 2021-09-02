@@ -166,7 +166,7 @@ class AddNewLoginSummaryFragment : Fragment() {
 //        citySpinner.adapter = arrayAdapter
 
         submit.setOnClickListener {
-            if (submit.text.equals("Check In")){
+            if (submit.text.equals(getString(R.string.check_in_common_ui))){
                 navigation.popBackStack()
                 navigation.navigateTo("gig/mygig")
             } else {
@@ -372,7 +372,7 @@ class AddNewLoginSummaryFragment : Fragment() {
                             businessRV.visibility = View.VISIBLE
                             chooseCityImg.visibility = View.VISIBLE
                             noDataFound.visibility = View.GONE
-                            submit.setText("Submit")
+                            submit.setText(getString(R.string.submit_giger_gigs))
                         }
                         viewModel.getCities()
 
@@ -382,7 +382,7 @@ class AddNewLoginSummaryFragment : Fragment() {
                             businessRV.visibility = View.GONE
                             chooseCityImg.visibility = View.GONE
                             noDataFound.visibility = View.VISIBLE
-                            submit.setText("Check In")
+                            submit.setText(getString(R.string.check_in_common_ui))
                         }
                     }
                 }
@@ -444,7 +444,7 @@ class AddNewLoginSummaryFragment : Fragment() {
         viewModel.totalCount.observe(viewLifecycleOwner, Observer {
             val count = it ?: return@Observer
             count?.let {
-                viewBinding.submit.text = "Submit ($count Logins)"
+                viewBinding.submit.text = "${getString(R.string.submit_giger_gigs)} ($count ${getString(R.string.logins_giger_gigs)})"
             }
         })
     }
@@ -457,7 +457,7 @@ class AddNewLoginSummaryFragment : Fragment() {
             businessListToProcess = businessList
             businessLoginLayout.removeAllViews()
             map.clear()
-            submit.setText("Submit")
+            submit.setText(getString(R.string.submit_giger_gigs))
             businessList.forEachIndexed { index, loginSummaryBusiness ->
                 val view = BusinessRecyclerItemView(requireContext(), null)
                 businessLoginLayout.addView(view)
@@ -499,7 +499,7 @@ class AddNewLoginSummaryFragment : Fragment() {
         }
         Log.d("count", "count $count , map: $map")
 
-        viewBinding.submit.setText("Submit ($count Logins)")
+        viewBinding.submit.setText("${getString(R.string.submit_giger_gigs)} ($count ${getString(R.string.logins_giger_gigs)})")
         viewBinding.loginsCount.setText("$count")
 
     }

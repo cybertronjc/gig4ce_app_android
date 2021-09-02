@@ -296,5 +296,10 @@
     <string name="attendance_history">उपस्थिति इतिहास</string>
     <string name="offer_letter">प्रस्ताव पत्र</string>
     <string name="identity_card">पहचान पत्र</string>
+    <string name="record_submitted">रिकॉर्ड जमा किया गया</string>
+    <string name="the_details_filled_by_you_has_been_submitted_successfully">आपके द्वारा भरा गया विवरण सफलतापूर्वक सबमिट कर दिया गया है</string>
+    <string name="profile_picture">प्रोफ़ाइल फोटो</string>
+    <string name="no">नहीं</string>
+    <string name="yes">हां</string>
 
 </resources>

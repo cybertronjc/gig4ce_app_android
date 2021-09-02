@@ -143,4 +143,8 @@
     <string name="pin_client">पिन कोड</string>
     <string name="landmark_client">लैंडमार्क</string>
     <string name="current_address_client">वर्तमान पता</string>
+    <string name="pending">लंबित</string>
+    <string name="active_locations">सक्रिय स्थान</string>
+    <string name="please_enter_the_hub_allocated_for_the_flipkart_delivery_gig">कृपया Flipkart डिलीवरी गीग के लिए आवंटित हब दर्ज करें</string>
+    <string name="state">राज्य</string>
 </resources>

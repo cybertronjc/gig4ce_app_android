@@ -600,7 +600,7 @@ class GigPage2Fragment : Fragment(),
 
             if (minutes > 15L) {
                 checkInCheckOutSliderBtn.visible()
-                checkInCheckOutSliderBtn.text = "Check-out"
+                checkInCheckOutSliderBtn.text = getString(R.string.check_out_common_ui)
             } else {
                 checkInCheckOutSliderBtn.gone()
             }
