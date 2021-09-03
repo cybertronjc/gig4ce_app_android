@@ -8,9 +8,11 @@
     <TextView
         android:id="@+id/uppercaption"
         style="@style/Caption2"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        android:paddingEnd="4dp"
         android:layout_height="wrap_content"
         android:text="You need to upload"
+        app:layout_constraintEnd_toStartOf="@+id/whyweneedit"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -29,7 +31,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_sm1"
-        android:text="@string/change_text"
+        android:text="@string/change_text_veri"
         android:visibility="gone"
         android:textColor="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="@id/title"

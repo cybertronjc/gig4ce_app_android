@@ -38,7 +38,7 @@ class FeaturesBSFragment : Fragment() {
 
     private fun initViews() {
         application_version.text =
-            getString(R.string.version) + " " + sharedPreAndCommonUtilInterface.getCurrentVersion()
+            getString(R.string.version_app_giger) + " " + sharedPreAndCommonUtilInterface.getCurrentVersion()
     }
 
     private fun listeners() {

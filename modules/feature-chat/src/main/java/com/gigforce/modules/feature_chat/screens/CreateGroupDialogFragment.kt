@@ -100,7 +100,7 @@ class CreateGroupDialogFragment : DialogFragment() {
                             progressBar.visible()
                         }
                         is Lce.Content -> {
-                            Toast.makeText(requireContext(), "Group Created", Toast.LENGTH_LONG).show()
+                            Toast.makeText(requireContext(), getString(R.string.group_created_chat), Toast.LENGTH_LONG).show()
                             createGroupDialogFragmentListener?.onGroupCreated(it.content)
                             dismiss()
                         }
@@ -108,9 +108,9 @@ class CreateGroupDialogFragment : DialogFragment() {
                             progressBar.gone()
                             createGroupMainLayout.visible()
                             MaterialAlertDialogBuilder(requireContext())
-                                    .setTitle("Alert")
-                                    .setMessage("Unable to create group, ${it.error}")
-                                    .setPositiveButton("Okay") { _, _ -> }
+                                    .setTitle(getString(R.string.alert_chat))
+                                    .setMessage(getString(R.string.unable_to_create_group_chat) + it.error)
+                                    .setPositiveButton(getString(R.string.okay_chat)) { _, _ -> }
                                     .show()
                         }
                     }
@@ -145,7 +145,7 @@ class CreateGroupDialogFragment : DialogFragment() {
         submitBtn.setOnClickListener {
 
             if (groupNameET.length() == 0) {
-                Toast.makeText(requireContext(), "Please enter a group name", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.enter_a_group_name_chat), Toast.LENGTH_SHORT).show()
             } else {
                 chatGroupViewModel.createGroup(
                         groupName = groupNameET.text.toString().capitalize(),

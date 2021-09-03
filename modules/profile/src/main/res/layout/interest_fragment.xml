@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="36dp"
             android:fontFamily="@font/lato"
-            android:text="Interest"
+            android:text="@string/interest_profile"
             android:textColor="#131415"
             android:textSize="24sp"
             android:textStyle="bold"
@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/lato"
-            android:text=" ( select max 3) "
+            android:text="@string/select_max_3_profile"
             android:textColor="#131415"
             android:textSize="@dimen/size16"
             app:layout_constraintBottom_toBottomOf="@+id/textView14"
@@ -68,7 +68,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="42dp"
             android:fontFamily="@font/lato"
-            android:text="Delivery executive"
+            android:text="@string/delivery_executive_profile"
             android:textColor="#131415"
             android:textSize="24sp"
             android:textStyle="bold"
@@ -95,7 +95,7 @@
                 android:fontFamily="@font/lato"
                 android:gravity="center_vertical"
                 android:paddingLeft="@dimen/size16"
-                android:text="Have you done Delivery Job Before?"
+                android:text="@string/have_done_delivery_job_profile"
                 android:textColor="#333333"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -109,7 +109,8 @@
                 android:text="(Kya aapne pehle delivery ka kaam Kiya hai?)"
                 android:textColor="#666666"
                 android:textSize="14sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:visibility="gone"/>
 
         </LinearLayout>
 
@@ -152,7 +153,7 @@
                     android:layout_marginTop="8dp"
                     android:fontFamily="@font/lato"
                     android:letterSpacing="0"
-                    android:text="Yes, I have"
+                    android:text="@string/yes_i_have_profile"
                     android:textColor="#2e2f30"
                     android:textSize="14sp"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -189,7 +190,7 @@
                     android:layout_marginTop="8dp"
                     android:fontFamily="@font/lato"
                     android:letterSpacing="0"
-                    android:text="No, I haven’t"
+                    android:text="@string/no_i_have_not_profile"
                     android:textColor="#2e2f30"
                     android:textSize="14sp"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -217,7 +218,7 @@
                 android:fontFamily="@font/lato"
                 android:gravity="center_vertical"
                 android:paddingLeft="@dimen/size16"
-                android:text="What have you delivered earlier?"
+                android:text="@string/what_have_you_deliver_before_profile"
                 android:textColor="#333333"
                 android:textSize="16sp"
                 android:textStyle="bold"

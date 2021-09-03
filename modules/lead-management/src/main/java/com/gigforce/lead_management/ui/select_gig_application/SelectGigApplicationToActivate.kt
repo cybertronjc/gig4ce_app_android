@@ -62,7 +62,7 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
         viewBinding: SelectGigApplicationToActivateFragmentBinding
     ) = viewBinding.toolbar.apply {
         hideSearchOption()
-        showTitle("Gig Application")
+        showTitle(context.getString(R.string.gig_application_lead))
         hideSubTitle()
         setBackButtonListener {
             navigation.popBackStack()
@@ -148,9 +148,9 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
                 is SelectGigAppViewState.ErrorInStartingJoiningProcess -> {
 
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Unable to start Joining")
+                        .setTitle(getString(R.string.unable_to_start_joining_lead))
                         .setMessage(state.error)
-                        .setPositiveButton("Okay") { _, _ -> }
+                        .setPositiveButton(getString(R.string.okay_lead)) { _, _ -> }
                         .show()
                 }
                 SelectGigAppViewState.FetchingDataToStartJoiningProcess -> {
@@ -169,7 +169,7 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
         viewModel.selectedJobProfileOverview.observe(viewLifecycleOwner, Observer {
             logger.d(TAG, "selected job profile $it")
             if (it.ongoing) {
-                submitBtn.text = "Next"
+                submitBtn.text = getString(R.string.next_lead)
                 if (it.submitted) {
                     submitBtn.isEnabled = true
                     submitBtn.background = resources.getDrawable(R.drawable.app_gradient_button)
@@ -178,7 +178,7 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
                     submitBtn.background = resources.getDrawable(R.drawable.app_gradient_button_disabled)
                 }
             }else {
-                submitBtn.text = "Share Referral Link"
+                submitBtn.text = getString(R.string.share_referral_link_lead)
                 submitBtn.isEnabled = true
                 submitBtn.background = resources.getDrawable(R.drawable.app_gradient_button)
             }
@@ -222,7 +222,7 @@ class SelectGigApplicationToActivate : BaseFragment2<SelectGigApplicationToActiv
 
         viewBinding.toolbar.apply {
             hideActionMenu()
-            showTitle("Gig Application")
+            showTitle(getString(R.string.gig_application_lead))
             setBackButtonListener(View.OnClickListener {
                 navigation.popBackStack()
             })

@@ -19,6 +19,7 @@ import com.gigforce.user_preferences.daytime.SlotsRecyclerAdapter
 import com.gigforce.core.datamodels.user_preferences.PreferencesDataModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.fragment_settings_slots.view.*
+import kotlinx.android.synthetic.main.prefrences_item.*
 import kotlinx.android.synthetic.main.week_day_fragment.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -65,7 +66,7 @@ class WeekDayFragment : Fragment() {
     private fun initializeViews() {
         viewDataModel = viewModel.getPreferenceDataModel()
         switch3.isChecked = viewDataModel.isweekdaysenabled
-        textView62.text = getArrayToString(viewDataModel.selecteddays)
+        textView62.text = getArrayFromDBString(viewDataModel.selecteddays)
         var selectedStrForSubtitle = getArrayToString(
             viewModel.getSelectedSlotsToShow(
                 viewDataModel.selectedslots
@@ -85,12 +86,42 @@ class WeekDayFragment : Fragment() {
     }
 
     private fun getArrayToString(selectedStrings: ArrayList<String>): String {
-        if (selectedStrings == null || selectedStrings.size == 0) return "None"
+        if (selectedStrings == null || selectedStrings.size == 0) return resources.getString(R.string.none_pref)
+//        var selectedStrings = getLocaleRelatedStr(selectedStringsEng)
         var selectedStr = Arrays.toString(selectedStrings.toTypedArray())
         selectedStr = selectedStr.substring(1, selectedStr.length - 1)
-        if (selectedStr.contains("All"))
-            return "All"
+        if (selectedStrings.contains(resources.getString(R.string.all_pref)) || selectedStrings.contains("All"))
+            return resources.getString(R.string.all_pref)
         return selectedStr
+    }
+
+    private fun getArrayFromDBString(selectedStringsEng: ArrayList<String>): String {
+        if (selectedStringsEng == null || selectedStringsEng.size == 0) return resources.getString(R.string.none_pref)
+        var selectedStrings = getLocaleRelatedStr(selectedStringsEng)
+        var selectedStr = Arrays.toString(selectedStrings.toTypedArray())
+        selectedStr = selectedStr.substring(1, selectedStr.length - 1)
+        if (selectedStrings.contains(resources.getString(R.string.all_pref)))
+            return resources.getString(R.string.all_pref)
+        return selectedStr
+    }
+
+    private fun getLocaleRelatedStr(selectedStringsEng: java.util.ArrayList<String>): ArrayList<String> {
+        var localeList = ArrayList<String>()
+        val items = arrayOf(getString(R.string.all_pref), getString(R.string.monday_pref), getString(
+            R.string.tuesday_pref), getString(R.string.wednesday_pref), getString(R.string.thursday_pref), getString(
+            R.string.friday_pref))
+
+        val daysInEnglish = arrayOf("All", "Monday", "Tuesday", "Wednesday","Thursday","Friday","Saturday","Sunday")
+
+        for(i in 0 until selectedStringsEng.size){
+            for(j in daysInEnglish.indices){
+                if(selectedStringsEng[i] == daysInEnglish[j]){
+                    localeList.add(items[j])
+                    break
+                }
+            }
+        }
+        return localeList
     }
 
     private fun listener() {
@@ -117,14 +148,14 @@ class WeekDayFragment : Fragment() {
     }
 
     private fun ifSlotsNotSelected(): Boolean {
-        if (getArrayToString(viewDataModel.selectedslots).equals("None")) {
+        if (getArrayToString(viewDataModel.selectedslots).equals(resources.getString(R.string.none_pref))) {
             return true
         }
         return false
     }
 
     private fun ifWeekdaysNotSelected(): Boolean {
-        if (getArrayToString(viewDataModel.selecteddays).equals("None")) {
+        if (getArrayToString(viewDataModel.selecteddays).equals(resources.getString(R.string.none_pref))) {
             return true
         }
         return false
@@ -132,14 +163,18 @@ class WeekDayFragment : Fragment() {
     }
 
     fun showDaysAlert() {
-        val items = arrayOf("All", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday")
+        val items = arrayOf(getString(R.string.all_pref), getString(R.string.monday_pref), getString(
+                    R.string.tuesday_pref), getString(R.string.wednesday_pref), getString(R.string.thursday_pref), getString(
+                                R.string.friday_pref))
+
+        val daysInEnglish = arrayOf("All", "Monday", "Tuesday", "Wednesday","Thursday","Friday","Saturday","Sunday")
         val indexItem = arrayOf(0, 1, 2, 3, 4, 5)
         var isSectionSelected = BooleanArray(items.size)
         var selectedList = ArrayList<Int>()
         for (i in 0..items.size - 1) {
             var isfound = false
             for (day in viewDataModel.selecteddays) {
-                if (items[i].equals(day)) {
+                if (daysInEnglish[i].equals(day)) {
                     isSectionSelected[i] = true
                     isfound = true
                     selectedList.add(i)
@@ -154,7 +189,7 @@ class WeekDayFragment : Fragment() {
 
         val builder = MaterialAlertDialogBuilder(requireContext())
         val view = layoutInflater.inflate(R.layout.fragment_settings_slots, null)
-        view.dialogTitleTV.text = "Days"
+        view.dialogTitleTV.text = getString(R.string.days_capital_pref)
         builder.setView(view)
 
         val rv: RecyclerView = view.findViewById(R.id.slotsRV)
@@ -164,12 +199,14 @@ class WeekDayFragment : Fragment() {
         rv.adapter = slotsRecyclerAdapter
 
 
-        builder.setPositiveButton("DONE") { dialogInterface, i ->
+        builder.setPositiveButton(getString(R.string.done_pref)) { dialogInterface, i ->
             val selectedStrings = ArrayList<String>()
+            val selectedStringForView = ArrayList<String>()
             for (j in selectedList.indices) {
-                selectedStrings.add(items[selectedList[j]])
+                selectedStrings.add(daysInEnglish[selectedList[j]])
+                selectedStringForView.add(items[selectedList[j]])
             }
-            var selectedStr = getArrayToString(selectedStrings)
+            var selectedStr = getArrayToString(selectedStringForView)
             viewModel.setWorkingDays(selectedStrings)
             if (!selectedStr.equals("None")) {
                 if (ifSlotsNotSelected()) {
@@ -265,7 +302,7 @@ class WeekDayFragment : Fragment() {
 
         val builder = MaterialAlertDialogBuilder(requireContext())
         val view = layoutInflater.inflate(R.layout.fragment_settings_slots, null)
-        view.dialogTitleTV.text = "Slots"
+        view.dialogTitleTV.text = getString(R.string.slots_pref)
         builder.setView(view)
 
         val rv: RecyclerView = view.findViewById(R.id.slotsRV)

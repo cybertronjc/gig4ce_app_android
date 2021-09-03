@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import androidx.core.os.bundleOf
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -15,14 +14,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.repository.ProfileFirebaseRepository
-import com.gigforce.core.StringConstants
-import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.invisible
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.DateHelper
 import com.gigforce.core.utils.Lce
-import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.giger_gigs.LoginSummaryConstants
 import com.gigforce.giger_gigs.R
 import com.gigforce.giger_gigs.databinding.AddNewLoginSummaryFragmentBinding
@@ -135,11 +131,11 @@ class AddNewLoginSummaryFragment : Fragment() {
 
         appBarComp.apply {
             if (mode == LoginSummaryConstants.MODE_VIEW) {
-                setAppBarTitle("Login Summary".toString())
+                setAppBarTitle(context.getString(R.string.login_summary_giger_gigs))
             } else if (mode == LoginSummaryConstants.MODE_EDIT) {
-                setAppBarTitle("Edit Login Summary".toString())
+                setAppBarTitle(context.getString(R.string.edit_login_summary_giger_gigs).toString())
             } else {
-                setAppBarTitle("Add New Login Summary".toString())
+                setAppBarTitle(context.getString(R.string.add_new_login_summary_giger_gigs).toString())
             }
             setBackButtonListener(View.OnClickListener {
                 activity?.onBackPressed()
@@ -170,13 +166,13 @@ class AddNewLoginSummaryFragment : Fragment() {
 //        citySpinner.adapter = arrayAdapter
 
         submit.setOnClickListener {
-            if (submit.text.equals("Check In")){
+            if (submit.text.equals(getString(R.string.check_in_common_ui))){
                 navigation.popBackStack()
                 navigation.navigateTo("gig/mygig")
             } else {
                 if (mode == LoginSummaryConstants.MODE_ADD) {
                     if (citySpinner.text.toString().isEmpty()) {
-                        showToast("Select a city to continue")
+                        showToast(getString(R.string.select_a_city_to_continue_giger_gigs))
                     } else {
                         //submit data
                         submitLoginSummary()
@@ -292,7 +288,7 @@ class AddNewLoginSummaryFragment : Fragment() {
             .inflate(R.layout.login_data_submitted_dialog_layout, null, false)
 
         viewBinding.root.foreground.alpha = 200
-        dialog?.setView(customView)?.setCancelable(false)?.setPositiveButton("Done"){ dialog, _ ->
+        dialog?.setView(customView)?.setCancelable(false)?.setPositiveButton(getString(R.string.done_giger_gigs)){ dialog, _ ->
             dialog.dismiss()
             viewBinding.progressBar.visibility = View.GONE
             navigation.popBackStack()
@@ -348,7 +344,7 @@ class AddNewLoginSummaryFragment : Fragment() {
                 }
 
                 is Lce.Content -> {
-                    showToast("getting cities")
+                    showToast(getString(R.string.getting_cities_giger_gigs))
 
                     if (mode == LoginSummaryConstants.MODE_ADD) {
                         citySpinner.isEnabled = true
@@ -376,7 +372,7 @@ class AddNewLoginSummaryFragment : Fragment() {
                             businessRV.visibility = View.VISIBLE
                             chooseCityImg.visibility = View.VISIBLE
                             noDataFound.visibility = View.GONE
-                            submit.setText("Submit")
+                            submit.setText(getString(R.string.submit_giger_gigs))
                         }
                         viewModel.getCities()
 
@@ -386,7 +382,7 @@ class AddNewLoginSummaryFragment : Fragment() {
                             businessRV.visibility = View.GONE
                             chooseCityImg.visibility = View.GONE
                             noDataFound.visibility = View.VISIBLE
-                            submit.setText("Check In")
+                            submit.setText(getString(R.string.check_in_common_ui))
                         }
                     }
                 }
@@ -399,7 +395,7 @@ class AddNewLoginSummaryFragment : Fragment() {
             val state = it ?: return@Observer
             when (state) {
                 is BusinessAppViewState.LoadingDataFromServer -> {
-                    showToast("Loading businesses")
+                    showToast(getString(R.string.loading_businesses_giger_gigs))
                 }
 
                 is BusinessAppViewState.BusinessListLoaded -> {
@@ -409,7 +405,7 @@ class AddNewLoginSummaryFragment : Fragment() {
 
                 is BusinessAppViewState.ErrorInLoadingDataFromServer -> {
 
-                    showToast("Error loading businesses")
+                    showToast(getString(R.string.error_loading_businesses_giger_gigs))
                 }
             }
         })
@@ -419,23 +415,23 @@ class AddNewLoginSummaryFragment : Fragment() {
 
             when (result) {
                 "Loading" -> {
-                    showToast("Submitting data")
+                    showToast(getString(R.string.submitting_data_giger_gigs))
                     viewBinding.progressBar.visibility = View.VISIBLE
                 }
 
                 "Created" -> {
-                    showToast("Data submitted successfully")
+                    showToast(getString(R.string.data_submitted_successfully_giger_gigs))
                     launchSuccessfullDialog()
                 }
 
                 "Already Exists" -> {
                     viewBinding.progressBar.visibility = View.GONE
-                    showToast("Data already exists")
+                    showToast(getString(R.string.data_already_exists_giger_gigs))
                 }
 
                 "Error" -> {
                     viewBinding.progressBar.visibility = View.GONE
-                    showToast("Error submitting data")
+                    showToast(getString(R.string.error_submitting_data_giger_gigs))
                 }
 
                 else -> {
@@ -448,7 +444,7 @@ class AddNewLoginSummaryFragment : Fragment() {
         viewModel.totalCount.observe(viewLifecycleOwner, Observer {
             val count = it ?: return@Observer
             count?.let {
-                viewBinding.submit.text = "Submit ($count Logins)"
+                viewBinding.submit.text = "${getString(R.string.submit_giger_gigs)} ($count ${getString(R.string.logins_giger_gigs)})"
             }
         })
     }
@@ -461,7 +457,7 @@ class AddNewLoginSummaryFragment : Fragment() {
             businessListToProcess = businessList
             businessLoginLayout.removeAllViews()
             map.clear()
-            submit.setText("Submit")
+            submit.setText(getString(R.string.submit_giger_gigs))
             businessList.forEachIndexed { index, loginSummaryBusiness ->
                 val view = BusinessRecyclerItemView(requireContext(), null)
                 businessLoginLayout.addView(view)
@@ -503,7 +499,7 @@ class AddNewLoginSummaryFragment : Fragment() {
         }
         Log.d("count", "count $count , map: $map")
 
-        viewBinding.submit.setText("Submit ($count Logins)")
+        viewBinding.submit.setText("${getString(R.string.submit_giger_gigs)} ($count ${getString(R.string.logins_giger_gigs)})")
         viewBinding.loginsCount.setText("$count")
 
     }

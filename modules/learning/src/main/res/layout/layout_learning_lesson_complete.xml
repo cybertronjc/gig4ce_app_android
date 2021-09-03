@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="75dp"
             android:adjustViewBounds="true"
-            android:contentDescription="@string/assessment_dialog_background"
+            android:contentDescription="@string/assessment_dialog_background_learning"
             android:scaleType="centerCrop"
               app:srcCompat="@drawable/bg_dialog_top"
             app:layout_constraintEnd_toEndOf="parent"

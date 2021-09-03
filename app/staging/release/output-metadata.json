@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "com.gigforce.app.staging",
+  "variantName": "stagingRelease",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "properties": [],
+      "versionCode": 137,
+      "versionName": "1.0.0-Staging",
+      "enabled": true,
+      "outputFile": "app-staging-release.apk"
+    }
+  ]
+}

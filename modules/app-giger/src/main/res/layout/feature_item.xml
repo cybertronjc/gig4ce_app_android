@@ -35,7 +35,7 @@
             android:id="@+id/feature_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="MyGig"
+            android:text="@string/mygig_app_giger"
             android:textColor="@color/black"
             android:textSize="12sp"
             android:layout_marginBottom="16dp"

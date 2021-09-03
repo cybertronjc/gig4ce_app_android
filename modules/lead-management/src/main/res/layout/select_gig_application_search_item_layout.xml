@@ -23,7 +23,7 @@
             android:paddingStart="20dp"
             android:background="@drawable/grey_border_square"
             android:fontFamily="@font/lato"
-            android:hint="Search by business name / Job Profile"
+            android:hint="@string/search_by_business_name_job_profile"
             android:layout_width="match_parent"/>
 
 

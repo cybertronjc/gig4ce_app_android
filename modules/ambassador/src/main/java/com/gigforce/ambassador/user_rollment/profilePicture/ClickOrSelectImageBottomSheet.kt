@@ -1,7 +1,6 @@
 package com.gigforce.ambassador.user_rollment.profilePicture
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -53,7 +52,8 @@ class ClickOrSelectImageBottomSheet : BottomSheetDialogFragment() {
 
 
     private fun initView() {
-        change_photo_label.text= if (isProfilePicPresent) "Change Photo" else "Upload Photo"
+        change_photo_label.text= if (isProfilePicPresent) getString(R.string.change_photo_amb) else getString(
+                    R.string.upload_photo_amb)
         //remove_profile_pic.visibility = if (isProfilePicPresent) View.VISIBLE else View.GONE
         //change_photo_label.text = if (isProfilePicPresent) "Change Photo" else "Upload Photo"
         camera_layout.setOnClickListener {

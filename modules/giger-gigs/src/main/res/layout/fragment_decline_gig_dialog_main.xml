@@ -37,7 +37,7 @@
                 android:layout_marginStart="@dimen/size_16"
                 android:fontFamily="@font/lato"
                 android:letterSpacing="0"
-                android:text="@string/cancelling_out_a_gig"
+                android:text="@string/cancelling_out_a_gig_giger_gigs"
                 android:textColor="@color/white"
                 android:textSize="16sp" />
         </LinearLayout>
@@ -124,7 +124,7 @@
                 android:paddingTop="8dp"
                 android:paddingEnd="@dimen/size_8"
                 android:paddingBottom="8dp"
-                android:text="@string/others_camel_case" />
+                android:text="@string/others_camel_case_giger_gigs" />
 
         </RadioGroup>
 
@@ -136,7 +136,7 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="10dp"
             android:letterSpacing="0"
-            android:text="@string/reason"
+            android:text="@string/reason_giger_gigs"
             android:textColor="#313131"
             android:textSize="14sp"
             android:visibility="gone"
@@ -191,7 +191,7 @@
             android:fontFamily="@font/lato_bold"
             android:gravity="center"
             android:minHeight="@dimen/size_36"
-            android:text="@string/submit_all_caps"
+            android:text="@string/submit_all_caps_giger_gigs"
             android:textColor="@color/white"
             app:layout_constraintTop_toBottomOf="@id/reason_et" />
 

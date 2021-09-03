@@ -1,5 +1,6 @@
 package com.gigforce.lead_management.ui.select_gig_application
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,9 +12,11 @@ import com.gigforce.common_ui.viewdatamodels.leadManagement.JobLocation
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfileOverview
 import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
+import com.gigforce.lead_management.R
 import com.gigforce.lead_management.models.GigAppListRecyclerItemData
 import com.gigforce.lead_management.repositories.LeadManagementRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -46,6 +49,7 @@ sealed class SelectGigAppViewState {
 
 @HiltViewModel
 class SelectGigApplicationToActivateViewModel @Inject constructor(
+    @ApplicationContext private val appContext : Context,
     private val leadManagementRepo: LeadManagementRepository,
     private val logger: GigforceLogger,
     private val firebaseAuthStateListener: FirebaseAuthStateListener,
@@ -132,75 +136,10 @@ class SelectGigApplicationToActivateViewModel @Inject constructor(
 
         var gigAppsListForView = mutableListOf<GigAppListRecyclerItemData>()
         try {
-
-//            statusToGigAppList.forEach { (ongoing, gigApps) ->
-//                logger.d(TAG, "processing data, Status :  : ${statusToGigAppList.size} GigApps")
-//
-//                gigAppsListForView.add(
-//                    GigAppListRecyclerItemData.GigAppListStatusRecyclerItemData(
-//                        "$ongoing"
-//                    )
-//                )
-//
-//                if (ongoing.equals("Other Applications")) {
-//                    gigAppsListForView.add(
-//                        GigAppListRecyclerItemData.GigAppListSearchRecyclerItemData(
-//                            currentSearchString.toString(),
-//                            this
-//                        )
-//                    )
-//                }
-//
-//                gigApps.forEach {
-//                    gigAppsListForView.add(
-//                        GigAppListRecyclerItemData.GigAppRecyclerItemData(
-//                            status = it.status.toString(),
-//                            jobProfileId = it.jobProfileId,
-//                            tradeName = it.tradeName.toString(),
-//                            profileName = it.profileName.toString(),
-//                            companyLogo = it.companyLogo.toString(),
-//                            it.ongoing,
-//                            selected = it.isSelected,
-//                            this
-//                        )
-//                    )
-//                }
-//            }
-//
-//            if (otherApps.isEmpty()) {
-//                gigAppsListForView.add(
-//                    GigAppListRecyclerItemData.GigAppListStatusRecyclerItemData(
-//                        "Other Applications"
-//                    )
-//                )
-//                gigAppsListForView.add(
-//                    GigAppListRecyclerItemData.GigAppListSearchRecyclerItemData(
-//                        "",
-//                        this
-//                    )
-//                )
-//
-//                gigAppsListForView.add(
-//                    GigAppListRecyclerItemData.NoGigAppsFoundItemData(
-//                        "No Applications"
-//                    )
-//                )
-//            } else if (ongoingApps.isEmpty()) {
-//                gigAppsListForView.add(
-//                    GigAppListRecyclerItemData.GigAppListStatusRecyclerItemData(
-//                        "Ongoing Applications"
-//                    )
-//                )
-//                gigAppsListForView.add(
-//                    GigAppListRecyclerItemData.NoGigAppsFoundItemData(
-//                        "No Applications"
-//                    )
-//                )
-//            }
-//
+            
             gigAppsListForView.add(
                 GigAppListRecyclerItemData.GigAppListStatusRecyclerItemData(
-                    "Ongoing Applications"
+                    appContext.getString(R.string.ongoing_applications)
                 )
             )
 
@@ -222,14 +161,14 @@ class SelectGigApplicationToActivateViewModel @Inject constructor(
             } else {
                 gigAppsListForView.add(
                     GigAppListRecyclerItemData.NoGigAppsFoundItemData(
-                        "No Applications"
+                        appContext.getString(R.string.no_applications)
                     )
                 )
             }
 
             gigAppsListForView.add(
                 GigAppListRecyclerItemData.GigAppListStatusRecyclerItemData(
-                    "Other Applications"
+                    appContext.getString(R.string.other_applications)
                 )
             )
             gigAppsListForView.add(
@@ -257,7 +196,7 @@ class SelectGigApplicationToActivateViewModel @Inject constructor(
             } else {
                 gigAppsListForView.add(
                     GigAppListRecyclerItemData.NoGigAppsFoundItemData(
-                        "No Applications"
+                        appContext.getString(R.string.no_applications)
                     )
                 )
             }

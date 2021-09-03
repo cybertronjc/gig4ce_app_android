@@ -1,5 +1,6 @@
 package com.gigforce.lead_management.ui.joining_list
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,6 +15,7 @@ import com.gigforce.lead_management.repositories.LeadManagementRepository
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ListenerRegistration
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import java.time.Duration
 import java.time.LocalDate
@@ -23,6 +25,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class JoiningListViewModel @Inject constructor(
+    @ApplicationContext private val appContext : Context,
     private val leadManagementRepository: LeadManagementRepository,
     private val gigforceLogger: GigforceLogger
 ) : ViewModel() {
@@ -117,7 +120,7 @@ class JoiningListViewModel @Inject constructor(
                 ) ?: false
             }
         }.groupBy {
-            it.getStatus().getOverallStatusString()
+            it.getStatus().getOverallStatusStringRes()
         }.toSortedMap(compareByDescending { it })
 
 
@@ -127,7 +130,7 @@ class JoiningListViewModel @Inject constructor(
 
             joiningListForView.add(
                 JoiningListRecyclerItemData.JoiningListRecyclerStatusItemData(
-                    "$status (${joinings.size})"
+                    "${appContext.getString(status)} (${joinings.size})"
                 )
             )
 

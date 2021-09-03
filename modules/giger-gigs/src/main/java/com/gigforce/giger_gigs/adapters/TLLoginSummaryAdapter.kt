@@ -73,7 +73,7 @@ class TLLoginSummaryAdapter(
                 }
             }
 
-            gigerCount.setText("$totalCount Logins")
+            gigerCount.setText("$totalCount ${context.resources.getString(R.string.logins_gigs)}")
 
         }
 

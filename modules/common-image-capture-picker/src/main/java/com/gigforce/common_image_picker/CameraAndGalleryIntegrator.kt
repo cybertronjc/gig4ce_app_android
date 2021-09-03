@@ -284,7 +284,7 @@ class CameraAndGalleryIntegrator : ClickOrSelectImageBottomSheet.OnPickOrCapture
                         null
                 )
         )
-        options.setToolbarTitle(context.getString(R.string.crop_and_rotate))
+        options.setToolbarTitle(context.getString(R.string.crop_and_rotate_common))
         return options
     }
 

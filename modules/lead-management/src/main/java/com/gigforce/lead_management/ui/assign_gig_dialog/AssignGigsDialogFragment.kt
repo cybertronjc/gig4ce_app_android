@@ -123,7 +123,7 @@ class AssignGigsDialogFragment : BaseDialogFragment<FragmentAssignGigDialogBindi
                 Lse.Success -> {
                     Toast.makeText(
                         requireContext(),
-                        "Gig assigned",
+                        getString(R.string.gig_assigned_lead),
                         Toast.LENGTH_LONG
                     ).show()
 

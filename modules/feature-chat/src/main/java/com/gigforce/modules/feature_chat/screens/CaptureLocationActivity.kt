@@ -15,6 +15,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.gigforce.core.base.BaseActivity
 import com.gigforce.core.date.DateHelper
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
@@ -32,7 +33,7 @@ import kotlinx.android.synthetic.main.activity_capture_location.*
 import java.io.File
 
 
-class CaptureLocationActivity : AppCompatActivity(), OnMapReadyCallback,
+class CaptureLocationActivity : BaseActivity(), OnMapReadyCallback,
         LocationUpdates.LocationUpdateCallbacks {
 
 
@@ -109,7 +110,7 @@ class CaptureLocationActivity : AppCompatActivity(), OnMapReadyCallback,
             if (allPermsGranted) {
                //Okay
             } else
-                Toast.makeText(this, "Please Grant Location Permission", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.please_grant_location_permission_chat), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -175,7 +176,7 @@ class CaptureLocationActivity : AppCompatActivity(), OnMapReadyCallback,
         googleMap?.clear()
 
         // create marker
-        marker.position(LatLng(latitude, longitude)).title("Current locaton")
+        marker.position(LatLng(latitude, longitude)).title("Current location")
 
         // adding marker
         googleMap?.addMarker(marker)

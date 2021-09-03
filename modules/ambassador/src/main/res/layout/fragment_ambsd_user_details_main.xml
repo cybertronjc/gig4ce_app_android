@@ -26,7 +26,7 @@
         android:enabled="true"
         android:fontFamily="@font/lato_bold"
         android:gravity="center"
-        android:text="@string/skip_underline"
+        android:text="@string/skip_underline_amb"
         android:textColor="@color/warm_grey"
         android:textAllCaps="false"
         android:minHeight="0dp"
@@ -46,7 +46,7 @@
         android:enabled="true"
         android:fontFamily="@font/lato"
         android:gravity="center"
-        android:text="@string/next_camel_case"
+        android:text="@string/next_camel_case_amb"
         app:strokeWidth="1dp"
         android:textAllCaps="false"
         app:strokeColor="@color/lipstick"
@@ -95,7 +95,7 @@
                     android:fontFamily="@font/lato"
                     android:lineHeight="17sp"
                     android:lineSpacingExtra="3sp"
-                    android:text="Tell us the basic information about the User"
+                    android:text="@string/tell_us_the_basic_information_about_the_user_amb"
                     android:textColor="#333333"
                     android:textSize="14sp"
                     android:textStyle="normal" />
@@ -111,7 +111,7 @@
                 android:fontFamily="@font/lato"
                 android:lineSpacingExtra="3sp"
                 android:lineHeight="17sp"
-                android:text="Full Name *"
+                android:text="@string/full_name_amb"
                 android:textColor="@color/black_three"
                 android:textSize="14sp"
                 android:textStyle="normal"
@@ -172,7 +172,7 @@
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/lato"
                 android:lineSpacingExtra="3sp"
-                android:text="Date Of Birth"
+                android:text="@string/date_of_birth_amb"
                 android:textColor="@color/black_three"
                 android:textStyle="normal"
                 app:layout_constraintStart_toStartOf="parent"
@@ -232,7 +232,7 @@
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/lato"
                 android:lineSpacingExtra="3sp"
-                android:text="Gender *"
+                android:text="@string/gender_amb"
                 android:textColor="@color/black_three"
                 android:textStyle="normal"
                 app:layout_constraintStart_toStartOf="parent"
@@ -271,7 +271,7 @@
                     style="@style/AppSingleChoiceChip2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Male"
+                    android:text="@string/male_amb"
                     android:checked="true"
                     app:chipStrokeWidth="1dp" />
 
@@ -280,7 +280,7 @@
                     style="@style/AppSingleChoiceChip2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Female"
+                    android:text="@string/female_amb"
                     app:chipStrokeWidth="1dp" />
 
                 <com.google.android.material.chip.Chip
@@ -288,7 +288,7 @@
                     style="@style/AppSingleChoiceChip2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Other"
+                    android:text="@string/other_amb"
                     app:chipStrokeWidth="1dp" />
 
             </com.google.android.material.chip.ChipGroup>
@@ -305,7 +305,7 @@
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/lato"
                 android:lineSpacingExtra="3sp"
-                android:text="Highest Qualification *"
+                android:text="@string/highest_qualification_amb"
                 android:textColor="@color/black_three"
                 android:textStyle="normal"
                 app:layout_constraintStart_toStartOf="parent"
@@ -345,7 +345,7 @@
                     style="@style/AppSingleChoiceChip2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Upto 10th"
+                    android:text="@string/upto_10th_amb"
                     app:chipStrokeWidth="1dp" />
 
                 <com.google.android.material.chip.Chip
@@ -353,7 +353,7 @@
                     style="@style/AppSingleChoiceChip2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="10th Pass"
+                    android:text="@string/_10th_pass_amb"
                     app:chipStrokeWidth="1dp" />
 
                 <com.google.android.material.chip.Chip
@@ -361,7 +361,7 @@
                     style="@style/AppSingleChoiceChip2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="12th Pass"
+                    android:text="@string/_12th_pass_amb"
                     app:chipStrokeWidth="1dp" />
 
                 <com.google.android.material.chip.Chip
@@ -369,7 +369,7 @@
                     style="@style/AppSingleChoiceChip2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Diploma"
+                    android:text="@string/diploma_amb"
                     app:chipStrokeWidth="1dp" />
 
                 <com.google.android.material.chip.Chip
@@ -377,7 +377,7 @@
                     style="@style/AppSingleChoiceChip2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Graduation"
+                    android:text="@string/graduation_amb"
                     app:chipStrokeWidth="1dp" />
 
             </com.google.android.material.chip.ChipGroup>

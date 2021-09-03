@@ -115,7 +115,7 @@ class ReferralsFragment : Fragment(),
     private fun initClicks() {
 
         ll_top.apply {
-            showTitle(getString(R.string.refer_your_friends))
+            showTitle(getString(R.string.refer_your_friends_amb))
             hideActionMenu()
             setBackButtonListener(View.OnClickListener {
                 navigation.popBackStack()
@@ -192,7 +192,7 @@ class ReferralsFragment : Fragment(),
                                 // Short link created
                                 val shortLink = result.shortLink
 
-                                shareViaWhatsApp("${getString(R.string.looking_for_dynamic_working_hours)} ${shortLink.toString()}")
+                                shareViaWhatsApp("${getString(R.string.looking_for_dynamic_working_hour_amb)} ${shortLink.toString()}")
                                 pb_referrals_frag.gone()
 
                             }.addOnFailureListener {
@@ -249,11 +249,11 @@ class ReferralsFragment : Fragment(),
                     it?.elementAtOrNull(0)?.let { first ->
                         iv_one_referrals_frag.visibility = View.VISIBLE
                         displayImage(first.profileAvatarName, iv_one_referrals_frag)
-                        tv_you_helped_referrals_frag.text = getString(R.string.you_helped) + " " +
-                                first.name + " " + getString(R.string.and) + " " + (it.size - 1) + " " + getString(
-                            R.string.more
+                        tv_you_helped_referrals_frag.text = getString(R.string.you_helped_amb) + " " +
+                                first.name + " " + getString(R.string.and_amb) + " " + (it.size - 1) + " " + getString(
+                            R.string.more_amb
                         ) +
-                                " " + getString(R.string.find_gigs_on)
+                                " " + getString(R.string.find_gigs_on_amb)
 
                     }
                     it?.elementAtOrNull(1)?.let { second ->
@@ -314,8 +314,8 @@ class ReferralsFragment : Fragment(),
             .setIosParameters(DynamicLink.IosParameters.Builder("com.gigforce.ios").build())
             .setSocialMetaTagParameters(
                 DynamicLink.SocialMetaTagParameters.Builder()
-                    .setTitle("Gigforce")
-                    .setDescription("Flexible work and learning platform")
+                    .setTitle(getString(R.string.gigforce_amb))
+                    .setDescription(getString(R.string.gigforce_desc_amb))
                     .setImageUrl(Uri.parse("https://firebasestorage.googleapis.com/v0/b/gig4ce-app.appspot.com/o/app_assets%2Fgigforce.jpg?alt=media&token=f7d4463b-47e4-4b8e-9b55-207594656161"))
                     .build()
             ).buildDynamicLink()
@@ -372,7 +372,7 @@ class ReferralsFragment : Fragment(),
                 Intent.EXTRA_SUBJECT,
                 getString(R.string.app_name)
             )
-            val shareMessage = getString(R.string.looking_for_dynamic_working_hours) + " " + url
+            val shareMessage = getString(R.string.looking_for_dynamic_working_hour_amb) + " " + url
             shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
             val bitmap =
                 BitmapFactory.decodeResource(requireContext().resources, R.drawable.bg_gig_type)
@@ -393,7 +393,7 @@ class ReferralsFragment : Fragment(),
                     outputFile
                 )
             )
-            startActivity(Intent.createChooser(shareIntent, "choose one"))
+            startActivity(Intent.createChooser(shareIntent, getString(R.string.choose_one_amb)))
         } catch (e: Exception) {
             //e.toString();
         }

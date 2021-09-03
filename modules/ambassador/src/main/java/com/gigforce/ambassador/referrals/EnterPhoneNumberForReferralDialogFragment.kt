@@ -96,7 +96,7 @@ class EnterPhoneNumberForReferralDialogFragment : BottomSheetDialogFragment() {
                         progressBar.visible()
                     }
                     Lse.Success -> {
-                        Toast.makeText(requireContext(), "Sms Sent", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), getString(R.string.sms_sent_amb), Toast.LENGTH_SHORT).show()
                         inviteLinkSentListener?.linkSent()
                         dismiss()
                     }
@@ -105,9 +105,9 @@ class EnterPhoneNumberForReferralDialogFragment : BottomSheetDialogFragment() {
                         invite_direct_main.visible()
 
                         MaterialAlertDialogBuilder(requireContext())
-                            .setTitle("Error")
-                            .setMessage("Unable to send message, ${it.error}")
-                            .setPositiveButton("Okay") { _, _ -> }
+                            .setTitle(getString(R.string.error_amb))
+                            .setMessage(getString(R.string.unable_to_send_message_amb) + it.error)
+                            .setPositiveButton(getString(R.string.error_amb)) { _, _ -> }
                             .show()
                     }
                 }
@@ -128,9 +128,9 @@ class EnterPhoneNumberForReferralDialogFragment : BottomSheetDialogFragment() {
 
             if (phoneNumber.length != 10) {
                 MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Error")
-                    .setMessage("Phone Number should be of 10 digits")
-                    .setPositiveButton("Okay") { _, _ -> }
+                    .setTitle(getString(R.string.error_amb))
+                    .setMessage(getString(R.string.valid_10_digits_amb))
+                    .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
                     .show()
             }
 

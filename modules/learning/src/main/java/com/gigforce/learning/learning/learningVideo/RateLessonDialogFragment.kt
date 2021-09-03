@@ -101,9 +101,9 @@ class RateLessonDialogFragment : DialogFragment() {
 
             if(rating == 0.0f ){
                 MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Alert")
-                    .setMessage("Please provide lesson rating in stars")
-                    .setPositiveButton("Okay"){_,_ -> }
+                    .setTitle(getString(R.string.alert_learning))
+                    .setMessage(getString(R.string.provide_lession_rating_learning))
+                    .setPositiveButton(getString(R.string.okay_learning)){ _, _ -> }
                     .show()
 
                 return@setOnClickListener

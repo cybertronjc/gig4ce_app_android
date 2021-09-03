@@ -73,7 +73,7 @@
         android:layout_marginTop="21dp"
         android:layout_marginBottom="15dp"
         android:minHeight="@dimen/size_36"
-        android:text="@string/got_it"
+        android:text="@string/got_it_veri"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/contentTV"
         app:strokeColor="@color/colorPrimary"

@@ -20,7 +20,7 @@
             android:layout_marginTop="22dp"
             android:fontFamily="@font/lato_bold"
             android:letterSpacing="0"
-            android:text="@string/pan_card"
+            android:text="@string/pan_card_veri"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -49,7 +49,7 @@
             android:letterSpacing="-0.01"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
-            android:text="@string/why_do_we_need_this"
+            android:text="@string/why_do_we_need_this_veri"
             android:textColor="@color/battle_ship_grey"
             android:textSize="12sp"
             app:layout_constraintEnd_toStartOf="@+id/helpIconIV"
@@ -63,7 +63,7 @@
             android:layout_marginTop="12dp"
             android:fontFamily="@font/lato"
             android:letterSpacing="-0.01"
-            android:text="@string/do_you_have_pan_card"
+            android:text="@string/do_you_have_pan_card_veri"
             android:textColor="@color/black"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/panCardLabel" />
@@ -99,7 +99,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/lato"
-                android:text="@string/yes_i_have_pan_card" />
+                android:text="@string/yes_i_have_pan_card_veri" />
 
             <com.google.android.material.radiobutton.MaterialRadioButton
                 android:id="@+id/panNoRB"
@@ -107,7 +107,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/lato"
-                android:text="@string/no_i_don_t_have_pan_card" />
+                android:text="@string/no_i_don_t_have_pan_card_veri" />
 
         </RadioGroup>
 
@@ -133,7 +133,7 @@
                 android:layout_marginTop="12dp"
                 android:fontFamily="@font/lato"
                 android:letterSpacing="-0.01"
-                android:text="@string/please_provide_following_details"
+                android:text="@string/please_provide_following_details_veri"
                 android:textColor="@color/black" />
 
 
@@ -145,7 +145,7 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginRight="16dp"
                 android:fontFamily="@font/lato"
-                android:text="@string/pan_number_eg_bttps4444a"
+                android:text="@string/pan_number_eg_bttps4444a_veri"
                 android:textSize="12sp" />
 
 
@@ -227,7 +227,7 @@
             android:layout_marginBottom="10dp"
             android:elevation="5dp"
             android:fontFamily="@font/lato"
-            android:text="@string/save_all_caps"
+            android:text="@string/save_all_caps_veri"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent" />
 
@@ -240,7 +240,7 @@
             android:layout_marginBottom="13dp"
             android:fontFamily="@font/lato"
             android:letterSpacing="0"
-            android:text="@string/yes_i_confirm_the_data_is_correct"
+            android:text="@string/yes_i_confirm_the_data_is_correct_veri"
             app:layout_constraintBottom_toTopOf="@id/panSubmitSliderBtn"
             app:layout_constraintTop_toBottomOf="@id/panImageEditErrorMessage"
             app:layout_constraintVertical_bias="0.98"

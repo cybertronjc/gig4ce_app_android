@@ -106,7 +106,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
             android:gravity="center"
-            android:text="@string/camera_and_audtio_permission_required_to_access_camera"
+            android:text="@string/camera_and_audtio_permission_required_to_access_camera_veri"
             android:textColor="@android:color/white"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -118,7 +118,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minHeight="@dimen/size_36"
-            android:text="@string/go_to_settings"
+            android:text="@string/go_to_settings_veri"
             android:textColor="@android:color/white"
             app:strokeColor="@android:color/white" />
 

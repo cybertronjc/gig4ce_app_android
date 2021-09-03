@@ -98,7 +98,7 @@ class AddExperienceProfileV2 : BaseFragment() {
         act_add_experience_profile_v2.setAdapter(
                 resources.getStringArray(R.array.lang_array).toList()
         )
-        act_add_experience_profile_v2.setHint(getString(R.string.search_role))
+        act_add_experience_profile_v2.setHint(getString(R.string.search_role_app))
         act_add_experience_profile_v2.setContentPadding(
                 paddingTop = resources.getDimensionPixelSize(
                         R.dimen.size_15
@@ -109,10 +109,10 @@ class AddExperienceProfileV2 : BaseFragment() {
 
     private fun intLangChipGroup() {
         val listOf = listOf(
-                "Other",
-                "Warehouse Helper",
-                "Delivery Executive",
-                "Driver"
+                getString(R.string.other_app),
+                getString(R.string.warehouse_helper_app),
+                getString(R.string.delivery_executive_app),
+                getString(R.string.driver)
         )
         listOf.forEach { element ->
             val chip = Chip(requireContext())

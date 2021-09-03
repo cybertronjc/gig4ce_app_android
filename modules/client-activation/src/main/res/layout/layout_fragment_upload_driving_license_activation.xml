@@ -40,7 +40,7 @@
                 android:layout_toEndOf="@+id/iv_back_application_client_activation"
                 android:fontFamily="@font/lato"
                 android:gravity="center_horizontal"
-                android:text="@string/upload_driving_license"
+                android:text="@string/upload_driving_license_client"
                 android:textColor="@color/white"
                 android:textSize="@dimen/font_20"
                 android:textStyle="normal" />

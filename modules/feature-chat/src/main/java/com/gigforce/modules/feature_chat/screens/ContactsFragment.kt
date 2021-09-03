@@ -122,10 +122,10 @@ class ContactsFragment : DialogFragment(),
 
                     contactsAdapter.stateCreateGroup(false)
                     contactsAdapter.clearSelectedContacts()
-                    contactsToolbarSubTitle.text = "${contactsAdapter.itemCount} Contact(s)"
+                    contactsToolbarSubTitle.text = "${contactsAdapter.itemCount} ${getString(R.string.contacts_with_space)}"
 
                     userSelectedLayout.isVisible = false
-                    selectedUserCountTV.text = "0 Contact(s) Selected"
+                    selectedUserCountTV.text = getString(R.string.zero_contacts_selected_chat)
 
                     createGroupFab.gone()
                 } else {
@@ -212,7 +212,8 @@ class ContactsFragment : DialogFragment(),
         shouldCallSyncAPI : Boolean
     ) {
         contactsPermissionLayout.gone()
-        showToast("Refreshing...")
+        showToast(getString(R.string.refreshing_chat))
+
 
         requireContext().startService(
             Intent(requireContext(),
@@ -249,9 +250,9 @@ class ContactsFragment : DialogFragment(),
         }
 
         if (shouldReturnToPreviousScreen) {
-            createGroupLabel.text = "Add To Group"
+            createGroupLabel.text = getString(R.string.add_to_group_chat)
         } else {
-            createGroupLabel.text = "Create Group"
+            createGroupLabel.text = getString(R.string.create_group_chat)
         }
 
         askPermissionView.setOnClickListener {
@@ -275,7 +276,7 @@ class ContactsFragment : DialogFragment(),
 
         createGroupFab.setOnClickListener {
             if (contactsAdapter.getSelectedContact().isEmpty()) {
-                showToast(getString(R.string.select_at_least_one_contact))
+                showToast(getString(R.string.select_at_least_one_contact_chat))
                 return@setOnClickListener
             }
 
@@ -382,7 +383,7 @@ class ContactsFragment : DialogFragment(),
         refreshingUserHorizontalProgressBar.gone()
         refreshingUserCenterProgressBar.gone()
 
-        showToast("Contacts Synced")
+        showToast(getString(R.string.contacts_synced_chat))
     }
 
     private fun errorInSyncingContacts(error: String) {
@@ -390,10 +391,10 @@ class ContactsFragment : DialogFragment(),
         refreshingUserCenterProgressBar.gone()
 
         MaterialAlertDialogBuilder(requireContext())
-            .setMessage(error)
-            .setTitle("Unable to sync contacts")
-            .setPositiveButton("Okay") { _, _ -> }
-            .show()
+                .setMessage(error)
+                .setTitle(getString(R.string.unable_to_sync_contacts_chat))
+                .setPositiveButton(getString(R.string.okay_chat)) { _, _ -> }
+                .show()
     }
 
     private fun showContactsOnView(it: List<ContactModel>) {
@@ -417,7 +418,7 @@ class ContactsFragment : DialogFragment(),
                 noContactsLayout.gone()
                 contactsSyncingLayout.visible()
             } else {
-                contactsToolbarSubTitle.text = "${contacts.size} Contact(s)"
+                contactsToolbarSubTitle.text = "${contacts.size} ${getString(R.string.contacts_with_space)}"
 
                 contactsAdapter.setData(contacts)
                 noContactsLayout.visible()
@@ -427,7 +428,7 @@ class ContactsFragment : DialogFragment(),
             contactsSyncingLayout.gone()
             noContactsLayout.gone()
 
-            contactsToolbarSubTitle.text = "${contacts.size} Contact(s)"
+            contactsToolbarSubTitle.text = "${contacts.size} ${getString(R.string.contacts_with_space)}"
             contactsAdapter.setData(contacts)
         }
 
@@ -437,8 +438,8 @@ class ContactsFragment : DialogFragment(),
 
     fun stateCreateNewGroup() {
         contactsToolbarSubTitle.visible()
-        contactsToolbarLabel.text = getString(R.string.select_members)
-        contactsToolbarSubTitle.text = "Tap to Select"
+        contactsToolbarLabel.text = getString(R.string.select_members_chat)
+        contactsToolbarSubTitle.text = getString(R.string.tap_to_select_chat)
         user_selected_layout.visible()
         create_group_layout.gone()
         contactsAdapter.getSelectedItems().clear()
@@ -446,7 +447,7 @@ class ContactsFragment : DialogFragment(),
         createGroupFab.show()
         contactsAdapter.stateCreateGroup(true)
 
-        selectedUserCountTV.text = "0 Contact(s) Selected"
+        selectedUserCountTV.text = getString(R.string._0_contacts_s_chat)
 
         onBackPressCallback.isEnabled = true
     }
@@ -509,11 +510,11 @@ class ContactsFragment : DialogFragment(),
 
             if (permissionSnackBar == null) {
                 permissionSnackBar = Snackbar.make(
-                    rootContactsLayout,
-                    "Grant contacts permission to sync contacts",
-                    Snackbar.LENGTH_INDEFINITE
+                        rootContactsLayout,
+                    getString(R.string.grant_contacts_permission_chat),
+                        Snackbar.LENGTH_INDEFINITE
                 )
-                permissionSnackBar?.setAction("Okay") {
+                permissionSnackBar?.setAction(getString(R.string.okay_chat)) {
                     startAppSettingsPage()
                 }
             }
@@ -575,7 +576,7 @@ class ContactsFragment : DialogFragment(),
                 true
             }
             else -> {
-                showToast("Coming soon")
+                showToast(getString(R.string.coming_soon_chat))
                 false
             }
         }

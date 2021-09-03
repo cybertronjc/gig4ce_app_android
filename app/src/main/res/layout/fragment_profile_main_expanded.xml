@@ -50,7 +50,7 @@
                 android:id="@+id/profile_avatar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:contentDescription="profile picture"
+                android:contentDescription="@string/profile_pic"
                 android:scaleType="centerCrop"
                   app:srcCompat="@drawable/placeholder_user"
                 app:layout_collapseMode="parallax"

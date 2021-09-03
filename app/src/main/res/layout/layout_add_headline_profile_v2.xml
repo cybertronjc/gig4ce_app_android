@@ -88,7 +88,7 @@
                 android:layout_marginEnd="@dimen/size_18"
                 android:fontFamily="@font/lato"
                 android:lineSpacingExtra="3sp"
-                android:text="Nunc justo eros, vehicula vel vehicula ut,lacinia a erat. Nam fringilla eros."
+                android:text="@string/nunc_justo_eros_vehicula_vel_vehicula_ut_lacinia_a_erat_nam_fringilla_eros"
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 android:textStyle="normal"

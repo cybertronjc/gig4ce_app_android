@@ -74,8 +74,8 @@ class EarningFragment : Fragment(), IOnBackPressedOverride {
                     (progress * (seekBar.width - 2 * seekBar.thumbOffset)) / seekBar.max
                 seekBarDependentCanvas2.x = (seekBar.x + value + seekBar.thumbOffset / 2) - 35
                 var progress1 = progress * 500
-                seekBarDependentCanvas2.text = getString(R.string.rs) + " " + progress1.toString()
-                dailyGoalsTV.text = getString(R.string.zero_to_rs) + progress1
+                seekBarDependentCanvas2.text = getString(R.string.rs_pref) + " " + progress1.toString()
+                dailyGoalsTV.text = getString(R.string.zero_to_rs_pref) + progress1
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -91,8 +91,8 @@ class EarningFragment : Fragment(), IOnBackPressedOverride {
                     (progress * (seekBar.width - 2 * seekBar.thumbOffset)) / seekBar.max
                 seekBarDependentCanvas3.x = (seekBar.x + value + seekBar.thumbOffset / 2) - 35
                 var progress1 = progress * 500
-                monthlyGoalsTV.text = getString(R.string.zero_to_rs) + progress1
-                seekBarDependentCanvas3.text = getString(R.string.rs) + " " + progress1.toString()
+                monthlyGoalsTV.text = getString(R.string.zero_to_rs_pref) + progress1
+                seekBarDependentCanvas3.text = getString(R.string.rs_pref) + " " + progress1.toString()
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -107,9 +107,9 @@ class EarningFragment : Fragment(), IOnBackPressedOverride {
                     (progress * (seekBar.width - 2 * seekBar.thumbOffset)) / seekBar.max
                 seekBarDependentCanvas4.x = (seekBar.x + value + seekBar.thumbOffset / 2) - 35
                 var progress1 = progress * 500
-                monthlyContractTV.text = getString(R.string.zero_to_rs) + progress1
+                monthlyContractTV.text = getString(R.string.zero_to_rs_pref) + progress1
 
-                seekBarDependentCanvas4.text = getString(R.string.rs) + progress1.toString()
+                seekBarDependentCanvas4.text = getString(R.string.rs_pref) + progress1.toString()
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -136,7 +136,7 @@ class EarningFragment : Fragment(), IOnBackPressedOverride {
         if (viewModel.getPreferenceDataModel().earning.preferredNoOfDays.isEmpty())
             viewModel.getPreferenceDataModel().earning.preferredNoOfDays = "0"
         selected_pre_no_of_days.text =
-            viewModel.getPreferenceDataModel().earning.preferredNoOfDays + " " + getString(R.string.days_camel_case)
+            viewModel.getPreferenceDataModel().earning.preferredNoOfDays + " " + getString(R.string.days_camel_case_pref)
         perDayGoalSB.progress = 0
         perDayGoalSB.progress = viewModel.getPreferenceDataModel().earning.perDayGoal / 500
         permonthGoalSB.progress = 0
@@ -148,9 +148,9 @@ class EarningFragment : Fragment(), IOnBackPressedOverride {
         monthlyExpectationSB.progress = viewModel.getPreferenceDataModel().earning.monthlyExpectation / 500
 
         dailyGoalsTV.text =
-            getString(R.string.zero_to_rs) + viewModel.getPreferenceDataModel().earning.perDayGoal
+            getString(R.string.zero_to_rs_pref) + viewModel.getPreferenceDataModel().earning.perDayGoal
         monthlyGoalsTV.text =
-            getString(R.string.zero_to_rs) + viewModel.getPreferenceDataModel().earning.perMonthGoal
+            getString(R.string.zero_to_rs_pref) + viewModel.getPreferenceDataModel().earning.perMonthGoal
     }
 
     private fun setMonthlyContractVisibility() {
@@ -169,7 +169,7 @@ class EarningFragment : Fragment(), IOnBackPressedOverride {
     }
 
     private fun confirmationForSavingData() {
-        appDialogInterface.showConfirmationDialogType2(getString(R.string.are_you_sure_change_preferences),
+        appDialogInterface.showConfirmationDialogType2(getString(R.string.are_you_sure_change_preferences_pref),
             object : ConfirmationDialogOnClickListener {
                 override fun clickedOnYes(dialog: Dialog?) {
                     saveDataToDB()
@@ -250,20 +250,20 @@ class EarningFragment : Fragment(), IOnBackPressedOverride {
                 customialog.dismiss()
             })
         radioGroup.setOnClickListener {
-            showToast(getString(R.string.working))
+            showToast(getString(R.string.working_pref))
         }
         customialog.show()
     }
 
     private fun setPreferenceNoOfDays(radioGroup: RadioGroup) {
         when (selected_pre_no_of_days.text) {
-            getString(R.string.zero_to_four_days) -> radioGroup.findViewById<RadioButton>(R.id.zeroToFour).isChecked =
+            getString(R.string.zero_to_four_days_pref) -> radioGroup.findViewById<RadioButton>(R.id.zeroToFour).isChecked =
                 true
-            getString(R.string.four_to_eight) -> radioGroup.findViewById<RadioButton>(R.id.fourToEight).isChecked =
+            getString(R.string.four_to_eight_pref) -> radioGroup.findViewById<RadioButton>(R.id.fourToEight).isChecked =
                 true
-            getString(R.string.eight_to_fifteen) -> radioGroup.findViewById<RadioButton>(R.id.eightToFifteen).isChecked =
+            getString(R.string.eight_to_fifteen_pref) -> radioGroup.findViewById<RadioButton>(R.id.eightToFifteen).isChecked =
                 true
-            getString(R.string.fifteen_to_thirty) -> radioGroup.findViewById<RadioButton>(R.id.fifteenToThirty).isChecked =
+            getString(R.string.fifteen_to_thirty_pref) -> radioGroup.findViewById<RadioButton>(R.id.fifteenToThirty).isChecked =
                 true
         }
 

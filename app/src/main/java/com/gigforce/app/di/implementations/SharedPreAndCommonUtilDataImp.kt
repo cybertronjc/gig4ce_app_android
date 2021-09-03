@@ -7,8 +7,10 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.util.Log
+import com.gigforce.app.MainActivity
 import com.gigforce.core.CoreConstants
 import com.gigforce.core.AppConstants
+import com.gigforce.core.base.BaseActivity
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import dagger.hilt.android.qualifiers.ActivityContext
 import java.util.*
@@ -167,11 +169,8 @@ class SharedPreAndCommonUtilDataImp @Inject constructor(@ActivityContext val act
 
     override fun updateResources(language: String) {
         val locale = Locale(language)
-        val config2 = Configuration()
-        config2.locale = locale
-        // updating locale
-        activity?.resources?.updateConfiguration(config2, null)
-        Locale.setDefault(locale)
+        val baseActivity = activity as BaseActivity
+        baseActivity.setLanguage(locale)
     }
 
     override fun getCurrentVersion(): String {

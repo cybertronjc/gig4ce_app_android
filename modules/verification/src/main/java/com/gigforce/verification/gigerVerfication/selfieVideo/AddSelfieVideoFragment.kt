@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.datamodels.GigerVerificationStatus
@@ -143,7 +142,7 @@ class AddSelfieVideoFragment : Fragment(), CaptureVideoFragmentEventListener,
                 pb_selfie_video.visibility = View.GONE
                 this.gigerVerificationStatus = it
                 if (it.selfieVideoUploaded) {
-                    selfieVideoSubmitSliderBtn.text = getString(R.string.update)
+                    selfieVideoSubmitSliderBtn.text = getString(R.string.update_veri)
                     selfieVideoSubmitSliderBtn.gone()
                     selfieVideoCorrectCB.gone()
 
@@ -175,7 +174,7 @@ class AddSelfieVideoFragment : Fragment(), CaptureVideoFragmentEventListener,
     }
 
     private fun documentUploaded() {
-        showToast(getString(R.string.video_uploaded))
+        showToast(getString(R.string.video_uploaded_veri))
         gigerVerificationStatus?.let {
 
             if (!it.panCardDetailsUploaded) {
@@ -242,8 +241,8 @@ class AddSelfieVideoFragment : Fragment(), CaptureVideoFragmentEventListener,
 
             WhyWeNeedThisBottomSheet.launch(
                 childFragmentManager = childFragmentManager,
-                title = getString(R.string.how_to_record_selfie_video),
-                content = getString(R.string.how_to_rec_selfie_video_content)
+                title = getString(R.string.how_to_record_selfie_video_veri),
+                content = getString(R.string.how_to_rec_selfie_video_content_veri)
             )
         }
 
@@ -251,8 +250,8 @@ class AddSelfieVideoFragment : Fragment(), CaptureVideoFragmentEventListener,
 
             WhyWeNeedThisBottomSheet.launch(
                 childFragmentManager = childFragmentManager,
-                title = getString(R.string.how_to_record_selfie_video),
-                content = getString(R.string.how_to_rec_selfie_video_content)
+                title = getString(R.string.how_to_record_selfie_video_veri),
+                content = getString(R.string.how_to_rec_selfie_video_content_veri)
             )
         }
     }
@@ -294,7 +293,7 @@ class AddSelfieVideoFragment : Fragment(), CaptureVideoFragmentEventListener,
     }
 
     override fun videoCaptured(file: File) {
-        showToast(getString(R.string.video_recorded))
+        showToast(getString(R.string.video_recorded_veri))
         this.mCapturedVideoPath = file
         replaceCaptureFragmentWithPreviewFragment(file)
 

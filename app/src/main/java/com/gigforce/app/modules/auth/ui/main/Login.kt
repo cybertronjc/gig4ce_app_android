@@ -26,10 +26,12 @@ import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.common_ui.utils.DocViewerActivity
 import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.WebViewLocaleHelper
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.analytics.AuthEvents
+import com.gigforce.core.base.BaseActivity
 import com.gigforce.core.navigation.INavigation
 import com.google.android.gms.auth.api.credentials.Credential
 import com.google.android.gms.auth.api.credentials.Credentials
@@ -64,11 +66,13 @@ class Login : Fragment() {
     private var win: Window? = null
     private val RC_HINT = 9
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             mobile_number = it.getString("mobileno") ?: ""
         }
+
 //        showKeyboard()
     }
 
@@ -303,6 +307,8 @@ class Login : Fragment() {
         }
 
         termsTextView.setOnClickListener {
+             val webViewLocaleHelper = WebViewLocaleHelper(requireActivity() as BaseActivity)
+            webViewLocaleHelper.implementWorkaround()
             navigation.navigateToDocViewerActivity(requireActivity(),"https://gigforce.in/terms-of-use" , "TERMS")
         }
 
@@ -340,7 +346,7 @@ class Login : Fragment() {
             login_button.isEnabled = true
             login_button.background = resources.getDrawable(R.drawable.gradient_button)
         } else if (!termsCheckbox.isChecked){
-            showToast("Accept Terms and Conditions to continue")
+            showToast(getString(R.string.accept_terms))
         }
         else {
             viewModel.sendVerificationCode(phoneNumber)

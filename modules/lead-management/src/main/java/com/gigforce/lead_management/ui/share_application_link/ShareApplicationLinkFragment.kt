@@ -12,8 +12,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.common_ui.utils.PushDownAnim
-import com.gigforce.common_ui.utils.UtilMethods
-import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfileOverview
 import com.gigforce.common_ui.views.GigforceToolbar
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.gone
@@ -123,9 +121,9 @@ class ShareApplicationLinkFragment : BaseFragment2<FragmentLeadManagementReferra
 
     private fun initToolbar(toolbar: GigforceToolbar) = toolbar.apply{
         val shareTitle = if (shareType == ShareReferralType.SHARE_JOB_PROFILE_LINK) {
-            "Share Job Profile"
+            context.getString(R.string.share_job_lead)
         } else {
-            "Share Application Link"
+            context.getString(R.string.share_app_link_lead)
         }
         showTitle(shareTitle)
         hideActionMenu()
@@ -204,7 +202,7 @@ class ShareApplicationLinkFragment : BaseFragment2<FragmentLeadManagementReferra
                         viewBinding.pbReferralsFrag.gone()
 
                         Toast.makeText(requireContext(),
-                            "Link Shared",
+                            getString(R.string.link_shared_lead),
                             Toast.LENGTH_SHORT
                         ).show()
 
@@ -225,9 +223,9 @@ class ShareApplicationLinkFragment : BaseFragment2<FragmentLeadManagementReferra
                         viewBinding.pbReferralsFrag.gone()
 
                         MaterialAlertDialogBuilder(requireContext())
-                            .setTitle("Unable to share")
+                            .setTitle(getString(R.string.unable_to_share_lead))
                             .setMessage(referralState.error)
-                            .setPositiveButton("Okay") { _, _ -> }
+                            .setPositiveButton(getString(R.string.okay_lead)) { _, _ -> }
                             .show()
                     }
                     ShareReferralViewState.SharingAndUpdatingJoiningDocument -> {
@@ -255,9 +253,9 @@ class ShareApplicationLinkFragment : BaseFragment2<FragmentLeadManagementReferra
                     is ShareReferralViewState.UnableToCreateShareLink -> {
                         viewBinding.pbReferralsFrag.gone()
                         MaterialAlertDialogBuilder(requireContext())
-                            .setTitle("Unable to share")
+                            .setTitle(getString(R.string.unable_to_share_lead))
                             .setMessage(referralState.error)
-                            .setPositiveButton("Okay") { _, _ -> }
+                            .setPositiveButton(getString(R.string.okay_lead)) { _, _ -> }
                             .show()
                     }
                 }
@@ -337,7 +335,7 @@ class ShareApplicationLinkFragment : BaseFragment2<FragmentLeadManagementReferra
                 Intent.EXTRA_SUBJECT,
                 getString(R.string.app_name)
             )
-            val shareMessage = getString(R.string.looking_for_dynamic_working_hours) + " " + url
+            val shareMessage = getString(R.string.looking_for_dynamic_working_hours_lead) + " " + url
             shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
             val bitmap =
                 BitmapFactory.decodeResource(requireContext().resources, R.drawable.bg_gig_type)
@@ -359,7 +357,7 @@ class ShareApplicationLinkFragment : BaseFragment2<FragmentLeadManagementReferra
                 )
             )
             startActivityForResult(
-                Intent.createChooser(shareIntent, "choose one"),
+                Intent.createChooser(shareIntent, getString(R.string.choose_one_lead)),
                 REQUEST_CODE_SHARE_VIA_OTHER_APPS
                 )
         } catch (e: Exception) {

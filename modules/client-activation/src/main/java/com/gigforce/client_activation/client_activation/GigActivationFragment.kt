@@ -181,9 +181,9 @@ class GigActivationFragment : Fragment(),
                 )
                 tv_application_gig_activation.text = Html.fromHtml(
                     if (jpSettings?.status == "Interested" || jpSettings?.status == "Inprocess" || jpSettings?.status == "Submitted")
-                        viewModel.observableGigActivation.value?.subTitle + getString(R.string.pending_bold) else if (jpSettings?.status == "Activated") viewModel.observableGigActivation.value?.subTitle + getString(
-                        R.string.approved_bold
-                    ) else viewModel.observableGigActivation.value?.subTitle + getString(R.string.rejected_bold)
+                        viewModel.observableGigActivation.value?.subTitle + getString(R.string.pending_bold_client) else if (jpSettings?.status == "Activated") viewModel.observableGigActivation.value?.subTitle + getString(
+                        R.string.approved_bold_client
+                    ) else viewModel.observableGigActivation.value?.subTitle + getString(R.string.rejected_bold_client)
                 )
                 tv_verification_gig_activation.setCompoundDrawablesWithIntrinsicBounds(
                     if (viewModel.observableJpApplication.value?.status == "Activated") R.drawable.ic_applied else R.drawable.ic_status_pending,
