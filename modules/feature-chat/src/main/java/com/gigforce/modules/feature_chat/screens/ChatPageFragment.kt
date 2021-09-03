@@ -39,6 +39,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.common_image_picker.CameraAndGalleryIntegrator
 import com.gigforce.common_image_picker.ImageCropCallback
 import com.gigforce.common_image_picker.ImageCropOptions
+import com.gigforce.common_image_picker.image_cropper.ImageCropActivity
 import com.gigforce.common_ui.MimeTypes
 import com.gigforce.common_ui.chat.ChatConstants
 import com.gigforce.common_ui.chat.ChatLocalDirectoryReferenceManager
@@ -122,6 +123,7 @@ class ChatPageFragment : Fragment(),
                 .Builder()
                 .shouldOpenImageCrop(true)
                 .setShouldEnableFaceDetector(false)
+                .shouldEnableFreeCrop(true)
                 .setOutputFileUri(imageFile.toUri())
                 .build()
         }
@@ -864,7 +866,9 @@ class ChatPageFragment : Fragment(),
             }
             CameraAndGalleryIntegrator.REQUEST_CAPTURE_IMAGE,
             CameraAndGalleryIntegrator.REQUEST_PICK_IMAGE,
-            CameraAndGalleryIntegrator.REQUEST_CROP -> {
+            CameraAndGalleryIntegrator.REQUEST_CROP,
+            ImageCropActivity.CROP_RESULT_CODE-> {
+
 
                 if (resultCode == Activity.RESULT_OK) {
 
