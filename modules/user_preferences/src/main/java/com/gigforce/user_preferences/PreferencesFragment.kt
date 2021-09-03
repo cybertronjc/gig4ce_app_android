@@ -80,10 +80,10 @@ class PreferencesFragment : Fragment() {
 
     private fun observeProfileData() {
         viewModel.userProfileData.observe(viewLifecycleOwner, Observer { profile ->
+            viewModel.setProfileDataModel(profile)
             displayImage(profile.profileAvatarName)
-
+            setPreferenecesList()
         })
-
     }
 
     private fun observePreferenceData() {

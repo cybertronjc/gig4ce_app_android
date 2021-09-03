@@ -61,6 +61,7 @@ class WeekDayFragment : Fragment() {
                 initializeViews()
             })
         viewModel.getConfiguration()
+        viewModel.getAllData()
     }
 
     private fun initializeViews() {
