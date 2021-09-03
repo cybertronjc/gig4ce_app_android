@@ -289,6 +289,9 @@ class AadhaarCardImageUploadFragment : Fragment(),
             it?.let {
 
                 if (it.verified) {
+                    var props = HashMap<String, Any>()
+                    props.put("Aadhaar verified", true)
+                    eventTracker.setUserProperty(props)
                     verificationScreenStatus = VerificationScreenStatus.VERIFIED
                     verifiedStatusViews()
                     viewBinding.belowLayout.visible()
