@@ -207,10 +207,11 @@ class ShareApplicationLinkFragment : BaseFragment2<FragmentLeadManagementReferra
                         ).show()
 
                         val referralText = if (shareType == ShareReferralType.SHARE_JOB_PROFILE_LINK) {
-                            "Ask the Giger to apply and submit Gig application"
+                            getString(R.string.ask_giger_to_apply)
                         } else {
-                            "Ask the giger to signup and submit Gig application."
+                            getString(R.string.ask_giger_to_signup)
                         }
+
 
                         ReferralLinkSharedResultDialogFragment.launchSuccess(
                             childFragmentManager,
@@ -235,9 +236,9 @@ class ShareApplicationLinkFragment : BaseFragment2<FragmentLeadManagementReferra
                         viewBinding.pbReferralsFrag.gone()
 
                         val referralText = if (shareType == ShareReferralType.SHARE_JOB_PROFILE_LINK) {
-                            "Ask the Giger to apply and submit Gig application"
+                            getString(R.string.ask_giger_to_apply)
                         } else {
-                            "Ask the giger to signup and submit Gig application."
+                            getString(R.string.ask_giger_to_signup)
                         }
 
                         ReferralLinkSharedResultDialogFragment.launchError(
