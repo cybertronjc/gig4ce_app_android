@@ -59,6 +59,7 @@ class WeekEndFragment : Fragment() {
                 initializeViews()
             })
         viewModel.getConfiguration()
+        viewModel.getAllData()
     }
 
     private fun initializeViews() {
