@@ -203,6 +203,7 @@
             android:layout_height="wrap_content"
             android:letterSpacing="0.05"
             android:text="@string/_20_km_pref"
+            android:visibility="gone"
             android:textColor="#787993"
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="@+id/arround_current_add_seekbar"
@@ -214,7 +215,7 @@
             android:layout_height="20dp"
             android:layout_marginLeft="25dp"
             android:layout_marginRight="0dp"
-            android:background="@color/white"
+            android:background="@color/fui_transparent"
             app:layout_constraintEnd_toEndOf="@+id/arround_current_add_seekbar"
             app:layout_constraintStart_toStartOf="@+id/arround_current_add_seekbar"
             app:layout_constraintTop_toBottomOf="@+id/arround_current_add_seekbar" />
