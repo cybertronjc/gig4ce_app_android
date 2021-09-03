@@ -102,5 +102,7 @@
     <string name="name_propercase">नाम</string>
     <string name="relation">रिश्ता</string>
     <string name="contact_number">संपर्क नंबर</string>
+    <string name="ask_giger_to_apply">गिगर को आवेदन करने और गिग आवेदन जमा करने के लिए कहें</string>
+    <string name="ask_giger_to_signup">गिगर को साइन अप करने और गिग आवेदन जमा करने के लिए कहें।</string>
 
 </resources>

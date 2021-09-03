@@ -75,6 +75,7 @@ class ProfileFragment : BaseFragment() {
     companion object {
         fun newInstance() = ProfileFragment()
         val UPLOAD_PROFILE_PIC = 1
+        val MAX_DISTANCE = 20
     }
 
 
@@ -466,7 +467,11 @@ class ProfileFragment : BaseFragment() {
                 }
 
             }
-
+            if(profile.address.current.preferred_distance>0) {
+                arround_current_add.text = profile.address.current.preferred_distance.toString()+" KM "+ if(profile.address.current.preferred_distance>=MAX_DISTANCE) "away" else ""
+            }else{
+                arround_current_add.text = ""
+            }
 
         })
 

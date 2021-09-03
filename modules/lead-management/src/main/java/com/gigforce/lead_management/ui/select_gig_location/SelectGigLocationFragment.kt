@@ -17,6 +17,7 @@ import com.gigforce.common_ui.viewdatamodels.GigerProfileCardDVM
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.selectChipWithText
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.Lce
@@ -57,6 +58,10 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentLayoutB
     val cityChips = arrayListOf<ChipGroupModel>()
     val locationChips = arrayListOf<ChipGroupModel>()
     var cityAndLocations = listOf<JobProfileCityAndLocation>()
+    var selectedCityChip : ChipGroupModel? = null
+    var selectedLocationChip : ChipGroupModel? = null
+    var currentJobProfile: JobProfileDetails? = null
+    var selectedLocationText : String? = null
 
     override fun viewCreated(
         viewBinding: SelectGigLocationFragmentLayoutBinding,
@@ -133,6 +138,7 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentLayoutB
         viewModel.viewState.observe(viewLifecycleOwner, Observer {
             val jobProfileDetails = it
 
+
             when (jobProfileDetails) {
                 is Lce.Content -> showGigLocations(jobProfileDetails.content)
                 is Lce.Error -> showErrorInLoadingGigLocation(jobProfileDetails.error)
@@ -159,6 +165,8 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentLayoutB
                     assignGigRequest.cityName = cityAndLocations.get(index).city.toString()
                 }
             }
+
+            selectedLocationText = searchLocation1.text.toString()
             //get the selected location chip and create JobLocation model
             locationChips.forEachIndexed { index, chipGroupModel ->
                 if (chipGroupModel.isSelected){
@@ -195,8 +203,6 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentLayoutB
             }
         }
 
-
-
         searchLocation1.setOnFocusChangeListener { view, b ->
             if (b){
                 searchLocation1.showDropDown()
@@ -207,7 +213,9 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentLayoutB
             searchLocation1.showDropDown()
         }
 
-
+        searchLocation1.setOnClickListener {
+            searchLocation1.showDropDown()
+        }
 
 
         if (currentGigerInfo != null) {
@@ -225,7 +233,10 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentLayoutB
 
     }
 
-    private fun showGigLocations(jobProfile: JobProfileDetails) = viewBinding.apply {
+    private fun showGigLocations(
+        jobProfile: JobProfileDetails
+    ) = viewBinding.apply {
+        currentJobProfile = jobProfile
 
         stopShimmer(
             this.locationShimmerContainer,
@@ -253,27 +264,52 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentLayoutB
             viewBinding.cityChipGroup.setOnCheckedChangeListener(object :
                 ChipGroupComponent.OnCustomCheckedChangeListener {
                 override fun onCheckedChangeListener(model: ChipGroupModel) {
-                    try {
-
-                        //make submit button enabled
-                        viewBinding.submitBtn.background = resources.getDrawable(R.drawable.app_gradient_button)
-
-                        //clear locations dropdown array
-                        locationsArray.clear()
-                        viewBinding.searchLocation1.setAdapter(null)
-                        viewBinding.searchLocation1.setText("")
-                        arrayAdapter1?.clear()
-                        jobLocalities = jobProfile.locality.filter { it.cityId?.equals(cityAndLocations.get(model.chipId).id) == true }
-                        jobStores = jobProfile.stores.filter { it.cityId?.equals(cityAndLocations.get(model.chipId).id) == true }
-                        locationChipGroup.removeAllViews()
-                        processJobLocations(jobLocalities, jobStores)
-
-                    } catch (e: Exception) {
-                        logger.d(TAG, "Exception while checkedChangeListener ${e.toString()}")
-                    }
-
+                    cityChipSelected(model, jobProfile)
                 }
             })
+        }
+
+        if(selectedCityChip != null && currentJobProfile != null){
+            viewBinding.cityChipGroup.selectChipWithText(selectedCityChip!!.text)
+            cityChipSelected(selectedCityChip!!,currentJobProfile!!)
+
+            if(selectedLocationChip != null){
+                viewBinding.locationChipGroup.selectChipWithText(selectedLocationChip!!.text)
+            }
+
+            if(!selectedLocationText.isNullOrEmpty()){
+                viewBinding.searchLocation1.visible()
+                viewBinding.spinnerDrop.visible()
+
+                viewBinding.searchLocation1.setText(selectedLocationText)
+            }
+        }
+    }
+
+    private fun cityChipSelected(
+        model: ChipGroupModel,
+        jobProfile: JobProfileDetails
+    ) {
+        try {
+            selectedCityChip = model
+
+            //make submit button enabled
+            viewBinding.submitBtn.background = resources.getDrawable(R.drawable.app_gradient_button)
+
+            //clear locations dropdown array
+            locationsArray.clear()
+            viewBinding.searchLocation1.setAdapter(null)
+            viewBinding.searchLocation1.setText("")
+            arrayAdapter1?.clear()
+            jobLocalities =
+                jobProfile.locality.filter { it.cityId?.equals(cityAndLocations.get(model.chipId).id) == true }
+            jobStores =
+                jobProfile.stores.filter { it.cityId?.equals(cityAndLocations.get(model.chipId).id) == true }
+            viewBinding.locationChipGroup.removeAllViews()
+            processJobLocations(jobLocalities, jobStores)
+
+        } catch (e: Exception) {
+            logger.d(TAG, "Exception while checkedChangeListener ${e.toString()}")
         }
     }
 
@@ -316,6 +352,7 @@ class SelectGigLocationFragment : BaseFragment2<SelectGigLocationFragmentLayoutB
             viewBinding.locationChipGroup.setOnCheckedChangeListener(object : ChipGroupComponent.OnCustomCheckedChangeListener{
                 override fun onCheckedChangeListener(model1: ChipGroupModel) {
                     //make dropdown visible
+                    selectedLocationChip = model1
 
                     locationsArray.clear()
                     viewBinding.searchLocation1.setAdapter(null)

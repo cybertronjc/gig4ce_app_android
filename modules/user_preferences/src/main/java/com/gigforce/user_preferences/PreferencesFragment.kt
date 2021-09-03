@@ -123,10 +123,10 @@ class PreferencesFragment : Fragment() {
     }
 
     private fun listener() {
-        appBar.setBackButtonListener(View.OnClickListener { activity?.onBackPressed() })
+        appBar.setBackButtonListener { activity?.onBackPressed() }
 
-        imageView8.setOnClickListener(View.OnClickListener { activity?.onBackPressed() })
-        imageView9.setOnClickListener(View.OnClickListener { navigation.navigateTo("profile")/*navigate(R.id.profileFragment)*/ })
+        imageView8.setOnClickListener { activity?.onBackPressed() }
+        imageView9.setOnClickListener { navigation.navigateTo("profile")/*navigate(R.id.profileFragment)*/ }
     }
 
     private fun initializeViews() {
@@ -258,7 +258,6 @@ class PreferencesFragment : Fragment() {
             unregisterCurrentFirebaseToken()
             eventTracker.logoutUserFromAnalytics()
             sharedPreAndCommonUtilInterface.removeIntroComplete()
-            navigation.popBackStack("preferences/settingFragment")//popFragmentFromStack(R.id.settingFragment)
             dialog.dismiss()
         }
 
