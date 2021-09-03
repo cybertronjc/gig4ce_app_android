@@ -1,5 +1,6 @@
 package com.gigforce.core.di.interfaces
 
+
 interface IBuildConfig {
     fun getDrivingCertificateMethod():String
     fun getReferralBaseUrl():String
@@ -19,4 +20,5 @@ interface IBuildConfig {
     val appFlavour : String
     val appBuildType : String
     fun getApiBaseURL() : String
+    fun getListingBaseUrl(): String
 }
