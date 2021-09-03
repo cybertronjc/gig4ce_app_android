@@ -18,6 +18,7 @@ import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.core.utils.Lce
 import com.gigforce.lead_management.LeadManagementConstants
 import com.gigforce.lead_management.LeadManagementNavDestinations
@@ -51,6 +52,7 @@ class GigerOnboardingFragment : BaseFragment2<GigerOnboardingFragmentBinding>(
 
     //Data
     private var cameFromJoinings: Boolean = false
+    private val firebaseAuthStateListener : FirebaseAuthStateListener = FirebaseAuthStateListener.getInstance()
 
     override fun viewCreated(
         viewBinding: GigerOnboardingFragmentBinding,
@@ -124,6 +126,7 @@ class GigerOnboardingFragment : BaseFragment2<GigerOnboardingFragmentBinding>(
             viewBinding.makeSureText.setText(resources.getString(R.string.registered_lead))
             viewBinding.enterMobileLabel.setText(resources.getString(R.string.gigers_phone_lead))
             viewBinding.changeNumber.gone()
+            viewBinding.changeNumberIv.gone()
 
             showKeyboard()
         }
@@ -180,6 +183,11 @@ class GigerOnboardingFragment : BaseFragment2<GigerOnboardingFragmentBinding>(
         val mobileNo = viewBinding.mobileNoEt.text.toString()
         if (!INDIAN_MOBILE_NUMBER.matcher(mobileNo).matches()) {
             showAlertDialog("", getString(R.string.enter_valid_mobile_lead))
+            return
+        }
+
+        if("+91${viewBinding.mobileNoEt.text}" == firebaseAuthStateListener.getCurrentSignInInfo()?.phoneNumber){
+            showAlertDialog("Wrong mobile number","You cannot user your own mobile number")
             return
         }
 
@@ -297,6 +305,7 @@ class GigerOnboardingFragment : BaseFragment2<GigerOnboardingFragmentBinding>(
         viewBinding.notRegisteredLayout.visible()
         viewBinding.createProfileBtn.visible()
         viewBinding.changeNumber.visible()
+        viewBinding.changeNumberIv.visible()
         viewBinding.mobileNoEt.isEnabled = false
         viewBinding.enterMobileLabel.setText(getString(R.string.giger_not_registered_lead))
         viewBinding.tvPleaseEnter.setText(getString(R.string.joining_failed_lead_lead))
