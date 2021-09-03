@@ -8,7 +8,6 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.utils.MDUtil.textChanged
 import com.gigforce.ambassador.EnrollmentConstants
 import com.gigforce.ambassador.R
@@ -154,7 +153,7 @@ class AddUserDetailsFragment : Fragment(), OnDatePickedListener, IOnBackPressedO
 
 
         toolbar_layout.apply {
-            showTitle(getString(R.string.user_details))
+            showTitle(getString(R.string.user_details_amb))
             hideActionMenu()
             setBackButtonListener(View.OnClickListener {
                 showGoBackConfirmationDialog()
@@ -196,7 +195,7 @@ class AddUserDetailsFragment : Fragment(), OnDatePickedListener, IOnBackPressedO
     private fun validateDataAndsubmit() {
         if (user_name_et.text.length <= 2) {
             full_name_error_tv.visible()
-            full_name_error_tv.text = getString(R.string.name_should_be_more_than_2_chars)
+            full_name_error_tv.text = getString(R.string.name_should_be_more_than_2_chars_amb)
 
             return
         } else {
@@ -206,7 +205,7 @@ class AddUserDetailsFragment : Fragment(), OnDatePickedListener, IOnBackPressedO
 
         if (gender_chip_group.checkedChipId == -1) {
             gender_error_tv.visible()
-            gender_error_tv.text = getString(R.string.select_ur_gender)
+            gender_error_tv.text = getString(R.string.select_ur_gender_amb)
             return
         } else {
             gender_error_tv.gone()
@@ -218,7 +217,7 @@ class AddUserDetailsFragment : Fragment(), OnDatePickedListener, IOnBackPressedO
         if (highest_qual_chipgroup.checkedChipId == -1) {
 
             highest_qual_error_tv.visible()
-            highest_qual_error_tv.text = getString(R.string.please_fill_highest_qual)
+            highest_qual_error_tv.text = getString(R.string.please_fill_highest_qual_amb)
             return
         } else {
             highest_qual_error_tv.gone()
@@ -239,7 +238,7 @@ class AddUserDetailsFragment : Fragment(), OnDatePickedListener, IOnBackPressedO
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(title)
             .setMessage(message)
-            .setPositiveButton(getString(R.string.okay).capitalize()) { _, _ -> }
+            .setPositiveButton(getString(R.string.okay_amb).capitalize()) { _, _ -> }
             .show()
     }
 
@@ -283,7 +282,7 @@ class AddUserDetailsFragment : Fragment(), OnDatePickedListener, IOnBackPressedO
                     Lse.Success -> {
 //                            submitBtn.hideProgress()
 
-                        showToast(getString(R.string.user_details_submitted))
+                        showToast(getString(R.string.user_details_submitted_amb))
                         navigation.navigateTo("userinfo/addProfilePictureFragment",bundleOf(
                             EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
                             EnrollmentConstants.INTENT_EXTRA_USER_NAME to user_name_et.text.toString(),
@@ -300,7 +299,7 @@ class AddUserDetailsFragment : Fragment(), OnDatePickedListener, IOnBackPressedO
                     is Lse.Error -> {
 //                            submitBtn.hideProgress()
 
-                        showAlertDialog(getString(R.string.cannot_submit_info), it.error)
+                        showAlertDialog(getString(R.string.cannot_submit_info_amb), it.error)
                     }
                 }
             })
@@ -313,10 +312,10 @@ class AddUserDetailsFragment : Fragment(), OnDatePickedListener, IOnBackPressedO
 
         if (showEditActions) {
             skip_btn.visible()
-            submitBtn.text = "Update"
+            submitBtn.text = getString(R.string.update_amb)
         } else {
             skip_btn.gone()
-            submitBtn.text = "Next"
+            submitBtn.text = getString(R.string.next_amb)
         }
     }
 
@@ -340,10 +339,10 @@ class AddUserDetailsFragment : Fragment(), OnDatePickedListener, IOnBackPressedO
 
     private fun showGoBackConfirmationDialog() {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle(getString(R.string.alert))
-            .setMessage(getString(R.string.are_u_sure_u_want_to_go_back))
-            .setPositiveButton(getString(R.string.yes)) { _, _ -> goBackToUsersList() }
-            .setNegativeButton(getString(R.string.no)) { _, _ -> }
+            .setTitle(getString(R.string.alert_amb))
+            .setMessage(getString(R.string.are_u_sure_u_want_to_go_back_amb))
+            .setPositiveButton(getString(R.string.yes_amb)) { _, _ -> goBackToUsersList() }
+            .setNegativeButton(getString(R.string.no_amb)) { _, _ -> }
             .show()
     }
 

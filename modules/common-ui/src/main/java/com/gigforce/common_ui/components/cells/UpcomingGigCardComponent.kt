@@ -168,7 +168,7 @@ class UpcomingGigCardComponent(context: Context, attrs: AttributeSet?) :  FrameL
                 GigStatus.MISSED -> {
 
                     checkInTV.isEnabled = false
-                    checkInTV.text = "Check In"
+                    checkInTV.text = context.getString(R.string.check_in_common_ui)
                 }
                 GigStatus.ONGOING,
                 GigStatus.PENDING,
@@ -183,15 +183,15 @@ class UpcomingGigCardComponent(context: Context, attrs: AttributeSet?) :  FrameL
                     if (obj.isCheckInAndCheckOutMarked()) {
                         checkInTV.isEnabled = false
                         checkInTV.text =
-                            "Checked Out"
+                            context.getString(R.string.checked_out)
                     } else if (obj.isCheckInMarked()) {
                         checkInTV.isEnabled = true
                         checkInTV.text =
-                            context.getString(R.string.check_out)
+                            context.getString(R.string.check_out_common_ui)
                     } else {
                         checkInTV.isEnabled = true
                         checkInTV.text =
-                            context.getString(R.string.check_in)
+                            context.getString(R.string.check_in_common_ui)
                     }
                 }
             }

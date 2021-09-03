@@ -217,14 +217,14 @@ class GigMonthlyAttendanceFragment : Fragment(), GigAttendanceAdapterClickListen
             }
         }
 
-        total_days_tv.text = ": ${completedGigsCount} Days"
-        total_working_days_tv.text = ": ${absentGigsCount} Days"
+        total_days_tv.text = "  : ${completedGigsCount} ${getString(R.string.days)}"
+        total_working_days_tv.text = "  : ${absentGigsCount} ${getString(R.string.days)}"
 
         attendance_type_chipgroup.check(R.id.attendance_all_chip)
         adapter.updateAttendanceList(content)
         if (content.isEmpty()) {
             attendance_monthly_learning_error.visible()
-            attendance_monthly_learning_error.text = "No Gigs assigned in selected month!"
+            attendance_monthly_learning_error.text = getString(R.string.no_gigs_assigned_giger_gigs)
         } else {
             attendance_monthly_learning_error.gone()
         }

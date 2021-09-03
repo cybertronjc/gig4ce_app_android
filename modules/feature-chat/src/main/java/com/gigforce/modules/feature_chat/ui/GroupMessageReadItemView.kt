@@ -14,7 +14,6 @@ import com.gigforce.core.navigation.INavigation
 import com.gigforce.modules.feature_chat.ChatNavigation
 import com.gigforce.modules.feature_chat.R
 import com.google.firebase.Timestamp
-import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import javax.inject.Inject
@@ -69,7 +68,7 @@ class GroupMessageReadItemView(
                 } else {
                     contextImageView.loadImage(R.drawable.ic_user_2)
                 }
-                txtSubtitle.text = "Read on ${formatDate(chatHeader.readOn)}"
+                txtSubtitle.text = context.getString(R.string.read_on_chat) + formatDate(chatHeader.readOn)
             }
         }
     }

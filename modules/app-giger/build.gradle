@@ -110,6 +110,6 @@ dependencies {
 
     //Permissions
     implementation 'pub.devrel:easypermissions:3.0.0'
-
+    implementation 'com.akexorcist:localization:1.2.10'
 
 }

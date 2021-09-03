@@ -23,7 +23,7 @@
             android:layout_marginTop="22dp"
             android:fontFamily="@font/lato_bold"
             android:letterSpacing="0"
-            android:text="@string/edit"
+            android:text="@string/edit_veri"
             android:textColor="@color/black"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -45,7 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/name"
+            android:text="@string/name_veri"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/editLabel" />
 
@@ -64,7 +64,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
-            android:text="@string/date_of_birth_without_colon"
+            android:text="@string/date_of_birth_without_colon_veri"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/nameET" />
 
@@ -96,7 +96,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
-            android:text="@string/gender_wo_colon"
+            android:text="@string/gender_wo_colon_veri"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/dobET" />
 
@@ -118,7 +118,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/aadhar_card"
+            android:text="@string/aadhar_card_veri"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/genderSpinner" />
 
@@ -138,7 +138,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/address_line"
+            android:text="@string/address_line_veri"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/aadharET" />
 
@@ -147,7 +147,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:text="House no 3601"
+            android:text="@string/house_no_3601_veri"
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/addressLineLabel" />
@@ -164,7 +164,7 @@
                 android:id="@+id/areaLabel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/area"
+                android:text="@string/area_veri"
                 app:layout_constraintEnd_toStartOf="@+id/locationLabel"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -174,7 +174,7 @@
                 android:id="@+id/locationLabel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/location"
+                android:text="@string/location_veri"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/areaLabel"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -185,7 +185,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="Preet Vihar"
+                android:text="@string/preet_vihar_veri"
                 android:textColor="@color/black"
                 app:layout_constraintEnd_toStartOf="@+id/locationET"
                 app:layout_constraintStart_toStartOf="parent"
@@ -197,7 +197,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="New Delhi"
+                android:text="@string/new_delhi_veri"
                 android:textColor="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/areaET"
@@ -217,7 +217,7 @@
                 android:id="@+id/stateLabel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/state"
+                android:text="@string/state_veri"
                 app:layout_constraintEnd_toStartOf="@+id/pinLabel"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -227,7 +227,7 @@
                 android:id="@+id/pinLabel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/pincode"
+                android:text="@string/pincode_veri"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/stateLabel"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -266,7 +266,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="33dp"
             android:minHeight="@dimen/size_36"
-            android:text="@string/update"
+            android:text="@string/update_veri"
             app:layout_constraintTop_toBottomOf="@id/statePinLayout" />
 
 

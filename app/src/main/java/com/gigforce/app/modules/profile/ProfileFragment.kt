@@ -24,7 +24,6 @@ import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewmodels.ProfileViewModel
 import com.gigforce.core.navigation.INavigation
-import com.gigforce.verification.util.VerificationConstants
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.chip.Chip
 import com.google.firebase.storage.FirebaseStorage
@@ -230,7 +229,7 @@ class ProfileFragment : BaseFragment() {
                 layout.main_expanded_is_verified.verification_status_cardview.strokeColor =
                     ResourcesCompat.getColor(resources, R.color.app_orange, null)
             } else {
-                layout.main_expanded_is_verified.verification_status_tv.text = "Not Verified"
+                layout.main_expanded_is_verified.verification_status_tv.text = getString(R.string.not_verified)
                 layout.main_expanded_is_verified.verification_status_tv.setTextColor(
                     ResourcesCompat.getColor(
                         resources,
@@ -249,6 +248,7 @@ class ProfileFragment : BaseFragment() {
 
         location_card.setOnClickListener {
             navigation.navigateTo("preferences/locationFragment")
+//            showToast(getString(R.string.work_in_progress_app))
         }
         // load user data
         viewModel.ambassadorProfilePicUpdate.observe(viewLifecycleOwner, Observer {
@@ -330,7 +330,7 @@ class ProfileFragment : BaseFragment() {
                 // TODO: Add a generic way for string formatting.
                 for ((index, language) in languages.withIndex()) {
                     mainAboutString += if (index == 0)
-                        "Language known: " + language.name + " (" +
+                        getString(R.string.know_lang_app) + language.name + " (" +
                                 getLanguageLevel(language.speakingSkill.toInt()) + ")\n"
                     else
                         "\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + language.name + " (" +

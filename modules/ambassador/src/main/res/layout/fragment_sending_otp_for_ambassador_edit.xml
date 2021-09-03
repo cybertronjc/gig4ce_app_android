@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/lato_bold"
                 android:letterSpacing="0"
-                android:text="Edit Profile !!!"
+                android:text="@string/edit_profile_amb"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
 
@@ -66,7 +66,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/congrats_image"
-            android:text="Verification Code will be sent to registered number to edit profile. "
+            android:text="@string/verification_code_will_be_sent_to_registered_number_to_edit_profile_amb"
              />
 
 
@@ -81,7 +81,7 @@
             android:fontFamily="@font/lato_bold"
             android:gravity="center"
             android:minHeight="@dimen/size_36"
-            android:text="@string/okay_text"
+            android:text="@string/okay_text_amb"
             android:textAllCaps="false"
             android:textColor="@color/white"
             app:layout_constraintTop_toBottomOf="@id/congrats_text"
@@ -97,7 +97,7 @@
             android:layout_marginEnd="24dp"
             android:fontFamily="@font/lato_bold"
             android:gravity="center"
-            android:text="@string/cancel_underlined"
+            android:text="@string/cancel_underlined_amb"
             android:textAllCaps="false"
             android:minHeight="0dp"
             android:textColor="@color/battle_ship_grey"

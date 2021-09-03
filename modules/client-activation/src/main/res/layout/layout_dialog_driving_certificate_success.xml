@@ -25,7 +25,7 @@
         android:layout_marginTop="@dimen/size_19"
         android:fontFamily="@font/lato"
         android:letterSpacing="-0.05"
-        android:text="@string/congratulations"
+        android:text="@string/congratulations_client"
         android:textColor="#dd2865"
         android:textSize="16sp"
         android:textStyle="bold" />
@@ -38,7 +38,7 @@
         android:layout_marginEnd="@dimen/size_25"
         android:fontFamily="@font/lato"
         android:gravity="center_horizontal"
-        android:text="@string/congratulations_your_driving_certificate_successfully_uploaded_your_docs_are_safe_with_us"
+        android:text="@string/congratulations_your_driving_certificate_successfully_uploaded_your_docs_are_safe_with_us_client"
         android:textColor="@color/black"
         android:textSize="14sp"
         android:textStyle="normal" />
@@ -52,7 +52,7 @@
         android:fontFamily="@font/lato"
         android:gravity="center_horizontal"
         android:letterSpacing="-0.01"
-        android:text="@string/driving_certificate"
+        android:text="@string/driving_certificate_client"
         android:textColor="@color/lipstick"
         android:textSize="14sp"
         android:textStyle="normal"
@@ -75,7 +75,7 @@
         android:paddingTop="@dimen/size_10"
         android:paddingEnd="@dimen/size_30"
         android:paddingBottom="@dimen/size_9"
-        android:text="@string/okay"
+        android:text="@string/okay_client"
         android:textColor="@color/white"
         android:textSize="@dimen/font_14"
         android:textStyle="normal" />

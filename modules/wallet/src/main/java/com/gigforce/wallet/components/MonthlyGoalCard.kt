@@ -52,9 +52,9 @@ class MonthlyGoalCard : MaterialCardView {
 
     private fun setBonusText() {
         if (currentMonthSalary > monthlyGoalAmount / 2)
-            bonus_text.text = "You are doing really great"
+            bonus_text.text = context.getString(R.string.doing_really_great_wallet)
         else if (!isMonthlyGoalSet)
-            bonus_text.text = "You haven't set your monthly goal"
+            bonus_text.text = context.getString(R.string.havent_set_monthly_goal_wallet)
         else
             bonus_text.text = "Plan your gigs to get maximum \nout of them"
     }

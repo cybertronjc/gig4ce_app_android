@@ -97,7 +97,7 @@ class ExperienceExpandedFragment : ProfileBaseFragment() {
                 experience_top_profile.about_me_verification_layout.status_iv.setImageResource(R.drawable.ic_clock_orange)
                 experience_top_profile.about_me_verification_layout.verification_status_cardview.strokeColor = ResourcesCompat.getColor(resources, R.color.app_orange, null)
             } else {
-                experience_top_profile.about_me_verification_layout.verification_status_tv.text = "Not Verified"
+                experience_top_profile.about_me_verification_layout.verification_status_tv.text = getString(R.string.not_verified)
                 experience_top_profile.about_me_verification_layout.verification_status_tv.setTextColor(
                         ResourcesCompat.getColor(resources, R.color.red, null))
                 experience_top_profile.about_me_verification_layout.status_iv.setImageResource(R.drawable.ic_cross_red)

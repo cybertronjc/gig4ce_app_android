@@ -25,7 +25,7 @@
         android:layout_marginTop="24dp"
         android:fontFamily="@font/lato"
         android:lineSpacingExtra="3sp"
-        android:text="@string/profile_picture"
+        android:text="@string/profile_picture_amb"
         android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -98,7 +98,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:fontFamily="@font/lato"
-            android:text="@string/edit"
+            android:text="@string/edit_amb"
             android:textColor="@color/colorPrimary" />
 
 
@@ -117,7 +117,7 @@
         android:enabled="true"
         android:fontFamily="@font/lato"
         android:gravity="center"
-        android:text="@string/next_camel_case"
+        android:text="@string/next_camel_case_amb"
         android:textAllCaps="false"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@id/skipButton"
@@ -138,7 +138,7 @@
         android:fontFamily="@font/lato_bold"
         android:gravity="center"
         android:minHeight="0dp"
-        android:text="@string/skip_underline"
+        android:text="@string/skip_underline_amb"
         android:paddingBottom="0dp"
         android:paddingTop="0dp"
         android:textAllCaps="false"

@@ -59,7 +59,7 @@
                     android:fontFamily="@font/lato"
                     android:gravity="center_horizontal"
                     android:lineSpacingExtra="3sp"
-                    android:text="@string/upload_picture"
+                    android:text="@string/upload_picture_app"
                     android:textColor="@color/lipstick"
                     android:textSize="14sp"
                     android:textStyle="bold" />

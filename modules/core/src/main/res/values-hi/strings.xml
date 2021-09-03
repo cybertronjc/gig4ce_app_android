@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="location_cant_be_found_core">स्थान नहीं मिल सका</string>
+    <string name="provide_permission_core">आगे बढ़ने के लिए आपको अनुमति प्रदान करने की आवश्यकता है</string>
+</resources>

@@ -55,13 +55,13 @@ class JobPreferenceFragment() :
 
     fun getAllWorkingDays(): ArrayList<String> {
         var workingDaysList = ArrayList<String>()
-        workingDaysList.add(("Monday"))
-        workingDaysList.add(("Tuesday"))
-        workingDaysList.add(("Wednesday"))
-        workingDaysList.add(("Thursday"))
-        workingDaysList.add(("Friday"))
-        workingDaysList.add(("Saturday"))
-        workingDaysList.add(("Sunday"))
+        workingDaysList.add("Monday")
+        workingDaysList.add("Tuesday")
+        workingDaysList.add("Wednesday")
+        workingDaysList.add("Thursday")
+        workingDaysList.add("Friday")
+        workingDaysList.add("Saturday")
+        workingDaysList.add("Sunday")
         return workingDaysList
     }
 
@@ -189,7 +189,8 @@ class JobPreferenceFragment() :
                 timing_cl.gone()
                 currentStep = 1
 
-                val fullTimePartime = if (fullTimeJob) "Full Time" else "Part Time"
+                val fullTimePartime = if (fullTimeJob) getString(R.string.full_time_profile) else getString(
+                                    R.string.part_time_profile)
                 eventTracker.pushEvent(args = TrackingEventArgs(
                         OnboardingEvents.EVENT_USER_EXPLOYMENT_PREFERENCE_SELECTED,
                         props = mapOf(

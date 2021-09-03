@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_decline_gig"
-        android:title="Decline Gig"
+        android:title="@string/decline_gig"
         app:showAsAction="collapseActionView" />
     <item
         android:id="@+id/action_help"

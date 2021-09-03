@@ -33,7 +33,7 @@
                 android:layout_marginEnd="24dp"
                 android:fontFamily="@font/lato"
                 android:lineSpacingExtra="7sp"
-                android:text="@string/enter_user_s_mobile_number"
+                android:text="@string/enter_user_s_mobile_number_amb"
                 android:textColor="#131415"
                 android:textSize="32sp"
                 android:textStyle="bold"
@@ -55,7 +55,7 @@
                 android:layout_marginTop="24dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/enter_mobile_label"
-                android:text="@string/we_will_send_an_otp_on_this_number"
+                android:text="@string/we_will_send_an_otp_on_this_number_amb"
                 />
 
             <TextView
@@ -67,7 +67,7 @@
                 android:textSize="20sp"
                 android:textColor="#2e2f30"
                 android:lineSpacingExtra="4sp"
-                android:text="@string/country_code"
+                android:text="@string/country_code_amb"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
                 android:layout_marginStart="24dp"
@@ -115,7 +115,7 @@
         android:enabled="true"
         android:fontFamily="@font/lato"
         android:gravity="center"
-        android:text="@string/next_camel_case"
+        android:text="@string/next_camel_case_amb"
         app:strokeWidth="1dp"
         android:textAllCaps="false"
         app:strokeColor="@color/lipstick"

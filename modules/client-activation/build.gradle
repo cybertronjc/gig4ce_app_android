@@ -129,4 +129,5 @@ dependencies {
 
     //ucrop
     implementation 'com.github.yalantis:ucrop:2.2.4'
+    implementation 'com.akexorcist:localization:1.2.10'
 }

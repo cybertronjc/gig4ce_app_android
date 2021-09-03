@@ -41,7 +41,7 @@
                     android:id="@+id/iv_profile_image_gig_his"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:contentDescription="@string/profile_image_gig_history"
+                    android:contentDescription="@string/profile_image_gig_history_giger_gigs"
                       app:srcCompat="@drawable/profile" />
             </androidx.cardview.widget.CardView>
 
@@ -74,7 +74,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginStart="@dimen/size_12"
                 android:adjustViewBounds="true"
-                android:contentDescription="@string/back_button"
+                android:contentDescription="@string/back_button_giger_gigs"
                 android:scaleType="centerCrop"
                   app:srcCompat="@drawable/ic_arrow_back_white"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -89,7 +89,7 @@
                 android:layout_marginStart="@dimen/size_16"
                 android:layout_marginEnd="@dimen/size_16"
                 android:ellipsize="end"
-                android:text="@string/my_gigs"
+                android:text="@string/my_gigs_giger_gigs"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/font_16"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -133,7 +133,7 @@
             android:id="@+id/tv_no_gigs"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/no_gigs_present"
+            android:text="@string/no_gigs_present_giger_gigs"
             android:textSize="@dimen/font_24"
             android:layout_marginTop="10dp"
             android:fontFamily="@font/lato"

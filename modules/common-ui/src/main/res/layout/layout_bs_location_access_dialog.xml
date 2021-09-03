@@ -26,7 +26,7 @@
         android:fontFamily="@font/lato"
         android:gravity="center_horizontal"
         android:visibility="gone"
-        android:text="@string/allow_gigforce_to_access_this_device_s_location"
+        android:text="@string/allow_gigforce_to_access_this_device_s_location_common_ui"
         android:textColor="#333333"
         android:textSize="@dimen/font16"
         android:textStyle="normal" />
@@ -43,7 +43,7 @@
         android:minHeight="@dimen/size36"
         android:paddingTop="@dimen/size14"
         android:paddingBottom="@dimen/size13"
-        android:text="@string/allow_access_location"
+        android:text="@string/allow_access_location_common_ui"
         android:textColor="@color/white"
         android:textSize="@dimen/font18"
         app:layout_constraintBottom_toBottomOf="parent" />
@@ -58,7 +58,7 @@
         android:layout_marginBottom="@dimen/size40"
         android:fontFamily="@font/lato"
         android:gravity="center_horizontal"
-        android:text="@string/background_location_details_subtitle"
+        android:text="@string/background_location_details_subtitle_common_ui"
         android:textColor="@color/warm_grey"
         android:textSize="@dimen/font14"
         android:textStyle="normal" />

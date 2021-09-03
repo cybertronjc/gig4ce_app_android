@@ -141,7 +141,7 @@ class GigPageNavigationFragment : Fragment() {
         // create marker
         val marker = MarkerOptions()
         marker.position(LatLng(latitude, longitude))
-            .title(getString(R.string.gig_location))
+            .title(getString(R.string.gig_location_giger_gigs))
 
         // adding marker
         it.addMarker(marker)

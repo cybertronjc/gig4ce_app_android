@@ -46,7 +46,7 @@
                     android:layout_marginStart="12dp"
                     android:fontFamily="@font/lato"
                     android:letterSpacing="0"
-                    android:text="Share Location"
+                    android:text="@string/share_location_chat"
                     android:textColor="@android:color/white"
                     android:textSize="20sp" />
 
@@ -58,7 +58,7 @@
                     android:layout_marginTop="4dp"
                     android:fontFamily="@font/lato"
                     android:letterSpacing="0"
-                    android:text="0 Contacts(s)"
+                    android:text="@string/_0_contacts_s_chat"
                     android:visibility="gone"
                     android:textColor="@android:color/white"
                     android:textSize="12sp" />
@@ -78,7 +78,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:text="SHARE"
+                android:text="@string/share_chat"
                 android:textColor="@color/white"/>
 
 

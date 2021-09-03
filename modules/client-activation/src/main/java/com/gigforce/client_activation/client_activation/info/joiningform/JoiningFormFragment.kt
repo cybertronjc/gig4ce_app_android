@@ -653,44 +653,44 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
 
                 if (fatherName.editText?.text.toString().isBlank()) {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
+                        .setTitle(getString(R.string.alert_client))
                         .setMessage("Enter father name")
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setPositiveButton(getString(R.string.okay_client)) { _, _ -> }
                         .show()
                     return@setOnClickListener
                 }
 
                 if (dateOfBirth.text.toString().isBlank()) {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
+                        .setTitle(getString(R.string.alert_client))
                         .setMessage("Select date of birth")
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setPositiveButton(getString(R.string.okay_client)) { _, _ -> }
                         .show()
                     return@setOnClickListener
                 }
 
                 if (dateOfJoining.text.toString().isBlank()) {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
+                        .setTitle(getString(R.string.alert_client))
                         .setMessage("Select date of joining")
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setPositiveButton(getString(R.string.okay_client)) { _, _ -> }
                         .show()
                     return@setOnClickListener
                 }
 
                 if (maritalStatusSpinner.selectedItem.toString() == resources.getStringArray(R.array.marital_status)[0]) {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
+                        .setTitle(getString(R.string.alert_client))
                         .setMessage("Select marital status")
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setPositiveButton(getString(R.string.okay_client)) { _, _ -> }
                         .show()
                     return@setOnClickListener
                 }
                 if(emailId.editText?.text.toString().isBlank() || !Patterns.EMAIL_ADDRESS.matcher(emailId.editText?.text.toString()).matches() ){
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
+                        .setTitle(getString(R.string.alert_client))
                         .setMessage("Enter a valid email")
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setPositiveButton(getString(R.string.okay_client)) { _, _ -> }
                         .show()
                     return@setOnClickListener
                 }
@@ -702,9 +702,9 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
                         .isBlank() || emergencyContact.editText?.text.toString().length != 10
                 ) {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
+                        .setTitle(getString(R.string.alert_client))
                         .setMessage("Enter emergency contact number")
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setPositiveButton(getString(R.string.okay_client)) { _, _ -> }
                         .show()
                     return@setOnClickListener
                 }
@@ -713,9 +713,9 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
                         .isBlank() || aadharNo.editText?.text.toString().length != 12
                 ) {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
+                        .setTitle(getString(R.string.alert_client))
                         .setMessage("Enter valid aadhaar number")
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setPositiveButton(getString(R.string.okay_client)) { _, _ -> }
                         .show()
                     return@setOnClickListener
                 }
@@ -723,18 +723,18 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
 
                 if (addLine1Input.text.toString().isBlank()) {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
+                        .setTitle(getString(R.string.alert_client))
                         .setMessage("Enter Address Line 1")
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setPositiveButton(getString(R.string.okay_client)) { _, _ -> }
                         .show()
                     return@setOnClickListener
                 }
 
                 if (addLine2Input.text.toString().isBlank()) {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
+                        .setTitle(getString(R.string.alert_client))
                         .setMessage("Enter Address Line 2")
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setPositiveButton(getString(R.string.okay_client)) { _, _ -> }
                         .show()
                     return@setOnClickListener
                 }
@@ -743,9 +743,9 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
                         .isEmpty() || !statesArray.contains(stateSpinner.text.toString())
                 ) {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
+                        .setTitle(getString(R.string.alert_client))
                         .setMessage(getString(R.string.select_aadhar_state))
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setPositiveButton(getString(R.string.okay_client)) { _, _ -> }
                         .show()
                     return@setOnClickListener
                 }
@@ -754,9 +754,9 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
                         .isEmpty() || !citiesArray.contains(citySpinner.text.toString())
                 ) {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
+                        .setTitle(getString(R.string.alert_client))
                         .setMessage("Select City")
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setPositiveButton(getString(R.string.okay_client)) { _, _ -> }
                         .show()
                     return@setOnClickListener
                 }
@@ -766,18 +766,18 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
 
                     if (caAddLine1Input.text.toString().isBlank()) {
                         MaterialAlertDialogBuilder(requireContext())
-                            .setTitle(getString(R.string.alert))
+                            .setTitle(getString(R.string.alert_client))
                             .setMessage("Enter Current Address Line 1")
-                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .setPositiveButton(getString(R.string.okay_client)) { _, _ -> }
                             .show()
                         return@setOnClickListener
                     }
 
                     if (caAddLine2Input.text.toString().isBlank()) {
                         MaterialAlertDialogBuilder(requireContext())
-                            .setTitle(getString(R.string.alert))
+                            .setTitle(getString(R.string.alert_client))
                             .setMessage("Enter Current Address Line 2")
-                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .setPositiveButton(getString(R.string.okay_client)) { _, _ -> }
                             .show()
                         return@setOnClickListener
                     }
@@ -786,9 +786,9 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
                             .isEmpty() || !statesArray.contains(caStateSpinner.text.toString())
                     ) {
                         MaterialAlertDialogBuilder(requireContext())
-                            .setTitle(getString(R.string.alert))
+                            .setTitle(getString(R.string.alert_client))
                             .setMessage(getString(R.string.select_aadhar_state))
-                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .setPositiveButton(getString(R.string.okay_client)) { _, _ -> }
                             .show()
                         return@setOnClickListener
                     }
@@ -797,9 +797,9 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
                             .isEmpty() || !caCitiesArray.contains(caCitySpinner.text.toString())
                     ) {
                         MaterialAlertDialogBuilder(requireContext())
-                            .setTitle(getString(R.string.alert))
+                            .setTitle(getString(R.string.alert_client))
                             .setMessage("Select City")
-                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .setPositiveButton(getString(R.string.okay_client)) { _, _ -> }
                             .show()
                         return@setOnClickListener
                     }
@@ -807,27 +807,27 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
 
                 if (hubState.text.isNullOrBlank() || !hubStatesArray.contains(hubState.text.toString())) {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
+                        .setTitle(getString(R.string.alert_client))
                         .setMessage("Please select hub state")
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setPositiveButton(getString(R.string.okay_client)) { _, _ -> }
                         .show()
                     return@setOnClickListener
                 }
 
                 if (hubCity.text.isNullOrBlank() || !hubCitiesArray.contains(hubCity.text.toString())) {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
+                        .setTitle(getString(R.string.alert_client))
                         .setMessage("Please select hub city")
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setPositiveButton(getString(R.string.okay_client)) { _, _ -> }
                         .show()
                     return@setOnClickListener
                 }
 
                 if (hubName.text.isNullOrBlank() || !hubNameArray.contains(hubName.text.toString())) {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
+                        .setTitle(getString(R.string.alert_client))
                         .setMessage("Please select hub name")
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setPositiveButton(getString(R.string.okay_client)) { _, _ -> }
                         .show()
                     return@setOnClickListener
                 }

@@ -11,7 +11,6 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.utils.UtilMethods
 import com.gigforce.core.base.BaseFragment2
@@ -23,11 +22,9 @@ import com.gigforce.core.utils.Lce
 import com.gigforce.lead_management.LeadManagementConstants
 import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
-import com.gigforce.lead_management.databinding.FragmentJoiningListBinding
 import com.gigforce.lead_management.databinding.GigerOnboardingFragmentBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import java.util.regex.Pattern
 import javax.inject.Inject
 
@@ -96,7 +93,7 @@ class GigerOnboardingFragment : BaseFragment2<GigerOnboardingFragmentBinding>(
 
                 val mobileNo = viewBinding.mobileNoEt.text.toString()
                 if (!INDIAN_MOBILE_NUMBER.matcher(mobileNo).matches()) {
-                    showAlertDialog("", "Enter a valid Mobile No")
+                    showAlertDialog("", getString(R.string.enter_valid_mobile_lead))
                     return@setOnClickListener
                 }
 
@@ -121,11 +118,11 @@ class GigerOnboardingFragment : BaseFragment2<GigerOnboardingFragmentBinding>(
             viewBinding.mobileNoEt.requestFocus()
             viewBinding.createProfileBtn.gone()
             viewBinding.submitButton.tag = "next"
-            viewBinding.submitButton.setText("Next")
+            viewBinding.submitButton.setText(getString(R.string.next_lead))
             viewBinding.notRegisteredLayout.gone()
-            viewBinding.tvPleaseEnter.setText(resources.getString(R.string.please_enter))
-            viewBinding.makeSureText.setText(resources.getString(R.string.registered))
-            viewBinding.enterMobileLabel.setText(resources.getString(R.string.gigers_phone))
+            viewBinding.tvPleaseEnter.setText(resources.getString(R.string.please_enter_lead))
+            viewBinding.makeSureText.setText(resources.getString(R.string.registered_lead))
+            viewBinding.enterMobileLabel.setText(resources.getString(R.string.gigers_phone_lead))
             viewBinding.changeNumber.gone()
 
             showKeyboard()
@@ -168,7 +165,7 @@ class GigerOnboardingFragment : BaseFragment2<GigerOnboardingFragmentBinding>(
         viewBinding: GigerOnboardingFragmentBinding
     ) = viewBinding.toolbarOnboarding.apply {
         this.hideActionMenu()
-        this.showTitle("Mobile Number")
+        this.showTitle(context.getString(R.string.mobile_number_lead))
         this.setBackButtonListener{
             activity?.onBackPressed()
         }
@@ -177,12 +174,12 @@ class GigerOnboardingFragment : BaseFragment2<GigerOnboardingFragmentBinding>(
     private fun validateDataAndsubmit() {
 
         if (viewBinding.mobileNoEt.text.length != 10) {
-            showAlertDialog("", "Enter a valid Mobile No")
+            showAlertDialog("", getString(R.string.enter_valid_mobile_lead))
             return
         }
         val mobileNo = viewBinding.mobileNoEt.text.toString()
         if (!INDIAN_MOBILE_NUMBER.matcher(mobileNo).matches()) {
-            showAlertDialog("", "Enter a valid Mobile No")
+            showAlertDialog("", getString(R.string.enter_valid_mobile_lead))
             return
         }
 
@@ -195,7 +192,7 @@ class GigerOnboardingFragment : BaseFragment2<GigerOnboardingFragmentBinding>(
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(title)
             .setMessage(message)
-            .setPositiveButton("Okay") { _, _ -> }
+            .setPositiveButton(getString(R.string.okay_lead)) { _, _ -> }
             .show()
     }
 
@@ -245,9 +242,9 @@ class GigerOnboardingFragment : BaseFragment2<GigerOnboardingFragmentBinding>(
                             }
                         } else {
                             MaterialAlertDialogBuilder(requireContext())
-                                .setTitle("Unable to check user")
-                                .setMessage("Unable to check if user is already registered or not")
-                                .setPositiveButton("Okay") { _, _ -> }
+                                .setTitle(getString(R.string.unable_to_check_user_lead))
+                                .setMessage(getString(R.string.unable_to_check_already_registered_lead))
+                                .setPositiveButton(getString(R.string.okay_lead)) { _, _ -> }
                                 .show()
                             logger.d(
                                 TAG,
@@ -274,7 +271,7 @@ class GigerOnboardingFragment : BaseFragment2<GigerOnboardingFragmentBinding>(
                     }
                     is Lce.Content -> {
                         UtilMethods.hideLoading()
-                        showToast("OTP sent")
+                        showToast(getString(R.string.otp_sent_lead))
 
                         if (viewBinding.mobileNoEt.text.toString().isNotEmpty()) {
                             navigation.navigateTo(
@@ -301,10 +298,10 @@ class GigerOnboardingFragment : BaseFragment2<GigerOnboardingFragmentBinding>(
         viewBinding.createProfileBtn.visible()
         viewBinding.changeNumber.visible()
         viewBinding.mobileNoEt.isEnabled = false
-        viewBinding.enterMobileLabel.setText(getString(R.string.giger_not_registered))
-        viewBinding.tvPleaseEnter.setText(getString(R.string.joining_failed))
-        viewBinding.makeSureText.setText(getString(R.string.not_signed_up))
-        viewBinding.submitButton.setText("Share Referral Link")
+        viewBinding.enterMobileLabel.setText(getString(R.string.giger_not_registered_lead))
+        viewBinding.tvPleaseEnter.setText(getString(R.string.joining_failed_lead_lead))
+        viewBinding.makeSureText.setText(getString(R.string.not_signed_up_lead))
+        viewBinding.submitButton.setText(getString(R.string.share_referral_link_lead))
         viewBinding.submitButton.tag = REFERRAL_TAG
     }
 

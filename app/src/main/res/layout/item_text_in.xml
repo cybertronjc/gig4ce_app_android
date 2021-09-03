@@ -25,7 +25,7 @@
                 android:layout_alignParentLeft="true"
                 android:textSize="16sp"
                 android:textColor="@android:color/black"
-                android:text="Hi" />
+                android:text="@string/hi" />
 
             <TextView
                 android:id="@+id/date_text"

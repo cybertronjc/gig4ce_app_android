@@ -259,9 +259,9 @@ class VideoResumeFragment:Fragment() {
                     //ref:https://stackoverflow.com/questions/7037630/how-to-create-a-video-preview-in-android
                 };
             } else if (resultCode == RESULT_CANCELED) {
-                Toast.makeText(this.context, "Video recording cancelled.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this.context, getString(string.recording_cancelled), Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(this.context, "Failed to record video", Toast.LENGTH_LONG).show();
+                Toast.makeText(this.context, getString(string.failed_to_record), Toast.LENGTH_LONG).show();
             }
         }
     }

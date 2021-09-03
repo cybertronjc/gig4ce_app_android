@@ -113,9 +113,9 @@ class ImageViewerFragment : Fragment() {
 
                         progressBar.visibility = View.GONE
                         MaterialAlertDialogBuilder(requireContext())
-                            .setTitle("Image Upload failed")
-                            .setMessage("Unable to upload image , ${it.error}")
-                            .setPositiveButton("Okay") {_,_ ->}
+                            .setTitle(getString(R.string.image_upload_failed_common))
+                            .setMessage(getString(R.string.unable_to_upload_image_common) + it.error)
+                            .setPositiveButton(getString(R.string.okay_common)) { _, _ ->}
                             .show()
                     }
                     is CaptureImageSharedViewState.ImageUploading -> {

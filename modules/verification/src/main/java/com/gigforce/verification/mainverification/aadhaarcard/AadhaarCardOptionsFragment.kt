@@ -84,8 +84,8 @@ class AadhaarCardOptionsFragment : Fragment(), View.OnClickListener {
     private fun showWhyWeNeedThisDialog() {
         WhyWeNeedThisBottomSheet.launch(
             childFragmentManager = childFragmentManager,
-            title = getString(R.string.why_do_we_need_this),
-            content = getString(R.string.why_do_we_need_this_aadhar)
+            title = getString(R.string.why_do_we_need_this_veri),
+            content = getString(R.string.why_do_we_need_this_aadhar_veri)
         )
     }
 }

@@ -213,7 +213,7 @@ class VerifyOTP : BaseFragment() {
         spannableString1.setSpan(UnderlineSpan(), 0, str.length, 0)
         reenter_mobile.text = spannableString1
         otp_label?.text =
-                getString(R.string.we_have_sent_otp) + " " + mobile_number + ".\n" + getString(R.string.please_enter_it_below)
+                getString(R.string.we_have_sent_otp_app) + " " + mobile_number + ".\n" + getString(R.string.please_enter_it_below_app)
     }
 
     private fun observer() {
