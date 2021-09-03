@@ -5,6 +5,7 @@ import com.gigforce.common_ui.chat.models.ContactModel
 import com.gigforce.core.extensions.commitOrThrow
 import com.gigforce.core.extensions.getOrThrow
 import com.gigforce.core.fb.BaseFirestoreDBRepository
+import com.gigforce.core.retrofit.RetrofitFactory
 import com.gigforce.modules.feature_chat.service.SyncPref
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -14,8 +15,13 @@ import kotlinx.coroutines.sync.withLock
 import java.util.regex.Pattern
 
 class ChatContactsRepository constructor(
-        private val syncPref: SyncPref
+    private val syncPref: SyncPref
 ) : BaseFirestoreDBRepository() {
+
+    private var chatContactsRemoteService: DownloadChatAttachmentService =
+        RetrofitFactory.createService(
+            DownloadChatAttachmentService::class.java
+        )
 
     private val currentUser: FirebaseUser by lazy {
         FirebaseAuth.getInstance().currentUser!!
@@ -23,24 +29,24 @@ class ChatContactsRepository constructor(
 
     private val userChatCollectionRef: DocumentReference by lazy {
         FirebaseFirestore.getInstance()
-                .collection(COLLECTION_CHATS)
-                .document(getUID())
+            .collection(COLLECTION_CHATS)
+            .document(getUID())
     }
 
     private val userChatContactsCollectionRef: CollectionReference by lazy {
         userChatCollectionRef
-                .collection(COLLECTION_CHATS_CONTACTS)
+            .collection(COLLECTION_CHATS_CONTACTS)
     }
 
     private val userChatHeadersCollectionRef: CollectionReference by lazy {
         userChatCollectionRef
-                .collection(COLLECTION_HEADERS)
+            .collection(COLLECTION_HEADERS)
     }
 
     private val profileDocRefCollectionRef: DocumentReference by lazy {
         userChatCollectionRef
-                .collection(COLLECTION_PROFILE)
-                .document(getUID())
+            .collection(COLLECTION_PROFILE)
+            .document(getUID())
     }
 
     private var profileDocSnap: DocumentSnapshot? = null
@@ -63,10 +69,15 @@ class ChatContactsRepository constructor(
         return COLLECTION_CHATS
     }
 
-    fun getUserContacts(): Query {
+    fun getUserGigforceContacts(): Query {
         return userChatCollectionRef
-                .collection(COLLECTION_CHATS_CONTACTS)
-                .whereEqualTo("isGigForceUser", true)
+            .collection(COLLECTION_CHATS_CONTACTS)
+            .whereEqualTo("isGigForceUser", true)
+    }
+
+    fun getUserAllContacts(): Query {
+        return userChatCollectionRef
+            .collection(COLLECTION_CHATS_CONTACTS)
     }
 
     private val mutex = Mutex()
@@ -74,8 +85,21 @@ class ChatContactsRepository constructor(
     private var batch = db.batch()
     private var numbersOnlyRegEx = "^[0-9]*$"
 
-    suspend fun updateContacts(contacts: List<ContactModel>) = mutex.withLock {
+    suspend fun updateContacts(
+        contacts: List<ContactModel>,
+        shouldCallSyncApiWhenDoneUploadingApiToDB: Boolean
+    ) = mutex.withLock {
+        if (!syncPref.shouldSyncContacts()) {
+            Log.d(TAG, "Avoiding contact update last sync was less than 30 secs ago...")
+
+            if(shouldCallSyncApiWhenDoneUploadingApiToDB)
+                callSyncContactsApi()
+
+            return
+        }
+
         Log.d(TAG, "Sync Started...")
+        syncPref.addContactSyncStartedPoint()
 
         val isUserTl = checkIfUserTl()
         Log.d(TAG, "Is UserTl : $isUserTl")
@@ -92,12 +116,15 @@ class ChatContactsRepository constructor(
 
             if (contactMatchInNewList == null) {
                 //user has removed that phone contacts add to remove batch
+
                 if (!isUserTl) {
+
                     //Wont Delete Contacts in case of TL
                     userHasDeletedContactFromPhoneRemoveFromDB(oldContact)
                 }
             } else {
                 if (contactMatchInNewList.name != oldContact.name) {
+
                     //user has renamed the contact
                     updateContactsName(oldContact, contactMatchInNewList)
                 }
@@ -119,7 +146,17 @@ class ChatContactsRepository constructor(
             batch.commitOrThrow()
         }
 
-        syncPref.setContactsAsSynced()
+        if(shouldCallSyncApiWhenDoneUploadingApiToDB) {
+            callSyncContactsApi()
+        }
+    }
+
+    private suspend fun callSyncContactsApi() {
+            try {
+                chatContactsRemoteService.trySyncingContacts(currentUser.uid)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
     }
 
     private fun filterContactsForIllegalMobileNos(contacts: List<ContactModel>): List<ContactModel> {
@@ -131,12 +168,13 @@ class ChatContactsRepository constructor(
     }
 
     private suspend fun addContactToUsersContactList(
-            pickedContact: ContactModel
+        pickedContact: ContactModel
     ) {
         if (pickedContact.mobile.isBlank()) return
 
         val contactRef = userChatContactsCollectionRef.document(pickedContact.mobile)
         batch.set(contactRef, pickedContact)
+        Log.d(TAG, "${pickedContact.mobile} - Added")
 
         checkBatchForOverFlowAndCommit()
     }
@@ -158,28 +196,28 @@ class ChatContactsRepository constructor(
     }
 
     private suspend fun updateContactsName(
-            oldContact: ContactModel,
-            newContact: ContactModel
+        oldContact: ContactModel,
+        newContact: ContactModel
     ) {
         val contactRef = userChatContactsCollectionRef.document(oldContact.mobile)
         batch.update(contactRef, "name", newContact.name)
-        Log.d(TAG, "Updating User Contact : ${oldContact.mobile}, to ${newContact.name}")
+        Log.d(TAG, "${oldContact.mobile} - Updating, new contact-name : ${newContact.name}")
 
         checkBatchForOverFlowAndCommit()
     }
 
     private suspend fun userHasDeletedContactFromPhoneRemoveFromDB(
-            contact: ContactModel
+        contact: ContactModel
     ) {
         val contactRef = userChatContactsCollectionRef.document(contact.mobile)
         batch.delete(contactRef)
-        Log.d(TAG, "User Deleted Contact : ${contact.mobile}")
+        Log.d(TAG, "${contact.mobile} : Deleted")
 
         checkBatchForOverFlowAndCommit()
     }
 
     private suspend fun getUsersAlreadyUploadedContacts(): List<ContactModel> {
-        val querySnap = getUserContacts().getOrThrow()
+        val querySnap = getUserAllContacts().getOrThrow()
         return querySnap.documents.map {
             it.toObject(ContactModel::class.java)!!.apply {
                 id = it.id
@@ -189,7 +227,6 @@ class ChatContactsRepository constructor(
 
     private suspend fun checkBatchForOverFlowAndCommit() {
         currentBatchSize++
-        Log.d(TAG, "Size updated to $currentBatchSize")
 
         if (currentBatchSize > 480) {
             //   batchArray.add(batch)
@@ -197,7 +234,6 @@ class ChatContactsRepository constructor(
             currentBatchSize = 0
 
             batch = db.batch()
-            Log.d(TAG, "New Batch $batch")
         }
     }
 

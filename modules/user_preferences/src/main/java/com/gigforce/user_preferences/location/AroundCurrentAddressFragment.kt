@@ -59,7 +59,7 @@ class AroundCurrentAddressFragment : Fragment(), IOnBackPressedOverride {
                 val value = (progress * (seekBar.getWidth() - 2 * seekBar.getThumbOffset())) / seekBar.getMax()
                 if(progress>0 && value>0) {
                     seekbardependent.visible()
-                    seekbardependent.text = progress.toString() + " " + getString(R.string.km)
+                    seekbardependent.text = progress.toString() + " " + getString(R.string.km_pref)
                     seekbardependent.setX(seekBar.getX() + value + seekBar.getThumbOffset() / 2)
                 }
                 else{
@@ -118,7 +118,7 @@ class AroundCurrentAddressFragment : Fragment(), IOnBackPressedOverride {
 
     override fun onBackPressed(): Boolean {
         if (arround_current_add_seekbar.progress == 0) {
-            showToast(getString(R.string.prefered_distance_zero))
+            showToast(getString(R.string.prefered_distance_zero_pref))
             viewModel.setCurrentAddressPrferredDistanceData(
                 arround_current_add_seekbar.progress,
                 false

@@ -96,7 +96,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="@dimen/size_16"
                 android:fontFamily="@font/lato"
-                android:text="Pending"
+                android:text="@string/pending"
                 android:textColor="@color/yellow"
                 android:textSize="@dimen/font_12"
                 android:textStyle="normal"
@@ -164,7 +164,7 @@
                     android:id="@+id/tv_active_locations"
                     android:layout_width="166dp"
                     android:layout_height="19dp"
-                    android:text="Active locations"
+                    android:text="@string/active_locations"
                     android:textColor="@color/black"
                     android:textStyle="bold"
                     android:layout_marginTop="@dimen/size_24"
@@ -175,11 +175,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tv_active_locations"
-                    android:layout_marginTop="@dimen/size_24"
                     android:layout_marginStart="@dimen/size_16"
+                    android:layout_marginTop="@dimen/size_24"
                     android:layout_marginBottom="@dimen/size_24"
-                    android:clipToPadding="false"
-                    />
+                    android:clipToPadding="false" />
             </RelativeLayout>
 
             <LinearLayout

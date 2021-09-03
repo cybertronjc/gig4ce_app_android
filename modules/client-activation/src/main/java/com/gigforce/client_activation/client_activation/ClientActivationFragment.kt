@@ -162,7 +162,7 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
                  customPowerMenu =
                 CustomPowerMenu.Builder(requireContext(), PopMenuAdapter())
                     .addItem(
-                        MenuItem(getString(R.string.share))
+                        MenuItem(getString(R.string.share_client))
                     )
 
                     .setShowBackground(false)
@@ -218,7 +218,7 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
             customPowerMenu =
                 CustomPowerMenu.Builder(requireContext(), PopMenuAdapter())
                     .addItem(
-                        MenuItem(getString(R.string.share))
+                        MenuItem(getString(R.string.share_client))
                     )
 
                     .setShowBackground(false)
@@ -397,7 +397,7 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
 
         viewModel.observableJpApplication.observe(viewLifecycleOwner, Observer { jpApplication ->
             pb_client_activation.gone()
-            tv_mark_as_interest_role_details.text = getString(R.string.apply_now)
+            tv_mark_as_interest_role_details.text = getString(R.string.apply_now_client)
             run {
                 if (FirebaseAuth.getInstance().currentUser?.uid == null) {
                     iv_options_client_activation.gone()
@@ -439,9 +439,9 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
                         )
                     }
                     var actionButtonText =
-                        if (jpApplication.status == "Interested") getString(R.string.complete_application) else if (jpApplication.status == "Inprocess") getString(
-                            R.string.complete_activation
-                        ) else if (jpApplication.status == "") getString(R.string.apply_now) else ""
+                        if (jpApplication.status == "Interested") getString(R.string.complete_application_client) else if (jpApplication.status == "Inprocess") getString(
+                            R.string.complete_activation_client
+                        ) else if (jpApplication.status == "") getString(R.string.apply_now_client) else ""
                     if (actionButtonText == "")
                         tv_mark_as_interest_role_details.gone()
                     else
@@ -684,8 +684,8 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
             .setIosParameters(DynamicLink.IosParameters.Builder("com.gigforce.ios").build())
             .setSocialMetaTagParameters(
                 DynamicLink.SocialMetaTagParameters.Builder()
-                    .setTitle("Gigforce")
-                    .setDescription("Flexible work and learning platform")
+                    .setTitle(getString(R.string.gigforce_client))
+                    .setDescription(getString(R.string.gigforce_desc_client))
                     .setImageUrl(Uri.parse("https://firebasestorage.googleapis.com/v0/b/gig4ce-app.appspot.com/o/app_assets%2Fgigforce.jpg?alt=media&token=f7d4463b-47e4-4b8e-9b55-207594656161"))
                     .build()
             ).buildDynamicLink()
@@ -707,7 +707,7 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
                 Intent.EXTRA_SUBJECT,
                 getString(R.string.app_name)
             )
-            val shareMessage = getString(R.string.looking_for_dynamic_working_hours) + " " + url
+            val shareMessage = getString(R.string.looking_for_dynamic_working_hours_client) + " " + url
             shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
             val bitmap =
                 BitmapFactory.decodeResource(requireContext().resources, R.drawable.bg_gig_type)
@@ -728,7 +728,7 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
                     outputFile
                 )
             )
-            startActivity(Intent.createChooser(shareIntent, "choose one"))
+            startActivity(Intent.createChooser(shareIntent, getString(R.string.choose_one_client)))
         } catch (e: Exception) {
             //e.toString();
         }
@@ -790,7 +790,7 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
 
             if (mClientViaDeeplink == true) {
                 if (location == null) {
-                    showToast(getString(R.string.set_location_to_high_accuracy))
+                    showToast(getString(R.string.set_location_to_high_accuracy_client))
                     return
 
                 }

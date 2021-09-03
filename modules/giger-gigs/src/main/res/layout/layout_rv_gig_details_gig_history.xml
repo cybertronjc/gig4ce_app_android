@@ -126,7 +126,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/size_4"
-                    android:text="@string/punch_in"
+                    android:text="@string/punch_in_giger_gigs"
                     android:textColor="@color/warm_grey"
                     android:textSize="@dimen/font_12" />
 
@@ -146,7 +146,7 @@
                     android:layout_marginStart="@dimen/size_33"
                     android:layout_marginTop="@dimen/size_4"
                     android:layout_toEndOf="@+id/tv_punch_in_rv_gig_hist"
-                    android:text="@string/punch_out"
+                    android:text="@string/punch_out_giger_gigs"
                     android:textColor="@color/warm_grey"
                     android:textSize="@dimen/font_12" />
 

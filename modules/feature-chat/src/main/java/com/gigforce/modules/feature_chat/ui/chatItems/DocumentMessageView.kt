@@ -45,7 +45,7 @@ abstract class DocumentMessageView(
         IViewHolder,
     View.OnClickListener,
     View.OnLongClickListener,
-    PopupMenu.OnMenuItemClickListener {
+    PopupMenu.OnMenuItemClickListener{
 
     @Inject
     lateinit var navigation: INavigation
@@ -184,7 +184,7 @@ abstract class DocumentMessageView(
             try {
                 context.startActivity(this)
             } catch (e: Exception) {
-                Toast.makeText(context, "Unable to open", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, context.getString(R.string.unable_to_open_chat), Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -270,6 +270,10 @@ abstract class DocumentMessageView(
                 message.id
             )
         }
+    }
+
+    override fun getCurrentChatMessageOrThrow(): ChatMessage {
+        return message
     }
 }
 

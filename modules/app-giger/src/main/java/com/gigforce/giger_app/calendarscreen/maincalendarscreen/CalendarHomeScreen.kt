@@ -45,6 +45,7 @@ import com.gigforce.core.IEventTracker
 import com.gigforce.core.ProfilePropArgs
 import com.gigforce.core.base.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.core.base.genericadapter.RecyclerGenericAdapter
+import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.datamodels.custom_gig_preferences.UnavailableDataModel
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
@@ -59,6 +60,7 @@ import com.gigforce.giger_app.roster.RosterDayFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.jaeger.library.StatusBarUtil
@@ -135,10 +137,10 @@ class CalendarHomeScreen : Fragment(),
             override fun getCurrentAPPVersion(latestAPPUpdateModel: ConfigRepository.LatestAPPUpdateModel) {
                 if (latestAPPUpdateModel.active && isNotLatestVersion(latestAPPUpdateModel))
                     appDialogsInterface.showConfirmationDialogType3(
-                        getString(R.string.new_version_available),
-                        getString(R.string.new_version_available_detail),
-                        getString(R.string.update_now),
-                        getString(R.string.cancel_update),
+                        getString(R.string.new_version_available_app_giger),
+                        getString(R.string.new_version_available_detail_app_giger),
+                        getString(R.string.update_now_app_giger),
+                        getString(R.string.cancel_update_app_giger),
                         object :
                             ConfirmationDialogOnClickListener {
                             override fun clickedOnYes(dialog: Dialog?) {
@@ -203,7 +205,37 @@ class CalendarHomeScreen : Fragment(),
             requireActivity(),
             ResourcesCompat.getColor(resources, R.color.white, null)
         )
+        trySyncingUnsyncedFirebaseData()
     }
+
+    private fun trySyncingUnsyncedFirebaseData() {
+        FirebaseFirestore
+            .getInstance()
+            .waitForPendingWrites()
+            .addOnSuccessListener {
+                Log.d(
+                    "CalendarHomeScreen",
+                    "Success no pending writes found"
+                )
+                CrashlyticsLogger.d(
+                    "CalendarHomeScreen",
+                    "Success no pending writes found"
+                )
+            }.addOnFailureListener {
+                Log.e(
+                    "CalendarHomeScreen",
+                    "while syncning data to server",
+                    it
+                )
+                CrashlyticsLogger.e(
+                    "CalendarHomeScreen",
+                    "while syncning data to server",
+                    it
+                )
+            }
+    }
+
+
 
     private fun isNotLatestVersion(latestAPPUpdateModel: ConfigRepository.LatestAPPUpdateModel): Boolean {
         try {
@@ -476,9 +508,9 @@ class CalendarHomeScreen : Fragment(),
                 }
                 is Lce.Error -> {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Alert")
-                        .setMessage("Unable to fetch todays gig list, ${it.error}")
-                        .setPositiveButton("Okay") { _, _ -> }
+                        .setTitle(getString(R.string.alert_app_giger))
+                        .setMessage(getString(R.string.unable_to_fetch_todays_gig_app_giger) + it.error)
+                        .setPositiveButton(getString(R.string.okay_app_giger)) { _, _ -> }
                         .show()
                 }
             }
@@ -711,7 +743,7 @@ class CalendarHomeScreen : Fragment(),
                         } else {
                             if (obj.isUnavailable) {
                                 (viewHolder.getView(R.id.title) as TextView).text =
-                                    getString(R.string.not_working)
+                                    getString(R.string.not_working_app_giger)
                                 viewHolder.getView(R.id.subtitle).gone()
 
                                 activity?.let {
@@ -818,6 +850,10 @@ class CalendarHomeScreen : Fragment(),
                             } else {
 
                                 activity?.let {
+                                    (viewHolder.getView(R.id.title) as TextView).text =
+                                    getString(R.string.no_gig_assigned_giger)
+//                                viewHolder.getView(R.id.subtitle).gone()
+
                                     viewHolder.getView(R.id.daydatecard).setBackgroundColor(
                                         ContextCompat.getColor(
                                             it.applicationContext,
@@ -1025,7 +1061,7 @@ class CalendarHomeScreen : Fragment(),
                 ContextCompat.getColor(it.applicationContext, R.color.action_layout_available_title)
             )
             (viewHolder.getView(R.id.title_calendar_action_item) as TextView).text =
-                getString(R.string.marked_working)
+                getString(R.string.marked_working_app_giger)
 
             (viewHolder.getView(R.id.flash_icon) as ImageView).setImageResource(R.drawable.ic_flash_green)
         }
@@ -1134,7 +1170,7 @@ class CalendarHomeScreen : Fragment(),
 
         view.findViewById<TextView>(R.id.dialog_message_tv)
             .text =
-            "You have $gigOnDay Active Gig(s) on this day. All Gigs will be declined for selected day."
+            getString(R.string.you_have_app_giger) + gigOnDay + getString(R.string.active_gig_on_this_date_app_giger)
 
         view.findViewById<View>(R.id.yesBtn)
             .setOnClickListener {

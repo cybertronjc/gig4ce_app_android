@@ -23,7 +23,7 @@
             android:id="@id/text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/sample_info"
+            android:text="@string/sample_info_wallet"
             android:layout_marginStart="12dp"
             style="@style/LatoRegular14Black"
             app:layout_constraintTop_toTopOf="parent"

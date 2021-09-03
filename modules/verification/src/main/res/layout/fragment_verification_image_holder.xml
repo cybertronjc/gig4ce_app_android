@@ -35,7 +35,7 @@
                 android:fontFamily="@font/lato"
                 android:letterSpacing="-0.01"
                 android:textColor="#d72467"
-                tools:text="@string/upload_aadhar_card_back_side" />
+                tools:text="@string/upload_aadhar_card_back_side_veri" />
 
             <ImageView
                 android:layout_width="15dp"
@@ -55,7 +55,7 @@
                 android:gravity="center"
                 android:letterSpacing="-0.01"
                 android:textColor="@color/battle_ship_grey"
-                tools:text="@string/upload_your_aadhar_card" />
+                tools:text="@string/upload_your_aadhar_card_veri" />
 
         </RelativeLayout>
     </com.google.android.material.card.MaterialCardView>
@@ -87,7 +87,7 @@
             android:fontFamily="@font/lato"
             android:letterSpacing="-0.07"
             android:padding="10dp"
-            android:text="@string/reupload"
+            android:text="@string/reupload_veri"
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/font_14"
             app:strokeColor="@color/lipstick"

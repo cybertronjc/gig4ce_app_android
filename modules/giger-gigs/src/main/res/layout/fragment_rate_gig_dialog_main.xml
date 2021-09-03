@@ -37,7 +37,7 @@
                 android:layout_marginStart="10dp"
                 android:fontFamily="@font/lato"
                 android:letterSpacing="0"
-                android:text="Rate your Gig"
+                android:text="@string/rate_your_gig_giger_gigs"
                 android:textColor="@color/white"
                 android:textSize="16sp" />
         </LinearLayout>
@@ -62,7 +62,7 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="18dp"
             android:letterSpacing="0"
-            android:text="@string/please_let_us_know_more_about_your_gig"
+            android:text="@string/please_let_us_know_more_about_your_gig_giger_gigs"
             android:textColor="#313131"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -121,7 +121,7 @@
                 android:paddingTop="4dp"
                 android:paddingRight="8dp"
                 android:paddingBottom="4dp"
-                android:text="Add Attachment"
+                android:text="@string/add_attachment_giger_gigs"
                 android:textColor="@color/lipstick"
                 android:textSize="12sp"
                 app:layout_constraintStart_toEndOf="@id/addIcon"
@@ -162,7 +162,7 @@
             android:fontFamily="@font/lato_bold"
             android:gravity="center"
             android:minHeight="@dimen/size_36"
-            android:text="SUBMIT"
+            android:text="@string/submit__giger_gigs"
             android:textColor="@color/white"
             app:layout_constraintTop_toBottomOf="@id/attachmentContainer" />
 

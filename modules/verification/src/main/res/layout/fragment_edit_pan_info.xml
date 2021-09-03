@@ -23,7 +23,7 @@
             android:layout_marginTop="22dp"
             android:fontFamily="@font/lato_bold"
             android:letterSpacing="0"
-            android:text="@string/edit"
+            android:text="@string/edit_veri"
             android:textColor="@color/black"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -45,7 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/name"
+            android:text="@string/name_veri"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/editLabel" />
 
@@ -65,7 +65,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/father_s_name"
+            android:text="@string/father_s_name_veri"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/nameET" />
 
@@ -85,7 +85,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
-            android:text="@string/date_of_birth_without_colon"
+            android:text="@string/date_of_birth_without_colon_veri"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/fathersNameET" />
 
@@ -117,7 +117,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
-            android:text="@string/permanent_account_number"
+            android:text="@string/permanent_account_number_veri"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/dobET" />
 
@@ -139,7 +139,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="33dp"
             android:minHeight="@dimen/size_36"
-            android:text="@string/update"
+            android:text="@string/update_veri"
             app:layout_constraintTop_toBottomOf="@id/panET" />
 
 

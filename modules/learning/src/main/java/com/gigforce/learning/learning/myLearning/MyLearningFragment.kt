@@ -133,9 +133,9 @@ class MyLearningFragment : Fragment() {
         override fun getPageTitle(position: Int): CharSequence? {
 
             return when (position) {
-                0 -> "Journey"
-                1 -> "Learning"
-                2 -> "Assessments"
+                0 -> getString(R.string.journey_learning)
+                1 -> getString(R.string.learning_learning)
+                2 -> getString(R.string.assessments_learning)
                 else -> {
                     throw IllegalArgumentException("error illegal page index $position")
                 }

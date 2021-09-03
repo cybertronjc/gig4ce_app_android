@@ -54,7 +54,7 @@
         android:lineSpacingExtra="3sp"
         android:paddingTop="@dimen/size_9"
         android:paddingBottom="@dimen/size_9"
-        android:text="@string/upload_picture"
+        android:text="@string/upload_picture_app"
         android:textColor="@color/lipstick"
         android:textSize="14sp"
         android:textStyle="bold"

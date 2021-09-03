@@ -73,9 +73,9 @@ class EditSkillBottomSheet: ProfileBaseBottomSheetFragment() {
                         is Lce.Error -> {
 
                             MaterialAlertDialogBuilder(requireContext())
-                                    .setTitle("Unable to load Skills")
+                                    .setTitle(getString(R.string.unable_to_load_skills))
                                     .setMessage(it.error)
-                                    .setPositiveButton("Okay") { _, _ -> profileViewModel.getInterestForUser(null, false) }
+                                    .setPositiveButton(getString(R.string.okay)) { _, _ -> profileViewModel.getInterestForUser(null, false) }
                                     .show()
                         }
                         else -> {

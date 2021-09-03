@@ -72,7 +72,7 @@ class AttendanceImageCaptureActivity : AppCompatActivity() {
 
     var resultIntent: Intent = Intent()
     private fun uploadImage() {
-        showToast("Uploading Image")
+        showToast(getString(R.string.uploading_image_giger_gigs))
         progress_circular.visible()
 
         val image = File(filesDir, "capture.jpg")
@@ -100,7 +100,7 @@ class AttendanceImageCaptureActivity : AppCompatActivity() {
                 progress_circular.progress = progress.toInt()
         }
         uploadTask.addOnSuccessListener {
-            showToast("Successfully uploaded - Selfie & geolocation")
+            showToast(getString(R.string.selfie_geolocation_uploaded_giger_gigs))
             resultIntent.putExtra("image_name", selfieImg)
             setResult(Activity.RESULT_OK, resultIntent)
             finish()
@@ -108,7 +108,7 @@ class AttendanceImageCaptureActivity : AppCompatActivity() {
 //                updateAttendanceToDB()
         }
         uploadTask.addOnFailureListener {
-            showToast("Error " + it.message)
+            showToast(getString(R.string.error_giger_gigs) + it.message)
             setResult(Activity.RESULT_CANCELED, resultIntent)
             finish()
 //                    startNavigationSliderBtn.resetSlider()
@@ -232,7 +232,7 @@ class AttendanceImageCaptureActivity : AppCompatActivity() {
                 })
             } catch (e: UnsupportedOperationException) {
                 show_pic.setImageDrawable(ColorDrawable(Color.GREEN))
-                showToast("Can't preview this format: ")
+                showToast(getString(R.string.cant_preview_format_giger_gigs))
             }
 //            uploadImage(result)
 //            show_pic.setImageBitmap(byteArrayToBitmap(result.data))

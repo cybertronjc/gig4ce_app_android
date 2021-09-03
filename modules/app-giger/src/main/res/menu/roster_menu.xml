@@ -4,16 +4,16 @@
 
     <item
         android:id="@+id/decline_gigs"
-        android:title="Decline Gigs"
+        android:title="@string/decline_gigs"
         app:showAsAction="collapseActionView" />
 
     <item
         android:id="@+id/location_preference"
-        android:title="@string/location_preference"
+        android:title="@string/location_preference_app_giger"
         app:showAsAction="collapseActionView" />
     <item
         android:id="@+id/settings"
-        android:title="@string/settings"
+        android:title="@string/settings_app_giger"
 
         app:showAsAction="collapseActionView" />
 

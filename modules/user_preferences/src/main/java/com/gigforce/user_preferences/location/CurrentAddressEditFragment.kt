@@ -90,7 +90,7 @@ class CurrentAddressEditFragment : Fragment() {
     private fun convertAddressToString(address: AddressModel?): String {
         Log.e("CURRENT ADDRESS", address!!.firstLine)
         return if (address!!.isEmpty() || address == null)
-            getString(R.string.add_address)
+            getString(R.string.add_address_pref)
         else
             address.firstLine + "," + address.secondLine + "," + address.city + "," + address.state + ". " + address.pincode
     }
@@ -127,7 +127,7 @@ class CurrentAddressEditFragment : Fragment() {
 
     fun addressIsValid(view: EditText):Boolean{
         if(view.text.toString().trim().length<3){
-            view.setError(getString(R.string.more_detail))
+            view.setError(getString(R.string.more_detail_pref))
             return false
         }
         return true
@@ -144,7 +144,7 @@ class CurrentAddressEditFragment : Fragment() {
         if(!addressIsValid(state))
             return false
         if(pincode.text.toString().length<6){
-            pincode.setError(getString(R.string.pincode_not_correct))
+            pincode.setError(getString(R.string.pincode_not_correct_pref))
             return false
         }
         return true

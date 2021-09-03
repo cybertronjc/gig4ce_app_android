@@ -33,7 +33,7 @@
             android:fontFamily="@font/lato"
             android:gravity="center"
             android:letterSpacing="-0.05"
-            android:text="@string/no_worries"
+            android:text="@string/no_worries_client"
             android:textColor="#dd2865"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -48,7 +48,7 @@
             android:layout_marginEnd="@dimen/size_51"
             android:fontFamily="@font/lato"
             android:gravity="center_horizontal"
-            android:text="@string/you_can_reapply_for_this_role_once_you_are_eligible_we_are_always_here_to_help_you"
+            android:text="@string/you_can_reapply_for_this_role_once_you_are_eligible_we_are_always_here_to_help_you_client"
             android:textColor="@color/black_85"
             android:textSize="14sp"
             android:textStyle="normal" />
@@ -62,7 +62,7 @@
             android:layout_marginEnd="@dimen/size_32"
             android:fontFamily="@font/lato"
             android:gravity="center_horizontal"
-            android:text="@string/meanwhile_you_can_refer_your_contacts_who_can_be_eligible_for_this_role"
+            android:text="@string/meanwhile_you_can_refer_your_contacts_who_can_be_eligible_for_this_role_client"
             android:textColor="@color/black_85"
             android:textSize="14sp"
             android:textStyle="normal" />
@@ -87,7 +87,7 @@
             android:fontFamily="@font/lato"
             android:gravity="center"
 
-            android:text="@string/refer_a_friend"
+            android:text="@string/refer_a_friend_client"
             android:textColor="@color/white"
             android:textSize="14sp"
             android:textStyle="normal" />
@@ -100,7 +100,7 @@
             android:layout_marginTop="@dimen/size_10"
             android:layout_marginBottom="@dimen/size_26"
             android:fontFamily="@font/lato"
-            android:text="@string/take_me_to_home"
+            android:text="@string/take_me_to_home_client"
             android:textColor="@color/lipstick"
             android:textSize="12sp"
             android:textStyle="normal" />

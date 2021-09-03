@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tap_for_details_tracking">Tap for details</string>
+    <string name="fetching_location_tracking">\"Fetching location for \"</string>
+    <string name="gig_tracking">\" Gig\"</string>
+</resources>

@@ -176,7 +176,7 @@ class OnboardingAddProfilePictureFragment() : Fragment(), ImageCropCallback, Onb
         MaterialAlertDialogBuilder(requireContext())
                 .setTitle(title)
                 .setMessage(message)
-                .setPositiveButton("Okay".capitalize()) { _, _ -> }
+                .setPositiveButton(getString(R.string.okay_profile).capitalize()) { _, _ -> }
                 .show()
     }
 
@@ -199,9 +199,9 @@ class OnboardingAddProfilePictureFragment() : Fragment(), ImageCropCallback, Onb
                             if (it.content.hasUserUploadedProfilePicture()) {
                                 displayImage(it.content.profileAvatarName)
                                 // formCompletionListener.changeTextButton("Upload Photo")
-                                skip_edit_textview.text = "Change"
+                                skip_edit_textview.text = getString(R.string.change_profile)
                             } else {
-                                skip_edit_textview.text = "Skip"
+                                skip_edit_textview.text = getString(R.string.skip_profile)
 
                             }
 
@@ -247,7 +247,7 @@ class OnboardingAddProfilePictureFragment() : Fragment(), ImageCropCallback, Onb
                             eventTracker.setProfileProperty(ProfilePropArgs("\$avatar", it.content))
                             Toast.makeText(
                                 requireContext(),
-                                "Profile Pic uploaded",
+                                getString(R.string.profile_uploaded_profile),
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -256,7 +256,7 @@ class OnboardingAddProfilePictureFragment() : Fragment(), ImageCropCallback, Onb
                             shimmerFrameLayout.gone()
                             imageView13.visible()
 
-                            showAlertDialog("could not submit info", it.error)
+                            showAlertDialog(getString(R.string.could_not_submit_info_profile_profile), it.error)
                         }
                     }
                 })
@@ -329,7 +329,7 @@ class OnboardingAddProfilePictureFragment() : Fragment(), ImageCropCallback, Onb
                 else {
                     Toast.makeText(
                         requireContext(),
-                        "Please Grant storage permission",
+                        getString(R.string.grant_storage_permission_profile),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -367,9 +367,9 @@ class OnboardingAddProfilePictureFragment() : Fragment(), ImageCropCallback, Onb
 
     override fun errorWhileCapturingOrPickingImage(e: Exception) {
         MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Alert")
-                .setMessage("Unable to click Photo, ${e.message}")
-                .setPositiveButton("Okay") { _, _ -> }
+                .setTitle(getString(R.string.alert_profile))
+                .setMessage(getString(R.string.unable_to_click_photo_profile) + e.message)
+                .setPositiveButton(getString(R.string.okay_profile)) { _, _ -> }
                 .show()
 
         CrashlyticsLogger.e("ProfilePicture", "WhileClickingProfilePicture", e)

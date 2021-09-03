@@ -82,6 +82,7 @@ class ChatNotificationHandler constructor(
                         .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
                         .setOnlyAlertOnce(true)
                         .setAutoCancel(true)
+                        .setVibrate(longArrayOf(100, 200, 300, 400, 500, 400))
 
         Log.d("ChatImage", fullImagePath)
         var imageBitmap: Bitmap? = null
@@ -198,6 +199,7 @@ class ChatNotificationHandler constructor(
                         .setAutoCancel(true)
                         .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
                         .setOnlyAlertOnce(true)
+                        .setVibrate(longArrayOf(100, 200, 300, 400, 500, 400))
 
         Log.d("ChatImage", fullImagePath)
         var imageBitmap: Bitmap? = null

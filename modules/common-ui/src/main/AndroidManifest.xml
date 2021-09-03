@@ -9,7 +9,6 @@
         <activity android:name="com.gigforce.common_image_picker.image_cropper.ImageCropActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
         </activity>
-        <activity android:name=".MainActivity" />
     </application>
 
 </manifest>

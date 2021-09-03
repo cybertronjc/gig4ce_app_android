@@ -12,6 +12,8 @@ data class ProfileData(
     var aboutMe: String = "",
     var email: String = "",
     var bio: String = "",
+    var maritalStatus : String = "",
+    var emergencyContact : String = "",
     var profileAvatarName: String = "avatar.jpg",
     var isVerified: Boolean = false,
     var educations: ArrayList<Education>? = ArrayList<Education>(),
@@ -40,6 +42,7 @@ data class ProfileData(
     var invited: ArrayList<Invites>? = null,
     var role_interests: ArrayList<RoleInterests>? = null,
     var gigerStatus: String = "lead",
+    var pfesic: PFESICDataModel? = null,
 
     @get:PropertyName("companies")
     @set:PropertyName("companies")
@@ -96,6 +99,7 @@ data class ProfileData(
     @get:PropertyName("reference")
     @set:PropertyName("reference")
     var reference: Reference? = null
+
 ) {
 
     @Exclude

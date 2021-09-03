@@ -138,8 +138,8 @@ class DrivingLicenseFragment : Fragment(),
 
     private fun initviews() {
         viewBinding.toplayoutblock.setIdonthaveDocContent(
-            resources.getString(R.string.no_doc_title_dl),
-            resources.getString(R.string.no_doc_subtitle_dl)
+            resources.getString(R.string.no_doc_title_dl_veri),
+            resources.getString(R.string.no_doc_subtitle_dl_veri)
         )
     }
     override fun onSaveInstanceState(outState: Bundle) {
@@ -253,10 +253,10 @@ class DrivingLicenseFragment : Fragment(),
                                 .isNullOrBlank() && viewBinding.dobDate.text.toString()
                                 .isNullOrBlank()
                         ) {
-                            viewBinding.submitButton.text = "Skip"
+                            viewBinding.submitButton.text = getString(R.string.skip_veri)
                             anyDataEntered = false
                         } else {
-                            viewBinding.submitButton.text = "Submit"
+                            viewBinding.submitButton.text = getString(R.string.submit_veri)
                             anyDataEntered = true
                         }
 
@@ -278,7 +278,7 @@ class DrivingLicenseFragment : Fragment(),
         viewBinding.toplayoutblock.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { p1, b1 ->
             if (b1) {
                 oldStateHolder.submitButtonCta = viewBinding.submitButton.text.toString()
-                viewBinding.submitButton.text = "Skip"
+                viewBinding.submitButton.text = getString(R.string.skip_veri)
                 viewBinding.belowLayout.gone()
             } else {
                 viewBinding.submitButton.text = oldStateHolder.submitButtonCta
@@ -320,27 +320,27 @@ class DrivingLicenseFragment : Fragment(),
             } else {
                 if (viewBinding.stateSpinner.text.equals("Select State")) {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage(getString(R.string.select_dl_state))
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setTitle(getString(R.string.alert_veri))
+                        .setMessage(getString(R.string.select_dl_state_veri))
+                        .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
                         .show()
                     return@setOnClickListener
                 }
 
                 if (viewBinding.dlnoTil.editText?.text.toString().isBlank()) {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage(getString(R.string.select_dl_no))
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setTitle(getString(R.string.alert_veri))
+                        .setMessage(getString(R.string.select_dl_no_veri))
+                        .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
                         .show()
                     return@setOnClickListener
                 }
 
                 if (viewBinding.dobDate.text.toString().isBlank()) {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage(getString(R.string.select_dl_dob))
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setTitle(getString(R.string.alert_veri))
+                        .setMessage(getString(R.string.select_dl_dob_veri))
+                        .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
                         .show()
                     return@setOnClickListener
                 }
@@ -395,8 +395,8 @@ class DrivingLicenseFragment : Fragment(),
                         )
                         viewBinding.toplayoutblock.uploadStatusLayout(
                             AppConstants.UPLOAD_SUCCESS,
-                            "Upload Successful",
-                            "Information of Driving License captured successfully."
+                            getString(R.string.upload_success_veri),
+                            getString(R.string.info_of_dl_success_veri)
                         )
                         if (!it.dateOfBirth.isNullOrBlank()) {
                             if (it.dateOfBirth.contains("/") || it.dateOfBirth.contains("-")) {
@@ -426,8 +426,8 @@ class DrivingLicenseFragment : Fragment(),
                         )
                         viewBinding.toplayoutblock.uploadStatusLayout(
                             AppConstants.UNABLE_TO_FETCH_DETAILS,
-                            "Unable to fetch information",
-                            "Enter the Driving License details manually below"
+                            getString(R.string.unable_to_fetch_info_veri),
+                            getString(R.string.enter_dl_details_veri)
                         )
                     }
                 } else {
@@ -439,8 +439,8 @@ class DrivingLicenseFragment : Fragment(),
                     )
                     viewBinding.toplayoutblock.uploadStatusLayout(
                         AppConstants.UNABLE_TO_FETCH_DETAILS,
-                        "Unable to fetch information",
-                        "Enter the Driving License details manually below"
+                        getString(R.string.unable_to_fetch_info_veri),
+                        getString(R.string.enter_dl_details_veri)
                     )
                     showToast("Ocr status " + it.message)
                 }
@@ -519,12 +519,12 @@ class DrivingLicenseFragment : Fragment(),
             .build()
         val list = listOf(
             KYCImageModel(
-                text = getString(R.string.upload_driving_license_front_side_new),
+                text = getString(R.string.upload_driving_license_front_side_new_veri),
                 imageIcon = frontUri,
                 imageUploaded = false
             ),
             KYCImageModel(
-                text = getString(R.string.upload_driving_license_back_side_new),
+                text = getString(R.string.upload_driving_license_back_side_new_veri),
                 imageIcon = backUri,
                 imageUploaded = false
             )
@@ -560,7 +560,7 @@ class DrivingLicenseFragment : Fragment(),
         if (hasStoragePermissions())
             VerificationClickOrSelectImageBottomSheet.launch(
                 parentFragmentManager,
-                "Upload Driving License",
+                getString(R.string.upload_driving_veri),
                 this
             )
         else
@@ -673,11 +673,11 @@ class DrivingLicenseFragment : Fragment(),
                 if (allPermsGranted)
                     VerificationClickOrSelectImageBottomSheet.launch(
                         parentFragmentManager,
-                        "Upload Driving License",
+                        getString(R.string.upload_driving_veri),
                         this
                     )
                 else {
-                    showToast("Please grant storage permission")
+                    showToast(getString(R.string.grant_storage_permission_veri))
                 }
             }
         }
@@ -766,8 +766,8 @@ class DrivingLicenseFragment : Fragment(),
     private fun showWhyWeNeedThisDialog() {
         WhyWeNeedThisBottomSheet.launch(
             childFragmentManager = childFragmentManager,
-            title = getString(R.string.why_do_we_need_this),
-            content = getString(R.string.why_do_we_need_this_dl)
+            title = getString(R.string.why_do_we_need_this_veri),
+            content = getString(R.string.why_do_we_need_this_dl_veri)
         )
     }
 
@@ -844,7 +844,7 @@ class DrivingLicenseFragment : Fragment(),
         options.setFreeStyleCropEnabled(true)
         options.setStatusBarColor(ResourcesCompat.getColor(resources, R.color.topBarDark, null))
         options.setToolbarColor(ResourcesCompat.getColor(resources, R.color.topBarDark, null))
-        options.setToolbarTitle(getString(R.string.crop_and_rotate))
+        options.setToolbarTitle(getString(R.string.crop_and_rotate_veri))
         return options
     }
 
@@ -861,21 +861,21 @@ class DrivingLicenseFragment : Fragment(),
         viewBinding.belowLayout.gone()
         viewBinding.toplayoutblock.uploadStatusLayout(
             AppConstants.UPLOAD_SUCCESS,
-            "Verification Completed",
-            "The Driving License details have been verified successfully."
+            getString(R.string.verification_completed_veri),
+            getString(R.string.dl_details_verified_veri)
         )
         viewBinding.submitButton.visible()
         viewBinding.submitButton.text = "Next"
         viewBinding.submitButton.isEnabled = true
         viewBinding.progressBar.gone()
-        viewBinding.toplayoutblock.setVerificationSuccessfulView("Driving License verified")
+        viewBinding.toplayoutblock.setVerificationSuccessfulView(getString(R.string.dl_verified_veri))
 
         var list = ArrayList<KYCImageModel>()
         drivingLicenseDataModel?.frontImage?.let {
             getDBImageUrl(it)?.let {
                 list.add(
                     KYCImageModel(
-                        text = getString(R.string.upload_driving_license_front_side_new),
+                        text = getString(R.string.upload_driving_license_front_side_new_veri),
                         imagePath = it,
                         imageUploaded = true
                     )
@@ -886,7 +886,7 @@ class DrivingLicenseFragment : Fragment(),
             getDBImageUrl(it)?.let {
                 list.add(
                     KYCImageModel(
-                        text = getString(R.string.upload_driving_license_back_side_new),
+                        text = getString(R.string.upload_driving_license_back_side_new_veri),
                         imagePath = it,
                         imageUploaded = true
                     )
@@ -911,8 +911,8 @@ class DrivingLicenseFragment : Fragment(),
                                 verifiedStatusViews(null)
                                 viewBinding.toplayoutblock.uploadStatusLayout(
                                     AppConstants.UNABLE_TO_FETCH_DETAILS,
-                                    "Verification in progress",
-                                    "Document will be verified soon. You can click next to proceed."
+                                    getString(R.string.verification_progress_veri),
+                                    getString(R.string.document_verified_soon_veri)
                                 )
                                 viewBinding.toplayoutblock.setVerificationSuccessfulView("", "")
                                 viewBinding.belowLayout.visible()
@@ -934,8 +934,8 @@ class DrivingLicenseFragment : Fragment(),
                     resetInitializeViews()
                     viewBinding.toplayoutblock.uploadStatusLayout(
                         AppConstants.DETAILS_MISMATCH,
-                        "Verification Failed",
-                        "The details submitted are incorrect. Please try again."
+                        getString(R.string.verification_failed_veri),
+                        getString(R.string.details_incorrect_veri)
                     )
                     var listData = setAlreadyfilledData(drivingLicenseDataModel, true)
                     if(listData.isEmpty()){
@@ -999,7 +999,7 @@ class DrivingLicenseFragment : Fragment(),
 
                     KYCImageModel(
 
-                        text = getString(R.string.upload_driving_license_front_side_new),
+                        text = getString(R.string.upload_driving_license_front_side_new_veri),
 
                         imagePath = it,
 
@@ -1021,7 +1021,7 @@ class DrivingLicenseFragment : Fragment(),
 
                     KYCImageModel(
 
-                        text = getString(R.string.upload_driving_license_back_side_new),
+                        text = getString(R.string.upload_driving_license_back_side_new_veri),
 
                         imagePath = it,
 
@@ -1056,12 +1056,12 @@ class DrivingLicenseFragment : Fragment(),
 
     private fun resetInitializeViews() {
         viewBinding.submitButton.visible()
-        viewBinding.submitButton.text = "Skip"
+        viewBinding.submitButton.text = getString(R.string.skip_veri)
         viewBinding.submitButton.isEnabled = true
         viewBinding.belowLayout.visible()
         viewBinding.toplayoutblock.setVerificationSuccessfulView(
-            "Driving License",
-            "You need to upload"
+            getString(R.string.driving_license_veri),
+            getString(R.string.you_need_to_upload_veri)
         )
         initializeImages()
         viewBinding.toplayoutblock.resetAllViews()
@@ -1083,12 +1083,12 @@ class DrivingLicenseFragment : Fragment(),
             .build()
         val list = listOf(
             KYCImageModel(
-                text = getString(R.string.upload_driving_license_front_side_new),
+                text = getString(R.string.upload_driving_license_front_side_new_veri),
                 imageIcon = frontUri,
                 imageUploaded = false
             ),
             KYCImageModel(
-                text = getString(R.string.upload_driving_license_back_side_new),
+                text = getString(R.string.upload_driving_license_back_side_new_veri),
                 imageIcon = backUri,
                 imageUploaded = false
             )
@@ -1104,15 +1104,15 @@ class DrivingLicenseFragment : Fragment(),
         viewBinding.progressBar.gone()
         viewBinding.belowLayout.gone()
         viewBinding.toplayoutblock.setVerificationSuccessfulView(
-            "Driving License pending for verification",
-            "Verifying"
+            getString(R.string.dl_pending_verification_veri),
+            getString(R.string.verifying_veri)
         )
         var list = ArrayList<KYCImageModel>()
         drivingLicenseDataModel.frontImage?.let {
             getDBImageUrl(it)?.let {
                 list.add(
                     KYCImageModel(
-                        text = getString(R.string.upload_driving_license_front_side_new),
+                        text = getString(R.string.upload_driving_license_front_side_new_veri),
                         imagePath = it,
                         imageUploaded = true
                     )
@@ -1123,7 +1123,7 @@ class DrivingLicenseFragment : Fragment(),
             getDBImageUrl(it)?.let {
                 list.add(
                     KYCImageModel(
-                        text = getString(R.string.upload_driving_license_back_side_new),
+                        text = getString(R.string.upload_driving_license_back_side_new_veri),
                         imagePath = it,
                         imageUploaded = true
                     )

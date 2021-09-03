@@ -23,7 +23,7 @@
             android:paddingTop="@dimen/size_19"
             android:paddingEnd="@dimen/size_20"
             android:paddingBottom="@dimen/size_16"
-            android:text="@string/_21_north_driver"
+            android:text="@string/_21_north_driver_client"
             android:textColor="@color/white"
             android:textSize="16sp"
             android:textStyle="normal" />
@@ -44,7 +44,7 @@
             android:layout_marginEnd="@dimen/size_15"
             android:fontFamily="@font/lato"
             android:gravity="center_horizontal"
-            android:text="@string/you_have_successfully_completed_all_the_check_points_required_for_the_application_you_can_submit_yourapplication_now"
+            android:text="@string/you_have_successfully_completed_all_the_check_points_required_for_the_application_you_can_submit_yourapplication_now_client"
             android:textColor="@color/black_85"
             android:textSize="14sp"
             android:textStyle="normal" />
@@ -61,7 +61,7 @@
             android:fontFamily="@font/lato"
             android:gravity="center"
             android:minHeight="@dimen/size_36"
-            android:text="@string/submit_your_application"
+            android:text="@string/submit_your_application_client"
             android:textColor="@color/white"
             android:textSize="14sp"
             android:textStyle="normal" />
@@ -76,7 +76,7 @@
             android:fontFamily="@font/lato"
             android:gravity="center_horizontal"
             android:minHeight="@dimen/size_36"
-            android:text="@string/review_your_application"
+            android:text="@string/review_your_application_client"
             android:textColor="@color/lipstick"
             android:textSize="14sp"
             android:textStyle="normal" />

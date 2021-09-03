@@ -197,8 +197,8 @@ class VideoWithTextFragment : Fragment() {
             showText(mDescription)
         }
 
-        video_slide_title_tv.text = "Video Title"
-        video_slide_desc_tv.text = "Video description"
+        video_slide_title_tv.text = getString(R.string.video_title_learning)
+        video_slide_desc_tv.text = getString(R.string.video_desc_learning)
 
 
         //     slideVideoPlayerView.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FILL
@@ -252,7 +252,7 @@ class VideoWithTextFragment : Fragment() {
 
         MaterialAlertDialogBuilder(requireContext())
             .setView(dialogView)
-            .setPositiveButton(R.string.okay_text) { _, _ -> }
+            .setPositiveButton(R.string.okay_text_learning) { _, _ -> }
             .show()
     }
 

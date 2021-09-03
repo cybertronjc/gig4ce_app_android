@@ -95,7 +95,7 @@ class EditProfileConsentAndSendOtpDialogFragment : DialogFragment() {
 
     private fun initView() {
 
-        congrats_text.text = "Verification Code will be sent to registered number to edit profile."
+        congrats_text.text = getString(R.string.verification_code_sent_to_mobile_amb)
         submitBtn.setOnClickListener {
             viewModel.getMobileNumberAndSendOtpInfo(enrolledUser)
         }
@@ -118,7 +118,7 @@ class EditProfileConsentAndSendOtpDialogFragment : DialogFragment() {
                     }
                     is Lce.Content -> {
 
-                        Toast.makeText(requireContext(), "OTP Sent", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), getString(R.string.otp_sent_amb), Toast.LENGTH_SHORT).show()
                         mOkayResultListener.onOtpSent(it.content)
                         dismiss()
                     }
@@ -127,9 +127,9 @@ class EditProfileConsentAndSendOtpDialogFragment : DialogFragment() {
                         send_otp_layout.visible()
 
                         MaterialAlertDialogBuilder(requireContext())
-                            .setTitle("Error")
+                            .setTitle(getString(R.string.error_amb))
                             .setMessage(it.error)
-                            .setPositiveButton("Okay") { _, _ -> }
+                            .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
                             .show()
                     }
                 }

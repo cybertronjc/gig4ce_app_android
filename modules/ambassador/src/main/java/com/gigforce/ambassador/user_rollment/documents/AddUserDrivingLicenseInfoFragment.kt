@@ -123,19 +123,19 @@ class AddUserDrivingLicenseInfoFragment : Fragment(),
         stateSpinner.adapter = adapter
 
         dlFrontImageHolder.documentUploadLabelTV.text =
-            getString(R.string.upload_driving_license_front_side)
+            getString(R.string.upload_driving_license_front_side_amb)
         dlFrontImageHolder.documentUploadSubLabelTV.text =
-            getString(R.string.upload_your_driving_license)
+            getString(R.string.upload_your_driving_license_amb)
 
         dlBackImageHolder.documentUploadLabelTV.text =
-            getString(R.string.upload_driving_license_back_side)
+            getString(R.string.upload_driving_license_back_side_amb)
         dlBackImageHolder.documentUploadSubLabelTV.text =
-            getString(R.string.upload_your_driving_license)
+            getString(R.string.upload_your_driving_license_amb)
         disableSubmitButton()
 
 
         toolbar_layout.apply {
-            showTitle(getString(R.string.upload_driving_license_details))
+            showTitle(getString(R.string.upload_driving_license_details_amb))
             hideActionMenu()
             setBackButtonListener(View.OnClickListener {
                 showGoBackConfirmationDialog()
@@ -173,13 +173,13 @@ class AddUserDrivingLicenseInfoFragment : Fragment(),
 
         dlSubmitSliderBtn.setOnClickListener {
 
-            if (dlYesRB.isChecked || dlSubmitSliderBtn.text == getString(R.string.update)) {
+            if (dlYesRB.isChecked || dlSubmitSliderBtn.text == getString(R.string.update_amb)) {
 
                 if (stateSpinner.selectedItemPosition == 0) {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage(getString(R.string.select_dl_state))
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setTitle(getString(R.string.alert_amb))
+                        .setMessage(getString(R.string.select_dl_state_amb))
+                        .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
                         .show()
 
                     return@setOnClickListener
@@ -198,12 +198,12 @@ class AddUserDrivingLicenseInfoFragment : Fragment(),
 //                    return@setOnClickListener
 //                }
 
-                if (dlSubmitSliderBtn.text != getString(R.string.update) && (dlFrontImagePath == null || dlBackImagePath == null)) {
+                if (dlSubmitSliderBtn.text != getString(R.string.update_amb) && (dlFrontImagePath == null || dlBackImagePath == null)) {
 
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage(getString(R.string.capture_both_sides_dl))
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setTitle(getString(R.string.alert_amb))
+                        .setMessage(getString(R.string.capture_both_sides_dl_amb))
+                        .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
                         .show()
                     return@setOnClickListener
                 }
@@ -255,9 +255,9 @@ class AddUserDrivingLicenseInfoFragment : Fragment(),
         editLayout.setOnClickListener {
 
             MaterialAlertDialogBuilder(requireContext())
-                .setTitle(getString(R.string.alert))
-                .setMessage(getString(R.string.reuploading_driving_license))
-                .setPositiveButton(getString(R.string.okay)) { _, _ ->
+                .setTitle(getString(R.string.alert_amb))
+                .setMessage(getString(R.string.reuploading_driving_license_amb))
+                .setPositiveButton(getString(R.string.okay_amb)) { _, _ ->
 
                     dlViewLayout.gone()
                     dlMainLayout.visible()
@@ -265,7 +265,7 @@ class AddUserDrivingLicenseInfoFragment : Fragment(),
                     setDataOnEditLayout(drivingLicenseDetail)
                     enableSubmitButton()
                 }
-                .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
+                .setNegativeButton(getString(R.string.cancel_amb)) { _, _ -> }
                 .show()
         }
 
@@ -280,10 +280,10 @@ class AddUserDrivingLicenseInfoFragment : Fragment(),
         }
 
         dlFrontImageHolder.uploadImageLayout.imageLabelTV.text =
-            getString(R.string.dl_image_front_side)
+            getString(R.string.dl_image_front_side_amb)
 
         dlBackImageHolder.uploadImageLayout.imageLabelTV.text =
-            getString(R.string.dl_image_back_side)
+            getString(R.string.dl_image_back_side_amb)
 
         dlFrontImageHolder.uploadImageLayout.reuploadBtn.setOnClickListener {
             openCameraAndGalleryOptionForFrontSideImage()
@@ -297,8 +297,8 @@ class AddUserDrivingLicenseInfoFragment : Fragment(),
     private fun showWhyWeNeedThisDialog() {
         navigation.navigateToWhyNeedThisBSFragment(
             childFragmentManager, bundleOf(
-                AppConstants.INTENT_EXTRA_TITLE to getString(R.string.why_do_we_need_this),
-                AppConstants.INTENT_EXTRA_CONTENT to getString(R.string.why_we_need_this_dl)
+                AppConstants.INTENT_EXTRA_TITLE to getString(R.string.why_do_we_need_this_amb),
+                AppConstants.INTENT_EXTRA_CONTENT to getString(R.string.why_we_need_this_dl_amb)
             )
         )
 //        WhyWeNeedThisBottomSheet.launch(
@@ -310,10 +310,10 @@ class AddUserDrivingLicenseInfoFragment : Fragment(),
 
     private fun showGoBackConfirmationDialog() {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle(getString(R.string.alert))
-            .setMessage(getString(R.string.are_u_sure_u_want_to_go_back))
-            .setPositiveButton(getString(R.string.yes)) { _, _ -> goBackToUsersList() }
-            .setNegativeButton(getString(R.string.no)) { _, _ -> }
+            .setTitle(getString(R.string.alert_amb))
+            .setMessage(getString(R.string.are_u_sure_u_want_to_go_back_amb))
+            .setPositiveButton(getString(R.string.yes_amb)) { _, _ -> goBackToUsersList() }
+            .setNegativeButton(getString(R.string.no_amb)) { _, _ -> }
             .show()
     }
 
@@ -373,16 +373,16 @@ class AddUserDrivingLicenseInfoFragment : Fragment(),
         dlMainLayout.visibility = View.VISIBLE
 
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle(getString(R.string.alert))
+            .setTitle(getString(R.string.alert_amb))
             .setMessage(error)
-            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+            .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
             .show()
     }
 
     private fun documentUploaded() {
 
         if (dlYesRB.isChecked)
-            showToast(getString(R.string.dl_details_uploaded))
+            showToast(getString(R.string.dl_details_uploaded_amb))
 
         UserDetailsFilledDialogFragment.launch(
             userId = userId,
@@ -472,9 +472,9 @@ class AddUserDrivingLicenseInfoFragment : Fragment(),
                 }
             } else {
                 MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(getString(R.string.alert))
-                    .setMessage(getString(R.string.unable_to_capture_image))
-                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                    .setTitle(getString(R.string.alert_amb))
+                    .setMessage(getString(R.string.unable_to_capture_image_amb))
+                    .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
                     .show()
             }
         }
@@ -563,7 +563,7 @@ class AddUserDrivingLicenseInfoFragment : Fragment(),
         }
 
         val dlData = it ?: return
-        dlSubmitSliderBtn.text = getString(R.string.update)
+        dlSubmitSliderBtn.text = getString(R.string.update_amb)
 
         drivingLicenseEditText.setText(dlData.dlNo)
         if (dlData.dlState != null) stateSpinner.selectItemWithText(dlData.dlState!!)

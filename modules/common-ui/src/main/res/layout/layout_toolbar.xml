@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     app:cardCornerRadius="0dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -39,11 +40,12 @@
             app:shapeAppearanceOverlay="@style/circleImageView" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:gravity="center_vertical"
             android:orientation="vertical"
+            app:layout_constraintEnd_toStartOf="@id/option_menu_iv"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/toolbar_image_iv"
             app:layout_constraintTop_toTopOf="parent">
@@ -51,23 +53,32 @@
 
             <TextView
                 android:id="@+id/titleTV"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/lato"
                 android:letterSpacing="0"
                 android:textColor="@android:color/white"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:scrollHorizontally="true"
+                android:ellipsize="end"
+                android:maxLines="1"
+                tools:text="Tool bar text that is long dswsswssss"/>
 
             <TextView
                 android:id="@+id/subTitleTV"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:fontFamily="@font/lato"
                 android:letterSpacing="0"
                 android:textColor="@android:color/white"
                 android:textSize="12sp"
-                android:visibility="gone" />
+                android:scrollHorizontally="true"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:visibility="gone"
+                tools:text="hduehddededfrfdeddeeddededdededdedddeddededdeddee" />
+
         </LinearLayout>
 
         <ImageView

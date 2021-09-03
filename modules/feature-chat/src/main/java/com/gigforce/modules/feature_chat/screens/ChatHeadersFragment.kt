@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.gigforce.common_ui.chat.ChatHeadersViewModel
 import com.gigforce.common_ui.chat.models.ChatHeader
 import com.gigforce.common_ui.chat.models.ChatListItemDataObject
@@ -33,6 +34,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.jaeger.library.StatusBarUtil
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import javax.inject.Inject
 
@@ -203,7 +210,7 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
             viewModel.sharedFiles = null
         }
 
-        toolbar.showTitle("Chats")
+        toolbar.showTitle(getString(R.string.chats_chat))
         toolbar.hideActionMenu()
         toolbar.setBackButtonListener {
 
@@ -219,8 +226,18 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
     }
 
     private fun initListeners() {
-        toolbar.showSearchOption("Search Chats")
-        toolbar.setOnSearchTextChangeListener(this)
+        toolbar.showSearchOption(getString(R.string.search_chat_chat))
+
+        lifecycleScope.launch {
+            toolbar.getSearchTextChangeAsFlow()
+                .debounce(300)
+                .distinctUntilChanged()
+                .flowOn(Dispatchers.Default)
+                .collect { searchString ->
+                    Log.d("Search ", "Searhcingg...$searchString")
+                    viewModel.filterChatList(searchString)
+                }
+        }
 
         requireActivity().onBackPressedDispatcher.addCallback(
                 viewLifecycleOwner,
@@ -257,24 +274,25 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
     }
 
     override fun onSearchTextChanged(newText: String) {
+        viewModel.filterChatList(newText)
 
-        if (newText.isBlank()) {
-            coreRecyclerView.resetFilter()
-        } else {
-            coreRecyclerView.filter {
-
-                val itemWrapper = it as ChatListItemDataWrapper
-                val item = itemWrapper.chatItem
-                item.groupName.contains(
-                        newText, true
-                ) || item.title.contains(
-                        newText, true
-                ) || item.subtitle.contains(
-                        newText, true
-                )
-
-            }
-        }
+//        if (newText.isBlank()) {
+//            coreRecyclerView.resetFilter()
+//        } else {
+//            coreRecyclerView.filter {
+//
+//                val itemWrapper = it as ChatListItemDataWrapper
+//                val item = itemWrapper.chatItem
+//                item.groupName.contains(
+//                    newText, true
+//                ) || item.title.contains(
+//                    newText, true
+//                ) || item.subtitle.contains(
+//                    newText, true
+//                )
+//
+//            }
+//        }
     }
 
     private fun hideSoftKeyboard() {
