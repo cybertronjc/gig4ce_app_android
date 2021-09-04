@@ -45,6 +45,7 @@ class LocationFragment : Fragment() {
         listener()
         observePreferenceData()
         observeProfileData()
+        viewModel.getAllData()
     }
 
     private fun observePreferenceData() {

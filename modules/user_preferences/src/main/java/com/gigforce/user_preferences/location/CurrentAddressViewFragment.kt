@@ -44,6 +44,7 @@ class CurrentAddressViewFragment: Fragment() {
         listener()
         observePreferenceData()
         observeProfileData()
+        viewModel.getAllData()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

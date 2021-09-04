@@ -209,6 +209,12 @@ class PickJobProfileForReferralFragment : BaseFragment2<FragmentPickJobProfileFo
         gigsShimmerContainer.gone()
         gigsListInfoLayout.root.gone()
 
+        searchResultTv.text = if (searchGigET.text.isBlank()) {
+            "Showing ${content.size} result(s)"
+        } else{
+            "Showing ${content.size} result(s) for \"${searchGigET.text}\""
+        }
+
         gigsRecyclerView.collection = content.map {
             GigAppListRecyclerItemData.GigAppRecyclerItemData(
                 status = "",

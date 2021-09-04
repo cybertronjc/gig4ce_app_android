@@ -465,6 +465,7 @@
 
                     <TextView
                         style="@style/LatoRegular8"
+                        android:id="@+id/arround_current_add"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"

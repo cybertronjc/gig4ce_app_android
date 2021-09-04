@@ -22,16 +22,20 @@ class ReferralLinkSharedResultDialogFragment :
         const val TAG = "ReferralLinkSharedSuccessDialogFragment"
         const val INTENT_EXTRA_RESULT = "result"
         const val INTENT_EXTRA_LINK = "link"
+        const val INTENT_SUCCESSFUL_REFERRAL_TEXT = "successful_referral_text"
+        const val INTENT_ERROR_REFERRAL_TEXT = "error_referral_text"
 
         fun launchSuccess(
             fragmentManager: FragmentManager,
-            link : String
+            link : String,
+            successReferralText : String
         ) {
 
             val dialog = ReferralLinkSharedResultDialogFragment().apply {
                 arguments = bundleOf(
                     INTENT_EXTRA_RESULT to true,
-                    INTENT_EXTRA_LINK to link
+                    INTENT_EXTRA_LINK to link,
+                    INTENT_SUCCESSFUL_REFERRAL_TEXT to successReferralText
                 )
             }
 
@@ -44,13 +48,15 @@ class ReferralLinkSharedResultDialogFragment :
 
         fun launchError(
             fragmentManager: FragmentManager,
-            link : String
+            link : String,
+            errorReferralText : String
         ) {
 
             val dialog = ReferralLinkSharedResultDialogFragment().apply {
                 arguments = bundleOf(
                     INTENT_EXTRA_RESULT to false,
-                    INTENT_EXTRA_LINK to link
+                    INTENT_EXTRA_LINK to link,
+                    INTENT_ERROR_REFERRAL_TEXT to errorReferralText
                 )
             }
 
@@ -65,6 +71,8 @@ class ReferralLinkSharedResultDialogFragment :
     private val viewModel : LeadManagementSharedViewModel by activityViewModels()
     private var result: Boolean = false
     private lateinit var link : String
+    private var successfulReferralText : String = ""
+    private var errorReferralText : String = ""
 
     override fun viewCreated(
         viewBinding: FragmentReferralResultDialogBinding,
@@ -86,11 +94,15 @@ class ReferralLinkSharedResultDialogFragment :
     ) {
         arguments?.let {
             result = it.getBoolean(INTENT_EXTRA_RESULT)
+            successfulReferralText = it.getString(INTENT_SUCCESSFUL_REFERRAL_TEXT) ?: ""
+            errorReferralText = it.getString(INTENT_ERROR_REFERRAL_TEXT) ?: ""
             link = it.getString(INTENT_EXTRA_LINK) ?: return@let
         }
 
         savedInstanceState?.let {
             result = it.getBoolean(INTENT_EXTRA_RESULT)
+            successfulReferralText = it.getString(INTENT_SUCCESSFUL_REFERRAL_TEXT) ?: ""
+            errorReferralText = it.getString(INTENT_ERROR_REFERRAL_TEXT) ?: ""
             link = it.getString(INTENT_EXTRA_LINK) ?: return@let
         }
     }
@@ -105,11 +117,25 @@ class ReferralLinkSharedResultDialogFragment :
             INTENT_EXTRA_LINK,
             link
         )
+        outState.putString(
+            INTENT_SUCCESSFUL_REFERRAL_TEXT,
+            successfulReferralText
+        )
+        outState.putString(
+            INTENT_ERROR_REFERRAL_TEXT,
+            errorReferralText
+        )
     }
 
     private fun initView(
         viewBinding: FragmentReferralResultDialogBinding
     ) = viewBinding.apply {
+
+        this.successLayout.gigsAssignedLabel.text = if(successfulReferralText.isNotBlank())
+            successfulReferralText
+        else
+            errorReferralText
+
         this.successLayout.okayBtn.setOnClickListener {
             viewModel.referralDialogOkayClicked()
         }

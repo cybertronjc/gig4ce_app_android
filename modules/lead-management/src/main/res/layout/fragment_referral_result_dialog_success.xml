@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
@@ -44,7 +45,7 @@
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/lato"
                 android:gravity="center"
-                android:text="@string/ask_the_giger_to_signup_and_submit_gig_application_lead"
+                android:text="Ask the giger to signup and submit Gig application."
                 android:textColor="@color/blackDark"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"

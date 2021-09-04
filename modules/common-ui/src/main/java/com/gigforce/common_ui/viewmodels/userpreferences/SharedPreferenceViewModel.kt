@@ -259,9 +259,9 @@ class SharedPreferenceViewModel : ViewModel {
         if (countNumberOfSelectedDays == 0) {
             subTitle = context.getString(R.string.none)
         } else if (countNumberOfSelectedDays > 1) {
-            subTitle = countNumberOfSelectedDays.toString() + context.getString(R.string.days_with_space)
+            subTitle = countNumberOfSelectedDays.toString() + " " + context.getString(R.string.days_with_space)
         } else if (preferencesDataModelObj.selecteddays.size == 1) {
-            subTitle = countNumberOfSelectedDays.toString() + context.getString(R.string.day_with_space)
+            subTitle = countNumberOfSelectedDays.toString() + " " + context.getString(R.string.day_with_space)
         }
         return subTitle
     }

@@ -377,7 +377,8 @@ class ProfileFirebaseRepository @Inject constructor() : BaseFirestoreDBRepositor
                                 "address.current.secondLine" to address.secondLine,
                                 "address.current.area" to address.area,
                                 "address.current.city" to address.city,
-                                "address.current.state" to address.state
+                                "address.current.state" to address.state,
+                                "address.current.pincode" to address.pincode
                         )
                 )
     }

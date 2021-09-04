@@ -729,7 +729,10 @@ class BankAccountFragment : Fragment(),
                 image =
                     MultipartBody.Part.createFormData("file", file.name, requestFile)
             }
-            image?.let { viewModel.getKycOcrResult("bank", "dummy", it) }
+            image?.let {
+                eventTracker.pushEvent(TrackingEventArgs(VerificationEvents.BANK_OCR_STARTED, null))
+                viewModel.getKycOcrResult("bank", "dummy", it)
+            }
         }
 
 

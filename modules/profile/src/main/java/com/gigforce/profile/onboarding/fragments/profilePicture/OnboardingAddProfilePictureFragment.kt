@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -327,14 +328,32 @@ class OnboardingAddProfilePictureFragment() : Fragment(), ImageCropCallback, Onb
                 if (allPermsGranted)
                     cameraAndGalleryIntegrator.showCameraAndGalleryBottomSheet()
                 else {
-                    Toast.makeText(
-                        requireContext(),
-                        getString(R.string.grant_storage_permission_profile),
-                        Toast.LENGTH_SHORT
-                    ).show()
+
+                    val userOptedForDontAskAgainReadStoragePermission = !requireActivity().shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE)
+                    val userOptedForDontAskAgainWriteStoragePermission = !requireActivity().shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    val userOptedForDontAskAgainCameraStoragePermission = !requireActivity().shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)
+
+                    if(userOptedForDontAskAgainCameraStoragePermission ||
+                        userOptedForDontAskAgainWriteStoragePermission ||
+                        userOptedForDontAskAgainReadStoragePermission ){
+
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.camera_and_storage_permission_required))
+                            .setMessage(getString(R.string.please_grant_storage_camera_permission))
+                            .setPositiveButton(getString(R.string.okay_common_ui)){_,_ -> openSettingsPage() }
+                            .setNegativeButton(getString(R.string.cancel_common_ui)) { _, _ ->}
+                            .show()
+                    }
                 }
             }
         }
+    }
+
+    private fun openSettingsPage() {
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+        val uri = Uri.fromParts("package", requireContext().packageName, null)
+        intent.data = uri
+        startActivity(intent)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
