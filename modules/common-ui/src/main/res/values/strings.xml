@@ -77,5 +77,6 @@
     <string name="days_with_space"> days</string>
     <string name="day_with_space"> day</string>
     <string name="work_from_home">Work from home</string>
+    <string name="cancel_common_ui">Cancel</string>
 
 </resources>

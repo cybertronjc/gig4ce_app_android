@@ -88,6 +88,8 @@
     <string name="time_slots_profile">समय सूचि</string>
     <string name="select_max_3_profile">" ( चुनें अधिकतम 3) "</string>
     <string name="highest_qualification_profile">उच्चतम योग्यता</string>
+    <string name="camera_and_storage_permission_required">संचयन और कैमरा अनुमति आवश्यक</string>
+    <string name="please_grant_storage_camera_permission">कृपया कैमरा और भंडारण की अनुमति दें, ताकि हम आपकी प्रोफ़ाइल तस्वीर को क्लिक करके सहेज सकें</string>
 
 
 </resources>
