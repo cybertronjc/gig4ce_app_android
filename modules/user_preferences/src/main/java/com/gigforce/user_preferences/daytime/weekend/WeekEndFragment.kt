@@ -263,6 +263,8 @@ class WeekEndFragment : Fragment() {
 
     fun showSlotsAlert() {
         val slots = viewModel.getAllSlotsToShow()
+        slots.removeAt(0)
+        slots.add(0,resources.getString(R.string.all_pref))
         val items = slots.toTypedArray()
         val indexItem = (0..slots.size - 1).toList().toTypedArray()
         val isSectionSelected = BooleanArray(items.size)
