@@ -204,6 +204,11 @@ android {
         exclude 'META-INF/core_release.kotlin_module'
     }
 
+    bundle {
+        language {
+            enableSplit = false
+        }
+    }
 }
 
 dependencies {
