@@ -85,8 +85,10 @@ class MainNavDataRepository @Inject constructor(
                 val index = (item.get("index") as? Long) ?: 500
                 val icon_type = item.get("icon") as? String
                 val navPath = item.get("navPath") as? String
+                val active = item.get("active") as? Boolean
                 mainNavData.add(
                     FeatureItemCard2DVM(
+                        active = active,
                         title = title,
                         icon = icon_type,
                         navPath = navPath,
@@ -96,6 +98,9 @@ class MainNavDataRepository @Inject constructor(
 
             }
             mainNavData.sortBy { it.index }
+            var tempMainNavData = mainNavData.filter { it.active == true }
+            mainNavData.clear()
+            mainNavData.addAll(tempMainNavData)
             data.value = mainNavData
             receivedNotifyToServer()
             reloadCount++
