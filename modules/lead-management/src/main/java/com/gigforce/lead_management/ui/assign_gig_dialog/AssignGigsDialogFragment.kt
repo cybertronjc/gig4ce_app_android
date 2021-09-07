@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
+import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.leadManagement.AssignGigRequest
 import com.gigforce.core.base.BaseDialogFragment
 import com.gigforce.core.extensions.gone
@@ -121,12 +122,8 @@ class AssignGigsDialogFragment : BaseDialogFragment<FragmentAssignGigDialogBindi
 
                 }
                 Lse.Success -> {
-                    Toast.makeText(
-                        requireContext(),
-                        getString(R.string.gig_assigned_lead),
-                        Toast.LENGTH_LONG
-                    ).show()
-
+                    showToast(getString(R.string.reference_submitted_lead))
+                    showToast(getString(R.string.gig_assigned_lead))
                     viewBinding.apply {
                         processingLayout.root.gone()
                         errorLayout.root.gone()
@@ -143,6 +140,7 @@ class AssignGigsDialogFragment : BaseDialogFragment<FragmentAssignGigDialogBindi
                         errorLayout.infoMessageTv.text = it.error
                         errorLayout.infoIv.loadImage(com.gigforce.common_ui.R.drawable.banner_error)
                         errorLayout.retryBtn.visible()
+                        showToast(it.error)
                     }
                 }
             }
