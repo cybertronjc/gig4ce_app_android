@@ -21,7 +21,9 @@ import com.gigforce.common_ui.viewmodels.custom_gig_preferences.ParamCustPreferV
 import com.gigforce.common_ui.viewmodels.userpreferences.SharedPreferenceViewModel
 import com.gigforce.core.AppConstants
 import com.gigforce.core.datamodels.gigpage.Gig
+import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toDate
+import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.giger_app.R
 import com.gigforce.giger_app.calendarscreen.maincalendarscreen.verticalcalendar.AllotedGigDataModel
@@ -119,6 +121,7 @@ class RosterDayFragment : RosterBaseFragment(), IOnBackPressedOverride {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         //observer()
+        screenLoaderBar.visible()
         viewPagerScrollListener()
         sharedPreferenceViewModel.configLiveDataModel.observe(
             viewLifecycleOwner,
@@ -139,6 +142,7 @@ class RosterDayFragment : RosterBaseFragment(), IOnBackPressedOverride {
             @RequiresApi(Build.VERSION_CODES.O)
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
+                screenLoaderBar.gone()
                 if (viewInitilaizedCount != 0) {
                     if (position != lastViewPosition) {
                         val newDateTime = (
