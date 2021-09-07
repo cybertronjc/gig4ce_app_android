@@ -217,7 +217,7 @@ class ReferenceCheckFragment : BaseFragment2<ReferenceCheckFragmentBinding>(
     }
 
     private fun showReferenceSubmittingState() = viewBinding.apply {
-        showToast(getString(R.string.reference_submitted_lead))
+        showToast(getString(R.string.submitting_data))
 //        submitButton.showProgress {
 //            this.buttonText = "Submitting..."
 //            this.progressColor = R.color.white
