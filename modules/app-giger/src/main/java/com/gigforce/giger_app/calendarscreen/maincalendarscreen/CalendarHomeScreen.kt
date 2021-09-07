@@ -592,6 +592,10 @@ class CalendarHomeScreen : Fragment(),
 //                        getView(viewHolder, R.id.coloredsideline).visibility = View.GONE
 //                        getView(viewHolder, R.id.graysideline).visibility = View.VISIBLE
                         showMonthLayout(false, viewHolder)
+                        if(obj.title == "No gigs assigned"){
+                            (viewHolder.getView(R.id.title) as TextView).text =
+                                getString(R.string.no_gig_assigned_giger)
+                        }else
                         (viewHolder.getView(R.id.title) as TextView).text = obj.title
 //                        getTextView(viewHolder, R.id.title).text = obj.title
                         if (obj.subTitle != null && !obj.subTitle.equals("")) {
@@ -736,7 +740,8 @@ class CalendarHomeScreen : Fragment(),
                             } else {
                                 viewHolder.getView(R.id.daydatecard).alpha = 1.0F
                                 viewHolder.getView(R.id.daydatecard).alpha = 0.5F
-
+                                (viewHolder.getView(R.id.title) as TextView).text =
+                                    getString(R.string.no_gig_assigned_giger)
 //                                getView(viewHolder, R.id.daydatecard).alpha = 1.0F
 //                                getView(viewHolder, R.id.daydatecard).alpha = 0.5F
                             }
