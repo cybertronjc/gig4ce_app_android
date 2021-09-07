@@ -11,7 +11,7 @@
         android:id="@+id/textView74"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/marked_not_working"
+        android:text="@string/marked_not_working_giger"
         android:layout_marginLeft="15dp"
         android:textSize="14sp"
         android:textColor="#000000"
