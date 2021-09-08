@@ -88,5 +88,5 @@
     <string name="update_now_app_giger">Update now</string>
     <string name="decline_gigs">Decline Gigs</string>
     <string name="no_gig_assigned_giger">No gigs assigned</string>
-    <string name="marked_not_working">Marked not working</string>
+    <string name="marked_not_working_giger">Marked not working</string>
 </resources>

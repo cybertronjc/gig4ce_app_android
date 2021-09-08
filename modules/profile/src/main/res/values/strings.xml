@@ -22,7 +22,7 @@
     <string name="alert_profile">Alert</string>
     <string name="unable_to_click_photo_profile">\"Unable to click Photo, \"</string>
     <string name="step_1_profile">Step 1/</string>
-    <string name="steps_profile">\"Steps \"</string>
+    <string name="steps_profile">Steps </string>
     <string name="full_time_profile">Full Time</string>
     <string name="part_time_profile">Part Time</string>
     <string name="max_three_localities_profile">Maximum three localities can be selected!!</string>
@@ -106,6 +106,8 @@
     <string name="yes_i_have_profile">Yes, I have</string>
     <string name="no_i_have_not_profile">No, I haven’t</string>
     <string name="what_have_you_deliver_before_profile">What have you delivered earlier?</string>
+    <string name="camera_and_storage_permission_required">Storage and Camera permission required</string>
+    <string name="please_grant_storage_camera_permission">Please grant camera and storage permission, so we can click and save your profile picture</string>
 
 
 </resources>

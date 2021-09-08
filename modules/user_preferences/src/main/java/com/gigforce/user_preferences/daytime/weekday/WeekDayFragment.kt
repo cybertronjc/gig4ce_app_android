@@ -61,6 +61,7 @@ class WeekDayFragment : Fragment() {
                 initializeViews()
             })
         viewModel.getConfiguration()
+        viewModel.getAllData()
     }
 
     private fun initializeViews() {
@@ -275,6 +276,8 @@ class WeekDayFragment : Fragment() {
 
     fun showSlotsAlert() {
         val slots = viewModel.getAllSlotsToShow()
+        slots.removeAt(0)
+        slots.add(0,resources.getString(R.string.all_pref))
         val items = slots.toTypedArray()
         val indexItem = (0..slots.size - 1).toList().toTypedArray()
         val isSectionSelected = BooleanArray(items.size)
@@ -312,7 +315,7 @@ class WeekDayFragment : Fragment() {
         rv.adapter = slotsRecyclerAdapter
 
 
-        builder.setPositiveButton("DONE") { dialogInterface, i ->
+        builder.setPositiveButton(getString(R.string.done_pref)) { dialogInterface, i ->
             val selectedItemsForDB = ArrayList<String>()
             val selectedItemForView = ArrayList<String>()
             for (j in selectedList.indices) {

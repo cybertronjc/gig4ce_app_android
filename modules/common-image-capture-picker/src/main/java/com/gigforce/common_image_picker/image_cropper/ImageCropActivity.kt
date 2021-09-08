@@ -1,4 +1,5 @@
 package com.gigforce.common_image_picker.image_cropper
+
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.ActivityInfo
@@ -17,44 +18,50 @@ import android.view.WindowManager
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.net.toUri
 import androidx.databinding.DataBindingUtil
-import com.canhub.cropper.CropImage
-import com.canhub.cropper.CropImageContract
-import com.canhub.cropper.CropImageOptions
 import com.canhub.cropper.CropImageView
-import com.canhub.cropper.common.CommonVersionCheck
-import com.canhub.cropper.utils.getUriForFile
 import com.gigforce.common_image_picker.R
 import com.gigforce.common_image_picker.databinding.ActivityImageCropBinding
-import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.core.logger.GigforceLogger
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.yalantis.ucrop.util.FileUtils.getDataColumn
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
-import kotlin.Boolean as Boolean
-import com.yalantis.ucrop.util.FileUtils.getDataColumn
-import java.io.*
 
 
 @AndroidEntryPoint
 class ImageCropActivity : AppCompatActivity() {
 
     companion object {
-         const val PREFIX: String = "IMG"
-         const val EXTENSION: String = ".jpg"
-         const val CROP_RESULT_CODE = 90
-         const val CROPPED_IMAGE_URL_EXTRA = "CROPPED_IMAGE_URL_EXTRA"
+        const val PREFIX: String = "IMG"
+        const val EXTENSION: String = ".jpg"
+        const val CROP_RESULT_CODE = 90
+
+        const val CROPPED_IMAGE_URL_EXTRA = "CROPPED_IMAGE_URL_EXTRA"
+
+        /**
+         *
+         */
+        const val INTENT_EXTRA_DESTINATION_URI = "destination_uri"
+
+        /**
+         * Enable or disbale 1:1 crop window
+         */
+        const val INTENT_EXTRA_ENABLE_FREE_CROP = "enable_free_crop"
     }
 
     private lateinit var viewBinding: ActivityImageCropBinding
     private var cropImageUri: Uri? = null
     private lateinit var incomingFile: String
+    private var enableFreeCropping : Boolean = false
+
     @Inject
     lateinit var logger: GigforceLogger
     private var win: Window? = null
+    private var destinationUri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?): Unit {
         super.onCreate(savedInstanceState)
@@ -68,6 +75,8 @@ class ImageCropActivity : AppCompatActivity() {
         val extras = intent.extras
         if (extras != null) {
             incomingFile = extras.getString("outgoingUri").toString()
+            destinationUri = extras.getParcelable(INTENT_EXTRA_DESTINATION_URI)
+            enableFreeCropping = extras.getBoolean(INTENT_EXTRA_ENABLE_FREE_CROP)
         }
         changeStatusBarColor()
         setIncomingImage(incomingFile)
@@ -75,8 +84,7 @@ class ImageCropActivity : AppCompatActivity() {
 
     }
 
-    private fun initListeners() = viewBinding.apply{
-
+    private fun initListeners() = viewBinding.apply {
 
 
         //this will rotate the image by 90 degree in anticlockwise
@@ -90,21 +98,15 @@ class ImageCropActivity : AppCompatActivity() {
 
         okayImg.setOnClickListener {
             viewBinding.progressCircular.visibility = View.VISIBLE
-            cropImageView.croppedImageAsync()
+            val cropedImage = cropImageView.getCroppedImage(1200, 1600) //720p
+
+            if(cropedImage != null)
+                saveBitmapToDestinationUriAndReturnResults(cropedImage)
 
         }
-        cropImageView.setOnCropImageCompleteListener(object : CropImageView.OnCropImageCompleteListener {
-            override fun onCropImageComplete(
-                view: CropImageView,
-                result: CropImageView.CropResult
-            ) {
-                viewBinding.progressCircular.visibility = View.GONE
-                handleCropResult(result)
-            }
 
-        })
-
-        cropImageView.setOnSetImageUriCompleteListener(object : CropImageView.OnSetImageUriCompleteListener {
+        cropImageView.setOnSetImageUriCompleteListener(object :
+            CropImageView.OnSetImageUriCompleteListener {
             override fun onSetImageUriComplete(view: CropImageView, uri: Uri, error: Exception?) {
                 viewBinding.progressCircular.visibility = View.GONE
                 Log.d("uri", "uri : $uri")
@@ -132,37 +134,39 @@ class ImageCropActivity : AppCompatActivity() {
         win?.setStatusBarColor(resources.getColor(R.color.status_bar_pink))
     }
 
-     private fun setIncomingImage(incomingFile: String) = viewBinding.apply{
-         if (incomingFile.isNotEmpty()){
-             val incomingUri: Uri = Uri.parse(incomingFile)
-             //logger.d(ImageCropFragment.logTag, "incomingFile uri : $incomingUri")
-             viewBinding.progressCircular.visibility = View.VISIBLE
-             cropImageUri = incomingUri
-             cropImageView.setImageUriAsync(incomingUri)
-             setCropImageControls()
-         } else {
-             //showToast("Invalid incoming image")
-             Toast.makeText(this@ImageCropActivity, "Invalid incoming image", Toast.LENGTH_SHORT)
-         }
+    private fun setIncomingImage(incomingFile: String) = viewBinding.apply {
+        if (incomingFile.isNotEmpty()) {
+            val incomingUri: Uri = Uri.parse(incomingFile)
+            //logger.d(ImageCropFragment.logTag, "incomingFile uri : $incomingUri")
+            viewBinding.progressCircular.visibility = View.VISIBLE
+            cropImageUri = incomingUri
+            cropImageView.setImageUriAsync(incomingUri)
+            setCropImageControls()
+        } else {
+            //showToast("Invalid incoming image")
+            Toast.makeText(this@ImageCropActivity, "Invalid incoming image", Toast.LENGTH_SHORT)
+        }
 
-     }
+    }
 
-    private fun rotateImageAntiClock(){
+    private fun rotateImageAntiClock() {
         viewBinding.cropImageView.rotateImage(90)
     }
 
-     private fun setCropImageControls(){
+    private fun setCropImageControls() {
 
-         viewBinding.cropImageView.apply {
-             setAspectRatio(1, 1)
-             setCenterMoveEnabled(true)
-             isShowProgressBar = true
-             setBackgroundColor(resources.getColor(R.color.warm_grey))
-             setFixedAspectRatio(true)
-             setMultiTouchEnabled(false)
-         }
-     }
+        viewBinding.cropImageView.apply {
 
+            if(!enableFreeCropping) {
+                setAspectRatio(1, 1)
+                setFixedAspectRatio(true)
+            }
+            setCenterMoveEnabled(true)
+            isShowProgressBar = true
+            setBackgroundColor(resources.getColor(R.color.warm_grey))
+            setMultiTouchEnabled(false)
+        }
+    }
 
 
     private fun handleCropResult(result: CropImageView.CropResult?) {
@@ -180,29 +184,32 @@ class ImageCropActivity : AppCompatActivity() {
 //            getUriFromBitmap(imageBitmap)?.let {
 //
 //            }
-            result?.uriContent?.let {
-                var actualImage = it
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    getUriFromContentUri(it)?.let {
-                        actualImage = it
-                    }
-                }
-
-//                Log.v("File Path", "filepath ${result?.getUriFilePath(this)}, actual: ${actualImage.toString()} ")
-                val resultIntent = Intent()
-                resultIntent.putExtra(CROPPED_IMAGE_URL_EXTRA, actualImage.toString())
-                setResult(Activity.RESULT_OK, resultIntent)
-                finish()
-            }
+//            result?.uriContent?.let {
+//                saveBitmapToDestinationUriAndReturnResults(it)
+//            }
 
             //Log.v("File Path temp", "filepath ${getUriFromBitmap(imageBitmap)} ")
 
         } else {
             Log.e("AIC", "Failed to crop image", result?.error)
-         //logger.d(ImageCropFragment.logTag, "Failed to crop image", result?.error.toString())
+            //logger.d(ImageCropFragment.logTag, "Failed to crop image", result?.error.toString())
 
-         Toast.makeText(this@ImageCropActivity, "Crop failed: ${result?.error?.message}", Toast.LENGTH_SHORT)
+            Toast.makeText(
+                this@ImageCropActivity,
+                "Crop failed: ${result?.error?.message}",
+                Toast.LENGTH_SHORT
+            )
         }
+    }
+
+    private fun saveBitmapToDestinationUriAndReturnResults(
+        image: Bitmap
+    ) {
+        val savedImageUri  = saveBitmapToUri(image)
+        val resultIntent = Intent()
+        resultIntent.putExtra(CROPPED_IMAGE_URL_EXTRA, savedImageUri.toString())
+        setResult(Activity.RESULT_OK, resultIntent)
+        finish()
     }
 
     private fun getUriFromContentUri(uri: Uri): Uri? {
@@ -210,17 +217,20 @@ class ImageCropActivity : AppCompatActivity() {
             "yyyyMMdd_HHmmss",
             Locale.getDefault()
         ).format(Date())
+
         val imageFileName = "IMG" + "_" + timeStamp + "_"
         var inputStream = contentResolver.openInputStream(uri)
-        val destinationFilename =
-            Environment.getExternalStorageDirectory().path + File.separatorChar.toString() +  imageFileName +".jpg"
-
+        val destinationFileUri = if (destinationUri == null) {
+            File(filesDir, imageFileName + ".jpg").toUri()
+        } else {
+            destinationUri!!
+        }
         var bis: BufferedInputStream? = null
         var bos: BufferedOutputStream? = null
 
         try {
             bis = BufferedInputStream(inputStream)
-            bos = BufferedOutputStream(FileOutputStream(destinationFilename, false))
+            bos = BufferedOutputStream(contentResolver.openOutputStream(destinationFileUri))
             val buf = ByteArray(1024)
             bis.read(buf)
             do {
@@ -236,10 +246,43 @@ class ImageCropActivity : AppCompatActivity() {
                 e.printStackTrace()
             }
         }
-        return getUriForFile(this, File(destinationFilename))
-        //return Uri.fromFile(File(destinationFilename))
+        return destinationFileUri
     }
 
+    private fun saveBitmapToUri(bitmap: Bitmap): Uri {
+        val timeStamp = SimpleDateFormat(
+            "yyyyMMdd_HHmmss",
+            Locale.getDefault()
+        ).format(Date())
+
+        val imageFileName = "IMG" + "_" + timeStamp + "_"
+        val destinationFileUri = if (destinationUri == null) {
+            File(filesDir, imageFileName + ".jpg").toUri()
+        } else {
+            destinationUri!!
+        }
+
+        try {
+            BufferedOutputStream(contentResolver.openOutputStream(destinationFileUri)).use {
+                bitmap.compress(
+                    Bitmap.CompressFormat.JPEG,
+                    100,
+                    it
+                )
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        } finally {
+
+            try {
+                if (!bitmap.isRecycled)
+                    bitmap.recycle()
+            } catch (e: Exception) {
+            }
+        }
+
+        return destinationFileUri
+    }
 
 
     fun getRealPathFromURI(contentUri: Uri?): String? {
@@ -253,7 +296,6 @@ class ImageCropActivity : AppCompatActivity() {
         cursor?.close()
         return path
     }
-
 
 
     private fun getDefaultUri(): Uri? {
@@ -270,30 +312,31 @@ class ImageCropActivity : AppCompatActivity() {
 
         return Uri.fromFile(tempFile)
     }
-    private fun getUriFromBitmap(bitmap: Bitmap?): Uri?{
 
-           var tempDir: File = Environment.getExternalStorageDirectory()
-           tempDir = File(tempDir.getAbsolutePath().toString() + "/.temp/")
-           tempDir.mkdir()
-           val timeStamp = SimpleDateFormat(
-               "yyyyMMdd_HHmmss",
-               Locale.getDefault()
-           ).format(Date())
-           val imageFileName = PREFIX + "_" + timeStamp + "_"
+    private fun getUriFromBitmap(bitmap: Bitmap?): Uri? {
 
-           val tempFile: File = File.createTempFile(imageFileName, ".jpg", tempDir)
-           val bytes = ByteArrayOutputStream()
-           bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
-           val bitmapData: ByteArray = bytes.toByteArray()
+        var tempDir: File = Environment.getExternalStorageDirectory()
+        tempDir = File(tempDir.getAbsolutePath().toString() + "/.temp/")
+        tempDir.mkdir()
+        val timeStamp = SimpleDateFormat(
+            "yyyyMMdd_HHmmss",
+            Locale.getDefault()
+        ).format(Date())
+        val imageFileName = PREFIX + "_" + timeStamp + "_"
 
-           //write the bytes in file
+        val tempFile: File = File.createTempFile(imageFileName, ".jpg", tempDir)
+        val bytes = ByteArrayOutputStream()
+        bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val bitmapData: ByteArray = bytes.toByteArray()
 
-           //write the bytes in file
-           val fos = FileOutputStream(tempFile)
-           fos.write(bitmapData)
-           fos.flush()
-           fos.close()
-           return Uri.fromFile(tempFile)
+        //write the bytes in file
+
+        //write the bytes in file
+        val fos = FileOutputStream(tempFile)
+        fos.write(bitmapData)
+        fos.flush()
+        fos.close()
+        return Uri.fromFile(tempFile)
     }
 
     override fun onBackPressed() {

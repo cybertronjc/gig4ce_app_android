@@ -26,7 +26,6 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:orientation="vertical">
 
             <TextView
@@ -133,6 +132,19 @@
                 app:layout_constraintTop_toTopOf="@+id/country_code_label"
                 />
 
+            <ImageView
+                android:id="@+id/change_number_iv"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginTop="@dimen/size_18"
+                android:src="@drawable/ic_baseline_edit_24"
+                app:tint="@color/lipstick_2"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@id/change_number"
+                app:layout_constraintTop_toBottomOf="@id/mobile_no_et"
+                />
+
             <TextView
                 android:id="@+id/change_number"
                 android:layout_width="wrap_content"
@@ -140,12 +152,12 @@
                 android:fontFamily="@font/lato"
                 android:textStyle="normal"
                 android:textSize="14sp"
-                android:visibility="gone"
                 android:textColor="@color/lipstick"
                 android:letterSpacing="-0.01"
                 android:lineSpacingExtra="3sp"
                 android:layout_marginStart="@dimen/size_16"
                 android:layout_marginTop="@dimen/size_16"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="@id/mobile_no_et"
                 app:layout_constraintTop_toBottomOf="@id/mobile_no_et"
                 android:text="@string/change_number_lead"

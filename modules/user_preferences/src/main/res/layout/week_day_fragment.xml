@@ -103,7 +103,7 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="14dp"
                 android:layout_marginBottom="@dimen/size_18"
-                  app:srcCompat="@drawable/ic_calendar_black" />
+                app:srcCompat="@drawable/ic_calendar_black" />
 
 
             <TextView
@@ -126,11 +126,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/textView61"
-                android:paddingBottom="@dimen/size_13"
                 android:layout_alignStart="@+id/textView61"
                 android:layout_marginTop="4dp"
                 android:letterSpacing="0"
-                android:text="Mon, Tues, Wed, Thus, Fri"
+                android:paddingBottom="@dimen/size_13"
+                tools:text="Mon, Tues, Wed, Thus, Fri"
                 android:textColor="@color/gray_color"
                 android:textSize="@dimen/font_10" />
 
