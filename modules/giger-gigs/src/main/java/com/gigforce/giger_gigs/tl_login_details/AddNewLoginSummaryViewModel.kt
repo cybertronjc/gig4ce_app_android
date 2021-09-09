@@ -34,14 +34,14 @@ sealed class BusinessAppViewState {
 
 @HiltViewModel
 class AddNewLoginSummaryViewModel @Inject constructor (
-    private val iBuildConfig: IBuildConfigVM
+    private val iBuildConfig: IBuildConfigVM,
+    private val tlLoginSummaryRepository: TlLoginSummaryRepository
 ) : ViewModel() {
 
     companion object {
         private const val TAG = "AddNewLoginSummaryViewModel"
     }
 
-    private val tlLoginSummaryRepository= TlLoginSummaryRepository(iBuildConfig)
     private val firebaseAuthStateListener= FirebaseAuthStateListener.getInstance()
     private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository()
     //data
