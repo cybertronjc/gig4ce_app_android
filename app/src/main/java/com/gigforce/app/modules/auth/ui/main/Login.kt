@@ -32,6 +32,7 @@ import com.gigforce.core.IEventTracker
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.analytics.AuthEvents
 import com.gigforce.core.base.BaseActivity
+import com.gigforce.core.extensions.gone
 import com.gigforce.core.navigation.INavigation
 import com.google.android.gms.auth.api.credentials.Credential
 import com.google.android.gms.auth.api.credentials.Credentials
@@ -210,13 +211,19 @@ class Login : Fragment() {
         viewModel.liveState.observeForever {
             when (it.stateResponse) {
                 LoginViewModel.STATE_CODE_SENT -> {
+                    login_button?.isEnabled = true
+                    progressBar?.gone()
                     navigateToOTPVarificationScreen()
 //                    eventTracker.pushEvent(TrackingEventArgs("Navigate to OTP verification screen", null))
                 }
                 LoginViewModel.STATE_VERIFY_FAILED -> {
+                    login_button?.isEnabled = true
+                    progressBar?.gone()
                     showToast(it.msg)
                 }
                 LoginViewModel.STATE_VERIFY_SUCCESS -> {
+                    login_button?.isEnabled = true
+                    progressBar?.gone()
                     navigateToOTPVarificationScreen()
 //                    eventTracker.pushEvent(TrackingEventArgs("Navigate to OTP verification screen", null))
                 }
@@ -230,7 +237,8 @@ class Login : Fragment() {
             try {
                 findNavController().navigate(
                     LoginDirections.actionLogin2ToVerifyOTP(
-                        viewModel.verificationId!!,
+//                        viewModel.verificationId!!,
+                        "",
                         invisible_edit_mobile.text.toString()
                     )
                 )
@@ -296,13 +304,13 @@ class Login : Fragment() {
         login_button.setOnClickListener {
             login_button.isEnabled = false
             progressBar.visibility = View.VISIBLE
-            Handler().postDelayed(Runnable {
-                // This method will be executed once the timer is over
-                if (login_button != null) {
-                    login_button.isEnabled = true
-                    progressBar.visibility = View.GONE
-                }
-            }, 3000)
+//            Handler().postDelayed(Runnable {
+//                // This method will be executed once the timer is over
+//                if (login_button != null) {
+//                    login_button.isEnabled = true
+//                    progressBar.visibility = View.GONE
+//                }
+//            }, 3000)
             doActionOnClick()
         }
 
@@ -349,7 +357,8 @@ class Login : Fragment() {
             showToast(getString(R.string.accept_terms))
         }
         else {
-            viewModel.sendVerificationCode(phoneNumber)
+//            viewModel.sendVerificationCode(phoneNumber)
+            navigateToOTPVarificationScreen()
         }
     }
 
