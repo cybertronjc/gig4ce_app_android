@@ -13,7 +13,7 @@ import java.time.LocalDateTime
 
 abstract class RosterBaseFragment: Fragment() {
 
-    val rosterViewModel: RosterDayViewModel by viewModels()
+    val rosterViewModel: RosterDayViewModel by activityViewModels<RosterDayViewModel>()
 
 
     val marginCardStart = 95.px

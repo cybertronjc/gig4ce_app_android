@@ -94,7 +94,7 @@ class TLLoginSummaryAdapter(
 
         this.originalList = contacts
         this.filteredList = contacts
-        notifyDataSetChanged()
+        //notifyDataSetChanged()
     }
 
     fun updateList(list: List<ListingTLModel>){
