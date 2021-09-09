@@ -73,7 +73,7 @@ class TLLoginSummaryAdapter(
                 }
             }
 
-            gigerCount.setText("$totalCount Logins")
+            gigerCount.setText("$totalCount ${context.resources.getString(R.string.logins_gigs)}")
 
         }
 
@@ -94,7 +94,7 @@ class TLLoginSummaryAdapter(
 
         this.originalList = contacts
         this.filteredList = contacts
-        notifyDataSetChanged()
+        //notifyDataSetChanged()
     }
 
     fun updateList(list: List<ListingTLModel>){

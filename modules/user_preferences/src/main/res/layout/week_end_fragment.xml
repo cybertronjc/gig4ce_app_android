@@ -40,7 +40,7 @@
             android:layout_marginLeft="19dp"
             android:fontFamily="@font/lato_bold"
             android:letterSpacing="0"
-            android:text="@string/weekends"
+            android:text="@string/weekends_pref"
             android:textColor="@color/black"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@+id/textView52"
@@ -83,7 +83,7 @@
             android:paddingStart="@dimen/size_68"
             android:paddingTop="@dimen/size_17"
             android:paddingBottom="@dimen/size_16"
-            android:text="@string/schedules"
+            android:text="@string/schedules_pref"
             android:textColor="@color/black"
             android:textSize="14sp"
             app:layout_constraintBottom_toTopOf="@+id/textView60"
@@ -117,7 +117,7 @@
                 android:fontFamily="@font/lato"
                 android:letterSpacing="0"
 
-                android:text="@string/days_caps"
+                android:text="@string/days_caps_pref"
                 android:textColor="@color/black"
                 android:textSize="14sp" />
 
@@ -164,7 +164,7 @@
                 android:layout_toEndOf="@+id/slots_iv"
                 android:fontFamily="@font/lato"
                 android:letterSpacing="0"
-                android:text="@string/slots"
+                android:text="@string/slots_pref"
                 android:textColor="@color/black"
                 android:textSize="14sp" />
 

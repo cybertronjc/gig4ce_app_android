@@ -128,7 +128,7 @@ class InvoiceAdapter(private val transactions: ArrayList<IRow>) :
 
         fun bindTransaction(transaction: Invoice) {
             this.transaction = transaction
-            view.start_date_text.text = "Invoice Generated ${transaction.invoiceGeneratedTime}"
+            view.start_date_text.text = "Invoice Generated " + transaction.invoiceGeneratedTime
             view.end_date_text.text = ""
             view.gig_invoice_status.text = "processed"
             view.gig_invoice_status.setTextColor(view.resources.getColor(R.color.app_green))

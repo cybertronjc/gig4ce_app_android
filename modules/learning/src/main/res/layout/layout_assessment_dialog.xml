@@ -32,7 +32,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/size_100"
                     android:adjustViewBounds="true"
-                    android:contentDescription="@string/assessment_dialog_background"
+                    android:contentDescription="@string/assessment_dialog_background_learning"
                     android:scaleType="centerCrop"
                       app:srcCompat="@drawable/bg_dialog_top"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -53,7 +53,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/iv_bg_top_assess_dialog"
-                    tools:text="@string/good_luck" />
+                    tools:text="@string/good_luck_learning" />
 
                 <TextView
                     android:id="@+id/tv_level_assess_dialog"
@@ -161,7 +161,7 @@
             app:layout_constraintBottom_toTopOf="@+id/tv_do_it_later_assess_dialog"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            tools:text="@string/start_assessment" />
+            tools:text="@string/start_assessment_learning" />
 
         <TextView
             android:id="@+id/tv_do_it_later_assess_dialog"
@@ -171,7 +171,7 @@
             android:layout_marginEnd="@dimen/size_16"
             android:layout_marginBottom="@dimen/size_23"
             android:gravity="center"
-            android:text="@string/do_it_later"
+            android:text="@string/do_it_later_learning"
             android:textColor="@color/warm_grey"
             android:textSize="@dimen/font_16"
             android:visibility="gone"

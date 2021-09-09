@@ -48,7 +48,7 @@
                 style="@style/Title"
                 android:layout_marginStart="@dimen/size_16"
                 android:layout_marginTop="@dimen/dp_xl2"
-                android:text="Verify Aadhar with Phone Number"
+                android:text="@string/verify_aadhar_with_phone_number_veri"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/toplayoutblock" />
 
@@ -60,7 +60,7 @@
                 android:layout_marginLeft="@dimen/dp_sm1"
                 android:layout_marginTop="@dimen/dp_xl1"
                 android:layout_marginRight="@dimen/dp_sm1"
-                android:hint="Enter Aadhaar Number"
+                android:hint="@string/enter_aadhaar_number_veri"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView11">
@@ -79,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/size_16"
                 android:layout_marginEnd="@dimen/size_16"
-                android:text="Enter Aadhaar Card number and then verify details with a 6-Digit OTP sent on the registered Phone Number."
+                android:text="@string/enter_aadhar_and_verify_veri"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/aadhaar_number"

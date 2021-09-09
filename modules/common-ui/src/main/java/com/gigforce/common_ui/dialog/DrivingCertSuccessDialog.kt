@@ -141,8 +141,8 @@ class DrivingCertSuccessDialog : DialogFragment() {
         val downloadmanager = context?.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         val uri = Uri.parse(url)
         val request = DownloadManager.Request(uri)
-        request.setTitle("Driving Certificate")
-        request.setDescription("Downloading Driving Certificate")
+        request.setTitle(getString(R.string.driving_certificate_common_ui))
+        request.setDescription(getString(R.string.downloading_driving_certificate_common_ui))
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
         request.setVisibleInDownloadsUi(false)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -160,19 +160,19 @@ class DrivingCertSuccessDialog : DialogFragment() {
             try {
                 Toast.makeText(
                     context,
-                    "Your Driving Certificate is Downloading",
+                    getString(R.string.dc_downloading_common_ui),
                     Toast.LENGTH_SHORT
                 ).show()
                 downloadmanager.enqueue(request)
             } catch (e: Exception) {
-                Toast.makeText(context, "NetWork Error. Please try again", Toast.LENGTH_SHORT)
+                Toast.makeText(context, getString(R.string.network_error_retry_common_ui), Toast.LENGTH_SHORT)
                     .show()
             }
         } else {
-            Toast.makeText(context, "Network Error. Please try again", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, getString(R.string.network_error_retry_common_ui), Toast.LENGTH_SHORT).show()
         }
         val progressBarDialog = ProgressDialog(context)
-        progressBarDialog.setTitle("Downloading Driving Certificate, Please Wait...")
+        progressBarDialog.setTitle(getString(R.string.downloading_dc_wait_common_ui))
         progressBarDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL)
         progressBarDialog.setButton(
             DialogInterface.BUTTON_POSITIVE, "OK"

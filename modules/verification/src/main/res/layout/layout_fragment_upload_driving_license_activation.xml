@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         app:backgroundType="PinkBar"
         android:visibility="visible"
-        app:titleText="@string/upload_driving_license"
+        app:titleText="@string/upload_driving_license_veri"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
@@ -76,7 +76,7 @@
             android:letterSpacing="0"
             android:paddingTop="@dimen/size_10"
             android:paddingBottom="@dimen/size_9"
-            android:text="@string/save"
+            android:text="@string/save_veri"
             android:textColor="@color/lipstick"
             android:textSize="@dimen/font_14"
             android:textStyle="bold"

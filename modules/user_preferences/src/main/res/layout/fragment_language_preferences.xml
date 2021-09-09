@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         app:backgroundType="WhiteBar"
         android:minHeight="@dimen/size_56"
-        app:titleText="@string/language"
+        app:titleText="@string/language_pref"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="19dp"
             android:fontFamily="@font/lato"
-            android:text="@string/language"
+            android:text="@string/language_pref"
             android:letterSpacing="0"
             android:textColor="@color/black"
             android:textSize="20sp"
@@ -109,7 +109,7 @@
             android:hint="kn"
             android:enabled="false"
             style="@style/Theme.RadioButtonLipstickPink"
-            android:text="@string/kannada"
+            android:text="@string/kannada_pref"
             android:textSize="14sp" />
 
         <View

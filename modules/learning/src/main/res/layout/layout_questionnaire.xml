@@ -27,14 +27,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/lato"
-            android:text="@string/yes" />
+            android:text="@string/yes_learning" />
 
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/cb_no"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/lato"
-            android:text="@string/no" />
+            android:text="@string/no_learning" />
 
     </LinearLayout>
 

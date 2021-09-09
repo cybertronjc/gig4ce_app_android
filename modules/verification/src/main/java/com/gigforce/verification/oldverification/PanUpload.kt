@@ -104,7 +104,7 @@ class PanUpload: Fragment() {
             if(panFront.drawable==null) {
                 Toast.makeText(
                     this.context,
-                    "Please upload the front side first!",
+                    getString(R.string.upload_front_side_first_veri),
                     Toast.LENGTH_LONG).show()
             }
             else {
@@ -129,7 +129,7 @@ class PanUpload: Fragment() {
             else {
                 Toast.makeText(
                     this.context,
-                    "Please upload the Pan before proceeding",
+                    getString(R.string.upload_pan_before_veri),
                     Toast.LENGTH_LONG).show()
             }
         }
@@ -153,7 +153,7 @@ class PanUpload: Fragment() {
                         .addOnSuccessListener {
                             Toast.makeText(
                                 this.context,
-                                "Document successfully uploaded!",
+                                getString(R.string.document_successfully_uploaded_veri),
                                 Toast.LENGTH_SHORT
                             ).show()
                             Log.d("REPOSITORY", "Aadhaar added successfully!")
@@ -162,7 +162,7 @@ class PanUpload: Fragment() {
                                 exception ->  Log.d("Repository", exception.toString())
                             Toast.makeText(
                                 this.context,
-                                "Some failure, please retry!",
+                                getString(R.string.failure_retry_veri),
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -173,7 +173,7 @@ class PanUpload: Fragment() {
                 }
                 )
         }else{
-            UtilMethods.showLongToast(this.context!!, "No Internet Connection!")
+            UtilMethods.showLongToast(this.context!!, getString(R.string.no_internet_veri))
         }
     }
 

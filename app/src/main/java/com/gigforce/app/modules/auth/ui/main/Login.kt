@@ -26,10 +26,13 @@ import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.common_ui.utils.DocViewerActivity
 import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.WebViewLocaleHelper
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.analytics.AuthEvents
+import com.gigforce.core.base.BaseActivity
+import com.gigforce.core.extensions.gone
 import com.gigforce.core.navigation.INavigation
 import com.google.android.gms.auth.api.credentials.Credential
 import com.google.android.gms.auth.api.credentials.Credentials
@@ -64,11 +67,13 @@ class Login : Fragment() {
     private var win: Window? = null
     private val RC_HINT = 9
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             mobile_number = it.getString("mobileno") ?: ""
         }
+
 //        showKeyboard()
     }
 
@@ -206,13 +211,19 @@ class Login : Fragment() {
         viewModel.liveState.observeForever {
             when (it.stateResponse) {
                 LoginViewModel.STATE_CODE_SENT -> {
+                    login_button?.isEnabled = true
+                    progressBar?.gone()
                     navigateToOTPVarificationScreen()
 //                    eventTracker.pushEvent(TrackingEventArgs("Navigate to OTP verification screen", null))
                 }
                 LoginViewModel.STATE_VERIFY_FAILED -> {
+                    login_button?.isEnabled = true
+                    progressBar?.gone()
                     showToast(it.msg)
                 }
                 LoginViewModel.STATE_VERIFY_SUCCESS -> {
+                    login_button?.isEnabled = true
+                    progressBar?.gone()
                     navigateToOTPVarificationScreen()
 //                    eventTracker.pushEvent(TrackingEventArgs("Navigate to OTP verification screen", null))
                 }
@@ -226,7 +237,8 @@ class Login : Fragment() {
             try {
                 findNavController().navigate(
                     LoginDirections.actionLogin2ToVerifyOTP(
-                        viewModel.verificationId!!,
+//                        viewModel.verificationId!!,
+                        "",
                         invisible_edit_mobile.text.toString()
                     )
                 )
@@ -292,17 +304,19 @@ class Login : Fragment() {
         login_button.setOnClickListener {
             login_button.isEnabled = false
             progressBar.visibility = View.VISIBLE
-            Handler().postDelayed(Runnable {
-                // This method will be executed once the timer is over
-                if (login_button != null) {
-                    login_button.isEnabled = true
-                    progressBar.visibility = View.GONE
-                }
-            }, 3000)
+//            Handler().postDelayed(Runnable {
+//                // This method will be executed once the timer is over
+//                if (login_button != null) {
+//                    login_button.isEnabled = true
+//                    progressBar.visibility = View.GONE
+//                }
+//            }, 3000)
             doActionOnClick()
         }
 
         termsTextView.setOnClickListener {
+             val webViewLocaleHelper = WebViewLocaleHelper(requireActivity() as BaseActivity)
+            webViewLocaleHelper.implementWorkaround()
             navigation.navigateToDocViewerActivity(requireActivity(),"https://gigforce.in/terms-of-use" , "TERMS")
         }
 
@@ -340,10 +354,11 @@ class Login : Fragment() {
             login_button.isEnabled = true
             login_button.background = resources.getDrawable(R.drawable.gradient_button)
         } else if (!termsCheckbox.isChecked){
-            showToast("Accept Terms and Conditions to continue")
+            showToast(getString(R.string.accept_terms))
         }
         else {
-            viewModel.sendVerificationCode(phoneNumber)
+//            viewModel.sendVerificationCode(phoneNumber)
+            navigateToOTPVarificationScreen()
         }
     }
 

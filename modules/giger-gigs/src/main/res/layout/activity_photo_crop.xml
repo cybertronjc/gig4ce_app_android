@@ -33,7 +33,7 @@
             android:layout_marginBottom="16dp"
             android:fontFamily="@font/lato"
             android:lineSpacingExtra="3sp"
-            android:text="Profile Picture"
+            android:text="@string/profile_picture"
             android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold"

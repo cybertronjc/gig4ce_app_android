@@ -1,7 +1,6 @@
 package com.gigforce.profile.onboarding
 
 import android.app.Activity
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.RemoteException
 import android.util.Log
@@ -37,7 +36,6 @@ import kotlinx.android.synthetic.main.experience_item.*
 import kotlinx.android.synthetic.main.name_gender_item.view.*
 import kotlinx.android.synthetic.main.onboarding_fragment_new_fragment.*
 import kotlinx.android.synthetic.main.onboarding_fragment_new_fragment_greeting_layout.*
-import org.json.JSONException
 import javax.inject.Inject
 import com.android.installreferrer.api.ReferrerDetails
 import com.android.installreferrer.api.InstallReferrerClient
@@ -108,9 +106,9 @@ class OnboardingFragmentNew : Fragment(){
         activity?.let {
             onboarding_pager.adapter =
                     MutlifragmentAdapter(it)
-            appBar.setSteps("Step 1/${(onboarding_pager.adapter as MutlifragmentAdapter).fragmentArr.size}")
+            appBar.setSteps(getString(R.string.steps_profile)+" 1/" + (onboarding_pager.adapter as MutlifragmentAdapter).fragmentArr.size)
             steps.text =
-                    "Step 1/${(onboarding_pager.adapter as MutlifragmentAdapter).fragmentArr.size}"
+                getString(R.string.steps_profile) +" 1/"+ (onboarding_pager.adapter as MutlifragmentAdapter).fragmentArr.size
         }
         next.setOnClickListener {
             clickOnNextButton()
@@ -154,7 +152,7 @@ class OnboardingFragmentNew : Fragment(){
 //                    fragment.showCameraSheetIfNotShown()
                     enableNextButton(true)
                 } else {
-                    next.text = "Next"
+                    next.text = getString(R.string.next_profile)
                 }
                 var fragmentInterface = fragmentAdapter.getFragment(position) as SetInterfaceListener
                 fragmentInterface.setInterface(communicator)
@@ -177,15 +175,15 @@ class OnboardingFragmentNew : Fragment(){
             }
             onboarding_pager.currentItem = onboarding_pager.currentItem + 1
             //steps.text = "Steps ${onboarding_pager.currentItem + 1}/9"
-            appBar.setSteps("Steps ${onboarding_pager.currentItem + 1}/9")
+            appBar.setSteps(getString(R.string.steps_profile) +" "+ (onboarding_pager.currentItem + 1) + "/9")
 
             if (onboarding_pager.currentItem == 8) {
                 val fragment = getProfilePicFragment()
                 if (!fragment.hasUserUploadedPhoto()) {
-                    next.text = "Upload Photo"
+                    next.text = getString(R.string.upload_photo_profile)
                     fragment.showCameraSheetIfNotShown()
                 }else {
-                    next.text = "Next"
+                    next.text = getString(R.string.next_profile)
                 }
             }
         }
@@ -366,7 +364,7 @@ class OnboardingFragmentNew : Fragment(){
         var total_experience_rg = experienceFragment.total_experience_rg
         val selectedId = total_experience_rg.checkedRadioButtonId
         var radioButton = onboarding_pager.findViewById(selectedId) as RadioButton
-        viewModel.saveTotalExperience(radioButton.text.toString())
+        viewModel.saveTotalExperience(radioButton.tag.toString())
     }
 
 
@@ -380,8 +378,10 @@ class OnboardingFragmentNew : Fragment(){
         // find the radiobutton by returned id
         var radioButton = onboarding_pager.findViewById(selectedId) as RadioButton
 
-        return radioButton.text.toString()
-//        return ""
+        return radioButton.tag.toString()
+//        return radioButton.text.toString()
+
+    //        return ""
     }
 
     private fun getSelectedHighestQualification(): String {
@@ -530,11 +530,11 @@ class OnboardingFragmentNew : Fragment(){
                 val fragment = getProfilePicFragment()
 
                 if (!fragment.hasUserUploadedPhoto()) {
-                    next.text = "Upload Photo"
+                    next.text = getString(R.string.upload_photo_profile)
                     enableNextButton(true)
                 } else {
                     enableNextButton(true)
-                    next.text = "Next"
+                    next.text = getString(R.string.next_profile)
                 }
             }
         }

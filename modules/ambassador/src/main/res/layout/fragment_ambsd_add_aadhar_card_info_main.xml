@@ -30,7 +30,7 @@
                 android:fontFamily="@font/lato_bold"
                 android:letterSpacing="0"
                 android:lineHeight="19sp"
-                android:text="@string/aadhar_card"
+                android:text="@string/aadhar_card_amb"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -61,7 +61,7 @@
                 android:lineHeight="15sp"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
-                android:text="@string/why_do_we_need_this"
+                android:text="@string/why_do_we_need_this_amb"
                 android:textColor="@color/battle_ship_grey"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toStartOf="@+id/helpIconViewIV"
@@ -76,7 +76,7 @@
                 android:fontFamily="@font/lato"
                 android:letterSpacing="-0.01"
                 android:lineHeight="19sp"
-                android:text="@string/do_you_have_aadhar_card"
+                android:text="@string/do_you_have_aadhar_card_amb"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -114,7 +114,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/lato"
                     android:letterSpacing="0"
-                    android:text="@string/yes_i_have_aadhar_card"
+                    android:text="@string/yes_i_have_aadhar_card_amb"
                     android:textColor="@color/black" />
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
@@ -124,7 +124,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/lato"
                     android:letterSpacing="0"
-                    android:text="@string/no_i_don_t_have_aadhar_card" />
+                    android:text="@string/no_i_don_t_have_aadhar_card_amb" />
 
             </RadioGroup>
 
@@ -152,7 +152,7 @@
                     android:fontFamily="@font/lato"
                     android:letterSpacing="-0.01"
                     android:lineHeight="17sp"
-                    android:text="@string/please_provide_the_following_information"
+                    android:text="@string/please_provide_the_following_information_amb"
                     android:textColor="@color/black" />
 
 
@@ -170,7 +170,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="2dp"
                         android:fontFamily="@font/lato"
-                        android:text="@string/aadhar_number_eg_444433332222"
+                        android:text="@string/aadhar_number_eg_444433332222_amb"
                         android:textColor="@color/warm_grey"
                         android:textSize="12sp" />
 
@@ -274,7 +274,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="4dp"
-        android:text="@string/next_camel_case"
+        android:text="@string/next_camel_case_amb"
         android:textAllCaps="false"
         app:layout_constraintBottom_toTopOf="@id/ambsd_aadhar_aahdar_skip_btn"
         app:strokeColor="@color/colorPrimary"
@@ -290,7 +290,7 @@
         android:layout_marginBottom="12dp"
         android:minHeight="0dp"
         android:textAllCaps="false"
-        android:text="@string/skip_underline"
+        android:text="@string/skip_underline_amb"
         android:paddingTop="0dp"
         android:paddingBottom="0dp"
         android:textColor="@color/black_666"

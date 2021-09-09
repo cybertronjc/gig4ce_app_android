@@ -1,8 +1,10 @@
 package com.gigforce.common_ui.viewmodels.userpreferences
 
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.gigforce.common_ui.R
 import com.gigforce.common_ui.configrepository.ConfigDataModel
 import com.gigforce.common_ui.configrepository.ConfigRepository
 import com.gigforce.common_ui.repository.ProfileFirebaseRepository
@@ -56,9 +58,9 @@ class SharedPreferenceViewModel : ViewModel {
         profileDataModelObj = profileDataModel
     }
 
-    init {
-        getAllData()
-    }
+//    init {
+//        getAllData()
+//    }
 
     fun getAllData() {
         preferencesRepository.getDBCollection()
@@ -212,16 +214,16 @@ class SharedPreferenceViewModel : ViewModel {
         preferencesRepository.setDataAndDeleteOldData(preferencesRepository.WEEKENDSLOTS, arrDays)
     }
 
-    fun getLocation(): String {
+    fun getLocation(context: Context): String {
         var str = ""
         if (preferencesDataModelObj.isWorkFromHome) {
-            str += "Work from home,"
+            str += context.getString(R.string.work_from_home)
         }
         if (!profileDataModelObj.address.current.city.isNullOrBlank()) {
             str += profileDataModelObj.address.current.city
         }
         if (str.isNullOrBlank()) {
-            return "None"
+            return context.getString(R.string.none)
         }
         return str
 
@@ -247,7 +249,7 @@ class SharedPreferenceViewModel : ViewModel {
         if (preferencesDataModelObj != null) return preferencesDataModelObj.languageName else return "English"
     }
 
-    fun getDateTimeSubtitle(): String {
+    fun getDateTimeSubtitle(context : Context): String {
         var subTitle = ""
         var weekDaysCount =
             if (preferencesDataModelObj.isweekdaysenabled) (if (preferencesDataModelObj.selecteddays.size == 6) (preferencesDataModelObj.selecteddays.size - 1) else preferencesDataModelObj.selecteddays.size) else 0
@@ -255,11 +257,11 @@ class SharedPreferenceViewModel : ViewModel {
             if (preferencesDataModelObj.isweekendenabled) (if (preferencesDataModelObj.selectedweekends.size == 3) preferencesDataModelObj.selectedweekends.size - 1 else preferencesDataModelObj.selectedweekends.size) else 0
         var countNumberOfSelectedDays = weekDaysCount + weekendCount
         if (countNumberOfSelectedDays == 0) {
-            subTitle = "None"
+            subTitle = context.getString(R.string.none)
         } else if (countNumberOfSelectedDays > 1) {
-            subTitle = countNumberOfSelectedDays.toString() + " days"
+            subTitle = countNumberOfSelectedDays.toString() + " " + context.getString(R.string.days_with_space)
         } else if (preferencesDataModelObj.selecteddays.size == 1) {
-            subTitle = countNumberOfSelectedDays.toString() + " day"
+            subTitle = countNumberOfSelectedDays.toString() + " " + context.getString(R.string.day_with_space)
         }
         return subTitle
     }

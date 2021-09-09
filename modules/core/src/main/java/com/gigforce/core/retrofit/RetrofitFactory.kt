@@ -110,10 +110,4 @@ object RetrofitFactory {
         .build()
         .create(CreateUserAccEnrollmentAPi::class.java)
 
-    fun generatePaySlipService() = Retrofit.Builder()
-        .baseUrl(AppConstants.IDFY_BASE_URL)
-        .addConverterFactory(gsonConverter)
-        .client(client)
-        .build()
-        .create(GeneratePaySlipService::class.java)
 }

@@ -74,7 +74,7 @@
                 android:layout_marginEnd="12dp"
                 android:fontFamily="@font/lato"
                 android:lineSpacingExtra="6sp"
-                android:text="View Details"
+                android:text="@string/view_details"
                 android:textColor="#e42c64"
                 android:textSize="12sp"
                 android:textStyle="normal"

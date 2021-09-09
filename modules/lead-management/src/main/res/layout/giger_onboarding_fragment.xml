@@ -26,7 +26,6 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:orientation="vertical">
 
             <TextView
@@ -43,7 +42,7 @@
                 android:layout_marginTop="148dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:text="@string/please_enter"
+                android:text="@string/please_enter_lead"
                 />
 
 
@@ -56,7 +55,7 @@
                 android:layout_marginEnd="16dp"
                 android:fontFamily="@font/lato"
                 android:lineSpacingExtra="7sp"
-                android:text="@string/gigers_phone"
+                android:text="@string/gigers_phone_lead"
                 android:textColor="#131415"
                 android:textSize="24sp"
                 android:textStyle="bold"
@@ -88,7 +87,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/imageView8"
                 app:layout_constraintTop_toTopOf="@id/imageView8"
-                android:text="@string/registered"
+                android:text="@string/registered_lead"
                 />
 
             <TextView
@@ -100,7 +99,7 @@
                 android:textSize="20sp"
                 android:textColor="#2e2f30"
                 android:lineSpacingExtra="4sp"
-                android:text="@string/country_code"
+                android:text="@string/country_code_lead"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
                 android:layout_marginStart="@dimen/size_16"
@@ -133,6 +132,19 @@
                 app:layout_constraintTop_toTopOf="@+id/country_code_label"
                 />
 
+            <ImageView
+                android:id="@+id/change_number_iv"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginTop="@dimen/size_18"
+                android:src="@drawable/ic_baseline_edit_24"
+                app:tint="@color/lipstick_2"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@id/change_number"
+                app:layout_constraintTop_toBottomOf="@id/mobile_no_et"
+                />
+
             <TextView
                 android:id="@+id/change_number"
                 android:layout_width="wrap_content"
@@ -140,15 +152,15 @@
                 android:fontFamily="@font/lato"
                 android:textStyle="normal"
                 android:textSize="14sp"
-                android:visibility="gone"
                 android:textColor="@color/lipstick"
                 android:letterSpacing="-0.01"
                 android:lineSpacingExtra="3sp"
                 android:layout_marginStart="@dimen/size_16"
                 android:layout_marginTop="@dimen/size_16"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="@id/mobile_no_et"
                 app:layout_constraintTop_toBottomOf="@id/mobile_no_et"
-                android:text="@string/change_number"
+                android:text="@string/change_number_lead"
                 />
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -182,7 +194,7 @@
                     android:layout_marginStart="@dimen/size_12"
                     android:fontFamily="@font/lato"
                     android:lineSpacingExtra="3sp"
-                    android:text="@string/note"
+                    android:text="@string/note_lead"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:textStyle="bold"
@@ -196,7 +208,7 @@
                     android:layout_marginTop="@dimen/size_16"
                     android:fontFamily="@font/lato"
                     android:lineSpacingExtra="3sp"
-                    android:text="@string/not_registered"
+                    android:text="@string/not_registered_lead"
                     android:textColor="#131415"
                     android:textSize="14sp"
                     android:layout_marginEnd="@dimen/size_16"
@@ -232,7 +244,7 @@
         android:gravity="center"
         android:visibility="gone"
         android:minHeight="@dimen/size_36"
-        android:text="Create Profile Now"
+        android:text="@string/create_profile_now_lead"
         android:textColor="@color/colorPrimary"
         app:layout_constraintBottom_toTopOf="@id/submit_button"
         app:layout_constraintEnd_toEndOf="parent"
@@ -248,7 +260,7 @@
         android:layout_marginBottom="@dimen/size_22"
         android:gravity="center"
         android:minHeight="@dimen/size_36"
-        android:text="Next"
+        android:text="@string/next_lead"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

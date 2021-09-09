@@ -210,7 +210,7 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
             viewModel.sharedFiles = null
         }
 
-        toolbar.showTitle("Chats")
+        toolbar.showTitle(getString(R.string.chats_chat))
         toolbar.hideActionMenu()
         toolbar.setBackButtonListener {
 
@@ -226,7 +226,7 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
     }
 
     private fun initListeners() {
-        toolbar.showSearchOption("Search Chats")
+        toolbar.showSearchOption(getString(R.string.search_chat_chat))
 
         lifecycleScope.launch {
             toolbar.getSearchTextChangeAsFlow()
@@ -275,6 +275,24 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
 
     override fun onSearchTextChanged(newText: String) {
         viewModel.filterChatList(newText)
+
+//        if (newText.isBlank()) {
+//            coreRecyclerView.resetFilter()
+//        } else {
+//            coreRecyclerView.filter {
+//
+//                val itemWrapper = it as ChatListItemDataWrapper
+//                val item = itemWrapper.chatItem
+//                item.groupName.contains(
+//                    newText, true
+//                ) || item.title.contains(
+//                    newText, true
+//                ) || item.subtitle.contains(
+//                    newText, true
+//                )
+//
+//            }
+//        }
     }
 
     private fun hideSoftKeyboard() {

@@ -21,7 +21,7 @@
             android:layout_marginTop="22dp"
             android:fontFamily="@font/lato_bold"
             android:letterSpacing="0"
-            android:text="@string/driving_license"
+            android:text="@string/driving_license_client"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -51,7 +51,7 @@
             android:letterSpacing="-0.01"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
-            android:text="@string/why_do_we_need_this"
+            android:text="@string/why_do_we_need_this_client"
             android:textColor="@color/battle_ship_grey"
             android:textSize="12sp"
             app:layout_constraintEnd_toStartOf="@+id/helpIconIV"
@@ -66,7 +66,7 @@
             android:layout_marginEnd="@dimen/size_16"
             android:fontFamily="@font/lato"
             android:letterSpacing="-0.01"
-            android:text="@string/do_you_have_driving_license"
+            android:text="@string/do_you_have_driving_license_client"
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -104,7 +104,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/lato"
-                android:text="@string/yes_i_have_driving_license" />
+                android:text="@string/yes_i_have_driving_license_client" />
 
             <com.google.android.material.radiobutton.MaterialRadioButton
                 android:id="@+id/dlNoRB"
@@ -112,7 +112,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/lato"
-                android:text="@string/no_i_don_t_have_driving_license" />
+                android:text="@string/no_i_don_t_have_driving_license_client" />
 
         </RadioGroup>
 
@@ -160,7 +160,7 @@
                     android:fontFamily="@font/lato"
                     android:gravity="center_horizontal"
                     android:letterSpacing="-0.01"
-                    android:text="@string/driving_license_is_mandatory_for_the_driver_role_you_will_not_be_eligible_to_submit_application"
+                    android:text="@string/driving_license_is_mandatory_for_the_driver_role_you_will_not_be_eligible_to_submit_application_client"
                     android:textColor="@color/battleship_grey"
                     android:textSize="14sp"
                     android:textStyle="normal" />
@@ -204,7 +204,7 @@
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/lato"
                 android:letterSpacing="-0.01"
-                android:text="@string/please_confirm_the_following_information"
+                android:text="@string/please_confirm_the_following_information_client"
                 android:textColor="@color/black" />
 
 
@@ -268,7 +268,7 @@
                     android:layout_marginLeft="2dp"
                     android:layout_marginTop="12dp"
                     android:fontFamily="@font/lato"
-                    android:text="@string/dl_hint_square_bracket"
+                    android:text="@string/dl_hint_square_bracket_client"
                     android:textSize="12sp" />
 
 
@@ -278,7 +278,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/size_9"
                     android:background="@drawable/border_27979797_rad_4"
-                    android:hint="@string/enter_driving_license_number"
+                    android:hint="@string/enter_driving_license_number_client"
                     android:imeActionLabel="Done"
                     android:imeOptions="actionGo"
                     android:inputType="textNoSuggestions"
@@ -390,7 +390,7 @@
             app:slider_height="60dp"
             app:slider_icon="@drawable/ic_arrow_forward_white"
             app:slider_icon_color="@color/white"
-            app:text="@string/save_all_caps"
+            app:text="@string/save_all_caps_client"
             app:text_size="@dimen/font_16" />
 
         <com.google.android.material.checkbox.MaterialCheckBox
@@ -402,7 +402,7 @@
             android:layout_marginBottom="13dp"
             android:fontFamily="@font/lato"
             android:letterSpacing="0"
-            android:text="@string/yes_i_confirm_the_data_is_correct"
+            android:text="@string/yes_i_confirm_the_data_is_correct_client"
             app:layout_constraintBottom_toTopOf="@id/dlSubmitSliderBtn_client_act"
             app:layout_constraintTop_toBottomOf="@id/dlBackEditErrorMessage_client_act"
             app:layout_constraintVertical_bias="0.98"

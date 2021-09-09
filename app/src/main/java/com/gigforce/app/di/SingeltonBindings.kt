@@ -5,6 +5,7 @@ import com.gigforce.common_ui.remote.JoiningProfileService
 import com.gigforce.common_ui.remote.ReferralService
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.logger.GigforceLogger
+import com.gigforce.core.retrofit.GeneratePaySlipService
 import com.gigforce.core.retrofit.RetrofitFactory
 import com.gigforce.core.retrofit.RetrofitServiceFactory
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
@@ -44,13 +45,6 @@ abstract class SingeltonBindings {
         //Remote Services
 
         @Provides
-        fun provideRetrofitServiceFactory(
-            buildConfig: IBuildConfig
-        ): RetrofitServiceFactory {
-            return RetrofitServiceFactory(buildConfig)
-        }
-
-        @Provides
         fun provideJoiningProfileService(
             retrofitServiceFactory : RetrofitServiceFactory
         ): JoiningProfileService {
@@ -70,5 +64,15 @@ abstract class SingeltonBindings {
         ): LoginSummaryService {
             return retrofitServiceFactory.prepareService(LoginSummaryService::class.java)
         }
+
+        @Provides
+        fun provideGeneratePaySlipService(
+            retrofitServiceFactory : RetrofitServiceFactory
+        ): GeneratePaySlipService {
+            return retrofitServiceFactory.prepareService(GeneratePaySlipService::class.java)
+        }
+
+
+
     }
 }

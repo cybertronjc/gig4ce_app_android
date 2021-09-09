@@ -70,59 +70,59 @@ class BankUpload : Fragment() {
     ): Boolean {
         //TODO Instead of toast msg we can put text msg on top of missing edit text or turn the edit text box to red!
         if (bankAcName.isEmpty()) {
-            showToast("Please enter Bank Ac Name")
+            showToast(getString(R.string.enter_bank_ac_name_veri))
             return false
         } else {
             match = NAME.matcher(bankAcName)
             if (!match.matches()) {
-                showToast("Please enter valid Bank Ac Name")
+                showToast(getString(R.string.enter_valid_bank_ac_name_veri))
                 Log.d("Verification: ", bankAcName)
                 return false
             }
         }
         if (bankName.isEmpty()) {
-            showToast("Please enter Bank name")
+            showToast(getString(R.string.please_enter_bank_name_veri))
             return false
         } else {
             match = NAME.matcher(bankName)
             if (!match.matches()) {
-                showToast("Please enter valid Bank Name")
+                showToast(getString(R.string.enter_valid_bank_ac_name_veri))
                 Log.d("Verification: ", bankName)
                 return false
             }
         }
 
         if (bankAcNo.isEmpty()) {
-            showToast("Please enter Bank Ac No")
+            showToast(getString(R.string.enter_bank_account_no_veri))
             return false
         } else {
             match = BANKAC.matcher(bankAcNo)
             if (!match.matches()) {
-                showToast("Please enter valid Bank Ac No")
+                showToast(getString(R.string.enter_valid_bank_ac_no_veri))
                 Log.d("Verification: ", bankAcNo)
                 return false
             }
         }
 
         if (bankAcNoRe.isEmpty()) {
-            showToast("Please enter Bank Ac No")
+            showToast(getString(R.string.enter_bank_account_no_veri))
             return false
         } else {
             match = BANKAC.matcher(bankAcNoRe)
             if (!match.matches()) {
-                showToast("Please enter valid Bank Ac No")
+                showToast(getString(R.string.enter_valid_bank_ac_no_veri))
                 Log.d("Verification: ", bankAcNoRe)
                 return false
             }
         }
 
         if (bankIfsc.isEmpty()) {
-            showToast("Please enter Bank IFSC")
+            showToast(getString(R.string.enter_bank_ifsc_veri))
             return false
         } else {
             match = IFSC.matcher(bankIfsc)
             if (!match.matches()) {
-                showToast("Please enter valid Bank IFSC")
+                showToast(getString(R.string.enter_valid_bank_ifsc_veri))
                 Log.d("Verification: ", bankIfsc)
                 return false
             }
@@ -164,7 +164,7 @@ class BankUpload : Fragment() {
 
             //if(!areValid)
             if (bankAcName.isEmpty() || bankName.isEmpty() || bankAcNo.isEmpty() || bankAcNoRe.isEmpty() || bankIfsc.isEmpty()) {
-                showToast("Please fill up all the missing fields")
+                showToast(getString(R.string.fill_up_missing_fields_veri))
             } else {
                 addNewBankAccount()
                 saveNewBanks()

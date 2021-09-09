@@ -10,6 +10,6 @@
     <item
         android:id="@+id/action_report"
         android:orderInCategory="100"
-        android:title="Report and Block"
+        android:title="@string/report_and_block"
         app:showAsAction="collapseActionView" />
 </menu>

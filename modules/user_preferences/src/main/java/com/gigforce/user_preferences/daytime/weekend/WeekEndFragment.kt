@@ -59,12 +59,13 @@ class WeekEndFragment : Fragment() {
                 initializeViews()
             })
         viewModel.getConfiguration()
+        viewModel.getAllData()
     }
 
     private fun initializeViews() {
         viewDataModel = viewModel.getPreferenceDataModel()
         switch3.isChecked = viewDataModel.isweekendenabled
-        textView62.text = getArrayToString(viewDataModel.selectedweekends)
+        textView62.text = getArrayFromDBString(viewDataModel.selectedweekends)
         var selectedStrForSubtitle = getArrayToString(
             viewModel.getSelectedSlotsToShow(
                 viewDataModel.selectedweekendslots
@@ -85,12 +86,38 @@ class WeekEndFragment : Fragment() {
     }
 
     private fun getArrayToString(selectedStrings: ArrayList<String>): String {
-        if (selectedStrings == null || selectedStrings.size == 0) return "None"
+        if (selectedStrings == null || selectedStrings.size == 0) return resources.getString(R.string.none_pref)
+//        var selectedStrings = getLocaleRelatedStr(selectedStringsEng)
         var selectedStr = Arrays.toString(selectedStrings.toTypedArray())
         selectedStr = selectedStr.substring(1, selectedStr.length - 1)
-        if (selectedStr.contains("All"))
-            return "All"
+        if (selectedStrings.contains(resources.getString(R.string.all_pref)) || selectedStrings.contains("All"))
+            return resources.getString(R.string.all_pref)
         return selectedStr
+    }
+    private fun getArrayFromDBString(selectedStringsEng: ArrayList<String>): String {
+        if (selectedStringsEng == null || selectedStringsEng.size == 0) return resources.getString(R.string.none_pref)
+        var selectedStrings = getLocaleRelatedStr(selectedStringsEng)
+        var selectedStr = Arrays.toString(selectedStrings.toTypedArray())
+        selectedStr = selectedStr.substring(1, selectedStr.length - 1)
+        if (selectedStrings.contains(resources.getString(R.string.all_pref)))
+            return resources.getString(R.string.all_pref)
+        return selectedStr
+    }
+    private fun getLocaleRelatedStr(selectedStringsEng: java.util.ArrayList<String>): ArrayList<String> {
+        var localeList = ArrayList<String>()
+        val items = arrayOf(getString(R.string.all_pref), getString(R.string.saturday_pref), getString(
+            R.string.sunday_pref))
+        val daysInEnglish = arrayOf("All","Saturday","Sunday")
+
+        for(i in 0 until selectedStringsEng.size){
+            for(j in daysInEnglish.indices){
+                if(selectedStringsEng[i] == daysInEnglish[j]){
+                    localeList.add(items[j])
+                    break
+                }
+            }
+        }
+        return localeList
     }
 
     private fun listener() {
@@ -117,22 +144,24 @@ class WeekEndFragment : Fragment() {
     }
 
     private fun ifSlotsNotSelected(): Boolean {
-        return getArrayToString(viewDataModel.selectedweekendslots).equals("None")
+        return getArrayToString(viewDataModel.selectedweekendslots).equals(resources.getString(R.string.none_pref))
     }
 
     private fun ifWeekenddaysNotSelected(): Boolean {
-        return getArrayToString(viewDataModel.selectedweekends).equals("None")
+        return getArrayToString(viewDataModel.selectedweekends).equals(resources.getString(R.string.none_pref))
     }
 
     fun showDaysAlert() {
-        val items = arrayOf("All", "Saturday", "Sunday")
+        val items = arrayOf(getString(R.string.all_pref), getString(R.string.saturday_pref), getString(
+                    R.string.sunday_pref))
+        val daysInEnglish = arrayOf("All","Saturday","Sunday")
         val indexItem = arrayOf(0, 1, 2)
         var isSectionSelected = BooleanArray(items.size)
         var selectedList = ArrayList<Int>()
         for (i in 0..items.size - 1) {
             var isfound = false
             for (day in viewDataModel.selectedweekends) {
-                if (items[i].equals(day)) {
+                if (daysInEnglish[i].equals(day)) {
                     isSectionSelected[i] = true
                     isfound = true
                     selectedList.add(i)
@@ -147,7 +176,7 @@ class WeekEndFragment : Fragment() {
 
         val builder = MaterialAlertDialogBuilder(requireContext())
         val view = layoutInflater.inflate(R.layout.fragment_settings_slots, null)
-        view.dialogTitleTV.text = "Days"
+        view.dialogTitleTV.text = getString(R.string.days_capital_pref)
         builder.setView(view)
 
         val rv: RecyclerView = view.findViewById(R.id.slotsRV)
@@ -157,14 +186,16 @@ class WeekEndFragment : Fragment() {
         rv.adapter = slotsRecyclerAdapter
 
 
-        builder.setPositiveButton("DONE") { dialogInterface, i ->
+        builder.setPositiveButton(getString(R.string.done_pref)) { dialogInterface, i ->
             val selectedStrings = ArrayList<String>()
+            val selectedStringForView = ArrayList<String>()
             for (j in selectedList.indices) {
-                selectedStrings.add(items[selectedList[j]])
+                selectedStrings.add(daysInEnglish[selectedList[j]])
+                selectedStringForView.add(items[selectedList[j]])
             }
-            var selectedStr = getArrayToString(selectedStrings)
+            var selectedStr = getArrayToString(selectedStringForView)
             viewModel.setWorkendDays(selectedStrings)
-            if (!selectedStr.equals("None")) {
+            if (!selectedStr.equals(resources.getString(R.string.none_pref))) {
                 if (ifSlotsNotSelected()) {
                     showSlotsAlert()
                 } else {
@@ -232,6 +263,8 @@ class WeekEndFragment : Fragment() {
 
     fun showSlotsAlert() {
         val slots = viewModel.getAllSlotsToShow()
+        slots.removeAt(0)
+        slots.add(0,resources.getString(R.string.all_pref))
         val items = slots.toTypedArray()
         val indexItem = (0..slots.size - 1).toList().toTypedArray()
         val isSectionSelected = BooleanArray(items.size)
@@ -259,7 +292,7 @@ class WeekEndFragment : Fragment() {
 
         val builder = MaterialAlertDialogBuilder(requireContext())
         val view = layoutInflater.inflate(R.layout.fragment_settings_slots, null)
-        view.dialogTitleTV.text = "Slots"
+        view.dialogTitleTV.text = getString(R.string.slots_pref)
         builder.setView(view)
 
         val rv: RecyclerView = view.findViewById(R.id.slotsRV)
@@ -269,7 +302,7 @@ class WeekEndFragment : Fragment() {
         rv.adapter = slotsRecyclerAdapter
 
 
-        builder.setPositiveButton("DONE") { dialogInterface, i ->
+        builder.setPositiveButton(getString(R.string.done_pref)) { dialogInterface, i ->
             val selectedItemsForDB = ArrayList<String>()
             val selectedItemForView = ArrayList<String>()
             for (j in selectedList.indices) {

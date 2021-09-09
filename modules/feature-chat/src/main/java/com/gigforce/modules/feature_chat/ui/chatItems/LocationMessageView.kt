@@ -202,7 +202,7 @@ abstract class LocationMessageView(
             try {
                 context.startActivity(intent)
             } catch (e: ActivityNotFoundException) {
-                Toast.makeText(context, "No App found to open location", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, context.getString(R.string.no_app_found_locations_chat), Toast.LENGTH_SHORT).show()
             }
         }
     }

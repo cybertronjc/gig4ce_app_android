@@ -110,7 +110,7 @@ class UserAadhaarCardFragment : Fragment(), UserDetailsFilledDialogFragmentResul
             .build()
         val list = listOf(
             KYCImageModel(
-                text = getString(R.string.upload_pan_card_new),
+                text = getString(R.string.upload_pan_card_new_amb),
                 imageIcon = frontUri,
                 imageUploaded = false
             )
@@ -309,13 +309,13 @@ class UserAadhaarCardFragment : Fragment(), UserDetailsFilledDialogFragmentResul
         viewBinding.belowLayout.gone()
         viewBinding.toplayoutblock.uploadStatusLayout(
             AppConstants.UPLOAD_SUCCESS,
-            "Verification Completed",
-            "The Aadhar card details have been verified successfully."
+            getString(R.string.verification_completed_amb),
+            getString(R.string.aadhar_details_verified_amb)
         )
         viewBinding.submitButton.visible()
-        viewBinding.submitButton.text = "Next"
+        viewBinding.submitButton.text = getString(R.string.next_amb)
         viewBinding.progressBar.gone()
-        viewBinding.toplayoutblock.setVerificationSuccessfulView("Aadhaar card verified")
+        viewBinding.toplayoutblock.setVerificationSuccessfulView(getString(R.string.aadhar_card_verified_amb))
 
 
     }
@@ -356,10 +356,10 @@ class UserAadhaarCardFragment : Fragment(), UserDetailsFilledDialogFragmentResul
 
     private fun showGoBackConfirmationDialog() {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle(getString(R.string.alert))
-            .setMessage(getString(R.string.are_u_sure_u_want_to_go_back))
-            .setPositiveButton(getString(R.string.yes)) { _, _ -> goBackToUsersList() }
-            .setNegativeButton(getString(R.string.no)) { _, _ -> }
+            .setTitle(getString(R.string.alert_amb))
+            .setMessage(getString(R.string.are_u_sure_u_want_to_go_back_amb))
+            .setPositiveButton(getString(R.string.yes_amb)) { _, _ -> goBackToUsersList() }
+            .setNegativeButton(getString(R.string.no_amb)) { _, _ -> }
             .show()
     }
     private fun goBackToUsersList() {

@@ -62,7 +62,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:ems="10"
-            android:hint="@string/location"
+            android:hint="@string/location_app"
             android:inputType="textPersonName"/>
 
         <EditText

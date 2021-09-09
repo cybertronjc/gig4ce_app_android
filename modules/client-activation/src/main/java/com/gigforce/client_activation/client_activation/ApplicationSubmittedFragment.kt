@@ -43,8 +43,9 @@ class ApplicationSubmittedFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         getDataFromIntents(savedInstanceState)
-        pending_tv.text = Html.fromHtml("Application check : <b>Pending</b>")
-        thanks_msg.text = Html.fromHtml("Thanks for applying at ${bussinessName}. We will contact you soon.")
+        pending_tv.text = Html.fromHtml(getString(R.string.application_check_client))
+        thanks_msg.text = Html.fromHtml(getString(R.string.thanks_applying_client) + bussinessName + getString(
+                    R.string.contact_soon_client))
 
         listener()
     }
@@ -95,8 +96,8 @@ class ApplicationSubmittedFragment : Fragment() {
                 .setIosParameters(DynamicLink.IosParameters.Builder("com.gigforce.ios").build())
                 .setSocialMetaTagParameters(
                         DynamicLink.SocialMetaTagParameters.Builder()
-                                .setTitle("Gigforce")
-                                .setDescription("Flexible work and learning platform")
+                                .setTitle(getString(R.string.gigforce_client))
+                                .setDescription(getString(R.string.gigforce_desc_client))
                                 .setImageUrl(Uri.parse("https://firebasestorage.googleapis.com/v0/b/gig4ce-app.appspot.com/o/app_assets%2Fgigforce.jpg?alt=media&token=f7d4463b-47e4-4b8e-9b55-207594656161"))
                                 .build()
                 ).buildDynamicLink()
@@ -113,7 +114,7 @@ class ApplicationSubmittedFragment : Fragment() {
                     Intent.EXTRA_SUBJECT,
                     getString(R.string.app_name)
             )
-            val shareMessage = getString(R.string.looking_for_dynamic_working_hours) + " " + url
+            val shareMessage = getString(R.string.looking_for_dynamic_working_hours_client) + " " + url
             shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
             val bitmap =
                     BitmapFactory.decodeResource(requireContext().resources, R.drawable.bg_gig_type)
@@ -134,7 +135,7 @@ class ApplicationSubmittedFragment : Fragment() {
                     outputFile
             )
             )
-            startActivity(Intent.createChooser(shareIntent, "choose one"))
+            startActivity(Intent.createChooser(shareIntent, getString(R.string.choose_one_client)))
             pb_client_activation.gone()
         } catch (e: Exception) {
             //e.toString();

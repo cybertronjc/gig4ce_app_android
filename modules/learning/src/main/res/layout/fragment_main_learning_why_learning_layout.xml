@@ -22,7 +22,7 @@
         android:layout_marginTop="20dp"
         android:fontFamily="@font/lato_bold"
         android:letterSpacing="0"
-        android:text="@string/why_learning_is_important"
+        android:text="@string/why_learning_is_important_learning"
         android:textColor="@color/black"
         app:layout_constraintStart_toEndOf="@id/userLearningIV"
         app:layout_constraintTop_toTopOf="parent" />
@@ -35,7 +35,7 @@
         android:layout_marginTop="9dp"
         android:fontFamily="@font/lato_bold"
         android:letterSpacing="0"
-        android:text="@string/increase_your_knowlegde"
+        android:text="@string/increase_your_knowlegde_learning"
         android:textColor="@color/black"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@id/userLearningIV"
@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/lato_bold"
         android:letterSpacing="0"
-        android:text="@string/anytime_anywhere"
+        android:text="@string/anytime_anywhere_learning"
         android:textColor="@color/darkish_pink_two"
         app:layout_constraintStart_toEndOf="@id/userLearningIV"
         app:layout_constraintTop_toBottomOf="@id/increaseKnowledgeLabel" />

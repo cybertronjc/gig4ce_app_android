@@ -123,7 +123,7 @@ class AssignGigsDialogFragment : BaseDialogFragment<FragmentAssignGigDialogBindi
                 Lse.Success -> {
                     Toast.makeText(
                         requireContext(),
-                        "Gig assigned",
+                        getString(R.string.gig_assigned_lead),
                         Toast.LENGTH_LONG
                     ).show()
 
@@ -139,7 +139,9 @@ class AssignGigsDialogFragment : BaseDialogFragment<FragmentAssignGigDialogBindi
                         successLayout.root.gone()
                         errorLayout.root.visible()
 
+
                         errorLayout.infoMessageTv.text = it.error
+                        errorLayout.infoIv.loadImage(com.gigforce.common_ui.R.drawable.banner_error)
                         errorLayout.retryBtn.visible()
                     }
                 }

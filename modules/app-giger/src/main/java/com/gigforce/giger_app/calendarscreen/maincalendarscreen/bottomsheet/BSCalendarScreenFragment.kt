@@ -365,7 +365,7 @@ class BSCalendarScreenFragment : Fragment() {
 
 //        initializeAssessmentBottomSheet()
         application_version.text =
-            getString(R.string.version) + " " + sharedPreAndCommonUtilInterface.getCurrentVersion()
+            getString(R.string.version_app_giger) + " " + sharedPreAndCommonUtilInterface.getCurrentVersion()
         listener()
         initializeExploreByRole()
 //        initializeExploreByIndustry()
@@ -375,13 +375,13 @@ class BSCalendarScreenFragment : Fragment() {
     }
 
     private fun initializeVerificationAlert() {
-        var clickhere: String = getString(R.string.click_here)
+        var clickhere: String = getString(R.string.click_here_app_giger)
         var content: SpannableString = SpannableString(clickhere)
         content.setSpan(UnderlineSpan(), 0, content.length, 0)
         kyc_tv.text =
-            Html.fromHtml(getString(R.string.kyc_not_done))
+            Html.fromHtml(getString(R.string.kyc_not_done_app_giger))
         video_resume_tv.text =
-            Html.fromHtml(getString(R.string.video_resume_pending_html))
+            Html.fromHtml(getString(R.string.video_resume_pending_html_app_giger))
     }
 
     private fun listener() {
@@ -788,7 +788,7 @@ class BSCalendarScreenFragment : Fragment() {
         override fun onClick(v: View?) {
             //val gig = (rv.adapter as RecyclerGenericAdapter<Gig>).list.get(position)
 
-            showToast("This is work in progress. Please check again in a few days")
+            showToast(getString(R.string.work_in_progress_app_giger))
 
 //            navigate(R.id.gigPageNavigationFragment, Bundle().apply {
 //                this.putString(GigPageNavigationFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
@@ -873,40 +873,40 @@ class BSCalendarScreenFragment : Fragment() {
             isUserTl : Boolean
     ) {
         var datalist: ArrayList<FeatureModel> = ArrayList<FeatureModel>()
-        datalist.add(FeatureModel("My Gig", R.drawable.mygig, navigationPath = "gig/mygig"))
+        datalist.add(FeatureModel(getString(R.string.my_gig_app_giger), R.drawable.mygig, navigationPath = "gig/mygig"))
         datalist.add(
             FeatureModel(
-                "Wallet",
+                getString(R.string.wallet_app_giger),
                 R.drawable.wallet,
                 navigationPath = "payslipMonthlyFragment"
             )
         )
-        datalist.add(FeatureModel("Profile", R.drawable.profile, navigationPath = "profile"))
+        datalist.add(FeatureModel(getString(R.string.profile_app_giger), R.drawable.profile, navigationPath = "profile"))
         datalist.add(
             FeatureModel(
-                "Learning",
+                getString(R.string.learning_app_giger),
                 R.drawable.learning,
                 navigationPath = "learning/main"
             )
         )
-        datalist.add(FeatureModel("Settings", R.drawable.settings, navigationPath = "setting"))
+        datalist.add(FeatureModel(getString(R.string.settings_app_giger), R.drawable.settings, navigationPath = "setting"))
         datalist.add(
             FeatureModel(
-                "Chat",
+                getString(R.string.chat_app_giger),
                 R.drawable.ic_homescreen_chat,
                 navigationPath = "chats/chatList"
             )
         )
         datalist.add(
             FeatureModel(
-                "Verification",
+                getString(R.string.verification_app_giger),
                 R.drawable.ic_shield_black,
                 navigationPath = "verification/main"
             )
         )
         datalist.add(
             FeatureModel(
-                "Invoices",
+                getString(R.string.invoices_app_giger),
                 R.drawable.wallet,
                 navigationPath = "wallet/invoicesList"
             )
@@ -916,7 +916,7 @@ class BSCalendarScreenFragment : Fragment() {
 
             datalist.add(
                     FeatureModel(
-                            "Gigers Attendance",
+                            getString(R.string.gigers_attendance_app_giger),
                             R.drawable.ic_group_black,
                             navigationPath = "gig/gigerAttendanceUnderManagerFragment"
                     )

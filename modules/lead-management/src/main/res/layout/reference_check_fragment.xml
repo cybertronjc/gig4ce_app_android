@@ -35,7 +35,7 @@
                 android:layout_marginTop="40dp"
                 android:layout_marginEnd="16dp"
                 android:fontFamily="@font/lato_bold"
-                android:text="You can perform a"
+                android:text="@string/you_can_perform_a"
                 android:textColor="#6F7070" />
 
             <TextView
@@ -45,7 +45,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:fontFamily="@font/lato_bold"
-                android:text="Reference Check"
+                android:text="@string/reference_check"
                 android:textColor="#000000"
                 android:textSize="24sp" />
 
@@ -57,7 +57,7 @@
                 android:layout_marginTop="40dp"
                 android:fontFamily="@font/lato_bold"
                 android:lineHeight="19sp"
-                android:text="Name"
+                android:text="@string/name_propercase"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
@@ -99,7 +99,7 @@
                 android:layout_marginTop="24dp"
                 android:fontFamily="@font/lato_bold"
                 android:lineHeight="19sp"
-                android:text="Relation"
+                android:text="@string/relation"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
@@ -141,7 +141,7 @@
                 android:layout_marginTop="24dp"
                 android:fontFamily="@font/lato_bold"
                 android:lineHeight="19sp"
-                android:text="Contact Number"
+                android:text="@string/contact_number"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
@@ -214,7 +214,7 @@
                 android:gravity="center"
                 android:layout_marginTop="8dp"
                 android:minHeight="@dimen/size_36"
-                android:text="Submit"
+                android:text="@string/submit_lead"
                 android:textColor="@color/white" />
 
 

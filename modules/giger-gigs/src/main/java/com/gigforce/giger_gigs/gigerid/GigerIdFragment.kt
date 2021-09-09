@@ -4,7 +4,6 @@ package com.gigforce.giger_gigs.gigerid
 //import com.gigforce.app.core.base.BaseFragment
 
 import android.Manifest
-import android.R.attr.label
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -17,7 +16,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -156,7 +154,7 @@ class GigerIdFragment : Fragment() {
         tv_giger_location_giger_id.text =
             "${gigOrder.getGigOrderCity()}, ${gigOrder.getGigOrderState()}"
         tv_gig_since_giger_id.text =
-            "${resources.getString(R.string.giger_since)} ${
+            "${resources.getString(R.string.giger_since_giger_gigs)} ${
                 parseTime(
                         "MMM yyyy",
                         gig.startDateTime.toDate()
@@ -195,13 +193,13 @@ class GigerIdFragment : Fragment() {
             iv_brand_logo_giger_id.setImageDrawable(drawable)
         }
         tv_brand_name_giger_id.text = "@${gig.getFullCompanyName()}"
-        tv_gig_id_giger_id.text = "Activation Code: ${gig.profile.activationCode ?: "NA"}"
+        tv_gig_id_giger_id.text = getString(R.string.activation_code_giger_gigs) + (gig.profile.activationCode ?: "NA")
 
         tv_gig_date_giger_id.text = parseTime("dd MMM yyyy", gigOrder.endDate.toDate())
         gig.assignedOn.let {
 
             tv_issued_date_giger_id.text =
-                "${getString(R.string.issued_on)} ${parseTime("dd MMM yyyy", it.toDate())}"
+                "${getString(R.string.issued_on_giger_gigs)} ${parseTime("dd MMM yyyy", it.toDate())}"
         }
         iv_share_giger_id.setOnClickListener {
             viewModelGigerID.showProgress(true)
@@ -215,7 +213,7 @@ class GigerIdFragment : Fragment() {
             val clip: ClipData = ClipData.newPlainText("activation_code", gigActivationCode)
             clipboard?.setPrimaryClip(clip)
 
-            showToast("Activation code copied")
+            showToast(getString(R.string.activation_code_copied_giger_gigs))
         }
     }
 
@@ -266,7 +264,7 @@ class GigerIdFragment : Fragment() {
             document.add(img)
             document.close()
             viewModelGigerID.showProgress(false)
-            Toast.makeText(requireContext(), "File Downloaded At Path $dirPath", Toast.LENGTH_LONG)
+            Toast.makeText(requireContext(), getString(R.string.file_downloaded_path_giger_gigs) + dirPath, Toast.LENGTH_LONG)
                 .show()
             return File(dirPath)
         } catch (ignored: Exception) {

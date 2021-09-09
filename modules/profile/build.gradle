@@ -85,4 +85,5 @@ dependencies {
 
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
     implementation 'com.android.installreferrer:installreferrer:2.2'
+    implementation 'com.akexorcist:localization:1.2.10'
 }
