@@ -29,9 +29,9 @@ import javax.inject.Inject
 class PayslipMonthlyViewModel @Inject constructor(
     private val walletRepository: WalletfirestoreRepository = WalletfirestoreRepository(),
     private val profileFirebaseRepository : IProfileFirestoreRepository,
-    private val buildConfig:IBuildConfigVM
+    private val buildConfig:IBuildConfigVM,
+    private var paySlipService: GeneratePaySlipService
 ) : ViewModel() {
-    private var paySlipService: GeneratePaySlipService = RetrofitFactory.generatePaySlipService()
 //    @Inject lateinit var profileFirebaseRepository : IProfileFirestoreRepository
 //    @Inject lateinit var buildConfig:IBuildConfig
     init {
