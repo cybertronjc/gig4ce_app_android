@@ -122,7 +122,6 @@ class AssignGigsDialogFragment : BaseDialogFragment<FragmentAssignGigDialogBindi
 
                 }
                 Lse.Success -> {
-                    showToast(getString(R.string.reference_submitted_lead))
                     showToast(getString(R.string.gig_assigned_lead))
                     viewBinding.apply {
                         processingLayout.root.gone()
