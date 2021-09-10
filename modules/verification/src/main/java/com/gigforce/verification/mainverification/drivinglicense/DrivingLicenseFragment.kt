@@ -1016,6 +1016,7 @@ class DrivingLicenseFragment : Fragment(),
                     )
 
                 )
+                dlFrontImagePath = Uri.parse(it)
 
             }
 
@@ -1038,6 +1039,7 @@ class DrivingLicenseFragment : Fragment(),
                     )
 
                 )
+                dlBackImagePath = Uri.parse(it)
 
             }
 

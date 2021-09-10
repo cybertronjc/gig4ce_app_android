@@ -356,7 +356,6 @@ class PanCardFragment : Fragment(),
                 }
                 val panCardNo =
                     viewBinding.panTil.editText?.text.toString().toUpperCase(Locale.getDefault())
-                Log.d("image", "image: ${clickedImagePath.toString()}")
                 if (clickedImagePath == null || clickedImagePath.toString().isBlank()) {
                     MaterialAlertDialogBuilder(requireContext())
                         .setTitle(getString(R.string.alert_veri))
@@ -424,6 +423,7 @@ class PanCardFragment : Fragment(),
                         imageUploaded = true
                     )
                 )
+                clickedImagePath = Uri.parse(it)
             }
 
         }
