@@ -413,4 +413,6 @@
 <!--    <string name="veri_bank_title">"Step 4 : Please add your Bank Details"</string>-->
 <!--    <string name="veri_add_bank">"Add Bank Details"</string>-->
 <!--    <string name="veri_done">Hurray!!!\nKYC Documents submitted.\nWe will let you know once Verified.</string>-->
+    <string name="upload_pan_image_first">Upload PAN card image first</string>
+    <string name="upload_dl_front_first">Upload DL front image first</string>
 </resources>

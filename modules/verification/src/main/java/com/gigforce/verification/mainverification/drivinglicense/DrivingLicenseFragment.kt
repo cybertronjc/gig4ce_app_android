@@ -318,6 +318,14 @@ class DrivingLicenseFragment : Fragment(),
             if (viewBinding.toplayoutblock.isDocDontOptChecked() || verificationScreenStatus == VerificationScreenStatus.VERIFIED || verificationScreenStatus == VerificationScreenStatus.STARTED_VERIFYING || !anyDataEntered) {
                 checkForNextDoc()
             } else {
+                if (dlFrontImagePath == null || dlFrontImagePath.toString().isBlank()){
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert_veri))
+                        .setMessage(getString(R.string.upload_dl_front_first))
+                        .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
+                        .show()
+                    return@setOnClickListener
+                }
                 if (viewBinding.stateSpinner.text.equals("Select State")) {
                     MaterialAlertDialogBuilder(requireContext())
                         .setTitle(getString(R.string.alert_veri))
