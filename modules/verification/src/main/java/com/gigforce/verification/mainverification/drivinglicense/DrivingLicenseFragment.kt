@@ -321,7 +321,7 @@ class DrivingLicenseFragment : Fragment(),
                 if (dlFrontImagePath == null || dlFrontImagePath.toString().isBlank()){
                     MaterialAlertDialogBuilder(requireContext())
                         .setTitle(getString(R.string.alert_veri))
-                        .setMessage(getString(R.string.upload_dl_front_first))
+                        .setMessage(getString(R.string.upload_dl_front_first_veri))
                         .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
                         .show()
                     return@setOnClickListener

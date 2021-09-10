@@ -359,7 +359,7 @@ class PanCardFragment : Fragment(),
                 if (clickedImagePath == null || clickedImagePath.toString().isBlank()) {
                     MaterialAlertDialogBuilder(requireContext())
                         .setTitle(getString(R.string.alert_veri))
-                        .setMessage(getString(R.string.upload_pan_image_first))
+                        .setMessage(getString(R.string.upload_pan_image_first_veri))
                         .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
                         .show()
                     return@setOnClickListener
