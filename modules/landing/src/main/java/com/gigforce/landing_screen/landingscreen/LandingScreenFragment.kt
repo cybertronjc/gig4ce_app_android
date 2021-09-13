@@ -1193,7 +1193,7 @@ class LandingScreenFragment : Fragment() {
             exploreGigsAdapter?.setOnSeeMoreSelectedListener(object :
                 ExploreGigsAdapter.OnSeeMoreSelectedListener {
                 override fun onSeeMoreSelected(any: Any) {
-                    navigation.navigateTo("client_activation/gig_detail")
+                    navigation.navigateTo("client_activation/jobProfileList")
                 }
 
             })

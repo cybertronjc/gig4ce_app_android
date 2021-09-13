@@ -46,6 +46,8 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
     var isLoading = false
     var isLastPage = false
     var scrollingAdded = false
+    lateinit var layoutManager : LinearLayoutManager
+    var tlListing = ArrayList<ListingTLModel>()
 
     private val tlLoginSummaryAdapter: TLLoginSummaryAdapter by lazy {
         TLLoginSummaryAdapter(requireContext(),this).apply {
@@ -142,6 +144,7 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
         //loadFirstPage
         currentPage = 1
         isLoading = false
+        tlListing.clear()
         viewModel.getListingForTL(1)
     }
 
@@ -150,8 +153,9 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
 
         swipeRefresh.setOnRefreshListener {
             swipeToRefresh = true
+            currentPage = 1
             stopSwipeToRefresh()
-
+            tlListing.clear()
         }
 
         addNew.setOnClickListener {
@@ -162,6 +166,19 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
             )
         }
 
+        initializeRecyclerView()
+
+    }
+
+    private fun initializeRecyclerView() = viewBinding.apply{
+        layoutManager = LinearLayoutManager(
+            activity?.applicationContext,
+            LinearLayoutManager.VERTICAL,
+            false
+        )
+
+        datecityRv.layoutManager = layoutManager
+        datecityRv.adapter = tlLoginSummaryAdapter
     }
 
     private fun observer() = viewBinding.apply {
@@ -189,23 +206,26 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
     var swipeToRefresh = true
 
     private fun setupReyclerView(res: List<ListingTLModel>)  = viewBinding.apply{
-
-        if (res.isEmpty()) {
+        tlListing.addAll(res)
+        if (tlListing.isEmpty()) {
             noData.visibility = View.VISIBLE
             datecityRv.visibility = View.GONE
         } else {
             noData.visibility = View.GONE
             datecityRv.visibility = View.VISIBLE
         }
-        val layoutManager = LinearLayoutManager(context)
-        datecityRv.layoutManager = layoutManager
+
         if (currentPage == 1){
             Log.d("pag", "zero $currentPage, list : ${res.size}")
-            tlLoginSummaryAdapter.submitList(res)
+            tlLoginSummaryAdapter.submitList(tlListing)
+            tlLoginSummaryAdapter.notifyDataSetChanged()
         }else {
             Log.d("pag", "nonzero $currentPage, list : ${res.size}" )
-            tlLoginSummaryAdapter.updateList(res)
-            tlLoginSummaryAdapter.notifyDataSetChanged()
+            //tlLoginSummaryAdapter.updateList(res)
+            val itemCount = tlLoginSummaryAdapter.itemCount
+            tlLoginSummaryAdapter.submitList(tlListing)
+            //tlLoginSummaryAdapter.notifyDataSetChanged()
+            tlLoginSummaryAdapter.notifyItemChanged(itemCount + 1)
             if (layoutManager.findLastVisibleItemPosition() >= 6 && layoutManager.findFirstVisibleItemPosition()<=6){
                 scrollingAdded = false
             }
@@ -213,9 +233,8 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
             //datecityRv.smoothScrollToPosition(tlLoginSummaryAdapter.itemCount/2)
 
         }
-        datecityRv.adapter = tlLoginSummaryAdapter
-        val totalPages = res.get(0).totalPages
 
+        //val totalPages = tlListing.get(0).totalPages
 
         datecityRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -233,11 +252,13 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
 
                 val currentItemsLatest = layoutManager.childCount
                 val totalItemsLatest = layoutManager.itemCount
+                val lastVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
 
 
                 //Log.d("Scrolled", " isLoading: ${isLoading} , currentItemsLatest : $currentItemsLatest, lastVisibleItemPosition: $lastVisibleItemPosition, totalItemsLatest: $totalItemsLatest ")
                 //if (isLoading && (currentItemsLatest + lastVisibleItemPosition == totalItemsLatest) && (totalItemsLatest <= tlLoginSummaryAdapter.itemCount)   ) {
-                if ((currentPage < totalPages) && isLoading ){
+                //if ((currentPage < totalPages) && isLoading ){
+                if (isLoading && (currentItemsLatest + lastVisibleItemPosition == totalItemsLatest) && (totalItemsLatest <= tlListing.size) ){
                     //load next page
                     currentPage += 1
                     isLoading = false

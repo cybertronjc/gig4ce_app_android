@@ -21,4 +21,10 @@ class BuildConfigImp @Inject constructor(): IBuildConfig {
     override fun getStorageBaseUrl(): String = BuildConfig.STORAGE_BASE_URL
     override fun getPanelBaseUrl(): String = BuildConfig.PANEL_BASE_URL
     override fun getApiBaseURL() = BuildConfig.API_BASE_URL
+
+    override val appVersion: String = BuildConfig.VERSION_NAME
+    override val appFlavour: String = BuildConfig.FLAVOR
+    override val appBuildType: String = BuildConfig.BUILD_TYPE
+
+    override fun getListingBaseUrl(): String = BuildConfig.LISTING_BASE_URL
 }
