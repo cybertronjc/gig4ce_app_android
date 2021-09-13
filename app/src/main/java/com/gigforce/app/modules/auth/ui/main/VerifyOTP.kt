@@ -63,13 +63,13 @@ class VerifyOTP : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-//            verificationId = it.getString("verificationId")!!
+            verificationId = it.getString("verificationId")!!
             mobile_number = it.getString("mobile_number")!!
         }
 
         //Log.d("app signature", appSignature.appSignatures.get(0))
         savedInstanceState?.let {
-//            verificationId = it.getString("verificationId")!!
+            verificationId = it.getString("verificationId")!!
             mobile_number = it.getString("mobile_number")!!
         }
     }
@@ -100,7 +100,7 @@ class VerifyOTP : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.activity = this.requireActivity()
-        viewModel.sendVerificationCode("+91"+mobile_number)
+//        viewModel.sendVerificationCode("+91"+mobile_number)
         initializeViews()
 //        startSmsRetriver()
         listeners()

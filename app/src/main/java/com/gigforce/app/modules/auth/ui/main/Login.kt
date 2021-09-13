@@ -237,8 +237,7 @@ class Login : Fragment() {
             try {
                 findNavController().navigate(
                     LoginDirections.actionLogin2ToVerifyOTP(
-//                        viewModel.verificationId!!,
-                        "",
+                        viewModel.verificationId!!,
                         invisible_edit_mobile.text.toString()
                     )
                 )
@@ -357,8 +356,8 @@ class Login : Fragment() {
             showToast(getString(R.string.accept_terms))
         }
         else {
-//            viewModel.sendVerificationCode(phoneNumber)
-            navigateToOTPVarificationScreen()
+            viewModel.sendVerificationCode(phoneNumber)
+//            navigateToOTPVarificationScreen()
         }
     }
 
