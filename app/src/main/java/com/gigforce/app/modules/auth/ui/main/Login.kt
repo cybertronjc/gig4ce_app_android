@@ -59,8 +59,6 @@ class Login : Fragment() {
     private val INDIAN_MOBILE_NUMBER =
         Pattern.compile("^[+][9][1][6-9][0-9]{9}\$")
 
-    //        private val INDIAN_MOBILE_NUMBER =
-//        Pattern.compile("^[+][0-9]{12}\$")
     lateinit var match: Matcher
     private var mobile_number: String = ""
     private var arrayEditTexts1 = ArrayList<EditText>()
@@ -73,8 +71,6 @@ class Login : Fragment() {
         arguments?.let {
             mobile_number = it.getString("mobileno") ?: ""
         }
-
-//        showKeyboard()
     }
 
     override fun onCreateView(
@@ -82,8 +78,6 @@ class Login : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        //this.setDarkStatusBarTheme(false);
-
         return inflater.inflate(R.layout.login_frament, container, false)
     }
 
@@ -95,18 +89,14 @@ class Login : Fragment() {
         populateMobileInEditTexts(mobile_number)
         Log.d("mobile_number", mobile_number)
         changeStatusBarColor()
-//        getAllEarlierMobileNumbers()
         prepareEditTextList()
         listeners()
         observer()
         requestHint()
-        //back button
         back_button_login.setOnClickListener {
             hideKeyboard()
             activity?.onBackPressed()
         }
-//            showKeyboard()
-
     }
 
 
@@ -118,8 +108,6 @@ class Login : Fragment() {
                 arrayEditTexts1.get(i).setText(mobile.toCharArray().get(i).toString())
                 Log.d("array size", "" + arrayEditTexts1.size)
             }
-//            login_button.isEnabled = true
-//            login_button.background = resources.getDrawable(R.drawable.gradient_button)
         }
 
     }
@@ -175,38 +163,6 @@ class Login : Fragment() {
         }
     }
 
-    fun showKeyboard() {
-        invisible_edit_mobile?.let {
-            it.isFocusableInTouchMode = true
-            it.requestFocus()
-            val inputMethodManager =
-                activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager?
-            inputMethodManager!!.toggleSoftInputFromWindow(
-                it.applicationWindowToken,
-                InputMethodManager.SHOW_FORCED, 0
-            )
-        }
-
-    }
-
-    private fun showComfortDialog() {
-        val dialog = activity?.let { Dialog(it) }
-        dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog?.setCancelable(false)
-        dialog?.setContentView(R.layout.comfort_message_login)
-        val okay = dialog?.findViewById(R.id.okay) as TextView
-        okay.setOnClickListener {
-            dialog.dismiss()
-        }
-        val cancel = dialog.findViewById<TextView>(R.id.cancel)
-        cancel.setOnClickListener {
-            navigation.popBackStack("login")
-            navigation.navigateTo("authFlowFragment")
-            dialog.dismiss()
-        }
-        dialog.show()
-    }
-
     private fun observer() {
         viewModel.liveState.observeForever {
             when (it.stateResponse) {
@@ -214,7 +170,6 @@ class Login : Fragment() {
                     login_button?.isEnabled = true
                     progressBar?.gone()
                     navigateToOTPVarificationScreen()
-//                    eventTracker.pushEvent(TrackingEventArgs("Navigate to OTP verification screen", null))
                 }
                 LoginViewModel.STATE_VERIFY_FAILED -> {
                     login_button?.isEnabled = true
@@ -225,7 +180,6 @@ class Login : Fragment() {
                     login_button?.isEnabled = true
                     progressBar?.gone()
                     navigateToOTPVarificationScreen()
-//                    eventTracker.pushEvent(TrackingEventArgs("Navigate to OTP verification screen", null))
                 }
             }
         }
@@ -237,7 +191,8 @@ class Login : Fragment() {
             try {
                 findNavController().navigate(
                     LoginDirections.actionLogin2ToVerifyOTP(
-                        viewModel.verificationId!!,
+//                        viewModel.verificationId!!,
+                        "",
                         invisible_edit_mobile.text.toString()
                     )
                 )
@@ -303,13 +258,6 @@ class Login : Fragment() {
         login_button.setOnClickListener {
             login_button.isEnabled = false
             progressBar.visibility = View.VISIBLE
-//            Handler().postDelayed(Runnable {
-//                // This method will be executed once the timer is over
-//                if (login_button != null) {
-//                    login_button.isEnabled = true
-//                    progressBar.visibility = View.GONE
-//                }
-//            }, 3000)
             doActionOnClick()
         }
 
@@ -337,11 +285,8 @@ class Login : Fragment() {
     private fun showWrongMobileNoLayout(show: Boolean) {
         if (show) {
             cvloginwrong.visibility = VISIBLE
-//            textView23.visibility = INVISIBLE
         } else {
             cvloginwrong.visibility = GONE
-//            textView23.visibility = VISIBLE
-
         }
     }
 
@@ -356,8 +301,8 @@ class Login : Fragment() {
             showToast(getString(R.string.accept_terms))
         }
         else {
-            viewModel.sendVerificationCode(phoneNumber)
-//            navigateToOTPVarificationScreen()
+//            viewModel.sendVerificationCode(phoneNumber)
+            navigateToOTPVarificationScreen()
         }
     }
 
@@ -371,26 +316,6 @@ class Login : Fragment() {
         }
         return true
     }
-
-//    private fun getAllEarlierMobileNumbers() {
-//        var deviceMobileNos = ArrayList<String>()
-//        var oldMobileNumbers = getAllMobileNumber()
-//        if (!oldMobileNumbers.equals("")) {
-//            var oldDeviceMobileNosList = oldMobileNumbers?.split(",")
-//            for (i in 0 until (oldDeviceMobileNosList?.size!!)) {
-//                deviceMobileNos.add(oldDeviceMobileNosList.get(i))
-//            }
-//            val adapter: ArrayAdapter<String> = ArrayAdapter<String>(
-//                requireActivity(),
-//                android.R.layout.select_dialog_item,
-//                deviceMobileNos
-//            )
-////            makeMobileNumberString().threshold = 1
-////            invisible_edit_mobile.setAdapter(
-////                    adapter
-////            )
-//        }
-//    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
