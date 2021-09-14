@@ -145,6 +145,9 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
         currentPage = 1
         isLoading = false
         tlListing.clear()
+
+        tlLoginSummaryAdapter.submitList(emptyList())
+        tlLoginSummaryAdapter.notifyDataSetChanged()
         viewModel.getListingForTL(1)
     }
 
