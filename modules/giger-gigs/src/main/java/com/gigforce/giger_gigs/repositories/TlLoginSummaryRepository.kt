@@ -8,6 +8,7 @@ import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.fb.BaseFirestoreDBRepository
 import com.gigforce.core.retrofit.RetrofitFactory
+import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.giger_gigs.models.*
 import com.gigforce.giger_gigs.tl_login_details.LoginSummaryService
 import com.google.firebase.auth.FirebaseAuth
@@ -27,26 +28,17 @@ import kotlin.collections.ArrayList
 
 @Singleton
 class TlLoginSummaryRepository @Inject constructor (
-    private val buildConfig: IBuildConfig,
-    private val loginSummaryService: LoginSummaryService
+    private val loginSummaryService: LoginSummaryService,
+    private val firebaseAuthStateListener: FirebaseAuthStateListener,
+    private val firebaseFirestore: FirebaseFirestore
 ) {
     companion object {
-
-
         private const val COLLECTION_PROFILE = "Profiles"
         const val COLLECTION_GIGS = "Gigs"
     }
 
-    private val firebaseFirestore: FirebaseFirestore = FirebaseFirestore.getInstance()
-    private val userUid = FirebaseAuth.getInstance().uid
-
-
-    private val profileCollectionRef: CollectionReference by lazy {
-        firebaseFirestore.collection(COLLECTION_PROFILE)
-    }
-
     suspend fun getCities(): List<LoginSummaryCity> {
-        val loginSummaryCity = loginSummaryService.getLoginSummaryCities(buildConfig.getListingBaseUrl() + "/cities")
+        val loginSummaryCity = loginSummaryService.getLoginSummaryCities()
 
         if (!loginSummaryCity.isSuccessful){
             throw Exception(loginSummaryCity.message())
@@ -56,7 +48,7 @@ class TlLoginSummaryRepository @Inject constructor (
     }
 
     suspend fun getBusinessByCity(cityId: String): List<LoginSummaryBusiness> {
-        val businessByCity = loginSummaryService.getBusinessByCity(buildConfig.getListingBaseUrl() + "/businessByCity/"+cityId)
+        val businessByCity = loginSummaryService.getBusinessByCity(cityId)
 
         if (!businessByCity.isSuccessful){
             throw Exception(businessByCity.message())
@@ -66,13 +58,16 @@ class TlLoginSummaryRepository @Inject constructor (
     }
 
     suspend fun submitLoginSummary(addNewSummaryReqModel: AddNewSummaryReqModel): Response<ResponseBody> {
-
-        return loginSummaryService.submitLoginSummary(buildConfig.getListingBaseUrl() + "/submit" ,addNewSummaryReqModel)
-
+        return loginSummaryService.submitLoginSummary(addNewSummaryReqModel)
     }
 
     suspend fun fetchListingForTL(page: Int, pageSize: Int): List<ListingTLModel> {
-        val response = loginSummaryService.getListingForTL(buildConfig.getListingBaseUrl() + "/listingForTL/"+userUid, page, pageSize)
+        val loggedInUser = firebaseAuthStateListener.getCurrentSignInInfo() ?: return emptyList()
+        val response = loginSummaryService.getListingForTL(
+            loggedInUser.uid ,
+            page,
+            pageSize
+        )
 
         if (!response.isSuccessful){
             throw Exception(response.message())
@@ -83,7 +78,8 @@ class TlLoginSummaryRepository @Inject constructor (
     }
 
     suspend fun checkIfAttendanceMarked() : CheckMark {
-       val response = loginSummaryService.checkIfTLMarked(buildConfig.getListingBaseUrl() + "/gigerPresent/"+userUid)
+        val loggedInUser = firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow()
+       val response = loginSummaryService.checkIfTLMarked(loggedInUser.uid)
         if (!response.isSuccessful){
             throw Exception(response.message())
         } else {
@@ -97,7 +93,6 @@ class TlLoginSummaryRepository @Inject constructor (
 
         try {
             val response = loginSummaryService.submitLoginReport(
-                buildConfig.baseUrl + "tlDailyReport/submit" ,
                 addNewSummaryReqModel.first()
             )
 
@@ -123,9 +118,15 @@ class TlLoginSummaryRepository @Inject constructor (
     }
 
 
-    suspend fun fetchTLDailyLoginReportListingForTL(searchCity: String,searchDate: String,page: Int, pageSize: Int): List<DailyLoginReport> {
+    suspend fun fetchTLDailyLoginReportListingForTL(
+        searchCity: String,
+        searchDate: String,
+        page: Int,
+        pageSize: Int
+    ): List<DailyLoginReport> {
+        val loggedInUser = firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow()
         val response = loginSummaryService.getDailyLoginReportListingForTL(
-            buildConfig.baseUrl + "tlDailyReport/listingForTL/" + userUid,
+            loggedInUser.uid,
             searchCity,
             searchDate,
             page,
