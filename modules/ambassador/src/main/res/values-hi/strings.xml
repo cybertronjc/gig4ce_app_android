@@ -362,4 +362,6 @@
     <string name="next_amb">अगला</string>
     <string name="invite_link_amb">पंजीकृत नंबर पर एसएमएस के माध्यम से आमंत्रण लिंक साझा किया जाएगा।</string>
     <string name="edit_propercase">संपादित करें</string>
+    <string name="upload_pan_image_first_amb">पहले पैन कार्ड की इमेज अपलोड करें</string>
+    <string name="upload_dl_front_first_amb">पहले DL फ्रंट इमेज अपलोड करें</string>
 </resources>

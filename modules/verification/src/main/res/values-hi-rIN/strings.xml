@@ -393,4 +393,7 @@
     <!--    <string name="veri_bank_title">चरण 4 : कृपया अपना बैंक विवरण जोड़ें</string>-->
     <!--    <string name="veri_add_bank">बैंक विवरण जोड़ें</string>-->
     <!--    <string name="veri_done">हुर्रे!!!\nKYC दस्तावेज़ सबमिट किए गए.\nसत्यापित होने के बाद हम आपको बताएंगे.</string>-->
+
+    <string name="upload_pan_image_first_veri">पहले पैन कार्ड की इमेज अपलोड करें</string>
+    <string name="upload_dl_front_first_veri">पहले DL फ्रंट इमेज अपलोड करें</string>
 </resources>
