@@ -88,23 +88,23 @@ class MainNavDataRepository @Inject constructor(
                 val index = (item.get("index") as? Long) ?: 500
                 val icon_type = item.get("icon") as? String
                 val navPath = item.get("navPath") as? String
-                val active = item.get("active") as? Boolean
+                val active = item.get("active") as? Boolean ?: true
                 mainNavData.add(
                     FeatureItemCard2DVM(
                         active = active,
                         title = title,
                         icon = icon_type,
                         navPath = navPath,
-                        index = index.toInt()
+                        index = index
                     )
                 )
 
             }
-            val mainNavData = appConfigList.filter { it.active && (it.type == null || it.type == "") }.filter { it.active == true }
-            mainNavData.sortBy { it.index }
+            val tempMainNavData = mainNavData.filter { it.active && (it.type == null || it.type == "") } as ArrayList<FeatureItemCard2DVM>
+            tempMainNavData.sortBy { it.index }
 //            var tempMainNavData = mainNavData.dup
             mainNavData.clear()
-//            mainNavData.addAll(tempMainNavData)
+            mainNavData.addAll(tempMainNavData)
             data.value = mainNavData
             receivedNotifyToServer()
             reloadCount++
