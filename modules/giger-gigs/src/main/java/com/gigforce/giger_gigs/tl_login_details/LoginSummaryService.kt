@@ -52,4 +52,18 @@ interface LoginSummaryService {
     suspend fun checkIfTLMarked(
         @Url getCheckUrl: String
     ) : Response<CheckMark>
+
+    @GET
+    suspend fun getBusinessByCity(
+        @Url getListingUrl : String,
+        @Query("searchCity") searchCity: String,
+        @Query("searchDate") searchDate: String,
+        @Query("page") page: Int,
+        @Query("pagesize") pagesize: Int
+    ) : Response<List<LoginSummaryBusiness>>
+
+    @GET("gigerAttendanceReport/getDetailsByTLandCity/{cityId}")
+    suspend fun getBusinessByCityWithLoginCount(
+        @Path("cityId") cityId : String
+    ): Response<List<LoginSummaryBusiness>>
 }
