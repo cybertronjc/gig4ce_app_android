@@ -9,6 +9,7 @@ import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 import com.gigforce.core.SingleLiveEvent
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.di.interfaces.IBuildConfigVM
+import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.core.utils.Lce
 import com.gigforce.giger_gigs.models.ListingTLModel
@@ -22,7 +23,8 @@ import javax.inject.Inject
 @HiltViewModel
 class TeamLeaderLoginDetailsViewModel @Inject constructor(
     private val iBuildConfig: IBuildConfigVM,
-    private val tlLoginSummaryRepository : TlLoginSummaryRepository
+    private val tlLoginSummaryRepository : TlLoginSummaryRepository,
+    private val logger : GigforceLogger
 ) : ViewModel() {
 
     companion object {
@@ -40,8 +42,8 @@ class TeamLeaderLoginDetailsViewModel @Inject constructor(
     private var _cities = MutableLiveData<Lce<List<LoginSummaryCity>>>()
     var cities : LiveData<Lce<List<LoginSummaryCity>>> = _cities
 
-    private var _loginListing = MutableLiveData<Lce<List<ListingTLModel>>>()
-    var loginListing : LiveData<Lce<List<ListingTLModel>>> = _loginListing
+    private var _loginListing = MutableLiveData<Lce<List<ListingTLModel>>?>()
+    var loginListing : LiveData<Lce<List<ListingTLModel>>?> = _loginListing
 
 
     private var _businesses = MutableLiveData<Lce<List<LoginSummaryBusiness>>>()
@@ -58,8 +60,11 @@ class TeamLeaderLoginDetailsViewModel @Inject constructor(
         _loginListing.postValue(Lce.loading())
 
         try {
+
+            logger.d(TAG,"loading data for page $page")
             val response = tlLoginSummaryRepository.fetchListingForTL(page, 10)
             _loginListing.value = Lce.content(response)
+            _loginListing.value = null
 
         }catch (e: Exception){
             e.printStackTrace()

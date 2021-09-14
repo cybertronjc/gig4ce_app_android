@@ -18,9 +18,7 @@ sealed class FirebaseAuthUserState {
 /**
  * Use getInstance() to use this class
  */
-class FirebaseAuthStateListener private constructor(
-
-) {
+class FirebaseAuthStateListener private constructor() {
 
     private val firebaseAuth: FirebaseAuth by lazy {
         FirebaseAuth.getInstance()
@@ -50,7 +48,7 @@ class FirebaseAuthStateListener private constructor(
     }
 
     fun getCurrentSignInInfo(): FirebaseUser? {
-        return currentLoggedInUser
+        return getLoggedUserfromCurrentUser() ?: currentLoggedInUser
     }
 
     fun getCurrentSignInUserInfoOrThrow(): FirebaseUser {
