@@ -65,7 +65,7 @@ class AmbassadorEnrolledDialogFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        guidelines = resources.getStringArray(R.array.ambassador_guidelines).toList()
+        guidelines = resources.getStringArray(R.array.ambassador_guidelines_amb).toList()
         initView()
         initViewModel()
 
@@ -90,15 +90,15 @@ class AmbassadorEnrolledDialogFragment : DialogFragment() {
                         appliedSuccessfullyLayout.visible()
                         Toast.makeText(
                             requireContext(),
-                            getString(R.string.ambassador_now),
+                            getString(R.string.ambassador_now_amb),
                             Toast.LENGTH_LONG
                         ).show()
                     }
                     is ErrorWhileSettingUserAsAmbassador -> {
                         MaterialAlertDialogBuilder(requireContext())
-                            .setTitle(getString(R.string.alert))
-                            .setMessage(getString(R.string.unable_to_apply_for_ambassador) + " " + it.error)
-                            .setPositiveButton(getString(R.string.okay).capitalizeWords()) { _, _ -> }
+                            .setTitle(getString(R.string.alert_amb))
+                            .setMessage(getString(R.string.unable_to_apply_for_ambassador_amb) + " " + it.error)
+                            .setPositiveButton(getString(R.string.okay_amb).capitalizeWords()) { _, _ -> }
                             .show()
                     }
                 }

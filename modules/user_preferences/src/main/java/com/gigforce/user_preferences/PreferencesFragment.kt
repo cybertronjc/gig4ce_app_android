@@ -2,6 +2,7 @@ package com.gigforce.user_preferences
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,15 +19,20 @@ import com.gigforce.core.analytics.AuthEvents
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
+import com.gigforce.core.datamodels.login.LoginResponse
 import com.gigforce.core.extensions.setDarkStatusBarTheme
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.GlideApp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.preferences_fragment.*
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 
 @AndroidEntryPoint
@@ -74,10 +80,10 @@ class PreferencesFragment : Fragment() {
 
     private fun observeProfileData() {
         viewModel.userProfileData.observe(viewLifecycleOwner, Observer { profile ->
+            viewModel.setProfileDataModel(profile)
             displayImage(profile.profileAvatarName)
-
+            setPreferenecesList()
         })
-
     }
 
     private fun observePreferenceData() {
@@ -95,6 +101,7 @@ class PreferencesFragment : Fragment() {
             viewLifecycleOwner,
             Observer { configDataModel1 ->
                 viewModel.setConfiguration(configDataModel1)
+                viewModel.getAllData()
             })
         viewModel.getConfiguration()
     }
@@ -116,10 +123,10 @@ class PreferencesFragment : Fragment() {
     }
 
     private fun listener() {
-        appBar.setBackButtonListener(View.OnClickListener { activity?.onBackPressed() })
+        appBar.setBackButtonListener { activity?.onBackPressed() }
 
-        imageView8.setOnClickListener(View.OnClickListener { activity?.onBackPressed() })
-        imageView9.setOnClickListener(View.OnClickListener { navigation.navigateTo("profile")/*navigate(R.id.profileFragment)*/ })
+        imageView8.setOnClickListener { activity?.onBackPressed() }
+        imageView9.setOnClickListener { navigation.navigateTo("profile")/*navigate(R.id.profileFragment)*/ }
     }
 
     private fun initializeViews() {
@@ -177,29 +184,29 @@ class PreferencesFragment : Fragment() {
         prefrencesItems.add(
             PreferencesScreenItem(
                 R.drawable.ic_clock_black,
-                getString(R.string.day_and_time),
-                viewModel.getDateTimeSubtitle()
+                getString(R.string.day_and_time_pref),
+                viewModel.getDateTimeSubtitle(requireContext())
             )
         )
         prefrencesItems.add(
             PreferencesScreenItem(
                 R.drawable.ic_location_pin_black,
-                getString(R.string.location),
-                viewModel.getLocation()
+                getString(R.string.location_pref),
+                viewModel.getLocation(requireContext())
             )
         )
         prefrencesItems.add(
             PreferencesScreenItem(
                 R.drawable.ic_credit_card_black,
-                getString(R.string.earning),
+                getString(R.string.earning_pref),
                 viewModel.getEarning()
             )
         )
-        prefrencesItems.add(PreferencesScreenItem(0, getString(R.string.others), ""))
+        prefrencesItems.add(PreferencesScreenItem(0, getString(R.string.others_pref), ""))
         prefrencesItems.add(
             PreferencesScreenItem(
                 R.drawable.ic_language_black,
-                getString(R.string.app_language),
+                getString(R.string.app_language_pref),
                 sharedPreAndCommonUtilInterface.getAppLanguageName()!!
             )
         )
@@ -207,7 +214,7 @@ class PreferencesFragment : Fragment() {
         prefrencesItems.add(
             PreferencesScreenItem(
                 R.drawable.ic_power_button_black,
-                getString(R.string.sign_out),
+                getString(R.string.sign_out_pref),
                 ""
             )
         )
@@ -236,7 +243,7 @@ class PreferencesFragment : Fragment() {
 //        titleDialog?.text = "Missing out on gigs?"
         val title = dialog?.findViewById(R.id.title) as TextView
         title.text =
-            getString(R.string.are_you_sure) + "\n" + getString(R.string.signing_out_means_missing_out_on_gigs)
+            getString(R.string.are_you_sure_pref) + "\n" + getString(R.string.signing_out_means_missing_out_on_gigs_pref)
         val yesBtn = dialog.findViewById(R.id.yes) as TextView
         val noBtn = dialog.findViewById(R.id.cancel) as TextView
         yesBtn.setOnClickListener {
@@ -248,15 +255,35 @@ class PreferencesFragment : Fragment() {
                 )
             )
 
-            FirebaseAuth.getInstance().signOut()
+            unregisterCurrentFirebaseToken()
             eventTracker.logoutUserFromAnalytics()
             sharedPreAndCommonUtilInterface.removeIntroComplete()
-            navigation.popBackStack("preferences/settingFragment")//popFragmentFromStack(R.id.settingFragment)
             dialog.dismiss()
         }
 
         noBtn.setOnClickListener { dialog.dismiss() }
         dialog.show()
+    }
+
+    private fun unregisterCurrentFirebaseToken() {
+        FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener {
+            val token = it.token
+
+            FirebaseFirestore
+                .getInstance()
+                .collection("firebase_tokens")
+                .document(token)
+                .delete()
+                .addOnSuccessListener {
+                    Log.d("S","Token deleted")
+                    FirebaseAuth.getInstance().signOut()
+                }.addOnFailureListener {
+                    Log.d("S","Token deleted")
+                    FirebaseAuth.getInstance().signOut()
+                }
+        }.addOnFailureListener {
+            FirebaseAuth.getInstance().signOut()
+        }
     }
 
 }

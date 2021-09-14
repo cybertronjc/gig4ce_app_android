@@ -75,15 +75,15 @@ class AddAadharCardInfoFragment : Fragment(), IOnBackPressedOverride {
     }
 
     private fun initViews() {
-        aadharFrontImageHolder.setDocumentUploadLabel(getString(R.string.upload_aadhar_card_front_side))
-        aadharFrontImageHolder.setDocumentUploadSubLabel(getString(R.string.upload_your_aadhar_card))
+        aadharFrontImageHolder.setDocumentUploadLabel(getString(R.string.upload_aadhar_card_front_side_veri))
+        aadharFrontImageHolder.setDocumentUploadSubLabel(getString(R.string.upload_your_aadhar_card_veri))
 //        aadharFrontImageHolder.documentUploadLabelTV.text =
 //            getString(R.string.upload_aadhar_card_front_side)
 //        aadharFrontImageHolder.documentUploadSubLabelTV.text =
 //            getString(R.string.upload_your_aadhar_card)
 
-        aadharBackImageHolder.setDocumentUploadLabel(getString(R.string.upload_aadhar_card_back_side))
-        aadharBackImageHolder.setDocumentUploadSubLabel(getString(R.string.upload_your_aadhar_card))
+        aadharBackImageHolder.setDocumentUploadLabel(getString(R.string.upload_aadhar_card_back_side_veri))
+        aadharBackImageHolder.setDocumentUploadSubLabel(getString(R.string.upload_your_aadhar_card_veri))
 //        aadharBackImageHolder.documentUploadLabelTV.text =
 //            getString(R.string.upload_aadhar_card_back_side)
 //        aadharBackImageHolder.documentUploadSubLabelTV.text =
@@ -94,7 +94,7 @@ class AddAadharCardInfoFragment : Fragment(), IOnBackPressedOverride {
         StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(resources, R.color.lipstick_2,null))
         toolbar.apply {
             hideActionMenu()
-            showTitle(getString(R.string.giger_verification))
+            showTitle(getString(R.string.giger_verification_veri))
             setBackButtonListener(View.OnClickListener {
                 navigation.popBackStack("verification/main",inclusive = false)
 //            findNavController().popBackStack(R.id.gigerVerificationFragment, false)
@@ -132,7 +132,7 @@ class AddAadharCardInfoFragment : Fragment(), IOnBackPressedOverride {
                 showImageInfoLayout()
 
                 if (aadharDataCorrectCB.isChecked
-                    && ((aadharSubmitSliderBtn.text == getString(R.string.update)
+                    && ((aadharSubmitSliderBtn.text == getString(R.string.update_veri)
                             || (aadharFrontImagePath != null && aadharBackImagePath != null)))
                 ) {
                     enableSubmitButton()
@@ -160,7 +160,7 @@ class AddAadharCardInfoFragment : Fragment(), IOnBackPressedOverride {
         aadharDataCorrectCB.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
 
-                if (aadharYesRB.isChecked && ((aadharSubmitSliderBtn.text == getString(R.string.update)
+                if (aadharYesRB.isChecked && ((aadharSubmitSliderBtn.text == getString(R.string.update_veri)
                             || (aadharFrontImagePath != null && aadharBackImagePath != null)))
                 )
                     enableSubmitButton()
@@ -191,7 +191,7 @@ class AddAadharCardInfoFragment : Fragment(), IOnBackPressedOverride {
 
         aadharSubmitSliderBtn.setOnClickListener {
 
-                    if (aadharYesRB.isChecked || aadharSubmitSliderBtn.text == getString(R.string.update)) {
+                    if (aadharYesRB.isChecked || aadharSubmitSliderBtn.text == getString(R.string.update_veri)) {
                         if (aadharCardET.text!!.length != 12) {
 
                             aadharEditLayout.post {
@@ -199,21 +199,21 @@ class AddAadharCardInfoFragment : Fragment(), IOnBackPressedOverride {
                             }
 
                             MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert))
-                                .setMessage(getString(R.string.enter_valid_aadhar_no))
-                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                                .setTitle(getString(R.string.alert_veri))
+                                .setMessage(getString(R.string.enter_valid_aadhar_no_veri))
+                                .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
                                 .show()
 
                             return@setOnClickListener
                         }
 
 
-                        if (aadharSubmitSliderBtn.text != getString(R.string.update) && (aadharFrontImagePath == null || aadharBackImagePath == null)) {
+                        if (aadharSubmitSliderBtn.text != getString(R.string.update_veri) && (aadharFrontImagePath == null || aadharBackImagePath == null)) {
 
                             MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert))
-                                .setMessage(getString(R.string.select_or_capture_both_sides_of_aadhar))
-                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                                .setTitle(getString(R.string.alert_veri))
+                                .setMessage(getString(R.string.select_or_capture_both_sides_of_aadhar_veri))
+                                .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
                                 .show()
 
                             return@setOnClickListener
@@ -238,9 +238,9 @@ class AddAadharCardInfoFragment : Fragment(), IOnBackPressedOverride {
         editLayout.setOnClickListener {
 
             MaterialAlertDialogBuilder(requireContext())
-                .setTitle(getString(R.string.alert))
-                .setMessage(getString(R.string.you_are_reuploading_aadhar))
-                .setPositiveButton(getString(R.string.okay)) { _, _ ->
+                .setTitle(getString(R.string.alert_veri))
+                .setMessage(getString(R.string.you_are_reuploading_aadhar_veri))
+                .setPositiveButton(getString(R.string.okay_veri)) { _, _ ->
 
                     aadharViewLayout.gone()
                     aadharEditLayout.visible()
@@ -249,7 +249,7 @@ class AddAadharCardInfoFragment : Fragment(), IOnBackPressedOverride {
                     aadharAvailaibilityOptionRG.check(R.id.aadharYesRB)
                     aadharSubmitSliderBtn.isEnabled = false
                 }
-                .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
+                .setNegativeButton(getString(R.string.cancel_veri)) { _, _ -> }
                 .show()
         }
     }
@@ -257,8 +257,8 @@ class AddAadharCardInfoFragment : Fragment(), IOnBackPressedOverride {
     private fun showWhyWeNeedThisBottomSheet() {
         WhyWeNeedThisBottomSheet.launch(
             childFragmentManager = childFragmentManager,
-            title = getString(R.string.why_do_we_need_this),
-            content = getString(R.string.why_we_need_this_aadhar)
+            title = getString(R.string.why_do_we_need_this_veri),
+            content = getString(R.string.why_we_need_this_aadhar_veri)
         )
     }
 
@@ -384,7 +384,7 @@ class AddAadharCardInfoFragment : Fragment(), IOnBackPressedOverride {
         }
 
         val aadharData = it ?: return
-        aadharSubmitSliderBtn.text = getString(R.string.update)
+        aadharSubmitSliderBtn.text = getString(R.string.update_veri)
 
         aadharCardET.setText(aadharData.aadharCardNo)
 
@@ -428,14 +428,14 @@ class AddAadharCardInfoFragment : Fragment(), IOnBackPressedOverride {
         aadharEditLayout.visibility = View.VISIBLE
 
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle(getString(R.string.alert))
+            .setTitle(getString(R.string.alert_veri))
             .setMessage(error)
-            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+            .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
             .show()
     }
 
     private fun documentUploaded() {
-        showToast(getString(R.string.aadhar_card_details_uploaded))
+        showToast(getString(R.string.aadhar_card_details_uploaded_veri))
 
         gigerVerificationStatus?.let {
 
@@ -590,7 +590,7 @@ class AddAadharCardInfoFragment : Fragment(), IOnBackPressedOverride {
         aadharFrontImageHolder.makeEditLayoutVisible()
 //        aadharFrontImageHolder.uploadImageLayout.imageLabelTV.text =
 //            getString(R.string.aadhar_card_front_image)
-        aadharFrontImageHolder.uploadImageLabel(getString(R.string.aadhar_card_front_image))
+        aadharFrontImageHolder.uploadImageLabel(getString(R.string.aadhar_card_front_image_veri))
 
         aadharFrontImageHolder.setImage(aadharFrontImagePath)
 //        Glide.with(requireContext())
@@ -601,7 +601,7 @@ class AddAadharCardInfoFragment : Fragment(), IOnBackPressedOverride {
 
     private fun showBackAadharCard(aadharBackImagePath: Uri) {
         aadharBackImageHolder.makeUploadLayoutVisible()
-        aadharBackImageHolder.uploadImageLabel(getString(R.string.aadhar_card_back_image))
+        aadharBackImageHolder.uploadImageLabel(getString(R.string.aadhar_card_back_image_veri))
 
         aadharBackImageHolder .setImage(aadharBackImagePath)
 //        aadharBackImageHolder.uploadDocumentCardView.visibility = View.GONE

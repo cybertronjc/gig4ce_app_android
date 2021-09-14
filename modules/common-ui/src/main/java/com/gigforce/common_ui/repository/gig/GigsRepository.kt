@@ -17,6 +17,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.QuerySnapshot
+import kotlinx.coroutines.tasks.await
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -296,7 +297,7 @@ open class GigsRepository : BaseFirestoreDBRepository() {
         }
     }
 
-    private suspend fun getGigOrder(gigOrderId: String): GigOrder? {
+    suspend fun getGigOrder(gigOrderId: String): GigOrder? {
         val getGigOrderQuery = db.collection("Gig_Order")
             .document(gigOrderId)
             .getOrThrow()

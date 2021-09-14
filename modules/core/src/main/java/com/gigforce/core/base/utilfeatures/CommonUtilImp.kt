@@ -3,7 +3,7 @@ package com.gigforce.core.base.utilfeatures
 import android.app.Activity
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
-import android.content.res.Configuration
+import com.gigforce.core.base.BaseActivity
 import dagger.hilt.android.qualifiers.ActivityContext
 import java.util.*
 import javax.inject.Inject
@@ -13,11 +13,9 @@ class CommonUtilImp @Inject constructor(
 
     override fun updateResources(language: String) {
         val locale = Locale(language)
-        val config2 = Configuration()
-        config2.locale = locale
-        // updating locale
-        activity?.resources?.updateConfiguration(config2, null)
-        Locale.setDefault(locale)
+
+        val baseActivity = activity as BaseActivity
+        baseActivity.setLanguage(locale)
     }
 
     override fun getCurrentVersion(): String {

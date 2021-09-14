@@ -40,7 +40,7 @@
             android:layout_marginLeft="19dp"
             android:fontFamily="@font/lato_bold"
             android:letterSpacing="0"
-            android:text="@string/weekday"
+            android:text="@string/weekday_pref"
             android:textColor="@color/black"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@+id/textView52"
@@ -83,7 +83,7 @@
             android:paddingStart="@dimen/size_68"
             android:paddingTop="@dimen/size_17"
             android:paddingBottom="@dimen/size_16"
-            android:text="@string/schedules"
+            android:text="@string/schedules_pref"
             android:textColor="@color/black"
             android:textSize="14sp"
             app:layout_constraintBottom_toTopOf="@+id/textView60"
@@ -103,7 +103,7 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="14dp"
                 android:layout_marginBottom="@dimen/size_18"
-                  app:srcCompat="@drawable/ic_calendar_black" />
+                app:srcCompat="@drawable/ic_calendar_black" />
 
 
             <TextView
@@ -117,7 +117,7 @@
                 android:fontFamily="@font/lato"
                 android:letterSpacing="0"
 
-                android:text="@string/days_caps"
+                android:text="@string/days_caps_pref"
                 android:textColor="@color/black"
                 android:textSize="14sp" />
 
@@ -126,11 +126,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/textView61"
-                android:paddingBottom="@dimen/size_13"
                 android:layout_alignStart="@+id/textView61"
                 android:layout_marginTop="4dp"
                 android:letterSpacing="0"
-                android:text="Mon, Tues, Wed, Thus, Fri"
+                android:paddingBottom="@dimen/size_13"
+                tools:text="Mon, Tues, Wed, Thus, Fri"
                 android:textColor="@color/gray_color"
                 android:textSize="@dimen/font_10" />
 
@@ -164,7 +164,7 @@
                 android:layout_toEndOf="@+id/slots_iv"
                 android:fontFamily="@font/lato"
                 android:letterSpacing="0"
-                android:text="@string/slots"
+                android:text="@string/slots_pref"
                 android:textColor="@color/black"
                 android:textSize="14sp" />
 

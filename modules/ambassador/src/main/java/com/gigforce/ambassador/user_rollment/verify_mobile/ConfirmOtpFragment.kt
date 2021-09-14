@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.gigforce.ambassador.EnrollmentConstants
 import com.gigforce.ambassador.R
@@ -89,7 +88,7 @@ class ConfirmOtpFragment : Fragment(), LocationUpdates.LocationUpdateCallbacks {
     }
 
     private fun initListeners() {
-        we_will_send_otp_label.text = "We sent it to the number +91 - $mobileNo"
+        we_will_send_otp_label.text = getString(R.string.sent_otp_to_the_number_amb) + mobileNo
 
         submitBtn.setOnClickListener {
             validateDataAndSubmit()
@@ -103,7 +102,7 @@ class ConfirmOtpFragment : Fragment(), LocationUpdates.LocationUpdateCallbacks {
 
     private fun validateDataAndSubmit() {
         if (txt_otp.text?.length != 6) {
-            showAlertDialog("", "Enter a valid OTP")
+            showAlertDialog("", getString(R.string.enter_valid_otp_amb))
             return
         }
 
@@ -147,7 +146,7 @@ class ConfirmOtpFragment : Fragment(), LocationUpdates.LocationUpdateCallbacks {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(title)
             .setMessage(message)
-            .setPositiveButton("Okay") { _, _ -> }
+            .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
             .show()
     }
 
@@ -160,7 +159,7 @@ class ConfirmOtpFragment : Fragment(), LocationUpdates.LocationUpdateCallbacks {
                         confirming_otp_pb.visible()
                     }
                     is Lce.Content -> {
-                        showToast("OTP Confirmed, Profile Created")
+                        showToast(getString(R.string.otp_confimed_amb))
 
                         if (mode == EnrollmentConstants.MODE_EDIT) {
                             navigation.navigateTo(

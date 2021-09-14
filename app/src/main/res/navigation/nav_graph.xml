@@ -716,6 +716,13 @@
         android:name="com.gigforce.client_activation.client_activation.ClientActivationFragment"
         android:label="fragment_client_activation"
         tools:layout="@layout/layout_fragment_client_activation" />
+    <fragment
+        android:id="@+id/fragment_business_loc_hub"
+        android:name="com.gigforce.client_activation.client_activation.info.hubform.BusinessLocationHubFragment" />
+
+    <fragment
+        android:id="@+id/fragment_joining_form"
+        android:name="com.gigforce.client_activation.client_activation.info.joiningform.JoiningFormFragment" />
 
     <fragment
         android:id="@+id/fragment_application_client_activation"
@@ -867,10 +874,10 @@
         android:label="GigContactPersonBottomSheet" />
 
     <!--    <include app:graph="@navigation/nav_graph_chat" />-->
-    <fragment
-        android:id="@+id/clientActiExploreList"
-        android:name="com.gigforce.client_activation.client_activation.explore.ClientActiExploreList"
-        android:label="ClientActiExploreList" />
+<!--    <fragment-->
+<!--        android:id="@+id/clientActiExploreList"-->
+<!--        android:name="com.gigforce.client_activation.client_activation.explore.ClientActiExploreList"-->
+<!--        android:label="ClientActiExploreList" />-->
     <fragment
         android:id="@+id/chatListFragment"
         android:name="com.gigforce.modules.feature_chat.screens.ChatHeadersFragment"
@@ -984,6 +991,7 @@
         android:id="@+id/addNewLoginSummaryFragment"
         android:name="com.gigforce.giger_gigs.tl_login_details.AddNewLoginSummaryFragment"
         android:label="AddNewLoginSummaryFragment" />
+
     <fragment
         android:id="@+id/addLoginReportFragment"
         android:name="com.gigforce.giger_gigs.tl_login_report.AddDailyLoginReportFragment"
@@ -992,6 +1000,18 @@
         android:id="@+id/loginReportListFragment"
         android:name="com.gigforce.giger_gigs.tl_login_report.TLDailyReportListFragment"
         android:label="TLDailyReportListFragment" />
+    <fragment
+        android:id="@+id/aadharApplicationDetailsFragment"
+        android:name="com.gigforce.client_activation.client_activation.info.aadhardetailform.AadharApplicationDetailsFragment"
+        android:label="AadharApplicationDetailsFragment" />
+    <fragment
+        android:id="@+id/pfesicFormDetailsFragment"
+        android:name="com.gigforce.client_activation.client_activation.info.pf_esic.PFESICFormDetailsFragment"
+        android:label="PFESICFormDetailsFragment" />
+    <fragment
+        android:id="@+id/jobProfileListFragment"
+        android:name="com.gigforce.client_activation.client_activation.explore.JobProfileListFragment"
+        android:label="JobProfileListFragment" />
 
 
 </navigation>

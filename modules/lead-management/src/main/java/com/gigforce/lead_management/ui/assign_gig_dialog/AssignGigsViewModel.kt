@@ -63,7 +63,7 @@ class AssignGigsViewModel @Inject constructor(
         } catch (e: Exception) {
             _viewState.postValue(
                 Lse.error(
-                    "Unable to assign gigs, please try again later"
+                    e.message ?: "Unable to assign gigs, please try again later"
                 )
             )
 

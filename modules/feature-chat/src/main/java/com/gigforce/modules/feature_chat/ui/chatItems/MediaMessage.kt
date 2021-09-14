@@ -25,7 +25,8 @@ abstract class MediaMessage(
 ) : RelativeLayout(
     context,
     attrs
-), IViewHolder {
+), IViewHolder,
+    BaseChatMessageItemView{
 
     private val refToGigForceAttachmentDirectory: File =
         Environment.getExternalStoragePublicDirectory(ChatConstants.DIRECTORY_APP_DATA_ROOT)!!

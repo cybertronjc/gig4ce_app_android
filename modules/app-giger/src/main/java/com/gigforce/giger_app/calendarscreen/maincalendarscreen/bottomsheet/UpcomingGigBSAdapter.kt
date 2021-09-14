@@ -185,11 +185,11 @@ class UpcomingGigBSAdapter(val context: Context, val itemWidth : Int) :
                     } else if (obj.isCheckInMarked()) {
                         checkInTV.isEnabled = true
                         checkInTV.text =
-                            context.getString(R.string.check_out)
+                            context.getString(R.string.check_out_app_giger)
                     } else {
                         checkInTV.isEnabled = true
                         checkInTV.text =
-                            context.getString(R.string.check_in)
+                            context.getString(R.string.check_in_app_giger)
                     }
                 }
             }

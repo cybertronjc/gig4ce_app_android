@@ -82,19 +82,29 @@ class MainNavDataRepository @Inject constructor(
     private fun arrangeDataAndSetObserver(iconList: Any) {
         val list = iconList as? List<Map<String, Any>>
         list?.let {
-            val appConfigList = arrayListOf<FeatureItemCard2DVM>()
-
+            val mainNavData = ArrayList<FeatureItemCard2DVM>()
             for (item in list) {
-                try {
-                    var appConfig = Gson().fromJson(JSONObject(item).toString(), FeatureItemCard2DVM::class.java)
-                    appConfigList.add(appConfig)
-                }catch (e: Exception){
-                    FirebaseCrashlytics.getInstance().log("IMainNavDataRepo : $e")
-                }
+                val title = item.get("title") as? String ?: "-"
+                val index = (item.get("index") as? Long) ?: 500
+                val icon_type = item.get("icon") as? String
+                val navPath = item.get("navPath") as? String
+                val active = item.get("active") as? Boolean
+                mainNavData.add(
+                    FeatureItemCard2DVM(
+                        active = active,
+                        title = title,
+                        icon = icon_type,
+                        navPath = navPath,
+                        index = index.toInt()
+                    )
+                )
+
             }
-            // defaultViewType is currently 0
-            val mainNavData = appConfigList.filter { it.active && (it.type == null || it.type == "") }
-            mainNavData.sortedBy { it.index }
+            val mainNavData = appConfigList.filter { it.active && (it.type == null || it.type == "") }.filter { it.active == true }
+            mainNavData.sortBy { it.index }
+//            var tempMainNavData = mainNavData.dup
+            mainNavData.clear()
+//            mainNavData.addAll(tempMainNavData)
             data.value = mainNavData
             receivedNotifyToServer()
             reloadCount++
@@ -200,4 +210,26 @@ class MainNavDataRepository @Inject constructor(
         return mainNavData
     }
 
+}
+
+private fun arrangeDataAndSetObserver(iconList: Any) {
+    val list = iconList as? List<Map<String, Any>>
+    list?.let {
+        val appConfigList = arrayListOf<FeatureItemCard2DVM>()
+
+        for (item in list) {
+            try {
+                var appConfig = Gson().fromJson(JSONObject(item).toString(), FeatureItemCard2DVM::class.java)
+                appConfigList.add(appConfig)
+            }catch (e: Exception){
+                FirebaseCrashlytics.getInstance().log("IMainNavDataRepo : $e")
+            }
+        }
+        // defaultViewType is currently 0
+        val mainNavData = appConfigList.filter { it.active && (it.type == null || it.type == "") }
+        mainNavData.sortedBy { it.index }
+        data.value = mainNavData
+        receivedNotifyToServer()
+        reloadCount++
+    }
 }

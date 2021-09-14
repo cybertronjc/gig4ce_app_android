@@ -99,13 +99,13 @@ class AddUserPanCardInfoFragment : Fragment(), SelectImageSourceBottomSheetActio
 
 
     private fun initViews() {
-        panImageHolder.documentUploadLabelTV.text = getString(R.string.upload_pan_card)
-        panImageHolder.documentUploadSubLabelTV.text = getString(R.string.please_upload_your_pan)
+        panImageHolder.documentUploadLabelTV.text = getString(R.string.upload_pan_card_amb)
+        panImageHolder.documentUploadSubLabelTV.text = getString(R.string.please_upload_your_pan_amb)
         disableSubmitButton()
 
         toolbar_layout?.apply {
 
-            showTitle(getString(R.string.upload_pan_details))
+            showTitle(getString(R.string.upload_pan_details_amb))
             hideActionMenu()
             setBackButtonListener(View.OnClickListener {
                 showGoBackConfirmationDialog()
@@ -128,7 +128,7 @@ class AddUserPanCardInfoFragment : Fragment(), SelectImageSourceBottomSheetActio
             launchSelectImageSourceDialog()
         }
 
-        panImageHolder.uploadImageLayout.imageLabelTV.text = getString(R.string.pan_card_image)
+        panImageHolder.uploadImageLayout.imageLabelTV.text = getString(R.string.pan_card_image_amb)
 
         panCardAvailaibilityOptionRG.setOnCheckedChangeListener { _, checkedId ->
 
@@ -178,9 +178,9 @@ class AddUserPanCardInfoFragment : Fragment(), SelectImageSourceBottomSheetActio
         editLayout.setOnClickListener {
 
             MaterialAlertDialogBuilder(requireContext())
-                .setTitle(getString(R.string.alert))
-                .setMessage(getString(R.string.you_are_reuploading_pan_card))
-                .setPositiveButton(getString(R.string.okay)) { _, _ ->
+                .setTitle(getString(R.string.alert_amb))
+                .setMessage(getString(R.string.you_are_reuploading_pan_card_amb))
+                .setPositiveButton(getString(R.string.okay_amb)) { _, _ ->
 
                     panViewLayout.gone()
                     panEditLayout.visible()
@@ -189,7 +189,7 @@ class AddUserPanCardInfoFragment : Fragment(), SelectImageSourceBottomSheetActio
                     panCardAvailaibilityOptionRG.check(R.id.panYesRB)
                     enableSubmitButton()
                 }
-                .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
+                .setNegativeButton(getString(R.string.cancel_amb)) { _, _ -> }
                 .show()
         }
 
@@ -197,26 +197,26 @@ class AddUserPanCardInfoFragment : Fragment(), SelectImageSourceBottomSheetActio
 
         panSubmitSliderBtn.setOnClickListener {
 
-            if (panYesRB.isChecked || panSubmitSliderBtn.text == getString(R.string.update)) {
+            if (panYesRB.isChecked || panSubmitSliderBtn.text == getString(R.string.update_amb)) {
                 val panCardNo =
                     panCardEditText.text.toString().toUpperCase(Locale.getDefault())
                 if (!VerificationValidations.isPanCardValid(panCardNo)) {
 
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage(getString(R.string.enter_valid_pan))
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setTitle(getString(R.string.alert_amb))
+                        .setMessage(getString(R.string.enter_valid_pan_amb))
+                        .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
                         .show()
 
                     return@setOnClickListener
                 }
 
-                if (panSubmitSliderBtn.text != getString(R.string.update) && clickedImagePath == null) {
+                if (panSubmitSliderBtn.text != getString(R.string.update_amb) && clickedImagePath == null) {
 
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage(getString(R.string.click_select_pan_image))
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setTitle(getString(R.string.alert_amb))
+                        .setMessage(getString(R.string.click_select_pan_image_amb))
+                        .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
                         .show()
 
                     return@setOnClickListener
@@ -233,8 +233,8 @@ class AddUserPanCardInfoFragment : Fragment(), SelectImageSourceBottomSheetActio
     private fun showWhyWeNeedThisDialog() {
 
         navigation.navigateToWhyNeedThisBSFragment(childFragmentManager,bundleOf(
-            AppConstants.INTENT_EXTRA_TITLE to getString(R.string.why_do_we_need_this),
-            AppConstants.INTENT_EXTRA_CONTENT to getString(R.string.why_do_we_need_this_pan)
+            AppConstants.INTENT_EXTRA_TITLE to getString(R.string.why_do_we_need_this_amb),
+            AppConstants.INTENT_EXTRA_CONTENT to getString(R.string.why_do_we_need_this_pan_amb)
         ))
 
 //        WhyWeNeedThisBottomSheet.launch(
@@ -293,16 +293,16 @@ class AddUserPanCardInfoFragment : Fragment(), SelectImageSourceBottomSheetActio
         panEditLayout.visibility = View.VISIBLE
 
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle(getString(R.string.alert))
+            .setTitle(getString(R.string.alert_amb))
             .setMessage(error)
-            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+            .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
             .show()
     }
 
     private fun panCardDocumentUploaded() {
 
         if (panYesRB.isChecked)
-            showToast(getString(R.string.pan_details_uploaded))
+            showToast(getString(R.string.pan_details_uploaded_amb))
         navigation.navigateTo("userinfo/addUserAadharCardInfoFragment",bundleOf(
             EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
             EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
@@ -317,10 +317,10 @@ class AddUserPanCardInfoFragment : Fragment(), SelectImageSourceBottomSheetActio
 
     private fun showGoBackConfirmationDialog() {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle(getString(R.string.alert))
-            .setMessage(getString(R.string.are_u_sure_u_want_to_go_back))
-            .setPositiveButton(getString(R.string.yes)) { _, _ -> goBackToUsersList() }
-            .setNegativeButton(getString(R.string.no)) { _, _ -> }
+            .setTitle(getString(R.string.alert_amb))
+            .setMessage(getString(R.string.are_u_sure_u_want_to_go_back_amb))
+            .setPositiveButton(getString(R.string.yes_amb)) { _, _ -> goBackToUsersList() }
+            .setNegativeButton(getString(R.string.no_amb)) { _, _ -> }
             .show()
     }
 
@@ -375,9 +375,9 @@ class AddUserPanCardInfoFragment : Fragment(), SelectImageSourceBottomSheetActio
 
             } else {
                 MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(getString(R.string.alert))
-                    .setMessage(getString(R.string.unable_to_capture_image))
-                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                    .setTitle(getString(R.string.alert_amb))
+                    .setMessage(getString(R.string.unable_to_capture_image_amb))
+                    .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
                     .show()
             }
         }
@@ -490,7 +490,7 @@ class AddUserPanCardInfoFragment : Fragment(), SelectImageSourceBottomSheetActio
         panImageHolder.visible()
 
         val panData = it ?: return
-        panSubmitSliderBtn.text = getString(R.string.update)
+        panSubmitSliderBtn.text = getString(R.string.update_amb)
 
         panCardEditText.setText(panData.panCardNo)
 

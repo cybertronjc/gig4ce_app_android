@@ -19,7 +19,9 @@ import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.utils.UtilMethods
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.core.AppConstants
+import com.gigforce.core.IEventTracker
 import com.gigforce.core.StringConstants
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.datamodels.verification.AadharCardDataModel
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.gone
@@ -30,6 +32,7 @@ import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.verification.R
 import com.gigforce.verification.databinding.AadhaarCardImageUploadFragmentBinding
 import com.gigforce.verification.util.VerificationConstants
+import com.gigforce.verification.util.VerificationEvents
 import com.google.gson.Gson
 import com.jaeger.library.StatusBarUtil
 import dagger.hilt.android.AndroidEntryPoint
@@ -66,7 +69,8 @@ class AadhaarCardImageUploadFragment : Fragment(),
 
     @Inject
     lateinit var navigation: INavigation
-
+    @Inject
+    lateinit var eventTracker: IEventTracker
     @Inject
     lateinit var iBuildConfig: IBuildConfig
     private var FROM_CLIENT_ACTIVATON: Boolean = false
@@ -96,6 +100,12 @@ class AadhaarCardImageUploadFragment : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getDataFromIntent(savedInstanceState)
+        eventTracker.pushEvent(
+            TrackingEventArgs(
+                eventName = VerificationEvents.AADHAAR_VERIFICATION_STARTED,
+                props = null
+            )
+        )
         initializeImageViews()
         observer()
         listeners()
@@ -118,7 +128,7 @@ class AadhaarCardImageUploadFragment : Fragment(),
             .build()
         val list = listOf(
             KYCImageModel(
-                text = getString(R.string.upload_pan_card_new),
+                text = getString(R.string.upload_pan_card_new_veri),
                 imageIcon = frontUri,
                 imageUploaded = false
             )
@@ -279,6 +289,9 @@ class AadhaarCardImageUploadFragment : Fragment(),
             it?.let {
 
                 if (it.verified) {
+                    var props = HashMap<String, Any>()
+                    props.put("Aadhaar verified", true)
+                    eventTracker.setUserProperty(props)
                     verificationScreenStatus = VerificationScreenStatus.VERIFIED
                     verifiedStatusViews()
                     viewBinding.belowLayout.visible()
@@ -321,13 +334,13 @@ class AadhaarCardImageUploadFragment : Fragment(),
         viewBinding.belowLayout.gone()
         viewBinding.toplayoutblock.uploadStatusLayout(
             AppConstants.UPLOAD_SUCCESS,
-            "Verification Completed",
-            "The Aadhar card details have been verified successfully."
+            getString(R.string.verification_completed_veri),
+            getString(R.string.aadhar_verified_veri)
         )
         viewBinding.submitButton.visible()
-        viewBinding.submitButton.text = "Next"
+        viewBinding.submitButton.text = getString(R.string.next_veri)
         viewBinding.progressBar.gone()
-        viewBinding.toplayoutblock.setVerificationSuccessfulView("Aadhaar card verified")
+        viewBinding.toplayoutblock.setVerificationSuccessfulView(getString(R.string.aadhar_verified_success_veri))
 
 
     }

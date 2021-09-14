@@ -197,7 +197,7 @@ class GigRegulariseAttendanceFragment : Fragment() {
     }
 
     private fun regularisationRequestSubmitted() {
-        showToast("Regularisation request submitted")
+        showToast(getString(R.string.regularisation_submitted_giger_gigs))
         activity?.onBackPressed()
     }
 
@@ -206,9 +206,9 @@ class GigRegulariseAttendanceFragment : Fragment() {
         regularise_main_layout.visible()
 
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Alert")
-            .setMessage("Unable to submit regularisation request , $error")
-            .setPositiveButton(R.string.okay_text) { _, _ ->
+            .setTitle(getString(R.string.alert_giger_gigs))
+            .setMessage(getString(R.string.unable_to_submit_request_giger_gigs) + error)
+            .setPositiveButton(R.string.okay_text_giger_gigs) { _, _ ->
 
             }.show()
     }
@@ -216,9 +216,9 @@ class GigRegulariseAttendanceFragment : Fragment() {
     private fun submitRegularisationRequest() {
         if (punchInTime == null) {
             MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Alert")
-                .setMessage("Select Punch-in time")
-                .setPositiveButton(R.string.okay_text) { _, _ ->
+                .setTitle(getString(R.string.alert_giger_gigs))
+                .setMessage(getString(R.string.select_punchin_time_giger_gigs))
+                .setPositiveButton(R.string.okay_text_giger_gigs) { _, _ ->
 
                 }.show()
 
@@ -227,9 +227,9 @@ class GigRegulariseAttendanceFragment : Fragment() {
 
         if (punchOutTime == null) {
             MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Alert")
-                .setMessage("Select Punch-out time")
-                .setPositiveButton(R.string.okay_text) { _, _ ->
+                .setTitle(getString(R.string.alert_giger_gigs))
+                .setMessage(getString(R.string.select_punchout_time_giger_gigs))
+                .setPositiveButton(R.string.okay_text_giger_gigs) { _, _ ->
 
                 }.show()
 
@@ -241,9 +241,9 @@ class GigRegulariseAttendanceFragment : Fragment() {
 
         if (punchIn.isAfter(punchOut) || punchIn.isEqual(punchOut)) {
             MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Alert")
-                .setMessage("Punch-out time should be greater than punch-in time")
-                .setPositiveButton(R.string.okay_text) { _, _ ->
+                .setTitle(getString(R.string.alert_giger_gigs))
+                .setMessage(getString(R.string.punchout_time_should_be_greater_giger_gigs))
+                .setPositiveButton(R.string.okay_text_giger_gigs) { _, _ ->
                 }.show()
 
             return

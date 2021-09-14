@@ -7,14 +7,11 @@ import android.text.Html
 import android.text.Spanned
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -22,8 +19,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.ambassador.AmbassadorProgramDetailsAdapter
 import com.gigforce.ambassador.R
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
-import com.gigforce.common_ui.ext.getCircularProgressDrawable
-import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.utils.LocationUpdates
@@ -35,9 +30,7 @@ import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.inflate
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
-import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.Lce
-import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_ambassador_program_details.*
 import kotlinx.android.synthetic.main.fragment_main_learning_role_based_learnings.*
@@ -68,8 +61,8 @@ class AmbassadorProgramDetailsFragment : Fragment(), LocationUpdates.LocationUpd
     private fun setAmbassadorProgramDetails() {
         inflateAmbResponsibilities(
             listOf(
-                getString(R.string.you_have_to_look_for),
-                getString(R.string.if_they_are_interested)
+                getString(R.string.you_have_to_look_for_amb),
+                getString(R.string.if_they_are_interested_amb)
             )
         )
     }
@@ -77,7 +70,7 @@ class AmbassadorProgramDetailsFragment : Fragment(), LocationUpdates.LocationUpd
 
     private fun initUi() {
 
-        roleBasedLearningTV.text = getString(R.string.related_learnings)
+        roleBasedLearningTV.text = getString(R.string.related_learnings_amb)
         ambRequirementsSeeMoreTV.setOnClickListener {
 
         }

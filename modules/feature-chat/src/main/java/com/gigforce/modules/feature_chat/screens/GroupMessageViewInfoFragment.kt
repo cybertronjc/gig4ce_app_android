@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.gigforce.modules.feature_chat.R
 import com.gigforce.modules.feature_chat.databinding.FragmentMessageViewedInfoBinding
 import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel
 import com.gigforce.modules.feature_chat.screens.vm.factories.GroupChatViewModelFactory
@@ -50,12 +52,14 @@ class GroupMessageViewInfoFragment : Fragment() {
 
     private fun initView() {
         viewBinding.toolbar.apply {
-            showTitle("Message Info")
+            showTitle(context.getString(R.string.message_info_chat))
             hideActionMenu()
             setBackButtonListener {
                 activity?.onBackPressed()
             }
         }
+
+        viewBinding.messageViewedRecyclerView.layoutManager = LinearLayoutManager(requireContext())
     }
 
     private fun getDataFrom(
@@ -83,7 +87,7 @@ class GroupMessageViewInfoFragment : Fragment() {
         viewModel.messageReadingInfo
             .observe(viewLifecycleOwner, {
 
-                viewBinding.toolbar.showSubtitle("Viewed by ${it.readingInfo.size}/ ${it.totalMembers}")
+                viewBinding.toolbar.showSubtitle(getString(R.string.viewed_by_chat) + it.readingInfo.size + "/ " + it.totalMembers)
                 viewBinding.messageViewedRecyclerView.collection = it.readingInfo
             })
     }

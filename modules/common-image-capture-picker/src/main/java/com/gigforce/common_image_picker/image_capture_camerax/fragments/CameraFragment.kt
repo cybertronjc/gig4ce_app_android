@@ -155,7 +155,7 @@ class CameraFragment : Fragment() {
                         try {
                             initializeCamera()
                         } catch (e: Exception) {
-                            showToast("Unable to initialise camera")
+                            showToast(getString(R.string.unable_to_initialise_camera_common))
                             CrashlyticsLogger.e(
                                     "CameraFragment",
                                     "initializeCamera",
@@ -217,7 +217,7 @@ class CameraFragment : Fragment() {
                 e
             )
 
-            showToast("Unable to open camera ..check for device permissions")
+            showToast(getString(R.string.unable_to_open_camera_common))
             return
         }
 
@@ -285,7 +285,7 @@ class CameraFragment : Fragment() {
                         }
                     }
                 } catch (e: Exception){
-                    showToast("unable to capture photo")
+                    showToast(getString(R.string.unable_to_capture_photo_common))
                     CrashlyticsLogger.e(TAG,"capturing image",e)
                 }
 

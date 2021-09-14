@@ -6,6 +6,7 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.media.ThumbnailUtils
@@ -16,14 +17,19 @@ import android.provider.MediaStore
 import android.util.Log
 import android.util.Size
 import android.view.View
+import android.view.ViewTreeObserver
 import android.view.Window
 import android.widget.*
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
-import com.gigforce.common_ui.widgets.ImagePicker
+import com.gigforce.common_image_picker.image_cropper.ImageCropActivity
 import com.gigforce.common_ui.viewmodels.ProfileViewModel
+import com.gigforce.common_ui.widgets.ImagePicker
+import com.gigforce.core.base.BaseActivity
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.ImageUtils
 import com.gigforce.giger_gigs.R
@@ -45,7 +51,7 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
-class PhotoCrop : AppCompatActivity() {
+class PhotoCrop : BaseActivity() {
 
     companion object {
         var profilePictureOptionsBottomSheetFragment: ProfilePictureOptionsBottomSheetFragment =
@@ -62,6 +68,7 @@ class PhotoCrop : AppCompatActivity() {
 
         const val PURPOSE_VERIFICATION = "verification"
         const val PURPOSE_UPLOAD_SELFIE_IMAGE = "upload_selfie_image"
+        private const val REQUEST_STORAGE_PERMISSION = 102
     }
 
     private val CODE_IMG_GALLERY: Int = 1
@@ -111,7 +118,7 @@ class PhotoCrop : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?): Unit {
         super.onCreate(savedInstanceState)
         if (Build.VERSION.SDK_INT != Build.VERSION_CODES.O) {
-            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
 
         this.setContentView(R.layout.activity_photo_crop)
@@ -147,8 +154,25 @@ class PhotoCrop : AppCompatActivity() {
         checkPermissions()
         imageView.setOnClickListener { toggleBottomSheet() }
         constLayout.setOnClickListener { toggleBottomSheet() }
-    }
 
+
+    }
+    private fun setProfilePicHeight() {
+        val vto: ViewTreeObserver = imageView.getViewTreeObserver()
+        vto.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+
+            override fun onGlobalLayout() {
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+                    imageView.getViewTreeObserver().removeGlobalOnLayoutListener(this)
+                } else {
+                    imageView.getViewTreeObserver().removeOnGlobalLayoutListener(this)
+                }
+                val width: Int = imageView.getMeasuredWidth()
+                val height: Int = imageView.getMeasuredHeight()
+                imageView.layoutParams = LinearLayout.LayoutParams(width, width)
+            }
+        })
+    }
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString("purpose", purpose)
@@ -232,20 +256,23 @@ class PhotoCrop : AppCompatActivity() {
                 "IMAGE_CAPTURE",
                 "request code=" + requestCode.toString() + "  ImURI: " + outputFileUri.toString()
             )
-            outputFileUri = ImagePicker.getImageFromResult(this, resultCode, data);
+            outputFileUri = ImagePicker.getImageFromResult(this, resultCode, data)
             if (outputFileUri != null) {
-                outputFileUri?.let { it -> startCrop(it) }
+                //outputFileUri?.let { it -> startCrop(it) }
+                outputFileUri?.let { it -> startCropImage(it) }
 
             } else {
-                Toast.makeText(this, "Issue in capturing image!!", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, getString(R.string.issue_capturing_image_giger_gigs), Toast.LENGTH_LONG).show()
             }
         }
 
         /**
          * Handles data which is a resultant from cropping activity
          */
-        else if (requestCode == UCrop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
-            val imageUriResultCrop: Uri? = UCrop.getOutput((data!!))
+        else if (requestCode == ImageCropActivity.CROP_RESULT_CODE && resultCode == Activity.RESULT_OK) {
+//            val imageUriResultCrop: Uri? = UCrop.getOutput((data!!))
+            val imageUriResultCrop: Uri? =
+                Uri.parse(data?.getStringExtra(ImageCropActivity.CROPPED_IMAGE_URL_EXTRA))
             Log.d("ImageUri", imageUriResultCrop.toString())
             if (imageUriResultCrop != null) {
                 resultIntent.putExtra("uri", imageUriResultCrop)
@@ -263,7 +290,7 @@ class PhotoCrop : AppCompatActivity() {
 
                 var baos = ByteArrayOutputStream()
                 if (imageUriResultCrop == null) {
-                    var bitmap = data.data as Bitmap
+                    var bitmap = data!!.data as Bitmap
                     bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
                 }
                 var fvImage = imageUriResultCrop?.let { FirebaseVisionImage.fromFilePath(this, it) }
@@ -276,7 +303,7 @@ class PhotoCrop : AppCompatActivity() {
                             if (faces.size > 0) {
                                 Toast.makeText(
                                     this,
-                                    "Face Detected. Uploading...",
+                                    getString(R.string.face_detected_giger_gigs),
                                     Toast.LENGTH_LONG
                                 ).show()
                                 upload(imageUriResultCrop, baos.toByteArray(), CLOUD_OUTPUT_FOLDER)
@@ -284,7 +311,7 @@ class PhotoCrop : AppCompatActivity() {
                             } else {
                                 Toast.makeText(
                                     this,
-                                    "Something seems off. Please take a smart selfie with good lights.",
+                                    getString(R.string.something_seems_off_giger_gigs),
                                     Toast.LENGTH_LONG
                                 ).show()
                             }
@@ -306,7 +333,7 @@ class PhotoCrop : AppCompatActivity() {
     /**
      * To get uri from the data received when using the camera to capture image
      */
-     fun getImageUriFromBitmap(context: Context, bitmap: Bitmap): Uri {
+    fun getImageUriFromBitmap(context: Context, bitmap: Bitmap): Uri {
         val bytes = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, bytes)
         val path =
@@ -352,6 +379,12 @@ class PhotoCrop : AppCompatActivity() {
         uCrop.start(this as AppCompatActivity)
     }
 
+    private fun startCropImage(uri: Uri) {
+        val photoCropIntent = Intent(this, ImageCropActivity::class.java)
+        photoCropIntent.putExtra("outgoingUri", uri.toString())
+        startActivityForResult(photoCropIntent, 90)
+    }
+
     /**
      * Settings for the ucrop activity need to be changed here.
      */
@@ -364,7 +397,7 @@ class PhotoCrop : AppCompatActivity() {
         options.setFreeStyleCropEnabled(false)
         options.setStatusBarColor(resources.getColor(R.color.topBarDark))
         options.setToolbarColor(resources.getColor(R.color.topBarDark))
-        options.setToolbarTitle("Crop and Rotate")
+        options.setToolbarTitle(getString(R.string.crop_or_rotate_giger_gigs))
         return options
     }
 
@@ -441,8 +474,8 @@ class PhotoCrop : AppCompatActivity() {
                                     progress_circular.visibility = View.GONE
                                     val thumbNail: String = it.metadata?.reference?.name.toString()
                                     updateViewModel(purpose, thumbNail, true)
-                                    //loadImage(folder, fname)
-                                    Toast.makeText(this, "Successfully Uploaded", Toast.LENGTH_LONG)
+                                    loadImage(folder, fname)
+                                    Toast.makeText(this, getString(R.string.upload_success_giger_gigs), Toast.LENGTH_LONG)
                                         .show()
                                     resultIntent.putExtra(
                                         "image_url",
@@ -455,7 +488,7 @@ class PhotoCrop : AppCompatActivity() {
                                 }
 
                             } else {
-                                Toast.makeText(this, "Some Seems Off", Toast.LENGTH_LONG).show()
+                                Toast.makeText(this, getString(R.string.some_seems_off_giger_gigs), Toast.LENGTH_LONG).show()
 
                             }
                         } catch (e: Exception) {
@@ -474,7 +507,7 @@ class PhotoCrop : AppCompatActivity() {
                     }
                     progress_circular.visibility = View.GONE
                     //loadImage(folder, fname)
-                    Toast.makeText(this, "Successfully Uploaded", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, getString(R.string.upload_success_giger_gigs), Toast.LENGTH_LONG).show()
                 }
 
                 updateViewModel(purpose, fname, false)
@@ -518,14 +551,19 @@ class PhotoCrop : AppCompatActivity() {
      *
      */
     private fun loadImage(folder: String, path: String) {
-        if (path == DEFAULT_PICTURE) disableRemoveProfilePicture()
-        else enableRemoveProfilePicture()
-        Log.d("PHOTO_CROP", "loading - " + path)
-        var profilePicRef: StorageReference =
-            storage.reference.child(folder).child(path)
-        GlideApp.with(this)
-            .load(profilePicRef)
-            .into(imageView)
+        if (path == DEFAULT_PICTURE) {
+            disableRemoveProfilePicture()
+        } else {
+            enableRemoveProfilePicture()
+            setProfilePicHeight()
+            Log.d("PHOTO_CROP", "loading - " + path)
+            var profilePicRef: StorageReference =
+                storage.reference.child(folder).child(path)
+            GlideApp.with(this)
+                .load(profilePicRef)
+                .into(imageView)
+        }
+
     }
 
     /**
@@ -534,8 +572,8 @@ class PhotoCrop : AppCompatActivity() {
      */
     var outputFileUri: Uri? = null
     open fun getImageFromPhone() {
-        var chooseImageIntent = ImagePicker.getPickImageIntent(this);
-        startActivityForResult(chooseImageIntent, CODE_IMG_GALLERY);
+        var chooseImageIntent = ImagePicker.getPickImageIntent(this)
+        startActivityForResult(chooseImageIntent, CODE_IMG_GALLERY)
 
 
 //        val pickIntent = Intent()
@@ -572,8 +610,67 @@ class PhotoCrop : AppCompatActivity() {
      */
     private fun showBottomSheet() {
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-        linear_layout_bottomsheet.updateProfilePicture.setOnClickListener { getImageFromPhone() }
+        linear_layout_bottomsheet.updateProfilePicture.setOnClickListener {
+            if(hasStoragePermissions())
+            getImageFromPhone()
+            else
+                requestStoragePermission()
+        }
         linear_layout_bottomsheet.removeProfilePicture.setOnClickListener { confirmRemoval() }
+    }
+
+    private fun hasStoragePermissions(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            applicationContext,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+            applicationContext,
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+            applicationContext,
+            Manifest.permission.CAMERA
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun requestStoragePermission() {
+
+        requestPermissions(
+            arrayOf(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.CAMERA
+            ),
+            REQUEST_STORAGE_PERMISSION
+        )
+    }
+
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>, grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            REQUEST_STORAGE_PERMISSION -> {
+
+                var allPermsGranted = true
+                for (i in grantResults.indices) {
+                    if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                        allPermsGranted = false
+                        break
+                    }
+                }
+
+                if (!allPermsGranted)
+                    {
+                    Toast.makeText(
+                        applicationContext,
+                        getString(R.string.grant_permission_giger_gigs),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
     }
 
     private fun toggleBottomSheet() {
@@ -632,11 +729,11 @@ class PhotoCrop : AppCompatActivity() {
         dialog.setCancelable(false)
         dialog.setContentView(R.layout.confirmation_custom_alert_type1)
         val titleDialog = dialog.findViewById(R.id.title) as TextView
-        titleDialog.text = "Are sure you want to Remove the picture ?"
+        titleDialog.text = getString(R.string.sure_to_remove_picture_giger_gigs)
         val noBtn = dialog.findViewById(R.id.yes) as TextView
-        noBtn.text = "No"
+        noBtn.text = getString(R.string.no)
         val yesBtn = dialog.findViewById(R.id.cancel) as TextView
-        yesBtn.text = "Yes"
+        yesBtn.text = getString(R.string.yes)
         yesBtn.setOnClickListener()
         {
             defaultProfilePicture()

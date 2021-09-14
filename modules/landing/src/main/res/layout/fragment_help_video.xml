@@ -26,7 +26,7 @@
                 android:background="@color/lipstick_2"
                 app:navigationIcon="@drawable/ic_arrow_back_white"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                app:title="Help Videos"
+                app:title="@string/help_videos_landing"
                 app:titleTextColor="@color/white" />
         </com.google.android.material.appbar.AppBarLayout>
 

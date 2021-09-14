@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tap_for_details_tracking">विवरण के लिए टैप करें</string>
+    <string name="fetching_location_tracking">\"के लिए स्थान प्राप्त किया जा रहा है\"</string>
+    <string name="gig_tracking">\"गिग\"</string>
+</resources>

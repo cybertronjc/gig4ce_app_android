@@ -13,7 +13,7 @@
         app:backgroundType="PinkBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:titleText="Document Verification" />
+        app:titleText="@string/document_verification" />
 
     <TextView
         android:id="@+id/textView4"
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_sm1"
         android:layout_marginTop="@dimen/dp_xl3"
-        android:text="Submit KYC Documents"
+        android:text="@string/submit_docs_veri"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/appBar2" />
 
@@ -44,7 +44,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_sm3"
         android:layout_marginRight="@dimen/dp_xl6"
-        android:text="We need to verify your information. Select the documents below that are ready to verify"
+        android:text="@string/need_to_verify_your_information"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView3"
         app:layout_constraintTop_toTopOf="@+id/imageView3" />
@@ -111,7 +111,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/button_style"
-        android:text="Next"
+        android:text="@string/next_veri"
         android:padding="@dimen/dp_sm1"
         android:layout_marginBottom="@dimen/dp_xl1"
         app:layout_constraintBottom_toBottomOf="parent"

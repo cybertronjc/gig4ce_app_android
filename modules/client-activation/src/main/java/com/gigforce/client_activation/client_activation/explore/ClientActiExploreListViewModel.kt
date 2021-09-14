@@ -45,7 +45,9 @@ class ClientActiExploreListViewModel constructor(
                 items.documents.forEach {
                         try {
                             var obj = it.toObject(JobProfile::class.java)
+
                             obj?.let { data ->
+                                obj?.id = it.id
                                 toObjects.add(data)
                             }
                         } catch (e: Exception) {
@@ -61,15 +63,14 @@ class ClientActiExploreListViewModel constructor(
 
 
 //                val toObjects = items.toObjects(JobProfile::class.java)
+                toObjects.sortBy{it.priority}
                 for (i in 0 until toObjects.size){
                     val obj = toObjects[i]
-                    var jobProfileId = items.documents[i].id
-                    obj.id = toObjects[i].profileId
-                    if (obj.id != null){
-                        Log.d("profileId", obj.id!!)
-                        val jpObject = getJPApplication(obj.id!!)
-                        Log.d("object", jpObject.toString())
-                        val jpExplore = JpExplore(jobProfileId,jpId = jpObject.id, profileId = obj.profileId,
+                    var jobProfileId = obj.id//items.documents[i].id
+//                    obj.id = toObjects[i].profileId
+                    if (jobProfileId!=null && obj.id != null){
+                        val jpObject = getJPApplication(obj.profileId!!)
+                        val jpExplore = JpExplore(id = jobProfileId,jpId = jpObject.id, profileId = obj.profileId,
                             profileName = obj.profileName,
                             title = obj.cardTitle, image = obj.cardImage,
                             status = jpObject.status, jobProfileTitle = obj.title

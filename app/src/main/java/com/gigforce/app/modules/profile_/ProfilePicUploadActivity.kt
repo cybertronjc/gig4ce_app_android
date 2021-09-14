@@ -24,6 +24,7 @@ import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.common_ui.viewmodels.ProfileViewModel
+import com.gigforce.core.base.BaseActivity
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -39,7 +40,7 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ProfilePicUploadActivity : AppCompatActivity(),
+class ProfilePicUploadActivity : BaseActivity(),
     ClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener {
     private var isPicturePresent: Boolean = false
     private val viewModel: ProfileViewModel by viewModels()
@@ -89,14 +90,14 @@ class ProfilePicUploadActivity : AppCompatActivity(),
                         viewModelUser.getProfileForUser(viewModel.profileID)
                         Toast.makeText(
                             this,
-                            getString(R.string.profile_pic_uploaded),
+                            getString(R.string.profile_pic_uploaded_app),
                             Toast.LENGTH_LONG
                         ).show()
 
                     }
                     is Lse.Error -> {
                         progress_bar_upload.gone()
-                        showAlertDialog(getString(R.string.could_not_submit_info), it.error)
+                        showAlertDialog(getString(R.string.could_not_submit_info_app), it.error)
                     }
                 }
             })
@@ -143,7 +144,7 @@ class ProfilePicUploadActivity : AppCompatActivity(),
             if (outputFileUri != null) {
                 startCrop(outputFileUri)
             } else {
-                Toast.makeText(this, getString(R.string.issue_in_cap_image), Toast.LENGTH_LONG)
+                Toast.makeText(this, getString(R.string.issue_in_cap_image_app), Toast.LENGTH_LONG)
                     .show()
             }
         } else if (requestCode == UCrop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
@@ -165,14 +166,14 @@ class ProfilePicUploadActivity : AppCompatActivity(),
                     if (faces.size > 0) {
                         Toast.makeText(
                             this,
-                            getString(R.string.face_detected_upload),
+                            getString(R.string.face_detected_upload_app),
                             Toast.LENGTH_LONG
                         ).show()
                         imageClickedOrSelectedNowUpload(imageUriResultCrop, baos.toByteArray())
                     } else {
                         Toast.makeText(
                             this,
-                            getString(R.string.something_seems_of),
+                            getString(R.string.something_seems_of_app),
                             Toast.LENGTH_LONG
                         ).show()
                     }
@@ -181,7 +182,7 @@ class ProfilePicUploadActivity : AppCompatActivity(),
                     // Task failed with an exception
                     Toast.makeText(
                         this,
-                        getString(R.string.no_face),
+                        getString(R.string.no_face_app),
                         Toast.LENGTH_LONG
                     ).show()
                 }
@@ -218,7 +219,7 @@ class ProfilePicUploadActivity : AppCompatActivity(),
         options.setFreeStyleCropEnabled(false)
         options.setStatusBarColor(ResourcesCompat.getColor(resources, R.color.topBarDark, null))
         options.setToolbarColor(ResourcesCompat.getColor(resources, R.color.topBarDark, null))
-        options.setToolbarTitle(getString(R.string.crop_and_rotate))
+        options.setToolbarTitle(getString(R.string.crop_and_rotate_app))
         return options
     }
 
@@ -277,7 +278,7 @@ class ProfilePicUploadActivity : AppCompatActivity(),
         dialog.setCancelable(false)
         dialog.setContentView(R.layout.confirmation_custom_alert_type1)
         val titleDialog = dialog.findViewById(R.id.title) as TextView
-        titleDialog.text = "Are sure you want to Remove the picture ?"
+        titleDialog.text = getString(R.string.sure_to_remove)
         val noBtn = dialog.findViewById(R.id.yes) as TextView
         noBtn.text = "No"
         val yesBtn = dialog.findViewById(R.id.cancel) as TextView

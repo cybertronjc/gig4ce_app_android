@@ -48,9 +48,9 @@ public class ReadMoreTextView extends androidx.appcompat.widget.AppCompatTextVie
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ReadMoreTextView);
         this.trimLength = typedArray.getInt(R.styleable.ReadMoreTextView_trimLength, DEFAULT_TRIM_LENGTH);
         int resourceIdTrimCollapsedText =
-                typedArray.getResourceId(R.styleable.ReadMoreTextView_trimCollapsedText, R.string.read_more);
+                typedArray.getResourceId(R.styleable.ReadMoreTextView_trimCollapsedText, R.string.read_more_common_ui);
         int resourceIdTrimExpandedText =
-                typedArray.getResourceId(R.styleable.ReadMoreTextView_trimExpandedText, R.string.read_less);
+                typedArray.getResourceId(R.styleable.ReadMoreTextView_trimExpandedText, R.string.read_less_common_ui);
         this.trimCollapsedText = getResources().getString(resourceIdTrimCollapsedText);
         this.trimExpandedText = getResources().getString(resourceIdTrimExpandedText);
         this.trimLines = typedArray.getInt(R.styleable.ReadMoreTextView_trimLines, DEFAULT_TRIM_LINES);

@@ -107,7 +107,7 @@ class AdapterBulletPoints constructor(
                         14F
                     )
                     moreTextView.setTextColor(context.resources.getColor(R.color.lipstick))
-                    moreTextView.text = context.getString(R.string.plus_more)
+                    moreTextView.text = context.getString(R.string.plus_more_client)
                     val face =
                         Typeface.createFromAsset(context.assets, "fonts/Lato-Regular.ttf")
                     moreTextView.typeface = face

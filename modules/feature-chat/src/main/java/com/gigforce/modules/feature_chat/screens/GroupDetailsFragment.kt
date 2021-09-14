@@ -3,6 +3,7 @@ package com.gigforce.modules.feature_chat.screens
 import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
+import android.text.InputFilter
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -203,8 +204,8 @@ class GroupDetailsFragment : Fragment(),
 
                             MaterialAlertDialogBuilder(requireContext())
                                     .setMessage(it.error)
-                                    .setTitle("Unable to activate/deactivate group")
-                                    .setPositiveButton("Okay") { _, _ -> }
+                                    .setTitle(getString(R.string.unable_to_activate_group_chat))
+                                    .setPositiveButton(getString(R.string.okay_chat)) { _, _ -> }
                                     .show()
                         }
                     }
@@ -222,7 +223,7 @@ class GroupDetailsFragment : Fragment(),
     private fun showGroupDetails(content: ChatGroup) {
         group_name_tv.text = content.name
         group_creation_date_tv.text =
-                "Created On : ${dateFormatter.format(content.creationDetails!!.createdOn.toDate())}"
+            getString(R.string.created_on_chat) + dateFormatter.format(content.creationDetails!!.createdOn.toDate())
 
         media_count_tv.text = content.groupMedia.size.toString()
         gigers_count_tv.text = content.groupMembers.size.toString()
@@ -281,10 +282,10 @@ class GroupDetailsFragment : Fragment(),
             if (content.groupDeactivated) {
                 add_giger_layout.isVisible = false
                 deactivate_group_btn.isVisible = true
-                deactivate_group_btn.text = "Activate Group"
+                deactivate_group_btn.text = getString(R.string.activate_group_chat)
                 group_deactivated_container.visible()
             } else {
-                deactivate_group_btn.text = "Deactivate Group"
+                deactivate_group_btn.text = getString(R.string.deactivate_group_chat)
                 add_giger_layout.isVisible = true
                 deactivate_group_btn.isVisible = true
                 group_deactivated_container.gone()
@@ -327,7 +328,7 @@ class GroupDetailsFragment : Fragment(),
             try {
                 requireContext().startActivity(this)
             } catch (e: Exception) {
-                Toast.makeText(context, "Unable to open", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, getString(R.string.unable_to_open_chat), Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -367,28 +368,29 @@ class GroupDetailsFragment : Fragment(),
         edit_group_name_iv.setOnClickListener {
 
             val groupNameEt = EditText(requireContext())
+            groupNameEt.filters = arrayOf<InputFilter>(InputFilter.LengthFilter(25))
 
             val layout = FrameLayout(requireContext())
             layout.setPaddingRelative(45, 15, 45, 0)
             layout.addView(groupNameEt)
 
             MaterialAlertDialogBuilder(requireContext())
-                    .setMessage("Enter a new group name")
-                    .setTitle("Change group name")
+                    .setMessage(getString(R.string.enter_new_group_name_chat))
+                    .setTitle(getString(R.string.change_group_name_chat))
                     .setView(layout)
-                    .setPositiveButton("Okay") { _, _ ->
+                    .setPositiveButton(getString(R.string.okay_chat)) { _, _ ->
 
                         if (groupNameEt.length() == 0) {
                             Toast.makeText(
                                     requireContext(),
-                                    "Please enter a valid group name",
+                                    getString(R.string.enter_valid_group_name_chat),
                                     Toast.LENGTH_SHORT
                             ).show()
                         } else {
                             viewModel.changeGroupName(groupNameEt.text.toString().capitalize())
                         }
                     }
-                    .setNegativeButton("Cancel") { _, _ ->
+                    .setNegativeButton(getString(R.string.cancel_chat)) { _, _ ->
 
                     }.show()
         }
@@ -400,10 +402,10 @@ class GroupDetailsFragment : Fragment(),
                     ?: return@setOnCheckedChangeListener
             if (isChecked && currentGroup.onlyAdminCanPostInGroup.not()) {
                 viewModel.limitPostingToAdminsInGroup()
-                showToast("Post limited to admins")
+                showToast(getString(R.string.post_limited_to_admin_chat))
             } else if (!isChecked && currentGroup.onlyAdminCanPostInGroup) {
                 viewModel.allowEveryoneToPostInThisGroup()
-                showToast("Everyone can post in group now")
+                showToast(getString(R.string.everyone_can_post_in_group_chat))
             }
         }
     }
@@ -500,7 +502,7 @@ class GroupDetailsFragment : Fragment(),
         if (viewModel.isUserGroupAdmin()) {
             popUp.menu.findItem(R.id.action_remove_user).also { item ->
                 item.isVisible = true
-                item.title = "Remove ${contact.name}"
+                item.title = getString(R.string.remove_chat) + contact.name
             }
         } else {
             popUp.menu.findItem(R.id.action_remove_user).also {
@@ -512,9 +514,9 @@ class GroupDetailsFragment : Fragment(),
             popUp.menu.findItem(R.id.action_make_admin).also {
                 it.isVisible = true
                 it.title = if (contact.isUserGroupManager)
-                    "Dismiss as admin"
+                    getString(R.string.dismiss_as_admin_chat)
                 else
-                    "Make group admin"
+                    getString(R.string.make_group_admin_chat)
 
             }
         } else {

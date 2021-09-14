@@ -23,7 +23,7 @@
             android:layout_marginTop="22dp"
             android:fontFamily="@font/lato_bold"
             android:letterSpacing="0"
-            android:text="@string/aadhar_card"
+            android:text="@string/aadhar_card_veri"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -53,7 +53,7 @@
             android:letterSpacing="-0.01"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
-            android:text="@string/why_do_we_need_this"
+            android:text="@string/why_do_we_need_this_veri"
             android:textColor="@color/battle_ship_grey"
             android:textSize="12sp"
             app:layout_constraintEnd_toStartOf="@+id/helpIconViewIV"
@@ -67,7 +67,7 @@
             android:layout_marginTop="12dp"
             android:fontFamily="@font/lato"
             android:letterSpacing="-0.01"
-            android:text="@string/do_you_have_aadhar_card"
+            android:text="@string/do_you_have_aadhar_card_veri"
             android:textColor="@color/black"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/aadharLabel" />
@@ -103,7 +103,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/lato"
                 android:letterSpacing="0"
-                android:text="@string/yes_i_have_aadhar_card"
+                android:text="@string/yes_i_have_aadhar_card_veri"
                 android:textColor="@color/black" />
 
             <com.google.android.material.radiobutton.MaterialRadioButton
@@ -113,7 +113,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/lato"
                 android:letterSpacing="0"
-                android:text="@string/no_i_don_t_have_aadhar_card" />
+                android:text="@string/no_i_don_t_have_aadhar_card_veri" />
 
         </RadioGroup>
 
@@ -141,7 +141,7 @@
 
                 android:fontFamily="@font/lato"
                 android:letterSpacing="-0.01"
-                android:text="@string/please_provide_the_following_information"
+                android:text="@string/please_provide_the_following_information_veri"
                 android:textColor="@color/black" />
 
 
@@ -160,7 +160,7 @@
                     android:layout_marginLeft="2dp"
                     android:layout_marginTop="8dp"
                     android:fontFamily="@font/lato"
-                    android:text="@string/aadhar_number_eg_444433332222"
+                    android:text="@string/aadhar_number_eg_444433332222_veri"
                     android:textSize="12sp" />
 
 
@@ -259,7 +259,7 @@
             app:slider_height="60dp"
             app:slider_icon="@drawable/ic_arrow_forward_white"
             app:slider_icon_color="@color/white"
-            app:text="@string/save_all_caps" />
+            app:text="@string/save_all_caps_veri" />
 
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/aadharDataCorrectCB"
@@ -270,7 +270,7 @@
             android:layout_marginBottom="13dp"
             android:fontFamily="@font/lato"
             android:letterSpacing="0"
-            android:text="@string/yes_i_confirm_the_data_is_correct"
+            android:text="@string/yes_i_confirm_the_data_is_correct_veri"
             app:layout_constraintBottom_toTopOf="@id/aadharSubmitSliderBtn"
             app:layout_constraintTop_toBottomOf="@id/aadharBackImageEditErrorMessage"
             app:layout_constraintVertical_bias="0.98"

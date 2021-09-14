@@ -11,7 +11,7 @@
         app:isSearchVisible="true"
         app:backgroundType="PinkBar"
         app:searchHint="Search Business/ Job"
-        app:titleText="Explore Gigs"
+        app:titleText="@string/explore_gigs_client"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
@@ -57,7 +57,7 @@
                 android:textColor="@color/white"
                 android:layout_marginStart="8dp"
                 android:textSize="20sp"
-                android:text="@string/explore_gigs" />
+                android:text="@string/explore_gigs_client" />
 
             <EditText
                 android:id="@+id/search_item"
@@ -74,7 +74,7 @@
                 android:layout_toEndOf="@id/iv_back_explore_fragment"
                 android:layout_toStartOf="@id/iv_search_explore"
                 android:background="@drawable/bg_search_item"
-                android:hint="@string/search_jobs" />
+                android:hint="@string/search_jobs_client" />
 
             <ImageView
                 android:id="@+id/iv_search_explore"
@@ -139,7 +139,7 @@
                     android:paddingTop="8dp"
                     android:paddingEnd="16dp"
                     android:paddingBottom="8dp"
-                    android:text="All"
+                    android:text="@string/all_client"
                     android:textColor="@color/filter_text"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/new_tv"
@@ -175,7 +175,7 @@
                     android:paddingEnd="8dp"
                     android:visibility="gone"
                     android:paddingBottom="8dp"
-                    android:text="Approved"
+                    android:text="@string/approved_client"
                     android:textColor="@color/filter_text"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/pending_tv"
@@ -193,7 +193,7 @@
                     android:visibility="gone"
                     android:paddingEnd="8dp"
                     android:paddingBottom="8dp"
-                    android:text="Pending"
+                    android:text="@string/pending_client"
                     android:textColor="@color/filter_text"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/applied_tv"
@@ -211,7 +211,7 @@
                     android:visibility="gone"
                     android:paddingEnd="8dp"
                     android:paddingBottom="8dp"
-                    android:text="Applied"
+                    android:text="@string/applied_client"
                     android:textColor="@color/filter_text"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/rejected_tv"
@@ -229,7 +229,7 @@
                     android:visibility="gone"
                     android:paddingEnd="8dp"
                     android:paddingBottom="8dp"
-                    android:text="Rejected"
+                    android:text="@string/rejected_client"
                     android:textColor="@color/filter_text"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/approved_tv"
@@ -273,12 +273,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                android:text="No Gigs to show!"
+                android:text="@string/no_gigs_to_show_client"
                 android:textSize="@dimen/size_24"
                 android:textColor="@color/lipstick"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/no_gigs"></TextView>
+
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/swipeRefresh"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginTop="@dimen/size_16"
+                android:layout_marginEnd="@dimen/size_16"
+                android:layout_marginBottom="@dimen/size_16"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/explore_rv"
@@ -287,10 +300,8 @@
                 android:clipToPadding="false"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                />
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -1,5 +1,6 @@
 package com.gigforce.core.datamodels.client_activation
 import com.gigforce.core.datamodels.client_activation.Dependency
+import com.google.firebase.Timestamp
 import com.google.gson.annotations.SerializedName
 import java.util.*
 
@@ -11,7 +12,7 @@ data class JpApplication(
         var gigerId: String = "",
         var rejectedBy: String = "",
         var rejectedOn: String = "",
-        var status: String = "Interested",
+        var status: String = "",
         var submitOn: String = "",
         @SerializedName("application") var application: MutableList<Dependency> = mutableListOf(),
         @SerializedName("activation") var activation: MutableList<Dependency> = mutableListOf(),
@@ -21,6 +22,7 @@ data class JpApplication(
         var activationComplete: Date? = null,
         var applicationLearningCompletionDate: Date? = null,
         var activationLearningCompletionDate: Date? = null,
-        var verifiedTLNumber :String?=null
+        var verifiedTLNumber :String?=null,
+        var dateOfJoining : Timestamp?=null
 
 )

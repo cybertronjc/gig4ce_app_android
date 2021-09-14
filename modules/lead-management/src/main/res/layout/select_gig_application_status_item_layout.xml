@@ -18,12 +18,11 @@
             android:id="@+id/status_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
+            android:fontFamily="@font/lato_bold"
             android:lineHeight="15sp"
             android:paddingTop="@dimen/size_6"
-            android:fontFamily="@font/lato_bold"
-            tools:text="Ongoing Applications"
-            />
+            android:textColor="@color/black"
+            tools:text="Ongoing Applications" />
 
 
     </RelativeLayout>

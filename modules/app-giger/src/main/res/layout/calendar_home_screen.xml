@@ -28,7 +28,7 @@
             android:layout_marginTop="13dp"
             android:fontFamily="@font/lato"
             android:letterSpacing="0.01"
-            android:text="@string/good_morning"
+            android:text="@string/good_morning_app_giger"
             android:textColor="#cd000000"
             android:textSize="22sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -57,7 +57,7 @@
                 android:gravity="center_horizontal"
                 android:letterSpacing="0"
                 android:paddingBottom="2dp"
-                android:text="April 2020"
+                android:text="@string/april_2020_app_giger"
                 android:textColor="#333333"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -82,7 +82,7 @@
             android:layout_marginRight="16dp"
             android:scaleX="0.8"
             android:scaleY="0.8"
-              app:srcCompat="@drawable/ic_homescreen_chat"
+            app:srcCompat="@drawable/ic_chat_black"
             app:layout_constraintBottom_toBottomOf="@+id/cardView"
             app:layout_constraintEnd_toStartOf="@+id/cardView"
             app:layout_constraintTop_toTopOf="@+id/cardView" />
@@ -159,7 +159,7 @@
         app:halfOffset="350dp"
         app:hideable="false"
         app:layout_behavior="com.riningan.widget.ExtendedBottomSheetBehavior"
-        app:peekHeight="200dp"
+        app:peekHeight="290dp"
         android:overScrollMode="never">
 <!--        android:name="com.gigforce.giger_app.calendarscreen.maincalendarscreen.bottomsheet.BSCalendarScreenFragment"-->
         <fragment

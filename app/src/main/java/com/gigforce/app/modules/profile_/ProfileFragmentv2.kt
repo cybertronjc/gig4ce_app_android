@@ -125,8 +125,8 @@ class ProfileFragmentv2 : BaseFragment() {
                 topLabel = R.string.current_address,
                 topIcon = R.drawable.ic_location_black,
                 contentIllustration = R.drawable.ic_address_illustration,
-                contentTitle = R.string.add_contact_address,
-                actionText = R.string.add_now
+                contentTitle = R.string.add_contact_address_app,
+                actionText = R.string.add_now_app
         )
         )
         updateContentCardUI(
@@ -135,7 +135,7 @@ class ProfileFragmentv2 : BaseFragment() {
                 contentIllustration = R.drawable.ic_education_profile_v2,
                 contentTitle = R.string.education,
                 actionText = R.string.update_now,
-                contentText = R.string.let_people_education,
+                contentText = R.string.let_people_education_app,
                 clickHandler = {
                     this@ProfileFragmentv2.navigate(R.id.fragment_add_education_v2)
                 })
@@ -145,9 +145,9 @@ class ProfileFragmentv2 : BaseFragment() {
                 topLabel = R.string.experience,
                 topIcon = R.drawable.ic_experience_top_label_profile_v2,
                 contentIllustration = R.drawable.ic_experience_illustration_profile_v2,
-                contentTitle = R.string.exp_matters,
+                contentTitle = R.string.exp_matters_app,
                 actionText = R.string.update_now,
-                contentText = R.string.exp_matters,
+                contentText = R.string.exp_matters_app,
                 clickHandler = {
                     this@ProfileFragmentv2.navigate(R.id.fragment_add_experience_profile_v2)
                 })
@@ -155,12 +155,12 @@ class ProfileFragmentv2 : BaseFragment() {
         )
         updateContentCardUI(
                 add_skills_profile_v2, ContentCardData(
-                topLabel = R.string.skills_known,
+                topLabel = R.string.skills_known_app,
                 topIcon = R.drawable.ic_skills_top_icon_profile_v2,
                 contentIllustration = R.drawable.ic_skills_profile_v2,
                 contentTitle = R.string.skills,
-                actionText = R.string.add_now,
-                contentText = R.string.let_people_skills,
+                actionText = R.string.add_now_app,
+                contentText = R.string.let_people_skills_app,
                 clickHandler = {
                     this@ProfileFragmentv2.navigate(R.id.fragment_add_skills_profile_v2)
                 }
@@ -168,20 +168,20 @@ class ProfileFragmentv2 : BaseFragment() {
         )
         updateContentCardUI(
                 add_documents_profile_v2, ContentCardData(
-                topLabel = R.string.documents,
+                topLabel = R.string.documents_app,
                 topIcon = R.drawable.ic_documents_top_icon_profile_v2,
                 contentIllustration = R.drawable.ic_documents_profile_v2,
-                contentTitle = R.string.upload_your_documents,
-                actionText = R.string.upload_now
+                contentTitle = R.string.upload_your_documents_app,
+                actionText = R.string.upload_now_app
         )
         )
         updateContentCardUI(
-                add_language_profile_v2, ContentCardData(topLabel = R.string.lang_known,
+                add_language_profile_v2, ContentCardData(topLabel = R.string.lang_known_app,
                 topIcon = R.drawable.ic_language_title,
                 contentIllustration = R.drawable.ic_add_language_illustration,
-                contentText = R.string.add_lang_known,
+                contentText = R.string.add_lang_known_app,
                 contentTitle = R.string.language,
-                actionText = R.string.add_now,
+                actionText = R.string.add_now_app,
                 clickHandler = {
                     this@ProfileFragmentv2.navigate(R.id.fragment_add_lang_profile_v2)
                 })

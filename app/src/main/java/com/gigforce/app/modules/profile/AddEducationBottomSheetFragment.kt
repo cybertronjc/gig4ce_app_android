@@ -120,7 +120,7 @@ class AddEducationBottomSheetFragment : ProfileBaseBottomSheetFragment() {
         save_button.setOnClickListener {
             if (validateEducation()) {
                 addNewEducation()
-                Toast.makeText(this.context, "Updated Education Section", Toast.LENGTH_LONG).show()
+                Toast.makeText(this.context, getString(R.string.updated_education_section), Toast.LENGTH_LONG).show()
                 this.dismiss()
             }
         }

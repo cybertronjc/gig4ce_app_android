@@ -101,8 +101,8 @@ class GigPagerTimerView(
 //        rootCardView.setCardBackgroundColor(
 //                ResourcesCompat.getColor(resources, R.color.gig_timer_upcoming_pink, null)
 //        )
-        gigTimerTV.text = "- -hrs: - -mins"
-        gigCheckInTimeTV.text = "Checkin Not Marked"
+        gigTimerTV.text = context.getString(R.string.hrs_mins)
+        gigCheckInTimeTV.text = context.getString(R.string.checkin_not_marked_giger_gigs)
 
         gigDateTV.text = formatGigDateForTimer(gig.startDateTime)
     }
@@ -114,8 +114,8 @@ class GigPagerTimerView(
 //        rootCardView.setCardBackgroundColor(
 //                ResourcesCompat.getColor(resources, R.color.gig_timer_no_show_red, null)
 //        )
-        gigTimerTV.text = "- -hrs: - -mins"
-        gigCheckInTimeTV.text = "You've missed this gig"
+        gigTimerTV.text = context.getString(R.string.hrs_mins)
+        gigCheckInTimeTV.text = context.getString(R.string.missed_the_gig_giger_gigs)
 
         gigDateTV.text = formatGigDateForTimer(gig.startDateTime)
     }
@@ -127,8 +127,8 @@ class GigPagerTimerView(
 //        rootCardView.setCardBackgroundColor(
 //                ResourcesCompat.getColor(resources, R.color.gig_timer_declined_red, null)
 //        )
-        gigTimerTV.text = "- -hrs: - -mins"
-        gigCheckInTimeTV.text = "Check-in Pending"
+        gigTimerTV.text = context.getString(R.string.hrs_mins)
+        gigCheckInTimeTV.text = context.getString(R.string.checkin_pending_giger_gigs)
 
         gigDateTV.text = formatGigDateForTimer(gig.startDateTime)
     }
@@ -174,12 +174,12 @@ class GigPagerTimerView(
 
         if (daysDiff > 1) {
             //Show Date only
-            gigTimerTV.text = "$daysDiff Days"
+            gigTimerTV.text = "$daysDiff ${context.getString(R.string.days)}"
         } else {
             startCountDownTimer(gig.startDateTime.toDate())
         }
 
-        gigCheckInTimeTV.text = "Left for the gig start"
+        gigCheckInTimeTV.text = context.getString(R.string.left_for_gig_start_giger_gigs)
         gigDateTV.text = formatGigDateForTimer(gig.startDateTime)
 
     }
@@ -202,8 +202,10 @@ class GigPagerTimerView(
                     val diffInMin: Long = TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) % 60
                     val diffInSec: Long = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) % 60
 
-                    gigTimerTV.text = "$diffInHours Hrs : $diffInMin Mins : $diffInSec Sec"
+                    gigTimerTV.text = "$diffInHours ${context.getString(R.string.hrs)} : " +
+                            "$diffInMin ${context.getString(R.string.mins)} : $diffInSec ${context.getString(R.string.seconds)}"
                 }
+
 
                 override fun onFinish() {
 
@@ -239,8 +241,8 @@ class GigPagerTimerView(
 //        rootCardView.setCardBackgroundColor(
 //                ResourcesCompat.getColor(resources, R.color.gig_timer_declined_red, null)
 //        )
-        gigTimerTV.text = "- -hrs: - -mins"
-        gigCheckInTimeTV.text = "Declined Reason : ${gig.declineReason}"
+        gigTimerTV.text = context.getString(R.string.hrs_mins)
+        gigCheckInTimeTV.text = context.getString(R.string.declined_reason_giger_gigs) + gig.declineReason
 
         gigDateTV.text = formatGigDateForTimer(gig.startDateTime)
     }
@@ -252,7 +254,7 @@ class GigPagerTimerView(
 //        rootCardView.setCardBackgroundColor(
 //                ResourcesCompat.getColor(resources, R.color.gig_timer_silver_light, null)
 //        )
-        gigTimerTV.text = "- -hrs: - -mins"
+        gigTimerTV.text = context.getString(R.string.hrs_mins)
         gigCheckInTimeTV.text = gig.cancellationReason
 
         gigDateTV.text = formatGigDateForTimer(gig.startDateTime)
@@ -266,11 +268,11 @@ class GigPagerTimerView(
         ).toDays()
 
         if (daysDiff == 0L) {
-            return "Today, ${gigDateFormat.format(startDateTime.toDate())}"
+            return "${context.getString(R.string.today)}, ${gigDateFormat.format(startDateTime.toDate())}"
         } else if (daysDiff == -1L) {
-            return "Tomorrow, ${gigDateFormat.format(startDateTime.toDate())}"
+            return "${context.getString(R.string.tomorrow)}, ${gigDateFormat.format(startDateTime.toDate())}"
         } else if (daysDiff == 1L) {
-            return "Yesterday, ${gigDateFormat.format(startDateTime.toDate())}"
+            return "${context.getString(R.string.yesterday)}, ${gigDateFormat.format(startDateTime.toDate())}"
         } else {
             return gigDateFormat.format(startDateTime.toDate())
         }

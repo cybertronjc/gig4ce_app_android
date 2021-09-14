@@ -10,19 +10,20 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.client_activation.R
-import com.gigforce.core.analytics.ClientActivationEvents
-import com.gigforce.core.datamodels.client_activation.Dependency
-import com.gigforce.core.datamodels.client_activation.JpApplication
 import com.gigforce.client_activation.client_activation.models.JpSettings
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.IEventTracker
-import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.core.TrackingEventArgs
+import com.gigforce.core.analytics.ClientActivationEvents
+import com.gigforce.core.datamodels.client_activation.Dependency
+import com.gigforce.core.datamodels.client_activation.JpApplication
 import com.gigforce.core.extensions.*
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.utils.NavFragmentsData
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.layout_application_client_activation_fragment.*
@@ -30,11 +31,13 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class ApplicationClientActivationFragment : Fragment(),
-        AdapterApplicationClientActivation.AdapterApplicationClientActivationCallbacks,
-        ReviewApplicationDialogClientActivation.ReviewApplicationDialogCallbacks {
+    AdapterApplicationClientActivation.AdapterApplicationClientActivationCallbacks,
+    ReviewApplicationDialogClientActivation.ReviewApplicationDialogCallbacks {
     private var dialog: ReviewApplicationDialogClientActivation? = null
     private lateinit var viewModel: ApplicationClientActivationViewModel
-    @Inject lateinit var navigation : INavigation
+
+    @Inject
+    lateinit var navigation: INavigation
 
     @Inject
     lateinit var eventTracker: IEventTracker
@@ -48,22 +51,22 @@ class ApplicationClientActivationFragment : Fragment(),
 
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(
-                R.layout.layout_application_client_activation_fragment,
-                container,
-                false
+            R.layout.layout_application_client_activation_fragment,
+            container,
+            false
         )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(
-                this,
-                ViewModelProvider.AndroidViewModelFactory(requireActivity().application)
+            this,
+            ViewModelProvider.AndroidViewModelFactory(requireActivity().application)
         ).get(ApplicationClientActivationViewModel::class.java)
         changeStatusBarColor()
         getDataFromIntents(savedInstanceState)
@@ -72,18 +75,17 @@ class ApplicationClientActivationFragment : Fragment(),
         initObservers()
         initClicks()
         viewModel.draftApplication(mJobProfileId)
-
     }
 
 
     private fun checkForBackPress() {
-            var navFragmentsData = activity as NavFragmentsData
-        if (navFragmentsData?.getData() != null) {
-            if (navFragmentsData?.getData()
-                            ?.getBoolean(StringConstants.BACK_PRESSED.value, false) == true
+        var navFragmentsData = activity as NavFragmentsData
+        if (navFragmentsData.getData() != null) {
+            if (navFragmentsData.getData()
+                    .getBoolean(StringConstants.BACK_PRESSED.value, false) == true
             ) {
                 viewModel.redirectToNextStep = false
-                navFragmentsData?.setData(bundleOf())
+                navFragmentsData.setData(bundleOf())
             }
         }
     }
@@ -101,21 +103,23 @@ class ApplicationClientActivationFragment : Fragment(),
         tv_action_application_client_activation.setOnClickListener {
 
             val bussinessTitle = jpSettings?.businessTitle ?: ""
-            eventTracker.pushEvent(TrackingEventArgs(
+            eventTracker.pushEvent(
+                TrackingEventArgs(
                     eventName = mJobProfileTitle + "_" + ClientActivationEvents.USER_SUBMITTED_APPLICATION,
                     props = mapOf(
-                            "id" to mJobProfileId,
-                            "title" to bussinessTitle
+                        "id" to mJobProfileId,
+                        "title" to bussinessTitle
                     )
-            ))
+                )
+            )
             eventTracker.pushEvent(
                 TrackingEventArgs(
                     eventName = ClientActivationEvents.USER_SUBMITTED_APPLICATION,
                     props = mapOf(
-                            "id" to mJobProfileId,
-                            "title" to bussinessTitle
+                        "id" to mJobProfileId,
+                        "title" to bussinessTitle
                     )
-            )
+                )
             )
 
             onClickSubmit()
@@ -139,14 +143,18 @@ class ApplicationClientActivationFragment : Fragment(),
             navigation.popBackStack()
             if (viewModel.isActivationScreenFound) {
                 navigation.navigateTo(
-                        "client_activation/gigActivation", bundleOf(
+                    "client_activation/gigActivation", bundleOf(
                         StringConstants.JOB_PROFILE_ID.value to mJobProfileId
-                )
+                    )
                 )
             } else {
                 jpSettings?.completionTitle?.let {
                     navigation.navigateTo(
-                            "client_activation/applicationSubmission", bundleOf(StringConstants.JOB_PROFILE_ID.value to mJobProfileId, StringConstants.BUSSINESS_NAME.value to it)
+                        "client_activation/applicationSubmission",
+                        bundleOf(
+                            StringConstants.JOB_PROFILE_ID.value to mJobProfileId,
+                            StringConstants.BUSSINESS_NAME.value to it
+                        )
                     )
                 }
             }
@@ -172,14 +180,13 @@ class ApplicationClientActivationFragment : Fragment(),
             appBar.setAppBarTitle(it?.businessTitle ?: "")
             //tv_title_application_client_activation.text = it?.businessTitle ?: ""
             viewModel.updateDraftJpApplication(
-                    mJobProfileId,
-                    it?.requiredFeatures ?: listOf()
+                mJobProfileId,
+                it?.requiredFeatures ?: listOf()
             )
 
         })
 
         viewModel.getJobProfileDependency(mJobProfileId)
-
 
     }
 
@@ -189,16 +196,16 @@ class ApplicationClientActivationFragment : Fragment(),
         for (i in 0 until jpApplication.application.size) {
             if (!jpApplication.application[i].isDone) {
                 adapter.setImageDrawable(
-                        jpApplication.application[i].type!!,
-                        resources.getDrawable(R.drawable.ic_status_pending),
-                        false
+                    jpApplication.application[i].type!!,
+                    resources.getDrawable(R.drawable.ic_status_pending),
+                    false
                 )
 //               viewModel.setData(jpApplication.application[i].feature)
             } else {
                 adapter.setImageDrawable(
-                        jpApplication.application[i].type!!,
-                        resources.getDrawable(R.drawable.ic_applied),
-                        true
+                    jpApplication.application[i].type!!,
+                    resources.getDrawable(R.drawable.ic_applied),
+                    true
                 )
             }
         }
@@ -219,45 +226,45 @@ class ApplicationClientActivationFragment : Fragment(),
     private fun checkForRedirection() {
         if (!viewModel.redirectToNextStep) return
 
-        for (i in viewModel.itemClicked+1 until adapter.items.size) {
+        for (i in viewModel.itemClicked + 1 until adapter.items.size) {
             if (!adapter.items[i].isDone) {
 
                 Log.d("type", adapter.items[i].toString())
                 when (adapter.items[i].type) {
                     "profile_pic" -> {
                         navigation.navigateTo(
-                                "profile", bundleOf(
+                            "profile", bundleOf(
                                 StringConstants.FROM_CLIENT_ACTIVATON.value to true,
                                 StringConstants.ACTION.value to UPLOAD_PROFILE_PIC
 
-                        )
+                            )
                         )
                     }
                     "about_me" -> {
                         navigation.navigateTo(
-                                "profile/addBio", bundleOf(
+                            "profile/addBio", bundleOf(
                                 StringConstants.FROM_CLIENT_ACTIVATON.value to true
-                        )
+                            )
                         )
                     }
                     "questionnaire" -> navigation.navigateTo(
-                            "learning/questionnair", bundleOf(
+                        "learning/questionnair", bundleOf(
                             StringConstants.JOB_PROFILE_ID.value to mJobProfileId,
                             StringConstants.TITLE.value to adapter.items[i].title,
                             StringConstants.TYPE.value to adapter.items[i].type,
                             StringConstants.FROM_CLIENT_ACTIVATON.value to true
-                    )
+                        )
                     )
                     "driving_licence" -> navigation.navigateTo(
                         "verification/drivinglicenseimageupload",
-                            bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
+                        bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
                     )
                     "learning" -> navigation.navigateTo(
-                            "learning/coursedetails",
-                            bundleOf(
-                                    INTENT_EXTRA_COURSE_ID to adapter.items[i].courseId,
-                                    StringConstants.FROM_CLIENT_ACTIVATON.value to true
-                            )
+                        "learning/coursedetails",
+                        bundleOf(
+                            INTENT_EXTRA_COURSE_ID to adapter.items[i].courseId,
+                            StringConstants.FROM_CLIENT_ACTIVATON.value to true
+                        )
                     )
 
                     "aadhar_card" -> navigation.navigateTo(
@@ -280,30 +287,33 @@ class ApplicationClientActivationFragment : Fragment(),
             }
         }
     }
+
     companion object {
         val UPLOAD_PROFILE_PIC = 1
         const val INTENT_EXTRA_COURSE_ID = "course_id"
         const val INTENT_EXTRA_MODULE_ID = "module_id"
     }
+
     fun checkAndUpdateUI() {
         h_pb_application_frag.max = adapter.items.size
 
-        Observable.fromIterable(adapter.items.filter { it -> !it.optional }).all { item -> item.isDone }.subscribe({ success ->
-            tv_action_application_client_activation.isEnabled = success
-        }, { err -> })
+        Observable.fromIterable(adapter.items.filter { it -> !it.optional })
+            .all { item -> item.isDone }.subscribe({ success ->
+                tv_action_application_client_activation.isEnabled = success
+            }, { err -> })
 
         Observable.fromIterable(adapter.items).filter { item -> !item.isDone }.toList()
-                .subscribe({ success ->
-                    run {
-                        h_pb_application_frag.progress = adapter.items.size - success.size
-                        tv_steps_pending_application_value.text =
-                                "" + success.size + "/" + adapter.items.size
-                        h_pb_application_frag.visible()
-                    }
-                }, { _ ->
-
+            .subscribe({ success ->
+                run {
+                    h_pb_application_frag.progress = adapter.items.size - success.size
+                    tv_steps_pending_application_value.text =
+                        "" + success.size + "/" + adapter.items.size
                     h_pb_application_frag.visible()
-                })
+                }
+            }, { _ ->
+
+                h_pb_application_frag.visible()
+            })
 
 
     }
@@ -334,24 +344,24 @@ class ApplicationClientActivationFragment : Fragment(),
     private fun setupRecycler() {
         rv_status_pending.adapter = adapter
         rv_status_pending.layoutManager =
-                LinearLayoutManager(requireContext())
+            LinearLayoutManager(requireContext())
 
 
     }
 
-    private fun changeStatusBarColor(){
-                win = activity?.window
-                // clear FLAG_TRANSLUCENT_STATUS flag:
-                win?.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+    private fun changeStatusBarColor() {
+        win = activity?.window
+        // clear FLAG_TRANSLUCENT_STATUS flag:
+        win?.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
 
         // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
-                win?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        win?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
 
         // finally change the color
-                win?.setStatusBarColor(resources.getColor(R.color.status_bar_pink))
-            }
+        win?.statusBarColor = resources.getColor(R.color.status_bar_pink)
+    }
 
-    override fun onItemClick(dependency: Dependency, position:Int) {
+    override fun onItemClick(dependency: Dependency, position: Int) {
         viewModel.redirectToNextStep = true
         viewModel.itemClicked = position
 
@@ -361,18 +371,18 @@ class ApplicationClientActivationFragment : Fragment(),
         var title = ""
         var typeForQuestionair = ""
         var courseId = ""
-        adapterList.forEachIndexed{index,data->
-            if(startCreateNavBundle && !data.isDone){
+        adapterList.forEachIndexed { index, data ->
+            if (startCreateNavBundle && !data.isDone) {
                 navigationsForBundle.add(getNavigationStr(data))
             }
-            if(data.type == dependency.type){
+            if (data.type == dependency.type) {
                 startCreateNavBundle = true
             }
-            if(data.type == "questionnaire"){
-                title = dependency.title?:""
-                typeForQuestionair = data.type?:""
+            if (data.type == "questionnaire") {
+                title = dependency.title ?: ""
+                typeForQuestionair = data.type ?: ""
             }
-            if(data.type == "learning"){
+            if (data.type == "learning") {
                 courseId = data.courseId
             }
             //code to get data for title type
@@ -390,26 +400,26 @@ class ApplicationClientActivationFragment : Fragment(),
         when (dependency.type) {
             "profile_pic" -> {
                 navigation.navigateTo(
-                        "profile", bundleForFragment
+                    "profile", bundleForFragment
                 )
 
             }
             "about_me" -> {
                 navigation.navigateTo(
-                        "profile/addBio", bundleForFragment
+                    "profile/addBio", bundleForFragment
                 )
             }
             "questionnaire" -> navigation.navigateTo(
-                    "learning/questionnair", bundleForFragment
+                "learning/questionnair", bundleForFragment
             )
             "driving_licence" -> navigation.navigateTo(
-                    "verification/drivinglicenseimageupload",
+                "verification/drivinglicenseimageupload",
                 bundleForFragment
             )
             "learning" ->
 
                 navigation.navigateTo(
-                        "learning/coursedetails",
+                    "learning/coursedetails",
                     bundleForFragment
                 )
 
@@ -428,11 +438,31 @@ class ApplicationClientActivationFragment : Fragment(),
                 "verification/bank_account_fragment",
                 bundleForFragment
             )
+
+            "aadhar_card_questionnaire" -> navigation.navigateTo(
+                "client_activation/aadharDetailsQuestionnaireFragment",
+                bundleForFragment
+            )
+
+            "jp_hub_location" -> navigation.navigateTo(
+                "client_activation/fragment_business_loc_hub",
+                bundleForFragment
+            )
+
+            "aadhar_hub_questionnaire" -> navigation.navigateTo(
+                "client_activation/joining_form",
+                bundleForFragment
+            )
+
+            "pf_esic" -> navigation.navigateTo(
+                "client_activation/pfesicFragment",
+                bundleForFragment
+            )
         }
     }
 
     private fun getNavigationStr(data: Dependency): String {
-        when(data.type) {
+        when (data.type) {
             "profile_pic" -> {
                 return "profile"
             }
@@ -442,20 +472,32 @@ class ApplicationClientActivationFragment : Fragment(),
             "questionnaire" -> {
                 return "learning/questionnair"
             }
-            "driving_licence" ->{
+            "driving_licence" -> {
                 return "verification/drivinglicenseimageupload"
             }
-            "learning" ->{
+            "learning" -> {
                 return "learning/coursedetails"
             }
-            "aadhar_card" ->{
+            "aadhar_card" -> {
                 return "verification/aadhaarcardimageupload"
             }
-            "pan_card" ->{
+            "pan_card" -> {
                 return "verification/pancardimageupload"
             }
-            "bank_account" ->{
+            "bank_account" -> {
                 return "verification/bank_account_fragment"
+            }
+            "aadhar_card_questionnaire" -> {
+                return "client_activation/aadharDetailsQuestionnaireFragment"
+            }
+            "jp_hub_location" -> {
+                return "client_activation/fragment_business_loc_hub"
+            }
+            "aadhar_hub_questionnaire" -> {
+                return "client_activation/joining_form"
+            }
+            "pf_esic" -> {
+                return "client_activation/pfesicFragment"
             }
             else -> return ""
         }
@@ -478,8 +520,6 @@ class ApplicationClientActivationFragment : Fragment(),
 
 
     }
-
-
 
 
 }

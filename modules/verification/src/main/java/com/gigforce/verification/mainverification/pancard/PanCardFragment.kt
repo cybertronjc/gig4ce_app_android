@@ -26,13 +26,16 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import com.gigforce.common_image_picker.image_cropper.ImageCropActivity
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.AppConstants
+import com.gigforce.core.IEventTracker
 import com.gigforce.core.StringConstants
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.datamodels.verification.PanCardDataModel
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.gone
@@ -49,6 +52,7 @@ import com.gigforce.verification.mainverification.Data
 import com.gigforce.verification.mainverification.OLDStateHolder
 import com.gigforce.verification.mainverification.VerificationClickOrSelectImageBottomSheet
 import com.gigforce.verification.util.VerificationConstants
+import com.gigforce.verification.util.VerificationEvents
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jaeger.library.StatusBarUtil
 import com.yalantis.ucrop.UCrop
@@ -96,7 +100,8 @@ class PanCardFragment : Fragment(),
 
     @Inject
     lateinit var navigation: INavigation
-
+    @Inject
+    lateinit var eventTracker: IEventTracker
     @Inject
     lateinit var buildConfig: IBuildConfig
     private var FROM_CLIENT_ACTIVATON: Boolean = false
@@ -125,8 +130,8 @@ class PanCardFragment : Fragment(),
 
     private fun initviews() {
         viewBinding.toplayoutblock.setIdonthaveDocContent(
-            resources.getString(R.string.no_doc_title_pan),
-            resources.getString(R.string.no_doc_subtitle_pan)
+            resources.getString(R.string.no_doc_title_pan_veri),
+            resources.getString(R.string.no_doc_subtitle_pan_veri)
         )
     }
 
@@ -165,18 +170,35 @@ class PanCardFragment : Fragment(),
             it?.let {
                 if (it.status) {
                     if (!it.panNumber.isNullOrBlank()) {
+
                         if (VerificationValidations.isPanCardValid(it.panNumber)) {
+                            var map = mapOf(
+                                "PAN number" to it.panNumber.toString()
+                            )
+                            eventTracker.pushEvent(
+                                TrackingEventArgs(
+                                    eventName = VerificationEvents.PAN_OCR_SUCCESS,
+                                    props = map
+                                )
+                            )
+
                             viewBinding.panTil.editText?.setText(it.panNumber)
                             viewBinding.toplayoutblock.uploadStatusLayout(
                                 AppConstants.UPLOAD_SUCCESS,
-                                "Upload Successful",
-                                "Information of PAN card captured successfully."
+                                getString(R.string.upload_success_veri),
+                                getString(R.string.pan_info_captured_veri)
                             )
                         } else {
+                            eventTracker.pushEvent(
+                                TrackingEventArgs(
+                                    eventName = VerificationEvents.PAN_OCR_SUCCESS,
+                                    props = mapOf("Data Captured" to false)
+                                )
+                            )
                             viewBinding.toplayoutblock.uploadStatusLayout(
                                 AppConstants.UNABLE_TO_FETCH_DETAILS,
-                                "Unable to fetch information",
-                                "Enter the PAN details manually below"
+                                getString(R.string.unable_to_fetch_info_veri),
+                                getString(R.string.enter_pan_details_manually_veri)
                             )
                         }
 
@@ -190,18 +212,31 @@ class PanCardFragment : Fragment(),
 //                        }
 
                     } else {
+                        eventTracker.pushEvent(
+                            TrackingEventArgs(
+                                eventName = VerificationEvents.PAN_OCR_FAILED,
+                                props = null
+                            )
+                        )
+
                         viewBinding.toplayoutblock.uploadStatusLayout(
                             AppConstants.UNABLE_TO_FETCH_DETAILS,
-                            "Unable to fetch information",
-                            "Enter the PAN details manually below"
+                            getString(R.string.unable_to_fetch_info_veri),
+                            getString(R.string.enter_pan_details_manually_veri)
                         )
                     }
 
                 } else {
+                    eventTracker.pushEvent(
+                        TrackingEventArgs(
+                            eventName = VerificationEvents.PAN_OCR_FAILED,
+                            props = null
+                        )
+                    )
                     viewBinding.toplayoutblock.uploadStatusLayout(
                         AppConstants.UNABLE_TO_FETCH_DETAILS,
-                        "Unable to fetch information",
-                        "Enter the PAN details manually below"
+                        getString(R.string.unable_to_fetch_info_veri),
+                        getString(R.string.enter_pan_details_manually_veri)
                     )
                     showToast("Ocr status " + it.message)
                 }
@@ -220,6 +255,11 @@ class PanCardFragment : Fragment(),
                 it?.let {
 
                     if (it.verified) {
+
+                        var props = HashMap<String, Any>()
+                        props.put("PAN verified", true)
+                        eventTracker.setUserProperty(props)
+
                         verificationScreenStatus = VerificationScreenStatus.VERIFIED
                         verifiedStatusViews(it)
                         viewBinding.belowLayout.visible()
@@ -247,10 +287,10 @@ class PanCardFragment : Fragment(),
                                 .isNullOrBlank() && viewBinding.dateOfBirth.text.toString()
                                 .isNullOrBlank()
                         ) {
-                            viewBinding.submitButton.text = "Skip"
+                            viewBinding.submitButton.text = getString(R.string.skip_veri)
                             anyDataEntered = false
                         } else {
-                            viewBinding.submitButton.text = "Submit"
+                            viewBinding.submitButton.text = getString(R.string.submit_veri)
                             anyDataEntered = true
                         }
                     }
@@ -273,7 +313,7 @@ class PanCardFragment : Fragment(),
         viewBinding.toplayoutblock.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { p1, b1 ->
             if (b1) {
                 oldStateHolder.submitButtonCta = viewBinding.submitButton.text.toString()
-                viewBinding.submitButton.text = "Skip"
+                viewBinding.submitButton.text = getString(R.string.skip_veri)
                 viewBinding.belowLayout.gone()
             } else {
                 viewBinding.submitButton.text = oldStateHolder.submitButtonCta
@@ -318,9 +358,9 @@ class PanCardFragment : Fragment(),
                 if (!VerificationValidations.isPanCardValid(panCardNo)) {
 
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage(getString(R.string.enter_valid_pan))
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setTitle(getString(R.string.alert_veri))
+                        .setMessage(getString(R.string.enter_valid_pan_veri))
+                        .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
                         .show()
                     return@setOnClickListener
                 }
@@ -369,7 +409,7 @@ class PanCardFragment : Fragment(),
             getDBImageUrl(it)?.let {
                 list.add(
                     KYCImageModel(
-                        text = getString(R.string.upload_pan_card_new),
+                        text = getString(R.string.upload_pan_card_new_veri),
                         imagePath = it,
                         imageUploaded = true
                     )
@@ -431,7 +471,7 @@ class PanCardFragment : Fragment(),
             .build()
         val list = listOf(
             KYCImageModel(
-                text = getString(R.string.upload_pan_card_new),
+                text = getString(R.string.upload_pan_card_new_veri),
                 imageIcon = frontUri,
                 imageUploaded = false
             )
@@ -443,7 +483,7 @@ class PanCardFragment : Fragment(),
         if (hasStoragePermissions())
             VerificationClickOrSelectImageBottomSheet.launch(
                 parentFragmentManager,
-                "Upload PAN Card",
+                getString(R.string.upload_pan_card_veri),
                 this
             )
         else
@@ -488,7 +528,10 @@ class PanCardFragment : Fragment(),
             image =
                 MultipartBody.Part.createFormData("file", file.name, requestFile)
         }
-        image?.let { viewModel.getKycOcrResult("pan", "dsd", it) }
+        image?.let {
+            eventTracker.pushEvent(TrackingEventArgs(VerificationEvents.PAN_OCR_STARTED, null))
+            viewModel.getKycOcrResult("pan", "dsd", it)
+        }
     }
 
     private val dateOfBirthPicker: DatePickerDialog by lazy {
@@ -543,11 +586,11 @@ class PanCardFragment : Fragment(),
                 if (allPermsGranted)
                     VerificationClickOrSelectImageBottomSheet.launch(
                         parentFragmentManager,
-                        "Upload PAN Card",
+                        getString(R.string.upload_pan_card_veri),
                         this
                     )
                 else {
-                    showToast("Please grant storage permission")
+                    showToast(getString(R.string.grant_storage_permission_veri))
                 }
             }
         }
@@ -559,7 +602,8 @@ class PanCardFragment : Fragment(),
         if (requestCode == REQUEST_CAPTURE_IMAGE || requestCode == REQUEST_PICK_IMAGE) {
             val outputFileUri = ImagePicker.getImageFromResult(requireContext(), resultCode, data)
             if (outputFileUri != null) {
-                startCrop(outputFileUri)
+//                startCrop(outputFileUri)
+                startCropImage(outputFileUri)
                 Log.d("image", outputFileUri.toString())
             }
         } else if (requestCode == UCrop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
@@ -567,15 +611,34 @@ class PanCardFragment : Fragment(),
             Log.d("ImageUri", imageUriResultCrop.toString())
             clickedImagePath = imageUriResultCrop
             showPanInfoCard(clickedImagePath!!)
+        }else if (requestCode == ImageCropActivity.CROP_RESULT_CODE && resultCode == Activity.RESULT_OK) {
+            val imageUriResultCrop: Uri? =  Uri.parse(data?.getStringExtra(ImageCropActivity.CROPPED_IMAGE_URL_EXTRA))
+            Log.d("ImageUri", imageUriResultCrop.toString())
+            clickedImagePath = imageUriResultCrop
+            showPanInfoCard(clickedImagePath!!)
         }
     }
+    private fun startCropImage(imageUri: Uri): Unit {
+        val photoCropIntent = Intent(context, ImageCropActivity::class.java)
+        photoCropIntent.putExtra("outgoingUri", imageUri.toString())
+        startActivityForResult(photoCropIntent, ImageCropActivity.CROP_RESULT_CODE)
 
+    }
     private fun callKycVerificationApi() {
         var list = listOf(
 //            Data("name", viewBinding.nameTil.editText?.text.toString()),
             Data("no", viewBinding.panTil.editText?.text.toString())
 //            Data("fathername", viewBinding.fatherNameTil.editText?.text.toString()),
 //            Data("dob", viewBinding.dateOfBirth.text.toString())
+        )
+        var map = mapOf(
+            "PAN number" to viewBinding.panTil.editText?.text.toString()
+        )
+        eventTracker.pushEvent(
+            TrackingEventArgs(
+                eventName = VerificationEvents.PAN_DETAIL_SUBMITTED,
+                props = map
+            )
         )
         activeLoader(true)
         viewModel.getKycVerificationResult("pan", list)
@@ -614,8 +677,8 @@ class PanCardFragment : Fragment(),
     private fun showWhyWeNeedThisDialog() {
         WhyWeNeedThisBottomSheet.launch(
             childFragmentManager = childFragmentManager,
-            title = getString(R.string.why_do_we_need_this),
-            content = getString(R.string.why_do_we_need_this_pan)
+            title = getString(R.string.why_do_we_need_this_veri),
+            content = getString(R.string.why_do_we_need_this_pan_veri)
         )
     }
 
@@ -658,7 +721,7 @@ class PanCardFragment : Fragment(),
         options.setFreeStyleCropEnabled(false)
         options.setStatusBarColor(ResourcesCompat.getColor(resources, R.color.topBarDark, null))
         options.setToolbarColor(ResourcesCompat.getColor(resources, R.color.topBarDark, null))
-        options.setToolbarTitle(getString(R.string.crop_and_rotate))
+        options.setToolbarTitle(getString(R.string.crop_and_rotate_veri))
         return options
     }
 
@@ -676,21 +739,21 @@ class PanCardFragment : Fragment(),
         viewBinding.belowLayout.gone()
         viewBinding.toplayoutblock.uploadStatusLayout(
             AppConstants.UPLOAD_SUCCESS,
-            "Verification Completed",
-            "The PAN card details have been verified successfully."
+            getString(R.string.verification_completed_veri),
+            getString(R.string.pan_verified_successfully_veri)
         )
         viewBinding.submitButton.visible()
-        viewBinding.submitButton.text = "Next"
+        viewBinding.submitButton.text = getString(R.string.next_camel_veri)
         viewBinding.submitButton.isEnabled = true
         viewBinding.progressBar.gone()
-        viewBinding.toplayoutblock.setVerificationSuccessfulView("PAN card verified")
+        viewBinding.toplayoutblock.setVerificationSuccessfulView(getString(R.string.pan_verified_veri))
 
         var list = ArrayList<KYCImageModel>()
         panCardDataModel?.panCardImagePath?.let {
             getDBImageUrl(it)?.let {
                 list.add(
                     KYCImageModel(
-                        text = getString(R.string.upload_pan_card_new),
+                        text = getString(R.string.upload_pan_card_new_veri),
                         imagePath = it,
                         imageUploaded = true
                     )
@@ -708,7 +771,7 @@ class PanCardFragment : Fragment(),
                 if (!imagePath.startsWith("/"))
                     modifiedString = "/$imagePath"
                 return buildConfig.getStorageBaseUrl() + modifiedString
-            } catch (e: Exception) {
+            } catch (egetDBImageUrl: Exception) {
                 return null
             }
         }
@@ -729,8 +792,8 @@ class PanCardFragment : Fragment(),
                                 verifiedStatusViews(null)
                                 viewBinding.toplayoutblock.uploadStatusLayout(
                                     AppConstants.UNABLE_TO_FETCH_DETAILS,
-                                    "Verification in progress",
-                                    "Document will be verified soon. You can click next to proceed"
+                                    getString(R.string.verification_progress_veri),
+                                    getString(R.string.doc_verified_soon_veri)
                                 )
                                 viewBinding.toplayoutblock.setVerificationSuccessfulView("", "")
                                 viewBinding.belowLayout.visible()
@@ -750,8 +813,8 @@ class PanCardFragment : Fragment(),
                     resetInitializeViews()
                     viewBinding.toplayoutblock.uploadStatusLayout(
                         AppConstants.DETAILS_MISMATCH,
-                        "Verification Failed",
-                        "The details submitted are incorrect. Please try again."
+                        getString(R.string.verification_failed_veri),
+                        getString(R.string.details_incorrect_veri)
                     )
                     var listData = setAlreadyfilledData(panCardDataModel, true)
                     if (listData.isEmpty()) {
@@ -773,12 +836,12 @@ class PanCardFragment : Fragment(),
 
     private fun resetInitializeViews() {
         viewBinding.submitButton.visible()
-        viewBinding.submitButton.text = "Skip"
+        viewBinding.submitButton.text = getString(R.string.skip_veri)
         viewBinding.submitButton.isEnabled = true
         viewBinding.belowLayout.visible()
         viewBinding.toplayoutblock.setVerificationSuccessfulView(
-            "PAN card",
-            "You need to upload"
+            getString(R.string.pan_card_veri),
+            getString(R.string.you_need_to_upload_veri)
         )
         initializeImageViews()
         viewBinding.toplayoutblock.resetAllViews()
@@ -791,15 +854,15 @@ class PanCardFragment : Fragment(),
         viewBinding.progressBar.gone()
         viewBinding.belowLayout.gone()
         viewBinding.toplayoutblock.setVerificationSuccessfulView(
-            "PAN card pending for verify",
-            "Verifying"
+            getString(R.string.pan_pending_for_verification_veri),
+            getString(R.string.verifying_veri)
         )
         var list = ArrayList<KYCImageModel>()
         panCardDataModel.panCardImagePath?.let {
             getDBImageUrl(it)?.let {
                 list.add(
                     KYCImageModel(
-                        text = getString(R.string.upload_pan_card_new),
+                        text = getString(R.string.upload_pan_card_new_veri),
                         imagePath = it,
                         imageUploaded = true
                     )

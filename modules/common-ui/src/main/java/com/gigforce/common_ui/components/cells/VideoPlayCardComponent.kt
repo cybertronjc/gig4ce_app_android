@@ -116,16 +116,16 @@ class VideoPlayCardComponent(context: Context, attributeSet: AttributeSet?) : Fr
 
             if (data.completed) {
                 //        setMarker(holder, R.drawable.ic_marker, R.color.colorPrimary)
-                lessonCompletionPercentage?.text = "Completed 100%"
-                lessonsSeeMoreButton?.text = "Re-play"
+                lessonCompletionPercentage?.text = context.getString(R.string.compelted_100_common_ui)
+                lessonsSeeMoreButton?.text = context.getString(R.string.replay_common_ui)
                 lessonCompletionPercentage?.setTextColor(ResourcesCompat.getColor(context.resources, R.color.text_green, null))
             } else /*if (data.currentlyOnGoing) */ {
 
                 if (data.completionProgress == 0L) {
                     //Not even started
                     //          setMarker(holder, R.drawable.ic_marker_active, R.color.colorPrimary)
-                    lessonCompletionPercentage?.text = "Completed 0%"
-                    lessonsSeeMoreButton?.text = "Play"
+                    lessonCompletionPercentage?.text = context.getString(R.string.completed_0_common_ui)
+                    lessonsSeeMoreButton?.text = context.getString(R.string.play_common_ui)
                     lessonCompletionPercentage?.setTextColor(ResourcesCompat.getColor(context.resources, R.color.text_yellow, null))
                 } else {
                     //Currently going on
@@ -136,8 +136,8 @@ class VideoPlayCardComponent(context: Context, attributeSet: AttributeSet?) : Fr
                     else
                         0
 
-                    lessonCompletionPercentage?.text = "Completed $completedPercentage%"
-                    lessonsSeeMoreButton?.text = "Resume"
+                    lessonCompletionPercentage?.text = context.getString(R.string.completed_common_ui) + completedPercentage + "%"
+                    lessonsSeeMoreButton?.text = context.getString(R.string.resume_common_ui)
                     lessonCompletionPercentage?.setTextColor(ResourcesCompat.getColor(context.resources, R.color.text_orange, null))
                 }
             }

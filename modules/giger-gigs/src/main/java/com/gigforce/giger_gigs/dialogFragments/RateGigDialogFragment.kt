@@ -91,9 +91,9 @@ class RateGigDialogFragment : BottomSheetDialogFragment() {
                         }
                         is Lce.Error -> {
                             MaterialAlertDialogBuilder(requireContext())
-                                    .setTitle("Alert")
-                                    .setMessage("Unable to fetch details, ${it.error}")
-                                    .setPositiveButton("Okay") { _, _ -> }
+                                    .setTitle(getString(R.string.alert_giger_gigs))
+                                    .setMessage(getString(R.string.unable_to_fetch_details_giger_gigs) + it.error)
+                                    .setPositiveButton(getString(R.string.okay_giger_gigs)) { _, _ -> }
                                     .show()
                         }
                     }
@@ -109,15 +109,15 @@ class RateGigDialogFragment : BottomSheetDialogFragment() {
                             progressBar.visible()
                         }
                         Lse.Success -> {
-                            Toast.makeText(requireContext(), "Feedback Submitted", Toast.LENGTH_SHORT)
+                            Toast.makeText(requireContext(), getString(R.string.feedback_submitted_giger_gigs), Toast.LENGTH_SHORT)
                                     .show()
                             dismiss()
                         }
                         is Lse.Error -> {
                             MaterialAlertDialogBuilder(requireContext())
-                                    .setTitle("Alert")
-                                    .setMessage("Unable to Submit Gig Feedback, ${it.error}")
-                                    .setPositiveButton("Okay") { _, _ -> }
+                                    .setTitle(getString(R.string.alert_giger_gigs))
+                                    .setMessage(getString(R.string.unable_to_submit_gig_giger_gigs) + it.error)
+                                    .setPositiveButton(getString(R.string.okay_giger_gigs)) { _, _ -> }
                                     .show()
                         }
                     }
@@ -187,9 +187,9 @@ class RateGigDialogFragment : BottomSheetDialogFragment() {
 
             if (rating == 0.0f) {
                 MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Alert")
-                        .setMessage("Please provide a rating")
-                        .setPositiveButton("Okay") { _, _ -> }
+                        .setTitle(getString(R.string.alert_giger_gigs))
+                        .setMessage(getString(R.string.provide_rating_giger_gigs))
+                        .setPositiveButton(getString(R.string.okay_giger_gigs)) { _, _ -> }
                         .show()
 
                 return@setOnClickListener
@@ -214,9 +214,9 @@ class RateGigDialogFragment : BottomSheetDialogFragment() {
 
             } else {
                 MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Alert")
-                        .setMessage("Unable to Capture Image")
-                        .setPositiveButton("OK") { _, _ -> }
+                        .setTitle(getString(R.string.alert_giger_gigs))
+                        .setMessage(getString(R.string.unable_to_capture_giger_gigs))
+                        .setPositiveButton(getString(R.string.okay_giger_gigs)) { _, _ -> }
                         .show()
             }
         }
@@ -261,10 +261,10 @@ class RateGigDialogFragment : BottomSheetDialogFragment() {
             index: Int
     ) {
         MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Alert")
-                .setMessage("Delete Image?")
-                .setPositiveButton("Yes") { _, _ -> deleteImage(index) }
-                .setNegativeButton("No") { _, _ -> }
+                .setTitle(getString(R.string.alert_giger_gigs))
+                .setMessage(getString(R.string.delete_image_giger_gigs))
+                .setPositiveButton(getString(R.string.yes_giger_gigs)) { _, _ -> deleteImage(index) }
+                .setNegativeButton(getString(R.string.no_giger_gigs)) { _, _ -> }
                 .show()
     }
 

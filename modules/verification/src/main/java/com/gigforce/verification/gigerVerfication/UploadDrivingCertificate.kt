@@ -114,9 +114,9 @@ class UploadDrivingCertificate : Fragment() {
     private fun initViews() {
         hideDLImageAndInfoLayout()
         disableSubmitButton()
-        dlFrontImageHolder.documentUploadLabelTV.text = getString(R.string.upload_driving_cert)
+        dlFrontImageHolder.documentUploadLabelTV.text = getString(R.string.upload_driving_cert_veri)
         dlFrontImageHolder.documentUploadSubLabelTV.text =
-            getString(R.string.please_upload_driving_cert)
+            getString(R.string.please_upload_driving_cert_veri)
 
         helpIconIV.setOnClickListener {
             showWhyWeNeedThisDialog()
@@ -172,9 +172,9 @@ class UploadDrivingCertificate : Fragment() {
                 if ((dlFrontImagePath == null)) {
 
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage(getString(R.string.capture_both_sides_dl))
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setTitle(getString(R.string.alert_veri))
+                        .setMessage(getString(R.string.capture_both_sides_dl_veri))
+                        .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
                         .show()
 
                     return@setOnClickListener
@@ -212,7 +212,7 @@ class UploadDrivingCertificate : Fragment() {
 //        }
 
         dlFrontImageHolder.uploadImageLayout.imageLabelTV.text =
-            getString(R.string.dl_image_front_side)
+            getString(R.string.dl_image_front_side_veri)
 
 //        dlBackImageHolder.uploadImageLayout.imageLabelTV.text =
 //                getString(R.string.dl_image_back_side)
@@ -232,8 +232,8 @@ class UploadDrivingCertificate : Fragment() {
     private fun showWhyWeNeedThisDialog() {
         WhyWeNeedThisBottomSheet.launch(
             childFragmentManager = childFragmentManager,
-            title = getString(R.string.why_do_we_need_this),
-            content = getString(R.string.why_we_need_this_dl)
+            title = getString(R.string.why_do_we_need_this_veri),
+            content = getString(R.string.why_we_need_this_dl_veri)
         )
     }
 
@@ -259,14 +259,14 @@ class UploadDrivingCertificate : Fragment() {
         dlMainLayout.visibility = View.VISIBLE
 
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle(getString(R.string.alert))
+            .setTitle(getString(R.string.alert_veri))
             .setMessage(error)
-            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+            .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
             .show()
     }
 
     private fun documentUploaded() {
-        showToast(getString(R.string.dl_details_uploaded))
+        showToast(getString(R.string.dl_details_uploaded_veri))
         navigation.popBackStack()
     }
 

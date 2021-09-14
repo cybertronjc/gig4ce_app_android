@@ -210,10 +210,10 @@ class LandingScreenFragment : Fragment() {
                 if (latestAPPUpdateModel.active && isNotLatestVersion(latestAPPUpdateModel))
                 //doubt
                     appDialogsInterface.showConfirmationDialogType3(
-                        getString(R.string.new_version_available),
-                        getString(R.string.new_version_available_detail),
-                        getString(R.string.update_now),
-                        getString(R.string.cancel_update),
+                        getString(R.string.new_version_available_landing),
+                        getString(R.string.new_version_available_detail_landing),
+                        getString(R.string.update_now_landing),
+                        getString(R.string.cancel_update_landing),
                         object :
                             ConfirmationDialogOnClickListener {
                             override fun clickedOnYes(dialog: Dialog?) {
@@ -404,14 +404,14 @@ class LandingScreenFragment : Fragment() {
                         && (it.aadharCardDataModel?.frontImage != null || it.drivingLicenseDataModel?.backImage != null)
 
                 if (requiredDocsVerified) {
-                    verificationTitleTV.text = getString(R.string.verification)
-                    complete_now.text = getString(R.string.completed)
+                    verificationTitleTV.text = getString(R.string.verification_landing)
+                    complete_now.text = getString(R.string.completed_landing)
                 } else if (requiredDocsUploaded) {
-                    verificationTitleTV.text = getString(R.string.verification)
-                    complete_now.text = getString(R.string.under_verification)
+                    verificationTitleTV.text = getString(R.string.verification_landing)
+                    complete_now.text = getString(R.string.under_verification_landing)
                 } else {
-                    verificationTitleTV.text = getString(R.string.complete_your_verification)
-                    complete_now.text = getString(R.string.complete_now)
+                    verificationTitleTV.text = getString(R.string.complete_your_verification_landing)
+                    complete_now.text = getString(R.string.complete_now_landing)
                 }
 
             })
@@ -454,8 +454,8 @@ class LandingScreenFragment : Fragment() {
         val tipsList = listOf<Tip>(
             Tip(
                 key = "ADD_EDUCATION_TIP",
-                title = getString(R.string.gig_force_tip),
-                subTitle = getString(R.string.tip_one),
+                title = getString(R.string.gig_force_tip_landing),
+                subTitle = getString(R.string.tip_one_landing),
 //                whereToRedirect = R.id.educationExpandedFragment,
                 navPath = "education_expended",
                 tip_id = 1097,
@@ -465,8 +465,8 @@ class LandingScreenFragment : Fragment() {
                 )
             ), Tip(
                 key = "ADD_WORK_EXP_TIP",
-                title = getString(R.string.gig_force_tip),
-                subTitle = getString(R.string.tip_two),
+                title = getString(R.string.gig_force_tip_landing),
+                subTitle = getString(R.string.tip_two_landing),
                 //                whereToRedirect = R.id.educationExpandedFragment,
                 navPath = "education_expended",
                 tip_id = 1098,
@@ -476,8 +476,8 @@ class LandingScreenFragment : Fragment() {
                 )
             ), Tip(
                 key = "ADD_SKILLS_TIP",
-                title = getString(R.string.gig_force_tip),
-                subTitle = getString(R.string.tip_three),
+                title = getString(R.string.gig_force_tip_landing),
+                subTitle = getString(R.string.tip_three_landing),
                 //                whereToRedirect = R.id.educationExpandedFragment,
                 navPath = "education_expended",
                 tip_id = 1099,
@@ -487,8 +487,8 @@ class LandingScreenFragment : Fragment() {
                 )
             ), Tip(
                 key = "ADD_ACHIEVEMENTS_TIP",
-                title = getString(R.string.gig_force_tip),
-                subTitle = getString(R.string.tip_four),
+                title = getString(R.string.gig_force_tip_landing),
+                subTitle = getString(R.string.tip_four_landing),
                 //                whereToRedirect = R.id.educationExpandedFragment,
                 navPath = "education_expended",
                 tip_id = 1100,
@@ -498,15 +498,15 @@ class LandingScreenFragment : Fragment() {
                 )
             ), Tip(
                 key = "ADD_PROFILE_PHOTO_TIP",
-                title = getString(R.string.gig_force_tip),
-                subTitle = getString(R.string.tip_five),
+                title = getString(R.string.gig_force_tip_landing),
+                subTitle = getString(R.string.tip_five_landing),
                 tip_id = 1101,
 //                whereToRedirect = R.id.profileFragment
                 navPath = "profile"
             ), Tip(
                 key = "ADD_LANGUAGE_TIP",
-                title = getString(R.string.gig_force_tip),
-                subTitle = getString(R.string.tip_six),
+                title = getString(R.string.gig_force_tip_landing),
+                subTitle = getString(R.string.tip_six_landing),
 //                whereToRedirect = R.id.aboutExpandedFragment,
                 navPath = "about_expended",
                 tip_id = 1102,
@@ -516,8 +516,8 @@ class LandingScreenFragment : Fragment() {
                 )
             ), Tip(
                 key = "ADD_ABOUT_ME_TIP",
-                title = getString(R.string.gig_force_tip),
-                subTitle = getString(R.string.tip_seven),
+                title = getString(R.string.gig_force_tip_landing),
+                subTitle = getString(R.string.tip_seven_landing),
                 //                whereToRedirect = R.id.aboutExpandedFragment,
                 navPath = "about_expended",
                 tip_id = 1103,
@@ -528,43 +528,43 @@ class LandingScreenFragment : Fragment() {
             ),
             Tip(
                 key = "ADD_PERMANENT_ADD_TIP",
-                title = getString(R.string.gig_force_tip),
-                subTitle = getString(R.string.tip_eight),
+                title = getString(R.string.gig_force_tip_landing),
+                subTitle = getString(R.string.tip_eight_landing),
                 tip_id = 1104,
 //                whereToRedirect = R.id.permanentAddressViewFragment
                 navPath = "permanent_address"
             ), Tip(
                 key = "ADD_PREFERRED_DISTANCE_TIP",
-                title = getString(R.string.gig_force_tip),
-                subTitle = getString(R.string.tip_nine),
+                title = getString(R.string.gig_force_tip_landing),
+                subTitle = getString(R.string.tip_nine_landing),
                 tip_id = 1105,
 //                whereToRedirect = R.id.arrountCurrentAddress
                 navPath = "current_address"
             ), Tip(
                 key = "ADD_DAILY_EARNING_EXPECTATION_TIP",
-                title = getString(R.string.gig_force_tip),
-                subTitle = getString(R.string.tip_ten),
+                title = getString(R.string.gig_force_tip_landing),
+                subTitle = getString(R.string.tip_ten_landing),
                 tip_id = 1106,
                 navPath = "earning"
 //                whereToRedirect = R.id.earningFragment
             ), Tip(
                 key = "ADD_WEEKDAY_TIP",
-                title = getString(R.string.gig_force_tip),
-                subTitle = getString(R.string.tip_eleven),
+                title = getString(R.string.gig_force_tip_landing),
+                subTitle = getString(R.string.tip_eleven_landing),
                 tip_id = 1107,
                 navPath = "week_day"
 //                whereToRedirect = R.id.weekDayFragment
             ), Tip(
                 key = "ADD_WEEKEND_TIP",
-                title = getString(R.string.gig_force_tip),
-                subTitle = getString(R.string.tip_twelve),
+                title = getString(R.string.gig_force_tip_landing),
+                subTitle = getString(R.string.tip_twelve_landing),
                 tip_id = 1108,
                 navPath = "week_end"
 //                whereToRedirect = R.id.weekEndFragment
             ), Tip(
                 key = "ADD_WFH_TIP",
-                title = getString(R.string.gig_force_tip),
-                subTitle = getString(R.string.tip_thirteen),
+                title = getString(R.string.gig_force_tip_landing),
+                subTitle = getString(R.string.tip_thirteen_landing),
                 tip_id = 1109,
                 navPath = "location"
 //                whereToRedirect = R.id.locationFragment
@@ -1012,28 +1012,28 @@ class LandingScreenFragment : Fragment() {
         var datalist: ArrayList<TitleSubtitleModel> = ArrayList<TitleSubtitleModel>()
         datalist.add(
             TitleSubtitleModel(
-                "Delivery",
+                getString(R.string.delivery_landing),
                 "",
                 "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Findustry.jpg?alt=media&token=039ddf50-9597-4ee4-bc12-0abdea74fd16"
             )
         )
         datalist.add(
             TitleSubtitleModel(
-                "Retail",
+                getString(R.string.retail_landing),
                 "",
                 "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Findustry3.jpg?alt=media&token=1813f5dd-5596-4a04-a0e1-3c8400a3d82d"
             )
         )
         datalist.add(
             TitleSubtitleModel(
-                "Quick Service Restuarant",
+                getString(R.string.quick_service_landing),
                 "",
                 "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Findustry1.jpg?alt=media&token=2634019b-9777-4dbb-9103-1d63eb44df97"
             )
         )
         datalist.add(
             TitleSubtitleModel(
-                "Telesales and Support",
+                getString(R.string.telesales_landing),
                 "",
                 "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Findustry2.jpg?alt=media&token=00412b0a-fbbe-4790-9a9b-050fefaf5d02"
             )
@@ -1193,7 +1193,7 @@ class LandingScreenFragment : Fragment() {
             exploreGigsAdapter?.setOnSeeMoreSelectedListener(object :
                 ExploreGigsAdapter.OnSeeMoreSelectedListener {
                 override fun onSeeMoreSelected(any: Any) {
-                    navigation.navigateTo("client_activation/gig_detail")
+                    navigation.navigateTo("client_activation/jobProfileList")
                 }
 
             })

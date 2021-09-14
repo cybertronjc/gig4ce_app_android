@@ -22,7 +22,7 @@
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:text="Key words" />
+        android:text="@string/key_words_giger_gigs" />
 
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/gig_keywords_group"

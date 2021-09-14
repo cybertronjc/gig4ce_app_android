@@ -1,8 +1,13 @@
 package com.gigforce.app
 
 import android.app.Application
+import android.content.Context
+import android.content.res.Configuration
+import android.content.res.Resources
 import android.util.Log
+import android.webkit.WebView
 import androidx.lifecycle.ProcessLifecycleOwner
+import com.akexorcist.localizationactivity.core.LocalizationApplicationDelegate
 import com.gigforce.app.di.implementations.SharedPreAndCommonUtilDataImp
 import com.gigforce.app.notification.NotificationConstants
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
@@ -18,9 +23,12 @@ import com.moengage.core.model.AppStatus
 import dagger.hilt.android.HiltAndroidApp
 import io.branch.referral.Branch
 import timber.log.Timber
+import java.util.*
 
 @HiltAndroidApp
 class MainApplication : Application() {
+
+    private val localizationDelegate = LocalizationApplicationDelegate()
 
     lateinit var sp: SharedPreAndCommonUtilInterface
     var moEngage = MoEngage.Builder(this, BuildConfig.MOENGAGE_KEY)
@@ -40,6 +48,7 @@ class MainApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        WebView(this).destroy()
         setUpBranchTool()
         setUpMoengage()
         //setupMixpanel()
@@ -51,6 +60,7 @@ class MainApplication : Application() {
         subscribeToFirebaseMessageingTopics()
         initLogger()
     }
+    
 
     private fun initLogger() {
         if (BuildConfig.DEBUG)
@@ -120,6 +130,25 @@ class MainApplication : Application() {
             sp.saveDataBoolean("has_sent_install", true)
             sp.saveDataBoolean("existing", true)
         }
+    }
+
+
+    override fun attachBaseContext(base: Context) {
+        localizationDelegate.setDefaultLanguage(base, Locale.ENGLISH)
+        super.attachBaseContext(localizationDelegate.attachBaseContext(base))
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        localizationDelegate.onConfigurationChanged(this)
+    }
+
+    override fun getApplicationContext(): Context {
+        return localizationDelegate.getApplicationContext(super.getApplicationContext())
+    }
+
+    override fun getResources(): Resources {
+        return localizationDelegate.getResources(baseContext, super.getResources())
     }
 
 

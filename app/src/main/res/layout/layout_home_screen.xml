@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="54dp"
             android:layout_marginTop="5dp"
-            android:text="Giger Name"
+            android:text="@string/giger_name_app"
             android:textSize="16sp" />
 
         <TextView
@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="54dp"
             android:layout_marginTop="27dp"
-            android:text="4 stars"
+            android:text="@string/_4_stars"
             android:textSize="12sp" />
     </androidx.cardview.widget.CardView>
 
@@ -51,7 +51,7 @@
             android:id="@+id/button_signout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SignOut"
+            android:text="@string/signout"
             android:textSize="8sp" />
     </androidx.cardview.widget.CardView>
 
@@ -66,7 +66,7 @@
             android:id="@+id/day_debug_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Check Day View"
+            android:text="@string/check_day_view"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
@@ -86,7 +86,7 @@
                 android:id="@+id/text_kyc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="kyc is not done. click here to complete." />
+                android:text="@string/kyc_is_not_done_click_here_to_complete" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
@@ -105,7 +105,7 @@
                 android:id="@+id/text_kyc_video"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Complete your video resume" />
+                android:text="@string/complete_your_video_resume_app" />
         </androidx.cardview.widget.CardView>
 
         <GridView
@@ -147,7 +147,7 @@
                     android:id="@+id/text_pending"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Learning pending" />
+                    android:text="@string/learning_pending" />
             </androidx.cardview.widget.CardView>
 
         </FrameLayout>

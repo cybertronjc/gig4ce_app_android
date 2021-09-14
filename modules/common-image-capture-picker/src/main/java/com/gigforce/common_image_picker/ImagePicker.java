@@ -67,7 +67,7 @@ public class ImagePicker {
 
             if (intentList.size() > 0) {
                 chooserIntent = Intent.createChooser(intentList.remove(intentList.size() - 1),
-                        context.getString(R.string.pick_image_intent_text));
+                        context.getString(R.string.pick_image_intent_text_common));
                 chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentList.toArray(new Parcelable[]{}));
             }
         }
@@ -103,7 +103,7 @@ public class ImagePicker {
 
             if (intentList.size() > 0) {
                 chooserIntent = Intent.createChooser(intentList.remove(intentList.size() - 1),
-                        context.getString(R.string.pick_image_intent_text));
+                        context.getString(R.string.pick_image_intent_text_common));
                 chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentList.toArray(new Parcelable[]{}));
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -148,7 +148,7 @@ public class ImagePicker {
 
             if (intentList.size() > 0) {
                 chooserIntent = Intent.createChooser(intentList.remove(intentList.size() - 1),
-                        context.getString(R.string.pick_image_intent_text));
+                        context.getString(R.string.pick_image_intent_text_common));
                 chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentList.toArray(new Parcelable[]{}));
             }
 
@@ -173,7 +173,7 @@ public class ImagePicker {
 
             if (intentList.size() > 0) {
                 chooserIntent = Intent.createChooser(intentList.remove(intentList.size() - 1),
-                        context.getString(R.string.pick_image_intent_text));
+                        context.getString(R.string.pick_image_intent_text_common));
                 chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentList.toArray(new Parcelable[]{}));
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -279,7 +279,7 @@ public class ImagePicker {
     @Nullable
     public static File getTempFile(Context context) {
 //        File imageFile = new File(Environment.getExternalStorageDirectory() + File.separator + context.getPackageName(), TEMP_IMAGE_NAME);
-        File folder = context.getExternalFilesDir("photos");
+        File folder = context.getFilesDir();
         if (folder != null && !folder.exists()) {
             folder.mkdir();
         }

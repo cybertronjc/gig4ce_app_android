@@ -97,7 +97,7 @@ class GigerVerificationFragment : Fragment(), IOnBackPressedOverride {
                     )
                     tv_contract_status.setTextColor(resources.getColor(R.color.green_dc3ab105))
                     tv_contract_status.setBackgroundResource(R.drawable.bg_capsule_53ba25)
-                    tv_contract_status.text = getString(R.string.signed)
+                    tv_contract_status.text = getString(R.string.signed_veri)
                     iv_download_giger_verification.visible()
                     val layoutParams: RelativeLayout.LayoutParams =
                         tv_contract_status.layoutParams as RelativeLayout.LayoutParams
@@ -136,7 +136,7 @@ class GigerVerificationFragment : Fragment(), IOnBackPressedOverride {
 //                                    url
 //                                )
 //                                startActivity(docIntent)
-                                navigation.navigateToDocViewerActivity(requireActivity(),url)
+                                navigation.navigateToDocViewerActivity(requireActivity(),url, "")
                             }
 
 
@@ -152,7 +152,7 @@ class GigerVerificationFragment : Fragment(), IOnBackPressedOverride {
                     )
                     tv_contract_status.setTextColor(resources.getColor(R.color.fa6400))
                     tv_contract_status.setBackgroundResource(R.drawable.bg_capsule_border_fa6400)
-                    tv_contract_status.text = getString(R.string.unsigned)
+                    tv_contract_status.text = getString(R.string.unsigned_veri)
                     iv_download_giger_verification.setOnClickListener(null)
                     tv_contract_status.setOnClickListener(null)
                     iv_download_giger_verification.gone()
@@ -179,7 +179,7 @@ class GigerVerificationFragment : Fragment(), IOnBackPressedOverride {
         ) {
             tv_contract_status.performClick()
         } else {
-            showToast(getString(R.string.perm_not_granted))
+            showToast(getString(R.string.perm_not_granted_veri))
         }
     }
 
@@ -199,7 +199,7 @@ class GigerVerificationFragment : Fragment(), IOnBackPressedOverride {
         StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(resources, R.color.lipstick_2,null))
         toolbar.apply {
             hideActionMenu()
-            showTitle(getString(R.string.giger_verification))
+            showTitle(getString(R.string.giger_verification_veri))
             setBackButtonListener(View.OnClickListener {
                 activity?.onBackPressed()
             })
@@ -224,39 +224,39 @@ class GigerVerificationFragment : Fragment(), IOnBackPressedOverride {
             .load(R.drawable.ic_video_round)
             .into(selfieVideoLayout.optionIconIV)
 
-        selfieVideoLayout.optionTitleTV.text = getString(R.string.selfie_video)
-        selfieVideoLayout.descTitleTV.text = getString(R.string.tap_to_upload)
+        selfieVideoLayout.optionTitleTV.text = getString(R.string.selfie_video_veri)
+        selfieVideoLayout.descTitleTV.text = getString(R.string.tap_to_upload_veri)
 
 
         Glide.with(requireContext())
             .load(R.drawable.ic_dl)
             .into(panLayout.optionIconIV)
 
-        panLayout.optionTitleTV.text = getString(R.string.pan_card)
-        panLayout.descTitleTV.text = getString(R.string.tap_to_upload)
+        panLayout.optionTitleTV.text = getString(R.string.pan_card_veri)
+        panLayout.descTitleTV.text = getString(R.string.tap_to_upload_veri)
 
         Glide.with(requireContext())
             .load(R.drawable.ic_bank)
             .into(aadharLayout.optionIconIV)
 
-        aadharLayout.optionTitleTV.text = getString(R.string.aadhar_card)
-        aadharLayout.descTitleTV.text = getString(R.string.tap_to_upload)
+        aadharLayout.optionTitleTV.text = getString(R.string.aadhar_card_veri)
+        aadharLayout.descTitleTV.text = getString(R.string.tap_to_upload_veri)
 
 
         Glide.with(requireContext())
             .load(R.drawable.ic_dl)
             .into(drivingLayout.optionIconIV)
 
-        drivingLayout.optionTitleTV.text = getString(R.string.driving_license)
-        drivingLayout.descTitleTV.text = getString(R.string.tap_to_upload)
+        drivingLayout.optionTitleTV.text = getString(R.string.driving_license_veri)
+        drivingLayout.descTitleTV.text = getString(R.string.tap_to_upload_veri)
 
 
         Glide.with(requireContext())
             .load(R.drawable.ic_bank)
             .into(bankDetailsLayout.optionIconIV)
 
-        bankDetailsLayout.optionTitleTV.text = getString(R.string.bank_details)
-        bankDetailsLayout.descTitleTV.text = getString(R.string.tap_to_upload)
+        bankDetailsLayout.optionTitleTV.text = getString(R.string.bank_details_veri)
+        bankDetailsLayout.descTitleTV.text = getString(R.string.tap_to_upload_veri)
         if (showActionButtons) {
             tv_action_giger_verification.visible()
 
@@ -322,7 +322,7 @@ class GigerVerificationFragment : Fragment(), IOnBackPressedOverride {
                 this.gigerVerificationStatus = it
 
                 if (it.selfieVideoUploaded) {
-                    selfieVideoLayout.descTitleTV.text = getString(R.string.uploaded)
+                    selfieVideoLayout.descTitleTV.text = getString(R.string.uploaded_veri)
                     selfieVideoLayout.descTitleTV.setTextColor(
                         ResourcesCompat.getColor(
                             resources,
@@ -331,7 +331,7 @@ class GigerVerificationFragment : Fragment(), IOnBackPressedOverride {
                         )
                     )
                 } else {
-                    selfieVideoLayout.descTitleTV.text = getString(R.string.tap_to_upload)
+                    selfieVideoLayout.descTitleTV.text = getString(R.string.tap_to_upload_veri)
                     selfieVideoLayout.descTitleTV.setTextColor(
                         ResourcesCompat.getColor(
                             resources,
@@ -352,7 +352,7 @@ class GigerVerificationFragment : Fragment(), IOnBackPressedOverride {
                         )
                     )
                 } else {
-                    panLayout.descTitleTV.text = getString(R.string.tap_to_upload)
+                    panLayout.descTitleTV.text = getString(R.string.tap_to_upload_veri)
                     panLayout.descTitleTV.setTextColor(
                         ResourcesCompat.getColor(
                             resources,
@@ -377,7 +377,7 @@ class GigerVerificationFragment : Fragment(), IOnBackPressedOverride {
                         )
                     )
                 } else {
-                    bankDetailsLayout.descTitleTV.text = getString(R.string.tap_to_upload)
+                    bankDetailsLayout.descTitleTV.text = getString(R.string.tap_to_upload_veri)
                     bankDetailsLayout.descTitleTV.setTextColor(
                         ResourcesCompat.getColor(
                             resources,
@@ -399,7 +399,7 @@ class GigerVerificationFragment : Fragment(), IOnBackPressedOverride {
                         )
                     )
                 } else {
-                    aadharLayout.descTitleTV.text = getString(R.string.tap_to_upload)
+                    aadharLayout.descTitleTV.text = getString(R.string.tap_to_upload_veri)
                     aadharLayout.descTitleTV.setTextColor(
                         ResourcesCompat.getColor(
                             resources,
@@ -421,7 +421,7 @@ class GigerVerificationFragment : Fragment(), IOnBackPressedOverride {
                         )
                     )
                 } else {
-                    drivingLayout.descTitleTV.text = getString(R.string.tap_to_upload)
+                    drivingLayout.descTitleTV.text = getString(R.string.tap_to_upload_veri)
                     drivingLayout.descTitleTV.setTextColor(
                         ResourcesCompat.getColor(
                             resources,
@@ -441,7 +441,7 @@ class GigerVerificationFragment : Fragment(), IOnBackPressedOverride {
                 "GigForceContract.pdf"
             ).exists()
         ) {
-            showToast(getString(R.string.download_contracts_exists))
+            showToast(getString(R.string.download_contracts_exists_veri))
             return
         }
 
@@ -449,8 +449,8 @@ class GigerVerificationFragment : Fragment(), IOnBackPressedOverride {
         val downloadmanager = context?.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         val uri = Uri.parse(url)
         val request = DownloadManager.Request(uri)
-        request.setTitle("Contract")
-        request.setDescription("Downloading Contract")
+        request.setTitle(getString(R.string.contract_veri))
+        request.setDescription(getString(R.string.downloading_contract_veri))
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
         request.setVisibleInDownloadsUi(false)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -468,19 +468,19 @@ class GigerVerificationFragment : Fragment(), IOnBackPressedOverride {
             try {
                 Toast.makeText(
                     context,
-                    "Your Contract is Downloading",
+                    getString(R.string.contract_is_downloading_veri),
                     Toast.LENGTH_SHORT
                 ).show()
                 downloadmanager.enqueue(request)
             } catch (e: Exception) {
-                Toast.makeText(context, "NetWork Error. Please try again", Toast.LENGTH_SHORT)
+                Toast.makeText(context, getString(R.string.network_error_retry_veri), Toast.LENGTH_SHORT)
                     .show()
             }
         } else {
-            Toast.makeText(context, "Network Error. Please try again", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, getString(R.string.network_error_retry_veri), Toast.LENGTH_SHORT).show()
         }
         val progressBarDialog = ProgressDialog(context)
-        progressBarDialog.setTitle("Downloading Contract, Please Wait...")
+        progressBarDialog.setTitle(getString(R.string.downloading_contract_wait_veri))
         progressBarDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL)
         progressBarDialog.setButton(
             DialogInterface.BUTTON_POSITIVE, "OK"
