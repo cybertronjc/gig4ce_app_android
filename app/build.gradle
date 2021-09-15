@@ -153,7 +153,7 @@ android {
             dimension "default"
             applicationId "com.gigforce.app.staging"
             resValue "string", "app_name", "Gigforce Staging"
-            versionCode 139
+            versionCode 137
             versionName "5.0.3"
             versionNameSuffix '-Staging'
             signingConfig signingConfigs.staging

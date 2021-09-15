@@ -53,5 +53,5 @@ interface LoginSummaryService {
     @GET("gigerAttendanceReport/getDetailsByTLandCity/{cityId}")
     suspend fun getBusinessByCityWithLoginCount(
         @Path("cityId") cityId : String
-    ): Response<List<LoginSummaryBusiness>>
+    ): Response<BussinessAndPreviousEntryId>
 }

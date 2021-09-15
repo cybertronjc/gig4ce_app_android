@@ -69,10 +69,10 @@ data class AddNewSummaryReqModel(
     val businessData: List<BusinessDataReqModel> = emptyList(),
 
     @SerializedName("update")
-    val update: Boolean = false,
+    var update: Boolean = false,
 
     @SerializedName("id")
-    val id: String = ""
+    var id: String = ""
 ) : Parcelable
 
 @Parcelize
@@ -139,4 +139,13 @@ data class CheckMark(
 
     @SerializedName("gigerId")
     val gigerId: String = "",
+) : Parcelable
+
+@Parcelize
+data class BussinessAndPreviousEntryId(
+    @SerializedName("businessData")
+    val businessData: List<LoginSummaryBusiness> ,
+
+    @SerializedName("id")
+    val id: String? = null,
 ) : Parcelable

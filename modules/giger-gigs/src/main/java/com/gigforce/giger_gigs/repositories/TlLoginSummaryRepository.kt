@@ -48,12 +48,22 @@ class TlLoginSummaryRepository @Inject constructor (
     }
 
     suspend fun getBusinessByCity(cityId: String): List<LoginSummaryBusiness> {
-        val businessByCity = loginSummaryService.getBusinessByCityWithLoginCount(cityId)
+        val businessByCity = loginSummaryService.getBusinessByCity(cityId)
 
         if (!businessByCity.isSuccessful){
             throw Exception(businessByCity.message())
         } else {
             return businessByCity.body()!!
+        }
+    }
+
+    suspend fun getBusinessByCityWithLoginSummaryCount(cityId: String): BussinessAndPreviousEntryId{
+        val businessByCityWithPreviousIdResponse = loginSummaryService.getBusinessByCityWithLoginCount(cityId)
+
+        if (!businessByCityWithPreviousIdResponse.isSuccessful){
+            throw Exception(businessByCityWithPreviousIdResponse.message())
+        } else {
+            return businessByCityWithPreviousIdResponse.body()!!
         }
     }
 

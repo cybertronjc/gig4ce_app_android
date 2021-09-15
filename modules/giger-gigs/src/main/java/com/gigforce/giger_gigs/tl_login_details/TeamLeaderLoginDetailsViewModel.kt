@@ -72,33 +72,5 @@ class TeamLeaderLoginDetailsViewModel @Inject constructor(
         }
     }
 
-    fun getCities() = viewModelScope.launch {
-        _cities.postValue(Lce.loading())
 
-        try {
-            val response = tlLoginSummaryRepository.getCities()
-            _cities.value = Lce.content(response)
-
-        }catch (e: Exception){
-            e.printStackTrace()
-            _cities.value = Lce.error(e.message ?: "Unable to fetch cities")
-        }
-    }
-
-    fun getBusinessByCity(cityId: String) = viewModelScope.launch {
-        _businesses.postValue(Lce.loading())
-
-        try {
-            val response = tlLoginSummaryRepository.getBusinessByCity(cityId)
-            _businesses.value = Lce.content(response)
-
-        }catch (e: Exception){
-            e.printStackTrace()
-            _businesses.value = Lce.error(e.message ?: "Unable to fetch businesses by city")
-        }
-    }
-
-    fun showProgress(show: Boolean) {
-        observerShowProgress.value = if (show) View.VISIBLE else View.GONE
-    }
 }
