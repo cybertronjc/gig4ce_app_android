@@ -35,7 +35,7 @@
                 android:paddingTop="@dimen/size_6"
                 android:paddingEnd="@dimen/size_27"
                 android:paddingBottom="@dimen/size_6"
-                android:text="@string/past"
+                android:text="@string/past_giger_gigs"
                 android:textColor="@color/vertical_calendar_today"
                 android:textSize="@dimen/font_14" />
 
@@ -50,7 +50,7 @@
                 android:paddingTop="@dimen/size_6"
                 android:paddingEnd="@dimen/size_27"
                 android:paddingBottom="@dimen/size_6"
-                android:text="@string/upcoming"
+                android:text="@string/upcoming_giger_gigs"
                 android:textColor="@color/black_2222"
                 android:textSize="@dimen/font_14"
                 app:layout_constraintStart_toEndOf="@id/tv_past_events_rv_gig_hist"

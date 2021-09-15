@@ -874,10 +874,10 @@
         android:label="GigContactPersonBottomSheet" />
 
     <!--    <include app:graph="@navigation/nav_graph_chat" />-->
-    <fragment
-        android:id="@+id/clientActiExploreList"
-        android:name="com.gigforce.client_activation.client_activation.explore.ClientActiExploreList"
-        android:label="ClientActiExploreList" />
+<!--    <fragment-->
+<!--        android:id="@+id/clientActiExploreList"-->
+<!--        android:name="com.gigforce.client_activation.client_activation.explore.ClientActiExploreList"-->
+<!--        android:label="ClientActiExploreList" />-->
     <fragment
         android:id="@+id/chatListFragment"
         android:name="com.gigforce.modules.feature_chat.screens.ChatHeadersFragment"
@@ -1008,6 +1008,10 @@
         android:id="@+id/pfesicFormDetailsFragment"
         android:name="com.gigforce.client_activation.client_activation.info.pf_esic.PFESICFormDetailsFragment"
         android:label="PFESICFormDetailsFragment" />
+    <fragment
+        android:id="@+id/jobProfileListFragment"
+        android:name="com.gigforce.client_activation.client_activation.explore.JobProfileListFragment"
+        android:label="JobProfileListFragment" />
 
 
 </navigation>

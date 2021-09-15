@@ -83,7 +83,7 @@
         android:gravity="center"
         android:letterSpacing="0"
         android:minHeight="@dimen/size_44"
-        android:text="@string/next_camel_case"
+        android:text="@string/next_camel_case_learning"
         android:textColor="@color/lipstick"
         android:textSize="@dimen/font_16"
         android:textStyle="bold"

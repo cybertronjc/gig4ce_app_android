@@ -32,7 +32,7 @@ class NoGigApplicationFoundItemView(
     override fun bind(data: Any?) {
         data?.let {
             val statusData = it as GigAppListRecyclerItemData.NoGigAppsFoundItemData
-            viewBinding.title.text = statusData.message
+            //viewBinding.title.text = statusData.message
         }
 
 

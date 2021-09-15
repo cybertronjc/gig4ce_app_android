@@ -15,13 +15,13 @@
         android:icon="@drawable/ic_menu_icon_chat"
         android:orderInCategory="100"
 
-        android:title="@string/call"
+        android:title="@string/call_app"
         app:showAsAction="collapseActionView" />
     <item
         android:id="@+id/action_chat"
         android:icon="@drawable/ic_call_menu_enrollment"
         android:orderInCategory="100"
-        android:title="@string/chat"
+        android:title="@string/chat_app"
         app:showAsAction="collapseActionView" />
 
 </menu>

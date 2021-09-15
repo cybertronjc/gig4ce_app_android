@@ -8,49 +8,45 @@ import retrofit2.http.*
 
 interface LoginSummaryService {
 
-    @GET
-    suspend fun getLoginSummaryCities(
-        @Url getLoginSummaryCitiesUrl : String,
-    ): Response<List<LoginSummaryCity>>
+    @GET("gigerAttendanceReport/cities")
+    suspend fun getLoginSummaryCities(): Response<List<LoginSummaryCity>>
 
-    @GET
+    @GET("gigerAttendanceReport/businessByCity/{cityId}")
     suspend fun getBusinessByCity(
-        @Url getBusinessByCityUrl : String
+        @Path("cityId") cityId : String
     ): Response<List<LoginSummaryBusiness>>
 
-    @POST
+    @POST("gigerAttendanceReport/submit")
     suspend fun submitLoginSummary(
-        @Url getSubmitUrl : String,
         @Body body: AddNewSummaryReqModel
     ) : Response<ResponseBody>
 
-    @GET
+    @GET("gigerAttendanceReport/listingForTL/{userUid}")
     suspend fun getListingForTL(
-        @Url getListingUrl : String,
+        @Path("userUid") userUid: String,
         @Query("page") page: Int,
         @Query("pagesize") pagesize: Int
     ) : Response<List<ListingTLModel>>
 
 
-    @GET
+    @GET("tlDailyReport/listingForTL/{userUid}")
     suspend fun getDailyLoginReportListingForTL(
-        @Url getListingUrl : String,
+        @Path("userUid") userUid: String,
         @Query("searchCity") searchCity: String,
         @Query("searchDate") searchDate: String,
         @Query("page") page: Int,
         @Query("pagesize") pagesize: Int
     ) : Response<List<DailyLoginReport>>
 
-    @POST
+    @POST("tlDailyReport/submit")
     suspend fun submitLoginReport(
-        @Url getSubmitUrl : String,
         @Body body: DailyTlAttendanceReport
     ) : Response<AssignGigResponse>
 
 
-    @GET
+    @GET("gigerAttendanceReport/gigerPresent/{userUid}")
     suspend fun checkIfTLMarked(
-        @Url getCheckUrl: String
+        @Path("userUid") userUid: String
     ) : Response<CheckMark>
 
     @GET

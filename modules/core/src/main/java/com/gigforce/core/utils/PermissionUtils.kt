@@ -9,6 +9,7 @@ import android.preference.PreferenceManager
 import android.provider.Settings
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.gigforce.core.R
 
 /**
  * @author Rohit
@@ -231,7 +232,7 @@ object PermissionUtils {
                     ) {
                         Toast.makeText(
                             context,
-                            "you need to provide permissions to proceed further",
+                            context.getString(R.string.provide_permission_core),
                             Toast.LENGTH_SHORT
                         ).show()
                         goToAppSettings(
@@ -289,7 +290,7 @@ object PermissionUtils {
                     ) {
                         Toast.makeText(
                             context.requireContext(),
-                            "you need to provide permissions to proceed further",
+                            context.getString(R.string.provide_permission_core),
                             Toast.LENGTH_SHORT
                         ).show()
                         goToAppSettings(

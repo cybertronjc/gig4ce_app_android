@@ -30,7 +30,7 @@
                 android:layout_marginTop="22dp"
                 android:fontFamily="@font/lato_bold"
                 android:letterSpacing="0"
-                android:text="@string/driving_license"
+                android:text="@string/driving_license_amb"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -60,7 +60,7 @@
                 android:letterSpacing="-0.01"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
-                android:text="@string/why_do_we_need_this"
+                android:text="@string/why_do_we_need_this_amb"
                 android:textColor="@color/battle_ship_grey"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toStartOf="@+id/helpIconIV"
@@ -76,7 +76,7 @@
                 android:letterSpacing="-0.01"
                 android:textSize="16sp"
                 android:lineHeight="19sp"
-                android:text="@string/do_you_have_driving_license"
+                android:text="@string/do_you_have_driving_license_amb"
                 android:textColor="@color/black"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/drivingLicenseLabel" />
@@ -111,7 +111,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/lato"
-                    android:text="@string/yes_i_have_driving_license" />
+                    android:text="@string/yes_i_have_driving_license_amb" />
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
                     android:id="@+id/dlNoRB"
@@ -119,7 +119,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/lato"
-                    android:text="@string/no_i_don_t_have_driving_license" />
+                    android:text="@string/no_i_don_t_have_driving_license_amb" />
 
             </RadioGroup>
 
@@ -147,7 +147,7 @@
                     android:layout_marginTop="16dp"
                     android:fontFamily="@font/lato"
                     android:letterSpacing="-0.01"
-                    android:text="@string/please_confirm_the_following_information"
+                    android:text="@string/please_confirm_the_following_information_amb"
                     android:textColor="@color/black" />
 
 
@@ -165,7 +165,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="2dp"
-                        android:text="@string/state_pascal_case"
+                        android:text="@string/state_pascal_case_amb"
                         android:textSize="12sp"
                         android:lineHeight="15sp"
                         android:textColor="@color/warm_grey" />
@@ -209,7 +209,7 @@
                         android:textColor="@color/warm_grey"
                         android:lineHeight="15sp"
                         android:visibility="gone"
-                        android:text="@string/dl_hint_square_bracket"
+                        android:text="@string/dl_hint_square_bracket_amb"
                         android:textSize="12sp" />
 
 
@@ -226,7 +226,7 @@
                         android:minHeight="36dp"
                         android:maxLines="1"
                         android:lineSpacingExtra="3sp"
-                        android:hint="Enter driving license number"
+                        android:hint="@string/enter_driving_license_number_amb"
                         android:textAllCaps="true"
                         android:textSize="@dimen/font_14"
                         android:paddingTop="4dp"
@@ -330,7 +330,7 @@
         android:layout_height="46dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:text="@string/next_camel_case"
+        android:text="@string/next_camel_case_amb"
         android:textAllCaps="false"
         app:layout_constraintBottom_toTopOf="@id/ambsd_dl_edit_skip_btn"
         app:strokeColor="@color/colorPrimary"
@@ -347,7 +347,7 @@
         android:minHeight="0dp"
         android:textColor="@color/black_666"
         android:textAllCaps="false"
-        android:text="@string/skip_underline"
+        android:text="@string/skip_underline_amb"
         android:paddingBottom="0dp"
         android:paddingTop="0dp"
         app:layout_constraintBottom_toBottomOf="parent"

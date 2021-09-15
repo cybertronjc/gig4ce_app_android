@@ -145,7 +145,7 @@ class EnrolledUsersRecyclerAdapter constructor(
             val userEnrolledDate = user.enrolledOn.toLocalDate()
             if (userEnrolledDate.equals(LocalDate.now())) {
                 // enrolled today
-                userAddedTimeTV.text = itemView.resources.getString(R.string.added_today)
+                userAddedTimeTV.text = itemView.resources.getString(R.string.added_today_amb)
             } else {
                 //
                 val daysDiff = Duration.between(
@@ -153,9 +153,9 @@ class EnrolledUsersRecyclerAdapter constructor(
                     LocalDate.now().atStartOfDay()
                 ).toDays()
                 userAddedTimeTV.text =
-                    "${itemView.resources.getString(R.string.added)} $daysDiff ${
+                    "${itemView.resources.getString(R.string.added_amb)} $daysDiff ${
                     itemView.resources.getString(
-                        R.string.days_ago
+                        R.string.days_ago_amb
                     )
                     }"
             }
@@ -196,7 +196,7 @@ class EnrolledUsersRecyclerAdapter constructor(
                                 ContextCompat.getDrawable(
                                     context,
                                     R.drawable.md_transparent
-                                )!!, "Edit"
+                                )!!, context.getString(R.string.edit_propercase)
                             )
                         )
                         .addItem(
@@ -204,7 +204,7 @@ class EnrolledUsersRecyclerAdapter constructor(
                                 ContextCompat.getDrawable(
                                     context,
                                     R.drawable.md_transparent
-                                )!!, "Call"
+                                )!!, context.getString(R.string.call_amb)
                             )
                         )
                         .addItem(
@@ -212,7 +212,7 @@ class EnrolledUsersRecyclerAdapter constructor(
                                 ContextCompat.getDrawable(
                                     context,
                                     R.drawable.md_transparent
-                                )!!, "Chat"
+                                )!!, context.getString(R.string.chat_amb)
                             )
                         ).setShowBackground(false)
                         .setOnMenuItemClickListener(object :

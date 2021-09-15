@@ -20,7 +20,7 @@
         android:layout_below="@id/iv_main_art_video"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="100dp"
-        android:text= "Onboarding"/>
+        android:text= "@string/onboarding"/>
 
     <TextView
         android:id="@+id/tv_subtitle"
@@ -33,7 +33,7 @@
         android:layout_below="@id/tv_title"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
-        android:text="How to - 1" />
+        android:text="@string/how_to_1" />
 
     <ImageView
         android:id="@+id/iv_bottom_art"
@@ -53,6 +53,6 @@
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:text="next"
+        android:text="@string/next_camel_case"
         android:textColor="@android:color/white" />
 </RelativeLayout>

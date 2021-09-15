@@ -3,7 +3,6 @@ package com.gigforce.lead_management.ui.select_shift_timing
 import android.app.DatePickerDialog
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.DatePicker
 import android.widget.LinearLayout
@@ -12,10 +11,8 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
-import com.gigforce.common_ui.components.atoms.ChipGroupComponent
 import com.gigforce.common_ui.components.atoms.models.ChipGroupModel
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
-import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.viewdatamodels.GigerProfileCardDVM
@@ -25,7 +22,6 @@ import com.gigforce.common_ui.viewdatamodels.leadManagement.JobShift
 import com.gigforce.common_ui.viewdatamodels.leadManagement.WorkingDays
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.gone
-import com.gigforce.core.extensions.toFirebaseTimeStamp
 import com.gigforce.core.extensions.toLocalDate
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
@@ -35,18 +31,14 @@ import com.gigforce.lead_management.LeadManagementConstants
 import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.ShiftTimingFragmentBinding
-import com.gigforce.lead_management.ui.select_gig_location.SelectGigLocationFragment
-import com.gigforce.lead_management.ui.select_team_leader.SelectTeamLeaderFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.lang.Exception
-import java.text.SimpleDateFormat
 import java.time.format.DateTimeFormatter
 import java.util.*
 import javax.inject.Inject
 
-@RequiresApi(Build.VERSION_CODES.N)
 @AndroidEntryPoint
 class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
     fragmentName = "ShiftTimingFragment",
@@ -155,7 +147,7 @@ class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
     private fun initListeners() = viewBinding.apply {
         toolbar.apply {
             hideActionMenu()
-            showTitle("Shift Timings")
+            showTitle(context.getString(R.string.shift_timings_lead))
             setBackButtonListener(View.OnClickListener {
                 navigation.popBackStack()
             })
@@ -179,20 +171,20 @@ class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
             when {
                 selectedShifts.isEmpty() -> {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setMessage("Select at least one shift to continue")
-                        .setPositiveButton("Okay") { _, _ -> }
+                        .setMessage(getString(R.string.select_atleast_one_shift_lead))
+                        .setPositiveButton(getString(R.string.okay_lead)) { _, _ -> }
                         .show()
                 }
                 selectedWorkingDays.isEmpty() -> {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setMessage("Select at least one working days option")
-                        .setPositiveButton("Okay") { _, _ -> }
+                        .setMessage(getString(R.string.select_one_working_day_lead))
+                        .setPositiveButton(getString(R.string.okay_lead)) { _, _ -> }
                         .show()
                 }
                 expectedDate.text.isEmpty() -> {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setMessage("Select expected date to continue")
-                        .setPositiveButton("Okay") { _, _ -> }
+                        .setMessage(getString(R.string.select_expected_date_lead))
+                        .setPositiveButton(getString(R.string.okay_lead)) { _, _ -> }
                         .show()
                 }
                 else -> {
@@ -288,6 +280,10 @@ class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
             viewBinding.workingDaysChipgroup.addChips(workingDaysChips, isSingleSelection = true, setFirstChecked = true)
             logger.d(TAG, "working day chips set ,count: ${workingDays.size}")
         }
+
+        if(assignGigRequest.assignGigsFrom != ""){
+            viewBinding.expectedDate.text = assignGigRequest.assignGigsFrom
+        }
     }
 
     private fun showErrorInLoadingGigShifts(error: String) = viewBinding.apply{
@@ -311,7 +307,7 @@ class ShiftTimingFragment : BaseFragment2<ShiftTimingFragmentBinding>(
         shiftInfoLayout.root.visible()
         shiftLayout.gone()
         shiftInfoLayout.infoIv.loadImage(R.drawable.ic_no_joining_found)
-        shiftInfoLayout.infoMessageTv.text = "No Gig Shifts Found"
+        shiftInfoLayout.infoMessageTv.text = getString(R.string.no_gig_shift_lead)
     }
 
     private fun showGigShiftAsLoading() = viewBinding.apply{

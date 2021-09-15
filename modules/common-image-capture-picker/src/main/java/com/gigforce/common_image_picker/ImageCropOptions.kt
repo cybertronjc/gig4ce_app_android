@@ -4,15 +4,17 @@ import android.net.Uri
 
 class ImageCropOptions private constructor(builder: Builder) {
 
-    var shouldOpenImageCropper: Boolean = builder.shouldOpenImageCropper
-    var shouldDetectForFace: Boolean = builder.shouldDetectForFace
-    var outputFileUri : Uri? = builder.outputFileUri
+    val shouldOpenImageCropper: Boolean = builder.shouldOpenImageCropper
+    val shouldDetectForFace: Boolean = builder.shouldDetectForFace
+    val outputFileUri : Uri? = builder.outputFileUri
+    val freeCropEnabled : Boolean = builder.freeCropEnabled
 
     class Builder() {
 
         var shouldOpenImageCropper: Boolean = false
         var shouldDetectForFace: Boolean = false
         var outputFileUri : Uri? = null
+        var freeCropEnabled : Boolean = false
 
         fun build(): ImageCropOptions {
             return ImageCropOptions(this)
@@ -30,6 +32,11 @@ class ImageCropOptions private constructor(builder: Builder) {
 
         fun setOutputFileUri(outputFileUri : Uri) : Builder{
             this.outputFileUri = outputFileUri
+            return this
+        }
+
+        fun shouldEnableFreeCrop(enableFreeCrop : Boolean) : Builder {
+            this.freeCropEnabled = enableFreeCrop
             return this
         }
     }

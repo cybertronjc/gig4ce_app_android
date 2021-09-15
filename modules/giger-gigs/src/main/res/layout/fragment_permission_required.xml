@@ -46,7 +46,7 @@ Gig  near you
         android:layout_marginTop="16dp"
         android:background="@color/lipstick"
         android:textColor="@color/white"
-        android:text="Okay"/>
+        android:text="@string/okay_giger_gigs"/>
 
 
 </LinearLayout>

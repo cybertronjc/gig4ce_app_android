@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -94,12 +93,12 @@ class AddUserBankDetailsInfoFragment : Fragment(),IOnBackPressedOverride {
 
     private fun initViews() {
         passbookImageHolder.documentUploadLabelTV.text =
-            getString(R.string.upload_bank_passbook)
+            getString(R.string.upload_bank_passbook_amb)
         passbookImageHolder.documentUploadSubLabelTV.text =
-            getString(R.string.upload_bank_passbook_sublabel)
+            getString(R.string.upload_bank_passbook_sublabel_amb)
 
         toolbar_layout.apply {
-            showTitle(getString(R.string.upload_bank_details))
+            showTitle(getString(R.string.upload_bank_details_amb))
             hideActionMenu()
             setBackButtonListener(View.OnClickListener {
                 showGoBackConfirmationDialog()
@@ -124,7 +123,7 @@ class AddUserBankDetailsInfoFragment : Fragment(),IOnBackPressedOverride {
         }
 
         passbookImageHolder.uploadImageLayout.imageLabelTV.text =
-            getString(R.string.bank_passbook_front_image)
+            getString(R.string.bank_passbook_front_image_amb)
 
         passbookAvailaibilityOptionRG.setOnCheckedChangeListener { _, checkedId ->
 
@@ -148,9 +147,9 @@ class AddUserBankDetailsInfoFragment : Fragment(),IOnBackPressedOverride {
         editLayout.setOnClickListener {
 
             MaterialAlertDialogBuilder(requireContext())
-                .setTitle(getString(R.string.alert))
-                .setMessage(getString(R.string.your_are_reuploading_bank_details))
-                .setPositiveButton(getString(R.string.okay)) { _, _ ->
+                .setTitle(getString(R.string.alert_amb))
+                .setMessage(getString(R.string.your_are_reuploading_bank_details_amb))
+                .setPositiveButton(getString(R.string.okay_amb)) { _, _ ->
 
                     bankViewLayout.gone()
                     bankEditLayout.visible()
@@ -159,7 +158,7 @@ class AddUserBankDetailsInfoFragment : Fragment(),IOnBackPressedOverride {
                     passbookAvailaibilityOptionRG.check(R.id.passbookYesRB)
                     enableSubmitButton()
                 }
-                .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
+                .setNegativeButton(getString(R.string.cancel_amb)) { _, _ -> }
                 .show()
         }
 
@@ -182,15 +181,15 @@ class AddUserBankDetailsInfoFragment : Fragment(),IOnBackPressedOverride {
 
         passbookSubmitSliderBtn.setOnClickListener {
 
-            if (passbookYesRB.isChecked || passbookSubmitSliderBtn.text == getString(R.string.update)) {
+            if (passbookYesRB.isChecked || passbookSubmitSliderBtn.text == getString(R.string.update_amb)) {
 
                 val ifsc = ifscEditText.text.toString().toUpperCase(Locale.getDefault())
                 if (!VerificationValidations.isIfSCValid(ifsc)) {
 
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage(getString(R.string.enter_valid_ifsc))
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setTitle(getString(R.string.alert_amb))
+                        .setMessage(getString(R.string.enter_valid_ifsc_amb))
+                        .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
                         .show()
 
                     return@setOnClickListener
@@ -223,9 +222,9 @@ class AddUserBankDetailsInfoFragment : Fragment(),IOnBackPressedOverride {
                 if (accountNoEditText.text.toString().length < 4) {
 
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage(getString(R.string.enter_valid_acc_no))
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .setTitle(getString(R.string.alert_amb))
+                        .setMessage(getString(R.string.enter_valid_acc_no_amb))
+                        .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
                         .show()
 
                     return@setOnClickListener
@@ -285,8 +284,8 @@ class AddUserBankDetailsInfoFragment : Fragment(),IOnBackPressedOverride {
 
     private fun showWhyWeNeedThisDialog() {
         navigation.navigateToWhyNeedThisBSFragment(childFragmentManager,bundleOf(
-            "title" to getString(R.string.why_do_we_need_this),
-        "content" to getString(R.string.why_we_need_this_bank)
+            "title" to getString(R.string.why_do_we_need_this_amb),
+        "content" to getString(R.string.why_we_need_this_bank_amb)
         ))
 //        WhyWeNeedThisBottomSheet.launch(
 //            childFragmentManager = childFragmentManager,
@@ -342,16 +341,16 @@ class AddUserBankDetailsInfoFragment : Fragment(),IOnBackPressedOverride {
         bankEditLayout.visibility = View.VISIBLE
 
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle(getString(R.string.alert))
+            .setTitle(getString(R.string.alert_amb))
             .setMessage(error)
-            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+            .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
             .show()
     }
 
     private fun documentsUploaded() {
 
         if (passbookYesRB.isChecked)
-            showToast(getString(R.string.bank_details_uploaded))
+            showToast(getString(R.string.bank_details_uploaded_amb))
 
 //        navigate(
 //            R.id.addUserPanCardInfoFragment, bundleOf(
@@ -367,10 +366,10 @@ class AddUserBankDetailsInfoFragment : Fragment(),IOnBackPressedOverride {
 
     private fun showGoBackConfirmationDialog() {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle(getString(R.string.alert))
-            .setMessage(getString(R.string.are_u_sure_u_want_to_go_back))
-            .setPositiveButton(getString(R.string.yes)) { _, _ -> goBackToUsersList() }
-            .setNegativeButton(getString(R.string.no)) { _, _ -> }
+            .setTitle(getString(R.string.alert_amb))
+            .setMessage(getString(R.string.are_u_sure_u_want_to_go_back_amb))
+            .setPositiveButton(getString(R.string.yes_amb)) { _, _ -> goBackToUsersList() }
+            .setNegativeButton(getString(R.string.no_amb)) { _, _ -> }
             .show()
     }
 
@@ -425,9 +424,9 @@ class AddUserBankDetailsInfoFragment : Fragment(),IOnBackPressedOverride {
 
             } else {
                 MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(getString(R.string.alert))
-                    .setMessage(getString(R.string.unable_to_capture_image))
-                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                    .setTitle(getString(R.string.alert_amb))
+                    .setMessage(getString(R.string.unable_to_capture_image_amb))
+                    .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
                     .show()
             }
         }
@@ -543,7 +542,7 @@ class AddUserBankDetailsInfoFragment : Fragment(),IOnBackPressedOverride {
         }
 
         val bankData = it ?: return
-        passbookSubmitSliderBtn.text = getString(R.string.update)
+        passbookSubmitSliderBtn.text = getString(R.string.update_amb)
         ifscEditText.setText(bankData.ifscCode)
         bankNameEditText.setText(bankData.bankName)
         accountNoEditText.setText(bankData.accountNo)

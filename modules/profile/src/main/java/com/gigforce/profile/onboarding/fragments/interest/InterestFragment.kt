@@ -140,7 +140,7 @@ class InterestFragment() :
                         } else {
                             Toast.makeText(
                                 context,
-                                "Maximum three interest can be selected!!",
+                                getString(R.string.max_three_interests_profile),
                                 Toast.LENGTH_SHORT
                             ).show()
                         }

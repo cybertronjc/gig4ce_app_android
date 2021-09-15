@@ -48,12 +48,11 @@ class AgeGroupFragment() : Fragment(),OnboardingFragmentNew.FragmentSetLastState
 
     override fun nextButtonActionFound(): Boolean {
         val radioButton = age_group.findViewById(age_group.checkedRadioButtonId) as RadioButton
-        var age = radioButton.text.toString()
+        var age = radioButton.tag.toString()
         var map = mapOf("age_group" to age)
         eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_UPDATED_AGE_GROUP,map))
         eventTracker.setUserProperty(map)
         eventTracker.setProfileProperty(ProfilePropArgs("Age Group", age))
-
         return false
     }
 

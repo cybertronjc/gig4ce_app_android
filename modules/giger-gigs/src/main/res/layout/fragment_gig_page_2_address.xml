@@ -25,7 +25,7 @@
         android:layout_marginStart="8dp"
         android:fontFamily="@font/lato_bold"
         android:letterSpacing="0.02"
-        android:text="Gig Location"
+        android:text="@string/gig_location_giger_gigs"
         android:layout_marginTop="3dp"
         android:textColor="@color/black_85"
         android:textSize="16sp"

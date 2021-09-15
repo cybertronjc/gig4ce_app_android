@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="pick_image_intent_text">Choose Image</string>
-    <string name="crop_and_rotate">Crop and Rotate</string>
+    <string name="pick_image_intent_text_common">Choose Image</string>
+    <string name="crop_and_rotate_common">Crop and Rotate</string>
+    <string name="unable_to_initialise_camera_common">Unable to initialise camera</string>
+    <string name="unable_to_open_camera_common">Unable to open camera ..check for device permissions</string>
+    <string name="unable_to_capture_photo_common">unable to capture photo</string>
+    <string name="image_upload_failed_common">Image Upload failed</string>
+    <string name="unable_to_upload_image_common">\"Unable to upload image , \"</string>
+    <string name="okay_common">Okay</string>
+    <string name="permission_denied_common">Permission request denied</string>
+    <string name="following_permission_are_required_to_click_image_common">Following permission are required to click image</string>
+    <string name="click_or_pick_image_common">Click or Pick Image</string>
+    <string name="camera_common">Camera</string>
+    <string name="gallery_common">Gallery</string>
 </resources>

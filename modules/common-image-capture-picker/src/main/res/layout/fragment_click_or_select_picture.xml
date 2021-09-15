@@ -21,7 +21,7 @@
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:text="Click or Pick Image" />
+        android:text="@string/click_or_pick_image_common" />
 
     <LinearLayout
         android:id="@+id/camera_layout"
@@ -47,7 +47,7 @@
             android:layout_marginTop="10dp"
             android:lineSpacingExtra="3sp"
             android:gravity="center_horizontal"
-            android:text="Camera"
+            android:text="@string/camera_common"
             />
 
 
@@ -79,7 +79,7 @@
             android:layout_marginTop="10dp"
             android:lineSpacingExtra="3sp"
             android:gravity="center_horizontal"
-            android:text="Gallery"
+            android:text="@string/gallery_common"
             />
 
 

@@ -36,7 +36,7 @@
                 android:layout_marginStart="@dimen/size_16"
                 android:fontFamily="@font/lato_bold"
                 android:letterSpacing="0"
-                android:text="Chat"
+                android:text="@string/chat_app"
                 android:textColor="#000000"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="@+id/back_arrow"
@@ -172,7 +172,7 @@
             android:layout_marginTop="38dp"
             android:fontFamily="@font/lato"
             android:gravity="center_horizontal"
-            android:text="No Chat …"
+            android:text="@string/no_chat_app"
             android:textColor="@color/lipstick"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -183,7 +183,7 @@
             android:layout_marginTop="24dp"
             android:fontFamily="@font/lato"
             android:gravity="center_horizontal"
-            android:text="Oops…it looks like you have not started chat with anyone."
+            android:text="@string/oops_it_looks_like_you_have_not_started_chat_with_anyone_app"
             android:textColor="@color/warm_grey"
             android:textSize="16sp"
             android:textStyle="normal" />
@@ -196,7 +196,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginTop="38dp"
             android:layout_marginRight="16dp"
-            android:text="Contacts"
+            android:text="@string/contacts"
             app:strokeColor="@color/colorPrimary" />
 
 

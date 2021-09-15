@@ -700,12 +700,12 @@ class OnboardingMainFragment : BaseFragment() {
     }
     private var isOpened = false
     private fun onShowKeyboard(keyboardHeight: Int) {
-        showToast("working open")
+        showToast(getString(R.string.working_open))
 
     }
 
     private fun onHideKeyboard() {
-        showToast("working")
+        showToast(getString(R.string.working))
     }
 
     class CustomTouchListener(var next: View, var activity: Activity) : View.OnTouchListener {

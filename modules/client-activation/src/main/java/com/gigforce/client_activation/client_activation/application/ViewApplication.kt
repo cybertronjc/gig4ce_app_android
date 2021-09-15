@@ -4,25 +4,17 @@ import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.AdapterView
 import androidx.core.content.ContextCompat
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.client_activation.R
-import com.gigforce.client_activation.client_activation.AdapterApplicationClientActivation
-import com.gigforce.client_activation.client_activation.ClientActivationNewUserRepo
-import com.gigforce.client_activation.client_activation.ClientActivationRepository
 import com.gigforce.client_activation.client_activation.adapters.AdapterViewApplication
 import com.gigforce.client_activation.client_activation.models.RequiredFeatures
-import com.gigforce.common_ui.StringConstants
-import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.core.datamodels.client_activation.JpApplication
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
-import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.layout_fragment_client_activation.*
 import kotlinx.android.synthetic.main.view_application_fragment.*
@@ -80,7 +72,7 @@ class ViewApplication : Fragment() {
 
     fun updateUI(jpApplication: JpApplication){
         pb_client_activation.gone()
-        tv_mark_as_interest_role_details.text = getString(R.string.apply_now)
+        tv_mark_as_interest_role_details.text = getString(R.string.apply_now_client)
         run {
             if (jpApplication.status == "") {
                 tv_application_status.gone()

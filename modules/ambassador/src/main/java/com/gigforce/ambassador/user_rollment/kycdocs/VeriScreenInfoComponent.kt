@@ -59,7 +59,7 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
                             ?: ""
             val querytextstr =
                     styledAttributeSet.getString(R.styleable.VeriScreenInfoComponent_querytext)
-                            ?: "Why we need this"
+                            ?: context.getString(R.string.why_we_need_this_amb)
             val missingdoctext =
                     styledAttributeSet.getString(R.styleable.VeriScreenInfoComponent_missingdoctext)
                             ?: ""
@@ -75,7 +75,7 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
     }
 
     private fun setChangeText() {
-        val content = SpannableString(resources.getString(R.string.change_text))
+        val content = SpannableString(resources.getString(R.string.change_text_amb))
         content.setSpan(UnderlineSpan(), 0, content.length, 0)
         editBankDetail.text = content
         editBankDetail.gone()
@@ -212,7 +212,7 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
                 uppercaption.gone()
             }
         } ?: run {
-            uppercaption.text = "Congratulation"
+            uppercaption.text = context.getString(R.string.congratulations_amb)
         }
         uploadHereText.gone()
     }

@@ -128,7 +128,7 @@ class AadhaarCardImageUploadFragment : Fragment(),
             .build()
         val list = listOf(
             KYCImageModel(
-                text = getString(R.string.upload_pan_card_new),
+                text = getString(R.string.upload_pan_card_new_veri),
                 imageIcon = frontUri,
                 imageUploaded = false
             )
@@ -289,6 +289,9 @@ class AadhaarCardImageUploadFragment : Fragment(),
             it?.let {
 
                 if (it.verified) {
+                    var props = HashMap<String, Any>()
+                    props.put("Aadhaar verified", true)
+                    eventTracker.setUserProperty(props)
                     verificationScreenStatus = VerificationScreenStatus.VERIFIED
                     verifiedStatusViews()
                     viewBinding.belowLayout.visible()
@@ -331,13 +334,13 @@ class AadhaarCardImageUploadFragment : Fragment(),
         viewBinding.belowLayout.gone()
         viewBinding.toplayoutblock.uploadStatusLayout(
             AppConstants.UPLOAD_SUCCESS,
-            "Verification Completed",
-            "The Aadhar card details have been verified successfully."
+            getString(R.string.verification_completed_veri),
+            getString(R.string.aadhar_verified_veri)
         )
         viewBinding.submitButton.visible()
-        viewBinding.submitButton.text = "Next"
+        viewBinding.submitButton.text = getString(R.string.next_veri)
         viewBinding.progressBar.gone()
-        viewBinding.toplayoutblock.setVerificationSuccessfulView("Aadhaar card verified")
+        viewBinding.toplayoutblock.setVerificationSuccessfulView(getString(R.string.aadhar_verified_success_veri))
 
 
     }

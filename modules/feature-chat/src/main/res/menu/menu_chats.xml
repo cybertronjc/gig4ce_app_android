@@ -3,25 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_pick_image"
-        android:title="Image"
+        android:title="@string/image_propercase"
         android:icon="@drawable/ic_chat_image"
         app:showAsAction="collapseActionView" />
     <item
         android:id="@+id/action_video"
-        android:title="Video"
+        android:title="@string/video_propercase"
         android:icon="@drawable/ic_chat_video"
         app:showAsAction="collapseActionView" />
     <item
         android:id="@+id/action_document"
         android:orderInCategory="100"
-        android:title="Document"
+        android:title="@string/document_propercase"
         android:icon="@drawable/ic_chat_document"
         app:showAsAction="collapseActionView" />
 
     <item
         android:id="@+id/action_location"
         android:orderInCategory="100"
-        android:title="Location"
+        android:title="@string/location_propercase"
         android:icon="@drawable/ic_chat_location"
         app:showAsAction="collapseActionView" />
 

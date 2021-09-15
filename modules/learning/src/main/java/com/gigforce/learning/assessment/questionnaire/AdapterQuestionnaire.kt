@@ -43,7 +43,7 @@ class AdapterQuestionnaire constructor(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val question = items[position]
         holder.itemView.tv_question_no_questionnaire.text = Html.fromHtml(
-            "${holder.itemView.resources.getString(R.string.ques)} ${position + 1}/${items.size} :"
+            "${holder.itemView.resources.getString(R.string.ques_learning)} ${position + 1}/${items.size} :"
         )
         holder.itemView.tv_question_questionnaire.text = Html.fromHtml(question.question)
         if (question.url.isNotEmpty()) {

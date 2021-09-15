@@ -71,13 +71,13 @@ class GigInfoCardComponent(context: Context, attrs: AttributeSet?) :
                 this.findViewById<View>(R.id.checkInTV).isEnabled = false
             } else if (data.isCheckInAndCheckOutMarked()) {
                 this.findViewById<View>(R.id.checkInTV).isEnabled = false
-                this.findViewById<Button>(R.id.checkInTV).text = "Checked Out"
+                this.findViewById<Button>(R.id.checkInTV).text = context.getString(R.string.checkedout_common_ui)
             } else if (data.isCheckInMarked()) {
                 this.findViewById<Button>(R.id.checkInTV).isEnabled = true
-                this.findViewById<Button>(R.id.checkInTV).text = "Checked Out"
+                this.findViewById<Button>(R.id.checkInTV).text = context.getString(R.string.checkedout_common_ui)
             } else {
                 this.findViewById<Button>(R.id.checkInTV).isEnabled = true
-                this.findViewById<Button>(R.id.checkInTV).text = "Checked In"
+                this.findViewById<Button>(R.id.checkInTV).text = context.getString(R.string.check_common_ui)
             }
 
         } else {

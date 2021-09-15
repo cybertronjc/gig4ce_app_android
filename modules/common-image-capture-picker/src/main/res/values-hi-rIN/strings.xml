@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pick_image_intent_text_common">छवि चुनें</string>
+    <string name="crop_and_rotate_common">फसल और घुमाएँ</string>
+    <string name="unable_to_initialise_camera_common">कैमरा प्रारंभ करने में असमर्थ</string>
+    <string name="unable_to_open_camera_common">कैमरा खोलने में असमर्थ ..डिवाइस अनुमतियों की जांच करें</string>
+    <string name="unable_to_capture_photo_common">फोटो खींचने में असमर्थ</string>
+    <string name="image_upload_failed_common">फोटो अपलोड विफल</string>
+    <string name="unable_to_upload_image_common">\"फोटो अपलोड करने में असमर्थ, \"</string>
+    <string name="okay_common">ठीक</string>
+    <string name="permission_denied_common">अनुमति अनुरोध अस्वीकृत</string>
+    <string name="following_permission_are_required_to_click_image_common">फोटो क्लिक करने के लिए निम्नलिखित अनुमति की आवश्यकता है</string>
+    <string name="click_or_pick_image_common">फोटो पर क्लिक करें या चुनें</string>
+    <string name="camera_common">कैमरा</string>
+    <string name="gallery_common">गेलरी</string>
+</resources>
