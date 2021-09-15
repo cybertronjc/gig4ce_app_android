@@ -49,17 +49,8 @@ interface LoginSummaryService {
         @Path("userUid") userUid: String
     ) : Response<CheckMark>
 
-    @GET
-    suspend fun getBusinessByCity(
-        @Url getListingUrl : String,
-        @Query("searchCity") searchCity: String,
-        @Query("searchDate") searchDate: String,
-        @Query("page") page: Int,
-        @Query("pagesize") pagesize: Int
-    ) : Response<List<LoginSummaryBusiness>>
 
-    //TODO("replace with di provided url")
-    @GET("https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/gigerAttendanceReport/getDetailsByTLandCity/{cityId}")
+    @GET("gigerAttendanceReport/getDetailsByTLandCity/{cityId}")
     suspend fun getBusinessByCityWithLoginCount(
         @Path("cityId") cityId : String
     ): Response<List<LoginSummaryBusiness>>
