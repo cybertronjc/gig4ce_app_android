@@ -44,7 +44,7 @@ data class LoginSummaryBusiness(
     @SerializedName("jobProfileName")
     val jobProfileName: String? = null,
 
-    @SerializedName("loginCount")
+    @SerializedName("gigerCount")
     var loginCount: Int? = null,
 
     var updatedBy: String? = null,
