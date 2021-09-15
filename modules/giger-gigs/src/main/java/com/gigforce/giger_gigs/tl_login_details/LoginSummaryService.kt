@@ -62,7 +62,8 @@ interface LoginSummaryService {
         @Query("pagesize") pagesize: Int
     ) : Response<List<LoginSummaryBusiness>>
 
-    @GET("gigerAttendanceReport/getDetailsByTLandCity/{cityId}")
+    //TODO("replace with di provided url")
+    @GET("https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/gigerAttendanceReport/getDetailsByTLandCity/{cityId}")
     suspend fun getBusinessByCityWithLoginCount(
         @Path("cityId") cityId : String
     ): Response<List<LoginSummaryBusiness>>

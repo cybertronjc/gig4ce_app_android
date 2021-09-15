@@ -50,7 +50,7 @@ class TlLoginSummaryRepository (
     }
 
     suspend fun getBusinessByCity(cityId: String): List<LoginSummaryBusiness> {
-        val businessByCity = loginSummaryService.getBusinessByCity(buildConfig.getListingBaseUrl() + "/businessByCity/"+cityId)
+        val businessByCity = loginSummaryService.getBusinessByCityWithLoginCount(cityId)
 
         if (!businessByCity.isSuccessful){
             throw Exception(businessByCity.message())
