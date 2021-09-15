@@ -1,11 +1,21 @@
 package com.gigforce.common_image_picker.image_capture_camerax.fragments
 
+import android.content.Context
+import android.database.Cursor
+import android.graphics.*
+import android.media.ExifInterface
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
+import android.widget.Toast
+import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -14,8 +24,14 @@ import com.bumptech.glide.Glide
 import com.gigforce.common_image_picker.R
 import com.gigforce.common_image_picker.image_capture_camerax.CaptureImageSharedViewModel
 import com.gigforce.common_image_picker.image_capture_camerax.CaptureImageSharedViewState
+import com.gigforce.common_ui.ext.showToast
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import java.io.File
+import com.google.firebase.ml.vision.FirebaseVision
+import com.google.firebase.ml.vision.common.FirebaseVisionImage
+import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions
+import java.io.*
+import java.util.*
+import kotlin.Exception
 
 
 class ImageViewerFragment : Fragment() {
@@ -33,6 +49,15 @@ class ImageViewerFragment : Fragment() {
     private lateinit var image: File
     private var shouldUploadImageToo: Boolean = false
     private  var parentDirectoryNameInFirebaseStorage: String? = null
+
+    val options = FirebaseVisionFaceDetectorOptions.Builder()
+        .setModeType(FirebaseVisionFaceDetectorOptions.ACCURATE_MODE)
+        .setLandmarkType(FirebaseVisionFaceDetectorOptions.ALL_LANDMARKS)
+        .setClassificationType(FirebaseVisionFaceDetectorOptions.ALL_CLASSIFICATIONS)
+        .build()
+
+    val detector = FirebaseVision.getInstance()
+        .getVisionFaceDetector(options)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -64,7 +89,8 @@ class ImageViewerFragment : Fragment() {
         }
 
         approveImageBtn.setOnClickListener {
-
+//            val fvImage = context?.let { it1 -> FirebaseVisionImage.fromFilePath(it1, Uri.parse(image.path)) }
+            detectFace(image.toUri())
             sharedCameraViewModel.clickedImageApproved(
                 shouldUploadImageToo,
                 image,
@@ -73,14 +99,37 @@ class ImageViewerFragment : Fragment() {
         }
     }
 
+    fun detectFace(path: Uri){
+        var fvImage : FirebaseVisionImage? = null
+        try {
+            fvImage = context?.let { FirebaseVisionImage.fromFilePath(it, image.toUri()) }
+        }catch (e: Exception){
+            Log.d("exception", "${e.message}")
+        }
 
+        //  Face detect - Check if face is present in the cropped image or not.
+        detector.detectInImage(fvImage!!)
+            .addOnSuccessListener { faces ->
+                // Task completed successfully
+                if (faces.size > 0) {
+                    Log.d("FaceDetect", "success")
+
+                } else {
+                    Log.d("FaceDetect", "failed")
+                }
+            }
+            .addOnFailureListener { e ->
+                // Task failed with an exception
+                Log.d("FaceDetect", "failed ${e.message}")
+            }
+    }
+    
 
     private fun getArgumentsFrom(arguments: Bundle?, savedInstanceState: Bundle?) {
         arguments?.let {
 
             val imagePath = it.getString(INTENT_EXTRA_FILE_PATH) ?: return@let
             image = File(imagePath)
-
             shouldUploadImageToo = it.getBoolean(INTENT_EXTRA_SHOULD_UPLOAD_IMAGE_TOO)
             parentDirectoryNameInFirebaseStorage = it.getString(INTENT_EXTRA_PARENT_DIRECTORY_NAME_IN_FIREBASE_STORAGE)
         }
@@ -89,7 +138,6 @@ class ImageViewerFragment : Fragment() {
 
             val imagePath = it.getString(INTENT_EXTRA_FILE_PATH) ?: return@let
             image = File(imagePath)
-
             shouldUploadImageToo = it.getBoolean(INTENT_EXTRA_SHOULD_UPLOAD_IMAGE_TOO)
             parentDirectoryNameInFirebaseStorage = it.getString(INTENT_EXTRA_PARENT_DIRECTORY_NAME_IN_FIREBASE_STORAGE)
         }
