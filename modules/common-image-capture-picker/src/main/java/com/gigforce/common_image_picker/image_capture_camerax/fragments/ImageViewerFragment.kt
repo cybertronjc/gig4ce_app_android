@@ -1,20 +1,15 @@
 package com.gigforce.common_image_picker.image_capture_camerax.fragments
 
-import android.content.Context
-import android.database.Cursor
 import android.graphics.*
-import android.media.ExifInterface
-import android.net.Uri
+import android.os.Build
 import android.os.Bundle
-import android.os.Environment
-import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
-import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -26,9 +21,9 @@ import com.gigforce.common_image_picker.image_capture_camerax.CaptureImageShared
 import com.gigforce.common_image_picker.image_capture_camerax.CaptureImageSharedViewState
 import com.gigforce.common_ui.ext.showToast
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.firebase.ml.vision.FirebaseVision
-import com.google.firebase.ml.vision.common.FirebaseVisionImage
-import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions
+import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.face.FaceDetection
+import com.google.mlkit.vision.face.FaceDetectorOptions
 import java.io.*
 import java.util.*
 import kotlin.Exception
@@ -43,21 +38,22 @@ class ImageViewerFragment : Fragment() {
     private lateinit var imageView: ImageView
     private lateinit var discardImageBtn: View
     private lateinit var approveImageBtn: View
-    private lateinit var progressBar : ProgressBar
+    private lateinit var progressBar: ProgressBar
 
     //Arguments
     private lateinit var image: File
     private var shouldUploadImageToo: Boolean = false
-    private  var parentDirectoryNameInFirebaseStorage: String? = null
+    private var parentDirectoryNameInFirebaseStorage: String? = null
 
-    val options = FirebaseVisionFaceDetectorOptions.Builder()
-        .setModeType(FirebaseVisionFaceDetectorOptions.ACCURATE_MODE)
-        .setLandmarkType(FirebaseVisionFaceDetectorOptions.ALL_LANDMARKS)
-        .setClassificationType(FirebaseVisionFaceDetectorOptions.ALL_CLASSIFICATIONS)
+    // High-accuracy landmark detection and face classification
+    val highAccuracyOpts = FaceDetectorOptions.Builder()
+        .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_ACCURATE)
+        .setLandmarkMode(FaceDetectorOptions.LANDMARK_MODE_ALL)
+        .setClassificationMode(FaceDetectorOptions.CLASSIFICATION_MODE_ALL)
         .build()
 
-    val detector = FirebaseVision.getInstance()
-        .getVisionFaceDetector(options)
+
+    val detector = FaceDetection.getClient(highAccuracyOpts)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -69,6 +65,7 @@ class ImageViewerFragment : Fragment() {
         false
     )
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         findViews(view)
@@ -78,6 +75,7 @@ class ImageViewerFragment : Fragment() {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun findViews(view: View) {
         imageView = view.findViewById(R.id.show_pic)
         discardImageBtn = view.findViewById(R.id.retake_image)
@@ -89,41 +87,48 @@ class ImageViewerFragment : Fragment() {
         }
 
         approveImageBtn.setOnClickListener {
-//            val fvImage = context?.let { it1 -> FirebaseVisionImage.fromFilePath(it1, Uri.parse(image.path)) }
-            detectFace(image.toUri())
-            sharedCameraViewModel.clickedImageApproved(
-                shouldUploadImageToo,
-                image,
-                parentDirectoryNameInFirebaseStorage
-            )
+            //detecting face after approved
+            detectFace()
         }
     }
 
-    fun detectFace(path: Uri){
-        var fvImage : FirebaseVisionImage? = null
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun detectFace() {
         try {
-            fvImage = context?.let { FirebaseVisionImage.fromFilePath(it, image.toUri()) }
-        }catch (e: Exception){
+            var image1: InputImage? = null
+            try {
+                image1 = InputImage.fromFilePath(context, image.toUri())
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+
+            //  Face detect - Check if face is present in the image or not.
+            val result = detector.process(image1)
+                .addOnSuccessListener { faces ->
+                    // Task completed successfully
+                    if (faces.size > 0) {
+                        Log.d("FaceDetect", "success")
+                        showToast(getString(R.string.face_detected_common))
+                        sharedCameraViewModel.clickedImageApproved(
+                            shouldUploadImageToo,
+                            image,
+                            parentDirectoryNameInFirebaseStorage
+                        )
+
+                    } else {
+                        Log.d("FaceDetect", "failed")
+                        showToast(getString(R.string.something_seems_off_common))
+                    }
+                }
+                .addOnFailureListener { e ->
+                    // Task failed with an exception
+                    Log.d("FaceDetect", "failed ${e.message}")
+                    showToast(getString(R.string.something_seems_off_common))
+                }
+        } catch (e: Exception) {
             Log.d("exception", "${e.message}")
         }
-
-        //  Face detect - Check if face is present in the cropped image or not.
-        detector.detectInImage(fvImage!!)
-            .addOnSuccessListener { faces ->
-                // Task completed successfully
-                if (faces.size > 0) {
-                    Log.d("FaceDetect", "success")
-
-                } else {
-                    Log.d("FaceDetect", "failed")
-                }
-            }
-            .addOnFailureListener { e ->
-                // Task failed with an exception
-                Log.d("FaceDetect", "failed ${e.message}")
-            }
     }
-    
 
     private fun getArgumentsFrom(arguments: Bundle?, savedInstanceState: Bundle?) {
         arguments?.let {
@@ -131,7 +136,8 @@ class ImageViewerFragment : Fragment() {
             val imagePath = it.getString(INTENT_EXTRA_FILE_PATH) ?: return@let
             image = File(imagePath)
             shouldUploadImageToo = it.getBoolean(INTENT_EXTRA_SHOULD_UPLOAD_IMAGE_TOO)
-            parentDirectoryNameInFirebaseStorage = it.getString(INTENT_EXTRA_PARENT_DIRECTORY_NAME_IN_FIREBASE_STORAGE)
+            parentDirectoryNameInFirebaseStorage =
+                it.getString(INTENT_EXTRA_PARENT_DIRECTORY_NAME_IN_FIREBASE_STORAGE)
         }
 
         savedInstanceState?.let {
@@ -139,7 +145,8 @@ class ImageViewerFragment : Fragment() {
             val imagePath = it.getString(INTENT_EXTRA_FILE_PATH) ?: return@let
             image = File(imagePath)
             shouldUploadImageToo = it.getBoolean(INTENT_EXTRA_SHOULD_UPLOAD_IMAGE_TOO)
-            parentDirectoryNameInFirebaseStorage = it.getString(INTENT_EXTRA_PARENT_DIRECTORY_NAME_IN_FIREBASE_STORAGE)
+            parentDirectoryNameInFirebaseStorage =
+                it.getString(INTENT_EXTRA_PARENT_DIRECTORY_NAME_IN_FIREBASE_STORAGE)
         }
     }
 
@@ -147,7 +154,10 @@ class ImageViewerFragment : Fragment() {
         super.onSaveInstanceState(outState)
         outState.putString(INTENT_EXTRA_FILE_PATH, image.absolutePath)
         outState.putBoolean(INTENT_EXTRA_SHOULD_UPLOAD_IMAGE_TOO, shouldUploadImageToo)
-        outState.putString(INTENT_EXTRA_PARENT_DIRECTORY_NAME_IN_FIREBASE_STORAGE, parentDirectoryNameInFirebaseStorage)
+        outState.putString(
+            INTENT_EXTRA_PARENT_DIRECTORY_NAME_IN_FIREBASE_STORAGE,
+            parentDirectoryNameInFirebaseStorage
+        )
     }
 
     private fun initViewModel() {
@@ -157,17 +167,17 @@ class ImageViewerFragment : Fragment() {
 
                 when (it) {
                     is CaptureImageSharedViewState.ImageUploadFailed -> {
-                        if(!isAdded) return@Observer
+                        if (!isAdded) return@Observer
 
                         progressBar.visibility = View.GONE
                         MaterialAlertDialogBuilder(requireContext())
                             .setTitle(getString(R.string.image_upload_failed_common))
                             .setMessage(getString(R.string.unable_to_upload_image_common) + it.error)
-                            .setPositiveButton(getString(R.string.okay_common)) { _, _ ->}
+                            .setPositiveButton(getString(R.string.okay_common)) { _, _ -> }
                             .show()
                     }
                     is CaptureImageSharedViewState.ImageUploading -> {
-                        if(!isAdded) return@Observer
+                        if (!isAdded) return@Observer
 
                         progressBar.visibility = View.VISIBLE
                         progressBar.progress = it.progress
@@ -177,7 +187,6 @@ class ImageViewerFragment : Fragment() {
                 }
             })
     }
-
 
 
     companion object {

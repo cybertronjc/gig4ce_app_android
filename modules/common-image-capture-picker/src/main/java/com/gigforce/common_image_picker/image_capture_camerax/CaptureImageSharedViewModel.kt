@@ -1,23 +1,14 @@
 package com.gigforce.common_image_picker.image_capture_camerax
 
-import android.database.Cursor
+
 import android.graphics.*
-import android.media.ExifInterface
-import android.provider.MediaStore
 import android.net.Uri
 import android.os.Environment
-
 import android.util.Log
-import android.widget.Toast
-import androidx.core.net.toUri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gigforce.core.extensions.putBytesOrThrow
-import com.google.firebase.ml.vision.FirebaseVision
-import com.google.firebase.ml.vision.common.FirebaseVisionImage
-import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.OnProgressListener
 import com.google.firebase.storage.StorageReference
@@ -66,16 +57,6 @@ class CaptureImageSharedViewModel : ViewModel() {
     val captureImageSharedViewModelState: LiveData<CaptureImageSharedViewState> =
         _captureImageSharedViewModelState
 
-    val options = with(FirebaseVisionFaceDetectorOptions.Builder()) {
-        setModeType(FirebaseVisionFaceDetectorOptions.ACCURATE_MODE)
-        setLandmarkType(FirebaseVisionFaceDetectorOptions.ALL_LANDMARKS)
-        setClassificationType(FirebaseVisionFaceDetectorOptions.ALL_CLASSIFICATIONS)
-        setMinFaceSize(0.15f)
-        setTrackingEnabled(true)
-        build()
-    }
-    val detector = FirebaseVision.getInstance()
-        .getVisionFaceDetector(options)
 
     fun imageCapturedOpenImageViewer(
         output: File,
@@ -149,52 +130,6 @@ class CaptureImageSharedViewModel : ViewModel() {
 //      check the rotation of the image and display it properly
                 val resizedBitmapCount = resizedBitmap.allocationByteCount
                 Log.d("count", "original $resizedBitmapCount")
-                val exif: ExifInterface?
-                try {
-                    exif = filePath?.let { ExifInterface(it) }
-                    val orientation: Int? = exif?.getAttributeInt(
-                        ExifInterface.TAG_ORIENTATION, 0
-                    )
-                    Log.d("EXIF", "Exif: $orientation")
-                    val matrix = Matrix()
-                    if (orientation == 6) {
-                        matrix.postRotate(90F)
-                        Log.d("EXIF", "Exif: $orientation")
-                    } else if (orientation == 3) {
-                        matrix.postRotate(180F)
-                        Log.d("EXIF", "Exif: $orientation")
-                    } else if (orientation == 8) {
-                        matrix.postRotate(270F)
-                        Log.d("EXIF", "Exif: $orientation")
-                    }
-                    resizedBitmap = Bitmap.createBitmap(
-                        resizedBitmap!!, 0, 0,
-                        resizedBitmap.width, resizedBitmap.height, matrix,
-                        true
-                    )
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
-
-
-
-                //detecting face
-//                val fvImage = FirebaseVisionImage.fromByteArray(baos.toByteArray(), )
-//                //  Face detect - Check if face is present in the cropped image or not.
-//                val result = detector.detectInImage(fvImage)
-//                    .addOnSuccessListener { faces ->
-//                        // Task completed successfully
-//                        if (faces.size > 0) {
-//                            Log.d("FaceDetect", "success")
-//
-//                        } else {
-//                          Log.d("FaceDetect", "failed")
-//                        }
-//                    }
-//                    .addOnFailureListener { e ->
-//                        // Task failed with an exception
-//                        Log.d("FaceDetect", "failed ${e.message}")
-//                    }
 
                 uploadPathInFirebaseStorage = bitmapToFile(resizedBitmap, "temp.jpg")?.let {
                     uploadImageInFirebase(
@@ -216,6 +151,7 @@ class CaptureImageSharedViewModel : ViewModel() {
             uploadPathInFirebaseStorage
         )
     }
+
 
     fun bitmapToFile(
         bitmap: Bitmap,
