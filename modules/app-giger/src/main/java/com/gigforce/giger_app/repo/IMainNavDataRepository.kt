@@ -100,7 +100,7 @@ class MainNavDataRepository @Inject constructor(
                 )
 
             }
-            val tempMainNavData = mainNavData.filter { it.active && (it.type == null || it.type == "") } as ArrayList<FeatureItemCard2DVM>
+            val tempMainNavData = mainNavData.filter { it.active && (it.type == null || it.type == "" || it.type == "icon" || it.type == "folder") } as ArrayList<FeatureItemCard2DVM>
             tempMainNavData.sortBy { it.index }
 //            var tempMainNavData = mainNavData.dup
             mainNavData.clear()
@@ -210,26 +210,4 @@ class MainNavDataRepository @Inject constructor(
         return mainNavData
     }
 
-}
-
-private fun arrangeDataAndSetObserver(iconList: Any) {
-    val list = iconList as? List<Map<String, Any>>
-    list?.let {
-        val appConfigList = arrayListOf<FeatureItemCard2DVM>()
-
-        for (item in list) {
-            try {
-                var appConfig = Gson().fromJson(JSONObject(item).toString(), FeatureItemCard2DVM::class.java)
-                appConfigList.add(appConfig)
-            }catch (e: Exception){
-                FirebaseCrashlytics.getInstance().log("IMainNavDataRepo : $e")
-            }
-        }
-        // defaultViewType is currently 0
-        val mainNavData = appConfigList.filter { it.active && (it.type == null || it.type == "") }
-        mainNavData.sortedBy { it.index }
-        data.value = mainNavData
-        receivedNotifyToServer()
-        reloadCount++
-    }
 }

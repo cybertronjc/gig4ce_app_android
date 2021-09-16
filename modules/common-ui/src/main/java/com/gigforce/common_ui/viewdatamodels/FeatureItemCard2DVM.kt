@@ -20,6 +20,6 @@ class FeatureItemCard2DVM(
     val imageUrl: String? = null,
     val navPath: String? = null,
     val type: String? = null,
-    val parentIcon: String? = null
+    val subicons: List<Long>? = null
 ) :
     SimpleDVM(CommonViewTypes.VIEW_FEATURE_ITEM_CARD2, navPath), Parcelable

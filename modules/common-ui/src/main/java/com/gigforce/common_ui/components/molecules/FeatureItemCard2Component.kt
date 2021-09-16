@@ -5,9 +5,11 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.core.os.bundleOf
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.viewdatamodels.FeatureItemCard2DVM
 import com.gigforce.core.IViewHolder
+import com.gigforce.core.StringConstants
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.GlideApp
@@ -67,15 +69,28 @@ class FeatureItemCard2Component(context: Context, attrs: AttributeSet?) :
         if(data is FeatureItemCard2DVM){
 
             feature_title.text = data.title
-
-            data.getNavArgs() ?. let {
-                this.setOnClickListener{ view ->
-                    navigation.navigateTo(it.navPath, it.args)
+            data.subicons?.let {
+                if(it.isNotEmpty()){
+                    navigation.navigateTo("subiconlistfragment", bundleOf(StringConstants.SUBICONS.value to it))
                 }
+                else{
+                    navigate(data)
+                }
+            }?:run{
+                navigate(data)
             }
+
             setImage(data)
 
         }
 
+    }
+
+    private fun navigate(data: FeatureItemCard2DVM) {
+        data.getNavArgs() ?. let {
+            this.setOnClickListener{ view ->
+                navigation.navigateTo(it.navPath, it.args)
+            }
+        }
     }
 }
