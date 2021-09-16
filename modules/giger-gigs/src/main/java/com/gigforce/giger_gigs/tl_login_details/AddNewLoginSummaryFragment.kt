@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.repository.ProfileFirebaseRepository
+import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.invisible
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
@@ -404,6 +405,13 @@ class AddNewLoginSummaryFragment : Fragment() {
 
                 is BusinessAppViewState.BusinessListLoaded -> {
                     Log.d("List1", "Business list ${state.businessList}")
+
+                    if(state.businessList.isEmpty()){
+                        noDataFound.visible()
+                        noData.text = getString(R.string.no_business_found_for_this_city)
+                    } else{
+                        noDataFound.gone()
+                    }
                     showBusinesses(state.businessList)
                 }
 
