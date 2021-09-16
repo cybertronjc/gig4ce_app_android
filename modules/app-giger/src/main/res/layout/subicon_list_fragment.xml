@@ -6,13 +6,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.SubiconListFragment">
 
-    <com.gigforce.common_ui.views.GigforceToolbar
+    <com.gigforce.common_ui.components.cells.AppBar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:backgroundType="PinkBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        />
+        app:titleText="TL" />
 
     <com.gigforce.core.recyclerView.CoreRecyclerView
         android:id="@+id/subiconsrv"

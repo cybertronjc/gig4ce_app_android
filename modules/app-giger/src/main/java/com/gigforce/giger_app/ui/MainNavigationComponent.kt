@@ -32,11 +32,11 @@ class MainNavigationComponent(context: Context, attrs: AttributeSet?) :
                             FeatureLayoutDVM(
                                 data.imageUrl,
                                 data.hi?.title ?: data.title,
-                                it
+                                it.filter { it.type == null || it.type == "" || it.type == "icon" || it.type == "folder" }
                             )
                         )
                     } else {
-                        super.bind(FeatureLayoutDVM(data.imageUrl, data.title, it))
+                        super.bind(FeatureLayoutDVM(data.imageUrl, data.title, it.filter { it.type == null || it.type == "" || it.type == "icon" || it.type == "folder" }))
                     }
                 } catch (e: Exception) {
                 }

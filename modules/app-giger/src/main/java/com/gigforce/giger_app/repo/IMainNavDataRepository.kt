@@ -84,23 +84,31 @@ class MainNavDataRepository @Inject constructor(
         list?.let {
             val mainNavData = ArrayList<FeatureItemCard2DVM>()
             for (item in list) {
-                val title = item.get("title") as? String ?: "-"
-                val index = (item.get("index") as? Long) ?: 500
-                val icon_type = item.get("icon") as? String
-                val navPath = item.get("navPath") as? String
-                val active = item.get("active") as? Boolean ?: true
-                mainNavData.add(
-                    FeatureItemCard2DVM(
-                        active = active,
-                        title = title,
-                        icon = icon_type,
-                        navPath = navPath,
-                        index = index
+                try {
+                    val title = item.get("title") as? String ?: "-"
+                    val index = (item.get("index") as? Long) ?: 500
+                    val icon_type = item.get("icon") as? String
+                    val navPath = item.get("navPath") as? String
+                    val active = item.get("active") as? Boolean ?: true
+                    val type = item.get("type") as? String ?: ""
+                    val subicons = item.get("subicons") as? List<Long> ?: null
+                    mainNavData.add(
+                        FeatureItemCard2DVM(
+                            active = active,
+                            title = title,
+                            icon = icon_type,
+                            navPath = navPath,
+                            index = index,
+                            type = type,
+                            subicons = subicons
+                        )
                     )
-                )
+                }catch (e:Exception){
+
+                }
 
             }
-            val tempMainNavData = mainNavData.filter { it.active && (it.type == null || it.type == "" || it.type == "icon" || it.type == "folder") } as ArrayList<FeatureItemCard2DVM>
+            val tempMainNavData = mainNavData.filter { it.active } as ArrayList<FeatureItemCard2DVM>
             tempMainNavData.sortBy { it.index }
 //            var tempMainNavData = mainNavData.dup
             mainNavData.clear()

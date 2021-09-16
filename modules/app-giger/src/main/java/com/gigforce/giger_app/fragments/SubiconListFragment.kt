@@ -11,9 +11,11 @@ import com.gigforce.core.StringConstants
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.giger_app.R
 import com.gigforce.giger_app.repo.IMainNavDataRepository
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.subicon_list_fragment.*
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class SubiconListFragment : Fragment() {
 
     @Inject
@@ -35,11 +37,22 @@ class SubiconListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         getDataFromIntent(savedInstanceState)
         observer()
+        listener()
+    }
+
+    private fun listener() {
+//        toolbar.textTitle.text = "TL"
+        toolbar.apply {
+            setBackButtonListener{
+                activity?.onBackPressed()
+            }
+        }
     }
 
     private fun observer() {
         repository.getData().observeForever {
             try {
+
                 var featureList  = ArrayList<FeatureItemCard2DVM>()
                 it.forEach{
                     arrayLong?.forEach { subIcons->
@@ -53,16 +66,16 @@ class SubiconListFragment : Fragment() {
             }
         }
     }
-    var arrayLong : LongArray?=null
+    var arrayLong : ArrayList<Long>?=null
     private fun getDataFromIntent(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
             arrayLong =
-                it.getLongArray(StringConstants.SUBICONS.value)
+                it.get(StringConstants.SUBICONS.value) as ArrayList<Long>
 
         } ?: run {
             arguments?.let {
                 arrayLong =
-                    it.getLongArray(StringConstants.SUBICONS.value)
+                    it.get(StringConstants.SUBICONS.value) as ArrayList<Long>
             }
         }
 

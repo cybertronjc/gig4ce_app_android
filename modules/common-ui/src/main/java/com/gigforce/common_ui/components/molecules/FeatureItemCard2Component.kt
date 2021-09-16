@@ -30,32 +30,34 @@ class FeatureItemCard2Component(context: Context, attrs: AttributeSet?) :
         LayoutInflater.from(context).inflate(R.layout.feature_item_card2, this, true)
     }
 
-    @Inject lateinit var navigation:INavigation
-    @Inject lateinit var buildConfig : IBuildConfig
+    @Inject
+    lateinit var navigation: INavigation
+    @Inject
+    lateinit var buildConfig: IBuildConfig
 
-    fun setImageFromUrl(url:String){
+    fun setImageFromUrl(url: String) {
         GlideApp.with(context)
             .load(url)
             .into(feature_icon)
     }
 
-    fun setImageFromUrl(storageReference: StorageReference){
+    fun setImageFromUrl(storageReference: StorageReference) {
         GlideApp.with(context)
             .load(storageReference)
             .into(feature_icon)
     }
 
-    fun setImage(data:FeatureItemCard2DVM){
+    fun setImage(data: FeatureItemCard2DVM) {
         data.imageUrl?.let {
             setImageFromUrl(it)
             return
         }
 
-        data.imageRes ?. let {
+        data.imageRes?.let {
             feature_icon.setImageResource(data.imageRes)
         }
 
-        data.icon ?. let{
+        data.icon?.let {
             val firebaseStoragePath = "${buildConfig.getFeaturesIconLocationUrl()}${data.icon}.png"
             val gsReference = FirebaseStorage.getInstance().getReferenceFromUrl(firebaseStoragePath)
             setImageFromUrl(gsReference)
@@ -66,17 +68,22 @@ class FeatureItemCard2Component(context: Context, attrs: AttributeSet?) :
 
         this.setOnClickListener(null)
 
-        if(data is FeatureItemCard2DVM){
+        if (data is FeatureItemCard2DVM) {
 
             feature_title.text = data.title
             data.subicons?.let {
-                if(it.isNotEmpty()){
-                    navigation.navigateTo("subiconlistfragment", bundleOf(StringConstants.SUBICONS.value to it, "name" to data.title))
+                this.setOnClickListener { _ ->
+                    if (it.isNotEmpty()) {
+                        navigation.navigateTo(
+                            "subiconlistfragment",
+                            bundleOf(StringConstants.SUBICONS.value to it, "name" to data.title)
+                        )
+                    } else {
+                        navigate(data)
+                    }
                 }
-                else{
-                    navigate(data)
-                }
-            }?:run{
+
+            } ?: run {
                 navigate(data)
             }
 
@@ -87,9 +94,9 @@ class FeatureItemCard2Component(context: Context, attrs: AttributeSet?) :
     }
 
     private fun navigate(data: FeatureItemCard2DVM) {
-        data.getNavArgs() ?. let {
-            this.setOnClickListener{ _ ->
-                it.args?.let { it.putString("name",data.title) }
+        data.getNavArgs()?.let {
+            this.setOnClickListener { _ ->
+                it.args?.let { it.putString("name", data.title) }
                 navigation.navigateTo(it.navPath, it.args)
             }
         }
