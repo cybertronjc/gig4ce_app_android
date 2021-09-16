@@ -71,7 +71,7 @@ class FeatureItemCard2Component(context: Context, attrs: AttributeSet?) :
             feature_title.text = data.title
             data.subicons?.let {
                 if(it.isNotEmpty()){
-                    navigation.navigateTo("subiconlistfragment", bundleOf(StringConstants.SUBICONS.value to it))
+                    navigation.navigateTo("subiconlistfragment", bundleOf(StringConstants.SUBICONS.value to it, "name" to data.title))
                 }
                 else{
                     navigate(data)
@@ -88,7 +88,8 @@ class FeatureItemCard2Component(context: Context, attrs: AttributeSet?) :
 
     private fun navigate(data: FeatureItemCard2DVM) {
         data.getNavArgs() ?. let {
-            this.setOnClickListener{ view ->
+            this.setOnClickListener{ _ ->
+                it.args?.let { it.putString("name",data.title) }
                 navigation.navigateTo(it.navPath, it.args)
             }
         }
