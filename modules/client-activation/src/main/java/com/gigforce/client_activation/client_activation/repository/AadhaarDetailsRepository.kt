@@ -9,7 +9,6 @@ import com.gigforce.core.di.repo.IAadhaarDetailsRepository
 import com.gigforce.core.extensions.toFirebaseTimeStamp
 import com.gigforce.core.extensions.updateOrThrow
 import com.gigforce.core.fb.BaseFirestoreDBRepository
-import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.tasks.await
 import java.util.*
@@ -50,7 +49,7 @@ class AadhaarDetailsRepository @Inject constructor() : BaseFirestoreDBRepository
 
     }
 
-    suspend fun getCities(stateCode: String): MutableList<City> {
+    override suspend fun getCities(stateCode: String): MutableList<City> {
         try {
             val await =
                 db.collection(citiesCollectionName).whereEqualTo("state_code", stateCode).get()
@@ -68,7 +67,7 @@ class AadhaarDetailsRepository @Inject constructor() : BaseFirestoreDBRepository
         }
     }
 
-    suspend fun getVerificationDetails(): VerificationBaseModel? {
+    override suspend fun getVerificationDetails(): VerificationBaseModel? {
         try {
             val await = db.collection(verificationCollectionName).document(uid).get().await()
             if (!await.exists()) {

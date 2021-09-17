@@ -40,6 +40,8 @@ class VerificationMainViewModel @Inject constructor (
         allDocs.add(SimpleCardDVM(appContext.getString(R.string.driving_license),appContext.getString(R.string.tap_to_select),R.drawable.ic_directions_car_black_24dp, "verification/drivinglicenseimageupload", false))
         allDocs.add(SimpleCardDVM(appContext.getString(R.string.bank_details),appContext.getString(R.string.tap_to_select),R.drawable.ic_account_balance_black_24dp, "verification/bank_account_fragment", false))
         allDocs.add(SimpleCardDVM(appContext.getString(R.string.aadhar_card),appContext.getString(R.string.tap_to_select),R.drawable.ic_account_box_black_24dp, "verification/aadhaarcardimageupload", false))
+        allDocs.add(SimpleCardDVM(appContext.getString(R.string.aadhar_card_detail_veri),appContext.getString(R.string.tap_to_select),R.drawable.ic_account_box_black_24dp, "verification/AadharDetailInfoFragment", false))
+
         _allDocumentsData.value = allDocs
 
         verificationKycRepo.db.collection("Verification").document(verificationKycRepo.getUID()).addSnapshotListener { value, error ->
@@ -51,6 +53,7 @@ class VerificationMainViewModel @Inject constructor (
                 allDocs.add(SimpleCardDVM(title = appContext.getString(R.string.driving_license),subtitle = getSubString(doc?.driving_license?.verified,doc?.driving_license?.status),image = R.drawable.ic_directions_car_black_24dp, navpath = "verification/drivinglicenseimageupload", color = getSubStringColor(doc?.driving_license?.verified,doc?.driving_license?.status)))
                 allDocs.add(SimpleCardDVM(title = appContext.getString(R.string.bank_details),subtitle = getSubString(doc?.bank_details?.verified,doc?.bank_details?.status),image = R.drawable.ic_account_balance_black_24dp, navpath = "verification/bank_account_fragment", color = getSubStringColor(doc?.bank_details?.verified,doc?.bank_details?.status)))
                 allDocs.add(SimpleCardDVM(title = appContext.getString(R.string.aadhar_card),subtitle = getSubString(doc?.aadhar_card?.verified,""),image = R.drawable.ic_account_box_black_24dp, navpath = "verification/aadhaarcardimageupload", color = getSubStringColor(doc?.aadhar_card?.verified,"")))
+                allDocs.add(SimpleCardDVM(title = appContext.getString(R.string.aadhar_card_detail_veri),subtitle = getSubString(doc?.aadhar_card?.verified,""),image = R.drawable.ic_account_box_black_24dp, navpath = "verification/AadharDetailInfoFragment", color = getSubStringColor(doc?.aadhar_card?.verified,"")))
                 _allDocumentsData.value = allDocs
                 doc?.let {
                     var allVerified = true

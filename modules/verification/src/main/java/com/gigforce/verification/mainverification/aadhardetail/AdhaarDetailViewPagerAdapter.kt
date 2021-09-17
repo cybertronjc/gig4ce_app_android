@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.core.extensions.gone
+import com.gigforce.core.utils.GlideApp
 import com.gigforce.verification.R
 import com.google.firebase.storage.FirebaseStorage
 

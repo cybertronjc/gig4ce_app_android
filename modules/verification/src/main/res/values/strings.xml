@@ -410,7 +410,6 @@
     <string name="enter_valid_aadhar_veri">Enter valid aadhaar number</string>
     <string name="select_dob_veri">Select date of birth</string>
     <string name="enter_father_name_veri">Enter father name</string>
-    <string name="enter_add1_veri">Enter Address Line 1</string>
     <string name="enter_add2_veri">Enter Address Line 2</string>
     <string name="enter_valid_pin_veri">Enter valid pincode</string>
     <string name="enter_landmark_veri">Enter Landmark</string>
@@ -422,6 +421,7 @@
     <string name="aadhar_card_number_veri">AADHAR Card Number</string>
     <string name="please_enter_the_below_details_of_your_aadhar_this_step_is_mandatory_for_this_application_veri">Please enter the below details of your Aadhar. This step is mandatory for this application.</string>
     <string name="enter_aadhar_veri">Enter Aadhar Details</string>
+    <string name="aadhar_card_detail_veri">Aadhaar Card Details</string>
 
     <!--    <string name="veri_add_doc_front">"Front Side"</string>-->
 <!--    <string name="veri_add_doc_back">"Back Side"</string>-->

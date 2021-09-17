@@ -385,7 +385,6 @@
     <string name="please_upload_aadhar_here">कृपया अपना आधार कार्ड यहाँ अपलोड करें</string>
 
 
-
     <string name="upload_aadhar_front_veri">आधार कार्ड की फ्रंट फोटो अपलोड करें</string>
     <string name="upload_aadhar_back_veri">आधार कार्ड बैक फोटो अपलोड करें</string>
     <string name="enter_valid_aadhar_veri">मान्य आधार संख्या दर्ज करें</string>
@@ -401,7 +400,9 @@
     <string name="date_of_birth_spaced_veri">"   जन्म की तारीख   "</string>
     <string name="aadhar_card_number_veri">AADHAR Card Number</string>
     <string name="please_enter_the_below_details_of_your_aadhar_this_step_is_mandatory_for_this_application_veri">कृपया अपने आधार का विवरण नीचे दर्ज करें। इस आवेदन के लिए यह कदम अनिवार्य है।</string>
-    <string name="enter_aadhar_veri">Enter Aadhar Details</string>
+    <string name="enter_aadhar_veri">आधार विवरण दर्ज करें</string>
+    <string name="aadhar_card_detail_veri">आधार कार्ड विवरण</string>
+
     <!--    <string name="veri_add_doc_front">सामने की ओर</string>-->
     <!--    <string name="veri_add_doc_back">पीछे की ओर</string>-->
     <!--    <string name="veri_pan_title">चरण 5: अपना पैन अपलोड करें</string>-->
