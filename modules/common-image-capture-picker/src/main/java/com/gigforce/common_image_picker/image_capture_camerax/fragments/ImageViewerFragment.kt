@@ -65,7 +65,7 @@ class ImageViewerFragment : Fragment() {
         false
     )
 
-    @RequiresApi(Build.VERSION_CODES.N)
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         findViews(view)
@@ -75,7 +75,7 @@ class ImageViewerFragment : Fragment() {
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.N)
+
     private fun findViews(view: View) {
         imageView = view.findViewById(R.id.show_pic)
         discardImageBtn = view.findViewById(R.id.retake_image)
@@ -88,11 +88,19 @@ class ImageViewerFragment : Fragment() {
 
         approveImageBtn.setOnClickListener {
             //detecting face after approved
-            detectFace()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+                detectFace()
+            } else {
+                sharedCameraViewModel.clickedImageApproved(
+                    shouldUploadImageToo,
+                    image,
+                    parentDirectoryNameInFirebaseStorage
+                )
+            }
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
+
     fun detectFace() {
         try {
             var image1: InputImage? = null
@@ -123,7 +131,11 @@ class ImageViewerFragment : Fragment() {
                 .addOnFailureListener { e ->
                     // Task failed with an exception
                     Log.d("FaceDetect", "failed ${e.message}")
-                    showToast(getString(R.string.something_seems_off_common))
+                    sharedCameraViewModel.clickedImageApproved(
+                        shouldUploadImageToo,
+                        image,
+                        parentDirectoryNameInFirebaseStorage
+                    )
                 }
         } catch (e: Exception) {
             Log.d("exception", "${e.message}")

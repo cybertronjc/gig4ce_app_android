@@ -14,5 +14,5 @@
     <string name="camera_common">कैमरा</string>
     <string name="gallery_common">गेलरी</string>
     <string name="face_detected_common">चेहरे का पता चला। अपलोडिंग...</string>
-    <string name="something_seems_off_common">कुछ हटकर लगता है। कृपया अच्छी रोशनी के साथ एक स्मार्ट सेल्फी लें.</string>
+    <string name="something_seems_off_common">चेहरा पहचानने में असमर्थ, कृपया पुनः प्रयास करें.</string>
 </resources>
