@@ -21,6 +21,7 @@ import com.gigforce.lead_management.ui.assign_gig_dialog.AssignGigsDialogFragmen
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -37,23 +38,30 @@ class ReferenceCheckFragment : BaseFragment2<ReferenceCheckFragmentBinding>(
     private lateinit var userUid: String
     private lateinit var assignGigRequest: AssignGigRequest
     private var currentGigerInfo: GigerProfileCardDVM? = null
+    private var s = ""
 
     private val viewModel: ReferenceCheckViewModel by viewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        getDataFrom(
+            arguments,
+            savedInstanceState
+        )
+    }
 
     override fun viewCreated(
         viewBinding: ReferenceCheckFragmentBinding,
         savedInstanceState: Bundle?
     ) {
 
-        getDataFrom(
-            arguments,
-            savedInstanceState
-        )
         initToolbar(viewBinding)
         initUi(viewBinding)
         initListeners(viewBinding)
         initViewModel()
+        fetchReferenceData()
     }
+
 
     private fun initUi(
         viewBinding: ReferenceCheckFragmentBinding
@@ -142,6 +150,7 @@ class ReferenceCheckFragment : BaseFragment2<ReferenceCheckFragmentBinding>(
         }
     }
 
+    @OptIn(FlowPreview::class)
     private fun initListeners(
         viewBinding: ReferenceCheckFragmentBinding
     ) = viewBinding.apply {
@@ -149,15 +158,40 @@ class ReferenceCheckFragment : BaseFragment2<ReferenceCheckFragmentBinding>(
 //        bindProgressButton(viewBinding.submitButton)
 //        viewBinding.submitButton.attachTextChangeAnimator()
 
-        lifecycleScope.launch {
+        lifecycleScope.launchWhenCreated {
             viewBinding.contactNoET.getTextChangeAsStateFlow()
-                .debounce(300)
+                .debounce(200)
                 .distinctUntilChanged()
                 .flowOn(Dispatchers.Default)
                 .collect {
+                    s  = it
                     viewBinding.callGigerBtn.isEnabled = ValidationHelper.isValidIndianMobileNo(it)
+                    viewModel.handleEvent(ReferenceCheckEvent.ContactNoChanged(it))
                 }
         }
+
+        lifecycleScope.launchWhenCreated {
+
+            viewBinding.nameET.getTextChangeAsStateFlow()
+                .debounce(200)
+                .distinctUntilChanged()
+                .flowOn(Dispatchers.Default)
+                .collect {
+                    viewModel.handleEvent(ReferenceCheckEvent.NameChanged(it))
+                }
+        }
+
+        lifecycleScope.launchWhenCreated {
+
+            viewBinding.relationET.getTextChangeAsStateFlow()
+                .debounce(200)
+                .distinctUntilChanged()
+                .flowOn(Dispatchers.Default)
+                .collect {
+                    viewModel.handleEvent(ReferenceCheckEvent.RelationChanged(it))
+                }
+        }
+
 
         viewBinding.callGigerBtn.setOnClickListener {
 
@@ -178,10 +212,7 @@ class ReferenceCheckFragment : BaseFragment2<ReferenceCheckFragmentBinding>(
     private fun submitReferenceData() {
 
         viewModel.saveReference(
-            userUid = userUid,
-            name = viewBinding.nameET.text.toString(),
-            relation = viewBinding.relationET.text.toString(),
-            contactNo = viewBinding.contactNoET.text.toString()
+            userUid = userUid
         )
     }
 
@@ -203,8 +234,28 @@ class ReferenceCheckFragment : BaseFragment2<ReferenceCheckFragmentBinding>(
                         state.relationValidationError,
                         state.contactValidationError
                     )
+                    is ReferenceCheckViewState.ErrorWhileFetchingPreviousReferenceData ->{
+                        viewBinding.refernceLoadingPb.gone()
+                        viewBinding.mainScrollView.visible()
+                    }
+                    ReferenceCheckViewState.FetchingReferenceDataFromProfile -> {
+                        viewBinding.mainScrollView.gone()
+                        viewBinding.refernceLoadingPb.visible()
+                    }
+                    is ReferenceCheckViewState.PreviousReferenceDataFetched -> {
+                        viewBinding.refernceLoadingPb.gone()
+                        viewBinding.mainScrollView.visible()
+
+                        viewBinding.relationET.setText( state.referenceData.relation)
+                        viewBinding.contactNoET.setText( state.referenceData.contactNo)
+                        viewBinding.nameET.setText( state.referenceData.name)
+                    }
                 }
             })
+    }
+
+    private fun fetchReferenceData() {
+        viewModel.fetchPreviousReferenceCheckData(userUid)
     }
 
     private fun referenceDataSubmitted() = viewBinding.apply {
