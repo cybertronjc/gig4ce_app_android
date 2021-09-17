@@ -2,6 +2,7 @@ package com.gigforce.core.base.basefirestore
 
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldValue
@@ -12,7 +13,10 @@ abstract class BaseFirestoreDBRepository {
 
     private var firebaseDB = FirebaseFirestore.getInstance()
     val db: FirebaseFirestore get() = firebaseDB
-    private var uid = FirebaseAuthStateListener.getInstance().getCurrentSignInUserInfoOrThrow().uid
+    private val user: FirebaseUser?
+        get() {
+            return FirebaseAuth.getInstance().currentUser
+        }
 
     abstract fun getCollectionName(): String
 
@@ -111,12 +115,12 @@ abstract class BaseFirestoreDBRepository {
     }
 
     fun getUID(): String {
-        return uid
+        return user!!.uid
     }
 
     fun getDBCollection(): DocumentReference {
         return firebaseDB.collection(getCollectionName())
-            .document(uid)
+            .document(getUID())
     }
 
     // for get collection data ----------------
