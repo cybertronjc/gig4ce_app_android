@@ -3,6 +3,7 @@ package com.gigforce.lead_management.views
 import android.content.Context
 import android.view.View
 import com.gigforce.core.IViewTypeLoader
+import com.gigforce.lead_management.ui.giger_info.views.AppCheckListRecyclerComponent
 import com.gigforce.lead_management.ui.select_gig_application.views.GigAppListRecyclerItemView
 import com.gigforce.lead_management.ui.select_gig_application.views.GigAppListSearchRecyclerItemView
 import com.gigforce.lead_management.ui.select_gig_application.views.GigAppListStatusRecyclerItemView
@@ -39,6 +40,10 @@ object LeadActivationViewTypeLoader : IViewTypeLoader {
                 null
             )
             LeadActivationViewTypes.NoGigAppsFound -> NoGigApplicationFoundItemView(
+                context,
+                null
+            )
+            LeadActivationViewTypes.GigerInfo -> AppCheckListRecyclerComponent(
                 context,
                 null
             )

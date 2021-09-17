@@ -21,8 +21,7 @@
         android:src="@drawable/ic_chevron"
         android:background="?android:attr/selectableItemBackgroundBorderless"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textTitle"
-        app:layout_constraintBottom_toBottomOf="@id/textSubTitle"/>
+        app:layout_constraintTop_toTopOf="@+id/textTitle" />
 
     <TextView
         android:id="@+id/textTitle"
@@ -38,18 +37,6 @@
         app:layout_constraintStart_toEndOf="@+id/backImageButton"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textSubTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/lato"
-        android:layout_marginTop="@dimen/size_12"
-        android:text="@string/giger_name"
-        android:textColor="@color/white"
-        android:textSize="12sp"
-        android:textStyle="normal"
-        app:layout_constraintTop_toBottomOf="@id/textTitle"
-        app:layout_constraintStart_toStartOf="@id/textTitle" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <include

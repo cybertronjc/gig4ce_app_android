@@ -7,10 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.GigerInfoFragmentBinding
+import com.gigforce.lead_management.models.ApplicationChecklistRecyclerItemData
+import com.gigforce.lead_management.models.GigAppListRecyclerItemData
 import com.gigforce.lead_management.ui.giger_onboarding.GigerOnboardingViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.layout_below_giger_functionality.*
@@ -40,14 +44,41 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
 
     private fun initViewModel() {
 
+        //observe data
+        viewModel.viewState.observe(viewLifecycleOwner, Observer {
+            val state = it ?: return@Observer
+            when(state) {
+
+                is GigerInfoState.ErrorLoadingData -> showErrorLoadingInfo(
+                    state.error
+                )
+                is GigerInfoState.GigerInfoLoaded -> showGigerInfo(state.gigApps)
+
+                GigerInfoState.LoadingDataFromServer -> showLoadingInfo()
+            }
+        })
+    }
+
+    private fun showLoadingInfo() {
+
+    }
+
+    private fun showGigerInfo(list: List<ApplicationChecklistRecyclerItemData>) {
+
+    }
+
+    private fun showErrorLoadingInfo(error: String) {
+
     }
 
     private fun initListeners() = viewBinding.apply {
         bottomButtonLayout.dropGigerBtn.setOnClickListener {
             //drop functionality
+
         }
         bottomButtonLayout.callLayout.setOnClickListener {
             //call functionality
+
         }
 
         topLayout.backImageButton.setOnClickListener {
