@@ -124,8 +124,18 @@ class AddNewLoginSummaryFragment : Fragment() {
         }
         viewModel.checkIfTLAttendanceMarked()
 
-        val c: Date = Calendar.getInstance().time
-        viewBinding.dateOfAtt.text = DateHelper.getDateInDDMMMYYYY(c)
+        viewBinding.dateOfAtt.text = if(loginSummaryDetails != null) {
+            val date =  DateHelper.getDateFromDDMMYYYY(loginSummaryDetails!!.date)
+
+            if(date != null)
+                DateHelper.getDateInDDMMMYYYY(date)
+            else
+                loginSummaryDetails!!.date
+        }
+        else {
+            val c: Date = Calendar.getInstance().time
+            DateHelper.getDateInDDMMMYYYY(c)
+        }
 
         if (mode == LoginSummaryConstants.MODE_VIEW) {
             viewBinding.submit.invisible()
