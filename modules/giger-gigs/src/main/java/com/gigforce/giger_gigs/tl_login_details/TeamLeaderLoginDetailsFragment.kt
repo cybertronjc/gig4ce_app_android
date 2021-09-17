@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.AbsListView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -45,6 +46,7 @@ class TeamLeaderLoginDetailsFragment : BaseFragment2<TeamLeaderLoginDetailsFragm
     lateinit var navigation: INavigation
 
     private val viewModel: TeamLeaderLoginDetailsViewModel by viewModels()
+    private val loginSummarySharedViewModel : LoginSummarySharedViewModel by activityViewModels()
 
     val PAGE_START = 1
     var currentPage = PAGE_START
@@ -69,6 +71,7 @@ class TeamLeaderLoginDetailsFragment : BaseFragment2<TeamLeaderLoginDetailsFragm
         initToolbar()
         initializeViews()
         observer()
+        initSharedViewModel()
         listeners()
     }
 
@@ -97,13 +100,7 @@ class TeamLeaderLoginDetailsFragment : BaseFragment2<TeamLeaderLoginDetailsFragm
     private fun listeners() = viewBinding.apply {
 
         swipeRefresh.setOnRefreshListener {
-            currentPage = 1
-
-            tlListing.clear()
-            tlLoginSummaryAdapter.submitList(emptyList())
-            tlLoginSummaryAdapter.notifyDataSetChanged()
-
-            viewModel.getListingForTL(currentPage)
+            clearExistingListAndRefreshData()
         }
 
         addNew.setOnClickListener {
@@ -118,6 +115,16 @@ class TeamLeaderLoginDetailsFragment : BaseFragment2<TeamLeaderLoginDetailsFragm
 
     }
 
+    private fun clearExistingListAndRefreshData() {
+        currentPage = 1
+
+        tlListing.clear()
+        tlLoginSummaryAdapter.submitList(emptyList())
+        tlLoginSummaryAdapter.notifyDataSetChanged()
+
+        viewModel.getListingForTL(currentPage)
+    }
+
     private fun initializeRecyclerView() = viewBinding.apply{
         layoutManager = LinearLayoutManager(
             activity?.applicationContext,
@@ -127,6 +134,15 @@ class TeamLeaderLoginDetailsFragment : BaseFragment2<TeamLeaderLoginDetailsFragm
 
         datecityRv.layoutManager = layoutManager
         datecityRv.adapter = tlLoginSummaryAdapter
+    }
+
+    private fun initSharedViewModel() {
+        loginSummarySharedViewModel.loginSummarySharedEvents
+            .observe(viewLifecycleOwner,{
+                if(!isAdded) return@observe
+                clearExistingListAndRefreshData()
+            })
+
     }
 
     private fun observer() = viewBinding.apply {

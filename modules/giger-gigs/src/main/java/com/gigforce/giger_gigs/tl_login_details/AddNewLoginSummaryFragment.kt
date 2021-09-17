@@ -13,6 +13,7 @@ import android.widget.EditText
 import androidx.core.os.bundleOf
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -50,6 +51,7 @@ class AddNewLoginSummaryFragment : Fragment() {
     @Inject
     lateinit var navigation: INavigation
 
+    private val loginSummarySharedViewModel : LoginSummarySharedViewModel by activityViewModels()
     private lateinit var viewModel: AddNewLoginSummaryViewModel
     private lateinit var viewBinding: AddNewLoginSummaryFragmentBinding
 
@@ -87,6 +89,7 @@ class AddNewLoginSummaryFragment : Fragment() {
         observer()
         listeners()
     }
+
 
     private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {
         arguments?.let {
@@ -170,11 +173,13 @@ class AddNewLoginSummaryFragment : Fragment() {
 
 //        citySpinner.adapter = arrayAdapter
 
+        markAttendanceLayout.markAttedanceBtn.setOnClickListener {
+            navigation.popBackStack()
+            navigation.navigateTo("gig/mygig")
+
+        }
+
         submit.setOnClickListener {
-            if (submit.text.equals(getString(R.string.check_in_common_ui))){
-                navigation.popBackStack()
-                navigation.navigateTo("gig/mygig")
-            } else {
                 if (mode == LoginSummaryConstants.MODE_ADD) {
                     if (citySpinner.text.toString().isEmpty()) {
                         showToast(getString(R.string.select_a_city_to_continue_giger_gigs))
@@ -186,9 +191,6 @@ class AddNewLoginSummaryFragment : Fragment() {
                     selectedCity = loginSummaryDetails?.city!!
                     submitLoginSummary()
                 }
-            }
-
-
         }
 
         if (mode == LoginSummaryConstants.MODE_ADD) {
@@ -341,6 +343,7 @@ class AddNewLoginSummaryFragment : Fragment() {
         viewModel.submitLoginSummaryData(addNewSummaryReqModel = addNewSummaryReqModel)
     }
 
+
     private fun observer() = viewBinding.apply {
         viewModel.cities.observe(viewLifecycleOwner, Observer {
             when (it) {
@@ -372,22 +375,25 @@ class AddNewLoginSummaryFragment : Fragment() {
                 if (mode == LoginSummaryConstants.MODE_ADD) {
                     //viewModel.getCities()
                     if (checkIn.checkedIn) {
+
+
                         viewBinding.apply {
+                            markAttendanceLayout.root.gone()
                             citySpinner.visibility = View.VISIBLE
                             businessRV.visibility = View.VISIBLE
                             chooseCityImg.visibility = View.VISIBLE
-                            noDataFound.visibility = View.GONE
-                            submit.setText(getString(R.string.submit_giger_gigs))
+                            submit.visible()
                         }
                         viewModel.getCities()
 
                     } else {
+
                         viewBinding.apply {
+                            markAttendanceLayout.root.visible()
                             citySpinner.visibility = View.GONE
                             businessRV.visibility = View.GONE
                             chooseCityImg.visibility = View.GONE
-                            noDataFound.visibility = View.VISIBLE
-                            submit.setText(getString(R.string.check_in_common_ui))
+                            submit.gone()
                         }
                     }
                 }
@@ -408,7 +414,7 @@ class AddNewLoginSummaryFragment : Fragment() {
 
                     if(state.businessList.isEmpty()){
                         noDataFound.visible()
-                        noData.text = getString(R.string.no_business_found_for_this_city)
+                        attMarkedText.text = getString(R.string.no_business_found_for_this_city)
                     } else{
                         noDataFound.gone()
                     }
@@ -433,6 +439,7 @@ class AddNewLoginSummaryFragment : Fragment() {
 
                 "Created" -> {
                     showToast(getString(R.string.data_submitted_successfully_giger_gigs))
+                    //loginSummarySharedViewModel.refreshLoginSummaryListInOtherScreens()
                     launchSuccessfullDialog()
                 }
 
