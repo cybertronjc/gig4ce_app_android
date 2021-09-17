@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:id="@+id/noDataFound"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/size_16"
+        android:layout_marginTop="@dimen/size_16"
+        android:layout_marginEnd="@dimen/size_16"
+        android:elevation="4dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            >
+
+            <ImageView
+                android:id="@+id/noDataImg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_group_2679" />
+
+            <TextView
+                android:id="@+id/attMarkedText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginTop="@dimen/size_16"
+                android:layout_marginEnd="@dimen/size_16"
+                android:fontFamily="@font/lato_bold"
+                android:gravity="center_horizontal"
+                android:padding="6dp"
+                android:text="@string/mark_todays_attendance_giger_gigs"
+                android:textColor="#000000"
+                android:textSize="@dimen/font14" />
+
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/mark_attedance_btn"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginEnd="@dimen/size_16"
+            android:layout_marginBottom="@dimen/size_22"
+            android:background="@drawable/app_gradient_button"
+            android:gravity="center"
+            android:minHeight="@dimen/size_36"
+            android:text="@string/check_in_common_ui"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+
+
+
+
+    </LinearLayout>
+
+</layout>

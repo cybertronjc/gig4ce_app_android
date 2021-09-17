@@ -48,4 +48,10 @@ interface LoginSummaryService {
     suspend fun checkIfTLMarked(
         @Path("userUid") userUid: String
     ) : Response<CheckMark>
+
+
+    @GET("gigerAttendanceReport/getDetailsByTLandCity/{cityId}")
+    suspend fun getBusinessByCityWithLoginCount(
+        @Path("cityId") cityId : String
+    ): Response<BussinessAndPreviousEntryId>
 }
