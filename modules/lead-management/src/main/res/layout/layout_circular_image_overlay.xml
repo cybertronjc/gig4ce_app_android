@@ -9,7 +9,6 @@
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:scaleType="centerCrop"
-        android:adjustViewBounds="true"
         android:src="@drawable/ic_avatar_male" />
 
     <LinearLayout
