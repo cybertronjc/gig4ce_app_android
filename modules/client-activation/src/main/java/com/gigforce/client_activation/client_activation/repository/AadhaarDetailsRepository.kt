@@ -5,6 +5,7 @@ import com.gigforce.core.datamodels.State
 import com.gigforce.core.datamodels.profile.AddressModel
 import com.gigforce.core.datamodels.verification.AadhaarDetailsDataModel
 import com.gigforce.core.datamodels.verification.VerificationBaseModel
+import com.gigforce.core.di.repo.IAadhaarDetailsRepository
 import com.gigforce.core.extensions.toFirebaseTimeStamp
 import com.gigforce.core.extensions.updateOrThrow
 import com.gigforce.core.fb.BaseFirestoreDBRepository
@@ -14,7 +15,7 @@ import kotlinx.coroutines.tasks.await
 import java.util.*
 import javax.inject.Inject
 
-class AadhaarDetailsRepository @Inject constructor() : BaseFirestoreDBRepository() {
+class AadhaarDetailsRepository @Inject constructor() : BaseFirestoreDBRepository(), IAadhaarDetailsRepository {
 
     var statesCollectionName = "Mst_States"
     var citiesCollectionName = "Mst_Cities"
@@ -32,7 +33,7 @@ class AadhaarDetailsRepository @Inject constructor() : BaseFirestoreDBRepository
         return COLLECTION_NAME
     }
 
-    suspend fun getStatesFromDb(): MutableList<State> {
+    override suspend fun getStatesFromDb(): MutableList<State> {
         try {
             val await = db.collection(statesCollectionName).get().await()
             if (await.documents.isNullOrEmpty()) {
