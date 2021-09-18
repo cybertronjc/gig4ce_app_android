@@ -17,7 +17,10 @@ sealed class ReferenceCheckEvent {
     ) : ReferenceCheckEvent()
 
     data class SubmitButtonPressed(
-        val userUid : String
+        val userUid : String,
+        val name : String,
+        val relation : String,
+        val contactNo : String,
     ) : ReferenceCheckEvent()
 }
 
