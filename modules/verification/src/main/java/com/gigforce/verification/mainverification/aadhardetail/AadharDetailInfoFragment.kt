@@ -7,6 +7,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -17,18 +19,24 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.common_image_picker.image_cropper.ImageCropActivity
+import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.datamodels.City
 import com.gigforce.core.datamodels.State
 import com.gigforce.core.datamodels.verification.AadhaarDetailsDataModel
+import com.gigforce.core.datamodels.verification.CurrentAddressDetailDataModel
 import com.gigforce.core.datamodels.verification.VerificationBaseModel
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
+import com.gigforce.core.navigation.INavigation
 import com.gigforce.verification.R
 import com.gigforce.verification.databinding.AadharDetailInfoFragmentBinding
 import com.gigforce.verification.mainverification.VerificationClickOrSelectImageBottomSheet
+import com.gigforce.verification.mainverification.pancard.VerificationScreenStatus
+import com.gigforce.verification.util.VerificationConstants
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType
@@ -49,12 +57,16 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
 
     private val viewModel: AadharDetailInfoViewModel by viewModels()
     private var clickedImagePath: Uri? = null
-    private lateinit var adapter : AdhaarDetailViewPagerAdapter
+    private lateinit var adapter: AdhaarDetailViewPagerAdapter
     private var aadharFrontImagePath: String? = null
     private var aadharBackImagePath: String? = null
 
     @Inject
     lateinit var buildConfig: IBuildConfig
+
+    @Inject
+    lateinit var navigation: INavigation
+
     //parmanent address variables (state variables is common with current add)
     var statesList = arrayListOf<State>()
     var stateAdapter: ArrayAdapter<String>? = null
@@ -79,20 +91,324 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        getDataFromIntent(savedInstanceState)
         setViews()
         observer()
+        listener()
     }
 
+    var allNavigationList = ArrayList<String>()
+    var intentBundle: Bundle? = null
+    private fun getDataFromIntent(savedInstanceState: Bundle?) {
+        savedInstanceState?.let {
+            it.getStringArrayList(VerificationConstants.NAVIGATION_STRINGS)?.let { arr ->
+                allNavigationList = arr
+            }
+            intentBundle = it
+        } ?: run {
+            arguments?.let {
+                it.getStringArrayList(VerificationConstants.NAVIGATION_STRINGS)?.let { arrData ->
+                    allNavigationList = arrData
+                }
+                intentBundle = it
+            }
+
+        }
+
+    }
+
+    var anyDataEntered = false
+    var verificationScreenStatus = VerificationScreenStatus.DEFAULT
+
+    inner class ValidationTextWatcher :
+            TextWatcher {
+        override fun afterTextChanged(text: Editable?) {
+            context?.let { cxt ->
+                if (verificationScreenStatus == VerificationScreenStatus.DEFAULT || verificationScreenStatus == VerificationScreenStatus.FAILED || verificationScreenStatus == VerificationScreenStatus.OCR_COMPLETED) {
+                    text?.toString().let {
+                        viewBinding.apply {
+                            if (aadharNo.editText?.text
+                                            .isNullOrBlank() && addLine1Input.text.toString()
+                                            .isNullOrBlank() && addLine2Input.text.toString()
+                                            .isNullOrBlank() && pincodeInput.text.toString()
+                                            .isNullOrBlank() && landmarkInput.text.toString().isNullOrEmpty()
+                            ) {
+                                submitButton.text = getString(R.string.skip_veri)
+                                anyDataEntered = false
+                            } else {
+                                submitButton.text = getString(R.string.submit_veri)
+                                anyDataEntered = true
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+
+        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+        }
+
+        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+        }
+
+    }
+
+    private fun listener() = viewBinding.apply {
+        submitButton.setOnClickListener {
+            if (anyDataEntered) {
+                if (aadharFrontImagePath == null || aadharFrontImagePath?.isEmpty() == true) {
+                    MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert_veri))
+                            .setMessage(getString(R.string.upload_aadhar_front_veri))
+                            .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
+                            .show()
+                    return@setOnClickListener
+                }
+
+                if (aadharBackImagePath == null || aadharBackImagePath?.isEmpty() == true) {
+                    MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert_veri))
+                            .setMessage(getString(R.string.upload_aadhar_back_veri))
+                            .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
+                            .show()
+                    return@setOnClickListener
+                }
+
+                if (aadharNo.editText?.text.toString()
+                                .isBlank() || aadharNo.editText?.text.toString().length != 12
+                ) {
+                    MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert_veri))
+                            .setMessage(getString(R.string.enter_valid_aadhar_veri))
+                            .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
+                            .show()
+                    return@setOnClickListener
+                }
+
+                if (dateOfBirth.text.toString().isBlank()) {
+                    MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert_veri))
+                            .setMessage(getString(R.string.select_dob_veri))
+                            .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
+                            .show()
+                    return@setOnClickListener
+                }
+
+                if (fatherNameTil.editText?.text.toString().isBlank()) {
+                    MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert_veri))
+                            .setMessage(getString(R.string.enter_father_name_veri))
+                            .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
+                            .show()
+                    return@setOnClickListener
+                }
+
+
+
+                if (addLine1Input.text.toString().isBlank()) {
+                    MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert_veri))
+                            .setMessage(getString(R.string.enter_add1_veri))
+                            .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
+                            .show()
+                    return@setOnClickListener
+                }
+
+                if (addLine2Input.text.toString().isBlank()) {
+                    MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert_veri))
+                            .setMessage(getString(R.string.enter_add2_veri))
+                            .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
+                            .show()
+                    return@setOnClickListener
+                }
+
+                if (stateSpinner.text.toString()
+                                .isEmpty() || !statesArray.contains(stateSpinner.text.toString())
+                ) {
+                    MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert_veri))
+                            .setMessage(getString(R.string.select_state_veri))
+                            .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
+                            .show()
+                    return@setOnClickListener
+                }
+
+                if (citySpinner.text.toString()
+                                .isEmpty() || !citiesArray.contains(citySpinner.text.toString())
+                ) {
+                    MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert_veri))
+                            .setMessage(getString(R.string.select_city_veri))
+                            .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
+                            .show()
+                    return@setOnClickListener
+                }
+
+                if (pincodeInput.text.toString()
+                                .isBlank() || pincodeInput.text.toString().length != 6
+                ) {
+                    MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert_veri))
+                            .setMessage(getString(R.string.enter_valid_pin_veri))
+                            .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
+                            .show()
+                    return@setOnClickListener
+                }
+
+                if (landmarkInput.text.toString().isBlank()) {
+                    MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert_veri))
+                            .setMessage(getString(R.string.enter_landmark_veri))
+                            .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
+                            .show()
+                    return@setOnClickListener
+                }
+                submitData()
+
+            } else {
+                checkForNextDoc()
+            }
+        }
+
+
+        landmarkInput.addTextChangedListener(
+                ValidationTextWatcher(
+                )
+        )
+        pincodeInput.addTextChangedListener(
+                ValidationTextWatcher(
+                )
+        )
+        addLine2Input.addTextChangedListener(
+                ValidationTextWatcher(
+                )
+        )
+        addLine1Input.addTextChangedListener(
+                ValidationTextWatcher(
+                )
+        )
+        dateOfBirth.addTextChangedListener(
+                ValidationTextWatcher(
+                )
+        )
+        aadharNo.editText?.addTextChangedListener(
+                ValidationTextWatcher(
+                )
+        )
+
+
+    }
+
+    private fun submitData() = viewBinding.apply {
+        viewBinding.progressBar.visibility = View.VISIBLE
+        var submitDataModel = AadhaarDetailsDataModel(
+                aadharFrontImagePath,
+                aadharBackImagePath,
+                aadhaarCardNo = aadharNo.editText?.text.toString(),
+                dateOfBirth = dateOfBirth.text.toString(),
+                fName = fatherNameTil.editText?.text.toString(),
+                addLine1 = addLine1Input.text.toString(),
+                addLine2 = addLine2Input.text.toString(),
+                state = stateSpinner.text.toString(),
+                city = citySpinner.text.toString(),
+                pincode = pincode.editText?.text.toString(),
+                landmark = landmark.editText?.text.toString()
+        )
+        viewModel.setAadhaarDetails(submitDataModel,nomineeCheckbox.isChecked)
+    }
+
+
+    private fun checkForNextDoc() {
+        if (allNavigationList.size == 0) {
+            activity?.onBackPressed()
+        } else {
+            var navigationsForBundle = emptyList<String>()
+            if (allNavigationList.size > 1) {
+                navigationsForBundle =
+                        allNavigationList.slice(IntRange(1, allNavigationList.size - 1))
+                                .filter { it.length > 0 }
+            }
+            navigation.popBackStack()
+
+            intentBundle?.putStringArrayList(
+                    com.gigforce.common_ui.StringConstants.NAVIGATION_STRING_ARRAY.value,
+                    java.util.ArrayList(navigationsForBundle)
+            )
+            navigation.navigateTo(
+                    allNavigationList.get(0), intentBundle)
+        }
+    }
+
+    var ocrCity = ""
+    var ocrCityDetected = false
     private fun observer() {
         viewModel.kycOcrResult.observe(viewLifecycleOwner, Observer {
             activeLoader(false)
             it?.let {
                 if (it.status) {
+                    if (!it.name.isNullOrBlank() || !it.dateOfBirth.isNullOrBlank() || !it.aadhaarNumber.isNullOrBlank() || !it.gender.isNullOrBlank()) {
+                        viewBinding.apply {
+                            it.name?.let {
+                                if (it.isNotEmpty()) {
+                                    name.editText?.setText(it)
+                                }
+                            }
+                            it.dateOfBirth?.let {
+                                if (it.isNotEmpty()) {
+                                    dateOfBirth.text = it
+                                    dobLabel.visible()
+                                }
+                            }
+                            it.aadhaarNumber?.let {
+                                if (it.isNotEmpty() && !it.contains("X") || !it.contains("x")) {
+                                    aadharNo.editText?.setText(it)
+                                }
+                            }
+
+                        }
+                    } else if (!it.city.isNullOrEmpty() || !it.state.isNullOrEmpty() || !it.pinCode.isNullOrEmpty() || !it.district.isNullOrEmpty() || !it.address1.isNullOrEmpty() || !it.address2.isNullOrEmpty()) {
+                        viewBinding.apply {
+                            it.address1?.let {
+                                addLine1.editText?.setText(it)
+                            }
+                            it.address2?.let {
+                                addLine2.editText?.setText(it)
+                            }
+                            it.pinCode?.let {
+                                pincode.editText?.setText(it)
+                            }
+
+                            it.state?.let { state ->
+                                if (statesArray.contains(state)) {
+                                    stateSpinner.setText(state)
+                                    it.city?.let {
+                                        ocrCity = it
+                                        ocrCityDetected = true
+                                        getCitiesWhenStateNotEmpty(it)
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+
 
                 }
             }
         })
+        viewModel.updatedResult.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            val updated = it ?: return@Observer
+            Log.d("updated", "up $updated")
+            viewBinding.progressBar.gone()
+            if (updated) {
+                showToast(getString(R.string.data_uploaded_veri))
+            }
 
+        })
         viewModel.statesResult.observe(viewLifecycleOwner, {
             if (it.isNotEmpty()) {
                 Log.d("States", it.toList().toString())
@@ -212,7 +528,7 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
         val stateModel = index?.let { it1 -> statesList.get(it1) }
         Log.d("index", "i: $index , map: $statesesMap")
         if (stateModel?.id.toString().isNotEmpty()) {
-                viewModel.getCities(stateModel?.id.toString())
+            viewModel.getCities(stateModel?.id.toString())
         }
     }
 
@@ -269,6 +585,7 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
         }
 
     }
+
     private fun processCities(content: ArrayList<City>) {
 
         citiesList.toMutableList().clear()
@@ -284,8 +601,11 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
         Log.d("map", "$citiesMap")
         //viewBinding.progressBar.visibility = View.GONE
         citiesAdapter?.notifyDataSetChanged()
-
+        if (ocrCityDetected && citiesArray.contains(ocrCity)) {
+            viewBinding.citySpinner.setText(ocrCity, false)
+        }
     }
+
     private fun processStates(content: ArrayList<State>) {
 
         statesList.toMutableList().clear()
@@ -372,11 +692,13 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
 
         }
     }
+
     private fun showAadharImage(uri: Uri, position: Int) {
         if (position in 0..1)
             adapter.updateData(position, uri)
 
     }
+
     private fun startCropImage(imageUri: Uri): Unit {
         val photoCropIntent = Intent(context, ImageCropActivity::class.java)
         photoCropIntent.putExtra("outgoingUri", imageUri.toString())
@@ -414,7 +736,7 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
                     MultipartBody.Part.createFormData("file", file.name, requestFile)
         }
         image?.let {
-            viewModel.getKycOcrResult("adhaar", if(viewBinding.viewPager2.currentItem == 0) "front" else "back" , it)
+            viewModel.getKycOcrResult("aadhar", if (viewBinding.viewPager2.currentItem == 0) "front" else "back", it)
         }
     }
 }

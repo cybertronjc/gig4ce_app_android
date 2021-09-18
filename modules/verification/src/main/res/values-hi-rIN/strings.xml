@@ -402,7 +402,8 @@
     <string name="please_enter_the_below_details_of_your_aadhar_this_step_is_mandatory_for_this_application_veri">कृपया अपने आधार का विवरण नीचे दर्ज करें। इस आवेदन के लिए यह कदम अनिवार्य है।</string>
     <string name="enter_aadhar_veri">आधार विवरण दर्ज करें</string>
     <string name="aadhar_card_detail_veri">आधार कार्ड विवरण</string>
-
+    <string name="data_uploaded_veri">डेटा सफलतापूर्वक अपलोड किया गया</string>
+    <string name="make_my_father_as_nominee">मेरे पिता को नामांकित करें</string>
     <!--    <string name="veri_add_doc_front">सामने की ओर</string>-->
     <!--    <string name="veri_add_doc_back">पीछे की ओर</string>-->
     <!--    <string name="veri_pan_title">चरण 5: अपना पैन अपलोड करें</string>-->

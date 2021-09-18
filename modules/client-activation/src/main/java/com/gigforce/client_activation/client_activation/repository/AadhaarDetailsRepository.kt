@@ -52,8 +52,8 @@ class AadhaarDetailsRepository @Inject constructor() : BaseFirestoreDBRepository
     override suspend fun getCities(stateCode: String): MutableList<City> {
         try {
             val await =
-                db.collection(citiesCollectionName).whereEqualTo("state_code", stateCode).get()
-                    .await()
+                    db.collection(citiesCollectionName).whereEqualTo("state_code", stateCode).get()
+                            .await()
             if (await.documents.isNullOrEmpty()) {
                 return mutableListOf()
             }
@@ -83,7 +83,32 @@ class AadhaarDetailsRepository @Inject constructor() : BaseFirestoreDBRepository
     suspend fun setAadhaarDetails(uid: String, aadhaardetails: AadhaarDetailsDataModel): Boolean {
         try {
             db.collection(verificationCollectionName).document(uid).updateOrThrow(
-                mapOf(
+                    mapOf(
+                            "aadhaar_card_questionnaire.frontImagePath" to aadhaardetails.frontImagePath,
+                            "aadhaar_card_questionnaire.backImagePath" to aadhaardetails.backImagePath,
+                            "aadhaar_card_questionnaire.aadhaarCardNo" to aadhaardetails.aadhaarCardNo,
+                            "aadhaar_card_questionnaire.dateOfBirth" to aadhaardetails.dateOfBirth,
+                            "aadhaar_card_questionnaire.fName" to aadhaardetails.fName,
+                            "aadhaar_card_questionnaire.addLine1" to aadhaardetails.addLine1,
+                            "aadhaar_card_questionnaire.addLine2" to aadhaardetails.addLine2,
+                            "aadhaar_card_questionnaire.state" to aadhaardetails.state,
+                            "aadhaar_card_questionnaire.city" to aadhaardetails.city,
+                            "aadhaar_card_questionnaire.pincode" to aadhaardetails.pincode,
+                            "aadhaar_card_questionnaire.landmark" to aadhaardetails.landmark,
+                            "aadhaar_card_questionnaire.currentAddSameAsParmanent" to aadhaardetails.currentAddSameAsParmanent,
+                            "aadhaar_card_questionnaire.currentAddress" to aadhaardetails.currentAddress
+                    )
+            )
+            //                "aadhaar_card_questionnaire" to aadhaardetails
+            return true
+        } catch (e: Exception) {
+            return false
+        }
+    }
+
+    override suspend fun setAadhaarFromVerificationModule(nomineeAsFather: Boolean, aadhaardetails: AadhaarDetailsDataModel): Boolean {
+        try {
+            var mapData = mapOf(
                     "aadhaar_card_questionnaire.frontImagePath" to aadhaardetails.frontImagePath,
                     "aadhaar_card_questionnaire.backImagePath" to aadhaardetails.backImagePath,
                     "aadhaar_card_questionnaire.aadhaarCardNo" to aadhaardetails.aadhaarCardNo,
@@ -95,11 +120,12 @@ class AadhaarDetailsRepository @Inject constructor() : BaseFirestoreDBRepository
                     "aadhaar_card_questionnaire.city" to aadhaardetails.city,
                     "aadhaar_card_questionnaire.pincode" to aadhaardetails.pincode,
                     "aadhaar_card_questionnaire.landmark" to aadhaardetails.landmark,
-                    "aadhaar_card_questionnaire.currentAddSameAsParmanent" to aadhaardetails.currentAddSameAsParmanent,
-                    "aadhaar_card_questionnaire.currentAddress" to aadhaardetails.currentAddress
-                )
+                    "aadhaar_card_questionnaire.pfNominee" to if (nomineeAsFather) "father" else ""
             )
-            //                "aadhaar_card_questionnaire" to aadhaardetails
+
+            db.collection(verificationCollectionName).document(uid).updateOrThrow(
+                    mapData
+            )
             return true
         } catch (e: Exception) {
             return false
@@ -107,25 +133,25 @@ class AadhaarDetailsRepository @Inject constructor() : BaseFirestoreDBRepository
     }
 
     suspend fun setAadhaarDetailsFromJoiningForm(
-        uid: String,
-        aadhaardetails: AadhaarDetailsDataModel
+            uid: String,
+            aadhaardetails: AadhaarDetailsDataModel
     ): Boolean {
         try {
             db.collection(verificationCollectionName).document(uid).updateOrThrow(
-                mapOf(
-                    "aadhaar_card_questionnaire.aadhaarCardNo" to aadhaardetails.aadhaarCardNo,
-                    "aadhaar_card_questionnaire.dateOfBirth" to aadhaardetails.dateOfBirth,
-                    "aadhaar_card_questionnaire.fName" to aadhaardetails.fName,
-                    "aadhaar_card_questionnaire.addLine1" to aadhaardetails.addLine1,
-                    "aadhaar_card_questionnaire.addLine2" to aadhaardetails.addLine2,
-                    "aadhaar_card_questionnaire.state" to aadhaardetails.state,
-                    "aadhaar_card_questionnaire.city" to aadhaardetails.city,
-                    "aadhaar_card_questionnaire.currentAddSameAsParmanent" to aadhaardetails.currentAddSameAsParmanent,
-                    "aadhaar_card_questionnaire.currentAddress.addLine1" to aadhaardetails.currentAddress?.addLine1,
-                    "aadhaar_card_questionnaire.currentAddress.addLine2" to aadhaardetails.currentAddress?.addLine2,
-                    "aadhaar_card_questionnaire.currentAddress.state" to aadhaardetails.currentAddress?.state,
-                    "aadhaar_card_questionnaire.currentAddress.city" to aadhaardetails.currentAddress?.city
-                )
+                    mapOf(
+                            "aadhaar_card_questionnaire.aadhaarCardNo" to aadhaardetails.aadhaarCardNo,
+                            "aadhaar_card_questionnaire.dateOfBirth" to aadhaardetails.dateOfBirth,
+                            "aadhaar_card_questionnaire.fName" to aadhaardetails.fName,
+                            "aadhaar_card_questionnaire.addLine1" to aadhaardetails.addLine1,
+                            "aadhaar_card_questionnaire.addLine2" to aadhaardetails.addLine2,
+                            "aadhaar_card_questionnaire.state" to aadhaardetails.state,
+                            "aadhaar_card_questionnaire.city" to aadhaardetails.city,
+                            "aadhaar_card_questionnaire.currentAddSameAsParmanent" to aadhaardetails.currentAddSameAsParmanent,
+                            "aadhaar_card_questionnaire.currentAddress.addLine1" to aadhaardetails.currentAddress?.addLine1,
+                            "aadhaar_card_questionnaire.currentAddress.addLine2" to aadhaardetails.currentAddress?.addLine2,
+                            "aadhaar_card_questionnaire.currentAddress.state" to aadhaardetails.currentAddress?.state,
+                            "aadhaar_card_questionnaire.currentAddress.city" to aadhaardetails.currentAddress?.city
+                    )
             )
             //                "aadhaar_card_questionnaire" to aadhaardetails
             return true
@@ -135,22 +161,22 @@ class AadhaarDetailsRepository @Inject constructor() : BaseFirestoreDBRepository
     }
 
     suspend fun setProfileRelatedData(
-        uid: String,
-        email: String,
-        dateOfBirth: Date,
-        fName: String,
-        maritalStatus: String,
-        emergencyContact: String
+            uid: String,
+            email: String,
+            dateOfBirth: Date,
+            fName: String,
+            maritalStatus: String,
+            emergencyContact: String
     ): Boolean {
         return try {
             db.collection("Profiles").document(uid).updateOrThrow(
-                mapOf(
-                    "email" to email,
-                    "dateOfBirth" to dateOfBirth.toFirebaseTimeStamp(),
-                    "fName" to fName,
-                    "maritalStatus" to maritalStatus,
-                    "emergencyContact" to emergencyContact
-                )
+                    mapOf(
+                            "email" to email,
+                            "dateOfBirth" to dateOfBirth.toFirebaseTimeStamp(),
+                            "fName" to fName,
+                            "maritalStatus" to maritalStatus,
+                            "emergencyContact" to emergencyContact
+                    )
             )
             true
         } catch (e: Exception) {

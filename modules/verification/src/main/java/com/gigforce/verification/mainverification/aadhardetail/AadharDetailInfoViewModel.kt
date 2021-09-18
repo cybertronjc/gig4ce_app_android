@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.core.datamodels.City
 import com.gigforce.core.datamodels.State
+import com.gigforce.core.datamodels.verification.AadhaarDetailsDataModel
 import com.gigforce.core.datamodels.verification.VerificationBaseModel
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.di.repo.IAadhaarDetailsRepository
@@ -25,6 +26,7 @@ class AadharDetailInfoViewModel @Inject constructor(private val aadharDetailsRep
     val kycOcrResult: LiveData<KycOcrResultModel> = _kycOcrResult
     val verificationResult: MutableLiveData<VerificationBaseModel> = MutableLiveData<VerificationBaseModel>()
     val citiesResult: MutableLiveData<MutableList<City>> = MutableLiveData<MutableList<City>>()
+    val updatedResult: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
     val verificationKycRepo = VerificationKycRepo(iBuildConfigVM)
     fun getStates() = viewModelScope.launch {
         try {
@@ -63,5 +65,14 @@ class AadharDetailInfoViewModel @Inject constructor(private val aadharDetailsRep
             e.printStackTrace()
         }
 
+    }
+
+    fun setAadhaarDetails(submitDataModel: AadhaarDetailsDataModel, nomineeAsFather : Boolean)= viewModelScope.launch {
+            try {
+                val updated = aadharDetailsRepo.setAadhaarFromVerificationModule(nomineeAsFather, submitDataModel)
+                updatedResult.postValue(updated)
+            }catch (e:Exception){
+                updatedResult.postValue(false)
+            }
     }
 }
