@@ -212,7 +212,10 @@ class ReferenceCheckFragment : BaseFragment2<ReferenceCheckFragmentBinding>(
     private fun submitReferenceData() {
 
         viewModel.saveReference(
-            userUid = userUid
+            userUid = userUid,
+            name = viewBinding.nameET.text.toString(),
+            relation = viewBinding.relationET.text.toString(),
+            contactNo = viewBinding.contactNoET.text.toString()
         )
     }
 
@@ -304,7 +307,7 @@ class ReferenceCheckFragment : BaseFragment2<ReferenceCheckFragmentBinding>(
 
         if (relationValidationError != null) {
             relationErrorTv.visible()
-            relationErrorTv.text = nameValidationError
+            relationErrorTv.text = relationValidationError
         } else {
             relationErrorTv.text = ""
             relationErrorTv.gone()
@@ -312,7 +315,7 @@ class ReferenceCheckFragment : BaseFragment2<ReferenceCheckFragmentBinding>(
 
         if (contactValidationError != null) {
             contactNoErrorTv.visible()
-            contactNoErrorTv.text = nameValidationError
+            contactNoErrorTv.text = contactValidationError
         } else {
             contactNoErrorTv.text = ""
             contactNoErrorTv.gone()

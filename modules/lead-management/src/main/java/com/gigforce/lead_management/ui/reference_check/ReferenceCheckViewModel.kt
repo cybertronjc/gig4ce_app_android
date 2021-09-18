@@ -47,7 +47,7 @@ class ReferenceCheckViewModel @Inject constructor(
 
             userReferenceCheckData = profileFirebaseRepository.getProfileData(
                 userId = userUid
-            ).reference
+            ).reference ?: Reference()
 
             _viewState.value = ReferenceCheckViewState.PreviousReferenceDataFetched(
                 referenceData = userReferenceCheckData ?: Reference()
@@ -76,19 +76,26 @@ class ReferenceCheckViewModel @Inject constructor(
             userReferenceCheckData?.relation = referenceCheckEvent.relation
         }
         is ReferenceCheckEvent.SubmitButtonPressed -> {
-            saveReference(referenceCheckEvent.userUid)
+            saveReference(
+                referenceCheckEvent.userUid,
+                referenceCheckEvent.name,
+                referenceCheckEvent.relation,
+                referenceCheckEvent.contactNo
+            )
         }
     }
 
     fun saveReference(
-        userUid: String
+        userUid: String,
+        name : String,
+        relation: String,
+        contactNo : String
     ) = viewModelScope.launch {
-        val referenceData = userReferenceCheckData ?: return@launch
 
         if (checkIfDataValid(
-                referenceData.name,
-                referenceData.relation,
-                referenceData.contactNo
+                name,
+                relation,
+                contactNo
             ).not()
         ) {
             logger.d(TAG, "validation failed")
@@ -102,18 +109,18 @@ class ReferenceCheckViewModel @Inject constructor(
             tag = TAG,
             message = "saving reference data....",
             mapOf(
-                "name" to referenceData.name,
-                "relation" to referenceData.relation,
-                "contact_no" to referenceData.contactNo
+                "name" to name,
+                "relation" to relation,
+                "contact_no" to contactNo
             )
         )
 
         try {
             leadManagementRepository.saveReference(
                 userUid = userUid,
-                name = referenceData.name,
-                relation = referenceData.relation,
-                contactNo = referenceData.contactNo
+                name = name,
+                relation = relation,
+                contactNo = contactNo
             )
             logger.d(
                 tag = TAG,
