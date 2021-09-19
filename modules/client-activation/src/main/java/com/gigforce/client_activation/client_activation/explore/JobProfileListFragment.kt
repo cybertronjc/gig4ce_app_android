@@ -194,19 +194,21 @@ class JobProfileListFragment : Fragment(), IOnBackPressedOverride, OnJobSelected
 
             Log.d("jobProfiles", jobProfiles.toString())
 
+            jobProfileListAdapter.submitList(jobProfilesList)
+            jobProfileListAdapter.notifyDataSetChanged()
 
-            if (currentPage == 1){
-                Log.d("pag", "zero $currentPage, list : ${jobProfiles.size}")
-                jobProfileListAdapter.submitList(jobProfilesList)
-                jobProfileListAdapter.notifyDataSetChanged()
-            }else {
-                Log.d("pag", "nonzero $currentPage, list : ${jobProfiles.size}" )
-                val itemCount = jobProfileListAdapter.itemCount
-                jobProfileListAdapter.submitList(jobProfilesList)
-                //jobProfileListAdapter.notifyDataSetChanged()
-                jobProfileListAdapter.notifyItemChanged(itemCount + 1)
-
-            }
+//            if (currentPage == 1){
+//                Log.d("pag", "zero $currentPage, list : ${jobProfiles.size}")
+//                jobProfileListAdapter.submitList(jobProfilesList)
+//                jobProfileListAdapter.notifyDataSetChanged()
+//            }else {
+//                Log.d("pag", "nonzero $currentPage, list : ${jobProfiles.size}" )
+////                val itemCount = jobProfileListAdapter.itemCount
+//                jobProfileListAdapter.submitList(jobProfilesList)
+//                jobProfileListAdapter.notifyDataSetChanged()
+////                jobProfileListAdapter.notifyItemChanged(itemCount + 1)
+//
+//            }
 
         }
 

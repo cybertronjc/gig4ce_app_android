@@ -934,6 +934,7 @@ class GigPage2Fragment : Fragment(),
                 if (resultCode == Activity.RESULT_OK) {
                     imageClickedPath =
                         data?.getStringExtra(CameraActivity.INTENT_EXTRA_UPLOADED_PATH_IN_FIREBASE_STORAGE)
+                    Log.d("clickedPath", "$imageClickedPath")
                     checkForLateOrEarlyCheckIn()
                 }
             }
