@@ -39,7 +39,6 @@ import com.gigforce.verification.R
 import com.gigforce.verification.databinding.AadharDetailInfoFragmentBinding
 import com.gigforce.verification.mainverification.OLDStateHolder
 import com.gigforce.verification.mainverification.VerificationClickOrSelectImageBottomSheet
-import com.gigforce.verification.mainverification.drivinglicense.DrivingLicenseFragment
 import com.gigforce.verification.mainverification.pancard.VerificationScreenStatus
 import com.gigforce.verification.util.VerificationConstants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
