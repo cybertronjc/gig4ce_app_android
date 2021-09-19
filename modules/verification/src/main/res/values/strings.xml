@@ -424,6 +424,14 @@
     <string name="aadhar_card_detail_veri">Aadhaar Card Details</string>
     <string name="data_uploaded_veri">Data uploaded successfully</string>
     <string name="make_my_father_as_nominee">Make my father as nominee</string>
+    <string name="enter_name_veri">Please enter your name</string>
+    <string name="submitted_status_veri">Submitted</string>
+    <string name="no_i_dont_have_aadhar_veri">No, I dont have Aadhaar card</string>
+    <string name="info_of_aadhar_success_veri">Information of Aadhar card captured successfully.</string>
+    <string name="enter_aadhar_details_veri">Enter the Aadhar card details manually below</string>
+    <string name="upload_aadhar_card_veri">Upload Aadhar Card</string>
+    <string name="please_upload_aadhar_veri">Please upload your Aadhar card or enter the details manually</string>
+
 
     <!--    <string name="veri_add_doc_front">"Front Side"</string>-->
 <!--    <string name="veri_add_doc_back">"Back Side"</string>-->

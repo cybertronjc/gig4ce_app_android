@@ -75,7 +75,8 @@ enum class VerificationScreenStatus {
     STARTED_VERIFYING,
     FAILED,
     COMPLETED,
-    DEFAULT
+    DEFAULT,
+    STARTED
 }
 
 @AndroidEntryPoint

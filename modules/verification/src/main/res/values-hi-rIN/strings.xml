@@ -404,6 +404,14 @@
     <string name="aadhar_card_detail_veri">आधार कार्ड विवरण</string>
     <string name="data_uploaded_veri">डेटा सफलतापूर्वक अपलोड किया गया</string>
     <string name="make_my_father_as_nominee">मेरे पिता को नामांकित करें</string>
+    <string name="enter_name_veri">कृपया अपना नाम दर्ज करें</string>
+    <string name="submitted_status_veri">पूर्ण</string>
+    <string name="no_i_dont_have_aadhar_veri">नहीं, मेरे पास आधार कार्ड नहीं है</string>
+    <string name="info_of_aadhar_success_veri">आधार कार्ड की जानकारी सफलतापूर्वक कैप्चर की गई।</string>
+    <string name="enter_aadhar_details_veri">आधार कार्ड विवरण नीचे मैन्युअल रूप से दर्ज करें</string>
+    <string name="upload_aadhar_card_veri">अपलोड आधार कार्ड</string>
+    <string name="please_upload_aadhar_veri">कृपया अपना आधार कार्ड अपलोड करें या मैन्युअल रूप से विवरण दर्ज करें</string>
+
     <!--    <string name="veri_add_doc_front">सामने की ओर</string>-->
     <!--    <string name="veri_add_doc_back">पीछे की ओर</string>-->
     <!--    <string name="veri_pan_title">चरण 5: अपना पैन अपलोड करें</string>-->

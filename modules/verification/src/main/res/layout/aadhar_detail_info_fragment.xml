@@ -29,43 +29,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <TextView
-                    android:id="@+id/textView9"
-                    style="@style/Title"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_sm1"
-                    android:layout_marginTop="@dimen/dp_large"
-                    android:layout_marginRight="@dimen/dp_sm1"
-                    android:text="@string/please_upload_aadhar_here"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <androidx.viewpager2.widget.ViewPager2
-                    android:id="@+id/viewPager2"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:layout_marginStart="@dimen/size_16"
-                    android:layout_marginTop="@dimen/dp_large"
-                    android:layout_marginEnd="@dimen/size_16"
-                    android:orientation="horizontal"
-                    android:visibility="visible"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/textView9" />
-
-                <com.google.android.material.tabs.TabLayout
-                    android:id="@+id/tabLayout"
+                <com.gigforce.verification.mainverification.component.VeriScreenInfoComponent
+                    android:id="@+id/toplayoutblock"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="visible"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginStart="@dimen/size16"
+                    android:layout_marginTop="@dimen/dp_xl1"
+                    app:docinfotext="@string/please_upload_aadhar_veri"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/viewPager2"
-                    app:tabBackground="@drawable/tab_selector_viewpager"
-                    app:tabGravity="center"
-                    app:tabIndicatorHeight="0dp" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:missingdoctext="@string/no_i_dont_have_aadhar_veri"
+                    app:title="@string/aadhaar_card_veri"
+                    app:uppercaption="@string/you_need_to_upload_veri" />
+
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/below_layout"
@@ -74,7 +50,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tabLayout">
+                    app:layout_constraintTop_toBottomOf="@+id/toplayoutblock">
 
                     <com.gigforce.common_ui.components.atoms.GrayLine
                         android:id="@+id/grayLine3"
@@ -116,7 +92,7 @@
                         <com.google.android.material.textfield.TextInputEditText
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/size_46"
-                            android:inputType="number"
+                            android:digits="abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz "
                             android:maxLength="12"
                             android:padding="4dp"
                             android:singleLine="true" />

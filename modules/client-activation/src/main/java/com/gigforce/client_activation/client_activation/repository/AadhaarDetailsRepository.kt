@@ -111,6 +111,7 @@ class AadhaarDetailsRepository @Inject constructor() : BaseFirestoreDBRepository
             var mapData = mapOf(
                     "aadhaar_card_questionnaire.frontImagePath" to aadhaardetails.frontImagePath,
                     "aadhaar_card_questionnaire.backImagePath" to aadhaardetails.backImagePath,
+                    "aadhaar_card_questionnaire.name" to aadhaardetails.name,
                     "aadhaar_card_questionnaire.aadhaarCardNo" to aadhaardetails.aadhaarCardNo,
                     "aadhaar_card_questionnaire.dateOfBirth" to aadhaardetails.dateOfBirth,
                     "aadhaar_card_questionnaire.fName" to aadhaardetails.fName,
@@ -119,13 +120,16 @@ class AadhaarDetailsRepository @Inject constructor() : BaseFirestoreDBRepository
                     "aadhaar_card_questionnaire.state" to aadhaardetails.state,
                     "aadhaar_card_questionnaire.city" to aadhaardetails.city,
                     "aadhaar_card_questionnaire.pincode" to aadhaardetails.pincode,
-                    "aadhaar_card_questionnaire.landmark" to aadhaardetails.landmark,
-                    "aadhaar_card_questionnaire.pfNominee" to if (nomineeAsFather) "father" else ""
+                    "aadhaar_card_questionnaire.landmark" to aadhaardetails.landmark
             )
 
             db.collection(verificationCollectionName).document(uid).updateOrThrow(
                     mapData
             )
+            if (nomineeAsFather)
+                db.collection("Profiles").document(uid).updateOrThrow(mapOf(
+                        "pfNominee" to "father"))
+
             return true
         } catch (e: Exception) {
             return false
