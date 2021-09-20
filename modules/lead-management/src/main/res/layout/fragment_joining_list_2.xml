@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.gigforce.common_ui.views.GigforceToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?android:actionBarSize" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingTop="12dp">
+
+            <com.gigforce.core.recyclerView.CoreRecyclerView
+                android:id="@+id/joinings_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <include
+                android:id="@+id/joining_shimmer_container"
+                layout="@layout/shimmer_container"
+                android:visibility="visible" />
+
+            <include
+                android:id="@+id/joining_list_info_layout"
+                layout="@layout/layout_error_with_retry" />
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/join_now_button"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/app_gradient_button"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginEnd="@dimen/size_16"
+            android:layout_marginBottom="@dimen/size_18"
+            android:gravity="center"
+            android:layout_marginTop="8dp"
+            android:minHeight="@dimen/size_36"
+            android:text="@string/add_new_lead"
+            android:textColor="@color/white" />
+
+
+    </LinearLayout>
+</layout>
+
