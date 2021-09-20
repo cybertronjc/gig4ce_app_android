@@ -19,7 +19,10 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.gigforce.ambassador.EnrollmentConstants
 import com.gigforce.ambassador.R
 import com.gigforce.ambassador.databinding.UserAadharDetailInfoFragmentBinding
@@ -27,8 +30,11 @@ import com.gigforce.ambassador.user_rollment.kycdocs.OLDStateHolder
 import com.gigforce.ambassador.user_rollment.kycdocs.VerificationClickOrSelectImageBottomSheet
 import com.gigforce.ambassador.user_rollment.kycdocs.VerificationConstants
 import com.gigforce.ambassador.user_rollment.kycdocs.VerificationStatus
+import com.gigforce.ambassador.user_rollment.user_details_filled_dialog.UserDetailsFilledDialogFragment
+import com.gigforce.ambassador.user_rollment.user_details_filled_dialog.UserDetailsFilledDialogFragmentResultListener
 import com.gigforce.common_image_picker.image_cropper.ImageCropActivity
 import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
@@ -44,6 +50,7 @@ import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.DateHelper
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.jaeger.library.StatusBarUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.veri_screen_info_component_ambassador.view.*
 import okhttp3.MediaType
@@ -56,7 +63,8 @@ import javax.inject.Inject
 import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
-class UserAadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener {
+class UserAadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener,
+    UserDetailsFilledDialogFragmentResultListener, IOnBackPressedOverride {
 
     companion object {
         private const val REQUEST_STORAGE_PERMISSION = 102
@@ -112,11 +120,18 @@ class UserAadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageB
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getDataFromIntent(savedInstanceState)
+        initializeNavigations()
         setViews()
         observer()
         listener()
     }
+    var navigationsForBundle = ArrayList<String>()
 
+    private fun initializeNavigations() {
+//        navigationsForBundle.add("userinfo/addUserPanCardInfoFragment")
+        navigationsForBundle.add("userinfo/addUserDrivingLicenseInfoFragment")
+        navigationsForBundle.add("userinfo/addUserAadharCardInfoFragment")
+    }
     var allNavigationList = ArrayList<String>()
     var intentBundle: Bundle? = null
     private fun getDataFromIntent(savedInstanceState: Bundle?) {
@@ -563,7 +578,6 @@ class UserAadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageB
                 backImagePath = aadharBackImagePath,
                 aadhaarCardNo = aadharNo.editText?.text.toString(),
                 dateOfBirth = dateOfBirth.text.toString(),
-                fName = fatherNameTil.editText?.text.toString(),
                 addLine1 = addLine1Input.text.toString(),
                 addLine2 = addLine2Input.text.toString(),
                 state = stateSpinner.text.toString(),
@@ -590,25 +604,38 @@ class UserAadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageB
 
 
     private fun checkForNextDoc() {
-        if (allNavigationList.size == 0) {
-            activity?.onBackPressed()
-        } else {
-            var navigationsForBundle = emptyList<String>()
-            if (allNavigationList.size > 1) {
-                navigationsForBundle =
-                        allNavigationList.slice(IntRange(1, allNavigationList.size - 1))
-                                .filter { it.length > 0 }
-            }
-            navigation.popBackStack()
 
-            intentBundle?.putStringArrayList(
-                    com.gigforce.common_ui.StringConstants.NAVIGATION_STRING_ARRAY.value,
-                    java.util.ArrayList(navigationsForBundle)
-            )
-            navigation.navigateTo(
-                    allNavigationList.get(0), intentBundle)
-        }
+        openDialogForKYCRequirement()
+
+//        if (allNavigationList.size == 0) {
+//            activity?.onBackPressed()
+//        } else {
+//            var navigationsForBundle = emptyList<String>()
+//            if (allNavigationList.size > 1) {
+//                navigationsForBundle =
+//                        allNavigationList.slice(IntRange(1, allNavigationList.size - 1))
+//                                .filter { it.length > 0 }
+//            }
+//            navigation.popBackStack()
+//
+//            intentBundle?.putStringArrayList(
+//                    com.gigforce.common_ui.StringConstants.NAVIGATION_STRING_ARRAY.value,
+//                    java.util.ArrayList(navigationsForBundle)
+//            )
+//            navigation.navigateTo(
+//                    allNavigationList.get(0), intentBundle)
+//        }
     }
+
+    private fun openDialogForKYCRequirement(){
+        UserDetailsFilledDialogFragment.launch(
+                userId = userId,
+                userName = userName,
+                fragmentManager = childFragmentManager,
+                okayClickListener = this@UserAadharDetailInfoFragment
+        )
+    }
+
     private var dobYear = 1990
     private val dateOfBirthPicker: DatePickerDialog by lazy {
         val cal = Calendar.getInstance()
@@ -842,7 +869,6 @@ class UserAadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageB
         name.editText?.isEnabled = enable
         aadharNo.editText?.isEnabled = enable
         dateOfBirthLabel.isEnabled = enable
-        fatherNameTil.editText?.isEnabled = enable
         addLine1Input.isEnabled = enable
         addLine2Input.isEnabled = enable
         stateSpinner.isEnabled = enable
@@ -927,9 +953,6 @@ class UserAadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageB
                     dateOfBirth.text = it
                     dobLabel.visible()
                 }
-            }
-            it.fName.let {
-                fatherNameTil.editText?.setText(it)
             }
             it.addLine1.let {
                 addLine1.editText?.setText(it)
@@ -1235,5 +1258,59 @@ class UserAadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageB
             }
 
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        StatusBarUtil.setColorNoTranslucent(
+            requireActivity(),
+            ResourcesCompat.getColor(resources, R.color.lipstick_2, null)
+        )
+    }
+
+    override fun onOkayClicked() {
+        try {
+            navigation.getBackStackEntry("LeadMgmt/joiningListFragment")
+            navigation.popBackStack("LeadMgmt/joiningListFragment",inclusive = false)
+        } catch (e: IllegalArgumentException) {
+            navigation.popBackStack("ambassador/users_enrolled",inclusive = false)
+        }
+    }
+
+    override fun onReUploadDocumentsClicked() {
+        navigation.popBackStack()
+        navigation.navigateTo(
+            "userinfo/addUserPanCardInfoFragment", bundleOf(
+                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName,
+                VerificationConstants.NAVIGATION_STRINGS to navigationsForBundle
+            )
+        )
+    }
+
+    override fun onBackPressed(): Boolean {
+        showGoBackConfirmationDialog()
+        return true
+    }
+
+    private fun showGoBackConfirmationDialog() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(getString(R.string.alert_amb))
+            .setMessage(getString(R.string.are_u_sure_u_want_to_go_back_amb))
+            .setPositiveButton(getString(R.string.yes_amb)) { _, _ -> goBackToUsersList() }
+            .setNegativeButton(getString(R.string.no_amb)) { _, _ -> }
+            .show()
+    }
+    private fun goBackToUsersList() {
+        findNavController().navigateUp()
+        var navigationsForBundleOld = java.util.ArrayList<String>()
+        navigationsForBundleOld.add("userinfo/addUserAadharCardInfoFragment")
+        navigation.navigateTo(
+            "userinfo/addUserDrivingLicenseInfoFragment", bundleOf(
+                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName,
+                VerificationConstants.NAVIGATION_STRINGS to navigationsForBundleOld
+            )
+        )
     }
 }
