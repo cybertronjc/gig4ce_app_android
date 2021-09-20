@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<FrameLayout
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    >
 
     <com.gigforce.common_ui.widgets.CircleImageView
         android:id="@+id/gigerImg"
@@ -25,7 +27,5 @@
             android:scaleType="centerCrop"
             android:src="@drawable/ic_avatar_male" />
     </LinearLayout>
-
-
-
 </FrameLayout>
+</layout>
