@@ -22,6 +22,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.common_image_picker.image_cropper.ImageCropActivity
+import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
@@ -29,6 +30,7 @@ import com.gigforce.core.AppConstants
 import com.gigforce.core.datamodels.City
 import com.gigforce.core.datamodels.State
 import com.gigforce.core.datamodels.verification.AadhaarDetailsDataModel
+import com.gigforce.core.datamodels.verification.CurrentAddressDetailDataModel
 import com.gigforce.core.datamodels.verification.VerificationBaseModel
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.gone
@@ -61,12 +63,15 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
         private const val REQUEST_STORAGE_PERMISSION = 102
         private const val REQUEST_CAPTURE_IMAGE = 1001
         private const val REQUEST_PICK_IMAGE = 1002
+        private const val FATHER = "father"
     }
 
     private val viewModel: AadharDetailInfoViewModel by viewModels()
     private var clickedImagePath: Uri? = null
     private var aadharFrontImagePath: String? = null
     private var aadharBackImagePath: String? = null
+    private var mJobProfileId: String = ""
+    private var FROM_CLIENT_ACTIVATON: Boolean = false
 
     @Inject
     lateinit var buildConfig: IBuildConfig
@@ -85,6 +90,13 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
     var citiesMap = mutableMapOf<String, Int>()
     var citiesArray = arrayListOf<String>()
     var selectedCity = City()
+
+    // current address
+    var caCitiesList = arrayListOf<City>()
+    var caCitiesAdapter: ArrayAdapter<String>? = null
+    var caCitiesMap = mutableMapOf<String, Int>()
+    var caCitiesArray = arrayListOf<String>()
+    var caSelectedCity = City()
 
     private lateinit var viewBinding: AadharDetailInfoFragmentBinding
     override fun onCreateView(
@@ -107,16 +119,24 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
     var intentBundle: Bundle? = null
     private fun getDataFromIntent(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
+
+            FROM_CLIENT_ACTIVATON =
+                    it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
             it.getStringArrayList(VerificationConstants.NAVIGATION_STRINGS)?.let { arr ->
                 allNavigationList = arr
             }
             intentBundle = it
+            mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
         } ?: run {
             arguments?.let {
+
+                FROM_CLIENT_ACTIVATON =
+                        it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
                 it.getStringArrayList(VerificationConstants.NAVIGATION_STRINGS)?.let { arrData ->
                     allNavigationList = arrData
                 }
                 intentBundle = it
+                mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
             }
 
         }
@@ -209,6 +229,34 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
             }
         }
 
+        // current address state and city
+        caStateSpinner.onItemClickListener = object : AdapterView.OnItemClickListener {
+
+            override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                Log.d("selectedIndex", "ind: $p2")
+                //get the state code
+                if (p2 <= statesList.size && caStateSpinner.text.toString().isNotEmpty()) {
+                    val actualIndex = statesesMap.get(caStateSpinner.text.toString().trim())
+                    caCitySpinner.setText("", false)
+                    var selectedState = actualIndex?.let { statesList.get(it) }!!
+                    Log.d("selected", "selected : $selectedState")
+                    viewModel.getCurrentAddCities(selectedState.id)
+                }
+            }
+        }
+
+        caCitySpinner.onItemClickListener = object : AdapterView.OnItemClickListener {
+            override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                Log.d("selectedIndex", "ind: $p2")
+                //get the state code
+                if (p2 <= caCitiesList.size && caCitySpinner.text.toString().isNotEmpty()) {
+                    val actualIndex = caCitiesMap.get(caCitySpinner.text.toString().trim())
+                    caSelectedCity = actualIndex?.let { caCitiesList.get(it) }!!
+                    Log.d("selected", "selected : $caSelectedCity")
+                }
+            }
+        }
+
         citySpinner.onItemClickListener = object : AdapterView.OnItemClickListener {
             override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 Log.d("selectedIndex", "ind: $p2")
@@ -251,6 +299,25 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
         citySpinner.setAdapter(citiesAdapter)
         citySpinner.threshold = 1
 
+
+        // current address state (state adapter is same as parmanent add) and city
+        caStateSpinner.setAdapter((stateAdapter))
+        caStateSpinner.threshold = 1
+        caStateSpinner.setOnFocusChangeListener { view, b ->
+            if (b) {
+                caStateSpinner.showDropDown()
+            }
+        }
+
+        caCitiesAdapter = context?.let { it1 ->
+            ArrayAdapter(
+                    it1,
+                    android.R.layout.simple_spinner_dropdown_item,
+                    caCitiesArray
+            )
+        }
+        caCitySpinner.setAdapter(caCitiesAdapter)
+        caCitySpinner.threshold = 1
 
         submitButton.setOnClickListener {
             if (viewBinding.toplayoutblock.isDocDontOptChecked() || verificationScreenStatus == VerificationScreenStatus.DEFAULT || verificationScreenStatus == VerificationScreenStatus.COMPLETED) {
@@ -363,6 +430,71 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
                                 .show()
                         return@setOnClickListener
                     }
+
+                    //current address validation
+                    if (!currentAddCheckbox.isChecked) {
+
+                        if (caAddLine1Input.text.toString().isBlank()) {
+                            MaterialAlertDialogBuilder(requireContext())
+                                    .setTitle(getString(R.string.alert_veri))
+                                    .setMessage(getString(R.string.curr_add1_veri))
+                                    .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
+                                    .show()
+                            return@setOnClickListener
+                        }
+
+                        if (caAddLine2Input.text.toString().isBlank()) {
+                            MaterialAlertDialogBuilder(requireContext())
+                                    .setTitle(getString(R.string.alert_veri))
+                                    .setMessage(getString(R.string.curr_add2_veri))
+                                    .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
+                                    .show()
+                            return@setOnClickListener
+                        }
+
+                        if (caStateSpinner.text.toString()
+                                        .isEmpty() || !statesArray.contains(caStateSpinner.text.toString())
+                        ) {
+                            MaterialAlertDialogBuilder(requireContext())
+                                    .setTitle(getString(R.string.alert_veri))
+                                    .setMessage(getString(R.string.select_state_veri))
+                                    .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
+                                    .show()
+                            return@setOnClickListener
+                        }
+
+                        if (caCitySpinner.text.toString()
+                                        .isEmpty() || !caCitiesArray.contains(caCitySpinner.text.toString())
+                        ) {
+                            MaterialAlertDialogBuilder(requireContext())
+                                    .setTitle(getString(R.string.alert_veri))
+                                    .setMessage(getString(R.string.select_city_veri))
+                                    .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
+                                    .show()
+                            return@setOnClickListener
+                        }
+
+                        if (caPincodeInput.text.toString()
+                                        .isBlank() || caPincodeInput.text.toString().length != 6
+                        ) {
+                            MaterialAlertDialogBuilder(requireContext())
+                                    .setTitle(getString(R.string.alert_veri))
+                                    .setMessage(getString(R.string.enter_valid_pin_veri))
+                                    .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
+                                    .show()
+                            return@setOnClickListener
+                        }
+
+                        if (caLandmarkInput.text.toString().isBlank()) {
+                            MaterialAlertDialogBuilder(requireContext())
+                                    .setTitle(getString(R.string.alert_veri))
+                                    .setMessage(getString(R.string.enter_landmark_veri))
+                                    .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
+                                    .show()
+                            return@setOnClickListener
+                        }
+                    }
+
                     submitData()
 
                 } else {
@@ -402,6 +534,14 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
             }
         }
 
+        viewBinding.currentAddCheckbox.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                viewBinding.currentAddLayout.gone()
+            } else {
+                viewBinding.currentAddLayout.visible()
+            }
+        }
+
     }
 
     private fun submitData() = viewBinding.apply {
@@ -418,9 +558,22 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
                 city = citySpinner.text.toString(),
                 pincode = pincode.editText?.text.toString(),
                 landmark = landmark.editText?.text.toString(),
-                name = name.editText?.text.toString()
+                name = name.editText?.text.toString(),
+                currentAddSameAsParmanent = currentAddCheckbox.isChecked,
+                currentAddress = if (!currentAddCheckbox.isChecked) CurrentAddressDetailDataModel(
+                        addLine1 = caAddLine1Input.text.toString(),
+                        addLine2 = caAddLine2Input.text.toString(),
+                        state = caStateSpinner.text.toString(),
+                        city = caCitySpinner.text.toString(),
+                        pincode = caPincodeInput.text.toString(),
+                        landmark = caLandmarkInput.text.toString()
+                ) else null
         )
-        viewModel.setAadhaarDetails(submitDataModel, nomineeCheckbox.isChecked)
+        if (FROM_CLIENT_ACTIVATON)
+            viewModel.setAadhaarDetails(submitDataModel, nomineeCheckbox.isChecked, mJobProfileId)
+        else
+            viewModel.setAadhaarDetails(submitDataModel, nomineeCheckbox.isChecked, "")
+
     }
 
 
@@ -488,7 +641,7 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
                             }
                             it.aadhaarNumber?.let {
                                 if (it.isNotEmpty() && !it.contains("X") && !it.contains("x")) {
-                                    aadharNo.editText?.setText(it)
+                                    aadharNo.editText?.setText(it.split(" ").joinToString(separator = ""))
                                 }
                             }
                             toplayoutblock.uploadStatusLayout(
@@ -571,6 +724,16 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
             }
         })
 
+        viewModel.caCitiesResult.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            if (it.isNotEmpty()) {
+                Log.d("Cities", it.toList().toString())
+                //getting states
+                val list = it as ArrayList<City>
+                processCACities(list)
+
+            }
+        })
+
         viewModel.verificationResult.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             val kycData = it ?: return@Observer
             Log.d("kycData", "data : $kycData")
@@ -587,12 +750,60 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
                 }
             }
         })
+
+        viewModel.profileNominee.observe(viewLifecycleOwner, Observer {
+            setNomineeCheckbox(it?.pfNominee)
+        })
+
+        viewModel.observableAddApplicationSuccess.observe(
+                viewLifecycleOwner,
+                androidx.lifecycle.Observer {
+                    if (it) {
+                        checkForNextDoc()
+                    }
+                }
+        )
+    }
+
+    private fun setNomineeCheckbox(it: String?) = viewBinding.apply {
+        nomineeCheckbox.isChecked = !it.isNullOrEmpty() && it == FATHER
+
+    }
+
+    var caCityFilled = false
+    private fun processCACities(content: ArrayList<City>) {
+
+        caCitiesList.toMutableList().clear()
+        caCitiesList = ArrayList(content.sortedBy { it.name })
+
+        caCitiesArray.clear()
+        caCitiesMap.clear()
+        caCitiesList.forEachIndexed { index, city ->
+
+            caCitiesArray.add(city.name)
+            caCitiesMap.put(city.name, index)
+        }
+        Log.d("map", "$citiesMap")
+        //viewBinding.progressBar.visibility = View.GONE
+        caCitiesAdapter?.notifyDataSetChanged()
+
+        if (!caCityFilled && caCitiesArray.contains(
+                        aadhaarDetailsDataModel?.currentAddress?.city ?: ""
+                )
+        ) {
+            viewBinding.caCitySpinner.setText(
+                    aadhaarDetailsDataModel?.currentAddress?.city ?: "",
+                    false
+            )
+            caCityFilled = true
+        }
+
     }
 
     private fun allFieldsEnable(enable: Boolean) = viewBinding.apply {
         name.editText?.isEnabled = enable
         aadharNo.editText?.isEnabled = enable
-        dateOfBirth.isEnabled = enable
+        dateOfBirthLabel.isEnabled = enable
         fatherNameTil.editText?.isEnabled = enable
         addLine1Input.isEnabled = enable
         addLine2Input.isEnabled = enable
@@ -601,6 +812,36 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
         pincode.editText?.isEnabled = enable
         landmark.editText?.isEnabled = enable
         nomineeCheckbox.isEnabled = enable
+
+        currentAddCheckbox.isEnabled = enable
+        caAddLine1Input.isEnabled = enable
+        caAddLine2Input.isEnabled = enable
+        caStateSpinner.isEnabled = enable
+        caCitySpinner.isEnabled = enable
+        caPincodeInput.isEnabled = enable
+        caLandmarkInput.isEnabled = enable
+
+
+        if (enable) toplayoutblock.enableImageClick() else toplayoutblock.disableImageClick()
+
+        if (enable) {
+            viewBinding.toplayoutblock.setVerificationSuccessfulView(
+                    getString(R.string.aadhaar_card_veri),
+                    getString(R.string.you_need_to_upload_veri)
+            )
+            viewBinding.toplayoutblock.showUploadHere()
+            viewBinding.toplayoutblock.statusDialogLayoutvisibilityGone()
+
+        } else {
+            viewBinding.toplayoutblock.setVerificationSuccessfulView(getString(R.string.aadhar_submitted_veri))
+
+            viewBinding.toplayoutblock.uploadStatusLayout(
+                    AppConstants.UPLOAD_SUCCESS,
+                    getString(R.string.document_submitted_veri),
+                    getString(R.string.aadhar_submitted_successfully_veri)
+            )
+            viewBinding.toplayoutblock.viewChangeOnVerified()
+        }
     }
 
     var aadhaarDetailsDataModel: AadhaarDetailsDataModel? = null
@@ -658,10 +899,31 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
             it.addLine2.let {
                 addLine2.editText?.setText(it)
             }
-            it.state.let {
-                if (it.isNotEmpty()) {
-                    stateSpinner.setText(it, false)
-                    getCitiesWhenStateNotEmpty(it)
+            it.state.let { state ->
+                if (state.isNotEmpty()) {
+                    if (statesArray.contains(state)) {
+                        stateSpinner.setText(state, false)
+                        getCitiesWhenStateNotEmpty(state)
+                        cityAutofillRequire = true
+                        if (it.city.isNotBlank()) {
+                            autofillCityName = it.city
+                        }
+                    }
+                }
+            }
+
+            currentAddCheckbox.isChecked = it.currentAddSameAsParmanent
+            if (!it.currentAddSameAsParmanent) {
+                it.currentAddress?.let { curradd ->
+                    caAddLine1Input.setText(curradd.addLine1)
+                    caAddLine2Input.setText(curradd.addLine2)
+                    caPincodeInput.setText(curradd.pincode)
+                    caLandmarkInput.setText(curradd.landmark)
+
+                    if (curradd.state?.isNotBlank() == true) {
+                        caStateSpinner.setText(curradd.state, false)
+                        getCitiesWhenStateNotEmpty(curradd.state ?: "", false)
+                    }
                 }
             }
 
@@ -691,14 +953,18 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
         return null
     }
 
-    private fun getCitiesWhenStateNotEmpty(stateStr: String) {
+    private fun getCitiesWhenStateNotEmpty(stateStr: String, parmanentCity: Boolean = true) {
         //get the value from states
 
         val index = statesesMap.get(stateStr)
         val stateModel = index?.let { it1 -> statesList.get(it1) }
         Log.d("index", "i: $index , map: $statesesMap")
         if (stateModel?.id.toString().isNotEmpty()) {
-            viewModel.getCities(stateModel?.id.toString())
+            if (parmanentCity) {
+                viewModel.getCities(stateModel?.id.toString())
+            } else {
+                viewModel.getCurrentAddCities(stateModel?.id.toString())
+            }
         }
     }
 
@@ -733,7 +999,8 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
         viewBinding.toplayoutblock.setImageViewPager(list)
     }
 
-
+    var cityAutofillRequire = false
+    var autofillCityName = ""
     private fun processCities(content: ArrayList<City>) {
 
         citiesList.toMutableList().clear()
@@ -751,6 +1018,11 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
         citiesAdapter?.notifyDataSetChanged()
         if (ocrCityDetected && citiesArray.contains(ocrCity)) {
             viewBinding.citySpinner.setText(ocrCity, false)
+            ocrCityDetected = false
+        }
+        if (cityAutofillRequire) {
+            viewBinding.citySpinner.setText(autofillCityName, false)
+            cityAutofillRequire = false
         }
     }
 
@@ -870,8 +1142,11 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
     }
 
     private fun showAadharImage(uri: Uri, position: Int) {
-        if (position in 0..1)
+        if (position in 0..1) {
+            if (position == 0) aadharFrontImagePath = uri.toString()
+            else aadharBackImagePath = uri.toString()
             viewBinding.toplayoutblock.setDocumentImage(position, uri)
+        }
 
     }
 

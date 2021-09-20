@@ -98,8 +98,7 @@ class ViewPagerAdapter(private val itemClickListener: (View) -> (Unit)) : Recycl
                 title.gone()
                 plusIcon.gone()
             }
-            if(!setImageClickable)
-                itemView.isClickable = false
+            itemView.isClickable = setImageClickable
         }
 
         override fun onClick(v: View?) {

@@ -356,6 +356,189 @@
 
                     </com.google.android.material.textfield.TextInputLayout>
 
+
+
+                    <TextView
+                        android:id="@+id/current_add_tv"
+                        style="@style/TitleL"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/size_16"
+                        android:layout_marginTop="@dimen/dp_large"
+                        android:layout_marginRight="@dimen/size_16"
+                        android:text="@string/current_address_veri"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/landmark" />
+
+                    <androidx.appcompat.widget.AppCompatCheckBox
+                        android:id="@+id/current_add_checkbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/same_as_permanent_veri"
+                        android:checked="true"
+                        android:textSize="@dimen/dp_sm3"
+                        android:layout_marginLeft="@dimen/size_16"
+                        android:layout_marginTop="@dimen/size_8"
+                        android:layout_marginRight="@dimen/size_16"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/current_add_tv" />
+
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/current_add_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/current_add_checkbox"
+                        android:visibility="gone">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/ca_addLine1"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/dp_sm1"
+                            android:layout_marginTop="@dimen/size_4"
+                            android:layout_marginRight="@dimen/dp_sm1"
+                            android:hint="@string/address_line_1_veri"
+                            android:visibility="visible"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/ca_addLine1Input"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/size_46"
+                                android:padding="4dp"
+                                android:singleLine="true" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/ca_addLine2"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/size_16"
+                            android:layout_marginTop="@dimen/size_16"
+                            android:layout_marginRight="@dimen/size_16"
+                            android:hint="@string/address_line_2_veri"
+                            android:visibility="visible"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/ca_addLine1">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/ca_addLine2Input"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/size_46"
+                                android:padding="4dp"
+                                android:singleLine="true" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/ca_stateLayout"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/size_16"
+                            android:layout_marginTop="@dimen/size_16"
+                            android:layout_marginRight="@dimen/size_16"
+                            android:hint="@string/select_state_veri"
+                            android:visibility="visible"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/ca_addLine2">
+
+                            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                                android:id="@+id/ca_stateSpinner"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/size_46"
+                                android:clickable="true"
+                                android:inputType="none"
+                                android:padding="4dp"
+                                tools:ignore="KeyboardInaccessibleWidget" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/ca_cityLayout"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/size_16"
+                            android:layout_marginTop="@dimen/size_16"
+                            android:layout_marginRight="@dimen/size_16"
+                            android:hint="@string/select_city_veri"
+                            android:visibility="visible"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/ca_stateLayout">
+
+                            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                                android:id="@+id/ca_citySpinner"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/size_46"
+                                android:clickable="true"
+                                android:inputType="none"
+                                android:padding="4dp"
+                                tools:ignore="KeyboardInaccessibleWidget" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/ca_pincode"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/size_16"
+                            android:layout_marginTop="@dimen/size_16"
+                            android:layout_marginRight="@dimen/size_16"
+                            android:hint="@string/pincode_veri"
+                            android:visibility="visible"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/ca_cityLayout">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/ca_pincodeInput"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/size_46"
+                                android:inputType="number"
+                                android:maxLength="6"
+                                android:padding="4dp"
+                                android:singleLine="true" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/ca_landmark"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/size_16"
+                            android:layout_marginTop="@dimen/size_16"
+                            android:layout_marginRight="@dimen/size_16"
+                            android:hint="@string/enter_landmark_veri"
+                            android:visibility="visible"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/ca_pincode">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/ca_landmarkInput"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/size_46"
+                                android:padding="4dp"
+                                android:singleLine="true" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
                     <androidx.appcompat.widget.AppCompatCheckBox
                         android:id="@+id/nomineeCheckbox"
                         android:layout_width="wrap_content"
@@ -367,7 +550,7 @@
                         android:layout_marginTop="@dimen/size_8"
                         android:layout_marginRight="@dimen/size_16"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/landmark" />
+                        app:layout_constraintTop_toBottomOf="@+id/current_add_layout" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>

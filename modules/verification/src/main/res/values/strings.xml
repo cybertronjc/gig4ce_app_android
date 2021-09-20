@@ -431,7 +431,12 @@
     <string name="enter_aadhar_details_veri">Enter the Aadhar card details manually below</string>
     <string name="upload_aadhar_card_veri">Upload Aadhar Card</string>
     <string name="please_upload_aadhar_veri">Please upload your Aadhar card or enter the details manually</string>
-
+    <string name="aadhar_submitted_successfully_veri">The Aadhar card details have been submitted successfully.</string>
+    <string name="document_submitted_veri">Document Submitted</string>
+    <string name="aadhar_submitted_veri">Aadhar card submitted</string>
+    <string name="same_as_permanent_veri">Same as permanent address</string>
+    <string name="curr_add1_veri">Enter Current Address Line 1</string>
+    <string name="curr_add2_veri">Enter Current Address Line 2</string>
 
     <!--    <string name="veri_add_doc_front">"Front Side"</string>-->
 <!--    <string name="veri_add_doc_back">"Back Side"</string>-->

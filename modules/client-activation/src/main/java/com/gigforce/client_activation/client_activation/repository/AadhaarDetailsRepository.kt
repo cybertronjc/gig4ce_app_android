@@ -3,6 +3,7 @@ package com.gigforce.client_activation.client_activation.repository
 import com.gigforce.core.datamodels.City
 import com.gigforce.core.datamodels.State
 import com.gigforce.core.datamodels.profile.AddressModel
+import com.gigforce.core.datamodels.profile.ProfileNominee
 import com.gigforce.core.datamodels.verification.AadhaarDetailsDataModel
 import com.gigforce.core.datamodels.verification.VerificationBaseModel
 import com.gigforce.core.di.repo.IAadhaarDetailsRepository
@@ -108,9 +109,10 @@ class AadhaarDetailsRepository @Inject constructor() : BaseFirestoreDBRepository
 
     override suspend fun setAadhaarFromVerificationModule(nomineeAsFather: Boolean, aadhaardetails: AadhaarDetailsDataModel): Boolean {
         try {
+//            "aadhaar_card_questionnaire.frontImagePath" to aadhaardetails.frontImagePath,
+//            "aadhaar_card_questionnaire.backImagePath" to aadhaardetails.backImagePath,
+
             var mapData = mapOf(
-                    "aadhaar_card_questionnaire.frontImagePath" to aadhaardetails.frontImagePath,
-                    "aadhaar_card_questionnaire.backImagePath" to aadhaardetails.backImagePath,
                     "aadhaar_card_questionnaire.name" to aadhaardetails.name,
                     "aadhaar_card_questionnaire.aadhaarCardNo" to aadhaardetails.aadhaarCardNo,
                     "aadhaar_card_questionnaire.dateOfBirth" to aadhaardetails.dateOfBirth,
@@ -120,19 +122,32 @@ class AadhaarDetailsRepository @Inject constructor() : BaseFirestoreDBRepository
                     "aadhaar_card_questionnaire.state" to aadhaardetails.state,
                     "aadhaar_card_questionnaire.city" to aadhaardetails.city,
                     "aadhaar_card_questionnaire.pincode" to aadhaardetails.pincode,
-                    "aadhaar_card_questionnaire.landmark" to aadhaardetails.landmark
+                    "aadhaar_card_questionnaire.landmark" to aadhaardetails.landmark,
+                    "aadhaar_card_questionnaire.currentAddSameAsParmanent" to aadhaardetails.currentAddSameAsParmanent,
+                    "aadhaar_card_questionnaire.currentAddress" to aadhaardetails.currentAddress
             )
 
             db.collection(verificationCollectionName).document(uid).updateOrThrow(
                     mapData
             )
-            if (nomineeAsFather)
-                db.collection("Profiles").document(uid).updateOrThrow(mapOf(
-                        "pfNominee" to "father"))
+            db.collection("Profiles").document(uid).updateOrThrow(mapOf(
+                    "pfNominee" to if (nomineeAsFather) "father" else ""))
 
             return true
         } catch (e: Exception) {
             return false
+        }
+    }
+
+    override suspend fun getProfileNominee(): ProfileNominee? {
+        try {
+            val await = db.collection("Profiles").document(uid).get().await()
+            if (!await.exists()) {
+                return ProfileNominee()
+            }
+            return await.toObject(ProfileNominee::class.java)
+        } catch (e: Exception) {
+            return ProfileNominee()
         }
     }
 
