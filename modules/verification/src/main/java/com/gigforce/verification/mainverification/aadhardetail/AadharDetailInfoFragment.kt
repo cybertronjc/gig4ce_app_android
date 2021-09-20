@@ -597,7 +597,7 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
                     allNavigationList.get(0), intentBundle)
         }
     }
-
+    private var dobYear = 1990
     private val dateOfBirthPicker: DatePickerDialog by lazy {
         val cal = Calendar.getInstance()
         val datePickerDialog = DatePickerDialog(
@@ -610,7 +610,7 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
                     viewBinding.dateOfBirth.text = DateHelper.getDateInDDMMYYYYHiphen(newCal.time)
                     viewBinding.dobLabel.visible()
                 },
-                1990,
+                dobYear,
                 cal.get(Calendar.MONTH),
                 cal.get(Calendar.DAY_OF_MONTH)
         )
@@ -634,14 +634,25 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
                                 }
                             }
                             it.dateOfBirth?.let {
-                                if (it.isNotEmpty() && it.contains("-") && it.length > 8) {
-                                    dateOfBirth.text = it
-                                    dobLabel.visible()
+                                if (it.isNotEmpty()) {
+                                    if(it.contains("-") && it.length > 8) {
+                                        dateOfBirth.text = it
+                                        dobLabel.visible()
+                                    }else if(it.length == 4){
+                                        try{
+                                            dobYear = it.toInt()
+                                        }catch (e:Exception){
+
+                                        }
+                                    }
                                 }
                             }
                             it.aadhaarNumber?.let {
                                 if (it.isNotEmpty() && !it.contains("X") && !it.contains("x")) {
-                                    aadharNo.editText?.setText(it.split(" ").joinToString(separator = ""))
+                                    var aadharNotemp = it
+                                    if (it.contains(""))
+                                        aadharNotemp = it.split(" ").joinToString(separator = "")
+                                    aadharNo.editText?.setText(aadharNotemp)
                                 }
                             }
                             toplayoutblock.uploadStatusLayout(
@@ -662,17 +673,32 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
                                 pincode.editText?.setText(it)
                             }
 
-                            it.state?.let { state ->
-                                if (statesArray.contains(state)) {
-                                    stateSpinner.setText(state)
-                                    it.city?.let {
-                                        ocrCity = it
-                                        ocrCityDetected = true
-                                        getCitiesWhenStateNotEmpty(it)
+//                            it.state?.let { state ->
+//                                if (statesArray.contains(state)) {
+//                                    stateSpinner.setText(state)
+//                                    it.city?.let {
+//                                        ocrCity = it
+//                                        ocrCityDetected = true
+//                                        getCitiesWhenStateNotEmpty(it)
+//                                    }
+//                                }
+//
+//                            }
+
+                            it.state.let { state ->
+                                if (state?.isNotEmpty() == true) {
+                                    if (statesArray.contains(state)) {
+                                        stateSpinner.setText(state, false)
+                                        getCitiesWhenStateNotEmpty(state)
+                                        cityAutofillRequire = true
+                                        if (it.city?.isNotBlank() == true) {
+                                            autofillCityName = it.city
+                                        }
                                     }
                                 }
-
                             }
+
+
                             toplayoutblock.uploadStatusLayout(
                                     AppConstants.UPLOAD_SUCCESS,
                                     getString(R.string.upload_success_veri),
@@ -1016,12 +1042,16 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
         Log.d("map", "$citiesMap")
         //viewBinding.progressBar.visibility = View.GONE
         citiesAdapter?.notifyDataSetChanged()
-        if (ocrCityDetected && citiesArray.contains(ocrCity)) {
-            viewBinding.citySpinner.setText(ocrCity, false)
+        if (ocrCityDetected) {
+            if (citiesArray.contains(ocrCity))
+                viewBinding.citySpinner.setText(ocrCity, false)
             ocrCityDetected = false
         }
         if (cityAutofillRequire) {
-            viewBinding.citySpinner.setText(autofillCityName, false)
+            if (citiesArray.contains(autofillCityName))
+                viewBinding.citySpinner.setText(autofillCityName, false)
+            else
+                viewBinding.citySpinner.setText("", false)
             cityAutofillRequire = false
         }
     }
