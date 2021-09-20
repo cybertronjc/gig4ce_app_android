@@ -34,6 +34,7 @@ class ViewPagerAdapter(private val itemClickListener: (View) -> (Unit)) : Recycl
     }
     fun updateData(position: Int, uri: Uri){
         list.get(position).imageIcon = uri
+        list.get(position).imagePath = ""
         list.get(position).imageUploaded = true
         notifyItemChanged(position)
     }
