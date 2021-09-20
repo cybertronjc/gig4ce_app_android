@@ -13,4 +13,6 @@
     <string name="click_or_pick_image_common">Click or Pick Image</string>
     <string name="camera_common">Camera</string>
     <string name="gallery_common">Gallery</string>
+    <string name="face_detected_common">Face Detected. Uploading...</string>
+    <string name="something_seems_off_common">Unable to recognise face, please try again.</string>
 </resources>
