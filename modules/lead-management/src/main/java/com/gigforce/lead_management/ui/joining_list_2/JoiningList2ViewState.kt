@@ -1,6 +1,7 @@
 package com.gigforce.lead_management.ui.joining_list_2
 
 import com.gigforce.lead_management.models.JoiningListRecyclerItemData
+import com.gigforce.lead_management.models.JoiningStatusAndCountItemData
 
 sealed class JoiningList2ViewState {
 
@@ -17,3 +18,8 @@ sealed class JoiningList2ViewState {
         val joiningList: List<JoiningListRecyclerItemData>
     ) : JoiningList2ViewState()
 }
+
+data class JoiningFilters(
+    val shouldRemoveOlderStatusTabs: Boolean,
+    val attendanceStatuses: List<JoiningStatusAndCountItemData>?
+)

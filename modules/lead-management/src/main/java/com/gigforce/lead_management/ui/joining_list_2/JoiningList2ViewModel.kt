@@ -34,8 +34,12 @@ class JoiningList2ViewModel @Inject constructor(
         private const val TAG = "JoiningListViewModel"
     }
 
+    //State Observables
     private val _viewState = MutableLiveData<JoiningList2ViewState>()
     val viewState: LiveData<JoiningList2ViewState> = _viewState
+
+    private val _filters = MutableLiveData<JoiningFilters>()
+    val filters: LiveData<JoiningFilters> = _filters
 
     //Data
     private var joiningsRaw: List<Joining> = emptyList()
