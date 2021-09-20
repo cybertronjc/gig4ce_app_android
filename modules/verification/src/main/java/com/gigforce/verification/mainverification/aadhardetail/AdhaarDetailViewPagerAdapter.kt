@@ -1,8 +1,6 @@
-package com.gigforce.verification.mainverification.adapters
+package com.gigforce.verification.mainverification.aadhardetail
 
-import android.content.Context
 import android.net.Uri
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,16 +8,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
-import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.verification.R
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.storage.FirebaseStorage
-import java.lang.Exception
 
-
-class ViewPagerAdapter(private val itemClickListener: (View) -> (Unit)) : RecyclerView.Adapter<ViewPagerAdapter.ViewPagerViewHolder>() {
+class AdhaarDetailViewPagerAdapter(private val itemClickListener: (View) -> (Unit)) : RecyclerView.Adapter<AdhaarDetailViewPagerAdapter.ViewPagerViewHolder>() {
 
     private var list: List<KYCImageModel> = listOf()
 
@@ -38,8 +32,8 @@ class ViewPagerAdapter(private val itemClickListener: (View) -> (Unit)) : Recycl
         notifyDataSetChanged()
     }
     fun updateData(position: Int, uri: Uri){
-        list.get(position).imageIcon = uri
         list.get(position).imagePath = ""
+        list.get(position).imageIcon = uri
         list.get(position).imageUploaded = true
         notifyItemChanged(position)
     }
@@ -54,13 +48,13 @@ class ViewPagerAdapter(private val itemClickListener: (View) -> (Unit)) : Recycl
     private var imageDetectionStarted = false
     private var imageFound = false
     inner class ViewPagerViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView),
-         View.OnClickListener {
+            View.OnClickListener {
 
         constructor(parent: ViewGroup) : this(
-            LayoutInflater.from(parent.context).inflate(
-                R.layout.kyc_image_card_view_item,
-                parent, false
-            )
+                LayoutInflater.from(parent.context).inflate(
+                        R.layout.kyc_image_card_view,
+                        parent, false
+                )
         )
         init {
             itemView.setOnClickListener(this)
@@ -76,29 +70,24 @@ class ViewPagerAdapter(private val itemClickListener: (View) -> (Unit)) : Recycl
             title.text = kYCImageModel.text
             if (kYCImageModel.imagePath.isNullOrBlank()) {
                 GlideApp.with(itemView.context)
-                    .load(kYCImageModel.imageIcon)
-                    .into(backgroundImage)
+                        .load(kYCImageModel.imageIcon)
+                        .into(backgroundImage)
 
             }
             else{
                 kYCImageModel.imagePath?.let {
-                    try {
-                        val gsReference = FirebaseStorage.getInstance().getReferenceFromUrl(it)
-                        GlideApp.with(itemView.context)
+                    val gsReference = FirebaseStorage.getInstance().getReferenceFromUrl(it)
+                    GlideApp.with(itemView.context)
                             .load(gsReference)
                             .into(backgroundImage)
-                    }catch (e: Exception){
-                        CrashlyticsLogger.d("Viewpager KYC", "${e.message} $it")
-                        FirebaseCrashlytics.getInstance().log("Exception : Viewpager KYC ${e.message} $it")
-                    }
-
                 }
             }
             if (kYCImageModel.imageUploaded) {
                 title.gone()
                 plusIcon.gone()
             }
-            itemView.isClickable = setImageClickable
+            if(!setImageClickable)
+                itemView.isClickable = false
         }
 
         override fun onClick(v: View?) {

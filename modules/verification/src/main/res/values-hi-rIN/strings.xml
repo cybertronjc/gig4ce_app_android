@@ -382,7 +382,35 @@
     <string name="verified_status_veri">जांच हो गई है</string>
     <string name="pending_status_veri">लंबित है</string>
     <string name="failed_status_veri">फ़ेल है</string>
+    <string name="please_upload_aadhar_here">कृपया अपना आधार कार्ड यहाँ अपलोड करें</string>
 
+
+    <string name="upload_aadhar_front_veri">आधार कार्ड की फ्रंट फोटो अपलोड करें</string>
+    <string name="upload_aadhar_back_veri">आधार कार्ड बैक फोटो अपलोड करें</string>
+    <string name="enter_valid_aadhar_veri">मान्य आधार संख्या दर्ज करें</string>
+    <string name="select_dob_veri">जन्म तिथि चुनें</string>
+    <string name="enter_father_name_veri">पिता का नाम दर्ज करें</string>
+    <string name="enter_valid_pin_veri">मान्य पिनकोड दर्ज करें</string>
+    <string name="enter_landmark_veri">मील का पत्थर दर्ज करें</string>
+
+    <string name="select_city_veri">Select City</string>
+    <string name="select_state_veri">Select state</string>
+    <string name="address_line_1_veri">Address Line 1</string>
+    <string name="address_line_2_veri">Address Line 2</string>
+    <string name="date_of_birth_spaced_veri">"   जन्म की तारीख   "</string>
+    <string name="aadhar_card_number_veri">AADHAR Card Number</string>
+    <string name="please_enter_the_below_details_of_your_aadhar_this_step_is_mandatory_for_this_application_veri">कृपया अपने आधार का विवरण नीचे दर्ज करें। इस आवेदन के लिए यह कदम अनिवार्य है।</string>
+    <string name="enter_aadhar_veri">आधार विवरण दर्ज करें</string>
+    <string name="aadhar_card_detail_veri">आधार कार्ड विवरण</string>
+    <string name="data_uploaded_veri">डेटा सफलतापूर्वक अपलोड किया गया</string>
+    <string name="make_my_father_as_nominee">मेरे पिता को नामांकित करें</string>
+    <string name="enter_name_veri">कृपया अपना नाम दर्ज करें</string>
+    <string name="submitted_status_veri">पूर्ण</string>
+    <string name="no_i_dont_have_aadhar_veri">नहीं, मेरे पास आधार कार्ड नहीं है</string>
+    <string name="info_of_aadhar_success_veri">आधार कार्ड की जानकारी सफलतापूर्वक कैप्चर की गई।</string>
+    <string name="enter_aadhar_details_veri">आधार कार्ड विवरण नीचे मैन्युअल रूप से दर्ज करें</string>
+    <string name="upload_aadhar_card_veri">अपलोड आधार कार्ड</string>
+    <string name="please_upload_aadhar_veri">कृपया अपना आधार कार्ड अपलोड करें या मैन्युअल रूप से विवरण दर्ज करें</string>
 
     <!--    <string name="veri_add_doc_front">सामने की ओर</string>-->
     <!--    <string name="veri_add_doc_back">पीछे की ओर</string>-->

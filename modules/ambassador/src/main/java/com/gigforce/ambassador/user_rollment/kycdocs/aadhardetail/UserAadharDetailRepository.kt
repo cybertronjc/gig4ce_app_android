@@ -1,4 +1,4 @@
-package com.gigforce.client_activation.client_activation.repository
+package com.gigforce.ambassador.user_rollment.kycdocs.aadhardetail
 
 import com.gigforce.core.datamodels.City
 import com.gigforce.core.datamodels.State
@@ -6,24 +6,20 @@ import com.gigforce.core.datamodels.profile.AddressModel
 import com.gigforce.core.datamodels.profile.ProfileNominee
 import com.gigforce.core.datamodels.verification.AadhaarDetailsDataModel
 import com.gigforce.core.datamodels.verification.VerificationBaseModel
-import com.gigforce.core.di.repo.IAadhaarDetailsRepository
 import com.gigforce.core.extensions.toFirebaseTimeStamp
 import com.gigforce.core.extensions.updateOrThrow
 import com.gigforce.core.fb.BaseFirestoreDBRepository
-import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.tasks.await
 import java.util.*
 import javax.inject.Inject
 
-class AadhaarDetailsRepository @Inject constructor() : BaseFirestoreDBRepository(), IAadhaarDetailsRepository {
+class UserAadharDetailRepository @Inject constructor() : BaseFirestoreDBRepository() {
 
     var statesCollectionName = "Mst_States"
     var citiesCollectionName = "Mst_Cities"
     var verificationCollectionName = "Verification"
     var profileCollectionName = "Profiles"
     var COLLECTION_NAME = "Profiles"
-
-    var uid = FirebaseAuth.getInstance().currentUser?.uid!!
 
     companion object {
         private const val COLLECTION_NAME = "Verification"
@@ -33,7 +29,7 @@ class AadhaarDetailsRepository @Inject constructor() : BaseFirestoreDBRepository
         return COLLECTION_NAME
     }
 
-    override suspend fun getStatesFromDb(): MutableList<State> {
+    suspend fun getStatesFromDb(): MutableList<State> {
         try {
             val await = db.collection(statesCollectionName).get().await()
             if (await.documents.isNullOrEmpty()) {
@@ -50,7 +46,7 @@ class AadhaarDetailsRepository @Inject constructor() : BaseFirestoreDBRepository
 
     }
 
-    override suspend fun getCities(stateCode: String): MutableList<City> {
+    suspend fun getCities(stateCode: String): MutableList<City> {
         try {
             val await =
                     db.collection(citiesCollectionName).whereEqualTo("state_code", stateCode).get()
@@ -68,7 +64,7 @@ class AadhaarDetailsRepository @Inject constructor() : BaseFirestoreDBRepository
         }
     }
 
-    override suspend fun getVerificationDetails(): VerificationBaseModel? {
+    suspend fun getVerificationDetails(uid : String): VerificationBaseModel? {
         try {
             val await = db.collection(verificationCollectionName).document(uid).get().await()
             if (!await.exists()) {
@@ -107,7 +103,7 @@ class AadhaarDetailsRepository @Inject constructor() : BaseFirestoreDBRepository
         }
     }
 
-    override suspend fun setAadhaarFromVerificationModule(nomineeAsFather: Boolean, aadhaardetails: AadhaarDetailsDataModel): Boolean {
+    suspend fun setAadhaarFromVerificationModule(uid: String, nomineeAsFather: Boolean, aadhaardetails: AadhaarDetailsDataModel): Boolean {
         try {
 //            "aadhaar_card_questionnaire.frontImagePath" to aadhaardetails.frontImagePath,
 //            "aadhaar_card_questionnaire.backImagePath" to aadhaardetails.backImagePath,
@@ -139,7 +135,7 @@ class AadhaarDetailsRepository @Inject constructor() : BaseFirestoreDBRepository
         }
     }
 
-    override suspend fun getProfileNominee(): ProfileNominee? {
+    suspend fun getProfileNominee(uid : String): ProfileNominee? {
         try {
             val await = db.collection("Profiles").document(uid).get().await()
             if (!await.exists()) {
@@ -203,7 +199,7 @@ class AadhaarDetailsRepository @Inject constructor() : BaseFirestoreDBRepository
         }
     }
 
-    suspend fun getAddressData(): AddressModel? {
+    suspend fun getAddressData(uid : String): AddressModel? {
         try {
             val await = db.collection(profileCollectionName).document(uid).get().await()
             if (!await.exists()) {

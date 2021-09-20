@@ -34,6 +34,18 @@ data class KycOcrResultModel(
     @SerializedName("accountNumber")
     val accountNumber: String? = "",
     @SerializedName("bankName")
-    val bankName: String? = ""
+    val bankName: String? = "",
+    @SerializedName("city")
+    val city: String? = "",
+    @SerializedName("state")
+    val state: String? = "",
+    @SerializedName("pinCode")
+    val pinCode: String? = "",
+    @SerializedName("district")
+    val district: String? = "",
+    @SerializedName("address1")
+    val address1: String? = "",
+    @SerializedName("address2")
+    val address2: String? = ""
 
 )
