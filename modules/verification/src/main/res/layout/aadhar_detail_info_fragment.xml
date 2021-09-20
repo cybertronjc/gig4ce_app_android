@@ -549,6 +549,7 @@
                         android:layout_marginLeft="@dimen/size_16"
                         android:layout_marginTop="@dimen/size_8"
                         android:layout_marginRight="@dimen/size_16"
+                        android:visibility="gone"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/current_add_layout" />
 

@@ -570,9 +570,9 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
                 ) else null
         )
         if (FROM_CLIENT_ACTIVATON)
-            viewModel.setAadhaarDetails(submitDataModel, nomineeCheckbox.isChecked, mJobProfileId)
+            viewModel.setAadhaarDetails(submitDataModel, false, mJobProfileId)
         else
-            viewModel.setAadhaarDetails(submitDataModel, nomineeCheckbox.isChecked, "")
+            viewModel.setAadhaarDetails(submitDataModel, false, "")
 
     }
 

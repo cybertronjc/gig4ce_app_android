@@ -595,10 +595,12 @@ class UserAadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageB
                         landmark = caLandmarkInput.text.toString()
                 ) else null
         )
-        if (FROM_CLIENT_ACTIVATON)
-            viewModel.setAadhaarDetails(submitDataModel, nomineeCheckbox.isChecked, mJobProfileId)
-        else
-            viewModel.setAadhaarDetails(submitDataModel, nomineeCheckbox.isChecked, "")
+        if(userId.isNotEmpty()) {
+            if (FROM_CLIENT_ACTIVATON)
+                viewModel.setAadhaarDetails(userId, submitDataModel, false, mJobProfileId)
+            else
+                viewModel.setAadhaarDetails(userId, submitDataModel, false, "")
+        }
 
     }
 
@@ -766,7 +768,7 @@ class UserAadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageB
             viewBinding.progressBar.gone()
             if (updated) {
                 showToast(getString(R.string.data_uploaded_amb))
-                viewModel.getVerificationData()
+                viewModel.getVerificationData(userId)
             }
 
         })
@@ -886,7 +888,7 @@ class UserAadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageB
         caLandmarkInput.isEnabled = enable
 
 
-        if (enable) toplayoutblock.enableImageClick() else toplayoutblock.disableImageClick()
+
 
         if (enable) {
             viewBinding.toplayoutblock.setVerificationSuccessfulView(
@@ -906,6 +908,9 @@ class UserAadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageB
             )
             viewBinding.toplayoutblock.viewChangeOnVerified()
         }
+
+        if (enable) toplayoutblock.enableImageClick() else toplayoutblock.disableImageClick()
+
     }
 
     var aadhaarDetailsDataModel: AadhaarDetailsDataModel? = null
@@ -1106,7 +1111,7 @@ class UserAadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageB
         }
         Log.d("map", "$statesesMap")
         stateAdapter?.notifyDataSetChanged()
-        viewModel.getVerificationData()
+        viewModel.getVerificationData(userId)
     }
 
 

@@ -23,8 +23,8 @@ import okhttp3.MultipartBody
 import javax.inject.Inject
 
 @HiltViewModel
-class UserAadharDetailInfoViewModel @Inject constructor(private val aadharDetailsRepo: IAadhaarDetailsRepository, private val iBuildConfigVM: IBuildConfigVM) : ViewModel() {
-
+class UserAadharDetailInfoViewModel @Inject constructor( private val iBuildConfigVM: IBuildConfigVM) : ViewModel() {
+    private val aadharDetailsRepo: UserAadharDetailRepository = UserAadharDetailRepository()
     val statesResult: MutableLiveData<MutableList<State>> = MutableLiveData<MutableList<State>>()
     val _kycOcrResult = MutableLiveData<KycOcrResultModel>()
     val kycOcrResult: LiveData<KycOcrResultModel> = _kycOcrResult
@@ -57,11 +57,11 @@ class UserAadharDetailInfoViewModel @Inject constructor(private val aadharDetail
             Log.d("result", _kycOcrResult.toString())
         }
 
-    fun getVerificationData() = viewModelScope.launch {
+    fun getVerificationData(uid: String) = viewModelScope.launch {
         try {
-            val veriData = aadharDetailsRepo.getVerificationDetails()
+            val veriData = aadharDetailsRepo.getVerificationDetails(uid)
             verificationResult.postValue(veriData)
-            val profileNominee = aadharDetailsRepo.getProfileNominee()
+            val profileNominee = aadharDetailsRepo.getProfileNominee(uid)
             _profileNominee.postValue(profileNominee)
         } catch (e: Exception) {
             e.printStackTrace()
@@ -86,9 +86,9 @@ class UserAadharDetailInfoViewModel @Inject constructor(private val aadharDetail
         }
 
     }
-    fun setAadhaarDetails(submitDataModel: AadhaarDetailsDataModel, nomineeAsFather : Boolean, mJobProfileId : String)= viewModelScope.launch {
+    fun setAadhaarDetails(uid: String,submitDataModel: AadhaarDetailsDataModel, nomineeAsFather : Boolean, mJobProfileId : String)= viewModelScope.launch {
         try {
-            val updated = aadharDetailsRepo.setAadhaarFromVerificationModule(nomineeAsFather, submitDataModel)
+            val updated = aadharDetailsRepo.setAadhaarFromVerificationModule(uid,nomineeAsFather, submitDataModel)
             updatedResult.postValue(updated)
             if (mJobProfileId.isNotEmpty()){
                 FirebaseFirestore.getInstance().collection("JP_Applications")
