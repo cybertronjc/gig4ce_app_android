@@ -278,7 +278,7 @@
 
     <string name="no_doc_title_bank_veri">Bank details not available!</string>
     <string name="no_doc_subtitle_bank_veri">No Worries! Once you own Bank details you can untick the checkbox to verify it</string>
-    <string name="aadhar_verified_veri">The Aadhar card details have been verified successfully.</string>
+    <string name="aadhar_verified_veri">The Aadhaar card details have been verified successfully.</string>
     <string name="aadhar_verified_success_veri">Aadhaar card verified</string>
     <string name="upload_front_side_first_veri">Please upload the front side first!</string>
     <string name="upload_aadhar_before_processding_veri">Please upload the Aadhaar before proceeding</string>
@@ -359,7 +359,7 @@
     <string name="select_the_method_you_want_for_verifying_your_aadhaar_card_veri">Select the method you want for verifying your Aadhaar Card</string>
     <string name="or_veri">OR</string>
     <string name="next_step_veri">Next Step</string>
-    <string name="verify_aadhar_with_phone_number_veri">Verify Aadhar with Phone Number</string>
+    <string name="verify_aadhar_with_phone_number_veri">Verify Aadhaar with Phone Number</string>
     <string name="enter_aadhaar_number_veri">Enter Aadhaar Number</string>
     <string name="enter_aadhar_and_verify_veri">Enter Aadhaar Card number and then verify details with a 6-Digit OTP sent on the registered Phone Number.</string>
     <string name="confirm_beneficiary_veri">Please confirm the beneficiary name</string>
@@ -403,7 +403,7 @@
     <string name="verified_status_veri">Verified</string>
     <string name="pending_status_veri">Pending</string>
     <string name="failed_status_veri">Failed</string>
-    <string name="please_upload_aadhar_here_veri">Please upload your aadhar card here</string>
+    <string name="please_upload_aadhar_here_veri">Please upload your aadhaar card here</string>
 
     <string name="upload_aadhar_front_veri">Upload aadhaar card front photo</string>
     <string name="upload_aadhar_back_veri">Upload aadhaar card back photo</string>
@@ -420,18 +420,18 @@
     <string name="date_of_birth_spaced_veri">"   Date of birth   "</string>
     <string name="aadhar_card_number_veri">AADHAR Card Number</string>
     <string name="please_enter_the_below_details_of_your_aadhar_this_step_is_mandatory_for_this_application_veri">Please enter the below details of your Aadhar. This step is mandatory for this application.</string>
-    <string name="enter_aadhar_veri">Enter Aadhar Details</string>
+    <string name="enter_aadhar_veri">Enter Aadhaar Details</string>
     <string name="aadhar_card_detail_veri">Aadhaar Card Details</string>
     <string name="data_uploaded_veri">Data uploaded successfully</string>
     <string name="make_my_father_as_nominee">Make my father as nominee</string>
     <string name="enter_name_veri">Please enter your name</string>
     <string name="submitted_status_veri">Submitted</string>
     <string name="no_i_dont_have_aadhar_veri">No, I dont have Aadhaar card</string>
-    <string name="info_of_aadhar_success_veri">Information of Aadhar card captured successfully.</string>
-    <string name="enter_aadhar_details_veri">Enter the Aadhar card details manually below</string>
-    <string name="upload_aadhar_card_veri">Upload Aadhar Card</string>
-    <string name="please_upload_aadhar_veri">Please upload your Aadhar card or enter the details manually</string>
-    <string name="aadhar_submitted_successfully_veri">The Aadhar card details have been submitted successfully.</string>
+    <string name="info_of_aadhar_success_veri">Information of Aadhaar card captured successfully.</string>
+    <string name="enter_aadhar_details_veri">Enter the Aadhaar card details manually below</string>
+    <string name="upload_aadhar_card_veri">Upload Aadhaar Card</string>
+    <string name="please_upload_aadhar_veri">Please upload your Aadhaar card or enter the details manually</string>
+    <string name="aadhar_submitted_successfully_veri">The Aadhaar card details have been submitted successfully.</string>
     <string name="document_submitted_veri">Document Submitted</string>
     <string name="aadhar_submitted_veri">Aadhar card submitted</string>
     <string name="same_as_permanent_veri">Same as permanent address</string>

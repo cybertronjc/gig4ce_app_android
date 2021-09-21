@@ -954,7 +954,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
                         }.addOnCanceledListener { progressBar.gone() }
                 } catch (e: Exception) {
                     CrashlyticsLogger.d("Aadhar Application Detail Fragment", "${e.message} $it")
-                    FirebaseCrashlytics.getInstance().log("Exception : Aadhar Application Detail Fragment ${e.message} $it")
+                    FirebaseCrashlytics.getInstance().log("Exception : Aadhaar Application Detail Fragment ${e.message} $it")
                 }
             }
 
