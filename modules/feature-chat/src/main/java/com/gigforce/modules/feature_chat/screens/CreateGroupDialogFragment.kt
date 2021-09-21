@@ -17,7 +17,7 @@ import com.gigforce.core.extensions.invisible
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.utils.Lce
 import com.gigforce.modules.feature_chat.R
-import com.gigforce.modules.feature_chat.models.ContactModel
+import com.gigforce.common_ui.chat.models.ContactModel
 import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel
 import com.gigforce.modules.feature_chat.screens.vm.factories.GroupChatViewModelFactory
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -100,7 +100,7 @@ class CreateGroupDialogFragment : DialogFragment() {
                             progressBar.visible()
                         }
                         is Lce.Content -> {
-                            Toast.makeText(requireContext(), "Group Created", Toast.LENGTH_LONG).show()
+                            Toast.makeText(requireContext(), getString(R.string.group_created_chat), Toast.LENGTH_LONG).show()
                             createGroupDialogFragmentListener?.onGroupCreated(it.content)
                             dismiss()
                         }
@@ -108,9 +108,9 @@ class CreateGroupDialogFragment : DialogFragment() {
                             progressBar.gone()
                             createGroupMainLayout.visible()
                             MaterialAlertDialogBuilder(requireContext())
-                                    .setTitle("Alert")
-                                    .setMessage("Unable to create group, ${it.error}")
-                                    .setPositiveButton("Okay") { _, _ -> }
+                                    .setTitle(getString(R.string.alert_chat))
+                                    .setMessage(getString(R.string.unable_to_create_group_chat) + it.error)
+                                    .setPositiveButton(getString(R.string.okay_chat)) { _, _ -> }
                                     .show()
                         }
                     }
@@ -145,7 +145,7 @@ class CreateGroupDialogFragment : DialogFragment() {
         submitBtn.setOnClickListener {
 
             if (groupNameET.length() == 0) {
-                Toast.makeText(requireContext(), "Please enter a group name", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.enter_a_group_name_chat), Toast.LENGTH_SHORT).show()
             } else {
                 chatGroupViewModel.createGroup(
                         groupName = groupNameET.text.toString().capitalize(),

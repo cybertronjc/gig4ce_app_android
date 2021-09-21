@@ -20,18 +20,19 @@ class SyncPref private constructor(
             Log.d(TAG,"last sync time : $lastSyncTime")
             Log.d(TAG,"Current sync time : ${System.currentTimeMillis()}")
             Log.d(TAG,"Diff : ${System.currentTimeMillis() - lastSyncTime}")
-            Log.d(TAG,"Diff Res: ${System.currentTimeMillis() - lastSyncTime > TWO_MINUTES}")
-            System.currentTimeMillis() - lastSyncTime > TWO_MINUTES
+            Log.d(TAG,"Diff Res: ${System.currentTimeMillis() - lastSyncTime > THIRTY_SECONDS}")
+
+            System.currentTimeMillis() - lastSyncTime > THIRTY_SECONDS
         }
     }
 
-    fun setContactsAsSynced() {
+    fun addContactSyncStartedPoint() {
         contactsSharedPref.edit { putLong(LAST_CONTACT_SYNC_TIME, System.currentTimeMillis()) }
     }
 
     companion object {
         const val LAST_CONTACT_SYNC_TIME = "last_contact_sync_time"
-        const val TWO_MINUTES =  120 * 1000
+        const val THIRTY_SECONDS =  30 * 1000
         const val TAG = "SyncPref"
 
         private var syncPref: SyncPref? = null

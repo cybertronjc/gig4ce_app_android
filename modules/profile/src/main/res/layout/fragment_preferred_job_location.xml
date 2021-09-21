@@ -16,9 +16,7 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:fillViewport="true"
+        android:layout_height="match_parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
@@ -36,7 +34,7 @@
                 android:fontFamily="@font/lato"
                 android:gravity="center_horizontal"
                 android:lineSpacingExtra="5sp"
-                android:text="Preferred Job location"
+                android:text="@string/preferred_job_location_profile"
                 android:textColor="#131415"
                 android:textSize="24sp"
                 android:textStyle="bold" />
@@ -77,14 +75,14 @@
                 android:paddingStart="16dp"
                 android:paddingTop="16dp"
                 android:paddingBottom="16dp"
-                android:text="Major Cities"
+                android:text="@string/major_cities_profile"
                 android:textColor="#333333"
                 android:textSize="16sp"
                 android:textStyle="normal" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/major_cities_recyclerview"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:layout_marginStart="16dp"
@@ -106,7 +104,7 @@
                 android:paddingStart="16dp"
                 android:paddingTop="16dp"
                 android:paddingBottom="16dp"
-                android:text="Other Cities"
+                android:text="@string/other_cities_profile"
                 android:textColor="#333333"
                 android:textSize="16sp"
                 android:textStyle="normal" />
@@ -141,7 +139,7 @@
             android:fontFamily="@font/lato"
             android:gravity="center_horizontal"
             android:lineSpacingExtra="5sp"
-            android:text="Locality"
+            android:text="@string/locality_profile"
             android:textColor="#131415"
             android:textSize="24sp"
             android:textStyle="bold"
@@ -160,7 +158,7 @@
             android:paddingStart="16dp"
             android:paddingTop="16dp"
             android:paddingBottom="16dp"
-            android:text="Delhi - NCR"
+            android:text="@string/delhi_ncr_profile"
             android:textColor="#333333"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/sub_cities_title"
@@ -193,7 +191,7 @@
         android:fontFamily="@font/lato_bold"
         android:gravity="center"
         android:minHeight="48dp"
-        android:text="Next"
+        android:text="@string/next_profile"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="16sp"

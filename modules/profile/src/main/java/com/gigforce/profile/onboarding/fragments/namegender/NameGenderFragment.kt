@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.ProfilePropArgs
 import com.gigforce.core.TrackingEventArgs
@@ -57,7 +58,7 @@ class NameGenderFragment : Fragment(), OnboardingFragmentNew.FragmentSetLastStat
 
     override fun onResume() {
         super.onResume()
-        showKeyboard()
+        //showKeyboard()
     }
 
     fun showKeyboard() {
@@ -177,6 +178,7 @@ class NameGenderFragment : Fragment(), OnboardingFragmentNew.FragmentSetLastStat
     }
 
     override fun nextButtonActionFound(): Boolean {
+        hideKeyboard()
         var props = HashMap<String, Any>()
         props.put("name", username.text.toString())
         props.put("gender", gender)
@@ -189,6 +191,7 @@ class NameGenderFragment : Fragment(), OnboardingFragmentNew.FragmentSetLastStat
         eventTracker.setUserProperty(props)
         eventTracker.setProfileProperty(ProfilePropArgs("\$name", username.text.toString()))
         eventTracker.setProfileProperty(ProfilePropArgs("Gender", gender))
+        eventTracker.setUserName(username.text.toString())
 
         return false
     }

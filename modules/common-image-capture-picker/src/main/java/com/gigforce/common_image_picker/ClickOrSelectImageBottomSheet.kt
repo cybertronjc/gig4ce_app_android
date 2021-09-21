@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
+import com.gigforce.common_ui.StringConstants
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 
@@ -16,7 +18,7 @@ class ClickOrSelectImageBottomSheet : BottomSheetDialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = inflater.inflate(R.layout.fragment_click_or_select_profile_picture, container, false)
+    ) = inflater.inflate(R.layout.fragment_click_or_select_picture, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -35,6 +37,8 @@ class ClickOrSelectImageBottomSheet : BottomSheetDialogFragment() {
             listener?.onPickImageThroughCameraClicked()
             dismiss()
         }
+
+
     }
 
     companion object {
@@ -42,12 +46,21 @@ class ClickOrSelectImageBottomSheet : BottomSheetDialogFragment() {
 
         fun launch(
             childFragmentManager: FragmentManager,
+            isPicturePresent: Boolean,
             listener: OnPickOrCaptureImageClickListener
         ) {
 
             val fragment = ClickOrSelectImageBottomSheet()
+            fragment.arguments =
+                bundleOf(StringConstants.PROFILE_PIC_PRESENT.value to isPicturePresent)
             fragment.listener = listener
-            fragment.show(childFragmentManager, TAG)
+
+            try {
+                fragment.show(childFragmentManager, TAG)
+            } catch (e : Exception){
+                e.printStackTrace()
+            }
+
         }
     }
 
@@ -56,5 +69,7 @@ class ClickOrSelectImageBottomSheet : BottomSheetDialogFragment() {
         fun onClickPictureThroughCameraClicked()
 
         fun onPickImageThroughCameraClicked()
+
+        fun removeProfilePic()
     }
 }

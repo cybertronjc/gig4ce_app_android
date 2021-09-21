@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/itemView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.github.vipulasri.timelineview.TimelineView
+        android:id="@+id/timeline"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        app:endLineColor="@color/colorPrimary"
+        app:lineStyle="dash"
+        app:lineWidth="1dp"
+        app:markerSize="16dp"
+        android:visibility="gone"
+        app:startLineColor="@color/colorPrimary" />
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <RelativeLayout
+            android:id="@+id/disabled_overlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="10dp"
+            android:visibility="gone"
+            android:background="@color/grey_transparetn"/>
+
+        <RelativeLayout
+            android:id="@+id/course_content_video_slide_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="12dp"
+            android:visibility="visible"
+            android:layout_marginBottom="12dp">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/imageLayout"
+                android:layout_width="88dp"
+                android:layout_height="72dp"
+                android:layout_gravity="center"
+                android:orientation="vertical"
+                android:layout_marginEnd="17dp"
+                app:cardCornerRadius="5dp">
+
+                <ImageView
+                    android:id="@+id/videoThumbnailIV"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY" />
+
+                <ImageView
+                    android:id="@+id/play_button_iv"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:scaleType="fitXY" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/video_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:layout_toRightOf="@id/imageLayout"
+                android:fontFamily="@font/lato"
+                android:letterSpacing="0"
+                android:textColor="@color/black_85"
+                tools:text="Order Successfully Completed" />
+
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/time_imageview"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_below="@id/video_title"
+                android:layout_toRightOf="@id/imageLayout"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="6dp"
+                app:srcCompat="@drawable/ic_time_light_grey"
+                tools:text="Order Successfully Completed" />
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/video_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/video_title"
+                android:layout_marginTop="8dp"
+                android:layout_toRightOf="@id/time_imageview"
+                android:fontFamily="@font/lato"
+                android:letterSpacing="0"
+                android:textColor="@color/warm_grey"
+                android:textSize="12sp"
+                tools:text="6:15" />
+
+
+
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/lesson_completion_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato"
+                android:letterSpacing="0"
+                android:layout_marginEnd="28dp"
+                android:layout_below="@id/video_time"
+                android:layout_toRightOf="@id/imageLayout"
+                android:layout_marginTop="18dp"
+                android:textColor="#f7b500"
+                android:textSize="12sp"
+                tools:text="Pending 0%" />
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/lessonsSeeMoreButton"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/video_time"
+                android:minHeight="@dimen/size_36"
+                android:layout_alignParentRight="true"
+                android:layout_marginEnd="5dp"
+                android:text="Play now"
+                android:textAllCaps="false"
+                app:strokeColor="@color/lipstick" />
+
+        </RelativeLayout>
+    </FrameLayout>
+
+
+</LinearLayout>

@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/tb_gig_activation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/toolbar_bg_client_activation"
+        android:minHeight="@dimen/size_69"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/iv_back_application_gig_activation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:paddingStart="@dimen/size_16"
+                android:paddingEnd="@dimen/size_19"
+                app:srcCompat="@drawable/ic_arrow_back_24"
+                app:tint="@color/white" />
+
+            <TextView
+                android:id="@+id/tv_title_toolbar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/iv_back_application_gig_activation"
+                android:fontFamily="@font/lato"
+                android:gravity="center_horizontal"
+                android:text="Activate Gig"
+                android:textColor="@color/white"
+                android:textSize="@dimen/font_20"
+                android:textStyle="normal" />
+
+        </RelativeLayout>
+
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/sv_gig_activation"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tb_gig_activation">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_player_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/size_16"
+                app:cardCornerRadius="@dimen/size_8"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+
+                <com.google.android.exoplayer2.ui.PlayerView
+                    android:id="@+id/playerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    app:controller_layout_id="@layout/fragment_play_video_controls"
+                    app:show_buffering="always" />
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_content_gig_activation"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cv_player_view">
+
+                <ImageView
+                    android:id="@+id/iv_gig_activation"
+                    android:layout_width="@dimen/size_138"
+                    android:layout_height="@dimen/size_141"
+                    android:layout_marginTop="24dp"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <RelativeLayout
+                    android:id="@+id/rl_thanks_gig_activation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/size_19"
+                    android:layout_marginTop="@dimen/size_19"
+                    android:layout_marginEnd="@dimen/size_21"
+
+
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/ic_applied_gig_activation"
+                        android:layout_width="@dimen/font_24"
+                        android:layout_height="@dimen/font_24"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="@dimen/size_16"
+                      />
+
+                    <TextView
+                        android:id="@+id/tv_application_gig_activation"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/size_8"
+                        android:layout_marginEnd="@dimen/size_16"
+                        android:layout_marginBottom="@dimen/size_8"
+                        android:layout_toEndOf="@+id/ic_applied_gig_activation"
+                        android:fontFamily="@font/lato"
+                        android:padding="@dimen/size_8"
+                        android:textColor="@color/black_85"
+                        android:textStyle="normal"
+
+                        tools:text="Your Application  for 21North is successfully submitted and under review.
+" />
+                </RelativeLayout>
+
+
+                <TextView
+                    android:id="@+id/tv_complete_gig_activation"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/size_19"
+                    android:layout_marginTop="@dimen/size_8"
+                    android:layout_marginEnd="@dimen/size_33"
+                    android:fontFamily="@font/lato"
+                    android:textColor="@color/black_85"
+                    android:textSize="16sp"
+                    android:textStyle="normal"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/rl_thanks_gig_activation"
+                    tools:text="Please complete the below mentioned steps
+to get selected." />
+
+                <TextView
+                    android:id="@+id/tv_application_stat_gig_activation"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/size_19"
+                    android:layout_marginTop="@dimen/size_23"
+                    android:fontFamily="@font/lato"
+                    android:gravity="start|center_vertical"
+                    android:text="@string/application_status_client"
+                    android:textColor="@color/black_two"
+                    android:textSize="14sp"
+                    android:textStyle="normal"
+                    android:visibility="gone"
+
+                    app:layout_constraintEnd_toStartOf="@+id/tv_verification_gig_activation"
+                    app:layout_constraintHorizontal_weight="6"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_complete_gig_activation" />
+
+                <TextView
+                    android:id="@+id/tv_verification_gig_activation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/size_23"
+                    android:layout_marginEnd="@dimen/size_14"
+                    android:drawablePadding="@dimen/size_7"
+                    android:fontFamily="@font/lato"
+                    android:gravity="end|center_vertical"
+                    android:text="@string/under_verification"
+                    android:textColor="#e42c64"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    app:drawableStartCompat="@drawable/ic_status_pending"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_weight="4"
+                    app:layout_constraintStart_toEndOf="@+id/tv_application_stat_gig_activation"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_complete_gig_activation" />
+
+                <View
+                    android:id="@+id/divider1"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/size_1"
+                    android:layout_marginTop="@dimen/size_16"
+                    android:background="#c8c7cc"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_verification_gig_activation" />
+
+                <TextView
+                    android:id="@+id/tv_requirements_gig_activation"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/size_18"
+                    android:layout_marginTop="@dimen/size_18"
+                    android:layout_marginBottom="@dimen/size_20"
+                    android:fontFamily="@font/lato"
+                    android:gravity="start"
+                    android:text="@string/requirements_for_the_role_client"
+                    android:textColor="@color/black_two"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/divider1" />
+
+                <View
+                    android:id="@+id/divider2"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/size_1"
+                    android:layout_marginTop="@dimen/size_16"
+                    android:background="#c8c7cc"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_requirements_gig_activation" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_gig_activation"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/divider2" />
+
+                <View
+                    android:id="@+id/divider3"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/size_1"
+                    android:layout_marginTop="@dimen/size_16"
+                    android:background="#c8c7cc"
+                    app:layout_constraintTop_toBottomOf="@+id/rv_gig_activation" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <ProgressBar
+        android:id="@+id/pb_gig_activation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

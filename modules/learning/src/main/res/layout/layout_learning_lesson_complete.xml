@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardElevation="@dimen/size_8"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="@dimen/size_8">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/parent_assessment_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="16dp"
+        android:visibility="invisible">
+
+        <ImageView
+            android:id="@+id/iv_bg_top_assess_dialog"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/assessment_dialog_background_learning"
+            android:scaleType="centerCrop"
+              app:srcCompat="@drawable/bg_dialog_top"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_message_lesson_completed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_10"
+            android:gravity="center"
+            android:letterSpacing="0"
+
+            android:textColor="@color/black_85"
+            android:textSize="@dimen/font_24"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_bg_top_assess_dialog"
+            android:text="Lesson Completed" />
+
+
+        <TextView
+            android:id="@+id/tv_action_next_lesson"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/size_12"
+            android:layout_marginTop="@dimen/size_23"
+            android:layout_marginEnd="@dimen/size_12"
+            android:layout_marginBottom="@dimen/size_16"
+            android:background="@drawable/pink_border"
+            android:gravity="center_horizontal"
+            android:letterSpacing="0"
+            android:padding="@dimen/size_15"
+            android:textColor="@color/lipstick"
+            android:textSize="16sp"
+            app:layout_constraintTop_toBottomOf="@id/tv_message_lesson_completed"
+            android:text="Next Lesson" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ProgressBar
+        android:id="@+id/pb_lesson_complete_dialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="visible" />
+
+</androidx.cardview.widget.CardView>

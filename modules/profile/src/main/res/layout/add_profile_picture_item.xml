@@ -25,7 +25,7 @@
             android:fontFamily="@font/lato"
             android:lineHeight="17sp"
             android:lineSpacingExtra="3sp"
-            android:text="Upload Your Profile Picture"
+            android:text="@string/upload_your_profile_picture_profile"
             android:textColor="#333333"
             android:textSize="14sp"
             android:textStyle="normal" />
@@ -42,7 +42,7 @@
         android:layout_marginTop="24dp"
         android:fontFamily="@font/lato"
         android:lineSpacingExtra="3sp"
-        android:text="@string/profile_picture"
+        android:text="@string/profile_picture_profile"
         android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -72,7 +72,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="360dp"
-                android:background="@color/grey" />
+                android:background="@color/greyLight" />
 
         </com.facebook.shimmer.ShimmerFrameLayout>
 
@@ -103,7 +103,7 @@
         android:enabled="true"
         android:fontFamily="@font/lato"
         android:gravity="center"
-        android:text="@string/next_camel_case"
+        android:text="@string/next_camel_case_profile"
         android:textAllCaps="false"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"

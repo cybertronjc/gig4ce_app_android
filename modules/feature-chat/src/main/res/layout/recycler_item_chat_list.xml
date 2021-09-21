@@ -55,6 +55,9 @@
         android:layout_marginStart="10dp"
         android:textColor="#646464"
         android:textSize="16sp"
+        android:scrollHorizontally="true"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:fontFamily="@font/lato_bold"
         app:layout_constraintEnd_toStartOf="@id/txt_time"
         app:layout_constraintStart_toEndOf="@id/iv_profile"
@@ -75,6 +78,7 @@
         tools:text="now" />
 
     <LinearLayout
+        android:id="@+id/last_message_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -129,11 +133,11 @@
         android:id="@+id/view_bottomBorder"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="20dp"
         android:background="#35BDBDBD"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/txt_title"
-        app:layout_constraintTop_toBottomOf="@id/iv_profile" />
+        app:layout_constraintTop_toBottomOf="@id/last_message_layout" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

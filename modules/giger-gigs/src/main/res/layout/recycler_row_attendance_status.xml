@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/status_layout"
+        android:orientation="vertical"
+        android:layout_marginTop="16dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:layout_marginEnd="@dimen/size_16"
+        >
+
+        <TextView
+            android:id="@+id/status_count_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="22sp"
+            android:gravity="center"
+            android:paddingTop="@dimen/size_6"
+            android:fontFamily="@font/lato_bold"
+            android:text="6"
+            />
+
+        <TextView
+            android:id="@+id/status_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:paddingTop="@dimen/size_6"
+            android:fontFamily="@font/lato_bold"
+            android:text="Present"
+            />
+
+    </LinearLayout>
+</layout>

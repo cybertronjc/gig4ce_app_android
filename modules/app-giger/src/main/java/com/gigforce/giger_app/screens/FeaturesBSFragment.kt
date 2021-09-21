@@ -7,15 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.giger_app.R
 import com.gigforce.giger_app.vm.FeaturesBSViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.features_bs_fragment.*
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class FeaturesBSFragment : Fragment() {
     val viewModel: FeaturesBSViewModel by viewModels()
-
+    @Inject
+    lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -34,7 +37,8 @@ class FeaturesBSFragment : Fragment() {
     }
 
     private fun initViews() {
-        //Todo initialize profile views
+        application_version.text =
+            getString(R.string.version_app_giger) + " " + sharedPreAndCommonUtilInterface.getCurrentVersion()
     }
 
     private fun listeners() {

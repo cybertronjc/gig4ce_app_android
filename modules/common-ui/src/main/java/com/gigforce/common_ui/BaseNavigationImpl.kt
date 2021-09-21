@@ -5,11 +5,10 @@ import android.util.Log
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import com.gigforce.core.navigation.INavigation
-import java.lang.Exception
 
-abstract class BaseNavigationImpl(): INavigation {
+abstract class BaseNavigationImpl : INavigation {
 
-    abstract fun getNavController():NavController
+    abstract override fun getNavController(): NavController
     abstract fun registerAllRoutes()
 
     private val navMap: HashMap<String, Int> = HashMap()
@@ -18,10 +17,10 @@ abstract class BaseNavigationImpl(): INavigation {
         registerAllRoutes()
     }
 
-    override fun navigateTo(dest:String, args: Bundle?, navOptions:NavOptions?){
+    override fun navigateTo(dest: String, args: Bundle?, navOptions: NavOptions?) {
         val navController = getNavController()
-        if(this.navMap.containsKey(dest))
-             navController.navigate(this.navMap[dest]!!, args, navOptions)
+        if (this.navMap.containsKey(dest))
+            navController.navigate(this.navMap[dest]!!, args, navOptions)
     }
 
     override fun popBackStack() {
@@ -31,27 +30,27 @@ abstract class BaseNavigationImpl(): INavigation {
 
     override fun popBackStack(des: String, inclusive: Boolean) {
         val navController = getNavController()
-        if(this.navMap.containsKey(des))
-            navController.popBackStack(this.navMap[des]!!,inclusive)
+        if (this.navMap.containsKey(des))
+            navController.popBackStack(this.navMap[des]!!, inclusive)
     }
 
     override fun getBackStackEntry(des: String) {
         val navController = getNavController()
-        if(this.navMap.containsKey(des))
+        if (this.navMap.containsKey(des))
             navController.getBackStackEntry(this.navMap[des]!!)
     }
 
-
-    fun registerRoute(dest:String, destResId:Int){
-        if(this.navMap.containsKey(dest)){
+    fun registerRoute(dest: String, destResId: Int) {
+        if (this.navMap.containsKey(dest)) {
             Log.w("Base/Nav", "Overriding existing nav key registration")
-            throw Exception("Nav Key Already Exists") // Comment if not required
+            throw Exception("Nav Key Already Exists $dest") // Comment if not required
         }
         this.navMap[dest] = destResId
     }
+
     override fun popAllBackStates() {
         val navController = getNavController()
-        var hasBackStack = true;
+        var hasBackStack = true
         while (hasBackStack) {
             hasBackStack = navController.popBackStack()
         }
@@ -60,4 +59,5 @@ abstract class BaseNavigationImpl(): INavigation {
     override fun navigateUp() {
         getNavController().navigateUp()
     }
- }
+
+}

@@ -1,25 +1,32 @@
 package com.gigforce.modules.feature_chat.ui.chatItems
 
 import android.content.Context
+import android.graphics.drawable.Drawable
+import android.text.util.Linkify
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.widget.*
 import androidx.cardview.widget.CardView
 import androidx.core.net.toUri
+import androidx.core.os.bundleOf
+import androidx.core.text.util.LinkifyCompat
 import androidx.core.view.isVisible
-import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
+import com.gigforce.common_ui.chat.ChatConstants
+import com.gigforce.common_ui.chat.models.ChatMessage
+import com.gigforce.common_ui.shimmer.ShimmerHelper
+import com.gigforce.common_ui.views.GigforceImageView
+import com.gigforce.core.extensions.dp
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toDisplayText
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.modules.feature_chat.ChatNavigation
 import com.gigforce.modules.feature_chat.R
-import com.gigforce.modules.feature_chat.core.ChatConstants
-import com.gigforce.modules.feature_chat.models.ChatMessage
+import com.gigforce.modules.feature_chat.screens.GroupMessageViewInfoFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -36,24 +43,35 @@ abstract class ImageMessageView(
 ) : MediaMessage(
         context,
         attrs
-), View.OnClickListener {
+), View.OnClickListener,
+    View.OnLongClickListener,
+    PopupMenu.OnMenuItemClickListener {
 
     @Inject
-    lateinit var navigation : INavigation
+    lateinit var navigation: INavigation
 
-    private val chatNavigation : ChatNavigation by lazy {
+    private val chatNavigation: ChatNavigation by lazy {
         ChatNavigation(navigation)
+    }
+
+    private val firebaseAuthStateListener: FirebaseAuthStateListener by lazy {
+        FirebaseAuthStateListener.getInstance()
     }
 
     private lateinit var senderNameTV: TextView
     private lateinit var imageView: ImageView
+    private lateinit var messageTV: TextView
     private lateinit var textViewTime: TextView
     private lateinit var cardView: CardView
     private lateinit var downloadIconIV: ImageView
     private lateinit var downloadOverlayIV: ImageView
     private lateinit var attachmentDownloadingProgressBar: ProgressBar
     private lateinit var receivedStatusIV: ImageView
+    private lateinit var imageContainerFrameLayout: FrameLayout
+//    private lateinit var quotedMessagePreviewContainer: LinearLayout
 
+    //Data
+    private lateinit var chatMessage: ChatMessage
 
     init {
         setDefault()
@@ -72,6 +90,9 @@ abstract class ImageMessageView(
         downloadOverlayIV = this.findViewById(R.id.download_overlay_iv)
         receivedStatusIV = this.findViewById(R.id.tv_received_status)
         attachmentDownloadingProgressBar = this.findViewById(R.id.attachment_downloading_pb)
+        imageContainerFrameLayout = this.findViewById(R.id.image_container_layout)
+        messageTV = this.findViewById(R.id.messageTV)
+//        quotedMessagePreviewContainer = this.findViewById(R.id.reply_messages_quote_container_layout)
     }
 
     fun setDefault() {
@@ -86,7 +107,9 @@ abstract class ImageMessageView(
     }
 
     private fun setOnClickListeners() {
-        cardView.setOnClickListener(this)
+        imageContainerFrameLayout.setOnClickListener(this)
+        cardView.setOnLongClickListener(this)
+        //quotedMessagePreviewContainer.setOnClickListener(this)
     }
 
     private fun handleImageNotDownloaded() {
@@ -95,22 +118,6 @@ abstract class ImageMessageView(
         downloadIconIV.visible()
     }
 
-    private fun loadThumbnail(msg: ChatMessage) {
-        if (msg.thumbnailBitmap != null) {
-
-            Glide.with(context)
-                    .load(msg.thumbnailBitmap)
-                    .placeholder(getCircularProgressDrawable())
-                    .into(imageView)
-        } else if (msg.thumbnail != null) {
-
-            val thumbnailStorageRef = storage.reference.child(msg.thumbnail!!)
-            Glide.with(context)
-                    .load(thumbnailStorageRef)
-                    .placeholder(getCircularProgressDrawable())
-                    .into(imageView)
-        }
-    }
 
     private fun handleDownloadInProgress() {
         downloadOverlayIV.visible()
@@ -119,7 +126,9 @@ abstract class ImageMessageView(
     }
 
 
-    private fun handleImage(msg: ChatMessage) {
+    private fun handleImage(
+            msg: ChatMessage
+    ) {
         imageView.setImageDrawable(null)
 
         if (msg.thumbnailBitmap != null) {
@@ -143,43 +152,139 @@ abstract class ImageMessageView(
         downloadIconIV.gone()
     }
 
-    private fun handleImageDownloaded(downloadedFile: File) {
+    private fun loadThumbnail(
+            msg: ChatMessage
+    ) {
+        if (msg.thumbnailBitmap != null) {
+
+            var glideRequestManager = Glide.with(context)
+                    .load(msg.thumbnailBitmap)
+                    .placeholder(getCircularProgressDrawable())
+
+            if (msg.imageMetaData == null ||
+                    msg.imageMetaData!!.isHeightBigger() ||
+                    msg.imageMetaData!!.isAspectRatioTooExtreme()
+            ) {
+                glideRequestManager = glideRequestManager.centerCrop()
+            }
+
+            glideRequestManager.into(imageView)
+        } else if (msg.thumbnail != null) {
+
+            val thumbnailStorageRef = storage.reference.child(msg.thumbnail!!)
+            var glideRequestManager = Glide.with(context)
+                    .load(thumbnailStorageRef)
+                    .placeholder(getCircularProgressDrawable())
+
+            if (msg.imageMetaData == null ||
+                    msg.imageMetaData!!.isHeightBigger() ||
+                    msg.imageMetaData!!.isAspectRatioTooExtreme()
+            ) {
+                glideRequestManager = glideRequestManager.centerCrop()
+            }
+
+            glideRequestManager.into(imageView)
+        }
+    }
+
+    private fun handleImageDownloaded(
+            downloadedFile: File
+    ) {
 
         attachmentDownloadingProgressBar.gone()
         downloadOverlayIV.gone()
         downloadIconIV.gone()
 
-        Glide.with(context)
+        var glideRequestManager = Glide.with(context)
                 .load(downloadedFile)
                 .placeholder(getCircularProgressDrawable())
-                .into(imageView)
+
+        if (message.imageMetaData == null ||
+                message.imageMetaData!!.isHeightBigger() ||
+                message.imageMetaData!!.isAspectRatioTooExtreme()
+        ) {
+            glideRequestManager = glideRequestManager.centerCrop()
+        }
+
+        glideRequestManager.into(imageView)
     }
 
     override fun onBind(msg: ChatMessage) {
+        chatMessage = msg
+
+        messageTV.isVisible = msg.content.isNotEmpty()
+        messageTV.text = msg.content
+        if (msg.content.isNotEmpty())
+            LinkifyCompat.addLinks(messageTV, Linkify.ALL)
+
         textViewTime.text = msg.timestamp?.toDisplayText()
 
         senderNameTV.isVisible = messageType == MessageType.GROUP_MESSAGE && type == MessageFlowType.IN
         senderNameTV.text = msg.senderInfo.name
 
+        adjustImageSizeAcc(msg)
         handleImage(msg)
         setReceivedStatus(msg)
+//        setQuotedMessageOnView(
+//            context =  context,
+//            firebaseAuthStateListener = firebaseAuthStateListener,
+//            type = type,
+//            chatMessage = message,
+//            quotedMessagePreviewContainer = quotedMessagePreviewContainer
+//        )
     }
 
-    fun getCircularProgressDrawable(): CircularProgressDrawable {
-        val circularProgressDrawable = CircularProgressDrawable(context)
-        circularProgressDrawable.strokeWidth = 5f
-        circularProgressDrawable.centerRadius = 20f
-        circularProgressDrawable.start()
-        return circularProgressDrawable
+    private fun adjustImageSizeAcc(msg: ChatMessage) {
+        if (msg.imageMetaData == null) {
+            imageContainerFrameLayout.layoutParams.width = 230.dp
+            imageContainerFrameLayout.layoutParams.height = 230.dp
+        } else {
+            val imageMetaData = msg.imageMetaData!!
+            if (imageMetaData.size.height == 0 ||
+                    imageMetaData.size.height == imageMetaData.size.width) {
+                imageContainerFrameLayout.layoutParams.width = 230.dp
+                imageContainerFrameLayout.layoutParams.height = 230.dp
+            } else {
+                val isHeightBiggerThanWidth = imageMetaData.size.height > imageMetaData.size.width
+                if (isHeightBiggerThanWidth) {
+                    val layoutParams = imageContainerFrameLayout.layoutParams
+                    layoutParams.width = 230.dp
+                    layoutParams.height = 230.dp
+                    imageContainerFrameLayout.layoutParams = layoutParams
+                } else {
+                    val minHeight = (230 * 0.6).toInt().dp
+                    val aspectRatio = (imageMetaData.size.height / imageMetaData.size.width.toFloat())
+
+                    var newHeight = (230 * aspectRatio).toInt().dp
+                    if (newHeight < minHeight) {
+                        newHeight = minHeight
+                    }
+
+                    val layoutParams = imageContainerFrameLayout.layoutParams
+                    layoutParams.width = 230.dp
+                    layoutParams.height = newHeight
+                    imageContainerFrameLayout.layoutParams = layoutParams
+                }
+            }
+        }
+    }
+
+    fun getCircularProgressDrawable(): Drawable {
+        return ShimmerHelper.getShimmerDrawable()
     }
 
     override fun onClick(v: View?) {
-        val file = returnFileIfAlreadyDownloadedElseNull()
+        val view = v ?: return
 
-        if (file != null) {
-            chatNavigation.openFullScreenImageViewDialogFragment(file.toUri())
+        if(view.id == R.id.reply_messages_quote_container_layout){
         } else {
-            downloadAttachment()
+
+            val file = returnFileIfAlreadyDownloadedElseNull()
+            if (file != null) {
+                chatNavigation.openFullScreenImageViewDialogFragment(file.toUri())
+            } else {
+                downloadAttachment()
+            }
         }
     }
 
@@ -211,7 +316,6 @@ abstract class ImageMessageView(
         }
     }
 
-
     private fun downloadAttachment() = GlobalScope.launch {
 
         this.launch(Dispatchers.Main) {
@@ -226,6 +330,58 @@ abstract class ImageMessageView(
             }
         } catch (e: Exception) {
         }
+    }
+
+    override fun onLongClick(v: View?): Boolean {
+        val popUpMenu = PopupMenu(context, v)
+        popUpMenu.inflate(R.menu.menu_chat_clipboard)
+
+        popUpMenu.menu.findItem(R.id.action_copy).isVisible = false
+        popUpMenu.menu.findItem(R.id.action_delete).isVisible = type == MessageFlowType.OUT
+        popUpMenu.menu.findItem(R.id.action_message_info).isVisible = type == MessageFlowType.OUT && messageType == MessageType.GROUP_MESSAGE
+
+        popUpMenu.setOnMenuItemClickListener(this)
+        popUpMenu.show()
+
+        return true
+    }
+
+    override fun onMenuItemClick(item: MenuItem?): Boolean {
+        val itemClicked = item ?: return true
+
+        when (itemClicked.itemId) {
+            R.id.action_copy -> {
+            }
+            R.id.action_delete -> deleteMessage()
+            R.id.action_message_info -> viewMessageInfo()
+        }
+        return true
+    }
+
+    private fun viewMessageInfo() {
+        navigation.navigateTo("chats/messageInfo",
+                bundleOf(
+                        GroupMessageViewInfoFragment.INTENT_EXTRA_GROUP_ID to chatMessage.groupId,
+                        GroupMessageViewInfoFragment.INTENT_EXTRA_MESSAGE_ID to chatMessage.id
+                )
+        )
+    }
+
+    private fun deleteMessage() {
+        if (messageType == MessageType.ONE_TO_ONE_MESSAGE) {
+
+            oneToOneChatViewModel.deleteMessage(
+                    message.id
+            )
+        } else if (messageType == MessageType.GROUP_MESSAGE) {
+            groupChatViewModel.deleteMessage(
+                    message.id
+            )
+        }
+    }
+
+    override fun getCurrentChatMessageOrThrow(): ChatMessage {
+        return message
     }
 }
 

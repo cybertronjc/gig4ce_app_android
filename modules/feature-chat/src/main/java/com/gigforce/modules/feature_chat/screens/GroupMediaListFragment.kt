@@ -22,15 +22,15 @@ import com.gigforce.modules.feature_chat.DownloadCompleted
 import com.gigforce.modules.feature_chat.DownloadStarted
 import com.gigforce.modules.feature_chat.ErrorWhileDownloadingAttachment
 import com.gigforce.modules.feature_chat.R
-import com.gigforce.modules.feature_chat.core.ChatConstants
-import com.gigforce.modules.feature_chat.models.ChatGroup
-import com.gigforce.modules.feature_chat.models.GroupMedia
+import com.gigforce.common_ui.chat.ChatConstants
+import com.gigforce.common_ui.chat.models.ChatGroup
+import com.gigforce.common_ui.chat.models.GroupMedia
+import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.modules.feature_chat.screens.adapters.GroupMediaRecyclerAdapter
 import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel
 import com.gigforce.modules.feature_chat.screens.vm.factories.GroupChatViewModelFactory
 import kotlinx.android.synthetic.main.fragment_chat_group_media_list.*
 import kotlinx.android.synthetic.main.fragment_chat_group_media_list_main.*
-
 import java.io.File
 
 
@@ -145,6 +145,11 @@ class GroupMediaListFragment2 : Fragment(),
                 }
             }
         })
+
+        if (groupId.isEmpty()) {
+            CrashlyticsLogger.e(TAG, "getting args from arguments", Exception("$groupId <-- String passed as groupId"))
+            throw IllegalArgumentException("$groupId <-- String passed as groupId")
+        }
 
         viewModel.setGroupId(groupId)
         viewModel.startWatchingGroupDetails()

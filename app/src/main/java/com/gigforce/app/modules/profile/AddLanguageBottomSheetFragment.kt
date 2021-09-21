@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.gigforce.app.R
-import com.gigforce.app.modules.profile.models.Language
+import com.gigforce.core.datamodels.profile.Language
 import kotlinx.android.synthetic.main.add_language_bottom_sheet.*
 
 class AddLanguageBottomSheetFragment : ProfileBaseBottomSheetFragment() {

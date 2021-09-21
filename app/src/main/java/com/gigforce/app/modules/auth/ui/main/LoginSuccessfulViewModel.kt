@@ -6,10 +6,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.BuildConfig
-import com.gigforce.app.modules.gigPage2.repositories.GigsRepository
-import com.gigforce.app.modules.gigPage2.models.Gig
-import com.gigforce.app.modules.profile.ProfileFirebaseRepository
-import com.gigforce.app.modules.profile.models.ProfileData
+import com.gigforce.common_ui.repository.ProfileFirebaseRepository
+import com.gigforce.common_ui.repository.gig.GigsRepository
+import com.gigforce.core.crashlytics.CrashlyticsLogger
+import com.gigforce.core.datamodels.gigpage.Gig
+import com.gigforce.core.datamodels.profile.ProfileData
+import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
@@ -26,14 +28,16 @@ data class ProfileAnGigInfo(
 @Keep
 data class UserVersionInfo(
     var currentVersion: String = "",
-    var time: Timestamp = Timestamp.now()
+    var time: Timestamp = Timestamp.now(),
+    var uid : String?= FirebaseAuthStateListener.getInstance().getCurrentSignInUserInfoOrThrow().uid
 )
 
 class LoginSuccessfulViewModel constructor(
-        private val gigsRepository: GigsRepository = GigsRepository(),
-        private val firebaseFunctions: FirebaseFunctions = FirebaseFunctions.getInstance()
+    private val gigsRepository: GigsRepository = GigsRepository(),
+    private val firebaseFunctions: FirebaseFunctions = FirebaseFunctions.getInstance()
 ) : ViewModel() {
-    var profileFirebaseRepository = ProfileFirebaseRepository()
+    var profileFirebaseRepository =
+        ProfileFirebaseRepository()
 
     var userProfileData: MutableLiveData<ProfileData> = MutableLiveData<ProfileData>()
     var userProfileAndGigData: MutableLiveData<ProfileAnGigInfo> =
@@ -60,20 +64,33 @@ class LoginSuccessfulViewModel constructor(
 
 
     fun getProfileAndGigData() {
-        profileFirebaseRepository
-            .db
-            .collection("Version_info")
-            .document(profileFirebaseRepository.getUID())
-            .set(
-                UserVersionInfo(
-                    currentVersion = BuildConfig.VERSION_NAME
-                )
-            )
-            .addOnSuccessListener {
-                Log.d("VersionInfo", "User version added")
-            }.addOnFailureListener {
-                Log.e("VersionInfo", "unable to add version info", it)
-            }
+        profileFirebaseRepository.db.collection("Version_info")
+                .whereEqualTo("currentVersion", BuildConfig.VERSION_NAME)
+                .whereEqualTo("uid",FirebaseAuthStateListener.getInstance().getCurrentSignInUserInfoOrThrow().uid)
+                .get()
+                .addOnSuccessListener { documents ->
+                    if(documents.isEmpty){
+                        insertDataToDB()
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    insertDataToDB()
+                }
+
+//        profileFirebaseRepository
+//            .db
+//            .collection("Version_info")
+//            .document(profileFirebaseRepository.getUID())
+//            .set(
+//                UserVersionInfo(
+//                    currentVersion = BuildConfig.VERSION_NAME
+//                )
+//            )
+//            .addOnSuccessListener {
+//                Log.d("VersionInfo", "User version added")
+//            }.addOnFailureListener {
+//                Log.e("VersionInfo", "unable to add version info", it)
+//            }
 
 
 
@@ -91,6 +108,7 @@ class LoginSuccessfulViewModel constructor(
                     )
                     return@EventListener
                 }
+
                 if (value!!.data == null) {
                     profileFirebaseRepository.createEmptyProfile()
                 } else {
@@ -100,6 +118,19 @@ class LoginSuccessfulViewModel constructor(
 
                 }
             })
+    }
+
+    private fun insertDataToDB() {
+
+        //            .document(profileFirebaseRepository.getUID())
+        profileFirebaseRepository
+                .db
+                .collection("Version_info")
+                .add(
+                   UserVersionInfo(
+                    currentVersion = BuildConfig.VERSION_NAME
+                  )
+                )
     }
 
     private fun checkForGigData(profileData: ProfileData) {
@@ -132,9 +163,15 @@ class LoginSuccessfulViewModel constructor(
     private fun hasGigs(querySnapshot: QuerySnapshot): Boolean {
         val userGigs: MutableList<Gig> = mutableListOf()
         querySnapshot.documents.forEach { t ->
-            t.toObject(Gig::class.java)?.let {
-                it.gigId = t.id
-                userGigs.add(it)
+
+
+            try {
+                t.toObject(Gig::class.java)?.let {
+                    it.gigId = t.id
+                    userGigs.add(it)
+                }
+            } catch (e: Exception) {
+                CrashlyticsLogger.e("LoginSuccessfullViewModel","while desearializing gig data",e)
             }
         }
 

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+    <SeekBar
+        android:id="@+id/sbProgress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/size_15"
+
+        android:progressDrawable="@drawable/bg_seekbar_add_language"
+        android:thumb="@drawable/thumb_seekbar_language" />
+
+    <com.gigforce.common_ui.widgets.ThumbTextView
+        android:id="@+id/tvThumb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_9"
+        android:text="@string/low_common_ui"
+        android:textColor="#7f7f7f"
+        android:textSize="@dimen/font_12" />
+</merge>

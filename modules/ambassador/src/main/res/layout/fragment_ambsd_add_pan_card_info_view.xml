@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="25dp"
+        tools:context="com.gigforce.verification.gigerVerfication.drivingLicense.AddDrivingLicenseInfoFragment">
+
+        <TextView
+            android:id="@+id/drivingLicenseLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:fontFamily="@font/lato_bold"
+            android:letterSpacing="0"
+            android:text="@string/pan_card_amb"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/helpIconViewIV"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_marginTop="22dp"
+            android:layout_marginEnd="13dp"
+            android:clickable="true"
+            android:focusable="true"
+              app:srcCompat="@drawable/ic_time"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/whyWeNeedThisViewTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="4dp"
+            android:fontFamily="@font/lato"
+            android:letterSpacing="-0.01"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:text="@string/why_do_we_need_this_amb"
+            android:textColor="@color/battle_ship_grey"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toStartOf="@+id/helpIconViewIV"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/statusTV"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/lato"
+            android:letterSpacing="-0.01"
+            android:text="@string/under_verification_amb"
+            android:textColor="@color/yellow"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toStartOf="@+id/editLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/drivingLicenseLabel" />
+
+        <LinearLayout
+            android:id="@+id/editLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/panViewImageIV"
+            app:layout_constraintEnd_toEndOf="parent">
+
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                  app:srcCompat="@drawable/ic_edit" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:fontFamily="@font/lato"
+                android:text="@string/edit_amb"
+                android:textColor="@color/black" />
+
+
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/imageLabelTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/lato"
+            android:letterSpacing="-0.01"
+            android:text="@string/pan_card_image_amb"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/statusTV" />
+
+        <ImageView
+            android:id="@+id/panViewImageIV"
+            android:layout_width="match_parent"
+            android:layout_height="172dp"
+            android:layout_marginTop="8dp"
+            android:scaleType="fitXY"
+            app:layout_constraintTop_toBottomOf="@id/imageLabelTV" />
+        <!--            tools:src="@drawable/bg_square_pos"-->
+
+        <TextView
+            android:id="@+id/panViewImageErrorMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/lato"
+            android:letterSpacing="0"
+            android:textColor="@color/app_red"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/panViewImageIV" />
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@color/white_two"
+            android:padding="16dp"
+            app:layout_constraintTop_toBottomOf="@id/panViewImageErrorMessage">
+
+            <TextView
+                android:id="@+id/panNoLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato_bold"
+                android:letterSpacing="0"
+                android:text="@string/pan_with_colon_amb"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/panViewNoTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:fontFamily="@font/lato"
+                android:letterSpacing="0"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintStart_toEndOf="@id/panNoLabel"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text=" UK123456789012" />
+
+            <TextView
+                android:id="@+id/panViewNoErrorMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="@font/lato"
+                android:letterSpacing="0"
+                android:textColor="@color/app_red"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/panViewNoTV" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/ambsd_pan_skip_btn"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/skip_amb"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:strokeColor="@color/colorPrimary"
+            app:strokeWidth="1dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

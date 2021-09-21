@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <ImageView
+        android:id="@+id/rightImg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_vector_tick"
+        android:layout_marginTop="@dimen/size_16"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/submittedText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/record_submitted"
+        android:textColor="@color/black"
+        android:textSize="@dimen/font_24"
+        android:layout_marginTop="@dimen/size_16"
+        app:layout_constraintTop_toBottomOf="@id/rightImg"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/submittedSubText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/the_details_filled_by_you_has_been_submitted_successfully"
+        android:textColor="@color/black"
+        android:textSize="@dimen/font_14"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:layout_marginStart="@dimen/size_16"
+        android:layout_marginEnd="@dimen/size_16"
+        android:layout_marginTop="@dimen/size_16"
+        app:layout_constraintTop_toBottomOf="@id/submittedText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <Button
+        android:id="@+id/doneButton"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/app_gradient_button"
+        android:layout_marginStart="@dimen/size_16"
+        android:layout_marginEnd="@dimen/size_16"
+        android:layout_marginBottom="@dimen/size_22"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:minHeight="@dimen/size_36"
+        android:text="Done"
+        android:visibility="gone"
+        android:layout_marginTop="24dp"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/submittedSubText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

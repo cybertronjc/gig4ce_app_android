@@ -16,7 +16,7 @@ import androidx.core.app.TaskStackBuilder
 import androidx.core.graphics.drawable.IconCompat
 import com.gigforce.app.MainActivity
 import com.gigforce.app.R
-import com.gigforce.app.core.toBundle
+import com.gigforce.core.extensions.toBundle
 import com.google.firebase.messaging.RemoteMessage
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.GlobalScope
@@ -82,6 +82,7 @@ class ChatNotificationHandler constructor(
                         .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
                         .setOnlyAlertOnce(true)
                         .setAutoCancel(true)
+                        .setVibrate(longArrayOf(100, 200, 300, 400, 500, 400))
 
         Log.d("ChatImage", fullImagePath)
         var imageBitmap: Bitmap? = null
@@ -198,6 +199,7 @@ class ChatNotificationHandler constructor(
                         .setAutoCancel(true)
                         .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
                         .setOnlyAlertOnce(true)
+                        .setVibrate(longArrayOf(100, 200, 300, 400, 500, 400))
 
         Log.d("ChatImage", fullImagePath)
         var imageBitmap: Bitmap? = null
@@ -261,6 +263,8 @@ class ChatNotificationHandler constructor(
             val url = URL(src)
             val connection: HttpURLConnection = url.openConnection() as HttpURLConnection
             connection.doInput = true
+            connection.connectTimeout = 120 //connect timeout 2 minutes
+            connection.readTimeout = 120    // read timeout 2 minutes
             connection.connect()
             val input: InputStream = connection.getInputStream()
             BitmapFactory.decodeStream(input)

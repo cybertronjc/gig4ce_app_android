@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AttendanceSingleChoiceChip" parent="@style/Widget.MaterialComponents.Chip.Choice">
+        <item name="chipBackgroundColor">@color/attendance_chip_bck_colors</item>
+        <item name="android:textColor">@color/attendance_chip_text_colors</item>
+        <item name="chipStrokeColor">@color/attendance_chip_stroke_colors</item>
+    </style>
+
+    <style name="IconOnlyButton" parent="Widget.MaterialComponents.Button.TextButton.Icon">
+        <item name="iconPadding">0dp</item>
+        <item name="iconGravity">textStart</item>
+        <item name="rippleColor">@android:color/transparent</item>
+        <item name="android:shadowColor">@android:color/transparent</item>
+        <item name="strokeColor">@android:color/transparent</item>
+        <item name="tint">@android:color/transparent</item>
+        <item name="tintMode">add</item>
+        <item name="android:insetLeft">0dp</item>
+        <item name="android:minWidth">0dp</item>
+    </style>
+
+    <style name="LatoRegular16Black">
+        <item name="android:textSize">16sp</item>
+        <item name="android:letterSpacing">0.04</item>
+        <item name="android:lineSpacingExtra">19.1sp</item>
+        <item name="android:textColor">#222222</item>
+    </style>
+
+    <style name="AppTheme.TextStyle" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/lato</item>
+        <item name="android:letterSpacing">0.0</item>
+    </style>
+
+    <style name="AppTheme.TextStyle.SectionTitle">
+        <item name="android:textSize">16sp</item>
+        <item name="fontWeight">900</item>
+    </style>
+
+    <style name="Divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">@color/colorLigthSeparater</item>
+    </style>
+
+</resources>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.cardview.widget.CardView
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="@dimen/size_4">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_title_submit_application"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#e42c64"
+            android:fontFamily="@font/lato"
+            android:paddingStart="@dimen/size_20"
+            android:paddingTop="@dimen/size_19"
+            android:paddingEnd="@dimen/size_20"
+            android:paddingBottom="@dimen/size_16"
+            android:text="@string/_21_north_driver_client"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="normal" />
+
+        <ImageView
+            android:id="@+id/iv_submit_application"
+            android:layout_width="@dimen/size_150"
+            android:layout_height="@dimen/size_83"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/size_41" />
+
+        <TextView
+            android:id="@+id/tv_content_submit_application"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_17"
+            android:layout_marginTop="@dimen/size_37"
+            android:layout_marginEnd="@dimen/size_15"
+            android:fontFamily="@font/lato"
+            android:gravity="center_horizontal"
+            android:text="@string/you_have_successfully_completed_all_the_check_points_required_for_the_application_you_can_submit_yourapplication_now_client"
+            android:textColor="@color/black_85"
+            android:textSize="14sp"
+            android:textStyle="normal" />
+
+        <TextView
+            android:id="@+id/tv_submit_application"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginStart="@dimen/size_23"
+            android:layout_marginTop="@dimen/size_40"
+            android:layout_marginEnd="@dimen/size_27"
+            android:background="@drawable/gradient_onboarding_progressbar_gradient"
+            android:fontFamily="@font/lato"
+            android:gravity="center"
+            android:minHeight="@dimen/size_36"
+            android:text="@string/submit_your_application_client"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="normal" />
+
+        <TextView
+            android:id="@+id/tv_review_submit_application"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/size_16"
+            android:layout_marginBottom="@dimen/size_26"
+            android:fontFamily="@font/lato"
+            android:gravity="center_horizontal"
+            android:minHeight="@dimen/size_36"
+            android:text="@string/review_your_application_client"
+            android:textColor="@color/lipstick"
+            android:textSize="14sp"
+            android:textStyle="normal" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

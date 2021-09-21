@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+
+    <ImageView
+        android:layout_width="218dp"
+        android:layout_height="152dp"
+        android:layout_marginTop="50dp"
+        app:srcCompat="@drawable/ic_undraw_task_31_wc" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="41dp"
+        android:fontFamily="@font/lato_bold"
+        android:letterSpacing="0"
+        android:text="@string/thank_you_amb"
+        android:textColor="#000000"
+        android:textSize="18sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="50dp"
+        android:fontFamily="@font/lato"
+        android:gravity="center_horizontal"
+        android:letterSpacing="0"
+        android:text="@string/documents_uploaded_long_amb"
+        android:textColor="#000000"
+        android:textSize="14sp" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/verificationCompletedBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="37dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="50dp"
+        android:background="@drawable/gradient_button"
+        android:minHeight="@dimen/size_36"
+        android:padding="15dp"
+        android:text="@string/let_s_go_amb"
+        android:textColor="@color/white" />
+
+</LinearLayout>

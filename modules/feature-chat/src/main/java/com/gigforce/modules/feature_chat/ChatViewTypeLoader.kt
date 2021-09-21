@@ -3,11 +3,12 @@ package com.gigforce.modules.feature_chat
 import android.content.Context
 import android.view.View
 import com.gigforce.core.*
-import com.gigforce.modules.feature_chat.core.ViewTypes
+import com.gigforce.common_ui.chat.models.ViewTypes
 import com.gigforce.modules.feature_chat.ui.ChatListItem
+import com.gigforce.modules.feature_chat.ui.GroupMessageReadItemView
 import com.gigforce.modules.feature_chat.ui.chatItems.*
 
-class ChatViewTypeLoader(): IViewTypeLoader {
+class ChatViewTypeLoader: IViewTypeLoader {
 
     override fun getView(context: Context, viewType: Int): View? {
         return when(viewType){
@@ -28,6 +29,9 @@ class ChatViewTypeLoader(): IViewTypeLoader {
             ViewTypes.IN_LOCATION -> InLocationMessageView(context, null)
             ViewTypes.OUT_LOCATION -> OutLocationMessageView(context, null)
 
+            ViewTypes.IN_DELETED_MESSAGE -> InDeletedMessageView(context, null)
+            ViewTypes.OUT_DELETED_MESSAGE -> OutDeletedMessageView(context, null)
+
             ViewTypes.GROUP_IN_TEXT -> GroupInTextMessageView(context, null)
             ViewTypes.GROUP_OUT_TEXT -> GroupOutTextMessageView(context, null)
 
@@ -43,8 +47,16 @@ class ChatViewTypeLoader(): IViewTypeLoader {
             ViewTypes.GROUP_IN_LOCATION -> GroupInLocationMessageView(context, null)
             ViewTypes.GROUP_OUT_LOCATION -> GroupOutLocationMessageView(context, null)
 
+            ViewTypes.GROUP_IN_DELETED_MESSAGE -> GroupInDeletedMessageView(context, null)
+            ViewTypes.GROUP_OUT_DELETED_MESSAGE -> GroupOutDeletedMessageView(context, null)
+
+            ViewTypes.GROUP_MESSAGE_READ_INFO -> GroupMessageReadItemView(context)
+
+            ViewTypes.CHAT_EVENT -> ChatEventView(context,null)
+
             ViewTypes.GROUP_DETAILS_GROUP_MEMBER -> TODO()
             ViewTypes.GROUP_DETAILS_MEDIA -> TODO()
+
             else -> null
         }
     }

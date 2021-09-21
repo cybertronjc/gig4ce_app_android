@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="@dimen/size_18"
+
+    android:layout_marginBottom="@dimen/size_89"
+    app:cardCornerRadius="@dimen/size_5">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/size_16"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/iv_hint_questionnaire"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_52"
+                android:layout_marginTop="@dimen/size_51"
+                android:layout_marginEnd="@dimen/size_66"
+                android:adjustViewBounds="true"
+                android:minHeight="@dimen/size_156"
+                android:scaleType="fitCenter" />
+
+            <TextView
+                android:id="@+id/tv_question_no_questionnaire"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginTop="@dimen/size_66"
+                android:fontFamily="@font/lato"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                tools:text="Ques 1/5 :" />
+
+            <TextView
+                android:id="@+id/tv_question_questionnaire"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginTop="@dimen/size_16"
+                android:fontFamily="@font/lato"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="normal"
+                tools:text="Has Driving License for more than 1 year?" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_answers_questionnaire"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+
+</androidx.cardview.widget.CardView>

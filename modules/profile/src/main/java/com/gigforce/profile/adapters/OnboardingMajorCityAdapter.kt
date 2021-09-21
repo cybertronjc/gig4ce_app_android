@@ -60,7 +60,12 @@ class OnboardingMajorCityAdapter(
     }
 
     override fun onBindViewHolder(holder: OnboardingMajorCityViewHolder, position: Int) {
-        holder.bindValues(filteredCityList.get(position), position)
+
+        if(position != RecyclerView.NO_POSITION
+                && position < filteredCityList.size
+        ) {
+            holder.bindValues(filteredCityList.get(position), position)
+        }
     }
 
     fun setData(contacts: ArrayList<CityWithImage>) {
@@ -78,8 +83,9 @@ class OnboardingMajorCityAdapter(
         override fun performFiltering(constraint: CharSequence?): FilterResults {
             val charString = constraint.toString()
 
+            val filterResults = FilterResults()
             if (charString.isEmpty()) {
-                filteredCityList = originalCityList
+                filterResults.values  = originalCityList
             } else {
                 val filteredList = ArrayList<CityWithImage>()
                 for (contact in originalCityList) {
@@ -90,11 +96,9 @@ class OnboardingMajorCityAdapter(
                     )
                         filteredList.add(contact)
                 }
-                filteredCityList = filteredList
+                filterResults.values  = filteredList
             }
 
-            val filterResults = FilterResults()
-            filterResults.values = filteredCityList
             return filterResults
         }
 
@@ -174,6 +178,7 @@ class OnboardingMajorCityAdapter(
                     City(
                             id = city.id,
                             name = city.name,
+                            cityCode = city.cityCode,
                             stateCode = city.state_code,
                             subLocationFound = city.subLocationFound
                     ),true

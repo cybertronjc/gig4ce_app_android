@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="IconOnlyButton" parent="Widget.MaterialComponents.Button.TextButton.Icon">
+        <item name="iconPadding">0dp</item>
+        <item name="iconGravity">textStart</item>
+        <item name="rippleColor">@android:color/transparent</item>
+        <item name="android:shadowColor">@android:color/transparent</item>
+        <item name="strokeColor">@android:color/transparent</item>
+        <item name="tint">@android:color/transparent</item>
+        <item name="tintMode">add</item>
+        <item name="android:insetLeft">0dp</item>
+        <item name="android:minWidth">0dp</item>
+    </style>
+
+
+
+
+</resources>

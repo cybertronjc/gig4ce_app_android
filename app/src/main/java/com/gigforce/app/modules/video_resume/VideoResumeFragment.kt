@@ -27,7 +27,7 @@ import com.gigforce.app.BuildConfig
 import com.gigforce.app.R
 import com.gigforce.app.R.*
 import com.gigforce.app.modules.onboarding.utils.DepthPageTransformer
-import com.gigforce.app.core.dp
+import com.gigforce.core.extensions.dp
 import com.gigforce.core.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageMetadata
@@ -129,14 +129,14 @@ class VideoResumeFragment:Fragment() {
             setupPermissions(Manifest.permission.CAMERA)
             setupPermissions(Manifest.permission.RECORD_AUDIO)
             setupPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            val window: Window = activity!!.window
+            val window: Window = requireActivity().window
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             //window.statusBarColor() to default ie transparent
             // Inflate the layout for this fragment
             // This callback will only be called when MyFragment is at least Started.
             // This callback will only be called when MyFragment is at least Started.
-            requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+            requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
             return inflater.inflate(layout.fragment_video_resume, container, false)
         }
 
@@ -259,9 +259,9 @@ class VideoResumeFragment:Fragment() {
                     //ref:https://stackoverflow.com/questions/7037630/how-to-create-a-video-preview-in-android
                 };
             } else if (resultCode == RESULT_CANCELED) {
-                Toast.makeText(this.context, "Video recording cancelled.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this.context, getString(string.recording_cancelled), Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(this.context, "Failed to record video", Toast.LENGTH_LONG).show();
+                Toast.makeText(this.context, getString(string.failed_to_record), Toast.LENGTH_LONG).show();
             }
         }
     }

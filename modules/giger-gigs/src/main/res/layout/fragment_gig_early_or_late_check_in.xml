@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="40dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:text="@string/late_check_in_giger_gigs"
+        android:paddingStart="16dp"
+        android:fontFamily="@font/lato"
+        android:textSize="16sp"
+        android:drawablePadding="16dp"
+        android:textColor="@color/white"
+        android:gravity="center_vertical"
+        android:background="@color/lipstick"
+        app:drawableStartCompat="@drawable/ic_warning" />
+
+
+    <TextView
+        android:id="@+id/check_in_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lato"
+        android:textStyle="normal"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:padding="16dp"
+        android:lineSpacingExtra="3sp"
+        tools:text="This Check- in will be considered once your manager approves."
+        />
+
+    <RelativeLayout
+        android:id="@+id/acutal_checkin_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/actual_checkin_time_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:padding="16dp"
+            android:lineSpacingExtra="3sp"
+            android:text="@string/gig_checkin_time_giger_gigs"
+            />
+
+        <TextView
+            android:id="@+id/checkin_time_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:padding="16dp"
+            android:layout_toEndOf="@id/actual_checkin_time_tv"
+            android:lineSpacingExtra="3sp"
+            />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/your_checkin_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/your_checkin_time_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:paddingTop="16dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:lineSpacingExtra="3sp"
+            android:text="@string/your_checkin_time_giger_gigs"
+            />
+
+        <TextView
+            android:id="@+id/change_time_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
+            android:textSize="16sp"
+            android:textColor="#e42c64"
+            android:paddingTop="4dp"
+            android:paddingStart="16dp"
+            android:paddingBottom="8dp"
+            android:layout_below="@id/your_checkin_time_tv"
+            android:paddingEnd="16dp"
+            android:lineSpacingExtra="3sp"
+            android:text="@string/change_time_giger_gigs"
+            />
+
+        <TextView
+            android:id="@+id/your_time_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:padding="16dp"
+            android:layout_toEndOf="@id/your_checkin_time_tv"
+            android:lineSpacingExtra="3sp"
+            />
+
+
+    </RelativeLayout>
+
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/okay_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/gradient_button"
+        android:fontFamily="@font/lato_bold"
+        android:gravity="center"
+        android:minHeight="@dimen/size_36"
+        android:text="@string/okay_giger_gigs"
+        android:textColor="@color/white"/>
+
+
+</LinearLayout>

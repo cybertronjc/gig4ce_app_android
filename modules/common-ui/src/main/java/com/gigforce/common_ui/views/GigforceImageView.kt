@@ -36,7 +36,8 @@ class GigforceImageView(
     fun loadImageFromFirebase(
             firebasePath: String,
             @DrawableRes placeHolder: Int = -1,
-            @DrawableRes error: Int = -1
+            @DrawableRes error: Int = -1,
+            centerCrop: Boolean = false
     ) {
         val pathRef = firebaseStorage.reference.child(firebasePath)
 
@@ -52,6 +53,10 @@ class GigforceImageView(
             requestManager = requestManager.error(getErrorImage())
         }
 
+        if (centerCrop) {
+            requestManager = requestManager.centerCrop()
+        }
+
         requestManager.into(this)
     }
 
@@ -59,7 +64,8 @@ class GigforceImageView(
     fun loadImageIfUrlElseTryFirebaseStorage(
             urlOrFirebasePath: String,
             @DrawableRes placeHolder: Int = -1,
-            @DrawableRes error: Int = -1
+            @DrawableRes error: Int = -1,
+            centerCrop: Boolean = false
     ) {
 
         val isUrl = Patterns.WEB_URL.matcher(urlOrFirebasePath).matches()
@@ -67,13 +73,15 @@ class GigforceImageView(
             loadImage(
                     Uri.parse(urlOrFirebasePath),
                     placeHolder,
-                    error
+                    error,
+                    centerCrop
             )
         } else {
             loadImageFromFirebase(
                     urlOrFirebasePath,
                     placeHolder,
-                    error
+                    error,
+                    centerCrop
             )
         }
     }
@@ -81,7 +89,8 @@ class GigforceImageView(
     fun loadImage(
             image: Uri,
             @DrawableRes placeHolder: Int = -1,
-            @DrawableRes error: Int = -1
+            @DrawableRes error: Int = -1,
+            centerCrop: Boolean = false
     ) {
 
         var requestManager = Glide.with(context)
@@ -97,26 +106,46 @@ class GigforceImageView(
             requestManager = requestManager.error(getErrorImage())
         }
 
+        if (centerCrop) {
+            requestManager = requestManager.centerCrop()
+        }
+
         requestManager.into(this)
     }
 
     fun loadImage(
-            @DrawableRes image: Int
+            @DrawableRes image: Int,
+            centerCrop: Boolean = false
     ) {
 
-        Glide.with(context)
+        var glideRequestManager = Glide.with(context)
                 .load(image)
                 .error(getErrorImage())
-                .into(this)
+
+        if(centerCrop){
+            glideRequestManager = glideRequestManager.centerCrop()
+        }
+
+        glideRequestManager.into(this)
     }
 
     fun loadImage(
-            image: Bitmap
+            image: Bitmap,
+            centerCrop: Boolean
     ) {
 
-        Glide.with(context)
+        var requestManager = Glide.with(context)
                 .load(image)
                 .error(getErrorImage())
-                .into(this)
+
+        if (centerCrop) {
+            requestManager = requestManager.centerCrop()
+        }
+
+        requestManager.into(this)
+    }
+
+    fun clearImage() {
+        Glide.with(context).clear(this)
     }
 }

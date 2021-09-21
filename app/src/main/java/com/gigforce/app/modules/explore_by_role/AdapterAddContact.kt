@@ -9,10 +9,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
 import com.gigforce.app.modules.explore_by_role.models.ContactModel
-import com.gigforce.app.modules.profile.models.Contact
-import com.gigforce.app.utils.PushDownAnim
-import com.gigforce.app.utils.isValidMail
-import com.gigforce.app.utils.isValidMobile
+import com.gigforce.common_ui.utils.PushDownAnim
+import com.gigforce.core.utils.isValidMail
+import com.gigforce.core.utils.isValidMobile
 import kotlinx.android.synthetic.main.layout_next_add_profile_segments.view.*
 import kotlinx.android.synthetic.main.layout_rv_contact_details.view.*
 
@@ -154,7 +153,8 @@ class AdapterAddContact : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private fun validate(viewholder: ViewHolderContact) {
         var isValidMail = true
         if (viewholder.itemView.et_add_email.text.isNotEmpty()) {
-            isValidMail = isValidMail(viewholder.itemView.et_add_email.text.toString())
+            isValidMail =
+                isValidMail(viewholder.itemView.et_add_email.text.toString())
 
 
             viewholder.itemView.et_line_email.setBackgroundColor(
@@ -170,7 +170,8 @@ class AdapterAddContact : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 Color.parseColor("#68979797")
             )
         }
-        val isCorrect = isValidMobile(viewholder.itemView.et_add_contact_phone.text.toString())
+        val isCorrect =
+            isValidMobile(viewholder.itemView.et_add_contact_phone.text.toString())
 
         viewholder.itemView.form_error_contact_details.visibility =
             if (!isCorrect || !isValidMail) View.VISIBLE else View.GONE

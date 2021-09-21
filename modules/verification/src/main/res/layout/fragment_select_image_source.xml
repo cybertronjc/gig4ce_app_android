@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="87dp"
+    tools:context="com.gigforce.verification.gigerVerfication.SelectImageSourceBottomSheet">
+
+    <TextView
+        android:id="@+id/uploadDocumentLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lato_bold"
+        android:text="@string/upload_document_veri"
+        android:textColor="@color/black"
+        android:layout_marginTop="39dp"
+        android:layout_marginStart="19dp"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/cameraLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lato_bold"
+        android:text="@string/from_camera_veri"
+        android:minHeight="@dimen/size_36"
+        android:textColor="@color/black"
+        android:layout_marginTop="25dp"
+        android:layout_marginStart="19dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:textSize="14sp" />
+
+    <View
+        android:id="@+id/topSeaparator"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginStart="19dp"
+        android:background="#cdccd1" />
+
+    <TextView
+        android:id="@+id/galleryLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lato_bold"
+        android:minHeight="@dimen/size_36"
+        android:text="@string/from_gallery_veri"
+        android:textColor="@color/black"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginStart="19dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:textSize="14sp" />
+
+
+</LinearLayout>

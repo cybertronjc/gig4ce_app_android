@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/dp_sm1">
+
+    <TextView
+        android:id="@+id/tv_number_rv_access_frag"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:letterSpacing="0"
+        android:paddingEnd="@dimen/size_5"
+        android:text="A."
+        android:layout_marginStart="@dimen/dp_sm1"
+        android:textColor="@color/black_85"
+        android:textSize="@dimen/font_16"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_option_rv_access_frag"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_option_rv_access_frag" />
+
+    <TextView
+        android:id="@+id/tv_option_rv_access_frag"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border_tv_rv_answers_assess_frag"
+        android:letterSpacing="0"
+        android:paddingStart="@dimen/size_14"
+        android:paddingTop="@dimen/size_13"
+        android:paddingEnd="@dimen/size_35"
+        android:paddingBottom="@dimen/size_13"
+        android:textColor="@color/black_85"
+        android:textSize="@dimen/font_14"
+        android:layout_marginEnd="@dimen/dp_sm1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tv_number_rv_access_frag"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Approach her confidently asking what’s she looking for" />
+
+    <TextView
+        android:id="@+id/tv_helper_rv_access_frag"
+        tools:text="Openly approaching a customer with a smile, introducing yourself, and then offering to help is the right approach. If she needs help she will ask. If she wants to be left alone, she can always tell you that."
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_helper_answer_rv_access_frag"
+        android:letterSpacing="0"
+        android:paddingStart="@dimen/size_8"
+
+        android:paddingTop="@dimen/size_17"
+        android:paddingBottom="@dimen/size_14"
+        android:textColor="@color/black_85"
+        android:textSize="14sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tv_number_rv_access_frag"
+        app:layout_constraintTop_toBottomOf="@id/tv_option_rv_access_frag" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

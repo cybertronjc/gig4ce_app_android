@@ -6,14 +6,17 @@ import android.content.Intent
 import android.net.Uri
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.webkit.MimeTypeMap
 import android.widget.ImageView
+import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.FileProvider
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.gigforce.core.IViewHolder
@@ -21,21 +24,31 @@ import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toDisplayText
 import com.gigforce.core.extensions.visible
 import com.gigforce.modules.feature_chat.R
-import com.gigforce.modules.feature_chat.core.ChatConstants
-import com.gigforce.modules.feature_chat.models.ChatMessage
+import com.gigforce.common_ui.chat.ChatConstants
+import com.gigforce.common_ui.chat.models.ChatMessage
+import com.gigforce.core.navigation.INavigation
+import com.gigforce.modules.feature_chat.screens.GroupMessageViewInfoFragment
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.File
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 abstract class DocumentMessageView(
         private val flowType: MessageFlowType,
         private val messageType: MessageType,
         context: Context,
         attrs: AttributeSet?
 ) : MediaMessage(context, attrs),
-        IViewHolder, View.OnClickListener {
+        IViewHolder,
+    View.OnClickListener,
+    View.OnLongClickListener,
+    PopupMenu.OnMenuItemClickListener{
+
+    @Inject
+    lateinit var navigation: INavigation
 
     //Views
     private lateinit var linearLayout: ConstraintLayout
@@ -46,11 +59,15 @@ abstract class DocumentMessageView(
     private lateinit var progressbar: View
     private lateinit var receivedStatusIV: ImageView
 
+    //Data
+    private lateinit var chatMessage : ChatMessage
+
     init {
         setDefault()
         inflate()
         findViews()
         cardView.setOnClickListener(this)
+        cardView.setOnLongClickListener(this)
     }
 
     private fun findViews() {
@@ -69,6 +86,7 @@ abstract class DocumentMessageView(
     }
 
     override fun onBind(msg: ChatMessage) {
+        chatMessage = msg
 
         senderNameTV.isVisible = messageType == MessageType.GROUP_MESSAGE && flowType == MessageFlowType.IN
         senderNameTV.text = msg.senderInfo.name
@@ -157,7 +175,7 @@ abstract class DocumentMessageView(
             setDataAndType(
                     FileProvider.getUriForFile(
                             context,
-                            "com.gigforce.app.provider",
+                            "${context.packageName}.provider",
                             file
                     ), getMimeType(Uri.fromFile(file))
             )
@@ -166,7 +184,7 @@ abstract class DocumentMessageView(
             try {
                 context.startActivity(this)
             } catch (e: Exception) {
-                Toast.makeText(context, "Unable to open", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, context.getString(R.string.unable_to_open_chat), Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -191,7 +209,7 @@ abstract class DocumentMessageView(
         }
 
         try {
-            val file = downloadMediaFile()
+            downloadMediaFile()
             this.launch(Dispatchers.Main) {
                 handleDownloadedCompleted()
             }
@@ -205,6 +223,57 @@ abstract class DocumentMessageView(
 
     private fun handleDownloadedCompleted() {
         progressbar.gone()
+    }
+
+    override fun onLongClick(v: View?): Boolean {
+        val popUpMenu = PopupMenu(context, v)
+        popUpMenu.inflate(R.menu.menu_chat_clipboard)
+
+        popUpMenu.menu.findItem(R.id.action_copy).isVisible = false
+        popUpMenu.menu.findItem(R.id.action_delete).isVisible =  flowType == MessageFlowType.OUT
+        popUpMenu.menu.findItem(R.id.action_message_info).isVisible =  flowType == MessageFlowType.OUT && messageType == MessageType.GROUP_MESSAGE
+
+        popUpMenu.setOnMenuItemClickListener(this)
+        popUpMenu.show()
+
+        return true
+    }
+
+    override fun onMenuItemClick(item: MenuItem?): Boolean {
+        val itemClicked = item ?: return true
+
+        when (itemClicked.itemId) {
+            R.id.action_copy -> {}
+            R.id.action_delete -> deleteMessage()
+            R.id.action_message_info -> viewMessageInfo()
+        }
+        return true
+    }
+
+    private fun viewMessageInfo() {
+        navigation.navigateTo("chats/messageInfo",
+            bundleOf(
+                GroupMessageViewInfoFragment.INTENT_EXTRA_GROUP_ID to chatMessage.groupId,
+                GroupMessageViewInfoFragment.INTENT_EXTRA_MESSAGE_ID to chatMessage.id
+                )
+        )
+    }
+
+    private fun deleteMessage() {
+        if (messageType == MessageType.ONE_TO_ONE_MESSAGE) {
+
+            oneToOneChatViewModel.deleteMessage(
+                message.id
+            )
+        } else if (messageType == MessageType.GROUP_MESSAGE) {
+            groupChatViewModel.deleteMessage(
+                message.id
+            )
+        }
+    }
+
+    override fun getCurrentChatMessageOrThrow(): ChatMessage {
+        return message
     }
 }
 

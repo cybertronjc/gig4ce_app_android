@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.gigforce.common_ui.views.GigforceToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?android:actionBarSize"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fillViewport="true">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.gigforce.common_ui.components.cells.GigerProfileCardComponent
+                    android:id="@+id/gigerProfileCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/locationLayout1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            android:id="@+id/selectTv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="16dp"
+                            android:fontFamily="@font/lato"
+                            android:letterSpacing="-0.01"
+                            android:lineSpacingExtra="3sp"
+                            android:text="@string/need_to_select_lead"
+                            android:textColor="@color/text_grey"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/gigLocationTV"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginEnd="16dp"
+                            android:fontFamily="@font/lato"
+                            android:lineSpacingExtra="7sp"
+                            android:text="@string/gig_location_lead"
+                            android:textColor="#131415"
+                            android:textSize="24sp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/selectTv" />
+
+                        <TextView
+                            android:id="@+id/addCityTV"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="30dp"
+                            android:layout_marginEnd="16dp"
+                            android:fontFamily="@font/lato"
+                            android:lineSpacingExtra="7sp"
+                            android:text="@string/add_city_lead"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/gigLocationTV" />
+
+                        <LinearLayout
+                            android:id="@+id/cityContainerLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="150dp"
+                            android:orientation="vertical"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/addCityTV">
+
+                            <androidx.core.widget.NestedScrollView
+                                android:id="@+id/cityScrollView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <com.gigforce.common_ui.components.atoms.ChipGroupComponent
+                                    android:id="@+id/cityChipGroup"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="@dimen/size_16"
+                                    android:layout_marginTop="@dimen/size_16" />
+
+                            </androidx.core.widget.NestedScrollView>
+                        </LinearLayout>
+
+
+                        <TextView
+                            android:id="@+id/selectLocTV"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="56dp"
+                            android:layout_marginEnd="16dp"
+                            android:fontFamily="@font/lato"
+                            android:lineSpacingExtra="7sp"
+                            android:text="@string/select_location_lead"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:visibility="gone"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/cityContainerLayout" />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/locationLayout2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/size_16"
+                            android:background="@drawable/search_autocomplete_bg"
+                            android:visibility="gone"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/selectLocTV">
+
+                            <com.gigforce.common_ui.components.atoms.ChipGroupComponent
+                                android:id="@+id/locationChipGroup"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/size_16"
+                                android:layout_marginTop="@dimen/size_16"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <Spinner
+                                android:id="@+id/searchLocation"
+                                android:layout_width="match_parent"
+                                android:layout_height="36dp"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginTop="24dp"
+                                android:layout_marginEnd="16dp"
+                                android:layout_marginBottom="@dimen/size_16"
+                                android:background="@drawable/search_autocomplete_bg"
+                                android:focusableInTouchMode="true"
+                                android:fontFamily="@font/lato"
+                                android:hint="@string/search_or_select_lead"
+                                android:padding="4dp"
+                                android:textColor="@color/text_grey"
+                                android:textSize="14sp"
+                                android:visibility="gone"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/locationChipGroup" />
+
+                            <AutoCompleteTextView
+                                android:id="@+id/searchLocation1"
+                                android:layout_width="match_parent"
+                                android:layout_height="36dp"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginTop="24dp"
+                                android:layout_marginEnd="16dp"
+                                android:layout_marginBottom="@dimen/size_16"
+                                android:background="@drawable/search_autocomplete_bg"
+                                android:focusableInTouchMode="true"
+                                android:fontFamily="@font/lato"
+                                android:hint="@string/search_or_select_lead"
+                                android:padding="4dp"
+                                android:inputType="none"
+                                android:textColor="@color/text_grey"
+                                android:textSize="14sp"
+                                android:visibility="gone"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/locationChipGroup" />
+
+                            <ImageView
+                                android:id="@+id/spinnerDrop"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/size_16"
+                                android:background="?android:attr/selectableItemBackground"
+                                android:src="@drawable/ic_baseline_keyboard_arrow_down_24"
+                                app:layout_constraintBottom_toBottomOf="@id/searchLocation1"
+                                app:layout_constraintEnd_toEndOf="@id/searchLocation1"
+                                app:layout_constraintTop_toTopOf="@id/searchLocation1" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <include
+                        android:id="@+id/location_shimmer_container"
+                        layout="@layout/shimmer_container"
+                        android:visibility="visible" />
+
+                    <include
+                        android:id="@+id/location_info_layout"
+                        layout="@layout/layout_error_with_retry" />
+                </FrameLayout>
+
+
+
+            </LinearLayout>
+        </ScrollView>
+
+        <TextView
+            android:id="@+id/submitBtn"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginEnd="@dimen/size_16"
+            android:layout_marginBottom="@dimen/size_16"
+            android:background="@drawable/app_gradient_button_disabled"
+            android:gravity="center"
+            android:minHeight="@dimen/size_36"
+            android:text="@string/next_camel_case_common_ui"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </LinearLayout>
+</layout>

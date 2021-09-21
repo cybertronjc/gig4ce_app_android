@@ -6,8 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.CompoundButton
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.profile.R
+import com.gigforce.profile.models.SubCity
 import com.gigforce.profile.onboarding.fragments.preferredJobLocation.OnboardingPreferredJobLocationFragment
 
 class OnboardingSubCityAdapter(
@@ -16,7 +18,7 @@ class OnboardingSubCityAdapter(
 
 
     private var selectedSubCityList: List<String> = emptyList()
-    private var originalSubCityList: List<String> = emptyList()
+    private var originalSubCityList: List<SubCity> = emptyList()
 
     private var onSubCitySelectedListener: OnSubCitySelectedListener? = null
 
@@ -43,7 +45,7 @@ class OnboardingSubCityAdapter(
         holder.bindValues(originalSubCityList.get(position), position)
     }
 
-    fun setData(contacts: List<String>, selectedCityList: List<String>) {
+    fun setData(contacts: List<SubCity>, selectedCityList: List<String>) {
 
         this.originalSubCityList = contacts
         this.selectedSubCityList = selectedCityList
@@ -63,11 +65,11 @@ class OnboardingSubCityAdapter(
             subCityCheckbox.setOnCheckedChangeListener(this@OnboardingSubCityViewHolder)
         }
 
-        fun bindValues(subCity: String, position: Int) {
-            subCityCheckbox.text = subCity
+        fun bindValues(subCity: SubCity, position: Int) {
+            subCityCheckbox.text = subCity.name
             var found = false
             if (selectedSubCityList.size > 0) {
-                found = selectedSubCityList.contains(subCity)
+                found = selectedSubCityList.contains(subCity.name)
             }
             subCityCheckbox.isChecked = found
         }
@@ -81,7 +83,13 @@ class OnboardingSubCityAdapter(
 
         override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
             val subCity = originalSubCityList.get(adapterPosition)
-            onSubCitySelectedListener?.onSubCitySelected(isChecked, subCity)
+            if (selectedSubCityList.size == 3 && isChecked){
+                subCityCheckbox.isChecked = false
+                Toast.makeText(context, context.getString(R.string.max_three_localities_profile), Toast.LENGTH_SHORT).show()
+            } else {
+                onSubCitySelectedListener?.onSubCitySelected(isChecked, subCity.name)
+            }
+
         }
 
     }

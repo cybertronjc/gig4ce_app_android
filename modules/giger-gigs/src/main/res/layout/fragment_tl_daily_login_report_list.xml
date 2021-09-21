@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".tl_login_details.TeamLeaderLoginDetailsFragment">
+
+        <!--        <com.gigforce.common_ui.views.GigforceToolbar-->
+        <!--            android:id="@+id/appBar"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="?android:attr/actionBarSize"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="parent" />-->
+
+        <com.gigforce.common_ui.components.cells.AppBar
+            android:id="@+id/appBar"
+            android:layout_width="match_parent"
+            android:layout_height="?android:attr/actionBarSize"
+            app:backgroundType="WhiteBar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:titleText="@string/login_report" />
+
+
+        <TextView
+            android:id="@+id/tl_name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/lato_bold"
+            android:lineSpacingExtra="-2sp"
+            android:textColor="#202325"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/appBar" />
+
+        <TextView
+            android:id="@+id/dateTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/lato"
+            android:lineSpacingExtra="6sp"
+            android:textColor="#979c9e"
+            android:textSize="12sp"
+            android:textStyle="normal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tl_name_tv"
+            tools:text="12-July-2021" />
+
+
+        <TextView
+            android:id="@+id/change_date_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="92dp"
+            android:fontFamily="@font/lato"
+            android:lineSpacingExtra="6sp"
+            android:padding="8dp"
+            android:text="@string/change_date_giger_gigs"
+            android:textColor="#e42c64"
+            android:textSize="12sp"
+            android:textStyle="normal"
+            app:layout_constraintStart_toEndOf="@id/dateTv"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <Button
+            android:id="@+id/add_new"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/app_gradient_button"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="@dimen/size_16"
+            android:layout_marginBottom="@dimen/size_22"
+            android:gravity="center"
+            android:minHeight="@dimen/size_36"
+            android:text="@string/add_new_giger_gigs"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_to_refresh"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="28dp"
+            app:layout_constraintBottom_toTopOf="@id/add_new"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dateTv">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/datecity_rv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                 />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/swipe_to_refresh"
+            app:layout_constraintEnd_toEndOf="@id/swipe_to_refresh"
+            app:layout_constraintStart_toStartOf="@id/swipe_to_refresh"
+            app:layout_constraintTop_toTopOf="@id/swipe_to_refresh" />
+
+        <TextView
+            android:id="@+id/noData"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="@dimen/size_16"
+            android:layout_marginBottom="@dimen/size_22"
+            android:gravity="center"
+            android:minHeight="@dimen/size_36"
+            android:text="@string/no_data_found_giger_gigs"
+            android:textColor="@color/black"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/swipe_to_refresh"
+            app:layout_constraintEnd_toEndOf="@id/swipe_to_refresh"
+            app:layout_constraintStart_toStartOf="@id/swipe_to_refresh"
+            app:layout_constraintTop_toTopOf="@id/swipe_to_refresh" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

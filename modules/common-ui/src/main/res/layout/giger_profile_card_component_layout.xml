@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="96dp"
+    android:background="@drawable/giger_profile_card_background"
+    android:layout_margin="@dimen/size_16">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.gigforce.common_ui.widgets.CircleImageView
+            android:id="@+id/gigerImg"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_margin="@dimen/size_16"
+            android:layout_marginStart="@dimen/size8"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_avatar_male"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/gigerName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size12"
+            android:layout_marginEnd="@dimen/size_16"
+            android:text="@string/giger_name_common_ui"
+            android:fontFamily="@font/lato_bold"
+            android:textFontWeight="600"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toStartOf="@id/jobProfileLogo"
+            app:layout_constraintBottom_toTopOf="@+id/gigerNumber"
+            app:layout_constraintStart_toEndOf="@+id/gigerImg"
+            app:layout_constraintTop_toTopOf="@+id/gigerImg" />
+
+        <TextView
+            android:id="@+id/gigerNumber"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size12"
+            android:layout_marginEnd="@dimen/size_16"
+            android:text="+91xxxxxxxxxx"
+            android:fontFamily="@font/lato"
+            android:textSize="12sp"
+            android:textColor="@color/giger_card_text"
+            app:layout_constraintEnd_toStartOf="@id/jobProfileLogo"
+            app:layout_constraintBottom_toTopOf="@+id/jobProfileTitle"
+            app:layout_constraintStart_toEndOf="@+id/gigerImg"
+            app:layout_constraintTop_toBottomOf="@+id/gigerName" />
+
+        <TextView
+            android:id="@+id/jobProfileTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size12"
+            android:layout_marginEnd="@dimen/size_16"
+            android:text="@string/job_profile_common_ui"
+            android:fontFamily="@font/lato"
+            android:textSize="12sp"
+            android:visibility="invisible"
+            android:scrollHorizontally="true"
+            android:ellipsize="end"
+            android:maxLines="1"
+            app:layout_constraintEnd_toStartOf="@id/jobProfileLogo"
+            app:layout_constraintBottom_toBottomOf="@+id/gigerImg"
+            app:layout_constraintStart_toEndOf="@+id/gigerImg"
+            app:layout_constraintTop_toBottomOf="@+id/gigerNumber" />
+
+        <com.gigforce.common_ui.widgets.CircleImageView
+            android:id="@+id/jobProfileLogo"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginEnd="@dimen/size_16"
+            android:scaleType="centerCrop"
+            android:visibility="invisible"
+            android:src="@drawable/ic_avatar_male"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+             />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

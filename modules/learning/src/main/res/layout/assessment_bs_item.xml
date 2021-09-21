@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/assessment_cl"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="15dp">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="10dp"
+        android:minHeight="84dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:paddingBottom="@dimen/size_20">
+
+
+            <ImageView
+                android:id="@+id/quiz_icon_iv"
+                android:layout_width="27dp"
+                android:layout_height="27dp"
+                android:layout_marginStart="16dp"
+                  app:srcCompat="@drawable/ic_quiz"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="@dimen/size_10"
+                android:ellipsize="end"
+                android:letterSpacing="0.01"
+                android:singleLine="true"
+                android:text="@string/assessment_1_learning"
+                android:textColor="#000000"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/quiz_icon_iv"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="@dimen/size_15"
+                android:background="@drawable/rect_assessment_status_pending"
+                android:gravity="center"
+                android:letterSpacing="0.05"
+                android:padding="4dp"
+
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:textColor="#ffffff"
+                android:textSize="12sp"
+                app:layout_constraintStart_toEndOf="@id/quiz_icon_iv"
+                app:layout_constraintTop_toBottomOf="@id/title"
+                tools:text="PENDING" />
+
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="5dp"
+                android:letterSpacing="0.02"
+                android:textColor="#000000"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/title"
+                tools:text="12:00" />
+
+            <ImageView
+                android:id="@+id/imageView18"
+                android:layout_width="11dp"
+                android:layout_height="11dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="2dp"
+                  app:srcCompat="@drawable/ic_clock_assessment"
+                app:layout_constraintBottom_toBottomOf="@+id/time"
+                app:layout_constraintEnd_toStartOf="@+id/time" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <ImageView
+        android:id="@+id/side_bar_status"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/size_36"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="1dp"
+        android:elevation="@dimen/size_6"
+        android:outlineProvider="none"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+
+        app:srcCompat="@drawable/assessment_line_pending" />
+</androidx.constraintlayout.widget.ConstraintLayout>

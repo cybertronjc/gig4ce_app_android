@@ -30,7 +30,7 @@
             android:fontFamily="@font/lato"
             android:gravity="center"
             android:layout_marginLeft="4dp"
-            android:text="Cancelling out on a gig !"
+            android:text="@string/cancelling_out_gigs"
             android:textColor="#ffffff"
             android:textSize="16sp"
             android:letterSpacing="0"
@@ -52,7 +52,7 @@
         android:letterSpacing="0"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:text="Please let us know your reason, to mark unavailable ?"
+        android:text="@string/please_let_us_know_your_reason"
         android:textColor="#313131"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -80,7 +80,7 @@
             android:paddingLeft="11dp"
             android:letterSpacing="0"
             android:textColor="@color/black"
-            android:text="I’m not feeling well"
+            android:text="@string/i_m_not_feeling_well"
             android:textSize="14sp" />
 
 
@@ -94,7 +94,7 @@
             android:paddingLeft="11dp"
             android:textColor="@color/black"
             android:letterSpacing="0"
-            android:text="I have other work"
+            android:text="@string/i_have_other_work"
             android:textSize="14sp" />
 
 
@@ -108,7 +108,7 @@
             android:paddingLeft="11dp"
             android:letterSpacing="0"
             android:textColor="@color/black"
-            android:text="This gig is unsuitable for me"
+            android:text="@string/this_gig_is_unsuitable_for_me_"
             android:textSize="14sp" />
 
 
@@ -122,7 +122,7 @@
             android:paddingLeft="11dp"
             android:letterSpacing="0"
             android:textColor="@color/black"
-            android:text="I can’t reach the location"
+            android:text="@string/i_can_t_reach_the_location"
             android:textSize="14sp" />
 
 
@@ -136,7 +136,7 @@
             android:paddingLeft="11dp"
             android:letterSpacing="0"
             android:textColor="@color/black"
-            android:text="I can’t do the gig today"
+            android:text="@string/i_can_t_do_the_gig_today"
             android:textSize="14sp" />
 
     </RadioGroup>
@@ -151,7 +151,7 @@
         android:fontFamily="@font/lato_bold"
         android:gravity="center"
         android:minHeight="@dimen/size_36"
-        android:text="Submit"
+        android:text="@string/submit"
         android:letterSpacing="0"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"

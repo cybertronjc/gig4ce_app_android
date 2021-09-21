@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="320dp"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="3dp">
+
+
+    <LinearLayout
+        android:id="@+id/document_uploaded_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingBottom="16dp"
+        android:visibility="invisible">
+
+        <LinearLayout
+            android:id="@+id/titleLayout"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@color/lipstick"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <TextView
+                android:id="@+id/dialog_title_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="22dp"
+                android:fontFamily="@font/lato"
+                android:letterSpacing="0"
+                android:text="@string/congratulations_exclamation_amb"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/congrats_image"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:layout_marginTop="22dp"
+              app:srcCompat="@drawable/banner_happy_feeling"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/titleLayout" />
+
+        <TextView
+            android:id="@+id/congrats_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/lato"
+            android:gravity="center_horizontal"
+            android:lineSpacingExtra="3sp"
+            android:textColor="#d9000000"
+            android:textSize="14sp"
+            android:textStyle="normal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/congrats_image"
+            tools:text="You have successfully submitted Bharat’s details  !!
+Soon gigs will assign to him, and you will receive your incentive." />
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/submitBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="60dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/gradient_button"
+            android:fontFamily="@font/lato_bold"
+            android:gravity="center"
+            android:minHeight="@dimen/size_36"
+            android:text="@string/okay_text_amb"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/congrats_text"
+            app:layout_goneMarginTop="56dp" />
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/upload_at_least_one_document_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingBottom="16dp"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:id="@+id/atLeastOneTitleLayout"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@color/lipstick"
+            android:gravity="center_vertical|center_horizontal"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <TextView
+                android:id="@+id/title_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato"
+                android:letterSpacing="0"
+                android:text="@string/oops_amb"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:layout_marginTop="22dp"
+              app:srcCompat="@drawable/bg_undraw_filing_system_b_5_d_2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/titleLayout" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/lato"
+            android:gravity="center_horizontal"
+            android:lineSpacingExtra="3sp"
+            android:text="@string/to_earn_incentive_for_the_profile_created_atleast_one_document_is_mandatory_amb"
+            android:textColor="#d9000000"
+            android:textSize="14sp"
+            android:textStyle="normal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/congrats_image" />
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/upload_doc_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="60dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/gradient_button"
+            android:fontFamily="@font/lato_bold"
+            android:gravity="center"
+            android:text="@string/upload_documents_amb"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/congrats_text"
+            app:layout_goneMarginTop="56dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/will_do_later_btn"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/gradient_button"
+            android:fontFamily="@font/lato_bold"
+            android:gravity="center"
+            android:text="@string/i_will_do_it_later_amb"
+            android:textAllCaps="false"
+            app:layout_constraintTop_toBottomOf="@id/congrats_text"
+            app:layout_goneMarginTop="56dp" />
+
+
+    </LinearLayout>
+
+
+    <ProgressBar
+        android:id="@+id/loading_progresbar"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center" />
+
+</com.google.android.material.card.MaterialCardView>

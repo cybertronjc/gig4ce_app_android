@@ -21,23 +21,24 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.gone
-import com.gigforce.app.core.visible
-import com.gigforce.app.modules.gigerVerfication.VerificationBaseModel
-import com.gigforce.app.modules.profile.ProfileViewModel
-import com.gigforce.app.modules.profile.models.ProfileData
-import com.gigforce.app.modules.profile.models.RoleInterests
-import com.gigforce.app.utils.HorizontaltemDecoration
-import com.gigforce.app.utils.StringConstants
-import com.gigforce.app.utils.getScreenWidth
-import com.gigforce.app.utils.openPopupMenu
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
+import com.gigforce.core.datamodels.verification.VerificationBaseModel
+import com.gigforce.common_ui.viewmodels.ProfileViewModel
+import com.gigforce.core.datamodels.profile.ProfileData
+import com.gigforce.core.datamodels.profile.RoleInterests
+import com.gigforce.common_ui.decors.HorizontaltemDecoration
+import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.adapter.AdapterPreferredLocation
+import com.gigforce.common_ui.ext.showToast
+import com.gigforce.common_ui.utils.getScreenWidth
+import com.gigforce.common_ui.utils.openPopupMenu
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.dynamiclinks.ktx.shortLinkAsync
 import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.layout_role_details_fragment.*
 import java.io.File
 import java.io.FileOutputStream
@@ -115,7 +116,12 @@ class RoleDetailsFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
     private fun initClicks() {
 
         iv_options_role_details.setOnClickListener {
-            openPopupMenu(it, R.menu.menu_assessment_result, this, activity)
+            openPopupMenu(
+                it,
+                R.menu.menu_assessment_result,
+                this,
+                activity
+            )
         }
     }
 
@@ -266,7 +272,8 @@ class RoleDetailsFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
             showToast(it ?: "")
         })
         viewModel.observerMarkedAsInterest.observe(viewLifecycleOwner, Observer {
-            navigate(R.id.fragment_marked_as_interest)
+            //if we need fragment_marked_as_interest file search in modular final branch
+//            navigate(R.id.fragment_marked_as_interest)
         })
         viewModel.observerDataToCheck.observe(viewLifecycleOwner, Observer {
             run {
@@ -282,13 +289,14 @@ class RoleDetailsFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
                                         StringConstants.NAVIGATE_TO_MARK_AS_INTERESTED.value,
                                         false
                                 )
-                        navigate(
-                                R.id.fragment_marked_as_interest,
-                                bundleOf(
-                                        StringConstants.ROLE_ID.value to mRoleID,
-                                        StringConstants.INVITE_USER_ID.value to mInviteUserID
-                                )
-                        )
+                        //if we need fragment_marked_as_interest file search in modular final branch
+//                        navigate(
+//                                R.id.fragment_marked_as_interest,
+//                                bundleOf(
+//                                        StringConstants.ROLE_ID.value to mRoleID,
+//                                        StringConstants.INVITE_USER_ID.value to mInviteUserID
+//                                )
+//                        )
                         break
                     } else if (navFragmentsData?.getData()
                                     ?.getBoolean(StringConstants.NAV_TO_QUESTIONNARE.value) == true
@@ -463,10 +471,10 @@ class RoleDetailsFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
         rv_preferred_locations_role_details.layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         rv_preferred_locations_role_details.addItemDecoration(
-                HorizontaltemDecoration(
-                        requireContext(),
-                        R.dimen.size_11
-                )
+            HorizontaltemDecoration(
+                requireContext(),
+                R.dimen.size_11
+            )
         )
 
     }
@@ -526,8 +534,8 @@ class RoleDetailsFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
                 .setIosParameters(DynamicLink.IosParameters.Builder("com.gigforce.ios").build())
                 .setSocialMetaTagParameters(
                         DynamicLink.SocialMetaTagParameters.Builder()
-                                .setTitle("Gigforce")
-                                .setDescription("Flexible work and learning platform")
+                                .setTitle(getString(R.string.gigforce_app))
+                                .setDescription(getString(R.string.gigforce_desc_app))
                                 .setImageUrl(Uri.parse("https://firebasestorage.googleapis.com/v0/b/gig4ce-app.appspot.com/o/app_assets%2Fgigforce.jpg?alt=media&token=f7d4463b-47e4-4b8e-9b55-207594656161"))
                                 .build()
                 ).buildDynamicLink()

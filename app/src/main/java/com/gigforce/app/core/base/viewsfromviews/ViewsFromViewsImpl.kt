@@ -8,7 +8,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
+import com.gigforce.core.base.genericadapter.PFRecyclerViewAdapter
+
+//import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 
 class ViewsFromViewsImpl(var activity: Activity) : ViewsFromViewsInterface {
 

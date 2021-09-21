@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="80dp"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.gigforce.common_ui.views.GigforceToolbar
+                android:id="@+id/toolbar_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                android:id="@+id/enter_mobile_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="80dp"
+                android:layout_marginEnd="24dp"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="7sp"
+                android:text="@string/enter_user_s_mobile_number_amb"
+                android:textColor="#131415"
+                android:textSize="32sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/toolbar_layout" />
+
+            <TextView
+                android:id="@+id/we_will_send_otp_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato"
+                android:textStyle="normal"
+                android:textSize="14sp"
+                android:textColor="#333333"
+                android:letterSpacing="-0.01"
+                android:lineSpacingExtra="3sp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/enter_mobile_label"
+                android:text="@string/we_will_send_an_otp_on_this_number_amb"
+                />
+
+            <TextView
+                android:id="@+id/country_code_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato"
+                android:textStyle="normal"
+                android:textSize="20sp"
+                android:textColor="#2e2f30"
+                android:lineSpacingExtra="4sp"
+                android:text="@string/country_code_amb"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="40dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/we_will_send_otp_label"
+                />
+
+            <EditText
+                android:id="@+id/mobile_no_et"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="190dp"
+                android:fontFamily="@font/lato"
+                android:textStyle="normal"
+                android:textSize="20sp"
+                android:textColor="#2e2f30"
+                android:paddingStart="8dp"
+                android:lineSpacingExtra="4sp"
+                android:inputType="number"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:background="@drawable/rectangle_round_grey_solid"
+                android:maxLength="10"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="40dp"
+                app:layout_constraintStart_toEndOf="@id/country_code_label"
+                app:layout_constraintTop_toBottomOf="@id/we_will_send_otp_label"
+                />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/submitBtn"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_46"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="12dp"
+        android:enabled="true"
+        android:fontFamily="@font/lato"
+        android:gravity="center"
+        android:text="@string/next_camel_case_amb"
+        app:strokeWidth="1dp"
+        android:textAllCaps="false"
+        app:strokeColor="@color/lipstick"
+        app:layout_constraintTop_toBottomOf="@id/ambsd_guildliness_on_success_container" />
+
+
+</FrameLayout>

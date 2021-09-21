@@ -7,12 +7,21 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.provider.Settings
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.content.res.ResourcesCompat
-import com.gigforce.app.DeepLinkActivity
+import androidx.work.Data
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import com.gigforce.app.MainActivity
 import com.gigforce.app.R
 import com.gigforce.app.notification.NotificationChannels.CHAT_NOTIFICATIONS
 import com.gigforce.app.notification.NotificationChannels.URGENT_NOTIFICATIONS
+import com.gigforce.app.services.SyncUnSyncedDataService
+import com.gigforce.core.crashlytics.CrashlyticsLogger
+import com.gigforce.user_tracking.TrackingConstants
+import com.gigforce.user_tracking.service.TrackingService
+import com.gigforce.user_tracking.workers.TrackingWorker
 import kotlin.random.Random
 
 
@@ -29,7 +38,7 @@ class NotificationHelper(private val mContext: Context) {
 
         val finalPendingIntent = if (pendingIntent == null) {
             /**Creates an explicit intent for an Activity in your app */
-            val resultIntent = Intent(mContext, DeepLinkActivity::class.java)
+            val resultIntent = Intent(mContext, MainActivity::class.java)
             resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             val resultPendingIntent = PendingIntent.getActivity(
                 mContext,
@@ -70,7 +79,6 @@ class NotificationHelper(private val mContext: Context) {
     ) {
 
 
-
         val mNotificationManager =
             mContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -89,7 +97,7 @@ class NotificationHelper(private val mContext: Context) {
         message: String
     ) {
         /**Creates an explicit intent for an Activity in your app */
-        val resultIntent = Intent(mContext, DeepLinkActivity::class.java)
+        val resultIntent = Intent(mContext, MainActivity::class.java)
         resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         val resultPendingIntent = PendingIntent.getActivity(
             mContext,
@@ -118,6 +126,109 @@ class NotificationHelper(private val mContext: Context) {
 
         val reqCode = Random.nextInt(0, 100)
         mNotificationManager.notify(reqCode /* Request Code */, mBuilder.build())
+    }
+
+    fun handleSilentPush(
+        context: Context,
+        data: Map<String, String>
+    ) {
+        val silentPushPurpose =
+            data.getOrDefault(NotificationConstants.GlobalKeys.SILENT_PURPOSE, "-")
+        Log.d("NotificationHelper", "silent push received ,purpose : $silentPushPurpose")
+
+        when (silentPushPurpose) {
+            NotificationConstants.GlobalKeys.TASK_UNSYNCED_DATA -> startSyncUnSyncedDataWorker(
+                context
+            )
+            NotificationConstants.GlobalKeys.TASK_SYNC_GEOFENCES -> startSyncGeoFenceWorker(
+                context
+            )
+            NotificationConstants.GlobalKeys.TASK_SYNC_CURRENT_LOCATION_FOR_GIG -> startSyncCurrentLocationForGigWorker(
+                context,
+                data
+            )
+            else -> {
+                //No Match
+            }
+        }
+    }
+
+    private fun startSyncCurrentLocationForGigWorker(
+        context: Context,
+        data: Map<String, String>
+    ) {
+        try {
+            val intent = Intent(context, TrackingService::class.java).apply {
+                action = TrackingConstants.ACTION_START_OR_RESUME_SERVICE
+                this.putExtra(
+                    TrackingConstants.SERVICE_INTENT_EXTRA_GIG_ID,
+                    data.get(TrackingConstants.SERVICE_INTENT_EXTRA_GIG_ID)
+                )
+                this.putExtra(
+                    TrackingConstants.SERVICE_INTENT_EXTRA_USER_NAME,
+                    data.get(TrackingConstants.SERVICE_INTENT_EXTRA_USER_NAME)
+                )
+                this.putExtra(
+                    TrackingConstants.SERVICE_INTENT_EXTRA_TRADING_NAME,
+                    data.get(TrackingConstants.SERVICE_INTENT_EXTRA_TRADING_NAME)
+                )
+            }
+            context.startService(intent)
+        } catch (e: IllegalStateException) {
+            // App is probably in background hence not able to start Service
+            // Using Work Manager
+
+            val workerData = Data.Builder()
+                .putString(
+                    TrackingConstants.SERVICE_INTENT_EXTRA_GIG_ID,
+                    data.get(TrackingConstants.SERVICE_INTENT_EXTRA_GIG_ID)
+                ).putString(
+                    TrackingConstants.SERVICE_INTENT_EXTRA_USER_NAME,
+                    data.get(TrackingConstants.SERVICE_INTENT_EXTRA_USER_NAME)
+                ).putString(
+                    TrackingConstants.SERVICE_INTENT_EXTRA_TRADING_NAME,
+                    data.get(TrackingConstants.SERVICE_INTENT_EXTRA_TRADING_NAME)
+                ).build()
+
+            val request =
+                OneTimeWorkRequestBuilder<TrackingWorker>().setInputData(workerData).build()
+            WorkManager.getInstance(context).enqueue(request)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            CrashlyticsLogger.e(
+                LOG_TAG,
+                "while starting TrackingService",
+                e
+            )
+        }
+    }
+
+    private fun startSyncGeoFenceWorker(
+        context: Context
+    ) {
+    }
+
+    private fun startSyncUnSyncedDataWorker(
+        context: Context
+    ) {
+
+        val intent = Intent(context, SyncUnSyncedDataService::class.java).apply {
+            action = TrackingConstants.ACTION_START_OR_RESUME_SERVICE
+        }
+        context.startService(intent)
+    }
+
+    companion object {
+
+        const val LOG_TAG = "NotificationHelper"
+
+        fun isSilentPush(
+            data: Map<String, String?>?
+        ): Boolean {
+            val dataMap = data ?: return false
+            return dataMap.containsKey(NotificationConstants.GlobalKeys.IS_SILENT_PUSH) &&
+                    "true" == dataMap.get(NotificationConstants.GlobalKeys.IS_SILENT_PUSH)
+        }
     }
 
 }

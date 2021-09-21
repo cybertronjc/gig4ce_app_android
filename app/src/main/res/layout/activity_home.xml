@@ -31,13 +31,13 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:text="Create Profile"/>
+            android:text="@string/create_profile_app"/>
 
         <Button
             android:id="@+id/sliderAdaptorButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="GIgforceIntro"
+            android:text="@string/gigforceintro"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

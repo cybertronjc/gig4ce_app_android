@@ -11,8 +11,8 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
-import com.gigforce.app.modules.profile.models.Experience
-import com.gigforce.app.utils.DropdownAdapter
+import com.gigforce.core.datamodels.profile.Experience
+import com.gigforce.common_ui.adapter.DropdownAdapter
 import kotlinx.android.synthetic.main.delete_confirmation_dialog.*
 import kotlinx.android.synthetic.main.edit_experience.*
 import kotlinx.android.synthetic.main.edit_experience.cancel
@@ -105,7 +105,7 @@ class EditExperienceBottomSheet : ProfileBaseBottomSheetFragment() {
 
     private fun setListeners() {
         val employmentAdapter =
-            DropdownAdapter(this.requireContext(), employments)
+                DropdownAdapter(this.requireContext(), employments)
         val employmentSpinner = employment_type
         employmentSpinner.setAdapter(employmentAdapter)
 

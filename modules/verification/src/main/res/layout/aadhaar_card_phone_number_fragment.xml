@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout >
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".mainverification.aadhaarcard.AadhaarCardPhoneNumberFragment">
+
+    <com.gigforce.common_ui.components.cells.AppBar
+        android:id="@+id/appBar2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:backgroundType="PinkBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:titleText="Aadhaar Card" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appBar2">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.gigforce.verification.mainverification.component.VeriScreenInfoComponent
+                android:id="@+id/toplayoutblock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_xl1"
+                android:layout_marginStart="@dimen/size_16"
+                app:docinfotext="Please upload your Aadhaar Card (FRONT and BACK Side) for Document verification Process"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:missingdoctext="I don’t have an Aadhhar Card"
+                app:title="Aadhaar Card"
+                app:uppercaption="You need to upload" />
+
+            <TextView
+                android:id="@+id/textView11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Title"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginTop="@dimen/dp_xl2"
+                android:text="@string/verify_aadhar_with_phone_number_veri"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/toplayoutblock" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/aadhaar_number"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_sm1"
+                android:layout_marginTop="@dimen/dp_xl1"
+                android:layout_marginRight="@dimen/dp_sm1"
+                android:hint="@string/enter_aadhaar_number_veri"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView11">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/size_46"
+                    android:padding="4dp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/textView12"
+                style="@style/Caption1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginEnd="@dimen/size_16"
+                android:text="@string/enter_aadhar_and_verify_veri"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/aadhaar_number"
+                android:layout_marginTop="@dimen/dp_sm2"
+                />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

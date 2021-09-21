@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/setting_bg"
+    tools:context="com.gigforce.user_preferences.location.PermanentAddressViewFragment">
+
+    <View
+        android:id="@+id/textView100"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="23dp"
+        android:background="@color/white"
+        app:layout_constraintTop_toTopOf="parent"
+         />
+
+    <ImageView
+        android:id="@+id/back_arrow_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+          app:srcCompat="@drawable/ic_baseline_arrow_back_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/textView100"
+        app:layout_constraintBottom_toBottomOf="@id/textView100"/>
+
+    <TextView
+        android:id="@+id/textView46"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="19dp"
+        android:fontFamily="@font/lato_bold"
+        android:text="@string/permanent_address_pref"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:letterSpacing="0"
+        app:layout_constraintBottom_toBottomOf="@id/textView100"
+        app:layout_constraintStart_toEndOf="@+id/back_arrow_iv"
+        app:layout_constraintTop_toTopOf="@id/textView100" />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/preferredNoOfDays"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:paddingBottom="16dp"
+        android:background="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView100">
+
+        <ImageView
+            android:id="@+id/editCurrentLocation"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginTop="19dp"
+            android:layout_marginEnd="23dp"
+              app:srcCompat="@drawable/ic_pencil_edit"
+            app:layout_constraintEnd_toEndOf="@+id/preferredNoOfDays"
+            app:layout_constraintTop_toTopOf="@+id/preferredNoOfDays" />
+
+        <TextView
+            android:id="@+id/line1view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="54dp"
+            android:layout_marginTop="19dp"
+            android:text="@string/first_line__pref"
+            android:textSize="14sp"
+            android:textColor="#000000"
+            android:letterSpacing="0"
+            app:layout_constraintStart_toStartOf="@+id/preferredNoOfDays"
+            app:layout_constraintTop_toTopOf="@+id/preferredNoOfDays" />
+
+        <TextView
+            android:id="@+id/line2view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/second_line__pref"
+            android:textSize="14sp"
+            android:textColor="#000000"
+            android:letterSpacing="0"
+            app:layout_constraintStart_toStartOf="@+id/line1view"
+            app:layout_constraintTop_toBottomOf="@+id/line1view" />
+
+        <TextView
+            android:id="@+id/areaview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="54dp"
+            android:layout_marginTop="2dp"
+            android:backgroundTint="@color/setting_bg"
+            android:text="@string/area__pref"
+            android:textSize="14sp"
+            android:textColor="#000000"
+            android:letterSpacing="0"
+            app:layout_constraintStart_toStartOf="@+id/preferredNoOfDays"
+            app:layout_constraintTop_toBottomOf="@+id/line2view" />
+
+        <TextView
+            android:id="@+id/cityview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="54dp"
+            android:layout_marginTop="2dp"
+            android:backgroundTint="@color/setting_bg"
+            android:text="@string/city__pref"
+            android:textSize="14sp"
+            android:textColor="#000000"
+            android:letterSpacing="0"
+            app:layout_constraintStart_toStartOf="@+id/preferredNoOfDays"
+            app:layout_constraintTop_toBottomOf="@+id/areaview" />
+
+        <TextView
+            android:id="@+id/stateview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="54dp"
+            android:layout_marginTop="2dp"
+            android:backgroundTint="@color/setting_bg"
+            android:text="@string/state__pref"
+            android:textSize="14sp"
+            android:textColor="#000000"
+            android:letterSpacing="0"
+            app:layout_constraintStart_toStartOf="@+id/preferredNoOfDays"
+            app:layout_constraintTop_toBottomOf="@+id/cityview" />
+
+        <TextView
+            android:id="@+id/pincodeview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="54dp"
+            android:layout_marginTop="2dp"
+            android:backgroundTint="@color/setting_bg"
+            android:text="@string/pincode__pref"
+            android:textSize="14sp"
+            android:textColor="#000000"
+            android:letterSpacing="0"
+            app:layout_constraintStart_toStartOf="@+id/preferredNoOfDays"
+            app:layout_constraintTop_toBottomOf="@+id/stateview"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <TextView
+        android:id="@+id/textView106"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="54dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/lato"
+        android:text="@string/address_proof__pref"
+        android:textColor="@color/gray_color"
+        android:textSize="12sp"
+        android:letterSpacing="0"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@+id/preferredNoOfDays"
+        app:layout_constraintTop_toBottomOf="@+id/preferredNoOfDays" />
+
+
+
+    <View
+        android:id="@+id/textView110"
+        android:layout_width="match_parent"
+        android:layout_height="68dp"
+        android:layout_marginTop="13dp"
+        android:background="@color/white"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/textView106"
+        tools:layout_editor_absoluteX="-16dp" />
+
+
+    <TextView
+        android:id="@+id/textView111"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="15dp"
+        android:fontFamily="@font/lato"
+        android:text="@string/adhaar_card__pref"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        android:letterSpacing="0"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@+id/textView110"
+        app:layout_constraintTop_toTopOf="@+id/textView110" />
+
+    <TextView
+        android:id="@+id/textView112"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="9dp"
+        android:fontFamily="@font/lato"
+        android:text="@string/document_under_verification__pref"
+        android:textColor="@color/gray_color"
+        android:letterSpacing="0"
+        android:textSize="12sp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@+id/preferredNoOfDays"
+        app:layout_constraintTop_toBottomOf="@+id/textView111" />
+    
+    <ImageView
+        android:layout_width="22dp"
+        android:layout_height="19dp"
+        android:layout_marginEnd="23dp"
+          app:srcCompat="@drawable/ic_warning"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/textView110"
+        app:layout_constraintTop_toTopOf="@+id/textView110"
+        app:layout_constraintEnd_toEndOf="@+id/textView110"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

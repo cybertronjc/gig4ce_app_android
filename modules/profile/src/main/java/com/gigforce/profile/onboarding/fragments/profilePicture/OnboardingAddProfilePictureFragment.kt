@@ -5,11 +5,16 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
+import android.widget.FrameLayout
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
@@ -18,8 +23,8 @@ import androidx.fragment.app.viewModels
 import com.gigforce.common_image_picker.CameraAndGalleryIntegrator
 import com.gigforce.common_image_picker.ImageCropCallback
 import com.gigforce.common_image_picker.ImageCropOptions
+import com.gigforce.common_image_picker.image_cropper.ImageCropActivity
 import com.gigforce.common_ui.shimmer.ShimmerHelper
-import com.gigforce.core.FragmentHelper
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.ProfilePropArgs
 import com.gigforce.core.TrackingEventArgs
@@ -29,7 +34,6 @@ import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.Lce
-import com.gigforce.core.utils.Lse
 import com.gigforce.profile.R
 import com.gigforce.profile.analytics.OnboardingEvents
 import com.gigforce.profile.models.OnboardingProfileData
@@ -97,9 +101,9 @@ class OnboardingAddProfilePictureFragment() : Fragment(), ImageCropCallback, Onb
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ) = inflater.inflate(R.layout.fragment_onboarding_profile_picture, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -108,6 +112,24 @@ class OnboardingAddProfilePictureFragment() : Fragment(), ImageCropCallback, Onb
         initListeners()
         initViewModel()
         getProfilePictureForUser()
+
+    }
+
+    private fun setProfilePicHeight() {
+        val vto: ViewTreeObserver = imageView13.getViewTreeObserver()
+        vto.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+
+            override fun onGlobalLayout() {
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+                    imageView13.getViewTreeObserver().removeGlobalOnLayoutListener(this)
+                } else {
+                    imageView13.getViewTreeObserver().removeOnGlobalLayoutListener(this)
+                }
+                val width: Int = imageView13.getMeasuredWidth()
+                val height: Int = imageView13.getMeasuredHeight()
+                imageView13.layoutParams = LinearLayout.LayoutParams(width, width)
+            }
+        })
     }
 
     private fun getProfilePictureForUser() {
@@ -155,7 +177,7 @@ class OnboardingAddProfilePictureFragment() : Fragment(), ImageCropCallback, Onb
         MaterialAlertDialogBuilder(requireContext())
                 .setTitle(title)
                 .setMessage(message)
-                .setPositiveButton("Okay".capitalize()) { _, _ -> }
+                .setPositiveButton(getString(R.string.okay_profile).capitalize()) { _, _ -> }
                 .show()
     }
 
@@ -177,10 +199,11 @@ class OnboardingAddProfilePictureFragment() : Fragment(), ImageCropCallback, Onb
 
                             if (it.content.hasUserUploadedProfilePicture()) {
                                 displayImage(it.content.profileAvatarName)
-                               // formCompletionListener.changeTextButton("Upload Photo")
-                                skip_edit_textview.text = "Change"
+                                // formCompletionListener.changeTextButton("Upload Photo")
+                                skip_edit_textview.text = getString(R.string.change_profile)
                             } else {
-                                skip_edit_textview.text = "Skip"
+                                skip_edit_textview.text = getString(R.string.skip_profile)
+
                             }
 
                             formCompletionListener?.checkForButtonText()
@@ -216,12 +239,17 @@ class OnboardingAddProfilePictureFragment() : Fragment(), ImageCropCallback, Onb
 
                             Log.d("profile_picture", it.content)
 
-                            eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_UPLOADED_PROFILE_PHOTO,null))
-                            eventTracker.setProfileProperty(ProfilePropArgs("\$avatar",it.content))
+                            eventTracker.pushEvent(
+                                TrackingEventArgs(
+                                    OnboardingEvents.EVENT_USER_UPLOADED_PROFILE_PHOTO,
+                                    null
+                                )
+                            )
+                            eventTracker.setProfileProperty(ProfilePropArgs("\$avatar", it.content))
                             Toast.makeText(
-                                    requireContext(),
-                                    "Profile Pic uploaded",
-                                    Toast.LENGTH_SHORT
+                                requireContext(),
+                                getString(R.string.profile_uploaded_profile),
+                                Toast.LENGTH_SHORT
                             ).show()
                         }
                         is Lce.Error -> {
@@ -229,7 +257,7 @@ class OnboardingAddProfilePictureFragment() : Fragment(), ImageCropCallback, Onb
                             shimmerFrameLayout.gone()
                             imageView13.visible()
 
-                            showAlertDialog("could not submit info", it.error)
+                            showAlertDialog(getString(R.string.could_not_submit_info_profile_profile), it.error)
                         }
                     }
                 })
@@ -237,7 +265,7 @@ class OnboardingAddProfilePictureFragment() : Fragment(), ImageCropCallback, Onb
 
     private fun displayImage(profileImg: String) {
         if (profileImg != "avatar.jpg" && profileImg != "") {
-
+            setProfilePicHeight()
             val profilePicRef: StorageReference = firebaseStorage
                     .reference
                     .child("profile_pics")
@@ -247,6 +275,8 @@ class OnboardingAddProfilePictureFragment() : Fragment(), ImageCropCallback, Onb
                     .load(profilePicRef)
                     .placeholder(ShimmerHelper.getShimmerDrawable())
                     .into(imageView13)
+            formCompletionListener?.checkForButtonText()
+
         } else {
             GlideApp.with(this.requireContext())
                     .load(R.drawable.ic_profile_avatar_pink)
@@ -257,32 +287,32 @@ class OnboardingAddProfilePictureFragment() : Fragment(), ImageCropCallback, Onb
 
     private fun hasStoragePermissions(): Boolean {
         return ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            requireContext(),
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
         ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.READ_EXTERNAL_STORAGE
+            requireContext(),
+            Manifest.permission.READ_EXTERNAL_STORAGE
         ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.CAMERA
+            requireContext(),
+            Manifest.permission.CAMERA
         ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun requestStoragePermission() {
 
         requestPermissions(
-                arrayOf(
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.CAMERA
-                ),
-                REQUEST_STORAGE_PERMISSION
+            arrayOf(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.CAMERA
+            ),
+            REQUEST_STORAGE_PERMISSION
         )
     }
 
     override fun onRequestPermissionsResult(
-            requestCode: Int,
-            permissions: Array<String>, grantResults: IntArray
+        requestCode: Int,
+        permissions: Array<String>, grantResults: IntArray
     ) {
         when (requestCode) {
             REQUEST_STORAGE_PERMISSION -> {
@@ -298,14 +328,32 @@ class OnboardingAddProfilePictureFragment() : Fragment(), ImageCropCallback, Onb
                 if (allPermsGranted)
                     cameraAndGalleryIntegrator.showCameraAndGalleryBottomSheet()
                 else {
-                    Toast.makeText(
-                            requireContext(),
-                            "Please Grant storage permission",
-                            Toast.LENGTH_SHORT
-                    ).show()
+
+                    val userOptedForDontAskAgainReadStoragePermission = !requireActivity().shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE)
+                    val userOptedForDontAskAgainWriteStoragePermission = !requireActivity().shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    val userOptedForDontAskAgainCameraStoragePermission = !requireActivity().shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)
+
+                    if(userOptedForDontAskAgainCameraStoragePermission ||
+                        userOptedForDontAskAgainWriteStoragePermission ||
+                        userOptedForDontAskAgainReadStoragePermission ){
+
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.camera_and_storage_permission_required))
+                            .setMessage(getString(R.string.please_grant_storage_camera_permission))
+                            .setPositiveButton(getString(R.string.okay_common_ui)){_,_ -> openSettingsPage() }
+                            .setNegativeButton(getString(R.string.cancel_common_ui)) { _, _ ->}
+                            .show()
+                    }
                 }
             }
         }
+    }
+
+    private fun openSettingsPage() {
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+        val uri = Uri.fromParts("package", requireContext().packageName, null)
+        intent.data = uri
+        startActivity(intent)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -314,16 +362,17 @@ class OnboardingAddProfilePictureFragment() : Fragment(), ImageCropCallback, Onb
         when (requestCode) {
             CameraAndGalleryIntegrator.REQUEST_CAPTURE_IMAGE,
             CameraAndGalleryIntegrator.REQUEST_PICK_IMAGE,
-            CameraAndGalleryIntegrator.REQUEST_CROP -> {
+            CameraAndGalleryIntegrator.REQUEST_CROP,
+            ImageCropActivity.CROP_RESULT_CODE -> {
 
                 if (resultCode == Activity.RESULT_OK) {
 
                     cameraAndGalleryIntegrator.parseResults(
-                            requestCode,
-                            resultCode,
-                            data,
-                            imageCropOptions,
-                            this@OnboardingAddProfilePictureFragment
+                        requestCode,
+                        resultCode,
+                        data,
+                        imageCropOptions,
+                        this@OnboardingAddProfilePictureFragment
                     )
                 }
             }
@@ -337,9 +386,9 @@ class OnboardingAddProfilePictureFragment() : Fragment(), ImageCropCallback, Onb
 
     override fun errorWhileCapturingOrPickingImage(e: Exception) {
         MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Alert")
-                .setMessage("Unable to click Photo, ${e.message}")
-                .setPositiveButton("Okay") { _, _ -> }
+                .setTitle(getString(R.string.alert_profile))
+                .setMessage(getString(R.string.unable_to_click_photo_profile) + e.message)
+                .setPositiveButton(getString(R.string.okay_profile)) { _, _ -> }
                 .show()
 
         CrashlyticsLogger.e("ProfilePicture", "WhileClickingProfilePicture", e)
@@ -360,7 +409,12 @@ class OnboardingAddProfilePictureFragment() : Fragment(), ImageCropCallback, Onb
 
     override fun nextButtonActionFound(): Boolean {
         var map = mapOf("OnboardingDone" to true)
-        eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_COMPLETED_ONBOARDING,map))
+        eventTracker.pushEvent(
+            TrackingEventArgs(
+                OnboardingEvents.EVENT_USER_COMPLETED_ONBOARDING,
+                map
+            )
+        )
         eventTracker.setUserProperty(map)
         return false
     }

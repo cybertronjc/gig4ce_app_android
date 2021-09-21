@@ -1,38 +1,42 @@
 package com.gigforce.app.modules.auth.ui.main
 
-import android.Manifest
 import android.app.Activity
 import android.app.Dialog
 import android.app.PendingIntent
 import android.content.Intent
 import android.content.IntentSender
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
+import android.text.Spannable
+import android.text.SpannableString
 import android.text.TextWatcher
+import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.*
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.inputmethod.InputMethodManager
-import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.TextView
-import androidx.core.widget.addTextChangedListener
-import androidx.core.widget.doAfterTextChanged
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
-import com.gigforce.app.analytics.AuthEvents
-import com.gigforce.app.core.base.BaseFragment
-import com.google.android.gms.auth.api.Auth
+import com.gigforce.common_ui.utils.DocViewerActivity
+import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.WebViewLocaleHelper
+import com.gigforce.common_ui.ext.showToast
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
+import com.gigforce.core.analytics.AuthEvents
+import com.gigforce.core.base.BaseActivity
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.navigation.INavigation
 import com.google.android.gms.auth.api.credentials.Credential
 import com.google.android.gms.auth.api.credentials.Credentials
 import com.google.android.gms.auth.api.credentials.HintRequest
-import com.google.android.gms.common.api.GoogleApiClient
-import com.gigforce.core.IEventTracker
-import com.gigforce.core.TrackingEventArgs
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.login_frament.*
 import kotlinx.android.synthetic.main.mobile_number_digit_layout.*
@@ -42,33 +46,26 @@ import javax.inject.Inject
 import kotlin.jvm.Throws
 
 @AndroidEntryPoint
-class Login : BaseFragment() {
+class Login : Fragment() {
     companion object {
         fun newInstance() = Login()
-        val PERMISSION_REQ_CODE = 100
-        val permissionsRequired = arrayOf(
-                Manifest.permission.READ_PHONE_STATE,
-                Manifest.permission.READ_PHONE_NUMBERS
-        )
-        var MOBILENO_INPUT_CHANGED = false
-
+        private const val TERMS_REQUEST_CODE = 90
     }
 
     @Inject
     lateinit var eventTracker: IEventTracker
+    @Inject lateinit var navigation : INavigation
     private val viewModel: LoginViewModel by viewModels()
     private val INDIAN_MOBILE_NUMBER =
-            Pattern.compile("^[+][9][1][6-9][0-9]{9}\$")
+        Pattern.compile("^[+][9][1][6-9][0-9]{9}\$")
 
     //        private val INDIAN_MOBILE_NUMBER =
 //        Pattern.compile("^[+][0-9]{12}\$")
     lateinit var match: Matcher
     private var mobile_number: String = ""
-    private var mobile_number_sb = StringBuilder()
     private var arrayEditTexts1 = ArrayList<EditText>()
     private var win: Window? = null
     private val RC_HINT = 9
-    var mCredentialsApiClient: GoogleApiClient? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,52 +73,40 @@ class Login : BaseFragment() {
         arguments?.let {
             mobile_number = it.getString("mobileno") ?: ""
         }
+
 //        showKeyboard()
     }
 
-    override fun isDeviceLanguageChangedDialogRequired(): Boolean {
-        return false
-    }
-
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         //this.setDarkStatusBarTheme(false);
 
-        return inflateView(com.gigforce.app.R.layout.login_frament, inflater, container)
+        return inflater.inflate(R.layout.login_frament, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        if (getIntroCompleted() == null || getIntroCompleted().equals("")) {
-//            navigateWithAllPopupStack(R.id.authFlowFragment)
-//        } else {
-
-        eventTracker.pushEvent(TrackingEventArgs(AuthEvents.SIGN_UP_LOADED, null))
+        eventTracker.pushEvent(TrackingEventArgs(AuthEvents.LOGIN_OR_SIGNUP_LOADED, null))
         viewModel.activity = this.requireActivity()
         invisible_edit_mobile.setText(mobile_number)
         populateMobileInEditTexts(mobile_number)
         Log.d("mobile_number", mobile_number)
         changeStatusBarColor()
-        getAllEarlierMobileNumbers()
+//        getAllEarlierMobileNumbers()
         prepareEditTextList()
         listeners()
         observer()
         requestHint()
-        //setClickListnerOnEditTexts()
-
         //back button
-            back_button_login.setOnClickListener {
-                hideKeyboard()
-                activity?.onBackPressed()
-            }
+        back_button_login.setOnClickListener {
+            hideKeyboard()
+            activity?.onBackPressed()
+        }
 //            showKeyboard()
-            //registerTextWatcher()
-//            if (mobile_number.equals(""))
-//                showComfortDialog()
-//        }
+
     }
 
 
@@ -154,25 +139,26 @@ class Login : BaseFragment() {
     @Throws(IntentSender.SendIntentException::class)
     private fun requestHint() {
         val hintRequest = HintRequest.Builder()
-                .setPhoneNumberIdentifierSupported(true)
-                .build()
-        val intent: PendingIntent? = context?.let { Credentials.getClient(it).getHintPickerIntent(hintRequest) }
-        startIntentSenderForResult(intent?.getIntentSender(), RC_HINT, null, 0, 0, 0, null)
+            .setPhoneNumberIdentifierSupported(true)
+            .build()
+        val intent: PendingIntent? =
+            context?.let { Credentials.getClient(it).getHintPickerIntent(hintRequest) }
+        startIntentSenderForResult(intent?.intentSender, RC_HINT, null, 0, 0, 0, null)
     }
 
 
     private fun prepareEditTextList() {
         arrayEditTexts1 = arrayListOf(
-                mobile_digit_1,
-                mobile_digit_2,
-                mobile_digit_3,
-                mobile_digit_4,
-                mobile_digit_5,
-                mobile_digit_6,
-                mobile_digit_7,
-                mobile_digit_8,
-                mobile_digit_9,
-                mobile_digit_10
+            mobile_digit_1,
+            mobile_digit_2,
+            mobile_digit_3,
+            mobile_digit_4,
+            mobile_digit_5,
+            mobile_digit_6,
+            mobile_digit_7,
+            mobile_digit_8,
+            mobile_digit_9,
+            mobile_digit_10
         )
     }
 
@@ -194,10 +180,10 @@ class Login : BaseFragment() {
             it.isFocusableInTouchMode = true
             it.requestFocus()
             val inputMethodManager =
-                    activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager?
+                activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager?
             inputMethodManager!!.toggleSoftInputFromWindow(
-                    it.applicationWindowToken,
-                    InputMethodManager.SHOW_FORCED, 0
+                it.applicationWindowToken,
+                InputMethodManager.SHOW_FORCED, 0
             )
         }
 
@@ -214,11 +200,8 @@ class Login : BaseFragment() {
         }
         val cancel = dialog.findViewById<TextView>(R.id.cancel)
         cancel.setOnClickListener {
-            removeIntroComplete()
-            popFragmentFromStack(R.id.Login)
-            navigate(
-                    R.id.authFlowFragment
-            )
+            navigation.popBackStack("login")
+            navigation.navigateTo("authFlowFragment")
             dialog.dismiss()
         }
         dialog.show()
@@ -228,13 +211,19 @@ class Login : BaseFragment() {
         viewModel.liveState.observeForever {
             when (it.stateResponse) {
                 LoginViewModel.STATE_CODE_SENT -> {
+                    login_button?.isEnabled = true
+                    progressBar?.gone()
                     navigateToOTPVarificationScreen()
 //                    eventTracker.pushEvent(TrackingEventArgs("Navigate to OTP verification screen", null))
                 }
                 LoginViewModel.STATE_VERIFY_FAILED -> {
+                    login_button?.isEnabled = true
+                    progressBar?.gone()
                     showToast(it.msg)
                 }
                 LoginViewModel.STATE_VERIFY_SUCCESS -> {
+                    login_button?.isEnabled = true
+                    progressBar?.gone()
                     navigateToOTPVarificationScreen()
 //                    eventTracker.pushEvent(TrackingEventArgs("Navigate to OTP verification screen", null))
                 }
@@ -244,13 +233,13 @@ class Login : BaseFragment() {
 
     fun navigateToOTPVarificationScreen() {
         // fixed by PD - during a hotfix for apk release - doubleclick issue resolved
-        if (getNavigationController().currentDestination?.id == R.id.Login) {
+        if (navigation.getNavController().currentDestination?.id == R.id.Login) {
             try {
                 findNavController().navigate(
-                        LoginDirections.actionLogin2ToVerifyOTP(
-                                viewModel.verificationId!!,
-                                invisible_edit_mobile.text.toString()
-                        )
+                    LoginDirections.actionLogin2ToVerifyOTP(
+                        viewModel.verificationId!!,
+                        invisible_edit_mobile.text.toString()
+                    )
                 )
             } catch (e: Exception) {
             }
@@ -271,11 +260,15 @@ class Login : BaseFragment() {
 
             override fun onTextChanged(text: CharSequence?, start: Int, before: Int, count: Int) {
                 // going forward
-                if (before == 0 && count == 1){
-                    fillMobileDigitBoxes(text.toString().length, text.toString()[start].toString(), true)
+                if (before == 0 && count == 1) {
+                    fillMobileDigitBoxes(
+                        text.toString().length,
+                        text.toString()[start].toString(),
+                        true
+                    )
                 }
                 // going backward
-                else if (before == 1 && count == 0){
+                else if (before == 1 && count == 0) {
                     fillMobileDigitBoxes(text.toString().length, "", false)
                 }
             }
@@ -288,7 +281,8 @@ class Login : BaseFragment() {
                     login_button.background = resources.getDrawable(R.drawable.gradient_button)
                 } else {
                     login_button.isEnabled = false
-                    login_button.background = resources.getDrawable(R.drawable.app_gradient_button_disabled)
+                    login_button.background =
+                        resources.getDrawable(R.drawable.app_gradient_button_disabled)
                 }
             }
 
@@ -299,7 +293,8 @@ class Login : BaseFragment() {
             cvloginwrong.visibility = GONE
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
                 login_button.isEnabled = false
-                login_button.background = resources.getDrawable(R.drawable.app_gradient_button_disabled)
+                login_button.background =
+                    resources.getDrawable(R.drawable.app_gradient_button_disabled)
                 doActionOnClick()
             }
             false
@@ -308,14 +303,20 @@ class Login : BaseFragment() {
         login_button.setOnClickListener {
             login_button.isEnabled = false
             progressBar.visibility = View.VISIBLE
-            Handler().postDelayed(Runnable {
-                // This method will be executed once the timer is over
-                if (login_button != null) {
-                    login_button.isEnabled = true
-                    progressBar.visibility = View.GONE
-                }
-            }, 3000)
+//            Handler().postDelayed(Runnable {
+//                // This method will be executed once the timer is over
+//                if (login_button != null) {
+//                    login_button.isEnabled = true
+//                    progressBar.visibility = View.GONE
+//                }
+//            }, 3000)
             doActionOnClick()
+        }
+
+        termsTextView.setOnClickListener {
+             val webViewLocaleHelper = WebViewLocaleHelper(requireActivity() as BaseActivity)
+            webViewLocaleHelper.implementWorkaround()
+            navigation.navigateToDocViewerActivity(requireActivity(),"https://gigforce.in/terms-of-use" , "TERMS")
         }
 
     }
@@ -345,15 +346,18 @@ class Login : BaseFragment() {
     }
 
     private fun doActionOnClick() {
-        var phoneNumber: String = "+91" + invisible_edit_mobile.text.toString();
+        var phoneNumber: String = "+91" + invisible_edit_mobile.text.toString()
         if (!validatePhoneNumber(phoneNumber)) {
             // TODO make the error bar visible
             cvloginwrong.visibility = VISIBLE
-//            textView23.visibility = INVISIBLE
             login_button.isEnabled = true
             login_button.background = resources.getDrawable(R.drawable.gradient_button)
-        } else {
+        } else if (!termsCheckbox.isChecked){
+            showToast(getString(R.string.accept_terms))
+        }
+        else {
             viewModel.sendVerificationCode(phoneNumber)
+//            navigateToOTPVarificationScreen()
         }
     }
 
@@ -368,93 +372,53 @@ class Login : BaseFragment() {
         return true
     }
 
-    private fun getAllEarlierMobileNumbers() {
-        var deviceMobileNos = ArrayList<String>()
-        var oldMobileNumbers = getAllMobileNumber()
-        if (!oldMobileNumbers.equals("")) {
-            var oldDeviceMobileNosList = oldMobileNumbers?.split(",")
-            for (i in 0..(oldDeviceMobileNosList?.size!!) - 1) {
-                deviceMobileNos.add(oldDeviceMobileNosList.get(i))
-            }
-            val adapter: ArrayAdapter<String> = ArrayAdapter<String>(
-                    requireActivity(),
-                    android.R.layout.select_dialog_item,
-                    deviceMobileNos
-            )
-//            makeMobileNumberString().threshold = 1
-//            invisible_edit_mobile.setAdapter(
-//                    adapter
+//    private fun getAllEarlierMobileNumbers() {
+//        var deviceMobileNos = ArrayList<String>()
+//        var oldMobileNumbers = getAllMobileNumber()
+//        if (!oldMobileNumbers.equals("")) {
+//            var oldDeviceMobileNosList = oldMobileNumbers?.split(",")
+//            for (i in 0 until (oldDeviceMobileNosList?.size!!)) {
+//                deviceMobileNos.add(oldDeviceMobileNosList.get(i))
+//            }
+//            val adapter: ArrayAdapter<String> = ArrayAdapter<String>(
+//                requireActivity(),
+//                android.R.layout.select_dialog_item,
+//                deviceMobileNos
 //            )
-        }
-    }
+////            makeMobileNumberString().threshold = 1
+////            invisible_edit_mobile.setAdapter(
+////                    adapter
+////            )
+//        }
+//    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == RC_HINT && resultCode == Activity.RESULT_OK) {
 
-            /*You will receive user selected phone number here if selected and send it to the server for request the otp*/
-            var credential: Credential = data!!.getParcelableExtra(Credential.EXTRA_KEY)
-            if (credential.id != null){
-                invisible_edit_mobile.setText(credential.id.substring(3))
-                populateMobileInEditTexts(credential.id.substring(3))
-                Log.d("phone detected", credential.id.substring(3))
-            }
-            else {
-                Log.d("phone detected", "Couldn't detect Phone number")
-            }
+            try {/*You will receive user selected phone number here if selected and send it to the server for request the otp*/
+                var credential: Credential = data!!.getParcelableExtra(Credential.EXTRA_KEY)
+                if (credential.id != null) {
 
+                    invisible_edit_mobile.setText(credential.id.substring(3))
+                    populateMobileInEditTexts(credential.id.substring(3))
+                    Log.d("phone detected", credential.id.substring(3))
+                } else {
+                    Log.d("phone detected", "Couldn't detect Phone number")
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+        else if (requestCode == TERMS_REQUEST_CODE && resultCode == Activity.RESULT_OK){
 
+            try {
+                if (!termsCheckbox.isChecked){
+                    termsCheckbox.isChecked = true
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
-
-
-//private fun checkForAllPermissions() {
-//    requestPermissions(Login.permissionsRequired, Login.PERMISSION_REQ_CODE)
-//}
-//override fun onRequestPermissionsResult(
-//        requestCode: Int,
-//        permissions: Array<out String>,
-//        grantResults: IntArray
-//) {
-//    super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-//    if (requestCode == Login.PERMISSION_REQ_CODE && isAllPermissionGranted(grantResults)) {
-//        requestForDeviceMobileNumber()
-//        showToast("Permissions Granted")
-//    } else {
-//        checkForAllPermissions()
-//    }
-//}
-//fun isAllPermissionGranted(grantResults: IntArray):Boolean{
-//    for(result in grantResults){
-//        if(result != PackageManager.PERMISSION_GRANTED){
-//            return false
-//        }
-//    }
-//    return true
-//}
-
-//private fun requestForDeviceMobileNumber() {
-//    if (ActivityCompat.checkSelfPermission(activity!!, Manifest.permission.READ_PHONE_NUMBERS) ==
-//            PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(activity!!,
-//                    Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
-//        var mSubscriptionManager: SubscriptionManager = SubscriptionManager.from(context);
-//        val subInfoList: List<SubscriptionInfo> = mSubscriptionManager.activeSubscriptionInfoList
-//        var deviceMobileNos  = ArrayList<String>()
-//
-//        for (subscriptionInfo in subInfoList) {
-//            if(subscriptionInfo.number!=null) {
-//                var numbStr = subscriptionInfo.number
-//                if(subscriptionInfo.number.contains("+91"))
-//                    numbStr = subscriptionInfo.number.substringAfter("+91")
-//                deviceMobileNos.add(numbStr)
-//            }
-//        }
-//        invisible_edit_mobile.threshold = 0
-//        invisible_edit_mobile.setAdapter(ArrayAdapter(activity!!, com.gigforce.app.R.layout.support_simple_spinner_dropdown_item, deviceMobileNos))
-//
-//    }
-//    else{
-//        checkForAllPermissions()
-//    }
-//}
 }

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="298dp"
+        android:layout_height="455dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/verification_done" />
+
+        <TextView
+            android:id="@+id/tvVeriDone"
+            android:layout_width="260dp"
+            android:layout_height="61dp"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="276dp"
+            android:foregroundTint="@color/colorAccent"
+            android:text="@string/done_veri_veri"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/buttonVeriDone"
+            android:layout_width="137dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="81dp"
+            android:layout_marginTop="375dp"
+            android:backgroundTint="@android:color/white"
+            android:minHeight="@dimen/size_36"
+            android:text="@string/okay_text_cap_veri"
+            android:textAlignment="center"
+            android:textColor="@color/colorAccent"
+            android:textSize="24sp" />
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

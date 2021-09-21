@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.profile
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -48,7 +49,11 @@ class EditTagBottomSheet: ProfileBaseBottomSheetFragment() {
 
         profileViewModel.userProfileData.observe(viewLifecycleOwner, androidx.lifecycle.Observer { profile ->
             userTags = profile?.tags!!
-
+            if (profile.tags!!.size > 0){
+                makeSaveEnabled(true)
+            }else{
+                makeSaveEnabled(false)
+            }
             for (tag in profile.tags!!) {
                 var chip = addCrossableChip(this.requireContext(), tag)
                 tags.addView(chip)
@@ -62,11 +67,18 @@ class EditTagBottomSheet: ProfileBaseBottomSheetFragment() {
 
     }
 
+    private fun makeSaveEnabled(enable: Boolean){
+        save.isEnabled = enable
+        save.setTextColor(if (enable)resources.getColor(R.color.colorPrimary) else resources.getColor(R.color.warm_grey))
+        save.strokeColor = ColorStateList.valueOf(if (enable) resources.getColor(R.color.colorPrimary) else resources.getColor(R.color.warm_grey))
+    }
+
     private fun setListeners() {
         cancel.setOnClickListener {
             this.dismiss()
         }
 
+        makeSaveEnabled(false)
         save.setOnClickListener {
             profileViewModel.setProfileTag(tagsToAdd)
             profileViewModel.removeProfileTag(tagsToRemove)
@@ -77,6 +89,7 @@ class EditTagBottomSheet: ProfileBaseBottomSheetFragment() {
             if (ValidateTag()) {
                 if (!allTags.contains(tag)) {
                     profileViewModel.addNewTag(tag)
+                    makeSaveEnabled(true)
                 }
                 if (!userTags.contains(tag) && !tagsToAdd.contains(tag)) {
                     tagsToAdd.add(tag)

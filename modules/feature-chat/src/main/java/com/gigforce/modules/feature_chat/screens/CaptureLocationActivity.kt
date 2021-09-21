@@ -8,23 +8,20 @@ import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
+import com.gigforce.core.base.BaseActivity
 import com.gigforce.core.date.DateHelper
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.image.ImageUtils
 import com.gigforce.core.location.LocationUpdates
 import com.gigforce.modules.feature_chat.R
-import com.gigforce.modules.feature_chat.screens.vm.CaptureLocationViewModel
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -36,10 +33,9 @@ import kotlinx.android.synthetic.main.activity_capture_location.*
 import java.io.File
 
 
-class CaptureLocationActivity : AppCompatActivity(), OnMapReadyCallback,
+class CaptureLocationActivity : BaseActivity(), OnMapReadyCallback,
         LocationUpdates.LocationUpdateCallbacks {
 
-    private lateinit var viewModel: CaptureLocationViewModel
 
     //View
     private lateinit var supportMapFragment: SupportMapFragment
@@ -114,7 +110,7 @@ class CaptureLocationActivity : AppCompatActivity(), OnMapReadyCallback,
             if (allPermsGranted) {
                //Okay
             } else
-                Toast.makeText(this, "Please Grant Location Permission", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.please_grant_location_permission_chat), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -151,7 +147,6 @@ class CaptureLocationActivity : AppCompatActivity(), OnMapReadyCallback,
     }
 
     private fun initViewModel() {
-        viewModel = ViewModelProvider(this).get(CaptureLocationViewModel::class.java)
     }
 
 
@@ -181,7 +176,7 @@ class CaptureLocationActivity : AppCompatActivity(), OnMapReadyCallback,
         googleMap?.clear()
 
         // create marker
-        marker.position(LatLng(latitude, longitude)).title("Current locaton")
+        marker.position(LatLng(latitude, longitude)).title("Current location")
 
         // adding marker
         googleMap?.addMarker(marker)

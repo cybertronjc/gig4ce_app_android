@@ -75,7 +75,21 @@ open class CoreRecyclerView(
         }
     }
 
+    fun smoothAndSafeScrollToPosition(position : Int) {
+        if (adapter == null)
+            return
+
+        if (adapter!!.itemCount != 0 && adapter!!.itemCount >= position) {
+            smoothScrollToPosition(position)
+        }
+    }
+
     fun resetFilter() {
         this.coreAdapter.resetFilter()
     }
+
+    var itemClickListener: ItemClickListener? = null
+        set(value) {
+            this.coreAdapter.itemClickListener = value
+        }
 }

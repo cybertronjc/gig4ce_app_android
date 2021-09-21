@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/learningImportanceLayout"
+    android:layout_width="match_parent"
+    android:layout_height="106dp"
+    android:background="@color/light_pink">
+
+    <ImageView
+        android:id="@+id/learning_progress_image"
+        android:layout_width="120dp"
+        android:layout_height="match_parent"
+          app:srcCompat="@drawable/bg_user_learning"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/learning_progress_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/lato_bold"
+        android:letterSpacing="0"
+        android:textSize="16sp"
+        android:text="@string/keep_it_up__learning"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toEndOf="@id/learning_progress_image"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/learning_progress_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="9dp"
+        android:fontFamily="@font/lato"
+        android:letterSpacing="0"
+        android:text="@string/you_ve_have_completed_80_of_your_nlearnings_learning"
+        android:textColor="@color/black_85"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@id/learning_progress_image"
+        app:layout_constraintTop_toBottomOf="@id/learning_progress_title" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

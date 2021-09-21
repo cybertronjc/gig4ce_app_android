@@ -19,8 +19,6 @@ class OnboardingCityAdapter(
 ) : RecyclerView.Adapter<OnboardingCityAdapter.OnboardingCityViewHolder>(),
         Filterable {
 
-    private var isUserGroupManager: Boolean = false
-
     private var originalCityList: List<City> = emptyList()
     private var filteredCityList: List<City> = emptyList()
 
@@ -61,7 +59,9 @@ class OnboardingCityAdapter(
     }
 
     override fun onBindViewHolder(holder: OnboardingCityViewHolder, position: Int) {
-        if(position != RecyclerView.NO_POSITION) {
+        if(position != RecyclerView.NO_POSITION
+                &&  position < filteredCityList.size
+        ) {
             holder.bindValues(filteredCityList.get(position), position)
         }
     }
@@ -81,11 +81,11 @@ class OnboardingCityAdapter(
         override fun performFiltering(constraint: CharSequence?): FilterResults {
             val charString = constraint.toString()
 
+            val filteredList: MutableList<City> = mutableListOf()
             if (charString.isEmpty()) {
-                filteredCityList = originalCityList
-                Log.d("FilteredL","${filteredCityList.size}")
+                filteredList.addAll(originalCityList)
             } else {
-                val filteredList: MutableList<City> = mutableListOf()
+
                 for (contact in originalCityList) {
                     if (contact.name.contains(
                                     charString,
@@ -94,16 +94,16 @@ class OnboardingCityAdapter(
                     )
                     filteredList.add(contact)
                 }
-                filteredCityList = filteredList
                 Log.d("FilteredL","${filteredList.size}")
             }
 
             val filterResults = FilterResults()
-            filterResults.values = filteredCityList
+            filterResults.values = filteredList
             return filterResults
         }
 
         override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+            filteredCityList = results!!.values as List<City>
             notifyDataSetChanged()
         }
     }

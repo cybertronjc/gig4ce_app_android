@@ -67,7 +67,7 @@ public class ImagePicker {
 
             if (intentList.size() > 0) {
                 chooserIntent = Intent.createChooser(intentList.remove(intentList.size() - 1),
-                        context.getString(R.string.pick_image_intent_text));
+                        context.getString(R.string.pick_image_intent_text_common));
                 chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentList.toArray(new Parcelable[]{}));
             }
         }
@@ -103,7 +103,7 @@ public class ImagePicker {
 
             if (intentList.size() > 0) {
                 chooserIntent = Intent.createChooser(intentList.remove(intentList.size() - 1),
-                        context.getString(R.string.pick_image_intent_text));
+                        context.getString(R.string.pick_image_intent_text_common));
                 chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentList.toArray(new Parcelable[]{}));
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -130,8 +130,14 @@ public class ImagePicker {
     public static Intent getPickImageIntentsOnly(Context context) {
         Intent chooserIntent = null;
         List<Intent> intentList = new ArrayList<>();
-        Intent pickIntent = new Intent(Intent.ACTION_PICK,
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        Intent pickIntent = null;
+        try {
+            pickIntent = new Intent(Intent.ACTION_PICK,
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
         Uri tempUri = FileProvider.getUriForFile(
                 context.getApplicationContext(),
                 context.getApplicationContext().getPackageName() + ".provider",
@@ -142,7 +148,7 @@ public class ImagePicker {
 
             if (intentList.size() > 0) {
                 chooserIntent = Intent.createChooser(intentList.remove(intentList.size() - 1),
-                        context.getString(R.string.pick_image_intent_text));
+                        context.getString(R.string.pick_image_intent_text_common));
                 chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentList.toArray(new Parcelable[]{}));
             }
 
@@ -167,7 +173,7 @@ public class ImagePicker {
 
             if (intentList.size() > 0) {
                 chooserIntent = Intent.createChooser(intentList.remove(intentList.size() - 1),
-                        context.getString(R.string.pick_image_intent_text));
+                        context.getString(R.string.pick_image_intent_text_common));
                 chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentList.toArray(new Parcelable[]{}));
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -273,7 +279,7 @@ public class ImagePicker {
     @Nullable
     public static File getTempFile(Context context) {
 //        File imageFile = new File(Environment.getExternalStorageDirectory() + File.separator + context.getPackageName(), TEMP_IMAGE_NAME);
-        File folder = context.getExternalFilesDir("photos");
+        File folder = context.getFilesDir();
         if (folder != null && !folder.exists()) {
             folder.mkdir();
         }
@@ -298,7 +304,7 @@ public class ImagePicker {
         try {
             fileDescriptor = context.getContentResolver().openAssetFileDescriptor(theUri, "r");
         } catch (FileNotFoundException e) {
-            Log.e(TAG, e.getMessage());
+            if(e != null) e.printStackTrace();
         }
 
         Bitmap actuallyUsableBitmap = null;

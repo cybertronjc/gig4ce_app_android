@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black_85">#d9000000</color>
+    <color name="upcoming_gig_title">#25265e</color>
+    <color name="upcoming_gig_time">#787993</color>
+    <color name="darkish_pink_two">#e94b81</color>
+    <color name="warm_grey_20">#33888888</color>
+    <color name="grey_c7">#c7c7c7</color>
+    <color name="colorText">#313131</color>
+    <color name="lipstick">#d72467</color>
+    <color name="shadow_color">#c8c7cc</color>
+    <color name="black">#000000</color>
+    <color name="light_grey">#dddddd</color>
+    <color name="lipstick_two">#e42c64</color>
+
+    <color name="gig_timer_silver_light">#e2dfdf</color>
+    <color name="gig_timer_silver_dark">#888888</color>
+    <color name="gig_timer_declined_red">#e02020</color>
+    <color name="gig_timer_ongoing_green">#468800</color>
+    <color name="gig_timer_completed_grey">#e8e8e8</color>
+    <color name="gig_timer_no_show_red">#ff8b8b</color>
+    <color name="gig_timer_upcoming_pink">#f7d16a</color>
+
+    <color name="vertical_calendar_today">#a30674</color>
+    <color name="black_2222">#222222</color>
+    <color name="black_color_future_date">#333333</color>
+    <color name="warm_grey_two">#979797</color>
+    <color name="black_three">#333333</color>
+    <color name="lightGrey">#c7c7cc</color>
+    <color name="colorLigthSeparater">#e4e4e4</color>
+    <color name="gray_chat_module">#979797</color>
+
+</resources>

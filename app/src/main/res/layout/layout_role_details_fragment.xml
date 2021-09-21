@@ -81,7 +81,7 @@
                     android:layout_marginStart="@dimen/size_10"
                     android:layout_marginEnd="@dimen/size_11"
                     android:gravity="center"
-                    android:text="Earn upto 2000 /Day by working as Retail Executive"
+                    android:text="@string/earn_upto_2000_day_by_working_as_retail_executive"
                     android:textColor="#000000"
                     android:textSize="@dimen/font_16" />
 
@@ -93,7 +93,7 @@
                     android:layout_marginTop="@dimen/size_14"
                     android:layout_marginEnd="@dimen/size_11"
                     android:gravity="center"
-                    android:text="Monthly earn up to Rs. 31000"
+                    android:text="@string/monthly_earn_up_to_rs_31000"
                     android:textColor="#1d1c1c"
                     android:textSize="@dimen/font_16" />
             </TableLayout>
@@ -114,14 +114,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ll_earn_role_details" />
 
-            <com.gigforce.app.utils.ReadMoreTextView
+            <com.gigforce.common_ui.utils.ReadMoreTextView
                 android:id="@+id/tv_what_content_role_details"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/size_19"
                 android:layout_marginTop="@dimen/size_6"
                 android:layout_marginEnd="@dimen/size_13"
-                android:text="As the public face of the company the Sales Associate is responsible for dealing with any and all customer questions about the products and services the company offers. A Sales Associate is expected to be"
+                android:text="@string/sales_associate_responsibilitu"
                 android:textColor="#000000"
                 android:textSize="@dimen/font_14"
                 app:layout_constraintEnd_toEndOf="parent"

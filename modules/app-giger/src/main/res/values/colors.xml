@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="vertical_calendar_today">#a30674</color>
+    <color name="vertical_calendar_today1">#d72467</color>
+    <color name="vertical_calendar_today_50">#50d72467</color>
+    <color name="vertical_calendar_today_70">#70d72467</color>
+
+    <color name="vertical_calendar_today_20">#20d72467</color>
+    <color name="vertical_calendar_today_40">#40d72467</color>
+    <color name="gray_color_day_date_calendar">#50000000</color>
+    <color name="app_gray_color_38">#38979797</color>
+    <color name="app_gray_color1_34">#34d8d8d8</color>
+
+    <color name="gray_color_calendar">#979797</color>
+    <color name="gray_chat_module">#979797</color>
+    <color name="gray_chat_module1">#646464</color>
+    <color name="gray_color_calendar_previous_date_50">#50e9e9e9</color>
+    <color name="different_month_calendar_color">#979797</color>
+
+    <color name="gray_color">#6d7278</color>
+    <color name="upcoming_gig_title">#25265e</color>
+    <color name="upcoming_gig_time">#787993</color>
+
+    <color name="onboarding_rv_item_color_40">#40131415</color>
+    <color name="shadow_color">#c8c7cc</color>
+
+</resources>

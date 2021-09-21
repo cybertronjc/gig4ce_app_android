@@ -3,6 +3,7 @@ package com.gigforce.modules.feature_chat.screens
 import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
+import android.text.InputFilter
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -22,16 +23,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.ViewFullScreenImageDialogFragment
 import com.gigforce.common_ui.ViewFullScreenVideoDialogFragment
+import com.gigforce.common_ui.chat.ChatConstants
+import com.gigforce.common_ui.chat.models.ChatGroup
+import com.gigforce.common_ui.chat.models.ContactModel
+import com.gigforce.common_ui.chat.models.GroupMedia
+import com.gigforce.common_ui.ext.showToast
+import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.onTextChanged
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.Lse
 import com.gigforce.modules.feature_chat.*
-import com.gigforce.modules.feature_chat.core.ChatConstants
-import com.gigforce.modules.feature_chat.models.ChatGroup
-import com.gigforce.modules.feature_chat.models.ContactModel
-import com.gigforce.modules.feature_chat.models.GroupMedia
 import com.gigforce.modules.feature_chat.screens.adapters.GroupMediaRecyclerAdapter
 import com.gigforce.modules.feature_chat.screens.adapters.GroupMembersRecyclerAdapter
 import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel
@@ -91,7 +94,6 @@ class GroupDetailsFragment : Fragment(),
     private val appDirectoryFileRef: File by lazy {
         Environment.getExternalStoragePublicDirectory(ChatConstants.DIRECTORY_APP_DATA_ROOT)!!
     }
-
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -202,12 +204,17 @@ class GroupDetailsFragment : Fragment(),
 
                             MaterialAlertDialogBuilder(requireContext())
                                     .setMessage(it.error)
-                                    .setTitle("Unable to activate/deactivate group")
-                                    .setPositiveButton("Okay") { _, _ -> }
+                                    .setTitle(getString(R.string.unable_to_activate_group_chat))
+                                    .setPositiveButton(getString(R.string.okay_chat)) { _, _ -> }
                                     .show()
                         }
                     }
                 })
+
+        if (groupId.isEmpty()) {
+            CrashlyticsLogger.e(TAG, "getting args from arguments", Exception("$groupId <-- String passed as groupId"))
+            throw IllegalArgumentException("$groupId <-- String passed as groupId")
+        }
 
         viewModel.setGroupId(groupId)
         viewModel.startWatchingGroupDetails()
@@ -216,10 +223,19 @@ class GroupDetailsFragment : Fragment(),
     private fun showGroupDetails(content: ChatGroup) {
         group_name_tv.text = content.name
         group_creation_date_tv.text =
-                "Created On : ${dateFormatter.format(content.creationDetails!!.createdOn.toDate())}"
+            getString(R.string.created_on_chat) + dateFormatter.format(content.creationDetails!!.createdOn.toDate())
 
         media_count_tv.text = content.groupMedia.size.toString()
         gigers_count_tv.text = content.groupMembers.size.toString()
+
+        group_details_divider_0.isVisible = viewModel.isUserGroupAdmin()
+        group_write_controls_layout.isVisible = viewModel.isUserGroupAdmin()
+
+        if (content.onlyAdminCanPostInGroup && only_admins_can_post_switch.isChecked.not()) {
+            only_admins_can_post_switch.isChecked = true
+        } else if (content.onlyAdminCanPostInGroup.not() && only_admins_can_post_switch.isChecked) {
+            only_admins_can_post_switch.isChecked = false
+        }
 
         if (content.groupMedia.isEmpty()) {
             media_recyclerview.gone()
@@ -266,10 +282,10 @@ class GroupDetailsFragment : Fragment(),
             if (content.groupDeactivated) {
                 add_giger_layout.isVisible = false
                 deactivate_group_btn.isVisible = true
-                deactivate_group_btn.text = "Activate Group"
+                deactivate_group_btn.text = getString(R.string.activate_group_chat)
                 group_deactivated_container.visible()
             } else {
-                deactivate_group_btn.text = "Deactivate Group"
+                deactivate_group_btn.text = getString(R.string.deactivate_group_chat)
                 add_giger_layout.isVisible = true
                 deactivate_group_btn.isVisible = true
                 group_deactivated_container.gone()
@@ -288,15 +304,13 @@ class GroupDetailsFragment : Fragment(),
 
     override fun onResume() {
         super.onResume()
-        StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(
+        StatusBarUtil.setColorNoTranslucent(
+                requireActivity(), ResourcesCompat.getColor(
                 resources,
                 android.R.color.white,
                 null
-        ))
-    }
-
-    private fun showDownloadingDialog() {
-//        UtilMethods.showLoading(requireContext())
+        )
+        )
     }
 
     private fun openDocument(file: File) {
@@ -305,7 +319,7 @@ class GroupDetailsFragment : Fragment(),
             setDataAndType(
                     FileProvider.getUriForFile(
                             requireContext(),
-                            "com.gigforce.app.provider",
+                            "${requireContext().packageName}.provider",
                             file
                     ), "application/pdf"
             )
@@ -314,7 +328,7 @@ class GroupDetailsFragment : Fragment(),
             try {
                 requireContext().startActivity(this)
             } catch (e: Exception) {
-                Toast.makeText(context, "Unable to open", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, getString(R.string.unable_to_open_chat), Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -354,38 +368,53 @@ class GroupDetailsFragment : Fragment(),
         edit_group_name_iv.setOnClickListener {
 
             val groupNameEt = EditText(requireContext())
+            groupNameEt.filters = arrayOf<InputFilter>(InputFilter.LengthFilter(25))
 
             val layout = FrameLayout(requireContext())
             layout.setPaddingRelative(45, 15, 45, 0)
             layout.addView(groupNameEt)
 
             MaterialAlertDialogBuilder(requireContext())
-                    .setMessage("Enter a new group name")
-                    .setTitle("Change group name")
+                    .setMessage(getString(R.string.enter_new_group_name_chat))
+                    .setTitle(getString(R.string.change_group_name_chat))
                     .setView(layout)
-                    .setPositiveButton("Okay") { _, _ ->
+                    .setPositiveButton(getString(R.string.okay_chat)) { _, _ ->
 
                         if (groupNameEt.length() == 0) {
                             Toast.makeText(
                                     requireContext(),
-                                    "Please enter a valid group name",
+                                    getString(R.string.enter_valid_group_name_chat),
                                     Toast.LENGTH_SHORT
                             ).show()
                         } else {
                             viewModel.changeGroupName(groupNameEt.text.toString().capitalize())
                         }
                     }
-                    .setNegativeButton("Cancel") { _, _ ->
+                    .setNegativeButton(getString(R.string.cancel_chat)) { _, _ ->
 
                     }.show()
         }
+
+
+
+        only_admins_can_post_switch.setOnCheckedChangeListener { _, isChecked ->
+            val currentGroup = viewModel.getCurrentChatGroupInfo()
+                    ?: return@setOnCheckedChangeListener
+            if (isChecked && currentGroup.onlyAdminCanPostInGroup.not()) {
+                viewModel.limitPostingToAdminsInGroup()
+                showToast(getString(R.string.post_limited_to_admin_chat))
+            } else if (!isChecked && currentGroup.onlyAdminCanPostInGroup) {
+                viewModel.allowEveryoneToPostInThisGroup()
+                showToast(getString(R.string.everyone_can_post_in_group_chat))
+            }
+        }
     }
+
 
     override fun onMenuItemClick(item: MenuItem?): Boolean = when (item?.itemId) {
         R.id.action_message_user -> {
 
             contactLongPressed?.let {
-
                 val otherUserName = if (it.name.isNullOrBlank()) {
                     it.mobile
                 } else
@@ -396,7 +425,8 @@ class GroupDetailsFragment : Fragment(),
                         otherUserId = it.uid!!,
                         headerId = "",
                         otherUserName = otherUserName,
-                        otherUserProfilePicture = it.imageUrl ?: ""
+                        otherUserProfilePicture = it.imageUrl ?: "",
+                        sharedFileBundle = null
                 )
             }
             contactLongPressed = null
@@ -407,6 +437,18 @@ class GroupDetailsFragment : Fragment(),
                 viewModel.removeUserFromGroup(it.uid!!)
             }
             contactLongPressed = null
+            true
+        }
+        R.id.action_make_admin -> {
+            contactLongPressed?.let {
+
+                if (it.isUserGroupManager)
+                    viewModel.dismissAsGroupAdmin(it.uid!!)
+                else
+                    viewModel.makeUserGroupAdmin(it.uid!!)
+
+                contactLongPressed = null
+            }
             true
         }
         else -> {
@@ -450,11 +492,40 @@ class GroupDetailsFragment : Fragment(),
 
     private var contactLongPressed: ContactModel? = null
     override fun onGroupMemberItemLongPressed(view: View, position: Int, contact: ContactModel) {
+        if (viewModel.isContactModelOfCurrentUser(contact))
+            return
 
         contactLongPressed = contact
         val popUp = PopupMenu(requireContext(), view)
-        popUp.setOnMenuItemClickListener(this)
         popUp.inflate(R.menu.menu_group_members_long_click)
+
+        if (viewModel.isUserGroupAdmin()) {
+            popUp.menu.findItem(R.id.action_remove_user).also { item ->
+                item.isVisible = true
+                item.title = getString(R.string.remove_chat) + contact.name
+            }
+        } else {
+            popUp.menu.findItem(R.id.action_remove_user).also {
+                it.isVisible = false
+            }
+        }
+
+        if (viewModel.isUserGroupAdmin()) {
+            popUp.menu.findItem(R.id.action_make_admin).also {
+                it.isVisible = true
+                it.title = if (contact.isUserGroupManager)
+                    getString(R.string.dismiss_as_admin_chat)
+                else
+                    getString(R.string.make_group_admin_chat)
+
+            }
+        } else {
+            popUp.menu.findItem(R.id.action_make_admin).also {
+                it.isVisible = false
+            }
+        }
+
+        popUp.setOnMenuItemClickListener(this)
         popUp.show()
     }
 
@@ -465,14 +536,13 @@ class GroupDetailsFragment : Fragment(),
         } else
             contact.name!!
 
-
-
         chatNavigation.navigateToChatPage(
                 chatType = ChatConstants.CHAT_TYPE_USER,
                 otherUserId = contact.uid!!,
                 headerId = "",
                 otherUserName = otherUserName,
-                otherUserProfilePicture = contact.getUserProfileImageUrlOrPath() ?: ""
+                otherUserProfilePicture = contact.getUserProfileImageUrlOrPath() ?: "",
+                sharedFileBundle = null
         )
 
     }

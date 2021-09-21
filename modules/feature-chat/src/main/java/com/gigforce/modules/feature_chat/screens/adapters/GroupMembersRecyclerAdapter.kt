@@ -14,7 +14,7 @@ import com.gigforce.common_ui.views.GigforceImageView
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.modules.feature_chat.R
-import com.gigforce.modules.feature_chat.models.ContactModel
+import com.gigforce.common_ui.chat.models.ContactModel
 import com.google.firebase.auth.FirebaseAuth
 
 class GroupMembersRecyclerAdapter(
@@ -73,7 +73,10 @@ class GroupMembersRecyclerAdapter(
             val charString = constraint.toString()
 
             if (charString.isEmpty()) {
-                filteredContactsList = originalContactsList
+
+                val filterResults = FilterResults()
+                filterResults.values = originalContactsList
+                return filterResults
             } else {
                 val filteredList: MutableList<ContactModel> = mutableListOf()
                 for (contact in originalContactsList) {
@@ -84,12 +87,13 @@ class GroupMembersRecyclerAdapter(
                     )
                         filteredList.add(contact)
                 }
-                filteredContactsList = filteredList
+
+                val filterResults = FilterResults()
+                filterResults.values = filteredList
+                return filterResults
             }
 
-            val filterResults = FilterResults()
-            filterResults.values = filteredContactsList
-            return filterResults
+
         }
 
         override fun publishResults(constraint: CharSequence?, results: FilterResults?) {

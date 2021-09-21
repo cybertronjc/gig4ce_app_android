@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
 
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
@@ -14,6 +15,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -34,6 +36,7 @@
         android:supportsRtl="true"
         android:theme="@style/GigforceTheme"
         tools:node="merge"
+        android:usesCleartextTraffic="true"
         tools:replace="android:label,android:allowBackup">
         <!--
                Set to true if your app is Standalone, that is, it does not require the handheld
@@ -64,17 +67,6 @@
             android:value="@integer/google_play_services_version" />
 
         <meta-data
-            android:name="CLEVERTAP_ACCOUNT_ID"
-            android:value="67Z-W98-795Z" />
-        <meta-data
-            android:name="CLEVERTAP_TOKEN"
-            android:value="bc0-1a6" />
-        <!-- IMPORTANT: To force use Google AD ID to uniquely identify  users, use the following meta tag. GDPR mandates that if you are using this tag, there is prominent disclousure to your end customer in their application. Read more about GDPR here - https://clevertap.com/blog/in-preparation-of-gdpr-compliance/ -->
-        <meta-data
-            android:name="CLEVERTAP_USE_GOOGLE_AD_ID"
-            android:value="1" />
-
-        <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_notification_icon" />
         <meta-data
@@ -83,6 +75,9 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="@string/default_notification_channel_id" />
+        <meta-data
+            android:name="com.google.firebase.ml.vision.DEPENDENCIES"
+            android:value="face" />
 
         <service
             android:name=".notification.MyFirebaseMessagingService"
@@ -98,45 +93,29 @@
             android:enabled="true"
             android:exported="true" />
 
+        <service android:name=".services.SyncUnSyncedDataService"
+            android:foregroundServiceType="location" />
+
         <meta-data
             android:name="firebase_messaging_auto_init_enabled"
             android:value="true" />
-
-        <!--        <service-->
-        <!--            android:name="com.clevertap.android.sdk.FcmTokenListenerService">-->
-        <!--            <intent-filter>-->
-        <!--                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>-->
-        <!--            </intent-filter>-->
-        <!--        </service>-->
-
-        <!--        <service-->
-        <!--            android:name="com.clevertap.android.sdk.FcmMessageListenerService">-->
-        <!--            <intent-filter>-->
-        <!--                <action android:name="com.google.firebase.MESSAGING_EVENT"/>-->
-        <!--            </intent-filter>-->
-        <!--        </service>-->
-
-
-        <!--        <receiver-->
-        <!--            android:name=".modules.auth.ui.main.SmsRetrieverBroadcastReceiver"-->
-        <!--            android:exported="true">-->
-        <!--            <intent-filter>-->
-        <!--                <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED" />-->
-        <!--            </intent-filter>-->
-        <!--        </receiver>-->
 
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/PhotoCrop" />
+        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ImageCropper" />
+
         <activity
-            android:name=".modules.markattendance.ImageCaptureActivity"
+            android:name="com.gigforce.giger_gigs.captureimage.AttendanceImageCaptureActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.gigforce.app.modules.photocrop.PhotoCrop"
+            android:name="com.gigforce.giger_gigs.photocrop.PhotoCrop"
             android:theme="@style/Theme.Transparent" />
         <activity
-            android:name=".utils.DocViewerActivity"
+            android:name="com.gigforce.common_ui.utils.DocViewerActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
 
         <activity
@@ -170,9 +149,37 @@
         </activity>
 
         <activity
+            android:name=".modules.profile_.ProfilePicUploadActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name=".MainActivity"
-            android:configChanges="layoutDirection|locale|orientation|screenSize|keyboardHidden">
+            android:launchMode="singleTask"
+            android:configChanges="layoutDirection|orientation|screenSize|keyboardHidden">
             <nav-graph android:value="@navigation/nav_graph" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="image/*" /><!--Images All-->
+                <data android:mimeType="video/*" /><!--Videos All-->
+                <data android:mimeType="application/pdf" /> <!--PDF-->
+                <data android:mimeType="application/vnd.ms-excel" /><!--XLS-->
+                <data android:mimeType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" /><!--XLSX-->
+                <data android:mimeType="application/vnd.openxmlformats-officedocument.wordprocessingml.document" /><!--Docx-->
+                <data android:mimeType="application/msword" /> <!--Doc-->
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND_MULTIPLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="image/*" /><!--Images All-->
+                <data android:mimeType="video/*" /><!--Videos All-->
+                <data android:mimeType="application/pdf" /> <!--PDF-->
+                <data android:mimeType="application/vnd.ms-excel" /><!--XLS-->
+                <data android:mimeType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" /><!--XLSX-->
+                <data android:mimeType="application/vnd.openxmlformats-officedocument.wordprocessingml.document" /><!--Docx-->
+                <data android:mimeType="application/msword" /> <!--Doc-->
+            </intent-filter>
 
             <intent-filter>
                 <action
@@ -200,6 +207,15 @@
                 <action android:name="com.gigforce.app.chats.open_group_chat" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="com.gigforce.app.calendar.open_calendar_home_screen" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.gigforce.app.joinings.open_joining_screen" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
         </activity>
 
         <meta-data
@@ -215,10 +231,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
-        <!--        <receiver android:name=".core.base.language.LanguageChangeReceiver">-->
-        <!--            <intent-filter><action android:name="android.intent.action.ACTION_LOCALE_CHANGED"/>-->
-        <!--            </intent-filter>-->
-        <!--        </receiver>-->
+
         <!-- Branch init -->
         <meta-data android:name="io.branch.sdk.BranchKey" android:value="key_live_cf1kHW4fcGP4SXVy31QE6ehoxyjgqLlW" />
         <meta-data android:name="io.branch.sdk.BranchKey.test" android:value="key_test_ph6gM53mhJM4J7Vt14O1OpkftwepAJEe" />

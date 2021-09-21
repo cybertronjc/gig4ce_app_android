@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="18dp">
+
+    <TextView
+        android:id="@+id/dialog_title_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lato"
+        android:letterSpacing="0"
+        android:text="@string/are_sure_you_want_to_decline_this_gig_app_giger"
+        android:textColor="@color/colorText"
+        android:textSize="16sp" />
+
+
+    <TextView
+        android:id="@+id/dialog_message_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/lato"
+        android:letterSpacing="0"
+        android:textColor="@color/battle_ship_grey"
+        android:textSize="12sp"
+        tools:text="@string/are_you_sure_app_giger" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/noBtn"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:layout_marginEnd="7dp"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="1"
+            android:minHeight="@dimen/size_36"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:text="@string/no_app_giger"
+            android:textAlignment="center"
+            app:strokeColor="@color/colorPrimary" />
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/yesBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="7dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/gradient_button"
+            android:clickable="true"
+            android:focusable="true"
+            android:letterSpacing="0"
+            android:minHeight="@dimen/size_36"
+            android:text="@string/yes_app_giger"
+            android:textAlignment="center"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

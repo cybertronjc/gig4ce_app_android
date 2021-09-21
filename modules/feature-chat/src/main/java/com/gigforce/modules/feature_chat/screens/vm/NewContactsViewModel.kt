@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.gigforce.modules.feature_chat.models.ContactModel
+import com.gigforce.common_ui.chat.models.ContactModel
 import com.gigforce.modules.feature_chat.repositories.ChatContactsRepository
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.QuerySnapshot
@@ -23,7 +23,7 @@ class NewContactsViewModel constructor(
     fun startListeningForContactChanges() {
 
         contactsChangeListener = chatContactsRepository
-            .getUserContacts()
+            .getUserGigforceContacts()
             .addSnapshotListener { value, error ->
                 error?.printStackTrace()
 

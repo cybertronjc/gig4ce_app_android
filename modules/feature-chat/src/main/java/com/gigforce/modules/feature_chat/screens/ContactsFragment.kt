@@ -27,14 +27,14 @@ import androidx.loader.content.CursorLoader
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.gigforce.common_ui.chat.ChatConstants
+import com.gigforce.common_ui.chat.models.ContactModel
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.onTextChanged
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.modules.feature_chat.ChatNavigation
 import com.gigforce.modules.feature_chat.R
-import com.gigforce.modules.feature_chat.core.ChatConstants
-import com.gigforce.modules.feature_chat.models.ContactModel
 import com.gigforce.modules.feature_chat.screens.adapters.ContactsRecyclerAdapter
 import com.gigforce.modules.feature_chat.screens.adapters.OnContactClickListener
 import com.gigforce.modules.feature_chat.screens.vm.NewContactsViewModel
@@ -49,8 +49,9 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class ContactsFragment : DialogFragment(),
-        PopupMenu.OnMenuItemClickListener,
-        OnContactClickListener, CreateGroupDialogFragment.CreateGroupDialogFragmentListener {
+    PopupMenu.OnMenuItemClickListener,
+    OnContactClickListener,
+    CreateGroupDialogFragment.CreateGroupDialogFragmentListener {
 
     @Inject
     lateinit var navigation: INavigation
@@ -61,8 +62,8 @@ class ContactsFragment : DialogFragment(),
 
     private val viewModelNew: NewContactsViewModel by lazy {
         ViewModelProvider(
-                this,
-                NewContactsViewModelFactory(requireContext())
+            this,
+            NewContactsViewModelFactory(requireContext())
         ).get(NewContactsViewModel::class.java)
     }
 
@@ -98,6 +99,8 @@ class ContactsFragment : DialogFragment(),
         ContactsRecyclerAdapter(requireContext(), Glide.with(requireContext()), this)
     }
 
+    private var sharedFilesBundle: Bundle? = null
+
     private val onBackPressCallback = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() {
 
@@ -119,10 +122,10 @@ class ContactsFragment : DialogFragment(),
 
                     contactsAdapter.stateCreateGroup(false)
                     contactsAdapter.clearSelectedContacts()
-                    contactsToolbarSubTitle.text = "${contactsAdapter.itemCount} Contact(s)"
+                    contactsToolbarSubTitle.text = "${contactsAdapter.itemCount} ${getString(R.string.contacts_with_space)}"
 
                     userSelectedLayout.isVisible = false
-                    selectedUserCountTV.text = "0 Contact(s) Selected"
+                    selectedUserCountTV.text = getString(R.string.zero_contacts_selected_chat)
 
                     createGroupFab.gone()
                 } else {
@@ -142,8 +145,8 @@ class ContactsFragment : DialogFragment(),
 
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? = inflater.inflate(R.layout.fragment_contacts, container, false)
 
 
@@ -155,7 +158,7 @@ class ContactsFragment : DialogFragment(),
         setClickListeners()
         initViewModel()
 
-        checkForPermissionElseSyncContacts()
+        checkForPermissionElseSyncContacts(false)
     }
 
     private fun findViews(view: View) {
@@ -172,7 +175,7 @@ class ContactsFragment : DialogFragment(),
         contactsPermissionLayout = view.findViewById(R.id.contactsPermissionLayout)
 
         refreshingUserHorizontalProgressBar =
-                view.findViewById(R.id.processing_contacts_horizontal_progressbar)
+            view.findViewById(R.id.processing_contacts_horizontal_progressbar)
         refreshingUserCenterProgressBar = view.findViewById(R.id.processing_contacts_progressbar)
 
         toolbarOverflowMenu = view.findViewById(R.id.imageView41)
@@ -189,10 +192,12 @@ class ContactsFragment : DialogFragment(),
     private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {
 
         arguments?.let {
+            sharedFilesBundle = it.getBundle(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE)
             shouldReturnToPreviousScreen = it.getBoolean(INTENT_EXTRA_RETURN_SELECTED_RESULTS)
         }
 
         savedInstanceState?.let {
+            sharedFilesBundle = it.getBundle(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE)
             shouldReturnToPreviousScreen = it.getBoolean(INTENT_EXTRA_RETURN_SELECTED_RESULTS)
         }
     }
@@ -200,20 +205,31 @@ class ContactsFragment : DialogFragment(),
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean(INTENT_EXTRA_RETURN_SELECTED_RESULTS, shouldReturnToPreviousScreen)
+        outState.putBundle(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE, sharedFilesBundle)
     }
 
-    private fun startLoaderForGettingContacts() {
+    private fun startLoaderForGettingContacts(
+        shouldCallSyncAPI : Boolean
+    ) {
         contactsPermissionLayout.gone()
-        showToast("Refreshing...")
-        requireActivity().startService(Intent(requireContext(), SyncContactsService::class.java))
+        showToast(getString(R.string.refreshing_chat))
+
+
+        requireContext().startService(
+            Intent(requireContext(),
+                SyncContactsService::class.java
+            ).apply {
+                putExtra(SyncContactsService.SHOULD_CALL_SYNC_API,shouldCallSyncAPI)
+            }
+        )
     }
 
     private fun setListeners() {
 
         contactRecyclerView.layoutManager = LinearLayoutManager(
-                requireContext(),
-                RecyclerView.VERTICAL,
-                false
+            requireContext(),
+            RecyclerView.VERTICAL,
+            false
         )
         contactRecyclerView.adapter = contactsAdapter
 
@@ -234,9 +250,9 @@ class ContactsFragment : DialogFragment(),
         }
 
         if (shouldReturnToPreviousScreen) {
-            createGroupLabel.text = "Add To Group"
+            createGroupLabel.text = getString(R.string.add_to_group_chat)
         } else {
-            createGroupLabel.text = "Create Group"
+            createGroupLabel.text = getString(R.string.create_group_chat)
         }
 
         askPermissionView.setOnClickListener {
@@ -251,23 +267,23 @@ class ContactsFragment : DialogFragment(),
             } else {
 
                 CreateGroupDialogFragment.launch(
-                        contacts = ArrayList(contactsAdapter.getSelectedContact()),
-                        createGroupDialogFragmentListener = this,
-                        fragmentManager = childFragmentManager
+                    contacts = ArrayList(contactsAdapter.getSelectedContact()),
+                    createGroupDialogFragmentListener = this,
+                    fragmentManager = childFragmentManager
                 )
             }
         }
 
         createGroupFab.setOnClickListener {
             if (contactsAdapter.getSelectedContact().isEmpty()) {
-                showToast(getString(R.string.select_at_least_one_contact))
+                showToast(getString(R.string.select_at_least_one_contact_chat))
                 return@setOnClickListener
             }
 
             CreateGroupDialogFragment.launch(
-                    contacts = ArrayList(contactsAdapter.getSelectedContact()),
-                    createGroupDialogFragmentListener = this,
-                    fragmentManager = childFragmentManager
+                contacts = ArrayList(contactsAdapter.getSelectedContact()),
+                createGroupDialogFragmentListener = this,
+                fragmentManager = childFragmentManager
             )
         }
 
@@ -280,8 +296,8 @@ class ContactsFragment : DialogFragment(),
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(
-                viewLifecycleOwner,
-                onBackPressCallback
+            viewLifecycleOwner,
+            onBackPressCallback
         )
     }
 
@@ -325,9 +341,9 @@ class ContactsFragment : DialogFragment(),
             } else {
 
                 CreateGroupDialogFragment.launch(
-                        contacts = ArrayList(contactsAdapter.getSelectedContact()),
-                        createGroupDialogFragmentListener = this,
-                        fragmentManager = childFragmentManager
+                    contacts = ArrayList(contactsAdapter.getSelectedContact()),
+                    createGroupDialogFragmentListener = this,
+                    fragmentManager = childFragmentManager
                 )
             }
         }
@@ -353,9 +369,9 @@ class ContactsFragment : DialogFragment(),
 
     private fun initViewModel() {
         viewModelNew.contacts
-                .observe(viewLifecycleOwner, Observer {
-                    showContactsOnView(it)
-                })
+            .observe(viewLifecycleOwner, Observer {
+                showContactsOnView(it)
+            })
     }
 
     private fun showContactsAsSyncing() {
@@ -367,7 +383,7 @@ class ContactsFragment : DialogFragment(),
         refreshingUserHorizontalProgressBar.gone()
         refreshingUserCenterProgressBar.gone()
 
-        showToast("Contacts Synced")
+        showToast(getString(R.string.contacts_synced_chat))
     }
 
     private fun errorInSyncingContacts(error: String) {
@@ -376,8 +392,8 @@ class ContactsFragment : DialogFragment(),
 
         MaterialAlertDialogBuilder(requireContext())
                 .setMessage(error)
-                .setTitle("Unable to sync contacts")
-                .setPositiveButton("Okay") { _, _ -> }
+                .setTitle(getString(R.string.unable_to_sync_contacts_chat))
+                .setPositiveButton(getString(R.string.okay_chat)) { _, _ -> }
                 .show()
     }
 
@@ -386,12 +402,13 @@ class ContactsFragment : DialogFragment(),
 
         if (it.isEmpty()) {
 
-            val cursor = CursorLoader(requireContext(),
-                    ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                    null,
-                    null,
-                    null,
-                    null
+            val cursor = CursorLoader(
+                requireContext(),
+                ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                null,
+                null,
+                null,
+                null
             ).loadInBackground()
             val totalContactList = cursor?.count ?: 0
 
@@ -401,7 +418,7 @@ class ContactsFragment : DialogFragment(),
                 noContactsLayout.gone()
                 contactsSyncingLayout.visible()
             } else {
-                contactsToolbarSubTitle.text = "${contacts.size} Contact(s)"
+                contactsToolbarSubTitle.text = "${contacts.size} ${getString(R.string.contacts_with_space)}"
 
                 contactsAdapter.setData(contacts)
                 noContactsLayout.visible()
@@ -411,7 +428,7 @@ class ContactsFragment : DialogFragment(),
             contactsSyncingLayout.gone()
             noContactsLayout.gone()
 
-            contactsToolbarSubTitle.text = "${contacts.size} Contact(s)"
+            contactsToolbarSubTitle.text = "${contacts.size} ${getString(R.string.contacts_with_space)}"
             contactsAdapter.setData(contacts)
         }
 
@@ -421,8 +438,8 @@ class ContactsFragment : DialogFragment(),
 
     fun stateCreateNewGroup() {
         contactsToolbarSubTitle.visible()
-        contactsToolbarLabel.text = getString(R.string.select_members)
-        contactsToolbarSubTitle.text = "Tap to Select"
+        contactsToolbarLabel.text = getString(R.string.select_members_chat)
+        contactsToolbarSubTitle.text = getString(R.string.tap_to_select_chat)
         user_selected_layout.visible()
         create_group_layout.gone()
         contactsAdapter.getSelectedItems().clear()
@@ -430,40 +447,44 @@ class ContactsFragment : DialogFragment(),
         createGroupFab.show()
         contactsAdapter.stateCreateGroup(true)
 
-        selectedUserCountTV.text = "0 Contact(s) Selected"
+        selectedUserCountTV.text = getString(R.string._0_contacts_s_chat)
 
         onBackPressCallback.isEnabled = true
     }
 
-    private fun checkForPermissionElseSyncContacts() {
+    private fun checkForPermissionElseSyncContacts(
+        shouldCallSyncApiOnDataUpload : Boolean
+    ) {
         // check for permissions
 
         if (ContextCompat.checkSelfPermission(
-                        requireContext(),
-                        android.Manifest.permission.READ_CONTACTS
-                )
-                != PackageManager.PERMISSION_GRANTED
+                requireContext(),
+                android.Manifest.permission.READ_CONTACTS
+            )
+            != PackageManager.PERMISSION_GRANTED
         ) {
             Log.v(TAG, "Permission Required. Requesting Permission")
             requestPermissions(
-                    arrayOf(android.Manifest.permission.READ_CONTACTS),
-                    REQUEST_CONTACTS_PERMISSION
+                arrayOf(android.Manifest.permission.READ_CONTACTS),
+                if(shouldCallSyncApiOnDataUpload) REQUEST_CONTACTS_PERMISSION_WITH_API_CALL else REQUEST_CONTACTS_PERMISSION
             )
             showPermissionLayout()
         } else {
-            startLoaderForGettingContacts()
+            startLoaderForGettingContacts(shouldCallSyncApiOnDataUpload)
             viewModelNew.startListeningForContactChanges()
         }
     }
 
     override fun onRequestPermissionsResult(
-            requestCode: Int,
-            permissions: Array<out String>,
-            grantResults: IntArray
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        if (requestCode == REQUEST_CONTACTS_PERMISSION) {
+        if (requestCode == REQUEST_CONTACTS_PERMISSION ||
+            requestCode == REQUEST_CONTACTS_PERMISSION_WITH_API_CALL
+            ) {
             var allPermsGranted = true
             for (i in grantResults.indices) {
                 if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
@@ -479,7 +500,7 @@ class ContactsFragment : DialogFragment(),
                 }
 
                 viewModelNew.startListeningForContactChanges()
-                startLoaderForGettingContacts()
+                startLoaderForGettingContacts(requestCode == REQUEST_CONTACTS_PERMISSION_WITH_API_CALL)
             }
         }
     }
@@ -490,10 +511,10 @@ class ContactsFragment : DialogFragment(),
             if (permissionSnackBar == null) {
                 permissionSnackBar = Snackbar.make(
                         rootContactsLayout,
-                        "Grant contacts permission to sync contacts",
+                    getString(R.string.grant_contacts_permission_chat),
                         Snackbar.LENGTH_INDEFINITE
                 )
-                permissionSnackBar?.setAction("Okay") {
+                permissionSnackBar?.setAction(getString(R.string.okay_chat)) {
                     startAppSettingsPage()
                 }
             }
@@ -512,11 +533,12 @@ class ContactsFragment : DialogFragment(),
         } else {
 
             chatNavigation.navigateToChatPage(
-                    otherUserId = contact.uid!!,
-                    headerId = contact.headerId ?: "",
-                    otherUserName = contact.name ?: "",
-                    otherUserProfilePicture = contact.getUserProfileImageUrlOrPath() ?: "",
-                    chatType = ChatConstants.CHAT_TYPE_USER
+                otherUserId = contact.uid!!,
+                headerId = contact.headerId ?: "",
+                otherUserName = contact.name ?: "",
+                otherUserProfilePicture = contact.getUserProfileImageUrlOrPath() ?: "",
+                chatType = ChatConstants.CHAT_TYPE_USER,
+                sharedFileBundle = sharedFilesBundle
             )
         }
     }
@@ -533,8 +555,8 @@ class ContactsFragment : DialogFragment(),
         super.onCreate(savedInstanceState)
 
         setStyle(
-                STYLE_NORMAL,
-                android.R.style.Theme_Light_NoTitleBar_Fullscreen
+            STYLE_NORMAL,
+            android.R.style.Theme_Light_NoTitleBar_Fullscreen
         )
     }
 
@@ -545,7 +567,7 @@ class ContactsFragment : DialogFragment(),
                 true
             }
             R.id.action_referesh -> {
-                checkForPermissionElseSyncContacts()
+                checkForPermissionElseSyncContacts(true)
                 true
             }
             R.id.action_invite_friends -> {
@@ -554,7 +576,7 @@ class ContactsFragment : DialogFragment(),
                 true
             }
             else -> {
-                showToast("Coming soon")
+                showToast(getString(R.string.coming_soon_chat))
                 false
             }
         }
@@ -567,17 +589,18 @@ class ContactsFragment : DialogFragment(),
     companion object {
         const val INTENT_EXTRA_RETURN_SELECTED_RESULTS = "return_selected_results"
         const val REQUEST_CONTACTS_PERMISSION = 101
+        const val REQUEST_CONTACTS_PERMISSION_WITH_API_CALL = 102
         const val TAG = "ContactsFragment"
         private const val CONTACTS_LOADER_ID = 1
 
 
         fun launchForSelectingContact(
-                fm: FragmentManager,
-                onContactsSelectedListener: OnContactsSelectedListener
+            fm: FragmentManager,
+            onContactsSelectedListener: OnContactsSelectedListener
         ) {
             ContactsFragment().apply {
                 arguments = bundleOf(
-                        INTENT_EXTRA_RETURN_SELECTED_RESULTS to true
+                    INTENT_EXTRA_RETURN_SELECTED_RESULTS to true
                 )
                 this.onContactSelectedListener = onContactsSelectedListener
                 show(fm, TAG)
@@ -588,7 +611,7 @@ class ContactsFragment : DialogFragment(),
     override fun onGroupCreated(groupId: String) {
 
         chatNavigation.navigateToGroupChat(
-                headerId = groupId
+            headerId = groupId
         )
     }
 
@@ -596,16 +619,18 @@ class ContactsFragment : DialogFragment(),
 
         val activity = activity ?: return
 
-        val inputMethodManager = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val inputMethodManager =
+            activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus()?.getWindowToken(), 0)
     }
 
     private fun openSoftKeyboard(view: View) {
-        val inputMethodManager = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val inputMethodManager =
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.toggleSoftInputFromWindow(
-                view.applicationWindowToken,
-                InputMethod.SHOW_FORCED,
-                0
+            view.applicationWindowToken,
+            InputMethod.SHOW_FORCED,
+            0
         )
     }
 }

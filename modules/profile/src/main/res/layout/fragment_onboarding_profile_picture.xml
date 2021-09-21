@@ -29,7 +29,7 @@
             android:fontFamily="@font/lato"
             android:lineHeight="17sp"
             android:lineSpacingExtra="3sp"
-            android:text="Click your profile picture"
+            android:text="@string/click_profile"
             android:textColor="#333333"
             android:textSize="14sp"
             android:textStyle="normal" />
@@ -44,7 +44,7 @@
         android:layout_marginTop="18dp"
         android:fontFamily="@font/lato"
         android:lineSpacingExtra="3sp"
-        android:text="Profile Picture"
+        android:text="@string/profile_picture_profile"
         android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -74,24 +74,28 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="420dp"
-                android:background="@color/grey" />
+                android:background="@color/greyLight" />
 
         </com.facebook.shimmer.ShimmerFrameLayout>
 
-
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp">
         <ImageView
             android:id="@+id/imageView13"
             android:layout_width="match_parent"
-            android:layout_height="420dp"
+            android:layout_height="wrap_content"
             android:clickable="true"
             android:focusable="true"
             android:scaleType="fitXY"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
             android:visibility="visible"
             app:layout_constraintTop_toBottomOf="@id/profile_picture_tv"
             app:srcCompat="@drawable/ic_profile_avatar_pink"
             tools:layout_editor_absoluteX="16dp" />
+        </LinearLayout>
 
     </FrameLayout>
 
@@ -121,7 +125,7 @@
             android:layout_marginEnd="14dp"
             android:fontFamily="@font/lato"
             android:lineHeight="17sp"
-            android:text="@string/skip_underlined"
+            android:text="@string/skip_underlined_profile"
             android:textColor="@color/black" />
 
 

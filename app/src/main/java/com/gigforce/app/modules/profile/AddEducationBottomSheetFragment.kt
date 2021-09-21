@@ -9,8 +9,8 @@ import android.view.ViewGroup
 import android.widget.DatePicker
 import android.widget.Toast
 import com.gigforce.app.R
-import com.gigforce.app.modules.profile.models.Education
-import com.gigforce.app.utils.DropdownAdapter
+import com.gigforce.core.datamodels.profile.Education
+import com.gigforce.common_ui.adapter.DropdownAdapter
 import kotlinx.android.synthetic.main.add_education_bottom_sheet.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -120,7 +120,7 @@ class AddEducationBottomSheetFragment : ProfileBaseBottomSheetFragment() {
         save_button.setOnClickListener {
             if (validateEducation()) {
                 addNewEducation()
-                Toast.makeText(this.context, "Updated Education Section", Toast.LENGTH_LONG).show()
+                Toast.makeText(this.context, getString(R.string.updated_education_section), Toast.LENGTH_LONG).show()
                 this.dismiss()
             }
         }

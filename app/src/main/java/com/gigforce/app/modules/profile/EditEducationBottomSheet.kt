@@ -10,8 +10,8 @@ import android.widget.DatePicker
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
-import com.gigforce.app.modules.profile.models.Education
-import com.gigforce.app.utils.DropdownAdapter
+import com.gigforce.core.datamodels.profile.Education
+import com.gigforce.common_ui.adapter.DropdownAdapter
 import kotlinx.android.synthetic.main.delete_confirmation_dialog.*
 import kotlinx.android.synthetic.main.edit_education_bottom_sheet.*
 import kotlinx.android.synthetic.main.edit_education_bottom_sheet.cancel
@@ -81,6 +81,8 @@ class EditEducationBottomSheet : ProfileBaseBottomSheetFragment() {
 
         profileViewModel.userProfileData.observe(this, Observer { profile ->
             profile?.educations?.let {
+                if(it.isEmpty()) return@let
+
                 val educations = it.sortedByDescending { education -> education.startYear!! }
                 education = educations[arrayLocation!!.toInt()]
                 institution.setText(education.institution)

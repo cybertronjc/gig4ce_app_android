@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">ಗಿಗ್ಫೋರ್ಸ್</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_profile">ಪ್ರೊಫೈಲ್ಆಕ್ಟಿವಿಟಿ</string>
     <string name="english">Kannada</string>
@@ -112,7 +111,7 @@
     <string name="add_experience_currently_working">ಪ್ರಸ್ತುತ ಇಲ್ಲಿ ಕೆಲಸ ಮಾಡಿ</string>
     <string name="cancel_text">ರದ್ದುಮಾಡಿ</string>
     <string name="save_text">ಉಳಿಸಿ</string>
-    <string name="back_text">ಹಿಂದೆ</string>
+    <string name="back_text_app">ಹಿಂದೆ</string>
     <string name="okay_text">ಸರಿ</string>
     <string name="okay_text_cap">ಸರಿ</string>
     <string name="add_more_text">ಇನ್ನಷ್ಟು ಸೇರಿಸಿ</string>
@@ -128,9 +127,9 @@
     <string name="end_date">ಅಂತಿಮ ದಿನಾಂಕ</string>
     <string name="delete">ಅಳಿಸಿ</string>
     <string name="edit_achievement">ಸಾಧನೆಯನ್ನು ಸಂಪಾದಿಸಿ</string>
-    <string name="title">ಶೀರ್ಷಿಕೆ</string>
+    <string name="title_app">ಶೀರ್ಷಿಕೆ</string>
     <string name="authority">ಪ್ರಾಧಿಕಾರ</string>
-    <string name="location">ಸ್ಥಳ</string>
+    <string name="location_app">ಸ್ಥಳ</string>
     <string name="year">ವರ್ಷ</string>
     <string name="year_text">ವರ್ಷ</string>
     <string name="edit_skill">ಕೌಶಲ್ಯವನ್ನು ಸಂಪಾದಿಸಿ</string>
@@ -212,7 +211,7 @@
     <string name="assessment">ಮೌಲ್ಯಮಾಪನ</string>
     <string name="kyc_verification_not_done">ಕೈಕ್ ಪರಿಶೀಲನೆ ಮಾಡಲಾಗಿಲ್ಲ, ಪೂರ್ಣಗೊಳಿಸಲು ಇಲ್ಲಿ ಕ್ಲಿಕ್ ಮಾಡಿ.</string>
     <string name="video_resume_pending">ನಿಮ್ಮ ವೀಡಿಯೊ ಪುನರಾರಂಭವು ಬಾಕಿ ಉಳಿದಿದೆ, ಪೂರ್ಣಗೊಳಿಸಲು ಇಲ್ಲಿ ಕ್ಲಿಕ್ ಮಾಡಿ.</string>
-    <string name="next">ಮುಂದಿನ</string>
+    <string name="next_app">ಮುಂದಿನ</string>
     <string name="cover_error_text">* ಪಠ್ಯವು 150 ಅಕ್ಷರಗಳನ್ನು ಮೀರಬಾರದು</string>
     <string name="update_contact_details">ಸಂಪರ್ಕ ವಿವರಗಳನ್ನು ನವೀಕರಿಸಿ</string>
     <string name="change_contact_message">ಈ ವಿವರಗಳನ್ನು ನವೀಕರಿಸಲು ಗಿಗರ್ ತಮ್ಮ ಆಧಾರ್ ಕ್ರಾಡ್ ಚಿತ್ರಗಳನ್ನು ಮರು ಅಪ್‌ಲೋಡ್ ಮಾಡಬೇಕಾಗುತ್ತದೆ ಮತ್ತು ಮತ್ತೆ ಕೆವೈಸಿ ಪರಿಶೀಲನೆ ಪ್ರಕ್ರಿಯೆಗೆ ಒಳಗಾಗಬೇಕಾಗುತ್ತದೆ. ಅಗತ್ಯವಿದ್ದರೆ ನೀವು ಹೆಸರು ಅಥವಾ ವಿಳಾಸದ ವಿವರಗಳನ್ನು ಬದಲಾಯಿಸಬಾರದು ಎಂದು ನಾವು ಶಿಫಾರಸು ಮಾಡುತ್ತೇವೆ</string>
@@ -277,7 +276,7 @@
     <string name="upload_bank_passbook">ಚೆಕ್ / ಬ್ಯಾಂಕ್ ಪಾಸ್ಬುಕ್ ಅನ್ನು ಅಪ್ಲೋಡ್ ಮಾಡಿ (ಮೊದಲ ಪುಟ)</string>
     <string name="upload_bank_passbook_sublabel">ನಿಮ್ಮ ಪರಿಶೀಲನೆಗಾಗಿ ದಯವಿಟ್ಟು ನಿಮ್ಮ ಬ್ಯಾಂಕ್ ಪಾಸ್‌ಬುಕ್ ಅನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ</string>
     <string name="edit">ಸಂಪಾದಿಸಿ</string>
-    <string name="name">ಹೆಸರು</string>
+    <string name="name_app">ಹೆಸರು</string>
     <string name="date_of_birth_without_colon">ಹುಟ್ತಿದ ದಿನಾಂಕ</string>
     <string name="gender_wo_colon">ಲಿಂಗ</string>
     <string name="address_line">ವಿಳಾಸ ಸಾಲು</string>
@@ -759,7 +758,7 @@
     <string name="day">ದಿನ</string>
     <string name="days">ದಿನಗಳು</string>
     <string name="yes">ಹೌದು</string>
-    <string name="no">ಇಲ್ಲ</string>
+    <string name="no_app">ಇಲ್ಲ</string>
     <string name="none">ಯಾವುದೂ</string>
     <string name="day_and_time">ದಿನ ಮತ್ತು ಸಮಯ</string>
     <string name="weekday">ವಾರದ ದಿನ</string>
@@ -919,7 +918,7 @@
     <string name="in_your_assessment">ನಿಮ್ಮ ಮೌಲ್ಯಮಾಪನದಲ್ಲಿ</string>
     <string name="new_cert_added_underlined"><u> ಪ್ರೊಫೈಲ್‌ಗೆ ಹೊಸ ಪ್ರಮಾಣಪತ್ರವನ್ನು ಸೇರಿಸಲಾಗಿದೆ. </u></string>
     <string name="watch_lesson_again">ಪಾಠವನ್ನು ಮತ್ತೆ ವೀಕ್ಷಿಸಿ</string>
-    <string name="skip">ಬಿಟ್ಟುಬಿಡಿ</string>
+    <string name="skip_client">ಬಿಟ್ಟುಬಿಡಿ</string>
     <string name="new_bio">ಹೊಸ ಬಯೋ</string>
     <string name="signed">ಸಹಿ</string>
     <string name="unsigned">ಸಹಿ ಮಾಡಲಾಗಿಲ್ಲ</string>

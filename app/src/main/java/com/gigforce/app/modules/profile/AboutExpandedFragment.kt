@@ -8,21 +8,23 @@ import android.view.ViewGroup
 import android.view.Window
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
-import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
-import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
-import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
-import com.gigforce.app.modules.landingscreen.LandingPageConstants.INTENT_EXTRA_ACTION
-import com.gigforce.app.modules.landingscreen.LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN
-import com.gigforce.app.modules.profile.models.ContactEmail
-import com.gigforce.app.modules.profile.models.ContactPhone
-import com.gigforce.app.modules.profile.models.ProfileData
-import com.gigforce.app.utils.StringConstants
-import com.gigforce.app.utils.ViewModelProviderFactory
+import com.gigforce.common_ui.ConfirmationDialogOnClickListener
+import com.gigforce.common_ui.viewmodels.GigVerificationViewModel
+//import com.gigforce.landing_screen.landingscreen.LandingPageConstants.INTENT_EXTRA_ACTION
+//import com.gigforce.landing_screen.landingscreen.LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN
+import com.gigforce.core.datamodels.profile.ContactEmail
+import com.gigforce.core.datamodels.profile.ContactPhone
+import com.gigforce.core.datamodels.profile.ProfileData
+import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.ext.showToast
+import com.gigforce.common_ui.utils.ViewModelProviderFactory
+import com.gigforce.core.AppConstants.INTENT_EXTRA_ACTION
+import com.gigforce.core.AppConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN
 import kotlinx.android.synthetic.main.contact_edit_warning_dialog.*
 import kotlinx.android.synthetic.main.fragment_profile_about_expanded.*
 import kotlinx.android.synthetic.main.fragment_profile_about_expanded.view.*
@@ -41,7 +43,9 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
     }
 
     private val viewModelFactory by lazy {
-        ViewModelProviderFactory(ViewModelAboutExpandedFragment(ModelAboutExpandedFragment()))
+        ViewModelProviderFactory(
+            ViewModelAboutExpandedFragment(ModelAboutExpandedFragment())
+        )
     }
     private val viewModel: ViewModelAboutExpandedFragment by lazy {
         ViewModelProvider(
@@ -50,7 +54,7 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
         ).get(ViewModelAboutExpandedFragment::class.java)
     }
 
-    private val gigerVerificationViewModel: GigVerificationViewModel by viewModels()
+    private val gigerVerificationViewModel: GigVerificationViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -119,17 +123,8 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
 
         gigerVerificationViewModel.gigerVerificationStatus.observe(viewLifecycleOwner, Observer {
 
-            val requiredDocsVerified = it.selfieVideoDataModel?.videoPath != null
-                    && it.panCardDetails?.state == GigerVerificationStatus.STATUS_VERIFIED
-                    && it.bankUploadDetailsDataModel?.state == GigerVerificationStatus.STATUS_VERIFIED
-                    && (it.aadharCardDataModel?.state == GigerVerificationStatus.STATUS_VERIFIED || it.drivingLicenseDataModel?.state == GigerVerificationStatus.STATUS_VERIFIED)
 
-            val requiredDocsUploaded = it.selfieVideoDataModel?.videoPath != null
-                    && it.panCardDetails?.panCardImagePath != null
-                    && it.bankUploadDetailsDataModel?.passbookImagePath != null
-                    && (it.aadharCardDataModel?.frontImage != null || it.drivingLicenseDataModel?.backImage != null)
-
-            if (requiredDocsVerified) {
+            if (it.requiredDocsVerified) {
                 about_top_profile.about_me_verification_layout.verification_status_tv.text =
                         getString(R.string.verified_text)
                 about_top_profile.about_me_verification_layout.verification_status_tv.setTextColor(
@@ -138,7 +133,7 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
                 about_top_profile.about_me_verification_layout.status_iv.setImageResource(R.drawable.ic_check)
                 about_top_profile.about_me_verification_layout.verification_status_cardview.strokeColor =
                         ResourcesCompat.getColor(resources, R.color.green, null)
-            } else if (requiredDocsUploaded) {
+            } else if (it.requiredDocsUploaded) {
                 about_top_profile.about_me_verification_layout.verification_status_tv.text =
                         getString(R.string.under_verification)
                 about_top_profile.about_me_verification_layout.verification_status_tv.setTextColor(
@@ -317,6 +312,10 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
             navigate(R.id.gigerVerificationFragment)
         }
 
+        about_top_profile.back_button.setOnClickListener {
+            activity?.onBackPressed()
+        }
+
     }
 
     private fun showAddContactDialog(isEmail: Boolean, registered: Boolean, bundle: Bundle) {
@@ -357,7 +356,8 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
 
         showConfirmationDialogType7(
                 getString(R.string.this_is_my_whatsapp_number),
-                object : ConfirmationDialogOnClickListener {
+                object :
+                    ConfirmationDialogOnClickListener {
                     override fun clickedOnYes(dialog: Dialog?) {
                         viewModel.setWhatsAppNumberStatus(
                                 profileViewModel.userProfileData.value?.id!!,
@@ -398,16 +398,17 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
         )
         if (isRegistered) {
             if (delete) {
-                showToast("Registered Number Cannot Be Deleted")
+                showToast(getString(R.string.reg_no_cannot_delete))
             } else {
                 showAddContactDialog(false, isRegistered, bundle)
 
             }
         } else {
             if (delete) {
-                showConfirmationDialogType3("Are You Sure!!!",
-                        "You want to delete $number from your contacts!!!",
-                        "Yes", "No", object : ConfirmationDialogOnClickListener {
+                showConfirmationDialogType3(getString(R.string.you_sure),
+                    getString(R.string.want_to_delete_app) + number + getString(R.string.from_contacts_app),
+                        getString(R.string.yes), getString(R.string.no_app), object :
+                        ConfirmationDialogOnClickListener {
                     override fun clickedOnYes(dialog: Dialog?) {
                         contactEdit(
                                 number,
@@ -436,9 +437,10 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
 
     override fun editEmail(email: String, delete: Boolean) {
         if (delete) {
-            showConfirmationDialogType3("Are You Sure!!!",
-                    "You want to delete $email from your emails!!!",
-                    "Yes", "No", object : ConfirmationDialogOnClickListener {
+            showConfirmationDialogType3(getString(R.string.you_sure),
+                getString(R.string.want_to_delete_app) + email + getString(R.string.from_emails_app),
+                getString(R.string.yes), getString(R.string.no_app), object :
+                    ConfirmationDialogOnClickListener {
                 override fun clickedOnYes(dialog: Dialog?) {
                     emailEdit(
                             email,

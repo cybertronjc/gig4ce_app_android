@@ -15,7 +15,7 @@ import com.gigforce.common_ui.views.GigforceImageView
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.modules.feature_chat.R
-import com.gigforce.modules.feature_chat.models.ContactModel
+import com.gigforce.common_ui.chat.models.ContactModel
 import com.google.firebase.storage.FirebaseStorage
 
 class ContactsRecyclerAdapter(
@@ -103,6 +103,7 @@ class ContactsRecyclerAdapter(
                 Glide.with(context)
                         .load(profilePathRef)
                         .placeholder(R.drawable.ic_user_2)
+                        .circleCrop()
                         .into(contactAvatarIV)
             } else if (!contact.imagePathInStorage.isNullOrBlank()) {
 
@@ -113,6 +114,7 @@ class ContactsRecyclerAdapter(
 
                 Glide.with(context)
                         .load(profilePathRef)
+                        .circleCrop()
                         .placeholder(R.drawable.ic_user_2)
                         .into(contactAvatarIV)
             } else if (!contact.imageUrl.isNullOrBlank()) {

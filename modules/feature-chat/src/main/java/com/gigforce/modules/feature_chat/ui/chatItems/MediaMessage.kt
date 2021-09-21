@@ -9,10 +9,13 @@ import com.gigforce.core.extensions.getDownloadUrlOrThrow
 import com.gigforce.core.fb.FirebaseUtils
 import com.gigforce.core.file.FileUtils
 import com.gigforce.core.retrofit.RetrofitFactory
-import com.gigforce.modules.feature_chat.core.ChatConstants
-import com.gigforce.modules.feature_chat.models.ChatMessage
-import com.gigforce.modules.feature_chat.models.IMediaMessage
+import com.gigforce.common_ui.chat.ChatConstants
+import com.gigforce.common_ui.chat.models.ChatMessage
+import com.gigforce.common_ui.chat.models.IMediaMessage
+import com.gigforce.modules.feature_chat.models.ChatMessageWrapper
 import com.gigforce.modules.feature_chat.repositories.DownloadChatAttachmentService
+import com.gigforce.modules.feature_chat.screens.vm.ChatPageViewModel
+import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel
 import com.google.firebase.storage.FirebaseStorage
 import java.io.File
 
@@ -22,7 +25,8 @@ abstract class MediaMessage(
 ) : RelativeLayout(
     context,
     attrs
-), IViewHolder {
+), IViewHolder,
+    BaseChatMessageItemView{
 
     private val refToGigForceAttachmentDirectory: File =
         Environment.getExternalStoragePublicDirectory(ChatConstants.DIRECTORY_APP_DATA_ROOT)!!
@@ -32,6 +36,10 @@ abstract class MediaMessage(
         File(refToGigForceAttachmentDirectory, ChatConstants.DIRECTORY_VIDEOS)
     private var documentsDirectoryRef: File =
         File(refToGigForceAttachmentDirectory, ChatConstants.DIRECTORY_DOCUMENTS)
+
+    protected lateinit var message: ChatMessage
+    protected lateinit var oneToOneChatViewModel: ChatPageViewModel
+    protected lateinit var groupChatViewModel: GroupChatViewModel
 
     var iMediaMessage: IMediaMessage? = null
 
@@ -76,8 +84,14 @@ abstract class MediaMessage(
     }
 
     override fun bind(data: Any?) {
-        iMediaMessage = data as IMediaMessage?
-        this.onBind(data as ChatMessage)
+
+        val dataAndViewModels =  data as ChatMessageWrapper
+        message = dataAndViewModels.message
+        groupChatViewModel = dataAndViewModels.groupChatViewModel
+        oneToOneChatViewModel = dataAndViewModels.oneToOneChatViewModel
+
+        iMediaMessage = message
+        this.onBind(message)
     }
 
     abstract fun onBind(msg: ChatMessage)

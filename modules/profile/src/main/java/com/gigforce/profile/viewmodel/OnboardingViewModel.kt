@@ -18,6 +18,7 @@ import com.gigforce.profile.R
 import com.gigforce.profile.models.City
 import com.gigforce.profile.models.CityWithImage
 import com.gigforce.profile.models.OnboardingProfileData
+import com.gigforce.profile.models.SubCity
 import com.gigforce.profile.onboarding.fragments.interest.InterestDM
 import com.gigforce.profile.repository.OnboardingProfileFirebaseRepository
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -188,6 +189,38 @@ class OnboardingViewModel constructor(
             e.printStackTrace()
         }
     }
+
+    private val _subCities = MutableLiveData<ArrayList<SubCity>>()
+    val subCities: LiveData<ArrayList<SubCity>> = _subCities
+
+    fun getSubCities(stateCode: String, cityCode: String)  = viewModelScope.launch{
+
+        try {
+            val subCityData =  ArrayList<SubCity>()
+            firebaseFirestore
+                .collection("MST_Sublocations").whereEqualTo("state_code", stateCode).whereEqualTo("cityCode", cityCode)
+                .addSnapshotListener { value, error ->
+                    error?.printStackTrace()
+
+                    value.let {
+                        value.let {
+                            it?.documents?.forEach { subCity ->
+                                subCity.toObject(SubCity::class.java).let {
+                                    if (it != null) {
+                                        subCityData.add(it)
+                                    }
+                                }
+                            }
+                        }
+                        subCityData.sortBy { it -> it.index }
+                        _subCities.value = subCityData
+                    }
+                }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
 
     fun savePreferredJobLocation(
             cityId: String,

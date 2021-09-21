@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_465"
+        android:background="#f2d1db"
+        android:fitsSystemWindows="true"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/toolbar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            android:minHeight="60dp"
+            app:contentScrim="#f2d1db"
+
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:statusBarScrim="@android:color/transparent"
+            app:toolbarId="@+id/toolbar">
+
+            <com.gigforce.common_ui.widgets.RoundCornerImageView
+                android:id="@+id/iv_profile_v2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:sriv_left_bottom_corner_radius="@dimen/size_8"
+                app:sriv_right_top_corner_radius="@dimen/size_8"
+                app:sriv_left_top_corner_radius="@dimen/size_8"
+                app:sriv_right_bottom_corner_radius="@dimen/size_8"
+                app:layout_collapseMode="parallax"
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/ll_no_pic_profile_v2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                app:layout_collapseMode="parallax">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/size_200"
+                    android:layout_height="@dimen/size_200"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/profile" />
+
+                <TextView
+                    android:id="@+id/tv_upload_profile_pic_profile_v2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/size_52"
+                    android:fontFamily="@font/lato"
+                    android:gravity="center_horizontal"
+                    android:lineSpacingExtra="3sp"
+                    android:text="@string/upload_picture_app"
+                    android:textColor="@color/lipstick"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/actionBarSize"
+                android:layout_marginTop="@dimen/size_24"
+                app:layout_collapseMode="pin"
+                app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                app:theme="@style/ToolbarTheme"
+                app:title=""
+                app:titleTextColor="@color/black" />
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <include layout="@layout/content_scrolling" />
+
+    <com.gigforce.common_ui.widgets.CircleImageView
+        android:id="@+id/iv_share_profile_v2"
+        android:layout_width="@dimen/size_36"
+        android:layout_height="@dimen/size_36"
+        android:layout_margin="@dimen/size_16"
+
+        android:background="@drawable/fab_bg_profile_v2"
+        android:elevation="@dimen/size_5"
+        android:padding="@dimen/size_10"
+        android:src="@drawable/ic_baseline_share_24"
+        app:layout_anchor="@id/app_bar"
+        app:layout_anchorGravity="bottom|end" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

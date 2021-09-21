@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".ui.share_application_link.PickJobProfileForReferralFragment">
+
+        <com.gigforce.common_ui.views.GigforceToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?android:actionBarSize" />
+
+        <LinearLayout
+            android:id="@+id/user_name_mobile_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/giger_name_TV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="56dp"
+                android:fontFamily="@font/lato_bold"
+                android:lineHeight="19sp"
+                android:text="@string/gigers_name_lead"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/gigers_name_ET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/rectangle_round_grey"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="3sp"
+                android:minHeight="36dp"
+                android:paddingStart="8dp"
+                android:textColor="#333333"
+                android:textSize="14sp"
+                android:textStyle="normal" />
+
+            <TextView
+                android:id="@+id/name_error_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="3sp"
+                android:textColor="@android:color/holo_red_dark"
+                android:textSize="12sp"
+                android:visibility="gone"
+                android:textStyle="normal" />
+
+
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/select_gig_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="30dp"
+            android:fontFamily="@font/lato_bold"
+            android:lineHeight="19sp"
+            android:text="@string/select_gig_lead"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/search_gig_ET"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/rectangle_round_grey"
+            android:fontFamily="@font/lato"
+            android:hint="@string/search_by_business_name_profile_lead"
+            android:lineSpacingExtra="3sp"
+            android:minHeight="36dp"
+            android:paddingStart="8dp"
+            android:textColor="#333333"
+            android:textSize="14sp"
+            android:textStyle="normal" />
+
+
+        <TextView
+            android:id="@+id/search_result_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/lato"
+            android:paddingStart="8dp"
+            android:textColor="#6D7278"
+            android:textSize="12sp"
+            android:textStyle="normal" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <com.gigforce.core.recyclerView.CoreRecyclerView
+                android:id="@+id/gigs_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <include
+                android:id="@+id/gigs_shimmer_container"
+                layout="@layout/shimmer_container"
+                android:visibility="visible" />
+
+            <include
+                android:id="@+id/gigs_list_info_layout"
+                layout="@layout/layout_error_with_retry" />
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/send_referral_link_btn"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="@dimen/size_16"
+            android:layout_marginBottom="@dimen/size_18"
+            android:background="@drawable/app_gradient_button"
+            android:gravity="center"
+            android:minHeight="@dimen/size_36"
+            android:text="@string/send_referral_link_lead"
+            android:textColor="@color/white" />
+
+
+    </LinearLayout>
+</layout>

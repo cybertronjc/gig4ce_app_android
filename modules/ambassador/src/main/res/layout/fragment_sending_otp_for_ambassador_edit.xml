@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="320dp"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="3dp">
+
+
+    <LinearLayout
+        android:id="@+id/send_otp_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingBottom="16dp"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:id="@+id/titleLayout"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@color/lipstick"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <TextView
+                android:id="@+id/dialog_title_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato_bold"
+                android:letterSpacing="0"
+                android:text="@string/edit_profile_amb"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/congrats_image"
+            android:layout_width="234dp"
+            android:layout_height="160dp"
+            android:layout_marginTop="22dp"
+              app:srcCompat="@drawable/ic_edit_profile_illus"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/titleLayout" />
+
+        <TextView
+            android:id="@+id/congrats_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/lato"
+            android:gravity="center"
+            android:lineSpacingExtra="3sp"
+            android:textColor="#d9000000"
+            android:textSize="14sp"
+
+            android:textStyle="normal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/congrats_image"
+            android:text="@string/verification_code_will_be_sent_to_registered_number_to_edit_profile_amb"
+             />
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/submitBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="60dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/gradient_button"
+            android:fontFamily="@font/lato_bold"
+            android:gravity="center"
+            android:minHeight="@dimen/size_36"
+            android:text="@string/okay_text_amb"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/congrats_text"
+            app:layout_goneMarginTop="56dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/cancel_btn"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="24dp"
+            android:fontFamily="@font/lato_bold"
+            android:gravity="center"
+            android:text="@string/cancel_underlined_amb"
+            android:textAllCaps="false"
+            android:minHeight="0dp"
+            android:textColor="@color/battle_ship_grey"
+            app:layout_constraintTop_toBottomOf="@id/congrats_text"
+            app:layout_goneMarginTop="56dp" />
+
+
+    </LinearLayout>
+
+
+
+
+
+    <ProgressBar
+        android:id="@+id/loading_progresbar"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center"
+        android:visibility="gone"/>
+
+</com.google.android.material.card.MaterialCardView>

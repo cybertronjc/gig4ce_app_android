@@ -1,0 +1,30 @@
+package com.gigforce.app.di.implementations
+
+import com.gigforce.app.BuildConfig
+import com.gigforce.core.di.interfaces.IBuildConfig
+import javax.inject.Inject
+
+class BuildConfigImp @Inject constructor(): IBuildConfig {
+
+    override fun getDrivingCertificateMethod(): String = BuildConfig.DRIVING_CERTIFICATE_METHOD
+    override fun getReferralBaseUrl(): String = BuildConfig.REFERRAL_BASE_URL
+    override fun getCreateUserUrl(): String = BuildConfig.CREATE_USER_URL
+    override fun getCreateOrSendOTPUrl(): String = BuildConfig.CHECK_USER_OR_SEND_OTP_URL
+    override fun getVerifyOTPURL(): String = BuildConfig.VERIFY_OTP_URL
+    override fun getGeneratePayslipURL(): String = BuildConfig.GENERATE_PAYSLIP_URL
+    override fun getApplicationID(): String = BuildConfig.APPLICATION_ID
+    override fun getSendSMSURL() : String = BuildConfig.SEND_SMS_URL
+    override fun getFeaturesIconLocationUrl(): String = BuildConfig.ALL_FEATURES_ICONS_STORAGE_URL
+    override val debugBuild: Boolean get() = BuildConfig.DEBUG
+    override val baseUrl: String get() = BuildConfig.BASE_URL
+    override fun getUserRegisterInfoUrl(): String = BuildConfig.GET_USER_REGISTER_INFO_URL
+    override fun getStorageBaseUrl(): String = BuildConfig.STORAGE_BASE_URL
+    override fun getPanelBaseUrl(): String = BuildConfig.PANEL_BASE_URL
+    override fun getApiBaseURL() = BuildConfig.API_BASE_URL
+
+    override val appVersion: String = BuildConfig.VERSION_NAME
+    override val appFlavour: String = BuildConfig.FLAVOR
+    override val appBuildType: String = BuildConfig.BUILD_TYPE
+
+    override fun getListingBaseUrl(): String = BuildConfig.LISTING_BASE_URL
+}

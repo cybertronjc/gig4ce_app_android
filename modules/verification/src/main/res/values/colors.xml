@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="light_grey">#dddddd</color>
+    <color name="green_dc3ab105">#dc3ab105</color>
+    <color name="fa6400">#fa6400</color>
+    <color name="battle_ship_grey">#6d7278</color>
+    <color name="app_red">#E02020</color>
+    <color name="white_two">#f4f4f4</color>
+    <color name="black_85">#d9000000</color>
+    <color name="warm_grey_two">#979797</color>
+    <color name="battleship_grey">#6d7278</color>
+    <color name="upload_success">#00bf80</color>
+    <color name="verification_inprogress">#7cd6a9</color>
+    <color name="upload_mismatch">#d79f3c</color>
+    <color name="upload_error">#ea6a5e</color>
+    <color name="black3">#333333</color>
+
+</resources>

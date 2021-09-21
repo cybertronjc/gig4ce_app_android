@@ -11,30 +11,33 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.gone
-import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
-import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
-import com.gigforce.app.modules.photocrop.PhotoCrop
-import com.gigforce.app.modules.profile.models.ProfileData
+import com.gigforce.core.extensions.gone
+import com.gigforce.common_ui.viewmodels.GigVerificationViewModel
+import com.gigforce.giger_gigs.photocrop.PhotoCrop
+import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.utils.GlideApp
-import com.gigforce.app.utils.StringConstants
+import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.ext.showToast
+import com.gigforce.common_ui.viewmodels.ProfileViewModel
+import com.gigforce.core.navigation.INavigation
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.chip.Chip
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_profile_main_expanded.*
 import kotlinx.android.synthetic.main.fragment_profile_main_expanded.view.*
 import kotlinx.android.synthetic.main.profile_main_card_background.view.*
 import kotlinx.android.synthetic.main.verified_button.view.*
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class ProfileFragment : BaseFragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -43,18 +46,28 @@ class ProfileFragment : BaseFragment() {
 
 
     }
-
+    var allNavigationList = ArrayList<String>()
+    var intentBundle : Bundle? = null
     private fun getDataFromIntents(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
             FROM_CLIENT_ACTIVATION =
                 it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
             ACTION_TO_PERFORM = it.getInt(StringConstants.ACTION.value, -1)
+
+            it.getStringArrayList(StringConstants.NAVIGATION_STRING_ARRAY.value)?.let { arr ->
+                allNavigationList = arr
+            }
+            intentBundle = it
         }
 
         arguments?.let {
             FROM_CLIENT_ACTIVATION =
                 it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
             ACTION_TO_PERFORM = it.getInt(StringConstants.ACTION.value, -1)
+            it.getStringArrayList(StringConstants.NAVIGATION_STRING_ARRAY.value)?.let { arr ->
+                allNavigationList = arr
+            }
+            intentBundle = it
         }
     }
 
@@ -62,6 +75,7 @@ class ProfileFragment : BaseFragment() {
     companion object {
         fun newInstance() = ProfileFragment()
         val UPLOAD_PROFILE_PIC = 1
+        val MAX_DISTANCE = 20
     }
 
 
@@ -78,8 +92,11 @@ class ProfileFragment : BaseFragment() {
     private var FROM_CLIENT_ACTIVATION = false
     private var profilePicUploadInProgress = false
 
-    private val gigerVerificationViewModel: GigVerificationViewModel by viewModels()
+    private val gigerVerificationViewModel: GigVerificationViewModel by activityViewModels()
     val viewModel: ProfileViewModel by activityViewModels<ProfileViewModel>()
+
+    @Inject
+    lateinit var navigation : INavigation
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,16 +105,14 @@ class ProfileFragment : BaseFragment() {
     }
 
     private fun makeStatusBarTransparent() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            win = requireActivity().window
-            win.setFlags(
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-            )
-            win.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            win.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            win.setStatusBarColor(requireActivity().getColor(R.color.white))
-        }
+        win = requireActivity().window
+        win.setFlags(
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+        )
+        win.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        win.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        win.setStatusBarColor(requireActivity().getColor(R.color.white))
     }
 
 
@@ -140,6 +155,35 @@ class ProfileFragment : BaseFragment() {
         val wm = requireContext().getSystemService(Context.WINDOW_SERVICE) as WindowManager
         dWidth = wm.defaultDisplay
         layout = inflateView(R.layout.fragment_profile_main_expanded, inflater, container)!!
+        return layout
+    }
+
+
+
+    private fun setAppBarOffset(offsetPx: Int) {
+        val params = layout.appbar.layoutParams as CoordinatorLayout.LayoutParams
+        val behavior = params.behavior as AppBarLayout.Behavior?
+
+
+        try {
+            behavior!!.onNestedPreScroll(
+                layout.coordinator,
+                layout.appbar,
+                this.requireView(),
+                0,
+                offsetPx,
+                intArrayOf(0, 0),
+                0
+            )
+        } catch (e : Exception){
+            e.printStackTrace()
+        }
+
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         layout.appbar.post(Runnable {
             val heightPx: Int = dWidth.width * 1 / 3
             setAppBarOffset(heightPx)
@@ -151,46 +195,15 @@ class ProfileFragment : BaseFragment() {
         })
 
         layout.profile_avatar.layoutParams.height = dWidth.width
-
         layout.main_expanded_is_verified.setOnClickListener {
             navigate(R.id.gigerVerificationFragment)
         }
 
-        return layout
-    }
 
-    private fun setAppBarOffset(offsetPx: Int) {
-        val params = layout.appbar.layoutParams as CoordinatorLayout.LayoutParams
-        val behavior = params.behavior as AppBarLayout.Behavior?
-
-
-        behavior!!.onNestedPreScroll(
-            layout.coordinator,
-            layout.appbar,
-            this.requireView(),
-            0,
-            offsetPx,
-            intArrayOf(0, 0),
-            0
-        )
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
         gigerVerificationViewModel.gigerVerificationStatus.observe(viewLifecycleOwner, Observer {
 
-            val requiredDocsVerified = it.selfieVideoDataModel?.videoPath != null
-                    && it.panCardDetails?.state == GigerVerificationStatus.STATUS_VERIFIED
-                    && it.bankUploadDetailsDataModel?.state == GigerVerificationStatus.STATUS_VERIFIED
-                    && (it.aadharCardDataModel?.state == GigerVerificationStatus.STATUS_VERIFIED || it.drivingLicenseDataModel?.state == GigerVerificationStatus.STATUS_VERIFIED)
-
-            val requiredDocsUploaded = it.selfieVideoDataModel?.videoPath != null
-                    && it.panCardDetails?.panCardImagePath != null
-                    && it.bankUploadDetailsDataModel?.passbookImagePath != null
-                    && (it.aadharCardDataModel?.frontImage != null || it.drivingLicenseDataModel?.backImage != null)
-
-            if (requiredDocsVerified) {
+            if (it.requiredDocsVerified) {
                 layout.main_expanded_is_verified.verification_status_tv.text =
                     getString(R.string.verified_text)
                 layout.main_expanded_is_verified.verification_status_tv.setTextColor(
@@ -203,7 +216,7 @@ class ProfileFragment : BaseFragment() {
                 layout.main_expanded_is_verified.status_iv.setImageResource(R.drawable.ic_check)
                 layout.main_expanded_is_verified.verification_status_cardview.strokeColor =
                     ResourcesCompat.getColor(resources, R.color.green, null)
-            } else if (requiredDocsUploaded) {
+            } else if (it.requiredDocsUploaded) {
                 layout.main_expanded_is_verified.verification_status_tv.text =
                     getString(R.string.under_verification)
                 layout.main_expanded_is_verified.verification_status_tv.setTextColor(
@@ -217,7 +230,7 @@ class ProfileFragment : BaseFragment() {
                 layout.main_expanded_is_verified.verification_status_cardview.strokeColor =
                     ResourcesCompat.getColor(resources, R.color.app_orange, null)
             } else {
-                layout.main_expanded_is_verified.verification_status_tv.text = "Not Verified"
+                layout.main_expanded_is_verified.verification_status_tv.text = getString(R.string.not_verified)
                 layout.main_expanded_is_verified.verification_status_tv.setTextColor(
                     ResourcesCompat.getColor(
                         resources,
@@ -234,10 +247,9 @@ class ProfileFragment : BaseFragment() {
         gigerVerificationViewModel.startListeningForGigerVerificationStatusChanges()
 
 
-
-
         location_card.setOnClickListener {
-            showToast("This is work in progress. Please check again in a few days")
+            navigation.navigateTo("preferences/locationFragment")
+//            showToast(getString(R.string.work_in_progress_app))
         }
         // load user data
         viewModel.ambassadorProfilePicUpdate.observe(viewLifecycleOwner, Observer {
@@ -319,7 +331,7 @@ class ProfileFragment : BaseFragment() {
                 // TODO: Add a generic way for string formatting.
                 for ((index, language) in languages.withIndex()) {
                     mainAboutString += if (index == 0)
-                        "Language known: " + language.name + " (" +
+                        getString(R.string.know_lang_app) + language.name + " (" +
                                 getLanguageLevel(language.speakingSkill.toInt()) + ")\n"
                     else
                         "\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + language.name + " (" +
@@ -455,7 +467,11 @@ class ProfileFragment : BaseFragment() {
                 }
 
             }
-
+            if(profile.address.current.preferred_distance>0) {
+                arround_current_add.text = profile.address.current.preferred_distance.toString()+" KM "+ if(profile.address.current.preferred_distance>=MAX_DISTANCE) "away" else ""
+            }else{
+                arround_current_add.text = ""
+            }
 
         })
 
@@ -529,13 +545,17 @@ class ProfileFragment : BaseFragment() {
 //        })
         appbar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
             override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {
-                if (Math.abs(verticalOffset) - appBarLayout.getTotalScrollRange() == 0) {
-                    main_expanded_user_name.animate().alpha(0.0f).setDuration(100)
-                    main_expanded_user_name.visibility = View.INVISIBLE
-                } else {
-                    main_expanded_user_name.animate().alpha(1.0f).setDuration(0)
-                    main_expanded_user_name.visibility = View.VISIBLE
 
+                try {
+                    if (Math.abs(verticalOffset) - appBarLayout.getTotalScrollRange() == 0) {
+                        main_expanded_user_name.animate().alpha(0.0f).setDuration(100)
+                        main_expanded_user_name.visibility = View.INVISIBLE
+                    } else {
+                        main_expanded_user_name.animate().alpha(1.0f).setDuration(0)
+                        main_expanded_user_name.visibility = View.VISIBLE
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
             }
         })
@@ -601,7 +621,12 @@ class ProfileFragment : BaseFragment() {
             }
             if (ACTION_TO_PERFORM != -1) {
                 when (ACTION_TO_PERFORM) {
-                    UPLOAD_PROFILE_PIC -> popBackState()
+                    UPLOAD_PROFILE_PIC -> {
+                        checkForNextDoc()
+//                        popBackState()
+                    }
+
+
                 }
             }
         }
@@ -614,6 +639,27 @@ class ProfileFragment : BaseFragment() {
         }
     }
 
+    private fun checkForNextDoc() {
+        if (allNavigationList.size == 0) {
+            activity?.onBackPressed()
+        } else {
+            var navigationsForBundle = emptyList<String>()
+            if (allNavigationList.size > 1) {
+                navigationsForBundle =
+                    allNavigationList.slice(IntRange(1, allNavigationList.size - 1))
+                        .filter { it.length > 0 }
+            }
+            navigation.popBackStack()
+            intentBundle?.putStringArrayList(StringConstants.NAVIGATION_STRING_ARRAY.value,  ArrayList(navigationsForBundle))
+            navigation.navigateTo(
+                allNavigationList.get(0),intentBundle)
+//            navigation.navigateTo(
+//                allNavigationList.get(0),
+//                bundleOf(VerificationConstants.NAVIGATION_STRINGS to navigationsForBundle,if(FROM_CLIENT_ACTIVATION) StringConstants.FROM_CLIENT_ACTIVATON.value to true else StringConstants.FROM_CLIENT_ACTIVATON.value to false)
+//            )
+
+        }
+    }
 
 }
 

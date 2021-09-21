@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="3dp">
+
+        <include
+            android:id="@+id/success_layout"
+            layout="@layout/fragment_assign_gig_dialog_success"
+            android:visibility="gone"
+            />
+
+        <include
+            android:id="@+id/processing_layout"
+            layout="@layout/fragment_assign_gig_dialog_processing"
+            android:visibility="visible"
+            />
+
+        <include
+            android:id="@+id/error_layout"
+            layout="@layout/layout_error_with_retry"
+            android:visibility="gone"
+            />
+
+    </RelativeLayout>
+</layout>

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="3dp">
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="3dp">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="16dp">
+
+            <LinearLayout
+                android:id="@+id/titleLayout"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@color/lipstick"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toTopOf="parent">
+
+
+                <ImageView
+                    android:id="@+id/warningIconIV"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_marginStart="22dp"
+                    app:srcCompat="@drawable/ic_warning" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:fontFamily="@font/lato"
+                    android:letterSpacing="0"
+                    android:text="@string/attendance_location_not_correct_giger_gigs"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/not_at_location_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
+                android:textSize="16sp"
+                android:fontFamily="@font/lato"
+                android:textColor="@color/black_three"
+                android:letterSpacing="0"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:text="@string/you_are_currently_not_at_gig_location_this_will_be_reported_to_your_supervisor_giger_gigs"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/titleLayout" />
+
+
+            <TextView
+                android:id="@+id/location_from_gig_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:letterSpacing="0"
+                tools:text="@string/please_let_us_know_more_about_your_gig_giger_gigs"
+                android:textColor="#313131"
+                android:textSize="14sp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/not_at_location_tv" />
+
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/try_later_btn"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/lato_bold"
+                android:gravity="center"
+                android:minWidth="120dp"
+                android:minHeight="@dimen/size_46"
+                android:text="@string/try_later_giger_gigs"
+                android:layout_marginStart="10dp"
+                android:textAllCaps="false"
+                android:textColor="@color/lipstick"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/location_from_gig_tv"
+                app:layout_constraintEnd_toStartOf="@id/submitBtn"
+                app:strokeColor="@color/lipstick" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/submitBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/gradient_button"
+                android:fontFamily="@font/lato_bold"
+                android:gravity="center"
+                android:minHeight="@dimen/size_36"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:layout_marginEnd="10dp"
+                android:text="@string/continue_attendance_giger_gigs"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/try_later_btn"
+                app:layout_constraintTop_toBottomOf="@id/location_from_gig_tv" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+</RelativeLayout>

@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="30dp"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:paddingTop="20dp"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/ic_cross"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:scaleY="0.8"
+        android:src="@drawable/ic_baseline_close_24"
+        app:tint="@color/black"
+        android:scaleX="0.8"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+    <ImageView
+        android:id="@+id/ic_ellipses"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:scaleY="0.8"
+        android:src="@drawable/ic_ellipses"
+        app:tint="@color/black"
+        android:scaleX="0.8"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <ImageView
+        android:id="@+id/user_image_iv"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_marginStart="10dp"
+        android:src="@drawable/bg_wallet"
+        app:layout_constraintStart_toEndOf="@id/ic_cross"
+        app:layout_constraintTop_toBottomOf="@id/ic_cross"/>
+
+
+    <TextView
+        android:id="@+id/user_name_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lato"
+        android:textStyle="normal"
+        android:textSize="16sp"
+        android:textColor="#d9000000"
+        tools:text="Sunita Willams"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="2dp"
+        app:layout_constraintTop_toTopOf="@id/user_image_iv"
+        app:layout_constraintStart_toEndOf="@id/user_image_iv"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+
+
+
+    <TextView
+        android:id="@+id/designation_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lato"
+        android:textStyle="normal"
+        android:textSize="12sp"
+        android:textColor="@color/warm_grey"
+        tools:text="Supervisor"
+        android:layout_marginTop="4dp"
+        app:layout_constraintStart_toEndOf="@id/user_image_iv"
+        app:layout_constraintTop_toBottomOf="@id/user_name_tv"
+        android:layout_marginStart="12dp"
+        />
+
+    <ImageView
+        android:id="@+id/rating_star_iv"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="12dp"
+        android:src="@drawable/ic_star"
+        android:layout_marginTop="6dp"
+        app:layout_constraintStart_toEndOf="@id/user_image_iv"
+        app:layout_constraintTop_toBottomOf="@id/designation_tv"/>
+
+    <TextView
+        android:id="@+id/rating_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lato"
+        android:textStyle="normal"
+        android:textSize="12sp"
+        android:textColor="@color/warm_grey"
+        tools:text="4.0"
+        android:layout_marginTop="6dp"
+        app:layout_constraintStart_toEndOf="@id/rating_star_iv"
+        app:layout_constraintTop_toBottomOf="@id/designation_tv"
+        android:layout_marginStart="12dp"
+        />
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/call_card_view"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        app:cardElevation="5dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/user_image_iv"
+        app:layout_constraintTop_toBottomOf="@id/user_image_iv">
+
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            app:tint="@color/black"
+            android:src="@drawable/ic_call"/>
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+    <TextView
+        android:id="@+id/call_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lato"
+        android:textStyle="normal"
+        android:textSize="14sp"
+        android:textColor="#d9000000"
+        android:text="@string/call_giger_gigs"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/call_card_view"
+        app:layout_constraintStart_toStartOf="@id/call_card_view"
+        app:layout_constraintEnd_toEndOf="@id/call_card_view"
+        />
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/message_card_view"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        app:cardElevation="5dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/whatsapp_card_view"
+        app:layout_constraintStart_toEndOf="@id/call_card_view"
+        app:layout_constraintTop_toBottomOf="@id/user_image_iv">
+
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_homescreen_chat"/>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <ProgressBar
+        android:id="@+id/getting_profile_details_pb"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@id/message_card_view"
+        app:layout_constraintEnd_toEndOf="@id/message_card_view"
+        app:layout_constraintBottom_toBottomOf="@id/message_card_view"
+        app:layout_constraintTop_toTopOf="@id/message_card_view"/>
+
+
+
+    <TextView
+        android:id="@+id/message_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lato"
+        android:textStyle="normal"
+        android:textSize="14sp"
+        android:textColor="#d9000000"
+        android:text="@string/message_giger_gigs"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/message_card_view"
+        app:layout_constraintStart_toStartOf="@id/message_card_view"
+        app:layout_constraintEnd_toEndOf="@id/message_card_view"
+        />
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/whatsapp_card_view"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        app:cardElevation="5dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:layout_marginEnd="26dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/user_image_iv">
+
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_whatsapp"/>
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+    <TextView
+        android:id="@+id/whatsApp_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lato"
+        android:textStyle="normal"
+        android:textSize="14sp"
+        android:textColor="#d9000000"
+        android:text="@string/whatsapp_giger_gigs"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/whatsapp_card_view"
+        app:layout_constraintStart_toStartOf="@id/whatsapp_card_view"
+        app:layout_constraintEnd_toEndOf="@id/whatsapp_card_view"
+        />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

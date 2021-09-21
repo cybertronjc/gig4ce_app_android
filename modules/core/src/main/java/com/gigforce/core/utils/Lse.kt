@@ -11,8 +11,11 @@ sealed class Lse {
 
     companion object {
 
-        fun success(): Lse = Success
-        fun loading(): Lse = Loading
-        fun error(error: String): Lse = Error(error)
+        fun success(): Lse =
+            Success
+        fun loading(): Lse =
+            Loading
+        fun error(error: String): Lse =
+            Error(error)
     }
 }

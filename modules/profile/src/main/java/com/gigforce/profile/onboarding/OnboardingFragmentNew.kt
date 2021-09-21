@@ -1,13 +1,13 @@
 package com.gigforce.profile.onboarding
 
 import android.app.Activity
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.RemoteException
 import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.RadioButton
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -36,14 +36,14 @@ import kotlinx.android.synthetic.main.experience_item.*
 import kotlinx.android.synthetic.main.name_gender_item.view.*
 import kotlinx.android.synthetic.main.onboarding_fragment_new_fragment.*
 import kotlinx.android.synthetic.main.onboarding_fragment_new_fragment_greeting_layout.*
-import org.json.JSONException
 import javax.inject.Inject
 import com.android.installreferrer.api.ReferrerDetails
 import com.android.installreferrer.api.InstallReferrerClient
 import com.android.installreferrer.api.InstallReferrerStateListener
+import com.gigforce.core.AppConstants
 import com.gigforce.core.StringConstants
+import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.utils.NavFragmentsData
-import com.gigforce.core.utils.SharedDataInterface
 
 @AndroidEntryPoint
 class OnboardingFragmentNew : Fragment(){
@@ -53,7 +53,7 @@ class OnboardingFragmentNew : Fragment(){
     @Inject
     lateinit var eventTracker: IEventTracker
 
-    @Inject lateinit var sharedPreference : SharedDataInterface
+    @Inject lateinit var sharedPreference : SharedPreAndCommonUtilInterface
 
     var navFragmentsData: NavFragmentsData? = null
 
@@ -106,27 +106,12 @@ class OnboardingFragmentNew : Fragment(){
         activity?.let {
             onboarding_pager.adapter =
                     MutlifragmentAdapter(it)
+            appBar.setSteps(getString(R.string.steps_profile)+" 1/" + (onboarding_pager.adapter as MutlifragmentAdapter).fragmentArr.size)
             steps.text =
-                    "Step 1/${(onboarding_pager.adapter as MutlifragmentAdapter).fragmentArr.size}"
+                getString(R.string.steps_profile) +" 1/"+ (onboarding_pager.adapter as MutlifragmentAdapter).fragmentArr.size
         }
         next.setOnClickListener {
-            if (isFragmentActionNotExists()) {
-                saveDataToDB(onboarding_pager.currentItem)
-
-                onboarding_pager.currentItem = onboarding_pager.currentItem + 1
-                steps.text = "Steps ${onboarding_pager.currentItem + 1}/9"
-
-                if (onboarding_pager.currentItem == 8) {
-                    val fragmentAdapter = onboarding_pager.adapter as MutlifragmentAdapter
-                    val fragment =
-                            fragmentAdapter.getFragment(onboarding_pager.currentItem) as OnboardingAddProfilePictureFragment
-                    if (!fragment.hasUserUploadedPhoto()) {
-                        fragment.showCameraSheetIfNotShown()
-                    } else {
-                    }
-                }
-            }
-            setNextButtonForCurrentFragment()
+            clickOnNextButton()
         }
 
 
@@ -141,6 +126,19 @@ class OnboardingFragmentNew : Fragment(){
                 }
         }
 
+        appBar.setBackButtonListener(object: View.OnClickListener {
+
+            override fun onClick(p0: View?) {
+                if (!isFragmentLastStateFound())
+                    if (onboarding_pager.currentItem != 0)
+                        onboarding_pager.currentItem = onboarding_pager.currentItem - 1
+                    else {
+                        hideKeyboard()
+                        activity?.onBackPressed()
+                    }
+            }
+        })
+
 
         onboarding_pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
 
@@ -149,20 +147,55 @@ class OnboardingFragmentNew : Fragment(){
 
                 val fragmentAdapter = onboarding_pager.adapter as MutlifragmentAdapter
                 if (position == 8) {
-                    val fragment =
-                            fragmentAdapter.getFragment(position) as OnboardingAddProfilePictureFragment
-                    fragment.showCameraSheetIfNotShown()
-
+//                    val fragment =
+//                            fragmentAdapter.getFragment(position) as OnboardingAddProfilePictureFragment
+//                    fragment.showCameraSheetIfNotShown()
                     enableNextButton(true)
                 } else {
-                    next.text = "Next"
-                    var fragmentInterface = fragmentAdapter.getFragment(position) as SetInterfaceListener
-                    fragmentInterface.setInterface(communicator)
+                    next.text = getString(R.string.next_profile)
                 }
+                var fragmentInterface = fragmentAdapter.getFragment(position) as SetInterfaceListener
+                fragmentInterface.setInterface(communicator)
             }
         })
     }
 
+    private fun clickOnNextButton(skip : Boolean?=false){
+        if (isFragmentActionNotExists()) {
+            if(onboarding_pager.currentItem == 8 && skip == false){
+                val fragment = getProfilePicFragment()
+                if (!fragment.hasUserUploadedPhoto()) {
+                    fragment.showCameraSheetIfNotShown()
+                    return
+                }
+            }
+            saveDataToDB(onboarding_pager.currentItem) // this will close the onboarding process itself if last fragment is open
+            if(onboarding_pager.currentItem == 8){
+                return
+            }
+            onboarding_pager.currentItem = onboarding_pager.currentItem + 1
+            //steps.text = "Steps ${onboarding_pager.currentItem + 1}/9"
+            appBar.setSteps(getString(R.string.steps_profile) +" "+ (onboarding_pager.currentItem + 1) + "/9")
+
+            if (onboarding_pager.currentItem == 8) {
+                val fragment = getProfilePicFragment()
+                if (!fragment.hasUserUploadedPhoto()) {
+                    next.text = getString(R.string.upload_photo_profile)
+                    fragment.showCameraSheetIfNotShown()
+                }else {
+                    next.text = getString(R.string.next_profile)
+                }
+            }
+        }
+        setNextButtonForCurrentFragment()
+    }
+
+    fun getProfilePicFragment() : OnboardingAddProfilePictureFragment{
+        val fragmentAdapter = onboarding_pager.adapter as MutlifragmentAdapter
+        val fragment =
+            fragmentAdapter.getFragment(onboarding_pager.currentItem) as OnboardingAddProfilePictureFragment
+        return fragment
+    }
 
     fun setNextButtonForCurrentFragment() {
         var currentFragment =
@@ -261,7 +294,11 @@ class OnboardingFragmentNew : Fragment(){
 
     private fun navigateToLoaderScreen() {
         navigation.popAllBackStates()
-        navigation.navigateTo("loader_screen")
+        navigation.navigateTo("loader_screen",
+            bundleOf(
+                AppConstants.SHOULD_CHECK_FOR_JOININGS_APPLICATIONS to true
+            )
+        )
     }
 
     private fun setAssetsData() {
@@ -327,7 +364,7 @@ class OnboardingFragmentNew : Fragment(){
         var total_experience_rg = experienceFragment.total_experience_rg
         val selectedId = total_experience_rg.checkedRadioButtonId
         var radioButton = onboarding_pager.findViewById(selectedId) as RadioButton
-        viewModel.saveTotalExperience(radioButton.text.toString())
+        viewModel.saveTotalExperience(radioButton.tag.toString())
     }
 
 
@@ -341,8 +378,10 @@ class OnboardingFragmentNew : Fragment(){
         // find the radiobutton by returned id
         var radioButton = onboarding_pager.findViewById(selectedId) as RadioButton
 
-        return radioButton.text.toString()
-//        return ""
+        return radioButton.tag.toString()
+//        return radioButton.text.toString()
+
+    //        return ""
     }
 
     private fun getSelectedHighestQualification(): String {
@@ -480,7 +519,7 @@ class OnboardingFragmentNew : Fragment(){
         }
 
         override fun profilePictureSkipPressed() {
-            //completet this
+            clickOnNextButton(true)
         }
 
         override fun checkForButtonText() {
@@ -488,17 +527,14 @@ class OnboardingFragmentNew : Fragment(){
 
             if (onboarding_pager.currentItem == 8) {
 
-                val fragmentAdapter = onboarding_pager.adapter as MutlifragmentAdapter
-                val fragment =
-                        fragmentAdapter.getFragment(onboarding_pager.currentItem) as OnboardingAddProfilePictureFragment
+                val fragment = getProfilePicFragment()
 
                 if (!fragment.hasUserUploadedPhoto()) {
-                    next.text = "Upload Photo"
+                    next.text = getString(R.string.upload_photo_profile)
                     enableNextButton(true)
-                    fragment.showCameraSheetIfNotShown()
                 } else {
                     enableNextButton(true)
-                    next.text = "Next"
+                    next.text = getString(R.string.next_profile)
                 }
             }
         }

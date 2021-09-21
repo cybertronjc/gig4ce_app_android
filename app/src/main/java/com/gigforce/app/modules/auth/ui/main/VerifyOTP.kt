@@ -17,17 +17,19 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.app.R
-import com.gigforce.app.analytics.AuthEvents
+import com.gigforce.core.analytics.AuthEvents
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.gone
-import com.gigforce.app.core.visible
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 import com.gigforce.app.modules.auth.ui.main.LoginViewModel.Companion.STATE_SIGNIN_FAILED
 import com.gigforce.app.modules.auth.ui.main.LoginViewModel.Companion.STATE_SIGNIN_SUCCESS
+import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.TrackingEventArgs
 import com.google.android.gms.auth.api.phone.SmsRetrieverClient
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.otp_verification.*
+import kotlinx.android.synthetic.main.otp_verification.progressBar
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 import javax.inject.Inject
@@ -55,9 +57,7 @@ class VerifyOTP : BaseFragment() {
     var timerStarted = false
     private var client: SmsRetrieverClient? = null
 
-    //    private var otpReceiver: SmsRetrieverBroadcastReceiver.OTPReceiveListener = this
-//    private  var smsBroadcast = SmsRetrieverBroadcastReceiver()
-    //var appSignature = AppSignatureHelper(context)
+
     private var win: Window? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,8 +68,16 @@ class VerifyOTP : BaseFragment() {
         }
 
         //Log.d("app signature", appSignature.appSignatures.get(0))
+        savedInstanceState?.let {
+            verificationId = it.getString("verificationId")!!
+            mobile_number = it.getString("mobile_number")!!
+        }
+    }
 
-
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("verificationId",verificationId)
+        outState.putString("mobile_number",mobile_number)
     }
 
     override fun onCreateView(
@@ -80,7 +88,6 @@ class VerifyOTP : BaseFragment() {
         changeStatusBarColor()
         viewModel.verificationId = verificationId.toString()
         layout = inflateView(R.layout.otp_verification, inflater, container)
-        //TODO
         eventTracker.pushEvent(TrackingEventArgs(AuthEvents.SIGN_UP_OTP_SCREEN_LOADED, null))
 //        layout?.textView29?.text = "We have sent the OTP to your " +". Please enter the OTP";
         return layout
@@ -93,6 +100,7 @@ class VerifyOTP : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.activity = this.requireActivity()
+//        viewModel.sendVerificationCode("+91"+mobile_number)
         initializeViews()
 //        startSmsRetriver()
         listeners()
@@ -207,18 +215,29 @@ class VerifyOTP : BaseFragment() {
         spannableString1.setSpan(UnderlineSpan(), 0, str.length, 0)
         reenter_mobile.text = spannableString1
         otp_label?.text =
-                getString(R.string.we_have_sent_otp) + " " + mobile_number + ".\n" + getString(R.string.please_enter_it_below)
+                getString(R.string.we_have_sent_otp_app) + " " + mobile_number + ".\n" + getString(R.string.please_enter_it_below_app)
     }
 
     private fun observer() {
         viewModel.liveState.observe(viewLifecycleOwner, Observer { it ->
-            if (it.stateResponse == STATE_SIGNIN_FAILED) {
-                showWrongOTPLayout(true)
 
-            } else if (it.stateResponse == STATE_SIGNIN_SUCCESS) {
-
-                countDownTimer?.cancel()
+            when (it.stateResponse) {
+                LoginViewModel.STATE_CODE_SENT -> {
+                    showToast("OTP sent")
+                }
+                LoginViewModel.STATE_VERIFY_FAILED -> {
+                    showToast(it.msg)
+                }
+                LoginViewModel.STATE_VERIFY_SUCCESS -> {
+                }
+                STATE_SIGNIN_FAILED ->{
+                    showWrongOTPLayout(true)
+                }
+                STATE_SIGNIN_SUCCESS -> {
+                    countDownTimer?.cancel()
+                }
             }
+
         })
 
     }
@@ -272,6 +291,7 @@ class VerifyOTP : BaseFragment() {
         iv_back_otp_fragment.setOnClickListener {
             onBackPressed()
         }
+
     }
 
     private fun navigateToLoginScreen() {
@@ -327,12 +347,14 @@ class VerifyOTP : BaseFragment() {
     }
 
     private fun showWrongOTPLayout(show: Boolean) {
-        if (show) {
-            cvotpwrong.visibility = View.VISIBLE
-
-        } else {
-            cvotpwrong.visibility = View.INVISIBLE
-
+        try {
+            if (show) {
+                cvotpwrong.visibility = View.VISIBLE
+            } else {
+                cvotpwrong.visibility = View.INVISIBLE
+            }
+        } catch (e: Exception){
+            e.printStackTrace()
         }
     }
 

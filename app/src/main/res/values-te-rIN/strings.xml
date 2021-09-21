@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">Gigforce</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="english">Telugu</string>
@@ -111,7 +110,7 @@
     <string name="add_experience_currently_working">ప్రస్తుతం ఇక్కడ పని చేయండి</string>
     <string name="cancel_text">రద్దు చేయండి</string>
     <string name="save_text">సేవ్</string>
-    <string name="back_text">తిరిగి</string>
+    <string name="back_text_app">తిరిగి</string>
     <string name="okay_text">సరే</string>
     <string name="okay_text_cap">సరే</string>
     <string name="add_more_text">మరిన్ని జోడించండి</string>
@@ -127,9 +126,9 @@
     <string name="end_date">ఆఖరి తేది</string>
     <string name="delete">తొలగించండి</string>
     <string name="edit_achievement">విజయాన్ని సవరించండి</string>
-    <string name="title">శీర్షిక</string>
+    <string name="title_app">శీర్షిక</string>
     <string name="authority">అధికారం</string>
-    <string name="location">స్థానం</string>
+    <string name="location_app">స్థానం</string>
     <string name="year">సంవత్సరం</string>
     <string name="year_text">సంవత్సరం</string>
     <string name="edit_skill">నైపుణ్యాన్ని సవరించండి</string>
@@ -211,7 +210,7 @@
     <string name="assessment">అసెస్మెంట్</string>
     <string name="kyc_verification_not_done">Kyc ధృవీకరణ పూర్తి కాలేదు, పూర్తి చేయడానికి ఇక్కడ క్లిక్ చేయండి.</string>
     <string name="video_resume_pending">మీ వీడియో పున ume ప్రారంభం పెండింగ్‌లో ఉంది, పూర్తి చేయడానికి ఇక్కడ క్లిక్ చేయండి.</string>
-    <string name="next">తరువాత</string>
+    <string name="next_app">తరువాత</string>
     <string name="cover_error_text">* టెక్స్ట్ 150 అక్షరాలను మించకూడదు</string>
     <string name="update_contact_details">సంప్రదింపు వివరాలను నవీకరించండి</string>
     <string name="change_contact_message">ఈ వివరాలను నవీకరించడానికి గిగర్ వారి ఆధార్ క్రాడ్ చిత్రాలను తిరిగి అప్‌లోడ్ చేయాలి మరియు KYC ధృవీకరణ ప్రక్రియను మళ్లీ చేయవలసి ఉంటుంది. అవసరమైతే తప్ప మీరు పేరు లేదా చిరునామా వివరాలను మార్చవద్దని మేము సిఫార్సు చేస్తున్నాము</string>
@@ -276,7 +275,7 @@
     <string name="upload_bank_passbook">అప్‌లోడ్ చెక్ / బ్యాంక్ పాస్‌బుక్ (మొదటి పేజీ)</string>
     <string name="upload_bank_passbook_sublabel">మీ ధృవీకరణ కోసం దయచేసి మీ బ్యాంక్ పాస్‌బుక్‌ను అప్‌లోడ్ చేయండి</string>
     <string name="edit">మార్చు</string>
-    <string name="name">పేరు</string>
+    <string name="name_app">పేరు</string>
     <string name="date_of_birth_without_colon">పుట్టిన తేది</string>
     <string name="gender_wo_colon">జెండర్</string>
     <string name="address_line">చిరునామా లైన్</string>
@@ -760,7 +759,7 @@
     <string name="day">రోజు</string>
     <string name="days">రోజులు</string>
     <string name="yes">అవును</string>
-    <string name="no">లేదు</string>
+    <string name="no_app">లేదు</string>
     <string name="none">ఏదీ లేదు</string>
     <string name="day_and_time">రోజు మరియు సమయం</string>
     <string name="weekday">వారపు రోజు</string>
@@ -918,7 +917,7 @@
     <string name="in_your_assessment">మీ అంచనాలో</string>
     <string name="new_cert_added_underlined"><u> క్రొత్త ప్రమాణపత్రం ప్రొఫైల్‌కు జోడించబడింది. </u></string>
     <string name="watch_lesson_again">పాఠం మళ్ళీ చూడండి</string>
-    <string name="skip">దాటవేయి</string>
+    <string name="skip_client">దాటవేయి</string>
     <string name="new_bio">కొత్త బయో</string>
     <string name="signed">సంతకం చేశారు</string>
     <string name="unsigned">సంతకం చేయలేదు</string>

@@ -11,6 +11,7 @@
         android:layout_height="56dp"
         android:background="@drawable/toolbar_bg_client_activation"
         android:minHeight="@dimen/size_56"
+        android:visibility="visible"
         app:contentInsetLeft="0dp"
         app:contentInsetStart="0dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -101,7 +102,7 @@
                     android:layout_marginBottom="@dimen/size_16"
                     android:letterSpacing="0"
                     android:lineSpacingExtra="3sp"
-                    android:text="@string/you_have_entered_invalid_otp_n_please_re_enter_otp"
+                    android:text="@string/you_have_entered_invalid_otp_n_please_re_enter_otp_app"
                     android:textColor="#E02020"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -120,7 +121,7 @@
                 android:fontFamily="@font/lato"
                 android:lineSpacingExtra="7sp"
                 android:minHeight="@dimen/size_42"
-                android:text="@string/verify_account"
+                android:text="@string/verify_account_app"
                 android:textColor="#333333"
                 android:textSize="32sp"
                 android:textStyle="bold"
@@ -149,7 +150,7 @@
 Please enter it below.
 " />
 
-            <com.gigforce.app.modules.auth.ui.main.OtpEditText
+            <com.gigforce.common_ui.widgets.OtpEditText
                 android:id="@+id/txt_otp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -173,7 +174,7 @@ Please enter it below.
                 android:gravity="end"
                 android:letterSpacing="0.09"
                 android:lineSpacingExtra="3sp"
-                android:text="@string/resend_otp"
+                android:text="@string/resend_otp_app"
                 android:textColor="#e82e66"
                 android:textSize="12sp"
                 android:textStyle="normal"
@@ -210,7 +211,7 @@ Please enter it below.
                 android:gravity="center"
                 android:letterSpacing="0.09"
                 android:lineSpacingExtra="3sp"
-                android:text="@string/otp_reenter_mobile_underline"
+                android:text="@string/otp_reenter_mobile_underline_app"
                 android:textColor="#333333"
                 android:textSize="16sp"
                 android:textStyle="normal"

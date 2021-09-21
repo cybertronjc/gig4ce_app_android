@@ -140,7 +140,7 @@ class InterestFragment() :
                         } else {
                             Toast.makeText(
                                 context,
-                                "Maximum three interest can be selected!!",
+                                getString(R.string.max_three_interests_profile),
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -327,39 +327,57 @@ class InterestFragment() :
         return false
     }
 
-    fun getSelectedInterestsForAnalytics(): ArrayList<String> {
+    fun getSelectedInterestsForAnalytics(): List<String> {
         var skills = ArrayList<String>()
         allInterestList.forEach { interest ->
             if (interest.selected) {
                 skills.add(interest.skill)
             }
         }
-        return skills
+        return skills.filter {
+            it.isNotBlank()
+        }
     }
 
 
-    private fun getExperiencedIn(): HashMap<String, Boolean> {
-        var map = HashMap<String, Boolean>()
+    private fun getExperiencedIn(): List<String> {
+        var map = mutableListOf<String>()
         skillDetailsList.forEach {
             if (it.selected){
-                map.put(it.name, it.selected)
+                map.add(it.name)
             }
         }
-        return map
+        return map.filter {
+            it.isNotBlank()
+        }
     }
 
     private fun setMainInterestTracker() {
-        var map = mapOf("interests" to getSelectedInterestsForAnalytics())
+        val selectedIntrest = getSelectedInterestsForAnalytics()
+
+        var map = mapOf("interests" to selectedIntrest)
+
         Log.d("interestMap", map.toString())
         eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_UPDATED_INTREST, map))
         eventTracker.removeUserProperty("DeliveryExperience")
         eventTracker.removeUserProperty("ExperienceIn")
         eventTracker.setUserProperty(map)
-        eventTracker.setProfileProperty(ProfilePropArgs("Interests", getSelectedInterestsForAnalytics()))
+
+        if(selectedIntrest.isNotEmpty())
+        eventTracker.setProfileProperty(ProfilePropArgs("Interests", selectedIntrest))
     }
 
     fun setDeliveryExecutiveInterestTracker() {
-        var map = mapOf("interests" to getSelectedInterestsForAnalytics(), "DeliveryExperience" to (clickedOnExperiencedOptions && !experiencedInDeliveryExecutive), "ExperienceIn" to getExperiencedIn())
+        var map = mutableMapOf<String,Any>(
+                "DeliveryExperience" to (clickedOnExperiencedOptions && !experiencedInDeliveryExecutive),
+        )
+        getSelectedInterestsForAnalytics().apply {
+            if(isNotEmpty()) map.put("interests", this)
+        }
+        getExperiencedIn().apply {
+            if(isNotEmpty()) map.put("ExperienceIn", this)
+        }
+
         Log.d("interestDel", map.toString())
         eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_UPDATED_INTREST, map))
         eventTracker.setUserProperty(map)

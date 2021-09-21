@@ -9,13 +9,17 @@ import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
+import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.ProfilePropArgs
 import com.gigforce.core.TrackingEventArgs
+import com.gigforce.core.extensions.getTextChangeAsStateFlow
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.profile.R
@@ -29,6 +33,9 @@ import com.gigforce.profile.onboarding.SpaceItemDecoration
 import com.gigforce.profile.viewmodel.OnboardingViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_preferred_job_location.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -112,10 +119,18 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
     }
 
     private fun initListeners() {
-        search_cities_et.doOnTextChanged { text, start, before, count ->
+        lifecycleScope.launch {
 
-            cityAdapter.filter.filter(text)
-            majorCitiesAdapter.filter.filter(text)
+        search_cities_et.getTextChangeAsStateFlow()
+                .debounce(300)
+                .distinctUntilChanged()
+                .flowOn(Dispatchers.Default)
+                .collect { searchString ->
+                    Log.d("Search ","Searhcingg...$searchString")
+
+                    cityAdapter.filter.filter(searchString)
+                    majorCitiesAdapter.filter.filter(searchString)
+                }
         }
     }
 
@@ -152,11 +167,11 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
 
 
     override fun onSubCitySelected(add: Boolean, text: String) {
-        formCompletionListener?.enableDisableNextButton(true)
 
         val uniqueList = confirmSubCityList.toSet().toList()
         confirmSubCityList.clear()
         uniqueList.forEach { obj -> confirmSubCityList.add(obj) }
+
         if (add) {
             confirmSubCityList.add(text)
             Log.d("added", "text" + " list: " + confirmSubCityList.toString())
@@ -166,6 +181,9 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
                 Log.d("removed", "text" + " list: " + confirmSubCityList.toString())
             }
         }
+        formCompletionListener?.enableDisableNextButton(confirmSubCityList.isNotEmpty())
+
+
     }
 
     override fun onCitySelected(city: City,isMajorCity : Boolean) {
@@ -203,20 +221,15 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
             if (selectedCity?.subLocationFound == true) {
                 cities_layout.visibility = View.GONE
                 sub_cities_layout.visibility = View.VISIBLE
-
-                val delhiSubLocations = arrayListOf<String>(
-                        "Faridabad",
-                        "Ghaziabad",
-                        "Gurugram",
-                        "Gautam Buddh Nagar",
-                        "New Delhi",
-                        "North Delhi",
-                        "West Delhi",
-                        "East Delhi",
-                        "South Delhi"
-                )
-
-                subCityAdapter.setData(delhiSubLocations, confirmSubCityList)
+                sub_cities_label.setText(selectedCity!!.name)
+                confirmSubCityList.clear()
+                //get sub cities here and set data to adapter
+                viewModel.getSubCities(selectedCity!!.stateCode, selectedCity!!.cityCode)
+                viewModel.subCities.observe(viewLifecycleOwner, Observer {
+                    if (it != null){
+                        subCityAdapter.setData(it, confirmSubCityList)
+                    }
+                })
                 currentStep = 1
                 return true
             } else {
@@ -226,7 +239,7 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
                 return false
             }
         }
-        setSelectedCityTracker()
+       // setSelectedCityTracker()
         setSelectedCitySubCityTracker()
         return false
     }
@@ -237,7 +250,10 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
                 var map = mapOf("Location" to it, "SubLocation" to confirmSubCityList)
                 eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_UPDATED_PREF_LOCATION, map))
                 eventTracker.setUserProperty(map)
+
+                if(it.isNotBlank())
                 eventTracker.setProfileProperty(ProfilePropArgs("Location", it))
+
                 eventTracker.setProfileProperty(ProfilePropArgs("SubLocation", confirmSubCityList))
             }
         }
@@ -248,6 +264,8 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
             var map = mapOf<String, String>("Location" to it)
             eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_UPDATED_PREF_LOCATION, map))
             eventTracker.setUserProperty(map)
+
+            if(it.isNotBlank())
             eventTracker.setProfileProperty(ProfilePropArgs("Location", it))
             eventTracker.removeUserProperty("SubLocation")
         }

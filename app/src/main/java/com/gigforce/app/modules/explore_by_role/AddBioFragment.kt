@@ -11,18 +11,28 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.gone
-import com.gigforce.app.core.visible
-import com.gigforce.app.utils.PushDownAnim
-import com.gigforce.app.utils.StringConstants
-import com.gigforce.app.utils.ViewModelProviderFactory
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
+import com.gigforce.common_ui.utils.PushDownAnim
+import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.ext.showToast
+import com.gigforce.common_ui.utils.ViewModelProviderFactory
+import com.gigforce.core.navigation.INavigation
+import com.gigforce.verification.util.VerificationConstants
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.layout_add_bio_fragment.*
+import java.util.ArrayList
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class AddBioFragment : BaseFragment() {
     private var FROM_CLIENT_ACTIVATION: Boolean = false
     private val viewModelFactory by lazy {
-        ViewModelProviderFactory(AddBioViewModel(AddBioRepository()))
+        ViewModelProviderFactory(
+            AddBioViewModel(
+                AddBioRepository()
+            )
+        )
     }
     private val viewModel: AddBioViewModel by lazy {
         ViewModelProvider(this, viewModelFactory).get(AddBioViewModel::class.java)
@@ -38,7 +48,7 @@ class AddBioFragment : BaseFragment() {
 
     private lateinit var win: Window
     var text: String = ""
-
+    @Inject lateinit var navigation : INavigation
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getDataFromIntents(savedInstanceState)
@@ -74,7 +84,8 @@ class AddBioFragment : BaseFragment() {
 
                     )
             )
-            popBackState()
+            checkForNextDoc()
+//            popBackState()
         }
         PushDownAnim.setPushDownAnimTo(tv_save_add_bio).setOnClickListener(View.OnClickListener {
             pb_add_bio.visible()
@@ -164,20 +175,48 @@ class AddBioFragment : BaseFragment() {
         super.onDestroy()
         restoreStatusBar()
     }
+    var allNavigationList = ArrayList<String>()
+
+    var intentBundle : Bundle? = null
 
     private fun getDataFromIntents(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
             FROM_CLIENT_ACTIVATION = it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
-
-
+            it.getStringArrayList(StringConstants.NAVIGATION_STRING_ARRAY.value)?.let { arr ->
+                allNavigationList = arr
+            }
+            intentBundle = it
         }
 
         arguments?.let {
             FROM_CLIENT_ACTIVATION = it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
-
-
+            it.getStringArrayList(StringConstants.NAVIGATION_STRING_ARRAY.value)?.let { arr ->
+                allNavigationList = arr
+            }
+            intentBundle = it
         }
     }
 
+    private fun checkForNextDoc() {
+        if (allNavigationList.size == 0) {
+            activity?.onBackPressed()
+        } else {
+            var navigationsForBundle = emptyList<String>()
+            if (allNavigationList.size > 1) {
+                navigationsForBundle =
+                    allNavigationList.slice(IntRange(1, allNavigationList.size - 1))
+                        .filter { it.length > 0 }
+            }
+            navigation.popBackStack()
+            intentBundle?.putStringArrayList(StringConstants.NAVIGATION_STRING_ARRAY.value,  ArrayList(navigationsForBundle))
+            navigation.navigateTo(
+                allNavigationList.get(0),intentBundle)
 
+//            navigation.navigateTo(
+//                allNavigationList.get(0),
+//                bundleOf(StringConstants.NAVIGATION_STRING_ARRAY.value to navigationsForBundle,if(FROM_CLIENT_ACTIVATION) StringConstants.FROM_CLIENT_ACTIVATON.value to true else StringConstants.FROM_CLIENT_ACTIVATON.value to false)
+//            )
+
+        }
+    }
 }
