@@ -39,10 +39,10 @@
     <string name="contact_us_app_giger">संपर्क करें</string>
     <string name="invite_your_contacts_app_giger">अपने संपर्कों को आमंत्रित करें</string>
     <string name="work_in_progress_app_giger">यह काम प्रगति में है। कृपया कुछ दिनों में फिर से जांचें</string>
-    <string name="my_gig_app_giger">माई गिगो</string>
+    <string name="my_gig_app_giger">मेरी गिग</string>
     <string name="wallet_app_giger">बटुआ</string>
     <string name="profile_app_giger">प्रोफ़ाइल</string>
-    <string name="settings_app_giger">समायोजन</string>
+    <string name="settings_app_giger">सेटिंग</string>
     <string name="chat_app_giger">चैट</string>
     <string name="verification_app_giger">सत्यापन</string>
     <string name="invoices_app_giger">चालान</string>

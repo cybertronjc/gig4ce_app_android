@@ -41,7 +41,7 @@ class MainNavigationComponent(context: Context, attrs: AttributeSet?) :
                 } catch (e: Exception) {
                 }
             }
-            super.bind(FeatureLayoutDVM(data.imageUrl, data.title, repository.getDefaultData()))
+            super.bind(FeatureLayoutDVM(data.imageUrl, data.title, repository.getDefaultData(context)))
         }
 
     }

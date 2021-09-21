@@ -8,6 +8,7 @@ import android.widget.FrameLayout
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.viewdatamodels.FeatureItemCard2DVM
 import com.gigforce.core.IViewHolder
+import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.GlideApp
@@ -30,7 +31,7 @@ class FeatureItemCard2Component(context: Context, attrs: AttributeSet?) :
 
     @Inject lateinit var navigation:INavigation
     @Inject lateinit var buildConfig : IBuildConfig
-
+    @Inject lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
     fun setImageFromUrl(url:String){
         GlideApp.with(context)
             .load(url)
@@ -65,7 +66,9 @@ class FeatureItemCard2Component(context: Context, attrs: AttributeSet?) :
         this.setOnClickListener(null)
 
         if(data is FeatureItemCard2DVM){
-
+            if (sharedPreAndCommonUtilInterface.getAppLanguageCode() == "hi") {
+                feature_title.text = data.hi?.title ?: data.title
+            }else
             feature_title.text = data.title
 
             data.getNavArgs() ?. let {
