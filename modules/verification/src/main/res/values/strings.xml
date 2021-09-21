@@ -66,7 +66,7 @@
     <string name="address_with_colon_veri">Address :</string>
     <string name="license_validity_with_colon_veri">License Validity :</string>
     <string name="gender_with_colon_veri">Gender :</string>
-    <string name="aadhar_number_with_colon_veri">Aadhar Number :</string>
+    <string name="aadhar_number_with_colon_veri">Aadhaar Number :</string>
     <string name="bank_account_details_veri">Bank Account Details</string>
     <string name="do_you_have_bank_passbook_veri">Do you have Bank Passbook ?</string>
     <string name="yes_i_have_bank_passbook_veri">Yes, I have Bank Passbook</string>
@@ -194,7 +194,7 @@
     <string name="i_have_collect_receipt_of_my_documents_veri">I have collect receipt of my documents.</string>
     <string name="giger_verification_desc_veri">We need to verify your information. Please submit the documents below to process giger verification</string>
     <string name="giger_verification_veri">Giger Verification</string>
-    <string name="aadhar_number_eg_444433332222_veri">Aadhar Number* (Eg: 444433332222)</string>
+    <string name="aadhar_number_eg_444433332222_veri">Aadhaar Number* (Eg: 444433332222)</string>
     <string name="please_provide_the_following_information_veri">Please provide the following information.</string>
     <string name="document_under_verification__veri">Document Under Verification</string>
     <string name="under_verification_veri">Under Verification</string>
@@ -207,7 +207,7 @@
     <string name="ifsc_code_veri">IFSC Code :</string>
     <string name="bank_name_with_colon_veri">Bank Name :</string>
     <string name="bank_account_no_veri">Bank Account No :</string>
-    <string name="aadhar_number_veri">Aadhar Number *</string>
+    <string name="aadhar_number_veri">Aadhaar Number *</string>
     <string name="state_pascal_case_veri">State</string>
     <string name="driving_license_number_veri">Driving License Number *</string>
     <string name="driving_license_front_image_veri">Driving License (Front Image)</string>
@@ -248,7 +248,7 @@
 
     <string name="area_veri">Area</string>
     <string name="permanent_address_veri">Permanent Address</string>
-    <string name="address_proof_smalls_veri">Adhaar Card</string>
+    <string name="address_proof_smalls_veri">Aadhaar Card</string>
     <string name="document_under_verification_veri">Document Under Verification</string>
     <string name="save_veri">SAVE</string>
     <string name="preferred_locations_veri">Preferred Locations</string>
@@ -418,8 +418,8 @@
     <string name="address_line_1_veri">Address Line 1</string>
     <string name="address_line_2_veri">Address Line 2</string>
     <string name="date_of_birth_spaced_veri">"   Date of birth   "</string>
-    <string name="aadhar_card_number_veri">AADHAR Card Number</string>
-    <string name="please_enter_the_below_details_of_your_aadhar_this_step_is_mandatory_for_this_application_veri">Please enter the below details of your Aadhar. This step is mandatory for this application.</string>
+    <string name="aadhar_card_number_veri">AADHAAR Card Number</string>
+    <string name="please_enter_the_below_details_of_your_aadhar_this_step_is_mandatory_for_this_application_veri">Please enter the below details of your Aadhaar. This step is mandatory for this application.</string>
     <string name="enter_aadhar_veri">Enter Aadhaar Details</string>
     <string name="aadhar_card_detail_veri">Aadhaar Card Details</string>
     <string name="data_uploaded_veri">Data uploaded successfully</string>
@@ -433,7 +433,7 @@
     <string name="please_upload_aadhar_veri">Please upload your Aadhaar card or enter the details manually</string>
     <string name="aadhar_submitted_successfully_veri">The Aadhaar card details have been submitted successfully.</string>
     <string name="document_submitted_veri">Document Submitted</string>
-    <string name="aadhar_submitted_veri">Aadhar card submitted</string>
+    <string name="aadhar_submitted_veri">Aadhaar card submitted</string>
     <string name="same_as_permanent_veri">Same as permanent address</string>
     <string name="curr_add1_veri">Enter Current Address Line 1</string>
     <string name="curr_add2_veri">Enter Current Address Line 2</string>

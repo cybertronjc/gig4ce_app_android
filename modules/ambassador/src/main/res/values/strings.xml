@@ -127,7 +127,7 @@
     <string name="skip_underline_amb"><u>Skip</u></string>
     <string name="under_verification_amb">Under Verification</string>
     <string name="edit_amb">Edit</string>
-    <string name="aadhar_number_with_colon_amb">Aadhar Number :</string>
+    <string name="aadhar_number_with_colon_amb">Aadhaar Number :</string>
     <string name="skip_amb">Skip</string>
     <string name="bank_account_details_amb">Bank Account Details</string>
     <string name="do_you_have_bank_passbook_amb">Do you have Bank Account ?</string>
@@ -367,8 +367,8 @@
     <string name="edit_propercase">Edit</string>
 
 
-    <string name="aadhar_card_number_amb">AADHAR Card Number</string>
-    <string name="please_enter_the_below_details_of_your_aadhar_this_step_is_mandatory_for_this_application_amb">Please enter the below details of your Aadhar. This step is mandatory for this application.</string>
+    <string name="aadhar_card_number_amb">AADHAAR Card Number</string>
+    <string name="please_enter_the_below_details_of_your_aadhar_this_step_is_mandatory_for_this_application_amb">Please enter the below details of your Aadhaar. This step is mandatory for this application.</string>
     <string name="enter_aadhar_amb">Enter Aadhaar Details</string>
     <string name="aadhar_card_detail_amb">Aadhaar Card Details</string>
     <string name="data_uploaded_amb">Data uploaded successfully</string>
@@ -382,7 +382,7 @@
     <string name="please_upload_aadhar_amb">Please upload your Aadhaar card or enter the details manually</string>
     <string name="aadhar_submitted_successfully_amb">The Aadhaar card details have been submitted successfully.</string>
     <string name="document_submitted_amb">Document Submitted</string>
-    <string name="aadhar_submitted_amb">Aadhar card submitted</string>
+    <string name="aadhar_submitted_amb">Aadhaar card submitted</string>
     <string name="same_as_permanent_amb">Same as permanent address</string>
     <string name="curr_add1_amb">Enter Current Address Line 1</string>
     <string name="curr_add2_amb">Enter Current Address Line 2</string>

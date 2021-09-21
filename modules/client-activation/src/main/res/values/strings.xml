@@ -128,8 +128,8 @@
     <string name="upload_photo_client">Upload Photo</string>
     <string name="enter_aadhar_client">Enter Aadhaar Details</string>
     <string name="please_upload_aadhar_here">Please upload your aadhaar card here</string>
-    <string name="please_enter_the_below_details_of_your_aadhar_this_step_is_mandatory_for_this_application_client">Please enter the below details of your Aadhar. This step is mandatory for this application.</string>
-    <string name="aadhar_card_number_client">AADHAR Card Number</string>
+    <string name="please_enter_the_below_details_of_your_aadhar_this_step_is_mandatory_for_this_application_client">Please enter the below details of your Aadhaar. This step is mandatory for this application.</string>
+    <string name="aadhar_card_number_client">AADHAAR Card Number</string>
     <string name="date_of_birth_client">Date of Birth</string>
     <string name="date_of_birth_spaced_client">"   Date of birth   "</string>
     <string name="father_s_name_client">Father\'s Name</string>
@@ -150,7 +150,7 @@
     <string name="dob_label_client">Date of Birth</string>
     <string name="emailid_client">Email ID</string>
     <string name="emergency_contact_client">Emergency contact number</string>
-    <string name="aadharno_label_client">Aadhar number</string>
+    <string name="aadharno_label_client">Aadhaar number</string>
     <string name="curr_add_client">Current Address</string>
     <string name="hub_state">Hub state</string>
     <string name="hub_city">Hub city</string>
