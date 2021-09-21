@@ -1,12 +1,19 @@
 package com.gigforce.lead_management.ui.joining_list_2
 
 import android.os.Bundle
+import android.util.Log
+import android.view.View
+import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.os.bundleOf
+import androidx.core.view.get
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
+import com.gigforce.common_ui.ext.onTabSelected
+import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.utils.PushDownAnim
@@ -14,11 +21,15 @@ import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.lead_management.LeadManagementConstants
 import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.FragmentJoiningListBinding
+import com.gigforce.lead_management.models.JoiningList2RecyclerItemData
 import com.gigforce.lead_management.models.JoiningListRecyclerItemData
+import com.gigforce.lead_management.models.JoiningStatusAndCountItemData
 import com.gigforce.lead_management.ui.giger_onboarding.GigerOnboardingFragment
+import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
@@ -40,6 +51,7 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningListBinding>(
         savedInstanceState: Bundle?
     ) {
         initToolbar(viewBinding)
+        initTabLayout()
         initListeners(viewBinding)
         initViewModel()
     }
@@ -62,6 +74,8 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningListBinding>(
             )
         }
 
+        viewModel.getJoinings()
+
     }
 
     private fun initToolbar(
@@ -72,11 +86,39 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningListBinding>(
         this.setBackButtonListener {
             activity?.onBackPressed()
         }
-
+        this.changeBackButtonDrawable()
         this.showSearchOption(context.getString(R.string.search_joinings_lead))
         lifecycleScope.launchWhenCreated {
             getSearchTextChangeAsFlow()
                 .collect { viewModel.searchJoinings(it) }
+        }
+    }
+
+    private fun initTabLayout() = viewBinding.apply {
+        statusTabLayout.addTab(statusTabLayout.newTab().setText("All (0)"))
+        statusTabLayout.addTab(statusTabLayout.newTab().setText("Pending (0)"))
+        statusTabLayout.addTab(statusTabLayout.newTab().setText("Completed (0)"))
+
+        val betweenSpace = 50
+
+        val slidingTabStrip: ViewGroup = statusTabLayout.getChildAt(0) as ViewGroup
+
+        for (i in 0 until slidingTabStrip.getChildCount() - 1) {
+            val v: View = slidingTabStrip.getChildAt(i)
+            val params: ViewGroup.MarginLayoutParams =
+                v.layoutParams as ViewGroup.MarginLayoutParams
+            params.rightMargin = betweenSpace
+        }
+
+        statusTabLayout.onTabSelected {
+
+            val statusText = it?.text?.split("(")?.get(0).toString().trim()
+            if (statusText == "All"){
+                viewModel.filterJoinings("")
+            }else{
+                viewModel.filterJoinings(statusText)
+            }
+
         }
     }
 
@@ -94,6 +136,28 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningListBinding>(
                     JoiningList2ViewState.NoJoiningFound -> showNoJoiningsFound()
                 }
             })
+
+//        viewModel.filters.observe(viewLifecycleOwner, Observer {
+//            setStatusCount(it)
+//        })
+
+        viewModel.filterMap.observe(viewLifecycleOwner, Observer {
+            setStatus(it)
+        })
+    }
+
+    private fun setStatus(map: Map<String, Int>) = viewBinding.apply{
+        map.forEach {
+            if (it.key == "All"){
+                this.statusTabLayout.getTabAt(0)?.text = "All (${it.value})"
+            }
+            if (it.key == LeadManagementConstants.STATUS_PENDING){
+                this.statusTabLayout.getTabAt(1)?.text = "Pending (${it.value})"
+            }
+            if (it.key == LeadManagementConstants.STATUS_COMPLETED){
+                this.statusTabLayout.getTabAt(2)?.text = "Completed (${it.value})"
+            }
+        }
     }
 
     private fun loadingJoiningsFromServer() = viewBinding.apply {
@@ -117,7 +181,7 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningListBinding>(
 
 
     private fun showJoinings(
-        joiningList: List<JoiningListRecyclerItemData>
+        joiningList: List<JoiningList2RecyclerItemData>
     ) = viewBinding.apply {
         stopShimmer(
             joiningShimmerContainer,
@@ -127,6 +191,22 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningListBinding>(
         joiningListInfoLayout.root.gone()
 
         joiningsRecyclerView.collection = joiningList
+    }
+
+    private fun setStatusCount(filters: JoiningFilters) = viewBinding.apply{
+        this.statusTabLayout.removeAllTabs()
+        filters.attendanceStatuses
+        filters.attendanceStatuses?.forEach {
+
+            val newTab = this.statusTabLayout.newTab().apply {
+                this.text = "${it.status} (${it.attendanceCount})"
+                this.tag = it.status
+            }
+            this.statusTabLayout.addTab(newTab)
+        }
+
+        initTabLayout()
+
     }
 
     private fun showNoJoiningsFound() = viewBinding.apply {

@@ -1016,6 +1016,10 @@
         android:id="@+id/gigerInfoFragment"
         android:name="com.gigforce.lead_management.ui.giger_info.GigerInfoFragment"
         android:label="GigerInfoFragment" />
+    <fragment
+        android:id="@+id/joiningList2Fragment"
+        android:name="com.gigforce.lead_management.ui.joining_list_2.JoiningList2Fragment"
+        android:label="JoiningList2Fragment" />
 
 
 </navigation>

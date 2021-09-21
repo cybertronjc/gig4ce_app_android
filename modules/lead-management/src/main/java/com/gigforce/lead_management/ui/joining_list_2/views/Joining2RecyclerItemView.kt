@@ -7,6 +7,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.RelativeLayout
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import com.gigforce.common_ui.viewdatamodels.GigerProfileCardDVM
@@ -14,11 +15,14 @@ import com.gigforce.common_ui.viewdatamodels.leadManagement.AssignGigRequest
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JobLocation
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JoiningStatus
 import com.gigforce.core.IViewHolder
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.lead_management.LeadManagementConstants
 import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.RecyclerRowJoiningItemBinding
+import com.gigforce.lead_management.models.JoiningList2RecyclerItemData
 import com.gigforce.lead_management.models.JoiningListRecyclerItemData
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -30,15 +34,16 @@ class Joining2RecyclerItemView(
 ) : RelativeLayout(
     context,
     attrs
-), IViewHolder, View.OnClickListener {
+), IViewHolder, View.OnClickListener, View.OnLongClickListener {
 
     @Inject
     lateinit var navigation: INavigation
     private lateinit var viewBinding: RecyclerRowJoiningItemBinding
-    private var viewData: JoiningListRecyclerItemData.JoiningListRecyclerJoiningItemData? = null
+    private var viewData: JoiningList2RecyclerItemData.JoiningListRecyclerJoiningItemData? = null
 
     lateinit var foregroundView: View
     lateinit var backgroundView: View
+    var selectEnable = false
 
     init {
         setDefault()
@@ -49,6 +54,7 @@ class Joining2RecyclerItemView(
     private fun setListenersOnView() {
         viewBinding.root.setOnClickListener(this)
         viewBinding.callGigerBtn.setOnClickListener(this)
+        viewBinding.root.setOnLongClickListener(this)
     }
 
     private fun setDefault() {
@@ -63,7 +69,7 @@ class Joining2RecyclerItemView(
             true
         )
         foregroundView = viewBinding.viewForeground
-        backgroundView = viewBinding.viewBackground
+//        backgroundView = viewBinding.viewBackground
     }
 
     override fun bind(data: Any?) {
@@ -71,18 +77,18 @@ class Joining2RecyclerItemView(
 
         data?.let {
             val gigerAttendanceData =
-                it as JoiningListRecyclerItemData.JoiningListRecyclerJoiningItemData
+                it as JoiningList2RecyclerItemData.JoiningListRecyclerJoiningItemData
             viewData = gigerAttendanceData
 
-            viewBinding.userNameTv.text = gigerAttendanceData.userName
+            viewBinding.userNameTv.text = gigerAttendanceData.gigerName
             viewBinding.callGigerBtn.isVisible =
-                gigerAttendanceData.userProfilePhoneNumber.isNotBlank()
+                gigerAttendanceData.gigerMobileNo.isNotBlank()
 
             setUserImage(
-                gigerAttendanceData.userProfilePictureThumbnail,
-                gigerAttendanceData.userProfilePicture
+                "",
+                gigerAttendanceData.profilePicture.toString()
             )
-            setOfficeOnView(gigerAttendanceData.joiningStatusText)
+//            setOfficeOnView(gigerAttendanceData.joiningStatusText)
             setJoiningStatus(gigerAttendanceData.status)
         }
     }
@@ -92,22 +98,29 @@ class Joining2RecyclerItemView(
     ) {
 
         val joiningStatus = JoiningStatus.fromValue(status)
-        viewBinding.userAttendanceStatusTextview.isVisible = joiningStatus != JoiningStatus.JOINED
-        viewBinding.userAttendanceStatusTextview.text = context.getString(joiningStatus.getStatusFormattedStringRes())
+//        viewBinding.userAttendanceStatusTextview.isVisible = joiningStatus != JoiningStatus.JOINED
+        viewBinding.userAttendanceStatusTextview.text = "Application " + context.getString(joiningStatus.getStatusFormattedStringRes())
+        viewBinding.statusDot.setImageDrawable(
+            if (status == "Pending") resources.getDrawable(R.drawable.ic_status_dot) else resources.getDrawable(R.drawable.ic_blue_dot)
+        )
+        viewBinding.userAttendanceStatusTextview.setTextColor(
+            if (status == "Pending") resources.getColor(R.color.pink_dot) else resources.getColor(R.color.blue_dot)
+        )
 
-        when (joiningStatus) {
-            JoiningStatus.SIGN_UP_PENDING -> {
-                viewBinding.userAttendanceStatusTextview.setBackgroundResource(R.drawable.joining_status_bck_orange)
-            }
-            JoiningStatus.APPLICATION_PENDING -> {
-                viewBinding.userAttendanceStatusTextview.setBackgroundResource(R.drawable.joining_status_bck_orange)
-            }
-            JoiningStatus.JOINING_PENDING -> {
-                viewBinding.userAttendanceStatusTextview.setBackgroundResource(R.drawable.joining_status_bck_green)
-            }
-            JoiningStatus.JOINED -> {
-            }
-        }
+        //viewBinding.userAttendanceStatusTextview.text = status
+//        when (joiningStatus) {
+//            JoiningStatus.SIGN_UP_PENDING -> {
+//                viewBinding.userAttendanceStatusTextview.setBackgroundResource(R.drawable.joining_status_bck_orange)
+//            }
+//            JoiningStatus.APPLICATION_PENDING -> {
+//                viewBinding.userAttendanceStatusTextview.setBackgroundResource(R.drawable.joining_status_bck_orange)
+//            }
+//            JoiningStatus.JOINING_PENDING -> {
+//                viewBinding.userAttendanceStatusTextview.setBackgroundResource(R.drawable.joining_status_bck_green)
+//            }
+//            JoiningStatus.JOINED -> {
+//            }
+//        }
     }
 
     private fun setOfficeOnView(
@@ -168,92 +181,118 @@ class Joining2RecyclerItemView(
             val intent =
                 Intent(
                     Intent.ACTION_DIAL,
-                    Uri.fromParts("tel", currentViewData.userProfilePhoneNumber, null)
+                    Uri.fromParts("tel", currentViewData.gigerMobileNo, null)
                 )
             context.startActivity(intent)
         } else {
             if (currentViewData.status.isEmpty())
                 return
 
-
-            when (JoiningStatus.fromValue(currentViewData.status)) {
-                JoiningStatus.SIGN_UP_PENDING, JoiningStatus.JOINED -> {
-                }
-                JoiningStatus.APPLICATION_PENDING -> {
-                    //navigate to applications screen
-                    navigation.navigateTo(
-                        LeadManagementNavDestinations.FRAGMENT_SELECT_GIG_TO_ACTIVATE,
-                        bundleOf(
-                            LeadManagementConstants.INTENT_EXTRA_JOINING_ID to currentViewData.joiningId,
-                            LeadManagementConstants.INTENT_EXTRA_CURRENT_JOINING_USER_INFO to prepareCurrentUserInfo(
-                                currentViewData
-                            ),
-                            LeadManagementConstants.INTENT_EXTRA_USER_ID to currentViewData.userUid,
-                        )
-                    )
-                }
-                JoiningStatus.JOINING_PENDING -> {
-                    if (currentViewData.jobProfileId.isEmpty()) {
-                        return
-                    }
-
-                    navigation.navigateTo(
-                        LeadManagementNavDestinations.FRAGMENT_SELECT_GIG_LOCATION,
-                        bundleOf(
-                            LeadManagementConstants.INTENT_EXTRA_JOINING_ID to currentViewData.joiningId,
-                            LeadManagementConstants.INTENT_EXTRA_CURRENT_JOINING_USER_INFO to prepareCurrentUserInfo(
-                                currentViewData
-                            ),
-                            LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL to prepareAssigngigModel(
-                                currentViewData
-                            ),
-                            LeadManagementConstants.INTENT_EXTRA_USER_ID to currentViewData.userUid,
-                        )
-                    )
-                }
+            if (selectEnable){
+                viewBinding.selectJoiningBtn.setImageDrawable(resources.getDrawable(R.drawable.ic_selected_tick))
+                viewData?.selected = true
             }
+//            when (JoiningStatus.fromValue(currentViewData.status)) {
+//                JoiningStatus.SIGN_UP_PENDING, JoiningStatus.JOINED -> {
+//                }
+//                JoiningStatus.APPLICATION_PENDING -> {
+//                    //navigate to applications screen
+//                    navigation.navigateTo(
+//                        LeadManagementNavDestinations.FRAGMENT_SELECT_GIG_TO_ACTIVATE,
+//                        bundleOf(
+//                            LeadManagementConstants.INTENT_EXTRA_JOINING_ID to currentViewData.joiningId,
+//                            LeadManagementConstants.INTENT_EXTRA_CURRENT_JOINING_USER_INFO to prepareCurrentUserInfo(
+//                                currentViewData
+//                            ),
+//                            LeadManagementConstants.INTENT_EXTRA_USER_ID to currentViewData.userUid,
+//                        )
+//                    )
+//                }
+//                JoiningStatus.JOINING_PENDING -> {
+//                    if (currentViewData._id.isEmpty()) {
+//                        return
+//                    }
+//
+//                    navigation.navigateTo(
+//                        LeadManagementNavDestinations.FRAGMENT_SELECT_GIG_LOCATION,
+//                        bundleOf(
+//                            LeadManagementConstants.INTENT_EXTRA_JOINING_ID to currentViewData._id,
+//                            LeadManagementConstants.INTENT_EXTRA_CURRENT_JOINING_USER_INFO to prepareCurrentUserInfo(
+//                                currentViewData
+//                            ),
+//                            LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL to prepareAssigngigModel(
+//                                currentViewData
+//                            ),
+//                            LeadManagementConstants.INTENT_EXTRA_USER_ID to currentViewData.gigerId
+//                        )
+//                    )
+//                }
+//            }
         }
     }
 
-    private fun prepareAssigngigModel(
-        currentViewData: JoiningListRecyclerItemData.JoiningListRecyclerJoiningItemData
-    ): AssignGigRequest {
+//    private fun prepareAssigngigModel(
+//        currentViewData: JoiningList2RecyclerItemData.JoiningListRecyclerJoiningItemData
+//    ): AssignGigRequest {
+//
+//        return AssignGigRequest(
+//            joiningId = currentViewData.joiningId,
+//            jobProfileId = currentViewData.jobProfileId,
+//            jobProfileName = currentViewData.jobProfileName,
+//            userName = currentViewData.userName,
+//            userUid = currentViewData.userUid!!,
+//            enrollingTlUid = "",
+//            assignGigsFrom = "",
+//            cityId = "",
+//            cityName = "",
+//            location = JobLocation(
+//                id = "",
+//                type = "",
+//                name = null
+//            ),
+//            shift = listOf(),
+//            gigForceTeamLeaders = listOf(),
+//            businessTeamLeaders = listOf()
+//        )
+//    }
 
-        return AssignGigRequest(
-            joiningId = currentViewData.joiningId,
-            jobProfileId = currentViewData.jobProfileId,
-            jobProfileName = currentViewData.jobProfileName,
-            userName = currentViewData.userName,
-            userUid = currentViewData.userUid!!,
-            enrollingTlUid = "",
-            assignGigsFrom = "",
-            cityId = "",
-            cityName = "",
-            location = JobLocation(
-                id = "",
-                type = "",
-                name = null
-            ),
-            shift = listOf(),
-            gigForceTeamLeaders = listOf(),
-            businessTeamLeaders = listOf()
-        )
+//    private fun prepareCurrentUserInfo(
+//        currentViewData: JoiningList2RecyclerItemData.JoiningListRecyclerJoiningItemData
+//    ): GigerProfileCardDVM {
+//        return GigerProfileCardDVM(
+//            name = currentViewData.userName,
+//            gigerImg = currentViewData.userProfilePicture,
+//            number = currentViewData.userProfilePhoneNumber,
+//            jobProfileName = currentViewData.jobProfileName,
+//            jobProfileLogo = currentViewData.jobProfileIcon,
+//            tradeName = currentViewData.tradeName
+//        )
+//    }
+
+    fun getDBImageUrl(imagePath: String): String? {
+        if (imagePath.isNotBlank()) {
+            try {
+                var modifiedString = imagePath
+                if (!imagePath.startsWith("/"))
+                    modifiedString = "/$imagePath"
+                return "gs://gigforce-staging.appspot.com" + modifiedString
+            } catch (egetDBImageUrl: Exception) {
+                return null
+            }
+        }
+        return null
     }
 
-    private fun prepareCurrentUserInfo(
-        currentViewData: JoiningListRecyclerItemData.JoiningListRecyclerJoiningItemData
-    ): GigerProfileCardDVM {
-        return GigerProfileCardDVM(
-            name = currentViewData.userName,
-            gigerImg = currentViewData.userProfilePicture,
-            number = currentViewData.userProfilePhoneNumber,
-            jobProfileName = currentViewData.jobProfileName,
-            jobProfileLogo = currentViewData.jobProfileIcon,
-            tradeName = currentViewData.tradeName
-        )
-    }
+    override fun onLongClick(p0: View?): Boolean {
+        viewBinding.selectJoiningBtn.visible()
+        viewData?.selected = true
+        viewBinding.selectJoiningBtn.setImageDrawable(resources.getDrawable(R.drawable.ic_selected_tick))
+        Toast.makeText(context, "Long click", Toast.LENGTH_SHORT).show()
 
-    fun getGigDataOrThrow(): JoiningListRecyclerItemData.JoiningListRecyclerJoiningItemData {
-        return viewData ?: throw NullPointerException("view data is null")
+        return true
     }
+//
+//    fun getGigDataOrThrow(): JoiningListRecyclerItemData.JoiningListRecyclerJoiningItemData {
+//        return viewData ?: throw NullPointerException("view data is null")
+//    }
 }

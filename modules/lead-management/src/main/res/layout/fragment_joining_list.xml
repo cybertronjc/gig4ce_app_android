@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/tab_background_color"
         android:orientation="vertical">
 
         <com.gigforce.common_ui.views.GigforceToolbar
@@ -11,6 +12,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="?android:actionBarSize" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/status_tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:layout_marginTop="@dimen/size_40"
+            android:layout_marginStart="@dimen/size_8"
+            android:layout_marginEnd="@dimen/size_8"
+            android:background="@color/tab_background_color"
+            app:tabBackground="@drawable/tab_selector_background"
+            app:tabGravity="center"
+            app:tabIndicatorHeight="0dp"
+            app:tabMode="fixed"
+            app:tabSelectedTextColor="@color/white"
+            app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
+            app:tabTextColor="@color/black"></com.google.android.material.tabs.TabLayout>
 
         <FrameLayout
             android:layout_width="match_parent"

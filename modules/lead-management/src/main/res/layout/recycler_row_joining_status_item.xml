@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -16,12 +17,22 @@
             android:id="@+id/status_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
+            android:textColor="#202325"
             android:lineHeight="15sp"
             android:paddingTop="@dimen/size_6"
             android:fontFamily="@font/lato_bold"
             tools:text="Company Name"
             />
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="@dimen/size_12"
+            android:layout_centerHorizontal="false"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/status_tv"
+            android:background="@color/view_bg" />
 
 
     </RelativeLayout>

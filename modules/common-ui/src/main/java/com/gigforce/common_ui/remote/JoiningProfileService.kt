@@ -29,4 +29,10 @@ interface JoiningProfileService {
     suspend fun getJoiningGigerInfo(
 
     ): Response<GigerInfo>
+
+
+    @GET("joining/listing")
+    suspend fun getJoiningListing(
+
+    ): Response<List<JoiningNew>>
 }

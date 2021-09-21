@@ -1,5 +1,6 @@
 package com.gigforce.lead_management.ui.joining_list_2
 
+import com.gigforce.lead_management.models.JoiningList2RecyclerItemData
 import com.gigforce.lead_management.models.JoiningListRecyclerItemData
 import com.gigforce.lead_management.models.JoiningStatusAndCountItemData
 
@@ -15,7 +16,7 @@ sealed class JoiningList2ViewState {
     ) : JoiningList2ViewState()
 
     data class JoiningListLoaded(
-        val joiningList: List<JoiningListRecyclerItemData>
+        val joiningList: List<JoiningList2RecyclerItemData>
     ) : JoiningList2ViewState()
 }
 

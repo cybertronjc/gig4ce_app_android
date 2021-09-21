@@ -8,7 +8,7 @@ class NavForLeadManagmentModule(
     baseImplementation: BaseNavigationImpl
 ){
     init {
-        baseImplementation.registerRoute(LeadManagementNavDestinations.FRAGMENT_JOINING, R.id.joiningListFragment)
+        baseImplementation.registerRoute(LeadManagementNavDestinations.FRAGMENT_JOINING, R.id.joiningList2Fragment)
         baseImplementation.registerRoute(LeadManagementNavDestinations.FRAGMENT_GIGER_ONBOARDING, R.id.gigerOnboardingFragment)
         baseImplementation.registerRoute(LeadManagementNavDestinations.FRAGMENT_GIGER_ONBOARDING_OTP, R.id.gigerOtpVerification)
         baseImplementation.registerRoute(LeadManagementNavDestinations.FRAGMENT_SELECT_GIG_TO_ACTIVATE, R.id.selectGigApplicationToActivate)

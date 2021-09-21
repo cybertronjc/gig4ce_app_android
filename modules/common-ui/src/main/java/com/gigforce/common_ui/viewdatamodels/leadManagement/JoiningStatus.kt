@@ -10,7 +10,10 @@ enum class JoiningStatus constructor(
     SIGN_UP_PENDING("sign_up_pending"),
     APPLICATION_PENDING("application_pending"),
     JOINING_PENDING("joining_pending"),
-    JOINED("joined");
+    JOINED("joined"),
+    PENDING("Pending"),
+    COMPLETED("Completed");
+
 
     fun getStatusString(): String {
         return this.string
@@ -22,6 +25,8 @@ enum class JoiningStatus constructor(
             APPLICATION_PENDING -> "Application Pending"
             JOINING_PENDING -> "Joining Pending"
             JOINED -> "Joined"
+            PENDING -> "Pending"
+            COMPLETED -> "Completed"
         }
     }
 
@@ -33,6 +38,8 @@ enum class JoiningStatus constructor(
             APPLICATION_PENDING -> R.string.application_pending
             JOINING_PENDING -> R.string.joining_pending
             JOINED -> R.string.joined
+            PENDING -> R.string.pending
+            COMPLETED -> R.string.completed
         }
     }
 
@@ -50,10 +57,10 @@ enum class JoiningStatus constructor(
 
     @StringRes
     fun getOverallStatusStringRes(): Int {
-        return if (this == JOINED)
-            R.string.joined
+        return if (this == COMPLETED)
+            R.string.completed
         else
-            R.string.joining_pending
+            R.string.pending
     }
 
     companion object {

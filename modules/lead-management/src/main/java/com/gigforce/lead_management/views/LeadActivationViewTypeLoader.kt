@@ -9,6 +9,8 @@ import com.gigforce.lead_management.ui.select_gig_application.views.GigAppListSe
 import com.gigforce.lead_management.ui.select_gig_application.views.GigAppListStatusRecyclerItemView
 import com.gigforce.lead_management.ui.joining_list.views.JoiningRecyclerItemView
 import com.gigforce.lead_management.ui.joining_list.views.JoiningStatusRecyclerItemView
+import com.gigforce.lead_management.ui.joining_list_2.views.Joining2BusinessRecyclerItemView
+import com.gigforce.lead_management.ui.joining_list_2.views.Joining2RecyclerItemView
 import com.gigforce.lead_management.ui.select_gig_application.views.NoGigApplicationFoundItemView
 
 object LeadActivationViewTypeLoader : IViewTypeLoader {
@@ -24,6 +26,14 @@ object LeadActivationViewTypeLoader : IViewTypeLoader {
                 null
             )
             LeadActivationViewTypes.JoiningList -> JoiningRecyclerItemView(
+                context,
+                null
+            )
+            LeadActivationViewTypes.JoiningList2 -> Joining2RecyclerItemView(
+                context,
+                null
+            )
+            LeadActivationViewTypes.JoiningBusiness -> Joining2BusinessRecyclerItemView(
                 context,
                 null
             )

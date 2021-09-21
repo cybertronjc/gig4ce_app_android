@@ -1,16 +1,22 @@
 package com.gigforce.lead_management.ui.joining_list_2
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.viewdatamodels.leadManagement.Joining
+import com.gigforce.common_ui.viewdatamodels.leadManagement.JoiningNew
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JoiningSignUpInitiatedMode
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JoiningStatus
 import com.gigforce.core.extensions.toLocalDate
 import com.gigforce.core.logger.GigforceLogger
+import com.gigforce.core.utils.Lce
+import com.gigforce.lead_management.LeadManagementConstants
+import com.gigforce.lead_management.models.JoiningList2RecyclerItemData
 import com.gigforce.lead_management.models.JoiningListRecyclerItemData
+import com.gigforce.lead_management.models.JoiningStatusAndCountItemData
 import com.gigforce.lead_management.repositories.LeadManagementRepository
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ListenerRegistration
@@ -41,14 +47,18 @@ class JoiningList2ViewModel @Inject constructor(
     private val _filters = MutableLiveData<JoiningFilters>()
     val filters: LiveData<JoiningFilters> = _filters
 
+    private val _filtersMap = MutableLiveData<Map<String, Int>>()
+    val filterMap: LiveData<Map<String, Int>> = _filtersMap
+
     //Data
-    private var joiningsRaw: List<Joining> = emptyList()
-    private var joiningListShownOnView: MutableList<JoiningListRecyclerItemData> = mutableListOf()
+    private var joiningsRaw: List<JoiningNew> = emptyList()
+    private var joiningListShownOnView: MutableList<JoiningList2RecyclerItemData> = mutableListOf()
     private var currentSearchString: String? = null
+    var currentFilterString: String? = null
     private var fetchJoiningListener: ListenerRegistration? = null
 
     init {
-        startListeningToJoinings()
+        //startListeningToJoinings()
     }
 
     override fun onCleared() {
@@ -60,6 +70,28 @@ class JoiningList2ViewModel @Inject constructor(
         )
     }
 
+    fun getJoinings() = viewModelScope.launch {
+        _viewState.postValue(JoiningList2ViewState.LoadingDataFromServer)
+        try {
+            gigforceLogger.d(TAG, "fetching job profiles...")
+
+            joiningsRaw = leadManagementRepository.getJoiningListings()
+
+            //_viewState.value = Lce.content(jobProfiles)
+            processJoiningsAndEmit(joiningsRaw)
+
+            gigforceLogger.d(TAG, "received ${joiningsRaw.size} joinings from server")
+
+        } catch (e: Exception) {
+            _viewState.value = JoiningList2ViewState.NoJoiningFound
+            gigforceLogger.e(
+                TAG,
+                " getJoiningList()",
+                e
+            )
+        }
+    }
+
     private fun startListeningToJoinings() = viewModelScope.launch {
         _viewState.postValue(JoiningList2ViewState.LoadingDataFromServer)
 
@@ -67,96 +99,128 @@ class JoiningList2ViewModel @Inject constructor(
             TAG,
             "listening to fetch joining query..."
         )
-        fetchJoiningListener = leadManagementRepository.fetchJoiningsQuery()
-            .addSnapshotListener { value, error ->
+//        fetchJoiningListener = leadManagementRepository.fetchJoiningsQuery()
+//            .addSnapshotListener { value, error ->
+//
+//                if (error != null) {
+//                    gigforceLogger.e(
+//                        TAG,
+//                        "while listing to joining list",
+//                        error
+//                    )
+//
+//                    _viewState.postValue(
+//                        JoiningList2ViewState.ErrorInLoadingDataFromServer(
+//                            error = "Unable to fetch Joinings",
+//                            shouldShowErrorButton = true
+//                        )
+//                    )
+//                }
+//
+//                if (value != null) {
+//                    gigforceLogger.d(
+//                        TAG,
+//                        " ${value.size()} joinings received from server"
+//                    )
+//
+//                    joiningsRaw =value.documents.map {
+//                        it.toObject(Joining::class.java)!!.apply {
+//                            this.joiningId = it.id
+//                        }
+//                    }
+//
+//                    if (joiningsRaw.isEmpty()) {
+//                        _viewState.postValue(JoiningList2ViewState.NoJoiningFound)
+//                    } else {
+//                        processJoiningsAndEmit(joiningsRaw)
+//                        prepareFilters(joiningsRaw)
+//                    }
+//                }
+//            }
 
-                if (error != null) {
-                    gigforceLogger.e(
-                        TAG,
-                        "while listing to joining list",
-                        error
-                    )
+        try {
+            gigforceLogger.d(TAG, "fetching job profiles...")
 
-                    _viewState.postValue(
-                        JoiningList2ViewState.ErrorInLoadingDataFromServer(
-                            error = "Unable to fetch Joinings",
-                            shouldShowErrorButton = true
-                        )
-                    )
-                }
+             joiningsRaw = leadManagementRepository.getJoiningListings()
 
-                if (value != null) {
-                    gigforceLogger.d(
-                        TAG,
-                        " ${value.size()} joinings received from server"
-                    )
+            //_viewState.value = Lce.content(jobProfiles)
+            processJoiningsAndEmit(joiningsRaw)
 
-                    joiningsRaw =value.documents.map {
-                        it.toObject(Joining::class.java)!!.apply {
-                            this.joiningId = it.id
-                        }
-                    }
+            gigforceLogger.d(TAG, "received ${joiningsRaw.size} joinings from server")
 
-                    if (joiningsRaw.isEmpty()) {
-                        _viewState.postValue(JoiningList2ViewState.NoJoiningFound)
-                    } else {
-                        processJoiningsAndEmit(joiningsRaw)
-                    }
-                }
-            }
+        } catch (e: Exception) {
+            _viewState.value = JoiningList2ViewState.NoJoiningFound
+            gigforceLogger.e(
+                TAG,
+                " getJoiningList()",
+                e
+            )
+        }
     }
 
     private fun processJoiningsAndEmit(
-        joiningsRaw: List<Joining>
+        joiningsRaw: List<JoiningNew>
     ) {
 
-        val statusToJoiningGroupedList = joiningsRaw.filter {
+        val businessToJoiningGroupedList = joiningsRaw.filter {
             if (currentSearchString.isNullOrBlank())
                 true
             else {
-                it.name?.contains(
+                it.gigerName?.contains(
                     currentSearchString!!,
                     true
                 ) ?: false
-                        || it.phoneNumber?.contains(
+                        || it.gigerMobileNo?.contains(
                     currentSearchString!!,
                     true
                 ) ?: false
             }
+        }.filter {
+            if (currentFilterString.isNullOrBlank())
+                true
+            else {
+                it.status.contains(
+                    currentFilterString!!, true
+                )
+            }
         }.groupBy {
-            it.getStatus().getOverallStatusStringRes()
+            it.business?.name
         }.toSortedMap(compareByDescending { it })
 
 
-        val joiningListForView = mutableListOf<JoiningListRecyclerItemData>()
-        statusToJoiningGroupedList.forEach { (status, joinings) ->
-            gigforceLogger.d(TAG, "processing data, Status : $status : ${joinings.size} Joinings")
+        val filterMap = HashMap<String, Int>()
+        var totalCount = 0
+        val joiningListForView = mutableListOf<JoiningList2RecyclerItemData>()
+        businessToJoiningGroupedList.forEach { (business, joinings) ->
+            gigforceLogger.d(TAG, "processing data, Status : $business : ${joinings.size} Joinings")
+
 
             joiningListForView.add(
-                JoiningListRecyclerItemData.JoiningListRecyclerStatusItemData(
-                    "${appContext.getString(status)} (${joinings.size})"
+                JoiningList2RecyclerItemData.JoiningListRecyclerStatusItemData(
+                    business.toString()
                 )
             )
 
             joinings.forEach {
                 joiningListForView.add(
-                    JoiningListRecyclerItemData.JoiningListRecyclerJoiningItemData(
-                        userUid = it.uid,
-                        userName = it.name ?: "N/A",
-                        userProfilePicture = it.profilePicture ?: "",
-                        userProfilePictureThumbnail = it.profilePicture ?: "",
-                        userProfilePhoneNumber = it.phoneNumber ?: "",
-                        status = it.getStatus().getStatusString(),
-                        joiningStatusText = getJoiningText(it),
-                        joiningId = it.joiningId,
-                        jobProfileId = it.jobProfileIdInvitedFor ?: "",
-                        jobProfileName = it.jobProfileNameInvitedFor ?: "",
-                        jobProfileIcon = it.jobProfileIcon ?: "",
-                        tradeName = it.tradeName ?: ""
+                    JoiningList2RecyclerItemData.JoiningListRecyclerJoiningItemData(
+                        _id = it._id,
+                        assignGigsFrom = it.assignGigsFrom ?: "",
+                        gigerName = it.gigerName ?: "",
+                        gigerMobileNo = it.gigerMobileNo ?: "",
+                        gigerId = it.gigerId,
+                        profilePicture = it.profilePicture,
+                        bussiness = it.business!!,
+                        status = it.status,
+                        selected = false
                     )
                 )
             }
+
+
         }
+
+
 
         joiningListShownOnView = joiningListForView
         if (joiningListShownOnView.isEmpty()) {
@@ -172,9 +236,74 @@ class JoiningList2ViewModel @Inject constructor(
             )
         }
 
+        //for filter count
+        val statusToJoiningGroupedList = joiningsRaw.filter {
+            if (currentSearchString.isNullOrBlank())
+                true
+            else {
+                it.gigerName?.contains(
+                    currentSearchString!!,
+                    true
+                ) ?: false
+                        || it.gigerMobileNo?.contains(
+                    currentSearchString!!,
+                    true
+                ) ?: false
+            }
+        }.groupBy { it.status }.toSortedMap(compareBy { it })
+
+        statusToJoiningGroupedList.forEach {
+            totalCount += it.value.size
+        }
+        if (statusToJoiningGroupedList.containsKey("Pending")){
+            filterMap.put(LeadManagementConstants.STATUS_PENDING, statusToJoiningGroupedList.get("Pending")?.size!!)
+        } else {
+            filterMap.put(LeadManagementConstants.STATUS_PENDING, 0)
+        }
+        if (statusToJoiningGroupedList.containsKey("Completed")){
+            filterMap.put(LeadManagementConstants.STATUS_COMPLETED, statusToJoiningGroupedList.get("Completed")?.size!!)
+        } else  {
+            filterMap.put(LeadManagementConstants.STATUS_COMPLETED, 0)
+        }
+
+        filterMap.put("All", totalCount)
+        _filtersMap.postValue(filterMap)
+
         gigforceLogger.d(
             TAG,
             "${joiningListShownOnView.size} items (joinings + status) shown on view"
+        )
+    }
+
+    fun prepareFilters(joininData: List<Joining>){
+        val joiningDa =  joininData ?: return
+        val statuses = joiningDa
+            .filter {
+                !it.status.isNullOrBlank()
+            }.distinctBy {
+                it.status
+            }.map { joiningItem ->
+                JoiningStatusAndCountItemData(
+                    status = joiningItem.status,
+                    attendanceCount = joiningDa.count { joiningItem.status == it.status },
+                    statusSelected = false
+                )
+            }.toMutableList()
+            .apply {
+                this.add(
+                    0, JoiningStatusAndCountItemData(
+                        status = "All",
+                        attendanceCount = joiningDa.size,
+                        statusSelected = true
+                    )
+                )
+            }
+
+        _filters.postValue(
+            JoiningFilters(
+                shouldRemoveOlderStatusTabs = true,
+                attendanceStatuses = statuses
+            )
         )
     }
 
@@ -202,6 +331,12 @@ class JoiningList2ViewModel @Inject constructor(
             JoiningStatus.JOINED -> {
                 "Joined ${getDateDifferenceFormatted(it.updatedOn)}"
             }
+            JoiningStatus.PENDING -> {
+                "Pending ${getDateDifferenceFormatted(it.updatedOn)}"
+            }
+            JoiningStatus.COMPLETED -> {
+                "Completed ${getDateDifferenceFormatted(it.updatedOn)}"
+            }
         }
     }
 
@@ -226,6 +361,19 @@ class JoiningList2ViewModel @Inject constructor(
     ) {
         gigforceLogger.d(TAG, "new search string received : '$searchString'")
         this.currentSearchString = searchString
+
+        if (joiningsRaw.isEmpty()) {
+            _viewState.postValue(JoiningList2ViewState.NoJoiningFound)
+            return
+        }
+        processJoiningsAndEmit(joiningsRaw)
+    }
+
+    fun filterJoinings(
+        filterString: String
+    ) {
+        gigforceLogger.d(TAG, "new filter string received : '$filterString'")
+        this.currentFilterString = filterString
 
         if (joiningsRaw.isEmpty()) {
             _viewState.postValue(JoiningList2ViewState.NoJoiningFound)

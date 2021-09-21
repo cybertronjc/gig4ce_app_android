@@ -63,7 +63,7 @@ class JoiningRecyclerItemView(
             true
         )
         foregroundView = viewBinding.viewForeground
-        backgroundView = viewBinding.viewBackground
+//        backgroundView = viewBinding.viewBackground
     }
 
     override fun bind(data: Any?) {

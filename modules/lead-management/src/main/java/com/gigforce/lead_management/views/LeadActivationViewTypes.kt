@@ -7,6 +7,8 @@ object LeadActivationViewTypes {
      */
     const val JoiningListStatus = 298012
     const val JoiningList = 239344
+    const val JoiningList2 = 2393567
+    const val JoiningBusiness = 2393456
 
     /**
      * Referral -

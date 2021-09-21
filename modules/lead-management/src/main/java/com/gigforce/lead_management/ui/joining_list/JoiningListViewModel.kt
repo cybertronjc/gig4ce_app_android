@@ -198,6 +198,12 @@ class JoiningListViewModel @Inject constructor(
             JoiningStatus.JOINED -> {
                 "Joined ${getDateDifferenceFormatted(it.updatedOn)}"
             }
+            JoiningStatus.PENDING -> {
+                "Pending ${getDateDifferenceFormatted(it.updatedOn)}"
+            }
+            JoiningStatus.COMPLETED -> {
+                "Completed ${getDateDifferenceFormatted(it.updatedOn)}"
+            }
         }
     }
 

@@ -1,5 +1,6 @@
 package com.gigforce.lead_management.repositories
 
+import android.util.Log
 import com.gigforce.common_ui.ext.bodyOrThrow
 import com.gigforce.common_ui.remote.JoiningProfileService
 import com.gigforce.common_ui.remote.ReferralService
@@ -91,6 +92,14 @@ class LeadManagementRepository @Inject constructor(
         tlUid = tlUid,
         userUid = null
     ).bodyOrThrow()
+
+    suspend fun getJoiningListings(
+    ): List<JoiningNew> {
+        Log.d("called", "calling")
+        return joiningProfileRemoteService.getJoiningListing(
+
+        ).bodyOrThrow()
+    }
 
     suspend fun getJobProfilesWithStatus(
         tlUid: String,
