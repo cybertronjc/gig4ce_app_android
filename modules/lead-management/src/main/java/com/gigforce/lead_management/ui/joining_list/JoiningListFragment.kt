@@ -140,7 +140,7 @@ class JoiningListFragment : BaseFragment2<FragmentJoiningListBinding>(
         joiningListInfoLayout.root.visible()
 
         joiningListInfoLayout.infoIv.loadImage(R.drawable.ic_no_joining_found)
-        joiningListInfoLayout.infoMessageTv.text = getString(R.string.no_job_profiles_found_lead)
+        joiningListInfoLayout.infoMessageTv.text = getString(R.string.no_joining_found_lead)
     }
 
     private fun showErrorInLoadingJoinings(

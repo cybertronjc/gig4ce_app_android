@@ -4,91 +4,109 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <FrameLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/size_8"
+        android:elevation="@dimen/size_8"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/view_background"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+<!--        <LinearLayout-->
+<!--            android:id="@+id/view_background"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent">-->
 
-            <RelativeLayout
-                android:id="@+id/swipe_bck_left_half"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="#62c554"
-                android:orientation="vertical"
-                android:paddingStart="12dp">
+<!--            <RelativeLayout-->
+<!--                android:id="@+id/swipe_bck_left_half"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_weight="1"-->
+<!--                android:background="#62c554"-->
+<!--                android:orientation="vertical"-->
+<!--                android:paddingStart="12dp">-->
 
-                <ImageView
-                    android:id="@+id/checkin_image"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="10dp" />
+<!--                <ImageView-->
+<!--                    android:id="@+id/checkin_image"-->
+<!--                    android:layout_width="22dp"-->
+<!--                    android:layout_height="22dp"-->
+<!--                    android:layout_centerVertical="true"-->
+<!--                    android:layout_marginStart="10dp" />-->
 
-                <TextView
-                    android:id="@+id/swipe_check_in_label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/checkin_image"
-                    android:fontFamily="@font/lato"
-                    android:text="Check-in"
-                    android:textColor="@color/white"
-                    android:textSize="10sp" />
-
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/swipe_bck_right_half"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="#ed6b5f"
-                android:orientation="vertical"
-                android:paddingEnd="12dp">
+<!--                <TextView-->
+<!--                    android:id="@+id/swipe_check_in_label"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_below="@id/checkin_image"-->
+<!--                    android:fontFamily="@font/lato"-->
+<!--                    android:text="Check-in"-->
+<!--                    android:textColor="@color/white"-->
+<!--                    android:textSize="10sp" />-->
 
 
-                <ImageView
-                    android:id="@+id/decline_image"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="8dp"
-                    android:layout_alignParentEnd="true" />
+<!--            </RelativeLayout>-->
 
-                <TextView
-                    android:id="@+id/swipe_decline_label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/decline_image"
-                    android:fontFamily="@font/lato"
-                    android:layout_marginTop="5dp"
-                    android:text="Decline"
-                    android:layout_alignParentEnd="true"
-                    android:textColor="@color/white"
-                    android:textSize="10sp" />
+<!--            <RelativeLayout-->
+<!--                android:id="@+id/swipe_bck_right_half"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_weight="1"-->
+<!--                android:visibility="gone"-->
+<!--                android:background="#ed6b5f"-->
+<!--                android:orientation="vertical"-->
+<!--                android:paddingEnd="12dp">-->
 
 
-            </RelativeLayout>
+<!--                <ImageView-->
+<!--                    android:id="@+id/decline_image"-->
+<!--                    android:layout_width="22dp"-->
+<!--                    android:layout_height="22dp"-->
+<!--                    android:layout_centerVertical="true"-->
+<!--                    android:layout_marginEnd="8dp"-->
+<!--                    android:layout_alignParentEnd="true" />-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/swipe_decline_label"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_below="@id/decline_image"-->
+<!--                    android:fontFamily="@font/lato"-->
+<!--                    android:layout_marginTop="5dp"-->
+<!--                    android:text="Decline"-->
+<!--                    android:layout_alignParentEnd="true"-->
+<!--                    android:textColor="@color/white"-->
+<!--                    android:textSize="10sp" />-->
 
 
-        </LinearLayout>
+<!--            </RelativeLayout>-->
+
+
+<!--        </LinearLayout>-->
+
+        <ImageButton
+            android:id="@+id/select_joining_btn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@null"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:srcCompat="@drawable/ic_unselect_tick" />
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/view_foreground"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingTop="18dp"
             android:paddingStart="16dp"
+            android:background="@drawable/joining_row_bg"
             android:paddingEnd="16dp"
-            android:background="@color/white"
-            android:paddingBottom="2dp">
+            android:paddingBottom="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/select_joining_btn"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
 
             <com.gigforce.common_ui.views.GigforceImageView
                 android:id="@+id/user_image_iv"
@@ -100,6 +118,8 @@
                 app:shapeAppearanceOverlay="@style/circleImageView"
                 tools:srcCompat="@tools:sample/avatars" />
 
+
+
             <ImageButton
                 android:id="@+id/call_giger_btn"
                 android:layout_width="50dp"
@@ -109,21 +129,23 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_call_drawable_2" />
 
-
+            <ImageView
+                android:id="@+id/status_dot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_status_dot"
+                android:layout_marginTop="@dimen/size_16"
+                app:layout_constraintStart_toStartOf="@id/user_name_tv"
+                app:layout_constraintTop_toBottomOf="@id/user_name_tv"/>
             <TextView
                 android:id="@+id/user_attendance_status_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:paddingStart="8dp"
-                android:paddingTop="2dp"
-                android:paddingEnd="8dp"
-                android:paddingBottom="2dp"
-                android:textColor="@color/white"
-                app:layout_constraintEnd_toStartOf="@id/call_giger_btn"
-                app:layout_constraintHorizontal_bias="0.008"
-                app:layout_constraintEnd_toEndOf="@id/call_giger_btn"
-                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginStart="@dimen/size_8"
+                android:textColor="@color/pink_text"
+                app:layout_constraintStart_toEndOf="@id/status_dot"
+                app:layout_constraintTop_toTopOf="@id/status_dot"
+                app:layout_constraintBottom_toBottomOf="@id/status_dot"
                 tools:text="Present" />
 
             <TextView
@@ -139,7 +161,7 @@
                 android:maxLines="1"
                 android:fontFamily="@font/lato_bold"
                 app:layout_constraintStart_toEndOf="@id/user_image_iv"
-                app:layout_constraintEnd_toStartOf="@id/user_attendance_status_textview"
+                app:layout_constraintEnd_toStartOf="@id/call_giger_btn"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Rahulefefeedededdedededav" />
 
@@ -153,6 +175,7 @@
                 android:textColor="@color/grey"
                 android:fontFamily="@font/lato"
                 android:textSize="16sp"
+                android:visibility="gone"
                 android:scrollHorizontally="true"
                 android:ellipsize="end"
                 android:maxLines="1"
@@ -167,5 +190,5 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </FrameLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

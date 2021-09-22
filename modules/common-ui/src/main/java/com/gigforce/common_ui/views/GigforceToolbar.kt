@@ -250,6 +250,10 @@ class GigforceToolbar(
         subTitleTV.visibility = View.GONE
     }
 
+    fun changeBackButtonDrawable(){
+        backButton.setImageDrawable(resources.getDrawable(R.drawable.ic_chevron))
+    }
+
     fun setTitleClickListener(
             listener: View.OnClickListener
     ) {

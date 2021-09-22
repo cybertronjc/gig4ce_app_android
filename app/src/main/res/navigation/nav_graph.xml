@@ -1012,6 +1012,14 @@
         android:id="@+id/jobProfileListFragment"
         android:name="com.gigforce.client_activation.client_activation.explore.JobProfileListFragment"
         android:label="JobProfileListFragment" />
+    <fragment
+        android:id="@+id/gigerInfoFragment"
+        android:name="com.gigforce.lead_management.ui.giger_info.GigerInfoFragment"
+        android:label="GigerInfoFragment" />
+    <fragment
+        android:id="@+id/joiningList2Fragment"
+        android:name="com.gigforce.lead_management.ui.joining_list_2.JoiningList2Fragment"
+        android:label="JoiningList2Fragment" />
 
     <fragment
         android:id="@+id/newSelectionForm1Fragment"

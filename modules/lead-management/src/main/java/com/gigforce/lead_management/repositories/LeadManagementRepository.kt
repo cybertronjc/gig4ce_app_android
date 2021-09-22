@@ -1,5 +1,6 @@
 package com.gigforce.lead_management.repositories
 
+import android.util.Log
 import com.gigforce.common_ui.ext.bodyOrThrow
 import com.gigforce.common_ui.remote.JoiningProfileService
 import com.gigforce.common_ui.remote.ReferralService
@@ -92,6 +93,14 @@ class LeadManagementRepository @Inject constructor(
         userUid = null
     ).bodyOrThrow()
 
+    suspend fun getJoiningListings(
+    ): List<JoiningNew> {
+        Log.d("called", "calling")
+        return joiningProfileRemoteService.getJoiningListing(
+
+        ).bodyOrThrow()
+    }
+
     suspend fun getJobProfilesWithStatus(
         tlUid: String,
         userUid: String
@@ -118,6 +127,10 @@ class LeadManagementRepository @Inject constructor(
             throw Exception(response.message ?: "Unable to assign gigs")
         }
     }
+
+    suspend fun getGigerJoiningInfo(
+
+    ): GigerInfo = joiningProfileRemoteService.getJoiningGigerInfo().bodyOrThrow()
 
     suspend fun createOrUpdateJoiningDocumentWithStatusSignUpPending(
         userUid: String,
