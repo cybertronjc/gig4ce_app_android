@@ -11,7 +11,7 @@
     <string name="add_bank_veri">बैंक विवरण जोड़ें</string>
     <string name="done_veri_veri">हुर्रे!!!\nKYC दस्तावेज़ सबमिट किए गए.\nवेरिफिकेशन होने के बाद हम आपको बताएंगे.</string>
     <string name="hint_address_line1_veri">पता पंक्ति 1</string>
-    <string name="hint_address_line2_veri">पता पंक्ति नं। 2</string>
+    <string name="hint_address_line2_veri">पता पंक्ति 2</string>
     <string name="hint_city_veri">शहर</string>
     <string name="hint_state_veri">राज्य</string>
     <string name="hint_pin_veri">पिन कोड</string>
@@ -333,7 +333,7 @@
     <string name="why_we_need_this_veri">हमें इसकी आवश्यकता क्यों है</string>
     <string name="aadhaar_card_number_veri">आधार कार्ड नंबर</string>
     <string name="date_of_birth_veri">जन्म की तारीख</string>
-    <string name="skip_veri">छोड़ें</string>
+    <string name="skip_veri">स्किप</string>
     <string name="you_need_to_upload_veri">आपको अपलोड करने की आवश्यकता है</string>
     <string name="aadhaar_card_veri">आधार कार्ड</string>
     <string name="select_the_method_you_want_for_verifying_your_aadhaar_card_veri">अपना आधार कार्ड सत्यापित करने के लिए इच्छित विधि का चयन करें</string>
@@ -391,14 +391,14 @@
     <string name="select_dob_veri">जन्म तिथि चुनें</string>
     <string name="enter_father_name_veri">पिता का नाम दर्ज करें</string>
     <string name="enter_valid_pin_veri">मान्य पिनकोड दर्ज करें</string>
-    <string name="enter_landmark_veri">मील का पत्थर दर्ज करें</string>
+    <string name="enter_landmark_veri">सीमाचिह्न दर्ज करें</string>
 
-    <string name="select_city_veri">Select City</string>
-    <string name="select_state_veri">Select state</string>
-    <string name="address_line_1_veri">Address Line 1</string>
-    <string name="address_line_2_veri">Address Line 2</string>
+    <string name="select_city_veri">कृपया शहर दर्ज करें</string>
+    <string name="select_state_veri">कृपया राज्य दर्ज करें</string>
+    <string name="address_line_1_veri">पता पंक्ति 1</string>
+    <string name="address_line_2_veri">पता पंक्ति 2</string>
     <string name="date_of_birth_spaced_veri">"   जन्म की तारीख   "</string>
-    <string name="aadhar_card_number_veri">AADHAAR Card Number</string>
+    <string name="aadhar_card_number_veri">आधार कार्ड संख्या</string>
     <string name="please_enter_the_below_details_of_your_aadhar_this_step_is_mandatory_for_this_application_veri">कृपया अपने आधार का विवरण नीचे दर्ज करें। इस आवेदन के लिए यह कदम अनिवार्य है।</string>
     <string name="enter_aadhar_veri">आधार विवरण दर्ज करें</string>
     <string name="aadhar_card_detail_veri">आधार कार्ड विवरण</string>

@@ -169,6 +169,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/dp_xsm1"
                             android:background="@color/white"
+                            android:textColor="@color/textview_text_colors"
                             android:text="@string/date_of_birth_spaced_amb"
                             android:visibility="gone"
                             app:layout_constraintStart_toStartOf="parent"
