@@ -1,9 +1,6 @@
 package com.gigforce.common_ui.remote
 
-import com.gigforce.common_ui.viewdatamodels.leadManagement.AssignGigRequest
-import com.gigforce.common_ui.viewdatamodels.leadManagement.AssignGigResponse
-import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfileDetails
-import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfileOverview
+import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.core.datamodels.auth.UserAuthStatusModel
 import retrofit2.Response
 import retrofit2.http.*
@@ -27,4 +24,20 @@ interface JoiningProfileService {
     suspend fun createGigs(
         @Body request : AssignGigRequest
     ): Response<AssignGigResponse>
+
+    @GET("business/listing/businessandjobProfile")
+    suspend fun getBusinessAndJobProfiles(): Response<List<JoiningBusinessAndJobProfilesItem>>
+
+    @GET("business/businessLocations")
+    suspend fun getBusinessLocationAndTeamLeaders(
+        @Query("businessId") businessId : String
+    ): Response<JoiningLocationTeamLeadersShifts>
+
+    @POST("joining/submit")
+    suspend fun submitJoiningRequest(
+        @Body joiningRequest: SubmitJoiningRequest
+    ): Response<AssignGigResponse>
+
+
+
 }

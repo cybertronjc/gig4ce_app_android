@@ -615,4 +615,23 @@ class LeadManagementRepository @Inject constructor(
                 )
             )
     }
+
+    suspend fun getBusinessAndJobProfiles() = joiningProfileRemoteService
+        .getBusinessAndJobProfiles()
+        .bodyOrThrow()
+
+    suspend fun getBusinessLocationsAndTeamLeaders(
+        businessId : String
+    ) = joiningProfileRemoteService
+        .getBusinessLocationAndTeamLeaders(businessId)
+        .bodyOrThrow()
+
+    suspend fun submitJoiningRequest(
+        joiningRequest: SubmitJoiningRequest
+    )  {
+        val response =  joiningProfileRemoteService.submitJoiningRequest(joiningRequest)
+        if (!response.isSuccessful) {
+            throw Exception(response.message() ?: "Unable to submit joining data")
+        }
+    }
 }

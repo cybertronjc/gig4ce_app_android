@@ -60,6 +60,8 @@ class JoiningList2ViewModel @Inject constructor(
         )
     }
 
+
+
     private fun startListeningToJoinings() = viewModelScope.launch {
         _viewState.postValue(JoiningList2ViewState.LoadingDataFromServer)
 

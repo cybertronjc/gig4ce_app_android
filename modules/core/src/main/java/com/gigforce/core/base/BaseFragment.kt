@@ -46,12 +46,14 @@ abstract class BaseFragment2<V : ViewDataBinding>(
             ResourcesCompat.getColor(resources, statusBarColor, null)
         )
 
-        _viewDataBinding = DataBindingUtil.inflate(
-            inflater,
-            layoutId,
-            container,
-            false
-        )
+        if(::_viewDataBinding.isInitialized.not()) {
+            _viewDataBinding = DataBindingUtil.inflate(
+                inflater,
+                layoutId,
+                container,
+                false
+            )
+        }
 
         return _viewDataBinding.root
     }

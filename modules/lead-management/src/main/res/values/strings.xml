@@ -104,5 +104,7 @@
     <string name="contact_number">Contact Number</string>
     <string name="ask_giger_to_apply">Ask the Giger to apply and submit Gig application</string>
     <string name="ask_giger_to_signup">Ask the giger to signup and submit Gig application.</string>
+    <string name="giger_mobile_number">Giger Mobile Number</string>
+    <string name="giger_name">Giger Name</string>
 
 </resources>
