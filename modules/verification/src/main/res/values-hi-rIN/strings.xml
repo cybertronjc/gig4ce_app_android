@@ -398,7 +398,7 @@
     <string name="address_line_1_veri">Address Line 1</string>
     <string name="address_line_2_veri">Address Line 2</string>
     <string name="date_of_birth_spaced_veri">"   जन्म की तारीख   "</string>
-    <string name="aadhar_card_number_veri">AADHAR Card Number</string>
+    <string name="aadhar_card_number_veri">AADHAAR Card Number</string>
     <string name="please_enter_the_below_details_of_your_aadhar_this_step_is_mandatory_for_this_application_veri">कृपया अपने आधार का विवरण नीचे दर्ज करें। इस आवेदन के लिए यह कदम अनिवार्य है।</string>
     <string name="enter_aadhar_veri">आधार विवरण दर्ज करें</string>
     <string name="aadhar_card_detail_veri">आधार कार्ड विवरण</string>

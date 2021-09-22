@@ -272,7 +272,7 @@
     <string name="bank_name_with_colon">Bank Name :</string>
     <string name="bank_account_no">Bank Account No :</string>
     <string name="please_provide_the_following_information">Please provide the following information.</string>
-    <string name="aadhar_number">Aadhar Number *</string>
+    <string name="aadhar_number">Aadhaar Number *</string>
     <string name="state_pascal_case">State</string>
     <string name="driving_license_number">Driving License Number *</string>
     <string name="driving_license_front_image">Driving License (Front Image)</string>
@@ -293,7 +293,7 @@
     <string name="aadhar_card_back_image">Aadhaar Card (Back Image)</string>
     <string name="why_we_need_this_aadhar">Uploading either Aadhaar or Driver’s license is mandatory for profile verification. Aadhaar card helps verify your name, date of birth, address, and other details.</string>
     <string name="aadhar_card_details_uploaded">Aadhaar Card Details Uploaded</string>
-    <string name="you_are_reuploading_aadhar">You are re-uploading your Aadhar details. They will be verified once again, which may take up to 7 days.</string>
+    <string name="you_are_reuploading_aadhar">You are re-uploading your Aadhaar details. They will be verified once again, which may take up to 7 days.</string>
     <string name="select_or_capture_both_sides_of_aadhar">Select or capture both sides of Aadhaar Card</string>
     <string name="enter_valid_aadhar_no">Enter Valid Aadhaar Card No</string>
     <string name="video_uploaded">Video Uploaded</string>
@@ -350,7 +350,7 @@
     <string name="scenario">Scenario :</string>
     <string name="record_a_10_second_video_of_yourself_nface_the_camera_and_say_hi_i_m_your_name_and_i_like_to_do_mention_2_things_you_like_to_do_selfie_video">Record a 10-second video of yourself Face the camera and say “Hi, I’m (your name) and I like to do (mention 2 things you like to do.)</string>
     <string name="pan_number_eg_bttps4444a">PAN Number (Eg: BTTPS4444A)</string>
-    <string name="aadhar_number_eg_444433332222">Aadhar Number* (Eg: 444433332222)</string>
+    <string name="aadhar_number_eg_444433332222">Aadhaar Number* (Eg: 444433332222)</string>
     <string name="driving_license_number_n_eg_if_the_driving_licence_number_is_rj_13_dlc_12_123456_rj1320120123456">Driving Licence Number * (Accepted formats of DL are as follows: RJ0520091048627. For other formats please call your supervisor for help)</string>
     <string name="ifsc_eg_sbin0000572_bkid0000048">IFSC* (Eg: SBIN0000572, BKID0000048)</string>
     <string name="account_number_eg_10_16_digit_number_30000011111111111">Account number* (Eg: 10-16 digit number : 30000011111111111)</string>
@@ -927,7 +927,7 @@
     <string name="title_app">Title</string>
     <string name="mock_name">MOCK NAME</string>
     <string name="restart_update">Restart Update</string>
-    <string name="restart">Cancel</string>
+    <string name="restart">Restart</string>
     <string name="add_headline">Add Headline</string>
     <string name="add_tag">Add Tag</string>
     <string name="newtag">#Newtag</string>
@@ -1034,7 +1034,7 @@
     <string name="know_lang_app">\"Language known: \"</string>
 
 
-//merged from live_master
+    //merged from live_master
 <!--    <string name="dl_hint_square_bracket">Driving License Number*\n(Accepted DL formats are : RJ-13/DLC/12/123456, RJ1320120123456, RJ-052009123456, and GJ18N2012123456. For other formats please call your supervisor for help.)</string>-->
 <!--    <string name="plus_see_more">+ see more</string>-->
 <!--    <string name="plus_see_less">+ see less</string>-->
@@ -1249,7 +1249,7 @@
 <!--    <string name="ambassador_now">You are an Ambassador now</string>-->
 <!--    <string name="unable_to_apply_for_ambassador">Unable to apply for ambassador,</string>-->
 <!--    <string name="you_have_to_look_for">You have to look for people who are looking for Jobs like Driver, Warehouse Helper, Delivery Executive etc</string>-->
-<!--    <string name="if_they_are_interested">If they are interested, you have to create their profiles on Gigforce app. Creating profile means entering their basic details and uploading  verifiying Documents like Adhaar, PAN, Bank passbook etc.</string>-->
+<!--    <string name="if_they_are_interested">If they are interested, you have to create their profiles on Gigforce app. Creating profile means entering their basic details and uploading  verifiying Documents like Aadhaar, PAN, Bank passbook etc.</string>-->
 <!--    <string name="related_learnings">Related Learnings</string>-->
 <!--    <string name="user_local_address">User Local Address</string>-->
 <!--    <string name="select_district">Select District</string>-->
@@ -1335,7 +1335,7 @@
 <!--    <string name="yes_i_am_ready">Yes, I am ready</string>-->
 <!--    <string name="no_i_am_not">No, I am not</string>-->
 <!--    <string name="upload_bank_details">Upload Bank Details</string>-->
-<!--    <string name="upload_aadhar_details">Upload Aadhar Details</string>-->
+<!--    <string name="upload_aadhar_details">Upload Aadhaar Details</string>-->
 <!--    <string name="upload_driving_license_details">Upload Driving License Details</string>-->
 <!--    <string name="upload_pan_details">Upload PAN Details</string>-->
 <!--    <string name="glad_to_know_about_your_interest_give_a_bit_more_details_to_show_best_gigs_to_you">Glad to know about your interest. Give a bit more details to show best Gigs to you</string>-->

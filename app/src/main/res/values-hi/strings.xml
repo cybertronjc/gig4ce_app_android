@@ -842,7 +842,7 @@
     <string name="title_app">शीर्षक</string>
     <string name="mock_name">नकली नाम</string>
     <string name="restart_update">अद्यतन पुनरारंभ करें</string>
-    <string name="restart">रद्द करें</string>
+    <string name="restart">रीस्टार्ट</string>
     <string name="add_headline">शीर्षक जोड़ें</string>
     <string name="add_tag">टैग जोड़ो</string>
     <string name="newtag">#Newtag</string>
