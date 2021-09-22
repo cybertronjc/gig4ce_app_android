@@ -13,5 +13,12 @@ object LeadManagementNavDestinations {
     const val FRAGMENT_REFERENCE_CHECK = "${moduleName}/referenceCheckFragment"
     const val FRAGMENT_PICK_PROFILE_FOR_REFERRAL = "${moduleName}/pickProfileForReferralFragment"
     const val FRAGMENT_REFERRAL = "${moduleName}/leadActReferral"
+    const val FRAGMENT_SELECTION_FORM_1 = "${moduleName}/selectionForm1"
+    const val FRAGMENT_SELECT_BUSINESS = "${moduleName}/selectBusiness"
+    const val FRAGMENT_SELECT_JOB_PROFILE = "${moduleName}/selectJobProfile"
+    const val FRAGMENT_SELECTION_FORM_2 = "${moduleName}/newSelectionForm2Fragment"
+    const val FRAGMENT_SELECT_CITY = "${moduleName}/selectCity"
+    const val FRAGMENT_SELECT_REPORTING_LOCATION = "${moduleName}/selectReportingLocation"
+    const val FRAGMENT_SELECT_CLIENT_TL = "${moduleName}/selectClientTL"
     const val FRAGMENT_GIGER_INFO = "${moduleName}/gigerInfoFragment"
 }

@@ -19,5 +19,13 @@ class NavForLeadManagmentModule(
         baseImplementation.registerRoute(LeadManagementNavDestinations.FRAGMENT_PICK_PROFILE_FOR_REFERRAL, R.id.pickProfileForReferralFragment)
         baseImplementation.registerRoute(LeadManagementNavDestinations.FRAGMENT_REFERRAL, R.id.shareReferralLinkFragment)
         baseImplementation.registerRoute(LeadManagementNavDestinations.FRAGMENT_GIGER_INFO, R.id.gigerInfoFragment)
+        baseImplementation.registerRoute(LeadManagementNavDestinations.FRAGMENT_SELECTION_FORM_1, R.id.newSelectionForm1Fragment)
+        baseImplementation.registerRoute(LeadManagementNavDestinations.FRAGMENT_SELECT_BUSINESS, R.id.selectBusinessFragment)
+        baseImplementation.registerRoute(LeadManagementNavDestinations.FRAGMENT_SELECT_JOB_PROFILE, R.id.selectJobProfileFragment)
+        baseImplementation.registerRoute(LeadManagementNavDestinations.FRAGMENT_SELECTION_FORM_2, R.id.newSelectionForm2Fragment)
+        baseImplementation.registerRoute(LeadManagementNavDestinations.FRAGMENT_SELECT_CITY, R.id.selectCityFragment)
+        baseImplementation.registerRoute(LeadManagementNavDestinations.FRAGMENT_SELECT_REPORTING_LOCATION, R.id.selectReportingLocationFragment)
+        baseImplementation.registerRoute(LeadManagementNavDestinations.FRAGMENT_SELECT_CLIENT_TL, R.id.selectClientTlFragment)
+
     }
 }

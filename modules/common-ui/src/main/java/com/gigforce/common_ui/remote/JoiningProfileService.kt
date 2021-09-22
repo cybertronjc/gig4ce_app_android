@@ -32,6 +32,20 @@ interface JoiningProfileService {
 
     ): Response<List<JoiningNew>>
 
+    @GET("business/listing/businessandjobProfile")
+    suspend fun getBusinessAndJobProfiles(): Response<List<JoiningBusinessAndJobProfilesItem>>
+
+    @GET("business/businessLocations")
+    suspend fun getBusinessLocationAndTeamLeaders(
+        @Query("businessId") businessId : String
+    ): Response<JoiningLocationTeamLeadersShifts>
+
+    @POST("joining/submit")
+    suspend fun submitJoiningRequest(
+        @Body joiningRequest: SubmitJoiningRequest
+    ): Response<AssignGigResponse>
+
+
     @GET("joining/detail/{id}")
     suspend fun getJoiningInfo(
         @Path("id") id: String

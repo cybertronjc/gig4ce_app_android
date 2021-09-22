@@ -46,12 +46,24 @@ abstract class BaseFragment2<V : ViewDataBinding>(
             ResourcesCompat.getColor(resources, statusBarColor, null)
         )
 
-        _viewDataBinding = DataBindingUtil.inflate(
-            inflater,
-            layoutId,
-            container,
-            false
-        )
+        if(shouldPreventViewRecreationOnNavigation()) {
+            if (::_viewDataBinding.isInitialized.not()) {
+                _viewDataBinding = DataBindingUtil.inflate(
+                    inflater,
+                    layoutId,
+                    container,
+                    false
+                )
+            }
+        } else{
+
+            _viewDataBinding = DataBindingUtil.inflate(
+                inflater,
+                layoutId,
+                container,
+                false
+            )
+        }
 
         return _viewDataBinding.root
     }
@@ -81,6 +93,10 @@ abstract class BaseFragment2<V : ViewDataBinding>(
     override fun onDestroy() {
         super.onDestroy()
         logger.d(fragmentName, "onDestroy()")
+    }
+
+    open fun shouldPreventViewRecreationOnNavigation() : Boolean{
+        return false
     }
 
     abstract fun viewCreated(

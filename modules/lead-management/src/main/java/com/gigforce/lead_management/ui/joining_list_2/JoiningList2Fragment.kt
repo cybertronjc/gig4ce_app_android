@@ -68,10 +68,7 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningListBinding>(
             logger.d(logTag, "navigating to ${LeadManagementNavDestinations.FRAGMENT_GIGER_ONBOARDING}")
 
             navigation.navigateTo(
-                dest = LeadManagementNavDestinations.FRAGMENT_GIGER_ONBOARDING,
-                args = bundleOf(
-                    GigerOnboardingFragment.INTENT_CAME_FROM_JOINING to true
-                ),
+                dest = LeadManagementNavDestinations.FRAGMENT_SELECTION_FORM_1,
                 navOptions = getNavOptions()
             )
         }

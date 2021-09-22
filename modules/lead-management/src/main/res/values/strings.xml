@@ -117,4 +117,6 @@
     <string name="location_lead">Location</string>
     <string name="selection_date">Selection Date</string>
     <string name="checklist_name_lead">Profile Picture</string>
+    <string name="giger_mobile_number">Giger Mobile Number</string>
+
 </resources>
