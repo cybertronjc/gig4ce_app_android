@@ -1,5 +1,7 @@
 package com.gigforce.common_ui.viewdatamodels
 
+import androidx.core.os.bundleOf
+import com.gigforce.core.NavArgs
 import com.gigforce.core.SimpleDVM
 import com.gigforce.core.datamodels.CommonViewTypes
 
@@ -18,4 +20,11 @@ data class FeatureItemCard2DVM(
     val navPath: String? = null,
     val hi: HindiTranslationMapping? = null
 ) :
-    SimpleDVM(CommonViewTypes.VIEW_FEATURE_ITEM_CARD2, navPath)
+    SimpleDVM(CommonViewTypes.VIEW_FEATURE_ITEM_CARD2, navPath){
+    override fun getNavArgs(): NavArgs? {
+        navPath?.let {
+            return NavArgs(navPath, bundleOf("title" to title, "hi" to hi))
+        }
+        return null
+    }
+    }

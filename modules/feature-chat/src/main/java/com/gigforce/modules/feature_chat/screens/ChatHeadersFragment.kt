@@ -102,56 +102,59 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
         noChatsLayout.isVisible = list.isEmpty()
 
         coreRecyclerView.collection =
-                ArrayList(list.map {
+            ArrayList(list.map {
 
-                    var timeToDisplayText = ""
-                    it.lastMsgTimestamp?.let {
-                        val chatDate = it.toDate()
-                        timeToDisplayText =
-                                if (DateUtils.isToday(chatDate.time)) SimpleDateFormat("hh:mm aa").format(
-                                        chatDate
-                                ) else SimpleDateFormat("dd MMM").format(chatDate)
-                    }
+                var timeToDisplayText = ""
+                it.lastMsgTimestamp?.let {
+                    val chatDate = it.toDate()
+                    timeToDisplayText =
+                        if (DateUtils.isToday(chatDate.time)) SimpleDateFormat("hh:mm aa").format(
+                            chatDate
+                        ) else SimpleDateFormat("dd MMM").format(chatDate)
+                }
 
-                    ChatListItemDataWrapper(
-                            chatItem = ChatListItemDataObject(
-                                    id = it.id,
-                                    title = it.otherUser?.name ?: "",
-                                    subtitle = it.lastMsgText,
-                                    timeDisplay = timeToDisplayText,
-                                    type = it.chatType,
-                                    profilePath = it.otherUser?.profilePic ?: "",
-                                    unreadCount = it.unseenCount,
-                                    profileId = it.otherUserId,
-                                    isOtherUserOnline = it.isOtherUserOnline,
-                                    groupName = it.groupName,
-                                    groupAvatar = it.groupAvatar,
-                                    lastMessage = it.lastMsgText,
-                                    lastMessageType = it.lastMessageType,
-                                    lastMsgFlowType = it.lastMsgFlowType,
-                                    chatType = it.chatType,
-                                    status = it.status,
-                                    lastMessageDeleted = it.lastMessageDeleted,
-                                    senderName = it.senderName
-                            ),
-                            viewModel = viewModel
-                    )
-                })
+                ChatListItemDataWrapper(
+                    chatItem = ChatListItemDataObject(
+                        id = it.id,
+                        title = it.otherUser?.name ?: "",
+                        subtitle = it.lastMsgText,
+                        timeDisplay = timeToDisplayText,
+                        type = it.chatType,
+                        profilePath = it.otherUser?.profilePic ?: "",
+                        unreadCount = it.unseenCount,
+                        profileId = it.otherUserId,
+                        isOtherUserOnline = it.isOtherUserOnline,
+                        groupName = it.groupName,
+                        groupAvatar = it.groupAvatar,
+                        lastMessage = it.lastMsgText,
+                        lastMessageType = it.lastMessageType,
+                        lastMsgFlowType = it.lastMsgFlowType,
+                        chatType = it.chatType,
+                        status = it.status,
+                        lastMessageDeleted = it.lastMessageDeleted,
+                        senderName = it.senderName
+                    ),
+                    viewModel = viewModel
+                )
+            })
 
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         cancelAnyNotificationIfShown()
-        StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(resources, R.color.lipstick_2, null))
+        StatusBarUtil.setColorNoTranslucent(
+            requireActivity(),
+            ResourcesCompat.getColor(resources, R.color.lipstick_2, null)
+        )
         return inflater.inflate(R.layout.fragment_chat_list, container, false)
     }
 
     private fun cancelAnyNotificationIfShown() {
         val mNotificationManager =
-                requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         mNotificationManager.cancel(67)
     }
 
@@ -168,22 +171,22 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
         super.onViewCreated(view, savedInstanceState)
     }
 
+    var title = ""
     private fun getDataFrom(
-            arguments: Bundle?,
-            savedInstanceState: Bundle?
+        arguments: Bundle?,
+        savedInstanceState: Bundle?
     ) {
         arguments?.let {
 
             if (!sharedFileSubmitted) {
-                val sharedFilesBundle = it.getBundle(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE)
+                val sharedFilesBundle =
+                    it.getBundle(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE)
                 viewModel.sharedFiles = sharedFilesBundle
                 sharedFileSubmitted = true
             }
-        }
-    }
+            title = it.getString("title") ?: ""
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
+        }
     }
 
     private fun findViews(view: View) {
@@ -191,7 +194,7 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
         contactsFab.setOnClickListener {
 
             chatNavigation.navigateToContactsPage(
-                    bundleOf(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE to viewModel.sharedFiles)
+                bundleOf(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE to viewModel.sharedFiles)
             )
             viewModel.sharedFiles = null
         }
@@ -205,12 +208,18 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
         contactsButton.setOnClickListener {
 
             chatNavigation.navigateToContactsPage(
-                    bundleOf(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE to viewModel.sharedFiles)
+                bundleOf(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE to viewModel.sharedFiles)
             )
             viewModel.sharedFiles = null
         }
 
-        toolbar.showTitle(getString(R.string.chats_chat))
+        if (title.isNotBlank()) {
+            toolbar.showTitle(title)
+        } else {
+            toolbar.showTitle(getString(R.string.chats_chat))
+
+        }
+
         toolbar.hideActionMenu()
         toolbar.setBackButtonListener {
 
@@ -240,36 +249,36 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(
-                viewLifecycleOwner,
-                backPressHandler
+            viewLifecycleOwner,
+            backPressHandler
         )
     }
 
     private fun askForStoragePermission() {
         Log.v(ChatPageFragment.TAG, "Permission Required. Requesting Permission")
         requestPermissions(
-                arrayOf(
-                        android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                        android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        android.Manifest.permission.CAMERA
-                ),
-                23
+            arrayOf(
+                android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                android.Manifest.permission.CAMERA
+            ),
+            23
         )
     }
 
     private fun isStoragePermissionGranted(): Boolean {
 
         return ContextCompat.checkSelfPermission(
-                requireContext(),
-                android.Manifest.permission.READ_EXTERNAL_STORAGE
+            requireContext(),
+            android.Manifest.permission.READ_EXTERNAL_STORAGE
         ) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(
-                requireContext(),
-                android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+            requireContext(),
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE
         ) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(
-                requireContext(),
-                android.Manifest.permission.CAMERA
+            requireContext(),
+            android.Manifest.permission.CAMERA
         ) == PackageManager.PERMISSION_GRANTED
     }
 
@@ -300,8 +309,8 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
         val activity = activity ?: return
 
         val inputMethodManager =
-                activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus()?.getWindowToken(), 0)
+            activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(activity.currentFocus?.windowToken, 0)
     }
 
     companion object {

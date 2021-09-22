@@ -73,6 +73,7 @@ class FeatureItemCard2Component(context: Context, attrs: AttributeSet?) :
 
             data.getNavArgs() ?. let {
                 this.setOnClickListener{ view ->
+                    it.args?.putString("title", feature_title.text.toString())
                     navigation.navigateTo(it.navPath, it.args)
                 }
             }
