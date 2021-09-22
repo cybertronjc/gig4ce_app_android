@@ -50,11 +50,13 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningListBinding>(
         viewBinding: FragmentJoiningListBinding,
         savedInstanceState: Bundle?
     ) {
+
         initToolbar(viewBinding)
         initTabLayout()
         initListeners(viewBinding)
         initViewModel()
     }
+
 
     private fun initListeners(
         viewBinding: FragmentJoiningListBinding

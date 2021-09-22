@@ -25,14 +25,15 @@ interface JoiningProfileService {
         @Body request : AssignGigRequest
     ): Response<AssignGigResponse>
 
-    @GET("gigs")
-    suspend fun getJoiningGigerInfo(
-
-    ): Response<GigerInfo>
 
 
     @GET("joining/listing")
     suspend fun getJoiningListing(
 
     ): Response<List<JoiningNew>>
+
+    @GET("joining/detail/{id}")
+    suspend fun getJoiningInfo(
+        @Path("id") id: String
+    ): Response<GigerInfo>
 }

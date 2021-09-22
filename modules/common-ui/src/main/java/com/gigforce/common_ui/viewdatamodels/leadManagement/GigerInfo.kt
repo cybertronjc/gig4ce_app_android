@@ -2,11 +2,11 @@ package com.gigforce.common_ui.viewdatamodels.leadManagement
 
 import com.google.gson.annotations.SerializedName
 
-class GigerInfo(
+data class GigerInfo(
     @SerializedName("gigerName")
     val gigerName: String,
 
-    @SerializedName("gigerPhone")
+    @SerializedName("gigerMobileNo")
     val gigerPhone: String?,
 
     @SerializedName("gigerProfilePicture")

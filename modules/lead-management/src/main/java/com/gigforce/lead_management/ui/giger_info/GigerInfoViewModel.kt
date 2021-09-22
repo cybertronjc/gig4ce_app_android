@@ -45,14 +45,13 @@ class GigerInfoViewModel @Inject constructor(
     private val _viewState = MutableLiveData<GigerInfoState>()
     val viewState: LiveData<GigerInfoState> = _viewState
 
-    fun getGigerJoiningInfo() = viewModelScope.launch {
+    fun getGigerJoiningInfo(joiningId: String) = viewModelScope.launch {
         _viewState.postValue(GigerInfoState.LoadingDataFromServer)
 
         try {
             logger.d(TAG, "fetching giger joining info...")
 
-            val gigerJoiningDetails = leadManagementRepository.getGigerJoiningInfo(
-            )
+            val gigerJoiningDetails = leadManagementRepository.getGigerJoiningInfo(joiningId)
             _viewState.value = GigerInfoState.GigerInfoLoaded(gigerJoiningDetails)
 
             logger.d(TAG, "received ${gigerJoiningDetails} giger joining info from server")
