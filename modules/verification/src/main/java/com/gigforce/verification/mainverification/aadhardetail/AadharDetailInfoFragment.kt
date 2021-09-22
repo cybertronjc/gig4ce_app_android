@@ -437,14 +437,14 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
                         return@setOnClickListener
                     }
 
-                    if (landmarkInput.text.toString().isBlank()) {
-                        MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert_veri))
-                                .setMessage(getString(R.string.enter_landmark_veri))
-                                .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
-                                .show()
-                        return@setOnClickListener
-                    }
+//                    if (landmarkInput.text.toString().isBlank()) {
+//                        MaterialAlertDialogBuilder(requireContext())
+//                                .setTitle(getString(R.string.alert_veri))
+//                                .setMessage(getString(R.string.enter_landmark_veri))
+//                                .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
+//                                .show()
+//                        return@setOnClickListener
+//                    }
 
                     //current address validation
                     if (!currentAddCheckbox.isChecked) {
@@ -500,14 +500,14 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
                             return@setOnClickListener
                         }
 
-                        if (caLandmarkInput.text.toString().isBlank()) {
-                            MaterialAlertDialogBuilder(requireContext())
-                                    .setTitle(getString(R.string.alert_veri))
-                                    .setMessage(getString(R.string.enter_landmark_veri))
-                                    .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
-                                    .show()
-                            return@setOnClickListener
-                        }
+//                        if (caLandmarkInput.text.toString().isBlank()) {
+//                            MaterialAlertDialogBuilder(requireContext())
+//                                    .setTitle(getString(R.string.alert_veri))
+//                                    .setMessage(getString(R.string.enter_landmark_veri))
+//                                    .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
+//                                    .show()
+//                            return@setOnClickListener
+//                        }
                     }
 
                     submitData()

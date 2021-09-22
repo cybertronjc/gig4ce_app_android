@@ -464,14 +464,14 @@ class UserAadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageB
                         return@setOnClickListener
                     }
 
-                    if (landmarkInput.text.toString().isBlank()) {
-                        MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert_amb))
-                                .setMessage(getString(R.string.enter_landmark_amb))
-                                .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
-                                .show()
-                        return@setOnClickListener
-                    }
+//                    if (landmarkInput.text.toString().isBlank()) {
+//                        MaterialAlertDialogBuilder(requireContext())
+//                                .setTitle(getString(R.string.alert_amb))
+//                                .setMessage(getString(R.string.enter_landmark_amb))
+//                                .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
+//                                .show()
+//                        return@setOnClickListener
+//                    }
 
                     //current address validation
                     if (!currentAddCheckbox.isChecked) {
@@ -527,14 +527,14 @@ class UserAadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageB
                             return@setOnClickListener
                         }
 
-                        if (caLandmarkInput.text.toString().isBlank()) {
-                            MaterialAlertDialogBuilder(requireContext())
-                                    .setTitle(getString(R.string.alert_amb))
-                                    .setMessage(getString(R.string.enter_landmark_amb))
-                                    .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
-                                    .show()
-                            return@setOnClickListener
-                        }
+//                        if (caLandmarkInput.text.toString().isBlank()) {
+//                            MaterialAlertDialogBuilder(requireContext())
+//                                    .setTitle(getString(R.string.alert_amb))
+//                                    .setMessage(getString(R.string.enter_landmark_amb))
+//                                    .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
+//                                    .show()
+//                            return@setOnClickListener
+//                        }
                     }
 
                     submitData()
