@@ -84,6 +84,10 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         datePickerDialog
     }
 
+    override fun shouldPreventViewRecreationOnNavigation(): Boolean {
+        return true
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {

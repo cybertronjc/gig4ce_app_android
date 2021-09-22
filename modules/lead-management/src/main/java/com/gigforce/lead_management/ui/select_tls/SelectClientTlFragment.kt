@@ -40,6 +40,11 @@ class SelectClientTlFragment : BaseFragment2<FragmentSelectClientTlBinding>(
         }
     }
 
+    override fun shouldPreventViewRecreationOnNavigation(): Boolean {
+        return true
+    }
+
+
     override fun viewCreated(
         viewBinding: FragmentSelectClientTlBinding,
         savedInstanceState: Bundle?

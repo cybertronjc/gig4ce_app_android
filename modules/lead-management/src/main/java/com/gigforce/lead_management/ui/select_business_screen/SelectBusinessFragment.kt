@@ -41,6 +41,10 @@ class SelectBusinessFragment : BaseFragment2<FragmentSelectBusinessBinding>(
         }
     }
 
+    override fun shouldPreventViewRecreationOnNavigation(): Boolean {
+        return true
+    }
+
     override fun viewCreated(
         viewBinding: FragmentSelectBusinessBinding,
         savedInstanceState: Bundle?

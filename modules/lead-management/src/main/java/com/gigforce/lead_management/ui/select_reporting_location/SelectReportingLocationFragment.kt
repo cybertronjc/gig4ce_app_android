@@ -40,6 +40,10 @@ class SelectReportingLocationFragment : BaseFragment2<FragmentSelectJobProfileBi
         }
     }
 
+    override fun shouldPreventViewRecreationOnNavigation(): Boolean {
+        return true
+    }
+
     override fun viewCreated(
         viewBinding: FragmentSelectJobProfileBinding,
         savedInstanceState: Bundle?

@@ -42,6 +42,10 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
     private val viewModel: NewSelectionForm1ViewModel by viewModels()
     private val leadMgmtSharedViewModel: LeadManagementSharedViewModel by activityViewModels()
 
+    override fun shouldPreventViewRecreationOnNavigation(): Boolean {
+        return true
+    }
+
     override fun viewCreated(
         viewBinding: FragmentNewSelectionForm1Binding,
         savedInstanceState: Bundle?
