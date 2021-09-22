@@ -397,6 +397,9 @@
     <string name="enter_add1_amb">Please enter address1</string>
     <string name="select_dob_amb">Select date of birth</string>
     <string name="date_of_birth_spaced_amb">"   Date of birth   "</string>
-
+    <string name="no_doc_title_aadhaar_amb">Aadhaar not available!</string>
+    <string name="no_doc_subtitle_aadhaar_amb">No Worries! Once you own Aadhaar you can untick the checkbox to verify it</string>
+    <string name="father_s_name_amb">Father\'s Name</string>
+    <string name="enter_father_name_amb">Enter father name</string>
 
 </resources>

@@ -437,7 +437,8 @@
     <string name="same_as_permanent_veri">Same as permanent address</string>
     <string name="curr_add1_veri">Enter Current Address Line 1</string>
     <string name="curr_add2_veri">Enter Current Address Line 2</string>
-
+    <string name="no_doc_title_aadhaar_veri">Aadhaar not available!</string>
+    <string name="no_doc_subtitle_aadhaar_veri">No Worries! Once you own Aadhaar you can untick the checkbox to verify it</string>
     <!--    <string name="veri_add_doc_front">"Front Side"</string>-->
 <!--    <string name="veri_add_doc_back">"Back Side"</string>-->
 <!--    <string name="veri_pan_title">"Step 5 : Upload your Pan"</string>-->

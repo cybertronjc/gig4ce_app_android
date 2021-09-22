@@ -362,4 +362,9 @@
     <string name="next_amb">अगला</string>
     <string name="invite_link_amb">पंजीकृत नंबर पर एसएमएस के माध्यम से आमंत्रण लिंक साझा किया जाएगा।</string>
     <string name="edit_propercase">संपादित करें</string>
+    <string name="no_doc_title_aadhaar_amb">आधार उपलब्ध नहीं है!</string>
+    <string name="no_doc_subtitle_aadhaar_amb">कोई चिंता नहीं! एक बार जब आप आधार के मालिक हो जाते हैं तो आप इसे सत्यापित करने के लिए चेकबॉक्स को अनचेक कर सकते हैं</string>
+    <string name="father_s_name_amb">पिता का नाम</string>
+    <string name="enter_father_name_amb">पिता का नाम दर्ज करें</string>
+
 </resources>

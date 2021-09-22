@@ -110,9 +110,17 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getDataFromIntent(savedInstanceState)
+        initviews()
         setViews()
         observer()
         listener()
+    }
+
+    private fun initviews() {
+        viewBinding.toplayoutblock.setIdonthaveDocContent(
+            resources.getString(R.string.no_doc_title_aadhaar_veri),
+            resources.getString(R.string.no_doc_subtitle_aadhaar_veri)
+        )
     }
 
     var allNavigationList = ArrayList<String>()
@@ -370,7 +378,14 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
                                 .show()
                         return@setOnClickListener
                     }
-
+                    if (fatherNameTil.editText?.text.toString().isBlank()) {
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert_veri))
+                            .setMessage(getString(R.string.enter_father_name_veri))
+                            .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
+                            .show()
+                        return@setOnClickListener
+                    }
                     if (addLine1Input.text.toString().isBlank()) {
                         MaterialAlertDialogBuilder(requireContext())
                                 .setTitle(getString(R.string.alert_veri))

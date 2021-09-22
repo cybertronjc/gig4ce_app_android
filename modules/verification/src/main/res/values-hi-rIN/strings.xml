@@ -411,7 +411,8 @@
     <string name="enter_aadhar_details_veri">आधार कार्ड विवरण नीचे मैन्युअल रूप से दर्ज करें</string>
     <string name="upload_aadhar_card_veri">अपलोड आधार कार्ड</string>
     <string name="please_upload_aadhar_veri">कृपया अपना आधार कार्ड अपलोड करें या मैन्युअल रूप से विवरण दर्ज करें</string>
-
+    <string name="no_doc_title_aadhaar_veri">आधार उपलब्ध नहीं है!</string>
+    <string name="no_doc_subtitle_aadhaar_veri">कोई चिंता नहीं! एक बार जब आप आधार के मालिक हो जाते हैं तो आप इसे सत्यापित करने के लिए चेकबॉक्स को अनचेक कर सकते हैं</string>
     <!--    <string name="veri_add_doc_front">सामने की ओर</string>-->
     <!--    <string name="veri_add_doc_back">पीछे की ओर</string>-->
     <!--    <string name="veri_pan_title">चरण 5: अपना पैन अपलोड करें</string>-->

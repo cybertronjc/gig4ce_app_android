@@ -120,11 +120,19 @@ class UserAadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageB
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getDataFromIntent(savedInstanceState)
+        initviews()
         initializeNavigations()
         setViews()
         observer()
         listener()
     }
+    private fun initviews() {
+        viewBinding.toplayoutblock.setIdonthaveDocContent(
+            resources.getString(R.string.no_doc_title_aadhaar_amb),
+            resources.getString(R.string.no_doc_subtitle_aadhaar_amb)
+        )
+    }
+
     var navigationsForBundle = ArrayList<String>()
 
     private fun initializeNavigations() {
@@ -397,7 +405,14 @@ class UserAadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageB
                                 .show()
                         return@setOnClickListener
                     }
-
+                    if (fatherNameTil.editText?.text.toString().isBlank()) {
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert_amb))
+                            .setMessage(getString(R.string.enter_father_name_amb))
+                            .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
+                            .show()
+                        return@setOnClickListener
+                    }
                     if (addLine1Input.text.toString().isBlank()) {
                         MaterialAlertDialogBuilder(requireContext())
                                 .setTitle(getString(R.string.alert_amb))
@@ -578,6 +593,7 @@ class UserAadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageB
                 backImagePath = aadharBackImagePath,
                 aadhaarCardNo = aadharNo.editText?.text.toString(),
                 dateOfBirth = dateOfBirth.text.toString(),
+                fName = fatherNameTil.editText?.text.toString(),
                 addLine1 = addLine1Input.text.toString(),
                 addLine2 = addLine2Input.text.toString(),
                 state = stateSpinner.text.toString(),
@@ -958,6 +974,9 @@ class UserAadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageB
                     dateOfBirth.text = it
                     dobLabel.visible()
                 }
+            }
+            it.fName.let {
+                fatherNameTil.editText?.setText(it)
             }
             it.addLine1.let {
                 addLine1.editText?.setText(it)
