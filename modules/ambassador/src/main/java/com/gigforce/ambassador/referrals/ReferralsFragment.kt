@@ -397,7 +397,7 @@ class ReferralsFragment : Fragment(),
         } catch (e: Exception) {
             //e.toString();
         }
-        pb_referrals_frag.gone()
+        pb_referrals_frag?.gone()
     }
 
     private fun displayImage(profileImg: String, imageView: ImageView) {
