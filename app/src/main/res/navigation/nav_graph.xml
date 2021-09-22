@@ -993,6 +993,11 @@
         android:label="AddNewLoginSummaryFragment" />
 
     <fragment
+        android:id="@+id/iconsubiconfragment"
+        android:name="com.gigforce.giger_app.fragments.SubiconListFragment"
+        android:label="Iconsubicon" />
+
+    <fragment
         android:id="@+id/addLoginReportFragment"
         android:name="com.gigforce.giger_gigs.tl_login_report.AddDailyLoginReportFragment"
         android:label="AddDailyLoginReportFragment" />

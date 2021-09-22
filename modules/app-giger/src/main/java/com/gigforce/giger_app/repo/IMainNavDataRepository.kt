@@ -5,18 +5,22 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.gigforce.common_ui.viewdatamodels.FeatureItemCard2DVM
 import com.gigforce.common_ui.viewdatamodels.HindiTranslationMapping
+import com.gigforce.common_ui.viewdatamodels.HindiTranslationMapping
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.retrofit.RetrofitFactory
 import com.gigforce.giger_app.R
 import com.gigforce.giger_app.service.APPRenderingService
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.gson.Gson
 import com.google.gson.JsonObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 import javax.inject.Inject
 
 interface IMainNavDataRepository {
@@ -84,26 +88,35 @@ class MainNavDataRepository @Inject constructor(
         list?.let {
             val mainNavData = ArrayList<FeatureItemCard2DVM>()
             for (item in list) {
-                val title = item.get("title") as? String ?: "-"
-                val index = (item.get("index") as? Long) ?: 500
-                val icon_type = item.get("icon") as? String
-                val navPath = item.get("navPath") as? String
-                val active = item.get("active") as? Boolean
-                val hi = item.get("hi") as? HindiTranslationMapping
-                mainNavData.add(
-                    FeatureItemCard2DVM(
-                        active = active,
-                        title = title,
-                        icon = icon_type,
-                        navPath = navPath,
-                        index = index.toInt(),
-                        hi = hi
+                try {
+                    val title = item.get("title") as? String ?: "-"
+                    val index = (item.get("index") as? Long) ?: 500
+                    val icon_type = item.get("icon") as? String
+                    val navPath = item.get("navPath") as? String
+                    val active = item.get("active") as? Boolean ?: true
+                    val type = item.get("type") as? String ?: ""
+                    val subicons = item.get("subicons") as? List<Long> ?: null
+                    val hi = item.get("hi") as? HindiTranslationMapping
+                    mainNavData.add(
+                        FeatureItemCard2DVM(
+                            active = active,
+                            title = title,
+                            icon = icon_type,
+                            navPath = navPath,
+                            index = index,
+                            type = type,
+                            subicons = subicons,
+                            hi = hi
+                        )
                     )
-                )
+                }catch (e:Exception){
+
+                }
 
             }
-            mainNavData.sortBy { it.index }
-            var tempMainNavData = mainNavData.filter { it.active == true }
+            val tempMainNavData = mainNavData.filter { it.active } as ArrayList<FeatureItemCard2DVM>
+            tempMainNavData.sortBy { it.index }
+//            var tempMainNavData = mainNavData.dup
             mainNavData.clear()
             mainNavData.addAll(tempMainNavData)
             data.value = mainNavData

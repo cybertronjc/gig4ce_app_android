@@ -13,12 +13,14 @@ data class FeatureItemCard2DVM(
     val borderWidthColor: String? = "",
     val backgroundColor: String? = "",
     val title: String,
-    val index: Int = 0,
-    val icon: String?,
+    val index: Long = 1000,
+    val icon: String? = "",
     val imageRes: Int? = null,
     val imageUrl: String? = null,
     val navPath: String? = null,
     val hi: HindiTranslationMapping? = null
+    val type: String? = null,
+    val subicons: List<Long>? = null
 ) :
     SimpleDVM(CommonViewTypes.VIEW_FEATURE_ITEM_CARD2, navPath){
     override fun getNavArgs(): NavArgs? {
