@@ -537,7 +537,6 @@ class AddNewLoginSummaryFragment : Fragment() {
         }
         Log.d("count", "count $count , map: $map")
 
-        viewBinding.submit.isEnabled = count != 0
         viewBinding.submit.setText("${getString(R.string.submit_giger_gigs)} ($count ${getString(R.string.logins_giger_gigs)})")
         viewBinding.loginsCount.setText("$count")
 
