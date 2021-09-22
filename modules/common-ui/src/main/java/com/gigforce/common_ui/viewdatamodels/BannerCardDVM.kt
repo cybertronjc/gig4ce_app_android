@@ -9,14 +9,17 @@ data class BannerCardDVM(
     val title: String? = null,
     val desc: String? = null,
     val image: String? = null,
-    val url: String? = null,
-    val navPath: String? = null
+    val apiUrl: String? = null,
+    val docUrl:String? = null,
+    val navPath: String? = null,
+    val type : String?=null,
+    val index : Long?=0
 ) : SimpleDVM(
-    CommonViewTypes.VIEW_FEATURE_ITEM_CARD
+    CommonViewTypes.VIEW_BANNER_CARD
 ) {
     override fun getNavArgs(): NavArgs? {
         navPath?.let {
-            return NavArgs(it, args = bundleOf("url" to url))
+            return NavArgs(it, args = bundleOf("apiUrl" to apiUrl, "DOC_URL" to docUrl))
         } ?: return null
     }
 }
