@@ -110,13 +110,15 @@
     <string name="application_checklist_lead">Application Checklist</string>
     <string name="call_giger_lead">CALL GIGER</string>
     <string name="drop_selection_lead">DROP SELECTION</string>
-    <string name="giger_name">Giger name</string>
+    <string name="giger_name_lead">Giger name</string>
     <string name="del_executive_lead">Delivery Executive</string>
     <string name="company_text_lead">Company</string>
     <string name="joining_date_lead">Joining Date</string>
     <string name="location_lead">Location</string>
-    <string name="selection_date">Selection Date</string>
+    <string name="selection_date_lead">Selection Date</string>
     <string name="checklist_name_lead">Profile Picture</string>
-    <string name="giger_mobile_number">Giger Mobile Number</string>
+    <string name="giger_mobile_number_lead">Giger Mobile Number</string>
+    <string name="sure_to_drop_lead">Are you sure that you want to drop 3 selection(s)?</string>
+    <string name="cancel_lead">Cancel</string>
 
 </resources>
