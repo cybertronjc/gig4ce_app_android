@@ -84,6 +84,7 @@ class SelectCityFragment : BaseFragment2<FragmentSelectBusinessBinding>(
 
     private fun initListeners() = viewBinding.apply {
         toolbar.apply {
+            titleText.text = "Select city"
             setBackButtonListener{
                 navigation.navigateUp()
             }
@@ -112,6 +113,8 @@ class SelectCityFragment : BaseFragment2<FragmentSelectBusinessBinding>(
             this.businessInfoLayout.root.gone()
             cityAdapter.setData(cityList)
         }
+
+        okayButton.isEnabled = cityList.find { it.selected } != null
     }
 
     override fun onCitySelected(selectedCity: ReportingLocationsItem) {

@@ -82,6 +82,7 @@ class SelectJobProfileFragment : BaseFragment2<FragmentSelectJobProfileBinding>(
 
     private fun initListeners() = viewBinding.apply {
         toolbar.apply {
+            titleText.text = "Select job profile"
             setBackButtonListener {
                 navigation.popBackStack()
             }
@@ -112,6 +113,8 @@ class SelectJobProfileFragment : BaseFragment2<FragmentSelectJobProfileBinding>(
             this.infoLayout.root.gone()
             jobProfileAdapter.setData(jobProfiles)
         }
+
+        okayButton.isEnabled = jobProfiles.find { it.selected } != null
     }
 
     override fun onJobProfileSelected(jobProfileSelected: JobProfilesItem) {

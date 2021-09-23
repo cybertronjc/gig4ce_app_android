@@ -84,6 +84,8 @@ class SelectBusinessFragment : BaseFragment2<FragmentSelectBusinessBinding>(
 
     private fun initListeners() = viewBinding.apply {
         toolbar.apply {
+
+            titleText.text = "Select Business"
             setBackButtonListener{
                 navigation.navigateUp()
             }
@@ -114,6 +116,8 @@ class SelectBusinessFragment : BaseFragment2<FragmentSelectBusinessBinding>(
             this.businessInfoLayout.root.gone()
             businessAdapter.setData(businessList)
         }
+
+        viewBinding.okayButton.isEnabled = businessList.find { it.selected } != null
     }
 
     override fun onBusinessSelected(businessSelected: JoiningBusinessAndJobProfilesItem) {

@@ -85,6 +85,7 @@ class SelectClientTlFragment : BaseFragment2<FragmentSelectClientTlBinding>(
 
     private fun initListeners() = viewBinding.apply {
         toolbar.apply {
+            titleText.text = "Select client tl"
             setBackButtonListener{
                 navigation.navigateUp()
             }

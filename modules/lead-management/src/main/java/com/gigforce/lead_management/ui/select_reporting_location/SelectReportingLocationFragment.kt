@@ -13,13 +13,14 @@ import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.FragmentSelectJobProfileBinding
+import com.gigforce.lead_management.databinding.FragmentSelectReportingLocationBinding
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class SelectReportingLocationFragment : BaseFragment2<FragmentSelectJobProfileBinding>(
+class SelectReportingLocationFragment : BaseFragment2<FragmentSelectReportingLocationBinding>(
     fragmentName = TAG,
-    layoutId = R.layout.fragment_select_job_profile,
+    layoutId = R.layout.fragment_select_reporting_location,
     statusBarColor = R.color.lipstick_2
 ), ReportingLocationAdapter.OnReportingLocationSelectedListener {
 
@@ -46,7 +47,7 @@ class SelectReportingLocationFragment : BaseFragment2<FragmentSelectJobProfileBi
     }
 
     override fun viewCreated(
-        viewBinding: FragmentSelectJobProfileBinding,
+        viewBinding: FragmentSelectReportingLocationBinding,
         savedInstanceState: Bundle?
     ) {
         getDataFrom(

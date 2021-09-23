@@ -40,7 +40,7 @@ class NewSelectionForm1ViewModel @Inject constructor(
     private var clientId: String? = null
     private var selectedBusiness: JoiningBusinessAndJobProfilesItem? = null
     private var selectedJobProfile: JobProfilesItem? = null
-    private var joiningBusinessAndJobProfiles: List<JoiningBusinessAndJobProfilesItem>? = null
+    private lateinit var joiningBusinessAndJobProfiles: List<JoiningBusinessAndJobProfilesItem>
 
     init {
         fetchJoiningForm1Data()
@@ -80,6 +80,11 @@ class NewSelectionForm1ViewModel @Inject constructor(
             )
             _viewState.value = null
         } else {
+
+            selectedBusiness!!.jobProfiles.onEach {
+                it.selected = it.id == selectedJobProfile?.id
+            }
+
             _viewState.value = NewSelectionForm1ViewState.OpenSelectedJobProfileScreen(
                 selectedBusiness!!.jobProfiles
             )
@@ -88,8 +93,16 @@ class NewSelectionForm1ViewModel @Inject constructor(
     }
 
     private fun openSelectBusinessScreen() {
+
+        if (selectedBusiness != null) {
+
+            joiningBusinessAndJobProfiles.onEach {
+                it.selected = it.id == selectedBusiness?.id
+            }
+        }
+
         _viewState.value = NewSelectionForm1ViewState.OpenSelectedBusinessScreen(
-            joiningBusinessAndJobProfiles ?: emptyList()
+            joiningBusinessAndJobProfiles
         )
         _viewState.value = null
     }

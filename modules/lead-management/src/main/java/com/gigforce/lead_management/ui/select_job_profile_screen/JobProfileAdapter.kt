@@ -6,10 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
-import com.gigforce.common_ui.core.TextDrawable
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfilesItem
 import com.gigforce.lead_management.R
 
@@ -19,12 +17,14 @@ class JobProfileAdapter(
 ) : RecyclerView.Adapter<JobProfileAdapter.BusinessViewHolder>(),
         Filterable {
 
-    private var originalBusinessList= ArrayList<JobProfilesItem>()
-    private var filteredBusinessList= ArrayList<JobProfilesItem>()
+    private var originalProfileList= ArrayList<JobProfilesItem>()
+    private var filteredProfileList= ArrayList<JobProfilesItem>()
 
     private val contactsFilter = CityFilter()
 
-    private var selectedItemIndex: Int = -1
+    private var selectedId: String? = null
+    //    private var selectedItemIndex: Int = -1
+
     private var onJobProfileSelectedListener: OnJobProfileSelectedListener? = null
 
     fun setOnJobProfileSelectedListener(onJobProfileSelectedListener: OnJobProfileSelectedListener) {
@@ -46,44 +46,41 @@ class JobProfileAdapter(
     }
 
     fun getSelectedBusiness() : JobProfilesItem?{
-        if (selectedItemIndex == -1)
+        if (selectedId == null)
             return null
-        else{
-            return filteredBusinessList[selectedItemIndex]
+        else {
+            return filteredProfileList[getIndexFromId(selectedId!!)]
         }
     }
 
-    fun getSelectedItemIndex(): Int {
-        return selectedItemIndex
-    }
-
-    fun resetSelectedItem() {
-        if (selectedItemIndex == -1)
-            return
-
-        val tempIndex = selectedItemIndex
-        selectedItemIndex = -1
-        notifyItemChanged(tempIndex)
-    }
 
     override fun getItemCount(): Int {
-        return filteredBusinessList.size
+        return filteredProfileList.size
     }
 
     override fun onBindViewHolder(holder: BusinessViewHolder, position: Int) {
 
         if(position != RecyclerView.NO_POSITION
-                && position < filteredBusinessList.size
+                && position < filteredProfileList.size
         ) {
-            holder.bindValues(filteredBusinessList.get(position), position)
+            holder.bindValues(filteredProfileList.get(position), position)
         }
     }
 
     fun setData(contacts: ArrayList<JobProfilesItem>) {
 
-        this.selectedItemIndex = -1
-        this.originalBusinessList = contacts
-        this.filteredBusinessList = contacts
+        val preSelectedItems = contacts.filter {
+            it.selected
+        }
+
+        if(preSelectedItems.isNotEmpty()){
+            this.selectedId = preSelectedItems.first().id
+        } else {
+            this.selectedId = null
+        }
+
+        this.originalProfileList = contacts
+        this.filteredProfileList = contacts
         notifyDataSetChanged()
     }
 
@@ -96,10 +93,10 @@ class JobProfileAdapter(
 
             val filterResults = FilterResults()
             if (charString.isEmpty()) {
-                filterResults.values  = originalBusinessList
+                filterResults.values  = originalProfileList
             } else {
                 val filteredList = ArrayList<JobProfilesItem>()
-                for (contact in originalBusinessList) {
+                for (contact in originalProfileList) {
                     if (contact.name?.contains(
                             charString,
                             true
@@ -114,7 +111,7 @@ class JobProfileAdapter(
         }
 
         override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-            filteredBusinessList = results?.values as ArrayList<JobProfilesItem>
+            filteredProfileList = results?.values as ArrayList<JobProfilesItem>
             notifyDataSetChanged()
         }
     }
@@ -136,7 +133,7 @@ class JobProfileAdapter(
         fun bindValues(jobProfile: JobProfilesItem, position: Int) {
             jobProfileNameTv.text = jobProfile.name
 
-            if (selectedItemIndex == position) {
+            if (selectedId == jobProfile.id) {
                 jobProfileRootLayout.background = ContextCompat.getDrawable(
                                         context,
                                         R.drawable.option_selection_border
@@ -149,30 +146,34 @@ class JobProfileAdapter(
         override fun onClick(v: View?) {
 
             val newPosition = adapterPosition
+            val jobProfile = filteredProfileList[newPosition]
 
-            if (selectedItemIndex != -1) {
-                val tempIndex = selectedItemIndex
-                selectedItemIndex = newPosition
+            if (selectedId != null) {
+                val tempIndex = getIndexFromId(selectedId!!)
+                selectedId = jobProfile.id
                 notifyItemChanged(tempIndex)
-                notifyItemChanged(selectedItemIndex)
+                notifyItemChanged(getIndexFromId(selectedId!!))
             } else {
-                selectedItemIndex = newPosition
-                notifyItemChanged(selectedItemIndex)
+                selectedId = jobProfile.id
+                notifyItemChanged(getIndexFromId(selectedId!!))
             }
 
             onJobProfileSelectedListener?.onJobProfileSelected(
-                filteredBusinessList[selectedItemIndex]
+                jobProfile
             )
         }
 
     }
 
-    fun uncheckedSelection(){
-        if(selectedItemIndex!=-1){
-            var position = selectedItemIndex
-            selectedItemIndex = -1
-            notifyItemChanged(position)
-        }
+    fun getIndexFromId(
+        id: String
+    ): Int {
+        val city = filteredProfileList.find { it.id == id }
+
+        return if (city == null)
+            return -1
+        else
+            filteredProfileList.indexOf(city)
     }
 
 

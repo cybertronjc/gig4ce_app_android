@@ -18,7 +18,9 @@ data class JoiningBusinessAndJobProfilesItem(
 	val icon: String? = null,
 
 	@field:SerializedName("jobProfiles")
-	val jobProfiles: List<JobProfilesItem>
+	val jobProfiles: List<JobProfilesItem>,
+
+	var selected : Boolean = false
 ) : Parcelable
 
 @Parcelize
@@ -28,5 +30,7 @@ data class JobProfilesItem(
 	val name: String? = null,
 
 	@field:SerializedName("id")
-	val id: String? = null
+	val id: String? = null,
+
+	var selected : Boolean = false
 ) : Parcelable

@@ -85,6 +85,10 @@ class NewSelectionForm2ViewModel @Inject constructor(
             it.type != "office"
         }
 
+        if(selectedCity != null){
+            cities.find { it.id == selectedCity?.id }?.selected = true
+        }
+
         _viewState.value = NewSelectionForm2ViewState.OpenSelectCityScreen(
             cities = cities
         )
@@ -111,6 +115,7 @@ class NewSelectionForm2ViewModel @Inject constructor(
                     it.type == "office" && selectedCity!!.cityId == it.cityId
                 }
             }
+
 
             _viewState.value = NewSelectionForm2ViewState.OpenSelectReportingScreen(
                 reportingLocations

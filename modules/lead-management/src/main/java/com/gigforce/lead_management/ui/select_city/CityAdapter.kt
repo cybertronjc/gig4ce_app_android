@@ -10,22 +10,22 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.gigforce.common_ui.core.TextDrawable
-import com.gigforce.common_ui.viewdatamodels.leadManagement.JoiningBusinessAndJobProfilesItem
 import com.gigforce.common_ui.viewdatamodels.leadManagement.ReportingLocationsItem
 import com.gigforce.lead_management.R
 
 class CityAdapter(
-        private val context: Context,
-        private val requestManager: RequestManager
+    private val context: Context,
+    private val requestManager: RequestManager
 ) : RecyclerView.Adapter<CityAdapter.BusinessViewHolder>(),
-        Filterable {
+    Filterable {
 
-    private var originalCityList= ArrayList<ReportingLocationsItem>()
-    private var filteredCityList= ArrayList<ReportingLocationsItem>()
+    private var originalCityList = ArrayList<ReportingLocationsItem>()
+    private var filteredCityList = ArrayList<ReportingLocationsItem>()
 
     private val contactsFilter = CityFilter()
 
-    private var selectedItemIndex: Int = -1
+    private var selectedId: String? = null
+//    private var selectedItemIndex: Int = -1
     private var onCitySelectedListener: OnCitySelectedListener? = null
 
     fun setOnCitySelectedListener(onCitySelectedListener: OnCitySelectedListener) {
@@ -33,11 +33,11 @@ class CityAdapter(
     }
 
     override fun onCreateViewHolder(
-            parent: ViewGroup,
-            viewType: Int
+        parent: ViewGroup,
+        viewType: Int
     ): BusinessViewHolder {
         val view = LayoutInflater.from(
-                parent.context
+            parent.context
         ).inflate(
             R.layout.recycler_item_city,
             parent,
@@ -46,25 +46,12 @@ class CityAdapter(
         return BusinessViewHolder(view)
     }
 
-    fun getSelectedCity() : ReportingLocationsItem?{
-        if (selectedItemIndex == -1)
+    fun getSelectedCity(): ReportingLocationsItem? {
+        if (selectedId == null)
             return null
-        else{
-            return filteredCityList[selectedItemIndex]
+        else {
+            return filteredCityList[getIndexFromId(selectedId!!)]
         }
-    }
-
-    fun getSelectedItemIndex(): Int {
-        return selectedItemIndex
-    }
-
-    fun resetSelectedItem() {
-        if (selectedItemIndex == -1)
-            return
-
-        val tempIndex = selectedItemIndex
-        selectedItemIndex = -1
-        notifyItemChanged(tempIndex)
     }
 
     override fun getItemCount(): Int {
@@ -73,8 +60,8 @@ class CityAdapter(
 
     override fun onBindViewHolder(holder: BusinessViewHolder, position: Int) {
 
-        if(position != RecyclerView.NO_POSITION
-                && position < filteredCityList.size
+        if (position != RecyclerView.NO_POSITION
+            && position < filteredCityList.size
         ) {
             holder.bindValues(filteredCityList.get(position), position)
         }
@@ -82,9 +69,19 @@ class CityAdapter(
 
     fun setData(contacts: ArrayList<ReportingLocationsItem>) {
 
-        this.selectedItemIndex = -1
+        val preSelectedItems = contacts.filter {
+            it.selected
+        }
+
+        if(preSelectedItems.isNotEmpty()){
+            this.selectedId = preSelectedItems.first().id
+        } else {
+            this.selectedId = null
+        }
         this.originalCityList = contacts
         this.filteredCityList = contacts
+
+
         notifyDataSetChanged()
     }
 
@@ -97,7 +94,7 @@ class CityAdapter(
 
             val filterResults = FilterResults()
             if (charString.isEmpty()) {
-                filterResults.values  = originalCityList
+                filterResults.values = originalCityList
             } else {
                 val filteredList = ArrayList<ReportingLocationsItem>()
                 for (contact in originalCityList) {
@@ -108,7 +105,7 @@ class CityAdapter(
                     )
                         filteredList.add(contact)
                 }
-                filterResults.values  = filteredList
+                filterResults.values = filteredList
             }
 
             return filterResults
@@ -122,9 +119,9 @@ class CityAdapter(
 
 
     inner class BusinessViewHolder(
-            itemView: View
+        itemView: View
     ) : RecyclerView.ViewHolder(itemView),
-            View.OnClickListener {
+        View.OnClickListener {
 
         private var businessNameTv: TextView = itemView.findViewById(R.id.city_name_tv)
         private var businessImageIV: ImageView = itemView.findViewById(R.id.city_image_iv)
@@ -136,16 +133,16 @@ class CityAdapter(
 
         fun bindValues(business: ReportingLocationsItem, position: Int) {
 
-                val companyInitials = if (business.name.isNullOrBlank())
-                    "C"
-                else
-                    business.name!![0].toString().toUpperCase()
+            val companyInitials = if (business.name.isNullOrBlank())
+                "C"
+            else
+                business.name!![0].toString().toUpperCase()
 
-                val drawable = TextDrawable.builder().buildRound(
-                    companyInitials,
-                    ResourcesCompat.getColor(context.resources, R.color.lipstick, null)
-                )
-                businessImageIV.setImageDrawable(drawable)
+            val drawable = TextDrawable.builder().buildRound(
+                companyInitials,
+                ResourcesCompat.getColor(context.resources, R.color.lipstick, null)
+            )
+            businessImageIV.setImageDrawable(drawable)
 //            }
 //            else{
 //                requestManager.load(business.icon).into(businessImageIV)
@@ -153,10 +150,10 @@ class CityAdapter(
 
             businessNameTv.text = business.name
 
-            if (selectedItemIndex == position) {
+            if (selectedId == business.id) {
                 businessRootLayout.background = ContextCompat.getDrawable(
-                                        context,
-                                        R.drawable.option_selection_border
+                    context,
+                    R.drawable.option_selection_border
                 )
             } else {
                 businessRootLayout.setBackgroundResource(R.drawable.rectangle_2)
@@ -166,44 +163,51 @@ class CityAdapter(
         override fun onClick(v: View?) {
 
             val newPosition = adapterPosition
-
-            if (selectedItemIndex != -1) {
-                val tempIndex = selectedItemIndex
-                selectedItemIndex = newPosition
-                notifyItemChanged(tempIndex)
-                notifyItemChanged(selectedItemIndex)
-            } else {
-                selectedItemIndex = newPosition
-                notifyItemChanged(selectedItemIndex)
-            }
-//            if (selectedItemIndex != -1) {
-//                selectedItemIndex = -1
-//            } else {
-//                selectedItemIndex = adapterPosition
-//            }
-//            notifyDataSetChanged()
-
             val city = filteredCityList[newPosition]
+
+            if (selectedId != null) {
+                val tempIndex = getIndexFromId(selectedId!!)
+                selectedId = city.id
+                notifyItemChanged(tempIndex)
+                notifyItemChanged(getIndexFromId(selectedId!!))
+            } else {
+                selectedId = city.id
+                notifyItemChanged(getIndexFromId(selectedId!!))
+            }
+
             onCitySelectedListener?.onCitySelected(
-                filteredCityList[selectedItemIndex]
+                city
             )
         }
+    }
+
+    fun getIndexFromId(
+        id: String
+    ): Int {
+        val city = filteredCityList.find { it.id == id }
+
+        return if (city == null)
+            return -1
+        else
+            filteredCityList.indexOf(city)
+    }
+
+    fun getIdFromIndex(
+        index : Int
+    ): String? {
+
+       if(index < filteredCityList.size){
+           return filteredCityList[index].id
+       } else {
+           return null
+       }
 
     }
 
-    fun uncheckedSelection(){
-        if(selectedItemIndex!=-1){
-            var position = selectedItemIndex
-            selectedItemIndex = -1
-            notifyItemChanged(position)
-        }
-    }
 
+    interface OnCitySelectedListener {
 
-
-    interface OnCitySelectedListener{
-
-        fun onCitySelected(selectedCity : ReportingLocationsItem)
+        fun onCitySelected(selectedCity: ReportingLocationsItem)
     }
 
 }

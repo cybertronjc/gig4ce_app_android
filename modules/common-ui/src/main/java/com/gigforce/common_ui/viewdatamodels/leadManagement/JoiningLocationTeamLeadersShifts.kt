@@ -32,7 +32,9 @@ data class ReportingLocationsItem(
 	val cityId: String? = null,
 
 	@field:SerializedName("type")
-	val type: String? = null
+	val type: String? = null,
+
+	var selected : Boolean = false
 ) : Parcelable
 
 @Parcelize

@@ -24,7 +24,9 @@ class BusinessAdapter(
 
     private val contactsFilter = CityFilter()
 
-    private var selectedItemIndex: Int = -1
+    private var selectedId: String? = null
+    //    private var selectedItemIndex: Int = -1
+
     private var onBusinesssSelectedListener: OnBusinessSelectedListener? = null
 
     fun setOnBusinessSelectedListener(onCitySelectedListener: OnBusinessSelectedListener) {
@@ -46,24 +48,11 @@ class BusinessAdapter(
     }
 
     fun getSelectedBusiness() : JoiningBusinessAndJobProfilesItem?{
-        if (selectedItemIndex == -1)
+        if (selectedId == null)
             return null
-        else{
-            return filteredBusinessList[selectedItemIndex]
+        else {
+            return filteredBusinessList[getIndexFromId(selectedId!!)]
         }
-    }
-
-    fun getSelectedItemIndex(): Int {
-        return selectedItemIndex
-    }
-
-    fun resetSelectedItem() {
-        if (selectedItemIndex == -1)
-            return
-
-        val tempIndex = selectedItemIndex
-        selectedItemIndex = -1
-        notifyItemChanged(tempIndex)
     }
 
     override fun getItemCount(): Int {
@@ -81,7 +70,16 @@ class BusinessAdapter(
 
     fun setData(contacts: ArrayList<JoiningBusinessAndJobProfilesItem>) {
 
-        this.selectedItemIndex = -1
+        val preSelectedItems = contacts.filter {
+            it.selected
+        }
+
+        if(preSelectedItems.isNotEmpty()){
+            this.selectedId = preSelectedItems.first().id
+        } else {
+            this.selectedId = null
+        }
+
         this.originalBusinessList = contacts
         this.filteredBusinessList = contacts
         notifyDataSetChanged()
@@ -153,7 +151,7 @@ class BusinessAdapter(
 
             businessNameTv.text = business.name
 
-            if (selectedItemIndex == position) {
+            if (selectedId == business.id) {
                 businessRootLayout.background = ContextCompat.getDrawable(
                                         context,
                                         R.drawable.option_selection_border
@@ -166,37 +164,36 @@ class BusinessAdapter(
         override fun onClick(v: View?) {
 
             val newPosition = adapterPosition
-
-            if (selectedItemIndex != -1) {
-                val tempIndex = selectedItemIndex
-                selectedItemIndex = newPosition
-                notifyItemChanged(tempIndex)
-                notifyItemChanged(selectedItemIndex)
-            } else {
-                selectedItemIndex = newPosition
-                notifyItemChanged(selectedItemIndex)
-            }
-//            if (selectedItemIndex != -1) {
-//                selectedItemIndex = -1
-//            } else {
-//                selectedItemIndex = adapterPosition
-//            }
-//            notifyDataSetChanged()
-
             val city = filteredBusinessList[newPosition]
+
+            if (selectedId != null) {
+                val tempIndex = getIndexFromId(selectedId!!)
+                selectedId = city.id
+                notifyItemChanged(tempIndex)
+                notifyItemChanged(getIndexFromId(selectedId!!))
+            } else {
+                selectedId = city.id
+                notifyItemChanged(getIndexFromId(selectedId!!))
+            }
+
             onBusinesssSelectedListener?.onBusinessSelected(
-                filteredBusinessList[selectedItemIndex]
+                city
             )
         }
 
     }
 
-    fun uncheckedSelection(){
-        if(selectedItemIndex!=-1){
-            var position = selectedItemIndex
-            selectedItemIndex = -1
-            notifyItemChanged(position)
-        }
+
+
+    fun getIndexFromId(
+        id: String
+    ): Int {
+        val city = filteredBusinessList.find { it.id == id }
+
+        return if (city == null)
+            return -1
+        else
+            filteredBusinessList.indexOf(city)
     }
 
 
