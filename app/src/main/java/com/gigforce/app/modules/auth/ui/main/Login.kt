@@ -101,9 +101,14 @@ class Login : Fragment() {
     }
 
     private fun initViews() {
-        login_button.isEnabled = false
-        login_button.background =
-            resources.getDrawable(R.drawable.app_gradient_button_disabled)
+        if(mobile_number.isEmpty()) {
+            login_button.isEnabled = false
+            login_button.background =
+                resources.getDrawable(R.drawable.app_gradient_button_disabled)
+        }else{
+            login_button.isEnabled = true
+            login_button.background = resources.getDrawable(R.drawable.gradient_button)
+        }
     }
 
 
