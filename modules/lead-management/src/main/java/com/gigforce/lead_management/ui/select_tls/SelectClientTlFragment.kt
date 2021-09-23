@@ -108,7 +108,7 @@ class SelectClientTlFragment : BaseFragment2<FragmentSelectClientTlBinding>(
     private fun setDataOnView() = viewBinding.apply {
         if (clientTls.isEmpty()) {
             this.infoLayout.root.visible()
-            this.infoLayout.infoMessageTv.text = "No Job Profile to show"
+            this.infoLayout.infoMessageTv.text = "No Client Team leader to show"
         } else {
             this.infoLayout.root.gone()
             clientTLAdapter.setData(clientTls)
