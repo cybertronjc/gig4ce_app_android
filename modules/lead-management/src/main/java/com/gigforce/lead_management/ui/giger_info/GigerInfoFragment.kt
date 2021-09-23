@@ -123,10 +123,8 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
             overlayCardLayout.jobProfileTitle.text = it.jobProfileTitle ?: ""
             overlayCardLayout.locationText.text = ": "+it.businessLocation ?: ""
 
-
             gigerPhone = it.gigerPhone.toString()
-
-
+            toolbar.showSubtitle(gigerPhone)
             setGigerProfilePicture(it.gigerProfilePicture.toString())
 
             context?.let { it1 ->
@@ -149,16 +147,31 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
             overlayCardLayout.joiningDate.text = ": "+getFormattedDateFromYYMMDD(it.joiningDate) ?: ""
 
             val checkListItemData = arrayListOf<ApplicationChecklistRecyclerItemData.ApplicationChecklistItemData>()
-            it.checkList.forEachIndexed { index, checkListItem ->
-                val itemData = ApplicationChecklistRecyclerItemData.ApplicationChecklistItemData(checkListItem.name, checkListItem.status, checkListItem.optional)
-                checkListItemData.add(itemData)
+            if (it.checkList == null){
+                checklistText.gone()
+                checklistRv.gone()
+            } else {
+                 it.checkList?.let {
+                it.forEachIndexed { index, checkListItem ->
+                    val itemData = ApplicationChecklistRecyclerItemData.ApplicationChecklistItemData(checkListItem.name, checkListItem.status, checkListItem.optional)
+                    checkListItemData.add(itemData)
+                }
+                if (checkListItemData.size > 0){
+                    checklistRv.visible()
+                    checklistRv.collection = checkListItemData
+                } else {
+                    checklistText.gone()
+                    checklistRv.gone()
+                }
+
+                }
             }
             stopShimmer(
                 gigerinfoShimmerContainer as LinearLayout,
                 R.id.shimmer_controller
             )
             gigerinfoShimmerContainer.gone()
-            checklistRv.collection = checkListItemData
+
         }
     }
 
@@ -192,7 +205,6 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
     private fun initToolbar(viewBinding: GigerInfoFragmentBinding) = viewBinding.toolbar.apply {
         this.showTitle("Giger name")
         this.hideActionMenu()
-        this.hideSubTitle()
         this.changeBackButtonDrawable()
         this.setBackButtonListener(View.OnClickListener {
             //back functionality
@@ -216,13 +228,6 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
             else
                 "profile_pics/${path}"
 
-//            context?.let { it1 ->
-//                GlideApp.with(it1)
-//                    .load(it.businessLogo)
-//                    .placeholder(getCircularProgressDrawable(it1))
-//                    .into(overlayCardLayout.profileImageOverlay.companyImg)
-//            }
-
             viewBinding.overlayCardLayout.profileImageOverlay.gigerImg.loadImageIfUrlElseTryFirebaseStorage(
                 userPathInFirebase,
                 R.drawable.ic_user_2,
@@ -233,15 +238,6 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
         }
     }
 
-    fun getDateInYYYYMMDD(date: String): String{
-        val format = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-        val localDateTime: LocalDateTime = LocalDateTime.parse(date, format)
-        val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
-        val output: String = formatter.format(localDateTime)
-
-
-        return output
-    }
 
     fun getFormattedDate(date: String): String {
         val input = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")

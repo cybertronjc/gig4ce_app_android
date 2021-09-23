@@ -34,7 +34,7 @@ class Joining2RecyclerItemView(
 ) : RelativeLayout(
     context,
     attrs
-), IViewHolder, View.OnClickListener, View.OnLongClickListener {
+), IViewHolder, View.OnClickListener {
 
     @Inject
     lateinit var navigation: INavigation
@@ -54,7 +54,7 @@ class Joining2RecyclerItemView(
     private fun setListenersOnView() {
         viewBinding.root.setOnClickListener(this)
         viewBinding.callGigerBtn.setOnClickListener(this)
-        viewBinding.root.setOnLongClickListener(this)
+//        viewBinding.root.setOnLongClickListener(this)
     }
 
     private fun setDefault() {
@@ -290,14 +290,14 @@ class Joining2RecyclerItemView(
         return null
     }
 
-    override fun onLongClick(p0: View?): Boolean {
-        viewBinding.selectJoiningBtn.visible()
-        viewData?.selected = true
-        viewBinding.selectJoiningBtn.setImageDrawable(resources.getDrawable(R.drawable.ic_selected_tick))
-        Toast.makeText(context, "Long click", Toast.LENGTH_SHORT).show()
-
-        return true
-    }
+//    override fun onLongClick(p0: View?): Boolean {
+//        viewBinding.selectJoiningBtn.visible()
+//        viewData?.selected = true
+//        viewBinding.selectJoiningBtn.setImageDrawable(resources.getDrawable(R.drawable.ic_selected_tick))
+//        Toast.makeText(context, "Long click", Toast.LENGTH_SHORT).show()
+//
+//        return true
+//    }
 //
 //    fun getGigDataOrThrow(): JoiningListRecyclerItemData.JoiningListRecyclerJoiningItemData {
 //        return viewData ?: throw NullPointerException("view data is null")
