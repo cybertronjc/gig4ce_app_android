@@ -23,6 +23,7 @@ sealed class NewSelectionForm2ViewState {
     ) : NewSelectionForm2ViewState()
 
     data class OpenSelectReportingScreen(
+        val wasShowAllLocationSelected : Boolean,
         var selectedCity : ReportingLocationsItem,
         val reportingLocations: List<ReportingLocationsItem>
     ) : NewSelectionForm2ViewState()
@@ -42,7 +43,9 @@ sealed class NewSelectionForm2ViewState {
 
     object SubmittingJoiningData : NewSelectionForm2ViewState()
 
-    object JoiningDataSubmitted : NewSelectionForm2ViewState()
+    data class JoiningDataSubmitted(
+        val shareLink : String
+    ) : NewSelectionForm2ViewState()
 
     data class ErrorWhileSubmittingJoiningData(
         val error: String,
@@ -67,6 +70,7 @@ sealed class NewSelectionForm2Events {
     ) : NewSelectionForm2Events()
 
     data class ReportingLocationSelected(
+        val wasShowAllLocationSelected : Boolean,
         val reportingLocation: ReportingLocationsItem
     ) : NewSelectionForm2Events()
 

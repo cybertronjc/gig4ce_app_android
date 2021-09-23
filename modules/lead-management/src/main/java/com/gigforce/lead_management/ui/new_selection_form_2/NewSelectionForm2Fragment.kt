@@ -11,7 +11,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
-import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
@@ -26,6 +25,7 @@ import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.FragmentNewSelectionForm2Binding
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModelState
+import com.gigforce.lead_management.ui.new_selection_form_submittion_success.SelectionFormSubmitSuccessFragment
 import com.gigforce.lead_management.ui.select_city.SelectCityFragment
 import com.gigforce.lead_management.ui.select_reporting_location.SelectReportingLocationFragment
 import com.gigforce.lead_management.ui.select_tls.SelectClientTlFragment
@@ -209,6 +209,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                     ArrayList(state.cities)
                 )
                 is NewSelectionForm2ViewState.OpenSelectReportingScreen -> openSelectReportingLocationScreen(
+                    state.wasShowAllLocationSelected,
                     state.selectedCity,
                     ArrayList(state.reportingLocations)
                 )
@@ -225,8 +226,13 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                         .setPositiveButton("Okay") { _, _ -> }
                         .show()
                 }
-                NewSelectionForm2ViewState.JoiningDataSubmitted -> {
-                    showToast("data submitted")
+                is NewSelectionForm2ViewState.JoiningDataSubmitted -> {
+                    navigation.navigateTo(
+                        LeadManagementNavDestinations.FRAGMENT_SELECT_FORM_SUCCESS,
+                        bundleOf(
+                            SelectionFormSubmitSuccessFragment.INTENT_EXTRA_SHARE_LINK to state.shareLink
+                        )
+                    )
                 }
                 NewSelectionForm2ViewState.SubmittingJoiningData -> {
 
@@ -239,6 +245,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         })
 
     private fun openSelectReportingLocationScreen(
+        wasShowAllLocationSelected: Boolean,
         selectedCity: ReportingLocationsItem,
         reportingLocations: ArrayList<ReportingLocationsItem>
     ) {
@@ -247,6 +254,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
             bundleOf(
                 SelectReportingLocationFragment.INTENT_EXTRA_REPORTING_LOCATIONS to reportingLocations,
                 SelectReportingLocationFragment.INTENT_EXTRA_SELECTED_CITY to selectedCity,
+                SelectReportingLocationFragment.INTENT_EXTRA_SHOULD_SHOW_STATE_WISE_BY_DEFAULT to wasShowAllLocationSelected,
             )
         )
     }
@@ -381,6 +389,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                     is LeadManagementSharedViewModelState.CitySelected -> showSelectedCity(it.city)
                     is LeadManagementSharedViewModelState.ClientTLSelected -> showSelectedTL(it.tlSelected)
                     is LeadManagementSharedViewModelState.ReportingLocationSelected -> showSelectedReportingLocation(
+                        it.wasShowAllLocationSelected,
                         it.reportingLocation
                     )
                 }
@@ -395,6 +404,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                         is LeadManagementSharedViewModelState.CitySelected -> showSelectedCity(it.city)
                         is LeadManagementSharedViewModelState.ClientTLSelected -> showSelectedTL(it.tlSelected)
                         is LeadManagementSharedViewModelState.ReportingLocationSelected -> showSelectedReportingLocation(
+                            it.wasShowAllLocationSelected,
                             it.reportingLocation
                         )
                     }
@@ -416,11 +426,14 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
     }
 
     private fun showSelectedReportingLocation(
+        wasShowAllLocationSelected: Boolean,
         reportingLocationSelected: ReportingLocationsItem
     ) = viewBinding.mainForm.apply {
+
         reportingLocationSelectedLabel.text = reportingLocationSelected.name
         viewModel.handleEvent(
             NewSelectionForm2Events.ReportingLocationSelected(
+                wasShowAllLocationSelected,
                 reportingLocationSelected
             )
         )

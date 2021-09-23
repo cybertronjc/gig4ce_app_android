@@ -12,7 +12,6 @@ import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.lead_management.R
-import com.gigforce.lead_management.databinding.FragmentSelectJobProfileBinding
 import com.gigforce.lead_management.databinding.FragmentSelectReportingLocationBinding
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,11 +27,13 @@ class SelectReportingLocationFragment : BaseFragment2<FragmentSelectReportingLoc
         private const val TAG = "SelectJobProfileFragment"
         const val INTENT_EXTRA_REPORTING_LOCATIONS = "reporting_locations"
         const val INTENT_EXTRA_SELECTED_CITY = "selected_city"
+        const val INTENT_EXTRA_SHOULD_SHOW_STATE_WISE_BY_DEFAULT = "should_show_state_wise"
     }
 
     private val sharedViewModel: LeadManagementSharedViewModel by activityViewModels()
     private var reportingLocations: ArrayList<ReportingLocationsItem> = arrayListOf()
     private lateinit var selectCity: ReportingLocationsItem
+    private var shouldShowStateWise: Boolean = false
 
     private val glide: RequestManager by lazy {
         Glide.with(requireContext())
@@ -66,12 +67,16 @@ class SelectReportingLocationFragment : BaseFragment2<FragmentSelectReportingLoc
     ) {
 
         arguments?.let {
-            reportingLocations = it.getParcelableArrayList(INTENT_EXTRA_REPORTING_LOCATIONS) ?: return@let
+            shouldShowStateWise = it.getBoolean(INTENT_EXTRA_SHOULD_SHOW_STATE_WISE_BY_DEFAULT)
+            reportingLocations =
+                it.getParcelableArrayList(INTENT_EXTRA_REPORTING_LOCATIONS) ?: return@let
             selectCity = it.getParcelable(INTENT_EXTRA_SELECTED_CITY) ?: return@let
         }
 
         savedInstanceState?.let {
-            reportingLocations = it.getParcelableArrayList(INTENT_EXTRA_REPORTING_LOCATIONS) ?: return@let
+            shouldShowStateWise = it.getBoolean(INTENT_EXTRA_SHOULD_SHOW_STATE_WISE_BY_DEFAULT)
+            reportingLocations =
+                it.getParcelableArrayList(INTENT_EXTRA_REPORTING_LOCATIONS) ?: return@let
             selectCity = it.getParcelable(INTENT_EXTRA_SELECTED_CITY) ?: return@let
         }
     }
@@ -88,12 +93,17 @@ class SelectReportingLocationFragment : BaseFragment2<FragmentSelectReportingLoc
             INTENT_EXTRA_SELECTED_CITY,
             selectCity
         )
+        outState.putBoolean(
+            INTENT_EXTRA_SHOULD_SHOW_STATE_WISE_BY_DEFAULT,
+            shouldShowStateWise
+        )
     }
 
 
     private fun initListeners() = viewBinding.apply {
         toolbar.apply {
-            setBackButtonListener{
+            titleText.text = "Select reporting location"
+            setBackButtonListener {
                 navigation.navigateUp()
             }
             searchTextChangeListener = object : SearchTextChangeListener {
@@ -105,7 +115,7 @@ class SelectReportingLocationFragment : BaseFragment2<FragmentSelectReportingLoc
 
         showAllLocationCheckbox.setOnCheckedChangeListener { buttonView, isChecked ->
 
-            if(isChecked)
+            if (isChecked)
                 showLocationsWithStatefilter()
             else
                 showLocationWithCityfilter()
@@ -115,8 +125,12 @@ class SelectReportingLocationFragment : BaseFragment2<FragmentSelectReportingLoc
         recyclerView.adapter = reportingLocationAdapter
 
         okayButton.setOnClickListener {
-            val selectedReportingLocation = reportingLocationAdapter.getSelectedReportingLocation() ?: return@setOnClickListener
-            sharedViewModel.reportingLocationSelected(selectedReportingLocation)
+            val selectedReportingLocation =
+                reportingLocationAdapter.getSelectedReportingLocation() ?: return@setOnClickListener
+            sharedViewModel.reportingLocationSelected(
+                showAllLocationCheckbox.isChecked,
+                selectedReportingLocation
+            )
             findNavController().navigateUp()
         }
     }
@@ -145,7 +159,12 @@ class SelectReportingLocationFragment : BaseFragment2<FragmentSelectReportingLoc
             this.infoLayout.root.visible()
             this.infoLayout.infoMessageTv.text = "No reporting location to show"
         } else {
-            showLocationWithCityfilter()
+
+            showAllLocationCheckbox.isChecked = shouldShowStateWise
+            if (shouldShowStateWise)
+                showLocationsWithStatefilter()
+            else
+                showLocationWithCityfilter()
             this.infoLayout.root.gone()
         }
     }

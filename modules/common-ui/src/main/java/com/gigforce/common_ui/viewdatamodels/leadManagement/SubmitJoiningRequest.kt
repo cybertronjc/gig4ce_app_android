@@ -37,5 +37,7 @@ data class SubmitJoiningRequest(
     @SerializedName("shifts")
     var shifts: List<ShiftTimingItem> = emptyList(),
 
+    @SerializedName("shareLink")
+    var shareLink: String = "",
 
 ) : Parcelable

@@ -36,6 +36,7 @@ sealed class LeadManagementSharedViewModelState {
     ): LeadManagementSharedViewModelState()
 
     data class ReportingLocationSelected(
+        val wasShowAllLocationSelected : Boolean,
         val reportingLocation: ReportingLocationsItem
     ): LeadManagementSharedViewModelState()
 
@@ -94,10 +95,17 @@ class LeadManagementSharedViewModel : ViewModel() {
     }
 
     fun reportingLocationSelected(
+        wasShowAllLocationSelected : Boolean,
         reportingLocation: ReportingLocationsItem
     ) = viewModelScope.launch{
-        _viewState.value = LeadManagementSharedViewModelState.ReportingLocationSelected(reportingLocation)
-        _viewStateFlow.send(LeadManagementSharedViewModelState.ReportingLocationSelected(reportingLocation))
+        _viewState.value = LeadManagementSharedViewModelState.ReportingLocationSelected(
+            wasShowAllLocationSelected,
+            reportingLocation
+        )
+        _viewStateFlow.send(LeadManagementSharedViewModelState.ReportingLocationSelected(
+            wasShowAllLocationSelected,
+            reportingLocation
+        ))
 
         delay(1000)
         _viewState.value = null

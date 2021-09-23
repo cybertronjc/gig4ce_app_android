@@ -28,7 +28,7 @@
     <string name="date_format_lead">DD/MM/YYYY</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment_lead">Hello blank fragment</string>
-    <string name="looking_for_dynamic_working_hours_lead">\Looking for flexible working hours? Join me at Gigforce :</string>
+    <string name="looking_for_dynamic_working_hours_lead">Looking for flexible working hours? Join me at Gigforce :</string>
     <string name="didn_t_received_the_link_lead"><u>Didn\'t received the link ?</u></string>
     <string name="gig_assigned_lead">Gig assigned</string>
     <string name="enter_valid_mobile_lead">Enter a valid Mobile No</string>

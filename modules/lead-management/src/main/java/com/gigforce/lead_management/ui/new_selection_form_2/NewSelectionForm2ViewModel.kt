@@ -42,6 +42,7 @@ class NewSelectionForm2ViewModel @Inject constructor(
     private var selectedShifts: MutableList<ShiftTimingItem> = mutableListOf()
     private lateinit var joiningLocationsAndTLs: JoiningLocationTeamLeadersShifts
     private lateinit var joiningRequest: SubmitJoiningRequest
+    private var shouldShowAllCitiesCheckedInReportingLocation = false
 
 
     fun handleEvent(
@@ -65,6 +66,7 @@ class NewSelectionForm2ViewModel @Inject constructor(
                 selectedTL = event.teamLeader
             }
             is NewSelectionForm2Events.ReportingLocationSelected -> {
+                shouldShowAllCitiesCheckedInReportingLocation = event.wasShowAllLocationSelected
                 selectedReportingLocation = event.reportingLocation
             }
             is NewSelectionForm2Events.SubmitButtonPressed -> {
@@ -108,6 +110,7 @@ class NewSelectionForm2ViewModel @Inject constructor(
             }
 
             _viewState.value = NewSelectionForm2ViewState.OpenSelectReportingScreen(
+                shouldShowAllCitiesCheckedInReportingLocation,
                 selectedCity!!,
                 reportingLocations
             )
@@ -227,11 +230,23 @@ class NewSelectionForm2ViewModel @Inject constructor(
                 TAG,
                 "Assigning gigs [Data]...., $joiningRequest",
             )
+
+            val shareLink = try {
+                leadManagementRepository.createJobProfileReferralLink(joiningRequest.jobProfile.id!!)
+            } catch (e : Exception){
+                logger.d(TAG,"error while creating job profile share link",e)
+                ""
+            }
+
+            joiningRequest.shareLink
             leadManagementRepository.submitJoiningRequest(
                 joiningRequest
             )
 
-            _viewState.value = NewSelectionForm2ViewState.JoiningDataSubmitted
+            _viewState.value = NewSelectionForm2ViewState.JoiningDataSubmitted(
+                shareLink = shareLink
+            )
+            _viewState.value = null
             logger.d(
                 TAG,
                 "[Success] Gigs assigned"
@@ -241,6 +256,7 @@ class NewSelectionForm2ViewModel @Inject constructor(
                 error = e.message ?: "Unable to submit joining request, please try again later",
                 shouldShowErrorButton = false
             )
+            _viewState.value = null
 
             logger.e(
                 TAG,

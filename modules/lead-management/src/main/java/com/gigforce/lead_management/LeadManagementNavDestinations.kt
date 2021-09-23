@@ -21,4 +21,5 @@ object LeadManagementNavDestinations {
     const val FRAGMENT_SELECT_REPORTING_LOCATION = "${moduleName}/selectReportingLocation"
     const val FRAGMENT_SELECT_CLIENT_TL = "${moduleName}/selectClientTL"
     const val FRAGMENT_GIGER_INFO = "${moduleName}/gigerInfoFragment"
+    const val FRAGMENT_SELECT_FORM_SUCCESS = "${moduleName}/formSubmittedSuccess"
 }
