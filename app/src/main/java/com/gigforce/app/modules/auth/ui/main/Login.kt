@@ -85,6 +85,7 @@ class Login : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         eventTracker.pushEvent(TrackingEventArgs(AuthEvents.LOGIN_OR_SIGNUP_LOADED, null))
         viewModel.activity = this.requireActivity()
+        initViews()
         invisible_edit_mobile.setText(mobile_number)
         populateMobileInEditTexts(mobile_number)
         Log.d("mobile_number", mobile_number)
@@ -97,6 +98,12 @@ class Login : Fragment() {
             hideKeyboard()
             activity?.onBackPressed()
         }
+    }
+
+    private fun initViews() {
+        login_button.isEnabled = false
+        login_button.background =
+            resources.getDrawable(R.drawable.app_gradient_button_disabled)
     }
 
 
@@ -297,8 +304,12 @@ class Login : Fragment() {
             cvloginwrong.visibility = VISIBLE
             login_button.isEnabled = true
             login_button.background = resources.getDrawable(R.drawable.gradient_button)
+            progressBar.gone()
         } else if (!termsCheckbox.isChecked){
             showToast(getString(R.string.accept_terms))
+            login_button.isEnabled = true
+            login_button.background = resources.getDrawable(R.drawable.gradient_button)
+            progressBar.gone()
         }
         else {
 //            viewModel.sendVerificationCode(phoneNumber)
