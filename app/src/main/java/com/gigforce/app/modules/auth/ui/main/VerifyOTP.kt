@@ -228,6 +228,9 @@ class VerifyOTP : BaseFragment() {
                     showToast("OTP sent")
                 }
                 LoginViewModel.STATE_VERIFY_FAILED -> {
+                    if(!it.msg.isNullOrEmpty() && it.msg.toLowerCase().contains("toomanyrequests") && it.msg.toLowerCase().contains("blocked")){
+                        showToast(resources.getString(R.string.account_blocked_app))
+                    }else
                     showToast(it.msg)
                 }
                 LoginViewModel.STATE_VERIFY_SUCCESS -> {

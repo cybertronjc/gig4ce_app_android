@@ -1032,9 +1032,10 @@
     <string name="from_contacts_app">\" from your contacts!!!\"</string>
     <string name="from_emails_app">\" from your emails!!!\"</string>
     <string name="know_lang_app">\"Language known: \"</string>
+    <string name="account_blocked_app">Your account has been temporarily locked. Please try again after sometime.</string>
 
 
-//merged from live_master
+    //merged from live_master
 <!--    <string name="dl_hint_square_bracket">Driving License Number*\n(Accepted DL formats are : RJ-13/DLC/12/123456, RJ1320120123456, RJ-052009123456, and GJ18N2012123456. For other formats please call your supervisor for help.)</string>-->
 <!--    <string name="plus_see_more">+ see more</string>-->
 <!--    <string name="plus_see_less">+ see less</string>-->

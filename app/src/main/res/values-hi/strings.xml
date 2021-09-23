@@ -956,4 +956,6 @@
     <string name="from_contacts_app">\"आपके संपर्कों से!!!\"</string>
     <string name="from_emails_app">\"आपके ईमेल से!!!\"</string>
     <string name="know_lang_app">\"ज्ञात भाषा: \"</string>
+    <string name="account_blocked_app">आपका खाता अस्थायी रूप से लॉक कर दिया गया है। कृपया कुछ समय बाद पुन: प्रयास करें।</string>
+
 </resources>
