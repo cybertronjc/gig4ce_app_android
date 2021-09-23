@@ -17,12 +17,12 @@ class ReportingLocationAdapter(
 ) : RecyclerView.Adapter<ReportingLocationAdapter.BusinessViewHolder>(),
         Filterable {
 
-    private var originalBusinessList= ArrayList<ReportingLocationsItem>()
-    private var filteredBusinessList= ArrayList<ReportingLocationsItem>()
+    private var originalLocationList= listOf<ReportingLocationsItem>()
+    private var filteredLocationList= listOf<ReportingLocationsItem>()
 
     private val contactsFilter = CityFilter()
 
-    private var selectedItemIndex: Int = -1
+    private var selectedId: String? = null
     private var onReportingLocationSelectedListener: OnReportingLocationSelectedListener? = null
 
     fun setOnReportingLocationSelectedListener(onReportingLocationSelectedListener: OnReportingLocationSelectedListener) {
@@ -44,44 +44,40 @@ class ReportingLocationAdapter(
     }
 
     fun getSelectedReportingLocation() : ReportingLocationsItem?{
-        if (selectedItemIndex == -1)
+        if (selectedId == null)
             return null
-        else{
-            return filteredBusinessList[selectedItemIndex]
+        else {
+            return filteredLocationList[getIndexFromId(selectedId!!)]
         }
     }
 
-    fun getSelectedItemIndex(): Int {
-        return selectedItemIndex
-    }
-
-    fun resetSelectedItem() {
-        if (selectedItemIndex == -1)
-            return
-
-        val tempIndex = selectedItemIndex
-        selectedItemIndex = -1
-        notifyItemChanged(tempIndex)
-    }
-
     override fun getItemCount(): Int {
-        return filteredBusinessList.size
+        return filteredLocationList.size
     }
 
     override fun onBindViewHolder(holder: BusinessViewHolder, position: Int) {
 
         if(position != RecyclerView.NO_POSITION
-                && position < filteredBusinessList.size
+                && position < filteredLocationList.size
         ) {
-            holder.bindValues(filteredBusinessList.get(position), position)
+            holder.bindValues(filteredLocationList.get(position), position)
         }
     }
 
-    fun setData(contacts: ArrayList<ReportingLocationsItem>) {
+    fun setData(contacts: List<ReportingLocationsItem>) {
 
-        this.selectedItemIndex = -1
-        this.originalBusinessList = contacts
-        this.filteredBusinessList = contacts
+        val preSelectedItems = contacts.filter {
+            it.selected
+        }
+
+        if(preSelectedItems.isNotEmpty()){
+            this.selectedId = preSelectedItems.first().id
+        } else {
+            this.selectedId = null
+        }
+
+        this.originalLocationList = contacts
+        this.filteredLocationList = contacts
         notifyDataSetChanged()
     }
 
@@ -94,10 +90,10 @@ class ReportingLocationAdapter(
 
             val filterResults = FilterResults()
             if (charString.isEmpty()) {
-                filterResults.values  = originalBusinessList
+                filterResults.values  = originalLocationList
             } else {
                 val filteredList = ArrayList<ReportingLocationsItem>()
-                for (contact in originalBusinessList) {
+                for (contact in originalLocationList) {
                     if (contact.name?.contains(
                             charString,
                             true
@@ -112,7 +108,7 @@ class ReportingLocationAdapter(
         }
 
         override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-            filteredBusinessList = results?.values as ArrayList<ReportingLocationsItem>
+            filteredLocationList = results?.values as ArrayList<ReportingLocationsItem>
             notifyDataSetChanged()
         }
     }
@@ -134,7 +130,7 @@ class ReportingLocationAdapter(
         fun bindValues(jobProfile: ReportingLocationsItem, position: Int) {
             jobProfileNameTv.text = jobProfile.name
 
-            if (selectedItemIndex == position) {
+            if (selectedId == jobProfile.id) {
                 jobProfileRootLayout.background = ContextCompat.getDrawable(
                                         context,
                                         R.drawable.option_selection_border
@@ -147,30 +143,35 @@ class ReportingLocationAdapter(
         override fun onClick(v: View?) {
 
             val newPosition = adapterPosition
+            val locationClicked = filteredLocationList[newPosition]
 
-            if (selectedItemIndex != -1) {
-                val tempIndex = selectedItemIndex
-                selectedItemIndex = newPosition
+            if (selectedId != null) {
+                val tempIndex = getIndexFromId(selectedId!!)
+                selectedId = locationClicked.id
                 notifyItemChanged(tempIndex)
-                notifyItemChanged(selectedItemIndex)
+                notifyItemChanged(getIndexFromId(selectedId!!))
             } else {
-                selectedItemIndex = newPosition
-                notifyItemChanged(selectedItemIndex)
+                selectedId = locationClicked.id
+                notifyItemChanged(getIndexFromId(selectedId!!))
             }
 
             onReportingLocationSelectedListener?.onReportingLocationSelected(
-                filteredBusinessList[selectedItemIndex]
+                locationClicked
             )
         }
 
     }
 
-    fun uncheckedSelection(){
-        if(selectedItemIndex!=-1){
-            var position = selectedItemIndex
-            selectedItemIndex = -1
-            notifyItemChanged(position)
-        }
+
+    fun getIndexFromId(
+        id: String
+    ): Int {
+        val tl = filteredLocationList.find { it.id == id }
+
+        return if (tl == null)
+            return -1
+        else
+            filteredLocationList.indexOf(tl)
     }
 
 

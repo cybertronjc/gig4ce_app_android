@@ -192,18 +192,6 @@ class CityAdapter(
             filteredCityList.indexOf(city)
     }
 
-    fun getIdFromIndex(
-        index : Int
-    ): String? {
-
-       if(index < filteredCityList.size){
-           return filteredCityList[index].id
-       } else {
-           return null
-       }
-
-    }
-
 
     interface OnCitySelectedListener {
 

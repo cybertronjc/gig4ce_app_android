@@ -136,11 +136,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         }
 
         selectReportingLocationLayout.setOnClickListener {
-            viewModel.handleEvent(
-                NewSelectionForm2Events.SelectReportingLocationClicked(
-                    shouldShowLocationsStateWise = this.stateWiseCheckbox.isChecked
-                )
-            )
+            viewModel.handleEvent(NewSelectionForm2Events.SelectReportingLocationClicked)
         }
 
         selectClientTlLayout.setOnClickListener {
@@ -155,13 +151,15 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         bindProgressButton(nextButton)
         nextButton.attachTextChangeAnimator()
         nextButton.setOnClickListener {
-            viewModel.handleEvent(NewSelectionForm2Events.SubmitButtonPressed(
-                checkChipsSelectedAndNotifyViewModel()
-            ))
+            viewModel.handleEvent(
+                NewSelectionForm2Events.SubmitButtonPressed(
+                    checkChipsSelectedAndNotifyViewModel()
+                )
+            )
         }
     }
 
-    private fun checkChipsSelectedAndNotifyViewModel() : MutableList<ShiftTimingItem> {
+    private fun checkChipsSelectedAndNotifyViewModel(): MutableList<ShiftTimingItem> {
 
         val shifts = mutableListOf<ShiftTimingItem>()
         viewBinding.mainForm.apply {
@@ -211,6 +209,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                     ArrayList(state.cities)
                 )
                 is NewSelectionForm2ViewState.OpenSelectReportingScreen -> openSelectReportingLocationScreen(
+                    state.selectedCity,
                     ArrayList(state.reportingLocations)
                 )
                 is NewSelectionForm2ViewState.OpenSelectClientTlScreen -> openSelectBusinessTlScreen(
@@ -218,12 +217,12 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                 )
 
                 is NewSelectionForm2ViewState.ErrorWhileSubmittingJoiningData -> {
-                  viewBinding.mainForm.nextButton.hideProgress("Submit")
+                    viewBinding.mainForm.nextButton.hideProgress("Submit")
 
                     MaterialAlertDialogBuilder(requireContext())
                         .setTitle("Unable to submit joining request")
                         .setMessage(state.error)
-                        .setPositiveButton("Okay"){_,_ ->}
+                        .setPositiveButton("Okay") { _, _ -> }
                         .show()
                 }
                 NewSelectionForm2ViewState.JoiningDataSubmitted -> {
@@ -240,11 +239,15 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         })
 
     private fun openSelectReportingLocationScreen(
+        selectedCity: ReportingLocationsItem,
         reportingLocations: ArrayList<ReportingLocationsItem>
     ) {
         navigation.navigateTo(
             LeadManagementNavDestinations.FRAGMENT_SELECT_REPORTING_LOCATION,
-            bundleOf(SelectReportingLocationFragment.INTENT_EXTRA_REPORTING_LOCATIONS to reportingLocations)
+            bundleOf(
+                SelectReportingLocationFragment.INTENT_EXTRA_REPORTING_LOCATIONS to reportingLocations,
+                SelectReportingLocationFragment.INTENT_EXTRA_SELECTED_CITY to selectedCity,
+            )
         )
     }
 

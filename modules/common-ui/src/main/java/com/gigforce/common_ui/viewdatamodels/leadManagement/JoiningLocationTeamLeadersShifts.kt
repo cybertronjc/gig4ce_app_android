@@ -44,7 +44,9 @@ data class BusinessTeamLeadersItem(
 	val name: String? = null,
 
 	@field:SerializedName("id")
-	val id: String? = null
+	val id: String? = null,
+
+	var selected : Boolean = false
 ) : Parcelable
 
 @Parcelize

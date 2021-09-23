@@ -115,9 +115,9 @@ class SelectBusinessFragment : BaseFragment2<FragmentSelectBusinessBinding>(
         } else {
             this.businessInfoLayout.root.gone()
             businessAdapter.setData(businessList)
-        }
 
-        viewBinding.okayButton.isEnabled = businessList.find { it.selected } != null
+            viewBinding.okayButton.isEnabled = businessList.find { it.selected } != null
+        }
     }
 
     override fun onBusinessSelected(businessSelected: JoiningBusinessAndJobProfilesItem) {

@@ -27,10 +27,12 @@ class SelectReportingLocationFragment : BaseFragment2<FragmentSelectReportingLoc
     companion object {
         private const val TAG = "SelectJobProfileFragment"
         const val INTENT_EXTRA_REPORTING_LOCATIONS = "reporting_locations"
+        const val INTENT_EXTRA_SELECTED_CITY = "selected_city"
     }
 
     private val sharedViewModel: LeadManagementSharedViewModel by activityViewModels()
     private var reportingLocations: ArrayList<ReportingLocationsItem> = arrayListOf()
+    private lateinit var selectCity: ReportingLocationsItem
 
     private val glide: RequestManager by lazy {
         Glide.with(requireContext())
@@ -65,10 +67,12 @@ class SelectReportingLocationFragment : BaseFragment2<FragmentSelectReportingLoc
 
         arguments?.let {
             reportingLocations = it.getParcelableArrayList(INTENT_EXTRA_REPORTING_LOCATIONS) ?: return@let
+            selectCity = it.getParcelable(INTENT_EXTRA_SELECTED_CITY) ?: return@let
         }
 
         savedInstanceState?.let {
             reportingLocations = it.getParcelableArrayList(INTENT_EXTRA_REPORTING_LOCATIONS) ?: return@let
+            selectCity = it.getParcelable(INTENT_EXTRA_SELECTED_CITY) ?: return@let
         }
     }
 
@@ -79,6 +83,10 @@ class SelectReportingLocationFragment : BaseFragment2<FragmentSelectReportingLoc
         outState.putParcelableArrayList(
             INTENT_EXTRA_REPORTING_LOCATIONS,
             reportingLocations
+        )
+        outState.putParcelable(
+            INTENT_EXTRA_SELECTED_CITY,
+            selectCity
         )
     }
 
@@ -95,6 +103,14 @@ class SelectReportingLocationFragment : BaseFragment2<FragmentSelectReportingLoc
             }
         }
 
+        showAllLocationCheckbox.setOnCheckedChangeListener { buttonView, isChecked ->
+
+            if(isChecked)
+                showLocationsWithStatefilter()
+            else
+                showLocationWithCityfilter()
+        }
+
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = reportingLocationAdapter
 
@@ -105,13 +121,32 @@ class SelectReportingLocationFragment : BaseFragment2<FragmentSelectReportingLoc
         }
     }
 
+    private fun showLocationsWithStatefilter() {
+        val filteredWithWithCity = reportingLocations.filter {
+            it.stateId == selectCity.stateId
+        }
+
+        reportingLocationAdapter.setData(filteredWithWithCity)
+        viewBinding.okayButton.isEnabled = filteredWithWithCity.find { it.selected } != null
+    }
+
+    private fun showLocationWithCityfilter() {
+        val filteredWithWithCity = reportingLocations.filter {
+            it.cityId == selectCity.cityId
+        }
+
+        reportingLocationAdapter.setData(filteredWithWithCity)
+        viewBinding.okayButton.isEnabled = filteredWithWithCity.find { it.selected } != null
+    }
+
     private fun setDataOnView() = viewBinding.apply {
+
         if (reportingLocations.isEmpty()) {
             this.infoLayout.root.visible()
             this.infoLayout.infoMessageTv.text = "No reporting location to show"
         } else {
+            showLocationWithCityfilter()
             this.infoLayout.root.gone()
-            reportingLocationAdapter.setData(reportingLocations)
         }
     }
 

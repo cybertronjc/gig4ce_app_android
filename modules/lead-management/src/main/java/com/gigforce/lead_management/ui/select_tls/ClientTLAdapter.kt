@@ -22,7 +22,7 @@ class ClientTLAdapter(
 
     private val contactsFilter = CityFilter()
 
-    private var selectedItemIndex: Int = -1
+    private var selectedId: String? = null
     private var onClientTLListener: OnClientTLListener? = null
 
     fun setOnClientTLListener(onClientTLListener: OnClientTLListener) {
@@ -44,25 +44,13 @@ class ClientTLAdapter(
     }
 
     fun getSelectedTL(): BusinessTeamLeadersItem? {
-        if (selectedItemIndex == -1)
+        if (selectedId == null)
             return null
         else {
-            return filteredTLList[selectedItemIndex]
+            return filteredTLList[getIndexFromId(selectedId!!)]
         }
     }
 
-    fun getSelectedItemIndex(): Int {
-        return selectedItemIndex
-    }
-
-    fun resetSelectedItem() {
-        if (selectedItemIndex == -1)
-            return
-
-        val tempIndex = selectedItemIndex
-        selectedItemIndex = -1
-        notifyItemChanged(tempIndex)
-    }
 
     override fun getItemCount(): Int {
         return filteredTLList.size
@@ -79,7 +67,16 @@ class ClientTLAdapter(
 
     fun setData(tls: ArrayList<BusinessTeamLeadersItem>) {
 
-        this.selectedItemIndex = -1
+        val preSelectedItems = tls.filter {
+            it.selected
+        }
+
+        if(preSelectedItems.isNotEmpty()){
+            this.selectedId = preSelectedItems.first().id
+        } else {
+            this.selectedId = null
+        }
+
         this.originalTLList = tls
         this.filteredTLList = tls
         notifyDataSetChanged()
@@ -139,7 +136,7 @@ class ClientTLAdapter(
         ) {
             jobProfileNameTv.text = businessTL.name
 
-            if (selectedItemIndex == position) {
+            if (selectedId == businessTL.id) {
                 jobProfileRootLayout.background = ContextCompat.getDrawable(
                     context,
                     R.drawable.option_selection_border
@@ -152,30 +149,34 @@ class ClientTLAdapter(
         override fun onClick(v: View?) {
 
             val newPosition = adapterPosition
+            val tlClicked = filteredTLList[newPosition]
 
-            if (selectedItemIndex != -1) {
-                val tempIndex = selectedItemIndex
-                selectedItemIndex = newPosition
+            if (selectedId != null) {
+                val tempIndex = getIndexFromId(selectedId!!)
+                selectedId = tlClicked.id
                 notifyItemChanged(tempIndex)
-                notifyItemChanged(selectedItemIndex)
+                notifyItemChanged(getIndexFromId(selectedId!!))
             } else {
-                selectedItemIndex = newPosition
-                notifyItemChanged(selectedItemIndex)
+                selectedId = tlClicked.id
+                notifyItemChanged(getIndexFromId(selectedId!!))
             }
 
             onClientTLListener?.onClientTLSelected(
-                filteredTLList[selectedItemIndex]
+                tlClicked
             )
         }
 
     }
 
-    fun uncheckedSelection() {
-        if (selectedItemIndex != -1) {
-            var position = selectedItemIndex
-            selectedItemIndex = -1
-            notifyItemChanged(position)
-        }
+    fun getIndexFromId(
+        id: String
+    ): Int {
+        val tl = filteredTLList.find { it.id == id }
+
+        return if (tl == null)
+            return -1
+        else
+            filteredTLList.indexOf(tl)
     }
 
 

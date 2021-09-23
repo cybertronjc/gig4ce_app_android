@@ -40,7 +40,7 @@ class NewSelectionForm2ViewModel @Inject constructor(
     private var selectedReportingLocation: ReportingLocationsItem? = null
     private var selectedTL: BusinessTeamLeadersItem? = null
     private var selectedShifts: MutableList<ShiftTimingItem> = mutableListOf()
-    private var joiningLocationsAndTLs: JoiningLocationTeamLeadersShifts? = null
+    private lateinit var joiningLocationsAndTLs: JoiningLocationTeamLeadersShifts
     private lateinit var joiningRequest: SubmitJoiningRequest
 
 
@@ -52,9 +52,7 @@ class NewSelectionForm2ViewModel @Inject constructor(
                 selectedDateOfJoining = event.date
             }
             NewSelectionForm2Events.SelectCityClicked -> openSelectCityScreen()
-            is NewSelectionForm2Events.SelectReportingLocationClicked -> openSelectReportingLocationsScreen(
-                shouldShowLocationsStateWise = event.shouldShowLocationsStateWise
-            )
+            NewSelectionForm2Events.SelectReportingLocationClicked -> openSelectReportingLocationsScreen()
             NewSelectionForm2Events.SelectClientTLClicked -> openSelectBusinessTLScreen()
             is NewSelectionForm2Events.ShiftSelected -> {
                 selectedShifts = event.shifts.toMutableList()
@@ -81,43 +79,36 @@ class NewSelectionForm2ViewModel @Inject constructor(
     }
 
     private fun openSelectCityScreen() {
-        val cities = joiningLocationsAndTLs!!.reportingLocations.filter {
+        val cities = joiningLocationsAndTLs.reportingLocations.filter {
             it.type != "office"
         }
 
-        if(selectedCity != null){
-            cities.find { it.id == selectedCity?.id }?.selected = true
+        cities.onEach {
+            it.selected = it.id == selectedCity?.id
         }
-
         _viewState.value = NewSelectionForm2ViewState.OpenSelectCityScreen(
             cities = cities
         )
         _viewState.value = null
     }
 
-    private fun openSelectReportingLocationsScreen(
-        shouldShowLocationsStateWise: Boolean
-    ) {
+    private fun openSelectReportingLocationsScreen() {
         if (selectedCity == null) {
             _viewState.value = NewSelectionForm2ViewState.ValidationError(
                 cityError = "Select City first"
             )
             _viewState.value = null
         } else {
-            val allLocations = joiningLocationsAndTLs?.reportingLocations ?: return
-
-            val reportingLocations = if (shouldShowLocationsStateWise) {
-                allLocations.filter {
-                    it.type == "office" && selectedCity!!.stateId == it.stateId
-                }
-            } else {
-                allLocations.filter {
-                    it.type == "office" && selectedCity!!.cityId == it.cityId
-                }
+            val reportingLocations = joiningLocationsAndTLs.reportingLocations.filter {
+                it.type == "office"
             }
 
+            reportingLocations.onEach {
+                it.selected = it.id == selectedReportingLocation?.id
+            }
 
             _viewState.value = NewSelectionForm2ViewState.OpenSelectReportingScreen(
+                selectedCity!!,
                 reportingLocations
             )
             _viewState.value = null
@@ -126,8 +117,11 @@ class NewSelectionForm2ViewModel @Inject constructor(
 
     private fun openSelectBusinessTLScreen() {
 
+        joiningLocationsAndTLs.businessTeamLeaders.onEach {
+            it.selected = it.id == selectedTL?.id
+        }
         _viewState.value = NewSelectionForm2ViewState.OpenSelectClientTlScreen(
-            joiningLocationsAndTLs?.businessTeamLeaders ?: emptyList()
+            joiningLocationsAndTLs.businessTeamLeaders
         )
         _viewState.value = null
     }
@@ -136,9 +130,9 @@ class NewSelectionForm2ViewModel @Inject constructor(
         businessId: String
     ) = viewModelScope.launch {
 
-        if (joiningLocationsAndTLs != null) {
+        if (::joiningLocationsAndTLs.isInitialized) {
             _viewState.value =
-                NewSelectionForm2ViewState.LocationAndTlDataLoaded(joiningLocationsAndTLs!!)
+                NewSelectionForm2ViewState.LocationAndTlDataLoaded(joiningLocationsAndTLs)
             return@launch
         }
 

@@ -23,6 +23,7 @@ sealed class NewSelectionForm2ViewState {
     ) : NewSelectionForm2ViewState()
 
     data class OpenSelectReportingScreen(
+        var selectedCity : ReportingLocationsItem,
         val reportingLocations: List<ReportingLocationsItem>
     ) : NewSelectionForm2ViewState()
 
@@ -57,9 +58,7 @@ sealed class NewSelectionForm2Events {
 
     object SelectCityClicked : NewSelectionForm2Events()
 
-    data class SelectReportingLocationClicked(
-        val shouldShowLocationsStateWise: Boolean
-    ) : NewSelectionForm2Events()
+    object SelectReportingLocationClicked : NewSelectionForm2Events()
 
     object SelectClientTLClicked : NewSelectionForm2Events()
 

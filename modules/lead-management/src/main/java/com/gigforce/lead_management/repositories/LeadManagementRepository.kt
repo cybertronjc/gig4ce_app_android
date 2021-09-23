@@ -644,7 +644,7 @@ class LeadManagementRepository @Inject constructor(
     )  {
         val response =  joiningProfileRemoteService.submitJoiningRequest(joiningRequest)
         if (!response.isSuccessful) {
-            throw Exception(response.message() ?: "Unable to submit joining data")
+            throw Exception(response.errorBody()?.string() ?: "Unable to submit joining data")
         }
     }
 }
