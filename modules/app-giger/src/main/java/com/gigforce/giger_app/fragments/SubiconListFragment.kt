@@ -36,14 +36,20 @@ class SubiconListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getDataFromIntent(savedInstanceState)
+        initViews()
         observer()
         listener()
+    }
+
+    private fun initViews() {
+        toolbar.setAppBarTitle(title)
+        subiconsrv.setOrientationAndRows(1, 4)
     }
 
     private fun listener() {
 //        toolbar.textTitle.text = "TL"
         toolbar.apply {
-            setBackButtonListener{
+            setBackButtonListener {
                 activity?.onBackPressed()
             }
         }
@@ -53,10 +59,10 @@ class SubiconListFragment : Fragment() {
         repository.getData().observeForever {
             try {
 
-                var featureList  = ArrayList<FeatureItemCard2DVM>()
-                it.forEach{
-                    arrayLong?.forEach { subIcons->
-                        if(it.index == subIcons){
+                var featureList = ArrayList<FeatureItemCard2DVM>()
+                it.forEach {
+                    arrayLong?.forEach { subIcons ->
+                        if (it.index == subIcons) {
                             featureList.add(it)
                         }
                     }
@@ -66,16 +72,19 @@ class SubiconListFragment : Fragment() {
             }
         }
     }
-    var arrayLong : ArrayList<Long>?=null
+
+    var arrayLong: ArrayList<Long>? = null
+    var title = ""
     private fun getDataFromIntent(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
             arrayLong =
                 it.get(StringConstants.SUBICONS.value) as ArrayList<Long>
-
+            title = it.getString("title") ?: ""
         } ?: run {
             arguments?.let {
                 arrayLong =
                     it.get(StringConstants.SUBICONS.value) as ArrayList<Long>
+                title = it.getString("title") ?: ""
             }
         }
 

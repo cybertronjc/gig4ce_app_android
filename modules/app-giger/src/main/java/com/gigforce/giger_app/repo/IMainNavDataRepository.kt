@@ -5,14 +5,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.gigforce.common_ui.viewdatamodels.FeatureItemCard2DVM
 import com.gigforce.common_ui.viewdatamodels.HindiTranslationMapping
-import com.gigforce.common_ui.viewdatamodels.HindiTranslationMapping
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.retrofit.RetrofitFactory
 import com.gigforce.giger_app.R
 import com.gigforce.giger_app.service.APPRenderingService
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import com.google.gson.JsonObject
@@ -26,7 +24,7 @@ import javax.inject.Inject
 interface IMainNavDataRepository {
     fun reload()
     fun getData(): LiveData<List<FeatureItemCard2DVM>>
-    fun getDefaultData(context : Context): List<FeatureItemCard2DVM>
+    fun getDefaultData(context: Context): List<FeatureItemCard2DVM>
 }
 
 class MainNavDataRepository @Inject constructor(
@@ -96,7 +94,12 @@ class MainNavDataRepository @Inject constructor(
                     val active = item.get("active") as? Boolean ?: true
                     val type = item.get("type") as? String ?: ""
                     val subicons = item.get("subicons") as? List<Long> ?: null
-                    val hi = item.get("hi") as? HindiTranslationMapping
+                    var hi : HindiTranslationMapping? = null
+                    item.get("hi")?.let {
+                        try {
+                            hi = Gson().fromJson(JSONObject(it as? Map<*, *>).toString(),HindiTranslationMapping::class.java)
+                        }catch (e: Exception){}
+                    }
                     mainNavData.add(
                         FeatureItemCard2DVM(
                             active = active,
@@ -109,14 +112,14 @@ class MainNavDataRepository @Inject constructor(
                             hi = hi
                         )
                     )
-                }catch (e:Exception){
+                } catch (e: Exception) {
 
                 }
 
             }
-            val tempMainNavData = mainNavData.filter { it.active } as ArrayList<FeatureItemCard2DVM>
+            val tempMainNavData =
+                mainNavData.filter { it.active == true } as ArrayList<FeatureItemCard2DVM>
             tempMainNavData.sortBy { it.index }
-//            var tempMainNavData = mainNavData.dup
             mainNavData.clear()
             mainNavData.addAll(tempMainNavData)
             data.value = mainNavData

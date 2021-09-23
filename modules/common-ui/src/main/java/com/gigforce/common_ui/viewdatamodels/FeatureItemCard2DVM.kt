@@ -18,14 +18,14 @@ data class FeatureItemCard2DVM(
     val imageRes: Int? = null,
     val imageUrl: String? = null,
     val navPath: String? = null,
-    val hi: HindiTranslationMapping? = null
+    val hi: HindiTranslationMapping? = null,
     val type: String? = null,
     val subicons: List<Long>? = null
 ) :
     SimpleDVM(CommonViewTypes.VIEW_FEATURE_ITEM_CARD2, navPath){
     override fun getNavArgs(): NavArgs? {
         navPath?.let {
-            return NavArgs(navPath, bundleOf("title" to title, "hi" to hi))
+            return NavArgs(navPath, bundleOf("title" to title))
         }
         return null
     }

@@ -177,14 +177,15 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
         savedInstanceState: Bundle?
     ) {
         arguments?.let {
+            title = it.getString("title") ?: ""
 
-            if (!sharedFileSubmitted) {
+            if (title.isEmpty() && !sharedFileSubmitted) {
                 val sharedFilesBundle =
                     it.getBundle(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE)
                 viewModel.sharedFiles = sharedFilesBundle
                 sharedFileSubmitted = true
             }
-            title = it.getString("title") ?: ""
+
 
         }
     }
