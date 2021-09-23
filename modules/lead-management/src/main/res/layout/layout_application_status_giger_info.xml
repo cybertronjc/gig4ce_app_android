@@ -6,7 +6,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:background="@color/status_background">
+        android:background="@color/status_background_pink">
 
         <ImageView
             android:id="@+id/statusIconImg"

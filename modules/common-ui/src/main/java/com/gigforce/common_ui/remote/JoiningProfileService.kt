@@ -32,11 +32,6 @@ interface JoiningProfileService {
 
     ): Response<List<JoiningNew>>
 
-    @GET("joining/detail/{id}")
-    suspend fun getJoiningInfo(
-        @Path("id") id: String
-    ): Response<GigerInfo>
-
     @GET("business/listing/businessandjobProfile")
     suspend fun getBusinessAndJobProfiles(): Response<List<JoiningBusinessAndJobProfilesItem>>
 
@@ -49,4 +44,10 @@ interface JoiningProfileService {
     suspend fun submitJoiningRequest(
         @Body joiningRequest: SubmitJoiningRequest
     ): Response<AssignGigResponse>
+
+
+    @GET("joining/detail/{id}")
+    suspend fun getJoiningInfo(
+        @Path("id") id: String
+    ): Response<GigerInfo>
 }
