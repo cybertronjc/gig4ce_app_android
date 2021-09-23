@@ -137,9 +137,14 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
             }
 
             applicationStatusLayout.statusText.text = "Application "+it.status
-            applicationStatusLayout.statusIconImg.setImageDrawable(
-                if (it.status == "Pending") resources.getDrawable(R.drawable.ic_pending_icon) else resources.getDrawable(R.drawable.ic_blue_tick)
-            )
+            if (it.status == "Pending"){
+                applicationStatusLayout.statusIconImg.setImageDrawable(resources.getDrawable(R.drawable.ic_pending_icon))
+                applicationStatusLayout.root.setBackgroundColor(resources.getColor(R.color.status_background_pink))
+            } else {
+                applicationStatusLayout.statusIconImg.setImageDrawable(resources.getDrawable(R.drawable.ic_blue_tick))
+                applicationStatusLayout.root.setBackgroundColor(resources.getColor(R.color.status_background_blue))
+            }
+
             overlayCardLayout.selectionDate.text = ": "+getFormattedDate(it.selectionDate)
             overlayCardLayout.joiningDate.text = ": "+getFormattedDateFromYYMMDD(it.joiningDate) ?: ""
 

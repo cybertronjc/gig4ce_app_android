@@ -32,7 +32,12 @@ import com.gigforce.lead_management.ui.giger_onboarding.GigerOnboardingFragment
 import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import java.lang.NullPointerException
 import javax.inject.Inject
+
+object Constant {
+    val fragmentTabs: HashMap<String, Int> = HashMap()
+}
 
 @AndroidEntryPoint
 class JoiningList2Fragment : BaseFragment2<FragmentJoiningListBinding>(
@@ -44,7 +49,7 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningListBinding>(
     @Inject
     lateinit var navigation: INavigation
     private val viewModel: JoiningList2ViewModel by viewModels()
-
+    var selectedTab = 0
 
     override fun viewCreated(
         viewBinding: FragmentJoiningListBinding,
@@ -73,8 +78,6 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningListBinding>(
             )
         }
 
-        viewModel.getJoinings()
-
     }
 
     private fun initToolbar(
@@ -94,6 +97,8 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningListBinding>(
     }
 
     private fun initTabLayout() = viewBinding.apply {
+
+
         statusTabLayout.addTab(statusTabLayout.newTab().setText("All (0)"))
         statusTabLayout.addTab(statusTabLayout.newTab().setText("Pending (0)"))
         statusTabLayout.addTab(statusTabLayout.newTab().setText("Completed (0)"))
@@ -109,6 +114,13 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningListBinding>(
             params.rightMargin = betweenSpace
         }
 
+        try {
+            //showToast("position: ${selectedTab}")
+            statusTabLayout.getTabAt(selectedTab)?.select()
+        } catch (e: NullPointerException) {
+            e.printStackTrace()
+        }
+
         statusTabLayout.onTabSelected {
 
             val statusText = it?.text?.split("(")?.get(0).toString().trim()
@@ -118,10 +130,13 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningListBinding>(
                 viewModel.filterJoinings(statusText)
             }
 
+            selectedTab = it?.position!!
         }
+
     }
 
     private fun initViewModel() {
+        viewModel.getJoinings()
         viewModel.viewState
             .observe(viewLifecycleOwner, {
                 val state = it ?: return@observe
@@ -136,9 +151,6 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningListBinding>(
                 }
             })
 
-//        viewModel.filters.observe(viewLifecycleOwner, Observer {
-//            setStatusCount(it)
-//        })
 
         viewModel.filterMap.observe(viewLifecycleOwner, Observer {
             setStatus(it)
@@ -192,21 +204,21 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningListBinding>(
         joiningsRecyclerView.collection = joiningList
     }
 
-    private fun setStatusCount(filters: JoiningFilters) = viewBinding.apply{
-        this.statusTabLayout.removeAllTabs()
-        filters.attendanceStatuses
-        filters.attendanceStatuses?.forEach {
-
-            val newTab = this.statusTabLayout.newTab().apply {
-                this.text = "${it.status} (${it.attendanceCount})"
-                this.tag = it.status
-            }
-            this.statusTabLayout.addTab(newTab)
-        }
-
-        initTabLayout()
-
-    }
+//    private fun setStatusCount(filters: JoiningFilters) = viewBinding.apply{
+//        this.statusTabLayout.removeAllTabs()
+//        filters.attendanceStatuses
+//        filters.attendanceStatuses?.forEach {
+//
+//            val newTab = this.statusTabLayout.newTab().apply {
+//                this.text = "${it.status} (${it.attendanceCount})"
+//                this.tag = it.status
+//            }
+//            this.statusTabLayout.addTab(newTab)
+//        }
+//
+//        initTabLayout()
+//
+//    }
 
     private fun showNoJoiningsFound() = viewBinding.apply {
 

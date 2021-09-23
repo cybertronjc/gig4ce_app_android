@@ -4,7 +4,8 @@
     <color name="limeGrey">#6D7278</color>
     <color name="submitted">#E59840</color>
     <color name="search_bg_border">#E6E6E6</color>
-    <color name="status_background">#FDF2F6</color>
+    <color name="status_background_pink">#FDF2F6</color>
+    <color name="status_background_blue">#CCD9F7</color>
     <color name="pink_text">#E42C64</color>
     <color name="tab_background_unselected">#FFFFFF</color>
     <color name="tab_background_selected">#E42C64</color>

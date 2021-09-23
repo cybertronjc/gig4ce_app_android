@@ -31,6 +31,19 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/divider3"/>
 
+    <ImageView
+        android:id="@+id/statusDot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_pink_dot"
+        android:layout_marginTop="@dimen/size_20"
+        android:layout_marginBottom="@dimen/size_20"
+        android:layout_marginEnd="@dimen/size_8"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/statusText"
+        app:layout_constraintBottom_toTopOf="@id/divider3"
+        android:layout_marginStart="@dimen/size_16"/>
+
     <TextView
         android:id="@+id/statusText"
         android:layout_width="wrap_content"
