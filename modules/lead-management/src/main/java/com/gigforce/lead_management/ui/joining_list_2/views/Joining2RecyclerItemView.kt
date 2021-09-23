@@ -185,13 +185,20 @@ class Joining2RecyclerItemView(
                 )
             context.startActivity(intent)
         } else {
-            if (currentViewData.status.isEmpty())
-                return
-
-            if (selectEnable){
-                viewBinding.selectJoiningBtn.setImageDrawable(resources.getDrawable(R.drawable.ic_selected_tick))
-                viewData?.selected = true
-            }
+//            if (currentViewData.status.isEmpty())
+//                return
+//
+//            if (selectEnable){
+//                viewBinding.selectJoiningBtn.setImageDrawable(resources.getDrawable(R.drawable.ic_selected_tick))
+//                viewData?.selected = true
+//            }
+            //navigate to joining details screen
+            navigation.navigateTo(
+                LeadManagementNavDestinations.FRAGMENT_GIGER_INFO,
+                bundleOf(
+                    LeadManagementConstants.INTENT_EXTRA_JOINING_ID to currentViewData._id
+                )
+                )
 //            when (JoiningStatus.fromValue(currentViewData.status)) {
 //                JoiningStatus.SIGN_UP_PENDING, JoiningStatus.JOINED -> {
 //                }

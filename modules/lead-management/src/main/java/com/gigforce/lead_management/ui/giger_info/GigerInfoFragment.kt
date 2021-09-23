@@ -4,6 +4,7 @@ package com.gigforce.lead_management.ui.giger_info
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import androidx.fragment.app.viewModels
@@ -17,12 +18,19 @@ import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.utils.DateHelper
 import com.gigforce.core.utils.GlideApp
+import com.gigforce.lead_management.LeadManagementConstants
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.GigerInfoFragmentBinding
 import com.gigforce.lead_management.models.ApplicationChecklistRecyclerItemData
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.layout_below_giger_functionality.*
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -41,15 +49,40 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
     lateinit var navigation: INavigation
     private val viewModel: GigerInfoViewModel by viewModels()
     var gigerPhone = ""
+    private lateinit var joiningId: String
+    private val dateFormatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
     override fun viewCreated(viewBinding: GigerInfoFragmentBinding, savedInstanceState: Bundle?) {
+        getDataFrom(arguments,savedInstanceState)
         initToolbar(viewBinding)
         initListeners()
         initViewModel()
     }
 
+    private fun getDataFrom(
+        arguments: Bundle?,
+        savedInstanceState: Bundle?
+    ) {
+        arguments?.let {
+            joiningId = it.getString(LeadManagementConstants.INTENT_EXTRA_JOINING_ID) ?: return@let
+
+        }
+
+        savedInstanceState?.let {
+            joiningId = it.getString(LeadManagementConstants.INTENT_EXTRA_JOINING_ID) ?: return@let
+
+        }
+    }
+    override fun onSaveInstanceState(
+        outState: Bundle
+    ) {
+        super.onSaveInstanceState(outState)
+        outState.putString(LeadManagementConstants.INTENT_EXTRA_JOINING_ID, joiningId)
+    }
+
+
     private fun initViewModel() {
-        viewModel.getGigerJoiningInfo()
+        viewModel.getGigerJoiningInfo(joiningId)
         //observe data
         viewModel.viewState.observe(viewLifecycleOwner, Observer {
             val state = it ?: return@Observer
@@ -86,12 +119,15 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
         //update ui
         gigerInfo?.let {
             toolbar.showTitle(it.gigerName)
-            overlayCardLayout.companyName.text = it.businessName
-            overlayCardLayout.jobProfileTitle.text = it.jobProfileTitle
-            overlayCardLayout.locationText.text = it.businessLocation
-            overlayCardLayout.joiningDate.text = it.joiningDate
-            overlayCardLayout.selectionDate.text = it.selectionDate
+            overlayCardLayout.companyName.text = ": "+it.businessName ?: ""
+            overlayCardLayout.jobProfileTitle.text = it.jobProfileTitle ?: ""
+            overlayCardLayout.locationText.text = ": "+it.businessLocation ?: ""
+
+
             gigerPhone = it.gigerPhone.toString()
+
+
+            setGigerProfilePicture(it.gigerProfilePicture.toString())
 
             context?.let { it1 ->
                 GlideApp.with(it1)
@@ -100,17 +136,12 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
                     .into(overlayCardLayout.profileImageOverlay.companyImg)
             }
 
-            context?.let { it1 ->
-                GlideApp.with(it1)
-                    .load(it.gigerProfilePicture)
-                    .placeholder(getCircularProgressDrawable(it1))
-                    .into(overlayCardLayout.profileImageOverlay.gigerImg)
-            }
-
-            applicationStatusLayout.statusText.text = it.status
+            applicationStatusLayout.statusText.text = "Application "+it.status
             applicationStatusLayout.statusIconImg.setImageDrawable(
-                if (it.status == "Application Pending") resources.getDrawable(R.drawable.ic_pending_icon) else resources.getDrawable(R.drawable.ic_blue_tick)
+                if (it.status == "Pending") resources.getDrawable(R.drawable.ic_pending_icon) else resources.getDrawable(R.drawable.ic_blue_tick)
             )
+            overlayCardLayout.selectionDate.text = ": "+getFormattedDate(it.selectionDate)
+            overlayCardLayout.joiningDate.text = ": "+getFormattedDateFromYYMMDD(it.joiningDate) ?: ""
 
             val checkListItemData = arrayListOf<ApplicationChecklistRecyclerItemData.ApplicationChecklistItemData>()
             it.checkList.forEachIndexed { index, checkListItem ->
@@ -151,9 +182,6 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
 
         }
 
-//        topLayout.backImageButton.setOnClickListener {
-//            //back functionality
-//        }
     }
 
     private fun initToolbar(viewBinding: GigerInfoFragmentBinding) = viewBinding.toolbar.apply {
@@ -167,5 +195,75 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
         })
     }
 
+
+    fun setGigerProfilePicture(path: String) {
+        if (!path.isBlank()) {
+
+            if (path.isEmpty() || path == "avatar.jpg") {
+                viewBinding.overlayCardLayout.profileImageOverlay.gigerImg.setImageDrawable(
+                    resources.getDrawable(R.drawable.ic_user_2)
+                )
+                return
+            }
+
+            val userPathInFirebase = if (path.startsWith("profile_pics/"))
+                path
+            else
+                "profile_pics/${path}"
+
+//            context?.let { it1 ->
+//                GlideApp.with(it1)
+//                    .load(it.businessLogo)
+//                    .placeholder(getCircularProgressDrawable(it1))
+//                    .into(overlayCardLayout.profileImageOverlay.companyImg)
+//            }
+
+            viewBinding.overlayCardLayout.profileImageOverlay.gigerImg.loadImageIfUrlElseTryFirebaseStorage(
+                userPathInFirebase,
+                R.drawable.ic_user_2,
+                R.drawable.ic_user_2
+            )
+        } else {
+                viewBinding.overlayCardLayout.profileImageOverlay.gigerImg.loadImage(R.drawable.ic_user_2)
+        }
+    }
+
+    fun getDateInYYYYMMDD(date: String): String{
+        val format = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+        val localDateTime: LocalDateTime = LocalDateTime.parse(date, format)
+        val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+        val output: String = formatter.format(localDateTime)
+
+
+        return output
+    }
+
+    fun getFormattedDate(date: String): String {
+        val input = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+        val output = SimpleDateFormat("dd/MM/yyyy")
+
+        var d: Date? = null
+        try {
+            d = input.parse(date)
+        } catch (e: ParseException) {
+            e.printStackTrace()
+        }
+        val formatted = output.format(d)
+        return formatted ?: ""
+    }
+
+    fun getFormattedDateFromYYMMDD(date: String): String {
+        val input = SimpleDateFormat("yyyy-MM-dd")
+        val output = SimpleDateFormat("dd/MM/yyyy")
+
+        var d: Date? = null
+        try {
+            d = input.parse(date)
+        } catch (e: ParseException) {
+            e.printStackTrace()
+        }
+        val formatted = output.format(d)
+        return formatted ?: ""
+    }
 
 }
