@@ -6,6 +6,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
+import com.gigforce.common_ui.components.cells.SearchTextChangeListener
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.gone
@@ -83,14 +84,16 @@ class SelectClientTlFragment : BaseFragment2<FragmentSelectClientTlBinding>(
 
 
     private fun initListeners() = viewBinding.apply {
-//        toolbar.apply {
-//            this.
-//            hideActionMenu()
-//            showTitle(context.getString(R.string.gig_location_lead))
-//            setBackButtonListener(View.OnClickListener {
-//                navigation.popBackStack()
-//            })
-//        }
+        toolbar.apply {
+            setBackButtonListener{
+                navigation.navigateUp()
+            }
+            searchTextChangeListener = object : SearchTextChangeListener {
+                override fun onSearchTextChanged(text: String) {
+                    clientTLAdapter.filter.filter(text)
+                }
+            }
+        }
 
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = clientTLAdapter

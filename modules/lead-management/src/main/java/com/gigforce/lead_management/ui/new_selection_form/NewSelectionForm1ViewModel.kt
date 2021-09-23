@@ -57,10 +57,12 @@ class NewSelectionForm1ViewModel @Inject constructor(
                 clientId = event.clientId
             }
             is NewSelectionForm1Events.GigerNameChanged -> {
+                gigforceLogger.d(TAG, "Name changed : ${event.name}")
                 gigerName = event.name
             }
             is NewSelectionForm1Events.BusinessSelected -> {
                 selectedBusiness = event.business
+                selectedJobProfile = null
             }
             is NewSelectionForm1Events.JobProfileSelected -> {
                 selectedJobProfile = event.jobProfile
@@ -93,7 +95,11 @@ class NewSelectionForm1ViewModel @Inject constructor(
     }
 
     private fun validateDataAndNavigateToForm2() {
-        if (mobilePhoneNumber.isNullOrBlank()) {
+
+        if (mobilePhoneNumber.isNullOrBlank() || !ValidationHelper.isValidIndianMobileNo(
+                mobilePhoneNumber!!.substring(3)
+            )
+        ) {
             _viewState.value = NewSelectionForm1ViewState.ValidationError(
                 invalidMobileNoMessage = "Invalid mobile number"
             )
@@ -138,7 +144,9 @@ class NewSelectionForm1ViewModel @Inject constructor(
     private fun checkIfChangedContactNoIsDifferentElseFetchProfileDetails(
         mobileNo: String
     ) = viewModelScope.launch {
+        gigforceLogger.d(TAG, "Mobile no changed : $mobileNo")
 
+        mobilePhoneNumber = mobileNo
         val doesMobileNoContains10digits = mobileNo.length == 13
         if (!doesMobileNoContains10digits)
             return@launch
@@ -151,10 +159,6 @@ class NewSelectionForm1ViewModel @Inject constructor(
             return@launch
         }
 
-        if (mobilePhoneNumber == mobileNo) { //same no typed
-            return@launch
-        }
-        mobilePhoneNumber = mobileNo
         _viewState.value = NewSelectionForm1ViewState.CheckingForUserDetailsFromProfiles
 
         try {
@@ -163,6 +167,11 @@ class NewSelectionForm1ViewModel @Inject constructor(
             val profileInfo = profileFirebaseRepository.getFirstProfileWithPhoneNumber(mobileNo)
             if (profileInfo == null) {
                 gigforceLogger.d(TAG, "no profile matched in profile for '$mobileNo'")
+
+                _viewState.value = NewSelectionForm1ViewState.ErrorWhileCheckingForUserInProfile(
+                    error = "No match found for this no",
+                    shouldShowErrorButton = false
+                )
             } else {
                 gigforceLogger.d(TAG, "User profile found for '$mobileNo'")
 

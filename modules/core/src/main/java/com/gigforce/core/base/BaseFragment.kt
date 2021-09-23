@@ -34,6 +34,9 @@ abstract class BaseFragment2<V : ViewDataBinding>(
             return _viewDataBinding
         }
 
+    private var _viewCreatedForTheFirstTime = false
+    val viewCreatedForTheFirstTime get() = _viewCreatedForTheFirstTime
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -48,12 +51,16 @@ abstract class BaseFragment2<V : ViewDataBinding>(
 
         if(shouldPreventViewRecreationOnNavigation()) {
             if (::_viewDataBinding.isInitialized.not()) {
+                _viewCreatedForTheFirstTime = true
+
                 _viewDataBinding = DataBindingUtil.inflate(
                     inflater,
                     layoutId,
                     container,
                     false
                 )
+            } else{
+                _viewCreatedForTheFirstTime = false
             }
         } else{
 

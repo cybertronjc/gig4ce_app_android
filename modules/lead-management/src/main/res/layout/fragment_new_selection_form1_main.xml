@@ -42,20 +42,20 @@
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="4dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="10dp"
                         android:layout_marginEnd="7dp"
+                        android:layout_marginBottom="4dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
                         app:cardElevation="8dp">
 
                         <EditText
                             android:layout_width="40dp"
                             android:layout_height="40dp"
+                            android:background="@null"
                             android:gravity="center"
                             android:inputType="none"
-                            android:background="@null"
                             android:text="+91" />
 
                     </com.google.android.material.card.MaterialCardView>
@@ -63,23 +63,23 @@
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="0dp"
                         android:layout_height="40dp"
-                        android:layout_weight="1"
-                        android:layout_marginBottom="4dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
                         android:layout_marginStart="7dp"
                         android:layout_marginTop="10dp"
                         android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="4dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
                         app:cardElevation="8dp">
 
-                    <EditText
-                        android:id="@+id/mobile_no_et"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:inputType="number"
-                        android:background="@null"
-                        android:paddingStart="10dp"
-                        android:maxLength="10" />
+                        <EditText
+                            android:id="@+id/mobile_no_et"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:inputType="number"
+                            android:maxLength="10"
+                            android:paddingStart="10dp" />
 
                     </com.google.android.material.card.MaterialCardView>
 
@@ -109,26 +109,40 @@
                     android:textAppearance="@style/style_h5"
                     android:translationY="-0.6sp" />
 
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/giger_name_text_input_layout"
-                    style="@style/Widget.Design.TextInputLayout"
+                <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint=" "
                     android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
-                    app:errorEnabled="true">
+                    android:layout_marginEnd="16dp">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/giger_name_et"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/giger_name_text_input_layout"
+                        style="@style/Widget.Design.TextInputLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Type Giger Name here"
-                        android:textAppearance="@style/body_primary" />
+                        android:hint=" "
+                        app:errorEnabled="true">
 
-                </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/giger_name_et"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="Type Giger Name here"
+                            android:textAppearance="@style/body_primary" />
 
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <ProgressBar
+                        android:id="@+id/nameProgressbar"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center_vertical|end"
+                        android:layout_marginEnd="10dp"
+                        android:visibility="gone"
+                        android:layout_marginBottom="4dp" />
+
+                </FrameLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"

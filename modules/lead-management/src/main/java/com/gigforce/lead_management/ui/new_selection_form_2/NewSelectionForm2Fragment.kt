@@ -74,6 +74,9 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                 viewBinding.mainForm.selectedDateLabel.text =
                     DateHelper.getDateInDDMMYYYY(newCal.time)
                 viewModel.handleEvent(NewSelectionForm2Events.DateOfJoiningSelected(newCal.time.toLocalDate()))
+
+                viewBinding.mainForm.expectedDateErrorTv.gone()
+                viewBinding.mainForm.expectedDateErrorTv.text = null
             },
             cal.get(Calendar.YEAR),
             cal.get(Calendar.MONTH),
@@ -184,6 +187,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         this.setBackButtonListener {
             navigation.navigateUp()
         }
+        stepsTextView.setText("Step 2/2")
     }
 
     private fun initViewModel() = viewModel
@@ -214,7 +218,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                 )
 
                 is NewSelectionForm2ViewState.ErrorWhileSubmittingJoiningData -> {
-                  viewBinding.mainForm.nextButton.hideProgress("Next")
+                  viewBinding.mainForm.nextButton.hideProgress("Submit")
 
                     MaterialAlertDialogBuilder(requireContext())
                         .setTitle("Unable to submit joining request")
@@ -398,9 +402,14 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
 
     private fun showSelectedCity(
         citySelected: ReportingLocationsItem
-    ) = viewBinding.apply {
-        mainForm.citySelectedLabel.text = citySelected.name
+    ) = viewBinding.mainForm.apply {
+        citySelectedLabel.text = citySelected.name
         viewModel.handleEvent(NewSelectionForm2Events.CitySelected(citySelected))
+
+        reportingLocationSelectedLabel.text = "Click to select location"
+
+        this.cityErrorTv.gone()
+        this.cityErrorTv.text = null
     }
 
     private fun showSelectedReportingLocation(
@@ -412,6 +421,9 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                 reportingLocationSelected
             )
         )
+
+        this.reportingLocationErrorTv.gone()
+        this.reportingLocationErrorTv.text = null
     }
 
     private fun showSelectedTL(

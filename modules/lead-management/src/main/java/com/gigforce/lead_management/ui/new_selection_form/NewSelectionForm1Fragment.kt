@@ -7,7 +7,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
-import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfilesItem
@@ -50,16 +49,17 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
         viewBinding: FragmentNewSelectionForm1Binding,
         savedInstanceState: Bundle?
     ) {
+        if (viewCreatedForTheFirstTime){
+            attachTextWatcher()
+        }
+
         initToolbar(viewBinding)
         initListeners(viewBinding)
         initViewModel()
         initSharedViewModel()
     }
 
-    private fun initListeners(
-        viewBinding: FragmentNewSelectionForm1Binding
-    ) = viewBinding.apply {
-
+    private fun attachTextWatcher()= viewBinding.apply  {
         lifecycleScope.launchWhenCreated {
 
             mainForm.mobileNoEt.getTextChangeAsStateFlow()
@@ -83,6 +83,11 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
                     viewModel.handleEvent(NewSelectionForm1Events.GigerClientIdChanged(it))
                 }
         }
+    }
+
+    private fun initListeners(
+        viewBinding: FragmentNewSelectionForm1Binding
+    ) = viewBinding.apply {
 
         mainForm.selectBusinessLayout.setOnClickListener {
             viewModel.handleEvent(NewSelectionForm1Events.OpenSelectBusinessScreenSelected)
@@ -103,6 +108,7 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
         this.setBackButtonListener {
             activity?.onBackPressed()
         }
+        this.stepsTextView.setText("Step 1/2")
     }
 
     private fun initViewModel() = viewModel
@@ -122,10 +128,29 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
                 is NewSelectionForm1ViewState.ValidationError -> handleValidationError(state)
 
                 //Checking Mobile no in profile states
-                NewSelectionForm1ViewState.CheckingForUserDetailsFromProfiles -> {}
-                is NewSelectionForm1ViewState.ErrorWhileCheckingForUserInProfile -> {}
+                NewSelectionForm1ViewState.CheckingForUserDetailsFromProfiles -> {
+                    viewBinding.mainForm.gigerNameEt.isEnabled = false
+                    viewBinding.mainForm.nameProgressbar.visible()
+                    viewBinding.mainForm.gigerNameEt.setText("")
+
+                    viewBinding.mainForm.contactNoErrorTv.text = null
+                    viewBinding.mainForm.contactNoErrorTv.gone()
+                }
+                is NewSelectionForm1ViewState.ErrorWhileCheckingForUserInProfile -> {
+                    viewBinding.mainForm.gigerNameEt.isEnabled = true
+                    viewBinding.mainForm.gigerNameEt.setText("")
+                    viewBinding.mainForm.nameProgressbar.gone()
+                }
                 is NewSelectionForm1ViewState.UserDetailsFromProfiles -> {
-                    viewBinding.mainForm.gigerNameEt.setText(state.profile.name)
+                    viewBinding.mainForm.nameProgressbar.gone()
+
+                    if (state.profile.name.isBlank()) {
+                        viewBinding.mainForm.gigerNameEt.isEnabled = true
+                        viewBinding.mainForm.gigerNameEt.setText("")
+                    } else {
+                        viewBinding.mainForm.gigerNameEt.isEnabled = false
+                        viewBinding.mainForm.gigerNameEt.setText(state.profile.name)
+                    }
                 }
 
                 //Open data selection screen states
@@ -146,9 +171,11 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
     private fun openForm2(
         submitJoiningRequest: SubmitJoiningRequest
     ) {
-        navigation.navigateTo(LeadManagementNavDestinations.FRAGMENT_SELECTION_FORM_2, bundleOf(
-            NewSelectionForm2Fragment.INTENT_EXTRA_JOINING_DATA to submitJoiningRequest
-        ))
+        navigation.navigateTo(
+            LeadManagementNavDestinations.FRAGMENT_SELECTION_FORM_2, bundleOf(
+                NewSelectionForm2Fragment.INTENT_EXTRA_JOINING_DATA to submitJoiningRequest
+            )
+        )
     }
 
     private fun openSelectJobProfileScreen(
@@ -171,9 +198,9 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
 
     private fun handleValidationError(
         errorState: NewSelectionForm1ViewState.ValidationError
-    ) = viewBinding.mainForm.apply{
+    ) = viewBinding.mainForm.apply {
 
-        if(errorState.invalidMobileNoMessage != null){
+        if (errorState.invalidMobileNoMessage != null) {
             contactNoErrorTv.visible()
             contactNoErrorTv.text = errorState.invalidMobileNoMessage
         } else {
@@ -185,7 +212,7 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
         gigerClientIdTextInputLayout.error = errorState.gigerClientIdError
 
 
-        if(errorState.businessError != null){
+        if (errorState.businessError != null) {
             businessErrorTv.visible()
             businessErrorTv.text = errorState.businessError
         } else {
@@ -193,7 +220,7 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
             businessErrorTv.gone()
         }
 
-        if(errorState.jobProfilesError != null){
+        if (errorState.jobProfilesError != null) {
             jobProfileErrorTv.visible()
             jobProfileErrorTv.text = errorState.jobProfilesError
         } else {
@@ -267,17 +294,26 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
 
     private fun showSelectedBusiness(
         businessSelected: JoiningBusinessAndJobProfilesItem
-    ) = viewBinding.apply{
+    ) = viewBinding.mainForm.apply {
 
-        mainForm.businessSelectedLabel.text = businessSelected.name
+        businessSelectedLabel.text = businessSelected.name
         viewModel.handleEvent(NewSelectionForm1Events.BusinessSelected(businessSelected))
+
+        //reseting job profile selected
+        selectedJobProfileLabel.text = "Click to select Job Profile"
+
+        businessErrorTv.text = null
+        businessErrorTv.gone()
     }
 
     private fun showSelectedJobProfile(
         jobProfileSelected: JobProfilesItem
-    ) = viewBinding.mainForm.apply{
+    ) = viewBinding.mainForm.apply {
 
         selectedJobProfileLabel.text = jobProfileSelected.name
         viewModel.handleEvent(NewSelectionForm1Events.JobProfileSelected(jobProfileSelected))
+
+        jobProfileErrorTv.text = null
+        jobProfileErrorTv.gone()
     }
 }

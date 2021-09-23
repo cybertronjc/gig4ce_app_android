@@ -6,6 +6,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
+import com.gigforce.common_ui.components.cells.SearchTextChangeListener
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.gone
@@ -34,7 +35,7 @@ class SelectCityFragment : BaseFragment2<FragmentSelectBusinessBinding>(
         Glide.with(requireContext())
     }
 
-    private val businessAdapter: CityAdapter by lazy {
+    private val cityAdapter: CityAdapter by lazy {
         CityAdapter(requireContext(), glide).apply {
             setOnCitySelectedListener(this@SelectCityFragment)
         }
@@ -82,20 +83,22 @@ class SelectCityFragment : BaseFragment2<FragmentSelectBusinessBinding>(
 
 
     private fun initListeners() = viewBinding.apply {
-//        toolbar.apply {
-//            this.
-//            hideActionMenu()
-//            showTitle(context.getString(R.string.gig_location_lead))
-//            setBackButtonListener(View.OnClickListener {
-//                navigation.popBackStack()
-//            })
-//        }
+        toolbar.apply {
+            setBackButtonListener{
+                navigation.navigateUp()
+            }
+            searchTextChangeListener = object : SearchTextChangeListener {
+                override fun onSearchTextChanged(text: String) {
+                    cityAdapter.filter.filter(text)
+                }
+            }
+        }
 
         businessRecyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
-        businessRecyclerView.adapter = businessAdapter
+        businessRecyclerView.adapter = cityAdapter
 
         okayButton.setOnClickListener {
-            val selectedCity = businessAdapter.getSelectedCity() ?: return@setOnClickListener
+            val selectedCity = cityAdapter.getSelectedCity() ?: return@setOnClickListener
             sharedViewModel.citySelected(selectedCity)
             findNavController().navigateUp()
         }
@@ -107,7 +110,7 @@ class SelectCityFragment : BaseFragment2<FragmentSelectBusinessBinding>(
             this.businessInfoLayout.infoMessageTv.text = "No City to show"
         } else {
             this.businessInfoLayout.root.gone()
-            businessAdapter.setData(cityList)
+            cityAdapter.setData(cityList)
         }
     }
 

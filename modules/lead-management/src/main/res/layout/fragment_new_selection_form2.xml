@@ -12,6 +12,7 @@
             android:layout_height="wrap_content"
             app:titleText="New Selection"
             app:backgroundType="PinkBar"
+            app:isStepsVisible="true"
             android:minHeight="?android:actionBarSize" />
 
         <FrameLayout

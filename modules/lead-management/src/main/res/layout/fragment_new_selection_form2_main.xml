@@ -113,6 +113,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="@style/style_h5"
+                        android:visibility="gone"
                         android:text="Show All locations"/>
 
                 </LinearLayout>
@@ -145,7 +146,7 @@
                             android:layout_weight="1"
                             android:gravity="top"
                             android:lineSpacingExtra="4sp"
-                            android:text="Click to select locaiton"
+                            android:text="Click to select location"
                             android:textAppearance="@style/body_primary"
                             android:textColor="@color/lipstick_2"
                             android:textStyle="bold"
@@ -279,7 +280,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                         />
+                        android:text="Select expected date" />
 
 
                     <TextView
@@ -376,7 +377,7 @@
             android:layout_marginEnd="@dimen/size_16"
             android:layout_marginBottom="@dimen/size_16"
             android:background="@color/lipstick_2"
-            android:text="Next"
+            android:text="Submit"
             android:textColor="@color/white" />
 
     </LinearLayout>
