@@ -4,7 +4,6 @@ import androidx.core.os.bundleOf
 import com.gigforce.core.NavArgs
 import com.gigforce.core.SimpleDVM
 import com.gigforce.core.datamodels.CommonViewTypes
-import kotlinx.android.parcel.Parcelize
 
 data class FeatureItemCard2DVM(
     val active: Boolean? = false,
@@ -23,11 +22,12 @@ data class FeatureItemCard2DVM(
     val type: String? = null,
     val subicons: List<Long>? = null
 ) :
-    SimpleDVM(CommonViewTypes.VIEW_FEATURE_ITEM_CARD2, navPath){
+    SimpleDVM(CommonViewTypes.VIEW_FEATURE_ITEM_CARD2, navPath) {
     override fun getNavArgs(): NavArgs? {
         navPath?.let {
             return NavArgs(navPath, bundleOf("title" to title))
         }
         return null
     }
-    }
+
+}

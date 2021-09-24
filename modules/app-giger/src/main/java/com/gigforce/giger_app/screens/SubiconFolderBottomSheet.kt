@@ -46,7 +46,7 @@ class SubiconFolderBottomSheet : BottomSheetDialogFragment() {
         initViews()
         observer()
         listener()
-        isCancelable = false
+//        isCancelable = false
 
     }
 
@@ -118,18 +118,18 @@ class SubiconFolderBottomSheet : BottomSheetDialogFragment() {
         var titleLengthFilter = arrayListOf<FeatureItemCard2DVM>()
         titleLengthFilter.addAll(indicatorList)
         var lengthLong = true
-        while (lengthLong){
+        while (lengthLong) {
             var completeTitle = ""
 
-            titleLengthFilter.forEach{
-                completeTitle+=it.title
+            titleLengthFilter.forEach {
+                completeTitle += it.title
             }
-            if(completeTitle.length<35)
+            if (completeTitle.length < 35)
                 lengthLong = false
             else
                 titleLengthFilter.removeAt(0)
         }
-        return titleLengthFilter.size+1
+        return titleLengthFilter.size + 1
 
     }
 
@@ -167,8 +167,8 @@ class SubiconFolderBottomSheet : BottomSheetDialogFragment() {
     private fun observer() {
         viewModel.allIconsLiveData.observeForever {
             try {
-                allIconsList.addAll(getFilteredList(data?.subicons, it))
-                recyclerSubList.addAll(allIconsList)
+                allIconsList.addAll(it)
+                recyclerSubList.addAll(getFilteredList(data?.subicons, it))
                 subiconsrv.collection = recyclerSubList
             } catch (e: Exception) {
             }
