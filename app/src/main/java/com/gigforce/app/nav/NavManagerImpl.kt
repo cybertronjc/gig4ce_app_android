@@ -60,7 +60,7 @@ class NavManagerImpl @Inject constructor(
         this.registerRoute("week_day", R.id.weekDayFragment)
         this.registerRoute("week_end", R.id.weekEndFragment)
         this.registerRoute("location", R.id.locationFragment)
-        this.registerRoute("subiconlistfragment", R.id.iconsubiconfragment)
+        this.registerRoute("subiconfolderBottomSheet", R.id.subiconfolderBottomSheet)
         this.registerForWalletAndPayouts()
         NavForSettingsModule(this)
         NavForAmbassadorModule(this)

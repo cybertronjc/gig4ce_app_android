@@ -85,6 +85,7 @@ enum class StringConstants(val value: String) {
     IMAGE_CROP_URI("IMAGE_CROP_URI"),
     IMAGE_CROPPED_URI("IMAGE_CROPPED_URI"),
     SUBICONS("subicons"),
+    ICON("icon"),
     ALL_FEATURE_ICONS("all_feature_icons")
 
 

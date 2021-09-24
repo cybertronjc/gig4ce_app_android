@@ -4,6 +4,7 @@ import androidx.core.os.bundleOf
 import com.gigforce.core.NavArgs
 import com.gigforce.core.SimpleDVM
 import com.gigforce.core.datamodels.CommonViewTypes
+import kotlinx.android.parcel.Parcelize
 
 data class FeatureItemCard2DVM(
     val active: Boolean? = false,

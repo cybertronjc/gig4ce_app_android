@@ -442,6 +442,11 @@
         android:label="EditHeadlineBottomSheet" />
 
     <dialog
+        android:id="@+id/subiconfolderBottomSheet"
+        android:name="com.gigforce.giger_app.screens.SubiconFolderBottomSheet"
+        android:label="SubiconFolderBottomSheet" />
+
+    <dialog
         android:id="@+id/editTagBottomSheet"
         android:name="com.gigforce.app.modules.profile.EditTagBottomSheet"
         android:label="EditTagBottomSheet" />

@@ -9,13 +9,14 @@ import androidx.core.os.bundleOf
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.viewdatamodels.FeatureItemCard2DVM
 import com.gigforce.core.IViewHolder
-import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.StringConstants
+import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.feature_item_card2.view.*
 import javax.inject.Inject
@@ -31,32 +32,37 @@ class FeatureItemCard2Component(context: Context, attrs: AttributeSet?) :
         LayoutInflater.from(context).inflate(R.layout.feature_item_card2, this, true)
     }
 
-    @Inject lateinit var navigation:INavigation
-    @Inject lateinit var buildConfig : IBuildConfig
-    @Inject lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
-    fun setImageFromUrl(url:String){
+    @Inject
+    lateinit var navigation: INavigation
+
+    @Inject
+    lateinit var buildConfig: IBuildConfig
+
+    @Inject
+    lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
+    fun setImageFromUrl(url: String) {
         GlideApp.with(context)
             .load(url)
             .into(feature_icon)
     }
 
-    fun setImageFromUrl(storageReference: StorageReference){
+    fun setImageFromUrl(storageReference: StorageReference) {
         GlideApp.with(context)
             .load(storageReference)
             .into(feature_icon)
     }
 
-    fun setImage(data:FeatureItemCard2DVM){
+    fun setImage(data: FeatureItemCard2DVM) {
         data.imageUrl?.let {
             setImageFromUrl(it)
             return
         }
 
-        data.imageRes ?. let {
+        data.imageRes?.let {
             feature_icon.setImageResource(data.imageRes)
         }
 
-        data.icon ?. let{
+        data.icon?.let {
             val firebaseStoragePath = "${buildConfig.getFeaturesIconLocationUrl()}${data.icon}.png"
             val gsReference = FirebaseStorage.getInstance().getReferenceFromUrl(firebaseStoragePath)
             setImageFromUrl(gsReference)
@@ -70,37 +76,36 @@ class FeatureItemCard2Component(context: Context, attrs: AttributeSet?) :
         if (data is FeatureItemCard2DVM) {
             if (sharedPreAndCommonUtilInterface.getAppLanguageCode() == "hi") {
                 feature_title.text = data.hi?.title ?: data.title
-            }else
-            feature_title.text = data.title
+            } else
+                feature_title.text = data.title
 
-            data.subicons?.let {
-                this.setOnClickListener { _ ->
+            setImage(data)
+
+            this.setOnClickListener {
+                data.subicons?.let {
                     if (it.isNotEmpty()) {
                         navigation.navigateTo(
-                            "subiconlistfragment",
-                            bundleOf(StringConstants.SUBICONS.value to it, "title" to feature_title.text.toString())
+                            "subiconfolderBottomSheet",
+                            bundleOf(
+                                StringConstants.ICON.value to Gson().toJson(data)
+                            )
                         )
                     } else {
                         navigate(data)
                     }
+
+                } ?: run {
+                    navigate(data)
                 }
-
-            } ?: run {
-                navigate(data)
             }
-
-            setImage(data)
-
         }
-
     }
 
     private fun navigate(data: FeatureItemCard2DVM) {
         data.getNavArgs()?.let {
-            this.setOnClickListener { _ ->
-                it.args?.let { it.putString("title", feature_title.text.toString()) }
-                navigation.navigateTo(it.navPath, it.args)
-            }
+            it.args?.let { it.putString("title", feature_title.text.toString()) }
+            navigation.navigateTo(it.navPath, it.args)
         }
     }
+
 }
