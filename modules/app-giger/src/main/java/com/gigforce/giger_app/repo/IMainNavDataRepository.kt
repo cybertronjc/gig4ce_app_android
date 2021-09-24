@@ -94,11 +94,15 @@ class MainNavDataRepository @Inject constructor(
                     val active = item.get("active") as? Boolean ?: true
                     val type = item.get("type") as? String ?: ""
                     val subicons = item.get("subicons") as? List<Long> ?: null
-                    var hi : HindiTranslationMapping? = null
+                    var hi: HindiTranslationMapping? = null
                     item.get("hi")?.let {
                         try {
-                            hi = Gson().fromJson(JSONObject(it as? Map<*, *>).toString(),HindiTranslationMapping::class.java)
-                        }catch (e: Exception){}
+                            hi = Gson().fromJson(
+                                JSONObject(it as? Map<*, *>).toString(),
+                                HindiTranslationMapping::class.java
+                            )
+                        } catch (e: Exception) {
+                        }
                     }
                     mainNavData.add(
                         FeatureItemCard2DVM(
@@ -118,7 +122,8 @@ class MainNavDataRepository @Inject constructor(
 
             }
             val tempMainNavData =
-                mainNavData.filter { it.active == true } as ArrayList<FeatureItemCard2DVM>
+                mainNavData.filter { it.active == true }
+                    .filter { (it.type != "folder" && it.type != "sub_folder") || !it.subicons.isNullOrEmpty() } as ArrayList<FeatureItemCard2DVM>
             tempMainNavData.sortBy { it.index }
             mainNavData.clear()
             mainNavData.addAll(tempMainNavData)

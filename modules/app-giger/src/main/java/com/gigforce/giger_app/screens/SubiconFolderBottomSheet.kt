@@ -86,11 +86,13 @@ class SubiconFolderBottomSheet : BottomSheetDialogFragment() {
     private fun setIndicatorData() {
         indicator.removeAllViews()
 
+        var indexTill = getIndexForIndicator()
+
         indicatorList.forEachIndexed { index, featureItemCard2DVM ->
-            if (index <= indicatorList.size - 1 && index >= indicatorList.size - 3) {
+            if (index <= indicatorList.size - 1 && index >= indicatorList.size - indexTill) {
 
                 var textView = TextView(context)
-                if (index == indicatorList.size - 3) {
+                if (index == indicatorList.size - indexTill) {
                     textView.text = "..."
                 } else {
                     var title = featureItemCard2DVM.title
@@ -110,6 +112,25 @@ class SubiconFolderBottomSheet : BottomSheetDialogFragment() {
             null,
             Typeface.BOLD
         )
+    }
+
+    private fun getIndexForIndicator(): Int {
+        var titleLengthFilter = arrayListOf<FeatureItemCard2DVM>()
+        titleLengthFilter.addAll(indicatorList)
+        var lengthLong = true
+        while (lengthLong){
+            var completeTitle = ""
+
+            titleLengthFilter.forEach{
+                completeTitle+=it.title
+            }
+            if(completeTitle.length<35)
+                lengthLong = false
+            else
+                titleLengthFilter.removeAt(0)
+        }
+        return titleLengthFilter.size
+
     }
 
     private fun directSwitchToFolder(index: Int) {

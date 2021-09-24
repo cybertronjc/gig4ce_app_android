@@ -7,10 +7,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.gigforce.common_ui.viewdatamodels.FeatureItemCard2DVM
 import com.gigforce.common_ui.viewdatamodels.HindiTranslationMapping
-import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.retrofit.RetrofitFactory
-import com.gigforce.giger_app.R
 import com.gigforce.giger_app.service.APPRenderingService
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -96,11 +94,15 @@ class FeatureIconsDataRepository @Inject constructor(
                     val active = item.get("active") as? Boolean ?: true
                     val type = item.get("type") as? String ?: ""
                     val subicons = item.get("subicons") as? List<Long> ?: null
-                    var hi : HindiTranslationMapping? = null
+                    var hi: HindiTranslationMapping? = null
                     item.get("hi")?.let {
                         try {
-                            hi = Gson().fromJson(JSONObject(it as? Map<*, *>).toString(),HindiTranslationMapping::class.java)
-                        }catch (e: Exception){}
+                            hi = Gson().fromJson(
+                                JSONObject(it as? Map<*, *>).toString(),
+                                HindiTranslationMapping::class.java
+                            )
+                        } catch (e: Exception) {
+                        }
                     }
                     mainNavData.add(
                         FeatureItemCard2DVM(
@@ -120,7 +122,8 @@ class FeatureIconsDataRepository @Inject constructor(
 
             }
             val tempMainNavData =
-                mainNavData.filter { it.active == true } as ArrayList<FeatureItemCard2DVM>
+                mainNavData.filter { it.active == true }
+                    .filter { (it.type != "folder" && it.type != "sub_folder") || !it.subicons.isNullOrEmpty() } as ArrayList<FeatureItemCard2DVM>
             tempMainNavData.sortBy { it.index }
             mainNavData.clear()
             mainNavData.addAll(tempMainNavData)
@@ -160,7 +163,7 @@ class FeatureIconsDataRepository @Inject constructor(
         try {
             val pInfo: PackageInfo =
                 context.packageManager.getPackageInfo(
-                    context.getPackageName(),
+                    context.packageName,
                     0
                 )
 
