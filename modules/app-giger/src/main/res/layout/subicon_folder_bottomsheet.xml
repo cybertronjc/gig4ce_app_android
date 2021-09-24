@@ -14,18 +14,16 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="@dimen/dp_sm1"
         android:background="@color/grey"/>
-
-    <TextView
+    <LinearLayout
         android:id="@+id/indicator"
-        android:layout_width="150dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ellipsize="start"
-        android:layout_marginTop="@dimen/dp_xsm1"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/dp_sm1"
         android:layout_marginLeft="@dimen/dp_sm1"
-        android:layout_marginRight="@dimen/dp_sm1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view"
-        android:singleLine="true"/>
+        app:layout_constraintTop_toBottomOf="@+id/view"/>
+
 
     <com.gigforce.core.recyclerView.CoreRecyclerView
         android:id="@+id/subiconsrv"

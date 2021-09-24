@@ -2,6 +2,7 @@ package com.gigforce.giger_app.screens
 
 import android.app.Dialog
 import android.content.DialogInterface
+import android.graphics.Typeface
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -83,21 +84,53 @@ class SubiconFolderBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun setIndicatorData() {
-        var stringIndicator = arrayListOf<String>()
-        indicatorList.forEach {
-            stringIndicator.add(it.title)
+        indicator.removeAllViews()
+
+        indicatorList.forEachIndexed { index, featureItemCard2DVM ->
+            if (index <= indicatorList.size - 1 && index >= indicatorList.size - 3) {
+
+                var textView = TextView(context)
+                if (index == indicatorList.size - 3) {
+                    textView.text = "..."
+                } else {
+                    var title = featureItemCard2DVM.title
+                    if (index > 0)
+                        title = " > $title"
+                    textView.text = title
+                }
+
+
+                textView.setOnClickListener {
+                    directSwitchToFolder(index)
+                }
+                indicator.addView(textView)
+            }
         }
-        indicator.text = stringIndicator.joinToString(">")
+        (indicator.getChildAt(indicator.childCount - 1) as TextView).setTypeface(
+            null,
+            Typeface.BOLD
+        )
     }
 
-    private fun backSetIndicator() {
-        var stringIndicator = arrayListOf<String>()
-        indicatorList.removeAt(indicatorList.size - 1)
-        indicatorList.forEach {
-            stringIndicator.add(it.title)
+    private fun directSwitchToFolder(index: Int) {
+        if (index <= indicatorList.size - 1) {
+            if (index == 0) {
+                var tempList = indicatorList[0]
+                indicatorList.clear()
+                indicatorList.add(tempList)
+            } else {
+                var tempList = indicatorList.subList(0, index)
+                indicatorList.clear()
+                indicatorList.addAll(tempList)
+            }
+
+
+            indicatorList[indicatorList.size - 1].subicons?.let {
+                refreshScreen(it)
+            }
         }
-        indicator.text = stringIndicator.joinToString(">")
     }
+
 
     var indicatorList = arrayListOf<FeatureItemCard2DVM>()
     private fun initViews() {
@@ -151,10 +184,16 @@ class SubiconFolderBottomSheet : BottomSheetDialogFragment() {
 
     private fun getDataFromIntent(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
-            data = Gson().fromJson(it.getString(StringConstants.ICON.value), FeatureItemCard2DVM::class.java)
+            data = Gson().fromJson(
+                it.getString(StringConstants.ICON.value),
+                FeatureItemCard2DVM::class.java
+            )
         } ?: run {
             arguments?.let {
-                data = Gson().fromJson(it.getString(StringConstants.ICON.value), FeatureItemCard2DVM::class.java)
+                data = Gson().fromJson(
+                    it.getString(StringConstants.ICON.value),
+                    FeatureItemCard2DVM::class.java
+                )
             }
         }
     }
