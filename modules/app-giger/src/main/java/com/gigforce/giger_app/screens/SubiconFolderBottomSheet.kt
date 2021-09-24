@@ -140,7 +140,7 @@ class SubiconFolderBottomSheet : BottomSheetDialogFragment() {
                 indicatorList.clear()
                 indicatorList.add(tempList)
             } else {
-                var tempList = indicatorList.subList(0, index)
+                var tempList = indicatorList.subList(0, index+1).toMutableList()
                 indicatorList.clear()
                 indicatorList.addAll(tempList)
             }
@@ -166,7 +166,9 @@ class SubiconFolderBottomSheet : BottomSheetDialogFragment() {
     var recyclerSubList = arrayListOf<FeatureItemCard2DVM>()
     private fun observer() {
         viewModel.allIconsLiveData.observeForever {
+            if(it != null)
             try {
+                allIconsList.clear()
                 allIconsList.addAll(it)
                 recyclerSubList.addAll(getFilteredList(data?.subicons, it))
                 subiconsrv.collection = recyclerSubList
