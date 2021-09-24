@@ -17,15 +17,15 @@
 
     <TextView
         android:id="@+id/indicator"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:ellipsize="start"
         android:layout_marginTop="@dimen/dp_xsm1"
         android:layout_marginLeft="@dimen/dp_sm1"
+        android:layout_marginRight="@dimen/dp_sm1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view"
-        android:singleLine="true"
-        android:maxLength="25"/>
+        android:singleLine="true"/>
 
     <com.gigforce.core.recyclerView.CoreRecyclerView
         android:id="@+id/subiconsrv"
