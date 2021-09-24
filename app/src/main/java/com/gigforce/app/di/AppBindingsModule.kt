@@ -2,6 +2,7 @@ package com.gigforce.app.di
 
 import com.gigforce.app.di.implementations.*
 import com.gigforce.app.nav.NavManagerImpl
+import com.gigforce.client_activation.client_activation.repository.AadhaarDetailsRepository
 import com.gigforce.client_activation.repo.ClientActivationDataRepository
 import com.gigforce.client_activation.repo.IClientActivationDataRepository
 import com.gigforce.common_ui.AppDialogsInterface
@@ -15,6 +16,7 @@ import com.gigforce.core.IEventTracker
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.di.interfaces.INavHost
+import com.gigforce.core.di.repo.IAadhaarDetailsRepository
 import com.gigforce.core.di.repo.IProfileFirestoreRepository
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.giger_app.repo.*
@@ -85,6 +87,9 @@ interface ViewModelBindings {
 
     @Binds
     fun provideViewModelEventTracker(imp: EventTrackerImp): IEventTracker
+
+    @Binds
+    fun provideAadhaarDetailsRepository(imp : AadhaarDetailsRepository) : IAadhaarDetailsRepository
 }
 
 

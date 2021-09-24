@@ -10,11 +10,14 @@ import android.view.ViewGroup
 import android.widget.AbsListView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.common_ui.ext.showToast
+import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.Lce
 import com.gigforce.giger_gigs.LoginSummaryConstants
@@ -29,7 +32,11 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
+class TeamLeaderLoginDetailsFragment : BaseFragment2<TeamLeaderLoginDetailsFragmentBinding>(
+    fragmentName = "TeamLeaderLoginDetailsFragment",
+    layoutId = R.layout.team_leader_login_details_fragment,
+    statusBarColor = R.color.white
+), OnTlItemSelectedListener {
 
     companion object {
         fun newInstance() = TeamLeaderLoginDetailsFragment()
@@ -38,14 +45,16 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
     @Inject
     lateinit var navigation: INavigation
 
-    private lateinit var viewModel: TeamLeaderLoginDetailsViewModel
-    private lateinit var viewBinding: TeamLeaderLoginDetailsFragmentBinding
+    private val viewModel: TeamLeaderLoginDetailsViewModel by viewModels()
+    private val loginSummarySharedViewModel : LoginSummarySharedViewModel by activityViewModels()
 
     val PAGE_START = 1
     var currentPage = PAGE_START
     var isLoading = false
     var isLastPage = false
     var scrollingAdded = false
+    lateinit var layoutManager : LinearLayoutManager
+    var tlListing = ArrayList<ListingTLModel>()
 
     private val tlLoginSummaryAdapter: TLLoginSummaryAdapter by lazy {
         TLLoginSummaryAdapter(requireContext(),this).apply {
@@ -53,81 +62,19 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+    override fun viewCreated(
+        viewBinding: TeamLeaderLoginDetailsFragmentBinding,
         savedInstanceState: Bundle?
-    ): View? {
-        viewBinding = TeamLeaderLoginDetailsFragmentBinding.inflate(inflater, container, false)
-        return viewBinding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this).get(TeamLeaderLoginDetailsViewModel::class.java)
+    ) {
 
         //checkForAddUpdate()
         initToolbar()
         initializeViews()
         observer()
+        initSharedViewModel()
         listeners()
     }
 
-//    private fun checkForAddUpdate() {
-//        var navFragmentsData = activity as NavFragmentsData
-//        if (navFragmentsData?.getData() != null) {
-//            if (navFragmentsData?.getData()
-//                    ?.getBoolean(LoginSummaryConstants.CAME_BACK_FROM_ADD, false) == true
-//            ) {
-//                didCamebackfromAdd = false
-//                navFragmentsData?.setData(bundleOf())
-//            }
-//        }
-//    }
-
-    private val INTERVAL_TIME: Long = 1000 * 5
-    private val SWIPE_INTERVAL_TIME: Long = 1000 * 1
-
-    var hadler = Handler()
-    var swipeToRefreshHandler = Handler()
-    var runnable : Runnable? = null
-    fun refreshListHandler() {
-        runnable = Runnable{
-            try {
-                if (!onpaused && swipeToRefresh) {
-                    initializeViews()
-                }
-                refreshListHandler()
-            } catch (e: Exception) {
-
-            }
-
-        }
-        hadler.postDelayed(runnable, INTERVAL_TIME)
-
-    }
-
-    fun stopSwipeToRefresh()
-    {
-        swipeToRefreshHandler.postDelayed({
-            viewBinding.swipeRefresh?.isRefreshing = false
-        },SWIPE_INTERVAL_TIME)
-    }
-
-    var onpaused = false
-    override fun onPause() {
-        super.onPause()
-        onpaused = true
-        runnable?.let {
-            hadler.removeCallbacks(runnable)
-        }
-
-    }
-
-    override fun onResume() {
-        super.onResume()
-        onpaused = false
-        refreshListHandler()
-    }
 
     private fun initToolbar() = viewBinding.apply {
         appBarComp.apply {
@@ -142,6 +89,10 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
         //loadFirstPage
         currentPage = 1
         isLoading = false
+        tlListing.clear()
+
+        tlLoginSummaryAdapter.submitList(emptyList())
+        tlLoginSummaryAdapter.notifyDataSetChanged()
         viewModel.getListingForTL(1)
     }
 
@@ -149,9 +100,7 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
     private fun listeners() = viewBinding.apply {
 
         swipeRefresh.setOnRefreshListener {
-            swipeToRefresh = true
-            stopSwipeToRefresh()
-
+            clearExistingListAndRefreshData()
         }
 
         addNew.setOnClickListener {
@@ -162,19 +111,55 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
             )
         }
 
+        initializeRecyclerView()
+
+    }
+
+    private fun clearExistingListAndRefreshData() {
+        currentPage = 1
+
+        tlListing.clear()
+        tlLoginSummaryAdapter.submitList(emptyList())
+        tlLoginSummaryAdapter.notifyDataSetChanged()
+
+        viewModel.getListingForTL(currentPage)
+    }
+
+    private fun initializeRecyclerView() = viewBinding.apply{
+        layoutManager = LinearLayoutManager(
+            activity?.applicationContext,
+            LinearLayoutManager.VERTICAL,
+            false
+        )
+
+        datecityRv.layoutManager = layoutManager
+        datecityRv.adapter = tlLoginSummaryAdapter
+    }
+
+    private fun initSharedViewModel() {
+        loginSummarySharedViewModel.loginSummarySharedEvents
+            .observe(viewLifecycleOwner,{
+                if(!isAdded) return@observe
+                clearExistingListAndRefreshData()
+            })
+
     }
 
     private fun observer() = viewBinding.apply {
+
         viewModel.loginListing.observe(viewLifecycleOwner, Observer {
             val res = it ?: return@Observer
             when (res) {
                 Lce.Loading -> {
-                    progressBar.visibility = View.VISIBLE
+                    if(tlLoginSummaryAdapter.itemCount == 0){
+                        progressBar.visibility = View.VISIBLE
+                    }
                 }
 
                 is Lce.Content -> {
                     progressBar.visibility = View.GONE
                     progressBarBottom.visibility = View.GONE
+                    swipeRefresh.isRefreshing = false
                     setupReyclerView(res.content)
                 }
 
@@ -186,26 +171,27 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
         })
     }
 
-    var swipeToRefresh = true
-
     private fun setupReyclerView(res: List<ListingTLModel>)  = viewBinding.apply{
-
-        if (res.isEmpty()) {
+        tlListing.addAll(res)
+        if (tlListing.isEmpty()) {
             noData.visibility = View.VISIBLE
             datecityRv.visibility = View.GONE
         } else {
             noData.visibility = View.GONE
             datecityRv.visibility = View.VISIBLE
         }
-        val layoutManager = LinearLayoutManager(context)
-        datecityRv.layoutManager = layoutManager
+
         if (currentPage == 1){
             Log.d("pag", "zero $currentPage, list : ${res.size}")
-            tlLoginSummaryAdapter.submitList(res)
+            tlLoginSummaryAdapter.submitList(tlListing)
+            tlLoginSummaryAdapter.notifyDataSetChanged()
         }else {
             Log.d("pag", "nonzero $currentPage, list : ${res.size}" )
-            tlLoginSummaryAdapter.updateList(res)
-            tlLoginSummaryAdapter.notifyDataSetChanged()
+            //tlLoginSummaryAdapter.updateList(res)
+            val itemCount = tlLoginSummaryAdapter.itemCount
+            tlLoginSummaryAdapter.submitList(tlListing)
+            //tlLoginSummaryAdapter.notifyDataSetChanged()
+            tlLoginSummaryAdapter.notifyItemChanged(itemCount + 1)
             if (layoutManager.findLastVisibleItemPosition() >= 6 && layoutManager.findFirstVisibleItemPosition()<=6){
                 scrollingAdded = false
             }
@@ -213,9 +199,8 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
             //datecityRv.smoothScrollToPosition(tlLoginSummaryAdapter.itemCount/2)
 
         }
-        datecityRv.adapter = tlLoginSummaryAdapter
-        val totalPages = res.get(0).totalPages
 
+        //val totalPages = tlListing.get(0).totalPages
 
         datecityRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -233,16 +218,17 @@ class TeamLeaderLoginDetailsFragment : Fragment(), OnTlItemSelectedListener {
 
                 val currentItemsLatest = layoutManager.childCount
                 val totalItemsLatest = layoutManager.itemCount
+                val lastVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
 
 
                 //Log.d("Scrolled", " isLoading: ${isLoading} , currentItemsLatest : $currentItemsLatest, lastVisibleItemPosition: $lastVisibleItemPosition, totalItemsLatest: $totalItemsLatest ")
                 //if (isLoading && (currentItemsLatest + lastVisibleItemPosition == totalItemsLatest) && (totalItemsLatest <= tlLoginSummaryAdapter.itemCount)   ) {
-                if ((currentPage < totalPages) && isLoading ){
+                //if ((currentPage < totalPages) && isLoading ){
+                if (isLoading && (currentItemsLatest + lastVisibleItemPosition == totalItemsLatest) && (totalItemsLatest <= tlListing.size) ){
                     //load next page
                     currentPage += 1
                     isLoading = false
                     scrollingAdded = true
-                    swipeToRefresh = false
                     progressBarBottom.visibility = View.VISIBLE
                     viewModel.getListingForTL(currentPage)
 

@@ -4,7 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gigforce.common_ui.viewdatamodels.client_activation.JobProfile
+import com.gigforce.common_ui.repository.ProfileFirebaseRepository
+import com.gigforce.core.datamodels.profile.Reference
 import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.lead_management.repositories.LeadManagementRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,7 +15,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ReferenceCheckViewModel @Inject constructor(
     private val leadManagementRepository: LeadManagementRepository,
-    private val logger: GigforceLogger
+    private val logger: GigforceLogger,
+    private val profileFirebaseRepository: ProfileFirebaseRepository
 ) : ViewModel() {
 
     companion object {
@@ -24,14 +26,71 @@ class ReferenceCheckViewModel @Inject constructor(
     private val _viewState: MutableLiveData<ReferenceCheckViewState> = MutableLiveData()
     val viewState: LiveData<ReferenceCheckViewState> = _viewState
 
-    fun saveReference(
-        userUid : String,
-        name: String,
-        relation: String,
-        contactNo: String
-    ) = viewModelScope.launch {
+    //Data
+    private var userReferenceCheckData: Reference? = null
 
-        JobProfile
+    fun fetchPreviousReferenceCheckData(
+        userUid: String
+    ) = viewModelScope.launch {
+        if (userReferenceCheckData != null) {
+
+            logger.d(TAG, "cached reference data found")
+            _viewState.value = ReferenceCheckViewState.PreviousReferenceDataFetched(
+                referenceData = userReferenceCheckData!!
+            )
+            return@launch
+        }
+
+        _viewState.value = ReferenceCheckViewState.FetchingReferenceDataFromProfile
+        try {
+            logger.d(TAG, "fetching reference data for user , ${userUid}......")
+
+            userReferenceCheckData = profileFirebaseRepository.getProfileData(
+                userId = userUid
+            ).reference ?: Reference()
+
+            _viewState.value = ReferenceCheckViewState.PreviousReferenceDataFetched(
+                referenceData = userReferenceCheckData ?: Reference()
+            )
+            logger.d(TAG, "[Success] fetched reference data")
+        } catch (e: Exception) {
+            userReferenceCheckData = Reference()
+            _viewState.value = ReferenceCheckViewState.ErrorWhileFetchingPreviousReferenceData(
+                error = "Error while fetching previous reference data"
+            )
+
+            logger.e(TAG, "[Failure] fetching users refernce data", e)
+        }
+    }
+
+    fun handleEvent(
+        referenceCheckEvent: ReferenceCheckEvent
+    ) = when (referenceCheckEvent){
+        is ReferenceCheckEvent.ContactNoChanged -> {
+            userReferenceCheckData?.contactNo = referenceCheckEvent.contactNo
+        }
+        is ReferenceCheckEvent.NameChanged -> {
+            userReferenceCheckData?.name = referenceCheckEvent.name
+        }
+        is ReferenceCheckEvent.RelationChanged -> {
+            userReferenceCheckData?.relation = referenceCheckEvent.relation
+        }
+        is ReferenceCheckEvent.SubmitButtonPressed -> {
+            saveReference(
+                referenceCheckEvent.userUid,
+                referenceCheckEvent.name,
+                referenceCheckEvent.relation,
+                referenceCheckEvent.contactNo
+            )
+        }
+    }
+
+    fun saveReference(
+        userUid: String,
+        name : String,
+        relation: String,
+        contactNo : String
+    ) = viewModelScope.launch {
 
         if (checkIfDataValid(
                 name,
@@ -61,7 +120,7 @@ class ReferenceCheckViewModel @Inject constructor(
                 userUid = userUid,
                 name = name,
                 relation = relation,
-                contactNo = contactNo,
+                contactNo = contactNo
             )
             logger.d(
                 tag = TAG,

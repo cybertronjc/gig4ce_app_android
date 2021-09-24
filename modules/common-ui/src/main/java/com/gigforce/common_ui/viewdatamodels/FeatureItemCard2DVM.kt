@@ -7,7 +7,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 class FeatureItemCard2DVM(
-    val active: Boolean? = true,
+    val active: Boolean? = false,
     val borderCorner: Int? = 0,
     val borderShadowRadius: Int? = 0,
     val borderWidth: Int? = 0,

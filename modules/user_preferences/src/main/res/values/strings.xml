@@ -26,7 +26,7 @@
     <string name="sign_out_pref">Sign out</string>
     <string name="area_pref">Area</string>
     <string name="permanent_address_pref">Permanent Address</string>
-    <string name="address_proof_smalls_pref">Adhaar Card</string>
+    <string name="address_proof_smalls_pref">Aadhaar Card</string>
     <string name="document_under_verification_pref">Document Under Verification</string>
     <string name="cancel_pref">CANCEL</string>
     <string name="save_pref">SAVE</string>
@@ -99,7 +99,7 @@
     <string name="no_pref">No</string>
     <string name="language_pref">Language</string>
     <string name="kannada_pref">ಕನ್ನಡ</string>
-    <string name="adhaar_card__pref">Adhaar Card</string>
+    <string name="adhaar_card__pref">Aadhaar Card</string>
     <string name="document_under_verification__pref">Document Under Verification</string>
     <string name="settings_pref">Settings</string>
     <string name="preferences_pref">PREFERENCES</string>

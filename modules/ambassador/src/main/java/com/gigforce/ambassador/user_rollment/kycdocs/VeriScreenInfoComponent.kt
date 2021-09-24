@@ -159,7 +159,10 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
     fun setDocumentImage(position: Int, uri: Uri) {
         adapter.updateData(position, uri)
     }
-
+    fun whyweneeditInvisible(){
+        whyweneedit.gone()
+        iconwhyweneed.gone()
+    }
 
     fun uploadStatusLayout(status: Int, title: String, subTitle: String) {
         statusDialogLayout.visible()

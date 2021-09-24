@@ -1,7 +1,10 @@
 package com.gigforce.common_image_picker.image_capture_camerax
 
+
+import android.graphics.*
 import android.net.Uri
-import androidx.core.net.toUri
+import android.os.Environment
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,7 +15,7 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
-import java.io.File
+import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.coroutines.resume
@@ -54,6 +57,7 @@ class CaptureImageSharedViewModel : ViewModel() {
     val captureImageSharedViewModelState: LiveData<CaptureImageSharedViewState> =
         _captureImageSharedViewModelState
 
+
     fun imageCapturedOpenImageViewer(
         output: File,
         orientation: Int,
@@ -87,11 +91,54 @@ class CaptureImageSharedViewModel : ViewModel() {
 
             _captureImageSharedViewModelState.value = CaptureImageSharedViewState.ImageUploading(0)
             try {
-                uploadPathInFirebaseStorage =  uploadImageInFirebase(
-                    parentDirectoryNameInFirebaseStorage!!,
-                    "Image",
-                    file
-                )
+                val filePath = file.absolutePath
+                Log.d("path", "path: $filePath")
+                val bmOptions = BitmapFactory.Options()
+                val bitmap = BitmapFactory.decodeFile(filePath, bmOptions)
+                val baos = ByteArrayOutputStream()
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 75, baos)
+
+                val actualWidth: Int = bitmap.getWidth()
+                val actualHeight: Int = bitmap.getHeight()
+                //      max Height and width values of the compressed image is taken as 816x612
+                val maxHeight = 720.0f
+                val maxWidth = 720.0f
+                var outputWidth: Int = 512
+                var outputHeight: Int = 512
+                var imgRatio = (actualWidth / actualHeight).toFloat()
+                val maxRatio = maxWidth / maxHeight
+
+                //      width and height values are set maintaining the aspect ratio of the image
+                if (actualHeight > maxHeight || actualWidth > maxWidth) {
+                    if (imgRatio < maxRatio) {
+                        imgRatio = maxHeight / actualHeight
+                        outputWidth = (imgRatio * actualWidth).toInt()
+                        outputHeight = maxHeight.toInt()
+                    } else if (imgRatio > maxRatio) {
+                        imgRatio = maxWidth / actualWidth
+                        outputHeight = (imgRatio * actualHeight).toInt()
+                        outputWidth = maxWidth.toInt()
+                    } else {
+                        outputHeight = maxHeight.toInt()
+                        outputWidth = maxWidth.toInt()
+                    }
+                }
+                val originalBitmapCount = bitmap.allocationByteCount
+                Log.d("count", "original $originalBitmapCount")
+
+                var resizedBitmap = Bitmap.createScaledBitmap(bitmap, outputWidth, outputHeight, false)
+//      check the rotation of the image and display it properly
+                val resizedBitmapCount = resizedBitmap.allocationByteCount
+                Log.d("count", "original $resizedBitmapCount")
+
+                uploadPathInFirebaseStorage = bitmapToFile(resizedBitmap, "temp.jpg")?.let {
+                    uploadImageInFirebase(
+                        parentDirectoryNameInFirebaseStorage!!,
+                        "Image",
+                        it
+                    )
+                }
+
             } catch (e: Exception) {
                 _captureImageSharedViewModelState.value = CaptureImageSharedViewState.ImageUploadFailed(
                     error = e.message ?: ""
@@ -105,6 +152,37 @@ class CaptureImageSharedViewModel : ViewModel() {
         )
     }
 
+
+    fun bitmapToFile(
+        bitmap: Bitmap,
+        fileNameToSave: String
+    ): File? { // File name like "image.png"
+        //create a file to write bitmap data
+        var file: File? = null
+        return try {
+            file = File(
+                Environment.getExternalStorageDirectory()
+                    .toString() + File.separator + fileNameToSave
+            )
+            file!!.createNewFile()
+
+            //Convert bitmap to byte array
+            val bos = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.PNG, 75, bos) // YOU can also save it in JPEG
+            val bitmapdata = bos.toByteArray()
+
+            //write the bytes in file
+            val fos = FileOutputStream(file)
+            fos.write(bitmapdata)
+            fos.flush()
+            fos.close()
+            file
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+            file // it will return null
+        }
+    }
+
     private suspend fun uploadImageInFirebase(
         parentDirName: String,
         imageName: String,
@@ -116,8 +194,12 @@ class CaptureImageSharedViewModel : ViewModel() {
             .child(selfieImg)
 
 
+//        val upload = mReference.putBytes(file).addOnProgressListener {
+//            val progress = (100.0 * it.bytesTransferred) / it.totalByteCount
+//            _captureImageSharedViewModelState.value = CaptureImageSharedViewState.ImageUploading(progress.toInt())
+//        }
         val uploadResult = mReference.putFileOrThrow(
-            file.toUri()
+            Uri.fromFile(file)
         ) { progressSnapShot ->
             val progress = (100.0 * progressSnapShot.bytesTransferred) / progressSnapShot.totalByteCount
             _captureImageSharedViewModelState.value = CaptureImageSharedViewState.ImageUploading(progress.toInt())

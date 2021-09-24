@@ -364,10 +364,9 @@ class DrivingLicenseFragment : Fragment(),
             showWhyWeNeedThisDialog()
         }
         viewBinding.appBarDl.apply {
-            setBackButtonListener(View.OnClickListener {
-//                navigation.popBackStack()
+            setBackButtonListener{
                 activity?.onBackPressed()
-            })
+            }
         }
     }
 
