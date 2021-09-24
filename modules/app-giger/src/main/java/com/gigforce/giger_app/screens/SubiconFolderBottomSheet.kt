@@ -129,7 +129,7 @@ class SubiconFolderBottomSheet : BottomSheetDialogFragment() {
             else
                 titleLengthFilter.removeAt(0)
         }
-        return titleLengthFilter.size
+        return titleLengthFilter.size+1
 
     }
 
