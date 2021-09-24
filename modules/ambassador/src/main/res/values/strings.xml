@@ -365,6 +365,8 @@
     <string name="next_amb">Next</string>
     <string name="invite_link_amb">Invite link will be shared via SMS on registered number.</string>
     <string name="edit_propercase">Edit</string>
+    <string name="upload_pan_image_first_amb">Upload PAN card image first</string>
+    <string name="upload_dl_front_first_amb">Upload DL front image first</string>
 
 
     <string name="aadhar_card_number_amb">AADHAAR Card Number</string>

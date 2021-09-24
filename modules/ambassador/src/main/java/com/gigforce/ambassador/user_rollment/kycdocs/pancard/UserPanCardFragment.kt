@@ -315,6 +315,14 @@ class PanCardFragment : Fragment(),
                 }
                 val panCardNo =
                     viewBinding.panTil.editText?.text.toString().toUpperCase(Locale.getDefault())
+                if (clickedImagePath == null || clickedImagePath.toString().isBlank()) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert_amb))
+                        .setMessage(getString(R.string.upload_pan_image_first_amb))
+                        .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
+                        .show()
+                    return@setOnClickListener
+                }
                 if (!VerificationValidations.isPanCardValid(panCardNo)) {
 
                     MaterialAlertDialogBuilder(requireContext())
@@ -374,6 +382,7 @@ class PanCardFragment : Fragment(),
                         imageUploaded = true
                     )
                 )
+                clickedImagePath = Uri.parse(it)
             }
 
         }
