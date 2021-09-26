@@ -73,11 +73,16 @@ class DocViewerActivity : BaseActivity() {
         val scope = CoroutineScope(Job() + Dispatchers.Main)
         scope.launch {
             var url = bundle?.getString("apiUrl")
+            var source = bundle?.getString("source")?:"bottom_sheet"
+            val bannerName = bundle?.getString("bannerName")?:"bottom_sheet_banner"
+            val id = bundle?.getString("id")?:""
             url?.let {
                 accessLogResponse = bannerCardRepo.createLogs(
                     it,
                     FirebaseAuth.getInstance().currentUser?.uid!!,
-                    "home"
+                    source,
+                    bannerName,
+                    id
                 )
             }
         }
