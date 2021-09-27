@@ -15,11 +15,10 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.request.RequestOptions
 import com.gigforce.common_ui.viewmodels.userpreferences.SharedPreferenceViewModel
-import com.gigforce.core.analytics.AuthEvents
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.TrackingEventArgs
+import com.gigforce.core.analytics.AuthEvents
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
-import com.gigforce.core.datamodels.login.LoginResponse
 import com.gigforce.core.extensions.setDarkStatusBarTheme
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.GlideApp
@@ -30,9 +29,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.preferences_fragment.*
-import java.util.*
 import javax.inject.Inject
-import kotlin.collections.ArrayList
 
 
 @AndroidEntryPoint
@@ -49,13 +46,16 @@ class PreferencesFragment : Fragment() {
 
     @Inject
     lateinit var eventTracker: IEventTracker
+
     @Inject
     lateinit var navigation: INavigation
+
     @Inject
     lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
 
     private lateinit var viewModel: SharedPreferenceViewModel
-//    lateinit var recyclerGenericAdapter: RecyclerGenericAdapter<PreferencesScreenItem>
+
+    //    lateinit var recyclerGenericAdapter: RecyclerGenericAdapter<PreferencesScreenItem>
     val arrPrefrancesList: ArrayList<PreferencesScreenItem> = ArrayList<PreferencesScreenItem>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -72,10 +72,22 @@ class PreferencesFragment : Fragment() {
 //            SharedPreferenceViewModel::class.java
 //        )
         viewModel = ViewModelProviders.of(this).get(SharedPreferenceViewModel::class.java)
+        getIntentData(savedInstanceState)
         initializeViews()
         listener()
         observePreferenceData()
         observeProfileData()
+    }
+
+    var title = ""
+    private fun getIntentData(savedInstanceState: Bundle?) {
+        savedInstanceState?.let {
+            title = it.getString("title") ?: ""
+        } ?: run {
+            arguments?.let {
+                title = it.getString("title") ?: ""
+            }
+        }
     }
 
     private fun observeProfileData() {
@@ -130,10 +142,13 @@ class PreferencesFragment : Fragment() {
     }
 
     private fun initializeViews() {
+        if (title.isNotBlank())
+            appBar.setAppBarTitle(title)
         initializeRecyclerView()
         setPreferenecesList()
     }
-    var preferencesAdapter : PreferencesFragmentAdapter? = null
+
+    var preferencesAdapter: PreferencesFragmentAdapter? = null
     private fun initializeRecyclerView() {
 //        recyclerGenericAdapter =
 //            RecyclerGenericAdapter<PreferencesScreenItem>(
@@ -151,7 +166,8 @@ class PreferencesFragment : Fragment() {
 
         preferencesAdapter = PreferencesFragmentAdapter()
         preferencesAdapter?.data = arrPrefrancesList
-        preferencesAdapter?.setItemClickListener(object : PreferencesFragmentAdapter.ItemClickListener{
+        preferencesAdapter?.setItemClickListener(object :
+            PreferencesFragmentAdapter.ItemClickListener {
             override fun onItemClickListener(position: Int) {
                 prefrencesItemSelect(
                     position
@@ -222,7 +238,6 @@ class PreferencesFragment : Fragment() {
     }
 
 
-
     private fun prefrencesItemSelect(position: Int) {
         if (position == DAY_TIME) navigation.navigateTo("preferences/dayTimeFragment")//navigate(R.id.dayTimeFragment)
         else if (position == TITLE_SIGNOUT) {
@@ -275,10 +290,10 @@ class PreferencesFragment : Fragment() {
                 .document(token)
                 .delete()
                 .addOnSuccessListener {
-                    Log.d("S","Token deleted")
+                    Log.d("S", "Token deleted")
                     FirebaseAuth.getInstance().signOut()
                 }.addOnFailureListener {
-                    Log.d("S","Token deleted")
+                    Log.d("S", "Token deleted")
                     FirebaseAuth.getInstance().signOut()
                 }
         }.addOnFailureListener {

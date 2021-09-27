@@ -1,5 +1,9 @@
 package com.gigforce.giger_gigs.gighistory
 
+//import androidx.navigation.fragment.findNavController
+//import com.gigforce.app.R
+//import com.gigforce.app.core.base.BaseFragment
+//import com.gigforce.user_preferences.PreferencesFragment
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,12 +13,8 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-//import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.request.RequestOptions
-import com.gigforce.common_ui.StringConstants
-//import com.gigforce.app.R
-//import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.listeners.PaginationScrollListener
 import com.gigforce.common_ui.utils.ViewModelProviderFactory
@@ -24,7 +24,6 @@ import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.giger_gigs.GigPage2Fragment
 import com.gigforce.giger_gigs.R
-//import com.gigforce.user_preferences.PreferencesFragment
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.jaeger.library.StatusBarUtil
@@ -81,12 +80,30 @@ class GigHistoryFragment : Fragment(), AdapterGigHistory.AdapterGigHistoryCallba
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        getIntentData(savedInstanceState)
+        initViews()
         setupRecycler()
         initClicks()
         initObservers()
         viewModel.getData()
         viewModel.observeDocChanges()
 
+    }
+
+    private fun initViews() {
+        if (title.isNotBlank())
+            appBar.setAppBarTitle(title)
+    }
+
+    var title = ""
+    private fun getIntentData(savedInstanceState: Bundle?) {
+        savedInstanceState?.let {
+            title = it.getString("title") ?: ""
+        } ?: run {
+            arguments?.let {
+                title = it.getString("title") ?: ""
+            }
+        }
     }
 
 
@@ -220,8 +237,11 @@ class GigHistoryFragment : Fragment(), AdapterGigHistory.AdapterGigHistoryCallba
 
     override fun openGigDetails(gig: Gig) {
 //        GigNavigation.openGigMainPage(findNavController(), gig.openNewGig(), gig.gigId)
-        navigation.navigateTo("gig/attendance", bundleOf(
-            GigPage2Fragment.INTENT_EXTRA_GIG_ID to  gig.gigId))
+        navigation.navigateTo(
+            "gig/attendance", bundleOf(
+                GigPage2Fragment.INTENT_EXTRA_GIG_ID to gig.gigId
+            )
+        )
     }
 
 

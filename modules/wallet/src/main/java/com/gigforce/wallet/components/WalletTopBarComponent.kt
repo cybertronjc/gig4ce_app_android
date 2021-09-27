@@ -3,10 +3,12 @@ package com.gigforce.wallet.components
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.bumptech.glide.request.RequestOptions
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.wallet.R
+import com.google.android.material.textview.MaterialTextView
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.top_profile_bar.view.*
@@ -14,9 +16,10 @@ import kotlinx.android.synthetic.main.top_profile_bar.view.*
 class WalletTopBarComponent : ConstraintLayout {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
-
+    val walletHeading : MaterialTextView
     init {
         View.inflate(context, R.layout.wallet_top_bar_component, this)
+        walletHeading = findViewById(R.id.wallet_heading)
         imageName = "ysharma.jpg"
     }
 
@@ -42,4 +45,7 @@ class WalletTopBarComponent : ConstraintLayout {
             displayImage()
         }
 
+    fun setAppBarTitle(title : String){
+        walletHeading.text = title
+    }
 }

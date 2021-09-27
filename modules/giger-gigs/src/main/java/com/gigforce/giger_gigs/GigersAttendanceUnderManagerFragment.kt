@@ -76,9 +76,26 @@ class GigersAttendanceUnderManagerFragment : Fragment(), AttendanceSwipeHandler.
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        getIntentData(savedInstanceState)
+        initViews()
         initView()
         initViewModel()
         getAttendanceFor(LocalDate.now())
+    }
+    private fun initViews() {
+        if (title.isNotBlank())
+            viewBinding.toolbar.showTitle(title)
+    }
+
+    var title = ""
+    private fun getIntentData(savedInstanceState: Bundle?) {
+        savedInstanceState?.let {
+            title = it.getString("title") ?: ""
+        } ?: run {
+            arguments?.let {
+                title = it.getString("title") ?: ""
+            }
+        }
     }
 
     @OptIn(FlowPreview::class)

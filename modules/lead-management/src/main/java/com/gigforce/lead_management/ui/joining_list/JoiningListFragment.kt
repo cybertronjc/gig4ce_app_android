@@ -39,11 +39,26 @@ class JoiningListFragment : BaseFragment2<FragmentJoiningListBinding>(
         viewBinding: FragmentJoiningListBinding,
         savedInstanceState: Bundle?
     ) {
+        getIntentData(savedInstanceState)
+        initViews()
         initToolbar(viewBinding)
         initListeners(viewBinding)
         initViewModel()
     }
-
+    private fun initViews() {
+        if (title.isNotBlank())
+            viewBinding.toolbar.showTitle(title)
+    }
+    var title = ""
+    private fun getIntentData(savedInstanceState: Bundle?) {
+        savedInstanceState?.let {
+            title = it.getString("title") ?: ""
+        } ?: run {
+            arguments?.let {
+                title = it.getString("title") ?: ""
+            }
+        }
+    }
     private fun initListeners(
         viewBinding: FragmentJoiningListBinding
     ) = viewBinding.apply {
