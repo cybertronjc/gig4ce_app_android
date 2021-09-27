@@ -75,7 +75,7 @@ class DocViewerActivity : BaseActivity() {
             var url = bundle?.getString("apiUrl")
             var source = bundle?.getString("source")?:"bottom_sheet"
             val bannerName = bundle?.getString("bannerName")?:"bottom_sheet_banner"
-            val id = bundle?.getString("id")?:""
+            val id = bundle?.getString("bannerId")?:"bannerId"
             url?.let {
                 accessLogResponse = bannerCardRepo.createLogs(
                     it,

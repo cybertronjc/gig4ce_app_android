@@ -22,7 +22,7 @@ data class BannerCardDVM(
 ) {
     override fun getNavArgs(): NavArgs? {
         navPath?.let {
-            return NavArgs(it, args = bundleOf("apiUrl" to apiUrl, "DOC_URL" to docUrl, "source" to source, "bannerName" to bannerName, "id" to id))
+            return NavArgs(it, args = bundleOf("apiUrl" to apiUrl, "DOC_URL" to docUrl, "source" to source, "bannerName" to bannerName, "bannerId" to id))
         } ?: return null
     }
 }
