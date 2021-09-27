@@ -239,7 +239,10 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
         statusDialogLayout.gone()
         checkboxidonthave.visible()
     }
-
+    fun whyweneeditInvisible(){
+        whyweneedit.gone()
+        iconwhyweneed.gone()
+    }
     fun viewChangeOnVerified() {
         docsubtitledetail.gone()
         iconwhyweneed.gone()

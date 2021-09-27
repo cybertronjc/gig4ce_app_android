@@ -61,6 +61,7 @@ class AddNewLoginSummaryViewModel @Inject constructor (
 
     private var businessList: List<LoginSummaryBusiness> = emptyList()
     private var businessListShown: List<LoginSummaryBusiness> = emptyList()
+    private var entryId : String? = null
 
     private val _viewState = MutableLiveData<BusinessAppViewState>()
     val viewState: LiveData<BusinessAppViewState> = _viewState
@@ -86,7 +87,10 @@ class AddNewLoginSummaryViewModel @Inject constructor (
         _viewState.postValue(BusinessAppViewState.LoadingDataFromServer)
 
         try {
-            businessList = tlLoginSummaryRepository.getBusinessByCity(cityId)
+
+            val businessWithLoginCountResponse = tlLoginSummaryRepository.getBusinessByCityWithLoginSummaryCount(cityId)
+            businessList = businessWithLoginCountResponse.businessData
+            entryId = businessWithLoginCountResponse.id
             businessListShown = businessList
             //processBusinessList(businessListShown)
             _viewState.postValue(
@@ -106,6 +110,12 @@ class AddNewLoginSummaryViewModel @Inject constructor (
     fun submitLoginSummaryData(addNewSummaryReqModel: AddNewSummaryReqModel) = viewModelScope.launch{
         _submitDataState.postValue("Loading")
         try {
+
+            if(entryId != null){
+                addNewSummaryReqModel.update = true
+                addNewSummaryReqModel.id = entryId!!
+            }
+
             val res = tlLoginSummaryRepository.submitLoginSummary(addNewSummaryReqModel)
             if (res.code() == 201){
                 _submitDataState.postValue("Created")

@@ -75,7 +75,8 @@ enum class VerificationScreenStatus {
     STARTED_VERIFYING,
     FAILED,
     COMPLETED,
-    DEFAULT
+    DEFAULT,
+    STARTED
 }
 
 @AndroidEntryPoint
@@ -349,12 +350,21 @@ class PanCardFragment : Fragment(),
             hideSoftKeyboard()
             if (viewBinding.toplayoutblock.isDocDontOptChecked() || !anyDataEntered || verificationScreenStatus == VerificationScreenStatus.VERIFIED || verificationScreenStatus == VerificationScreenStatus.STARTED_VERIFYING) {
                 checkForNextDoc()
-            } else {
+            }
+            else {
                 if (verificationScreenStatus == VerificationScreenStatus.FAILED) {
                     viewBinding.toplayoutblock.statusDialogLayoutvisibilityGone()
                 }
                 val panCardNo =
                     viewBinding.panTil.editText?.text.toString().toUpperCase(Locale.getDefault())
+                if (clickedImagePath == null || clickedImagePath.toString().isBlank()) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert_veri))
+                        .setMessage(getString(R.string.upload_pan_image_first_veri))
+                        .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
+                        .show()
+                    return@setOnClickListener
+                }
                 if (!VerificationValidations.isPanCardValid(panCardNo)) {
 
                     MaterialAlertDialogBuilder(requireContext())
@@ -414,6 +424,7 @@ class PanCardFragment : Fragment(),
                         imageUploaded = true
                     )
                 )
+                clickedImagePath = Uri.parse(it)
             }
 
         }

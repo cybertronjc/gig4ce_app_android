@@ -1,19 +1,25 @@
 package com.gigforce.giger_gigs.tl_login_details
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.EditText
+import androidx.core.os.bundleOf
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.repository.ProfileFirebaseRepository
+import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.invisible
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
@@ -45,6 +51,7 @@ class AddNewLoginSummaryFragment : Fragment() {
     @Inject
     lateinit var navigation: INavigation
 
+    private val loginSummarySharedViewModel : LoginSummarySharedViewModel by activityViewModels()
     private lateinit var viewModel: AddNewLoginSummaryViewModel
     private lateinit var viewBinding: AddNewLoginSummaryFragmentBinding
 
@@ -82,6 +89,7 @@ class AddNewLoginSummaryFragment : Fragment() {
         listeners()
     }
 
+
     private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {
         arguments?.let {
             mode = it.getInt(LoginSummaryConstants.INTENT_EXTRA_MODE)
@@ -115,8 +123,18 @@ class AddNewLoginSummaryFragment : Fragment() {
         }
         viewModel.checkIfTLAttendanceMarked()
 
-        val c: Date = Calendar.getInstance().time
-        viewBinding.dateOfAtt.text = DateHelper.getDateInDDMMMYYYY(c)
+        viewBinding.dateOfAtt.text = if(loginSummaryDetails != null) {
+            val date =  DateHelper.getDateFromDDMMYYYY(loginSummaryDetails!!.date)
+
+            if(date != null)
+                DateHelper.getDateInDDMMMYYYY(date)
+            else
+                loginSummaryDetails!!.date
+        }
+        else {
+            val c: Date = Calendar.getInstance().time
+            DateHelper.getDateInDDMMMYYYY(c)
+        }
 
         if (mode == LoginSummaryConstants.MODE_VIEW) {
             viewBinding.submit.invisible()
@@ -164,11 +182,13 @@ class AddNewLoginSummaryFragment : Fragment() {
 
 //        citySpinner.adapter = arrayAdapter
 
+        markAttendanceLayout.markAttedanceBtn.setOnClickListener {
+            navigation.popBackStack()
+            navigation.navigateTo("gig/mygig")
+
+        }
+
         submit.setOnClickListener {
-            if (submit.text.equals(getString(R.string.check_in_common_ui))){
-                navigation.popBackStack()
-                navigation.navigateTo("gig/mygig")
-            } else {
                 if (mode == LoginSummaryConstants.MODE_ADD) {
                     if (citySpinner.text.toString().isEmpty()) {
                         showToast(getString(R.string.select_a_city_to_continue_giger_gigs))
@@ -180,9 +200,6 @@ class AddNewLoginSummaryFragment : Fragment() {
                     selectedCity = loginSummaryDetails?.city!!
                     submitLoginSummary()
                 }
-            }
-
-
         }
 
         if (mode == LoginSummaryConstants.MODE_ADD) {
@@ -335,6 +352,7 @@ class AddNewLoginSummaryFragment : Fragment() {
         viewModel.submitLoginSummaryData(addNewSummaryReqModel = addNewSummaryReqModel)
     }
 
+
     private fun observer() = viewBinding.apply {
         viewModel.cities.observe(viewLifecycleOwner, Observer {
             when (it) {
@@ -366,22 +384,25 @@ class AddNewLoginSummaryFragment : Fragment() {
                 if (mode == LoginSummaryConstants.MODE_ADD) {
                     //viewModel.getCities()
                     if (checkIn.checkedIn) {
+
+
                         viewBinding.apply {
+                            markAttendanceLayout.root.gone()
                             citySpinner.visibility = View.VISIBLE
                             businessRV.visibility = View.VISIBLE
                             chooseCityImg.visibility = View.VISIBLE
-                            noDataFound.visibility = View.GONE
-                            submit.setText(getString(R.string.submit_giger_gigs))
+                            submit.visible()
                         }
                         viewModel.getCities()
 
                     } else {
+
                         viewBinding.apply {
+                            markAttendanceLayout.root.visible()
                             citySpinner.visibility = View.GONE
                             businessRV.visibility = View.GONE
                             chooseCityImg.visibility = View.GONE
-                            noDataFound.visibility = View.VISIBLE
-                            submit.setText(getString(R.string.check_in_common_ui))
+                            submit.gone()
                         }
                     }
                 }
@@ -399,6 +420,13 @@ class AddNewLoginSummaryFragment : Fragment() {
 
                 is BusinessAppViewState.BusinessListLoaded -> {
                     Log.d("List1", "Business list ${state.businessList}")
+
+                    if(state.businessList.isEmpty()){
+                        noDataFound.visible()
+                        attMarkedText.text = getString(R.string.no_business_found_for_this_city)
+                    } else{
+                        noDataFound.gone()
+                    }
                     showBusinesses(state.businessList)
                 }
 
@@ -420,6 +448,7 @@ class AddNewLoginSummaryFragment : Fragment() {
 
                 "Created" -> {
                     showToast(getString(R.string.data_submitted_successfully_giger_gigs))
+                    //loginSummarySharedViewModel.refreshLoginSummaryListInOtherScreens()
                     launchSuccessfullDialog()
                 }
 
@@ -457,6 +486,8 @@ class AddNewLoginSummaryFragment : Fragment() {
             businessLoginLayout.removeAllViews()
             map.clear()
             submit.setText(getString(R.string.submit_giger_gigs))
+
+            var gotAViewToFocusOn = false
             businessList.forEachIndexed { index, loginSummaryBusiness ->
                 val view = BusinessRecyclerItemView(requireContext(), null)
                 businessLoginLayout.addView(view)
@@ -484,6 +515,13 @@ class AddNewLoginSummaryFragment : Fragment() {
                 )
                 if (loginSummaryBusiness.loginCount != null){
                     map.put(index.toString(), loginSummaryBusiness.loginCount.toString())
+
+                    if(!gotAViewToFocusOn) {
+                        view.findViewById<EditText>(R.id.loginCount).requestFocus()
+                        val imm: InputMethodManager = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                        imm.toggleSoftInput( InputMethodManager.SHOW_FORCED,0)
+                        gotAViewToFocusOn = true
+                    }
                 }
             }
             setTotalSumFromMap()

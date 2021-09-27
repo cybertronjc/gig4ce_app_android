@@ -3,9 +3,9 @@ package com.gigforce.common_ui.viewdatamodels
 import android.os.Bundle
 import com.gigforce.core.SimpleDVM
 import com.gigforce.core.datamodels.CommonViewTypes
+import kotlinx.android.parcel.Parcelize
 
-
-open class StandardActionCardDVM(
+data class StandardActionCardDVM(
     val image: Int? = -1,
     val imageType: String = "",
     val imageUrl: String? = null,
@@ -22,14 +22,13 @@ open class StandardActionCardDVM(
 ) : SimpleDVM(defaultViewType)
 
 
-open class ActionButton(
+data class ActionButton(
     val title: String? = "",
     val navPath: String? = "",
     val type: String? = null,
     val link: String? = null
 )
-
-open class HindiTranslationMapping(
+data class HindiTranslationMapping(
     var action1: ActionButton? = null,
     val title: String? = "",
     var desc: String = ""

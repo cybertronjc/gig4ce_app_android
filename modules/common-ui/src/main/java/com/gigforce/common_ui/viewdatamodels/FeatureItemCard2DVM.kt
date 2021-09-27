@@ -1,12 +1,11 @@
 package com.gigforce.common_ui.viewdatamodels
 
-import android.os.Parcelable
+import androidx.core.os.bundleOf
+import com.gigforce.core.NavArgs
 import com.gigforce.core.SimpleDVM
 import com.gigforce.core.datamodels.CommonViewTypes
-import kotlinx.android.parcel.Parcelize
 
-@Parcelize
-class FeatureItemCard2DVM(
+data class FeatureItemCard2DVM(
     val active: Boolean? = false,
     val borderCorner: Int? = 0,
     val borderShadowRadius: Int? = 0,
@@ -14,10 +13,21 @@ class FeatureItemCard2DVM(
     val borderWidthColor: String? = "",
     val backgroundColor: String? = "",
     val title: String,
-    val index: Int = 0,
-    val icon: String?,
+    val index: Long = 1000,
+    val icon: String? = "",
     val imageRes: Int? = null,
     val imageUrl: String? = null,
-    val navPath: String? = null
+    val navPath: String? = null,
+    val hi: HindiTranslationMapping? = null,
+    val type: String? = null,
+    val subicons: List<Long>? = null
 ) :
-    SimpleDVM(CommonViewTypes.VIEW_FEATURE_ITEM_CARD2, navPath), Parcelable
+    SimpleDVM(CommonViewTypes.VIEW_FEATURE_ITEM_CARD2, navPath) {
+    override fun getNavArgs(): NavArgs? {
+        navPath?.let {
+            return NavArgs(navPath, bundleOf("title" to title))
+        }
+        return null
+    }
+
+}

@@ -362,4 +362,26 @@
     <string name="next_amb">अगला</string>
     <string name="invite_link_amb">पंजीकृत नंबर पर एसएमएस के माध्यम से आमंत्रण लिंक साझा किया जाएगा।</string>
     <string name="edit_propercase">संपादित करें</string>
+    <string name="upload_pan_image_first_amb">पहले पैन कार्ड की इमेज अपलोड करें</string>
+    <string name="upload_dl_front_first_amb">पहले DL फ्रंट इमेज अपलोड करें</string>
+    <string name="no_doc_title_aadhaar_amb">आधार उपलब्ध नहीं है!</string>
+    <string name="no_doc_subtitle_aadhaar_amb">कोई चिंता नहीं! एक बार जब आप आधार के मालिक हो जाते हैं तो आप इसे सत्यापित करने के लिए चेकबॉक्स को अनचेक कर सकते हैं</string>
+    <string name="father_s_name_amb">पिता का नाम</string>
+    <string name="enter_father_name_amb">पिता का नाम दर्ज करें</string>
+
+
+    <string name="enter_aadhar_amb">आधार विवरण दर्ज करें</string>
+    <string name="please_upload_aadhar_amb">कृपया अपना आधार कार्ड अपलोड करें या मैन्युअल रूप से विवरण दर्ज करें</string>
+    <string name="aadhaar_card_amb">आधार कार्ड</string>
+    <string name="you_need_to_upload_amb">आपको अपलोड करने की आवश्यकता है</string>
+    <string name="please_enter_the_below_details_of_your_aadhar_this_step_is_mandatory_for_this_application_amb">कृपया अपने आधार का विवरण नीचे दर्ज करें। इस आवेदन के लिए यह कदम अनिवार्य है।</string>
+    <string name="enter_name_amb">कृपया अपना नाम दर्ज करें</string>
+    <string name="aadhar_card_number_amb">आधार कार्ड संख्या</string>
+    <string name="date_of_birth_spaced_amb">"   जन्म की तारीख   "</string>
+    <string name="select_city_amb">कृपया शहर दर्ज करें</string>
+    <string name="enter_valid_pin_amb">मान्य पिनकोड दर्ज करें</string>
+    <string name="enter_landmark_amb">सीमाचिह्न दर्ज करें</string>
+    <string name="same_as_permanent_amb">स्थायी पते के समान</string>
+    <string name="make_my_father_as_nominee_amb">मेरे पिता को नामांकित करें</string>
+
 </resources>

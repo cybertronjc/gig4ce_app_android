@@ -13,4 +13,6 @@
     <string name="click_or_pick_image_common">फोटो पर क्लिक करें या चुनें</string>
     <string name="camera_common">कैमरा</string>
     <string name="gallery_common">गेलरी</string>
+    <string name="face_detected_common">चेहरे का पता चला। अपलोडिंग...</string>
+    <string name="something_seems_off_common">चेहरा पहचानने में असमर्थ, कृपया पुनः प्रयास करें.</string>
 </resources>

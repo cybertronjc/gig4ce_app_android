@@ -50,7 +50,7 @@
     <string name="aadhar_card_back_image_client">Aadhaar Card (Back Image)</string>
     <string name="why_we_need_this_aadhar_client">Uploading either Aadhaar or Driver’s license is mandatory for profile verification. Aadhaar card helps verify your name, date of birth, address, and other details.</string>
     <string name="aadhar_card_details_uploaded_client">Aadhaar Card Details Uploaded</string>
-    <string name="you_are_reuploading_aadhar_client">You are re-uploading your Aadhar details. They will be verified once again, which may take up to 7 days.</string>
+    <string name="you_are_reuploading_aadhar_client">You are re-uploading your Aadhaar details. They will be verified once again, which may take up to 7 days.</string>
     <string name="select_or_capture_both_sides_of_aadhar_client">Select or capture both sides of Aadhaar Card</string>
     <string name="enter_valid_aadhar_no_client">Enter Valid Aadhaar Card No</string>
     <string name="alert_client">Alert</string>
@@ -105,8 +105,8 @@
 
     <string name="crop_and_rotate">Crop and Rotate</string>
     <string name="data_uploaded_client">Data uploaded successfully</string>
-    <string name="upload_front_first_client">Please upload your AADHAR card Front side</string>
-    <string name="upload_back_side_client">Please upload your AADHAR card Back side</string>
+    <string name="upload_front_first_client">Please upload your AADHAAR card Front side</string>
+    <string name="upload_back_side_client">Please upload your AADHAAR card Back side</string>
     <string name="upload_aadhar_front_client">Upload aadhaar card front photo</string>
     <string name="upload_aadhar_back_client">Upload aadhaar card back photo</string>
     <string name="enter_valid_aadhar_client">Enter valid aadhaar number</string>
@@ -120,16 +120,16 @@
     <string name="curr_add2_client">Enter Current Address Line 2</string>
     <string name="select_city_client">Select City</string>
     <string name="valid_pin_client">Enter valid pincode</string>
-    <string name="uplaod_aadhar_client">Upload Aadhar Card</string>
+    <string name="uplaod_aadhar_client">Upload Aadhaar Card</string>
     <string name="choose_one_client">choose one</string>
     <string name="thanks_applying_client">\"Thanks for applying at \"</string>
     <string name="contact_soon_client">. We will contact you soon.</string>
     <string name="application_check_client"><![CDATA[Application check : <b>Pending</b>]]></string>
     <string name="upload_photo_client">Upload Photo</string>
-    <string name="enter_aadhar_client">Enter Aadhar Details</string>
-    <string name="please_upload_aadhar_here">Please upload your aadhar card here</string>
-    <string name="please_enter_the_below_details_of_your_aadhar_this_step_is_mandatory_for_this_application_client">Please enter the below details of your Aadhar. This step is mandatory for this application.</string>
-    <string name="aadhar_card_number_client">AADHAR Card Number</string>
+    <string name="enter_aadhar_client">Enter Aadhaar Details</string>
+    <string name="please_upload_aadhar_here">Please upload your aadhaar card here</string>
+    <string name="please_enter_the_below_details_of_your_aadhar_this_step_is_mandatory_for_this_application_client">Please enter the below details of your Aadhaar. This step is mandatory for this application.</string>
+    <string name="aadhar_card_number_client">AADHAAR Card Number</string>
     <string name="date_of_birth_client">Date of Birth</string>
     <string name="date_of_birth_spaced_client">"   Date of birth   "</string>
     <string name="father_s_name_client">Father\'s Name</string>
@@ -150,7 +150,7 @@
     <string name="dob_label_client">Date of Birth</string>
     <string name="emailid_client">Email ID</string>
     <string name="emergency_contact_client">Emergency contact number</string>
-    <string name="aadharno_label_client">Aadhar number</string>
+    <string name="aadharno_label_client">Aadhaar number</string>
     <string name="curr_add_client">Current Address</string>
     <string name="hub_state">Hub state</string>
     <string name="hub_city">Hub city</string>

@@ -302,6 +302,7 @@
     <string name="no">नहीं</string>
     <string name="yes">हां</string>
     <string name="logins_gigs">लॉगिन</string>
+    <string name="no_business_found_for_this_city">No Business found for this city</string>
 
 
 </resources>

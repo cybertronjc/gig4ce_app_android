@@ -24,8 +24,8 @@ class NavUserDetailsInfo(
         baseImplementation.registerRoute("${moduleName}/addUserBankDetailsInfoFragment", R.id.addUserBankDetailsInfoFragment)
         baseImplementation.registerRoute("${moduleName}/addUserDrivingLicenseInfoFragment", R.id.addUserDrivingLicenseInfoFragment)
         baseImplementation.registerRoute("${moduleName}/addUserPanCardInfoFragment", R.id.addUserPanCardInfoFragment)
-        baseImplementation.registerRoute("${moduleName}/addUserAadharCardInfoFragment", R.id.addUserAadharCardInfoFragment)
-
+//        baseImplementation.registerRoute("${moduleName}/addUserAadharCardInfoFragment", R.id.addUserAadharCardInfoFragment) digilocker
+        baseImplementation.registerRoute("${moduleName}/addUserAadharCardInfoFragment", R.id.UserAadharDetailInfoFragment)
         // new ambassador fragments
 
 

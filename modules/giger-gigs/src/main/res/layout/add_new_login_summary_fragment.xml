@@ -30,6 +30,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
+
+            <include
+                android:id="@+id/mark_attendance_layout"
+                android:visibility="gone"
+                layout="@layout/fragment_add_new_login_summary_mark_attendance"/>
+
             <TextView
                 android:id="@+id/teamLeaderName"
                 android:layout_width="wrap_content"
@@ -199,7 +205,6 @@
                     android:id="@+id/noDataImg"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_group_2679"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
