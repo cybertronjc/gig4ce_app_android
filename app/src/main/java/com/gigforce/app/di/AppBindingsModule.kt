@@ -90,6 +90,12 @@ interface ViewModelBindings {
 
     @Binds
     fun provideAadhaarDetailsRepository(imp : AadhaarDetailsRepository) : IAadhaarDetailsRepository
+
+    @Binds
+    fun provideMainNavRepo(imp: MainNavDataRepository): IMainNavDataRepository
+
+    @Binds
+    fun provideCommonUtilVM(imp: FeatureIconsDataRepository): IFeatureIconsDataRepository
 }
 
 
