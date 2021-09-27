@@ -215,7 +215,14 @@
                 <action android:name="com.gigforce.app.joinings.open_joining_screen" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-
+            <intent-filter>
+                <action android:name="com.gigforce.app.verification.aadhaar" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.gigforce.app.verification.pan" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
 
         <meta-data

@@ -11,7 +11,6 @@ import android.os.Handler
 import android.util.Log
 import android.view.MotionEvent
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -438,6 +437,11 @@ class MainActivity : BaseActivity(),
                             )
                         }
                 )
+            }
+            NotificationConstants.CLICK_ACTIONS.OPEN_VERIFICATION_PAN_SCREEN -> {
+                navController.popAllBackStates()
+                navController.navigate(R.id.verificationMainLayout)
+                navController.navigate(R.id.panCardFragment)
             }
             else -> {
                 navController.popAllBackStates()
