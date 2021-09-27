@@ -83,7 +83,10 @@ class JoiningList2ViewModel @Inject constructor(
             gigforceLogger.d(TAG, "received ${joiningsRaw.size} joinings from server")
 
         } catch (e: Exception) {
-            _viewState.value = JoiningList2ViewState.NoJoiningFound
+            _viewState.value = JoiningList2ViewState.ErrorInLoadingDataFromServer(
+                error = e.message ?: "Unable to fetch selections",
+                shouldShowErrorButton = false
+            )
             gigforceLogger.e(
                 TAG,
                 " getJoiningList()",

@@ -56,6 +56,8 @@
                             android:background="@null"
                             android:gravity="center"
                             android:inputType="none"
+                            android:enabled="false"
+                            android:textColor="@drawable/edit_text_color_selector"
                             android:text="+91" />
 
                     </com.google.android.material.card.MaterialCardView>
@@ -128,6 +130,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:enabled="false"
+                            android:inputType="textNoSuggestions"
                             android:hint="Type Giger Name here"
                             android:textAppearance="@style/body_primary" />
 
@@ -147,7 +150,7 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="20dp"
                     android:layout_marginTop="28dp"
                     android:orientation="horizontal">
 

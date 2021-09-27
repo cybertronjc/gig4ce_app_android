@@ -304,6 +304,8 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
 
         businessErrorTv.text = null
         businessErrorTv.gone()
+
+        openSelectJobProfileScreen(ArrayList(businessSelected.jobProfiles))
     }
 
     private fun showSelectedJobProfile(

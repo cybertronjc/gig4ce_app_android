@@ -83,7 +83,6 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
             cal.get(Calendar.DAY_OF_MONTH)
         )
 
-        datePickerDialog.datePicker.minDate = Date().time
         datePickerDialog
     }
 
@@ -130,6 +129,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         viewBinding: FragmentNewSelectionForm2Binding
     ) = viewBinding.mainForm.apply {
 
+        viewBinding.mainForm.selectedDateLabel.text = DateHelper.getDateInDDMMYYYY(Date())
 
         selectCityLayout.setOnClickListener {
             viewModel.handleEvent(NewSelectionForm2Events.SelectCityClicked)
@@ -209,7 +209,6 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                     ArrayList(state.cities)
                 )
                 is NewSelectionForm2ViewState.OpenSelectReportingScreen -> openSelectReportingLocationScreen(
-                    state.wasShowAllLocationSelected,
                     state.selectedCity,
                     ArrayList(state.reportingLocations)
                 )
@@ -245,7 +244,6 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         })
 
     private fun openSelectReportingLocationScreen(
-        wasShowAllLocationSelected: Boolean,
         selectedCity: ReportingLocationsItem,
         reportingLocations: ArrayList<ReportingLocationsItem>
     ) {
@@ -253,8 +251,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
             LeadManagementNavDestinations.FRAGMENT_SELECT_REPORTING_LOCATION,
             bundleOf(
                 SelectReportingLocationFragment.INTENT_EXTRA_REPORTING_LOCATIONS to reportingLocations,
-                SelectReportingLocationFragment.INTENT_EXTRA_SELECTED_CITY to selectedCity,
-                SelectReportingLocationFragment.INTENT_EXTRA_SHOULD_SHOW_STATE_WISE_BY_DEFAULT to wasShowAllLocationSelected,
+                SelectReportingLocationFragment.INTENT_EXTRA_SELECTED_CITY to selectedCity
             )
         )
     }
@@ -362,6 +359,14 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
 
         mainForm.shiftChipGroup.isSelectionRequired = true
         mainForm.shiftChipGroup.isSingleSelection = false
+
+        try {
+            if(shiftAndTls.shiftTiming.size == 1){
+                (mainForm.shiftChipGroup.getChildAt(0) as Chip).isChecked = true
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     private fun showErrorInLoadingBusinessAndJobProfiles(
@@ -389,7 +394,6 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                     is LeadManagementSharedViewModelState.CitySelected -> showSelectedCity(it.city)
                     is LeadManagementSharedViewModelState.ClientTLSelected -> showSelectedTL(it.tlSelected)
                     is LeadManagementSharedViewModelState.ReportingLocationSelected -> showSelectedReportingLocation(
-                        it.wasShowAllLocationSelected,
                         it.reportingLocation
                     )
                 }
@@ -404,7 +408,6 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                         is LeadManagementSharedViewModelState.CitySelected -> showSelectedCity(it.city)
                         is LeadManagementSharedViewModelState.ClientTLSelected -> showSelectedTL(it.tlSelected)
                         is LeadManagementSharedViewModelState.ReportingLocationSelected -> showSelectedReportingLocation(
-                            it.wasShowAllLocationSelected,
                             it.reportingLocation
                         )
                     }
@@ -426,14 +429,12 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
     }
 
     private fun showSelectedReportingLocation(
-        wasShowAllLocationSelected: Boolean,
         reportingLocationSelected: ReportingLocationsItem
     ) = viewBinding.mainForm.apply {
 
         reportingLocationSelectedLabel.text = reportingLocationSelected.name
         viewModel.handleEvent(
             NewSelectionForm2Events.ReportingLocationSelected(
-                wasShowAllLocationSelected,
                 reportingLocationSelected
             )
         )

@@ -27,6 +27,9 @@ data class GigerInfo(
     @SerializedName("businessLocation")
     val businessLocation: String?,
 
+    @SerializedName("reportingLocation")
+    val reportingLocation: String?,
+
     @SerializedName("selectionDate")
     val selectionDate: String,
 

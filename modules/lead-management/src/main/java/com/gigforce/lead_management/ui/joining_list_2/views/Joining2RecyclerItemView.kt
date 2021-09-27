@@ -146,14 +146,14 @@ class Joining2RecyclerItemView(
 
             viewBinding.userImageIv.loadImageIfUrlElseTryFirebaseStorage(
                 userPathInFirebase,
-                R.drawable.ic_user_2,
-                R.drawable.ic_user_2
+                R.drawable.ic_avatar_male,
+                R.drawable.ic_avatar_male
             )
 
         } else if(!gigerImage.isBlank()) {
 
             if (gigerImage.isEmpty() || gigerImage == "avatar.jpg") {
-                viewBinding.userImageIv.loadImage(R.drawable.ic_user_2)
+                viewBinding.userImageIv.loadImage(R.drawable.ic_avatar_male)
                 return
             }
 
@@ -164,11 +164,11 @@ class Joining2RecyclerItemView(
 
             viewBinding.userImageIv.loadImageIfUrlElseTryFirebaseStorage(
                 userPathInFirebase,
-                R.drawable.ic_user_2,
-                R.drawable.ic_user_2
+                R.drawable.ic_avatar_male,
+                R.drawable.ic_avatar_male
             )
         } else {
-            viewBinding.userImageIv.loadImage(R.drawable.ic_user_2)
+            viewBinding.userImageIv.loadImage(R.drawable.ic_avatar_male)
 
         }
     }

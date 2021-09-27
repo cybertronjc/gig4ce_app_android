@@ -27,13 +27,11 @@ class SelectReportingLocationFragment : BaseFragment2<FragmentSelectReportingLoc
         private const val TAG = "SelectJobProfileFragment"
         const val INTENT_EXTRA_REPORTING_LOCATIONS = "reporting_locations"
         const val INTENT_EXTRA_SELECTED_CITY = "selected_city"
-        const val INTENT_EXTRA_SHOULD_SHOW_STATE_WISE_BY_DEFAULT = "should_show_state_wise"
     }
 
     private val sharedViewModel: LeadManagementSharedViewModel by activityViewModels()
     private var reportingLocations: ArrayList<ReportingLocationsItem> = arrayListOf()
     private lateinit var selectCity: ReportingLocationsItem
-    private var shouldShowStateWise: Boolean = false
 
     private val glide: RequestManager by lazy {
         Glide.with(requireContext())
@@ -67,14 +65,12 @@ class SelectReportingLocationFragment : BaseFragment2<FragmentSelectReportingLoc
     ) {
 
         arguments?.let {
-            shouldShowStateWise = it.getBoolean(INTENT_EXTRA_SHOULD_SHOW_STATE_WISE_BY_DEFAULT)
             reportingLocations =
                 it.getParcelableArrayList(INTENT_EXTRA_REPORTING_LOCATIONS) ?: return@let
             selectCity = it.getParcelable(INTENT_EXTRA_SELECTED_CITY) ?: return@let
         }
 
         savedInstanceState?.let {
-            shouldShowStateWise = it.getBoolean(INTENT_EXTRA_SHOULD_SHOW_STATE_WISE_BY_DEFAULT)
             reportingLocations =
                 it.getParcelableArrayList(INTENT_EXTRA_REPORTING_LOCATIONS) ?: return@let
             selectCity = it.getParcelable(INTENT_EXTRA_SELECTED_CITY) ?: return@let
@@ -93,10 +89,6 @@ class SelectReportingLocationFragment : BaseFragment2<FragmentSelectReportingLoc
             INTENT_EXTRA_SELECTED_CITY,
             selectCity
         )
-        outState.putBoolean(
-            INTENT_EXTRA_SHOULD_SHOW_STATE_WISE_BY_DEFAULT,
-            shouldShowStateWise
-        )
     }
 
 
@@ -113,14 +105,6 @@ class SelectReportingLocationFragment : BaseFragment2<FragmentSelectReportingLoc
             }
         }
 
-        showAllLocationCheckbox.setOnCheckedChangeListener { buttonView, isChecked ->
-
-            if (isChecked)
-                showLocationsWithStatefilter()
-            else
-                showLocationWithCityfilter()
-        }
-
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = reportingLocationAdapter
 
@@ -128,30 +112,12 @@ class SelectReportingLocationFragment : BaseFragment2<FragmentSelectReportingLoc
             val selectedReportingLocation =
                 reportingLocationAdapter.getSelectedReportingLocation() ?: return@setOnClickListener
             sharedViewModel.reportingLocationSelected(
-                showAllLocationCheckbox.isChecked,
                 selectedReportingLocation
             )
             findNavController().navigateUp()
         }
     }
 
-    private fun showLocationsWithStatefilter() {
-        val filteredWithWithCity = reportingLocations.filter {
-            it.stateId == selectCity.stateId
-        }
-
-        reportingLocationAdapter.setData(filteredWithWithCity)
-        viewBinding.okayButton.isEnabled = filteredWithWithCity.find { it.selected } != null
-    }
-
-    private fun showLocationWithCityfilter() {
-        val filteredWithWithCity = reportingLocations.filter {
-            it.cityId == selectCity.cityId
-        }
-
-        reportingLocationAdapter.setData(filteredWithWithCity)
-        viewBinding.okayButton.isEnabled = filteredWithWithCity.find { it.selected } != null
-    }
 
     private fun setDataOnView() = viewBinding.apply {
 
@@ -160,12 +126,9 @@ class SelectReportingLocationFragment : BaseFragment2<FragmentSelectReportingLoc
             this.infoLayout.infoMessageTv.text = "No reporting location to show"
         } else {
 
-            showAllLocationCheckbox.isChecked = shouldShowStateWise
-            if (shouldShowStateWise)
-                showLocationsWithStatefilter()
-            else
-                showLocationWithCityfilter()
             this.infoLayout.root.gone()
+            reportingLocationAdapter.setData(reportingLocations)
+            viewBinding.okayButton.isEnabled = reportingLocations.find { it.selected } != null
         }
     }
 

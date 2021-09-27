@@ -35,10 +35,6 @@ import kotlinx.coroutines.flow.collect
 import java.lang.NullPointerException
 import javax.inject.Inject
 
-object Constant {
-    val fragmentTabs: HashMap<String, Int> = HashMap()
-}
-
 @AndroidEntryPoint
 class JoiningList2Fragment : BaseFragment2<FragmentJoiningListBinding>(
     fragmentName = "JoiningListFragment",
@@ -230,8 +226,8 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningListBinding>(
         joiningShimmerContainer.gone()
         joiningListInfoLayout.root.visible()
 
-        joiningListInfoLayout.infoIv.loadImage(R.drawable.ic_no_joining_found)
-        joiningListInfoLayout.infoMessageTv.text = getString(R.string.no_job_profiles_found_lead)
+        joiningListInfoLayout.infoIv.loadImage(R.drawable.ic_no_selection)
+        joiningListInfoLayout.infoMessageTv.text = "No Selections Yet !"
     }
 
     private fun showErrorInLoadingJoinings(
@@ -246,7 +242,7 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningListBinding>(
         joiningShimmerContainer.gone()
         joiningListInfoLayout.root.visible()
 
-        joiningListInfoLayout.infoIv.loadImage(R.drawable.ic_no_joining_found)
+        joiningListInfoLayout.infoIv.loadImage(R.drawable.ic_no_selection)
         joiningListInfoLayout.infoMessageTv.text = error
     }
 }

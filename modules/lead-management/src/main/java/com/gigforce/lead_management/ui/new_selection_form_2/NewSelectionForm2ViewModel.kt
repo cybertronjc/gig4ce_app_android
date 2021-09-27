@@ -11,6 +11,7 @@ import com.gigforce.lead_management.repositories.LeadManagementRepository
 import com.gigforce.lead_management.ui.assign_gig_dialog.AssignGigsViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -35,14 +36,13 @@ class NewSelectionForm2ViewModel @Inject constructor(
     val viewState: LiveData<NewSelectionForm2ViewState?> = _viewState
 
     //Data
-    private var selectedDateOfJoining: LocalDate? = null
+    private var selectedDateOfJoining: LocalDate = LocalDate.now()
     private var selectedCity: ReportingLocationsItem? = null
     private var selectedReportingLocation: ReportingLocationsItem? = null
     private var selectedTL: BusinessTeamLeadersItem? = null
     private var selectedShifts: MutableList<ShiftTimingItem> = mutableListOf()
     private lateinit var joiningLocationsAndTLs: JoiningLocationTeamLeadersShifts
     private lateinit var joiningRequest: SubmitJoiningRequest
-    private var shouldShowAllCitiesCheckedInReportingLocation = false
 
 
     fun handleEvent(
@@ -61,12 +61,12 @@ class NewSelectionForm2ViewModel @Inject constructor(
             is NewSelectionForm2Events.CitySelected -> {
                 selectedCity = event.city
                 selectedReportingLocation = null
+                openSelectReportingLocationsScreenWithDelay()
             }
             is NewSelectionForm2Events.ClientTLSelected -> {
                 selectedTL = event.teamLeader
             }
             is NewSelectionForm2Events.ReportingLocationSelected -> {
-                shouldShowAllCitiesCheckedInReportingLocation = event.wasShowAllLocationSelected
                 selectedReportingLocation = event.reportingLocation
             }
             is NewSelectionForm2Events.SubmitButtonPressed -> {
@@ -82,7 +82,7 @@ class NewSelectionForm2ViewModel @Inject constructor(
 
     private fun openSelectCityScreen() {
         val cities = joiningLocationsAndTLs.reportingLocations.filter {
-            it.type != "office"
+            it.type == "city"
         }
 
         cities.onEach {
@@ -94,6 +94,11 @@ class NewSelectionForm2ViewModel @Inject constructor(
         _viewState.value = null
     }
 
+    private fun openSelectReportingLocationsScreenWithDelay() = viewModelScope.launch{
+        delay(200)
+        openSelectReportingLocationsScreen()
+    }
+
     private fun openSelectReportingLocationsScreen() {
         if (selectedCity == null) {
             _viewState.value = NewSelectionForm2ViewState.ValidationError(
@@ -102,7 +107,7 @@ class NewSelectionForm2ViewModel @Inject constructor(
             _viewState.value = null
         } else {
             val reportingLocations = joiningLocationsAndTLs.reportingLocations.filter {
-                it.type == "office"
+               it.cityId == selectedCity?.cityId &&  it.type == "office"
             }
 
             reportingLocations.onEach {
@@ -110,7 +115,6 @@ class NewSelectionForm2ViewModel @Inject constructor(
             }
 
             _viewState.value = NewSelectionForm2ViewState.OpenSelectReportingScreen(
-                shouldShowAllCitiesCheckedInReportingLocation,
                 selectedCity!!,
                 reportingLocations
             )

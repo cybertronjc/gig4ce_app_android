@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
@@ -24,6 +25,7 @@ import com.gigforce.lead_management.LeadManagementConstants
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.GigerInfoFragmentBinding
 import com.gigforce.lead_management.models.ApplicationChecklistRecyclerItemData
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.layout_below_giger_functionality.*
 import java.text.ParseException
@@ -121,7 +123,7 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
             toolbar.showTitle(it.gigerName)
             overlayCardLayout.companyName.text = ": "+it.businessName ?: ""
             overlayCardLayout.jobProfileTitle.text = it.jobProfileTitle ?: ""
-            overlayCardLayout.locationText.text = ": "+it.businessLocation ?: ""
+            overlayCardLayout.locationText.text = ": "+it.reportingLocation + ", " + it.businessLocation ?: ""
 
             gigerPhone = it.gigerPhone.toString()
             toolbar.showSubtitle(gigerPhone)
@@ -182,6 +184,13 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
             R.id.shimmer_controller
         )
         gigerinfoShimmerContainer.gone()
+
+        MaterialAlertDialogBuilder(
+            requireContext()
+        ).setTitle("Unable to load info")
+            .setMessage(error)
+            .setPositiveButton("Okay"){_,_ ->}
+            .show()
     }
 
     private fun initListeners() = viewBinding.apply {
@@ -218,7 +227,7 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
 
             if (path.isEmpty() || path == "avatar.jpg") {
                 viewBinding.overlayCardLayout.profileImageOverlay.gigerImg.setImageDrawable(
-                    resources.getDrawable(R.drawable.ic_user_2)
+                    ResourcesCompat.getDrawable(resources,R.drawable.ic_avatar_male,null)
                 )
                 return
             }
@@ -230,11 +239,11 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
 
             viewBinding.overlayCardLayout.profileImageOverlay.gigerImg.loadImageIfUrlElseTryFirebaseStorage(
                 userPathInFirebase,
-                R.drawable.ic_user_2,
-                R.drawable.ic_user_2
+                R.drawable.ic_avatar_male,
+                R.drawable.ic_avatar_male
             )
         } else {
-                viewBinding.overlayCardLayout.profileImageOverlay.gigerImg.loadImage(R.drawable.ic_user_2)
+                viewBinding.overlayCardLayout.profileImageOverlay.gigerImg.loadImage(R.drawable.ic_avatar_male)
         }
     }
 

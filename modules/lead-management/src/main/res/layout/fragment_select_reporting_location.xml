@@ -27,13 +27,6 @@
                 android:orientation="vertical">
 
 
-                <CheckBox
-                    android:id="@+id/show_all_location_checkbox"
-                    style="@style/Theme.CheckBoxLipstickPink"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:text="Show all locations" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_view"

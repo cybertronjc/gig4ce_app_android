@@ -321,15 +321,6 @@
         <item name="android:letterSpacing">0</item>
     </style>
 
-
-
-
-
-
-
-
-
-
     <!--Second Theme-->
     <style name="GigforceTheme.Option2">
         <item name="colorPrimary">@color/yellow</item>

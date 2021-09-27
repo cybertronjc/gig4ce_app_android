@@ -107,10 +107,7 @@ class LeadManagementRepository @Inject constructor(
 
     suspend fun getJoiningListings(
     ): List<JoiningNew> {
-        Log.d("called", "calling")
-        return joiningProfileRemoteService.getJoiningListing(
-
-        ).bodyOrThrow()
+        return joiningProfileRemoteService.getJoiningListing().bodyOrThrow()
     }
 
     suspend fun getJobProfilesWithStatus(
