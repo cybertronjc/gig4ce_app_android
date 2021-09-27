@@ -108,6 +108,7 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
         this.setBackButtonListener {
             activity?.onBackPressed()
         }
+        setBackButtonDrawable(R.drawable.ic_chevron)
         this.stepsTextView.setText("Step 1/2")
     }
 

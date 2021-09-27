@@ -86,7 +86,7 @@ class SelectJobProfileFragment : BaseFragment2<FragmentSelectJobProfileBinding>(
             setBackButtonListener {
                 navigation.popBackStack()
             }
-
+            setBackButtonDrawable(R.drawable.ic_chevron)
             searchTextChangeListener = object : SearchTextChangeListener {
 
                 override fun onSearchTextChanged(text: String) {

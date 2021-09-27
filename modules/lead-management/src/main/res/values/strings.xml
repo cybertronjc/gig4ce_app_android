@@ -117,7 +117,7 @@
     <string name="location_lead">Location</string>
     <string name="selection_date_lead">Selection Date</string>
     <string name="checklist_name_lead">Profile Picture</string>
-    <string name="giger_mobile_number_lead">Giger Mobile Number</string>
+    <string name="giger_mobile_number">Giger Mobile Number</string>
     <string name="sure_to_drop_lead">Are you sure that you want to drop 3 selection(s)?</string>
     <string name="cancel_lead">Cancel</string>
 

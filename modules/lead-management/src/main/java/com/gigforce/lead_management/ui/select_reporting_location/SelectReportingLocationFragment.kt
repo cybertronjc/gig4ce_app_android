@@ -98,6 +98,7 @@ class SelectReportingLocationFragment : BaseFragment2<FragmentSelectReportingLoc
             setBackButtonListener {
                 navigation.navigateUp()
             }
+            setBackButtonDrawable(R.drawable.ic_chevron)
             searchTextChangeListener = object : SearchTextChangeListener {
                 override fun onSearchTextChanged(text: String) {
                     reportingLocationAdapter.filter.filter(text)

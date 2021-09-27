@@ -12,6 +12,8 @@ import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.annotation.DrawableRes
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.UserInfoImp
@@ -232,6 +234,14 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
 
     override fun bind(data: Any?) {
 
+    }
+
+    fun setBackButtonDrawable(
+        @DrawableRes drawable : Int
+    ){
+        backImageButton.setImageDrawable(
+            ResourcesCompat.getDrawable(resources,drawable,null)
+        )
     }
 
     fun hideKeyboard(view: View) {

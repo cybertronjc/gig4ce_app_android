@@ -105,7 +105,7 @@
     <string name="ask_giger_to_apply">गिगर को आवेदन करने और गिग आवेदन जमा करने के लिए कहें</string>
     <string name="ask_giger_to_signup">गिगर को साइन अप करने और गिग आवेदन जमा करने के लिए कहें।</string>
     <string name="no_joining_found_lead">कोई जॉइनिंग नहीं मिला</string>
-    <string name="giger_mobile_number_lead">गिगर मोबाइल नंबर</string>
+    <string name="giger_mobile_number">गिगर मोबाइल नंबर</string>
     <string name="giger_name_lead">गिगर नाम</string>
     <string name="app_pending_lead">आवेदन लंबित</string>
     <string name="app_submitted_lead">आवेदन जमा किया गया</string>

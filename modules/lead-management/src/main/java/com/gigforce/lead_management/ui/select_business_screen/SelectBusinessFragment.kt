@@ -89,6 +89,7 @@ class SelectBusinessFragment : BaseFragment2<FragmentSelectBusinessBinding>(
             setBackButtonListener{
                 navigation.navigateUp()
             }
+            setBackButtonDrawable(R.drawable.ic_chevron)
             searchTextChangeListener = object : SearchTextChangeListener{
 
                 override fun onSearchTextChanged(text: String) {

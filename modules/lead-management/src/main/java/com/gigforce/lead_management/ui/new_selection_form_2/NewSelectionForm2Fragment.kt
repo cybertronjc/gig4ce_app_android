@@ -185,6 +185,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         this.setBackButtonListener {
             navigation.navigateUp()
         }
+        setBackButtonDrawable(R.drawable.ic_chevron)
         stepsTextView.setText("Step 2/2")
     }
 

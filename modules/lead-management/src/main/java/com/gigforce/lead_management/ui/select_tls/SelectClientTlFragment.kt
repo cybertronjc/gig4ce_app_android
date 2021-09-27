@@ -89,6 +89,7 @@ class SelectClientTlFragment : BaseFragment2<FragmentSelectClientTlBinding>(
             setBackButtonListener{
                 navigation.navigateUp()
             }
+            setBackButtonDrawable(R.drawable.ic_chevron)
             searchTextChangeListener = object : SearchTextChangeListener {
                 override fun onSearchTextChanged(text: String) {
                     clientTLAdapter.filter.filter(text)
