@@ -36,7 +36,7 @@ class BannerCardRepository : IBannerCardRepository {
     ): AccessLogResponse {
         val accessLogsRequest = accessLogsApi.createUpateLogs(
             url,
-            AccessLogDataObject(uuid = uuid, screen = screen, bannerName = bannerName, id = id)
+            AccessLogDataObject(uuid = uuid, screen = screen, bannerName = bannerName, bannerId = id)
         )
         if (!accessLogsRequest.isSuccessful) {
             throw Exception(accessLogsRequest.message())
