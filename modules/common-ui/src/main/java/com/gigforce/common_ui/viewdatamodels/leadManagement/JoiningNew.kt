@@ -25,7 +25,13 @@ data class JoiningNew(
     var profilePicture: String? = null,
 
     @SerializedName("status")
-    var status: String
+    var status: String,
+
+    @SerializedName("createdAt")
+    var createdAt: String? = null,
+
+    @SerializedName("updatedAt")
+    var updatedAt: String? = null
 )
 
 

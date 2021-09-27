@@ -82,7 +82,7 @@ class JoiningRecyclerItemView(
                 gigerAttendanceData.userProfilePictureThumbnail,
                 gigerAttendanceData.userProfilePicture
             )
-            setOfficeOnView(gigerAttendanceData.joiningStatusText)
+            //setOfficeOnView(gigerAttendanceData.joiningStatusText)
             setJoiningStatus(gigerAttendanceData.status)
         }
     }
@@ -110,15 +110,15 @@ class JoiningRecyclerItemView(
         }
     }
 
-    private fun setOfficeOnView(
-        office: String
-    ) {
-        if (office.isEmpty()) {
-            viewBinding.userPhoneNumber.text = context.getString(R.string.office_na_lead)
-        } else {
-            viewBinding.userPhoneNumber.text = office
-        }
-    }
+//    private fun setOfficeOnView(
+//        office: String
+//    ) {
+//        if (office.isEmpty()) {
+//            viewBinding.userPhoneNumber.text = context.getString(R.string.office_na_lead)
+//        } else {
+//            viewBinding.userPhoneNumber.text = office
+//        }
+//    }
 
     private fun setUserImage(
         profilePicThumbnail: String?,

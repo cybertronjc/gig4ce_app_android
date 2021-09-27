@@ -188,7 +188,7 @@ class JoiningList2ViewModel @Inject constructor(
             }
         }.groupBy {
             it.business?.name
-        }.toSortedMap(compareByDescending { it })
+        }.toSortedMap(compareBy { it })
 
 
         val filterMap = HashMap<String, Int>()
@@ -215,7 +215,9 @@ class JoiningList2ViewModel @Inject constructor(
                         profilePicture = it.profilePicture,
                         bussiness = it.business!!,
                         status = it.status,
-                        selected = false
+                        selected = false,
+                        createdAt = it.createdAt,
+                        updatedAt = it.updatedAt
                     )
                 )
             }

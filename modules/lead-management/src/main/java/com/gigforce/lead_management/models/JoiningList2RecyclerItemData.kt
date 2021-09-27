@@ -29,7 +29,9 @@ open class JoiningList2RecyclerItemData(
         val profilePicture: String?,
         val bussiness: JoiningBusiness,
         val status: String,
-        var selected: Boolean
+        var selected: Boolean,
+        val createdAt: String?,
+        val updatedAt: String?
     ): JoiningList2RecyclerItemData(
         LeadActivationViewTypes.JoiningList2
     )
