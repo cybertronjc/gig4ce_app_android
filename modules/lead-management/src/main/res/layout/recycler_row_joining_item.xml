@@ -7,7 +7,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/size_8"
+        android:layout_marginTop="@dimen/size_8"
+        android:layout_marginStart="@dimen/size_16"
+        android:layout_marginEnd="@dimen/size_16"
         android:elevation="@dimen/size_8"
         android:orientation="vertical">
 
@@ -154,7 +156,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:lineHeight="19sp"
-                android:textColor="#646464"
+                android:textColor="#202325"
                 android:textSize="16sp"
                 android:scrollHorizontally="true"
                 android:ellipsize="end"
@@ -167,20 +169,20 @@
 
 
             <TextView
-                android:id="@+id/user_phone_number"
+                android:id="@+id/selected_on"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
                 android:layout_marginTop="6dp"
-                android:textColor="@color/grey"
+                android:textColor="#979C9E"
                 android:fontFamily="@font/lato"
-                android:textSize="16sp"
-                android:visibility="gone"
+                android:textSize="14sp"
+                android:text="@string/gigers_phone_lead"
                 android:scrollHorizontally="true"
                 android:ellipsize="end"
                 android:maxLines="1"
-                app:layout_constraintStart_toEndOf="@id/user_image_iv"
-                app:layout_constraintTop_toBottomOf="@id/user_name_tv"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@id/user_name_tv"
+                app:layout_constraintTop_toBottomOf="@id/user_attendance_status_textview"
                 app:layout_constraintEnd_toStartOf="@id/call_giger_btn"
                 />
 

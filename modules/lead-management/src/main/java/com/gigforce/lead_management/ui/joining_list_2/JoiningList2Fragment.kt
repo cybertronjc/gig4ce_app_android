@@ -18,27 +18,33 @@ import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.utils.PushDownAnim
 import com.gigforce.core.base.BaseFragment2
+import com.gigforce.core.extensions.getTextChangeAsStateFlow
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.lead_management.LeadManagementConstants
 import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
-import com.gigforce.lead_management.databinding.FragmentJoiningListBinding
+import com.gigforce.lead_management.databinding.FragmentJoiningList2Binding
 import com.gigforce.lead_management.models.JoiningList2RecyclerItemData
 import com.gigforce.lead_management.models.JoiningListRecyclerItemData
 import com.gigforce.lead_management.models.JoiningStatusAndCountItemData
 import com.gigforce.lead_management.ui.giger_onboarding.GigerOnboardingFragment
 import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.launch
 import java.lang.NullPointerException
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class JoiningList2Fragment : BaseFragment2<FragmentJoiningListBinding>(
+class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
     fragmentName = "JoiningListFragment",
-    layoutId = R.layout.fragment_joining_list,
+    layoutId = R.layout.fragment_joining_list_2,
     statusBarColor = R.color.lipstick_2
 ) {
 
@@ -48,11 +54,11 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningListBinding>(
     var selectedTab = 0
 
     override fun viewCreated(
-        viewBinding: FragmentJoiningListBinding,
+        viewBinding: FragmentJoiningList2Binding,
         savedInstanceState: Bundle?
     ) {
 
-        initToolbar(viewBinding)
+        initAppBar()
         initTabLayout()
         initListeners(viewBinding)
         initViewModel()
@@ -60,7 +66,7 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningListBinding>(
 
 
     private fun initListeners(
-        viewBinding: FragmentJoiningListBinding
+        viewBinding: FragmentJoiningList2Binding
     ) = viewBinding.apply {
 
         this.joiningsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -76,19 +82,37 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningListBinding>(
 
     }
 
-    private fun initToolbar(
-        viewBinding: FragmentJoiningListBinding
-    ) = viewBinding.toolbar.apply {
-        this.hideActionMenu()
-        this.showTitle(context.getString(R.string.joinings_lead))
-        this.setBackButtonListener {
+//    private fun initToolbar(
+//        viewBinding: FragmentJoiningListBinding
+//    ) = viewBinding.toolbar.apply {
+//        this.hideActionMenu()
+//        this.showTitle(context.getString(R.string.joinings_lead))
+//        this.setBackButtonListener {
+//            activity?.onBackPressed()
+//        }
+//        //this.changeBackgroundToRound()
+//        this.changeBackButtonDrawable()
+//        this.showSearchOption(context.getString(R.string.search_joinings_lead))
+//        lifecycleScope.launchWhenCreated {
+//            getSearchTextChangeAsFlow()
+//                .collect { viewModel.searchJoinings(it) }
+//        }
+//    }
+//
+    private fun initAppBar() = viewBinding.appBarComp.apply {
+
+        changeBackButtonDrawable()
+        setBackButtonListener(View.OnClickListener {
             activity?.onBackPressed()
-        }
-        this.changeBackButtonDrawable()
-        this.showSearchOption(context.getString(R.string.search_joinings_lead))
-        lifecycleScope.launchWhenCreated {
-            getSearchTextChangeAsFlow()
-                .collect { viewModel.searchJoinings(it) }
+        })
+        lifecycleScope.launch {
+            search_item.getTextChangeAsStateFlow()
+                .debounce(300)
+                .distinctUntilChanged()
+                .flowOn(Dispatchers.Default)
+                .collect { searchString ->
+                    viewModel.searchJoinings(searchString)
+                }
         }
     }
 
@@ -99,7 +123,7 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningListBinding>(
         statusTabLayout.addTab(statusTabLayout.newTab().setText("Pending (0)"))
         statusTabLayout.addTab(statusTabLayout.newTab().setText("Completed (0)"))
 
-        val betweenSpace = 50
+        val betweenSpace = 25
 
         val slidingTabStrip: ViewGroup = statusTabLayout.getChildAt(0) as ViewGroup
 
@@ -245,4 +269,6 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningListBinding>(
         joiningListInfoLayout.infoIv.loadImage(R.drawable.ic_no_selection)
         joiningListInfoLayout.infoMessageTv.text = error
     }
+
+
 }

@@ -25,6 +25,9 @@ import com.gigforce.lead_management.databinding.RecyclerRowJoiningItemBinding
 import com.gigforce.lead_management.models.JoiningList2RecyclerItemData
 import com.gigforce.lead_management.models.JoiningListRecyclerItemData
 import dagger.hilt.android.AndroidEntryPoint
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -88,7 +91,7 @@ class Joining2RecyclerItemView(
                 "",
                 gigerAttendanceData.profilePicture.toString()
             )
-//            setOfficeOnView(gigerAttendanceData.joiningStatusText)
+            setSelectionDate(gigerAttendanceData.createdAt, gigerAttendanceData.updatedAt)
             setJoiningStatus(gigerAttendanceData.status)
         }
     }
@@ -107,29 +110,16 @@ class Joining2RecyclerItemView(
             if (status == "Pending") resources.getColor(R.color.pink_dot) else resources.getColor(R.color.blue_dot)
         )
 
-        //viewBinding.userAttendanceStatusTextview.text = status
-//        when (joiningStatus) {
-//            JoiningStatus.SIGN_UP_PENDING -> {
-//                viewBinding.userAttendanceStatusTextview.setBackgroundResource(R.drawable.joining_status_bck_orange)
-//            }
-//            JoiningStatus.APPLICATION_PENDING -> {
-//                viewBinding.userAttendanceStatusTextview.setBackgroundResource(R.drawable.joining_status_bck_orange)
-//            }
-//            JoiningStatus.JOINING_PENDING -> {
-//                viewBinding.userAttendanceStatusTextview.setBackgroundResource(R.drawable.joining_status_bck_green)
-//            }
-//            JoiningStatus.JOINED -> {
-//            }
-//        }
     }
 
-    private fun setOfficeOnView(
-        office: String
+    private fun setSelectionDate(
+        createdAt: String?,
+        updatedAt: String?
     ) {
-        if (office.isEmpty()) {
-            viewBinding.userPhoneNumber.text = context.getString(R.string.office_na_lead)
+        if (updatedAt.isNullOrBlank()) {
+            viewBinding.selectedOn.text = "Selected on " + getFormattedDate(createdAt.toString())
         } else {
-            viewBinding.userPhoneNumber.text = office
+            viewBinding.selectedOn.text = "Selected on " + getFormattedDate(updatedAt.toString())
         }
     }
 
@@ -185,13 +175,7 @@ class Joining2RecyclerItemView(
                 )
             context.startActivity(intent)
         } else {
-//            if (currentViewData.status.isEmpty())
-//                return
-//
-//            if (selectEnable){
-//                viewBinding.selectJoiningBtn.setImageDrawable(resources.getDrawable(R.drawable.ic_selected_tick))
-//                viewData?.selected = true
-//            }
+
             //navigate to joining details screen
             navigation.navigateTo(
                 LeadManagementNavDestinations.FRAGMENT_GIGER_INFO,
@@ -199,107 +183,22 @@ class Joining2RecyclerItemView(
                     LeadManagementConstants.INTENT_EXTRA_JOINING_ID to currentViewData._id
                 )
                 )
-//            when (JoiningStatus.fromValue(currentViewData.status)) {
-//                JoiningStatus.SIGN_UP_PENDING, JoiningStatus.JOINED -> {
-//                }
-//                JoiningStatus.APPLICATION_PENDING -> {
-//                    //navigate to applications screen
-//                    navigation.navigateTo(
-//                        LeadManagementNavDestinations.FRAGMENT_SELECT_GIG_TO_ACTIVATE,
-//                        bundleOf(
-//                            LeadManagementConstants.INTENT_EXTRA_JOINING_ID to currentViewData.joiningId,
-//                            LeadManagementConstants.INTENT_EXTRA_CURRENT_JOINING_USER_INFO to prepareCurrentUserInfo(
-//                                currentViewData
-//                            ),
-//                            LeadManagementConstants.INTENT_EXTRA_USER_ID to currentViewData.userUid,
-//                        )
-//                    )
-//                }
-//                JoiningStatus.JOINING_PENDING -> {
-//                    if (currentViewData._id.isEmpty()) {
-//                        return
-//                    }
-//
-//                    navigation.navigateTo(
-//                        LeadManagementNavDestinations.FRAGMENT_SELECT_GIG_LOCATION,
-//                        bundleOf(
-//                            LeadManagementConstants.INTENT_EXTRA_JOINING_ID to currentViewData._id,
-//                            LeadManagementConstants.INTENT_EXTRA_CURRENT_JOINING_USER_INFO to prepareCurrentUserInfo(
-//                                currentViewData
-//                            ),
-//                            LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL to prepareAssigngigModel(
-//                                currentViewData
-//                            ),
-//                            LeadManagementConstants.INTENT_EXTRA_USER_ID to currentViewData.gigerId
-//                        )
-//                    )
-//                }
-//            }
+
         }
     }
 
-//    private fun prepareAssigngigModel(
-//        currentViewData: JoiningList2RecyclerItemData.JoiningListRecyclerJoiningItemData
-//    ): AssignGigRequest {
-//
-//        return AssignGigRequest(
-//            joiningId = currentViewData.joiningId,
-//            jobProfileId = currentViewData.jobProfileId,
-//            jobProfileName = currentViewData.jobProfileName,
-//            userName = currentViewData.userName,
-//            userUid = currentViewData.userUid!!,
-//            enrollingTlUid = "",
-//            assignGigsFrom = "",
-//            cityId = "",
-//            cityName = "",
-//            location = JobLocation(
-//                id = "",
-//                type = "",
-//                name = null
-//            ),
-//            shift = listOf(),
-//            gigForceTeamLeaders = listOf(),
-//            businessTeamLeaders = listOf()
-//        )
-//    }
+    fun getFormattedDate(date: String): String {
+        val input = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+        val output = SimpleDateFormat("dd/MM/yyyy")
 
-//    private fun prepareCurrentUserInfo(
-//        currentViewData: JoiningList2RecyclerItemData.JoiningListRecyclerJoiningItemData
-//    ): GigerProfileCardDVM {
-//        return GigerProfileCardDVM(
-//            name = currentViewData.userName,
-//            gigerImg = currentViewData.userProfilePicture,
-//            number = currentViewData.userProfilePhoneNumber,
-//            jobProfileName = currentViewData.jobProfileName,
-//            jobProfileLogo = currentViewData.jobProfileIcon,
-//            tradeName = currentViewData.tradeName
-//        )
-//    }
-
-    fun getDBImageUrl(imagePath: String): String? {
-        if (imagePath.isNotBlank()) {
-            try {
-                var modifiedString = imagePath
-                if (!imagePath.startsWith("/"))
-                    modifiedString = "/$imagePath"
-                return "gs://gigforce-staging.appspot.com" + modifiedString
-            } catch (egetDBImageUrl: Exception) {
-                return null
-            }
+        var d: Date? = null
+        try {
+            d = input.parse(date)
+        } catch (e: ParseException) {
+            e.printStackTrace()
         }
-        return null
+        val formatted = output.format(d)
+        return formatted ?: ""
     }
 
-//    override fun onLongClick(p0: View?): Boolean {
-//        viewBinding.selectJoiningBtn.visible()
-//        viewData?.selected = true
-//        viewBinding.selectJoiningBtn.setImageDrawable(resources.getDrawable(R.drawable.ic_selected_tick))
-//        Toast.makeText(context, "Long click", Toast.LENGTH_SHORT).show()
-//
-//        return true
-//    }
-//
-//    fun getGigDataOrThrow(): JoiningListRecyclerItemData.JoiningListRecyclerJoiningItemData {
-//        return viewData ?: throw NullPointerException("view data is null")
-//    }
 }

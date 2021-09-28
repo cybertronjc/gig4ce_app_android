@@ -232,6 +232,10 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
         if (visible) menuImageButton.visible() else menuImageButton.invisible()
     }
 
+    fun changeBackButtonDrawable(){
+        backImageButton.setImageDrawable(resources.getDrawable(R.drawable.ic_chevron))
+    }
+
     override fun bind(data: Any?) {
 
     }
