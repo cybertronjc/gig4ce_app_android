@@ -139,6 +139,7 @@ class MainActivity : BaseActivity(),
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d("notificationverixxxxx", "verification kjkjkjjkj")
         if (!isTaskRoot
             && intent.hasCategory(Intent.CATEGORY_LAUNCHER)
             && intent.action != null
@@ -382,7 +383,7 @@ class MainActivity : BaseActivity(),
             proceedWithNormalNavigation()
             return
         }
-        Log.d("notification", "verification 2")
+        Log.d("notificationverixxxxx", "verification 2")
 
         val clickAction = intent.getStringExtra(NotificationConstants.INTENT_EXTRA_CLICK_ACTION)
         Log.d("MainActivity", "Click action received $clickAction ")
@@ -445,14 +446,14 @@ class MainActivity : BaseActivity(),
                 )
             }
             NotificationConstants.CLICK_ACTIONS.OPEN_VERIFICATION_PAN_SCREEN -> {
-                Log.d("notification", "verification pancard")
+                Log.d("notificationverixxxxx", "verification pancard")
 
-                navController.popAllBackStates()
-                navController.navigate(R.id.verificationMainLayout)
-//                navController.navigate(R.id.panCardFragment)
+//                navController.popAllBackStates()
+                navController.navigate(R.id.gigerVerificationFragment)
+                navController.navigate(R.id.panCardFragment)
             }
             else -> {
-                Log.d("notification", "verification else condition")
+                Log.d("notificationverixxxxx", "verification else condition")
 
                 navController.popAllBackStates()
                 navController.navigate(
@@ -471,7 +472,7 @@ class MainActivity : BaseActivity(),
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        Log.d("notification", "verification")
+        Log.d("notificationverixxxxx", "verification onnewintent")
         navController.handleDeepLink(intent)
         intent?.extras?.let {
             it.printDebugLog("printDebugLog")
@@ -483,7 +484,7 @@ class MainActivity : BaseActivity(),
         } else if (Intent.ACTION_SEND_MULTIPLE == intent?.action && isUserLoggedIn()) {
             formatMultipleDataSharedAndOpenChat(intent)
         } else if (intent?.getStringExtra(IS_DEEPLINK) == "true") {
-            Log.d("notification", "verification 1")
+            Log.d("notificationverixxxxx", "verification 1")
             handleDeepLink()
         }
     }
