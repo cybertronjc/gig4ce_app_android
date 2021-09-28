@@ -22,8 +22,20 @@ class SplashScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //Handling if Firebase Dynamic link is being clicked in any other application
-
+        //handling deep links
+        intent?.let {
+            val uri = intent.data
+            if (uri != null) {
+                val parameters = uri.pathSegments
+                // after that we are extracting string from that parameters.
+                val param = parameters[parameters.size - 1]
+                val intent = Intent(this, MainActivity::class.java)
+                if (param == "login_summary"){
+                    intent.putExtra(StringConstants.LOGIN_SUMMARY_VIA_DEEP_LINK.value, true)
+                    initApp(intent)
+                }
+            }
+        }
     }
 
     override fun onResume() {

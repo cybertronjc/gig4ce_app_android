@@ -217,6 +217,10 @@ class MainActivity : BaseActivity(),
                 intent.getStringExtra(IS_DEEPLINK) == "true" -> {
                     handleDeepLink()
                 }
+                //deep linking for login summary is handled here
+                intent.getBooleanExtra(StringConstants.LOGIN_SUMMARY_VIA_DEEP_LINK.value, false) -> {
+                   handleLoginSummaryNav()
+                }
                 else -> {
                     proceedWithNormalNavigation()
                 }
@@ -227,6 +231,16 @@ class MainActivity : BaseActivity(),
             lookForNewChatMessages()
         }
         profileDataSnapshot()
+    }
+
+    private fun handleLoginSummaryNav() {
+        if (!isUserLoggedIn()) {
+            proceedWithNormalNavigation()
+            return
+        }
+        navController.popBackStack()
+        navController.navigate(R.id.teamLeaderLoginDetailsFragment)
+
     }
 
     private fun profileDataSnapshot() {
