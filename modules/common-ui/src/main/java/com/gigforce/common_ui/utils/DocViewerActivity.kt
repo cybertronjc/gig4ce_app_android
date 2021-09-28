@@ -73,9 +73,9 @@ class DocViewerActivity : BaseActivity() {
         val scope = CoroutineScope(Job() + Dispatchers.Main)
         scope.launch {
             var url = bundle?.getString("apiUrl")
-            var source = bundle?.getString("source")?:"bottom_sheet"
-            val bannerName = bundle?.getString("bannerName")?:"bottom_sheet_banner"
-            val id = bundle?.getString("bannerId")?:"bannerId"
+            var source = bundle?.getString("source")?:""
+            val bannerName = bundle?.getString("bannerName")?:""
+            val id = bundle?.getString("bannerId")?:""
             url?.let {
                 accessLogResponse = bannerCardRepo.createLogs(
                     it,
@@ -108,7 +108,22 @@ class DocViewerActivity : BaseActivity() {
             changeStatusBarColor()
             toolbarDownload.gone()
             acceptLayout.visible()
-        } else {
+        }else if(purpose == "banner") {
+            var title = if(bundle?.getString("title").isNullOrBlank()){
+                if(bundle?.getString("defaultDocTitle").isNullOrBlank()){
+                    "Back to Gigforce"
+                }else{
+                    bundle?.getString("defaultDocTitle")
+                }
+            }else{bundle?.getString("title")}
+
+            toolbarTitle.text = title
+            toolbar_doc.visible()
+            changeStatusBarColor()
+            toolbarDownload.gone()
+            acceptLayout.gone()
+        }
+        else {
             toolbar_doc.gone()
             toolbarDownload.gone()
             acceptLayout.gone()

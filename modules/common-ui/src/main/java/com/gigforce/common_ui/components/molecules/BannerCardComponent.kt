@@ -23,7 +23,6 @@ open class BannerCardComponent(context: Context, attrs: AttributeSet?) :
     FrameLayout(context, attrs),
     IViewHolder {
     val title: TextView
-    val subtitle: TextView
     val image: ImageView
     var bannerCardData: BannerCardDVM? = null
     val topLayout: View
@@ -33,7 +32,6 @@ open class BannerCardComponent(context: Context, attrs: AttributeSet?) :
             LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         LayoutInflater.from(context).inflate(R.layout.banner_card_component, this, true)
         title = this.findViewById(R.id.title)
-        subtitle = this.findViewById(R.id.subtitle)
         image = this.findViewById(R.id.background_img)
         topLayout = this.findViewById(R.id.top_layout)
     }
@@ -60,14 +58,15 @@ open class BannerCardComponent(context: Context, attrs: AttributeSet?) :
             if (data.image.isNullOrEmpty() || data.apiUrl.isNullOrEmpty()) {
                 topLayout.gone()
             } else {
-                if (data.image?.isNotBlank() == true) {
+                if (data.image.isNotBlank()) {
                     setImage(data.image)
                 }
+                kjkj
                 if (data.title?.isNotBlank() == true) {
                     title.text = data.title
                 }
-                if (data.desc?.isNotBlank() == true) {
-                    subtitle.text = data.desc
+                else{
+                    title.gone()
                 }
 
 

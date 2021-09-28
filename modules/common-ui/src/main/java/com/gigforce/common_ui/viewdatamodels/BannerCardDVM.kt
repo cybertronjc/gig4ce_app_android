@@ -6,23 +6,34 @@ import com.gigforce.core.SimpleDVM
 import com.gigforce.core.datamodels.CommonViewTypes
 
 data class BannerCardDVM(
-    val id:String?=null,
+    val bannerId: String? = null,
     val title: String? = null,
-    val desc: String? = null,
     val image: String? = null,
     val apiUrl: String? = null,
-    val docUrl:String? = null,
+    val docUrl: String? = null,
     val navPath: String? = null,
-    val source : String?=null,
-    val bannerName : String?=null,
-    val type : String?=null,
-    val index : Long?=0
+    val source: String? = null,
+    val bannerName: String? = null,
+    val defaultDocTitle: String? = null,
+    val type: String? = null,
+    val index: Long? = 0
 ) : SimpleDVM(
     CommonViewTypes.VIEW_BANNER_CARD
 ) {
     override fun getNavArgs(): NavArgs? {
         navPath?.let {
-            return NavArgs(it, args = bundleOf("apiUrl" to apiUrl, "DOC_URL" to docUrl, "source" to source, "bannerName" to bannerName, "bannerId" to id))
+            return NavArgs(
+                it,
+                args = bundleOf(
+                    "apiUrl" to apiUrl,
+                    "DOC_URL" to docUrl,
+                    "source" to source,
+                    "bannerName" to bannerName,
+                    "bannerId" to bannerId,
+                    "title" to title,
+                    "defaultDocTitle" to defaultDocTitle
+                )
+            )
         } ?: return null
     }
 }
