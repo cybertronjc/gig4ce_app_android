@@ -41,7 +41,7 @@ class NewSelectionForm2ViewModel @Inject constructor(
     private var selectedShifts: MutableList<ShiftTimingItem> = mutableListOf()
     private lateinit var joiningLocationsAndTLs: JoiningLocationTeamLeadersShifts
     private lateinit var joiningRequest: SubmitJoiningRequest
-
+    private var currentlySubmittingAnyJoiningRequuest = false
 
     fun handleEvent(
         event: NewSelectionForm2Events
@@ -265,9 +265,20 @@ class NewSelectionForm2ViewModel @Inject constructor(
         submitJoiningData(joiningRequest)
     }
 
+
     private fun submitJoiningData(
         joiningRequest: SubmitJoiningRequest
     ) = viewModelScope.launch {
+
+        if(currentlySubmittingAnyJoiningRequuest){
+            logger.d(
+                TAG,
+                "Already a joining request submission in progress, ignoring this one",
+            )
+            return@launch
+        }
+
+        currentlySubmittingAnyJoiningRequuest = true
         logger.d(
             TAG,
             "Assigning gigs....",
@@ -302,7 +313,10 @@ class NewSelectionForm2ViewModel @Inject constructor(
                 TAG,
                 "[Success] Gigs assigned"
             )
+            currentlySubmittingAnyJoiningRequuest = false
         } catch (e: Exception) {
+
+            currentlySubmittingAnyJoiningRequuest = false
             _viewState.value = NewSelectionForm2ViewState.ErrorWhileSubmittingJoiningData(
                 error = e.message ?: "Unable to submit joining request, please try again later",
                 shouldShowErrorButton = false

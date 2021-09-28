@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.FileProvider
 import androidx.core.os.bundleOf
 import com.gigforce.core.base.BaseFragment2
@@ -33,6 +34,17 @@ class SelectionFormSubmitSuccessFragment : BaseFragment2<FragmentNewSelectionFor
     lateinit var navigation : INavigation
     private lateinit var shareLink : String
 
+    private val backPressHandler = object : OnBackPressedCallback(true) {
+
+        override fun handleOnBackPressed() {
+
+            navigation.popBackStack(
+                LeadManagementNavDestinations.FRAGMENT_JOINING,
+                false
+            )
+        }
+    }
+
     override fun shouldPreventViewRecreationOnNavigation(): Boolean {
         return true
     }
@@ -60,6 +72,14 @@ class SelectionFormSubmitSuccessFragment : BaseFragment2<FragmentNewSelectionFor
     ) {
         initView()
         initListener()
+        addBackPressListener()
+    }
+
+    private fun addBackPressListener() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            backPressHandler
+        )
     }
 
     private fun initView() = viewBinding.apply{

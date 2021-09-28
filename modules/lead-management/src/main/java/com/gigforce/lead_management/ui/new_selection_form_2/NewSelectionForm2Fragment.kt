@@ -223,6 +223,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
 
                 is NewSelectionForm2ViewState.ErrorWhileSubmittingJoiningData -> {
                     viewBinding.mainForm.nextButton.hideProgress("Submit")
+                    viewBinding.mainForm.nextButton.isEnabled = true
 
                     MaterialAlertDialogBuilder(requireContext())
                         .setTitle("Unable to submit joining request")
@@ -244,6 +245,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                         buttonText = "Submitting..."
                         progressColor = Color.WHITE
                     }
+                    viewBinding.mainForm.nextButton.isEnabled = false
                 }
             }
         })
