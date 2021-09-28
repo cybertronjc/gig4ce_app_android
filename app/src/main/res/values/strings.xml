@@ -1032,6 +1032,7 @@
     <string name="from_contacts_app">\" from your contacts!!!\"</string>
     <string name="from_emails_app">\" from your emails!!!\"</string>
     <string name="know_lang_app">\"Language known: \"</string>
+    <string name="account_blocked_app">Your account has been temporarily locked. Please try again after sometime.</string>
 
 
     //merged from live_master

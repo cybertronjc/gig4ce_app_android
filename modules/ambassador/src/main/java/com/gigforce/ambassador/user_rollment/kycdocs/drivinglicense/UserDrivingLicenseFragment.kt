@@ -289,6 +289,14 @@ class DrivingLicenseFragment : Fragment(),
             if (viewBinding.toplayoutblock.isDocDontOptChecked() || verificationScreenStatus == VerificationScreenStatus.VERIFIED || verificationScreenStatus == VerificationScreenStatus.STARTED_VERIFYING || !anyDataEntered) {
                 checkForNextDoc()
             } else {
+                if (dlFrontImagePath == null || dlFrontImagePath.toString().isBlank()){
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert_amb))
+                        .setMessage(getString(R.string.upload_dl_front_first_amb))
+                        .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
+                        .show()
+                    return@setOnClickListener
+                }
                 if (viewBinding.stateSpinner.text.equals("Select State")) {
                     MaterialAlertDialogBuilder(requireContext())
                         .setTitle(getString(R.string.alert_amb))
@@ -948,6 +956,7 @@ class DrivingLicenseFragment : Fragment(),
                     )
 
                 )
+                dlFrontImagePath = Uri.parse(it)
 
             }
 
@@ -970,6 +979,7 @@ class DrivingLicenseFragment : Fragment(),
                     )
 
                 )
+                dlBackImagePath = Uri.parse(it)
 
             }
 

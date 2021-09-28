@@ -437,7 +437,8 @@
     <string name="same_as_permanent_veri">Same as permanent address</string>
     <string name="curr_add1_veri">Enter Current Address Line 1</string>
     <string name="curr_add2_veri">Enter Current Address Line 2</string>
-
+    <string name="no_doc_title_aadhaar_veri">Aadhaar not available!</string>
+    <string name="no_doc_subtitle_aadhaar_veri">No Worries! Once you own Aadhaar you can untick the checkbox to verify it</string>
     <!--    <string name="veri_add_doc_front">"Front Side"</string>-->
 <!--    <string name="veri_add_doc_back">"Back Side"</string>-->
 <!--    <string name="veri_pan_title">"Step 5 : Upload your Pan"</string>-->
@@ -447,4 +448,6 @@
 <!--    <string name="veri_bank_title">"Step 4 : Please add your Bank Details"</string>-->
 <!--    <string name="veri_add_bank">"Add Bank Details"</string>-->
 <!--    <string name="veri_done">Hurray!!!\nKYC Documents submitted.\nWe will let you know once Verified.</string>-->
+    <string name="upload_pan_image_first_veri">Upload PAN card image first</string>
+    <string name="upload_dl_front_first_veri">Upload DL front image first</string>
 </resources>

@@ -81,8 +81,8 @@ android {
 
             applicationId "com.gigforce.app"
             resValue "string", "app_name", "Gigforce"
-            versionCode 153
-            versionName "1.34.4"
+            versionCode 155
+            versionName "1.34.6"
             buildConfigField "String", 'REFERRAL_BASE_URL', '"https://gig4ce.page.link/"'
             buildConfigField "String", 'GENERATE_PAYSLIP_URL', '"https://45nydq0i5g.execute-api.ap-south-1.amazonaws.com/default/get-or-create-payment-advice-prod"'
             buildConfigField "String", 'DRIVING_CERTIFICATE_URL', '"https://d1rdwfmrsl.execute-api.ap-south-1.amazonaws.com/default/"'
@@ -153,8 +153,8 @@ android {
             dimension "default"
             applicationId "com.gigforce.app.staging"
             resValue "string", "app_name", "Gigforce Staging"
-            versionCode 137
-            versionName "5.0.3"
+            versionCode 140
+            versionName "5.0.4"
             versionNameSuffix '-Staging'
             signingConfig signingConfigs.staging
             buildConfigField "String", 'REFERRAL_BASE_URL', '"https://gig4cestaging.page.link"'

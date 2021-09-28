@@ -299,7 +299,6 @@
                 android:gravity="center"
                 android:minHeight="@dimen/size_36"
                 android:text="@string/submit_giger_gigs"
-                android:enabled="false"
                 android:layout_marginTop="16dp"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
