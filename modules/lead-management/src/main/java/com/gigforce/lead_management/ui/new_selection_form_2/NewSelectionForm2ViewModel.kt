@@ -8,10 +8,8 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.lead_management.repositories.LeadManagementRepository
-import com.gigforce.lead_management.ui.assign_gig_dialog.AssignGigsViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -61,7 +59,6 @@ class NewSelectionForm2ViewModel @Inject constructor(
             is NewSelectionForm2Events.CitySelected -> {
                 selectedCity = event.city
                 selectedReportingLocation = null
-                openSelectReportingLocationsScreenWithDelay()
             }
             is NewSelectionForm2Events.ClientTLSelected -> {
                 selectedTL = event.teamLeader
@@ -87,17 +84,31 @@ class NewSelectionForm2ViewModel @Inject constructor(
 
         cities.onEach {
             it.selected = it.id == selectedCity?.id
+            it.reportingLocations = getReportingLocations(it.id)
         }
+
         _viewState.value = NewSelectionForm2ViewState.OpenSelectCityScreen(
             cities = cities
         )
         _viewState.value = null
     }
 
-    private fun openSelectReportingLocationsScreenWithDelay() = viewModelScope.launch{
-        delay(200)
-        openSelectReportingLocationsScreen()
+    private fun getReportingLocations(
+        cityId: String?
+    ): List<ReportingLocationsItem> {
+        val cityIdNonNull = cityId ?: return emptyList()
+
+        val reportingLocations = joiningLocationsAndTLs.reportingLocations.filter {
+            it.cityId == cityIdNonNull && it.type == "office"
+        }
+
+        reportingLocations.onEach {
+            it.selected = it.id == cityIdNonNull
+        }
+
+        return reportingLocations
     }
+
 
     private fun openSelectReportingLocationsScreen() {
         if (selectedCity == null) {
@@ -107,11 +118,12 @@ class NewSelectionForm2ViewModel @Inject constructor(
             _viewState.value = null
         } else {
             val reportingLocations = joiningLocationsAndTLs.reportingLocations.filter {
-               it.cityId == selectedCity?.cityId &&  it.type == "office"
+                it.cityId == selectedCity?.cityId && it.type == "office"
             }
 
             reportingLocations.onEach {
                 it.selected = it.id == selectedReportingLocation?.id
+
             }
 
             _viewState.value = NewSelectionForm2ViewState.OpenSelectReportingScreen(
@@ -138,8 +150,14 @@ class NewSelectionForm2ViewModel @Inject constructor(
     ) = viewModelScope.launch {
 
         if (::joiningLocationsAndTLs.isInitialized) {
-            _viewState.value =
-                NewSelectionForm2ViewState.LocationAndTlDataLoaded(joiningLocationsAndTLs)
+
+            checkIfCityAndReportingLocationIsSelectedElseSelectedFirstOne()
+
+            _viewState.value = NewSelectionForm2ViewState.LocationAndTlDataLoaded(
+                selectedCity?.name,
+                selectedReportingLocation?.name,
+                joiningLocationsAndTLs
+            )
             return@launch
         }
 
@@ -159,9 +177,14 @@ class NewSelectionForm2ViewModel @Inject constructor(
                 TAG,
                 "location and tl data received from server"
             )
+            checkIfCityAndReportingLocationIsSelectedElseSelectedFirstOne()
 
             _viewState.value =
-                NewSelectionForm2ViewState.LocationAndTlDataLoaded(locationAndTlsData)
+                NewSelectionForm2ViewState.LocationAndTlDataLoaded(
+                    selectedCity?.name,
+                    selectedReportingLocation?.name,
+                    locationAndTlsData
+                )
         } catch (e: Exception) {
             logger.e(
                 TAG,
@@ -176,6 +199,37 @@ class NewSelectionForm2ViewModel @Inject constructor(
         }
     }
 
+    private fun checkIfCityAndReportingLocationIsSelectedElseSelectedFirstOne() {
+        if (selectedCity == null) {
+
+            val cities = joiningLocationsAndTLs.reportingLocations.filter {
+                it.type == "city"
+            }
+            if (cities.size == 1) {
+                cities.onEach {
+                    it.selected = it.id == selectedCity?.id
+                    it.reportingLocations = getReportingLocations(it.id)
+                }
+                selectedCity = cities.first()
+
+                if (selectedReportingLocation == null) {
+                    val reportingLocations = joiningLocationsAndTLs.reportingLocations.filter {
+                        it.cityId == selectedCity?.cityId && it.type == "office"
+                    }
+
+                    if (reportingLocations.size == 1) {
+                        reportingLocations.onEach {
+                            it.selected = it.id == selectedReportingLocation?.id
+                        }
+                        selectedReportingLocation = reportingLocations.first()
+                    }
+                }
+            }
+        }
+
+
+    }
+
     private fun validateDataAndSubmit() {
 
         if (selectedCity == null) {
@@ -187,23 +241,15 @@ class NewSelectionForm2ViewModel @Inject constructor(
         }
         joiningRequest.city = selectedCity!!
 
-        if (selectedReportingLocation == null) {
+        if (selectedCity!!.reportingLocations.isNotEmpty() && selectedReportingLocation == null) {
 
             _viewState.value = NewSelectionForm2ViewState.ValidationError(
                 reportingLocationError = "Please select reporting location"
             )
             return
         }
-        joiningRequest.reportingLocation = selectedReportingLocation!!
-
-        if (selectedDateOfJoining == null) {
-            _viewState.value = NewSelectionForm2ViewState.ValidationError(
-               assignGigsFromError  = "Please select expected date"
-            )
-            return
-        }
+        joiningRequest.reportingLocation = selectedReportingLocation
         joiningRequest.assignGigsFrom = dateFormatter.format(selectedDateOfJoining)
-
 
         if (selectedShifts.isEmpty()) {
 
@@ -237,8 +283,8 @@ class NewSelectionForm2ViewModel @Inject constructor(
 
             val shareLink = try {
                 leadManagementRepository.createJobProfileReferralLink(joiningRequest.jobProfile.id!!)
-            } catch (e : Exception){
-                logger.d(TAG,"error while creating job profile share link",e)
+            } catch (e: Exception) {
+                logger.d(TAG, "error while creating job profile share link", e)
                 ""
             }
 

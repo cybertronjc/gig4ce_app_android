@@ -1,6 +1,7 @@
 package com.gigforce.lead_management.ui.select_business_screen
 
 import android.os.Bundle
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -11,10 +12,14 @@ import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
+import com.gigforce.core.navigation.INavigation
+import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.FragmentSelectBusinessBinding
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
+import com.gigforce.lead_management.ui.select_job_profile_screen.SelectJobProfileFragment
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SelectBusinessFragment : BaseFragment2<FragmentSelectBusinessBinding>(
@@ -27,6 +32,9 @@ class SelectBusinessFragment : BaseFragment2<FragmentSelectBusinessBinding>(
         private const val TAG = "SelectBusinessFragment"
         const val INTENT_EXTRA_BUSINESS_LIST = "business_list"
     }
+
+    @Inject
+    lateinit var navigation: INavigation
 
     private val sharedViewModel: LeadManagementSharedViewModel by activityViewModels()
     private var businessList: ArrayList<JoiningBusinessAndJobProfilesItem> = arrayListOf()
@@ -102,10 +110,14 @@ class SelectBusinessFragment : BaseFragment2<FragmentSelectBusinessBinding>(
         businessRecyclerView.adapter = businessAdapter
 
         okayButton.setOnClickListener {
-            val selectedBusiness =
-                businessAdapter.getSelectedBusiness() ?: return@setOnClickListener
+            val selectedBusiness = businessAdapter.getSelectedBusiness() ?: return@setOnClickListener
             sharedViewModel.businessSelected(selectedBusiness)
-            findNavController().navigateUp()
+
+            navigation.navigateTo(
+                LeadManagementNavDestinations.FRAGMENT_SELECT_JOB_PROFILE,
+                bundleOf(SelectJobProfileFragment.INTENT_EXTRA_JOB_PROFILES to selectedBusiness.jobProfiles),
+                getNavOptions()
+            )
         }
     }
 
@@ -113,6 +125,7 @@ class SelectBusinessFragment : BaseFragment2<FragmentSelectBusinessBinding>(
         if (businessList.isEmpty()) {
             this.businessInfoLayout.root.visible()
             this.businessInfoLayout.infoMessageTv.text = "No Business to show"
+            this.businessInfoLayout.infoIv.loadImage(R.drawable.ic_no_selection)
         } else {
             this.businessInfoLayout.root.gone()
             businessAdapter.setData(businessList)

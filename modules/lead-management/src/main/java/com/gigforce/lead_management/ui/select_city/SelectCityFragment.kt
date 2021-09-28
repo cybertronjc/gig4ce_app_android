@@ -1,6 +1,7 @@
 package com.gigforce.lead_management.ui.select_city
 
 import android.os.Bundle
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -11,10 +12,14 @@ import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
+import com.gigforce.core.navigation.INavigation
+import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.FragmentSelectBusinessBinding
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
+import com.gigforce.lead_management.ui.select_reporting_location.SelectReportingLocationFragment
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SelectCityFragment : BaseFragment2<FragmentSelectBusinessBinding>(
@@ -28,6 +33,8 @@ class SelectCityFragment : BaseFragment2<FragmentSelectBusinessBinding>(
         const val INTENT_EXTRA_CITY_LIST = "city_list"
     }
 
+    @Inject
+    lateinit var navigation: INavigation
     private val sharedViewModel: LeadManagementSharedViewModel by activityViewModels()
     private var cityList: ArrayList<ReportingLocationsItem> = arrayListOf()
 
@@ -102,7 +109,20 @@ class SelectCityFragment : BaseFragment2<FragmentSelectBusinessBinding>(
         okayButton.setOnClickListener {
             val selectedCity = cityAdapter.getSelectedCity() ?: return@setOnClickListener
             sharedViewModel.citySelected(selectedCity)
-            findNavController().navigateUp()
+
+
+            okayButton.postDelayed({
+
+                navigation.navigateTo(
+                    LeadManagementNavDestinations.FRAGMENT_SELECT_REPORTING_LOCATION,
+                    bundleOf(
+                        SelectReportingLocationFragment.INTENT_EXTRA_REPORTING_LOCATIONS to selectedCity.reportingLocations,
+                        SelectReportingLocationFragment.INTENT_EXTRA_SELECTED_CITY to selectedCity
+                    ),
+                    getNavOptions()
+                )
+            },200)
+
         }
     }
 
@@ -110,6 +130,7 @@ class SelectCityFragment : BaseFragment2<FragmentSelectBusinessBinding>(
         if (cityList.isEmpty()) {
             this.businessInfoLayout.root.visible()
             this.businessInfoLayout.infoMessageTv.text = "No City to show"
+            this.businessInfoLayout.infoIv.loadImage(R.drawable.ic_no_selection)
         } else {
             this.businessInfoLayout.root.gone()
             cityAdapter.setData(cityList)

@@ -341,13 +341,16 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/next_button"
+            style="@style/Widget.MaterialComponents.Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/size_16"
             android:layout_marginEnd="@dimen/size_16"
             android:layout_marginBottom="@dimen/size_16"
-            android:background="@color/lipstick_2"
             android:text="Next"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            app:shapeAppearanceOverlay="@style/RoundCornerButtonShapeOverlay"
             android:textColor="@color/white" />
 
     </LinearLayout>

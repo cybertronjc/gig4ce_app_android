@@ -10,6 +10,8 @@ sealed class NewSelectionForm2ViewState {
     object LoadingLocationAndTLData : NewSelectionForm2ViewState()
 
     data class LocationAndTlDataLoaded(
+        val selectedCity : String?,
+        val selectedReportingLocation : String?,
         val shiftAndTls : JoiningLocationTeamLeadersShifts
     ) : NewSelectionForm2ViewState()
 
@@ -69,6 +71,7 @@ sealed class NewSelectionForm2Events {
     ) : NewSelectionForm2Events()
 
     data class ReportingLocationSelected(
+        val citySelected: ReportingLocationsItem,
         val reportingLocation: ReportingLocationsItem
     ) : NewSelectionForm2Events()
 

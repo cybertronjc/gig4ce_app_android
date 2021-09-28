@@ -32,7 +32,7 @@ data class SubmitJoiningRequest(
     var city: ReportingLocationsItem = ReportingLocationsItem(),
 
     @SerializedName("reportingLocation")
-    var reportingLocation: ReportingLocationsItem = ReportingLocationsItem(),
+    var reportingLocation: ReportingLocationsItem? = null,
 
     @SerializedName("shifts")
     var shifts: List<ShiftTimingItem> = emptyList(),

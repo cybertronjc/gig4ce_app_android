@@ -34,7 +34,9 @@ data class ReportingLocationsItem(
 	@field:SerializedName("type")
 	val type: String? = null,
 
-	var selected : Boolean = false
+	var selected : Boolean = false,
+
+	var reportingLocations: List<ReportingLocationsItem> = emptyList()
 ) : Parcelable
 
 @Parcelize

@@ -254,7 +254,7 @@
                     android:layout_marginTop="28dp"
                     android:gravity="top"
                     android:lineSpacingExtra="1sp"
-                    android:text="Expected date of joining"
+                    android:text="Date of Joining"
                     android:textAppearance="@style/style_h5"
                     android:translationY="-0.6sp" />
 
@@ -321,7 +321,7 @@
                     android:layout_marginTop="28dp"
                     android:gravity="top"
                     android:lineSpacingExtra="1sp"
-                    android:text="Select Shift Timing (Multi Select)"
+                    android:text="Select Shift Timing"
                     android:textAppearance="@style/style_h5"
                     android:translationY="-0.6sp" />
 
@@ -370,7 +370,9 @@
             android:layout_marginStart="@dimen/size_16"
             android:layout_marginEnd="@dimen/size_16"
             android:layout_marginBottom="@dimen/size_16"
-            android:background="@color/lipstick_2"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            app:shapeAppearanceOverlay="@style/RoundCornerButtonShapeOverlay"
             android:text="Submit"
             android:textColor="@color/white" />
 

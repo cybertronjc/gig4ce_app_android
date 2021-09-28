@@ -47,7 +47,7 @@
     <style name="body_primary">
 
         <item name="android:textSize">
-            12sp
+            14sp
         </item>
 
         <item name="android:textColor">

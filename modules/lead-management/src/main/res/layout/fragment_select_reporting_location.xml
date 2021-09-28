@@ -44,7 +44,9 @@
                     android:layout_marginStart="@dimen/size_16"
                     android:layout_marginEnd="@dimen/size_16"
                     android:layout_marginBottom="@dimen/size_16"
-                    android:background="@color/lipstick_2"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
+                    app:shapeAppearanceOverlay="@style/RoundCornerButtonShapeOverlay"
                     android:enabled="false"
                     android:text="Next"
                     android:textColor="@color/white" />

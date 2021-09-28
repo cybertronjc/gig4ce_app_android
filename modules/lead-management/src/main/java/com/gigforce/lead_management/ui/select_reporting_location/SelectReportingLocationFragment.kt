@@ -11,10 +11,13 @@ import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
+import com.gigforce.core.navigation.INavigation
+import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.FragmentSelectReportingLocationBinding
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SelectReportingLocationFragment : BaseFragment2<FragmentSelectReportingLocationBinding>(
@@ -29,6 +32,8 @@ class SelectReportingLocationFragment : BaseFragment2<FragmentSelectReportingLoc
         const val INTENT_EXTRA_SELECTED_CITY = "selected_city"
     }
 
+    @Inject
+    lateinit var navigation: INavigation
     private val sharedViewModel: LeadManagementSharedViewModel by activityViewModels()
     private var reportingLocations: ArrayList<ReportingLocationsItem> = arrayListOf()
     private lateinit var selectCity: ReportingLocationsItem
@@ -113,9 +118,13 @@ class SelectReportingLocationFragment : BaseFragment2<FragmentSelectReportingLoc
             val selectedReportingLocation =
                 reportingLocationAdapter.getSelectedReportingLocation() ?: return@setOnClickListener
             sharedViewModel.reportingLocationSelected(
+                selectCity,
                 selectedReportingLocation
             )
-            findNavController().navigateUp()
+            navigation.popBackStack(
+                LeadManagementNavDestinations.FRAGMENT_SELECTION_FORM_2,
+                false
+            )
         }
     }
 
@@ -125,8 +134,8 @@ class SelectReportingLocationFragment : BaseFragment2<FragmentSelectReportingLoc
         if (reportingLocations.isEmpty()) {
             this.infoLayout.root.visible()
             this.infoLayout.infoMessageTv.text = "No reporting location to show"
+            this.infoLayout.infoIv.loadImage(R.drawable.ic_no_selection)
         } else {
-
             this.infoLayout.root.gone()
             reportingLocationAdapter.setData(reportingLocations)
             viewBinding.okayButton.isEnabled = reportingLocations.find { it.selected } != null

@@ -1064,10 +1064,6 @@
         android:id="@+id/newSelectionFormSubmitSuccessFragment"
         android:name="com.gigforce.lead_management.ui.new_selection_form_submittion_success.SelectionFormSubmitSuccessFragment"
         android:label="SelectionFormSubmitSuccessFragment" />
-    <dialog
-        android:id="@+id/shareJobProfileLinkBottomSheet"
-        android:name="com.gigforce.lead_management.ui.new_selection_form_submittion_success.ShareJobProfileLinkBottomSheet"
-        android:label="ShareJobProfileLinkBottomSheet" />
 
     <fragment
         android:id="@+id/adharDetailInfoFragment"

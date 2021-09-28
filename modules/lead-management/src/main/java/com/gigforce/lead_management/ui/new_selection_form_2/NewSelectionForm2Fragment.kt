@@ -197,7 +197,11 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
             when (state) {
                 //Loading initial data states
                 NewSelectionForm2ViewState.LoadingLocationAndTLData -> loadingBusinessAndJobProfiles()
-                is NewSelectionForm2ViewState.LocationAndTlDataLoaded -> showMainForm(state.shiftAndTls)
+                is NewSelectionForm2ViewState.LocationAndTlDataLoaded -> showMainForm(
+                    state.shiftAndTls,
+                    state.selectedCity,
+                    state.selectedReportingLocation
+                )
                 is NewSelectionForm2ViewState.ErrorWhileLoadingLocationAndTlData -> showErrorInLoadingBusinessAndJobProfiles(
                     state.error
                 )
@@ -253,7 +257,8 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
             bundleOf(
                 SelectReportingLocationFragment.INTENT_EXTRA_REPORTING_LOCATIONS to reportingLocations,
                 SelectReportingLocationFragment.INTENT_EXTRA_SELECTED_CITY to selectedCity
-            )
+            ),
+            getNavOptions()
         )
     }
 
@@ -262,7 +267,8 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
     ) {
         navigation.navigateTo(
             LeadManagementNavDestinations.FRAGMENT_SELECT_CLIENT_TL,
-            bundleOf(SelectClientTlFragment.INTENT_EXTRA_CLIENT_TLS to businessTls)
+            bundleOf(SelectClientTlFragment.INTENT_EXTRA_CLIENT_TLS to businessTls),
+            getNavOptions()
         )
     }
 
@@ -271,7 +277,8 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
     ) {
         navigation.navigateTo(
             LeadManagementNavDestinations.FRAGMENT_SELECT_CITY,
-            bundleOf(SelectCityFragment.INTENT_EXTRA_CITY_LIST to cities)
+            bundleOf(SelectCityFragment.INTENT_EXTRA_CITY_LIST to cities),
+            getNavOptions()
         )
     }
 
@@ -332,7 +339,9 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
     }
 
     private fun showMainForm(
-        shiftAndTls: JoiningLocationTeamLeadersShifts
+        shiftAndTls: JoiningLocationTeamLeadersShifts,
+        selectedCity: String?,
+        selectedReportingLocation: String?
     ) = viewBinding.apply {
         stopShimmer(
             dataLoadingShimmerContainer,
@@ -362,11 +371,24 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         mainForm.shiftChipGroup.isSingleSelection = false
 
         try {
-            if(shiftAndTls.shiftTiming.size == 1){
+            if (shiftAndTls.shiftTiming.size == 1) {
                 (mainForm.shiftChipGroup.getChildAt(0) as Chip).isChecked = true
             }
         } catch (e: Exception) {
             e.printStackTrace()
+        }
+
+
+        if(selectedCity != null) {
+            mainForm.citySelectedLabel.text = selectedCity
+        } else{
+            mainForm.citySelectedLabel.text = "Click to select city"
+        }
+
+        if(selectedReportingLocation != null) {
+            mainForm.reportingLocationSelectedLabel.text = selectedReportingLocation
+        } else{
+            mainForm.reportingLocationSelectedLabel.text = "Click to select location"
         }
     }
 
@@ -395,26 +417,11 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                     is LeadManagementSharedViewModelState.CitySelected -> showSelectedCity(it.city)
                     is LeadManagementSharedViewModelState.ClientTLSelected -> showSelectedTL(it.tlSelected)
                     is LeadManagementSharedViewModelState.ReportingLocationSelected -> showSelectedReportingLocation(
+                        it.citySelected,
                         it.reportingLocation
                     )
                 }
             })
-
-        lifecycleScope.launchWhenCreated {
-
-            leadMgmtSharedViewModel
-                .viewStateFlow
-                .collect {
-                    when (it) {
-                        is LeadManagementSharedViewModelState.CitySelected -> showSelectedCity(it.city)
-                        is LeadManagementSharedViewModelState.ClientTLSelected -> showSelectedTL(it.tlSelected)
-                        is LeadManagementSharedViewModelState.ReportingLocationSelected -> showSelectedReportingLocation(
-                            it.reportingLocation
-                        )
-                    }
-                }
-        }
-
     }
 
     private fun showSelectedCity(
@@ -430,12 +437,14 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
     }
 
     private fun showSelectedReportingLocation(
+        citySelected: ReportingLocationsItem,
         reportingLocationSelected: ReportingLocationsItem
     ) = viewBinding.mainForm.apply {
 
         reportingLocationSelectedLabel.text = reportingLocationSelected.name
         viewModel.handleEvent(
             NewSelectionForm2Events.ReportingLocationSelected(
+                citySelected,
                 reportingLocationSelected
             )
         )

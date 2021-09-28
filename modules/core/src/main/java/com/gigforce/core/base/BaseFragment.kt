@@ -113,10 +113,10 @@ abstract class BaseFragment2<V : ViewDataBinding>(
 
     fun getNavOptions() = navOptions {
         this.anim {
-            this.enter = R.anim.nav_default_enter_anim
-            this.exit = R.anim.nav_default_exit_anim
-            this.popEnter= R.anim.nav_default_pop_enter_anim
-            this.popExit= R.anim.nav_default_pop_exit_anim
+            this.enter = R.anim.anim_enter_from_right
+            this.exit = R.anim.anim_exit_to_left
+            this.popEnter = R.anim.anim_enter_from_left
+            this.popExit = R.anim.anim_exit_to_right
         }
     }
 }

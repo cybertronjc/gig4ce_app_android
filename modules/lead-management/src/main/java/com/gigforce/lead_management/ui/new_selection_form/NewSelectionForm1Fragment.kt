@@ -1,6 +1,10 @@
 package com.gigforce.lead_management.ui.new_selection_form
 
+import android.content.Context
 import android.os.Bundle
+import android.os.Handler
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.LinearLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
@@ -57,6 +61,13 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
         initListeners(viewBinding)
         initViewModel()
         initSharedViewModel()
+    }
+
+    private fun requestFocusOnMobileNoEditText() = viewBinding.mainForm.apply {
+
+        mobileNoEt.requestFocus()
+        val imm: InputMethodManager = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.toggleSoftInput( InputMethodManager.SHOW_FORCED,0)
     }
 
     private fun attachTextWatcher()= viewBinding.apply  {
@@ -184,7 +195,8 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
     ) {
         navigation.navigateTo(
             LeadManagementNavDestinations.FRAGMENT_SELECT_JOB_PROFILE,
-            bundleOf(SelectJobProfileFragment.INTENT_EXTRA_JOB_PROFILES to jobProfiles)
+            bundleOf(SelectJobProfileFragment.INTENT_EXTRA_JOB_PROFILES to jobProfiles),
+            getNavOptions()
         )
     }
 
@@ -193,7 +205,8 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
     ) {
         navigation.navigateTo(
             LeadManagementNavDestinations.FRAGMENT_SELECT_BUSINESS,
-            bundleOf(SelectBusinessFragment.INTENT_EXTRA_BUSINESS_LIST to business)
+            bundleOf(SelectBusinessFragment.INTENT_EXTRA_BUSINESS_LIST to business),
+            getNavOptions()
         )
     }
 
@@ -258,6 +271,12 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
         formMainInfoLayout.root.gone()
 
         mainForm.root.visible()
+
+        if (viewCreatedForTheFirstTime){
+            Handler().postDelayed({
+                requestFocusOnMobileNoEditText()
+            },300)
+        }
     }
 
     private fun showErrorInLoadingBusinessAndJobProfiles(
@@ -305,8 +324,6 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
 
         businessErrorTv.text = null
         businessErrorTv.gone()
-
-        openSelectJobProfileScreen(ArrayList(businessSelected.jobProfiles))
     }
 
     private fun showSelectedJobProfile(

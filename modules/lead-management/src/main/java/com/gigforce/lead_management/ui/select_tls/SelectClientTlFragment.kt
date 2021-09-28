@@ -85,7 +85,7 @@ class SelectClientTlFragment : BaseFragment2<FragmentSelectClientTlBinding>(
 
     private fun initListeners() = viewBinding.apply {
         toolbar.apply {
-            titleText.text = "Select client tl"
+            titleText.text = "Select client TL"
             setBackButtonListener{
                 navigation.navigateUp()
             }
@@ -111,6 +111,7 @@ class SelectClientTlFragment : BaseFragment2<FragmentSelectClientTlBinding>(
         if (clientTls.isEmpty()) {
             this.infoLayout.root.visible()
             this.infoLayout.infoMessageTv.text = "No Client Team leader to show"
+            this.infoLayout.infoIv.loadImage(R.drawable.ic_no_selection)
         } else {
             this.infoLayout.root.gone()
             clientTLAdapter.setData(clientTls)

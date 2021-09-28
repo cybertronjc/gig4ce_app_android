@@ -63,6 +63,7 @@ class SelectionFormSubmitSuccessFragment : BaseFragment2<FragmentNewSelectionFor
     }
 
     private fun initView() = viewBinding.apply{
+        toolbar.setBackButtonDrawable(R.drawable.ic_chevron)
         toolbar.setBackButtonListener {
             navigation.popBackStack(
                 LeadManagementNavDestinations.FRAGMENT_JOINING,

@@ -12,11 +12,14 @@ import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
+import com.gigforce.core.navigation.INavigation
+import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.FragmentSelectBusinessBinding
 import com.gigforce.lead_management.databinding.FragmentSelectJobProfileBinding
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SelectJobProfileFragment : BaseFragment2<FragmentSelectJobProfileBinding>(
@@ -30,6 +33,8 @@ class SelectJobProfileFragment : BaseFragment2<FragmentSelectJobProfileBinding>(
         const val INTENT_EXTRA_JOB_PROFILES = "job_profiles"
     }
 
+    @Inject
+    lateinit var navigation: INavigation
     private val sharedViewModel: LeadManagementSharedViewModel by activityViewModels()
     private var jobProfiles: ArrayList<JobProfilesItem> = arrayListOf()
 
@@ -101,7 +106,11 @@ class SelectJobProfileFragment : BaseFragment2<FragmentSelectJobProfileBinding>(
         okayButton.setOnClickListener {
             val selectedJobProfile = jobProfileAdapter.getSelectedBusiness() ?: return@setOnClickListener
             sharedViewModel.jobProfileSelected(selectedJobProfile)
-            findNavController().navigateUp()
+
+            navigation.popBackStack(
+                LeadManagementNavDestinations.FRAGMENT_SELECTION_FORM_1,
+                false
+            )
         }
     }
 
@@ -109,6 +118,7 @@ class SelectJobProfileFragment : BaseFragment2<FragmentSelectJobProfileBinding>(
         if (jobProfiles.isEmpty()) {
             this.infoLayout.root.visible()
             this.infoLayout.infoMessageTv.text = "No Job Profile to show"
+            this.infoLayout.infoIv.loadImage(R.drawable.ic_no_selection)
         } else {
             this.infoLayout.root.gone()
             jobProfileAdapter.setData(jobProfiles)
