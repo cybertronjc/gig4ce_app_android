@@ -68,8 +68,8 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity(),
-        NavFragmentsData,
-        INavigationProvider, InstallStateUpdatedListener {
+    NavFragmentsData,
+    INavigationProvider, InstallStateUpdatedListener {
 
     private var bundle: Bundle? = null
     private lateinit var navController: NavController
@@ -105,6 +105,7 @@ class MainActivity : BaseActivity(),
 
     @Inject
     lateinit var appDialogsInterface: AppDialogsInterface
+
     @Inject
     lateinit var eventTracker: IEventTracker
 
@@ -117,13 +118,13 @@ class MainActivity : BaseActivity(),
     }
 
     private val intentFilters =
-            IntentFilter(NotificationConstants.BROADCAST_ACTIONS.SHOW_CHAT_NOTIFICATION)
+        IntentFilter(NotificationConstants.BROADCAST_ACTIONS.SHOW_CHAT_NOTIFICATION)
     private val notificationIntentRecevier = object : BroadcastReceiver() {
 
         override fun onReceive(context: Context?, intent: Intent?) {
             val remoteMessage: RemoteMessage =
-                    intent?.getParcelableExtra(MyFirebaseMessagingService.INTENT_EXTRA_REMOTE_MESSAGE)
-                            ?: return
+                intent?.getParcelableExtra(MyFirebaseMessagingService.INTENT_EXTRA_REMOTE_MESSAGE)
+                    ?: return
 
             if (!isUserLoggedIn()) {
                 Log.d("MainActivity", "User Not logged in, not showing chat notification")
@@ -131,7 +132,7 @@ class MainActivity : BaseActivity(),
             }
 
             if (navController.currentDestination?.label != "fragment_chat_list" &&
-                    navController.currentDestination?.label != "fragment_chat_page"
+                navController.currentDestination?.label != "fragment_chat_page"
             )
                 chatNotificationHandler.handleChatNotification(remoteMessage)
         }
@@ -139,9 +140,9 @@ class MainActivity : BaseActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         if (!isTaskRoot
-                && intent.hasCategory(Intent.CATEGORY_LAUNCHER)
-                && intent.action != null
-                && intent.action.equals(Intent.ACTION_MAIN)
+            && intent.hasCategory(Intent.CATEGORY_LAUNCHER)
+            && intent.action != null
+            && intent.action.equals(Intent.ACTION_MAIN)
         ) {
             finish()
             return
@@ -161,8 +162,8 @@ class MainActivity : BaseActivity(),
         // sendCommandToService(TrackingConstants.ACTION_START_OR_RESUME_SERVICE)
 
         LocalBroadcastManager.getInstance(this).registerReceiver(
-                notificationIntentRecevier,
-                intentFilters
+            notificationIntentRecevier,
+            intentFilters
         )
         if (Intent.ACTION_SEND == intent.action && isUserLoggedIn()) {
             //User Clicked on share in gallery
@@ -180,15 +181,15 @@ class MainActivity : BaseActivity(),
 
                     navController.popBackStack()
                     navController.navigate(
-                            R.id.fragment_client_activation, bundleOf(
+                        R.id.fragment_client_activation, bundleOf(
                             StringConstants.JOB_PROFILE_ID.value to intent.getStringExtra(
-                                    StringConstants.JOB_PROFILE_ID.value
+                                StringConstants.JOB_PROFILE_ID.value
                             ),
                             StringConstants.INVITE_USER_ID.value to intent.getStringExtra(
-                                    StringConstants.INVITE_USER_ID.value
+                                StringConstants.INVITE_USER_ID.value
                             ),
                             StringConstants.CLIENT_ACTIVATION_VIA_DEEP_LINK.value to true
-                    )
+                        )
                     )
                 }
 
@@ -202,15 +203,15 @@ class MainActivity : BaseActivity(),
 //                LandingScreenFragmentDirections.openRoleDetailsHome( intent.getStringExtra(StringConstants.ROLE_ID.value),true)
                     navController.popBackStack()
                     navController.navigate(
-                            R.id.fragment_role_details, bundleOf(
+                        R.id.fragment_role_details, bundleOf(
                             StringConstants.ROLE_ID.value to intent.getStringExtra(
-                                    StringConstants.ROLE_ID.value
+                                StringConstants.ROLE_ID.value
                             ),
                             StringConstants.INVITE_USER_ID.value to intent.getStringExtra(
-                                    StringConstants.INVITE_USER_ID.value
+                                StringConstants.INVITE_USER_ID.value
                             ),
                             StringConstants.ROLE_VIA_DEEPLINK.value to true
-                    )
+                        )
                     )
                 }
                 intent.getStringExtra(IS_DEEPLINK) == "true" -> {
@@ -232,20 +233,20 @@ class MainActivity : BaseActivity(),
         FirebaseAuth.getInstance().addAuthStateListener { it1 ->
             it1.currentUser?.uid?.let {
                 FirebaseFirestore.getInstance().collection("Profiles").document(it)
-                        .addSnapshotListener { value, e ->
-                            value?.data?.let {
-                                value.toObject(ProfileData::class.java)?.let {
-                                    shareDataAndCommUtil.saveLoggedInMobileNumber(
-                                            it1.currentUser?.phoneNumber ?: ""
-                                    )
-                                    shareDataAndCommUtil.saveLoggedInUserName(it.name)
-                                    shareDataAndCommUtil.saveUserProfilePic(
-                                            if (it.profileAvatarName.isNotEmpty()) it.profileAvatarName else (it.profileAvatarThumbnail
-                                                    ?: "")
-                                    )
-                                }
+                    .addSnapshotListener { value, e ->
+                        value?.data?.let {
+                            value.toObject(ProfileData::class.java)?.let {
+                                shareDataAndCommUtil.saveLoggedInMobileNumber(
+                                    it1.currentUser?.phoneNumber ?: ""
+                                )
+                                shareDataAndCommUtil.saveLoggedInUserName(it.name)
+                                shareDataAndCommUtil.saveUserProfilePic(
+                                    if (it.profileAvatarName.isNotEmpty()) it.profileAvatarName else (it.profileAvatarThumbnail
+                                        ?: "")
+                                )
                             }
                         }
+                    }
             } ?: run {
                 shareDataAndCommUtil.saveLoggedInMobileNumber("")
                 shareDataAndCommUtil.saveLoggedInUserName("")
@@ -261,11 +262,11 @@ class MainActivity : BaseActivity(),
         } else if (intent.type?.startsWith(MimeTypes.VIDEO_MATCHER) == true) {
             handleVideoImage(intent)
         } else if (
-                MimeTypes.DOC == intent.type ||
-                MimeTypes.DOCX == intent.type ||
-                MimeTypes.PDF == intent.type ||
-                MimeTypes.XLS == intent.type ||
-                MimeTypes.XLSX == intent.type
+            MimeTypes.DOC == intent.type ||
+            MimeTypes.DOCX == intent.type ||
+            MimeTypes.PDF == intent.type ||
+            MimeTypes.XLS == intent.type ||
+            MimeTypes.XLSX == intent.type
         ) {
             handleDocumentSend(intent)
         }
@@ -293,24 +294,25 @@ class MainActivity : BaseActivity(),
             } else if (mimeType?.startsWith(MimeTypes.VIDEO_MATCHER) == true) {
                 videosUri.add(SharedFile(it))
             } else if (
-                    MimeTypes.DOC == mimeType ||
-                    MimeTypes.DOCX == mimeType ||
-                    MimeTypes.PDF == mimeType ||
-                    MimeTypes.XLS == mimeType ||
-                    MimeTypes.XLSX == mimeType
+                MimeTypes.DOC == mimeType ||
+                MimeTypes.DOCX == mimeType ||
+                MimeTypes.PDF == mimeType ||
+                MimeTypes.XLS == mimeType ||
+                MimeTypes.XLSX == mimeType
             ) {
                 documentsUris.add(SharedFile(it))
             }
         }
 
         val itemSharedBundle = bundleOf(
-                ChatPageFragment.INTENT_EXTRA_SHARED_VIDEOS to videosUri,
-                ChatPageFragment.INTENT_EXTRA_SHARED_IMAGES to imagesUri,
-                ChatPageFragment.INTENT_EXTRA_SHARED_DOCUMENTS to documentsUris
+            ChatPageFragment.INTENT_EXTRA_SHARED_VIDEOS to videosUri,
+            ChatPageFragment.INTENT_EXTRA_SHARED_IMAGES to imagesUri,
+            ChatPageFragment.INTENT_EXTRA_SHARED_DOCUMENTS to documentsUris
         )
 
-        navController.navigate(R.id.chatListFragment,
-                bundleOf(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE to itemSharedBundle)
+        navController.navigate(
+            R.id.chatListFragment,
+            bundleOf(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE to itemSharedBundle)
         )
     }
 
@@ -318,16 +320,17 @@ class MainActivity : BaseActivity(),
         val documentUri = intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)
 
         val sharedFile = SharedFile(
-                file = documentUri,
-                text = intent.getStringExtra(Intent.EXTRA_TEXT)
+            file = documentUri,
+            text = intent.getStringExtra(Intent.EXTRA_TEXT)
         )
 
         val sharedFileBundle = bundleOf(
-                ChatPageFragment.INTENT_EXTRA_SHARED_DOCUMENTS to arrayListOf(sharedFile)
+            ChatPageFragment.INTENT_EXTRA_SHARED_DOCUMENTS to arrayListOf(sharedFile)
         )
 
-        navController.navigate(R.id.chatListFragment,
-                bundleOf(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE to sharedFileBundle)
+        navController.navigate(
+            R.id.chatListFragment,
+            bundleOf(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE to sharedFileBundle)
         )
     }
 
@@ -335,31 +338,33 @@ class MainActivity : BaseActivity(),
         val videoUri = intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)
 
         val sharedFile = SharedFile(
-                file = videoUri,
-                text = intent.getStringExtra(Intent.EXTRA_TEXT)
+            file = videoUri,
+            text = intent.getStringExtra(Intent.EXTRA_TEXT)
         )
         val sharedFileBundle = bundleOf(
-                ChatPageFragment.INTENT_EXTRA_SHARED_VIDEOS to arrayListOf(sharedFile)
+            ChatPageFragment.INTENT_EXTRA_SHARED_VIDEOS to arrayListOf(sharedFile)
         )
 
-        navController.navigate(R.id.chatListFragment,
-                bundleOf(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE to sharedFileBundle)
+        navController.navigate(
+            R.id.chatListFragment,
+            bundleOf(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE to sharedFileBundle)
         )
     }
 
     private fun handleSendImage(intent: Intent) {
         val documentUri = intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)
         val sharedFile = SharedFile(
-                file = documentUri,
-                text = intent.getStringExtra(Intent.EXTRA_TEXT)
+            file = documentUri,
+            text = intent.getStringExtra(Intent.EXTRA_TEXT)
         )
 
         val sharedFileBundle = bundleOf(
-                ChatPageFragment.INTENT_EXTRA_SHARED_IMAGES to arrayListOf(sharedFile)
+            ChatPageFragment.INTENT_EXTRA_SHARED_IMAGES to arrayListOf(sharedFile)
         )
 
-        navController.navigate(R.id.chatListFragment,
-                bundleOf(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE to sharedFileBundle)
+        navController.navigate(
+            R.id.chatListFragment,
+            bundleOf(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE to sharedFileBundle)
         )
     }
 
@@ -377,6 +382,7 @@ class MainActivity : BaseActivity(),
             proceedWithNormalNavigation()
             return
         }
+        Log.d("notification", "verification 2")
 
         val clickAction = intent.getStringExtra(NotificationConstants.INTENT_EXTRA_CLICK_ACTION)
         Log.d("MainActivity", "Click action received $clickAction ")
@@ -398,8 +404,8 @@ class MainActivity : BaseActivity(),
                 Log.d("MainActivity", "redirecting to gig verification page")
                 navController.popAllBackStates()
                 navController.navigate(
-                        R.id.gigerVerificationFragment,
-                        intent.extras
+                    R.id.gigerVerificationFragment,
+                    intent.extras
                 )
             }
             NotificationConstants.CLICK_ACTIONS.OPEN_JOINING_SCREEN -> {
@@ -416,38 +422,42 @@ class MainActivity : BaseActivity(),
                 Log.d("MainActivity", "redirecting to gig verification page")
                 navController.popAllBackStates()
                 navController.navigate(
-                        R.id.chatPageFragment,
-                        intent.extras.apply {
-                            this?.putString(
-                                    ChatPageFragment.INTENT_EXTRA_CHAT_TYPE,
-                                    ChatConstants.CHAT_TYPE_USER
-                            )
-                        }
+                    R.id.chatPageFragment,
+                    intent.extras.apply {
+                        this?.putString(
+                            ChatPageFragment.INTENT_EXTRA_CHAT_TYPE,
+                            ChatConstants.CHAT_TYPE_USER
+                        )
+                    }
                 )
             }
             NotificationConstants.CLICK_ACTIONS.OPEN_GROUP_CHAT_PAGE -> {
                 Log.d("MainActivity", "redirecting to gig verification page")
                 navController.popAllBackStates()
                 navController.navigate(
-                        R.id.chatPageFragment,
-                        intent.extras.apply {
-                            this?.putString(
-                                    ChatPageFragment.INTENT_EXTRA_CHAT_TYPE,
-                                    ChatConstants.CHAT_TYPE_GROUP
-                            )
-                        }
+                    R.id.chatPageFragment,
+                    intent.extras.apply {
+                        this?.putString(
+                            ChatPageFragment.INTENT_EXTRA_CHAT_TYPE,
+                            ChatConstants.CHAT_TYPE_GROUP
+                        )
+                    }
                 )
             }
             NotificationConstants.CLICK_ACTIONS.OPEN_VERIFICATION_PAN_SCREEN -> {
+                Log.d("notification", "verification pancard")
+
                 navController.popAllBackStates()
                 navController.navigate(R.id.verificationMainLayout)
 //                navController.navigate(R.id.panCardFragment)
             }
             else -> {
+                Log.d("notification", "verification else condition")
+
                 navController.popAllBackStates()
                 navController.navigate(
-                        R.id.landinghomefragment,
-                        intent.extras
+                    R.id.landinghomefragment,
+                    intent.extras
                 )
             }
         }
@@ -461,6 +471,7 @@ class MainActivity : BaseActivity(),
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
+        Log.d("notification", "verification")
         navController.handleDeepLink(intent)
         intent?.extras?.let {
             it.printDebugLog("printDebugLog")
@@ -472,27 +483,28 @@ class MainActivity : BaseActivity(),
         } else if (Intent.ACTION_SEND_MULTIPLE == intent?.action && isUserLoggedIn()) {
             formatMultipleDataSharedAndOpenChat(intent)
         } else if (intent?.getStringExtra(IS_DEEPLINK) == "true") {
+            Log.d("notification", "verification 1")
             handleDeepLink()
         }
     }
 
     private fun GetFirebaseInstanceID() {
         FirebaseInstanceId.getInstance().instanceId
-                .addOnCompleteListener(OnCompleteListener { task ->
-                    if (!task.isSuccessful) {
-                        Log.w("Firebase/InstanceId", "getInstanceId failed", task.exception)
-                        return@OnCompleteListener
-                    }
+            .addOnCompleteListener(OnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    Log.w("Firebase/InstanceId", "getInstanceId failed", task.exception)
+                    return@OnCompleteListener
+                }
 
-                    // Get new Instance ID token
-                    val token = task.result?.token
+                // Get new Instance ID token
+                val token = task.result?.token
 
-                    // Log and toast
-                    val msg = token //getString(R.string.msg_token_fmt, token)
-                    Log.v("Firebase/InstanceId", "Firebase Token Received")
-                    Log.v("Firebase/InstanceId", msg)
-                    //  Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
-                })
+                // Log and toast
+                val msg = token //getString(R.string.msg_token_fmt, token)
+                Log.v("Firebase/InstanceId", "Firebase Token Received")
+                Log.v("Firebase/InstanceId", msg)
+                //  Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+            })
     }
 
     private fun checkForAllAuthentication() {
@@ -511,10 +523,10 @@ class MainActivity : BaseActivity(),
 
     override fun onBackPressed() {
         val navHostFragment: NavHostFragment? =
-                supportFragmentManager.findFragmentById(R.id.nav_fragment) as NavHostFragment?
+            supportFragmentManager.findFragmentById(R.id.nav_fragment) as NavHostFragment?
 
         var fragmentholder: Fragment? =
-                navHostFragment!!.childFragmentManager.fragments[navHostFragment.childFragmentManager.fragments.size - 1]
+            navHostFragment!!.childFragmentManager.fragments[navHostFragment.childFragmentManager.fragments.size - 1]
         var handled = false
         try {
             handled = (fragmentholder as IOnBackPressedOverride).onBackPressed()
@@ -566,7 +578,9 @@ class MainActivity : BaseActivity(),
             //Log.d("Update", "Data fetched from Remote Config")
             //showToast("Data fetched from Remote Config", this)
             val appUpdatePriority = firebaseRemoteConfig.getString("app_update_priority")
-            if (update_cancelled == true) runOnceADay(appUpdatePriority) else checkforUpdate(appUpdatePriority)
+            if (update_cancelled == true) runOnceADay(appUpdatePriority) else checkforUpdate(
+                appUpdatePriority
+            )
         } catch (e: Exception) {
             e.printStackTrace()
             //Log.d("Update", "Fetching error from Remote config")
@@ -577,21 +591,21 @@ class MainActivity : BaseActivity(),
     private fun showRestartDialog() {
         //appUpdateManager?.completeUpdate()
         appDialogsInterface.showConfirmationDialogType3(
-                getString(R.string.restart_update),
-                getString(R.string.new_version_available_detail),
-                getString(R.string.restart),
-                getString(R.string.cancel_update),
-                object :
-                        ConfirmationDialogOnClickListener {
-                    override fun clickedOnYes(dialog: Dialog?) {
-                        //restartAppUpdate()
-                        appUpdateManager?.completeUpdate()
-                    }
+            getString(R.string.restart_update),
+            getString(R.string.new_version_available_detail),
+            getString(R.string.restart),
+            getString(R.string.cancel_update),
+            object :
+                ConfirmationDialogOnClickListener {
+                override fun clickedOnYes(dialog: Dialog?) {
+                    //restartAppUpdate()
+                    appUpdateManager.completeUpdate()
+                }
 
-                    override fun clickedOnNo(dialog: Dialog?) {
-                        dialog?.dismiss()
-                    }
-                })
+                override fun clickedOnNo(dialog: Dialog?) {
+                    dialog?.dismiss()
+                }
+            })
     }
 
     private fun restartAppUpdate() {
@@ -605,11 +619,13 @@ class MainActivity : BaseActivity(),
         val gson = GsonBuilder().create()
         appUpdatePriority?.let {
             val versionUpdateInfo = gson.fromJson(it, VersionUpdateInfo::class.java)
-            currentPriority = getCurrentVersionCode()?.let { getUpdatePriority(it, versionUpdateInfo) }
+            currentPriority =
+                getCurrentVersionCode()?.let { getUpdatePriority(it, versionUpdateInfo) }
             appUpdateManager.appUpdateInfo.addOnSuccessListener { appUpdateInfo ->
                 if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
                     if ((currentPriority == 0 /* flexible priority */ || currentPriority == -1 /* default priority*/)
-                            && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
+                        && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)
+                    ) {
 
                         // Request the update.
                         requestUpdate(appUpdateInfo, AppUpdateType.FLEXIBLE)
@@ -617,7 +633,8 @@ class MainActivity : BaseActivity(),
                         showToast(getString(R.string.update_available), this)
 
                     } else if (currentPriority == 1 /* immediate priority */
-                            && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
+                        && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
+                    ) {
                         //request for immediate update
                         requestUpdate(appUpdateInfo, AppUpdateType.IMMEDIATE)
                         showToast(getString(R.string.update_available), this)
@@ -641,8 +658,8 @@ class MainActivity : BaseActivity(),
 
     fun getUpdatePriority(currentAppVersion: Int, info: VersionUpdateInfo): Int {
         val mostImportantUpdate = info.updates
-                .filter { it.version > currentAppVersion }
-                ?.sortedByDescending { it.updatePriority }
+            .filter { it.version > currentAppVersion }
+            .sortedByDescending { it.updatePriority }
         return if (mostImportantUpdate.size > 0) mostImportantUpdate[0].updatePriority else -1
     }
 
@@ -650,11 +667,11 @@ class MainActivity : BaseActivity(),
         try {
             //showToast("Start update intent", this)
             Log.d("Update", "Start update intent")
-            appUpdateManager?.startUpdateFlowForResult(
-                    appUpdateInfo,
-                    updateType, //  HERE specify the type of update flow you want
-                    this@MainActivity,   //  the instance of an activity
-                    UPDATE_REQUEST_CODE
+            appUpdateManager.startUpdateFlowForResult(
+                appUpdateInfo,
+                updateType, //  HERE specify the type of update flow you want
+                this@MainActivity,   //  the instance of an activity
+                UPDATE_REQUEST_CODE
             )
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
@@ -693,25 +710,25 @@ class MainActivity : BaseActivity(),
                     if (currentPriority == 1) {
                         //request the update again
                         appDialogsInterface.showConfirmationDialogType3(
-                                getString(R.string.new_version_available),
-                                getString(R.string.new_version_available_detail),
-                                getString(R.string.update_now),
-                                getString(R.string.cancel_update),
-                                object :
-                                        ConfirmationDialogOnClickListener {
-                                    override fun clickedOnYes(dialog: Dialog?) {
-                                        appUpdateManager
-                                                ?.appUpdateInfo
-                                                ?.addOnSuccessListener { appUpdateInfo ->
-                                                    requestUpdate(appUpdateInfo, AppUpdateType.IMMEDIATE)
-                                                }
-                                    }
+                            getString(R.string.new_version_available),
+                            getString(R.string.new_version_available_detail),
+                            getString(R.string.update_now),
+                            getString(R.string.cancel_update),
+                            object :
+                                ConfirmationDialogOnClickListener {
+                                override fun clickedOnYes(dialog: Dialog?) {
+                                    appUpdateManager
+                                        ?.appUpdateInfo
+                                        .addOnSuccessListener { appUpdateInfo ->
+                                            requestUpdate(appUpdateInfo, AppUpdateType.IMMEDIATE)
+                                        }
+                                }
 
-                                    override fun clickedOnNo(dialog: Dialog?) {
-                                        dialog?.dismiss()
-                                        finish()
-                                    }
-                                })
+                                override fun clickedOnNo(dialog: Dialog?) {
+                                    dialog?.dismiss()
+                                    finish()
+                                }
+                            })
                     } else {
                         //user can use the app
                         sharedPreAndCommonUtilInterface.saveDataBoolean("update_cancelled", true)
@@ -734,26 +751,26 @@ class MainActivity : BaseActivity(),
     override fun onResume() {
         super.onResume()
         appUpdateManager
-                ?.appUpdateInfo
-                ?.addOnSuccessListener { appUpdateInfo ->
-                    // If the update is downloaded but not installed,
-                    // notify the user to complete the update.
-                    if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
-                        showRestartDialog()
-                        showToast(getString(R.string.update_downloaded), this)
-                    } else if (appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS && currentPriority == 1
-                    ) {
-                        showToast(getString(R.string.download_in_progress), this)
-                        // If an in-app update is already running, resume the update.
-                        requestUpdate(appUpdateInfo, AppUpdateType.IMMEDIATE)
-                    }
+            ?.appUpdateInfo
+            .addOnSuccessListener { appUpdateInfo ->
+                // If the update is downloaded but not installed,
+                // notify the user to complete the update.
+                if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
+                    showRestartDialog()
+                    showToast(getString(R.string.update_downloaded), this)
+                } else if (appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS && currentPriority == 1
+                ) {
+                    showToast(getString(R.string.download_in_progress), this)
+                    // If an in-app update is already running, resume the update.
+                    requestUpdate(appUpdateInfo, AppUpdateType.IMMEDIATE)
                 }
+            }
     }
 
     override fun onRequestPermissionsResult(
-            requestCode: Int,
-            permissions: Array<out String>,
-            grantResults: IntArray
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
@@ -787,7 +804,7 @@ class MainActivity : BaseActivity(),
         if (state.installStatus() == InstallStatus.DOWNLOADED) {
             showToast(getString(R.string.download_completed), this)
             showRestartDialog()
-            appUpdateManager?.unregisterListener(this)
+            appUpdateManager.unregisterListener(this)
 //            currentPriority?.let {
 //                if (currentPriority == 0) showRestartDialog() else restartAppUpdate()
 //            }
