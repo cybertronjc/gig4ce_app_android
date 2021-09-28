@@ -64,6 +64,7 @@ class NewSelectionForm2ViewModel @Inject constructor(
                 selectedTL = event.teamLeader
             }
             is NewSelectionForm2Events.ReportingLocationSelected -> {
+                selectedCity = event.citySelected
                 selectedReportingLocation = event.reportingLocation
             }
             is NewSelectionForm2Events.SubmitButtonPressed -> {

@@ -442,6 +442,8 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
     ) = viewBinding.mainForm.apply {
 
         reportingLocationSelectedLabel.text = reportingLocationSelected.name
+        citySelectedLabel.text = citySelected.name
+
         viewModel.handleEvent(
             NewSelectionForm2Events.ReportingLocationSelected(
                 citySelected,
