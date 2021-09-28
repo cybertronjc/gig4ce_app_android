@@ -78,5 +78,5 @@
     <string name="day_with_space"> day</string>
     <string name="work_from_home">Work from home</string>
     <string name="cancel_common_ui">Cancel</string>
-
+    <string name="back_to_gigforce_ui">Back to Gigforce</string>
 </resources>

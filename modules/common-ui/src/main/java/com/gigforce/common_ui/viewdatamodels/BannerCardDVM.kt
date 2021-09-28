@@ -15,6 +15,7 @@ data class BannerCardDVM(
     val source: String? = null,
     val bannerName: String? = null,
     val defaultDocTitle: String? = null,
+    val hi : BannerHindiTranslation?=null,
     val type: String? = null,
     val index: Long? = 0
 ) : SimpleDVM(
@@ -36,4 +37,8 @@ data class BannerCardDVM(
             )
         } ?: return null
     }
+}
+
+data class BannerHindiTranslation(val title: String? = null, val defaultDocTitle : String?=null){
+
 }

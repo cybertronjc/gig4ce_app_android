@@ -109,14 +109,7 @@ class DocViewerActivity : BaseActivity() {
             toolbarDownload.gone()
             acceptLayout.visible()
         }else if(purpose == "banner") {
-            var title = if(bundle?.getString("title").isNullOrBlank()){
-                if(bundle?.getString("defaultDocTitle").isNullOrBlank()){
-                    "Back to Gigforce"
-                }else{
-                    bundle?.getString("defaultDocTitle")
-                }
-            }else{bundle?.getString("title")}
-
+            var title = bundle?.getString("title")
             toolbarTitle.text = title
             toolbar_doc.visible()
             changeStatusBarColor()

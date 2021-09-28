@@ -8,11 +8,13 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.viewdatamodels.BannerCardDVM
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.IViewHolder
+import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.navigation.INavigation
 import dagger.hilt.android.AndroidEntryPoint
@@ -42,6 +44,8 @@ open class BannerCardComponent(context: Context, attrs: AttributeSet?) :
     @Inject
     lateinit var eventTracker: IEventTracker
 
+    @Inject
+    lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
 
     private fun setImage(imageStr: String) {
         if (imageStr.contains("http") or imageStr.contains("https")) {
@@ -61,28 +65,55 @@ open class BannerCardComponent(context: Context, attrs: AttributeSet?) :
                 if (data.image.isNotBlank()) {
                     setImage(data.image)
                 }
-                kjkj
-                if (data.title?.isNotBlank() == true) {
-                    title.text = data.title
-                }
-                else{
+                if (sharedPreAndCommonUtilInterface.getAppLanguageCode() == "hi") {
+                    if (data.hi?.title.isNullOrBlank()) {
+                        if (data.title.isNullOrBlank()) {
+                            title.gone()
+                        } else {
+                            title.text = data.title
+                        }
+                    } else {
+                        title.text = data.hi?.title
+                    }
+                } else if (data.title.isNullOrBlank()) {
                     title.gone()
+                } else
+                    title.text = data.title
+            }
+
+            data.getNavArgs()?.let { navArgs ->
+                if (title.isVisible)
+                    navArgs.args?.putString("title", title.text.toString())
+                else {
+                    if (sharedPreAndCommonUtilInterface.getAppLanguageCode() == "hi") {
+                        if (data.hi?.defaultDocTitle.isNullOrBlank()) {
+                            if(data.defaultDocTitle.isNullOrBlank()){
+                                navArgs.args?.putString("title", resources.getString(R.string.back_to_gigforce_ui))
+                            }else {
+                                navArgs.args?.putString("title", data.defaultDocTitle)
+                            }
+                        } else {
+                            navArgs.args?.putString("title", data.hi?.defaultDocTitle)
+                        }
+                    } else {
+                        if(data.defaultDocTitle.isNullOrBlank()){
+                            navArgs.args?.putString("title", resources.getString(R.string.back_to_gigforce_ui))
+                        }else {
+                            navArgs.args?.putString("title", data.defaultDocTitle)
+                        }
+                    }
                 }
-
-
-                data.getNavArgs()?.let { navArgs ->
-                    topLayout.setOnClickListener {
-                        bannerCardData?.let {
-                            it.apiUrl?.let {
-                                bannerCardData?.docUrl?.let { docUrl ->
-                                    navigation.navigateToDocViewerActivity(
-                                        null,
-                                        docUrl,
-                                        "banner",
-                                        navArgs.args,
-                                        context
-                                    )
-                                }
+                topLayout.setOnClickListener {
+                    bannerCardData?.let {
+                        it.apiUrl?.let {
+                            bannerCardData?.docUrl?.let { docUrl ->
+                                navigation.navigateToDocViewerActivity(
+                                    null,
+                                    docUrl,
+                                    "banner",
+                                    navArgs.args,
+                                    context
+                                )
                             }
                         }
                     }
