@@ -441,7 +441,7 @@ class MainActivity : BaseActivity(),
             NotificationConstants.CLICK_ACTIONS.OPEN_VERIFICATION_PAN_SCREEN -> {
                 navController.popAllBackStates()
                 navController.navigate(R.id.verificationMainLayout)
-                navController.navigate(R.id.panCardFragment)
+//                navController.navigate(R.id.panCardFragment)
             }
             else -> {
                 navController.popAllBackStates()
