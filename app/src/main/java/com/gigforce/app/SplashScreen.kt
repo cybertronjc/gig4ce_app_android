@@ -35,6 +35,7 @@ class SplashScreen : AppCompatActivity() {
             .addOnSuccessListener(this) { pendingDynamicLinkData ->
                 // Get deep link from result (may be null if no link is found)
                 var deepLink: Uri? = null
+                val mainIntent = Intent(this, MainActivity::class.java)
                 //handling deep links
                 intent?.let {
                     val uri = intent.data
@@ -42,14 +43,12 @@ class SplashScreen : AppCompatActivity() {
                         val parameters = uri.pathSegments
                         // after that we are extracting string from that parameters.
                         val param = parameters[parameters.size - 1]
-                        val intent = Intent(this, MainActivity::class.java)
                         if (param == "login_summary"){
-                            intent.putExtra(StringConstants.LOGIN_SUMMARY_VIA_DEEP_LINK.value, true)
-                            initApp(intent)
+                            mainIntent.putExtra(StringConstants.LOGIN_SUMMARY_VIA_DEEP_LINK.value, true)
                         }
                     }
                 }
-                val intent = Intent(this, MainActivity::class.java)
+
                 if (pendingDynamicLinkData != null) {
                     deepLink = pendingDynamicLinkData.link
                     val inviteID = deepLink?.getQueryParameter("invite")
@@ -67,19 +66,19 @@ class SplashScreen : AppCompatActivity() {
                         inviteID
                     )
                     if (!jobProfileID.isNullOrEmpty()) {
-                        intent.putExtra(StringConstants.NAV_TO_CLIENT_ACT.value, true)
-                        intent.putExtra(StringConstants.INVITE_USER_ID.value, inviteID)
-                        intent.putExtra(
+                        mainIntent.putExtra(StringConstants.NAV_TO_CLIENT_ACT.value, true)
+                        mainIntent.putExtra(StringConstants.INVITE_USER_ID.value, inviteID)
+                        mainIntent.putExtra(
                             StringConstants.JOB_PROFILE_ID.value,
                             jobProfileID
                         )
-                        initApp(intent)
+                        initApp(mainIntent)
                         return@addOnSuccessListener
                     } else if (!roleID.isNullOrEmpty()) {
-                        intent.putExtra(StringConstants.NAV_TO_ROLE.value, true)
-                        intent.putExtra(StringConstants.INVITE_USER_ID.value, inviteID)
-                        intent.putExtra(StringConstants.ROLE_ID.value, roleID)
-                        initApp(intent)
+                        mainIntent.putExtra(StringConstants.NAV_TO_ROLE.value, true)
+                        mainIntent.putExtra(StringConstants.INVITE_USER_ID.value, inviteID)
+                        mainIntent.putExtra(StringConstants.ROLE_ID.value, roleID)
+                        initApp(mainIntent)
                         return@addOnSuccessListener
                     }else if(!isAmbassador.isNullOrEmpty()){
                         sp.saveData(
@@ -94,24 +93,36 @@ class SplashScreen : AppCompatActivity() {
                             StringConstants.AMBASSADOR_LONGITUDE.value,
                             ambassadorLongitude?:"0.0"
                         )
-                        intent.putExtra(StringConstants.INVITE_BY_AMBASSADOR.value, true)
-                        intent.putExtra(StringConstants.INVITE_USER_ID.value, inviteID)
-                        intent.putExtra(StringConstants.AMBASSADOR_LATITUDE.value,ambassadorLatitude?.toDouble())
-                        intent.putExtra(StringConstants.AMBASSADOR_LONGITUDE.value,ambassadorLongitude?.toDouble())
-                        initApp(intent)
+                        mainIntent.putExtra(StringConstants.INVITE_BY_AMBASSADOR.value, true)
+                        mainIntent.putExtra(StringConstants.INVITE_USER_ID.value, inviteID)
+                        mainIntent.putExtra(StringConstants.AMBASSADOR_LATITUDE.value,ambassadorLatitude?.toDouble())
+                        mainIntent.putExtra(StringConstants.AMBASSADOR_LONGITUDE.value,ambassadorLongitude?.toDouble())
+                        initApp(mainIntent)
                         return@addOnSuccessListener
                     }
                 }
 
-                initApp(Intent(this, MainActivity::class.java))
+                initApp(mainIntent)
 
 
             }
             .addOnFailureListener(this)
             { e ->
                 run {
-                    initApp(Intent(this, MainActivity::class.java))
-
+                    val mainIntent = Intent(this, MainActivity::class.java)
+                    //handling deep links
+                    intent?.let {
+                        val uri = intent.data
+                        if (uri != null) {
+                            val parameters = uri.pathSegments
+                            // after that we are extracting string from that parameters.
+                            val param = parameters[parameters.size - 1]
+                            if (param == "login_summary"){
+                                mainIntent.putExtra(StringConstants.LOGIN_SUMMARY_VIA_DEEP_LINK.value, true)
+                            }
+                        }
+                    }
+                    initApp(mainIntent)
                 }
             }
     }
