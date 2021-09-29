@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import androidx.core.content.res.ResourcesCompat
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
@@ -25,6 +26,9 @@ import com.gigforce.lead_management.LeadManagementConstants
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.GigerInfoFragmentBinding
 import com.gigforce.lead_management.models.ApplicationChecklistRecyclerItemData
+import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
+import com.gigforce.lead_management.ui.LeadManagementSharedViewModelState
+import com.gigforce.lead_management.ui.drop_selection.DropSelectionBottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.layout_below_giger_functionality.*
@@ -50,6 +54,8 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
     @Inject
     lateinit var navigation: INavigation
     private val viewModel: GigerInfoViewModel by viewModels()
+    private val sharedViewModel : LeadManagementSharedViewModel by activityViewModels()
+
     var gigerPhone = ""
     private lateinit var joiningId: String
     private val dateFormatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
@@ -59,6 +65,7 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
         initToolbar(viewBinding)
         initListeners()
         initViewModel()
+        initSharedViewModel()
     }
 
     private fun getDataFrom(
@@ -100,8 +107,18 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
         })
     }
 
+    private fun initSharedViewModel() {
+        sharedViewModel.viewState
+            .observe(viewLifecycleOwner,{
+                when (it) {
+                    LeadManagementSharedViewModelState.OneOrMoreSelectionsDropped -> viewModel.getGigerJoiningInfo(joiningId)
+                }
+            })
+    }
+
     private fun showLoadingInfo() = viewBinding.apply{
         checklistRv.collection = emptyList()
+        mainScrollView.gone()
         gigerinfoShimmerContainer.visible()
 
         startShimmer(
@@ -118,7 +135,14 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
     }
 
     private fun showGigerInfo(gigerInfo: GigerInfo) = viewBinding.apply {
-        //update ui
+        stopShimmer(
+            gigerinfoShimmerContainer as LinearLayout,
+            R.id.shimmer_controller
+        )
+        gigerinfoShimmerContainer.gone()
+        mainScrollView.visible()
+
+
         gigerInfo?.let {
             toolbar.showTitle(it.gigerName)
             overlayCardLayout.companyName.text = ": "+it.businessName ?: ""
@@ -184,6 +208,8 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
             R.id.shimmer_controller
         )
         gigerinfoShimmerContainer.gone()
+        mainScrollView.visible()
+
 
         MaterialAlertDialogBuilder(
             requireContext()
@@ -196,7 +222,10 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
     private fun initListeners() = viewBinding.apply {
         bottomButtonLayout.dropGigerBtn.setOnClickListener {
             //drop functionality
-
+            DropSelectionBottomSheetDialogFragment.launch(
+                arrayListOf(joiningId),
+                childFragmentManager
+            )
         }
         bottomButtonLayout.callLayout.setOnClickListener {
             //call functionality

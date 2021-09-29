@@ -51,7 +51,7 @@ class JoiningList2ViewModel @Inject constructor(
     val filterMap: LiveData<Map<String, Int>> = _filtersMap
 
     //Data
-    private var joiningsRaw: List<JoiningNew> = emptyList()
+    private var joiningsRaw: List<JoiningNew>? = null
     private var joiningListShownOnView: MutableList<JoiningList2RecyclerItemData> = mutableListOf()
     private var currentSearchString: String? = null
     var currentFilterString: String? = null
@@ -72,15 +72,16 @@ class JoiningList2ViewModel @Inject constructor(
 
     fun getJoinings() = viewModelScope.launch {
         _viewState.postValue(JoiningList2ViewState.LoadingDataFromServer)
+
         try {
             gigforceLogger.d(TAG, "fetching job profiles...")
 
-            joiningsRaw = leadManagementRepository.getJoiningListings()
+            val joiningsReceived = leadManagementRepository.getJoiningListings()
+            joiningsRaw = joiningsReceived
 
             //_viewState.value = Lce.content(jobProfiles)
-            processJoiningsAndEmit(joiningsRaw)
-
-            gigforceLogger.d(TAG, "received ${joiningsRaw.size} joinings from server")
+            processJoiningsAndEmit(joiningsReceived)
+            gigforceLogger.d(TAG, "received ${joiningsReceived.size} joinings from server")
 
         } catch (e: Exception) {
             _viewState.value = JoiningList2ViewState.ErrorInLoadingDataFromServer(
@@ -95,71 +96,6 @@ class JoiningList2ViewModel @Inject constructor(
         }
     }
 
-    private fun startListeningToJoinings() = viewModelScope.launch {
-        _viewState.postValue(JoiningList2ViewState.LoadingDataFromServer)
-
-        gigforceLogger.d(
-            TAG,
-            "listening to fetch joining query..."
-        )
-//        fetchJoiningListener = leadManagementRepository.fetchJoiningsQuery()
-//            .addSnapshotListener { value, error ->
-//
-//                if (error != null) {
-//                    gigforceLogger.e(
-//                        TAG,
-//                        "while listing to joining list",
-//                        error
-//                    )
-//
-//                    _viewState.postValue(
-//                        JoiningList2ViewState.ErrorInLoadingDataFromServer(
-//                            error = "Unable to fetch Joinings",
-//                            shouldShowErrorButton = true
-//                        )
-//                    )
-//                }
-//
-//                if (value != null) {
-//                    gigforceLogger.d(
-//                        TAG,
-//                        " ${value.size()} joinings received from server"
-//                    )
-//
-//                    joiningsRaw =value.documents.map {
-//                        it.toObject(Joining::class.java)!!.apply {
-//                            this.joiningId = it.id
-//                        }
-//                    }
-//
-//                    if (joiningsRaw.isEmpty()) {
-//                        _viewState.postValue(JoiningList2ViewState.NoJoiningFound)
-//                    } else {
-//                        processJoiningsAndEmit(joiningsRaw)
-//                        prepareFilters(joiningsRaw)
-//                    }
-//                }
-//            }
-
-        try {
-            gigforceLogger.d(TAG, "fetching job profiles...")
-
-             joiningsRaw = leadManagementRepository.getJoiningListings()
-
-            //_viewState.value = Lce.content(jobProfiles)
-            processJoiningsAndEmit(joiningsRaw)
-
-            gigforceLogger.d(TAG, "received ${joiningsRaw.size} joinings from server")
-
-        } catch (e: Exception) {
-            _viewState.value = JoiningList2ViewState.NoJoiningFound
-            gigforceLogger.e(
-                TAG,
-                " getJoiningList()",
-                e
-            )
-        }
-    }
 
     private fun processJoiningsAndEmit(
         joiningsRaw: List<JoiningNew>
@@ -221,10 +157,7 @@ class JoiningList2ViewModel @Inject constructor(
                     )
                 )
             }
-
-
         }
-
 
 
         joiningListShownOnView = joiningListForView
@@ -367,11 +300,15 @@ class JoiningList2ViewModel @Inject constructor(
         gigforceLogger.d(TAG, "new search string received : '$searchString'")
         this.currentSearchString = searchString
 
-        if (joiningsRaw.isEmpty()) {
+        if(joiningsRaw == null){
+            return
+        }
+
+        if (joiningsRaw!!.isEmpty()) {
             _viewState.postValue(JoiningList2ViewState.NoJoiningFound)
             return
         }
-        processJoiningsAndEmit(joiningsRaw)
+        processJoiningsAndEmit(joiningsRaw!!)
     }
 
     fun filterJoinings(
@@ -380,10 +317,14 @@ class JoiningList2ViewModel @Inject constructor(
         gigforceLogger.d(TAG, "new filter string received : '$filterString'")
         this.currentFilterString = filterString
 
-        if (joiningsRaw.isEmpty()) {
+        if(joiningsRaw == null){
+            return
+        }
+
+        if (joiningsRaw!!.isEmpty()) {
             _viewState.postValue(JoiningList2ViewState.NoJoiningFound)
             return
         }
-        processJoiningsAndEmit(joiningsRaw)
+        processJoiningsAndEmit(joiningsRaw!!)
     }
 }

@@ -1,10 +1,9 @@
-package com.vinners.trumanms.feature_myjobs.views
+package com.gigforce.lead_management.ui.joining_list_2.views
 
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View.OnClickListener
 import android.widget.HorizontalScrollView
-import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.ViewCompat

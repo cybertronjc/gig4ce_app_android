@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.os.bundleOf
 import androidx.core.view.get
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -29,6 +30,8 @@ import com.gigforce.lead_management.databinding.FragmentJoiningList2Binding
 import com.gigforce.lead_management.models.JoiningList2RecyclerItemData
 import com.gigforce.lead_management.models.JoiningListRecyclerItemData
 import com.gigforce.lead_management.models.JoiningStatusAndCountItemData
+import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
+import com.gigforce.lead_management.ui.LeadManagementSharedViewModelState
 import com.gigforce.lead_management.ui.giger_onboarding.GigerOnboardingFragment
 import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
@@ -51,6 +54,7 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
     @Inject
     lateinit var navigation: INavigation
     private val viewModel: JoiningList2ViewModel by viewModels()
+    private val sharedViewModel : LeadManagementSharedViewModel by activityViewModels()
     var selectedTab = 0
 
     override fun viewCreated(
@@ -62,8 +66,8 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
         initTabLayout()
         initListeners(viewBinding)
         initViewModel()
+        initSharedViewModel()
     }
-
 
     private fun initListeners(
         viewBinding: FragmentJoiningList2Binding
@@ -156,7 +160,6 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
     }
 
     private fun initViewModel() {
-        viewModel.getJoinings()
         viewModel.viewState
             .observe(viewLifecycleOwner, {
                 val state = it ?: return@observe
@@ -175,6 +178,19 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
         viewModel.filterMap.observe(viewLifecycleOwner, Observer {
             setStatus(it)
         })
+
+        viewModel.getJoinings()
+    }
+
+    private fun initSharedViewModel() {
+        sharedViewModel
+            .viewState
+            .observe(viewLifecycleOwner,{
+
+                when (it) {
+                    LeadManagementSharedViewModelState.OneOrMoreSelectionsDropped -> viewModel.getJoinings()
+                }
+            })
     }
 
     private fun setStatus(map: Map<String, Int>) = viewBinding.apply{
@@ -198,7 +214,7 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
         joiningShimmerContainer.visible()
 
         startShimmer(
-            this.joiningShimmerContainer,
+            this.joiningShimmerContainer as LinearLayout,
             ShimmerDataModel(
                 minHeight = R.dimen.size_120,
                 minWidth = LinearLayout.LayoutParams.MATCH_PARENT,

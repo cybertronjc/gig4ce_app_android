@@ -35,7 +35,7 @@
             app:tabMode="fixed"
             app:tabSelectedTextColor="@color/white"
             app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
-            app:tabTextColor="@color/black"></com.google.android.material.tabs.TabLayout>
+            app:tabTextColor="@color/black"/>
 
         <FrameLayout
             android:layout_width="match_parent"

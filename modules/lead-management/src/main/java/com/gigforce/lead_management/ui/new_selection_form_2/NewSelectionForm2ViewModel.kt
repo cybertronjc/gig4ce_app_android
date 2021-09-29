@@ -300,7 +300,7 @@ class NewSelectionForm2ViewModel @Inject constructor(
                 ""
             }
 
-            joiningRequest.shareLink
+            joiningRequest.shareLink = shareLink
             leadManagementRepository.submitJoiningRequest(
                 joiningRequest
             )

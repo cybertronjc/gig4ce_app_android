@@ -43,6 +43,8 @@ sealed class LeadManagementSharedViewModelState {
     data class ClientTLSelected(
         val tlSelected: BusinessTeamLeadersItem
     ): LeadManagementSharedViewModelState()
+
+    object OneOrMoreSelectionsDropped : LeadManagementSharedViewModelState()
 }
 
 class LeadManagementSharedViewModel : ViewModel() {
@@ -118,5 +120,10 @@ class LeadManagementSharedViewModel : ViewModel() {
 
         delay(1000)
         _viewState.value = null
+    }
+
+    fun oneOrMoreSelectionsDropped()= viewModelScope.launch{
+        _viewState.value = LeadManagementSharedViewModelState.OneOrMoreSelectionsDropped
+        _viewStateFlow.send(LeadManagementSharedViewModelState.OneOrMoreSelectionsDropped)
     }
 }

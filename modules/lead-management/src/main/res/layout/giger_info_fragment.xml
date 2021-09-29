@@ -7,52 +7,52 @@
         android:layout_height="match_parent">
 
 
-            <com.gigforce.common_ui.views.GigforceToolbar
-                android:id="@+id/toolbar"
+        <com.gigforce.common_ui.views.GigforceToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <ScrollView
+            android:id="@+id/mainScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="8dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@id/bottomButtonLayout"
+            app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                />
+                android:orientation="vertical">
 
-
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginBottom="8dp"
-                android:orientation="vertical"
-                app:layout_constraintBottom_toTopOf="@id/bottomButtonLayout"
-                app:layout_constraintTop_toBottomOf="@id/toolbar"
-                >
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintBottom_toTopOf="@id/bottomButtonLayout"
-                    app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent">
+                    app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
 
                     <LinearLayout
+                        android:id="@+id/toolbarLayout"
                         android:layout_width="match_parent"
                         android:layout_height="126dp"
-                        android:id="@+id/toolbarLayout"
                         android:background="@drawable/info_toolbar_background"
-                        android:orientation="vertical">
-                    </LinearLayout>
-                <include
-                    android:id="@+id/overlay_card_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    layout="@layout/layout_info_overlay_card"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="@dimen/size_2"
-                    />
+                        android:orientation="vertical"></LinearLayout>
+
+                    <include
+                        android:id="@+id/overlay_card_layout"
+                        layout="@layout/layout_info_overlay_card"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="@dimen/size_2" />
 
                 </FrameLayout>
 
@@ -64,54 +64,56 @@
 
                     <include
                         android:id="@+id/applicationStatusLayout"
+                        layout="@layout/layout_application_status_giger_info"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        layout="@layout/layout_application_status_giger_info" />
+                        android:layout_height="48dp" />
 
                     <TextView
                         android:id="@+id/checklistText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/lato_bold"
-                        android:layout_marginTop="@dimen/size_16"
-                        android:textColor="@color/pink_text"
                         android:layout_marginStart="@dimen/size_16"
+                        android:layout_marginTop="@dimen/size_16"
+                        android:fontFamily="@font/lato_bold"
                         android:text="@string/application_checklist_lead"
-                        app:layout_constraintTop_toBottomOf="@id/applicationStatusLayout"
-                        app:layout_constraintStart_toStartOf="parent"/>
+                        android:textColor="@color/pink_text"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/applicationStatusLayout" />
 
                     <com.gigforce.core.recyclerView.CoreRecyclerView
                         android:id="@+id/checklist_rv"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/size_16"
                         android:layout_marginEnd="@dimen/size_16"
-                        android:layout_marginTop="@dimen/size_16"
                         android:orientation="vertical"
-                        app:layout_constraintTop_toBottomOf="@id/checklistText"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@id/checklistText"
-                        app:layout_constraintEnd_toEndOf="parent"/>
-                    <include
-                        android:id="@+id/gigerinfo_shimmer_container"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        layout="@layout/shimmer_container"
-                        android:visibility="gone"
-                        android:layout_marginTop="@dimen/size_16"
-                        app:layout_constraintStart_toStartOf="@id/checklistText"
-                        app:layout_constraintTop_toBottomOf="@id/checklistText"/>
+                        app:layout_constraintTop_toBottomOf="@id/checklistText" />
+
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
-                </LinearLayout>
-            </ScrollView>
-
+            </LinearLayout>
+        </ScrollView>
 
 
         <include
             android:id="@+id/bottomButtonLayout"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
             layout="@layout/layout_below_giger_functionality"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent" />
+
+
+        <include
+            android:id="@+id/gigerinfo_shimmer_container"
+            layout="@layout/shimmer_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_16"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            app:layout_constraintBottom_toTopOf="@id/bottomButtonLayout" />
 
 
 

@@ -1,9 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout>
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="390dp">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <include
+            android:id="@+id/mainLayout"
+            layout="@layout/bottom_sheet_dialog_fragment_drop_selection_main"/>
+
+        <include
+            android:id="@+id/successLayout"
+            layout="@layout/bottom_sheet_dialog_fragment_drop_selection_sucess"/>
+
+        <include
+            android:id="@+id/errorLayout"
+            layout="@layout/layout_error_with_retry"/>
+
+    </FrameLayout>
 </layout>

@@ -1,6 +1,7 @@
 package com.gigforce.common_ui.viewdatamodels.leadManagement
 
 import android.os.Parcelable
+import com.gigforce.core.retrofit.DoNotSerialize
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
@@ -34,8 +35,10 @@ data class ReportingLocationsItem(
 	@field:SerializedName("type")
 	val type: String? = null,
 
+	@DoNotSerialize
 	var selected : Boolean = false,
 
+	@DoNotSerialize
 	var reportingLocations: List<ReportingLocationsItem> = emptyList()
 ) : Parcelable
 
@@ -48,6 +51,7 @@ data class BusinessTeamLeadersItem(
 	@field:SerializedName("id")
 	val id: String? = null,
 
+	@DoNotSerialize
 	var selected : Boolean = false
 ) : Parcelable
 

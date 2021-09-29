@@ -104,6 +104,7 @@ class RetrofitServiceFactory @Inject constructor(
 
     private fun makeMoshi(): Gson {
         return GsonBuilder()
+            .setExclusionStrategies(GsonExclusionStrategy())
             .setLenient()
             .serializeNulls()
             .setDateFormat("yyyy-MM-dd HH:mm:ss")

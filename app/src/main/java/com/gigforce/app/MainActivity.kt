@@ -469,6 +469,47 @@ class MainActivity : BaseActivity(),
             formatMultipleDataSharedAndOpenChat(intent)
         } else if (intent?.getStringExtra(IS_DEEPLINK) == "true") {
             handleDeepLink()
+        } else {
+            if(intent?.getBooleanExtra(StringConstants.NAV_TO_CLIENT_ACT.value, false) == true) {
+
+                if (!isUserLoggedIn()) {
+                    proceedWithNormalNavigation()
+                    return
+                }
+
+                navController.popBackStack()
+                navController.navigate(
+                    R.id.fragment_client_activation, bundleOf(
+                        StringConstants.JOB_PROFILE_ID.value to intent.getStringExtra(
+                            StringConstants.JOB_PROFILE_ID.value
+                        ),
+                        StringConstants.INVITE_USER_ID.value to intent.getStringExtra(
+                            StringConstants.INVITE_USER_ID.value
+                        ),
+                        StringConstants.CLIENT_ACTIVATION_VIA_DEEP_LINK.value to true
+                    )
+                )
+            } else if(intent?.getBooleanExtra(StringConstants.NAV_TO_ROLE.value, false) == true) {
+
+                if (!isUserLoggedIn()) {
+                    proceedWithNormalNavigation()
+                    return
+                }
+
+//                LandingScreenFragmentDirections.openRoleDetailsHome( intent.getStringExtra(StringConstants.ROLE_ID.value),true)
+                navController.popBackStack()
+                navController.navigate(
+                    R.id.fragment_role_details, bundleOf(
+                        StringConstants.ROLE_ID.value to intent.getStringExtra(
+                            StringConstants.ROLE_ID.value
+                        ),
+                        StringConstants.INVITE_USER_ID.value to intent.getStringExtra(
+                            StringConstants.INVITE_USER_ID.value
+                        ),
+                        StringConstants.ROLE_VIA_DEEPLINK.value to true
+                    )
+                )
+            }
         }
     }
 
