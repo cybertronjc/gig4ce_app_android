@@ -691,4 +691,10 @@ class LeadManagementRepository @Inject constructor(
             ).buildDynamicLink()
             .uri
     }
+
+    suspend fun dropSelections(
+        selectionIds : List<String>
+    ){
+
+    }
 }

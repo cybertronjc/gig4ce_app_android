@@ -50,4 +50,9 @@ interface JoiningProfileService {
     suspend fun getJoiningInfo(
         @Path("id") id: String
     ): Response<GigerInfo>
+
+    @POST("joining/detail/{id}")
+    suspend fun dropSelections(
+        @Body selectionIds: List<String>
+    ): Response<GigerInfo>
 }
