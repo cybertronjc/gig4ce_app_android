@@ -28,8 +28,6 @@ class SplashScreen : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        Log.d("notificationverixxxxx", "verification splash")
-
         handleDynamicLink()
     }
 
