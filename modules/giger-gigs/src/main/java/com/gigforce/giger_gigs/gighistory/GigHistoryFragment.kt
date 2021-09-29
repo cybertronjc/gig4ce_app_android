@@ -93,8 +93,6 @@ class GigHistoryFragment : Fragment(), AdapterGigHistory.AdapterGigHistoryCallba
     private fun initViews() {
         if (title.isNotBlank())
             tv_title_toolbar_gig_history.text = title
-        else
-            tv_title_toolbar_gig_history.text = resources.getString(R.string.my_gigs_giger_gigs)
     }
 
     var title = ""
