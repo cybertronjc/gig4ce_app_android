@@ -488,20 +488,22 @@ class PlayVideoDialogFragment :
 
 
                     Handler().postDelayed({
-                        if (shouldShowFeedbackDialog) {
-                            RateLessonDialogFragment.launch(
+                        try {
+                            if (shouldShowFeedbackDialog) {
+                                RateLessonDialogFragment.launch(
                                     childFragmentManager,
                                     this@PlayVideoDialogFragment,
                                     mModuleId,
                                     mLessonId
-                            )
-                        } else {
-                            initShowLessCompDialog()
-                            viewModel.markVideoAsComplete(
+                                )
+                            } else {
+                                initShowLessCompDialog()
+                                viewModel.markVideoAsComplete(
                                     moduleId = mModuleId,
                                     lessonId = mLessonId
-                            )
-                        }
+                                )
+                            }
+                        }catch (e:Exception){}
                     }, 300)
                 }
             } else { // STATE_IDLE, STATE_ENDED
