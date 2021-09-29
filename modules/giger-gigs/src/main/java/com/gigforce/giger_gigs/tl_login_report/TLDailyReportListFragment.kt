@@ -73,15 +73,17 @@ class TLDailyReportListFragment : BaseFragment2<FragmentTlDailyLoginReportListBi
     var title = ""
     private fun getDataFrom(arguments: Bundle?, savedInstanceState: Bundle?) {
         arguments?.let {
+            title = it.getString("title") ?: ""
             val serializedDate = it.getSerializable(INTENT_EXTRA_DATE) ?: return@let
             currentlySelectedDate = serializedDate as Date
-            title = it.getString("title") ?: ""
+
         }
 
         savedInstanceState?.let {
+            title = it.getString("title") ?: ""
             val serializedDate = it.getSerializable(INTENT_EXTRA_DATE) ?: return@let
             currentlySelectedDate = serializedDate as Date
-            title = it.getString("title") ?: ""
+
         }
     }
 

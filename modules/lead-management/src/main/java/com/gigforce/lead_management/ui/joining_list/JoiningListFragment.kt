@@ -45,10 +45,11 @@ class JoiningListFragment : BaseFragment2<FragmentJoiningListBinding>(
         initListeners(viewBinding)
         initViewModel()
     }
+
     private fun initViews() {
-        if (title.isNotBlank())
-            viewBinding.toolbar.showTitle(title)
+
     }
+
     var title = ""
     private fun getIntentData(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
@@ -59,6 +60,7 @@ class JoiningListFragment : BaseFragment2<FragmentJoiningListBinding>(
             }
         }
     }
+
     private fun initListeners(
         viewBinding: FragmentJoiningListBinding
     ) = viewBinding.apply {
@@ -66,7 +68,10 @@ class JoiningListFragment : BaseFragment2<FragmentJoiningListBinding>(
         this.joiningsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         PushDownAnim.setPushDownAnimTo(this.joinNowButton).setOnClickListener {
-            logger.d(logTag, "navigating to ${LeadManagementNavDestinations.FRAGMENT_GIGER_ONBOARDING}")
+            logger.d(
+                logTag,
+                "navigating to ${LeadManagementNavDestinations.FRAGMENT_GIGER_ONBOARDING}"
+            )
 
             navigation.navigateTo(
                 dest = LeadManagementNavDestinations.FRAGMENT_GIGER_ONBOARDING,
@@ -83,7 +88,10 @@ class JoiningListFragment : BaseFragment2<FragmentJoiningListBinding>(
         viewBinding: FragmentJoiningListBinding
     ) = viewBinding.toolbar.apply {
         this.hideActionMenu()
-        this.showTitle(context.getString(R.string.joinings_lead))
+        if (title.isNotBlank())
+            showTitle(title)
+        else
+            this.showTitle(context.getString(R.string.joinings_lead))
         this.setBackButtonListener {
             activity?.onBackPressed()
         }
