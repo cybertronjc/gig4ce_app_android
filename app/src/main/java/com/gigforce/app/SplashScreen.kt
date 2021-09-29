@@ -22,20 +22,6 @@ class SplashScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //handling deep links
-        intent?.let {
-            val uri = intent.data
-            if (uri != null) {
-                val parameters = uri.pathSegments
-                // after that we are extracting string from that parameters.
-                val param = parameters[parameters.size - 1]
-                val intent = Intent(this, MainActivity::class.java)
-                if (param == "login_summary"){
-                    intent.putExtra(StringConstants.LOGIN_SUMMARY_VIA_DEEP_LINK.value, true)
-                    initApp(intent)
-                }
-            }
-        }
     }
 
     override fun onResume() {
@@ -49,6 +35,21 @@ class SplashScreen : AppCompatActivity() {
             .addOnSuccessListener(this) { pendingDynamicLinkData ->
                 // Get deep link from result (may be null if no link is found)
                 var deepLink: Uri? = null
+                //handling deep links
+                intent?.let {
+                    val uri = intent.data
+                    if (uri != null) {
+                        val parameters = uri.pathSegments
+                        // after that we are extracting string from that parameters.
+                        val param = parameters[parameters.size - 1]
+                        val intent = Intent(this, MainActivity::class.java)
+                        if (param == "login_summary"){
+                            intent.putExtra(StringConstants.LOGIN_SUMMARY_VIA_DEEP_LINK.value, true)
+                            initApp(intent)
+                        }
+                    }
+                }
+                val intent = Intent(this, MainActivity::class.java)
                 if (pendingDynamicLinkData != null) {
                     deepLink = pendingDynamicLinkData.link
                     val inviteID = deepLink?.getQueryParameter("invite")
@@ -66,7 +67,6 @@ class SplashScreen : AppCompatActivity() {
                         inviteID
                     )
                     if (!jobProfileID.isNullOrEmpty()) {
-                        val intent = Intent(this, MainActivity::class.java)
                         intent.putExtra(StringConstants.NAV_TO_CLIENT_ACT.value, true)
                         intent.putExtra(StringConstants.INVITE_USER_ID.value, inviteID)
                         intent.putExtra(
@@ -76,7 +76,6 @@ class SplashScreen : AppCompatActivity() {
                         initApp(intent)
                         return@addOnSuccessListener
                     } else if (!roleID.isNullOrEmpty()) {
-                        val intent = Intent(this, MainActivity::class.java)
                         intent.putExtra(StringConstants.NAV_TO_ROLE.value, true)
                         intent.putExtra(StringConstants.INVITE_USER_ID.value, inviteID)
                         intent.putExtra(StringConstants.ROLE_ID.value, roleID)
@@ -95,7 +94,6 @@ class SplashScreen : AppCompatActivity() {
                             StringConstants.AMBASSADOR_LONGITUDE.value,
                             ambassadorLongitude?:"0.0"
                         )
-                        val intent = Intent(this, MainActivity::class.java)
                         intent.putExtra(StringConstants.INVITE_BY_AMBASSADOR.value, true)
                         intent.putExtra(StringConstants.INVITE_USER_ID.value, inviteID)
                         intent.putExtra(StringConstants.AMBASSADOR_LATITUDE.value,ambassadorLatitude?.toDouble())
