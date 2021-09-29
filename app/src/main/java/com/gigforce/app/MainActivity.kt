@@ -446,15 +446,30 @@ class MainActivity : BaseActivity(),
                 )
             }
             NotificationConstants.CLICK_ACTIONS.OPEN_VERIFICATION_PAN_SCREEN -> {
-                Log.d("notificationverixxxxx", "verification pancard")
-
-//                navController.popAllBackStates()
+                navController.popAllBackStates()
+                navController.navigate(R.id.onboardingLoaderfragment)
                 navController.navigate(R.id.gigerVerificationFragment)
                 navController.navigate(R.id.panCardFragment)
             }
+            NotificationConstants.CLICK_ACTIONS.OPEN_VERIFICATION_DL_SCREEN -> {
+                navController.popAllBackStates()
+                navController.navigate(R.id.onboardingLoaderfragment)
+                navController.navigate(R.id.gigerVerificationFragment)
+                navController.navigate(R.id.drivingLicenseFragment)
+            }
+            NotificationConstants.CLICK_ACTIONS.OPEN_VERIFICATION_BANK_SCREEN -> {
+                navController.popAllBackStates()
+                navController.navigate(R.id.onboardingLoaderfragment)
+                navController.navigate(R.id.gigerVerificationFragment)
+                navController.navigate(R.id.bank_account_fragment)
+            }
+            NotificationConstants.CLICK_ACTIONS.OPEN_VERIFICATION_AADHAAR_SCREEN -> {
+                navController.popAllBackStates()
+                navController.navigate(R.id.onboardingLoaderfragment)
+                navController.navigate(R.id.gigerVerificationFragment)
+                navController.navigate(R.id.adharDetailInfoFragment)
+            }
             else -> {
-                Log.d("notificationverixxxxx", "verification else condition")
-
                 navController.popAllBackStates()
                 navController.navigate(
                     R.id.landinghomefragment,
@@ -719,7 +734,7 @@ class MainActivity : BaseActivity(),
                                 ConfirmationDialogOnClickListener {
                                 override fun clickedOnYes(dialog: Dialog?) {
                                     appUpdateManager
-                                        ?.appUpdateInfo
+                                        .appUpdateInfo
                                         .addOnSuccessListener { appUpdateInfo ->
                                             requestUpdate(appUpdateInfo, AppUpdateType.IMMEDIATE)
                                         }
@@ -752,7 +767,7 @@ class MainActivity : BaseActivity(),
     override fun onResume() {
         super.onResume()
         appUpdateManager
-            ?.appUpdateInfo
+            .appUpdateInfo
             .addOnSuccessListener { appUpdateInfo ->
                 // If the update is downloaded but not installed,
                 // notify the user to complete the update.
