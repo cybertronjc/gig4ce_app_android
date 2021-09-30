@@ -66,7 +66,7 @@ class TeamLeaderLoginDetailsFragment : BaseFragment2<TeamLeaderLoginDetailsFragm
         viewBinding: TeamLeaderLoginDetailsFragmentBinding,
         savedInstanceState: Bundle?
     ) {
-
+        getIntentData(savedInstanceState)
         //checkForAddUpdate()
         initToolbar()
         initializeViews()
@@ -75,9 +75,21 @@ class TeamLeaderLoginDetailsFragment : BaseFragment2<TeamLeaderLoginDetailsFragm
         listeners()
     }
 
+    var title = ""
+    private fun getIntentData(savedInstanceState: Bundle?) {
+        savedInstanceState?.let {
+            title = it.getString("title") ?: ""
+        } ?: run {
+            arguments?.let {
+                title = it.getString("title") ?: ""
+            }
+        }
+    }
 
     private fun initToolbar() = viewBinding.apply {
         appBarComp.apply {
+            if (title.isNotBlank())
+                setAppBarTitle(title)
             setBackButtonListener(View.OnClickListener {
                 activity?.onBackPressed()
             })
