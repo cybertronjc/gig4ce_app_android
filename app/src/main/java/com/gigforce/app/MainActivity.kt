@@ -11,7 +11,6 @@ import android.os.Handler
 import android.util.Log
 import android.view.MotionEvent
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -69,8 +68,8 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity(),
-        NavFragmentsData,
-        INavigationProvider, InstallStateUpdatedListener {
+    NavFragmentsData,
+    INavigationProvider, InstallStateUpdatedListener {
 
     private var bundle: Bundle? = null
     private lateinit var navController: NavController
@@ -439,11 +438,35 @@ class MainActivity : BaseActivity(),
                         }
                 )
             }
+            NotificationConstants.CLICK_ACTIONS.OPEN_VERIFICATION_PAN_SCREEN -> {
+                navController.popAllBackStates()
+                navController.navigate(R.id.onboardingLoaderfragment)
+                navController.navigate(R.id.gigerVerificationFragment)
+                navController.navigate(R.id.panCardFragment)
+            }
+            NotificationConstants.CLICK_ACTIONS.OPEN_VERIFICATION_DL_SCREEN -> {
+                navController.popAllBackStates()
+                navController.navigate(R.id.onboardingLoaderfragment)
+                navController.navigate(R.id.gigerVerificationFragment)
+                navController.navigate(R.id.drivingLicenseFragment)
+            }
+            NotificationConstants.CLICK_ACTIONS.OPEN_VERIFICATION_BANK_SCREEN -> {
+                navController.popAllBackStates()
+                navController.navigate(R.id.onboardingLoaderfragment)
+                navController.navigate(R.id.gigerVerificationFragment)
+                navController.navigate(R.id.bank_account_fragment)
+            }
+            NotificationConstants.CLICK_ACTIONS.OPEN_VERIFICATION_AADHAAR_SCREEN -> {
+                navController.popAllBackStates()
+                navController.navigate(R.id.onboardingLoaderfragment)
+                navController.navigate(R.id.gigerVerificationFragment)
+                navController.navigate(R.id.adharDetailInfoFragment)
+            }
             else -> {
                 navController.popAllBackStates()
                 navController.navigate(
-                        R.id.landinghomefragment,
-                        intent.extras
+                    R.id.landinghomefragment,
+                    intent.extras
                 )
             }
         }
@@ -637,8 +660,8 @@ class MainActivity : BaseActivity(),
 
     fun getUpdatePriority(currentAppVersion: Int, info: VersionUpdateInfo): Int {
         val mostImportantUpdate = info.updates
-                .filter { it.version > currentAppVersion }
-                ?.sortedByDescending { it.updatePriority }
+            .filter { it.version > currentAppVersion }
+            .sortedByDescending { it.updatePriority }
         return if (mostImportantUpdate.size > 0) mostImportantUpdate[0].updatePriority else -1
     }
 

@@ -17,6 +17,11 @@ object NotificationConstants {
         const val OPEN_GROUP_CHAT_PAGE = "com.gigforce.app.chats.open_group_chat"
         const val OPEN_CALENDAR_HOME_SCREEN = "com.gigforce.app.calendar.open_calendar_home_screen"
         const val OPEN_JOINING_SCREEN = "com.gigforce.app.joinings.open_joining_screen"
+        const val OPEN_VERIFICATION_PAN_SCREEN = "com.gigforce.app.verification.pan"
+        const val OPEN_VERIFICATION_DL_SCREEN = "com.gigforce.app.verification.dl"
+        const val OPEN_VERIFICATION_AADHAAR_SCREEN = "com.gigforce.app.verification.aadhaar"
+        const val OPEN_VERIFICATION_BANK_SCREEN = "com.gigforce.app.verification.bank"
+
     }
 
     object PAYLOADS{
