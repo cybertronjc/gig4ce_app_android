@@ -115,7 +115,7 @@ abstract class BaseFirestoreDBRepository {
     }
 
     fun getUID(): String {
-        return user!!.uid
+        return user?.uid?:""
     }
 
     fun getDBCollection(): DocumentReference {
