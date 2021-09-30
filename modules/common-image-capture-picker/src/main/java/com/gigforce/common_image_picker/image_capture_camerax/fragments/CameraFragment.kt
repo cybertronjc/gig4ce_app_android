@@ -155,7 +155,11 @@ class CameraFragment : Fragment() {
                         try {
                             initializeCamera()
                         } catch (e: Exception) {
-                            showToast(getString(R.string.unable_to_initialise_camera_common))
+                            context?.getString(R.string.unable_to_initialise_camera_common)?.let {
+                                showToast(
+                                    it
+                                )
+                            }
                             CrashlyticsLogger.e(
                                     "CameraFragment",
                                     "initializeCamera",
@@ -217,7 +221,7 @@ class CameraFragment : Fragment() {
                 e
             )
 
-            showToast(getString(R.string.unable_to_open_camera_common))
+            context?.getString(R.string.unable_to_open_camera_common)?.let { showToast(it) }
             return
         }
 
@@ -285,7 +289,11 @@ class CameraFragment : Fragment() {
                         }
                     }
                 } catch (e: Exception){
-                    showToast(getString(R.string.unable_to_capture_photo_common))
+                    context?.getString(R.string.unable_to_capture_photo_common)?.let { it1 ->
+                        showToast(
+                            it1
+                        )
+                    }
                     CrashlyticsLogger.e(TAG,"capturing image",e)
                 }
 
