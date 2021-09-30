@@ -44,6 +44,7 @@ class SplashScreen : AppCompatActivity() {
                         // after that we are extracting string from that parameters.
                         val param = parameters[parameters.size - 1]
                         if (param == "login_summary"){
+                            Log.d("datahere", "login summary")
                             mainIntent.putExtra(StringConstants.LOGIN_SUMMARY_VIA_DEEP_LINK.value, true)
                         }
                     }

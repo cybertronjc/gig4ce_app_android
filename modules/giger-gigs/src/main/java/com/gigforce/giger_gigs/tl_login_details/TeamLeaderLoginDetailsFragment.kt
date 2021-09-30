@@ -16,6 +16,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.navigation.INavigation
@@ -36,7 +38,7 @@ class TeamLeaderLoginDetailsFragment : BaseFragment2<TeamLeaderLoginDetailsFragm
     fragmentName = "TeamLeaderLoginDetailsFragment",
     layoutId = R.layout.team_leader_login_details_fragment,
     statusBarColor = R.color.white
-), OnTlItemSelectedListener {
+), OnTlItemSelectedListener, IOnBackPressedOverride {
 
     companion object {
         fun newInstance() = TeamLeaderLoginDetailsFragment()
@@ -55,6 +57,7 @@ class TeamLeaderLoginDetailsFragment : BaseFragment2<TeamLeaderLoginDetailsFragm
     var scrollingAdded = false
     lateinit var layoutManager : LinearLayoutManager
     var tlListing = ArrayList<ListingTLModel>()
+    var cameFromDeeplink = false
 
     private val tlLoginSummaryAdapter: TLLoginSummaryAdapter by lazy {
         TLLoginSummaryAdapter(requireContext(),this).apply {
@@ -68,11 +71,36 @@ class TeamLeaderLoginDetailsFragment : BaseFragment2<TeamLeaderLoginDetailsFragm
     ) {
 
         //checkForAddUpdate()
+        getDataFrom(
+            arguments,
+            savedInstanceState
+        )
         initToolbar()
         initializeViews()
         observer()
         initSharedViewModel()
         listeners()
+    }
+    private fun getDataFrom(
+        arguments: Bundle?,
+        savedInstanceState: Bundle?
+    ) {
+
+        arguments?.let {
+            cameFromDeeplink = it.getBoolean(StringConstants.CAME_FROM_LOGIN_SUMMARY_DEEPLINK.value) ?: return@let
+        }
+        savedInstanceState?.let {
+            cameFromDeeplink = it.getBoolean(StringConstants.CAME_FROM_LOGIN_SUMMARY_DEEPLINK.value) ?: return@let
+        }
+
+    }
+
+    override fun onSaveInstanceState(
+        outState: Bundle
+    ) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(StringConstants.CAME_FROM_LOGIN_SUMMARY_DEEPLINK.value, cameFromDeeplink)
+
     }
 
 
@@ -256,5 +284,14 @@ class TeamLeaderLoginDetailsFragment : BaseFragment2<TeamLeaderLoginDetailsFragm
             )
 
         }
+    }
+
+    override fun onBackPressed(): Boolean {
+        if (cameFromDeeplink){
+            navigation.popBackStack()
+            navigation.navigateTo("common/landingScreen")
+            return true
+        }
+        return false
     }
 }

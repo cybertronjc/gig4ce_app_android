@@ -239,7 +239,9 @@ class MainActivity : BaseActivity(),
             return
         }
         navController.popBackStack()
-        navController.navigate(R.id.teamLeaderLoginDetailsFragment)
+        navController.navigate(R.id.teamLeaderLoginDetailsFragment, bundleOf(
+            StringConstants.CAME_FROM_LOGIN_SUMMARY_DEEPLINK.value to true
+        ))
 
     }
 
