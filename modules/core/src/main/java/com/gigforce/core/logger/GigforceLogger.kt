@@ -44,6 +44,20 @@ class GigforceLogger @Inject constructor() {
          }
      }
 
+    fun d(
+        tag: String,
+        message: String,
+        e : Throwable
+    ) {
+
+        try {
+            Timber.tag(tag)
+            Timber.d(e,message)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
      fun e(
         tag: String,
         occurredWhen: String,

@@ -13,6 +13,7 @@ import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.annotation.MenuRes
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import com.gigforce.common_ui.R
 import com.gigforce.core.extensions.getTextChangeAsStateFlow
@@ -248,6 +249,18 @@ class GigforceToolbar(
 
     fun hideSubTitle() {
         subTitleTV.visibility = View.GONE
+    }
+
+    fun changeBackButtonDrawable(){
+        backButton.setImageDrawable(resources.getDrawable(R.drawable.ic_chevron))
+    }
+
+    fun setBackButtonDrawable(
+        @DrawableRes drawable : Int
+    ){
+        backButton.setImageDrawable(
+            ResourcesCompat.getDrawable(resources,drawable,null)
+        )
     }
 
     fun setTitleClickListener(

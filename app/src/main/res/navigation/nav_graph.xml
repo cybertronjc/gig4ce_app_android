@@ -1022,6 +1022,48 @@
         android:id="@+id/jobProfileListFragment"
         android:name="com.gigforce.client_activation.client_activation.explore.JobProfileListFragment"
         android:label="JobProfileListFragment" />
+    <fragment
+        android:id="@+id/gigerInfoFragment"
+        android:name="com.gigforce.lead_management.ui.giger_info.GigerInfoFragment"
+        android:label="GigerInfoFragment" />
+    <fragment
+        android:id="@+id/joiningList2Fragment"
+        android:name="com.gigforce.lead_management.ui.joining_list_2.JoiningList2Fragment"
+        android:label="JoiningList2Fragment" />
+
+    <fragment
+        android:id="@+id/newSelectionForm1Fragment"
+        android:name="com.gigforce.lead_management.ui.new_selection_form.NewSelectionForm1Fragment"
+        android:label="NewSelectionForm1Fragment" />
+    <fragment
+        android:id="@+id/selectBusinessFragment"
+        android:name="com.gigforce.lead_management.ui.select_business_screen.SelectBusinessFragment"
+        android:label="SelectBusinessFragment" />
+    <fragment
+        android:id="@+id/selectJobProfileFragment"
+        android:name="com.gigforce.lead_management.ui.select_job_profile_screen.SelectJobProfileFragment"
+        android:label="SelectJobProfileFragment" />
+    <fragment
+        android:id="@+id/selectCityFragment"
+        android:name="com.gigforce.lead_management.ui.select_city.SelectCityFragment"
+        android:label="SelectCityFragment" />
+    <fragment
+        android:id="@+id/selectReportingLocationFragment"
+        android:name="com.gigforce.lead_management.ui.select_reporting_location.SelectReportingLocationFragment"
+        android:label="SelectReportingLocationFragment" />
+    <fragment
+        android:id="@+id/selectClientTlFragment"
+        android:name="com.gigforce.lead_management.ui.select_tls.SelectClientTlFragment"
+        android:label="SelectClientTlFragment" />
+    <fragment
+        android:id="@+id/newSelectionForm2Fragment"
+        android:name="com.gigforce.lead_management.ui.new_selection_form_2.NewSelectionForm2Fragment"
+        android:label="NewSelectionForm2Fragment" />
+
+    <fragment
+        android:id="@+id/newSelectionFormSubmitSuccessFragment"
+        android:name="com.gigforce.lead_management.ui.new_selection_form_submittion_success.SelectionFormSubmitSuccessFragment"
+        android:label="SelectionFormSubmitSuccessFragment" />
 
     <fragment
         android:id="@+id/adharDetailInfoFragment"

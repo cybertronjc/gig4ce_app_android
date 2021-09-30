@@ -28,7 +28,7 @@
     <string name="date_format_lead">DD/MM/YYYY</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment_lead">Hello blank fragment</string>
-    <string name="looking_for_dynamic_working_hours_lead">\Looking for flexible working hours? Join me at Gigforce :</string>
+    <string name="looking_for_dynamic_working_hours_lead">Looking for flexible working hours? Join me at Gigforce :</string>
     <string name="didn_t_received_the_link_lead"><u>Didn\'t received the link ?</u></string>
     <string name="gig_assigned_lead">Gig assigned</string>
     <string name="enter_valid_mobile_lead">Enter a valid Mobile No</string>
@@ -43,6 +43,7 @@
     <string name="search_joinings_lead">Search Joinings</string>
     <string name="joinings_lead">Joinings</string>
     <string name="no_job_profiles_found_lead">No Job Profile Found</string>
+    <string name="no_joining_found_lead">No Joining Found</string>
     <string name="office_na_lead">Office : N/A</string>
     <string name="select_atleast_one_profile_lead">Please select at least one job profile</string>
     <string name="select_job_profile_lead">Select Job Profile</string>
@@ -72,7 +73,7 @@
     <string name="congratulations_lead">Congratulations</string>
     <string name="giger_has_been_activated_successfully_lead">Giger has been activated successfully.</string>
     <string name="submit_lead">Submit</string>
-    <string name="add_new_lead">Add New</string>
+    <string name="add_new_lead">+ ADD NEW</string>
     <string name="start_referring_now_lead">Start referring now</string>
     <string name="send_via_whatsapp_lead">Send via Whatsapp</string>
     <string name="send_via_other_apps_lead">Send via other apps</string>
@@ -104,5 +105,21 @@
     <string name="contact_number">Contact Number</string>
     <string name="ask_giger_to_apply">Ask the Giger to apply and submit Gig application</string>
     <string name="ask_giger_to_signup">Ask the giger to signup and submit Gig application.</string>
+    <string name="app_pending_lead">Application Pending</string>
+    <string name="app_submitted_lead">Application Submitted</string>
+    <string name="application_checklist_lead">Application Checklist</string>
+    <string name="call_giger_lead">CALL GIGER</string>
+    <string name="drop_selection_lead">DROP SELECTION</string>
+    <string name="giger_name_lead">Giger name</string>
+    <string name="del_executive_lead">Delivery Executive</string>
+    <string name="company_text_lead">Company</string>
+    <string name="joining_date_lead">Joining Date</string>
+    <string name="location_lead">Location</string>
+    <string name="selection_date_lead">Selection Date</string>
+    <string name="checklist_name_lead">Profile Picture</string>
+    <string name="giger_mobile_number">Giger Mobile Number</string>
+    <string name="sure_to_drop_lead">Are you sure that you want to drop 3 selection(s)?</string>
+    <string name="cancel_lead">Cancel</string>
     <string name="submitting_data">Submitting...</string>
+
 </resources>

@@ -13,6 +13,12 @@ open class JoiningListRecyclerItemData(
         LeadActivationViewTypes.JoiningListStatus
     )
 
+    data class JoiningListRecyclerBusinessItemData(
+        val buisnessName: String
+    ) : JoiningListRecyclerItemData(
+        LeadActivationViewTypes.JoiningBusiness
+    )
+
     data class JoiningListRecyclerJoiningItemData(
         val joiningId :String,
         val userUid: String?,
@@ -27,6 +33,6 @@ open class JoiningListRecyclerItemData(
         val jobProfileIcon : String,
         val tradeName : String
     ): JoiningListRecyclerItemData(
-        LeadActivationViewTypes.JoiningList
+        LeadActivationViewTypes.JoiningList2
     )
 }

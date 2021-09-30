@@ -37,5 +37,16 @@
         <item name="android:colorForeground">#42221f1f</item>
     </style>
 
+    <style name="RoundCornerButtonShapeOverlay" parent="Widget.MaterialComponents.Button">
+        <item name="shapeAppearanceOverlay">@style/RoundCornerAppearance</item>
+    </style>
+    <style name="RoundCornerAppearance">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerFamilyTopRight">cut</item>
+        <item name="cornerFamilyBottomRight">cut</item>
+        <item name="cornerSizeTopLeft">32dp</item>
+        <item name="cornerSizeBottomLeft">32dp</item>
+    </style>
+
 
 </resources>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+<FrameLayout
+    android:layout_width="86dp"
+    android:layout_height="86dp"
+    >
+
+    <com.gigforce.common_ui.views.GigforceImageView
+        android:id="@+id/gigerImg"
+        android:layout_width="66dp"
+        android:layout_height="66dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/circleImageView"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <LinearLayout
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_marginBottom="6dp"
+        android:layout_marginEnd="-6dp"
+        android:layout_gravity="bottom|right">
+    <LinearLayout
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:background="@drawable/company_logo_white_background">
+        <com.gigforce.common_ui.widgets.CircleImageView
+            android:id="@+id/companyImg"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:padding="@dimen/size_6"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_avatar_male" />
+    </LinearLayout>
+    </LinearLayout>
+</FrameLayout>
+</layout>
