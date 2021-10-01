@@ -289,11 +289,7 @@ class CameraFragment : Fragment() {
                         }
                     }
                 } catch (e: Exception){
-                    context?.getString(R.string.unable_to_capture_photo_common)?.let { it1 ->
-                        showToast(
-                            it1
-                        )
-                    }
+                    showToast(getString(R.string.unable_to_capture_photo_common))
                     CrashlyticsLogger.e(TAG,"capturing image",e)
                 }
 
