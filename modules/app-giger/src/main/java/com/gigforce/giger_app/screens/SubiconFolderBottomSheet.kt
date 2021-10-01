@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.fragment.app.activityViewModels
 import com.gigforce.common_ui.viewdatamodels.FeatureItemCard2DVM
 import com.gigforce.core.StringConstants
+import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.recyclerView.ItemClickListener
 import com.gigforce.giger_app.R
@@ -30,6 +31,9 @@ class SubiconFolderBottomSheet : BottomSheetDialogFragment() {
 
     @Inject
     lateinit var navigation: INavigation
+
+    @Inject
+    lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -95,7 +99,11 @@ class SubiconFolderBottomSheet : BottomSheetDialogFragment() {
                 if (index == indicatorList.size - indexTill) {
                     textView.text = "..."
                 } else {
-                    var title = featureItemCard2DVM.title
+                    var title = if (sharedPreAndCommonUtilInterface.getAppLanguageCode() == "hi") {
+                        featureItemCard2DVM.hi?.title ?: featureItemCard2DVM.title
+                    } else
+                        featureItemCard2DVM.title
+
                     if (index > 0)
                         title = " > $title"
                     textView.text = title
