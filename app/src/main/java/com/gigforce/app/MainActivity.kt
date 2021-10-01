@@ -219,6 +219,7 @@ class MainActivity : BaseActivity(),
                 }
                 //deep linking for login summary is handled here
                 intent.getBooleanExtra(StringConstants.LOGIN_SUMMARY_VIA_DEEP_LINK.value, false) -> {
+                    Log.d("datahere", "main")
                    handleLoginSummaryNav()
                 }
                 else -> {

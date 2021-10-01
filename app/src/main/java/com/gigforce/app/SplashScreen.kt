@@ -7,17 +7,23 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.gigforce.app.di.implementations.SharedPreAndCommonUtilDataImp
 import com.gigforce.common_ui.StringConstants
+import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
+import dagger.hilt.android.AndroidEntryPoint
 import io.branch.referral.Branch
 import io.branch.referral.Branch.BranchReferralInitListener
 import io.branch.referral.BranchError
 import org.json.JSONObject
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class SplashScreen : AppCompatActivity() {
 
     val TAG: String = "activity/main"
+
+    @Inject
+    lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +51,9 @@ class SplashScreen : AppCompatActivity() {
                         val param = parameters[parameters.size - 1]
                         if (param == "login_summary"){
                             Log.d("datahere", "login summary")
+                            sharedPreAndCommonUtilInterface.saveDataBoolean("deeplink_login", true)
                             mainIntent.putExtra(StringConstants.LOGIN_SUMMARY_VIA_DEEP_LINK.value, true)
+                            mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                         }
                     }
                 }

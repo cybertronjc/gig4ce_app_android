@@ -20,6 +20,7 @@ import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.base.BaseFragment2
+import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.Lce
 import com.gigforce.giger_gigs.LoginSummaryConstants
@@ -46,6 +47,9 @@ class TeamLeaderLoginDetailsFragment : BaseFragment2<TeamLeaderLoginDetailsFragm
 
     @Inject
     lateinit var navigation: INavigation
+
+    @Inject
+    lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
 
     private val viewModel: TeamLeaderLoginDetailsViewModel by viewModels()
     private val loginSummarySharedViewModel : LoginSummarySharedViewModel by activityViewModels()
@@ -88,6 +92,7 @@ class TeamLeaderLoginDetailsFragment : BaseFragment2<TeamLeaderLoginDetailsFragm
 
         arguments?.let {
             cameFromDeeplink = it.getBoolean(StringConstants.CAME_FROM_LOGIN_SUMMARY_DEEPLINK.value) ?: return@let
+            if (cameFromDeeplink) sharedPreAndCommonUtilInterface.saveDataBoolean("deeplink_login", false)
         }
         savedInstanceState?.let {
             cameFromDeeplink = it.getBoolean(StringConstants.CAME_FROM_LOGIN_SUMMARY_DEEPLINK.value) ?: return@let
