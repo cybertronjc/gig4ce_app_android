@@ -313,9 +313,9 @@ class VerifyOTP : BaseFragment() {
     private fun requestVerifyOTP(otpIn : Editable?){
         count++
         if (count > 3) {
-            progressBar.visibility = View.GONE
-            verify_otp_button.isEnabled = true
-            showToast("Try again!!")
+            progressBar?.visibility = View.GONE
+            verify_otp_button?.isEnabled = true
+            context?.let { showToast("Try again!!") }
         } else {
             Handler().postDelayed({
                 verifyOTP(otpIn)

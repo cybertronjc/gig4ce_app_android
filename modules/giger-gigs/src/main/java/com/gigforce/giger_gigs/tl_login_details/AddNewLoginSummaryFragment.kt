@@ -79,7 +79,6 @@ class AddNewLoginSummaryFragment : Fragment() {
         return viewBinding.root
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(AddNewLoginSummaryViewModel::class.java)

@@ -23,7 +23,10 @@
             android:layout_marginTop="26dp"
             android:fontFamily="@font/lato_bold"
             android:textColor="@color/black_two"
-            tools:text="Some error"/>
+            android:gravity="center"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            tools:text="Some  ded ded ded ded ed ed ed e d ed ed ed ed e dd e de d de edd ed e d de dd e derror"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/retry_btn"

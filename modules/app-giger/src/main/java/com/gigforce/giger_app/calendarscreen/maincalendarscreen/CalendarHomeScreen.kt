@@ -32,6 +32,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.request.RequestOptions
 import com.gigforce.common_ui.AppDialogsInterface
 import com.gigforce.common_ui.ConfirmationDialogOnClickListener
+import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.chat.ChatHeadersViewModel
 import com.gigforce.common_ui.configrepository.ConfigRepository
 import com.gigforce.common_ui.core.TextDrawable
@@ -45,6 +46,7 @@ import com.gigforce.core.IEventTracker
 import com.gigforce.core.ProfilePropArgs
 import com.gigforce.core.base.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.core.base.genericadapter.RecyclerGenericAdapter
+import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.datamodels.custom_gig_preferences.UnavailableDataModel
 import com.gigforce.core.extensions.gone
@@ -110,6 +112,9 @@ class CalendarHomeScreen : Fragment(),
     lateinit var navigation: INavigation
 
     @Inject
+    lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
+
+    @Inject
     lateinit var appDialogsInterface: AppDialogsInterface
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -125,7 +130,8 @@ class CalendarHomeScreen : Fragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        
+
+        checkForDeepLink()
         viewModelProfile = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         viewModelCustomPreference =
             ViewModelProvider(this, ParamCustPreferViewModel(viewLifecycleOwner)).get(
@@ -187,6 +193,21 @@ class CalendarHomeScreen : Fragment(),
             showLocationDialog()
         }
 
+    }
+
+    private fun checkForDeepLink() {
+        try {
+            val cameFromDeepLink = sharedPreAndCommonUtilInterface.getDataBoolean("deeplink_login")
+            if (cameFromDeepLink == true){
+                Log.d("deepLink", "here")
+                navigation.navigateTo("gig/tlLoginDetails", bundleOf(
+                    StringConstants.CAME_FROM_LOGIN_SUMMARY_DEEPLINK.value to true
+                )
+                )
+            }
+        }catch (e: Exception){
+
+        }
     }
 
     private fun showLocationDialog() {

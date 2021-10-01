@@ -1,5 +1,7 @@
 package com.gigforce.lead_management.repositories
 
+import android.net.Uri
+import android.util.Log
 import com.gigforce.common_ui.ext.bodyOrThrow
 import com.gigforce.common_ui.remote.JoiningProfileService
 import com.gigforce.common_ui.remote.ReferralService
@@ -15,6 +17,7 @@ import com.gigforce.core.extensions.addOrThrow
 import com.gigforce.core.extensions.getOrThrow
 import com.gigforce.core.extensions.setOrThrow
 import com.gigforce.core.extensions.updateOrThrow
+import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.core.retrofit.CreateUserAccEnrollmentAPi
 import com.gigforce.core.retrofit.RetrofitFactory
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
@@ -22,22 +25,32 @@ import com.gigforce.lead_management.exceptions.TryingToDowngradeJoiningStatusExc
 import com.gigforce.lead_management.exceptions.UserDoesNotExistInProfileException
 import com.google.firebase.Timestamp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.google.firebase.dynamiclinks.DynamicLink
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
+import com.google.firebase.dynamiclinks.ktx.dynamicLinks
+import com.google.firebase.dynamiclinks.ktx.shortLinkAsync
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.ktx.Firebase
 import javax.inject.Inject
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 class LeadManagementRepository @Inject constructor(
     private val firebaseFirestore: FirebaseFirestore,
     private val firebaseAuthStateListener: FirebaseAuthStateListener,
     private val joiningProfileRemoteService: JoiningProfileService,
     private val referralService: ReferralService,
-    private val buildConfig: IBuildConfig
+    private val buildConfig: IBuildConfig,
+    private val logger : GigforceLogger
 ) {
 
 
     companion object {
 
+        private const val TAG = "LeadManagementRepository"
         private const val COLLECTION_JOININGS = "Joinings"
         private const val COLLECTION_PROFILE = "Profiles"
     }
@@ -92,6 +105,11 @@ class LeadManagementRepository @Inject constructor(
         userUid = null
     ).bodyOrThrow()
 
+    suspend fun getJoiningListings(
+    ): List<JoiningNew> {
+        return joiningProfileRemoteService.getJoiningListing().bodyOrThrow()
+    }
+
     suspend fun getJobProfilesWithStatus(
         tlUid: String,
         userUid: String
@@ -118,6 +136,10 @@ class LeadManagementRepository @Inject constructor(
             throw Exception(response.message ?: "Unable to assign gigs")
         }
     }
+
+    suspend fun getGigerJoiningInfo(
+        joiningId: String
+    ): GigerInfo = joiningProfileRemoteService.getJoiningInfo(joiningId).bodyOrThrow()
 
     suspend fun createOrUpdateJoiningDocumentWithStatusSignUpPending(
         userUid: String,
@@ -614,5 +636,65 @@ class LeadManagementRepository @Inject constructor(
                     )
                 )
             )
+    }
+
+    suspend fun getBusinessAndJobProfiles() = joiningProfileRemoteService
+        .getBusinessAndJobProfiles()
+        .bodyOrThrow()
+
+    suspend fun getBusinessLocationsAndTeamLeaders(
+        businessId : String
+    ) = joiningProfileRemoteService
+        .getBusinessLocationAndTeamLeaders(businessId)
+        .bodyOrThrow()
+
+    suspend fun submitJoiningRequest(
+        joiningRequest: SubmitJoiningRequest
+    )  {
+
+        val response =  joiningProfileRemoteService.submitJoiningRequest(joiningRequest)
+        if (!response.isSuccessful) {
+            throw Exception(response.errorBody()?.string() ?: "Unable to submit joining data")
+        }
+    }
+
+    suspend fun createJobProfileReferralLink(
+        jobProfileId: String
+    ) = suspendCoroutine<String> { cont ->
+        Firebase.dynamicLinks.shortLinkAsync {
+            longLink = Uri.parse(
+                buildDeepLink(
+                    Uri.parse("http://www.gig4ce.com/?job_profile_id=$jobProfileId&invite=${firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow().uid}")
+                ).toString()
+            )
+        }.addOnSuccessListener { result ->
+            cont.resume(result.shortLink.toString())
+        }.addOnFailureListener {
+            cont.resumeWithException(it)
+        }
+    }
+
+    private fun buildDeepLink(
+        deepLink: Uri
+    ): Uri {
+        return FirebaseDynamicLinks.getInstance().createDynamicLink()
+            .setLink(Uri.parse(deepLink.toString()))
+            .setDomainUriPrefix(buildConfig.getReferralBaseUrl())
+            .setAndroidParameters(DynamicLink.AndroidParameters.Builder().build())
+            .setIosParameters(DynamicLink.IosParameters.Builder("com.gigforce.ios").build())
+            .setSocialMetaTagParameters(
+                DynamicLink.SocialMetaTagParameters.Builder()
+                    .setTitle("Gigforce")
+                    .setDescription("Flexible work and learning platform")
+                    .setImageUrl(Uri.parse("https://firebasestorage.googleapis.com/v0/b/gig4ce-app.appspot.com/o/app_assets%2Fgigforce.jpg?alt=media&token=f7d4463b-47e4-4b8e-9b55-207594656161"))
+                    .build()
+            ).buildDynamicLink()
+            .uri
+    }
+
+    suspend fun dropSelections(
+        selectionIds : List<String>
+    ){
+
     }
 }

@@ -16,8 +16,11 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.base.BaseFragment2
+import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.Lce
 import com.gigforce.giger_gigs.LoginSummaryConstants
@@ -36,7 +39,7 @@ class TeamLeaderLoginDetailsFragment : BaseFragment2<TeamLeaderLoginDetailsFragm
     fragmentName = "TeamLeaderLoginDetailsFragment",
     layoutId = R.layout.team_leader_login_details_fragment,
     statusBarColor = R.color.white
-), OnTlItemSelectedListener {
+), OnTlItemSelectedListener, IOnBackPressedOverride {
 
     companion object {
         fun newInstance() = TeamLeaderLoginDetailsFragment()
@@ -44,6 +47,9 @@ class TeamLeaderLoginDetailsFragment : BaseFragment2<TeamLeaderLoginDetailsFragm
 
     @Inject
     lateinit var navigation: INavigation
+
+    @Inject
+    lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
 
     private val viewModel: TeamLeaderLoginDetailsViewModel by viewModels()
     private val loginSummarySharedViewModel : LoginSummarySharedViewModel by activityViewModels()
@@ -55,6 +61,7 @@ class TeamLeaderLoginDetailsFragment : BaseFragment2<TeamLeaderLoginDetailsFragm
     var scrollingAdded = false
     lateinit var layoutManager : LinearLayoutManager
     var tlListing = ArrayList<ListingTLModel>()
+    var cameFromDeeplink = false
 
     private val tlLoginSummaryAdapter: TLLoginSummaryAdapter by lazy {
         TLLoginSummaryAdapter(requireContext(),this).apply {
@@ -66,18 +73,56 @@ class TeamLeaderLoginDetailsFragment : BaseFragment2<TeamLeaderLoginDetailsFragm
         viewBinding: TeamLeaderLoginDetailsFragmentBinding,
         savedInstanceState: Bundle?
     ) {
-
+        getIntentData(savedInstanceState)
         //checkForAddUpdate()
+        getDataFrom(
+            arguments,
+            savedInstanceState
+        )
         initToolbar()
         initializeViews()
         observer()
         initSharedViewModel()
         listeners()
     }
+    private fun getDataFrom(
+        arguments: Bundle?,
+        savedInstanceState: Bundle?
+    ) {
 
+        arguments?.let {
+            cameFromDeeplink = it.getBoolean(StringConstants.CAME_FROM_LOGIN_SUMMARY_DEEPLINK.value) ?: return@let
+            if (cameFromDeeplink) sharedPreAndCommonUtilInterface.saveDataBoolean("deeplink_login", false)
+        }
+        savedInstanceState?.let {
+            cameFromDeeplink = it.getBoolean(StringConstants.CAME_FROM_LOGIN_SUMMARY_DEEPLINK.value) ?: return@let
+        }
+
+    }
+
+    override fun onSaveInstanceState(
+        outState: Bundle
+    ) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(StringConstants.CAME_FROM_LOGIN_SUMMARY_DEEPLINK.value, cameFromDeeplink)
+
+    }
+
+    var title = ""
+    private fun getIntentData(savedInstanceState: Bundle?) {
+        savedInstanceState?.let {
+            title = it.getString("title") ?: ""
+        } ?: run {
+            arguments?.let {
+                title = it.getString("title") ?: ""
+            }
+        }
+    }
 
     private fun initToolbar() = viewBinding.apply {
         appBarComp.apply {
+            if (title.isNotBlank())
+                setAppBarTitle(title)
             setBackButtonListener(View.OnClickListener {
                 activity?.onBackPressed()
             })
@@ -256,5 +301,14 @@ class TeamLeaderLoginDetailsFragment : BaseFragment2<TeamLeaderLoginDetailsFragm
             )
 
         }
+    }
+
+    override fun onBackPressed(): Boolean {
+        if (cameFromDeeplink){
+            navigation.popBackStack()
+            navigation.navigateTo("common/landingScreen")
+            return true
+        }
+        return false
     }
 }

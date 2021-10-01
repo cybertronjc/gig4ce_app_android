@@ -76,7 +76,7 @@ class QuestionnaireFragment : Fragment(), AdapterQuestionnaire.AdapterQuestionna
 
         //need to resolve this : list not refreshing after state city loaded
         Handler().postDelayed({
-            adapter.notifyDataSetChanged()
+            adapter?.notifyDataSetChanged()
         }, 1000)
     }
 
@@ -193,7 +193,7 @@ class QuestionnaireFragment : Fragment(), AdapterQuestionnaire.AdapterQuestionna
                     ratioLayoutManager.startSmoothScroll(smoothScroller)
                     adapter.notifyItemChanged(selectedPosition)
                     rv_questionnaire.postDelayed({
-                        ratioLayoutManager.setScrollEnabled(false)
+                        ratioLayoutManager?.setScrollEnabled(false)
 
                     }, 500)
 

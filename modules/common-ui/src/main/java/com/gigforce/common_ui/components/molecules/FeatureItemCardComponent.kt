@@ -90,7 +90,7 @@ open class FeatureItemCardComponent(context: Context, attrs: AttributeSet?) :
         if (data.title.isNotBlank())
             title.text = data.title
         else title.gone()
-        if (data.subtitle?.isNotBlank()?:false) {
+        if (data.subtitle?.isNotBlank() == true) {
             subtitle.text = data.subtitle
         }
         else subtitle.gone()

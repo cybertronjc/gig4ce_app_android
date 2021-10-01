@@ -15,7 +15,6 @@ import kotlinx.android.synthetic.main.fragment_gig_early_or_late_check_in.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 class EarlyOrLateCheckInBottomSheet : BottomSheetDialogFragment() {
 
     private var checkInType: String? = null

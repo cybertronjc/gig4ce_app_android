@@ -11,7 +11,6 @@ import android.os.Handler
 import android.util.Log
 import android.view.MotionEvent
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -69,8 +68,8 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity(),
-        NavFragmentsData,
-        INavigationProvider, InstallStateUpdatedListener {
+    NavFragmentsData,
+    INavigationProvider, InstallStateUpdatedListener {
 
     private var bundle: Bundle? = null
     private lateinit var navController: NavController
@@ -217,6 +216,11 @@ class MainActivity : BaseActivity(),
                 intent.getStringExtra(IS_DEEPLINK) == "true" -> {
                     handleDeepLink()
                 }
+                //deep linking for login summary is handled here
+                intent.getBooleanExtra(StringConstants.LOGIN_SUMMARY_VIA_DEEP_LINK.value, false) -> {
+                    Log.d("datahere", "main")
+                   handleLoginSummaryNav()
+                }
                 else -> {
                     proceedWithNormalNavigation()
                 }
@@ -227,6 +231,18 @@ class MainActivity : BaseActivity(),
             lookForNewChatMessages()
         }
         profileDataSnapshot()
+    }
+
+    private fun handleLoginSummaryNav() {
+        if (!isUserLoggedIn()) {
+            proceedWithNormalNavigation()
+            return
+        }
+        navController.popBackStack()
+        navController.navigate(R.id.teamLeaderLoginDetailsFragment, bundleOf(
+            StringConstants.CAME_FROM_LOGIN_SUMMARY_DEEPLINK.value to true
+        ))
+
     }
 
     private fun profileDataSnapshot() {
@@ -411,7 +427,7 @@ class MainActivity : BaseActivity(),
             NotificationConstants.CLICK_ACTIONS.OPEN_CALENDAR_HOME_SCREEN -> {
                 Log.d("MainActivity", "redirecting to OPEN_CALENDAR_HOME_SCREEN")
                 navController.popAllBackStates()
-                navController.navigate(R.id.homeScreenFragment)
+                navController.navigate(R.id.mainHomeScreen)
             }
             NotificationConstants.CLICK_ACTIONS.OPEN_CHAT_PAGE -> {
                 Log.d("MainActivity", "redirecting to gig verification page")
@@ -439,11 +455,35 @@ class MainActivity : BaseActivity(),
                         }
                 )
             }
+            NotificationConstants.CLICK_ACTIONS.OPEN_VERIFICATION_PAN_SCREEN -> {
+                navController.popAllBackStates()
+                navController.navigate(R.id.onboardingLoaderfragment)
+                navController.navigate(R.id.gigerVerificationFragment)
+                navController.navigate(R.id.panCardFragment)
+            }
+            NotificationConstants.CLICK_ACTIONS.OPEN_VERIFICATION_DL_SCREEN -> {
+                navController.popAllBackStates()
+                navController.navigate(R.id.onboardingLoaderfragment)
+                navController.navigate(R.id.gigerVerificationFragment)
+                navController.navigate(R.id.drivingLicenseFragment)
+            }
+            NotificationConstants.CLICK_ACTIONS.OPEN_VERIFICATION_BANK_SCREEN -> {
+                navController.popAllBackStates()
+                navController.navigate(R.id.onboardingLoaderfragment)
+                navController.navigate(R.id.gigerVerificationFragment)
+                navController.navigate(R.id.bank_account_fragment)
+            }
+            NotificationConstants.CLICK_ACTIONS.OPEN_VERIFICATION_AADHAAR_SCREEN -> {
+                navController.popAllBackStates()
+                navController.navigate(R.id.onboardingLoaderfragment)
+                navController.navigate(R.id.gigerVerificationFragment)
+                navController.navigate(R.id.adharDetailInfoFragment)
+            }
             else -> {
                 navController.popAllBackStates()
                 navController.navigate(
-                        R.id.landinghomefragment,
-                        intent.extras
+                    R.id.landinghomefragment,
+                    intent.extras
                 )
             }
         }
@@ -469,6 +509,47 @@ class MainActivity : BaseActivity(),
             formatMultipleDataSharedAndOpenChat(intent)
         } else if (intent?.getStringExtra(IS_DEEPLINK) == "true") {
             handleDeepLink()
+        } else {
+            if(intent?.getBooleanExtra(StringConstants.NAV_TO_CLIENT_ACT.value, false) == true) {
+
+                if (!isUserLoggedIn()) {
+                    proceedWithNormalNavigation()
+                    return
+                }
+
+                navController.popBackStack()
+                navController.navigate(
+                    R.id.fragment_client_activation, bundleOf(
+                        StringConstants.JOB_PROFILE_ID.value to intent.getStringExtra(
+                            StringConstants.JOB_PROFILE_ID.value
+                        ),
+                        StringConstants.INVITE_USER_ID.value to intent.getStringExtra(
+                            StringConstants.INVITE_USER_ID.value
+                        ),
+                        StringConstants.CLIENT_ACTIVATION_VIA_DEEP_LINK.value to true
+                    )
+                )
+            } else if(intent?.getBooleanExtra(StringConstants.NAV_TO_ROLE.value, false) == true) {
+
+                if (!isUserLoggedIn()) {
+                    proceedWithNormalNavigation()
+                    return
+                }
+
+//                LandingScreenFragmentDirections.openRoleDetailsHome( intent.getStringExtra(StringConstants.ROLE_ID.value),true)
+                navController.popBackStack()
+                navController.navigate(
+                    R.id.fragment_role_details, bundleOf(
+                        StringConstants.ROLE_ID.value to intent.getStringExtra(
+                            StringConstants.ROLE_ID.value
+                        ),
+                        StringConstants.INVITE_USER_ID.value to intent.getStringExtra(
+                            StringConstants.INVITE_USER_ID.value
+                        ),
+                        StringConstants.ROLE_VIA_DEEPLINK.value to true
+                    )
+                )
+            }
         }
     }
 
@@ -637,8 +718,8 @@ class MainActivity : BaseActivity(),
 
     fun getUpdatePriority(currentAppVersion: Int, info: VersionUpdateInfo): Int {
         val mostImportantUpdate = info.updates
-                .filter { it.version > currentAppVersion }
-                ?.sortedByDescending { it.updatePriority }
+            .filter { it.version > currentAppVersion }
+            .sortedByDescending { it.updatePriority }
         return if (mostImportantUpdate.size > 0) mostImportantUpdate[0].updatePriority else -1
     }
 

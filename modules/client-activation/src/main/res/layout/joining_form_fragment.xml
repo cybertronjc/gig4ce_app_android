@@ -585,7 +585,7 @@
                     android:layout_marginLeft="@dimen/size_16"
                     android:layout_marginTop="@dimen/size_16"
                     android:layout_marginRight="@dimen/size_16"
-                    android:hint="Select hub city"
+                    android:hint="Select hub name"
                     android:visibility="visible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

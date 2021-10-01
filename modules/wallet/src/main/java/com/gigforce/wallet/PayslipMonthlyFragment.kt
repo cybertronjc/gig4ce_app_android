@@ -6,19 +6,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.FileProvider
-import androidx.fragment.app.Fragment
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.gigforce.wallet.adapters.MonthlyPayslipsAdapter
-import com.gigforce.wallet.models.Payslip
 import com.gigforce.common_ui.utils.UtilMethods
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.utils.Lce
+import com.gigforce.wallet.adapters.MonthlyPayslipsAdapter
+import com.gigforce.wallet.models.Payslip
 import com.gigforce.wallet.vm.PayslipMonthlyViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,7 +33,9 @@ import javax.inject.Inject
 class PayslipMonthlyFragment : Fragment() {
 
     private val viewModel: PayslipMonthlyViewModel by activityViewModels()
-    @Inject lateinit var buildConfig : IBuildConfig
+
+    @Inject
+    lateinit var buildConfig: IBuildConfig
     private val mAdapter: MonthlyPayslipsAdapter by lazy {
         MonthlyPayslipsAdapter(requireContext())
     }
@@ -45,13 +47,25 @@ class PayslipMonthlyFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        getIntentData(savedInstanceState)
         initView()
         initViewModel()
     }
 
-    private fun initView() {
+    var title = ""
+    private fun getIntentData(savedInstanceState: Bundle?) {
+        savedInstanceState?.let {
+            title = it.getString("title") ?: ""
+        } ?: run {
+            arguments?.let {
+                title = it.getString("title") ?: ""
+            }
+        }
+    }
 
+    private fun initView() {
+        if (title.isNotBlank())
+            top_bar.setAppBarTitle(title)
         top_bar.search_icon.gone()
         //top_bar.wallet_heading.text = "My Payslips"
 

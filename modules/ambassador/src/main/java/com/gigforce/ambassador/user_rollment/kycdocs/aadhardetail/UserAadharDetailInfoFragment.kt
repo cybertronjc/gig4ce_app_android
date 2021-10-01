@@ -822,7 +822,7 @@ class UserAadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageB
             Log.d("kycData", "data : $kycData")
             processKycData(kycData)
             it.aadhaar_card_questionnaire?.apply {
-                if (!name.isNullOrEmpty() && !aadhaarCardNo.isNullOrEmpty() && !dateOfBirth.isNullOrEmpty()) {
+                if (verified == true){
                     allFieldsEnable(false)
                     viewBinding.toplayoutblock.toggleChangeTextView(true)
                     viewBinding.submitButton.text = getString(R.string.next_amb)

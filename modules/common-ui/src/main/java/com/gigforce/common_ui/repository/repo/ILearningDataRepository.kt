@@ -8,6 +8,7 @@ import com.gigforce.common_ui.datamodels.datamodels.UserInterestsAndRolesDM
 import com.gigforce.common_ui.viewdatamodels.FeatureItemCardDVM
 import com.gigforce.common_ui.viewdatamodels.models.progress.CourseMapping
 import com.gigforce.core.StringConstants
+import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
 import com.gigforce.core.datamodels.learning.Course
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.google.firebase.auth.FirebaseAuth
@@ -25,7 +26,7 @@ interface ILearningDataRepository {
 }
 
 class LearningDataRepository @Inject constructor() :
-    ILearningDataRepository {
+    ILearningDataRepository, BaseFirestoreDBRepository() {
     private var allCourses: MutableLiveData<List<FeatureItemCardDVM>> = MutableLiveData()
     private var allAssessments: MutableLiveData<List<FeatureItemCardDVM>> = MutableLiveData()
 
@@ -135,25 +136,30 @@ class LearningDataRepository @Inject constructor() :
 
     var mProfile: UserInterestsAndRolesDM? = null
     suspend fun getProfileData(): UserInterestsAndRolesDM = suspendCoroutine { cont ->
-        FirebaseAuth.getInstance().currentUser?.uid?.let { useruid->
-            FirebaseFirestore.getInstance().collection("Profiles")
-                .document(useruid).get()
-                .addOnSuccessListener {
+        try {
+            FirebaseAuth.getInstance().currentUser?.uid?.let { useruid->
+                FirebaseFirestore.getInstance().collection("Profiles")
+                    .document(useruid).get()
+                    .addOnSuccessListener {
 
-                    if (it.exists()) {
-                        val profileData = it.toObject(UserInterestsAndRolesDM::class.java)
-                            ?: throw  IllegalStateException("unable to parse profile object")
-                        profileData.id = it.id
-                        mProfile = profileData
-                        cont.resume(profileData)
-                    } else {
-                        cont.resume(UserInterestsAndRolesDM())
+                        if (it.exists()) {
+                            val profileData = it.toObject(UserInterestsAndRolesDM::class.java)
+                                ?: throw  IllegalStateException("unable to parse profile object")
+                            profileData.id = it.id
+                            mProfile = profileData
+                            cont.resume(profileData)
+                        } else {
+                            cont.resume(UserInterestsAndRolesDM())
+                        }
                     }
-                }
-                .addOnFailureListener {
-                    cont.resumeWithException(it)
-                }
+                    .addOnFailureListener {
+                        cont.resumeWithException(it)
+                    }
+            }
+        }catch (e:Exception){
+            cont.resumeWithException(e)
         }
+
 
     }
 
@@ -286,5 +292,9 @@ class LearningDataRepository @Inject constructor() :
                         }
             }
         }
+
+    override fun getCollectionName(): String {
+        return ""
+    }
 
 }

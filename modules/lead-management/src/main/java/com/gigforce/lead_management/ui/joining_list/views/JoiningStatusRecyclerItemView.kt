@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.widget.RelativeLayout
 import com.gigforce.core.IViewHolder
 import com.gigforce.lead_management.databinding.RecyclerRowJoiningStatusItemBinding
+import com.gigforce.lead_management.models.JoiningList2RecyclerItemData
 import com.gigforce.lead_management.models.JoiningListRecyclerItemData
 
 
@@ -39,7 +40,7 @@ class JoiningStatusRecyclerItemView(
 
     override fun bind(data: Any?) {
         data?.let {
-            val shiftNameData = it as JoiningListRecyclerItemData.JoiningListRecyclerStatusItemData
+            val shiftNameData = it as JoiningList2RecyclerItemData.JoiningListRecyclerStatusItemData
             viewBinding.statusTv.text = shiftNameData.status
         }
     }

@@ -39,9 +39,26 @@ class JoiningListFragment : BaseFragment2<FragmentJoiningListBinding>(
         viewBinding: FragmentJoiningListBinding,
         savedInstanceState: Bundle?
     ) {
+        getIntentData(savedInstanceState)
+        initViews()
         initToolbar(viewBinding)
         initListeners(viewBinding)
         initViewModel()
+    }
+
+    private fun initViews() {
+
+    }
+
+    var title = ""
+    private fun getIntentData(savedInstanceState: Bundle?) {
+        savedInstanceState?.let {
+            title = it.getString("title") ?: ""
+        } ?: run {
+            arguments?.let {
+                title = it.getString("title") ?: ""
+            }
+        }
     }
 
     private fun initListeners(
@@ -51,7 +68,10 @@ class JoiningListFragment : BaseFragment2<FragmentJoiningListBinding>(
         this.joiningsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         PushDownAnim.setPushDownAnimTo(this.joinNowButton).setOnClickListener {
-            logger.d(logTag, "navigating to ${LeadManagementNavDestinations.FRAGMENT_GIGER_ONBOARDING}")
+            logger.d(
+                logTag,
+                "navigating to ${LeadManagementNavDestinations.FRAGMENT_GIGER_ONBOARDING}"
+            )
 
             navigation.navigateTo(
                 dest = LeadManagementNavDestinations.FRAGMENT_GIGER_ONBOARDING,
@@ -68,7 +88,10 @@ class JoiningListFragment : BaseFragment2<FragmentJoiningListBinding>(
         viewBinding: FragmentJoiningListBinding
     ) = viewBinding.toolbar.apply {
         this.hideActionMenu()
-        this.showTitle(context.getString(R.string.joinings_lead))
+        if (title.isNotBlank())
+            showTitle(title)
+        else
+            this.showTitle(context.getString(R.string.joinings_lead))
         this.setBackButtonListener {
             activity?.onBackPressed()
         }
@@ -140,7 +163,7 @@ class JoiningListFragment : BaseFragment2<FragmentJoiningListBinding>(
         joiningListInfoLayout.root.visible()
 
         joiningListInfoLayout.infoIv.loadImage(R.drawable.ic_no_joining_found)
-        joiningListInfoLayout.infoMessageTv.text = getString(R.string.no_job_profiles_found_lead)
+        joiningListInfoLayout.infoMessageTv.text = getString(R.string.no_joining_found_lead)
     }
 
     private fun showErrorInLoadingJoinings(

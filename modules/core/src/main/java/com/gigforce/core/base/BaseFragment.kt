@@ -34,6 +34,9 @@ abstract class BaseFragment2<V : ViewDataBinding>(
             return _viewDataBinding
         }
 
+    private var _viewCreatedForTheFirstTime = false
+    val viewCreatedForTheFirstTime get() = _viewCreatedForTheFirstTime
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -46,12 +49,28 @@ abstract class BaseFragment2<V : ViewDataBinding>(
             ResourcesCompat.getColor(resources, statusBarColor, null)
         )
 
-        _viewDataBinding = DataBindingUtil.inflate(
-            inflater,
-            layoutId,
-            container,
-            false
-        )
+        if(shouldPreventViewRecreationOnNavigation()) {
+            if (::_viewDataBinding.isInitialized.not()) {
+                _viewCreatedForTheFirstTime = true
+
+                _viewDataBinding = DataBindingUtil.inflate(
+                    inflater,
+                    layoutId,
+                    container,
+                    false
+                )
+            } else{
+                _viewCreatedForTheFirstTime = false
+            }
+        } else{
+
+            _viewDataBinding = DataBindingUtil.inflate(
+                inflater,
+                layoutId,
+                container,
+                false
+            )
+        }
 
         return _viewDataBinding.root
     }
@@ -83,6 +102,10 @@ abstract class BaseFragment2<V : ViewDataBinding>(
         logger.d(fragmentName, "onDestroy()")
     }
 
+    open fun shouldPreventViewRecreationOnNavigation() : Boolean{
+        return false
+    }
+
     abstract fun viewCreated(
         viewBinding: V,
         savedInstanceState: Bundle?
@@ -90,10 +113,10 @@ abstract class BaseFragment2<V : ViewDataBinding>(
 
     fun getNavOptions() = navOptions {
         this.anim {
-            this.enter = R.anim.nav_default_enter_anim
-            this.exit = R.anim.nav_default_exit_anim
-            this.popEnter= R.anim.nav_default_pop_enter_anim
-            this.popExit= R.anim.nav_default_pop_exit_anim
+            this.enter = R.anim.anim_enter_from_right
+            this.exit = R.anim.anim_exit_to_left
+            this.popEnter = R.anim.anim_enter_from_left
+            this.popExit = R.anim.anim_exit_to_right
         }
     }
 }

@@ -120,7 +120,8 @@ class UserAadharDetailRepository @Inject constructor() : BaseFirestoreDBReposito
                     "aadhaar_card_questionnaire.pincode" to aadhaardetails.pincode,
                     "aadhaar_card_questionnaire.landmark" to aadhaardetails.landmark,
                     "aadhaar_card_questionnaire.currentAddSameAsParmanent" to aadhaardetails.currentAddSameAsParmanent,
-                    "aadhaar_card_questionnaire.currentAddress" to aadhaardetails.currentAddress
+                    "aadhaar_card_questionnaire.currentAddress" to aadhaardetails.currentAddress,
+                    "aadhaar_card_questionnaire.verified" to true
             )
 
             db.collection(verificationCollectionName).document(uid).updateOrThrow(

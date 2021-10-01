@@ -14,7 +14,8 @@ data class AadhaarDetailsDataModel(
         var landmark: String? = "",
         var currentAddSameAsParmanent: Boolean = true,
         var currentAddress: CurrentAddressDetailDataModel? = null,
-        var name: String? = ""
+        var name: String? = "",
+        var verified : Boolean?=false
 )
 
 data class CurrentAddressDetailDataModel(

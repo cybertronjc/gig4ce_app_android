@@ -68,6 +68,8 @@
     <string name="pending_common_ui">Pending</string>
     <string name="status_common_ui">Status</string>
     <string name="joined">Joined</string>
+    <string name="pending">Pending</string>
+    <string name="completed">Completed</string>
     <string name="joining_pending">Joining Pending</string>
     <string name="signup_pending">Signup Pending</string>
     <string name="application_pending">Application Pending</string>
@@ -78,5 +80,5 @@
     <string name="day_with_space"> day</string>
     <string name="work_from_home">Work from home</string>
     <string name="cancel_common_ui">Cancel</string>
-
+    <string name="back_to_gigforce_ui">Back to Gigforce</string>
 </resources>
