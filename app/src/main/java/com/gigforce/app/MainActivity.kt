@@ -424,7 +424,7 @@ class MainActivity : BaseActivity(),
             NotificationConstants.CLICK_ACTIONS.OPEN_CALENDAR_HOME_SCREEN -> {
                 Log.d("MainActivity", "redirecting to OPEN_CALENDAR_HOME_SCREEN")
                 navController.popAllBackStates()
-                navController.navigate(R.id.homeScreenFragment)
+                navController.navigate(R.id.mainHomeScreen)
             }
             NotificationConstants.CLICK_ACTIONS.OPEN_CHAT_PAGE -> {
                 Log.d("MainActivity", "redirecting to gig verification page")

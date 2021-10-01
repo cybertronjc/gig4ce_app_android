@@ -415,13 +415,15 @@ class AssessmentFragment : Fragment(), IOnBackPressedOverride,
         if (pushfinalEvent) {
             pushfinalEvent = false
             Handler().postDelayed({
-                showToast(getString(R.string.time_is_up_learning))
-                viewModelAssessmentFragment.observableAssessmentData.value?.timeTakenInMillis =
-                    timeTaken.toLong()
-                pb_assessment.visible()
-                FirebaseAuth.getInstance().currentUser?.uid?.let {
-                    viewModelAssessmentFragment.submitAnswers(it)
-                }
+                try {
+                    showToast(getString(R.string.time_is_up_learning))
+                    viewModelAssessmentFragment.observableAssessmentData.value?.timeTakenInMillis =
+                        timeTaken.toLong()
+                    pb_assessment.visible()
+                    FirebaseAuth.getInstance().currentUser?.uid?.let {
+                        viewModelAssessmentFragment.submitAnswers(it)
+                    }
+                }catch (e:Exception){}
             }, 500)
 
         }

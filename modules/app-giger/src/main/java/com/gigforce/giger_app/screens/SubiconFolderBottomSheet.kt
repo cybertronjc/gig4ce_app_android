@@ -108,10 +108,11 @@ class SubiconFolderBottomSheet : BottomSheetDialogFragment() {
                 indicator.addView(textView)
             }
         }
-        (indicator.getChildAt(indicator.childCount - 1) as TextView).setTypeface(
-            null,
-            Typeface.BOLD
-        )
+        if (indicator.childCount > 0)
+            (indicator.getChildAt(indicator.childCount - 1) as TextView).setTypeface(
+                null,
+                Typeface.BOLD
+            )
     }
 
     private fun getIndexForIndicator(): Int {
@@ -140,7 +141,7 @@ class SubiconFolderBottomSheet : BottomSheetDialogFragment() {
                 indicatorList.clear()
                 indicatorList.add(tempList)
             } else {
-                var tempList = indicatorList.subList(0, index+1).toMutableList()
+                var tempList = indicatorList.subList(0, index + 1).toMutableList()
                 indicatorList.clear()
                 indicatorList.addAll(tempList)
             }
@@ -166,14 +167,14 @@ class SubiconFolderBottomSheet : BottomSheetDialogFragment() {
     var recyclerSubList = arrayListOf<FeatureItemCard2DVM>()
     private fun observer() {
         viewModel.allIconsLiveData.observeForever {
-            if(it != null)
-            try {
-                allIconsList.clear()
-                allIconsList.addAll(it)
-                recyclerSubList.addAll(getFilteredList(data?.subicons, it))
-                subiconsrv.collection = recyclerSubList
-            } catch (e: Exception) {
-            }
+            if (it != null)
+                try {
+                    allIconsList.clear()
+                    allIconsList.addAll(it)
+                    recyclerSubList.addAll(getFilteredList(data?.subicons, it))
+                    subiconsrv.collection = recyclerSubList
+                } catch (e: Exception) {
+                }
         }
     }
 
