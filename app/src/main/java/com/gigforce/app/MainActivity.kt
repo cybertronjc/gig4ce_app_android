@@ -218,6 +218,7 @@ class MainActivity : BaseActivity(),
                 }
                 //deep linking for login summary is handled here
                 intent.getBooleanExtra(StringConstants.LOGIN_SUMMARY_VIA_DEEP_LINK.value, false) -> {
+                    Log.d("datahere", "main")
                    handleLoginSummaryNav()
                 }
                 else -> {
@@ -238,7 +239,9 @@ class MainActivity : BaseActivity(),
             return
         }
         navController.popBackStack()
-        navController.navigate(R.id.teamLeaderLoginDetailsFragment)
+        navController.navigate(R.id.teamLeaderLoginDetailsFragment, bundleOf(
+            StringConstants.CAME_FROM_LOGIN_SUMMARY_DEEPLINK.value to true
+        ))
 
     }
 

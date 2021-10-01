@@ -14,16 +14,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.common_ui.AppDialogsInterface
 import com.gigforce.common_ui.ConfirmationDialogOnClickListener
+import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.chat.ChatHeadersViewModel
 import com.gigforce.common_ui.configrepository.ConfigRepository
 import com.gigforce.common_ui.core.TextDrawable
 import com.gigforce.common_ui.deviceInfo_permission.DeviceInfoGatherer
 import com.gigforce.common_ui.utils.BsBackgroundAndLocationAccess
+import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.navigation.INavigation
@@ -133,6 +136,9 @@ class LandingFragment : Fragment(),
     lateinit var navigation: INavigation
 
     @Inject
+    lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
+
+    @Inject
     lateinit var appDialogsInterface: AppDialogsInterface
     private val chatHeadersViewModel: ChatHeadersViewModel by viewModels()
 
@@ -146,6 +152,22 @@ class LandingFragment : Fragment(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         checkForLocationPermission()
+        checkForDeepLink()
+    }
+
+    private fun checkForDeepLink() {
+        try {
+            val cameFromDeepLink = sharedPreAndCommonUtilInterface.getDataBoolean("deeplink_login")
+            if (cameFromDeepLink == true){
+                Log.d("deepLink", "here")
+                navigation.navigateTo("gig/tlLoginDetails", bundleOf(
+                    StringConstants.CAME_FROM_LOGIN_SUMMARY_DEEPLINK.value to true
+                )
+                )
+            }
+        }catch (e: Exception){
+
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
