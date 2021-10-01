@@ -840,7 +840,7 @@ class BankAccountFragment : Fragment(),
             } else if (requestCode == ImageCropActivity.CROP_RESULT_CODE && resultCode == Activity.RESULT_OK) {
                 val imageUriResultCrop: Uri? =
                     Uri.parse(data?.getStringExtra(ImageCropActivity.CROPPED_IMAGE_URL_EXTRA))
-                Log.d("ImageUri", imageUriResultCrop.toString())
+//                Log.d("ImageUri", imageUriResultCrop.toString())
                 clickedImagePath = imageUriResultCrop
                 showPassbookInfoCard(clickedImagePath!!)
             }

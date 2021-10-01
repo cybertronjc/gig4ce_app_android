@@ -136,25 +136,30 @@ class LearningDataRepository @Inject constructor() :
 
     var mProfile: UserInterestsAndRolesDM? = null
     suspend fun getProfileData(): UserInterestsAndRolesDM = suspendCoroutine { cont ->
-        FirebaseAuth.getInstance().currentUser?.uid?.let { useruid->
-            FirebaseFirestore.getInstance().collection("Profiles")
-                .document(useruid).get()
-                .addOnSuccessListener {
+        try {
+            FirebaseAuth.getInstance().currentUser?.uid?.let { useruid->
+                FirebaseFirestore.getInstance().collection("Profiles")
+                    .document(useruid).get()
+                    .addOnSuccessListener {
 
-                    if (it.exists()) {
-                        val profileData = it.toObject(UserInterestsAndRolesDM::class.java)
-                            ?: throw  IllegalStateException("unable to parse profile object")
-                        profileData.id = it.id
-                        mProfile = profileData
-                        cont.resume(profileData)
-                    } else {
-                        cont.resume(UserInterestsAndRolesDM())
+                        if (it.exists()) {
+                            val profileData = it.toObject(UserInterestsAndRolesDM::class.java)
+                                ?: throw  IllegalStateException("unable to parse profile object")
+                            profileData.id = it.id
+                            mProfile = profileData
+                            cont.resume(profileData)
+                        } else {
+                            cont.resume(UserInterestsAndRolesDM())
+                        }
                     }
-                }
-                .addOnFailureListener {
-                    cont.resumeWithException(it)
-                }
+                    .addOnFailureListener {
+                        cont.resumeWithException(it)
+                    }
+            }
+        }catch (e:Exception){
+            cont.resumeWithException(e)
         }
+
 
     }
 

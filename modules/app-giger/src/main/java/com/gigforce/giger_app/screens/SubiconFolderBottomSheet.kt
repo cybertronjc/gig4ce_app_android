@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.fragment.app.activityViewModels
 import com.gigforce.common_ui.viewdatamodels.FeatureItemCard2DVM
 import com.gigforce.core.StringConstants
+import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.recyclerView.ItemClickListener
 import com.gigforce.giger_app.R
@@ -30,6 +31,9 @@ class SubiconFolderBottomSheet : BottomSheetDialogFragment() {
 
     @Inject
     lateinit var navigation: INavigation
+
+    @Inject
+    lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -95,7 +99,11 @@ class SubiconFolderBottomSheet : BottomSheetDialogFragment() {
                 if (index == indicatorList.size - indexTill) {
                     textView.text = "..."
                 } else {
-                    var title = featureItemCard2DVM.title
+                    var title = if (sharedPreAndCommonUtilInterface.getAppLanguageCode() == "hi") {
+                        featureItemCard2DVM.hi?.title ?: featureItemCard2DVM.title
+                    } else
+                        featureItemCard2DVM.title
+
                     if (index > 0)
                         title = " > $title"
                     textView.text = title
@@ -108,10 +116,11 @@ class SubiconFolderBottomSheet : BottomSheetDialogFragment() {
                 indicator.addView(textView)
             }
         }
-        (indicator.getChildAt(indicator.childCount - 1) as TextView).setTypeface(
-            null,
-            Typeface.BOLD
-        )
+        if (indicator.childCount > 0)
+            (indicator.getChildAt(indicator.childCount - 1) as TextView).setTypeface(
+                null,
+                Typeface.BOLD
+            )
     }
 
     private fun getIndexForIndicator(): Int {
@@ -140,7 +149,7 @@ class SubiconFolderBottomSheet : BottomSheetDialogFragment() {
                 indicatorList.clear()
                 indicatorList.add(tempList)
             } else {
-                var tempList = indicatorList.subList(0, index+1).toMutableList()
+                var tempList = indicatorList.subList(0, index + 1).toMutableList()
                 indicatorList.clear()
                 indicatorList.addAll(tempList)
             }
@@ -166,14 +175,14 @@ class SubiconFolderBottomSheet : BottomSheetDialogFragment() {
     var recyclerSubList = arrayListOf<FeatureItemCard2DVM>()
     private fun observer() {
         viewModel.allIconsLiveData.observeForever {
-            if(it != null)
-            try {
-                allIconsList.clear()
-                allIconsList.addAll(it)
-                recyclerSubList.addAll(getFilteredList(data?.subicons, it))
-                subiconsrv.collection = recyclerSubList
-            } catch (e: Exception) {
-            }
+            if (it != null)
+                try {
+                    allIconsList.clear()
+                    allIconsList.addAll(it)
+                    recyclerSubList.addAll(getFilteredList(data?.subicons, it))
+                    subiconsrv.collection = recyclerSubList
+                } catch (e: Exception) {
+                }
         }
     }
 

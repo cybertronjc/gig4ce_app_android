@@ -125,6 +125,37 @@ class JobProfileListFragment : Fragment(), IOnBackPressedOverride, OnJobSelected
         exploreRv.layoutManager = layoutManager
         exploreRv.adapter = jobProfileListAdapter
 
+        jobProfileListAdapter.onItemClick = {jpExplore ->
+            Log.d("id", jpExplore.id)
+            val id = jpExplore?.id ?: ""
+            val title = jpExplore?.title ?: ""
+            Log.d("title", jpExplore.title + "id $id")
+
+            eventTracker.pushEvent(
+                TrackingEventArgs(
+                    eventName = jpExplore.title + "_" + ClientActivationEvents.EVENT_USER_CLICKED,
+                    props = mapOf(
+                        "id" to id,
+                        "title" to title,
+                        "screen_source" to "Client Explore Job List"
+                    )
+                )
+            )
+            eventTracker.pushEvent(
+                TrackingEventArgs(
+                    eventName = ClientActivationEvents.EVENT_USER_CLICKED,
+                    props = mapOf(
+                        "id" to id,
+                        "title" to title,
+                        "screen_source" to "Client Explore Job List"
+                    )
+                )
+            )
+            navigation.navigateTo("client_activation",
+                bundleOf(StringConstants.JOB_PROFILE_ID.value to jpExplore.id)
+            )
+        }
+
         exploreRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
@@ -179,12 +210,13 @@ class JobProfileListFragment : Fragment(), IOnBackPressedOverride, OnJobSelected
     private fun showClientActivations(jobProfiles: ArrayList<JobProfileDVM>) = viewBinding.apply{
         jobProfilesList.addAll(jobProfiles)
         swipeRefresh.isRefreshing = false
-
+        Log.d("jobProfile", "job ${jobProfiles.size}")
         if (jobProfilesList.isNullOrEmpty()) {
             exploreRv.gone()
             exploreError.visible()
             noGigs.visible()
             exploreProgressBar.gone()
+            jobProfileListAdapter.submitList(jobProfilesList)
         } else {
             exploreRv.visible()
             exploreError.gone()
@@ -195,7 +227,7 @@ class JobProfileListFragment : Fragment(), IOnBackPressedOverride, OnJobSelected
             Log.d("jobProfiles", jobProfiles.toString())
 
             jobProfileListAdapter.submitList(jobProfilesList)
-            jobProfileListAdapter.notifyDataSetChanged()
+//            jobProfileListAdapter.notifyDataSetChanged()
 
 //            if (currentPage == 1){
 //                Log.d("pag", "zero $currentPage, list : ${jobProfiles.size}")
@@ -220,6 +252,9 @@ class JobProfileListFragment : Fragment(), IOnBackPressedOverride, OnJobSelected
         swipeRefresh.setOnRefreshListener {
             jobProfilesList.clear()
             currentPage = 1
+            exploreRv.gone()
+            exploreError.gone()
+            noGigs.gone()
             jobProfileRequestModelCurrent.pageNo = currentPage
             viewModel.getAllJobProfiles(jobProfileRequestModelCurrent)
         }
@@ -246,6 +281,9 @@ class JobProfileListFragment : Fragment(), IOnBackPressedOverride, OnJobSelected
                     currentPage = 1
                     jobProfileRequestModelCurrent.pageNo = currentPage
                     jobProfilesList.clear()
+                    exploreRv.gone()
+                    exploreError.gone()
+                    noGigs.gone()
                     viewModel.getAllJobProfiles(jobProfileRequestModelCurrent)
                 }
         }
@@ -268,6 +306,9 @@ class JobProfileListFragment : Fragment(), IOnBackPressedOverride, OnJobSelected
                 }
 
                 jobProfilesList.clear()
+                exploreRv.gone()
+                exploreError.gone()
+                noGigs.gone()
                 viewModel.getAllJobProfiles(jobProfileRequestModelCurrent)
             }
 
