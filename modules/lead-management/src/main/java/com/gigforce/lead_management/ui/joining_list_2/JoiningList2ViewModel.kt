@@ -53,8 +53,9 @@ class JoiningList2ViewModel @Inject constructor(
     //Data
     private var joiningsRaw: List<JoiningNew>? = null
     private var joiningListShownOnView: MutableList<JoiningList2RecyclerItemData> = mutableListOf()
+
     private var currentSearchString: String? = null
-    var currentFilterString: String? = null
+    var currentFilterString: String = "Pending"
     private var fetchJoiningListener: ListenerRegistration? = null
 
     init {
