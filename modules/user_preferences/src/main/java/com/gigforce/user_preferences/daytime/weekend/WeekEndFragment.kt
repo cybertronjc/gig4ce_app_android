@@ -207,7 +207,11 @@ class WeekEndFragment : Fragment() {
 
             textView62.text = selectedStr
         }
-        builder.setOnDismissListener { dialog -> initializeViews() }
+        builder.setOnDismissListener { dialog ->
+            try {
+                initializeViews()
+            }catch (e:Exception){}
+        }
         builder.show()
 
         slotsRecyclerAdapter.updateSlots(items, isSectionSelected)
