@@ -123,9 +123,9 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
     private fun initTabLayout() = viewBinding.apply {
 
 
-        statusTabLayout.addTab(statusTabLayout.newTab().setText("All (0)"))
         statusTabLayout.addTab(statusTabLayout.newTab().setText("Pending (0)"))
         statusTabLayout.addTab(statusTabLayout.newTab().setText("Completed (0)"))
+        statusTabLayout.addTab(statusTabLayout.newTab().setText("All (0)"))
 
         val betweenSpace = 25
 
@@ -195,14 +195,17 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
 
     private fun setStatus(map: Map<String, Int>) = viewBinding.apply{
         map.forEach {
-            if (it.key == "All"){
-                this.statusTabLayout.getTabAt(0)?.text = "All (${it.value})"
-            }
+
             if (it.key == LeadManagementConstants.STATUS_PENDING){
-                this.statusTabLayout.getTabAt(1)?.text = "Pending (${it.value})"
+                this.statusTabLayout.getTabAt(0)?.text = "Pending (${it.value})"
             }
+
             if (it.key == LeadManagementConstants.STATUS_COMPLETED){
-                this.statusTabLayout.getTabAt(2)?.text = "Completed (${it.value})"
+                this.statusTabLayout.getTabAt(1)?.text = "Completed (${it.value})"
+            }
+
+            if (it.key == "All"){
+                this.statusTabLayout.getTabAt(2)?.text = "All (${it.value})"
             }
         }
     }
