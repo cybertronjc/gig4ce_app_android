@@ -1,10 +1,12 @@
-package com.gigforce.lead_management.repositories
+package com.gigforce.common_ui.repository
 
 import android.net.Uri
-import android.util.Log
+import com.gigforce.common_ui.exceptions.TryingToDowngradeJoiningStatusException
+import com.gigforce.common_ui.exceptions.UserDoesNotExistInProfileException
 import com.gigforce.common_ui.ext.bodyOrThrow
 import com.gigforce.common_ui.remote.JoiningProfileService
 import com.gigforce.common_ui.remote.ReferralService
+import com.gigforce.common_ui.viewdatamodels.PendingJoiningItemDVM
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.common_ui.viewdatamodels.referral.ReferralRequest
 import com.gigforce.core.datamodels.ambassador.*
@@ -21,8 +23,6 @@ import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.core.retrofit.CreateUserAccEnrollmentAPi
 import com.gigforce.core.retrofit.RetrofitFactory
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
-import com.gigforce.lead_management.exceptions.TryingToDowngradeJoiningStatusException
-import com.gigforce.lead_management.exceptions.UserDoesNotExistInProfileException
 import com.google.firebase.Timestamp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.dynamiclinks.DynamicLink
@@ -696,5 +696,9 @@ class LeadManagementRepository @Inject constructor(
         selectionIds : List<String>
     ){
 
+    }
+
+    suspend fun getPendingJoinings() : List<PendingJoiningItemDVM>{
+        return joiningProfileRemoteService.getPendingJoining().bodyOrThrow()
     }
 }

@@ -1,7 +1,6 @@
 package com.gigforce.lead_management.ui.joining_list_2
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,12 +11,10 @@ import com.gigforce.common_ui.viewdatamodels.leadManagement.JoiningSignUpInitiat
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JoiningStatus
 import com.gigforce.core.extensions.toLocalDate
 import com.gigforce.core.logger.GigforceLogger
-import com.gigforce.core.utils.Lce
 import com.gigforce.lead_management.LeadManagementConstants
 import com.gigforce.lead_management.models.JoiningList2RecyclerItemData
-import com.gigforce.lead_management.models.JoiningListRecyclerItemData
 import com.gigforce.lead_management.models.JoiningStatusAndCountItemData
-import com.gigforce.lead_management.repositories.LeadManagementRepository
+import com.gigforce.common_ui.repository.LeadManagementRepository
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ListenerRegistration
 import dagger.hilt.android.lifecycle.HiltViewModel

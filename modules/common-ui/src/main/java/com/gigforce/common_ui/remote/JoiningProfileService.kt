@@ -1,5 +1,6 @@
 package com.gigforce.common_ui.remote
 
+import com.gigforce.common_ui.viewdatamodels.PendingJoiningItemDVM
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.core.datamodels.auth.UserAuthStatusModel
 import retrofit2.Response
@@ -55,4 +56,7 @@ interface JoiningProfileService {
     suspend fun dropSelections(
         @Body selectionIds: List<String>
     ): Response<GigerInfo>
+
+    @GET("joining/detail/{id}")
+    suspend fun getPendingJoining(): Response<List<PendingJoiningItemDVM>>
 }
