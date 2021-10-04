@@ -29,6 +29,7 @@ class CommonViewTypes {
         const val VIEW_OTHER_FEATURE = 20207
         const val VIEW_OTHER_FEATURE_ITEM = 20208
         const val VIEW_SEE_MORE_ITEM = 20209
+        const val VIEW_PENDING_JOINING_ITEM = 202109
 
         const val VIEW_PROFILE_PIC = 20401
 

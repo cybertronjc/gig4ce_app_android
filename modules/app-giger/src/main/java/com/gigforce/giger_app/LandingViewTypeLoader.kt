@@ -10,6 +10,7 @@ import com.gigforce.common_ui.components.molecules.FeatureItemCard2Component
 import com.gigforce.common_ui.components.molecules.FeatureItemCardComponent
 import com.gigforce.common_ui.components.molecules.VideoItemCardComponent
 import com.gigforce.core.IViewTypeLoader
+import com.gigforce.giger_app.ui.PendingJoiningComponent
 
 class LandingViewTypeLoader : IViewTypeLoader {
     override fun getView(context: Context, viewType: Int): View? {
@@ -31,6 +32,7 @@ class LandingViewTypeLoader : IViewTypeLoader {
             CommonViewTypes.VIEW_OTHER_FEATURE -> OtherFeatureComponent(context, null)
             CommonViewTypes.VIEW_OTHER_FEATURE_ITEM -> OtherFeatureItemComponent(context, null)
             CommonViewTypes.VIEW_SEE_MORE_ITEM -> SeeMoreComponent(context, null)
+            CommonViewTypes.VIEW_PENDING_JOINING_ITEM -> JoiningPendingCardComponent(context, null)
 
             else -> null
         }

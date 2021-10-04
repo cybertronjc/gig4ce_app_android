@@ -12,7 +12,6 @@ import com.gigforce.common_ui.R
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.recyclerView.CoreRecyclerView
-import dagger.hilt.android.AndroidEntryPoint
 import ru.tinkoff.scrollingpagerindicator.ScrollingPagerIndicator
 
 open class HorizontalScrollingPageComponent<T>(
@@ -35,7 +34,7 @@ open class HorizontalScrollingPageComponent<T>(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
-        LayoutInflater.from(context).inflate(R.layout.component_pending_joinings, this, true)
+        LayoutInflater.from(context).inflate(R.layout.component_horizontal_scroll_page, this, true)
         initViews()
     }
 
