@@ -121,5 +121,14 @@
     <string name="sure_to_drop_lead">क्या आप वाकई 3 चयनों को छोड़ना चाहते हैं?</string>
     <string name="cancel_lead">रद्द करें</string>
     <string name="submitting_data">भेज रहे है…</string>
+    <string name="filter_date_text_lead">चयन तिथि के अनुसार फ़िल्टर करें</string>
+    <string name="filter_date_sub_text_lead">कृपया निम्नलिखित विकल्पों में से फ़िल्टर का चयन करें.</string>
+    <string name="apply_filter_lead">फिल्टर लागू करें</string>
+    <string name="remove_filter_lead">फ़िल्टर निकालें</string>
+    <string name="today_lead">आज</string>
+    <string name="yesterday_lead">बीता हुआ कल</string>
+    <string name="three_days_lead">पिछले 3 दिन</string>
+    <string name="seven_days_lead">आखिरी 7 दिन</string>
+    <string name="one_month_lead">पिछले 1 महीने</string>
 
 </resources>

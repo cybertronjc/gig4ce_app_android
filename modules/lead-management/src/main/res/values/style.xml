@@ -56,9 +56,10 @@
 
     </style>
 
-    <style name="ShapeAppearanceOverlay.MaterialComponents.Chip" parent="">
-        <item name="cornerSize">130%</item>
+    <style name="DialogStyle" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:colorBackground">@android:color/transparent</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
     </style>
-
 
 </resources>
