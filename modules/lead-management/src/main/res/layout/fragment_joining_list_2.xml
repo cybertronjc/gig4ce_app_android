@@ -63,7 +63,7 @@
         <TextView
             android:id="@+id/join_now_button"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="34dp"
             android:background="@drawable/bottom_primary_button_background"
             android:layout_marginStart="@dimen/size_16"
             android:layout_marginEnd="@dimen/size_16"

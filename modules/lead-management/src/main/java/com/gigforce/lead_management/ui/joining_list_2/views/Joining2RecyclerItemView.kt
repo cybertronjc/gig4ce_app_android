@@ -83,8 +83,13 @@ class Joining2RecyclerItemView(
             val gigerAttendanceData =
                 it as JoiningList2RecyclerItemData.JoiningListRecyclerJoiningItemData
             viewData = gigerAttendanceData
+            if (gigerAttendanceData.isVisible){
+                viewBinding.root.visible()
+            }else{
+                viewBinding.root.gone()
+            }
 
-            viewBinding.userNameTv.text = gigerAttendanceData.gigerName
+            viewBinding.userNameTv.text = gigerAttendanceData.gigerName.capitalize()
             viewBinding.callGigerBtn.isVisible =
                 gigerAttendanceData.gigerMobileNo.isNotBlank()
 

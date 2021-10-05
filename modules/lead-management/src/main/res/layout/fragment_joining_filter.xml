@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@color/fui_transparent"
-        >
-        <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="@dimen/size_16"
+        android:layout_height="match_parent"
         android:background="@drawable/filter_bottom_background"
-        >
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/topText"
@@ -46,7 +47,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Today"
-                android:layout_marginTop="@dimen/size_4"
+                android:layout_marginTop="@dimen/size_2"
                 android:id="@+id/todayRadio"
                 android:checked="false" />
 
@@ -54,28 +55,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Yesterday"
-                android:layout_marginTop="@dimen/size_4"
                 android:id="@+id/yesterdayRadio"
                 android:checked="false" />
             <RadioButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Last 3 days"
-                android:layout_marginTop="@dimen/size_4"
                 android:id="@+id/threeDaysRadio"
                 android:checked="false" />
             <RadioButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Last 7 days"
-                android:layout_marginTop="@dimen/size_4"
                 android:id="@+id/sevenDaysRadio"
                 android:checked="false" />
             <RadioButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Last 1 month"
-                android:layout_marginTop="@dimen/size_4"
                 android:id="@+id/monthRadio"
                 android:checked="false" />
         </RadioGroup>
@@ -83,34 +80,30 @@
         <TextView
             android:id="@+id/applyFilterButton"
             android:layout_width="match_parent"
-            android:layout_height="46dp"
+            android:layout_height="34dp"
             android:layout_marginStart="@dimen/size_16"
             android:layout_marginEnd="@dimen/size_16"
-            android:layout_marginTop="@dimen/size_16"
+            android:layout_marginTop="@dimen/size_40"
             android:text="@string/apply_filter"
             android:textAlignment="center"
             android:gravity="center"
             android:textColor="@color/white"
-            android:background="@drawable/bottom_primary_button_background"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/call_layout"
-            android:layout_marginBottom="@dimen/size_16"/>
+            android:background="@drawable/bottom_primary_button_background" />
 
         <TextView
             android:id="@+id/removeFilterButton"
             android:layout_width="match_parent"
-            android:layout_height="46dp"
+            android:layout_height="34dp"
             android:layout_marginStart="@dimen/size_16"
             android:layout_marginEnd="@dimen/size_16"
-            android:layout_marginTop="@dimen/size_8"
+            android:layout_marginTop="@dimen/size_20"
             android:text="@string/remove_filter"
             android:textAlignment="center"
             android:gravity="center"
             android:textColor="@color/pink_text"
             android:background="@drawable/bottom_secondary_button_background"
-            app:layout_constraintTop_toBottomOf="@+id/call_layout"
             android:layout_marginBottom="@dimen/size_16"/>
 
     </LinearLayout>
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

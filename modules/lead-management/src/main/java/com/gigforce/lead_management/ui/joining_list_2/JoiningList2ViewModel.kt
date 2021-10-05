@@ -60,6 +60,8 @@ class JoiningList2ViewModel @Inject constructor(
     var filterDaysVM: Int? = null
     private var fetchJoiningListener: ListenerRegistration? = null
 
+    var dropBusinessMap : HashMap<String, Int>? = HashMap<String, Int>()
+
     init {
         //startListeningToJoinings()
     }
@@ -141,12 +143,18 @@ class JoiningList2ViewModel @Inject constructor(
         val joiningListForView = mutableListOf<JoiningList2RecyclerItemData>()
         businessToJoiningGroupedList.forEach { (business, joinings) ->
             gigforceLogger.d(TAG, "processing data, Status : $business : ${joinings.size} Joinings")
+            var isVisible = true
 
+            if (dropBusinessMap?.containsKey(business) == true){
+                isVisible = dropBusinessMap!!.get(business) == 0
+                Log.d("dropVMVisible", "$isVisible")
+            }
 
             joiningListForView.add(
                 JoiningList2RecyclerItemData.JoiningListRecyclerStatusItemData(
                     business.toString() + "(${joinings.size})",
-                    false
+                    this,
+                    isVisible
                 )
             )
 
@@ -163,7 +171,8 @@ class JoiningList2ViewModel @Inject constructor(
                         status = it.status,
                         selected = false,
                         createdAt = it.createdAt,
-                        updatedAt = it.updatedAt
+                        updatedAt = it.updatedAt,
+                        isVisible = isVisible
                     )
                 )
             }
@@ -261,38 +270,6 @@ class JoiningList2ViewModel @Inject constructor(
         )
     }
 
-    private fun getJoiningText(
-        it: Joining
-    ): String {
-        return when (it.getStatus()) {
-            JoiningStatus.SIGN_UP_PENDING -> {
-                if (JoiningSignUpInitiatedMode.BY_LINK == it.signUpMode) {
-                    "App invite sent ${getDateDifferenceFormatted(it.updatedOn)}"
-                } else {
-                    "Signup started ${getDateDifferenceFormatted(it.updatedOn)}"
-                }
-            }
-            JoiningStatus.APPLICATION_PENDING -> {
-                if (it.jobProfileNameInvitedFor.isNullOrBlank()) {
-                    "No Application Link shared yet"
-                } else {
-                    "${it.jobProfileNameInvitedFor} invite sent ${getDateDifferenceFormatted(it.updatedOn)}"
-                }
-            }
-            JoiningStatus.JOINING_PENDING -> {
-                "Joining initiated ${getDateDifferenceFormatted(it.updatedOn)}"
-            }
-            JoiningStatus.JOINED -> {
-                "Joined ${getDateDifferenceFormatted(it.updatedOn)}"
-            }
-            JoiningStatus.PENDING -> {
-                "Pending ${getDateDifferenceFormatted(it.updatedOn)}"
-            }
-            JoiningStatus.COMPLETED -> {
-                "Completed ${getDateDifferenceFormatted(it.updatedOn)}"
-            }
-        }
-    }
 
     private fun getDateDifferenceFormatted(updatedOn: Timestamp): String {
         val updateOnDate = updatedOn.toLocalDate()
@@ -360,8 +337,16 @@ class JoiningList2ViewModel @Inject constructor(
         processJoiningsAndEmit(joiningsRaw!!)
     }
 
-    fun clickDropdown(){
-        gigforceLogger.d(TAG, "new dropdown click received")
+    fun clickDropdown(businessName: String, dropEnabled: Boolean){
+        gigforceLogger.d(TAG, "new dropdown click received $businessName , $dropEnabled")
+        if (dropEnabled){
+            dropBusinessMap?.put(businessName, 0)
+        } else {
+            dropBusinessMap?.put(businessName, 1)
+        }
+        Log.d("drop", "$dropBusinessMap")
+        processJoiningsAndEmit(joiningsRaw!!)
+
     }
 
     fun filterDaysJoinings(

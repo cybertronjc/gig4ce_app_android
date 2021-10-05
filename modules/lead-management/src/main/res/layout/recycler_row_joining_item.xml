@@ -117,10 +117,9 @@
                 android:scaleType="centerCrop"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:shapeAppearanceOverlay="@style/circleImageView"
                 tools:srcCompat="@tools:sample/avatars" />
-
-
 
             <ImageButton
                 android:id="@+id/call_giger_btn"
@@ -129,14 +128,15 @@
                 android:background="@null"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_call_drawable_2" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:srcCompat="@drawable/ic_call_joining_button" />
 
             <ImageView
                 android:id="@+id/status_dot"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_status_dot"
-                android:layout_marginTop="@dimen/size_16"
+                android:layout_marginTop="@dimen/size_12"
                 app:layout_constraintStart_toStartOf="@id/user_name_tv"
                 app:layout_constraintTop_toBottomOf="@id/user_name_tv"/>
             <TextView
@@ -164,23 +164,23 @@
                 android:fontFamily="@font/lato_bold"
                 app:layout_constraintStart_toEndOf="@id/user_image_iv"
                 app:layout_constraintEnd_toStartOf="@id/call_giger_btn"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Rahulefefeedededdedededav" />
+                app:layout_constraintTop_toTopOf="@id/user_name_tv"
+                tools:text="Rahulefefeedededdedededavytfytfy" />
 
 
             <TextView
                 android:id="@+id/selected_on"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="8dp"
                 android:textColor="#979C9E"
                 android:fontFamily="@font/lato"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 android:text="@string/gigers_phone_lead"
                 android:scrollHorizontally="true"
                 android:ellipsize="end"
                 android:maxLines="1"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/user_image_iv"
                 app:layout_constraintStart_toStartOf="@id/user_name_tv"
                 app:layout_constraintTop_toBottomOf="@id/user_attendance_status_textview"
                 app:layout_constraintEnd_toStartOf="@id/call_giger_btn"
