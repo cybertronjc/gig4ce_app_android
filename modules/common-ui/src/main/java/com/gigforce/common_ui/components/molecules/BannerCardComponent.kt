@@ -1,6 +1,7 @@
 package com.gigforce.common_ui.components.molecules
 
 import android.content.Context
+import android.os.Bundle
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -11,13 +12,19 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.R
+import com.gigforce.common_ui.repository.BannerCardRepository
 import com.gigforce.common_ui.viewdatamodels.BannerCardDVM
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.navigation.INavigation
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -28,6 +35,7 @@ open class BannerCardComponent(context: Context, attrs: AttributeSet?) :
     val image: ImageView
     var bannerCardData: BannerCardDVM? = null
     val topLayout: View
+    private var bannerCardRepo = BannerCardRepository()
 
     init {
         this.layoutParams =
@@ -87,18 +95,24 @@ open class BannerCardComponent(context: Context, attrs: AttributeSet?) :
                 else {
                     if (sharedPreAndCommonUtilInterface.getAppLanguageCode() == "hi") {
                         if (data.hi?.defaultDocTitle.isNullOrBlank()) {
-                            if(data.defaultDocTitle.isNullOrBlank()){
-                                navArgs.args?.putString("title", resources.getString(R.string.back_to_gigforce_ui))
-                            }else {
+                            if (data.defaultDocTitle.isNullOrBlank()) {
+                                navArgs.args?.putString(
+                                    "title",
+                                    resources.getString(R.string.back_to_gigforce_ui)
+                                )
+                            } else {
                                 navArgs.args?.putString("title", data.defaultDocTitle)
                             }
                         } else {
                             navArgs.args?.putString("title", data.hi?.defaultDocTitle)
                         }
                     } else {
-                        if(data.defaultDocTitle.isNullOrBlank()){
-                            navArgs.args?.putString("title", resources.getString(R.string.back_to_gigforce_ui))
-                        }else {
+                        if (data.defaultDocTitle.isNullOrBlank()) {
+                            navArgs.args?.putString(
+                                "title",
+                                resources.getString(R.string.back_to_gigforce_ui)
+                            )
+                        } else {
                             navArgs.args?.putString("title", data.defaultDocTitle)
                         }
                     }
@@ -106,6 +120,12 @@ open class BannerCardComponent(context: Context, attrs: AttributeSet?) :
                 topLayout.setOnClickListener {
                     bannerCardData?.let {
                         it.apiUrl?.let {
+                            navArgs.args?.let { bundle ->
+                                getDocUrl(it, bundle)
+                            }
+
+
+
                             bannerCardData?.docUrl?.let { docUrl ->
                                 navigation.navigateToDocViewerActivity(
                                     null,
@@ -121,4 +141,40 @@ open class BannerCardComponent(context: Context, attrs: AttributeSet?) :
             }
         }
     }
+
+    private fun getDocUrl(apiUrl: String, bundle: Bundle): String? {
+        FirebaseAuth.getInstance().currentUser?.uid?.let { uid ->
+            val scope = CoroutineScope(Job() + Dispatchers.Main)
+            scope.launch {
+                var source = bundle.getString("source") ?: ""
+                val bannerName = bundle.getString("bannerName") ?: ""
+                val id = bundle.getString("bannerId") ?: ""
+                apiUrl.let {
+                    var accessLogResponse = bannerCardRepo.createLogs(
+                        it,
+                        uid,
+                        source,
+                        bannerName,
+                        id
+                    )
+                    accessLogResponse.docUrl?.let {
+                        if (it.isNotBlank()) {
+                            navigation.navigateToDocViewerActivity(
+                                null,
+                                it,
+                                "banner",
+                                bundle,
+                                context
+                            )
+                        }
+                    }
+
+                }
+
+            }
+        }
+
+        return null
+    }
+
 }
