@@ -41,19 +41,8 @@ class Joining2BusinessRecyclerItemView(
     override fun bind(data: Any?) {
         data?.let {
             val shiftNameData = it as JoiningList2RecyclerItemData.JoiningListRecyclerStatusItemData
-            viewBinding.statusTv.text = shiftNameData.status + "fdgdf"
-            val businessName = shiftNameData.status.split("(").get(0)
-            viewBinding.dropdownView.setOnClickListener {
-                Log.d("drop", "clicked")
-                if (shiftNameData.dropEnabled){
-                    Log.d("drop", "false")
-                    shiftNameData.viewModel.clickDropdown(businessName, false)
-                }else{
-                    Log.d("drop", "true")
-                    shiftNameData.viewModel.clickDropdown(businessName, true)
-                }
+            viewBinding.statusTv.text = shiftNameData.status
 
-            }
         }
     }
 }

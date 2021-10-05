@@ -11,7 +11,6 @@ open class JoiningList2RecyclerItemData(
 
     data class JoiningListRecyclerStatusItemData(
         val status: String,
-        val viewModel: JoiningList2ViewModel,
         val dropEnabled: Boolean
     ) : JoiningList2RecyclerItemData(
         LeadActivationViewTypes.JoiningListStatus
