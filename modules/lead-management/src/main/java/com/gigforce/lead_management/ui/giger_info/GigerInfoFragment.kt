@@ -2,6 +2,7 @@ package com.gigforce.lead_management.ui.giger_info
 
 
 import android.content.Intent
+import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -18,6 +19,7 @@ import com.gigforce.common_ui.utils.getCircularProgressDrawable
 import com.gigforce.common_ui.viewdatamodels.leadManagement.GigerInfo
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.inflate
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.DateHelper
@@ -29,6 +31,7 @@ import com.gigforce.lead_management.models.ApplicationChecklistRecyclerItemData
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModelState
 import com.gigforce.lead_management.ui.drop_selection.DropSelectionBottomSheetDialogFragment
+import com.gigforce.lead_management.ui.giger_info.views.AppCheckListRecyclerComponent
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.layout_below_giger_functionality.*
@@ -117,7 +120,7 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
     }
 
     private fun showLoadingInfo() = viewBinding.apply{
-        checklistRv.collection = emptyList()
+        checklistLayout.removeAllViews()
         mainScrollView.gone()
         gigerinfoShimmerContainer.visible()
 
@@ -145,6 +148,7 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
 
         gigerInfo?.let {
             toolbar.showTitle(it.gigerName)
+            toolbar.setTitleTypeface(Typeface.BOLD)
             overlayCardLayout.companyName.text = ": "+it.businessName ?: ""
             overlayCardLayout.jobProfileTitle.text = it.jobProfileTitle ?: ""
             overlayCardLayout.locationText.text = ": "+it.reportingLocation + ", " + it.businessLocation ?: ""
@@ -175,7 +179,7 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
             val checkListItemData = arrayListOf<ApplicationChecklistRecyclerItemData.ApplicationChecklistItemData>()
             if (it.checkList == null){
                 checklistText.gone()
-                checklistRv.gone()
+                checklistLayout.gone()
             } else {
                  it.checkList?.let {
                 it.forEachIndexed { index, checkListItem ->
@@ -183,11 +187,11 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
                     checkListItemData.add(itemData)
                 }
                 if (checkListItemData.size > 0){
-                    checklistRv.visible()
-                    checklistRv.collection = checkListItemData
+                    checklistLayout.visible()
+                    inflateCheckListInCheckListContainer(checkListItemData)
                 } else {
                     checklistText.gone()
-                    checklistRv.gone()
+                    checklistLayout.gone()
                 }
 
                 }
@@ -201,8 +205,21 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
         }
     }
 
+    private fun inflateCheckListInCheckListContainer(
+        checkListItemData: ArrayList<ApplicationChecklistRecyclerItemData.ApplicationChecklistItemData>
+    ) = viewBinding.checklistLayout.apply{
+        removeAllViews()
+
+        checkListItemData.forEach {
+
+            val view = AppCheckListRecyclerComponent(requireContext(),null)
+            addView(view)
+            view.bind(it)
+        }
+    }
+
     private fun showErrorLoadingInfo(error: String) = viewBinding.apply{
-        checklistRv.collection = emptyList()
+        checklistLayout.removeAllViews()
         stopShimmer(
             gigerinfoShimmerContainer as LinearLayout,
             R.id.shimmer_controller
@@ -279,7 +296,7 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
 
     fun getFormattedDate(date: String): String {
         val input = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-        val output = SimpleDateFormat("dd/MM/yyyy")
+        val output = SimpleDateFormat("dd/MMM/yy",Locale.getDefault())
 
         var d: Date? = null
         try {
@@ -293,7 +310,7 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
 
     fun getFormattedDateFromYYMMDD(date: String): String {
         val input = SimpleDateFormat("yyyy-MM-dd")
-        val output = SimpleDateFormat("dd/MM/yyyy")
+        val output = SimpleDateFormat("dd/MMM/yy",Locale.getDefault())
 
         var d: Date? = null
         try {

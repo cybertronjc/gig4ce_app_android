@@ -2,6 +2,7 @@ package com.gigforce.lead_management.ui.new_selection_form_2
 
 import android.app.DatePickerDialog
 import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
 import android.widget.DatePicker
 import android.widget.LinearLayout
@@ -37,6 +38,7 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
@@ -57,6 +59,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
     lateinit var navigation: INavigation
     private val viewModel: NewSelectionForm2ViewModel by viewModels()
     private val leadMgmtSharedViewModel: LeadManagementSharedViewModel by activityViewModels()
+    private val dateFormatter =  SimpleDateFormat("dd/MMM/yy",Locale.getDefault())
 
     //Data from previous screen
     private lateinit var joiningRequest: SubmitJoiningRequest
@@ -71,8 +74,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                 newCal.set(Calendar.MONTH, month)
                 newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
 
-                viewBinding.mainForm.selectedDateLabel.text =
-                    DateHelper.getDateInDDMMYYYY(newCal.time)
+                viewBinding.mainForm.selectedDateLabel.text = dateFormatter.format(newCal.time)
                 viewModel.handleEvent(NewSelectionForm2Events.DateOfJoiningSelected(newCal.time.toLocalDate()))
 
                 viewBinding.mainForm.expectedDateErrorTv.gone()
@@ -129,7 +131,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         viewBinding: FragmentNewSelectionForm2Binding
     ) = viewBinding.mainForm.apply {
 
-        viewBinding.mainForm.selectedDateLabel.text = DateHelper.getDateInDDMMYYYY(Date())
+        viewBinding.mainForm.selectedDateLabel.text = dateFormatter.format(Date())
 
         selectCityLayout.setOnClickListener {
             viewModel.handleEvent(NewSelectionForm2Events.SelectCityClicked)
@@ -383,12 +385,14 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
 
         if(selectedCity != null) {
             mainForm.citySelectedLabel.text = selectedCity
+            mainForm.citySelectedLabel.setTypeface(mainForm.citySelectedLabel.typeface,Typeface.BOLD)
         } else{
             mainForm.citySelectedLabel.text = "Click to select city"
         }
 
         if(selectedReportingLocation != null) {
             mainForm.reportingLocationSelectedLabel.text = selectedReportingLocation
+            mainForm.reportingLocationSelectedLabel.setTypeface(mainForm.reportingLocationSelectedLabel.typeface,Typeface.BOLD)
         } else{
             mainForm.reportingLocationSelectedLabel.text = "Click to select location"
         }
@@ -430,9 +434,12 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         citySelected: ReportingLocationsItem
     ) = viewBinding.mainForm.apply {
         citySelectedLabel.text = citySelected.name
+        citySelectedLabel.setTypeface(citySelectedLabel.typeface,Typeface.BOLD)
+
         viewModel.handleEvent(NewSelectionForm2Events.CitySelected(citySelected))
 
         reportingLocationSelectedLabel.text = "Click to select location"
+        reportingLocationSelectedLabel.typeface = Typeface.DEFAULT
 
         this.cityErrorTv.gone()
         this.cityErrorTv.text = null
@@ -444,7 +451,11 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
     ) = viewBinding.mainForm.apply {
 
         reportingLocationSelectedLabel.text = reportingLocationSelected.name
+        reportingLocationSelectedLabel.typeface = Typeface.DEFAULT_BOLD
+
         citySelectedLabel.text = citySelected.name
+        citySelectedLabel.typeface = Typeface.DEFAULT_BOLD
+
 
         viewModel.handleEvent(
             NewSelectionForm2Events.ReportingLocationSelected(
@@ -462,5 +473,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
     ) = viewBinding.mainForm.apply {
         selectedClientTlLabel.text = tlSelected.name
         viewModel.handleEvent(NewSelectionForm2Events.ClientTLSelected(tlSelected))
+
+        selectedClientTlLabel.setTypeface(selectedClientTlLabel.typeface,Typeface.BOLD)
     }
 }

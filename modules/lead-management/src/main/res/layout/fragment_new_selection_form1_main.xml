@@ -48,7 +48,8 @@
                         android:layout_marginBottom="4dp"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
-                        app:cardElevation="8dp">
+                        app:cardCornerRadius="6dp"
+                        app:cardElevation="4dp">
 
                         <EditText
                             android:layout_width="40dp"
@@ -68,11 +69,12 @@
                         android:layout_marginStart="7dp"
                         android:layout_marginTop="10dp"
                         android:layout_marginEnd="16dp"
-                        android:layout_marginBottom="4dp"
+                        android:layout_marginBottom="14dp"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
-                        app:cardElevation="8dp">
+                        app:cardCornerRadius="6dp"
+                        app:cardElevation="4dp">
 
                         <EditText
                             android:id="@+id/mobile_no_et"
@@ -82,6 +84,14 @@
                             android:inputType="number"
                             android:maxLength="10"
                             android:paddingStart="10dp" />
+
+                        <ImageButton
+                            android:id="@+id/pick_contacts_button"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_gravity="end"
+                            android:background="@null"
+                            android:src="@drawable/ic_contact_book"/>
 
                     </com.google.android.material.card.MaterialCardView>
 
@@ -97,6 +107,7 @@
                     android:lineSpacingExtra="3sp"
                     android:textColor="@android:color/holo_red_dark"
                     android:textSize="12sp"
+                    android:visibility="gone"
                     android:textStyle="normal" />
 
                 <TextView
@@ -104,7 +115,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="18dp"
                     android:layout_marginLeft="20dp"
-                    android:layout_marginTop="28dp"
+                    android:layout_marginTop="30dp"
                     android:gravity="top"
                     android:lineSpacingExtra="1sp"
                     android:text="@string/giger_name_lead"
@@ -132,6 +143,9 @@
                             android:enabled="false"
                             android:inputType="textNoSuggestions"
                             android:hint="Type Giger Name here"
+                            android:paddingBottom="15dp"
+                            android:backgroundTint="#EBEBEB"
+                            android:textColorHint="#979C9E"
                             android:textAppearance="@style/body_primary" />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -147,11 +161,154 @@
 
                 </FrameLayout>
 
+
+
+
+                <TextView
+                    android:id="@+id/select_business_label"
+                    android:layout_width="134dp"
+                    android:layout_height="18dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp"
+                    android:gravity="top"
+                    android:lineSpacingExtra="1sp"
+                    android:text="Select Business"
+                    android:textAppearance="@style/style_h5"
+                    android:translationY="-0.6sp" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    app:cardElevation="4dp"
+                    app:cardCornerRadius="6dp">
+
+                    <LinearLayout
+                        android:id="@+id/select_business_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/rectangle_2"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/business_selected_label"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginLeft="10dp"
+                            android:layout_weight="1"
+                            android:gravity="top"
+                            android:layout_marginTop="2dp"
+                            android:lineSpacingExtra="4sp"
+                            android:text="Click to select business"
+                            android:textAppearance="@style/body_primary"
+                            android:textColor="@color/lipstick_2"
+                            android:translationY="-1.8sp" />
+
+                        <ImageView
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_marginEnd="15dp"
+                            android:src="@drawable/right_arrow_24" />
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:id="@+id/business_error_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/lato"
+                    android:lineSpacingExtra="3sp"
+                    android:textColor="@android:color/holo_red_dark"
+                    android:textSize="12sp"
+                    android:visibility="gone"
+                    android:textStyle="normal" />
+
+
+                <TextView
+                    android:id="@+id/select_job_profile_label"
+                    android:layout_width="134dp"
+                    android:layout_height="18dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="30dp"
+                    android:gravity="top"
+                    android:lineSpacingExtra="1sp"
+                    android:text="Select Job Profile"
+                    android:textAppearance="@style/style_h5"
+                    android:translationY="-0.6sp" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    app:cardElevation="4dp"
+                    app:cardCornerRadius="6dp">
+
+                    <LinearLayout
+                        android:id="@+id/select_job_profile_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/rectangle_2"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/selected_job_profile_label"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_weight="1"
+                            android:gravity="top"
+                            android:layout_marginTop="2dp"
+                            android:lineSpacingExtra="4sp"
+                            android:text="Click to select Job Profile"
+                            android:textAppearance="@style/body_primary"
+                            android:textColor="@color/lipstick_2"
+                            android:translationY="-1.8sp" />
+
+                        <ImageView
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_marginEnd="15dp"
+                            android:src="@drawable/right_arrow_24" />
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:id="@+id/job_profile_error_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/lato"
+                    android:lineSpacingExtra="3sp"
+                    android:textColor="@android:color/holo_red_dark"
+                    android:textSize="12sp"
+                    android:visibility="gone"
+                    android:textStyle="normal" />
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:layout_marginTop="28dp"
+                    android:layout_marginTop="30dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -182,7 +339,6 @@
                     style="@style/Widget.Design.TextInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="4dp"
                     android:hint=" "
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
@@ -193,147 +349,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Type Client Id here"
+                        android:paddingBottom="15dp"
+                        android:backgroundTint="#EBEBEB"
+                        android:textColorHint="#979C9E"
                         android:textAppearance="@style/body_primary" />
 
                 </com.google.android.material.textfield.TextInputLayout>
-
-
-                <TextView
-                    android:id="@+id/select_business_label"
-                    android:layout_width="134dp"
-                    android:layout_height="18dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="28dp"
-                    android:gravity="top"
-                    android:lineSpacingExtra="1sp"
-                    android:text="Select Business"
-                    android:textAppearance="@style/style_h5"
-                    android:translationY="-0.6sp" />
-
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="4dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    app:cardElevation="8dp">
-
-                    <LinearLayout
-                        android:id="@+id/select_business_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/rectangle_2"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/business_selected_label"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentTop="true"
-                            android:layout_marginLeft="10dp"
-                            android:layout_weight="1"
-                            android:gravity="top"
-                            android:lineSpacingExtra="4sp"
-                            android:text="Click to select business"
-                            android:textAppearance="@style/body_primary"
-                            android:textColor="@color/lipstick_2"
-                            android:textStyle="bold"
-                            android:translationY="-1.8sp" />
-
-                        <ImageView
-                            android:layout_width="15dp"
-                            android:layout_height="15dp"
-                            android:layout_marginEnd="15dp"
-                            android:src="@drawable/right_arrow_24" />
-
-                    </LinearLayout>
-
-                </com.google.android.material.card.MaterialCardView>
-
-                <TextView
-                    android:id="@+id/business_error_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="4dp"
-                    android:fontFamily="@font/lato"
-                    android:lineSpacingExtra="3sp"
-                    android:textColor="@android:color/holo_red_dark"
-                    android:textSize="12sp"
-                    android:textStyle="normal" />
-
-
-                <TextView
-                    android:id="@+id/select_job_profile_label"
-                    android:layout_width="134dp"
-                    android:layout_height="18dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="28dp"
-                    android:gravity="top"
-                    android:lineSpacingExtra="1sp"
-                    android:text="Select Job Profile"
-                    android:textAppearance="@style/style_h5"
-                    android:translationY="-0.6sp" />
-
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="4dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    app:cardElevation="8dp">
-
-                    <LinearLayout
-                        android:id="@+id/select_job_profile_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/rectangle_2"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/selected_job_profile_label"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentTop="true"
-                            android:layout_marginLeft="10dp"
-                            android:layout_weight="1"
-                            android:gravity="top"
-                            android:lineSpacingExtra="4sp"
-                            android:text="Click to select Job Profile"
-                            android:textAppearance="@style/body_primary"
-                            android:textColor="@color/lipstick_2"
-                            android:textStyle="bold"
-                            android:translationY="-1.8sp" />
-
-                        <ImageView
-                            android:layout_width="15dp"
-                            android:layout_height="15dp"
-                            android:layout_marginEnd="15dp"
-                            android:src="@drawable/right_arrow_24" />
-
-                    </LinearLayout>
-
-                </com.google.android.material.card.MaterialCardView>
-
-                <TextView
-                    android:id="@+id/job_profile_error_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="4dp"
-                    android:fontFamily="@font/lato"
-                    android:lineSpacingExtra="3sp"
-                    android:textColor="@android:color/holo_red_dark"
-                    android:textSize="12sp"
-                    android:textStyle="normal" />
 
             </LinearLayout>
 
@@ -341,7 +362,6 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/next_button"
-            style="@style/Widget.MaterialComponents.Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/size_16"
@@ -350,6 +370,8 @@
             android:text="Next"
             android:paddingTop="12dp"
             android:paddingBottom="12dp"
+            android:fontFamily="@font/lato"
+            style="@style/LeadMgmtMaterialButtonStyle"
             app:shapeAppearanceOverlay="@style/RoundCornerButtonShapeOverlay"
             android:textColor="@color/white" />
 

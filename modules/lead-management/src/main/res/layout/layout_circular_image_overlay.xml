@@ -31,7 +31,7 @@
             android:id="@+id/companyImg"
             android:layout_width="38dp"
             android:layout_height="38dp"
-            android:padding="@dimen/size_6"
+            android:padding="@dimen/size_2"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_avatar_male" />
     </LinearLayout>

@@ -12,6 +12,7 @@ import com.gigforce.common_ui.viewdatamodels.leadManagement.SubmitJoiningRequest
 import com.gigforce.core.ValidationHelper
 import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.common_ui.repository.LeadManagementRepository
+import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
@@ -23,7 +24,8 @@ class NewSelectionForm1ViewModel @Inject constructor(
     @ApplicationContext private val appContext: Context,
     private val leadManagementRepository: LeadManagementRepository,
     private val gigforceLogger: GigforceLogger,
-    private val profileFirebaseRepository: ProfileFirebaseRepository
+    private val profileFirebaseRepository: ProfileFirebaseRepository,
+    private val firebaseAuthStateListener: FirebaseAuthStateListener
 ) : ViewModel() {
 
     companion object {
@@ -58,7 +60,7 @@ class NewSelectionForm1ViewModel @Inject constructor(
             }
             is NewSelectionForm1Events.GigerNameChanged -> {
                 gigforceLogger.d(TAG, "Name changed : ${event.name}")
-                gigerName = event.name
+                gigerName = event.name.capitalize()
             }
             is NewSelectionForm1Events.BusinessSelected -> {
                 selectedBusiness = event.business
@@ -86,7 +88,9 @@ class NewSelectionForm1ViewModel @Inject constructor(
             }
 
             _viewState.value = NewSelectionForm1ViewState.OpenSelectedJobProfileScreen(
-                selectedBusiness!!.jobProfiles
+                selectedBusiness!!.jobProfiles.sortedBy {
+                    it.name
+                }
             )
             _viewState.value = null
         }
@@ -102,7 +106,9 @@ class NewSelectionForm1ViewModel @Inject constructor(
         }
 
         _viewState.value = NewSelectionForm1ViewState.OpenSelectedBusinessScreen(
-            joiningBusinessAndJobProfiles
+            joiningBusinessAndJobProfiles.sortedBy {
+                it.name
+            }
         )
         _viewState.value = null
     }
@@ -168,7 +174,13 @@ class NewSelectionForm1ViewModel @Inject constructor(
             _viewState.value = NewSelectionForm1ViewState.ValidationError(
                 invalidMobileNoMessage = "Invalid mobile number"
             )
+            return@launch
+        }
 
+        if(mobileNo == firebaseAuthStateListener.getCurrentSignInInfo()?.phoneNumber){
+            _viewState.value = NewSelectionForm1ViewState.ValidationError(
+                invalidMobileNoMessage = "You cannot use your own mobile number"
+            )
             return@launch
         }
 

@@ -89,7 +89,9 @@ class NewSelectionForm2ViewModel @Inject constructor(
         }
 
         _viewState.value = NewSelectionForm2ViewState.OpenSelectCityScreen(
-            cities = cities
+            cities = cities.sortedBy {
+                it.name
+            }
         )
         _viewState.value = null
     }
@@ -124,12 +126,13 @@ class NewSelectionForm2ViewModel @Inject constructor(
 
             reportingLocations.onEach {
                 it.selected = it.id == selectedReportingLocation?.id
-
             }
 
             _viewState.value = NewSelectionForm2ViewState.OpenSelectReportingScreen(
                 selectedCity!!,
-                reportingLocations
+                reportingLocations.sortedBy {
+                    it.name
+                }
             )
             _viewState.value = null
         }
@@ -141,7 +144,9 @@ class NewSelectionForm2ViewModel @Inject constructor(
             it.selected = it.id == selectedTL?.id
         }
         _viewState.value = NewSelectionForm2ViewState.OpenSelectClientTlScreen(
-            joiningLocationsAndTLs.businessTeamLeaders
+            joiningLocationsAndTLs.businessTeamLeaders.sortedBy {
+                it.name
+            }
         )
         _viewState.value = null
     }

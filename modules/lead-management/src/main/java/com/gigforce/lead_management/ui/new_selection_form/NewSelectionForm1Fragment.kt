@@ -1,16 +1,24 @@
 package com.gigforce.lead_management.ui.new_selection_form
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
+import android.content.pm.PackageManager
+import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import android.widget.LinearLayout
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.gigforce.common_ui.contacts.ContactsDelegate
+import com.gigforce.common_ui.contacts.PhoneContact
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
+import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfilesItem
@@ -29,6 +37,7 @@ import com.gigforce.lead_management.ui.LeadManagementSharedViewModelState
 import com.gigforce.lead_management.ui.new_selection_form_2.NewSelectionForm2Fragment
 import com.gigforce.lead_management.ui.select_business_screen.SelectBusinessFragment
 import com.gigforce.lead_management.ui.select_job_profile_screen.SelectJobProfileFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
@@ -40,10 +49,81 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
     statusBarColor = R.color.lipstick_2
 ) {
 
+    companion object {
+
+        const val TAG = "NewSelectionForm1Fragment"
+    }
+
     @Inject
     lateinit var navigation: INavigation
     private val viewModel: NewSelectionForm1ViewModel by viewModels()
     private val leadMgmtSharedViewModel: LeadManagementSharedViewModel by activityViewModels()
+
+    private val contactsDelegate: ContactsDelegate by lazy {
+        ContactsDelegate(requireContext().contentResolver)
+    }
+
+    @SuppressLint("NewApi")
+    private val pickContactContract = registerForActivityResult(
+        ActivityResultContracts.PickContact()
+    ) {
+        if(it == null) return@registerForActivityResult
+
+        contactsDelegate.parseResults(
+            uri = it,
+            onSuccess = { contacts ->
+                showContactNoOnMobileNo(contacts)
+            }, onFailure = { exception ->
+                logger.e(TAG, "while picking contact", exception)
+                showToast("Unable to pick contact")
+            })
+    }
+
+    private fun showContactNoOnMobileNo(contacts: List<PhoneContact>) {
+        if (contacts.isEmpty()) return
+
+        val pickedContact = contacts.first()
+        if(pickedContact.phoneNumbers.isEmpty()) return
+
+        if (pickedContact.phoneNumbers.size > 1) {
+            //show choose no dialog
+
+            val builder = MaterialAlertDialogBuilder(requireContext())
+            builder.setTitle("Select Phone Number")
+            builder.setItems(pickedContact.phoneNumbers.toTypedArray()) { _, item ->
+                val number = pickedContact.phoneNumbers[item]
+                viewBinding.mainForm.mobileNoEt.setText(number)
+
+                viewBinding.mainForm.mobileNoEt.post {
+                    viewBinding.mainForm.mobileNoEt.setSelection(viewBinding.mainForm.mobileNoEt.length())
+                }
+                viewModel.handleEvent(NewSelectionForm1Events.ContactNoChanged("+91" +number))
+            }
+            builder.show()
+        } else {
+            viewBinding.mainForm.mobileNoEt.setText(pickedContact.phoneNumbers.first())
+
+            viewBinding.mainForm.mobileNoEt.post {
+                viewBinding.mainForm.mobileNoEt.setSelection(viewBinding.mainForm.mobileNoEt.length())
+            }
+            viewModel.handleEvent(NewSelectionForm1Events.ContactNoChanged("+91" + pickedContact.phoneNumbers.first()))
+        }
+    }
+
+    @SuppressLint("NewApi")
+    private val requestContactPermissionContract = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { contactPermissionGranted ->
+
+        if (contactPermissionGranted) {
+            pickContactContract.launch(null)
+        } else {
+            val hasUserOptedForDoNotAskAgain = requireActivity().shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS).not()
+            if(hasUserOptedForDoNotAskAgain){
+
+            }
+        }
+    }
 
     override fun shouldPreventViewRecreationOnNavigation(): Boolean {
         return true
@@ -53,7 +133,8 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
         viewBinding: FragmentNewSelectionForm1Binding,
         savedInstanceState: Bundle?
     ) {
-        if (viewCreatedForTheFirstTime){
+
+        if (viewCreatedForTheFirstTime) {
             attachTextWatcher()
         }
 
@@ -66,11 +147,12 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
     private fun requestFocusOnMobileNoEditText() = viewBinding.mainForm.apply {
 
         mobileNoEt.requestFocus()
-        val imm: InputMethodManager = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.toggleSoftInput( InputMethodManager.SHOW_FORCED,0)
+        val imm: InputMethodManager =
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
     }
 
-    private fun attachTextWatcher()= viewBinding.apply  {
+    private fun attachTextWatcher() = viewBinding.apply {
         lifecycleScope.launchWhenCreated {
 
             mainForm.mobileNoEt.getTextChangeAsStateFlow()
@@ -110,6 +192,18 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
 
         mainForm.nextButton.setOnClickListener {
             viewModel.handleEvent(NewSelectionForm1Events.SubmitButtonPressed)
+        }
+
+        mainForm.pickContactsButton.setOnClickListener {
+
+            if (readContactsPermissionsGranted()) {
+                pickContactContract.launch(null)
+            } else {
+
+                requestContactPermissionContract.launch(
+                    Manifest.permission.READ_CONTACTS
+                )
+            }
         }
     }
 
@@ -272,10 +366,10 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
 
         mainForm.root.visible()
 
-        if (viewCreatedForTheFirstTime){
+        if (viewCreatedForTheFirstTime) {
             Handler().postDelayed({
                 requestFocusOnMobileNoEditText()
-            },300)
+            }, 300)
         }
     }
 
@@ -291,7 +385,7 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
         dataLoadingShimmerContainer.gone()
         formMainInfoLayout.root.visible()
 
-        formMainInfoLayout.infoIv.loadImage(R.drawable.ic_no_joining_found) //todo change this image
+        formMainInfoLayout.infoIv.loadImage(R.drawable.ic_no_selection)
         formMainInfoLayout.infoMessageTv.text = error
     }
 
@@ -317,10 +411,12 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
     ) = viewBinding.mainForm.apply {
 
         businessSelectedLabel.text = businessSelected.name
+        businessSelectedLabel.typeface = Typeface.DEFAULT_BOLD
         viewModel.handleEvent(NewSelectionForm1Events.BusinessSelected(businessSelected))
 
         //reseting job profile selected
         selectedJobProfileLabel.text = "Click to select Job Profile"
+        selectedJobProfileLabel.typeface = Typeface.DEFAULT
 
         businessErrorTv.text = null
         businessErrorTv.gone()
@@ -331,9 +427,20 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
     ) = viewBinding.mainForm.apply {
 
         selectedJobProfileLabel.text = jobProfileSelected.name
+        selectedJobProfileLabel.typeface = Typeface.DEFAULT_BOLD
         viewModel.handleEvent(NewSelectionForm1Events.JobProfileSelected(jobProfileSelected))
 
         jobProfileErrorTv.text = null
         jobProfileErrorTv.gone()
+    }
+
+    private fun readContactsPermissionsGranted(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            requireContext(), Manifest.permission.READ_CONTACTS
+        ) == PackageManager.PERMISSION_GRANTED
+                &&
+                ContextCompat.checkSelfPermission(
+                    requireContext(), Manifest.permission.READ_CONTACTS
+                ) == PackageManager.PERMISSION_GRANTED
     }
 }
