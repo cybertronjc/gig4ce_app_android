@@ -58,6 +58,7 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
      var searchImageButton: ImageButton
      var filterImageButton: ImageButton
      var filterDotImageButton: ImageButton
+     var filterFrameLayout: FrameLayout
      var stepsTextView: TextView
      var search_item: EditText
      var profilePic: AppProfilePicComponent
@@ -126,6 +127,7 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
         searchImageButton = findViewById(R.id.searchImageButton)
         filterImageButton = findViewById(R.id.filterImageButton)
         filterDotImageButton = findViewById(R.id.filterDot)
+        filterFrameLayout = findViewById(R.id.filterImageFrame)
         search_item = findViewById(R.id.search_item)
         profilePic = findViewById(R.id.profilePicComp)
         stepsTextView = findViewById(R.id.steps)
@@ -161,7 +163,13 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
     }
 
     private fun makeFilterVisible(filterVisible: Boolean) {
-        if (filterVisible) filterImageButton.visible() else filterImageButton.invisible()
+        if (filterVisible){
+            filterImageButton.visible()
+            filterFrameLayout.visible()
+        }  else{
+            filterImageButton.gone()
+            filterFrameLayout.gone()
+        }
     }
 
     val isSearchCurrentlyShown: Boolean get() = search_item.isVisible

@@ -147,13 +147,11 @@ class JoiningList2ViewModel @Inject constructor(
 
             if (dropBusinessMap?.containsKey(business) == true){
                 isVisible = dropBusinessMap!!.get(business) == 0
-                Log.d("dropVMVisible", "$isVisible")
             }
 
             joiningListForView.add(
                 JoiningList2RecyclerItemData.JoiningListRecyclerStatusItemData(
                     business.toString() + "(${joinings.size})",
-                    this,
                     isVisible
                 )
             )
