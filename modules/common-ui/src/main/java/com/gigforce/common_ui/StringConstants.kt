@@ -76,8 +76,9 @@ enum class StringConstants(val value: String) {
     INTENT_EXTRA_OTHER_USER_IMAGE("imageUrl"),
     INTENT_EXTRA_OTHER_USER_NAME("receiver_name"),
     INTENT_EXTRA_CHAT_HEADER_ID("chat_header_id"),
-    INTENT_EXTRA_OTHER_USER_ID("receiver_id")
-
+    INTENT_EXTRA_OTHER_USER_ID("receiver_id"),
+    INTENT_FILTER_DAYS_EXTRA("FILTER_DAYS"),
+    INTENT_FILTER_DAYS_NUMBER("FILTER_DAYS_NUMBER")
 
 
 

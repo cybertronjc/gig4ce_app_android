@@ -11,18 +11,24 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.onTabSelected
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.utils.PushDownAnim
+import com.gigforce.common_ui.viewdatamodels.FeatureItemCard2DVM
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.getTextChangeAsStateFlow
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.recyclerView.ItemClickListener
+import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.lead_management.LeadManagementConstants
 import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
@@ -56,12 +62,13 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
     private val viewModel: JoiningList2ViewModel by viewModels()
     private val sharedViewModel : LeadManagementSharedViewModel by activityViewModels()
     var selectedTab = 0
+    var filterDaysFM = -1
 
     override fun viewCreated(
         viewBinding: FragmentJoiningList2Binding,
         savedInstanceState: Bundle?
     ) {
-
+        checkForApplyFilter()
         initAppBar()
         initTabLayout()
         initListeners(viewBinding)
@@ -84,25 +91,42 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
             )
         }
 
+        joiningsRecyclerView.itemClickListener = object : ItemClickListener {
+            override fun onItemClick(view: View, position: Int, dataModel: Any) {
+                if (dataModel is JoiningList2RecyclerItemData.JoiningListRecyclerStatusItemData) {
+                    Log.d("dropFM", "$dataModel")
+                    if (dataModel.dropEnabled){
+                        //!dataModel.dropEnabled
+                        val businessName = dataModel.status.split("(").get(0)
+                        viewModel.clickDropdown(businessName, false)
+                        //joiningsRecyclerView.coreAdapter.notifyDataSetChanged()
+                    }else {
+                        //dataModel.dropEnabled
+                        val businessName = dataModel.status.split("(").get(0)
+                        viewModel.clickDropdown(businessName, true)
+                        //joiningsRecyclerView.coreAdapter.notifyDataSetChanged()
+                    }
+
+                }
+            }
+        }
     }
 
-//    private fun initToolbar(
-//        viewBinding: FragmentJoiningListBinding
-//    ) = viewBinding.toolbar.apply {
-//        this.hideActionMenu()
-//        this.showTitle(context.getString(R.string.joinings_lead))
-//        this.setBackButtonListener {
-//            activity?.onBackPressed()
-//        }
-//        //this.changeBackgroundToRound()
-//        this.changeBackButtonDrawable()
-//        this.showSearchOption(context.getString(R.string.search_joinings_lead))
-//        lifecycleScope.launchWhenCreated {
-//            getSearchTextChangeAsFlow()
-//                .collect { viewModel.searchJoinings(it) }
-//        }
-//    }
-//
+    private fun checkForApplyFilter() {
+        val navController = findNavController()
+        navController.currentBackStackEntry?.savedStateHandle?.getLiveData<Int>("filterDays")?.observe(
+            viewLifecycleOwner) { result ->
+            filterDaysFM = result
+            if (filterDaysFM != -1){
+                viewBinding.appBarComp.filterDotImageButton.visible()
+            } else {
+                viewBinding.appBarComp.filterDotImageButton.gone()
+            }
+            viewModel.filterDaysJoinings(filterDaysFM)
+        }
+
+    }
+
     private fun initAppBar() = viewBinding.appBarComp.apply {
 
         changeBackButtonDrawable()
@@ -117,6 +141,12 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
                 .collect { searchString ->
                     viewModel.searchJoinings(searchString)
                 }
+        }
+
+        filterImageButton.setOnClickListener {
+            navigation.navigateTo("LeadMgmt/joiningFilter", bundleOf(
+                StringConstants.INTENT_FILTER_DAYS_NUMBER.value to filterDaysFM
+            ))
         }
     }
 
@@ -234,6 +264,7 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
             joiningShimmerContainer,
             R.id.shimmer_controller
         )
+        statusTabLayout.visible()
         joiningShimmerContainer.gone()
         joiningListInfoLayout.root.gone()
 
@@ -265,7 +296,7 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
         )
         joiningShimmerContainer.gone()
         joiningListInfoLayout.root.visible()
-
+        statusTabLayout.gone()
         joiningListInfoLayout.infoIv.loadImage(R.drawable.ic_no_selection)
         joiningListInfoLayout.infoMessageTv.text = "No Selections Yet !"
     }

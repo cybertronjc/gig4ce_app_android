@@ -22,8 +22,10 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import java.time.Duration
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.*
 import javax.inject.Inject
-
+import kotlin.collections.HashMap
 
 
 @HiltViewModel
@@ -52,7 +54,10 @@ class JoiningList2ViewModel @Inject constructor(
     private var joiningListShownOnView: MutableList<JoiningList2RecyclerItemData> = mutableListOf()
     private var currentSearchString: String? = null
     var currentFilterString: String? = null
+    var filterDaysVM: Int? = null
     private var fetchJoiningListener: ListenerRegistration? = null
+
+    var dropBusinessMap : HashMap<String, Int>? = HashMap<String, Int>()
 
     init {
         //startListeningToJoinings()
@@ -119,6 +124,12 @@ class JoiningList2ViewModel @Inject constructor(
                     currentFilterString!!, true
                 )
             }
+        }.filter {
+            if (filterDaysVM == null || filterDaysVM == -1)
+                true
+            else {
+                getDateDifference(it.createdAt.toString()) <= filterDaysVM!!
+            }
         }.groupBy {
             it.business?.name
         }.toSortedMap(compareBy { it })
@@ -129,11 +140,18 @@ class JoiningList2ViewModel @Inject constructor(
         val joiningListForView = mutableListOf<JoiningList2RecyclerItemData>()
         businessToJoiningGroupedList.forEach { (business, joinings) ->
             gigforceLogger.d(TAG, "processing data, Status : $business : ${joinings.size} Joinings")
+            var isVisible = true
 
+            if (dropBusinessMap?.containsKey(business) == true){
+                isVisible = dropBusinessMap!!.get(business) == 0
+                Log.d("dropVMVisible", "$isVisible")
+            }
 
             joiningListForView.add(
                 JoiningList2RecyclerItemData.JoiningListRecyclerStatusItemData(
-                    business.toString()
+                    business.toString() + "(${joinings.size})",
+                    this,
+                    isVisible
                 )
             )
 
@@ -150,7 +168,8 @@ class JoiningList2ViewModel @Inject constructor(
                         status = it.status,
                         selected = false,
                         createdAt = it.createdAt,
-                        updatedAt = it.updatedAt
+                        updatedAt = it.updatedAt,
+                        isVisible = isVisible
                     )
                 )
             }
@@ -184,6 +203,12 @@ class JoiningList2ViewModel @Inject constructor(
                     currentSearchString!!,
                     true
                 ) ?: false
+            }
+        }.filter {
+            if (filterDaysVM == null || filterDaysVM == -1)
+                true
+            else {
+                getDateDifference(it.createdAt.toString()) <= filterDaysVM!!
             }
         }.groupBy { it.status }.toSortedMap(compareBy { it })
 
@@ -242,38 +267,6 @@ class JoiningList2ViewModel @Inject constructor(
         )
     }
 
-    private fun getJoiningText(
-        it: Joining
-    ): String {
-        return when (it.getStatus()) {
-            JoiningStatus.SIGN_UP_PENDING -> {
-                if (JoiningSignUpInitiatedMode.BY_LINK == it.signUpMode) {
-                    "App invite sent ${getDateDifferenceFormatted(it.updatedOn)}"
-                } else {
-                    "Signup started ${getDateDifferenceFormatted(it.updatedOn)}"
-                }
-            }
-            JoiningStatus.APPLICATION_PENDING -> {
-                if (it.jobProfileNameInvitedFor.isNullOrBlank()) {
-                    "No Application Link shared yet"
-                } else {
-                    "${it.jobProfileNameInvitedFor} invite sent ${getDateDifferenceFormatted(it.updatedOn)}"
-                }
-            }
-            JoiningStatus.JOINING_PENDING -> {
-                "Joining initiated ${getDateDifferenceFormatted(it.updatedOn)}"
-            }
-            JoiningStatus.JOINED -> {
-                "Joined ${getDateDifferenceFormatted(it.updatedOn)}"
-            }
-            JoiningStatus.PENDING -> {
-                "Pending ${getDateDifferenceFormatted(it.updatedOn)}"
-            }
-            JoiningStatus.COMPLETED -> {
-                "Completed ${getDateDifferenceFormatted(it.updatedOn)}"
-            }
-        }
-    }
 
     private fun getDateDifferenceFormatted(updatedOn: Timestamp): String {
         val updateOnDate = updatedOn.toLocalDate()
@@ -288,6 +281,22 @@ class JoiningList2ViewModel @Inject constructor(
             ).toDays()
 
             "$daysDiff day(s) ago"
+        }
+    }
+
+    private fun getDateDifference(createdAt: String): Int {
+        val currentDate = LocalDate.now()
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH)
+        val date = LocalDate.parse(createdAt, formatter)
+        return if (currentDate.isEqual(date)){
+            0
+        } else {
+            val daysDiff = Duration.between(
+                date.atStartOfDay(),
+                currentDate.atStartOfDay()
+            ).toDays()
+            Log.d("daysDiff", "diff $daysDiff")
+            daysDiff.toInt()
         }
     }
 
@@ -323,5 +332,26 @@ class JoiningList2ViewModel @Inject constructor(
             return
         }
         processJoiningsAndEmit(joiningsRaw!!)
+    }
+
+    fun clickDropdown(businessName: String, dropEnabled: Boolean){
+        gigforceLogger.d(TAG, "new dropdown click received $businessName , $dropEnabled")
+        if (dropEnabled){
+            dropBusinessMap?.put(businessName, 0)
+        } else {
+            dropBusinessMap?.put(businessName, 1)
+        }
+        Log.d("drop", "$dropBusinessMap")
+        processJoiningsAndEmit(joiningsRaw!!)
+
+    }
+
+    fun filterDaysJoinings(
+        filterDays: Int
+    ){
+        gigforceLogger.d(TAG, "new filter click received $filterDays")
+        filterDaysVM = filterDays
+        processJoiningsAndEmit(joiningsRaw!!)
+
     }
 }
