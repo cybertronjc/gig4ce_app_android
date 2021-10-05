@@ -9,7 +9,8 @@ open class JoiningList2RecyclerItemData(
 ) : SimpleDVM(type) {
 
     data class JoiningListRecyclerStatusItemData(
-        val status: String
+        val status: String,
+        val dropEnabled: Boolean
     ) : JoiningList2RecyclerItemData(
         LeadActivationViewTypes.JoiningListStatus
     )

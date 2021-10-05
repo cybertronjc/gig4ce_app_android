@@ -5,9 +5,14 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:orientation="horizontal"
         android:layout_marginTop="8dp"
+        android:layout_marginStart="@dimen/size_16"
+        android:layout_marginEnd="@dimen/size_16"
+        android:layout_marginBottom="@dimen/size_16"
+        android:elevation="@dimen/size_4"
+        android:background="@drawable/business_compo_background"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:paddingBottom="8dp"
@@ -19,20 +24,20 @@
             android:layout_height="wrap_content"
             android:textColor="#202325"
             android:lineHeight="15sp"
-            android:paddingTop="@dimen/size_6"
+            android:layout_centerVertical="true"
             android:fontFamily="@font/lato_bold"
             tools:text="Company Name"
             />
 
-        <View
-            android:id="@+id/view"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="@dimen/size_12"
+        <ImageView
+            android:id="@+id/dropdownView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
             android:layout_centerHorizontal="false"
+            android:src="@drawable/ic_dropdown_up"
             android:layout_centerVertical="true"
-            android:layout_toEndOf="@id/status_tv"
-            android:background="@color/view_bg" />
+            android:layout_marginStart="@dimen/size_12" />
 
 
     </RelativeLayout>

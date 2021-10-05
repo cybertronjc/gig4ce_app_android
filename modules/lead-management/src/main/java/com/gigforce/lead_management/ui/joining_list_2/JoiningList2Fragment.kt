@@ -11,7 +11,10 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.onTabSelected
 import com.gigforce.common_ui.ext.showToast
@@ -23,6 +26,7 @@ import com.gigforce.core.extensions.getTextChangeAsStateFlow
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.lead_management.LeadManagementConstants
 import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
@@ -56,12 +60,13 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
     private val viewModel: JoiningList2ViewModel by viewModels()
     private val sharedViewModel : LeadManagementSharedViewModel by activityViewModels()
     var selectedTab = 0
+    var filterDaysFM = -1
 
     override fun viewCreated(
         viewBinding: FragmentJoiningList2Binding,
         savedInstanceState: Bundle?
     ) {
-
+        checkForApplyFilter()
         initAppBar()
         initTabLayout()
         initListeners(viewBinding)
@@ -86,23 +91,21 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
 
     }
 
-//    private fun initToolbar(
-//        viewBinding: FragmentJoiningListBinding
-//    ) = viewBinding.toolbar.apply {
-//        this.hideActionMenu()
-//        this.showTitle(context.getString(R.string.joinings_lead))
-//        this.setBackButtonListener {
-//            activity?.onBackPressed()
-//        }
-//        //this.changeBackgroundToRound()
-//        this.changeBackButtonDrawable()
-//        this.showSearchOption(context.getString(R.string.search_joinings_lead))
-//        lifecycleScope.launchWhenCreated {
-//            getSearchTextChangeAsFlow()
-//                .collect { viewModel.searchJoinings(it) }
-//        }
-//    }
-//
+    private fun checkForApplyFilter() {
+        val navController = findNavController()
+        navController.currentBackStackEntry?.savedStateHandle?.getLiveData<Int>("filterDays")?.observe(
+            viewLifecycleOwner) { result ->
+            filterDaysFM = result
+            if (filterDaysFM != -1){
+                viewBinding.appBarComp.filterDotImageButton.visible()
+            } else {
+                viewBinding.appBarComp.filterDotImageButton.gone()
+            }
+            viewModel.filterDaysJoinings(filterDaysFM)
+        }
+
+    }
+
     private fun initAppBar() = viewBinding.appBarComp.apply {
 
         changeBackButtonDrawable()
@@ -117,6 +120,12 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
                 .collect { searchString ->
                     viewModel.searchJoinings(searchString)
                 }
+        }
+
+        filterImageButton.setOnClickListener {
+            navigation.navigateTo("LeadMgmt/joiningFilter", bundleOf(
+                StringConstants.INTENT_FILTER_DAYS_NUMBER.value to filterDaysFM
+            ))
         }
     }
 

@@ -121,5 +121,9 @@
     <string name="sure_to_drop_lead">Are you sure that you want to drop 3 selection(s)?</string>
     <string name="cancel_lead">Cancel</string>
     <string name="submitting_data">Submitting...</string>
+    <string name="filter_date_text">Filter by Selection Date</string>
+    <string name="filter_date_sub_text">Please select the filter from the following options.</string>
+    <string name="apply_filter">APPLY FILTER</string>
+    <string name="remove_filter">REMOVE FILTER</string>
 
 </resources>

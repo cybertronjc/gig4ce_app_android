@@ -25,8 +25,10 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import java.time.Duration
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.*
 import javax.inject.Inject
-
+import kotlin.collections.HashMap
 
 
 @HiltViewModel
@@ -55,6 +57,7 @@ class JoiningList2ViewModel @Inject constructor(
     private var joiningListShownOnView: MutableList<JoiningList2RecyclerItemData> = mutableListOf()
     private var currentSearchString: String? = null
     var currentFilterString: String? = null
+    var filterDaysVM: Int? = null
     private var fetchJoiningListener: ListenerRegistration? = null
 
     init {
@@ -122,6 +125,12 @@ class JoiningList2ViewModel @Inject constructor(
                     currentFilterString!!, true
                 )
             }
+        }.filter {
+            if (filterDaysVM == null || filterDaysVM == -1)
+                true
+            else {
+                getDateDifference(it.createdAt.toString()) <= filterDaysVM!!
+            }
         }.groupBy {
             it.business?.name
         }.toSortedMap(compareBy { it })
@@ -136,7 +145,8 @@ class JoiningList2ViewModel @Inject constructor(
 
             joiningListForView.add(
                 JoiningList2RecyclerItemData.JoiningListRecyclerStatusItemData(
-                    business.toString()
+                    business.toString() + "(${joinings.size})",
+                    false
                 )
             )
 
@@ -187,6 +197,12 @@ class JoiningList2ViewModel @Inject constructor(
                     currentSearchString!!,
                     true
                 ) ?: false
+            }
+        }.filter {
+            if (filterDaysVM == null || filterDaysVM == -1)
+                true
+            else {
+                getDateDifference(it.createdAt.toString()) <= filterDaysVM!!
             }
         }.groupBy { it.status }.toSortedMap(compareBy { it })
 
@@ -294,6 +310,22 @@ class JoiningList2ViewModel @Inject constructor(
         }
     }
 
+    private fun getDateDifference(createdAt: String): Int {
+        val currentDate = LocalDate.now()
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH)
+        val date = LocalDate.parse(createdAt, formatter)
+        return if (currentDate.isEqual(date)){
+            0
+        } else {
+            val daysDiff = Duration.between(
+                date.atStartOfDay(),
+                currentDate.atStartOfDay()
+            ).toDays()
+            Log.d("daysDiff", "diff $daysDiff")
+            daysDiff.toInt()
+        }
+    }
+
     fun searchJoinings(
         searchString: String
     ) {
@@ -326,5 +358,18 @@ class JoiningList2ViewModel @Inject constructor(
             return
         }
         processJoiningsAndEmit(joiningsRaw!!)
+    }
+
+    fun clickDropdown(){
+        gigforceLogger.d(TAG, "new dropdown click received")
+    }
+
+    fun filterDaysJoinings(
+        filterDays: Int
+    ){
+        gigforceLogger.d(TAG, "new filter click received $filterDays")
+        filterDaysVM = filterDays
+        processJoiningsAndEmit(joiningsRaw!!)
+
     }
 }
