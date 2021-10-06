@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.lifecycle.findViewTreeLifecycleOwner
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.repository.BannerCardRepository
@@ -39,7 +40,7 @@ open class BannerCardComponent(context: Context, attrs: AttributeSet?) :
     val topLayout: View
     val progressBar: View
     private var bannerCardRepo = BannerCardRepository()
-    private var onPauseCalled = false
+    private var onPauseState = false
 
     init {
         this.layoutParams =
@@ -151,7 +152,8 @@ open class BannerCardComponent(context: Context, attrs: AttributeSet?) :
                         bannerName,
                         id
                     )
-                    if (!onPauseCalled) {
+                    findViewTreeLifecycleOwner()
+                    if (!onPauseState) {
                         if (accessLogResponse.status == true) {
                             if (accessLogResponse.siplyResponseStatus == true) {
                                 accessLogResponse.responseURL?.let {
@@ -197,17 +199,17 @@ open class BannerCardComponent(context: Context, attrs: AttributeSet?) :
                             ).show()
                         }
                     }
-                    progressBar.gone()
+                    progressBar?.gone()
 
                 } catch (e: Exception) {
-                    if (!onPauseCalled) {
-                        progressBar.gone()
+                    if (!onPauseState) {
                         Toast.makeText(
                             context,
                             "There is some internal error. Please try after sometime.",
                             Toast.LENGTH_LONG
                         ).show()
                     }
+                    progressBar?.gone()
                 }
             }
         }
@@ -215,21 +217,27 @@ open class BannerCardComponent(context: Context, attrs: AttributeSet?) :
 
     override fun onVisibilityChanged(changedView: View, visibility: Int) {
         super.onVisibilityChanged(changedView, visibility)
-        if (visibility != View.VISIBLE) {
-            onPauseCalled = true
-        }
+        onPauseState = visibility != View.VISIBLE
     }
 
     override fun onWindowFocusChanged(hasWindowFocus: Boolean) {
         super.onWindowFocusChanged(hasWindowFocus)
-        if (hasWindowFocus) {
-            onPauseCalled = true
-        }
+        onPauseState = hasWindowFocus
     }
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        onPauseCalled = true
+        onPauseState = true
 
+    }
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        onPauseState = false
+    }
+
+    override fun onVisibilityAggregated(isVisible: Boolean) {
+        super.onVisibilityAggregated(isVisible)
+        onPauseState = !isVisible
     }
 }
