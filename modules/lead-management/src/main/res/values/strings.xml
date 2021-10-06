@@ -148,7 +148,7 @@
     <string name="read_contact_permission_required">Read contact permission required</string>
     <string name="please_grant_read_permissions_to">Please grant Read contact permission in order to select giger mobile no from contacts</string>
     <string name="unable_to_load_business_and_job_profiles">Unable to load business and job profiles</string>
-    <string name="note_with_colon">\"Note : \"</string>
+    <string name="note_with_colon">Note : </string>
     <string name="please_select_business_first">Please select business first to select job profile</string>
     <string name="number_you_entered_is_invalid_number">Number you entered is invalid Number</string>
     <string name="please_enter_name">Please enter name</string>

@@ -5,6 +5,7 @@ import com.gigforce.common_ui.exceptions.TryingToDowngradeJoiningStatusException
 import com.gigforce.common_ui.exceptions.UserDoesNotExistInProfileException
 import com.gigforce.common_ui.ext.bodyOrThrow
 import com.gigforce.common_ui.remote.JoiningProfileService
+import com.gigforce.common_ui.remote.ProfileCommonService
 import com.gigforce.common_ui.remote.ReferralService
 import com.gigforce.common_ui.viewdatamodels.PendingJoiningItemDVM
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
@@ -44,7 +45,8 @@ class LeadManagementRepository @Inject constructor(
     private val joiningProfileRemoteService: JoiningProfileService,
     private val referralService: ReferralService,
     private val buildConfig: IBuildConfig,
-    private val logger : GigforceLogger
+    private val logger : GigforceLogger,
+    private val profileCommonService: ProfileCommonService
 ) {
 
 
@@ -700,5 +702,12 @@ class LeadManagementRepository @Inject constructor(
 
     suspend fun getPendingJoinings() : List<PendingJoiningItemDVM>{
         return joiningProfileRemoteService.getPendingJoining().bodyOrThrow()
+    }
+
+    suspend fun getUserInfoFromMobileNumber(
+        mobileNo10digit : String
+    ) : UserAuthStatusModel{
+       return profileCommonService.getUserInfoFromMobile(mobileNo10digit)
+            .bodyOrThrow()
     }
 }

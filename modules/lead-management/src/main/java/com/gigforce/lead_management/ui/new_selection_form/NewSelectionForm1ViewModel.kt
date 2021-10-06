@@ -14,6 +14,7 @@ import com.gigforce.common_ui.viewdatamodels.leadManagement.SubmitJoiningRequest
 import com.gigforce.core.ValidationHelper
 import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.common_ui.repository.LeadManagementRepository
+import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.lead_management.R
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -264,10 +265,10 @@ class NewSelectionForm1ViewModel @Inject constructor(
         try {
             gigforceLogger.d(TAG, "checking phone-number in profile '$mobileNo'")
 
-            val profileInfo = profileFirebaseRepository.getFirstProfileWithPhoneNumber(mobileNo)
-            if (profileInfo == null) {
-                gigforceLogger.d(TAG, "no profile matched in profile for '$mobileNo'")
+            val userInfo = leadManagementRepository.getUserInfoFromMobileNumber(mobileNo.substring(3))
 
+            if(userInfo.name == null){
+                gigforceLogger.d(TAG, "null received in name for mobile no '$mobileNo'")
                 _viewState.value = NewSelectionForm1ViewState.ErrorWhileCheckingForUserInProfile(
                     error = appContext.getString(R.string.no_match_found_for_this_no),
                     shouldShowErrorButton = false
@@ -275,9 +276,9 @@ class NewSelectionForm1ViewModel @Inject constructor(
             } else {
                 gigforceLogger.d(TAG, "User profile found for '$mobileNo'")
 
-                gigerName = profileInfo.name
+                gigerName = userInfo.name
                 _viewState.value = NewSelectionForm1ViewState.UserDetailsFromProfiles(
-                    profile = profileInfo
+                    profile = ProfileData(name = userInfo.name!!)
                 )
             }
         } catch (e: Exception) {
