@@ -60,19 +60,19 @@
 
         </FrameLayout>
 
-        <TextView
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/join_now_button"
             android:layout_width="match_parent"
-            android:layout_height="34dp"
-            android:background="@drawable/bottom_primary_button_background"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/size_16"
             android:layout_marginEnd="@dimen/size_16"
-            android:layout_marginBottom="@dimen/size_18"
-            android:gravity="center"
-            android:fontFamily="@font/lato_bold"
-            android:layout_marginTop="8dp"
-            android:minHeight="@dimen/size_36"
+            android:layout_marginBottom="@dimen/size_16"
             android:text="@string/add_new_lead"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:fontFamily="@font/lato"
+            style="@style/LeadMgmtMaterialButtonStyle"
+            app:shapeAppearanceOverlay="@style/RoundCornerButtonShapeOverlay"
             android:textColor="@color/white" />
 
 

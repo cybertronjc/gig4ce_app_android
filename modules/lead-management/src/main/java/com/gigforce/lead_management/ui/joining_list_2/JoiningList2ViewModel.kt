@@ -350,6 +350,8 @@ class JoiningList2ViewModel @Inject constructor(
     ){
         gigforceLogger.d(TAG, "new filter click received $filterDays")
         filterDaysVM = filterDays
+
+        if(joiningsRaw != null)
         processJoiningsAndEmit(joiningsRaw!!)
 
     }

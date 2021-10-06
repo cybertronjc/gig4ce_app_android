@@ -78,18 +78,12 @@
                 </com.google.android.material.card.MaterialCardView>
 
 
-                <TextView
-                    android:id="@+id/city_error_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="4dp"
-                    android:fontFamily="@font/lato"
-                    android:lineSpacingExtra="3sp"
-                    android:textColor="@android:color/holo_red_dark"
-                    android:textSize="12sp"
-                    android:textStyle="normal"
-                    android:visibility="gone" />
+                <include
+                    android:id="@+id/city_error"
+                    layout="@layout/layout_validation_error"
+                    android:layout_width="match_parent"
+                    android:visibility="gone"
+                    android:layout_height="wrap_content" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -155,18 +149,13 @@
 
                 </com.google.android.material.card.MaterialCardView>
 
-                <TextView
-                    android:id="@+id/reporting_location_error_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="4dp"
-                    android:fontFamily="@font/lato"
-                    android:lineSpacingExtra="3sp"
-                    android:textColor="@android:color/holo_red_dark"
-                    android:textSize="12sp"
-                    android:textStyle="normal"
-                    android:visibility="gone" />
+
+                <include
+                    android:id="@+id/reporting_location_error"
+                    layout="@layout/layout_validation_error"
+                    android:layout_width="match_parent"
+                    android:visibility="gone"
+                    android:layout_height="wrap_content" />
 
 
                 <LinearLayout
@@ -285,18 +274,12 @@
 
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/expected_date_error_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="4dp"
-                    android:fontFamily="@font/lato"
-                    android:lineSpacingExtra="3sp"
-                    android:textColor="@android:color/holo_red_dark"
-                    android:textSize="12sp"
-                    android:textStyle="normal"
-                    android:visibility="gone" />
+                <include
+                    android:id="@+id/expected_date_of_joining_error"
+                    layout="@layout/layout_validation_error"
+                    android:layout_width="match_parent"
+                    android:visibility="gone"
+                    android:layout_height="wrap_content" />
 
                 <View
                     android:id="@+id/line_79"
@@ -319,18 +302,13 @@
                     android:textAppearance="@style/style_h5"
                     android:translationY="-0.6sp" />
 
-                <TextView
-                    android:id="@+id/shift_error_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="4dp"
-                    android:fontFamily="@font/lato"
-                    android:lineSpacingExtra="3sp"
-                    android:textColor="@android:color/holo_red_dark"
-                    android:textSize="12sp"
-                    android:textStyle="normal"
-                    android:visibility="gone" />
+
+                <include
+                    android:id="@+id/shift_error"
+                    layout="@layout/layout_validation_error"
+                    android:layout_width="match_parent"
+                    android:visibility="gone"
+                    android:layout_height="wrap_content" />
 
                 <com.google.android.material.chip.ChipGroup
                     android:id="@+id/shift_chip_group"
@@ -340,18 +318,6 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
                     />
-
-                <TextView
-                    android:id="@+id/job_profile_error_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="4dp"
-                    android:fontFamily="@font/lato"
-                    android:lineSpacingExtra="3sp"
-                    android:textColor="@android:color/holo_red_dark"
-                    android:textSize="12sp"
-                    android:textStyle="normal" />
 
             </LinearLayout>
 

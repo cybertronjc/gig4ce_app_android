@@ -255,8 +255,8 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
                     viewBinding.mainForm.nameProgressbar.visible()
                     viewBinding.mainForm.gigerNameEt.setText("")
 
-                    viewBinding.mainForm.contactNoErrorTv.text = null
-                    viewBinding.mainForm.contactNoErrorTv.gone()
+                    viewBinding.mainForm.contactNoError.errorTextview.text = null
+                    viewBinding.mainForm.contactNoError.root.gone()
                 }
                 is NewSelectionForm1ViewState.ErrorWhileCheckingForUserInProfile -> {
                     viewBinding.mainForm.gigerNameEt.isEnabled = true
@@ -325,31 +325,39 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
     ) = viewBinding.mainForm.apply {
 
         if (errorState.invalidMobileNoMessage != null) {
-            contactNoErrorTv.visible()
-            contactNoErrorTv.text = errorState.invalidMobileNoMessage
+
+            viewBinding.mainForm.contactNoError.root.visible()
+            viewBinding.mainForm.contactNoError.errorTextview.text = errorState.invalidMobileNoMessage
         } else {
-            contactNoErrorTv.text = null
-            contactNoErrorTv.gone()
+            viewBinding.mainForm.contactNoError.errorTextview.text = null
+            viewBinding.mainForm.contactNoError.root.gone()
         }
 
-        gigerNameTextInputLayout.error = errorState.gigerNameError
+        if (errorState.gigerNameError != null) {
+            viewBinding.mainForm.gigerNameError.root.visible()
+            viewBinding.mainForm.gigerNameError.errorTextview.text = errorState.gigerNameError
+        } else {
+            viewBinding.mainForm.gigerNameError.errorTextview.text = null
+            viewBinding.mainForm.gigerNameError.root.gone()
+        }
+
         gigerClientIdTextInputLayout.error = errorState.gigerClientIdError
 
-
         if (errorState.businessError != null) {
-            businessErrorTv.visible()
-            businessErrorTv.text = errorState.businessError
+
+            viewBinding.mainForm.businessError.root.visible()
+            viewBinding.mainForm.businessError.errorTextview.text = errorState.businessError
         } else {
-            businessErrorTv.text = null
-            businessErrorTv.gone()
+            viewBinding.mainForm.businessError.errorTextview.text = null
+            viewBinding.mainForm.businessError.root.gone()
         }
 
         if (errorState.jobProfilesError != null) {
-            jobProfileErrorTv.visible()
-            jobProfileErrorTv.text = errorState.jobProfilesError
+            viewBinding.mainForm.jobProfileError.root.visible()
+            viewBinding.mainForm.jobProfileError.errorTextview.text = errorState.jobProfilesError
         } else {
-            jobProfileErrorTv.text = null
-            jobProfileErrorTv.gone()
+            viewBinding.mainForm.jobProfileError.errorTextview.text = null
+            viewBinding.mainForm.jobProfileError.root.gone()
         }
     }
 
@@ -434,8 +442,8 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
         selectedJobProfileLabel.text = getString(R.string.click_to_select_job_profile)
         selectedJobProfileLabel.typeface = Typeface.DEFAULT
 
-        businessErrorTv.text = null
-        businessErrorTv.gone()
+        viewBinding.mainForm.businessError.errorTextview.text = null
+        viewBinding.mainForm.businessError.root.gone()
     }
 
     private fun showSelectedJobProfile(
@@ -446,8 +454,8 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
         selectedJobProfileLabel.typeface = Typeface.DEFAULT_BOLD
         viewModel.handleEvent(NewSelectionForm1Events.JobProfileSelected(jobProfileSelected))
 
-        jobProfileErrorTv.text = null
-        jobProfileErrorTv.gone()
+        viewBinding.mainForm.jobProfileError.errorTextview.text = null
+        viewBinding.mainForm.jobProfileError.root.gone()
     }
 
     private fun readContactsPermissionsGranted(): Boolean {

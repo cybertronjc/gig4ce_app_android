@@ -55,11 +55,11 @@
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:background="@null"
+                            android:enabled="false"
                             android:gravity="center"
                             android:inputType="none"
-                            android:enabled="false"
-                            android:textColor="@drawable/edit_text_color_selector"
-                            android:text="+91" />
+                            android:text="+91"
+                            android:textColor="@drawable/edit_text_color_selector" />
 
                     </com.google.android.material.card.MaterialCardView>
 
@@ -91,24 +91,18 @@
                             android:layout_height="40dp"
                             android:layout_gravity="end"
                             android:background="@null"
-                            android:src="@drawable/ic_contact_book"/>
+                            android:src="@drawable/ic_contact_book" />
 
                     </com.google.android.material.card.MaterialCardView>
 
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/contact_no_error_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="4dp"
-                    android:fontFamily="@font/lato"
-                    android:lineSpacingExtra="3sp"
-                    android:textColor="@android:color/holo_red_dark"
-                    android:textSize="12sp"
+                <include
+                    android:id="@+id/contact_no_error"
+                    layout="@layout/layout_validation_error"
+                    android:layout_width="match_parent"
                     android:visibility="gone"
-                    android:textStyle="normal" />
+                    android:layout_height="wrap_content" />
 
                 <TextView
                     android:id="@+id/giger_name_label"
@@ -134,19 +128,19 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint=" "
-                        app:errorEnabled="true">
+                        app:errorEnabled="false">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/giger_name_et"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:enabled="false"
-                            android:inputType="textNoSuggestions"
-                            android:hint="@string/type_giger_name_here"
-                            android:paddingBottom="15dp"
                             android:backgroundTint="#EBEBEB"
-                            android:textColorHint="#979C9E"
-                            android:textAppearance="@style/body_primary" />
+                            android:enabled="false"
+                            android:hint="@string/type_giger_name_here"
+                            android:inputType="textNoSuggestions"
+                            android:paddingBottom="15dp"
+                            android:textAppearance="@style/body_primary"
+                            android:textColorHint="#979C9E" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -156,12 +150,17 @@
                         android:layout_height="20dp"
                         android:layout_gravity="center_vertical|end"
                         android:layout_marginEnd="10dp"
-                        android:visibility="gone"
-                        android:layout_marginBottom="4dp" />
+                        android:layout_marginBottom="4dp"
+                        android:visibility="gone" />
 
                 </FrameLayout>
 
-
+                <include
+                    android:id="@+id/giger_name_error"
+                    layout="@layout/layout_validation_error"
+                    android:layout_width="match_parent"
+                    android:visibility="gone"
+                    android:layout_height="wrap_content" />
 
 
                 <TextView
@@ -185,8 +184,8 @@
                     android:layout_marginBottom="10dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    app:cardElevation="4dp"
-                    app:cardCornerRadius="6dp">
+                    app:cardCornerRadius="6dp"
+                    app:cardElevation="4dp">
 
                     <LinearLayout
                         android:id="@+id/select_business_layout"
@@ -201,9 +200,9 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
+                            android:layout_marginTop="2dp"
                             android:layout_weight="1"
                             android:gravity="top"
-                            android:layout_marginTop="2dp"
                             android:lineSpacingExtra="4sp"
                             android:text="@string/click_to_select_business"
                             android:textAppearance="@style/body_primary"
@@ -220,18 +219,13 @@
 
                 </com.google.android.material.card.MaterialCardView>
 
-                <TextView
-                    android:id="@+id/business_error_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="4dp"
-                    android:fontFamily="@font/lato"
-                    android:lineSpacingExtra="3sp"
-                    android:textColor="@android:color/holo_red_dark"
-                    android:textSize="12sp"
+
+                <include
+                    android:id="@+id/business_error"
+                    layout="@layout/layout_validation_error"
+                    android:layout_width="match_parent"
                     android:visibility="gone"
-                    android:textStyle="normal" />
+                    android:layout_height="wrap_content" />
 
 
                 <TextView
@@ -255,8 +249,8 @@
                     android:layout_marginBottom="10dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    app:cardElevation="4dp"
-                    app:cardCornerRadius="6dp">
+                    app:cardCornerRadius="6dp"
+                    app:cardElevation="4dp">
 
                     <LinearLayout
                         android:id="@+id/select_job_profile_layout"
@@ -271,9 +265,9 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
+                            android:layout_marginTop="2dp"
                             android:layout_weight="1"
                             android:gravity="top"
-                            android:layout_marginTop="2dp"
                             android:lineSpacingExtra="4sp"
                             android:text="@string/click_to_select_job_profile"
                             android:textAppearance="@style/body_primary"
@@ -290,18 +284,14 @@
 
                 </com.google.android.material.card.MaterialCardView>
 
-                <TextView
-                    android:id="@+id/job_profile_error_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="4dp"
-                    android:fontFamily="@font/lato"
-                    android:lineSpacingExtra="3sp"
-                    android:textColor="@android:color/holo_red_dark"
-                    android:textSize="12sp"
+
+                <include
+                    android:id="@+id/job_profile_error"
+                    layout="@layout/layout_validation_error"
+                    android:layout_width="match_parent"
                     android:visibility="gone"
-                    android:textStyle="normal" />
+                    android:layout_height="wrap_content" />
+
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -347,11 +337,11 @@
                         android:id="@+id/client_id_et"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:backgroundTint="#EBEBEB"
                         android:hint="@string/type_client_id_here"
                         android:paddingBottom="15dp"
-                        android:backgroundTint="#EBEBEB"
-                        android:textColorHint="#979C9E"
-                        android:textAppearance="@style/body_primary" />
+                        android:textAppearance="@style/body_primary"
+                        android:textColorHint="#979C9E" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -361,18 +351,18 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/next_button"
+            style="@style/LeadMgmtMaterialButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/size_16"
             android:layout_marginEnd="@dimen/size_16"
             android:layout_marginBottom="@dimen/size_16"
-            android:text="@string/next_camel_case_common_ui"
+            android:fontFamily="@font/lato"
             android:paddingTop="12dp"
             android:paddingBottom="12dp"
-            android:fontFamily="@font/lato"
-            style="@style/LeadMgmtMaterialButtonStyle"
-            app:shapeAppearanceOverlay="@style/RoundCornerButtonShapeOverlay"
-            android:textColor="@color/white" />
+            android:text="@string/next_camel_case_common_ui"
+            android:textColor="@color/white"
+            app:shapeAppearanceOverlay="@style/RoundCornerButtonShapeOverlay" />
 
     </LinearLayout>
 </layout>

@@ -89,7 +89,7 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
 
         this.joiningsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        PushDownAnim.setPushDownAnimTo(this.joinNowButton).setOnClickListener {
+        this.joinNowButton.setOnClickListener {
             logger.d(logTag, "navigating to ${LeadManagementNavDestinations.FRAGMENT_GIGER_ONBOARDING}")
 
             navigation.navigateTo(

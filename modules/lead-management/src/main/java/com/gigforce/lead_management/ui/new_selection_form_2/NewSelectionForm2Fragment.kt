@@ -74,8 +74,9 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                 viewBinding.mainForm.selectedDateLabel.text = dateFormatter.format(newCal.time)
                 viewModel.handleEvent(NewSelectionForm2Events.DateOfJoiningSelected(newCal.time.toLocalDate()))
 
-                viewBinding.mainForm.expectedDateErrorTv.gone()
-                viewBinding.mainForm.expectedDateErrorTv.text = null
+                viewBinding.mainForm.expectedDateOfJoiningError.errorTextview.text = null
+                viewBinding.mainForm.expectedDateOfJoiningError.root.gone()
+
             },
             cal.get(Calendar.YEAR),
             cal.get(Calendar.MONTH),
@@ -288,35 +289,38 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
     ) = viewBinding.mainForm.apply {
 
         if (errorState.assignGigsFromError != null) {
-            this.expectedDateErrorTv.visible()
-            this.expectedDateErrorTv.text = errorState.assignGigsFromError
+
+            viewBinding.mainForm.expectedDateOfJoiningError.root.visible()
+            viewBinding.mainForm.expectedDateOfJoiningError.errorTextview.text = errorState.assignGigsFromError
         } else {
-            this.expectedDateErrorTv.gone()
-            this.expectedDateErrorTv.text = null
+            viewBinding.mainForm.expectedDateOfJoiningError.errorTextview.text = null
+            viewBinding.mainForm.expectedDateOfJoiningError.root.gone()
         }
 
         if (errorState.cityError != null) {
-            this.cityErrorTv.visible()
-            this.cityErrorTv.text = errorState.cityError
+
+            viewBinding.mainForm.cityError.root.visible()
+            viewBinding.mainForm.cityError.errorTextview.text = errorState.cityError
         } else {
-            this.cityErrorTv.gone()
-            this.cityErrorTv.text = null
+            viewBinding.mainForm.cityError.errorTextview.text = null
+            viewBinding.mainForm.cityError.root.gone()
         }
 
         if (errorState.reportingLocationError != null) {
-            this.reportingLocationErrorTv.visible()
-            this.reportingLocationErrorTv.text = errorState.reportingLocationError
+            viewBinding.mainForm.reportingLocationError.root.visible()
+            viewBinding.mainForm.reportingLocationError.errorTextview.text = errorState.reportingLocationError
         } else {
-            this.reportingLocationErrorTv.gone()
-            this.reportingLocationErrorTv.text = null
+            viewBinding.mainForm.reportingLocationError.errorTextview.text = null
+            viewBinding.mainForm.reportingLocationError.root.gone()
         }
 
+
         if (errorState.shiftsError != null) {
-            this.shiftErrorTv.visible()
-            this.shiftErrorTv.text = errorState.shiftsError
+            viewBinding.mainForm.shiftError.root.visible()
+            viewBinding.mainForm.shiftError.errorTextview.text = errorState.shiftsError
         } else {
-            this.shiftErrorTv.gone()
-            this.shiftErrorTv.text = null
+            viewBinding.mainForm.shiftError.errorTextview.text = null
+            viewBinding.mainForm.shiftError.root.gone()
         }
     }
 
@@ -438,8 +442,8 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         reportingLocationSelectedLabel.text = getString(R.string.click_to_select_location)
         reportingLocationSelectedLabel.typeface = Typeface.DEFAULT
 
-        this.cityErrorTv.gone()
-        this.cityErrorTv.text = null
+        viewBinding.mainForm.cityError.errorTextview.text = null
+        viewBinding.mainForm.cityError.root.gone()
     }
 
     private fun showSelectedReportingLocation(
@@ -461,8 +465,8 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
             )
         )
 
-        this.reportingLocationErrorTv.gone()
-        this.reportingLocationErrorTv.text = null
+        viewBinding.mainForm.reportingLocationError.errorTextview.text = null
+        viewBinding.mainForm.reportingLocationError.root.gone()
     }
 
     private fun showSelectedTL(
