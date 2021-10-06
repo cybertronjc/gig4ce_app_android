@@ -1,6 +1,8 @@
 package com.gigforce.lead_management.ui.new_selection_form
 
 import android.content.Context
+import androidx.core.text.bold
+import androidx.core.text.buildSpannedString
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,9 +15,11 @@ import com.gigforce.core.ValidationHelper
 import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.common_ui.repository.LeadManagementRepository
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
+import com.gigforce.lead_management.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
 
 
@@ -60,7 +64,7 @@ class NewSelectionForm1ViewModel @Inject constructor(
             }
             is NewSelectionForm1Events.GigerNameChanged -> {
                 gigforceLogger.d(TAG, "Name changed : ${event.name}")
-                gigerName = event.name.capitalize()
+                gigerName = event.name.capitalize(Locale.getDefault())
             }
             is NewSelectionForm1Events.BusinessSelected -> {
                 selectedBusiness = event.business
@@ -78,7 +82,14 @@ class NewSelectionForm1ViewModel @Inject constructor(
     private fun openJobProfilesScreen() {
         if (selectedBusiness == null) {
             _viewState.value = NewSelectionForm1ViewState.ValidationError(
-                businessError = "Select Business first"
+                businessError = buildSpannedString {
+                    bold {
+                        append(appContext.getString(R.string.note_with_colon))
+                    }
+                    append(
+                        appContext.getString(R.string.please_select_business_first)
+                    )
+                }
             )
             _viewState.value = null
         } else {
@@ -120,7 +131,14 @@ class NewSelectionForm1ViewModel @Inject constructor(
             )
         ) {
             _viewState.value = NewSelectionForm1ViewState.ValidationError(
-                invalidMobileNoMessage = "Invalid mobile number"
+                invalidMobileNoMessage = buildSpannedString {
+                    bold {
+                        append(appContext.getString(R.string.note_with_colon))
+                    }
+                    append(
+                        appContext.getString(R.string.number_you_entered_is_invalid_number)
+                    )
+                }
             )
             return
         }
@@ -128,7 +146,14 @@ class NewSelectionForm1ViewModel @Inject constructor(
         if (gigerName.isNullOrBlank()) {
 
             _viewState.value = NewSelectionForm1ViewState.ValidationError(
-                gigerNameError = "Please provide name"
+                gigerNameError = buildSpannedString {
+                    bold {
+                        append(appContext.getString(R.string.note_with_colon))
+                    }
+                    append(
+                        appContext.getString(R.string.please_enter_name)
+                    )
+                }
             )
             return
         }
@@ -136,14 +161,28 @@ class NewSelectionForm1ViewModel @Inject constructor(
 
         if (selectedBusiness == null) {
             _viewState.value = NewSelectionForm1ViewState.ValidationError(
-                businessError = "Please select business"
+                businessError = buildSpannedString {
+                    bold {
+                        append(appContext.getString(R.string.note_with_colon))
+                    }
+                    append(
+                        appContext.getString(R.string.please_select_business)
+                    )
+                }
             )
             return
         }
 
         if (selectedJobProfile == null) {
             _viewState.value = NewSelectionForm1ViewState.ValidationError(
-                jobProfilesError = "Please select job profile"
+                jobProfilesError = buildSpannedString {
+                    bold {
+                        append(appContext.getString(R.string.note_with_colon))
+                    }
+                    append(
+                        appContext.getString(R.string.please_select_job_profile)
+                    )
+                }
             )
             return
         }
@@ -172,14 +211,28 @@ class NewSelectionForm1ViewModel @Inject constructor(
 
         if (!ValidationHelper.isValidIndianMobileNo(mobileNo.substring(3))) {
             _viewState.value = NewSelectionForm1ViewState.ValidationError(
-                invalidMobileNoMessage = "Invalid mobile number"
+                invalidMobileNoMessage = buildSpannedString {
+                    bold {
+                        append(appContext.getString(R.string.note_with_colon))
+                    }
+                    append(
+                        appContext.getString(R.string.number_you_entered_is_invalid_number)
+                    )
+                }
             )
             return@launch
         }
 
         if(mobileNo == firebaseAuthStateListener.getCurrentSignInInfo()?.phoneNumber){
             _viewState.value = NewSelectionForm1ViewState.ValidationError(
-                invalidMobileNoMessage = "You cannot use your own mobile number"
+                invalidMobileNoMessage = buildSpannedString {
+                    bold {
+                        append(appContext.getString(R.string.note_with_colon))
+                    }
+                    append(
+                        appContext.getString(R.string.you_cannot_user_your_own_number)
+                    )
+                }
             )
             return@launch
         }
@@ -194,7 +247,7 @@ class NewSelectionForm1ViewModel @Inject constructor(
                 gigforceLogger.d(TAG, "no profile matched in profile for '$mobileNo'")
 
                 _viewState.value = NewSelectionForm1ViewState.ErrorWhileCheckingForUserInProfile(
-                    error = "No match found for this no",
+                    error = appContext.getString(R.string.no_match_found_for_this_no),
                     shouldShowErrorButton = false
                 )
             } else {
@@ -209,7 +262,7 @@ class NewSelectionForm1ViewModel @Inject constructor(
             gigforceLogger.d(TAG, "Error in checking User profile for '$mobileNo'", e)
 
             _viewState.value = NewSelectionForm1ViewState.ErrorWhileCheckingForUserInProfile(
-                error = "Unable to check user",
+                error = appContext.getString(R.string.unable_to_check_user),
                 shouldShowErrorButton = false
             )
         }
@@ -229,7 +282,7 @@ class NewSelectionForm1ViewModel @Inject constructor(
 
             gigforceLogger.d(
                 TAG,
-                " ${joiningBusinessAndJobProfiles?.size} business received from server"
+                " ${joiningBusinessAndJobProfiles.size} business received from server"
             )
 
             _viewState.value = NewSelectionForm1ViewState.JobProfilesAndBusinessLoadSuccess
@@ -241,7 +294,7 @@ class NewSelectionForm1ViewModel @Inject constructor(
             )
 
             _viewState.value = NewSelectionForm1ViewState.ErrorWhileLoadingBusinessAndJobProfiles(
-                error = e.message ?: "Unable to load business and job profiles",
+                error = e.message ?: appContext.getString(R.string.unable_to_load_business_and_job_profiles),
                 shouldShowErrorButton = false
             )
         }

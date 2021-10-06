@@ -99,7 +99,7 @@ class SelectReportingLocationFragment : BaseFragment2<FragmentSelectReportingLoc
 
     private fun initListeners() = viewBinding.apply {
         toolbar.apply {
-            titleText.text = "Select reporting location"
+            titleText.text = getString(R.string.select_reporting_location)
             setBackButtonListener {
                 navigation.navigateUp()
             }
@@ -133,7 +133,7 @@ class SelectReportingLocationFragment : BaseFragment2<FragmentSelectReportingLoc
 
         if (reportingLocations.isEmpty()) {
             this.infoLayout.root.visible()
-            this.infoLayout.infoMessageTv.text = "No reporting location to show"
+            this.infoLayout.infoMessageTv.text = getString(R.string.no_reporting_location_to_show)
             this.infoLayout.infoIv.loadImage(R.drawable.ic_no_selection)
         } else {
             this.infoLayout.root.gone()

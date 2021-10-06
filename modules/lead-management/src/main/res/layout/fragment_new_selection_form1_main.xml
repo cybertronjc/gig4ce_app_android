@@ -17,7 +17,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <!-- Giger Mobile Number -->
@@ -142,7 +142,7 @@
                             android:layout_height="wrap_content"
                             android:enabled="false"
                             android:inputType="textNoSuggestions"
-                            android:hint="Type Giger Name here"
+                            android:hint="@string/type_giger_name_here"
                             android:paddingBottom="15dp"
                             android:backgroundTint="#EBEBEB"
                             android:textColorHint="#979C9E"
@@ -172,7 +172,7 @@
                     android:layout_marginTop="20dp"
                     android:gravity="top"
                     android:lineSpacingExtra="1sp"
-                    android:text="Select Business"
+                    android:text="@string/select_business"
                     android:textAppearance="@style/style_h5"
                     android:translationY="-0.6sp" />
 
@@ -200,13 +200,12 @@
                             android:id="@+id/business_selected_label"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentTop="true"
                             android:layout_marginLeft="10dp"
                             android:layout_weight="1"
                             android:gravity="top"
                             android:layout_marginTop="2dp"
                             android:lineSpacingExtra="4sp"
-                            android:text="Click to select business"
+                            android:text="@string/click_to_select_business"
                             android:textAppearance="@style/body_primary"
                             android:textColor="@color/lipstick_2"
                             android:translationY="-1.8sp" />
@@ -243,7 +242,7 @@
                     android:layout_marginTop="30dp"
                     android:gravity="top"
                     android:lineSpacingExtra="1sp"
-                    android:text="Select Job Profile"
+                    android:text="@string/select_job_profile"
                     android:textAppearance="@style/style_h5"
                     android:translationY="-0.6sp" />
 
@@ -276,7 +275,7 @@
                             android:gravity="top"
                             android:layout_marginTop="2dp"
                             android:lineSpacingExtra="4sp"
-                            android:text="Click to select Job Profile"
+                            android:text="@string/click_to_select_job_profile"
                             android:textAppearance="@style/body_primary"
                             android:textColor="@color/lipstick_2"
                             android:translationY="-1.8sp" />
@@ -317,7 +316,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="top"
                         android:lineSpacingExtra="1sp"
-                        android:text="Giger Client ID"
+                        android:text="@string/giger_client_id"
                         android:textAppearance="@style/style_h5"
                         android:translationY="-0.6sp" />
 
@@ -328,7 +327,7 @@
                         android:layout_marginStart="4dp"
                         android:gravity="top"
                         android:lineSpacingExtra="1sp"
-                        android:text="(Optional)"
+                        android:text="@string/optional"
                         android:textAppearance="@style/body_primary"
                         android:translationY="-0.6sp" />
 
@@ -348,7 +347,7 @@
                         android:id="@+id/client_id_et"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Type Client Id here"
+                        android:hint="@string/type_client_id_here"
                         android:paddingBottom="15dp"
                         android:backgroundTint="#EBEBEB"
                         android:textColorHint="#979C9E"
@@ -367,7 +366,7 @@
             android:layout_marginStart="@dimen/size_16"
             android:layout_marginEnd="@dimen/size_16"
             android:layout_marginBottom="@dimen/size_16"
-            android:text="Next"
+            android:text="@string/next_camel_case_common_ui"
             android:paddingTop="12dp"
             android:paddingBottom="12dp"
             android:fontFamily="@font/lato"

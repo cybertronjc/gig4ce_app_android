@@ -10,7 +10,6 @@ import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
@@ -20,7 +19,6 @@ import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toLocalDate
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
-import com.gigforce.core.utils.DateHelper
 import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.FragmentNewSelectionForm2Binding
@@ -37,7 +35,6 @@ import com.github.razir.progressbutton.showProgress
 import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -68,7 +65,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         val cal = Calendar.getInstance()
         val datePickerDialog = DatePickerDialog(
             requireContext(),
-            { datePicker: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
+            { _: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
                 val newCal = Calendar.getInstance()
                 newCal.set(Calendar.YEAR, year)
                 newCal.set(Calendar.MONTH, month)
@@ -188,7 +185,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
             navigation.navigateUp()
         }
         setBackButtonDrawable(R.drawable.ic_chevron)
-        stepsTextView.setText("Step 2/2")
+        stepsTextView.text = getString(R.string.step_2_2)
     }
 
     private fun initViewModel() = viewModel
@@ -224,13 +221,13 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                 )
 
                 is NewSelectionForm2ViewState.ErrorWhileSubmittingJoiningData -> {
-                    viewBinding.mainForm.nextButton.hideProgress("Submit")
+                    viewBinding.mainForm.nextButton.hideProgress(getString(R.string.submit_lead))
                     viewBinding.mainForm.nextButton.isEnabled = true
 
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Unable to submit joining request")
+                        .setTitle(getString(R.string.unable_to_submit_joining_request))
                         .setMessage(state.error)
-                        .setPositiveButton("Okay") { _, _ -> }
+                        .setPositiveButton(getString(R.string.okay_common_ui)) { _, _ -> }
                         .show()
                 }
                 is NewSelectionForm2ViewState.JoiningDataSubmitted -> {
@@ -244,7 +241,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                 NewSelectionForm2ViewState.SubmittingJoiningData -> {
 
                     viewBinding.mainForm.nextButton.showProgress {
-                        buttonText = "Submitting..."
+                        buttonText = getString(R.string.submitting_data)
                         progressColor = Color.WHITE
                     }
                     viewBinding.mainForm.nextButton.isEnabled = false
@@ -387,14 +384,14 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
             mainForm.citySelectedLabel.text = selectedCity
             mainForm.citySelectedLabel.setTypeface(mainForm.citySelectedLabel.typeface,Typeface.BOLD)
         } else{
-            mainForm.citySelectedLabel.text = "Click to select city"
+            mainForm.citySelectedLabel.text = getString(R.string.click_to_select_city)
         }
 
         if(selectedReportingLocation != null) {
             mainForm.reportingLocationSelectedLabel.text = selectedReportingLocation
             mainForm.reportingLocationSelectedLabel.setTypeface(mainForm.reportingLocationSelectedLabel.typeface,Typeface.BOLD)
         } else{
-            mainForm.reportingLocationSelectedLabel.text = "Click to select location"
+            mainForm.reportingLocationSelectedLabel.text = getString(R.string.click_to_select_location)
         }
     }
 
@@ -410,7 +407,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         dataLoadingShimmerContainer.gone()
         formMainInfoLayout.root.visible()
 
-        formMainInfoLayout.infoIv.loadImage(R.drawable.ic_no_joining_found) //todo change this image
+        formMainInfoLayout.infoIv.loadImage(R.drawable.ic_no_selection)
         formMainInfoLayout.infoMessageTv.text = error
     }
 
@@ -438,7 +435,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
 
         viewModel.handleEvent(NewSelectionForm2Events.CitySelected(citySelected))
 
-        reportingLocationSelectedLabel.text = "Click to select location"
+        reportingLocationSelectedLabel.text = getString(R.string.click_to_select_location)
         reportingLocationSelectedLabel.typeface = Typeface.DEFAULT
 
         this.cityErrorTv.gone()

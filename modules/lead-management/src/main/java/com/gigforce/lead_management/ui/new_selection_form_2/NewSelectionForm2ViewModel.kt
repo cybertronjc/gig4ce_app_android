@@ -1,6 +1,8 @@
 package com.gigforce.lead_management.ui.new_selection_form_2
 
 import android.content.Context
+import androidx.core.text.bold
+import androidx.core.text.buildSpannedString
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.common_ui.repository.LeadManagementRepository
+import com.gigforce.lead_management.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
@@ -116,7 +119,14 @@ class NewSelectionForm2ViewModel @Inject constructor(
     private fun openSelectReportingLocationsScreen() {
         if (selectedCity == null) {
             _viewState.value = NewSelectionForm2ViewState.ValidationError(
-                cityError = "Select City first"
+                cityError = buildSpannedString {
+                    bold {
+                        append(appContext.getString(R.string.note_with_colon))
+                    }
+                    append(
+                        appContext.getString(R.string.select_city_to_select_reporting_location)
+                    )
+                }
             )
             _viewState.value = null
         } else {
@@ -241,7 +251,14 @@ class NewSelectionForm2ViewModel @Inject constructor(
         if (selectedCity == null) {
 
             _viewState.value = NewSelectionForm2ViewState.ValidationError(
-                cityError = "Please select city"
+                cityError = buildSpannedString {
+                    bold {
+                        append(appContext.getString(R.string.note_with_colon))
+                    }
+                    append(
+                        appContext.getString(R.string.please_select_city)
+                    )
+                }
             )
             return
         }
@@ -250,7 +267,14 @@ class NewSelectionForm2ViewModel @Inject constructor(
         if (selectedCity!!.reportingLocations.isNotEmpty() && selectedReportingLocation == null) {
 
             _viewState.value = NewSelectionForm2ViewState.ValidationError(
-                reportingLocationError = "Please select reporting location"
+                reportingLocationError = buildSpannedString {
+                    bold {
+                        append(appContext.getString(R.string.note_with_colon))
+                    }
+                    append(
+                        appContext.getString(R.string.please_select_reporting_location)
+                    )
+                }
             )
             return
         }
@@ -260,7 +284,14 @@ class NewSelectionForm2ViewModel @Inject constructor(
         if (selectedShifts.isEmpty()) {
 
             _viewState.value = NewSelectionForm2ViewState.ValidationError(
-                shiftsError = "Please select at least one shift"
+                shiftsError = buildSpannedString {
+                    bold {
+                        append(appContext.getString(R.string.note_with_colon))
+                    }
+                    append(
+                        appContext.getString(R.string.please_select_at_least_one_shift)
+                    )
+                }
             )
             return
         }

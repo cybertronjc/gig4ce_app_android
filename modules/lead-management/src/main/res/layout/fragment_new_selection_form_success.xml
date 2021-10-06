@@ -12,7 +12,7 @@
             android:layout_height="wrap_content"
             android:minHeight="?android:actionBarSize"
             app:backgroundType="PinkBar"
-            app:titleText="New Selection" />
+            app:titleText="@string/new_selection" />
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -56,12 +56,10 @@
                     android:id="@+id/selection_f"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentTop="true"
                     android:layout_marginTop="40dp"
                     android:gravity="center_vertical"
                     android:lineSpacingExtra="3sp"
-                    android:text="Selection form submitted"
+                    android:text="@string/selection_form_submitted"
                     android:textAppearance="@style/style_h3" />
 
 
@@ -72,7 +70,7 @@
                     android:layout_marginTop="10dp"
                     android:gravity="center_vertical"
                     android:lineSpacingExtra="3sp"
-                    android:text="Invitation Link:  Shared on Whatsapp and SMS with Giger to Complete Application"
+                    android:text="@string/invitation_link_shared_on_whatsapp_and_sms_with_giger_to_complete_application"
                     android:textAppearance="@style/style_h5"
                     android:textColor="#303437" />
 
@@ -98,7 +96,7 @@
                         android:layout_marginTop="2dp"
                         android:gravity="center_horizontal|top"
                         android:lineSpacingExtra="4sp"
-                        android:text="SHARE LINK MANUALLY"
+                        android:text="@string/share_link_manually"
                         android:textAppearance="@style/style_h6"
                         android:textColor="@color/lipstick_2"
                         android:translationY="-1.8sp" />
@@ -118,7 +116,7 @@
             android:layout_marginBottom="@dimen/size_16"
             android:paddingTop="12dp"
             android:paddingBottom="12dp"
-            android:text="Okay"
+            android:text="@string/okay_common_ui"
             android:textColor="@color/white"
             app:shapeAppearanceOverlay="@style/RoundCornerButtonShapeOverlay" />
 

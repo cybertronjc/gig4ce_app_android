@@ -1,5 +1,6 @@
 package com.gigforce.lead_management.ui.new_selection_form_2
 
+import android.text.SpannedString
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.lead_management.models.JoiningStatusAndCountItemData
@@ -34,11 +35,11 @@ sealed class NewSelectionForm2ViewState {
     ) : NewSelectionForm2ViewState()
 
     data class ValidationError(
-        val cityError: String? = null,
-        val reportingLocationError: String? = null,
-        val clientTLError: String? = null,
-        val assignGigsFromError: String? = null,
-        val shiftsError: String? = null,
+        val cityError: SpannedString? = null,
+        val reportingLocationError: SpannedString? = null,
+        val clientTLError: SpannedString? = null,
+        val assignGigsFromError: SpannedString? = null,
+        val shiftsError: SpannedString? = null,
     ) : NewSelectionForm2ViewState()
 
 

@@ -3,7 +3,6 @@ package com.gigforce.lead_management.ui.select_business_screen
 import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
@@ -93,7 +92,7 @@ class SelectBusinessFragment : BaseFragment2<FragmentSelectBusinessBinding>(
     private fun initListeners() = viewBinding.apply {
         toolbar.apply {
 
-            titleText.text = "Select Business"
+            titleText.text = getString(R.string.select_business)
             setBackButtonListener{
                 navigation.navigateUp()
             }
@@ -124,7 +123,7 @@ class SelectBusinessFragment : BaseFragment2<FragmentSelectBusinessBinding>(
     private fun setDataOnView() = viewBinding.apply {
         if (businessList.isEmpty()) {
             this.businessInfoLayout.root.visible()
-            this.businessInfoLayout.infoMessageTv.text = "No Business to show"
+            this.businessInfoLayout.infoMessageTv.text = getString(R.string.no_business_to_show)
             this.businessInfoLayout.infoIv.loadImage(R.drawable.ic_no_selection)
         } else {
             this.businessInfoLayout.root.gone()

@@ -1,5 +1,7 @@
 package com.gigforce.lead_management.ui.new_selection_form
 
+import android.text.SpannableString
+import android.text.SpannedString
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfilesItem
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JoiningBusinessAndJobProfilesItem
 import com.gigforce.common_ui.viewdatamodels.leadManagement.SubmitJoiningRequest
@@ -28,11 +30,11 @@ sealed class NewSelectionForm1ViewState {
     object CheckingForUserDetailsFromProfiles : NewSelectionForm1ViewState()
 
     data class ValidationError(
-        val invalidMobileNoMessage: String? = null,
-        val gigerNameError: String? = null,
-        val gigerClientIdError: String? = null,
-        val businessError: String? = null,
-        val jobProfilesError: String? = null,
+        val invalidMobileNoMessage: SpannedString? = null,
+        val gigerNameError: SpannedString? = null,
+        val gigerClientIdError: SpannedString? = null,
+        val businessError: SpannedString? = null,
+        val jobProfilesError: SpannedString? = null,
     ) : NewSelectionForm1ViewState()
 
     data class UserDetailsFromProfiles(

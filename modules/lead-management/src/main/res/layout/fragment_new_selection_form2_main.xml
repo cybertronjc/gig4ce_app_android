@@ -17,7 +17,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
 
@@ -29,7 +29,7 @@
                     android:layout_marginTop="40dp"
                     android:gravity="top"
                     android:lineSpacingExtra="1sp"
-                    android:text="Select City"
+                    android:text="@string/select_city"
                     android:textAppearance="@style/style_h5"
                     android:translationY="-0.6sp" />
 
@@ -57,13 +57,12 @@
                             android:id="@+id/city_selected_label"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentTop="true"
                             android:layout_marginLeft="10dp"
                             android:layout_weight="1"
                             android:gravity="top"
                             android:layout_marginTop="2dp"
                             android:lineSpacingExtra="4sp"
-                            android:text="Click to select city"
+                            android:text="@string/click_to_select_city"
                             android:textAppearance="@style/body_primary"
                             android:textColor="@color/lipstick_2"
                             android:translationY="-1.8sp" />
@@ -105,7 +104,7 @@
                         android:layout_height="18dp"
                         android:gravity="top"
                         android:lineSpacingExtra="1sp"
-                        android:text="Reporting Location"
+                        android:text="@string/reporting_location"
                         android:textAppearance="@style/style_h5"
                         android:translationY="-0.6sp" />
 
@@ -137,12 +136,11 @@
                             android:id="@+id/reporting_location_selected_label"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentTop="true"
                             android:layout_marginLeft="10dp"
                             android:layout_weight="1"
                             android:gravity="top"
                             android:lineSpacingExtra="4sp"
-                            android:text="Click to select location"
+                            android:text="@string/click_to_select_location"
                             android:textAppearance="@style/body_primary"
                             android:textColor="@color/lipstick_2"
                             android:translationY="-1.8sp" />
@@ -184,7 +182,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="top"
                         android:lineSpacingExtra="1sp"
-                        android:text="Client TL"
+                        android:text="@string/client_tl"
                         android:textAppearance="@style/style_h5"
                         android:translationY="-0.6sp" />
 
@@ -195,7 +193,7 @@
                         android:layout_marginStart="4dp"
                         android:gravity="top"
                         android:lineSpacingExtra="1sp"
-                        android:text="(Optional)"
+                        android:text="@string/optional"
                         android:textAppearance="@style/body_primary"
                         android:translationY="-0.6sp" />
 
@@ -224,12 +222,11 @@
                             android:id="@+id/selected_client_tl_label"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentTop="true"
                             android:layout_marginLeft="10dp"
                             android:layout_weight="1"
                             android:gravity="top"
                             android:lineSpacingExtra="4sp"
-                            android:text="Click to select team leader"
+                            android:text="@string/click_to_select_team_leader"
                             android:textAppearance="@style/body_primary"
                             android:textColor="@color/lipstick_2"
                             android:translationY="-1.8sp" />
@@ -253,7 +250,7 @@
                     android:layout_marginTop="28dp"
                     android:gravity="top"
                     android:lineSpacingExtra="1sp"
-                    android:text="Date of Joining"
+                    android:text="@string/date_of_joining"
                     android:textAppearance="@style/style_h5"
                     android:translationY="-0.6sp" />
 
@@ -280,7 +277,7 @@
                         style="@style/style_h5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Change Date"
+                        android:text="@string/change_date"
                         android:paddingBottom="4dp"
                         android:paddingTop="4dp"
                         android:textColor="@color/lipstick_2" />
@@ -305,7 +302,6 @@
                     android:id="@+id/line_79"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_alignParentLeft="true"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="16dp"
@@ -319,7 +315,7 @@
                     android:layout_marginTop="28dp"
                     android:gravity="top"
                     android:lineSpacingExtra="1sp"
-                    android:text="Select Shift Timing"
+                    android:text="@string/select_shift_timing"
                     android:textAppearance="@style/style_h5"
                     android:translationY="-0.6sp" />
 
@@ -373,7 +369,7 @@
             android:fontFamily="@font/lato"
             style="@style/LeadMgmtMaterialButtonStyle"
             app:shapeAppearanceOverlay="@style/RoundCornerButtonShapeOverlay"
-            android:text="Submit"
+            android:text="@string/submit_lead"
             android:textColor="@color/white" />
 
     </LinearLayout>

@@ -3,10 +3,13 @@ package com.gigforce.lead_management.ui.new_selection_form
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Typeface
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.provider.Settings
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import androidx.activity.result.contract.ActivityResultContracts
@@ -75,7 +78,7 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
                 showContactNoOnMobileNo(contacts)
             }, onFailure = { exception ->
                 logger.e(TAG, "while picking contact", exception)
-                showToast("Unable to pick contact")
+                showToast(getString(R.string.unable_to_pick_contact))
             })
     }
 
@@ -121,8 +124,21 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
             val hasUserOptedForDoNotAskAgain = requireActivity().shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS).not()
             if(hasUserOptedForDoNotAskAgain){
 
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(getString(R.string.read_contact_permission_required))
+                    .setMessage(getString(R.string.please_grant_read_permissions_to))
+                    .setPositiveButton(getString(R.string.okay_common_ui)){_,_ -> openSettingsPage() }
+                    .setNegativeButton(getString(R.string.cancel_common_ui)) { _, _ ->}
+                    .show()
             }
         }
+    }
+
+    private fun openSettingsPage() {
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+        val uri = Uri.fromParts("package", requireContext().packageName, null)
+        intent.data = uri
+        startActivity(intent)
     }
 
     override fun shouldPreventViewRecreationOnNavigation(): Boolean {
@@ -214,7 +230,7 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
             activity?.onBackPressed()
         }
         setBackButtonDrawable(R.drawable.ic_chevron)
-        this.stepsTextView.setText("Step 1/2")
+        this.stepsTextView.setText(context.getString(R.string.step_1_2))
     }
 
     private fun initViewModel() = viewModel
@@ -415,7 +431,7 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
         viewModel.handleEvent(NewSelectionForm1Events.BusinessSelected(businessSelected))
 
         //reseting job profile selected
-        selectedJobProfileLabel.text = "Click to select Job Profile"
+        selectedJobProfileLabel.text = getString(R.string.click_to_select_job_profile)
         selectedJobProfileLabel.typeface = Typeface.DEFAULT
 
         businessErrorTv.text = null

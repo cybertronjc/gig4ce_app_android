@@ -2,8 +2,6 @@ package com.gigforce.lead_management.ui.select_job_profile_screen
 
 import android.os.Bundle
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
@@ -15,7 +13,6 @@ import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
-import com.gigforce.lead_management.databinding.FragmentSelectBusinessBinding
 import com.gigforce.lead_management.databinding.FragmentSelectJobProfileBinding
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -87,7 +84,7 @@ class SelectJobProfileFragment : BaseFragment2<FragmentSelectJobProfileBinding>(
 
     private fun initListeners() = viewBinding.apply {
         toolbar.apply {
-            titleText.text = "Select job profile"
+            titleText.text = getString(R.string.select_job_profile)
             setBackButtonListener {
                 navigation.popBackStack()
             }
@@ -117,7 +114,7 @@ class SelectJobProfileFragment : BaseFragment2<FragmentSelectJobProfileBinding>(
     private fun setDataOnView() = viewBinding.apply {
         if (jobProfiles.isEmpty()) {
             this.infoLayout.root.visible()
-            this.infoLayout.infoMessageTv.text = "No Job Profile to show"
+            this.infoLayout.infoMessageTv.text = getString(R.string.no_job_profile_to_show)
             this.infoLayout.infoIv.loadImage(R.drawable.ic_no_selection)
         } else {
             this.infoLayout.root.gone()
