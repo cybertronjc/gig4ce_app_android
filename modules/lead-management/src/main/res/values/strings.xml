@@ -175,5 +175,15 @@
     <string name="no_business_to_show">No Business to show</string>
     <string name="pending">Pending</string>
     <string name="application">Application %s</string>
+    <string name="filter_date_text_lead">Filter by Selection Date</string>
+    <string name="filter_date_sub_text_lead">Please select the filter from the following options.</string>
+    <string name="apply_filter_lead">APPLY FILTER</string>
+    <string name="remove_filter_lead">REMOVE FILTER</string>
+    <string name="today_lead">Today</string>
+    <string name="yesterday_lead">Yesterday</string>
+    <string name="three_days_lead">Last 3 days</string>
+    <string name="seven_days_lead">Last 7 days</string>
+    <string name="one_month_lead">Last 1 month</string>
+    <string name="no_selection_yet_lead">No Selections Yet !</string>
 
 </resources>
