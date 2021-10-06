@@ -69,7 +69,7 @@ open class CommonConfigCardsFBRepo : ICommonConfigCardsFBRepo {
             "sec_other_features" ->{
                 return snapshot.toObject(OtherFeatureComponentDVM::class.java)
             }
-            "sec_banner" ->{
+            "sec_banner_feature" ->{
                 return snapshot.toObject(BannerCardDVM::class.java)
             }
             else -> return null
