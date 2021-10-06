@@ -77,6 +77,28 @@ class NewSelectionForm1ViewModel @Inject constructor(
             NewSelectionForm1Events.OpenSelectJobProfileScreenSelected -> openJobProfilesScreen()
             NewSelectionForm1Events.SubmitButtonPressed -> validateDataAndNavigateToForm2()
         }
+
+       // checkForDataAndEnabledOrDisableSubmitButton()
+    }
+
+    private fun checkForDataAndEnabledOrDisableSubmitButton() {
+        if(gigerName.isNullOrBlank()){
+            _viewState.value = NewSelectionForm1ViewState.DisableSubmitButton
+            return
+        }
+
+        if (mobilePhoneNumber.isNullOrBlank() || !ValidationHelper.isValidIndianMobileNo(
+                mobilePhoneNumber!!.substring(3)
+            )
+        ) {
+            _viewState.value = NewSelectionForm1ViewState.DisableSubmitButton
+            return
+        }
+
+        if(mobilePhoneNumber.isNullOrBlank()){
+            _viewState.value = NewSelectionForm1ViewState.DisableSubmitButton
+            return
+        }
     }
 
     private fun openJobProfilesScreen() {

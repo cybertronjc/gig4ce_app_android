@@ -50,6 +50,10 @@ sealed class NewSelectionForm1ViewState {
     data class NavigateToForm2(
         val submitJoiningRequest: SubmitJoiningRequest
     ) : NewSelectionForm1ViewState()
+
+    object EnableSubmitButton : NewSelectionForm1ViewState()
+
+    object DisableSubmitButton : NewSelectionForm1ViewState()
 }
 
 sealed class NewSelectionForm1Events {
