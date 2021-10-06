@@ -61,7 +61,6 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
 
     var gigerPhone = ""
     private lateinit var joiningId: String
-    private val dateFormatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
     override fun viewCreated(viewBinding: GigerInfoFragmentBinding, savedInstanceState: Bundle?) {
         getDataFrom(arguments,savedInstanceState)
@@ -146,7 +145,7 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
         mainScrollView.visible()
 
 
-        gigerInfo?.let {
+        gigerInfo.let {
             toolbar.showTitle(it.gigerName)
             toolbar.setTitleTypeface(Typeface.BOLD)
             overlayCardLayout.companyName.text = ": "+it.businessName ?: ""
@@ -164,13 +163,13 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
                     .into(overlayCardLayout.profileImageOverlay.companyImg)
             }
 
-            applicationStatusLayout.statusText.text = "Application "+it.status
+            applicationStatusLayout.statusText.text = getString(R.string.application,it.status)
             if (it.status == "Pending"){
-                applicationStatusLayout.statusIconImg.setImageDrawable(resources.getDrawable(R.drawable.ic_pending_icon))
-                applicationStatusLayout.root.setBackgroundColor(resources.getColor(R.color.status_background_pink))
+                applicationStatusLayout.statusIconImg.setImageDrawable(ResourcesCompat.getDrawable(resources,R.drawable.ic_pending_icon,null))
+                applicationStatusLayout.root.setBackgroundColor(ResourcesCompat.getColor(resources,R.color.status_background_pink,null))
             } else {
-                applicationStatusLayout.statusIconImg.setImageDrawable(resources.getDrawable(R.drawable.ic_blue_tick))
-                applicationStatusLayout.root.setBackgroundColor(resources.getColor(R.color.status_background_blue))
+                applicationStatusLayout.statusIconImg.setImageDrawable(ResourcesCompat.getDrawable(resources,R.drawable.ic_blue_tick,null))
+                applicationStatusLayout.root.setBackgroundColor(ResourcesCompat.getColor(resources,R.color.status_background_blue,null))
             }
 
             overlayCardLayout.selectionDate.text = ": "+getFormattedDate(it.selectionDate)

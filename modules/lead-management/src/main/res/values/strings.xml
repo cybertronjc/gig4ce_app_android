@@ -173,5 +173,7 @@
     <string name="no_job_profile_to_show">No Job Profile to show</string>
     <string name="no_city_to_show">No City to show</string>
     <string name="no_business_to_show">No Business to show</string>
+    <string name="pending">Pending</string>
+    <string name="application">Application %s</string>
 
 </resources>

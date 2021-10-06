@@ -172,5 +172,7 @@
     <string name="no_job_profile_to_show">दिखाने के लिए कोई जॉब प्रोफाइल नहीं</string>
     <string name="no_city_to_show">दिखाने के लिए कोई शहर नहीं</string>
     <string name="no_business_to_show">दिखाने के लिए कोई व्यवसाय नहीं</string>
+    <string name="pending">लंबित</string>
+    <string name="application">आवेदन %s</string>
 
 </resources>

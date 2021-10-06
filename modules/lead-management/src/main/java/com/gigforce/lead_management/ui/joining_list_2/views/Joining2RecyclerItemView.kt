@@ -108,7 +108,7 @@ class Joining2RecyclerItemView(
 
         val joiningStatus = JoiningStatus.fromValue(status)
 //        viewBinding.userAttendanceStatusTextview.isVisible = joiningStatus != JoiningStatus.JOINED
-        viewBinding.userAttendanceStatusTextview.text = "Application " + context.getString(joiningStatus.getStatusFormattedStringRes())
+        viewBinding.userAttendanceStatusTextview.text = resources.getString(R.string.application, resources.getString(joiningStatus.getStatusFormattedStringRes()))
         viewBinding.statusDot.setImageDrawable(
             if (status == "Pending") resources.getDrawable(R.drawable.ic_status_dot) else resources.getDrawable(R.drawable.ic_blue_dot)
         )
