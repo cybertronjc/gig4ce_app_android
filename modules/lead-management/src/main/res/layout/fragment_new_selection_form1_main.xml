@@ -298,6 +298,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="30dp"
+                    android:visibility="gone"
                     android:orientation="horizontal">
 
                     <TextView
@@ -329,6 +330,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint=" "
+                    android:visibility="gone"
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
                     app:errorEnabled="true">
