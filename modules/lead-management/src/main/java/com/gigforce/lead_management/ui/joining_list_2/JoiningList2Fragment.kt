@@ -50,6 +50,12 @@ import kotlinx.coroutines.launch
 import java.lang.NullPointerException
 import javax.inject.Inject
 
+enum class JoiningDataState {
+    DEFAULT,
+    HAS_DATA,
+    NO_DATA
+}
+
 @AndroidEntryPoint
 class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
     fragmentName = "JoiningListFragment",
@@ -63,6 +69,7 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
     private val sharedViewModel : LeadManagementSharedViewModel by activityViewModels()
     var selectedTab = 0
     var filterDaysFM = -1
+    var joiningDataState = JoiningDataState.DEFAULT
 
     override fun viewCreated(
         viewBinding: FragmentJoiningList2Binding,
@@ -264,10 +271,14 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
             joiningShimmerContainer,
             R.id.shimmer_controller
         )
-        statusTabLayout.visible()
+        if (joiningDataState == JoiningDataState.DEFAULT){
+            joiningDataState = JoiningDataState.HAS_DATA
+            statusTabLayout.visible()
+            appBarComp.searchImageButton.visible()
+            appBarComp.filterFrameLayout.visible()
+        }
         joiningShimmerContainer.gone()
         joiningListInfoLayout.root.gone()
-
         joiningsRecyclerView.collection = joiningList
     }
 
@@ -288,17 +299,24 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
 //    }
 
     private fun showNoJoiningsFound() = viewBinding.apply {
-
         joiningsRecyclerView.collection = emptyList()
         stopShimmer(
             joiningShimmerContainer,
             R.id.shimmer_controller
         )
+        if (joiningDataState == JoiningDataState.DEFAULT){
+            joiningDataState = JoiningDataState.NO_DATA
+            statusTabLayout.gone()
+            appBarComp.searchImageButton.gone()
+            appBarComp.filterFrameLayout.gone()
+        }
         joiningShimmerContainer.gone()
         joiningListInfoLayout.root.visible()
-        statusTabLayout.gone()
         joiningListInfoLayout.infoIv.loadImage(R.drawable.ic_no_selection)
-        joiningListInfoLayout.infoMessageTv.text = "No Selections Yet !"
+        joiningListInfoLayout.infoIv.layoutParams.height = 800
+        joiningListInfoLayout.infoIv.layoutParams.width = 800
+        joiningListInfoLayout.infoIv.requestLayout()
+        joiningListInfoLayout.infoMessageTv.text = getString(R.string.no_selection_yet_lead)
     }
 
     private fun showErrorInLoadingJoinings(
@@ -312,10 +330,13 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
         )
         joiningShimmerContainer.gone()
         joiningListInfoLayout.root.visible()
-
         joiningListInfoLayout.infoIv.loadImage(R.drawable.ic_no_selection)
+        joiningListInfoLayout.infoIv.layoutParams.height = 800
+        joiningListInfoLayout.infoIv.layoutParams.width = 800
+        joiningListInfoLayout.infoIv.requestLayout()
         joiningListInfoLayout.infoMessageTv.text = error
     }
 
 
 }
+

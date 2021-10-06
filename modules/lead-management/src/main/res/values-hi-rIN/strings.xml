@@ -130,5 +130,6 @@
     <string name="three_days_lead">पिछले 3 दिन</string>
     <string name="seven_days_lead">आखिरी 7 दिन</string>
     <string name="one_month_lead">पिछले 1 महीने</string>
+    <string name="no_selection_yet_lead">अभी तक कोई चयन नहीं!</string>
 
 </resources>

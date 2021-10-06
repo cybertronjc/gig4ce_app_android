@@ -130,5 +130,6 @@
     <string name="three_days_lead">Last 3 days</string>
     <string name="seven_days_lead">Last 7 days</string>
     <string name="one_month_lead">Last 1 month</string>
+    <string name="no_selection_yet_lead">No Selections Yet !</string>
 
 </resources>
