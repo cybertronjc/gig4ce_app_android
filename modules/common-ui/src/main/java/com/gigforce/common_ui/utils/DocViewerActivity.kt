@@ -63,30 +63,30 @@ class DocViewerActivity : BaseActivity() {
                 ".pdf"
             ), purposeExtra
         )
-        if(purposeExtra == "banner"){
-            bannerEntered()
-        }
+//        if(purposeExtra == "banner"){
+//            bannerEntered()
+//        }
         setListeners(stringExtra)
     }
-    var accessLogResponse : AccessLogResponse?=null
-    private fun bannerEntered() {
-        val scope = CoroutineScope(Job() + Dispatchers.Main)
-        scope.launch {
-            var url = bundle?.getString("apiUrl")
-            var source = bundle?.getString("source")?:""
-            val bannerName = bundle?.getString("bannerName")?:""
-            val id = bundle?.getString("bannerId")?:""
-            url?.let {
-                accessLogResponse = bannerCardRepo.createLogs(
-                    it,
-                    FirebaseAuth.getInstance().currentUser?.uid!!,
-                    source,
-                    bannerName,
-                    id
-                )
-            }
-        }
-    }
+//    var accessLogResponse : AccessLogResponse?=null
+//    private fun bannerEntered() {
+//        val scope = CoroutineScope(Job() + Dispatchers.Main)
+//        scope.launch {
+//            var url = bundle?.getString("apiUrl")
+//            var source = bundle?.getString("source")?:""
+//            val bannerName = bundle?.getString("bannerName")?:""
+//            val id = bundle?.getString("bannerId")?:""
+//            url?.let {
+//                accessLogResponse = bannerCardRepo.createLogs(
+//                    it,
+//                    FirebaseAuth.getInstance().currentUser?.uid!!,
+//                    source,
+//                    bannerName,
+//                    id
+//                )
+//            }
+//        }
+//    }
 
 
     private fun makeToolbarVisible(isImageOrPdf: Boolean, purpose: String) {
@@ -261,18 +261,17 @@ class DocViewerActivity : BaseActivity() {
         val scope = CoroutineScope(Job() + Dispatchers.Main)
         scope.launch {
             bundle?.let { bundle->
-                accessLogResponse?.let {
-                    var url = bundle.getString("apiUrl")
-                    if(!url.isNullOrEmpty() && !it._id.isNullOrEmpty()) {
+                    val url = bundle.getString("apiUrl")
+                    val _id = bundle.getString("_id")
+                    val source = bundle.getString("source")?:"home"
+                    if(!url.isNullOrEmpty() && !_id.isNullOrEmpty()) {
                         bannerCardRepo.updateLogs(
                             url,
                             FirebaseAuth.getInstance().currentUser?.uid!!,
-                            it._id!!,
-                            "home"
+                            _id,
+                            source
                         )
                     }
-                }
-
             }
 
         }

@@ -11,8 +11,8 @@
         style="@style/FeatureCardTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_xsm1"
         android:layout_marginLeft="@dimen/dp_sm1"
+        android:layout_marginTop="@dimen/dp_xsm1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -20,13 +20,23 @@
         android:id="@+id/background_img"
         android:layout_width="match_parent"
         android:layout_height="152dp"
-        android:layout_marginTop="@dimen/dp_xsm1"
         android:layout_marginLeft="@dimen/dp_sm1"
+        android:layout_marginTop="@dimen/dp_xsm1"
         android:layout_marginRight="@dimen/dp_sm1"
-        android:scaleType="centerCrop"
         android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title" />
 
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/background_img"
+            app:layout_constraintEnd_toEndOf="@+id/background_img"
+            app:layout_constraintStart_toStartOf="@+id/background_img"
+            app:layout_constraintTop_toTopOf="@+id/background_img" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

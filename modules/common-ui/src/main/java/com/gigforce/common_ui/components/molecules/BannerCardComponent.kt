@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.R
@@ -18,6 +19,7 @@ import com.gigforce.core.IEventTracker
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,7 +37,9 @@ open class BannerCardComponent(context: Context, attrs: AttributeSet?) :
     val image: ImageView
     var bannerCardData: BannerCardDVM? = null
     val topLayout: View
+    val progressBar: View
     private var bannerCardRepo = BannerCardRepository()
+    private var onPauseCalled = false
 
     init {
         this.layoutParams =
@@ -43,6 +47,7 @@ open class BannerCardComponent(context: Context, attrs: AttributeSet?) :
         LayoutInflater.from(context).inflate(R.layout.banner_card_component, this, true)
         title = this.findViewById(R.id.title)
         image = this.findViewById(R.id.background_img)
+        progressBar = this.findViewById(R.id.progressBar)
         topLayout = this.findViewById(R.id.top_layout)
     }
 
@@ -117,24 +122,12 @@ open class BannerCardComponent(context: Context, attrs: AttributeSet?) :
                         }
                     }
                 }
-                topLayout.setOnClickListener {
+                image.setOnClickListener {
                     bannerCardData?.let {
                         it.apiUrl?.let {
-                            navArgs.args?.let { bundle ->
-                                getDocUrl(it, bundle)
-                            }
-
-
-
-                            bannerCardData?.docUrl?.let { docUrl ->
-                                navigation.navigateToDocViewerActivity(
-                                    null,
-                                    docUrl,
-                                    "banner",
-                                    navArgs.args,
-                                    context
-                                )
-                            }
+                            getAndRedirectToDocUrl(it, navArgs.args)
+                        } ?: run {
+                            Toast.makeText(context, "API url not found!!", Toast.LENGTH_LONG).show()
                         }
                     }
                 }
@@ -142,39 +135,101 @@ open class BannerCardComponent(context: Context, attrs: AttributeSet?) :
         }
     }
 
-    private fun getDocUrl(apiUrl: String, bundle: Bundle): String? {
+    private fun getAndRedirectToDocUrl(apiUrl: String, bundle: Bundle?) {
         FirebaseAuth.getInstance().currentUser?.uid?.let { uid ->
             val scope = CoroutineScope(Job() + Dispatchers.Main)
             scope.launch {
-                var source = bundle.getString("source") ?: ""
-                val bannerName = bundle.getString("bannerName") ?: ""
-                val id = bundle.getString("bannerId") ?: ""
-                apiUrl.let {
-                    var accessLogResponse = bannerCardRepo.createLogs(
-                        it,
+                val source = bundle?.getString("source") ?: ""
+                val bannerName = bundle?.getString("bannerName") ?: ""
+                val id = bundle?.getString("bannerId") ?: ""
+                progressBar.visible()
+                try {
+                    val accessLogResponse = bannerCardRepo.createLogs(
+                        apiUrl,
                         uid,
                         source,
                         bannerName,
                         id
                     )
-                    accessLogResponse.docUrl?.let {
-                        if (it.isNotBlank()) {
-                            navigation.navigateToDocViewerActivity(
-                                null,
-                                it,
-                                "banner",
-                                bundle,
-                                context
-                            )
+                    if (!onPauseCalled) {
+                        if (accessLogResponse.status == true) {
+                            if (accessLogResponse.siplyResponseStatus == true) {
+                                accessLogResponse.responseURL?.let {
+                                    if (it.isNotBlank()) {
+                                        bundle?.putString("_id", accessLogResponse._id)
+                                        navigation.navigateToDocViewerActivity(
+                                            null,
+                                            it,
+                                            "banner",
+                                            bundle,
+                                            context
+                                        )
+
+                                    } else {
+                                        Toast.makeText(
+                                            context,
+                                            "There is some internal error. Please try after sometime.",
+                                            Toast.LENGTH_LONG
+                                        )
+                                            .show()
+                                    }
+
+                                } ?: run {
+                                    Toast.makeText(
+                                        context,
+                                        "There is some internal error. Please try after sometime.",
+                                        Toast.LENGTH_LONG
+                                    )
+                                        .show()
+                                }
+                            } else {
+                                Toast.makeText(
+                                    context,
+                                    accessLogResponse.responseURL,
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+                        } else {
+                            Toast.makeText(
+                                context,
+                                "There is some internal error. Please try after sometime.",
+                                Toast.LENGTH_LONG
+                            ).show()
                         }
                     }
+                    progressBar.gone()
 
+                } catch (e: Exception) {
+                    if (!onPauseCalled) {
+                        progressBar.gone()
+                        Toast.makeText(
+                            context,
+                            "There is some internal error. Please try after sometime.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
                 }
-
             }
         }
-
-        return null
     }
 
+    override fun onVisibilityChanged(changedView: View, visibility: Int) {
+        super.onVisibilityChanged(changedView, visibility)
+        if (visibility != View.VISIBLE) {
+            onPauseCalled = true
+        }
+    }
+
+    override fun onWindowFocusChanged(hasWindowFocus: Boolean) {
+        super.onWindowFocusChanged(hasWindowFocus)
+        if (hasWindowFocus) {
+            onPauseCalled = true
+        }
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        onPauseCalled = true
+
+    }
 }
