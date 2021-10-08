@@ -188,13 +188,6 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
                 }
         }
 
-        lifecycleScope.launchWhenCreated {
-
-            mainForm.clientIdEt.getTextChangeAsStateFlow()
-                .collect {
-                    viewModel.handleEvent(NewSelectionForm1Events.GigerClientIdChanged(it))
-                }
-        }
     }
 
     private fun initListeners(
@@ -382,7 +375,6 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
             viewBinding.mainForm.gigerNameError.root.gone()
         }
 
-        gigerClientIdTextInputLayout.error = errorState.gigerClientIdError
 
         if (errorState.businessError != null) {
 

@@ -10,7 +10,14 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.repository.LeadManagementRepository
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.core.logger.GigforceLogger
+import com.gigforce.common_ui.repository.LeadManagementRepository
+import com.gigforce.core.TrackingEventArgs
+import com.gigforce.core.analytics.AuthEvents
+import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.lead_management.R
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
@@ -350,7 +357,9 @@ class NewSelectionForm2ViewModel @Inject constructor(
             )
 
             _viewState.value = NewSelectionForm2ViewState.JoiningDataSubmitted(
-                shareLink = shareLink
+                shareLink = shareLink,
+                businessName = joiningRequest.business.name.toString(),
+                jobProfileName = joiningRequest.jobProfile.name.toString()
             )
             _viewState.value = null
             logger.d(
@@ -374,5 +383,22 @@ class NewSelectionForm2ViewModel @Inject constructor(
             )
         }
 
+    }
+
+    fun getTlNameAndNumber(): ProfileData?{
+        var profileData: ProfileData? = null
+        FirebaseAuth.getInstance().currentUser?.let {
+            FirebaseFirestore
+                .getInstance()
+                .collection("Profiles").document(it.uid).get().addOnSuccessListener {
+                    if (it.exists()) {
+                        profileData = it.toObject(ProfileData::class.java)
+                            ?: throw  IllegalStateException("unable to parse profile object")
+                    }
+                }.addOnFailureListener { exception ->
+                    FirebaseCrashlytics.getInstance().log("Exception : checkIfSignInOrSignup Method $exception")
+                }
+        }
+        return profileData
     }
 }

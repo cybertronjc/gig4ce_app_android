@@ -34,6 +34,11 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.ktx.Firebase
+import com.google.gson.Gson
+import com.google.gson.JsonArray
+import com.google.gson.JsonObject
+import org.json.JSONArray
+import org.json.JSONObject
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -697,8 +702,9 @@ class LeadManagementRepository @Inject constructor(
 
     suspend fun dropSelections(
         selectionIds : List<String>
-    ){
-
+    ): DropSelectionResponse{
+        val dropRequest = DropSelectionRequest(selectionIds)
+        return joiningProfileRemoteService.dropSelections(jsonObject = dropRequest).bodyOrThrow()
     }
 
     suspend fun getPendingJoinings() : List<PendingJoiningItemDVM>{

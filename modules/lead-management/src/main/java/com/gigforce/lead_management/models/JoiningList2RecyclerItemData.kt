@@ -34,7 +34,9 @@ open class JoiningList2RecyclerItemData(
         var selected: Boolean,
         val createdAt: String?,
         val updatedAt: String?,
-        val isVisible: Boolean
+        val isVisible: Boolean,
+        val selectEnable: Boolean,
+        val viewModel: JoiningList2ViewModel
     ): JoiningList2RecyclerItemData(
         LeadActivationViewTypes.JoiningList2
     )

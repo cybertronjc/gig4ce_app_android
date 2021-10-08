@@ -3,12 +3,14 @@ package com.gigforce.lead_management.ui.drop_selection
 import android.graphics.Color
 import android.os.Bundle
 import androidx.core.os.bundleOf
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.gigforce.core.base.BaseBottomSheetDialogFragment
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
+import com.gigforce.core.utils.Lce
 import com.gigforce.core.utils.Lse
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.BottomSheetDialogFragmentDropSelectionBinding
@@ -48,7 +50,7 @@ class DropSelectionBottomSheetDialogFragment :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
         arguments?.let {
             selectionIdsToDrop = it.getStringArrayList(INTENT_SELECTIONS_TO_DROP) ?: return@let
         }
@@ -80,6 +82,8 @@ class DropSelectionBottomSheetDialogFragment :
         bindProgressButton(this.successLayout.okayButton)
         this.successLayout.okayButton.attachTextChangeAnimator()
 
+        this.mainLayout.dropSelectionLabel.text = "Are you sure that you want to drop ${selectionIdsToDrop.size} selection(s)?"
+
         this.errorLayout.retryBtn.setOnClickListener {
             showMainLayout()
         }
@@ -95,6 +99,7 @@ class DropSelectionBottomSheetDialogFragment :
         }
 
         this.successLayout.okayButton.setOnClickListener {
+            sharedLeadMgmtViewModel.oneOrMoreSelectionsDropped()
             dismiss()
         }
     }
@@ -107,7 +112,7 @@ class DropSelectionBottomSheetDialogFragment :
         this.mainLayout.dropSelectionLabel.text = if(selectionIdsToDrop.size == 1){
             "Are you sure you that you want to drop this selection?"
         } else{
-            "Are you sure you that you want to drop 3 selection(s)?"
+            "Are you sure you that you want to drop ${selectionIdsToDrop.size} selection(s)?"
         }
     }
 
@@ -116,7 +121,7 @@ class DropSelectionBottomSheetDialogFragment :
         .observe(viewLifecycleOwner, {
 
             when (it) {
-                is Lse.Error -> {
+                is Lce.Error -> {
                     viewBinding.mainLayout.dropSelectionButton.hideProgress("Drop Selection")
                     viewBinding.mainLayout.dropSelectionButton.isEnabled = false
 
@@ -127,17 +132,24 @@ class DropSelectionBottomSheetDialogFragment :
                     viewBinding.errorLayout.infoMessageTv.text = it.error
                     viewBinding.errorLayout.retryBtn.visible()
                 }
-                Lse.Loading -> {
+                Lce.Loading -> {
                     viewBinding.mainLayout.dropSelectionButton.showProgress {
-                        buttonText = "Droping..."
+                        buttonText = "Dropping..."
                         progressColor = Color.WHITE
                     }
                     viewBinding.mainLayout.dropSelectionButton.isEnabled = false
 
+
                 }
-                Lse.Success -> {
-                    sharedLeadMgmtViewModel.oneOrMoreSelectionsDropped()
-                    dismiss()
+                is Lce.Content -> {
+                    viewBinding.successLayout.root.visible()
+                    viewBinding.mainLayout.root.gone()
+                    viewBinding.errorLayout.root.gone()
+                   if (selectionIdsToDrop.size == 1){
+                       viewBinding.successLayout.dropedSelectionLabel.text = "1 selection dropped successfully"
+                    } else {
+                       viewBinding.successLayout.dropedSelectionLabel.text =  "${selectionIdsToDrop.size} selections dropped successfully"}
+                    //dismiss()
                 }
             }
         })

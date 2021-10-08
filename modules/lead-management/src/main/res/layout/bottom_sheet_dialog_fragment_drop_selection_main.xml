@@ -4,43 +4,51 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="390dp"
-        android:orientation="vertical"
-        android:paddingLeft="16dp"
-        android:paddingTop="30dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="30dp">
+        android:orientation="vertical">
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:src="@drawable/ic_no_selection" />
+            android:layout_marginTop="@dimen/size_40"
+            android:src="@drawable/ic_drop_selection_illustration" />
 
         <TextView
             android:id="@+id/drop_selection_label"
             style="@style/body_primary"
+            android:textColor="#202325"
+            android:layout_marginStart="@dimen/size_20"
+            android:layout_marginEnd="@dimen/size_20"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp" />
 
-        <com.google.android.material.button.MaterialButton
+        <TextView
             android:id="@+id/drop_selection_button"
-            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:text="Drop Selection"
-            app:shapeAppearanceOverlay="@style/RoundCornerButtonShapeOverlay" />
+            android:layout_height="34dp"
+            android:layout_marginStart="@dimen/size_20"
+            android:layout_marginTop="@dimen/size_40"
+            android:layout_marginEnd="@dimen/size_20"
+            android:background="@drawable/bottom_primary_button_background"
+            android:gravity="center"
+            android:text="@string/drop_selection_lead"
+            android:textAlignment="center"
+            android:textColor="@color/white" />
 
-        <com.google.android.material.button.MaterialButton
+        <TextView
             android:id="@+id/cancel_button"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="cancel"
-            app:shapeAppearanceOverlay="@style/RoundCornerButtonShapeOverlay"
-            app:strokeColor="@color/lipstick_2"
-            app:strokeWidth="1dp" />
+            android:layout_height="34dp"
+            android:layout_marginStart="@dimen/size_20"
+            android:layout_marginTop="@dimen/size_20"
+            android:layout_marginEnd="@dimen/size_20"
+            android:layout_marginBottom="@dimen/size_16"
+            android:background="@drawable/bottom_secondary_button_background"
+            android:gravity="center"
+            android:text="@string/cancel_lead"
+            android:textAlignment="center"
+            android:textColor="@color/pink_text" />
+
 
     </LinearLayout>
 </layout>

@@ -29,6 +29,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment_lead">Hello blank fragment</string>
     <string name="looking_for_dynamic_working_hours_lead">Looking for flexible working hours? Join me at Gigforce :</string>
+    <string name="joining_whatsapp_share_msg_lead">You are selected for delivery profile in Flipkart. Please complete your joining checklist on Gigforce app to start earning.</string>
     <string name="didn_t_received_the_link_lead"><u>Didn\'t received the link ?</u></string>
     <string name="gig_assigned_lead">Gig assigned</string>
     <string name="enter_valid_mobile_lead">Enter a valid Mobile No</string>
@@ -47,7 +48,7 @@
     <string name="office_na_lead">Office : N/A</string>
     <string name="select_atleast_one_profile_lead">Please select at least one job profile</string>
     <string name="select_job_profile_lead">Select Job Profile</string>
-    <string name="okay_lead">okay</string>
+    <string name="okay_lead">Okay</string>
     <string name="fill_user_name_lead">Please fill user name</string>
     <string name="reference_check_lead">Reference Check</string>
     <string name="reference_submitted_lead">Reference data submitted</string>
@@ -185,6 +186,7 @@
     <string name="seven_days_lead">Last 7 days</string>
     <string name="one_month_lead">Last 1 month</string>
     <string name="no_selection_yet_lead">No Selections Yet !</string>
+    <string name="no_shift_loaded_lead">Cannot make joining, Please contact your manager</string>
     <string name="type">Type</string>
     <string name="here">here</string>
 

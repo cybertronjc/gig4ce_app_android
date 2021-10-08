@@ -46,7 +46,9 @@ sealed class NewSelectionForm2ViewState {
     object SubmittingJoiningData : NewSelectionForm2ViewState()
 
     data class JoiningDataSubmitted(
-        val shareLink : String
+        val shareLink : String,
+        val businessName: String,
+        val jobProfileName: String
     ) : NewSelectionForm2ViewState()
 
     data class ErrorWhileSubmittingJoiningData(

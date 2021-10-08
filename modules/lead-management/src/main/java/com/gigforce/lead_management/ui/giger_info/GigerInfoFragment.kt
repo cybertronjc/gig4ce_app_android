@@ -12,6 +12,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
@@ -38,6 +39,7 @@ import com.gigforce.lead_management.ui.giger_info.views.AppCheckListRecyclerComp
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.layout_below_giger_functionality.*
+import kotlinx.coroutines.flow.collect
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
@@ -116,13 +118,14 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
         })
     }
 
-    private fun initSharedViewModel() {
-        sharedViewModel.viewState
-            .observe(viewLifecycleOwner,{
+    private fun initSharedViewModel() = lifecycleScope.launchWhenCreated {
+        sharedViewModel.viewStateFlow.collect{
                 when (it) {
-                    LeadManagementSharedViewModelState.OneOrMoreSelectionsDropped -> viewModel.getGigerJoiningInfo(joiningId)
+                    LeadManagementSharedViewModelState.OneOrMoreSelectionsDropped -> {
+                        navigation.popBackStack()
+                    }
                 }
-            })
+            }
     }
 
     private fun showLoadingInfo() = viewBinding.apply{

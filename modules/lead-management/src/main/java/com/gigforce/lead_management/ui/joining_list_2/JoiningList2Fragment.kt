@@ -1,5 +1,6 @@
 package com.gigforce.lead_management.ui.joining_list_2
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -28,6 +29,7 @@ import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.recyclerView.ItemClickListener
+import com.gigforce.core.recyclerView.ItemLongClickListener
 import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.lead_management.LeadManagementConstants
 import com.gigforce.lead_management.LeadManagementNavDestinations
@@ -38,6 +40,7 @@ import com.gigforce.lead_management.models.JoiningListRecyclerItemData
 import com.gigforce.lead_management.models.JoiningStatusAndCountItemData
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModelState
+import com.gigforce.lead_management.ui.drop_selection.DropSelectionBottomSheetDialogFragment
 import com.gigforce.lead_management.ui.giger_onboarding.GigerOnboardingFragment
 import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
@@ -48,6 +51,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import java.lang.NullPointerException
+import java.util.HashMap
 import javax.inject.Inject
 
 enum class JoiningDataState {
@@ -70,6 +74,8 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
     var selectedTab = 0
     var filterDaysFM = -1
     var joiningDataState = JoiningDataState.DEFAULT
+    val dropSelectionIds = arrayListOf<String>()
+    var dropJoining : HashMap<String, Boolean>? = HashMap<String, Boolean>()
 
     override fun viewCreated(
         viewBinding: FragmentJoiningList2Binding,
@@ -90,33 +96,46 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
         this.joiningsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         this.joinNowButton.setOnClickListener {
-            logger.d(logTag, "navigating to ${LeadManagementNavDestinations.FRAGMENT_GIGER_ONBOARDING}")
+            if (joinNowButton.text == getString(R.string.add_new_lead)) {
+                logger.d(
+                    logTag,
+                    "navigating to ${LeadManagementNavDestinations.FRAGMENT_GIGER_ONBOARDING}"
+                )
 
-            navigation.navigateTo(
-                dest = LeadManagementNavDestinations.FRAGMENT_SELECTION_FORM_1,
-                navOptions = getNavOptions()
-            )
+                navigation.navigateTo(
+                    dest = LeadManagementNavDestinations.FRAGMENT_SELECTION_FORM_1,
+                    navOptions = getNavOptions()
+                )
+            }else {
+                dropSelectionIds.clear()
+                for (entry in dropJoining?.keys!!){
+                    dropSelectionIds.add(entry)
+                }
+                if(dropSelectionIds.isEmpty()){
+                    showToast("Select at-least one joining to drop")
+                }else {
+                    DropSelectionBottomSheetDialogFragment.launch(
+                        dropSelectionIds, childFragmentManager
+                    )
+                }
+            }
         }
 
         joiningsRecyclerView.itemClickListener = object : ItemClickListener {
             override fun onItemClick(view: View, position: Int, dataModel: Any) {
                 if (dataModel is JoiningList2RecyclerItemData.JoiningListRecyclerStatusItemData) {
-                    Log.d("dropFM", "$dataModel")
                     if (dataModel.dropEnabled){
-                        //!dataModel.dropEnabled
                         val businessName = dataModel.status.split("(").get(0)
                         viewModel.clickDropdown(businessName, false)
-                        //joiningsRecyclerView.coreAdapter.notifyDataSetChanged()
                     }else {
-                        //dataModel.dropEnabled
                         val businessName = dataModel.status.split("(").get(0)
                         viewModel.clickDropdown(businessName, true)
-                        //joiningsRecyclerView.coreAdapter.notifyDataSetChanged()
                     }
 
                 }
             }
         }
+
     }
 
     private fun checkForApplyFilter() {
@@ -217,17 +236,29 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
         })
 
         viewModel.getJoinings()
+
+        viewModel.dropJoiningMap.observe(viewLifecycleOwner, Observer {
+            setDropSelection(it)
+        })
     }
 
-    private fun initSharedViewModel() {
-        sharedViewModel
-            .viewState
-            .observe(viewLifecycleOwner,{
+    private fun setDropSelection(hashMap: HashMap<String, Boolean>?) = viewBinding.apply{
+            val count = hashMap?.size
+            appBarComp.setAppBarTitle("$count Selected")
+            joinNowButton.text = getString(R.string.drop_selection_lead)
+            dropJoining = hashMap
+    }
+
+    private fun initSharedViewModel() = lifecycleScope.launchWhenCreated {
+        sharedViewModel.viewStateFlow.collect{
 
                 when (it) {
-                    LeadManagementSharedViewModelState.OneOrMoreSelectionsDropped -> viewModel.getJoinings()
+                    LeadManagementSharedViewModelState.OneOrMoreSelectionsDropped -> {
+                        navigation.popBackStack()
+                        navigation.navigateTo("LeadMgmt/joiningListFragment")
+                    }
                 }
-            })
+            }
     }
 
     private fun setStatus(map: Map<String, Int>) = viewBinding.apply{

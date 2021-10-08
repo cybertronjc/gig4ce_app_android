@@ -13,8 +13,6 @@ data class SubmitJoiningRequest(
     @SerializedName("jobProfile")
     var jobProfile: JobProfilesItem,
 
-    @SerializedName("gigerClientId")
-    var gigerClientId: String?,
 
     @SerializedName("gigerName")
     var gigerName: String,
