@@ -259,6 +259,15 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
                     }
                 }
             }
+
+//        sharedViewModel.viewState.observe(viewLifecycleOwner, Observer {
+//            when (it) {
+//                LeadManagementSharedViewModelState.OneOrMoreSelectionsDropped -> {
+//                    navigation.popBackStack()
+//                    navigation.navigateTo("LeadMgmt/joiningListFragment")
+//                }
+//            }
+//        })
     }
 
     private fun setStatus(map: Map<String, Int>) = viewBinding.apply{

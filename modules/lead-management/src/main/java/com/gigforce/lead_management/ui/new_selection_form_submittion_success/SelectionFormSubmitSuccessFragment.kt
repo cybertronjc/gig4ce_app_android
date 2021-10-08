@@ -45,11 +45,6 @@ class SelectionFormSubmitSuccessFragment : BaseFragment2<FragmentNewSelectionFor
 
     @Inject
     lateinit var navigation : INavigation
-//    private lateinit var shareLink : String
-//    private lateinit var businessName : String
-//    private lateinit var tlName : String
-//    private lateinit var jobProfileName : String
-//    private lateinit var tlMobileNumber : String
     private lateinit var whatsappTemplateModel: WhatsappTemplateModel
 
     private val backPressHandler = object : OnBackPressedCallback(true) {
@@ -74,18 +69,10 @@ class SelectionFormSubmitSuccessFragment : BaseFragment2<FragmentNewSelectionFor
     ) {
         arguments?.let {
             whatsappTemplateModel = it.getParcelable(INTENT_EXTRA_WHATSAPP_DATA) ?: return@let
-//            businessName = it.getString(INTENT_EXTRA_BUSINESS_NAME) ?: return@let
-//            tlName = it.getString(INTENT_EXTRA_TL_NAME) ?: return@let
-//            jobProfileName = it.getString(INTENT_EXTRA_JOB_PROFILE_NAME) ?: return@let
-//            tlMobileNumber = it.getString(INTENT_EXTRA_TL_MOBILE_NUMBER) ?: return@let
         }
 
         savedInstanceState?.let {
             whatsappTemplateModel = it.getParcelable(INTENT_EXTRA_WHATSAPP_DATA) ?: return@let
-//            businessName = it.getString(INTENT_EXTRA_BUSINESS_NAME) ?: return@let
-//            tlName = it.getString(INTENT_EXTRA_TL_NAME) ?: return@let
-//            jobProfileName = it.getString(INTENT_EXTRA_JOB_PROFILE_NAME) ?: return@let
-//            tlMobileNumber = it.getString(INTENT_EXTRA_TL_MOBILE_NUMBER) ?: return@let
         }
 
         logDataReceivedFromBundles()
@@ -95,10 +82,6 @@ class SelectionFormSubmitSuccessFragment : BaseFragment2<FragmentNewSelectionFor
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putParcelable(INTENT_EXTRA_WHATSAPP_DATA, whatsappTemplateModel)
-//        outState.putString(INTENT_EXTRA_BUSINESS_NAME, businessName)
-//        outState.putString(INTENT_EXTRA_TL_NAME, tlName)
-//        outState.putString(INTENT_EXTRA_JOB_PROFILE_NAME, jobProfileName)
-//        outState.putString(INTENT_EXTRA_TL_MOBILE_NUMBER, tlMobileNumber)
     }
     private fun logDataReceivedFromBundles() {
 
@@ -155,7 +138,7 @@ class SelectionFormSubmitSuccessFragment : BaseFragment2<FragmentNewSelectionFor
     private fun shareToAnyApp(url: String) {
         try {
             val shareIntent = Intent(Intent.ACTION_SEND)
-            shareIntent.type = "image/png"
+            shareIntent.type = "text/plain"
             shareIntent.putExtra(
                 Intent.EXTRA_SUBJECT,
                 getString(R.string.app_name)
@@ -173,25 +156,25 @@ class SelectionFormSubmitSuccessFragment : BaseFragment2<FragmentNewSelectionFor
                     " " + url
 
             shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
-            val bitmap =
-                BitmapFactory.decodeResource(requireContext().resources, R.drawable.bg_gig_type)
-
-            //save bitmap to app cache folder
-
-            //save bitmap to app cache folder
-            val outputFile = File(requireContext().cacheDir, "share" + ".png")
-            val outPutStream = FileOutputStream(outputFile)
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outPutStream)
-            outPutStream.flush()
-            outPutStream.close()
-            outputFile.setReadable(true, false)
-            shareIntent.putExtra(
-                Intent.EXTRA_STREAM, FileProvider.getUriForFile(
-                    requireContext(),
-                    requireContext().packageName + ".provider",
-                    outputFile
-                )
-            )
+//            val bitmap =
+//                BitmapFactory.decodeResource(requireContext().resources, R.drawable.bg_gig_type)
+//
+//            //save bitmap to app cache folder
+//
+//            //save bitmap to app cache folder
+//            val outputFile = File(requireContext().cacheDir, "share" + ".png")
+//            val outPutStream = FileOutputStream(outputFile)
+//            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outPutStream)
+//            outPutStream.flush()
+//            outPutStream.close()
+//            outputFile.setReadable(true, false)
+//            shareIntent.putExtra(
+//                Intent.EXTRA_STREAM, FileProvider.getUriForFile(
+//                    requireContext(),
+//                    requireContext().packageName + ".provider",
+//                    outputFile
+//                )
+//            )
             startActivityForResult(
                 Intent.createChooser(shareIntent, getString(R.string.choose_one_lead)),
                 ShareApplicationLinkFragment.REQUEST_CODE_SHARE_VIA_OTHER_APPS

@@ -1,6 +1,7 @@
 package com.gigforce.lead_management.ui.new_selection_form_2
 
 import android.content.Context
+import android.util.Log
 import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import androidx.lifecycle.LiveData
@@ -10,9 +11,11 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.common_ui.repository.LeadManagementRepository
+import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.analytics.AuthEvents
 import com.gigforce.core.datamodels.profile.ProfileData
+import com.gigforce.core.utils.Lce
 import com.gigforce.lead_management.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -29,6 +32,7 @@ import javax.inject.Inject
 class NewSelectionForm2ViewModel @Inject constructor(
     @ApplicationContext private val appContext: Context,
     private val leadManagementRepository: LeadManagementRepository,
+    private val profileFirebaseRepository: ProfileFirebaseRepository,
     private val logger: GigforceLogger
 ) : ViewModel() {
 
@@ -377,7 +381,7 @@ class NewSelectionForm2ViewModel @Inject constructor(
     }
 
     fun getTlNameAndNumber(): ProfileData?{
-        var profileData: ProfileData? = null
+        var profileData: ProfileData? = ProfileData()
         FirebaseAuth.getInstance().currentUser?.let {
             FirebaseFirestore
                 .getInstance()
@@ -385,11 +389,29 @@ class NewSelectionForm2ViewModel @Inject constructor(
                     if (it.exists()) {
                         profileData = it.toObject(ProfileData::class.java)
                             ?: throw  IllegalStateException("unable to parse profile object")
+                        Log.d("profileData", "profiledata ${profileData?.name}")
                     }
                 }.addOnFailureListener { exception ->
                     FirebaseCrashlytics.getInstance().log("Exception : checkIfSignInOrSignup Method $exception")
                 }
         }
         return profileData
+    }
+    private val _profile = MutableLiveData<Lce<ProfileData>>()
+    val profile: LiveData<Lce<ProfileData>> = _profile
+
+    fun getProfileForUser(
+        userId: String?
+    ) = viewModelScope.launch {
+        try {
+            _profile.value = Lce.loading()
+            val profileData = profileFirebaseRepository.getProfileData(
+                userId = userId
+            )
+
+            _profile.value = Lce.content(profileData)
+        } catch (e: Exception) {
+            _profile.value = Lce.error(e.message!!)
+        }
     }
 }

@@ -119,6 +119,14 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
                     }
                 }
             }
+
+//        sharedViewModel.viewState.observe(viewLifecycleOwner, Observer {
+//            when (it) {
+//                LeadManagementSharedViewModelState.OneOrMoreSelectionsDropped -> {
+//                    navigation.popBackStack()
+//                }
+//            }
+//        })
     }
 
     private fun showLoadingInfo() = viewBinding.apply{
