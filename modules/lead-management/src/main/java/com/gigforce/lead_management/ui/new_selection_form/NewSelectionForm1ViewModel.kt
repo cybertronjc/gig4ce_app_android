@@ -44,7 +44,6 @@ class NewSelectionForm1ViewModel @Inject constructor(
     //Data
     private var mobilePhoneNumber: String? = null
     private var gigerName: String? = null
-    private var clientId: String? = null
     private var selectedBusiness: JoiningBusinessAndJobProfilesItem? = null
     private var selectedJobProfile: JobProfilesItem? = null
     private lateinit var joiningBusinessAndJobProfiles: List<JoiningBusinessAndJobProfilesItem>
@@ -60,9 +59,6 @@ class NewSelectionForm1ViewModel @Inject constructor(
             is NewSelectionForm1Events.ContactNoChanged -> checkIfChangedContactNoIsDifferentElseFetchProfileDetails(
                 event.mobileNo
             )
-            is NewSelectionForm1Events.GigerClientIdChanged -> {
-                clientId = event.clientId
-            }
             is NewSelectionForm1Events.GigerNameChanged -> {
                 gigforceLogger.d(TAG, "Name changed : ${event.name}")
                 gigerName = event.name.capitalize(Locale.getDefault())
@@ -214,7 +210,6 @@ class NewSelectionForm1ViewModel @Inject constructor(
             submitJoiningRequest = SubmitJoiningRequest(
                 business = selectedBusiness!!,
                 jobProfile = selectedJobProfile!!,
-                gigerClientId = clientId,
                 gigerName = gigerName!!,
                 gigerMobileNo = mobilePhoneNumber!!
             )

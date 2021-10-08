@@ -32,7 +32,6 @@ sealed class NewSelectionForm1ViewState {
     data class ValidationError(
         val invalidMobileNoMessage: SpannedString? = null,
         val gigerNameError: SpannedString? = null,
-        val gigerClientIdError: SpannedString? = null,
         val businessError: SpannedString? = null,
         val jobProfilesError: SpannedString? = null,
     ) : NewSelectionForm1ViewState()
@@ -64,10 +63,6 @@ sealed class NewSelectionForm1Events {
 
     data class GigerNameChanged(
         val name: String
-    ) : NewSelectionForm1Events()
-
-    data class GigerClientIdChanged(
-        val clientId: String
     ) : NewSelectionForm1Events()
 
     data class BusinessSelected(

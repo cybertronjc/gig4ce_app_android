@@ -57,8 +57,13 @@ class JoiningList2ViewModel @Inject constructor(
     var currentFilterString: String? = null
     var filterDaysVM: Int? = null
     private var fetchJoiningListener: ListenerRegistration? = null
+    var isSelectEnableGlobal = false
 
     var dropBusinessMap : HashMap<String, Int>? = HashMap<String, Int>()
+    var dropJoining : HashMap<String, Boolean>? = HashMap<String, Boolean>()
+
+    private val _dropJoiningMap = MutableLiveData<HashMap<String, Boolean>>()
+    val dropJoiningMap: LiveData<HashMap<String, Boolean>> = _dropJoiningMap
 
     init {
         //startListeningToJoinings()
@@ -154,7 +159,18 @@ class JoiningList2ViewModel @Inject constructor(
                 )
             )
 
+            var isSelectEnable = false
+            if (dropJoining?.isNotEmpty() == true){
+                isSelectEnable = true
+            }else if (isSelectEnableGlobal){
+                isSelectEnable = true
+            }
+
             joinings.forEach {
+                var isSelected = false
+                if (dropJoining?.containsKey(it._id) == true){
+                    isSelected = dropJoining?.get(it._id)!!
+                }
                 joiningListForView.add(
                     JoiningList2RecyclerItemData.JoiningListRecyclerJoiningItemData(
                         _id = it._id,
@@ -165,10 +181,12 @@ class JoiningList2ViewModel @Inject constructor(
                         profilePicture = it.profilePicture,
                         bussiness = it.business!!,
                         status = it.status,
-                        selected = false,
+                        selected = isSelected,
                         createdAt = it.createdAt,
                         updatedAt = it.updatedAt,
-                        isVisible = isVisible
+                        isVisible = isVisible,
+                        isSelectEnable,
+                        this
                     )
                 )
             }
@@ -354,5 +372,19 @@ class JoiningList2ViewModel @Inject constructor(
         if(joiningsRaw != null)
         processJoiningsAndEmit(joiningsRaw!!)
 
+    }
+
+    fun dropSelection(joiningId: String, dropSelected: Boolean){
+        gigforceLogger.d(TAG, "new drop selection $joiningId, $dropSelected")
+        if (dropSelected){
+            dropJoining?.put(joiningId, true)
+        } else {
+            if (dropJoining?.containsKey(joiningId) == true){
+                dropJoining?.remove(joiningId)
+            }
+        }
+        isSelectEnableGlobal = true
+        _dropJoiningMap.postValue(dropJoining)
+        processJoiningsAndEmit(joiningsRaw!!)
     }
 }

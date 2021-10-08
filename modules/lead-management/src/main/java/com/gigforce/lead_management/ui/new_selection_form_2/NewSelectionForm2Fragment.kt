@@ -22,6 +22,7 @@ import com.gigforce.core.navigation.INavigation
 import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.FragmentNewSelectionForm2Binding
+import com.gigforce.lead_management.models.WhatsappTemplateModel
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModelState
 import com.gigforce.lead_management.ui.new_selection_form_submittion_success.SelectionFormSubmitSuccessFragment
@@ -232,12 +233,19 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                         .show()
                 }
                 is NewSelectionForm2ViewState.JoiningDataSubmitted -> {
-                    navigation.navigateTo(
-                        LeadManagementNavDestinations.FRAGMENT_SELECT_FORM_SUCCESS,
-                        bundleOf(
-                            SelectionFormSubmitSuccessFragment.INTENT_EXTRA_SHARE_LINK to state.shareLink
+                    try {
+                        val profileData = viewModel.getTlNameAndNumber()
+                        val whatsAppIntentData = WhatsappTemplateModel(state.shareLink, state.businessName, profileData?.name.toString(), state.jobProfileName, profileData?.loginMobile.toString())
+                        navigation.navigateTo(
+                            LeadManagementNavDestinations.FRAGMENT_SELECT_FORM_SUCCESS,
+                            bundleOf(
+                                SelectionFormSubmitSuccessFragment.INTENT_EXTRA_WHATSAPP_DATA to whatsAppIntentData,
+
+                                )
                         )
-                    )
+                    }catch (e: Exception){
+
+                    }
                 }
                 NewSelectionForm2ViewState.SubmittingJoiningData -> {
 

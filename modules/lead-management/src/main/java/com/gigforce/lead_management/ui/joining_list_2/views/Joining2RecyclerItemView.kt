@@ -11,6 +11,7 @@ import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.fragment.app.viewModels
 import com.gigforce.common_ui.viewdatamodels.GigerProfileCardDVM
 import com.gigforce.common_ui.viewdatamodels.leadManagement.AssignGigRequest
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JobLocation
@@ -25,6 +26,7 @@ import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.RecyclerRowJoiningItemBinding
 import com.gigforce.lead_management.models.JoiningList2RecyclerItemData
 import com.gigforce.lead_management.models.JoiningListRecyclerItemData
+import com.gigforce.lead_management.ui.joining_list_2.JoiningList2ViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -38,7 +40,7 @@ class Joining2RecyclerItemView(
 ) : RelativeLayout(
     context,
     attrs
-), IViewHolder, View.OnClickListener {
+), IViewHolder, View.OnClickListener, View.OnLongClickListener {
 
     @Inject
     lateinit var navigation: INavigation
@@ -47,7 +49,7 @@ class Joining2RecyclerItemView(
 
     lateinit var foregroundView: View
     lateinit var backgroundView: View
-    var selectEnable = false
+    var selectEnableComponent: Boolean = false
 
     init {
         setDefault()
@@ -58,7 +60,7 @@ class Joining2RecyclerItemView(
     private fun setListenersOnView() {
         viewBinding.root.setOnClickListener(this)
         viewBinding.callGigerBtn.setOnClickListener(this)
-//        viewBinding.root.setOnLongClickListener(this)
+        viewBinding.root.setOnLongClickListener(this)
     }
 
     private fun setDefault() {
@@ -99,6 +101,29 @@ class Joining2RecyclerItemView(
             )
             setSelectionDate(gigerAttendanceData.createdAt, gigerAttendanceData.updatedAt)
             setJoiningStatus(gigerAttendanceData.status)
+            setSelectEnableCard(gigerAttendanceData.selectEnable, gigerAttendanceData.selected)
+        }
+    }
+
+     fun setSelectEnableCard(selectEnable: Boolean, isSelected: Boolean) {
+
+        if (selectEnable){
+            if (isSelected){
+                Log.d("selectEnable", "$selectEnable , $isSelected")
+                viewBinding.selectJoiningBtn.setImageDrawable(resources.getDrawable(R.drawable.ic_selected_tick))
+//                this.selectEnable = true
+                viewData?.selected = true
+                viewBinding.selectJoiningBtn.visible()
+                viewBinding.callGigerBtn.gone()
+            }else {
+                Log.d("selectEnableNot", "$selectEnable , $isSelected")
+                viewBinding.selectJoiningBtn.setImageDrawable(resources.getDrawable(R.drawable.ic_unselect_tick))
+//                this.selectEnable = false
+                viewData?.selected = false
+                viewBinding.selectJoiningBtn.visible()
+                viewBinding.callGigerBtn.gone()
+            }
+
         }
     }
 
@@ -171,25 +196,36 @@ class Joining2RecyclerItemView(
 
     override fun onClick(v: View?) {
         val currentViewData = viewData ?: return
+        Log.d("drop", "data ${currentViewData.selected}")
+        if (currentViewData.selectEnable){
+            if (viewData?.selected == true){
+                viewData?.selected = false
+                viewBinding.selectJoiningBtn.setImageDrawable(resources.getDrawable(R.drawable.ic_unselect_tick))
+                viewData?.viewModel?.dropSelection(viewData?._id.toString(), false)
+            }else {
+                viewData?.selected = true
+                viewBinding.selectJoiningBtn.setImageDrawable(resources.getDrawable(R.drawable.ic_selected_tick))
+                viewData?.viewModel?.dropSelection(viewData?._id.toString(), true)
+            }
+        }else {
+            if (v?.id == R.id.call_giger_btn) {
 
-        if (v?.id == R.id.call_giger_btn) {
+                val intent =
+                    Intent(
+                        Intent.ACTION_DIAL,
+                        Uri.fromParts("tel", currentViewData.gigerMobileNo, null)
+                    )
+                context.startActivity(intent)
+            } else {
 
-            val intent =
-                Intent(
-                    Intent.ACTION_DIAL,
-                    Uri.fromParts("tel", currentViewData.gigerMobileNo, null)
+                //navigate to joining details screen
+                navigation.navigateTo(
+                    LeadManagementNavDestinations.FRAGMENT_GIGER_INFO,
+                    bundleOf(
+                        LeadManagementConstants.INTENT_EXTRA_JOINING_ID to currentViewData._id
+                    )
                 )
-            context.startActivity(intent)
-        } else {
-
-            //navigate to joining details screen
-            navigation.navigateTo(
-                LeadManagementNavDestinations.FRAGMENT_GIGER_INFO,
-                bundleOf(
-                    LeadManagementConstants.INTENT_EXTRA_JOINING_ID to currentViewData._id
-                )
-                )
-
+            }
         }
     }
 
@@ -243,6 +279,23 @@ class Joining2RecyclerItemView(
 //            conversionTime+="ago"
 //        }
         return conversionTime
+    }
+
+    override fun onLongClick(p0: View?): Boolean {
+        if (viewData?.selected == true){
+            Log.d("selected", "Already selected")
+            viewBinding.selectJoiningBtn.setImageDrawable(resources.getDrawable(R.drawable.ic_unselect_tick))
+            return false
+        }else {
+            Log.d("selected", "Selecting")
+            viewBinding.selectJoiningBtn.setImageDrawable(resources.getDrawable(R.drawable.ic_selected_tick))
+//            selectEnable = true
+            viewData?.selected = true
+            viewBinding.selectJoiningBtn.visible()
+            viewBinding.callGigerBtn.gone()
+            viewData?.viewModel?.dropSelection(viewData?._id.toString(), true)
+        }
+        return true
     }
 
 }
