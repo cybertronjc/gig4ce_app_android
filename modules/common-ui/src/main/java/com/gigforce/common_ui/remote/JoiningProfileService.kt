@@ -38,7 +38,8 @@ interface JoiningProfileService {
 
     @GET("business/businessLocations")
     suspend fun getBusinessLocationAndTeamLeaders(
-        @Query("businessId") businessId : String
+        @Query("businessId") businessId : String,
+        @Query("jobProfileId") jobProfileId : String
     ): Response<JoiningLocationTeamLeadersShifts>
 
     @POST("joining/submit")

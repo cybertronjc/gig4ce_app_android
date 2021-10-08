@@ -21,9 +21,11 @@ import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
+import com.gigforce.lead_management.common_views.JobProfileRelatedDynamicFieldView
 import com.gigforce.lead_management.databinding.FragmentNewSelectionForm2Binding
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModelState
+import com.gigforce.lead_management.ui.new_selection_form.NewSelectionForm1Events
 import com.gigforce.lead_management.ui.new_selection_form_submittion_success.SelectionFormSubmitSuccessFragment
 import com.gigforce.lead_management.ui.select_city.SelectCityFragment
 import com.gigforce.lead_management.ui.select_reporting_location.SelectReportingLocationFragment
@@ -49,7 +51,9 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
 
     companion object {
 
+        const val SCREEN_ID = "form_2"
         const val INTENT_EXTRA_JOINING_DATA = "joining_data"
+        const val INTENT_EXTRA_DYNAMIC_FIELDS = "dynamic_fields"
     }
 
     @Inject
@@ -60,6 +64,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
 
     //Data from previous screen
     private lateinit var joiningRequest: SubmitJoiningRequest
+    private lateinit var dynamicInputsFields : ArrayList<JobProfileDependentDynamicInputField>
 
     private val expectedStartDatePicker: DatePickerDialog by lazy {
         val cal = Calendar.getInstance()
@@ -94,10 +99,12 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         super.onCreate(savedInstanceState)
         arguments?.let {
             joiningRequest = it.getParcelable(INTENT_EXTRA_JOINING_DATA) ?: return@let
+            dynamicInputsFields = it.getParcelableArrayList(INTENT_EXTRA_DYNAMIC_FIELDS) ?: arrayListOf()
         }
 
         savedInstanceState?.let {
             joiningRequest = it.getParcelable(INTENT_EXTRA_JOINING_DATA) ?: return@let
+            dynamicInputsFields = it.getParcelableArrayList(INTENT_EXTRA_DYNAMIC_FIELDS) ?: arrayListOf()
         }
 
         viewModel.handleEvent(
@@ -119,6 +126,10 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         viewBinding: FragmentNewSelectionForm2Binding,
         savedInstanceState: Bundle?
     ) {
+        if (viewCreatedForTheFirstTime) {
+            showJobProfileRelatedDynamicFields(dynamicInputsFields)
+        }
+
         initToolbar(viewBinding)
         initListeners(viewBinding)
         initViewModel()
@@ -151,31 +162,21 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         bindProgressButton(nextButton)
         nextButton.attachTextChangeAnimator()
         nextButton.setOnClickListener {
-            viewModel.handleEvent(
-                NewSelectionForm2Events.SubmitButtonPressed(
-                    checkChipsSelectedAndNotifyViewModel()
-                )
-            )
+            validateDataAndSubmitData()
         }
     }
 
-    private fun checkChipsSelectedAndNotifyViewModel(): MutableList<ShiftTimingItem> {
+    private fun validateDataAndSubmitData() = viewBinding.mainForm.jobProfileDependentDynamicFieldsContainer.apply{
 
-        val shifts = mutableListOf<ShiftTimingItem>()
-        viewBinding.mainForm.apply {
+        val dynamicFieldsData = mutableListOf<DataFromDynamicInputField>()
+        for( i in 0 until childCount){
 
-            shiftChipGroup.checkedChipIds.forEach {
-                val shiftChip = shiftChipGroup.findViewById<Chip>(it)
-                shifts.add(
-                    ShiftTimingItem(
-                        id = shiftChip.tag.toString(),
-                        name = shiftChip.text.toString()
-                    )
-                )
-            }
+            val dynamicFieldView = getChildAt(i) as JobProfileRelatedDynamicFieldView
+            val dataFromField = dynamicFieldView.validateDataReturnIfValid() ?: return@apply
+            dynamicFieldsData.add(dataFromField)
         }
 
-        return shifts
+        viewModel.handleEvent(NewSelectionForm2Events.SubmitButtonPressed(dynamicFieldsData))
     }
 
     private fun initToolbar(
@@ -313,15 +314,6 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
             viewBinding.mainForm.reportingLocationError.errorTextview.text = null
             viewBinding.mainForm.reportingLocationError.root.gone()
         }
-
-
-        if (errorState.shiftsError != null) {
-            viewBinding.mainForm.shiftError.root.visible()
-            viewBinding.mainForm.shiftError.errorTextview.text = errorState.shiftsError
-        } else {
-            viewBinding.mainForm.shiftError.errorTextview.text = null
-            viewBinding.mainForm.shiftError.root.gone()
-        }
     }
 
     private fun loadingBusinessAndJobProfiles() = viewBinding.apply {
@@ -356,33 +348,6 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         formMainInfoLayout.root.gone()
 
         mainForm.root.visible()
-
-        //Populating TL Chips
-        mainForm.shiftChipGroup.removeAllViews()
-        shiftAndTls.shiftTiming.forEach {
-
-            val chip: Chip = layoutInflater.inflate(
-                R.layout.shift_chip,
-                mainForm.shiftChipGroup,
-                false
-            ) as Chip
-            chip.text = it.name
-            chip.tag = it.id
-            chip.id = ViewCompat.generateViewId()
-            mainForm.shiftChipGroup.addView(chip)
-        }
-
-        mainForm.shiftChipGroup.isSelectionRequired = true
-        mainForm.shiftChipGroup.isSingleSelection = false
-
-        try {
-            if (shiftAndTls.shiftTiming.size == 1) {
-                (mainForm.shiftChipGroup.getChildAt(0) as Chip).isChecked = true
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
 
         if(selectedCity != null) {
             mainForm.citySelectedLabel.text = selectedCity
@@ -476,5 +441,18 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         viewModel.handleEvent(NewSelectionForm2Events.ClientTLSelected(tlSelected))
 
         selectedClientTlLabel.setTypeface(selectedClientTlLabel.typeface,Typeface.BOLD)
+    }
+
+    private fun showJobProfileRelatedDynamicFields(
+        dynamicFields: List<JobProfileDependentDynamicInputField>
+    ) = viewBinding.mainForm.jobProfileDependentDynamicFieldsContainer.apply {
+        removeAllViews()
+
+        dynamicFields.forEach {
+
+            val view = JobProfileRelatedDynamicFieldView(requireContext(), null)
+            addView(view)
+            view.bind(it)
+        }
     }
 }

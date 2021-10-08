@@ -287,6 +287,13 @@ fun EditText.getTextChangeAsStateFlow(): StateFlow<String> {
     return query
 }
 
+fun EditText.getTextIfNotBlankElseNull(): String? {
+    return if (text.isBlank()) {
+        null
+    } else
+        text.toString()
+}
+
 fun Number.roundTo(
         numFractionDigits: Int
 ) = "%.${numFractionDigits}f".format(this, Locale.ENGLISH).toDouble()

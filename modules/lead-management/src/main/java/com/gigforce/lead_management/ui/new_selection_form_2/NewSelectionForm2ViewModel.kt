@@ -7,9 +7,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.common_ui.repository.LeadManagementRepository
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.core.logger.GigforceLogger
-import com.gigforce.common_ui.repository.LeadManagementRepository
 import com.gigforce.lead_management.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -41,10 +41,10 @@ class NewSelectionForm2ViewModel @Inject constructor(
     private var selectedCity: ReportingLocationsItem? = null
     private var selectedReportingLocation: ReportingLocationsItem? = null
     private var selectedTL: BusinessTeamLeadersItem? = null
-    private var selectedShifts: MutableList<ShiftTimingItem> = mutableListOf()
     private lateinit var joiningLocationsAndTLs: JoiningLocationTeamLeadersShifts
     private lateinit var joiningRequest: SubmitJoiningRequest
     private var currentlySubmittingAnyJoiningRequuest = false
+    private var dataFromDynamicFieldsFromPreviousPages : List<DataFromDynamicInputField> = emptyList()
 
     fun handleEvent(
         event: NewSelectionForm2Events
@@ -57,7 +57,6 @@ class NewSelectionForm2ViewModel @Inject constructor(
             NewSelectionForm2Events.SelectReportingLocationClicked -> openSelectReportingLocationsScreen()
             NewSelectionForm2Events.SelectClientTLClicked -> openSelectBusinessTLScreen()
             is NewSelectionForm2Events.ShiftSelected -> {
-                selectedShifts = event.shifts.toMutableList()
             }
             is NewSelectionForm2Events.CitySelected -> {
                 selectedCity = event.city
@@ -71,12 +70,20 @@ class NewSelectionForm2ViewModel @Inject constructor(
                 selectedReportingLocation = event.reportingLocation
             }
             is NewSelectionForm2Events.SubmitButtonPressed -> {
-                selectedShifts = event.shiftSelected.toMutableList()
-                validateDataAndSubmit()
+                validateDataAndSubmit(
+                    event.dataFromDynamicFields
+                )
             }
             is NewSelectionForm2Events.JoiningDataReceivedFromPreviousScreen -> {
                 joiningRequest = event.submitJoiningRequest
-                fetchJoiningForm2Data(joiningRequest.business.id!!)
+                dataFromDynamicFieldsFromPreviousPages = event.submitJoiningRequest.dataFromDynamicFields
+                joiningRequest.dataFromDynamicFields = emptyList()
+
+
+                fetchJoiningForm2Data(
+                    joiningRequest.business.id!!,
+                    joiningRequest.jobProfile.id!!,
+                )
             }
         }
     }
@@ -162,7 +169,8 @@ class NewSelectionForm2ViewModel @Inject constructor(
     }
 
     fun fetchJoiningForm2Data(
-        businessId: String
+        businessId: String,
+        jobProfileId: String
     ) = viewModelScope.launch {
 
         if (::joiningLocationsAndTLs.isInitialized) {
@@ -185,9 +193,17 @@ class NewSelectionForm2ViewModel @Inject constructor(
 
         try {
             val locationAndTlsData = leadManagementRepository.getBusinessLocationsAndTeamLeaders(
-                businessId = businessId
+                businessId = businessId,
+                jobProfileId = jobProfileId
             )
             joiningLocationsAndTLs = locationAndTlsData
+            if (locationAndTlsData.shiftTiming.isEmpty()) {
+                _viewState.value = NewSelectionForm2ViewState.ErrorWhileLoadingLocationAndTlData(
+                    error = "Cannot make joining, Please contact your manager",
+                    shouldShowErrorButton = false
+                )
+                return@launch
+            }
 
             logger.d(
                 TAG,
@@ -246,7 +262,9 @@ class NewSelectionForm2ViewModel @Inject constructor(
 
     }
 
-    private fun validateDataAndSubmit() {
+    private fun validateDataAndSubmit(
+        dataFromDynamicFields: MutableList<DataFromDynamicInputField>
+    ) {
 
         if (selectedCity == null) {
 
@@ -281,24 +299,14 @@ class NewSelectionForm2ViewModel @Inject constructor(
         joiningRequest.reportingLocation = selectedReportingLocation
         joiningRequest.assignGigsFrom = dateFormatter.format(selectedDateOfJoining)
 
-        if (selectedShifts.isEmpty()) {
+        val selectedShift = joiningLocationsAndTLs.shiftTiming.firstOrNull()
+        if (selectedShift != null)
+            joiningRequest.shifts = listOf(selectedShift)
 
-            _viewState.value = NewSelectionForm2ViewState.ValidationError(
-                shiftsError = buildSpannedString {
-                    bold {
-                        append(appContext.getString(R.string.note_with_colon))
-                    }
-                    append(
-                        appContext.getString(R.string.please_select_at_least_one_shift)
-                    )
-                }
-            )
-            return
-        }
-        joiningRequest.shifts = selectedShifts
-
-
-        submitJoiningData(joiningRequest)
+        joiningRequest.dataFromDynamicFields = dataFromDynamicFieldsFromPreviousPages + dataFromDynamicFields
+        submitJoiningData(
+            joiningRequest
+        )
     }
 
 
@@ -306,7 +314,7 @@ class NewSelectionForm2ViewModel @Inject constructor(
         joiningRequest: SubmitJoiningRequest
     ) = viewModelScope.launch {
 
-        if(currentlySubmittingAnyJoiningRequuest){
+        if (currentlySubmittingAnyJoiningRequuest) {
             logger.d(
                 TAG,
                 "Already a joining request submission in progress, ignoring this one",

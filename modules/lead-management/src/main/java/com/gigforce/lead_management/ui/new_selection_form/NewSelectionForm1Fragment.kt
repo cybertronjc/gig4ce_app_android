@@ -15,6 +15,7 @@ import android.widget.LinearLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
+import androidx.core.view.children
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -24,9 +25,7 @@ import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
-import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfilesItem
-import com.gigforce.common_ui.viewdatamodels.leadManagement.JoiningBusinessAndJobProfilesItem
-import com.gigforce.common_ui.viewdatamodels.leadManagement.SubmitJoiningRequest
+import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.getTextChangeAsStateFlow
 import com.gigforce.core.extensions.gone
@@ -34,6 +33,7 @@ import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
+import com.gigforce.lead_management.common_views.JobProfileRelatedDynamicFieldView
 import com.gigforce.lead_management.databinding.FragmentNewSelectionForm1Binding
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModelState
@@ -54,6 +54,7 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
 
     companion object {
 
+        const val SCREEN_ID = "form_1"
         const val TAG = "NewSelectionForm1Fragment"
     }
 
@@ -70,7 +71,7 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
     private val pickContactContract = registerForActivityResult(
         ActivityResultContracts.PickContact()
     ) {
-        if(it == null) return@registerForActivityResult
+        if (it == null) return@registerForActivityResult
 
         contactsDelegate.parseResults(
             uri = it,
@@ -86,7 +87,7 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
         if (contacts.isEmpty()) return
 
         val pickedContact = contacts.first()
-        if(pickedContact.phoneNumbers.isEmpty()) return
+        if (pickedContact.phoneNumbers.isEmpty()) return
 
         if (pickedContact.phoneNumbers.size > 1) {
             //show choose no dialog
@@ -100,7 +101,7 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
                 viewBinding.mainForm.mobileNoEt.post {
                     viewBinding.mainForm.mobileNoEt.setSelection(viewBinding.mainForm.mobileNoEt.length())
                 }
-                viewModel.handleEvent(NewSelectionForm1Events.ContactNoChanged("+91" +number))
+                viewModel.handleEvent(NewSelectionForm1Events.ContactNoChanged("+91" + number))
             }
             builder.show()
         } else {
@@ -121,14 +122,16 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
         if (contactPermissionGranted) {
             pickContactContract.launch(null)
         } else {
-            val hasUserOptedForDoNotAskAgain = requireActivity().shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS).not()
-            if(hasUserOptedForDoNotAskAgain){
+            val hasUserOptedForDoNotAskAgain =
+                requireActivity().shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS)
+                    .not()
+            if (hasUserOptedForDoNotAskAgain) {
 
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle(getString(R.string.read_contact_permission_required))
                     .setMessage(getString(R.string.please_grant_read_permissions_to))
-                    .setPositiveButton(getString(R.string.okay_common_ui)){_,_ -> openSettingsPage() }
-                    .setNegativeButton(getString(R.string.cancel_common_ui)) { _, _ ->}
+                    .setPositiveButton(getString(R.string.okay_common_ui)) { _, _ -> openSettingsPage() }
+                    .setNegativeButton(getString(R.string.cancel_common_ui)) { _, _ -> }
                     .show()
             }
         }
@@ -207,7 +210,8 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
         }
 
         mainForm.nextButton.setOnClickListener {
-            viewModel.handleEvent(NewSelectionForm1Events.SubmitButtonPressed)
+
+            validateDataAndSubmitData()
         }
 
         mainForm.pickContactsButton.setOnClickListener {
@@ -221,6 +225,19 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
                 )
             }
         }
+    }
+
+    private fun validateDataAndSubmitData() = viewBinding.mainForm.jobProfileDependentDynamicFieldsContainer.apply{
+
+        val dynamicFieldsData = mutableListOf<DataFromDynamicInputField>()
+        for( i in 0 until childCount){
+
+            val dynamicFieldView = getChildAt(i) as JobProfileRelatedDynamicFieldView
+            val dataFromField = dynamicFieldView.validateDataReturnIfValid() ?: return@apply
+            dynamicFieldsData.add(dataFromField)
+        }
+
+        viewModel.handleEvent(NewSelectionForm1Events.SubmitButtonPressed(dynamicFieldsData))
     }
 
     private fun initToolbar(
@@ -285,17 +302,40 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
 
                 //Data submit states
                 is NewSelectionForm1ViewState.NavigateToForm2 -> openForm2(
-                    state.submitJoiningRequest
+                    state.submitJoiningRequest,
+                    ArrayList(state.dynamicInputsFields)
                 )
+                is NewSelectionForm1ViewState.ShowJobProfileRelatedField -> showJobProfileRelatedFields(
+                    state.dynamicFields
+                )
+                NewSelectionForm1ViewState.DisableSubmitButton -> TODO()
+                NewSelectionForm1ViewState.EnableSubmitButton -> TODO()
+
             }
         })
 
+    private fun showJobProfileRelatedFields(
+        dynamicFields: List<JobProfileDependentDynamicInputField>
+    ) = viewBinding.mainForm.jobProfileDependentDynamicFieldsContainer.apply {
+        removeAllViews()
+
+        dynamicFields.forEach {
+
+            val view = JobProfileRelatedDynamicFieldView(requireContext(), null)
+            addView(view)
+            view.bind(it)
+        }
+    }
+
     private fun openForm2(
-        submitJoiningRequest: SubmitJoiningRequest
+        submitJoiningRequest: SubmitJoiningRequest,
+        dynamicInputsFieldValues : ArrayList<JobProfileDependentDynamicInputField>
     ) {
+
         navigation.navigateTo(
             LeadManagementNavDestinations.FRAGMENT_SELECTION_FORM_2, bundleOf(
-                NewSelectionForm2Fragment.INTENT_EXTRA_JOINING_DATA to submitJoiningRequest
+                NewSelectionForm2Fragment.INTENT_EXTRA_JOINING_DATA to submitJoiningRequest,
+                NewSelectionForm2Fragment.INTENT_EXTRA_DYNAMIC_FIELDS to dynamicInputsFieldValues
             )
         )
     }
@@ -327,7 +367,8 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
         if (errorState.invalidMobileNoMessage != null) {
 
             viewBinding.mainForm.contactNoError.root.visible()
-            viewBinding.mainForm.contactNoError.errorTextview.text = errorState.invalidMobileNoMessage
+            viewBinding.mainForm.contactNoError.errorTextview.text =
+                errorState.invalidMobileNoMessage
         } else {
             viewBinding.mainForm.contactNoError.errorTextview.text = null
             viewBinding.mainForm.contactNoError.root.gone()

@@ -14,11 +14,14 @@ import com.gigforce.common_ui.viewdatamodels.leadManagement.SubmitJoiningRequest
 import com.gigforce.core.ValidationHelper
 import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.common_ui.repository.LeadManagementRepository
+import com.gigforce.common_ui.viewdatamodels.leadManagement.DataFromDynamicInputField
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.lead_management.R
+import com.gigforce.lead_management.ui.new_selection_form_2.NewSelectionForm2Fragment
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
@@ -29,7 +32,6 @@ class NewSelectionForm1ViewModel @Inject constructor(
     @ApplicationContext private val appContext: Context,
     private val leadManagementRepository: LeadManagementRepository,
     private val gigforceLogger: GigforceLogger,
-    private val profileFirebaseRepository: ProfileFirebaseRepository,
     private val firebaseAuthStateListener: FirebaseAuthStateListener
 ) : ViewModel() {
 
@@ -73,13 +75,29 @@ class NewSelectionForm1ViewModel @Inject constructor(
             }
             is NewSelectionForm1Events.JobProfileSelected -> {
                 selectedJobProfile = event.jobProfile
+                inflateDynamicFieldsRelatedToSelectedJobProfile(event.jobProfile)
             }
             NewSelectionForm1Events.OpenSelectBusinessScreenSelected -> openSelectBusinessScreen()
             NewSelectionForm1Events.OpenSelectJobProfileScreenSelected -> openJobProfilesScreen()
-            NewSelectionForm1Events.SubmitButtonPressed -> validateDataAndNavigateToForm2()
+            is NewSelectionForm1Events.SubmitButtonPressed -> validateDataAndNavigateToForm2(
+                event.dataFromDynamicFields
+            )
         }
 
        // checkForDataAndEnabledOrDisableSubmitButton()
+    }
+
+    private fun inflateDynamicFieldsRelatedToSelectedJobProfile(jobProfile: JobProfilesItem) = viewModelScope.launch{
+
+        val selectedJobProfileDependentDynamicFields = jobProfile.dynamicInputFields.filter {
+            it.screenIdToShowIn == NewSelectionForm1Fragment.SCREEN_ID
+        }
+
+        _viewState.value = NewSelectionForm1ViewState.ShowJobProfileRelatedField(
+            selectedJobProfileDependentDynamicFields
+        )
+        delay(1000)
+        _viewState.value = null
     }
 
     private fun checkForDataAndEnabledOrDisableSubmitButton() {
@@ -147,7 +165,9 @@ class NewSelectionForm1ViewModel @Inject constructor(
         _viewState.value = null
     }
 
-    private fun validateDataAndNavigateToForm2() {
+    private fun validateDataAndNavigateToForm2(
+        dataFromDynamicFields: MutableList<DataFromDynamicInputField>
+    ) {
 
         if (mobilePhoneNumber.isNullOrBlank() || !ValidationHelper.isValidIndianMobileNo(
                 mobilePhoneNumber!!.substring(3)
@@ -210,14 +230,20 @@ class NewSelectionForm1ViewModel @Inject constructor(
             return
         }
 
+        val dynamicFieldsForNextForm = selectedJobProfile!!.dynamicInputFields.filter {
+            it.screenIdToShowIn == NewSelectionForm2Fragment.SCREEN_ID
+        }
+
         _viewState.value = NewSelectionForm1ViewState.NavigateToForm2(
             submitJoiningRequest = SubmitJoiningRequest(
                 business = selectedBusiness!!,
                 jobProfile = selectedJobProfile!!,
                 gigerClientId = clientId,
                 gigerName = gigerName!!,
-                gigerMobileNo = mobilePhoneNumber!!
-            )
+                gigerMobileNo = mobilePhoneNumber!!,
+                dataFromDynamicFields = dataFromDynamicFields
+            ),
+            dynamicInputsFields = dynamicFieldsForNextForm
         )
         _viewState.value = null
     }

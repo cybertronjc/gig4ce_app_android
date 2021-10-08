@@ -22,6 +22,9 @@ data class SubmitJoiningRequest(
     @SerializedName("gigerMobileNo")
     var gigerMobileNo: String,
 
+    @SerializedName("dataFromDynamicFields")
+    var dataFromDynamicFields : List<DataFromDynamicInputField>,
+
     @SerializedName("assignGigsFrom")
     var assignGigsFrom: String = "",
 
@@ -39,5 +42,7 @@ data class SubmitJoiningRequest(
 
     @SerializedName("shareLink")
     var shareLink: String = "",
+
+
 
 ) : Parcelable

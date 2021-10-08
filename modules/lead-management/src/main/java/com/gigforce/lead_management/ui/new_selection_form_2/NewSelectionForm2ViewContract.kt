@@ -89,6 +89,6 @@ sealed class NewSelectionForm2Events {
     ) : NewSelectionForm2Events()
 
     data class SubmitButtonPressed(
-        val shiftSelected : List<ShiftTimingItem>
+        val dataFromDynamicFields : MutableList<DataFromDynamicInputField>
     ) : NewSelectionForm2Events()
 }

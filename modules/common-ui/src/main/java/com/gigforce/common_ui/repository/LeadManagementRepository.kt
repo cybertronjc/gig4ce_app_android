@@ -645,9 +645,10 @@ class LeadManagementRepository @Inject constructor(
         .bodyOrThrow()
 
     suspend fun getBusinessLocationsAndTeamLeaders(
-        businessId : String
+        businessId : String,
+        jobProfileId: String
     ) = joiningProfileRemoteService
-        .getBusinessLocationAndTeamLeaders(businessId)
+        .getBusinessLocationAndTeamLeaders(businessId,jobProfileId)
         .bodyOrThrow()
 
     suspend fun submitJoiningRequest(

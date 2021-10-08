@@ -1,12 +1,8 @@
 package com.gigforce.lead_management.ui.new_selection_form
 
-import android.text.SpannableString
 import android.text.SpannedString
-import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfilesItem
-import com.gigforce.common_ui.viewdatamodels.leadManagement.JoiningBusinessAndJobProfilesItem
-import com.gigforce.common_ui.viewdatamodels.leadManagement.SubmitJoiningRequest
+import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.core.datamodels.profile.ProfileData
-import com.gigforce.lead_management.models.JoiningStatusAndCountItemData
 
 sealed class NewSelectionForm1ViewState {
 
@@ -48,12 +44,17 @@ sealed class NewSelectionForm1ViewState {
 
 
     data class NavigateToForm2(
-        val submitJoiningRequest: SubmitJoiningRequest
+        val submitJoiningRequest: SubmitJoiningRequest,
+        val dynamicInputsFields : List<JobProfileDependentDynamicInputField>
     ) : NewSelectionForm1ViewState()
 
     object EnableSubmitButton : NewSelectionForm1ViewState()
 
     object DisableSubmitButton : NewSelectionForm1ViewState()
+
+    data class ShowJobProfileRelatedField(
+        val dynamicFields : List<JobProfileDependentDynamicInputField>
+    ): NewSelectionForm1ViewState()
 }
 
 sealed class NewSelectionForm1Events {
@@ -78,14 +79,11 @@ sealed class NewSelectionForm1Events {
         val jobProfile: JobProfilesItem
     ) : NewSelectionForm1Events()
 
-    object SubmitButtonPressed : NewSelectionForm1Events()
+    data class SubmitButtonPressed(
+        val dataFromDynamicFields : MutableList<DataFromDynamicInputField>
+    ) : NewSelectionForm1Events()
 
     object OpenSelectBusinessScreenSelected : NewSelectionForm1Events()
 
     object OpenSelectJobProfileScreenSelected : NewSelectionForm1Events()
 }
-
-data class JoiningFilters(
-    val shouldRemoveOlderStatusTabs: Boolean,
-    val attendanceStatuses: List<JoiningStatusAndCountItemData>?
-)

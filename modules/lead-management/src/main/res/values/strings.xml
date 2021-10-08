@@ -185,5 +185,7 @@
     <string name="seven_days_lead">Last 7 days</string>
     <string name="one_month_lead">Last 1 month</string>
     <string name="no_selection_yet_lead">No Selections Yet !</string>
+    <string name="type">Type</string>
+    <string name="here">here</string>
 
 </resources>
