@@ -15,13 +15,16 @@ import com.gigforce.common_ui.viewdatamodels.GigerProfileCardDVM
 import com.gigforce.common_ui.viewdatamodels.leadManagement.AssignGigRequest
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JobLocation
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JoiningStatus
+import com.gigforce.core.IEventTracker
 import com.gigforce.core.IViewHolder
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.lead_management.LeadManagementConstants
 import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
+import com.gigforce.lead_management.analytics.LeadManagementAnalyticsEvents
 import com.gigforce.lead_management.databinding.RecyclerRowJoiningItemBinding
 import com.gigforce.lead_management.models.JoiningList2RecyclerItemData
 import com.gigforce.lead_management.models.JoiningListRecyclerItemData
@@ -42,6 +45,10 @@ class Joining2RecyclerItemView(
 
     @Inject
     lateinit var navigation: INavigation
+
+    @Inject
+    lateinit var eventTracker: IEventTracker
+
     private lateinit var viewBinding: RecyclerRowJoiningItemBinding
     private var viewData: JoiningList2RecyclerItemData.JoiningListRecyclerJoiningItemData? = null
 
@@ -173,6 +180,15 @@ class Joining2RecyclerItemView(
         val currentViewData = viewData ?: return
 
         if (v?.id == R.id.call_giger_btn) {
+
+            eventTracker.pushEvent(
+                TrackingEventArgs(
+                LeadManagementAnalyticsEvents.Onboarded_Giger_Calling,
+                mapOf(
+                    "Phone_number_called" to currentViewData.gigerMobileNo
+                )
+            )
+            )
 
             val intent =
                 Intent(

@@ -17,6 +17,8 @@ import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.utils.getCircularProgressDrawable
 import com.gigforce.common_ui.viewdatamodels.leadManagement.GigerInfo
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.inflate
@@ -26,6 +28,7 @@ import com.gigforce.core.utils.DateHelper
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.lead_management.LeadManagementConstants
 import com.gigforce.lead_management.R
+import com.gigforce.lead_management.analytics.LeadManagementAnalyticsEvents
 import com.gigforce.lead_management.databinding.GigerInfoFragmentBinding
 import com.gigforce.lead_management.models.ApplicationChecklistRecyclerItemData
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
@@ -56,6 +59,10 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
 
     @Inject
     lateinit var navigation: INavigation
+
+    @Inject
+    lateinit var eventTracker: IEventTracker
+
     private val viewModel: GigerInfoViewModel by viewModels()
     private val sharedViewModel : LeadManagementSharedViewModel by activityViewModels()
 
@@ -245,6 +252,13 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
         }
         bottomButtonLayout.callLayout.setOnClickListener {
             //call functionality
+            eventTracker.pushEvent(TrackingEventArgs(
+                LeadManagementAnalyticsEvents.Onboarded_Giger_Calling,
+                mapOf(
+                    "Phone_number_called" to gigerPhone
+                )
+            ))
+
             val intent =
                 Intent(
                     Intent.ACTION_DIAL,
