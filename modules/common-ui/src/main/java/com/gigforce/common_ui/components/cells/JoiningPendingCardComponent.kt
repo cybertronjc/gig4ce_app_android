@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import com.gigforce.common_ui.R
+import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.viewdatamodels.PendingJoiningItemDVM
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.navigation.INavigation
@@ -66,7 +68,12 @@ class JoiningPendingCardComponent(
     override fun onClick(v: View?) {
 
         pendingJoining?.let {
-            navigation //TODO navigate
+            navigation.navigateTo(
+                "client_activation/applicationClientActivation", bundleOf(
+                    StringConstants.JOB_PROFILE_ID.value to it.jobProfileId,
+                    StringConstants.JOB_PROFILE_TITLE.value to it.jobProfileName
+                )
+            )
         }
     }
 }

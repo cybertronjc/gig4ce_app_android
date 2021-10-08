@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_view"
-    android:visibility="gone"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingBottom="20dp"
     android:orientation="vertical">
 
     <com.gigforce.core.recyclerView.CoreRecyclerView
@@ -15,7 +15,11 @@
 
     <ru.tinkoff.scrollingpagerindicator.ScrollingPagerIndicator
         android:id="@+id/indicator"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
+        app:spi_dotColor="#EBEBEB"
+        app:spi_dotSelectedColor="@color/lipstick_2"
         android:layout_height="wrap_content" />
 
 </LinearLayout>

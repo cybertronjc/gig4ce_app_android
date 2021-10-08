@@ -702,7 +702,7 @@ class LeadManagementRepository @Inject constructor(
     }
 
     suspend fun getPendingJoinings() : List<PendingJoiningItemDVM>{
-        return joiningProfileRemoteService.getPendingJoining().bodyOrThrow()
+        return joiningProfileRemoteService.getPendingJoining().bodyOrThrow().data
     }
 
     suspend fun getUserInfoFromMobileNumber(

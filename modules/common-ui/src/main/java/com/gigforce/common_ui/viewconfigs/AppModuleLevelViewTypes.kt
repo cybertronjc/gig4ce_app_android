@@ -11,5 +11,6 @@ class AppModuleLevelViewTypes {
         const val VIEW_UPCOMING_GIG_SECTION = 1006
         const val VIEW_GIGFORCE_TIP_SECTION = 1007
         const val VIEW_PENDING_JOINING_SECTION = 1008
+        const val VIEW_PENDING_JOINING_SECTION_ITEM = 1009
     }
 }

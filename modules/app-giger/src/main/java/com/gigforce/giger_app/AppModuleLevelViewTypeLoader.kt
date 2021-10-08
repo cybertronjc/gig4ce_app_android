@@ -3,6 +3,7 @@ package com.gigforce.giger_app
 import android.content.Context
 import android.view.View
 import com.gigforce.client_activation.ui.ClientActivationLayoutComponent
+import com.gigforce.common_ui.components.cells.JoiningPendingCardComponent
 import com.gigforce.common_ui.viewconfigs.AppModuleLevelViewTypes
 import com.gigforce.core.IViewTypeLoader
 import com.gigforce.giger_app.ui.*
@@ -24,6 +25,10 @@ class AppModuleLevelViewTypeLoader : IViewTypeLoader {
                 null
             )
             AppModuleLevelViewTypes.VIEW_PENDING_JOINING_SECTION -> PendingJoiningComponent(
+                context,
+                null
+            )
+            AppModuleLevelViewTypes.VIEW_PENDING_JOINING_SECTION_ITEM -> JoiningPendingCardComponent(
                 context,
                 null
             )

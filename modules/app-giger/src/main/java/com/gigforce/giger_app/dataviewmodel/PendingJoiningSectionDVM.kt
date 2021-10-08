@@ -11,5 +11,5 @@ class PendingJoiningSectionDVM(
     val navPath: String? = "",
     val showVideo: Int = 0,
     var hi: HindiTranslationMapping? = null
-) : SimpleDVM(AppModuleLevelViewTypes.VIEW_HELP_VIDEO_SECTION) {
+) : SimpleDVM(AppModuleLevelViewTypes.VIEW_PENDING_JOINING_SECTION) {
 }

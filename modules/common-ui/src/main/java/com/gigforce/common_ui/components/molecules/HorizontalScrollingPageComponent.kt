@@ -40,9 +40,10 @@ open class HorizontalScrollingPageComponent<T>(
 
     private fun initViews() {
         recyclerView = findViewById(R.id.recycler_view)
+        containerLayout = findViewById(R.id.card_view)
+        scrollingPageIndicator = findViewById(R.id.indicator)
 
         if (shouldShowScrollIndicator) {
-            scrollingPageIndicator = findViewById(R.id.indicator)
             scrollingPageIndicator.attachToRecyclerView(recyclerView)
         } else {
             hideScrollIndicator()
@@ -72,6 +73,7 @@ open class HorizontalScrollingPageComponent<T>(
             containerLayout.visible()
 
             if(shouldShowScrollIndicator) {
+                showScrollIndicator()
                 if (data.size == 1) {
                     hideScrollIndicator()
                 } else {

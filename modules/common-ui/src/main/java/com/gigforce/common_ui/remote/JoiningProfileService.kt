@@ -1,5 +1,6 @@
 package com.gigforce.common_ui.remote
 
+import com.gigforce.common_ui.viewdatamodels.BaseResponse
 import com.gigforce.common_ui.viewdatamodels.PendingJoiningItemDVM
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.core.datamodels.auth.UserAuthStatusModel
@@ -58,6 +59,6 @@ interface JoiningProfileService {
         @Body selectionIds: List<String>
     ): Response<GigerInfo>
 
-    @GET("joining/detail/{id}")
-    suspend fun getPendingJoining(): Response<List<PendingJoiningItemDVM>>
+    @GET("joining/pendingEjoining")
+    suspend fun getPendingJoining(): Response<BaseResponse<PendingJoiningItemDVM>>
 }

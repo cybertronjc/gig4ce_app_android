@@ -9,4 +9,4 @@ class PendingJoiningItemDVM(
     val jobProfileName: String = "",
     val location: String = "",
     val expectedStartDate: String = ""
-) : SimpleDVM(AppModuleLevelViewTypes.VIEW_PENDING_JOINING_SECTION)
+) : SimpleDVM(AppModuleLevelViewTypes.VIEW_PENDING_JOINING_SECTION_ITEM)
