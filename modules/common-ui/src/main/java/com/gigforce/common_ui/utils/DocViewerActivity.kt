@@ -22,10 +22,11 @@ import com.gigforce.common_ui.R
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.repository.BannerCardRepository
 import com.gigforce.core.base.BaseActivity
-import com.gigforce.core.datamodels.AccessLogResponse
+import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.acitivity_doc_viewer.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -33,10 +34,15 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.net.URLEncoder
 import java.util.*
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class DocViewerActivity : BaseActivity() {
     private var pdfView: WebView? = null
     private var progress: ProgressBar? = null
+
+    @Inject
+    lateinit var buildConfig: IBuildConfig
 
     //var pageTitle: String? = null
     private var win: Window? = null
@@ -108,15 +114,14 @@ class DocViewerActivity : BaseActivity() {
             changeStatusBarColor()
             toolbarDownload.gone()
             acceptLayout.visible()
-        }else if(purpose == "banner") {
+        } else if (purpose == "banner") {
             var title = bundle?.getString("title")
             toolbarTitle.text = title
             toolbar_doc.visible()
             changeStatusBarColor()
             toolbarDownload.gone()
             acceptLayout.gone()
-        }
-        else {
+        } else {
             toolbar_doc.gone()
             toolbarDownload.gone()
             acceptLayout.gone()
@@ -172,6 +177,9 @@ class DocViewerActivity : BaseActivity() {
         pdfView!!.settings.builtInZoomControls = true
         pdfView!!.settings.loadWithOverviewMode = true
         pdfView!!.settings.useWideViewPort = true
+        pdfView!!.settings.loadWithOverviewMode = true
+        pdfView!!.settings.loadsImagesAutomatically = true
+        pdfView!!.settings.domStorageEnabled = true
 
         pdfView!!.loadUrl(
             if (isPdf)
@@ -260,18 +268,24 @@ class DocViewerActivity : BaseActivity() {
     private fun bannerUpdateRequest() {
         val scope = CoroutineScope(Job() + Dispatchers.Main)
         scope.launch {
-            bundle?.let { bundle->
-                    val url = bundle.getString("apiUrl")
-                    val _id = bundle.getString("_id")
-                    val source = bundle.getString("source")?:"home"
-                    if(!url.isNullOrEmpty() && !_id.isNullOrEmpty()) {
-                        bannerCardRepo.updateLogs(
-                            url,
-                            FirebaseAuth.getInstance().currentUser?.uid!!,
-                            _id,
-                            source
-                        )
-                    }
+            bundle?.let { bundle ->
+                val apiUrl = bundle.getString("apiUrl")
+                val apiUrlRequire = bundle.getBoolean("apiUrlRequire", false)
+                val url = if (!apiUrlRequire || apiUrl.isNullOrBlank()) {
+                    buildConfig.getSiplyCompleteUrl()
+                } else {
+                    apiUrl
+                }
+                val _id = bundle.getString("_id")
+                val source = bundle.getString("source") ?: "home"
+                if (!url.isNullOrEmpty() && !_id.isNullOrEmpty()) {
+                    bannerCardRepo.updateLogs(
+                        url,
+                        FirebaseAuth.getInstance().currentUser?.uid!!,
+                        _id,
+                        source
+                    )
+                }
             }
 
         }

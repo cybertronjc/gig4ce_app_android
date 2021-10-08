@@ -10,6 +10,7 @@ data class BannerCardDVM(
     val title: String? = null,
     val image: String? = null,
     val apiUrl: String? = null,
+    val apiUrlRequire : Boolean?=false,
     val docUrl: String? = null,
     val navPath: String? = null,
     val source: String? = null,
@@ -27,6 +28,7 @@ data class BannerCardDVM(
                 it,
                 args = bundleOf(
                     "apiUrl" to apiUrl,
+                    "apiUrlRequire" to apiUrlRequire,
                     "DOC_URL" to docUrl,
                     "source" to source,
                     "bannerName" to bannerName,
