@@ -14,11 +14,12 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.R
-import com.gigforce.common_ui.repository.BannerCardRepository
+import com.gigforce.common_ui.repository.IBannerCardRepository
 import com.gigforce.common_ui.viewdatamodels.BannerCardDVM
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
+import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
@@ -39,7 +40,9 @@ open class BannerCardComponent(context: Context, attrs: AttributeSet?) :
     var bannerCardData: BannerCardDVM? = null
     val topLayout: View
     val progressBar: View
-    private var bannerCardRepo = BannerCardRepository()
+    @Inject
+    lateinit var bannerCardRepo : IBannerCardRepository
+
     private var onPauseState = false
 
     init {
@@ -61,6 +64,8 @@ open class BannerCardComponent(context: Context, attrs: AttributeSet?) :
     @Inject
     lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
 
+    @Inject lateinit var buildConfig:IBuildConfig
+
     private fun setImage(imageStr: String) {
         if (imageStr.contains("http") or imageStr.contains("https")) {
             Glide.with(context)
@@ -73,7 +78,7 @@ open class BannerCardComponent(context: Context, attrs: AttributeSet?) :
         this.setOnClickListener(null)
         if (data is BannerCardDVM) {
             bannerCardData = data
-            if (data.image.isNullOrEmpty() || data.apiUrl.isNullOrEmpty()) {
+            if (data.image.isNullOrEmpty()) {
                 topLayout.gone()
             } else {
                 if (data.image.isNotBlank()) {
@@ -125,10 +130,15 @@ open class BannerCardComponent(context: Context, attrs: AttributeSet?) :
                 }
                 image.setOnClickListener {
                     bannerCardData?.let {
-                        it.apiUrl?.let {
-                            getAndRedirectToDocUrl(it, navArgs.args)
-                        } ?: run {
-                            Toast.makeText(context, "API url not found!!", Toast.LENGTH_LONG).show()
+                        if(it.apiUrlRequire == false){
+                            getAndRedirectToDocUrl(buildConfig.getSiplyCompleteUrl(), navArgs.args)
+                        }else {
+                            it.apiUrl?.let {
+                                getAndRedirectToDocUrl(it, navArgs.args)
+                            } ?: run {
+                                Toast.makeText(context, "API url not found!!", Toast.LENGTH_LONG)
+                                    .show()
+                            }
                         }
                     }
                 }

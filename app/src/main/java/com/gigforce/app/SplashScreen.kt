@@ -25,11 +25,6 @@ class SplashScreen : AppCompatActivity() {
     @Inject
     lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
-
     override fun onResume() {
         super.onResume()
         handleDynamicLink()
@@ -48,12 +43,20 @@ class SplashScreen : AppCompatActivity() {
                     if (uri != null) {
                         val parameters = uri.pathSegments
                         // after that we are extracting string from that parameters.
-                        val param = parameters[parameters.size - 1]
-                        if (param == "login_summary"){
-                            Log.d("datahere", "login summary")
-                            sharedPreAndCommonUtilInterface.saveDataBoolean("deeplink_login", true)
-                            mainIntent.putExtra(StringConstants.LOGIN_SUMMARY_VIA_DEEP_LINK.value, true)
-                            mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                        if (parameters != null && parameters.size > 0) {
+                            val param = parameters[parameters.size - 1]
+                            if (param == "login_summary") {
+                                Log.d("datahere", "login summary")
+                                sharedPreAndCommonUtilInterface.saveDataBoolean(
+                                    "deeplink_login",
+                                    true
+                                )
+                                mainIntent.putExtra(
+                                    StringConstants.LOGIN_SUMMARY_VIA_DEEP_LINK.value,
+                                    true
+                                )
+                                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                            }
                         }
                     }
                 }
@@ -89,23 +92,29 @@ class SplashScreen : AppCompatActivity() {
                         mainIntent.putExtra(StringConstants.ROLE_ID.value, roleID)
                         initApp(mainIntent)
                         return@addOnSuccessListener
-                    }else if(!isAmbassador.isNullOrEmpty()){
+                    } else if (!isAmbassador.isNullOrEmpty()) {
                         sp.saveData(
                             StringConstants.INVITE_BY_AMBASSADOR.value,
                             "true"
                         )
                         sp.saveData(
                             StringConstants.AMBASSADOR_LATITUDE.value,
-                            ambassadorLatitude?:"0.0"
+                            ambassadorLatitude ?: "0.0"
                         )
                         sp.saveData(
                             StringConstants.AMBASSADOR_LONGITUDE.value,
-                            ambassadorLongitude?:"0.0"
+                            ambassadorLongitude ?: "0.0"
                         )
                         mainIntent.putExtra(StringConstants.INVITE_BY_AMBASSADOR.value, true)
                         mainIntent.putExtra(StringConstants.INVITE_USER_ID.value, inviteID)
-                        mainIntent.putExtra(StringConstants.AMBASSADOR_LATITUDE.value,ambassadorLatitude?.toDouble())
-                        mainIntent.putExtra(StringConstants.AMBASSADOR_LONGITUDE.value,ambassadorLongitude?.toDouble())
+                        mainIntent.putExtra(
+                            StringConstants.AMBASSADOR_LATITUDE.value,
+                            ambassadorLatitude?.toDouble()
+                        )
+                        mainIntent.putExtra(
+                            StringConstants.AMBASSADOR_LONGITUDE.value,
+                            ambassadorLongitude?.toDouble()
+                        )
                         initApp(mainIntent)
                         return@addOnSuccessListener
                     }
@@ -126,8 +135,11 @@ class SplashScreen : AppCompatActivity() {
                             val parameters = uri.pathSegments
                             // after that we are extracting string from that parameters.
                             val param = parameters[parameters.size - 1]
-                            if (param == "login_summary"){
-                                mainIntent.putExtra(StringConstants.LOGIN_SUMMARY_VIA_DEEP_LINK.value, true)
+                            if (param == "login_summary") {
+                                mainIntent.putExtra(
+                                    StringConstants.LOGIN_SUMMARY_VIA_DEEP_LINK.value,
+                                    true
+                                )
                             }
                         }
                     }
@@ -143,8 +155,8 @@ class SplashScreen : AppCompatActivity() {
             && intent.action.equals(Intent.ACTION_MAIN)
         ) {
             startActivity(intent)
-            finish();
-            return;
+            finish()
+            return
         }
         startActivity(intent)
         finish()
@@ -159,10 +171,10 @@ class SplashScreen : AppCompatActivity() {
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        setIntent(intent);
+        setIntent(intent)
         // if activity is in foreground (or in backstack but partially visible) launching the same
         // activity will skip onStart, handle this case with reInitSession
-        Branch.sessionBuilder(this).withCallback(branchReferralInitListener).reInit();
+        Branch.sessionBuilder(this).withCallback(branchReferralInitListener).reInit()
     }
 
     private val branchReferralInitListener: BranchReferralInitListener =

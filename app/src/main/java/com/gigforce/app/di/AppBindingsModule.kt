@@ -8,12 +8,15 @@ import com.gigforce.client_activation.repo.IClientActivationDataRepository
 import com.gigforce.common_ui.AppDialogsInterface
 import com.gigforce.common_ui.IUserInfo
 import com.gigforce.common_ui.UserInfoImp
+import com.gigforce.common_ui.repository.BannerCardRepository
+import com.gigforce.common_ui.repository.IBannerCardRepository
 import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 import com.gigforce.common_ui.repository.repo.ILearningDataRepository
 import com.gigforce.common_ui.repository.repo.LearningDataRepository
 import com.gigforce.core.ICoreViewHolderFactory
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
+import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.di.interfaces.INavHost
 import com.gigforce.core.di.repo.IAadhaarDetailsRepository
@@ -67,6 +70,9 @@ interface AppBindingsModule {
     @Binds
     fun provideNavHost(imp: NavHostImp): INavHost
 
+    @Binds
+    fun provideBannerCardRepository(repo: BannerCardRepository): IBannerCardRepository
+
 }
 
 @InstallIn(ViewModelComponent::class)
@@ -89,7 +95,7 @@ interface ViewModelBindings {
     fun provideViewModelEventTracker(imp: EventTrackerImp): IEventTracker
 
     @Binds
-    fun provideAadhaarDetailsRepository(imp : AadhaarDetailsRepository) : IAadhaarDetailsRepository
+    fun provideAadhaarDetailsRepository(imp: AadhaarDetailsRepository): IAadhaarDetailsRepository
 
     @Binds
     fun provideMainNavRepo(imp: MainNavDataRepository): IMainNavDataRepository

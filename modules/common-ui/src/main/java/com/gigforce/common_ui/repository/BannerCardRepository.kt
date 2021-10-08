@@ -4,6 +4,7 @@ import com.gigforce.core.datamodels.AccessLogDataObject
 import com.gigforce.core.datamodels.AccessLogResponse
 import com.gigforce.core.retrofit.AccessLogsService
 import com.gigforce.core.retrofit.RetrofitFactory
+import javax.inject.Inject
 
 
 interface IBannerCardRepository {
@@ -23,7 +24,7 @@ interface IBannerCardRepository {
     ): AccessLogResponse
 }
 
-class BannerCardRepository : IBannerCardRepository {
+class BannerCardRepository @Inject constructor() : IBannerCardRepository {
     private val accessLogsApi: AccessLogsService =
         RetrofitFactory.createService(AccessLogsService::class.java)
 
