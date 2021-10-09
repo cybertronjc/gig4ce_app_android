@@ -312,7 +312,6 @@ class JoiningList2ViewModel @Inject constructor(
                 date.atStartOfDay(),
                 currentDate.atStartOfDay()
             ).toDays()
-            Log.d("daysDiff", "diff $daysDiff")
             daysDiff.toInt()
         }
     }
@@ -358,7 +357,6 @@ class JoiningList2ViewModel @Inject constructor(
         } else {
             dropBusinessMap?.put(businessName, 1)
         }
-        Log.d("drop", "$dropBusinessMap")
         processJoiningsAndEmit(joiningsRaw!!)
 
     }
@@ -386,5 +384,15 @@ class JoiningList2ViewModel @Inject constructor(
         isSelectEnableGlobal = true
         _dropJoiningMap.postValue(dropJoining)
         processJoiningsAndEmit(joiningsRaw!!)
+    }
+
+    fun resetViewModel(){
+        gigforceLogger.d(TAG, "reset viewmodel")
+        dropJoining?.clear()
+        dropBusinessMap?.clear()
+        isSelectEnableGlobal = false
+        dropBusinessMap?.clear()
+        //processJoiningsAndEmit(joiningsRaw!!)
+
     }
 }

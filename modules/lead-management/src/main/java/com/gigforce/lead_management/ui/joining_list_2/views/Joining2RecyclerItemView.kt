@@ -124,6 +124,10 @@ class Joining2RecyclerItemView(
                 viewBinding.callGigerBtn.gone()
             }
 
+        } else {
+            viewData?.selected = false
+            viewBinding.selectJoiningBtn.gone()
+            viewBinding.callGigerBtn.visible()
         }
     }
 

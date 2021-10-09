@@ -379,39 +379,4 @@ class NewSelectionForm2ViewModel @Inject constructor(
         }
 
     }
-
-    fun getTlNameAndNumber(): ProfileData?{
-        var profileData: ProfileData? = ProfileData()
-        FirebaseAuth.getInstance().currentUser?.let {
-            FirebaseFirestore
-                .getInstance()
-                .collection("Profiles").document(it.uid).get().addOnSuccessListener {
-                    if (it.exists()) {
-                        profileData = it.toObject(ProfileData::class.java)
-                            ?: throw  IllegalStateException("unable to parse profile object")
-                        Log.d("profileData", "profiledata ${profileData?.name}")
-                    }
-                }.addOnFailureListener { exception ->
-                    FirebaseCrashlytics.getInstance().log("Exception : checkIfSignInOrSignup Method $exception")
-                }
-        }
-        return profileData
-    }
-    private val _profile = MutableLiveData<Lce<ProfileData>>()
-    val profile: LiveData<Lce<ProfileData>> = _profile
-
-    fun getProfileForUser(
-        userId: String?
-    ) = viewModelScope.launch {
-        try {
-            _profile.value = Lce.loading()
-            val profileData = profileFirebaseRepository.getProfileData(
-                userId = userId
-            )
-
-            _profile.value = Lce.content(profileData)
-        } catch (e: Exception) {
-            _profile.value = Lce.error(e.message!!)
-        }
-    }
 }

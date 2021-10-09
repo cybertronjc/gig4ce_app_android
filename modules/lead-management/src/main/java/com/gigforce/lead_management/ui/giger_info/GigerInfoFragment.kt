@@ -13,6 +13,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
@@ -69,7 +70,8 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
         initToolbar(viewBinding)
         initListeners()
         initViewModel()
-        initSharedViewModel()
+        checkForDropSelection()
+        //initSharedViewModel()
     }
 
     private fun getDataFrom(
@@ -94,6 +96,26 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
     }
 
 
+    private fun checkForDropSelection() {
+//        val navController = findNavController()
+//        navController.currentBackStackEntry?.savedStateHandle?.getLiveData<String>("drop_status")?.observe(
+//            viewLifecycleOwner) { result ->
+//            if (result == "dropped"){
+//                Log.d("droppedInfo","dropped")
+//                navigation.popBackStack()
+//            }
+//        }
+        childFragmentManager.setFragmentResultListener("drop_status", viewLifecycleOwner) { key, bundle ->
+            val result = bundle.getString("drop_status")
+            // Do something with the result
+            if (result == "dropped"){
+                Log.d("droppedInfo","dropped")
+                navigation.popBackStack()
+            }
+        }
+
+    }
+
     private fun initViewModel() {
         viewModel.getGigerJoiningInfo(joiningId)
         //observe data
@@ -111,23 +133,23 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
         })
     }
 
-    private fun initSharedViewModel() = lifecycleScope.launchWhenCreated {
-        sharedViewModel.viewStateFlow.collect{
-                when (it) {
-                    LeadManagementSharedViewModelState.OneOrMoreSelectionsDropped -> {
-                        navigation.popBackStack()
-                    }
-                }
-            }
-
-//        sharedViewModel.viewState.observe(viewLifecycleOwner, Observer {
-//            when (it) {
-//                LeadManagementSharedViewModelState.OneOrMoreSelectionsDropped -> {
-//                    navigation.popBackStack()
+//    private fun initSharedViewModel() = lifecycleScope.launchWhenCreated {
+//        sharedViewModel.viewStateFlow.collect{
+//                when (it) {
+//                    LeadManagementSharedViewModelState.OneOrMoreSelectionsDropped -> {
+//                        navigation.popBackStack()
+//                    }
 //                }
 //            }
-//        })
-    }
+//
+////        sharedViewModel.viewState.observe(viewLifecycleOwner, Observer {
+////            when (it) {
+////                LeadManagementSharedViewModelState.OneOrMoreSelectionsDropped -> {
+////                    navigation.popBackStack()
+////                }
+////            }
+////        })
+//    }
 
     private fun showLoadingInfo() = viewBinding.apply{
         checklistLayout.removeAllViews()

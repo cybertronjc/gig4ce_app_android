@@ -10,6 +10,7 @@ import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import com.gigforce.common_ui.UserInfoImp
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
@@ -55,6 +56,8 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
 
     @Inject
     lateinit var navigation: INavigation
+    @Inject
+    lateinit var userinfo: UserInfoImp
     private val viewModel: NewSelectionForm2ViewModel by viewModels()
     private val leadMgmtSharedViewModel: LeadManagementSharedViewModel by activityViewModels()
     private val dateFormatter =  SimpleDateFormat("dd/MMM/yy",Locale.getDefault())
@@ -234,8 +237,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                 }
                 is NewSelectionForm2ViewState.JoiningDataSubmitted -> {
                     try {
-                        val profileData = viewModel.getTlNameAndNumber()
-                        val whatsAppIntentData = WhatsappTemplateModel(state.shareLink, state.businessName, profileData?.name.toString(), state.jobProfileName, profileData?.loginMobile.toString())
+                        val whatsAppIntentData = WhatsappTemplateModel(state.shareLink, state.businessName, userinfo.getData().profileName, state.jobProfileName, userinfo.sharedPreAndCommonUtilInterface.getLoggedInMobileNumber())
                         navigation.navigateTo(
                             LeadManagementNavDestinations.FRAGMENT_SELECT_FORM_SUCCESS,
                             bundleOf(

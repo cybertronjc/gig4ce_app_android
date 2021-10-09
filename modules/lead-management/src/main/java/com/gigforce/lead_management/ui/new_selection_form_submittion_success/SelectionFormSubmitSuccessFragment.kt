@@ -35,11 +35,6 @@ class SelectionFormSubmitSuccessFragment : BaseFragment2<FragmentNewSelectionFor
 
     companion object{
         private const val TAG = "SelectionFormSubmitSuccessFragment"
-        const val INTENT_EXTRA_SHARE_LINK = "share_link"
-        const val INTENT_EXTRA_BUSINESS_NAME = "business_name"
-        const val INTENT_EXTRA_TL_NAME = "tl_name"
-        const val INTENT_EXTRA_JOB_PROFILE_NAME = "job_profile"
-        const val INTENT_EXTRA_TL_MOBILE_NUMBER = "tl_mobile"
         const val INTENT_EXTRA_WHATSAPP_DATA = "whatsapp_data"
     }
 
@@ -143,17 +138,12 @@ class SelectionFormSubmitSuccessFragment : BaseFragment2<FragmentNewSelectionFor
                 Intent.EXTRA_SUBJECT,
                 getString(R.string.app_name)
             )
-//            val shareMessageSnappable = SpannableStringBuilder().bold { append("Congratulations!") }.append("\\nWelcome to $businessName with Gigforce! I am $tlName from Gigforce. \\uD83D\\uDE4F \\n\" +\n" +
-//                    "                    \"You are selected as $jobProfileName. We are delighted to have you on our platform. You are about to start an exciting and rewarding journey with us. \\uD83E\\uDD1D \\n\"")
-//                .bold { append("With Gigforce") }.append("- now get transparent rate card and timely payouts. ❤️ \\n\" +\n" +
-//                        "                    \"Please complete the joining checklist on Gigforce app. The payouts will be released to the same account that you upload on app. \\uD83D\\uDC47 \\n\" +\n" +
-//                        "                    \"Feel free to reach out to me on $tlMobileNumber if you have any questions or issues. Happy to assist. \\uD83D\\uDE0A").append(" "+ url)
-            val shareMessage = "Congratulations! \nWelcome to ${whatsappTemplateModel.businessName} with Gigforce! I am ${whatsappTemplateModel.tlName} from Gigforce. \uD83D\uDE4F \n" +
-                    "You are selected as ${whatsappTemplateModel.jobProfileName}. We are delighted to have you on our platform. You are about to start an exciting and rewarding journey with us. \uD83E\uDD1D \n" +
-                    "With Gigforce - now get transparent rate card and timely payouts. ❤️ \n" +
-                    "Please complete the joining checklist on Gigforce app. The payouts will be released to the same account that you upload on app. \uD83D\uDC47 \n" +
-                    "Feel free to reach out to me on ${whatsappTemplateModel.tlMobileNumber} if you have any questions or issues. Happy to assist. \uD83D\uDE0A" +
-                    " " + url
+            val shareMessage = "Congratulations! \nWelcome to ${whatsappTemplateModel.businessName} with Gigforce! I am ${whatsappTemplateModel.tlName} from Gigforce. \uD83D\uDE4F \n\n" +
+                    "You are selected as ${whatsappTemplateModel.jobProfileName}. We are delighted to have you on our platform. You are about to start an exciting and rewarding journey with us. \uD83E\uDD1D \n\n" +
+                    "With Gigforce - now get transparent rate card and timely payouts. ❤️ \n\n" +
+                    "Please complete the joining checklist on Gigforce app. The payouts will be released to the same account that you upload on app. \uD83D\uDC47 \n\n" +
+                    "Feel free to reach out to me on ${whatsappTemplateModel.tlMobileNumber} if you have any questions or issues. Happy to assist. \uD83D\uDE0A \n" +
+                    " \n" + url
 
             shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
 //            val bitmap =

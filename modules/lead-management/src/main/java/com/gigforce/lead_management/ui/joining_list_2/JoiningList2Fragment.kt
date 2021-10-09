@@ -82,11 +82,12 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
         savedInstanceState: Bundle?
     ) {
         checkForApplyFilter()
+        checkForDropSelection()
         initAppBar()
         initTabLayout()
         initListeners(viewBinding)
         initViewModel()
-        initSharedViewModel()
+//        initSharedViewModel()
     }
 
     private fun initListeners(
@@ -138,6 +139,20 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
 
     }
 
+    private fun checkForDropSelection() {
+        childFragmentManager.setFragmentResultListener("drop_status", viewLifecycleOwner) { key, bundle ->
+            val result = bundle.getString("drop_status")
+            // Do something with the result
+            if (result == "dropped"){
+                viewModel.resetViewModel()
+                viewBinding.appBarComp.setAppBarTitle(getString(R.string.joinings_lead))
+                viewBinding.joinNowButton.text = getString(R.string.add_new_lead)
+                dropJoining?.clear()
+                viewModel.getJoinings()
+            }
+        }
+
+    }
     private fun checkForApplyFilter() {
         val navController = findNavController()
         navController.currentBackStackEntry?.savedStateHandle?.getLiveData<Int>("filterDays")?.observe(
@@ -249,26 +264,6 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
             dropJoining = hashMap
     }
 
-    private fun initSharedViewModel() = lifecycleScope.launchWhenCreated {
-        sharedViewModel.viewStateFlow.collect{
-
-                when (it) {
-                    LeadManagementSharedViewModelState.OneOrMoreSelectionsDropped -> {
-                        navigation.popBackStack()
-                        navigation.navigateTo("LeadMgmt/joiningListFragment")
-                    }
-                }
-            }
-
-//        sharedViewModel.viewState.observe(viewLifecycleOwner, Observer {
-//            when (it) {
-//                LeadManagementSharedViewModelState.OneOrMoreSelectionsDropped -> {
-//                    navigation.popBackStack()
-//                    navigation.navigateTo("LeadMgmt/joiningListFragment")
-//                }
-//            }
-//        })
-    }
 
     private fun setStatus(map: Map<String, Int>) = viewBinding.apply{
         map.forEach {
