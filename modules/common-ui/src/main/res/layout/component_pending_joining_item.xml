@@ -34,7 +34,6 @@
                 android:layout_width="100dp"
                 android:layout_height="80dp"
                 android:layout_marginTop="30dp"
-                android:layout_marginEnd="28dp"
                 android:src="@drawable/banner_error"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

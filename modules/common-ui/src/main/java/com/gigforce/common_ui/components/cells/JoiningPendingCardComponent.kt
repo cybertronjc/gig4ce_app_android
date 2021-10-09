@@ -11,6 +11,7 @@ import androidx.core.os.bundleOf
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.viewdatamodels.PendingJoiningItemDVM
+import com.gigforce.common_ui.views.GigforceImageView
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.navigation.INavigation
 import com.google.android.material.button.MaterialButton
@@ -33,6 +34,7 @@ class JoiningPendingCardComponent(
     private val locationNameTV: TextView
     private val expectedDateTV: TextView
     private val completeJoiningBtn: MaterialButton
+    private val image : GigforceImageView
 
     private var pendingJoining : PendingJoiningItemDVM? = null
 
@@ -50,6 +52,7 @@ class JoiningPendingCardComponent(
         locationNameTV = this.findViewById(R.id.location_textview)
         expectedDateTV = this.findViewById(R.id.joining_date_textview)
         completeJoiningBtn = this.findViewById(R.id.complete_joining_button)
+        image = this.findViewById(R.id.gigforceImageView)
 
         completeJoiningBtn.setOnClickListener(this)
     }
@@ -62,6 +65,9 @@ class JoiningPendingCardComponent(
             jobProfileNameTV.text = it.jobProfileName
             expectedDateTV.text = it.expectedStartDate
             locationNameTV.text = "Location - ${it.location}"
+
+            if(it.image.isNotBlank())
+             image.loadImageIfUrlElseTryFirebaseStorage(it.image)
         }
     }
 
