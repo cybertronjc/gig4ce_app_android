@@ -148,7 +148,7 @@ class OnboardingLoaderFragment : BaseFragment() {
                     "Success no pending writes found"
                 )
 
-                if (!profileAndGig.hasGigs) {
+                if (profileAndGig.hasGigs) {
                     navigateToCalendarHomeScreen()
                 } else {
                     navigateToLandingHomeScreen()
@@ -161,7 +161,7 @@ class OnboardingLoaderFragment : BaseFragment() {
                     it
                 )
 
-                if (!profileAndGig.hasGigs) {
+                if (profileAndGig.hasGigs) {
                     navigateToCalendarHomeScreen()
                 } else {
                     navigateToLandingHomeScreen()
