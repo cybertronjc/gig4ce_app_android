@@ -3,10 +3,8 @@ package com.gigforce.lead_management.ui.drop_selection
 import android.graphics.Color
 import android.os.Bundle
 import androidx.core.os.bundleOf
-import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.*
+import androidx.navigation.fragment.findNavController
 import com.gigforce.core.base.BaseBottomSheetDialogFragment
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
@@ -82,7 +80,7 @@ class DropSelectionBottomSheetDialogFragment :
         bindProgressButton(this.successLayout.okayButton)
         this.successLayout.okayButton.attachTextChangeAnimator()
 
-        this.mainLayout.dropSelectionLabel.text = "Are you sure that you want to drop ${selectionIdsToDrop.size} selection(s)?"
+        this.mainLayout.dropSelectionLabel.text = getString(R.string.are_sure_to_drop_lead) + " ${selectionIdsToDrop.size} " + getString(R.string.selections_lead)
 
         this.errorLayout.retryBtn.setOnClickListener {
             showMainLayout()
@@ -99,7 +97,7 @@ class DropSelectionBottomSheetDialogFragment :
         }
 
         this.successLayout.okayButton.setOnClickListener {
-            sharedLeadMgmtViewModel.oneOrMoreSelectionsDropped()
+            setFragmentResult("drop_status", bundleOf("drop_status" to "dropped"))
             dismiss()
         }
     }
@@ -110,9 +108,9 @@ class DropSelectionBottomSheetDialogFragment :
         this.mainLayout.root.visible()
 
         this.mainLayout.dropSelectionLabel.text = if(selectionIdsToDrop.size == 1){
-            "Are you sure you that you want to drop this selection?"
+            getString(R.string.are_you_sure_drop_lead)
         } else{
-            "Are you sure you that you want to drop ${selectionIdsToDrop.size} selection(s)?"
+            getString(R.string.are_sure_to_drop_lead) + " ${selectionIdsToDrop.size} " + getString(R.string.selections_lead)
         }
     }
 
@@ -146,9 +144,11 @@ class DropSelectionBottomSheetDialogFragment :
                     viewBinding.mainLayout.root.gone()
                     viewBinding.errorLayout.root.gone()
                    if (selectionIdsToDrop.size == 1){
-                       viewBinding.successLayout.dropedSelectionLabel.text = "1 selection dropped successfully"
+                       viewBinding.successLayout.dropedSelectionLabel.text = getString(R.string.one_selection_drop_lead)
                     } else {
-                       viewBinding.successLayout.dropedSelectionLabel.text =  "${selectionIdsToDrop.size} selections dropped successfully"}
+                       viewBinding.successLayout.dropedSelectionLabel.text =
+                           selectionIdsToDrop.size.toString() + getString(R.string.selection_drop_lead)
+                   }
                     //dismiss()
                 }
             }

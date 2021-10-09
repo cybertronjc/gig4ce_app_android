@@ -185,6 +185,12 @@
     <string name="one_month_lead">पिछले 1 महीने</string>
     <string name="no_selection_yet_lead">अभी तक कोई चयन नहीं!</string>
     <string name="joining_whatsapp_share_msg_lead">आपको फ्लिपकार्ट में डिलीवरी प्रोफाइल के लिए चुना गया है। कमाई शुरू करने के लिए कृपया Gigforce ऐप पर अपनी ज्वाइनिंग चेकलिस्ट पूरी करें.</string>
+    <string name="selection_drop_lead"> चयन सफलतापूर्वक गिरा</string>
+    <string name="are_you_sure_drop_lead">क्या आप वाकई इस चयन को छोड़ना चाहते हैं? </string>
+    <string name="are_sure_to_drop_lead">क्या आप सुनिश्चित हैं कि आप छोड़ना चाहते हैं </string>
+    <string name="selections_lead"> चयन (ओं)?</string>
+    <string name="no_shift_loaded_lead">शामिल नहीं हो सकते, कृपया अपने प्रबंधक से संपर्क करें </string>
+    <string name="one_selection_drop_lead">1 चयन सफलतापूर्वक गिराया गया</string>
     <string name="type">Type</string>
     <string name="here">here</string>
 

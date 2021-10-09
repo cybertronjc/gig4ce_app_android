@@ -187,6 +187,11 @@
     <string name="one_month_lead">Last 1 month</string>
     <string name="no_selection_yet_lead">No Selections Yet !</string>
     <string name="no_shift_loaded_lead">Cannot make joining, Please contact your manager</string>
+    <string name="one_selection_drop_lead"> 1 selection dropped successfully</string>
+    <string name="selection_drop_lead"> selections dropped successfully</string>
+    <string name="are_you_sure_drop_lead">Are you sure you that you want to drop this selection?</string>
+    <string name="are_sure_to_drop_lead">Are you sure you that you want to drop </string>
+    <string name="selections_lead"> selection(s)?</string>
     <string name="type">Type</string>
     <string name="here">here</string>
 

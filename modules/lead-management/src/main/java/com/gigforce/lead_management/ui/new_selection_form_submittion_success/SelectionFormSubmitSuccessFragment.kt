@@ -35,21 +35,11 @@ class SelectionFormSubmitSuccessFragment : BaseFragment2<FragmentNewSelectionFor
 
     companion object{
         private const val TAG = "SelectionFormSubmitSuccessFragment"
-        const val INTENT_EXTRA_SHARE_LINK = "share_link"
-        const val INTENT_EXTRA_BUSINESS_NAME = "business_name"
-        const val INTENT_EXTRA_TL_NAME = "tl_name"
-        const val INTENT_EXTRA_JOB_PROFILE_NAME = "job_profile"
-        const val INTENT_EXTRA_TL_MOBILE_NUMBER = "tl_mobile"
         const val INTENT_EXTRA_WHATSAPP_DATA = "whatsapp_data"
     }
 
     @Inject
     lateinit var navigation : INavigation
-//    private lateinit var shareLink : String
-//    private lateinit var businessName : String
-//    private lateinit var tlName : String
-//    private lateinit var jobProfileName : String
-//    private lateinit var tlMobileNumber : String
     private lateinit var whatsappTemplateModel: WhatsappTemplateModel
 
     private val backPressHandler = object : OnBackPressedCallback(true) {
@@ -74,18 +64,10 @@ class SelectionFormSubmitSuccessFragment : BaseFragment2<FragmentNewSelectionFor
     ) {
         arguments?.let {
             whatsappTemplateModel = it.getParcelable(INTENT_EXTRA_WHATSAPP_DATA) ?: return@let
-//            businessName = it.getString(INTENT_EXTRA_BUSINESS_NAME) ?: return@let
-//            tlName = it.getString(INTENT_EXTRA_TL_NAME) ?: return@let
-//            jobProfileName = it.getString(INTENT_EXTRA_JOB_PROFILE_NAME) ?: return@let
-//            tlMobileNumber = it.getString(INTENT_EXTRA_TL_MOBILE_NUMBER) ?: return@let
         }
 
         savedInstanceState?.let {
             whatsappTemplateModel = it.getParcelable(INTENT_EXTRA_WHATSAPP_DATA) ?: return@let
-//            businessName = it.getString(INTENT_EXTRA_BUSINESS_NAME) ?: return@let
-//            tlName = it.getString(INTENT_EXTRA_TL_NAME) ?: return@let
-//            jobProfileName = it.getString(INTENT_EXTRA_JOB_PROFILE_NAME) ?: return@let
-//            tlMobileNumber = it.getString(INTENT_EXTRA_TL_MOBILE_NUMBER) ?: return@let
         }
 
         logDataReceivedFromBundles()
@@ -95,10 +77,6 @@ class SelectionFormSubmitSuccessFragment : BaseFragment2<FragmentNewSelectionFor
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putParcelable(INTENT_EXTRA_WHATSAPP_DATA, whatsappTemplateModel)
-//        outState.putString(INTENT_EXTRA_BUSINESS_NAME, businessName)
-//        outState.putString(INTENT_EXTRA_TL_NAME, tlName)
-//        outState.putString(INTENT_EXTRA_JOB_PROFILE_NAME, jobProfileName)
-//        outState.putString(INTENT_EXTRA_TL_MOBILE_NUMBER, tlMobileNumber)
     }
     private fun logDataReceivedFromBundles() {
 
@@ -155,43 +133,38 @@ class SelectionFormSubmitSuccessFragment : BaseFragment2<FragmentNewSelectionFor
     private fun shareToAnyApp(url: String) {
         try {
             val shareIntent = Intent(Intent.ACTION_SEND)
-            shareIntent.type = "image/png"
+            shareIntent.type = "text/plain"
             shareIntent.putExtra(
                 Intent.EXTRA_SUBJECT,
                 getString(R.string.app_name)
             )
-//            val shareMessageSnappable = SpannableStringBuilder().bold { append("Congratulations!") }.append("\\nWelcome to $businessName with Gigforce! I am $tlName from Gigforce. \\uD83D\\uDE4F \\n\" +\n" +
-//                    "                    \"You are selected as $jobProfileName. We are delighted to have you on our platform. You are about to start an exciting and rewarding journey with us. \\uD83E\\uDD1D \\n\"")
-//                .bold { append("With Gigforce") }.append("- now get transparent rate card and timely payouts. ❤️ \\n\" +\n" +
-//                        "                    \"Please complete the joining checklist on Gigforce app. The payouts will be released to the same account that you upload on app. \\uD83D\\uDC47 \\n\" +\n" +
-//                        "                    \"Feel free to reach out to me on $tlMobileNumber if you have any questions or issues. Happy to assist. \\uD83D\\uDE0A").append(" "+ url)
-            val shareMessage = "Congratulations! \nWelcome to ${whatsappTemplateModel.businessName} with Gigforce! I am ${whatsappTemplateModel.tlName} from Gigforce. \uD83D\uDE4F \n" +
-                    "You are selected as ${whatsappTemplateModel.jobProfileName}. We are delighted to have you on our platform. You are about to start an exciting and rewarding journey with us. \uD83E\uDD1D \n" +
-                    "With Gigforce - now get transparent rate card and timely payouts. ❤️ \n" +
-                    "Please complete the joining checklist on Gigforce app. The payouts will be released to the same account that you upload on app. \uD83D\uDC47 \n" +
-                    "Feel free to reach out to me on ${whatsappTemplateModel.tlMobileNumber} if you have any questions or issues. Happy to assist. \uD83D\uDE0A" +
-                    " " + url
+            val shareMessage = "Congratulations! \nWelcome to ${whatsappTemplateModel.businessName} with Gigforce! I am ${whatsappTemplateModel.tlName} from Gigforce. \uD83D\uDE4F \n\n" +
+                    "You are selected as ${whatsappTemplateModel.jobProfileName}. We are delighted to have you on our platform. You are about to start an exciting and rewarding journey with us. \uD83E\uDD1D \n\n" +
+                    "With Gigforce - now get transparent rate card and timely payouts. ❤️ \n\n" +
+                    "Please complete the joining checklist on Gigforce app. The payouts will be released to the same account that you upload on app. \uD83D\uDC47 \n\n" +
+                    "Feel free to reach out to me on ${whatsappTemplateModel.tlMobileNumber} if you have any questions or issues. Happy to assist. \uD83D\uDE0A \n" +
+                    " \n" + url
 
             shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
-            val bitmap =
-                BitmapFactory.decodeResource(requireContext().resources, R.drawable.bg_gig_type)
-
-            //save bitmap to app cache folder
-
-            //save bitmap to app cache folder
-            val outputFile = File(requireContext().cacheDir, "share" + ".png")
-            val outPutStream = FileOutputStream(outputFile)
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outPutStream)
-            outPutStream.flush()
-            outPutStream.close()
-            outputFile.setReadable(true, false)
-            shareIntent.putExtra(
-                Intent.EXTRA_STREAM, FileProvider.getUriForFile(
-                    requireContext(),
-                    requireContext().packageName + ".provider",
-                    outputFile
-                )
-            )
+//            val bitmap =
+//                BitmapFactory.decodeResource(requireContext().resources, R.drawable.bg_gig_type)
+//
+//            //save bitmap to app cache folder
+//
+//            //save bitmap to app cache folder
+//            val outputFile = File(requireContext().cacheDir, "share" + ".png")
+//            val outPutStream = FileOutputStream(outputFile)
+//            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outPutStream)
+//            outPutStream.flush()
+//            outPutStream.close()
+//            outputFile.setReadable(true, false)
+//            shareIntent.putExtra(
+//                Intent.EXTRA_STREAM, FileProvider.getUriForFile(
+//                    requireContext(),
+//                    requireContext().packageName + ".provider",
+//                    outputFile
+//                )
+//            )
             startActivityForResult(
                 Intent.createChooser(shareIntent, getString(R.string.choose_one_lead)),
                 ShareApplicationLinkFragment.REQUEST_CODE_SHARE_VIA_OTHER_APPS
