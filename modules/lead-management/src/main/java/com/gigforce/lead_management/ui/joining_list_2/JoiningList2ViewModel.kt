@@ -393,6 +393,9 @@ class JoiningList2ViewModel @Inject constructor(
         isSelectEnableGlobal = false
         dropBusinessMap?.clear()
         //processJoiningsAndEmit(joiningsRaw!!)
+    }
 
+    fun clearCachedRawJoinings(){
+        joiningsRaw = null
     }
 }

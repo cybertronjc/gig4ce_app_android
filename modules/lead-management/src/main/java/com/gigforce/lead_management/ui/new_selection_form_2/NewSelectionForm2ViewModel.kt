@@ -11,7 +11,6 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.repository.LeadManagementRepository
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.core.logger.GigforceLogger
-import com.gigforce.common_ui.repository.LeadManagementRepository
 import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.analytics.AuthEvents
@@ -313,6 +312,10 @@ class NewSelectionForm2ViewModel @Inject constructor(
         val selectedShift = joiningLocationsAndTLs.shiftTiming.firstOrNull()
         if (selectedShift != null)
             joiningRequest.shifts = listOf(selectedShift)
+
+        //Cleaning up Final JSON
+        joiningRequest.business.jobProfiles = emptyList()
+        joiningRequest.jobProfile.dynamicInputFields = emptyList()
 
         joiningRequest.dataFromDynamicFields = dataFromDynamicFieldsFromPreviousPages + dataFromDynamicFields
         submitJoiningData(

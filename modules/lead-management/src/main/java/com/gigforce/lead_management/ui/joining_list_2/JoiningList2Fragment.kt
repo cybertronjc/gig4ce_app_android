@@ -137,6 +137,11 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
             }
         }
 
+        swipeRefresh.setOnRefreshListener {
+            viewModel.resetViewModel()
+            viewModel.clearCachedRawJoinings()
+            viewModel.getJoinings()
+        }
     }
 
     private fun checkForDropSelection() {
@@ -315,6 +320,7 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
         joiningShimmerContainer.gone()
         joiningListInfoLayout.root.gone()
         joiningsRecyclerView.collection = joiningList
+        swipeRefresh.isRefreshing = false
     }
 
 //    private fun setStatusCount(filters: JoiningFilters) = viewBinding.apply{
@@ -352,6 +358,7 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
         joiningListInfoLayout.infoIv.layoutParams.width = 800
         joiningListInfoLayout.infoIv.requestLayout()
         joiningListInfoLayout.infoMessageTv.text = getString(R.string.no_selection_yet_lead)
+        swipeRefresh.isRefreshing = false
     }
 
     private fun showErrorInLoadingJoinings(
@@ -370,6 +377,7 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
         joiningListInfoLayout.infoIv.layoutParams.width = 800
         joiningListInfoLayout.infoIv.requestLayout()
         joiningListInfoLayout.infoMessageTv.text = error
+        swipeRefresh.isRefreshing = false
     }
 
 

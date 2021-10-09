@@ -27,6 +27,7 @@ class SelectJobProfileFragment : BaseFragment2<FragmentSelectJobProfileBinding>(
 
     companion object {
         private const val TAG = "SelectJobProfileFragment"
+        const val INTENT_EXTRA_SELECTED_BUSINESS = "selected_business"
         const val INTENT_EXTRA_JOB_PROFILES = "job_profiles"
     }
 
@@ -34,6 +35,7 @@ class SelectJobProfileFragment : BaseFragment2<FragmentSelectJobProfileBinding>(
     lateinit var navigation: INavigation
     private val sharedViewModel: LeadManagementSharedViewModel by activityViewModels()
     private var jobProfiles: ArrayList<JobProfilesItem> = arrayListOf()
+    private lateinit var selectedBusiness: JoiningBusinessAndJobProfilesItem
 
     private val glide: RequestManager by lazy {
         Glide.with(requireContext())
@@ -63,10 +65,12 @@ class SelectJobProfileFragment : BaseFragment2<FragmentSelectJobProfileBinding>(
     ) {
 
         arguments?.let {
+            selectedBusiness = it.getParcelable(INTENT_EXTRA_SELECTED_BUSINESS) ?: return@let
             jobProfiles = it.getParcelableArrayList(INTENT_EXTRA_JOB_PROFILES) ?: return@let
         }
 
         savedInstanceState?.let {
+            selectedBusiness = it.getParcelable(INTENT_EXTRA_SELECTED_BUSINESS) ?: return@let
             jobProfiles = it.getParcelableArrayList(INTENT_EXTRA_JOB_PROFILES) ?: return@let
         }
     }
@@ -78,6 +82,10 @@ class SelectJobProfileFragment : BaseFragment2<FragmentSelectJobProfileBinding>(
         outState.putParcelableArrayList(
             INTENT_EXTRA_JOB_PROFILES,
             jobProfiles
+        )
+        outState.putParcelable(
+            INTENT_EXTRA_SELECTED_BUSINESS,
+            selectedBusiness
         )
     }
 
@@ -102,7 +110,7 @@ class SelectJobProfileFragment : BaseFragment2<FragmentSelectJobProfileBinding>(
 
         okayButton.setOnClickListener {
             val selectedJobProfile = jobProfileAdapter.getSelectedBusiness() ?: return@setOnClickListener
-            sharedViewModel.jobProfileSelected(selectedJobProfile)
+            sharedViewModel.jobProfileSelected(selectedBusiness,selectedJobProfile)
 
             navigation.popBackStack(
                 LeadManagementNavDestinations.FRAGMENT_SELECTION_FORM_1,

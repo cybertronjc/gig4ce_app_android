@@ -19,7 +19,7 @@ data class JoiningBusinessAndJobProfilesItem(
     val icon: String? = null,
 
     @field:SerializedName("jobProfiles")
-    val jobProfiles: List<JobProfilesItem>,
+    var jobProfiles: List<JobProfilesItem>,
 
     @DoNotSerialize
     var selected: Boolean = false
@@ -34,46 +34,8 @@ data class JobProfilesItem(
     @field:SerializedName("id")
     val id: String? = null,
 
-//    @field:SerializedName("dynamicInputFields")
-    @DoNotSerialize
-    val dynamicInputFields: List<JobProfileDependentDynamicInputField> = listOf(
-        JobProfileDependentDynamicInputField(
-            id = "dd",
-            title = "Mandatory title",
-            mandatory = true,
-            inputType = JobProfileDependentDynamicInputField.INPUT_TYPE_NUMBER,
-            maxLength = 10,
-            screenIdToShowIn = "form_1",
-            prefillText = "0"
-        ),
-        JobProfileDependentDynamicInputField(
-            id = "dd",
-            title = "Mandatory title",
-            mandatory = false,
-            inputType = JobProfileDependentDynamicInputField.INPUT_TYPE_NUMBER,
-            maxLength = 0,
-            screenIdToShowIn = "form_1",
-            prefillText = null
-        ),
-        JobProfileDependentDynamicInputField(
-            id = "dd",
-            title = "nMandatory title",
-            mandatory = true,
-            inputType = JobProfileDependentDynamicInputField.INPUT_TYPE_TEXT,
-            maxLength = 10,
-            screenIdToShowIn = "form_2",
-            prefillText = "0"
-        ),
-        JobProfileDependentDynamicInputField(
-            id = "dd",
-            title = "nMandatory title",
-            mandatory = false,
-            inputType = JobProfileDependentDynamicInputField.INPUT_TYPE_TEXT,
-            maxLength = 0,
-            screenIdToShowIn = "form_2",
-            prefillText = null
-        )
-    ),
+    @field:SerializedName("dynamicInputFields")
+    var dynamicInputFields: List<JobProfileDependentDynamicInputField> = emptyList(),
 
     @DoNotSerialize
     var selected: Boolean = false
@@ -94,7 +56,7 @@ data class JobProfileDependentDynamicInputField(
     @field:SerializedName("inputType")
     val inputType: String? = INPUT_TYPE_TEXT,
 
-    @field:SerializedName("id")
+    @field:SerializedName("maxLength")
     val maxLength: Int = 0, //0 means no limit
 
     @field:SerializedName("screenIdToShowIn")

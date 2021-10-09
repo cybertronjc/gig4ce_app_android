@@ -114,7 +114,10 @@ class SelectBusinessFragment : BaseFragment2<FragmentSelectBusinessBinding>(
 
             navigation.navigateTo(
                 LeadManagementNavDestinations.FRAGMENT_SELECT_JOB_PROFILE,
-                bundleOf(SelectJobProfileFragment.INTENT_EXTRA_JOB_PROFILES to selectedBusiness.jobProfiles),
+                bundleOf(
+                    SelectJobProfileFragment.INTENT_EXTRA_SELECTED_BUSINESS to selectedBusiness,
+                    SelectJobProfileFragment.INTENT_EXTRA_JOB_PROFILES to selectedBusiness.jobProfiles
+                ),
                 getNavOptions()
             )
         }

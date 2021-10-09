@@ -15,7 +15,6 @@ import android.widget.LinearLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
-import androidx.core.view.children
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -446,21 +445,23 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
         formMainInfoLayout.infoMessageTv.text = error
     }
 
-    private fun initSharedViewModel() = lifecycleScope.launchWhenCreated {
+    private fun initSharedViewModel()  {
         leadMgmtSharedViewModel
-            .viewStateFlow.collect {
-//                showToast(it.toString())
-//                if (!isAdded) return@collect
+            .viewState
+            .observe(viewLifecycleOwner,{
 
                 when (it) {
                     is LeadManagementSharedViewModelState.BusinessSelected -> showSelectedBusiness(
                         it.businessSelected
                     )
-                    is LeadManagementSharedViewModelState.JobProfileSelected -> showSelectedJobProfile(
-                        it.jobProfileSelected
-                    )
+                    is LeadManagementSharedViewModelState.JobProfileSelected -> {
+                        showSelectedJobProfile(
+                            it.businessSelected,
+                            it.jobProfileSelected
+                        )
+                    }
                 }
-            }
+            })
     }
 
     private fun showSelectedBusiness(
@@ -480,8 +481,13 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
     }
 
     private fun showSelectedJobProfile(
+        businessSelected: JoiningBusinessAndJobProfilesItem,
         jobProfileSelected: JobProfilesItem
     ) = viewBinding.mainForm.apply {
+
+        businessSelectedLabel.text = businessSelected.name
+        businessSelectedLabel.typeface = Typeface.DEFAULT_BOLD
+        viewModel.handleEvent(NewSelectionForm1Events.BusinessSelected(businessSelected))
 
         selectedJobProfileLabel.text = jobProfileSelected.name
         selectedJobProfileLabel.typeface = Typeface.DEFAULT_BOLD

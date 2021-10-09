@@ -226,7 +226,7 @@ class NewSelectionForm1ViewModel @Inject constructor(
             return
         }
 
-        val dynamicFieldsForNextForm = selectedJobProfile!!.dynamicInputFields.filter {
+        val dynamicFieldsForNextForm = selectedJobProfile!!.dynamicInputFields?.filter {
             it.screenIdToShowIn == NewSelectionForm2Fragment.SCREEN_ID
         }
 

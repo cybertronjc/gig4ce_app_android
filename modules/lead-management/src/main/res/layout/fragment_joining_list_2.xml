@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -13,8 +14,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="visible"
-            app:isFilterVisible="true"
             app:backgroundType="PinkBar"
+            app:isFilterVisible="true"
             app:isSearchVisible="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -36,7 +37,7 @@
             app:tabMode="fixed"
             app:tabSelectedTextColor="@color/white"
             app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
-            app:tabTextColor="@color/black"/>
+            app:tabTextColor="@color/black" />
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -44,10 +45,17 @@
             android:layout_weight="1"
             android:paddingTop="12dp">
 
-            <com.gigforce.core.recyclerView.CoreRecyclerView
-                android:id="@+id/joinings_recycler_view"
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/swipeRefresh"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent">
+
+                <com.gigforce.core.recyclerView.CoreRecyclerView
+                    android:id="@+id/joinings_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
             <include
                 android:id="@+id/joining_shimmer_container"
@@ -62,18 +70,18 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/join_now_button"
+            style="@style/LeadMgmtMaterialButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/size_16"
             android:layout_marginEnd="@dimen/size_16"
             android:layout_marginBottom="@dimen/size_16"
-            android:text="@string/add_new_lead"
+            android:fontFamily="@font/lato"
             android:paddingTop="12dp"
             android:paddingBottom="12dp"
-            android:fontFamily="@font/lato"
-            style="@style/LeadMgmtMaterialButtonStyle"
-            app:shapeAppearanceOverlay="@style/RoundCornerButtonShapeOverlay"
-            android:textColor="@color/white" />
+            android:text="@string/add_new_lead"
+            android:textColor="@color/white"
+            app:shapeAppearanceOverlay="@style/RoundCornerButtonShapeOverlay" />
 
 
     </LinearLayout>

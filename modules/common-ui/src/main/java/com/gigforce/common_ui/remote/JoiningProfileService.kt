@@ -57,7 +57,7 @@ interface JoiningProfileService {
     ): Response<GigerInfo>
 
     @GET("joining/pendingEjoining")
-    suspend fun getPendingJoining(): Response<List<PendingJoiningItemDVM>>
+    suspend fun getPendingJoining(): Response<BaseResponse<PendingJoiningItemDVM>>
 
     @POST("joining/dropEjoining")
     suspend fun dropSelections(
