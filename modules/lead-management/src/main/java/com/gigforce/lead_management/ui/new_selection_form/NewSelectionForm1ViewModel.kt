@@ -136,6 +136,7 @@ class NewSelectionForm1ViewModel @Inject constructor(
             }
 
             _viewState.value = NewSelectionForm1ViewState.OpenSelectedJobProfileScreen(
+                selectedBusiness!!,
                 selectedBusiness!!.jobProfiles.sortedBy {
                     it.name
                 }

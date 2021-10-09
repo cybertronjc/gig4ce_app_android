@@ -84,10 +84,10 @@ class LeadManagementSharedViewModel : ViewModel() {
         jobProfileSelected: JobProfilesItem
     ) = viewModelScope.launch{
         _viewState.value = LeadManagementSharedViewModelState.JobProfileSelected(selectedBusiness,jobProfileSelected)
-        _viewStateFlow.send(LeadManagementSharedViewModelState.JobProfileSelected(selectedBusiness,jobProfileSelected))
-        delay(1000)
-
+        delay(200)
         _viewState.value = null
+
+        _viewStateFlow.send(LeadManagementSharedViewModelState.JobProfileSelected(selectedBusiness,jobProfileSelected))
     }
 
     fun citySelected(

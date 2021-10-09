@@ -20,6 +20,7 @@ sealed class NewSelectionForm1ViewState {
     ) : NewSelectionForm1ViewState()
 
     data class OpenSelectedJobProfileScreen(
+        val selectedBusiness: JoiningBusinessAndJobProfilesItem,
         val jobProfiles: List<JobProfilesItem>
     ) : NewSelectionForm1ViewState()
 

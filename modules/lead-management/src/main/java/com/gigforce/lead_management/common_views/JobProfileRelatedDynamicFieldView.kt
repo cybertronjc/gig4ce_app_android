@@ -20,6 +20,7 @@ import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.LayoutDynamicFieldBinding
 import kotlinx.android.parcel.Parcelize
 
+
 class JobProfileRelatedDynamicFieldView(
     context: Context,
     attrs: AttributeSet?
@@ -96,7 +97,7 @@ class JobProfileRelatedDynamicFieldView(
     private fun setInputType(inputType: String?) {
         viewBinding.editText.inputType = when (inputType) {
             JobProfileDependentDynamicInputField.INPUT_TYPE_NUMBER -> InputType.TYPE_CLASS_NUMBER
-            JobProfileDependentDynamicInputField.INPUT_TYPE_NUMBER_WITH_DECIMAL -> InputType.TYPE_NUMBER_FLAG_DECIMAL
+            JobProfileDependentDynamicInputField.INPUT_TYPE_NUMBER_WITH_DECIMAL ->InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
             else -> InputType.TYPE_CLASS_TEXT
         }
     }

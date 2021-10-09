@@ -289,6 +289,7 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
                     ArrayList(state.business)
                 )
                 is NewSelectionForm1ViewState.OpenSelectedJobProfileScreen -> openSelectJobProfileScreen(
+                    state.selectedBusiness,
                     ArrayList(state.jobProfiles)
                 )
 
@@ -333,11 +334,15 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
     }
 
     private fun openSelectJobProfileScreen(
+        selectedBusiness: JoiningBusinessAndJobProfilesItem,
         jobProfiles: ArrayList<JobProfilesItem>
     ) {
         navigation.navigateTo(
             LeadManagementNavDestinations.FRAGMENT_SELECT_JOB_PROFILE,
-            bundleOf(SelectJobProfileFragment.INTENT_EXTRA_JOB_PROFILES to jobProfiles),
+            bundleOf(
+                SelectJobProfileFragment.INTENT_EXTRA_SELECTED_BUSINESS to selectedBusiness,
+                SelectJobProfileFragment.INTENT_EXTRA_JOB_PROFILES to jobProfiles
+            ),
             getNavOptions()
         )
     }
@@ -449,6 +454,7 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
         leadMgmtSharedViewModel
             .viewState
             .observe(viewLifecycleOwner,{
+                it ?: return@observe
 
                 when (it) {
                     is LeadManagementSharedViewModelState.BusinessSelected -> showSelectedBusiness(
