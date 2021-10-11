@@ -251,7 +251,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                 NewSelectionForm2ViewState.SubmittingJoiningData -> {
 
                     viewBinding.mainForm.nextButton.showProgress {
-                        buttonText = getString(R.string.submitting_data)
+                        buttonText = getString(R.string.submitting_data_lead)
                         progressColor = Color.WHITE
                     }
                     viewBinding.mainForm.nextButton.isEnabled = false

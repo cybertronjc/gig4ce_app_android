@@ -121,7 +121,7 @@
     <string name="giger_mobile_number">Giger Mobile Number</string>
     <string name="sure_to_drop_lead">Are you sure that you want to drop 3 selection(s)?</string>
     <string name="cancel_lead">Cancel</string>
-    <string name="submitting_data">Submitting...</string>
+    <string name="submitting_data_lead">Submitting...</string>
     <string name="new_selection_lead">New Selection</string>
     <string name="type_giger_name_here_lead">Type Giger Name here</string>
     <string name="select_business_lead">Select Business</string>
