@@ -138,6 +138,7 @@ class SelectionFormSubmitSuccessFragment : BaseFragment2<FragmentNewSelectionFor
                 Intent.EXTRA_SUBJECT,
                 getString(R.string.app_name)
             )
+            //This code needs to be improved. We can't use the resource string value here because this needs dynamic variables.
             val shareMessage = "Congratulations! \nWelcome to ${whatsappTemplateModel.businessName} with Gigforce! I am ${whatsappTemplateModel.tlName} from Gigforce. \uD83D\uDE4F \n\n" +
                     "You are selected as ${whatsappTemplateModel.jobProfileName}. We are delighted to have you on our platform. You are about to start an exciting and rewarding journey with us. \uD83E\uDD1D \n\n" +
                     "With Gigforce - now get transparent rate card and timely payouts. ❤️ \n\n" +
