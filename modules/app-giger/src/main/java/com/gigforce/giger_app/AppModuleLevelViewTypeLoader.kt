@@ -3,12 +3,10 @@ package com.gigforce.giger_app
 import android.content.Context
 import android.view.View
 import com.gigforce.client_activation.ui.ClientActivationLayoutComponent
+import com.gigforce.common_ui.components.cells.JoiningPendingCardComponent
 import com.gigforce.common_ui.viewconfigs.AppModuleLevelViewTypes
 import com.gigforce.core.IViewTypeLoader
-import com.gigforce.giger_app.ui.GigforceTipsComponent
-import com.gigforce.giger_app.ui.HelpVideoInfoComponent
-import com.gigforce.giger_app.ui.MainNavigationComponent
-import com.gigforce.giger_app.ui.UpcomingGigsComponent
+import com.gigforce.giger_app.ui.*
 import com.gigforce.learning.ui.LearningLayoutComponent
 
 class AppModuleLevelViewTypeLoader : IViewTypeLoader {
@@ -23,6 +21,14 @@ class AppModuleLevelViewTypeLoader : IViewTypeLoader {
             )
             AppModuleLevelViewTypes.VIEW_HELP_VIDEO_SECTION -> HelpVideoInfoComponent(context, null)
             AppModuleLevelViewTypes.VIEW_UPCOMING_GIG_SECTION -> UpcomingGigsComponent(
+                context,
+                null
+            )
+            AppModuleLevelViewTypes.VIEW_PENDING_JOINING_SECTION -> PendingJoiningComponent(
+                context,
+                null
+            )
+            AppModuleLevelViewTypes.VIEW_PENDING_JOINING_SECTION_ITEM -> JoiningPendingCardComponent(
                 context,
                 null
             )

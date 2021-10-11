@@ -27,5 +27,7 @@ class NavForLeadManagmentModule(
         baseImplementation.registerRoute(LeadManagementNavDestinations.FRAGMENT_SELECT_REPORTING_LOCATION, R.id.selectReportingLocationFragment)
         baseImplementation.registerRoute(LeadManagementNavDestinations.FRAGMENT_SELECT_CLIENT_TL, R.id.selectClientTlFragment)
         baseImplementation.registerRoute(LeadManagementNavDestinations.FRAGMENT_SELECT_FORM_SUCCESS, R.id.newSelectionFormSubmitSuccessFragment)
+        baseImplementation.registerRoute(LeadManagementNavDestinations.FRAGMENT_JOINING_FILTER, R.id.joiningFilterFragment)
+        baseImplementation.registerRoute(LeadManagementNavDestinations.FRAGMENT_JOINING_DROP_SELECTION, R.id.dropSelectionBottomSheetDialogFragment)
     }
 }

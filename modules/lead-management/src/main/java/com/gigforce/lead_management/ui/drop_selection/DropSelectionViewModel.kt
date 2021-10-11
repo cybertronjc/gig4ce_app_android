@@ -5,7 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.core.utils.Lse
-import com.gigforce.lead_management.repositories.LeadManagementRepository
+import com.gigforce.common_ui.repository.LeadManagementRepository
+import com.gigforce.common_ui.viewdatamodels.leadManagement.DropSelectionResponse
+import com.gigforce.core.utils.Lce
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -15,20 +17,20 @@ class DropSelectionViewModel @Inject constructor(
     private val leadManagementRepository: LeadManagementRepository
 ): ViewModel() {
 
-    private val _submitDropSelectionState : MutableLiveData<Lse> = MutableLiveData()
-    val submitDropSelectionState : LiveData<Lse> = _submitDropSelectionState
+    private val _submitDropSelectionState : MutableLiveData<Lce<DropSelectionResponse>> = MutableLiveData()
+    val submitDropSelectionState : LiveData<Lce<DropSelectionResponse>> = _submitDropSelectionState
 
     fun dropSelections(
         selectionsToDrop : ArrayList<String>
     ) = viewModelScope.launch{
 
         try {
-            _submitDropSelectionState.value = Lse.loading()
-            leadManagementRepository.dropSelections(selectionsToDrop)
+            _submitDropSelectionState.value = Lce.loading()
+            val response = leadManagementRepository.dropSelections(selectionsToDrop)
 
-            _submitDropSelectionState.value = Lse.success()
+            _submitDropSelectionState.value = Lce.content(response)
         } catch (e: Exception) {
-            _submitDropSelectionState.value = Lse.error(e.message ?: "Unable to drop selections")
+            _submitDropSelectionState.value = Lce.error(e.message ?: "Unable to drop selections")
         }
     }
 }

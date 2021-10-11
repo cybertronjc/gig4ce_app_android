@@ -95,8 +95,40 @@
         android:layout_marginEnd="@dimen/size_16"
         android:src="@drawable/ic_baseline_search_24"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/filterImageFrame"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/filterImageFrame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <ImageButton
+            android:id="@+id/filterImageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/size_4"
+            android:visibility="gone"
+            android:background="@color/fui_transparent"
+            app:tint="@color/white"
+            android:layout_marginEnd="@dimen/size_16"
+            android:src="@drawable/ic_filter_icon"
+             />
+        <ImageButton
+            android:id="@+id/filterDot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/size_14"
+            android:layout_gravity="end|top"
+            android:visibility="gone"
+            android:background="@color/fui_transparent"
+            android:src="@drawable/ic_filter_dot"
+            />
+    </FrameLayout>
+
+
 
     <com.gigforce.common_ui.components.cells.AppProfilePicComponent
         android:id="@+id/profilePicComp"

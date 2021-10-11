@@ -11,9 +11,6 @@ import com.gigforce.common_ui.viewdatamodels.GigerProfileCardDVM
 import com.gigforce.common_ui.viewdatamodels.leadManagement.AssignGigRequest
 import com.gigforce.core.ValidationHelper
 import com.gigforce.core.base.BaseFragment2
-import com.gigforce.core.extensions.getTextChangeAsStateFlow
-import com.gigforce.core.extensions.gone
-import com.gigforce.core.extensions.visible
 import com.gigforce.lead_management.LeadManagementConstants
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.ReferenceCheckFragmentBinding
@@ -22,10 +19,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -272,7 +265,7 @@ class ReferenceCheckFragment : BaseFragment2<ReferenceCheckFragmentBinding>(
     }
 
     private fun showReferenceSubmittingState() = viewBinding.apply {
-        showToast(getString(R.string.submitting_data))
+        showToast(getString(R.string.submitting_data_lead))
 //        submitButton.showProgress {
 //            this.buttonText = "Submitting..."
 //            this.progressColor = R.color.white

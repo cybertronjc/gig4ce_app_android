@@ -6,14 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 import com.gigforce.common_ui.viewdatamodels.leadManagement.GigerInfo
-import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.logger.GigforceLogger
-import com.gigforce.core.utils.Lce
-import com.gigforce.lead_management.models.ApplicationChecklistRecyclerItemData
-import com.gigforce.lead_management.models.GigAppListRecyclerItemData
-import com.gigforce.lead_management.repositories.LeadManagementRepository
-import com.gigforce.lead_management.ui.select_gig_application.SelectGigAppViewState
-import com.gigforce.lead_management.ui.select_gig_location.SelectGigLocationViewModel
+import com.gigforce.common_ui.repository.LeadManagementRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
