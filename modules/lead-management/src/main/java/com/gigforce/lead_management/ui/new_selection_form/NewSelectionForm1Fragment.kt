@@ -10,13 +10,11 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
-import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -85,7 +83,7 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
                 showContactNoOnMobileNo(contacts)
             }, onFailure = { exception ->
                 logger.e(TAG, "while picking contact", exception)
-                showToast(getString(R.string.unable_to_pick_contact))
+                showToast(getString(R.string.unable_to_pick_contact_lead))
             })
     }
 
@@ -133,8 +131,8 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
             if (hasUserOptedForDoNotAskAgain) {
 
                 MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(getString(R.string.read_contact_permission_required))
-                    .setMessage(getString(R.string.please_grant_read_permissions_to))
+                    .setTitle(getString(R.string.read_contact_permission_required_lead))
+                    .setMessage(getString(R.string.please_grant_read_permissions_to_lead))
                     .setPositiveButton(getString(R.string.okay_common_ui)) { _, _ -> openSettingsPage() }
                     .setNegativeButton(getString(R.string.cancel_common_ui)) { _, _ -> }
                     .show()
@@ -248,7 +246,7 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
             activity?.onBackPressed()
         }
         setBackButtonDrawable(R.drawable.ic_chevron)
-        this.stepsTextView.setText(context.getString(R.string.step_1_2))
+        this.stepsTextView.setText(context.getString(R.string.step_1_2_lead))
     }
 
     private fun initViewModel() = viewModel
@@ -491,7 +489,7 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
         viewModel.handleEvent(NewSelectionForm1Events.BusinessSelected(businessSelected))
 
         //reseting job profile selected
-        selectedJobProfileLabel.text = getString(R.string.click_to_select_job_profile)
+        selectedJobProfileLabel.text = getString(R.string.click_to_select_job_profile_lead)
         selectedJobProfileLabel.typeface = Typeface.DEFAULT
 
         viewBinding.mainForm.businessError.errorTextview.text = null

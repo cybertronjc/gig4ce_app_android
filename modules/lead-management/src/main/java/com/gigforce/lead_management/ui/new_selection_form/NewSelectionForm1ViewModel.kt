@@ -121,10 +121,10 @@ class NewSelectionForm1ViewModel @Inject constructor(
             _viewState.value = NewSelectionForm1ViewState.ValidationError(
                 businessError = buildSpannedString {
                     bold {
-                        append(appContext.getString(R.string.note_with_colon))
+                        append(appContext.getString(R.string.note_with_colon_lead))
                     }
                     append(
-                        appContext.getString(R.string.please_select_business_first)
+                        appContext.getString(R.string.please_select_business_first_lead)
                     )
                 }
             )
@@ -173,10 +173,10 @@ class NewSelectionForm1ViewModel @Inject constructor(
             _viewState.value = NewSelectionForm1ViewState.ValidationError(
                 invalidMobileNoMessage = buildSpannedString {
                     bold {
-                        append(appContext.getString(R.string.note_with_colon))
+                        append(appContext.getString(R.string.note_with_colon_lead))
                     }
                     append(
-                        appContext.getString(R.string.number_you_entered_is_invalid_number)
+                        appContext.getString(R.string.number_you_entered_is_invalid_number_lead)
                     )
                 }
             )
@@ -188,10 +188,10 @@ class NewSelectionForm1ViewModel @Inject constructor(
             _viewState.value = NewSelectionForm1ViewState.ValidationError(
                 gigerNameError = buildSpannedString {
                     bold {
-                        append(appContext.getString(R.string.note_with_colon))
+                        append(appContext.getString(R.string.note_with_colon_lead))
                     }
                     append(
-                        appContext.getString(R.string.please_enter_name)
+                        appContext.getString(R.string.please_enter_name_lead)
                     )
                 }
             )
@@ -203,10 +203,10 @@ class NewSelectionForm1ViewModel @Inject constructor(
             _viewState.value = NewSelectionForm1ViewState.ValidationError(
                 businessError = buildSpannedString {
                     bold {
-                        append(appContext.getString(R.string.note_with_colon))
+                        append(appContext.getString(R.string.note_with_colon_lead))
                     }
                     append(
-                        appContext.getString(R.string.please_select_business)
+                        appContext.getString(R.string.please_select_business_lead)
                     )
                 }
             )
@@ -217,10 +217,10 @@ class NewSelectionForm1ViewModel @Inject constructor(
             _viewState.value = NewSelectionForm1ViewState.ValidationError(
                 jobProfilesError = buildSpannedString {
                     bold {
-                        append(appContext.getString(R.string.note_with_colon))
+                        append(appContext.getString(R.string.note_with_colon_lead))
                     }
                     append(
-                        appContext.getString(R.string.please_select_job_profile)
+                        appContext.getString(R.string.please_select_job_profile_lead)
                     )
                 }
             )
@@ -265,10 +265,10 @@ class NewSelectionForm1ViewModel @Inject constructor(
             _viewState.value = NewSelectionForm1ViewState.ValidationError(
                 invalidMobileNoMessage = buildSpannedString {
                     bold {
-                        append(appContext.getString(R.string.note_with_colon))
+                        append(appContext.getString(R.string.note_with_colon_lead))
                     }
                     append(
-                        appContext.getString(R.string.number_you_entered_is_invalid_number)
+                        appContext.getString(R.string.number_you_entered_is_invalid_number_lead)
                     )
                 }
             )
@@ -279,10 +279,10 @@ class NewSelectionForm1ViewModel @Inject constructor(
             _viewState.value = NewSelectionForm1ViewState.ValidationError(
                 invalidMobileNoMessage = buildSpannedString {
                     bold {
-                        append(appContext.getString(R.string.note_with_colon))
+                        append(appContext.getString(R.string.note_with_colon_lead))
                     }
                     append(
-                        appContext.getString(R.string.you_cannot_user_your_own_number)
+                        appContext.getString(R.string.you_cannot_user_your_own_number_lead)
                     )
                 }
             )
@@ -300,7 +300,7 @@ class NewSelectionForm1ViewModel @Inject constructor(
             if (userInfo.name == null) {
                 gigforceLogger.d(TAG, "null received in name for mobile no '$mobileNo'")
                 _viewState.value = NewSelectionForm1ViewState.ErrorWhileCheckingForUserInProfile(
-                    error = appContext.getString(R.string.no_match_found_for_this_no),
+                    error = appContext.getString(R.string.no_match_found_for_this_no_lead),
                     shouldShowErrorButton = false
                 )
             } else {
@@ -315,7 +315,7 @@ class NewSelectionForm1ViewModel @Inject constructor(
             gigforceLogger.d(TAG, "Error in checking User profile for '$mobileNo'", e)
 
             _viewState.value = NewSelectionForm1ViewState.ErrorWhileCheckingForUserInProfile(
-                error = appContext.getString(R.string.unable_to_check_user),
+                error = appContext.getString(R.string.unable_to_check_user1_lead),
                 shouldShowErrorButton = false
             )
         }
@@ -368,7 +368,7 @@ class NewSelectionForm1ViewModel @Inject constructor(
 
             _viewState.value = NewSelectionForm1ViewState.ErrorWhileLoadingBusinessAndJobProfiles(
                 error = e.message
-                    ?: appContext.getString(R.string.unable_to_load_business_and_job_profiles),
+                    ?: appContext.getString(R.string.unable_to_load_business_and_job_profiles_lead),
                 shouldShowErrorButton = false
             )
         }

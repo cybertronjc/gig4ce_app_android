@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.widget.DatePicker
 import android.widget.LinearLayout
 import androidx.core.os.bundleOf
-import androidx.core.view.ViewCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.gigforce.common_ui.UserInfoImp
@@ -28,7 +27,6 @@ import com.gigforce.lead_management.databinding.FragmentNewSelectionForm2Binding
 import com.gigforce.lead_management.models.WhatsappTemplateModel
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModelState
-import com.gigforce.lead_management.ui.new_selection_form.NewSelectionForm1Events
 import com.gigforce.lead_management.ui.new_selection_form_submittion_success.SelectionFormSubmitSuccessFragment
 import com.gigforce.lead_management.ui.select_city.SelectCityFragment
 import com.gigforce.lead_management.ui.select_reporting_location.SelectReportingLocationFragment
@@ -37,7 +35,6 @@ import com.github.razir.progressbutton.attachTextChangeAnimator
 import com.github.razir.progressbutton.bindProgressButton
 import com.github.razir.progressbutton.hideProgress
 import com.github.razir.progressbutton.showProgress
-import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
@@ -192,7 +189,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
             navigation.navigateUp()
         }
         setBackButtonDrawable(R.drawable.ic_chevron)
-        stepsTextView.text = getString(R.string.step_2_2)
+        stepsTextView.text = getString(R.string.step_2_2_lead)
     }
 
     private fun initViewModel() = viewModel
@@ -232,7 +229,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                     viewBinding.mainForm.nextButton.isEnabled = true
 
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.unable_to_submit_joining_request))
+                        .setTitle(getString(R.string.unable_to_submit_joining_request_lead))
                         .setMessage(state.error)
                         .setPositiveButton(getString(R.string.okay_common_ui)) { _, _ -> }
                         .show()
@@ -367,14 +364,14 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
             mainForm.citySelectedLabel.text = selectedCity
             mainForm.citySelectedLabel.setTypeface(mainForm.citySelectedLabel.typeface,Typeface.BOLD)
         } else{
-            mainForm.citySelectedLabel.text = getString(R.string.click_to_select_city)
+            mainForm.citySelectedLabel.text = getString(R.string.click_to_select_city_lead)
         }
 
         if(selectedReportingLocation != null) {
             mainForm.reportingLocationSelectedLabel.text = selectedReportingLocation
             mainForm.reportingLocationSelectedLabel.setTypeface(mainForm.reportingLocationSelectedLabel.typeface,Typeface.BOLD)
         } else{
-            mainForm.reportingLocationSelectedLabel.text = getString(R.string.click_to_select_location)
+            mainForm.reportingLocationSelectedLabel.text = getString(R.string.click_to_select_location_lead)
         }
     }
 
@@ -418,7 +415,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
 
         viewModel.handleEvent(NewSelectionForm2Events.CitySelected(citySelected))
 
-        reportingLocationSelectedLabel.text = getString(R.string.click_to_select_location)
+        reportingLocationSelectedLabel.text = getString(R.string.click_to_select_location_lead)
         reportingLocationSelectedLabel.typeface = Typeface.DEFAULT
 
         viewBinding.mainForm.cityError.errorTextview.text = null

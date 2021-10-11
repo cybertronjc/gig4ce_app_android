@@ -12,7 +12,7 @@
             android:layout_height="wrap_content"
             android:minHeight="?android:actionBarSize"
             app:backgroundType="PinkBar"
-            app:titleText="@string/new_selection" />
+            app:titleText="@string/new_selection_lead" />
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -59,7 +59,7 @@
                     android:layout_marginTop="40dp"
                     android:gravity="center_vertical"
                     android:lineSpacingExtra="3sp"
-                    android:text="@string/selection_form_submitted"
+                    android:text="@string/selection_form_submitted_lead"
                     android:textAppearance="@style/style_h3" />
 
 
@@ -70,7 +70,7 @@
                     android:layout_marginTop="10dp"
                     android:gravity="center_vertical"
                     android:lineSpacingExtra="3sp"
-                    android:text="@string/invitation_link_shared_on_whatsapp_and_sms_with_giger_to_complete_application"
+                    android:text="@string/invitation_link_shared_on_whatsapp_and_sms_with_giger_to_complete_application_lead"
                     android:textAppearance="@style/style_h5"
                     android:textColor="#303437" />
 
@@ -96,7 +96,7 @@
                         android:layout_marginTop="2dp"
                         android:gravity="center_horizontal|top"
                         android:lineSpacingExtra="4sp"
-                        android:text="@string/share_link_manually"
+                        android:text="@string/share_link_manually_lead"
                         android:textAppearance="@style/style_h6"
                         android:textColor="@color/lipstick_2"
                         android:translationY="-1.8sp" />

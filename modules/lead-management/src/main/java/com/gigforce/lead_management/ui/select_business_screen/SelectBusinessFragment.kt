@@ -92,7 +92,7 @@ class SelectBusinessFragment : BaseFragment2<FragmentSelectBusinessBinding>(
     private fun initListeners() = viewBinding.apply {
         toolbar.apply {
 
-            titleText.text = getString(R.string.select_business)
+            titleText.text = getString(R.string.select_business_lead)
             setBackButtonListener{
                 navigation.navigateUp()
             }
@@ -126,7 +126,7 @@ class SelectBusinessFragment : BaseFragment2<FragmentSelectBusinessBinding>(
     private fun setDataOnView() = viewBinding.apply {
         if (businessList.isEmpty()) {
             this.businessInfoLayout.root.visible()
-            this.businessInfoLayout.infoMessageTv.text = getString(R.string.no_business_to_show)
+            this.businessInfoLayout.infoMessageTv.text = getString(R.string.no_business_to_show_lead)
             this.businessInfoLayout.infoIv.loadImage(R.drawable.ic_no_selection)
         } else {
             this.businessInfoLayout.root.gone()

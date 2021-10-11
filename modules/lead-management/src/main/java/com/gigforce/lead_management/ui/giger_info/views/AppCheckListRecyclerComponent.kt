@@ -52,7 +52,7 @@ class AppCheckListRecyclerComponent(
                 viewBinding.checkListItemText.setText(Html.fromHtml(txt), TextView.BufferType.SPANNABLE)
             }
         }
-        viewBinding.statusText.text = if (viewData.status == "Pending") context.getString(R.string.pending) else ""
+        viewBinding.statusText.text = if (viewData.status == "Pending") context.getString(R.string.pending_lead) else ""
         setStatusIcon(viewData.status)
     }
 

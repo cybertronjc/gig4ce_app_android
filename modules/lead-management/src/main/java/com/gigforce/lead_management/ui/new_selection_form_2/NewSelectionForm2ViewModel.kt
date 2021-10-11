@@ -1,7 +1,6 @@
 package com.gigforce.lead_management.ui.new_selection_form_2
 
 import android.content.Context
-import android.util.Log
 import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import androidx.lifecycle.LiveData
@@ -12,14 +11,7 @@ import com.gigforce.common_ui.repository.LeadManagementRepository
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.common_ui.repository.ProfileFirebaseRepository
-import com.gigforce.core.TrackingEventArgs
-import com.gigforce.core.analytics.AuthEvents
-import com.gigforce.core.datamodels.profile.ProfileData
-import com.gigforce.core.utils.Lce
 import com.gigforce.lead_management.R
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
@@ -138,10 +130,10 @@ class NewSelectionForm2ViewModel @Inject constructor(
             _viewState.value = NewSelectionForm2ViewState.ValidationError(
                 cityError = buildSpannedString {
                     bold {
-                        append(appContext.getString(R.string.note_with_colon))
+                        append(appContext.getString(R.string.note_with_colon_lead))
                     }
                     append(
-                        appContext.getString(R.string.select_city_to_select_reporting_location)
+                        appContext.getString(R.string.select_city_to_select_reporting_location_lead)
                     )
                 }
             )
@@ -281,10 +273,10 @@ class NewSelectionForm2ViewModel @Inject constructor(
             _viewState.value = NewSelectionForm2ViewState.ValidationError(
                 cityError = buildSpannedString {
                     bold {
-                        append(appContext.getString(R.string.note_with_colon))
+                        append(appContext.getString(R.string.note_with_colon_lead))
                     }
                     append(
-                        appContext.getString(R.string.please_select_city)
+                        appContext.getString(R.string.please_select_city_lead)
                     )
                 }
             )
@@ -297,10 +289,10 @@ class NewSelectionForm2ViewModel @Inject constructor(
             _viewState.value = NewSelectionForm2ViewState.ValidationError(
                 reportingLocationError = buildSpannedString {
                     bold {
-                        append(appContext.getString(R.string.note_with_colon))
+                        append(appContext.getString(R.string.note_with_colon_lead))
                     }
                     append(
-                        appContext.getString(R.string.please_select_reporting_location)
+                        appContext.getString(R.string.please_select_reporting_location_lead)
                     )
                 }
             )

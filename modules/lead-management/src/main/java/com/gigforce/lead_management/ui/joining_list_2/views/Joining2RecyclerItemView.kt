@@ -8,13 +8,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.RelativeLayout
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
-import androidx.fragment.app.viewModels
-import com.gigforce.common_ui.viewdatamodels.GigerProfileCardDVM
-import com.gigforce.common_ui.viewdatamodels.leadManagement.AssignGigRequest
-import com.gigforce.common_ui.viewdatamodels.leadManagement.JobLocation
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JoiningStatus
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.IViewHolder
@@ -28,8 +23,6 @@ import com.gigforce.lead_management.R
 import com.gigforce.lead_management.analytics.LeadManagementAnalyticsEvents
 import com.gigforce.lead_management.databinding.RecyclerRowJoiningItemBinding
 import com.gigforce.lead_management.models.JoiningList2RecyclerItemData
-import com.gigforce.lead_management.models.JoiningListRecyclerItemData
-import com.gigforce.lead_management.ui.joining_list_2.JoiningList2ViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -144,7 +137,7 @@ class Joining2RecyclerItemView(
 
         val joiningStatus = JoiningStatus.fromValue(status)
 //        viewBinding.userAttendanceStatusTextview.isVisible = joiningStatus != JoiningStatus.JOINED
-        viewBinding.userAttendanceStatusTextview.text = resources.getString(R.string.application, resources.getString(joiningStatus.getStatusFormattedStringRes()))
+        viewBinding.userAttendanceStatusTextview.text = resources.getString(R.string.application_lead, resources.getString(joiningStatus.getStatusFormattedStringRes()))
         viewBinding.statusDot.setImageDrawable(
             if (status == "Pending") resources.getDrawable(R.drawable.ic_status_dot) else resources.getDrawable(R.drawable.ic_blue_dot)
         )

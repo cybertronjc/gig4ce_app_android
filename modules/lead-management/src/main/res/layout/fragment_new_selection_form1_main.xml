@@ -136,7 +136,7 @@
                             android:layout_height="wrap_content"
                             android:backgroundTint="#EBEBEB"
                             android:enabled="false"
-                            android:hint="@string/type_giger_name_here"
+                            android:hint="@string/type_giger_name_here_lead"
                             android:inputType="textNoSuggestions"
                             android:paddingBottom="15dp"
                             android:textAppearance="@style/body_primary"
@@ -171,7 +171,7 @@
                     android:layout_marginTop="20dp"
                     android:gravity="top"
                     android:lineSpacingExtra="1sp"
-                    android:text="@string/select_business"
+                    android:text="@string/select_business_lead"
                     android:textAppearance="@style/style_h5"
                     android:translationY="-0.6sp" />
 
@@ -204,7 +204,7 @@
                             android:layout_weight="1"
                             android:gravity="top"
                             android:lineSpacingExtra="4sp"
-                            android:text="@string/click_to_select_business"
+                            android:text="@string/click_to_select_business_lead"
                             android:textAppearance="@style/body_primary"
                             android:textColor="@color/lipstick_2"
                             android:translationY="-1.8sp" />
@@ -236,7 +236,7 @@
                     android:layout_marginTop="30dp"
                     android:gravity="top"
                     android:lineSpacingExtra="1sp"
-                    android:text="@string/select_job_profile"
+                    android:text="@string/select_job_profile1_lead"
                     android:textAppearance="@style/style_h5"
                     android:translationY="-0.6sp" />
 
@@ -269,7 +269,7 @@
                             android:layout_weight="1"
                             android:gravity="top"
                             android:lineSpacingExtra="4sp"
-                            android:text="@string/click_to_select_job_profile"
+                            android:text="@string/click_to_select_job_profile_lead"
                             android:textAppearance="@style/body_primary"
                             android:textColor="@color/lipstick_2"
                             android:translationY="-1.8sp" />
@@ -308,7 +308,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:backgroundTint="#EBEBEB"
-                        android:hint="@string/type_client_id_here"
+                        android:hint="@string/type_client_id_here_lead"
                         android:paddingBottom="15dp"
                         android:textAppearance="@style/body_primary"
                         android:textColorHint="#979C9E" />

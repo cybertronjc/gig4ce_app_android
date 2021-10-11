@@ -90,7 +90,7 @@ class SelectCityFragment : BaseFragment2<FragmentSelectBusinessBinding>(
 
     private fun initListeners() = viewBinding.apply {
         toolbar.apply {
-            titleText.text = getString(R.string.select_city)
+            titleText.text = getString(R.string.select_city_lead)
             setBackButtonListener{
                 navigation.navigateUp()
             }
@@ -128,7 +128,7 @@ class SelectCityFragment : BaseFragment2<FragmentSelectBusinessBinding>(
     private fun setDataOnView() = viewBinding.apply {
         if (cityList.isEmpty()) {
             this.businessInfoLayout.root.visible()
-            this.businessInfoLayout.infoMessageTv.text = getString(R.string.no_city_to_show)
+            this.businessInfoLayout.infoMessageTv.text = getString(R.string.no_city_to_show_lead)
             this.businessInfoLayout.infoIv.loadImage(R.drawable.ic_no_selection)
         } else {
             this.businessInfoLayout.root.gone()

@@ -70,7 +70,7 @@ class JobProfileRelatedDynamicFieldView(
             viewBinding.editText.setText(prefillText)
         } else {
             val hint =
-                "${resources.getString(R.string.type)} $title ${resources.getString(R.string.here)}"
+                "${resources.getString(R.string.type_lead)} $title ${resources.getString(R.string.here_lead)}"
             viewBinding.editText.setHint(hint)
         }
     }
@@ -129,7 +129,7 @@ class JobProfileRelatedDynamicFieldView(
 
                     setError(buildSpannedString {
                         bold { append(
-                            resources.getString(R.string.note_with_colon)
+                            resources.getString(R.string.note_with_colon_lead)
                         )}
                         append(" Please fill a non zero value for ${viewData.title}")
                     })
@@ -140,7 +140,7 @@ class JobProfileRelatedDynamicFieldView(
 
                     setError(buildSpannedString {
                         bold { append(
-                            resources.getString(R.string.note_with_colon)
+                            resources.getString(R.string.note_with_colon_lead)
                         )}
                         append(" Please fill a value for ${viewData.title}")
                     })

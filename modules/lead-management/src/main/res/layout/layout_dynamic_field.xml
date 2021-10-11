@@ -33,7 +33,7 @@
                 android:layout_marginStart="4dp"
                 android:gravity="top"
                 android:lineSpacingExtra="1sp"
-                android:text="@string/optional"
+                android:text="@string/optional_lead"
                 android:textAppearance="@style/body_primary"
                 android:translationY="-0.6sp" />
 

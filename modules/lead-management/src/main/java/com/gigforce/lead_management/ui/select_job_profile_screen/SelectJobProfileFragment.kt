@@ -92,7 +92,7 @@ class SelectJobProfileFragment : BaseFragment2<FragmentSelectJobProfileBinding>(
 
     private fun initListeners() = viewBinding.apply {
         toolbar.apply {
-            titleText.text = getString(R.string.select_job_profile)
+            titleText.text = getString(R.string.select_job_profile1_lead)
             setBackButtonListener {
                 navigation.popBackStack()
             }
@@ -122,7 +122,7 @@ class SelectJobProfileFragment : BaseFragment2<FragmentSelectJobProfileBinding>(
     private fun setDataOnView() = viewBinding.apply {
         if (jobProfiles.isEmpty()) {
             this.infoLayout.root.visible()
-            this.infoLayout.infoMessageTv.text = getString(R.string.no_job_profile_to_show)
+            this.infoLayout.infoMessageTv.text = getString(R.string.no_job_profile_to_show_lead)
             this.infoLayout.infoIv.loadImage(R.drawable.ic_no_selection)
         } else {
             this.infoLayout.root.gone()

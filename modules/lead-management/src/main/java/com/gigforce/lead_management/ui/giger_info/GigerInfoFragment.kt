@@ -12,8 +12,6 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
@@ -23,10 +21,8 @@ import com.gigforce.core.IEventTracker
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.gone
-import com.gigforce.core.extensions.inflate
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
-import com.gigforce.core.utils.DateHelper
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.lead_management.LeadManagementConstants
 import com.gigforce.lead_management.R
@@ -34,17 +30,13 @@ import com.gigforce.lead_management.analytics.LeadManagementAnalyticsEvents
 import com.gigforce.lead_management.databinding.GigerInfoFragmentBinding
 import com.gigforce.lead_management.models.ApplicationChecklistRecyclerItemData
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
-import com.gigforce.lead_management.ui.LeadManagementSharedViewModelState
 import com.gigforce.lead_management.ui.drop_selection.DropSelectionBottomSheetDialogFragment
 import com.gigforce.lead_management.ui.giger_info.views.AppCheckListRecyclerComponent
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.layout_below_giger_functionality.*
-import kotlinx.coroutines.flow.collect
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
 import javax.inject.Inject
 
@@ -203,7 +195,7 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
                     .into(overlayCardLayout.profileImageOverlay.companyImg)
             }
 
-            applicationStatusLayout.statusText.text = getString(R.string.application,it.status)
+            applicationStatusLayout.statusText.text = getString(R.string.application_lead,it.status)
             if (it.status == "Pending"){
                 applicationStatusLayout.statusIconImg.setImageDrawable(ResourcesCompat.getDrawable(resources,R.drawable.ic_pending_icon,null))
                 applicationStatusLayout.root.setBackgroundColor(ResourcesCompat.getColor(resources,R.color.status_background_pink,null))

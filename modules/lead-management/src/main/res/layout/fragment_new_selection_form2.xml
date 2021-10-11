@@ -10,7 +10,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:titleText="@string/new_selection"
+            app:titleText="@string/new_selection_lead"
             app:backgroundType="PinkBar"
             app:isStepsVisible="true"
             android:minHeight="?android:actionBarSize" />
