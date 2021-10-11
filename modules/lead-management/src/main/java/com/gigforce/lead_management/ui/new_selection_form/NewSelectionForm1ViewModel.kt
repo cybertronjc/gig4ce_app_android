@@ -329,7 +329,7 @@ class NewSelectionForm1ViewModel @Inject constructor(
             return
         }
 
-        //replacing +91 , starting 0 and spaces from text with empty string
+        //replacing 91 , starting 0s and spaces from text with empty string
         val sanitizedNumber = mobileNo.substring(3).replace(
             "(\\\\s|^0+|^91)".toRegex(), ""
         )

@@ -12,6 +12,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.gigforce.common_ui.UserInfoImp
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
+import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
@@ -273,6 +274,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
             ),
             getNavOptions()
         )
+        hideSoftKeyboard()
     }
 
     private fun openSelectBusinessTlScreen(
@@ -283,6 +285,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
             bundleOf(SelectClientTlFragment.INTENT_EXTRA_CLIENT_TLS to businessTls),
             getNavOptions()
         )
+        hideSoftKeyboard()
     }
 
     private fun openSelectCityScreen(
@@ -293,6 +296,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
             bundleOf(SelectCityFragment.INTENT_EXTRA_CITY_LIST to cities),
             getNavOptions()
         )
+        hideSoftKeyboard()
     }
 
     private fun handleValidationError(

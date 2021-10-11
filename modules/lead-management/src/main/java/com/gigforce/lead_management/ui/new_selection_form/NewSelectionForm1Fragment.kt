@@ -23,6 +23,7 @@ import androidx.lifecycle.lifecycleScope
 import com.gigforce.common_ui.contacts.ContactsDelegate
 import com.gigforce.common_ui.contacts.PhoneContact
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
+import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
@@ -187,11 +188,6 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
                 }
         }
 
-        mainForm.mobileNoEt.addTextChangedListener {
-
-            Log.d("D","D")
-        }
-
         lifecycleScope.launchWhenCreated {
 
             mainForm.gigerNameEt.getTextChangeAsStateFlow()
@@ -344,6 +340,7 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
                 NewSelectionForm2Fragment.INTENT_EXTRA_DYNAMIC_FIELDS to dynamicInputsFieldValues
             )
         )
+        hideSoftKeyboard()
     }
 
     private fun openSelectJobProfileScreen(
@@ -358,6 +355,7 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
             ),
             getNavOptions()
         )
+        hideSoftKeyboard()
     }
 
     private fun openSelectBusinessScreen(
@@ -368,6 +366,7 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
             bundleOf(SelectBusinessFragment.INTENT_EXTRA_BUSINESS_LIST to business),
             getNavOptions()
         )
+        hideSoftKeyboard()
     }
 
     private fun handleValidationError(
@@ -511,6 +510,9 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
         selectedJobProfileLabel.text = jobProfileSelected.name
         selectedJobProfileLabel.typeface = Typeface.DEFAULT_BOLD
         viewModel.handleEvent(NewSelectionForm1Events.JobProfileSelected(jobProfileSelected))
+
+        viewBinding.mainForm.businessError.errorTextview.text = null
+        viewBinding.mainForm.businessError.root.gone()
 
         viewBinding.mainForm.jobProfileError.errorTextview.text = null
         viewBinding.mainForm.jobProfileError.root.gone()
