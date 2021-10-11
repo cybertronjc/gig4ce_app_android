@@ -270,9 +270,11 @@ class Joining2RecyclerItemView(
             val format = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
 
             val sdf = SimpleDateFormat(format)
+            sdf.setTimeZone(TimeZone.getTimeZone("IST"));
 
             val datetime= Calendar.getInstance()
             var date2= sdf.format(datetime.time).toString()
+
 
             val dateObj1 = sdf.parse(date1)
             val dateObj2 = sdf.parse(date2)
@@ -296,21 +298,16 @@ class Joining2RecyclerItemView(
         }catch (ex:java.lang.Exception){
             Log.d("formatTimeAgo",ex.toString())
         }
-//        if(conversionTime!=""){
-//            conversionTime+="ago"
-//        }
+
         return conversionTime
     }
 
     override fun onLongClick(p0: View?): Boolean {
         if (viewData?.selected == true){
-            Log.d("selected", "Already selected")
             viewBinding.selectJoiningBtn.setImageDrawable(resources.getDrawable(R.drawable.ic_unselect_tick))
             return false
         }else {
-            Log.d("selected", "Selecting")
             viewBinding.selectJoiningBtn.setImageDrawable(resources.getDrawable(R.drawable.ic_selected_tick))
-//            selectEnable = true
             viewData?.selected = true
             viewBinding.selectJoiningBtn.visible()
             viewBinding.callGigerBtn.gone()

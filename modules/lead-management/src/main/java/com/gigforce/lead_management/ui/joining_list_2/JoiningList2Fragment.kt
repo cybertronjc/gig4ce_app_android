@@ -2,9 +2,11 @@ package com.gigforce.lead_management.ui.joining_list_2
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -15,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.onTabSelected
+import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.utils.PushDownAnim
@@ -156,13 +159,16 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
             // Do something with the result
             if (result == "dropped"){
                 viewModel.resetViewModel()
-                viewBinding.appBarComp.setAppBarTitle(getString(R.string.joinings_lead))
+                //viewBinding.appBarComp.setAppBarTitle(getString(R.string.joinings_lead))
+                if (title.isNotBlank())
+                    viewBinding.appBarComp.setAppBarTitle(title)
+                else
+                    viewBinding.appBarComp.setAppBarTitle(context?.getString(R.string.joinings_lead))
                 viewBinding.joinNowButton.text = getString(R.string.add_new_lead)
                 dropJoining?.clear()
                 viewModel.getJoinings()
             }
         }
-
     }
     private fun checkForApplyFilter() {
         val navController = findNavController()
@@ -402,7 +408,6 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
         joiningListInfoLayout.infoMessageTv.text = error
         swipeRefresh.isRefreshing = false
     }
-
 
 }
 
