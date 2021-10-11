@@ -1,5 +1,6 @@
 package com.gigforce.common_ui.datamodels
 
+import com.gigforce.core.StringConstants
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.PropertyName
 
@@ -41,5 +42,27 @@ data class CourseProgress(
 
     @get:PropertyName("type")
     @set:PropertyName("type")
-    var type : String = "course"
-)
+    var type : String = "course",
+
+    @get:PropertyName("updatedOn")
+    @set:PropertyName("updatedOn")
+    var updatedOn : Timestamp ?= Timestamp.now(),
+
+    @get:PropertyName("updatedBy")
+    @set:PropertyName("updatedBy")
+    var updatedBy : String ?= StringConstants.APP.value,
+
+    @get:PropertyName("createdOn")
+    @set:PropertyName("createdOn")
+    var createdOn : Timestamp ?= Timestamp.now()
+
+){
+    fun setUpdatedOnAndBy(){
+        updatedOn = Timestamp.now()
+        updatedBy = StringConstants.APP.value
+    }
+
+    fun setCreatedOn(){
+        createdOn = Timestamp.now()
+    }
+}

@@ -72,6 +72,27 @@ data class LessonProgress(
 
     @get:PropertyName("isActive")
     @set:PropertyName("isActive")
-    var isActive: Boolean = true
+    var isActive: Boolean = true,
 
-)
+    @get:PropertyName("updatedOn")
+    @set:PropertyName("updatedOn")
+    var updatedOn : Timestamp ?= Timestamp.now(),
+
+    @get:PropertyName("updatedBy")
+    @set:PropertyName("updatedBy")
+    var updatedBy : String ?= "APP",
+
+    @get:PropertyName("createdOn")
+    @set:PropertyName("createdOn")
+    var createdOn : Timestamp ?= Timestamp.now()
+
+){
+    fun setUpdatedOnAndBy(){
+        updatedOn = Timestamp.now()
+        updatedBy = "APP"
+    }
+
+    fun setCreatedOn(){
+        createdOn = Timestamp.now()
+    }
+}
