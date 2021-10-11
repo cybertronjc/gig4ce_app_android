@@ -1,5 +1,9 @@
 package com.gigforce.learning.learning
 
+//import com.gigforce.app.R
+//import com.gigforce.app.core.gone
+//import com.gigforce.app.core.visible
+//import com.gigforce.app.utils.Lce
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,12 +16,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.bumptech.glide.request.RequestOptions
 import com.example.learning.R
-//import com.gigforce.app.R
-//import com.gigforce.app.core.gone
-//import com.gigforce.app.core.visible
-import com.gigforce.learning.learning.courseDetails.LearningCourseDetailsFragment
-import com.gigforce.core.datamodels.learning.Course
-//import com.gigforce.app.utils.Lce
 import com.gigforce.common_ui.IUserInfo
 import com.gigforce.common_ui.UserInfoImp
 import com.gigforce.common_ui.core.IOnBackPressedOverride
@@ -27,11 +25,13 @@ import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.viewdatamodels.FeatureItemCardDVM
 import com.gigforce.common_ui.viewmodels.LearningViewModel
+import com.gigforce.core.datamodels.learning.Course
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.Lce
+import com.gigforce.learning.learning.courseDetails.LearningCourseDetailsFragment
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import dagger.hilt.android.AndroidEntryPoint
@@ -49,7 +49,8 @@ class MainLearningFragment : Fragment(), IOnBackPressedOverride {
     @Inject
     lateinit var loginInfo: IUserInfo
 
-    @Inject lateinit var userinfo: UserInfoImp
+    @Inject
+    lateinit var userinfo: UserInfoImp
 
     private val mainLearningViewModel: MainLearningViewModel by viewModels()
 
@@ -62,7 +63,8 @@ class MainLearningFragment : Fragment(), IOnBackPressedOverride {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        getIntentData(savedInstanceState)
+        initViews()
         learningBackButton.setOnClickListener {
 //            popBackState()
 //            activity?.onBackPressed()
@@ -93,6 +95,22 @@ class MainLearningFragment : Fragment(), IOnBackPressedOverride {
 
         initLearningViewModel()
         imageView30.gone()
+    }
+
+    private fun initViews() {
+        if (title.isNotBlank())
+            tv1HS1.text = title
+    }
+
+    var title = ""
+    private fun getIntentData(savedInstanceState: Bundle?) {
+        savedInstanceState?.let {
+            title = it.getString("title") ?: ""
+        } ?: run {
+            arguments?.let {
+                title = it.getString("title") ?: ""
+            }
+        }
     }
 
     private fun initLearningViewModel() {
@@ -187,7 +205,7 @@ class MainLearningFragment : Fragment(), IOnBackPressedOverride {
 
     private fun showRoleBasedLearnings(content: List<Course>) {
 
-        stopShimmer(learning_based_horizontal_progress as LinearLayout,R.id.shimmer_controller)
+        stopShimmer(learning_based_horizontal_progress as LinearLayout, R.id.shimmer_controller)
         role_based_learning_error.gone()
         learning_based_role_rv.visible()
 
@@ -223,11 +241,11 @@ class MainLearningFragment : Fragment(), IOnBackPressedOverride {
         startShimmer(
             explore_learnings_loader as LinearLayout,
             ShimmerDataModel(
-               minHeight = R.dimen.size_168,
-               minWidth = R.dimen.size_147,
-               marginRight = R.dimen.size_1,
-               marginTop = R.dimen.size_1,
-               orientation = LinearLayout.HORIZONTAL
+                minHeight = R.dimen.size_168,
+                minWidth = R.dimen.size_147,
+                marginRight = R.dimen.size_1,
+                marginTop = R.dimen.size_1,
+                orientation = LinearLayout.HORIZONTAL
             ), R.id.shimmer_controller
         )
         explore_learnings_rv.gone()
@@ -429,7 +447,7 @@ class MainLearningFragment : Fragment(), IOnBackPressedOverride {
     private fun showCoursesOnExploreLearning(content: List<Course>) {
         explore_learning_error.gone()
         explore_learnings_rv.visible()
-        stopShimmer(explore_learnings_loader as LinearLayout,R.id.shimmer_controller)
+        stopShimmer(explore_learnings_loader as LinearLayout, R.id.shimmer_controller)
 
         val roleBasedLearning = getLearningData(content)
         explore_learnings_rv.collection = roleBasedLearning

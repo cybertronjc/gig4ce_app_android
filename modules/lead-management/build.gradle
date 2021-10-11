@@ -28,6 +28,7 @@ android {
         dataBinding true
     }
 
+
     compileOptions {
         coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8

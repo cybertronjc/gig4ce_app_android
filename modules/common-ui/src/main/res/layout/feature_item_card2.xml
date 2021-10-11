@@ -3,8 +3,8 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view"
-    style="@style/CardStyle.ItemStyle"
-    android:layout_width="92dp"
+    style="@style/CardStyle.ItemStyle1"
+    android:layout_width="match_parent"
     android:layout_height="82dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -26,7 +26,9 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginBottom="@dimen/dp_sm4"
-            android:text="@string/login_summary_common_ui"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="98765431230"
             android:gravity="center"
             android:paddingStart="@dimen/dp_xsm2"
             android:paddingEnd="@dimen/dp_sm4"

@@ -7,8 +7,8 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
+import android.os.Environment.DIRECTORY_DOWNLOADS
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
@@ -18,39 +18,81 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.ProgressBar
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.repository.BannerCardRepository
+import com.gigforce.core.base.BaseActivity
+import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
+import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.acitivity_doc_viewer.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import java.net.URLEncoder
-import android.os.Environment.DIRECTORY_DOWNLOADS
-import androidx.core.content.ContentProviderCompat.requireContext
-import com.gigforce.core.base.BaseActivity
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.util.*
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class DocViewerActivity : BaseActivity() {
     private var pdfView: WebView? = null
     private var progress: ProgressBar? = null
+
+    @Inject
+    lateinit var buildConfig: IBuildConfig
+
     //var pageTitle: String? = null
     private var win: Window? = null
     private val removePdfTopIcon =
         "javascript:(function() {" + "document.querySelector('[role=\"toolbar\"]').remove();})()"
-
+    var purposeExtra = ""
+    var bundle: Bundle? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.acitivity_doc_viewer)
         pdfView = findViewById(R.id.webview)
         progress = findViewById(R.id.pb_doc)
         val stringExtra = intent.getStringExtra(StringConstants.DOC_URL.value)
-        val purposeExtra = intent.getStringExtra(StringConstants.DOC_PURPOSE.value) ?: ""
+        purposeExtra = intent.getStringExtra(StringConstants.DOC_PURPOSE.value) ?: ""
+        bundle = intent.extras
         //pageTitle = intent.getStringExtra(StringConstants.WEB_TITLE.value)
-        showPdfFile(stringExtra, stringExtra.contains(".jpg") || stringExtra.contains(".png"), stringExtra.contains(".pdf"));
-        makeToolbarVisible(stringExtra.contains(".jpg") || stringExtra.contains(".png") || stringExtra.contains(".pdf"), purposeExtra)
+        showPdfFile(
+            stringExtra,
+            stringExtra.contains(".jpg") || stringExtra.contains(".png"),
+            stringExtra.contains(".pdf")
+        )
+        makeToolbarVisible(
+            stringExtra.contains(".jpg") || stringExtra.contains(".png") || stringExtra.contains(
+                ".pdf"
+            ), purposeExtra
+        )
+//        if(purposeExtra == "banner"){
+//            bannerEntered()
+//        }
         setListeners(stringExtra)
     }
+//    var accessLogResponse : AccessLogResponse?=null
+//    private fun bannerEntered() {
+//        val scope = CoroutineScope(Job() + Dispatchers.Main)
+//        scope.launch {
+//            var url = bundle?.getString("apiUrl")
+//            var source = bundle?.getString("source")?:""
+//            val bannerName = bundle?.getString("bannerName")?:""
+//            val id = bundle?.getString("bannerId")?:""
+//            url?.let {
+//                accessLogResponse = bannerCardRepo.createLogs(
+//                    it,
+//                    FirebaseAuth.getInstance().currentUser?.uid!!,
+//                    source,
+//                    bannerName,
+//                    id
+//                )
+//            }
+//        }
+//    }
 
 
     private fun makeToolbarVisible(isImageOrPdf: Boolean, purpose: String) {
@@ -60,24 +102,31 @@ class DocViewerActivity : BaseActivity() {
 //       } else {
 //           changeStatusBarColor()
 //           acceptLayout.visible()
-           if (purpose == "OFFER_LETTER" && isImageOrPdf){
-               toolbarTitle.text = getString(R.string.offer_letter_common_ui)
-               toolbar_doc.visible()
-               changeStatusBarColor()
-               toolbarDownload.visible()
-               acceptLayout.gone()
-           }else if (purpose == "TERMS" && !isImageOrPdf) {
-               toolbarTitle.text = getString(R.string.terms_common_ui)
-               toolbar_doc.visible()
-               changeStatusBarColor()
-               toolbarDownload.gone()
-               acceptLayout.visible()
-           } else {
-               toolbar_doc.gone()
-               toolbarDownload.gone()
-               acceptLayout.gone()
-           }
-      // }
+        if (purpose == "OFFER_LETTER" && isImageOrPdf) {
+            toolbarTitle.text = getString(R.string.offer_letter_common_ui)
+            toolbar_doc.visible()
+            changeStatusBarColor()
+            toolbarDownload.visible()
+            acceptLayout.gone()
+        } else if (purpose == "TERMS" && !isImageOrPdf) {
+            toolbarTitle.text = getString(R.string.terms_common_ui)
+            toolbar_doc.visible()
+            changeStatusBarColor()
+            toolbarDownload.gone()
+            acceptLayout.visible()
+        } else if (purpose == "banner") {
+            var title = bundle?.getString("title")
+            toolbarTitle.text = title
+            toolbar_doc.visible()
+            changeStatusBarColor()
+            toolbarDownload.gone()
+            acceptLayout.gone()
+        } else {
+            toolbar_doc.gone()
+            toolbarDownload.gone()
+            acceptLayout.gone()
+        }
+        // }
 
     }
 
@@ -94,23 +143,30 @@ class DocViewerActivity : BaseActivity() {
         }
 
         toolbarDownload.setOnClickListener {
-            if (url.isNotEmpty()){
+            if (url.isNotEmpty()) {
                 showDownloadStartedDialog()
-                downloadFile(this, url.substring(url.lastIndexOf('/') + 1), ".pdf", DIRECTORY_DOWNLOADS, url)
+                downloadFile(
+                    this,
+                    url.substring(url.lastIndexOf('/') + 1),
+                    ".pdf",
+                    DIRECTORY_DOWNLOADS,
+                    url
+                )
             }
 
         }
     }
+
     private fun changeStatusBarColor() {
         win = this.window
         // clear FLAG_TRANSLUCENT_STATUS flag:
-        win?.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        win?.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
 
         // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
-        win?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        win?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
 
         // finally change the color
-        win?.setStatusBarColor(resources.getColor(R.color.status_bar_pink))
+        win?.statusBarColor = resources.getColor(R.color.status_bar_pink)
     }
 
     private fun showPdfFile(imageString: String?, isImage: Boolean, isPdf: Boolean) {
@@ -118,19 +174,22 @@ class DocViewerActivity : BaseActivity() {
         pdfView!!.invalidate()
         pdfView!!.settings.javaScriptEnabled = true
         pdfView!!.settings.setSupportZoom(true)
-        pdfView!!.settings.builtInZoomControls = true;
-        pdfView!!.settings.loadWithOverviewMode = true;
-        pdfView!!.settings.useWideViewPort = true;
+        pdfView!!.settings.builtInZoomControls = true
+        pdfView!!.settings.loadWithOverviewMode = true
+        pdfView!!.settings.useWideViewPort = true
+        pdfView!!.settings.loadWithOverviewMode = true
+        pdfView!!.settings.loadsImagesAutomatically = true
+        pdfView!!.settings.domStorageEnabled = true
 
         pdfView!!.loadUrl(
-             if (isPdf)
+            if (isPdf)
                 "https://docs.google.com/gview?embedded=true&url=${
                     URLEncoder.encode(
                         imageString,
                         "UTF-8"
                     )
                 }"
-             else imageString
+            else imageString
         )
         pdfView!!.webViewClient = object : WebViewClient() {
             var checkOnPageStartedCalled = false
@@ -147,8 +206,16 @@ class DocViewerActivity : BaseActivity() {
                 }
             }
 
-            override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
-                Toast.makeText(this@DocViewerActivity, getString(R.string.error_loading_page_common_ui), Toast.LENGTH_SHORT).show()
+            override fun onReceivedError(
+                view: WebView?,
+                request: WebResourceRequest?,
+                error: WebResourceError?
+            ) {
+                Toast.makeText(
+                    this@DocViewerActivity,
+                    getString(R.string.error_loading_page_common_ui),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
@@ -159,10 +226,6 @@ class DocViewerActivity : BaseActivity() {
 
     fun hideProgress() {
         progress!!.visibility = View.GONE
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
     }
 
     private fun downloadFile(
@@ -183,14 +246,49 @@ class DocViewerActivity : BaseActivity() {
         downloadManager.enqueue(request)
     }
 
-    private fun showDownloadStartedDialog(){
+    private fun showDownloadStartedDialog() {
         AlertDialog.Builder(this)
             .setTitle(getString(R.string.alert_common_ui))
             .setMessage(getString(R.string.download_started_common_ui))
-            .setPositiveButton(getString(R.string.okay_common_ui)) {dialog, which ->
+            .setPositiveButton(getString(R.string.okay_common_ui)) { dialog, which ->
                 dialog.dismiss()
             }
             .show()
+    }
+
+    private var bannerCardRepo = BannerCardRepository()
+    override fun onBackPressed() {
+        if (purposeExtra == "banner") {
+            bannerUpdateRequest()
+
+        }
+        super.onBackPressed()
+    }
+
+    private fun bannerUpdateRequest() {
+        val scope = CoroutineScope(Job() + Dispatchers.Main)
+        scope.launch {
+            bundle?.let { bundle ->
+                val apiUrl = bundle.getString("apiUrl")
+                val apiUrlRequire = bundle.getBoolean("apiUrlRequire", false)
+                val url = if (!apiUrlRequire || apiUrl.isNullOrBlank()) {
+                    buildConfig.getSiplyCompleteUrl()
+                } else {
+                    apiUrl
+                }
+                val _id = bundle.getString("_id")
+                val source = bundle.getString("source") ?: "home"
+                if (!url.isNullOrEmpty() && !_id.isNullOrEmpty()) {
+                    bannerCardRepo.updateLogs(
+                        url,
+                        FirebaseAuth.getInstance().currentUser?.uid!!,
+                        _id,
+                        source
+                    )
+                }
+            }
+
+        }
     }
 
 }

@@ -20,7 +20,7 @@
 
     <TextView
         android:id="@+id/textTitle"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/size16"
         android:fontFamily="@font/lato"
@@ -29,9 +29,12 @@
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="normal"
+        android:ellipsize="end"
+        android:maxLines="1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/backImageButton"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/searchImageButton"/>
 
     <TextView
         android:id="@+id/steps"

@@ -13,6 +13,7 @@ import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.QuerySnapshot
@@ -73,7 +74,7 @@ class LoginSuccessfulViewModel constructor(
                         insertDataToDB()
                     }
                 }
-                .addOnFailureListener { exception ->
+                .addOnFailureListener {
                     insertDataToDB()
                 }
 
@@ -123,14 +124,18 @@ class LoginSuccessfulViewModel constructor(
     private fun insertDataToDB() {
 
         //            .document(profileFirebaseRepository.getUID())
-        profileFirebaseRepository
+        FirebaseAuth.getInstance().currentUser?.uid?.let {
+            profileFirebaseRepository
                 .db
                 .collection("Version_info")
                 .add(
-                   UserVersionInfo(
-                    currentVersion = BuildConfig.VERSION_NAME
-                  )
+                    UserVersionInfo(
+                        currentVersion = BuildConfig.VERSION_NAME,
+                        uid = it
+                    )
                 )
+        }
+
     }
 
     private fun checkForGigData(profileData: ProfileData) {

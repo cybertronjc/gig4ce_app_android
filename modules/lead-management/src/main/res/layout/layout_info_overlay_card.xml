@@ -31,8 +31,9 @@
                 android:id="@+id/guideline2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintGuide_percent="0.4"
-                android:orientation="vertical" />
+                android:orientation="vertical"
+                app:layout_constraintStart_toEndOf="@id/joiningDateTextView"
+                app:layout_constraintGuide_begin="160dp" />
 
             <TextView
                 android:id="@+id/jobProfileTitle"
@@ -58,7 +59,7 @@
 
             <TextView
                 android:id="@+id/joiningDateTextView"
-                android:layout_width="wrap_content"
+                android:layout_width="125dp"
                 android:layout_height="wrap_content"
                 android:text="@string/joining_date_lead"
                 android:textAppearance="@style/body_primary_2"

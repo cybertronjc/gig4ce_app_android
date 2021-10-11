@@ -54,7 +54,7 @@ class JoiningList2ViewModel @Inject constructor(
     private var joiningsRaw: List<JoiningNew>? = null
     private var joiningListShownOnView: MutableList<JoiningList2RecyclerItemData> = mutableListOf()
     private var currentSearchString: String? = null
-    var currentFilterString: String? = null
+    var currentFilterString: String = "Pending"
     var filterDaysVM: Int? = null
     private var fetchJoiningListener: ListenerRegistration? = null
     var isSelectEnableGlobal = false

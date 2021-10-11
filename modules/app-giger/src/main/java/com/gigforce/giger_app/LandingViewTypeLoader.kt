@@ -5,6 +5,7 @@ import android.view.View
 import com.gigforce.common_ui.components.atoms.OtherFeatureItemComponent
 import com.gigforce.common_ui.components.atoms.SeeMoreComponent
 import com.gigforce.common_ui.components.cells.*
+import com.gigforce.common_ui.components.molecules.BannerCardComponent
 import com.gigforce.core.datamodels.CommonViewTypes
 import com.gigforce.common_ui.components.molecules.FeatureItemCard2Component
 import com.gigforce.common_ui.components.molecules.FeatureItemCardComponent
@@ -22,6 +23,10 @@ class LandingViewTypeLoader : IViewTypeLoader {
             )
             CommonViewTypes.VIEW_FEATURE_LAYOUT -> FeatureLayoutComponent(context, null)
             CommonViewTypes.VIEW_FEATURE_ITEM_CARD -> FeatureItemCardComponent(
+                context,
+                null
+            )
+            CommonViewTypes.VIEW_BANNER_CARD -> BannerCardComponent(
                 context,
                 null
             )

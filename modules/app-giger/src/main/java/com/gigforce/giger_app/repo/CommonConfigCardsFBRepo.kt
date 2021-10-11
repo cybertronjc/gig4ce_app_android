@@ -3,10 +3,12 @@ package com.gigforce.giger_app.repo
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.gigforce.client_activation.client_activation.dataviewmodel.ClientActivationLayoutDVM
+import com.gigforce.common_ui.viewdatamodels.BannerCardDVM
 import com.gigforce.common_ui.viewdatamodels.OtherFeatureComponentDVM
 import com.gigforce.common_ui.viewdatamodels.StandardActionCardDVM
 import com.gigforce.giger_app.dataviewmodel.*
 import com.gigforce.learning.dataviewmodels.LearningLayoutDVM
+import com.gigforce.giger_app.dataviewmodel.*
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -64,6 +66,9 @@ open class CommonConfigCardsFBRepo : ICommonConfigCardsFBRepo {
             }
             "sec_other_features" ->{
                 return snapshot.toObject(OtherFeatureComponentDVM::class.java)
+            }
+            "sec_banner_feature" ->{
+                return snapshot.toObject(BannerCardDVM::class.java)
             }
             "sec_pending_joinings" ->{
                 return snapshot.toObject(PendingJoiningSectionDVM::class.java)

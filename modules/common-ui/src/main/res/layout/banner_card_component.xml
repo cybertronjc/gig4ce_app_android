@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/top_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/dp_xsm1">
+
+    <TextView
+        android:id="@+id/title"
+        style="@style/FeatureCardTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_sm1"
+        android:layout_marginTop="@dimen/dp_xsm1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/background_img"
+        android:layout_width="match_parent"
+        android:layout_height="152dp"
+        android:layout_marginLeft="@dimen/dp_sm1"
+        android:layout_marginTop="@dimen/dp_xsm1"
+        android:layout_marginRight="@dimen/dp_sm1"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title" />
+
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/background_img"
+            app:layout_constraintEnd_toEndOf="@+id/background_img"
+            app:layout_constraintStart_toStartOf="@+id/background_img"
+            app:layout_constraintTop_toTopOf="@+id/background_img" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

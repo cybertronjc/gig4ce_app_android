@@ -2,12 +2,9 @@ package com.gigforce.lead_management.ui.joining_list_2
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import androidx.core.os.bundleOf
-import androidx.core.view.get
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -18,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.onTabSelected
-import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.utils.PushDownAnim
@@ -36,8 +32,6 @@ import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.FragmentJoiningList2Binding
 import com.gigforce.lead_management.models.JoiningList2RecyclerItemData
-import com.gigforce.lead_management.models.JoiningListRecyclerItemData
-import com.gigforce.lead_management.models.JoiningStatusAndCountItemData
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModelState
 import com.gigforce.lead_management.ui.drop_selection.DropSelectionBottomSheetDialogFragment
@@ -70,7 +64,7 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
     @Inject
     lateinit var navigation: INavigation
     private val viewModel: JoiningList2ViewModel by viewModels()
-    private val sharedViewModel : LeadManagementSharedViewModel by activityViewModels()
+    private val sharedViewModel: LeadManagementSharedViewModel by activityViewModels()
     var selectedTab = 0
     var filterDaysFM = -1
     var joiningDataState = JoiningDataState.DEFAULT
@@ -81,6 +75,7 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
         viewBinding: FragmentJoiningList2Binding,
         savedInstanceState: Bundle?
     ) {
+        getIntentData(savedInstanceState)
         checkForApplyFilter()
         checkForDropSelection()
         initAppBar()
@@ -88,6 +83,17 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
         initListeners(viewBinding)
         initViewModel()
 //        initSharedViewModel()
+    }
+
+    var title = ""
+    private fun getIntentData(savedInstanceState: Bundle?) {
+        savedInstanceState?.let {
+            title = it.getString("title") ?: ""
+        } ?: run {
+            arguments?.let {
+                title = it.getString("title") ?: ""
+            }
+        }
     }
 
     private fun initListeners(
@@ -174,7 +180,10 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
     }
 
     private fun initAppBar() = viewBinding.appBarComp.apply {
-
+        if (title.isNotBlank())
+            setAppBarTitle(title)
+        else
+            setAppBarTitle(context.getString(R.string.joinings_lead))
         changeBackButtonDrawable()
         setBackButtonListener(View.OnClickListener {
             activity?.onBackPressed()
@@ -199,15 +208,15 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
     private fun initTabLayout() = viewBinding.apply {
 
 
-        statusTabLayout.addTab(statusTabLayout.newTab().setText("All (0)"))
         statusTabLayout.addTab(statusTabLayout.newTab().setText("Pending (0)"))
         statusTabLayout.addTab(statusTabLayout.newTab().setText("Completed (0)"))
+        statusTabLayout.addTab(statusTabLayout.newTab().setText("All (0)"))
 
         val betweenSpace = 25
 
         val slidingTabStrip: ViewGroup = statusTabLayout.getChildAt(0) as ViewGroup
 
-        for (i in 0 until slidingTabStrip.getChildCount() - 1) {
+        for (i in 0 until slidingTabStrip.childCount - 1) {
             val v: View = slidingTabStrip.getChildAt(i)
             val params: ViewGroup.MarginLayoutParams =
                 v.layoutParams as ViewGroup.MarginLayoutParams
@@ -224,9 +233,9 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
         statusTabLayout.onTabSelected {
 
             val statusText = it?.text?.split("(")?.get(0).toString().trim()
-            if (statusText == "All"){
+            if (statusText == "All") {
                 viewModel.filterJoinings("")
-            }else{
+            } else {
                 viewModel.filterJoinings(statusText)
             }
 
@@ -262,6 +271,17 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
         })
     }
 
+    private fun initSharedViewModel() {
+        sharedViewModel
+            .viewState
+            .observe(viewLifecycleOwner, {
+
+                when (it) {
+                    LeadManagementSharedViewModelState.OneOrMoreSelectionsDropped -> viewModel.getJoinings()
+                }
+            })
+    }
+
     private fun setDropSelection(hashMap: HashMap<String, Boolean>?) = viewBinding.apply{
             val count = hashMap?.size
             appBarComp.setAppBarTitle("$count Selected")
@@ -270,16 +290,19 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
     }
 
 
-    private fun setStatus(map: Map<String, Int>) = viewBinding.apply{
+    private fun setStatus(map: Map<String, Int>) = viewBinding.apply {
         map.forEach {
-            if (it.key == "All"){
-                this.statusTabLayout.getTabAt(0)?.text = "All (${it.value})"
+
+            if (it.key == LeadManagementConstants.STATUS_PENDING) {
+                this.statusTabLayout.getTabAt(0)?.text = "Pending (${it.value})"
             }
-            if (it.key == LeadManagementConstants.STATUS_PENDING){
-                this.statusTabLayout.getTabAt(1)?.text = "Pending (${it.value})"
+
+            if (it.key == LeadManagementConstants.STATUS_COMPLETED) {
+                this.statusTabLayout.getTabAt(1)?.text = "Completed (${it.value})"
             }
-            if (it.key == LeadManagementConstants.STATUS_COMPLETED){
-                this.statusTabLayout.getTabAt(2)?.text = "Completed (${it.value})"
+
+            if (it.key == "All") {
+                this.statusTabLayout.getTabAt(2)?.text = "All (${it.value})"
             }
         }
     }
@@ -291,7 +314,7 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
         joiningShimmerContainer.visible()
 
         startShimmer(
-            this.joiningShimmerContainer as LinearLayout,
+            this.joiningShimmerContainer,
             ShimmerDataModel(
                 minHeight = R.dimen.size_120,
                 minWidth = LinearLayout.LayoutParams.MATCH_PARENT,
