@@ -10,11 +10,13 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
+import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -41,7 +43,11 @@ import com.gigforce.lead_management.ui.select_business_screen.SelectBusinessFrag
 import com.gigforce.lead_management.ui.select_job_profile_screen.SelectJobProfileFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -95,22 +101,21 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
             builder.setTitle("Select Phone Number")
             builder.setItems(pickedContact.phoneNumbers.toTypedArray()) { _, item ->
                 val number = pickedContact.phoneNumbers[item]
-                viewBinding.mainForm.mobileNoEt.setText(number)
-
-                viewBinding.mainForm.mobileNoEt.post {
-                    viewBinding.mainForm.mobileNoEt.setSelection(viewBinding.mainForm.mobileNoEt.length())
-                }
-                viewModel.handleEvent(NewSelectionForm1Events.ContactNoChanged("+91" + number))
+                setMobileNoOnEditText(number)
             }
             builder.show()
         } else {
-            viewBinding.mainForm.mobileNoEt.setText(pickedContact.phoneNumbers.first())
-
-            viewBinding.mainForm.mobileNoEt.post {
-                viewBinding.mainForm.mobileNoEt.setSelection(viewBinding.mainForm.mobileNoEt.length())
-            }
-            viewModel.handleEvent(NewSelectionForm1Events.ContactNoChanged("+91" + pickedContact.phoneNumbers.first()))
+            setMobileNoOnEditText(pickedContact.phoneNumbers.first())
         }
+    }
+
+    private fun setMobileNoOnEditText(number: String) {
+        viewBinding.mainForm.mobileNoEt.setText(number)
+
+        viewBinding.mainForm.mobileNoEt.post {
+            viewBinding.mainForm.mobileNoEt.setSelection(viewBinding.mainForm.mobileNoEt.length())
+        }
+        viewModel.handleEvent(NewSelectionForm1Events.ContactNoChanged("+91" + number))
     }
 
     @SuppressLint("NewApi")
@@ -174,9 +179,17 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
         lifecycleScope.launchWhenCreated {
 
             mainForm.mobileNoEt.getTextChangeAsStateFlow()
+                .debounce(300)
+                .distinctUntilChanged()
+                .flowOn(Dispatchers.Default)
                 .collect {
                     viewModel.handleEvent(NewSelectionForm1Events.ContactNoChanged("+91$it"))
                 }
+        }
+
+        mainForm.mobileNoEt.addTextChangedListener {
+
+            Log.d("D","D")
         }
 
         lifecycleScope.launchWhenCreated {
@@ -301,9 +314,9 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
                 is NewSelectionForm1ViewState.ShowJobProfileRelatedField -> showJobProfileRelatedFields(
                     state.dynamicFields
                 )
-                NewSelectionForm1ViewState.DisableSubmitButton -> TODO()
-                NewSelectionForm1ViewState.EnableSubmitButton -> TODO()
-
+                is NewSelectionForm1ViewState.EnteredPhoneNumberSanitized -> {
+                    setMobileNoOnEditText(state.sanitizedPhoneNumber)
+                }
             }
         })
 

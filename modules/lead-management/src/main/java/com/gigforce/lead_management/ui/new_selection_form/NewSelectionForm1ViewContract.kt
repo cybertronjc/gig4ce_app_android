@@ -55,6 +55,10 @@ sealed class NewSelectionForm1ViewState {
     data class ShowJobProfileRelatedField(
         val dynamicFields : List<JobProfileDependentDynamicInputField>
     ): NewSelectionForm1ViewState()
+
+    data class EnteredPhoneNumberSanitized(
+        val sanitizedPhoneNumber : String
+    ): NewSelectionForm1ViewState()
 }
 
 sealed class NewSelectionForm1Events {

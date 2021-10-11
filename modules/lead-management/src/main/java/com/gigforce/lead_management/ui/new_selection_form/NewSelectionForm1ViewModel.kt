@@ -7,15 +7,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gigforce.common_ui.repository.ProfileFirebaseRepository
+import com.gigforce.common_ui.repository.LeadManagementRepository
+import com.gigforce.common_ui.viewdatamodels.leadManagement.DataFromDynamicInputField
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfilesItem
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JoiningBusinessAndJobProfilesItem
 import com.gigforce.common_ui.viewdatamodels.leadManagement.SubmitJoiningRequest
 import com.gigforce.core.ValidationHelper
-import com.gigforce.core.logger.GigforceLogger
-import com.gigforce.common_ui.repository.LeadManagementRepository
-import com.gigforce.common_ui.viewdatamodels.leadManagement.DataFromDynamicInputField
 import com.gigforce.core.datamodels.profile.ProfileData
+import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.ui.new_selection_form_2.NewSelectionForm2Fragment
@@ -80,24 +79,25 @@ class NewSelectionForm1ViewModel @Inject constructor(
             )
         }
 
-       // checkForDataAndEnabledOrDisableSubmitButton()
+        // checkForDataAndEnabledOrDisableSubmitButton()
     }
 
-    private fun inflateDynamicFieldsRelatedToSelectedJobProfile(jobProfile: JobProfilesItem) = viewModelScope.launch{
+    private fun inflateDynamicFieldsRelatedToSelectedJobProfile(jobProfile: JobProfilesItem) =
+        viewModelScope.launch {
 
-        val selectedJobProfileDependentDynamicFields = jobProfile.dynamicInputFields.filter {
-            it.screenIdToShowIn == NewSelectionForm1Fragment.SCREEN_ID
+            val selectedJobProfileDependentDynamicFields = jobProfile.dynamicInputFields.filter {
+                it.screenIdToShowIn == NewSelectionForm1Fragment.SCREEN_ID
+            }
+
+            _viewState.value = NewSelectionForm1ViewState.ShowJobProfileRelatedField(
+                selectedJobProfileDependentDynamicFields
+            )
+            delay(1000)
+            _viewState.value = null
         }
 
-        _viewState.value = NewSelectionForm1ViewState.ShowJobProfileRelatedField(
-            selectedJobProfileDependentDynamicFields
-        )
-        delay(1000)
-        _viewState.value = null
-    }
-
     private fun checkForDataAndEnabledOrDisableSubmitButton() {
-        if(gigerName.isNullOrBlank()){
+        if (gigerName.isNullOrBlank()) {
             _viewState.value = NewSelectionForm1ViewState.DisableSubmitButton
             return
         }
@@ -110,7 +110,7 @@ class NewSelectionForm1ViewModel @Inject constructor(
             return
         }
 
-        if(mobilePhoneNumber.isNullOrBlank()){
+        if (mobilePhoneNumber.isNullOrBlank()) {
             _viewState.value = NewSelectionForm1ViewState.DisableSubmitButton
             return
         }
@@ -249,10 +249,17 @@ class NewSelectionForm1ViewModel @Inject constructor(
     ) = viewModelScope.launch {
         gigforceLogger.d(TAG, "Mobile no changed : $mobileNo")
 
+        if( mobilePhoneNumber == mobileNo){
+            return@launch
+        }
+
         mobilePhoneNumber = mobileNo
         val doesMobileNoContains10digits = mobileNo.length == 13
-        if (!doesMobileNoContains10digits)
+        if (!doesMobileNoContains10digits) {
+            gigforceLogger.d(TAG,"Mobile no received : '${mobileNo}', checking if can be fixed..")
+            tryToFixPhoneNumberEntered(mobileNo)
             return@launch
+        }
 
         if (!ValidationHelper.isValidIndianMobileNo(mobileNo.substring(3))) {
             _viewState.value = NewSelectionForm1ViewState.ValidationError(
@@ -268,7 +275,7 @@ class NewSelectionForm1ViewModel @Inject constructor(
             return@launch
         }
 
-        if(mobileNo == firebaseAuthStateListener.getCurrentSignInInfo()?.phoneNumber){
+        if (mobileNo == firebaseAuthStateListener.getCurrentSignInInfo()?.phoneNumber) {
             _viewState.value = NewSelectionForm1ViewState.ValidationError(
                 invalidMobileNoMessage = buildSpannedString {
                     bold {
@@ -287,9 +294,10 @@ class NewSelectionForm1ViewModel @Inject constructor(
         try {
             gigforceLogger.d(TAG, "checking phone-number in profile '$mobileNo'")
 
-            val userInfo = leadManagementRepository.getUserInfoFromMobileNumber(mobileNo.substring(3))
+            val userInfo =
+                leadManagementRepository.getUserInfoFromMobileNumber(mobileNo.substring(3))
 
-            if(userInfo.name == null){
+            if (userInfo.name == null) {
                 gigforceLogger.d(TAG, "null received in name for mobile no '$mobileNo'")
                 _viewState.value = NewSelectionForm1ViewState.ErrorWhileCheckingForUserInProfile(
                     error = appContext.getString(R.string.no_match_found_for_this_no),
@@ -310,6 +318,26 @@ class NewSelectionForm1ViewModel @Inject constructor(
                 error = appContext.getString(R.string.unable_to_check_user),
                 shouldShowErrorButton = false
             )
+        }
+    }
+
+    private fun tryToFixPhoneNumberEntered(
+        mobileNo: String
+    ) {
+        if (mobileNo.length <= 13) {
+            //Not fixing mobile number that have less than 11 (+91 + phone number)Digits
+            return
+        }
+
+        //replacing +91 , starting 0 and spaces from text with empty string
+        val sanitizedNumber = mobileNo.substring(3).replace(
+            "(\\\\s|^0+|^91)".toRegex(), ""
+        )
+
+        gigforceLogger.d(TAG,"phone number sanitized : $sanitizedNumber")
+
+        if (ValidationHelper.isValidIndianMobileNo(sanitizedNumber)) {
+            _viewState.value = NewSelectionForm1ViewState.EnteredPhoneNumberSanitized(sanitizedNumber)
         }
     }
 
@@ -339,7 +367,8 @@ class NewSelectionForm1ViewModel @Inject constructor(
             )
 
             _viewState.value = NewSelectionForm1ViewState.ErrorWhileLoadingBusinessAndJobProfiles(
-                error = e.message ?: appContext.getString(R.string.unable_to_load_business_and_job_profiles),
+                error = e.message
+                    ?: appContext.getString(R.string.unable_to_load_business_and_job_profiles),
                 shouldShowErrorButton = false
             )
         }

@@ -280,9 +280,10 @@ fun EditText.getTextChangeAsStateFlow(): StateFlow<String> {
     val query = MutableStateFlow("")
 
     addTextChangedListener {
-        onTextChanged {
-            query.value = it
-        }
+        query.value = it?.toString() ?: ""
+//        onTextChanged {
+//
+//        }
     }
     return query
 }
