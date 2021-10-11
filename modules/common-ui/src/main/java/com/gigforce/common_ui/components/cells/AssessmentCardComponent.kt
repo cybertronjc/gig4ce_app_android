@@ -44,7 +44,6 @@ class AssessmentCardComponent(context: Context, attributeSet: AttributeSet?) : F
                             navPath, data.args
                     )
                 }
-
             }
             assessmentTitle.text = data.title
             assessmentEstTime.text = data.videoLengthString

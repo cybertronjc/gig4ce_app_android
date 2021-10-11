@@ -28,6 +28,7 @@ sealed class LeadManagementSharedViewModelState {
     ): LeadManagementSharedViewModelState()
 
     data class JobProfileSelected(
+        val businessSelected: JoiningBusinessAndJobProfilesItem,
         val jobProfileSelected: JobProfilesItem
     ): LeadManagementSharedViewModelState()
 
@@ -71,21 +72,22 @@ class LeadManagementSharedViewModel : ViewModel() {
     fun businessSelected(
         business: JoiningBusinessAndJobProfilesItem
     ) = viewModelScope.launch{
-
-        delay(200)
         _viewState.value = LeadManagementSharedViewModelState.BusinessSelected(business)
-        _viewState.value = null
-
         _viewStateFlow.send(LeadManagementSharedViewModelState.BusinessSelected(business))
+
+        delay(1000)
+        _viewState.value = null
     }
 
     fun jobProfileSelected(
+        selectedBusiness: JoiningBusinessAndJobProfilesItem,
         jobProfileSelected: JobProfilesItem
     ) = viewModelScope.launch{
-        _viewState.value = LeadManagementSharedViewModelState.JobProfileSelected(jobProfileSelected)
+        _viewState.value = LeadManagementSharedViewModelState.JobProfileSelected(selectedBusiness,jobProfileSelected)
+        delay(200)
         _viewState.value = null
 
-        _viewStateFlow.send(LeadManagementSharedViewModelState.JobProfileSelected(jobProfileSelected))
+        _viewStateFlow.send(LeadManagementSharedViewModelState.JobProfileSelected(selectedBusiness,jobProfileSelected))
     }
 
     fun citySelected(

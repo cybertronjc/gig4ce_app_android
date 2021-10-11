@@ -2,6 +2,7 @@ package com.gigforce.lead_management.ui.giger_info
 
 
 import android.content.Intent
+import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -16,26 +17,26 @@ import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.utils.getCircularProgressDrawable
 import com.gigforce.common_ui.viewdatamodels.leadManagement.GigerInfo
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
-import com.gigforce.core.utils.DateHelper
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.lead_management.LeadManagementConstants
 import com.gigforce.lead_management.R
+import com.gigforce.lead_management.analytics.LeadManagementAnalyticsEvents
 import com.gigforce.lead_management.databinding.GigerInfoFragmentBinding
 import com.gigforce.lead_management.models.ApplicationChecklistRecyclerItemData
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
-import com.gigforce.lead_management.ui.LeadManagementSharedViewModelState
 import com.gigforce.lead_management.ui.drop_selection.DropSelectionBottomSheetDialogFragment
+import com.gigforce.lead_management.ui.giger_info.views.AppCheckListRecyclerComponent
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.layout_below_giger_functionality.*
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
 import javax.inject.Inject
 
@@ -53,19 +54,23 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
 
     @Inject
     lateinit var navigation: INavigation
+
+    @Inject
+    lateinit var eventTracker: IEventTracker
+
     private val viewModel: GigerInfoViewModel by viewModels()
     private val sharedViewModel : LeadManagementSharedViewModel by activityViewModels()
 
     var gigerPhone = ""
     private lateinit var joiningId: String
-    private val dateFormatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
     override fun viewCreated(viewBinding: GigerInfoFragmentBinding, savedInstanceState: Bundle?) {
         getDataFrom(arguments,savedInstanceState)
         initToolbar(viewBinding)
         initListeners()
         initViewModel()
-        initSharedViewModel()
+        checkForDropSelection()
+        //initSharedViewModel()
     }
 
     private fun getDataFrom(
@@ -90,6 +95,26 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
     }
 
 
+    private fun checkForDropSelection() {
+//        val navController = findNavController()
+//        navController.currentBackStackEntry?.savedStateHandle?.getLiveData<String>("drop_status")?.observe(
+//            viewLifecycleOwner) { result ->
+//            if (result == "dropped"){
+//                Log.d("droppedInfo","dropped")
+//                navigation.popBackStack()
+//            }
+//        }
+        childFragmentManager.setFragmentResultListener("drop_status", viewLifecycleOwner) { key, bundle ->
+            val result = bundle.getString("drop_status")
+            // Do something with the result
+            if (result == "dropped"){
+                Log.d("droppedInfo","dropped")
+                navigation.popBackStack()
+            }
+        }
+
+    }
+
     private fun initViewModel() {
         viewModel.getGigerJoiningInfo(joiningId)
         //observe data
@@ -107,17 +132,26 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
         })
     }
 
-    private fun initSharedViewModel() {
-        sharedViewModel.viewState
-            .observe(viewLifecycleOwner,{
-                when (it) {
-                    LeadManagementSharedViewModelState.OneOrMoreSelectionsDropped -> viewModel.getGigerJoiningInfo(joiningId)
-                }
-            })
-    }
+//    private fun initSharedViewModel() = lifecycleScope.launchWhenCreated {
+//        sharedViewModel.viewStateFlow.collect{
+//                when (it) {
+//                    LeadManagementSharedViewModelState.OneOrMoreSelectionsDropped -> {
+//                        navigation.popBackStack()
+//                    }
+//                }
+//            }
+//
+////        sharedViewModel.viewState.observe(viewLifecycleOwner, Observer {
+////            when (it) {
+////                LeadManagementSharedViewModelState.OneOrMoreSelectionsDropped -> {
+////                    navigation.popBackStack()
+////                }
+////            }
+////        })
+//    }
 
     private fun showLoadingInfo() = viewBinding.apply{
-        checklistRv.collection = emptyList()
+        checklistLayout.removeAllViews()
         mainScrollView.gone()
         gigerinfoShimmerContainer.visible()
 
@@ -143,8 +177,9 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
         mainScrollView.visible()
 
 
-        gigerInfo?.let {
+        gigerInfo.let {
             toolbar.showTitle(it.gigerName)
+            toolbar.setTitleTypeface(Typeface.BOLD)
             overlayCardLayout.companyName.text = ": "+it.businessName ?: ""
             overlayCardLayout.jobProfileTitle.text = it.jobProfileTitle ?: ""
             overlayCardLayout.locationText.text = ": "+it.reportingLocation + ", " + it.businessLocation ?: ""
@@ -160,13 +195,13 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
                     .into(overlayCardLayout.profileImageOverlay.companyImg)
             }
 
-            applicationStatusLayout.statusText.text = "Application "+it.status
+            applicationStatusLayout.statusText.text = getString(R.string.application_lead,it.status)
             if (it.status == "Pending"){
-                applicationStatusLayout.statusIconImg.setImageDrawable(resources.getDrawable(R.drawable.ic_pending_icon))
-                applicationStatusLayout.root.setBackgroundColor(resources.getColor(R.color.status_background_pink))
+                applicationStatusLayout.statusIconImg.setImageDrawable(ResourcesCompat.getDrawable(resources,R.drawable.ic_pending_icon,null))
+                applicationStatusLayout.root.setBackgroundColor(ResourcesCompat.getColor(resources,R.color.status_background_pink,null))
             } else {
-                applicationStatusLayout.statusIconImg.setImageDrawable(resources.getDrawable(R.drawable.ic_blue_tick))
-                applicationStatusLayout.root.setBackgroundColor(resources.getColor(R.color.status_background_blue))
+                applicationStatusLayout.statusIconImg.setImageDrawable(ResourcesCompat.getDrawable(resources,R.drawable.ic_blue_tick,null))
+                applicationStatusLayout.root.setBackgroundColor(ResourcesCompat.getColor(resources,R.color.status_background_blue,null))
             }
 
             overlayCardLayout.selectionDate.text = ": "+getFormattedDate(it.selectionDate)
@@ -175,7 +210,7 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
             val checkListItemData = arrayListOf<ApplicationChecklistRecyclerItemData.ApplicationChecklistItemData>()
             if (it.checkList == null){
                 checklistText.gone()
-                checklistRv.gone()
+                checklistLayout.gone()
             } else {
                  it.checkList?.let {
                 it.forEachIndexed { index, checkListItem ->
@@ -183,11 +218,11 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
                     checkListItemData.add(itemData)
                 }
                 if (checkListItemData.size > 0){
-                    checklistRv.visible()
-                    checklistRv.collection = checkListItemData
+                    checklistLayout.visible()
+                    inflateCheckListInCheckListContainer(checkListItemData)
                 } else {
                     checklistText.gone()
-                    checklistRv.gone()
+                    checklistLayout.gone()
                 }
 
                 }
@@ -201,8 +236,21 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
         }
     }
 
+    private fun inflateCheckListInCheckListContainer(
+        checkListItemData: ArrayList<ApplicationChecklistRecyclerItemData.ApplicationChecklistItemData>
+    ) = viewBinding.checklistLayout.apply{
+        removeAllViews()
+
+        checkListItemData.forEach {
+
+            val view = AppCheckListRecyclerComponent(requireContext(),null)
+            addView(view)
+            view.bind(it)
+        }
+    }
+
     private fun showErrorLoadingInfo(error: String) = viewBinding.apply{
-        checklistRv.collection = emptyList()
+        checklistLayout.removeAllViews()
         stopShimmer(
             gigerinfoShimmerContainer as LinearLayout,
             R.id.shimmer_controller
@@ -229,6 +277,13 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
         }
         bottomButtonLayout.callLayout.setOnClickListener {
             //call functionality
+            eventTracker.pushEvent(TrackingEventArgs(
+                LeadManagementAnalyticsEvents.Onboarded_Giger_Calling,
+                mapOf(
+                    "Phone_number_called" to gigerPhone
+                )
+            ))
+
             val intent =
                 Intent(
                     Intent.ACTION_DIAL,
@@ -279,7 +334,7 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
 
     fun getFormattedDate(date: String): String {
         val input = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-        val output = SimpleDateFormat("dd/MM/yyyy")
+        val output = SimpleDateFormat("dd/MMM/yy",Locale.getDefault())
 
         var d: Date? = null
         try {
@@ -293,7 +348,7 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
 
     fun getFormattedDateFromYYMMDD(date: String): String {
         val input = SimpleDateFormat("yyyy-MM-dd")
-        val output = SimpleDateFormat("dd/MM/yyyy")
+        val output = SimpleDateFormat("dd/MMM/yy",Locale.getDefault())
 
         var d: Date? = null
         try {

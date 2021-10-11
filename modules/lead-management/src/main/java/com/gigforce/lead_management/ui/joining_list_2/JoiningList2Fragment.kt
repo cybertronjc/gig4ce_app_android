@@ -1,24 +1,35 @@
 package com.gigforce.lead_management.ui.joining_list_2
 
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.onTabSelected
+import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.utils.PushDownAnim
+import com.gigforce.common_ui.viewdatamodels.FeatureItemCard2DVM
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.getTextChangeAsStateFlow
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.recyclerView.ItemClickListener
+import com.gigforce.core.recyclerView.ItemLongClickListener
+import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.lead_management.LeadManagementConstants
 import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
@@ -26,6 +37,9 @@ import com.gigforce.lead_management.databinding.FragmentJoiningList2Binding
 import com.gigforce.lead_management.models.JoiningList2RecyclerItemData
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModelState
+import com.gigforce.lead_management.ui.drop_selection.DropSelectionBottomSheetDialogFragment
+import com.gigforce.lead_management.ui.giger_onboarding.GigerOnboardingFragment
+import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
@@ -33,7 +47,15 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
+import java.lang.NullPointerException
+import java.util.HashMap
 import javax.inject.Inject
+
+enum class JoiningDataState {
+    DEFAULT,
+    HAS_DATA,
+    NO_DATA
+}
 
 @AndroidEntryPoint
 class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
@@ -47,17 +69,23 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
     private val viewModel: JoiningList2ViewModel by viewModels()
     private val sharedViewModel: LeadManagementSharedViewModel by activityViewModels()
     var selectedTab = 0
+    var filterDaysFM = -1
+    var joiningDataState = JoiningDataState.DEFAULT
+    val dropSelectionIds = arrayListOf<String>()
+    var dropJoining : HashMap<String, Boolean>? = HashMap<String, Boolean>()
 
     override fun viewCreated(
         viewBinding: FragmentJoiningList2Binding,
         savedInstanceState: Bundle?
     ) {
         getIntentData(savedInstanceState)
+        checkForApplyFilter()
+        checkForDropSelection()
         initAppBar()
         initTabLayout()
         initListeners(viewBinding)
         initViewModel()
-        initSharedViewModel()
+//        initSharedViewModel()
     }
 
     var title = ""
@@ -77,37 +105,86 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
 
         this.joiningsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        PushDownAnim.setPushDownAnimTo(this.joinNowButton).setOnClickListener {
-            logger.d(
-                logTag,
-                "navigating to ${LeadManagementNavDestinations.FRAGMENT_GIGER_ONBOARDING}"
-            )
+        this.joinNowButton.setOnClickListener {
+            if (joinNowButton.text == getString(R.string.add_new_lead)) {
+                logger.d(
+                    logTag,
+                    "navigating to ${LeadManagementNavDestinations.FRAGMENT_GIGER_ONBOARDING}"
+                )
 
-            navigation.navigateTo(
-                dest = LeadManagementNavDestinations.FRAGMENT_SELECTION_FORM_1,
-                navOptions = getNavOptions()
-            )
+                navigation.navigateTo(
+                    dest = LeadManagementNavDestinations.FRAGMENT_SELECTION_FORM_1,
+                    navOptions = getNavOptions()
+                )
+            }else {
+                dropSelectionIds.clear()
+                for (entry in dropJoining?.keys!!){
+                    dropSelectionIds.add(entry)
+                }
+                if(dropSelectionIds.isEmpty()){
+                    showToast("Select at-least one joining to drop")
+                }else {
+                    DropSelectionBottomSheetDialogFragment.launch(
+                        dropSelectionIds, childFragmentManager
+                    )
+                }
+            }
+        }
+
+        joiningsRecyclerView.itemClickListener = object : ItemClickListener {
+            override fun onItemClick(view: View, position: Int, dataModel: Any) {
+                if (dataModel is JoiningList2RecyclerItemData.JoiningListRecyclerStatusItemData) {
+                    if (dataModel.dropEnabled){
+                        val businessName = dataModel.status.split("(").get(0)
+                        viewModel.clickDropdown(businessName, false)
+                    }else {
+                        val businessName = dataModel.status.split("(").get(0)
+                        viewModel.clickDropdown(businessName, true)
+                    }
+
+                }
+            }
+        }
+
+        swipeRefresh.setOnRefreshListener {
+            viewModel.resetViewModel()
+            viewModel.clearCachedRawJoinings()
+            viewModel.getJoinings()
+        }
+    }
+
+    private fun checkForDropSelection() {
+        childFragmentManager.setFragmentResultListener("drop_status", viewLifecycleOwner) { key, bundle ->
+            val result = bundle.getString("drop_status")
+            // Do something with the result
+            if (result == "dropped"){
+                viewModel.resetViewModel()
+                //viewBinding.appBarComp.setAppBarTitle(getString(R.string.joinings_lead))
+                if (title.isNotBlank())
+                    viewBinding.appBarComp.setAppBarTitle(title)
+                else
+                    viewBinding.appBarComp.setAppBarTitle(context?.getString(R.string.joinings_lead))
+                viewBinding.joinNowButton.text = getString(R.string.add_new_lead)
+                dropJoining?.clear()
+                viewModel.getJoinings()
+            }
+        }
+    }
+    private fun checkForApplyFilter() {
+        val navController = findNavController()
+        navController.currentBackStackEntry?.savedStateHandle?.getLiveData<Int>("filterDays")?.observe(
+            viewLifecycleOwner) { result ->
+            filterDaysFM = result
+            if (filterDaysFM != -1){
+                viewBinding.appBarComp.filterDotImageButton.visible()
+            } else {
+                viewBinding.appBarComp.filterDotImageButton.gone()
+            }
+            viewModel.filterDaysJoinings(filterDaysFM)
         }
 
     }
 
-    //    private fun initToolbar(
-//        viewBinding: FragmentJoiningListBinding
-//    ) = viewBinding.toolbar.apply {
-//        this.hideActionMenu()
-//        this.showTitle(context.getString(R.string.joinings_lead))
-//        this.setBackButtonListener {
-//            activity?.onBackPressed()
-//        }
-//        //this.changeBackgroundToRound()
-//        this.changeBackButtonDrawable()
-//        this.showSearchOption(context.getString(R.string.search_joinings_lead))
-//        lifecycleScope.launchWhenCreated {
-//            getSearchTextChangeAsFlow()
-//                .collect { viewModel.searchJoinings(it) }
-//        }
-//    }
-//
     private fun initAppBar() = viewBinding.appBarComp.apply {
         if (title.isNotBlank())
             setAppBarTitle(title)
@@ -125,6 +202,12 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
                 .collect { searchString ->
                     viewModel.searchJoinings(searchString)
                 }
+        }
+
+        filterImageButton.setOnClickListener {
+            navigation.navigateTo("LeadMgmt/joiningFilter", bundleOf(
+                StringConstants.INTENT_FILTER_DAYS_NUMBER.value to filterDaysFM
+            ))
         }
     }
 
@@ -188,6 +271,10 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
         })
 
         viewModel.getJoinings()
+
+        viewModel.dropJoiningMap.observe(viewLifecycleOwner, Observer {
+            setDropSelection(it)
+        })
     }
 
     private fun initSharedViewModel() {
@@ -200,6 +287,14 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
                 }
             })
     }
+
+    private fun setDropSelection(hashMap: HashMap<String, Boolean>?) = viewBinding.apply{
+            val count = hashMap?.size
+            appBarComp.setAppBarTitle("$count Selected")
+            joinNowButton.text = getString(R.string.drop_selection_lead)
+            dropJoining = hashMap
+    }
+
 
     private fun setStatus(map: Map<String, Int>) = viewBinding.apply {
         map.forEach {
@@ -245,10 +340,16 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
             joiningShimmerContainer,
             R.id.shimmer_controller
         )
+        if (joiningDataState == JoiningDataState.DEFAULT){
+            joiningDataState = JoiningDataState.HAS_DATA
+            statusTabLayout.visible()
+            appBarComp.searchImageButton.visible()
+            appBarComp.filterFrameLayout.visible()
+        }
         joiningShimmerContainer.gone()
         joiningListInfoLayout.root.gone()
-
         joiningsRecyclerView.collection = joiningList
+        swipeRefresh.isRefreshing = false
     }
 
 //    private fun setStatusCount(filters: JoiningFilters) = viewBinding.apply{
@@ -268,17 +369,25 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
 //    }
 
     private fun showNoJoiningsFound() = viewBinding.apply {
-
         joiningsRecyclerView.collection = emptyList()
         stopShimmer(
             joiningShimmerContainer,
             R.id.shimmer_controller
         )
+        if (joiningDataState == JoiningDataState.DEFAULT){
+            joiningDataState = JoiningDataState.NO_DATA
+            statusTabLayout.gone()
+            appBarComp.searchImageButton.gone()
+            appBarComp.filterFrameLayout.gone()
+        }
         joiningShimmerContainer.gone()
         joiningListInfoLayout.root.visible()
-
         joiningListInfoLayout.infoIv.loadImage(R.drawable.ic_no_selection)
-        joiningListInfoLayout.infoMessageTv.text = "No Selections Yet !"
+        joiningListInfoLayout.infoIv.layoutParams.height = 800
+        joiningListInfoLayout.infoIv.layoutParams.width = 800
+        joiningListInfoLayout.infoIv.requestLayout()
+        joiningListInfoLayout.infoMessageTv.text = getString(R.string.no_selection_yet_lead)
+        swipeRefresh.isRefreshing = false
     }
 
     private fun showErrorInLoadingJoinings(
@@ -292,10 +401,13 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
         )
         joiningShimmerContainer.gone()
         joiningListInfoLayout.root.visible()
-
         joiningListInfoLayout.infoIv.loadImage(R.drawable.ic_no_selection)
+        joiningListInfoLayout.infoIv.layoutParams.height = 800
+        joiningListInfoLayout.infoIv.layoutParams.width = 800
+        joiningListInfoLayout.infoIv.requestLayout()
         joiningListInfoLayout.infoMessageTv.text = error
+        swipeRefresh.isRefreshing = false
     }
 
-
 }
+

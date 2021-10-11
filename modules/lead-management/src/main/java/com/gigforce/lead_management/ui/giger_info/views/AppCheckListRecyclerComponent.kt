@@ -1,32 +1,31 @@
 package com.gigforce.lead_management.ui.giger_info.views
 
 import android.content.Context
+import android.os.Build
 import android.text.Html
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.TextView
-import com.gigforce.core.IViewHolder
+import androidx.core.content.res.ResourcesCompat
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.LayoutApplicationChecklistItemBinding
-import com.gigforce.lead_management.databinding.SelectGigApplicationItemLayoutBinding
 import com.gigforce.lead_management.models.ApplicationChecklistRecyclerItemData
-import com.gigforce.lead_management.models.GigAppListRecyclerItemData
 
-class AppCheckListRecyclerComponent  (
+class AppCheckListRecyclerComponent(
     context: Context,
     attrs: AttributeSet?
 ) : FrameLayout(
     context,
     attrs
-), IViewHolder {
+) {
 
     private var viewBinding: LayoutApplicationChecklistItemBinding
     private lateinit var viewData: ApplicationChecklistRecyclerItemData.ApplicationChecklistItemData
+
     init {
         this.layoutParams =
             LayoutParams(
@@ -40,31 +39,31 @@ class AppCheckListRecyclerComponent  (
         )
     }
 
-    override fun bind(data: Any?) {
-        data?.let {
-            val applicationInfo =
-                it as ApplicationChecklistRecyclerItemData.ApplicationChecklistItemData
-            viewData = applicationInfo
-            if (viewData.isOptional){
-                viewBinding.checkListItemText.setText(viewData.checkName)
-            }else {
-                val txt = viewData.checkName + "<font color=\"red\"> *</font>"
-                viewBinding.checkListItemText.setText(Html.fromHtml(txt), TextView.BufferType.SPANNABLE  )
-            }
-            viewBinding.statusText.text = if (viewData.status == "Pending") viewData.status else ""
-            setStatusIcon(viewData.status)
-        }
+    fun bind(data: ApplicationChecklistRecyclerItemData.ApplicationChecklistItemData) {
 
+        viewData = data
+        if (viewData.isOptional) {
+            viewBinding.checkListItemText.setText(viewData.checkName)
+        } else {
+            val txt = viewData.checkName + "<font color=\"red\"> *</font>"
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                viewBinding.checkListItemText.setText(Html.fromHtml(txt,Html.FROM_HTML_MODE_LEGACY), TextView.BufferType.SPANNABLE)
+            } else{
+                viewBinding.checkListItemText.setText(Html.fromHtml(txt), TextView.BufferType.SPANNABLE)
+            }
+        }
+        viewBinding.statusText.text = if (viewData.status == "Pending") context.getString(R.string.pending_lead) else ""
+        setStatusIcon(viewData.status)
     }
 
-    fun setStatusIcon(status: String){
-        if (status == "Pending"){
+    private fun setStatusIcon(status: String) {
+        if (status == "Pending") {
             viewBinding.statusDot.visible()
-            viewBinding.statusText.setTextColor(resources.getColor(R.color.pink_text))
-            viewBinding.statusIcon.setImageDrawable(resources.getDrawable(R.drawable.ic_check_pending))
-        }else {
+            viewBinding.statusText.setTextColor(ResourcesCompat.getColor(resources,R.color.pink_text,null))
+            viewBinding.statusIcon.setImageDrawable(ResourcesCompat.getDrawable(resources,R.drawable.ic_check_pending,null))
+        } else {
             viewBinding.statusDot.gone()
-            viewBinding.statusIcon.setImageDrawable(resources.getDrawable(R.drawable.ic_pink_tick))
+            viewBinding.statusIcon.setImageDrawable(ResourcesCompat.getDrawable(resources,R.drawable.ic_pink_tick,null))
         }
     }
 }

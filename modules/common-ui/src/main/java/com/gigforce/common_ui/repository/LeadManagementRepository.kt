@@ -1,10 +1,13 @@
-package com.gigforce.lead_management.repositories
+package com.gigforce.common_ui.repository
 
 import android.net.Uri
-import android.util.Log
+import com.gigforce.common_ui.exceptions.TryingToDowngradeJoiningStatusException
+import com.gigforce.common_ui.exceptions.UserDoesNotExistInProfileException
 import com.gigforce.common_ui.ext.bodyOrThrow
 import com.gigforce.common_ui.remote.JoiningProfileService
+import com.gigforce.common_ui.remote.ProfileCommonService
 import com.gigforce.common_ui.remote.ReferralService
+import com.gigforce.common_ui.viewdatamodels.PendingJoiningItemDVM
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.common_ui.viewdatamodels.referral.ReferralRequest
 import com.gigforce.core.datamodels.ambassador.*
@@ -21,8 +24,6 @@ import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.core.retrofit.CreateUserAccEnrollmentAPi
 import com.gigforce.core.retrofit.RetrofitFactory
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
-import com.gigforce.lead_management.exceptions.TryingToDowngradeJoiningStatusException
-import com.gigforce.lead_management.exceptions.UserDoesNotExistInProfileException
 import com.google.firebase.Timestamp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.dynamiclinks.DynamicLink
@@ -33,6 +34,11 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.ktx.Firebase
+import com.google.gson.Gson
+import com.google.gson.JsonArray
+import com.google.gson.JsonObject
+import org.json.JSONArray
+import org.json.JSONObject
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -44,7 +50,8 @@ class LeadManagementRepository @Inject constructor(
     private val joiningProfileRemoteService: JoiningProfileService,
     private val referralService: ReferralService,
     private val buildConfig: IBuildConfig,
-    private val logger : GigforceLogger
+    private val logger : GigforceLogger,
+    private val profileCommonService: ProfileCommonService
 ) {
 
 
@@ -643,9 +650,10 @@ class LeadManagementRepository @Inject constructor(
         .bodyOrThrow()
 
     suspend fun getBusinessLocationsAndTeamLeaders(
-        businessId : String
+        businessId : String,
+        jobProfileId: String
     ) = joiningProfileRemoteService
-        .getBusinessLocationAndTeamLeaders(businessId)
+        .getBusinessLocationAndTeamLeaders(businessId,jobProfileId)
         .bodyOrThrow()
 
     suspend fun submitJoiningRequest(
@@ -694,7 +702,19 @@ class LeadManagementRepository @Inject constructor(
 
     suspend fun dropSelections(
         selectionIds : List<String>
-    ){
+    ): DropSelectionResponse{
+        val dropRequest = DropSelectionRequest(selectionIds)
+        return joiningProfileRemoteService.dropSelections(jsonObject = dropRequest).bodyOrThrow()
+    }
 
+    suspend fun getPendingJoinings() : List<PendingJoiningItemDVM>{
+        return joiningProfileRemoteService.getPendingJoining().bodyOrThrow().data
+    }
+
+    suspend fun getUserInfoFromMobileNumber(
+        mobileNo10digit : String
+    ) : UserAuthStatusModel{
+       return profileCommonService.getUserInfoFromMobile(mobileNo10digit)
+            .bodyOrThrow()
     }
 }

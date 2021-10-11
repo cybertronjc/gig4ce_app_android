@@ -8,5 +8,5 @@
         android:color="#E42C64"
         />
     <!-- The radius makes the corners rounded -->
-    <corners android:radius="8dp"/>
+    <corners android:radius="6dp"/>
 </shape>

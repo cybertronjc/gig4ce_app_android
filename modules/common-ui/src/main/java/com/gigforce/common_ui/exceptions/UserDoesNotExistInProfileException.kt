@@ -1,4 +1,4 @@
-package com.gigforce.lead_management.exceptions
+package com.gigforce.common_ui.exceptions
 
 class UserDoesNotExistInProfileException constructor(
     uid : String

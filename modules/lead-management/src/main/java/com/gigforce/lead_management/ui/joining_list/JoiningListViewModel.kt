@@ -11,7 +11,7 @@ import com.gigforce.common_ui.viewdatamodels.leadManagement.JoiningStatus
 import com.gigforce.core.extensions.toLocalDate
 import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.lead_management.models.JoiningListRecyclerItemData
-import com.gigforce.lead_management.repositories.LeadManagementRepository
+import com.gigforce.common_ui.repository.LeadManagementRepository
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ListenerRegistration
 import dagger.hilt.android.lifecycle.HiltViewModel

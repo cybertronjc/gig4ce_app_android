@@ -14,7 +14,7 @@ import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.models.GigAppListRecyclerItemData
-import com.gigforce.lead_management.repositories.LeadManagementRepository
+import com.gigforce.common_ui.repository.LeadManagementRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch

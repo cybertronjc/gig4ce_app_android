@@ -13,8 +13,8 @@ import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.core.utils.Lce
-import com.gigforce.lead_management.exceptions.TryingToDowngradeJoiningStatusException
-import com.gigforce.lead_management.repositories.LeadManagementRepository
+import com.gigforce.common_ui.exceptions.TryingToDowngradeJoiningStatusException
+import com.gigforce.common_ui.repository.LeadManagementRepository
 import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks

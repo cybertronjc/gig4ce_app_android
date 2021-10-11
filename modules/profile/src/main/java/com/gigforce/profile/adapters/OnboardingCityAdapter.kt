@@ -37,7 +37,7 @@ class OnboardingCityAdapter(
     ): OnboardingCityViewHolder {
         val view = LayoutInflater.from(
                 parent.context
-        ).inflate(R.layout.recycler_item_city, parent, false)
+        ).inflate(R.layout.recycler_item_city_onboarding, parent, false)
         return OnboardingCityViewHolder(view)
     }
 

@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 import com.gigforce.core.datamodels.profile.Reference
 import com.gigforce.core.logger.GigforceLogger
-import com.gigforce.lead_management.repositories.LeadManagementRepository
+import com.gigforce.common_ui.repository.LeadManagementRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

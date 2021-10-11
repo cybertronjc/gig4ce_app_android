@@ -52,8 +52,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/company_text_lead"
-                android:textColor="@color/blackDark"
-                android:fontFamily="@font/lato"
+                android:textAppearance="@style/body_primary_2"
                 android:layout_marginTop="@dimen/size_24"
                 app:layout_constraintTop_toBottomOf="@id/jobProfileTitle"
                 app:layout_constraintStart_toStartOf="@id/jobProfileTitle"/>
@@ -63,9 +62,8 @@
                 android:layout_width="125dp"
                 android:layout_height="wrap_content"
                 android:text="@string/joining_date_lead"
-                android:textColor="@color/blackDark"
-                android:fontFamily="@font/lato"
-                android:layout_marginTop="@dimen/size_24"
+                android:textAppearance="@style/body_primary_2"
+                android:layout_marginTop="@dimen/size_10"
                 app:layout_constraintTop_toBottomOf="@id/companyTextView"
                 app:layout_constraintStart_toStartOf="@id/jobProfileTitle"/>
 
@@ -74,9 +72,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/location_lead"
-                android:textColor="@color/blackDark"
-                android:fontFamily="@font/lato"
-                android:layout_marginTop="@dimen/size_24"
+                android:textAppearance="@style/body_primary_2"
+                android:layout_marginTop="@dimen/size_10"
                 app:layout_constraintTop_toBottomOf="@id/joiningDateTextView"
                 app:layout_constraintStart_toStartOf="@id/jobProfileTitle"/>
 
@@ -85,9 +82,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/selection_date_lead"
-                android:textColor="@color/blackDark"
-                android:fontFamily="@font/lato"
-                android:layout_marginTop="@dimen/size_24"
+                android:textAppearance="@style/body_primary_2"
+                android:layout_marginTop="@dimen/size_10"
                 app:layout_constraintTop_toBottomOf="@id/locationTextView"
                 app:layout_constraintStart_toStartOf="@id/jobProfileTitle"/>
 
@@ -96,8 +92,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/company_text_lead"
-                android:textColor="@color/blackDark"
-                android:fontFamily="@font/lato"
+                android:textAppearance="@style/body_primary_2"
                 app:layout_constraintTop_toTopOf="@id/companyTextView"
                 app:layout_constraintStart_toStartOf="@id/guideline2"/>
 
@@ -106,8 +101,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/joining_date_lead"
-                android:textColor="@color/blackDark"
-                android:fontFamily="@font/lato"
+                android:textAppearance="@style/body_primary_2"
                 app:layout_constraintTop_toTopOf="@id/joiningDateTextView"
                 app:layout_constraintStart_toStartOf="@id/guideline2"/>
 
@@ -116,8 +110,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/location_lead"
-                android:textColor="@color/blackDark"
-                android:fontFamily="@font/lato"
+                android:textAppearance="@style/body_primary_2"
                 app:layout_constraintTop_toTopOf="@id/locationTextView"
                 app:layout_constraintStart_toStartOf="@id/guideline2"/>
 
@@ -126,8 +119,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/selection_date_lead"
-                android:textColor="@color/blackDark"
-                android:fontFamily="@font/lato"
+                android:textAppearance="@style/body_primary_2"
                 app:layout_constraintTop_toTopOf="@id/selectionDateTextView"
                 app:layout_constraintStart_toStartOf="@id/guideline2"/>
 

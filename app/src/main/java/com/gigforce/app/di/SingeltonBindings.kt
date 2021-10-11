@@ -2,6 +2,7 @@ package com.gigforce.app.di
 
 import com.gigforce.app.di.implementations.BuildConfigImp
 import com.gigforce.common_ui.remote.JoiningProfileService
+import com.gigforce.common_ui.remote.ProfileCommonService
 import com.gigforce.common_ui.remote.ReferralService
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.logger.GigforceLogger
@@ -72,7 +73,11 @@ abstract class SingeltonBindings {
             return retrofitServiceFactory.prepareService(GeneratePaySlipService::class.java)
         }
 
-
-
+        @Provides
+        fun provideProfileCommonService(
+            retrofitServiceFactory : RetrofitServiceFactory
+        ): ProfileCommonService {
+            return retrofitServiceFactory.prepareService(ProfileCommonService::class.java)
+        }
     }
 }

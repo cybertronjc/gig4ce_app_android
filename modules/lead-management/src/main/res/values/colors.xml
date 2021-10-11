@@ -13,4 +13,7 @@
     <color name="view_bg">#E1E0E0</color>
     <color name="pink_dot">#E42C64</color>
     <color name="blue_dot">#407BFF</color>
+    <color name="filter_text_color">#202325</color>
+
+
 </resources>

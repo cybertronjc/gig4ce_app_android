@@ -4,26 +4,25 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.RelativeLayout
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
-import com.gigforce.common_ui.viewdatamodels.GigerProfileCardDVM
-import com.gigforce.common_ui.viewdatamodels.leadManagement.AssignGigRequest
-import com.gigforce.common_ui.viewdatamodels.leadManagement.JobLocation
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JoiningStatus
+import com.gigforce.core.IEventTracker
 import com.gigforce.core.IViewHolder
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.lead_management.LeadManagementConstants
 import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
+import com.gigforce.lead_management.analytics.LeadManagementAnalyticsEvents
 import com.gigforce.lead_management.databinding.RecyclerRowJoiningItemBinding
 import com.gigforce.lead_management.models.JoiningList2RecyclerItemData
-import com.gigforce.lead_management.models.JoiningListRecyclerItemData
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -37,16 +36,20 @@ class Joining2RecyclerItemView(
 ) : RelativeLayout(
     context,
     attrs
-), IViewHolder, View.OnClickListener {
+), IViewHolder, View.OnClickListener, View.OnLongClickListener {
 
     @Inject
     lateinit var navigation: INavigation
+
+    @Inject
+    lateinit var eventTracker: IEventTracker
+
     private lateinit var viewBinding: RecyclerRowJoiningItemBinding
     private var viewData: JoiningList2RecyclerItemData.JoiningListRecyclerJoiningItemData? = null
 
     lateinit var foregroundView: View
     lateinit var backgroundView: View
-    var selectEnable = false
+    var selectEnableComponent: Boolean = false
 
     init {
         setDefault()
@@ -57,7 +60,7 @@ class Joining2RecyclerItemView(
     private fun setListenersOnView() {
         viewBinding.root.setOnClickListener(this)
         viewBinding.callGigerBtn.setOnClickListener(this)
-//        viewBinding.root.setOnLongClickListener(this)
+        viewBinding.root.setOnLongClickListener(this)
     }
 
     private fun setDefault() {
@@ -82,8 +85,13 @@ class Joining2RecyclerItemView(
             val gigerAttendanceData =
                 it as JoiningList2RecyclerItemData.JoiningListRecyclerJoiningItemData
             viewData = gigerAttendanceData
+            if (gigerAttendanceData.isVisible){
+                viewBinding.root.visible()
+            }else{
+                viewBinding.root.gone()
+            }
 
-            viewBinding.userNameTv.text = gigerAttendanceData.gigerName
+            viewBinding.userNameTv.text = gigerAttendanceData.gigerName.capitalize()
             viewBinding.callGigerBtn.isVisible =
                 gigerAttendanceData.gigerMobileNo.isNotBlank()
 
@@ -93,6 +101,33 @@ class Joining2RecyclerItemView(
             )
             setSelectionDate(gigerAttendanceData.createdAt, gigerAttendanceData.updatedAt)
             setJoiningStatus(gigerAttendanceData.status)
+            setSelectEnableCard(gigerAttendanceData.selectEnable, gigerAttendanceData.selected)
+        }
+    }
+
+     fun setSelectEnableCard(selectEnable: Boolean, isSelected: Boolean) {
+
+        if (selectEnable){
+            if (isSelected){
+                Log.d("selectEnable", "$selectEnable , $isSelected")
+                viewBinding.selectJoiningBtn.setImageDrawable(resources.getDrawable(R.drawable.ic_selected_tick))
+//                this.selectEnable = true
+                viewData?.selected = true
+                viewBinding.selectJoiningBtn.visible()
+                viewBinding.callGigerBtn.gone()
+            }else {
+                Log.d("selectEnableNot", "$selectEnable , $isSelected")
+                viewBinding.selectJoiningBtn.setImageDrawable(resources.getDrawable(R.drawable.ic_unselect_tick))
+//                this.selectEnable = false
+                viewData?.selected = false
+                viewBinding.selectJoiningBtn.visible()
+                viewBinding.callGigerBtn.gone()
+            }
+
+        } else {
+            viewData?.selected = false
+            viewBinding.selectJoiningBtn.gone()
+            viewBinding.callGigerBtn.visible()
         }
     }
 
@@ -102,7 +137,7 @@ class Joining2RecyclerItemView(
 
         val joiningStatus = JoiningStatus.fromValue(status)
 //        viewBinding.userAttendanceStatusTextview.isVisible = joiningStatus != JoiningStatus.JOINED
-        viewBinding.userAttendanceStatusTextview.text = "Application " + context.getString(joiningStatus.getStatusFormattedStringRes())
+        viewBinding.userAttendanceStatusTextview.text = resources.getString(R.string.application_lead, resources.getString(joiningStatus.getStatusFormattedStringRes()))
         viewBinding.statusDot.setImageDrawable(
             if (status == "Pending") resources.getDrawable(R.drawable.ic_status_dot) else resources.getDrawable(R.drawable.ic_blue_dot)
         )
@@ -117,9 +152,9 @@ class Joining2RecyclerItemView(
         updatedAt: String?
     ) {
         if (updatedAt.isNullOrBlank()) {
-            viewBinding.selectedOn.text = "Selected on " + getFormattedDate(createdAt.toString())
+            viewBinding.selectedOn.text = "Selected " + formatTimeAgo(createdAt.toString())
         } else {
-            viewBinding.selectedOn.text = "Selected on " + getFormattedDate(updatedAt.toString())
+            viewBinding.selectedOn.text = "Selected " + formatTimeAgo(updatedAt.toString())
         }
     }
 
@@ -165,31 +200,52 @@ class Joining2RecyclerItemView(
 
     override fun onClick(v: View?) {
         val currentViewData = viewData ?: return
+        Log.d("drop", "data ${currentViewData.selected}")
+        if (currentViewData.selectEnable){
+            if (viewData?.selected == true){
+                viewData?.selected = false
+                viewBinding.selectJoiningBtn.setImageDrawable(resources.getDrawable(R.drawable.ic_unselect_tick))
+                viewData?.viewModel?.dropSelection(viewData?._id.toString(), false)
+            }else {
+                viewData?.selected = true
+                viewBinding.selectJoiningBtn.setImageDrawable(resources.getDrawable(R.drawable.ic_selected_tick))
+                viewData?.viewModel?.dropSelection(viewData?._id.toString(), true)
+            }
+        }else {
+            if (v?.id == R.id.call_giger_btn) {
 
-        if (v?.id == R.id.call_giger_btn) {
-
-            val intent =
-                Intent(
-                    Intent.ACTION_DIAL,
-                    Uri.fromParts("tel", currentViewData.gigerMobileNo, null)
+                eventTracker.pushEvent(
+                    TrackingEventArgs(
+                        LeadManagementAnalyticsEvents.Onboarded_Giger_Calling,
+                        mapOf(
+                            "Phone_number_called" to currentViewData.gigerMobileNo
+                        )
+                    )
                 )
-            context.startActivity(intent)
-        } else {
 
-            //navigate to joining details screen
-            navigation.navigateTo(
-                LeadManagementNavDestinations.FRAGMENT_GIGER_INFO,
-                bundleOf(
-                    LeadManagementConstants.INTENT_EXTRA_JOINING_ID to currentViewData._id
-                )
-                )
 
+                val intent =
+                    Intent(
+                        Intent.ACTION_DIAL,
+                        Uri.fromParts("tel", currentViewData.gigerMobileNo, null)
+                    )
+                context.startActivity(intent)
+            } else {
+
+                //navigate to joining details screen
+                navigation.navigateTo(
+                    LeadManagementNavDestinations.FRAGMENT_GIGER_INFO,
+                    bundleOf(
+                        LeadManagementConstants.INTENT_EXTRA_JOINING_ID to currentViewData._id
+                    )
+                )
+            }
         }
     }
 
     fun getFormattedDate(date: String): String {
         val input = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-        val output = SimpleDateFormat("dd/MM/yyyy")
+        val output = SimpleDateFormat("dd/MMM/yyyy")
 
         var d: Date? = null
         try {
@@ -199,6 +255,58 @@ class Joining2RecyclerItemView(
         }
         val formatted = output.format(d)
         return formatted ?: ""
+    }
+
+    fun formatTimeAgo(date1: String): String {  // Note : date1 must be in   "yyyy-MM-dd hh:mm:ss"   format
+        var conversionTime =""
+        try{
+            val format = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+
+            val sdf = SimpleDateFormat(format)
+            sdf.setTimeZone(TimeZone.getTimeZone("IST"));
+
+            val datetime= Calendar.getInstance()
+            var date2= sdf.format(datetime.time).toString()
+
+
+            val dateObj1 = sdf.parse(date1)
+            val dateObj2 = sdf.parse(date2)
+            val diff = dateObj2.time - dateObj1.time
+
+            val diffDays = diff / (24 * 60 * 60 * 1000)
+            val diffhours = diff / (60 * 60 * 1000)
+            val diffmin = diff / (60 * 1000)
+            val diffsec = diff  / 1000
+            if(diffDays in 1..7){
+                conversionTime+=diffDays.toString()+" days ago"
+            }else if (diffDays > 7){
+                conversionTime+= "on "+getFormattedDate(date1)
+            } else if(diffhours>1){
+                conversionTime+=(diffhours-diffDays*24).toString()+" hours ago"
+            }else if(diffmin>1){
+                conversionTime+=(diffmin-diffhours*60).toString()+" min ago"
+            }else if(diffsec>1){
+                conversionTime+=(diffsec-diffmin*60).toString()+" sec ago"
+            }
+        }catch (ex:java.lang.Exception){
+            Log.d("formatTimeAgo",ex.toString())
+        }
+
+        return conversionTime
+    }
+
+    override fun onLongClick(p0: View?): Boolean {
+        if (viewData?.selected == true){
+            viewBinding.selectJoiningBtn.setImageDrawable(resources.getDrawable(R.drawable.ic_unselect_tick))
+            return false
+        }else {
+            viewBinding.selectJoiningBtn.setImageDrawable(resources.getDrawable(R.drawable.ic_selected_tick))
+            viewData?.selected = true
+            viewBinding.selectJoiningBtn.visible()
+            viewBinding.callGigerBtn.gone()
+            viewData?.viewModel?.dropSelection(viewData?._id.toString(), true)
+        }
+        return true
     }
 
 }

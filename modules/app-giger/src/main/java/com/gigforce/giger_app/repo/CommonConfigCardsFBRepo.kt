@@ -6,11 +6,9 @@ import com.gigforce.client_activation.client_activation.dataviewmodel.ClientActi
 import com.gigforce.common_ui.viewdatamodels.BannerCardDVM
 import com.gigforce.common_ui.viewdatamodels.OtherFeatureComponentDVM
 import com.gigforce.common_ui.viewdatamodels.StandardActionCardDVM
-import com.gigforce.giger_app.dataviewmodel.GigForceTipsDVM
-import com.gigforce.giger_app.dataviewmodel.HelpVideosSectionDVM
-import com.gigforce.giger_app.dataviewmodel.MainSectionDVM
-import com.gigforce.giger_app.dataviewmodel.UpcomingGigSectionDVM
+import com.gigforce.giger_app.dataviewmodel.*
 import com.gigforce.learning.dataviewmodels.LearningLayoutDVM
+import com.gigforce.giger_app.dataviewmodel.*
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -71,6 +69,9 @@ open class CommonConfigCardsFBRepo : ICommonConfigCardsFBRepo {
             }
             "sec_banner_feature" ->{
                 return snapshot.toObject(BannerCardDVM::class.java)
+            }
+            "sec_pending_joinings" ->{
+                return snapshot.toObject(PendingJoiningSectionDVM::class.java)
             }
             else -> return null
         }

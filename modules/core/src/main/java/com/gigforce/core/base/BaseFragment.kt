@@ -37,6 +37,7 @@ abstract class BaseFragment2<V : ViewDataBinding>(
     private var _viewCreatedForTheFirstTime = false
     val viewCreatedForTheFirstTime get() = _viewCreatedForTheFirstTime
 
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
