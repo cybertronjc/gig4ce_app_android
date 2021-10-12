@@ -48,7 +48,7 @@
                     android:paddingBottom="12dp"
                     app:shapeAppearanceOverlay="@style/RoundCornerButtonShapeOverlay"
                     android:enabled="false"
-                    android:text="Next"
+                    android:text="@string/next_lead"
                     android:textColor="@color/white" />
 
             </LinearLayout>

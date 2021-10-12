@@ -1,5 +1,6 @@
 package com.gigforce.lead_management.ui.new_selection_form_2
 
+import android.text.SpannedString
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.lead_management.models.JoiningStatusAndCountItemData
@@ -34,18 +35,20 @@ sealed class NewSelectionForm2ViewState {
     ) : NewSelectionForm2ViewState()
 
     data class ValidationError(
-        val cityError: String? = null,
-        val reportingLocationError: String? = null,
-        val clientTLError: String? = null,
-        val assignGigsFromError: String? = null,
-        val shiftsError: String? = null,
+        val cityError: SpannedString? = null,
+        val reportingLocationError: SpannedString? = null,
+        val clientTLError: SpannedString? = null,
+        val assignGigsFromError: SpannedString? = null,
+        val shiftsError: SpannedString? = null,
     ) : NewSelectionForm2ViewState()
 
 
     object SubmittingJoiningData : NewSelectionForm2ViewState()
 
     data class JoiningDataSubmitted(
-        val shareLink : String
+        val shareLink : String,
+        val businessName: String,
+        val jobProfileName: String
     ) : NewSelectionForm2ViewState()
 
     data class ErrorWhileSubmittingJoiningData(
@@ -88,6 +91,6 @@ sealed class NewSelectionForm2Events {
     ) : NewSelectionForm2Events()
 
     data class SubmitButtonPressed(
-        val shiftSelected : List<ShiftTimingItem>
+        val dataFromDynamicFields : MutableList<DataFromDynamicInputField>
     ) : NewSelectionForm2Events()
 }

@@ -13,7 +13,7 @@ import com.gigforce.core.datamodels.login.LoginResponse
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.core.utils.Lce
-import com.gigforce.lead_management.repositories.LeadManagementRepository
+import com.gigforce.common_ui.repository.LeadManagementRepository
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

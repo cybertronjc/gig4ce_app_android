@@ -1,7 +1,11 @@
 package com.gigforce.common_ui.remote
 
+import com.gigforce.common_ui.viewdatamodels.BaseResponse
+import com.gigforce.common_ui.viewdatamodels.PendingJoiningItemDVM
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.core.datamodels.auth.UserAuthStatusModel
+import com.google.gson.JsonObject
+import org.json.JSONObject
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -37,7 +41,8 @@ interface JoiningProfileService {
 
     @GET("business/businessLocations")
     suspend fun getBusinessLocationAndTeamLeaders(
-        @Query("businessId") businessId : String
+        @Query("businessId") businessId : String,
+        @Query("jobProfileId") jobProfileId : String
     ): Response<JoiningLocationTeamLeadersShifts>
 
     @POST("joining/submit")
@@ -51,8 +56,11 @@ interface JoiningProfileService {
         @Path("id") id: String
     ): Response<GigerInfo>
 
-    @POST("joining/detail/{id}")
+    @GET("joining/pendingEjoining")
+    suspend fun getPendingJoining(): Response<BaseResponse<PendingJoiningItemDVM>>
+
+    @POST("joining/dropEjoining")
     suspend fun dropSelections(
-        @Body selectionIds: List<String>
-    ): Response<GigerInfo>
+        @Body jsonObject: DropSelectionRequest
+    ): Response<DropSelectionResponse>
 }

@@ -1,13 +1,17 @@
 package com.gigforce.lead_management.ui.new_selection_form_2
 
 import android.content.Context
+import androidx.core.text.bold
+import androidx.core.text.buildSpannedString
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.common_ui.repository.LeadManagementRepository
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.core.logger.GigforceLogger
-import com.gigforce.lead_management.repositories.LeadManagementRepository
+import com.gigforce.common_ui.repository.ProfileFirebaseRepository
+import com.gigforce.lead_management.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
@@ -20,6 +24,7 @@ import javax.inject.Inject
 class NewSelectionForm2ViewModel @Inject constructor(
     @ApplicationContext private val appContext: Context,
     private val leadManagementRepository: LeadManagementRepository,
+    private val profileFirebaseRepository: ProfileFirebaseRepository,
     private val logger: GigforceLogger
 ) : ViewModel() {
 
@@ -38,10 +43,10 @@ class NewSelectionForm2ViewModel @Inject constructor(
     private var selectedCity: ReportingLocationsItem? = null
     private var selectedReportingLocation: ReportingLocationsItem? = null
     private var selectedTL: BusinessTeamLeadersItem? = null
-    private var selectedShifts: MutableList<ShiftTimingItem> = mutableListOf()
     private lateinit var joiningLocationsAndTLs: JoiningLocationTeamLeadersShifts
     private lateinit var joiningRequest: SubmitJoiningRequest
     private var currentlySubmittingAnyJoiningRequuest = false
+    private var dataFromDynamicFieldsFromPreviousPages : List<DataFromDynamicInputField> = emptyList()
 
     fun handleEvent(
         event: NewSelectionForm2Events
@@ -54,7 +59,6 @@ class NewSelectionForm2ViewModel @Inject constructor(
             NewSelectionForm2Events.SelectReportingLocationClicked -> openSelectReportingLocationsScreen()
             NewSelectionForm2Events.SelectClientTLClicked -> openSelectBusinessTLScreen()
             is NewSelectionForm2Events.ShiftSelected -> {
-                selectedShifts = event.shifts.toMutableList()
             }
             is NewSelectionForm2Events.CitySelected -> {
                 selectedCity = event.city
@@ -68,12 +72,20 @@ class NewSelectionForm2ViewModel @Inject constructor(
                 selectedReportingLocation = event.reportingLocation
             }
             is NewSelectionForm2Events.SubmitButtonPressed -> {
-                selectedShifts = event.shiftSelected.toMutableList()
-                validateDataAndSubmit()
+                validateDataAndSubmit(
+                    event.dataFromDynamicFields
+                )
             }
             is NewSelectionForm2Events.JoiningDataReceivedFromPreviousScreen -> {
                 joiningRequest = event.submitJoiningRequest
-                fetchJoiningForm2Data(joiningRequest.business.id!!)
+                dataFromDynamicFieldsFromPreviousPages = event.submitJoiningRequest.dataFromDynamicFields
+                joiningRequest.dataFromDynamicFields = emptyList()
+
+
+                fetchJoiningForm2Data(
+                    joiningRequest.business.id!!,
+                    joiningRequest.jobProfile.id!!,
+                )
             }
         }
     }
@@ -89,7 +101,9 @@ class NewSelectionForm2ViewModel @Inject constructor(
         }
 
         _viewState.value = NewSelectionForm2ViewState.OpenSelectCityScreen(
-            cities = cities
+            cities = cities.sortedBy {
+                it.name
+            }
         )
         _viewState.value = null
     }
@@ -114,7 +128,14 @@ class NewSelectionForm2ViewModel @Inject constructor(
     private fun openSelectReportingLocationsScreen() {
         if (selectedCity == null) {
             _viewState.value = NewSelectionForm2ViewState.ValidationError(
-                cityError = "Select City first"
+                cityError = buildSpannedString {
+                    bold {
+                        append(appContext.getString(R.string.note_with_colon_lead))
+                    }
+                    append(
+                        appContext.getString(R.string.select_city_to_select_reporting_location_lead)
+                    )
+                }
             )
             _viewState.value = null
         } else {
@@ -124,12 +145,13 @@ class NewSelectionForm2ViewModel @Inject constructor(
 
             reportingLocations.onEach {
                 it.selected = it.id == selectedReportingLocation?.id
-
             }
 
             _viewState.value = NewSelectionForm2ViewState.OpenSelectReportingScreen(
                 selectedCity!!,
-                reportingLocations
+                reportingLocations.sortedBy {
+                    it.name
+                }
             )
             _viewState.value = null
         }
@@ -141,13 +163,16 @@ class NewSelectionForm2ViewModel @Inject constructor(
             it.selected = it.id == selectedTL?.id
         }
         _viewState.value = NewSelectionForm2ViewState.OpenSelectClientTlScreen(
-            joiningLocationsAndTLs.businessTeamLeaders
+            joiningLocationsAndTLs.businessTeamLeaders.sortedBy {
+                it.name
+            }
         )
         _viewState.value = null
     }
 
     fun fetchJoiningForm2Data(
-        businessId: String
+        businessId: String,
+        jobProfileId: String
     ) = viewModelScope.launch {
 
         if (::joiningLocationsAndTLs.isInitialized) {
@@ -170,9 +195,17 @@ class NewSelectionForm2ViewModel @Inject constructor(
 
         try {
             val locationAndTlsData = leadManagementRepository.getBusinessLocationsAndTeamLeaders(
-                businessId = businessId
+                businessId = businessId,
+                jobProfileId = jobProfileId
             )
             joiningLocationsAndTLs = locationAndTlsData
+            if (locationAndTlsData.shiftTiming.isEmpty()) {
+                _viewState.value = NewSelectionForm2ViewState.ErrorWhileLoadingLocationAndTlData(
+                    error = "Cannot make joining, Please contact your manager",
+                    shouldShowErrorButton = false
+                )
+                return@launch
+            }
 
             logger.d(
                 TAG,
@@ -231,12 +264,21 @@ class NewSelectionForm2ViewModel @Inject constructor(
 
     }
 
-    private fun validateDataAndSubmit() {
+    private fun validateDataAndSubmit(
+        dataFromDynamicFields: MutableList<DataFromDynamicInputField>
+    ) {
 
         if (selectedCity == null) {
 
             _viewState.value = NewSelectionForm2ViewState.ValidationError(
-                cityError = "Please select city"
+                cityError = buildSpannedString {
+                    bold {
+                        append(appContext.getString(R.string.note_with_colon_lead))
+                    }
+                    append(
+                        appContext.getString(R.string.please_select_city_lead)
+                    )
+                }
             )
             return
         }
@@ -245,24 +287,32 @@ class NewSelectionForm2ViewModel @Inject constructor(
         if (selectedCity!!.reportingLocations.isNotEmpty() && selectedReportingLocation == null) {
 
             _viewState.value = NewSelectionForm2ViewState.ValidationError(
-                reportingLocationError = "Please select reporting location"
+                reportingLocationError = buildSpannedString {
+                    bold {
+                        append(appContext.getString(R.string.note_with_colon_lead))
+                    }
+                    append(
+                        appContext.getString(R.string.please_select_reporting_location_lead)
+                    )
+                }
             )
             return
         }
         joiningRequest.reportingLocation = selectedReportingLocation
         joiningRequest.assignGigsFrom = dateFormatter.format(selectedDateOfJoining)
 
-        if (selectedShifts.isEmpty()) {
+        val selectedShift = joiningLocationsAndTLs.shiftTiming.firstOrNull()
+        if (selectedShift != null)
+            joiningRequest.shifts = listOf(selectedShift)
 
-            _viewState.value = NewSelectionForm2ViewState.ValidationError(
-                shiftsError = "Please select at least one shift"
-            )
-            return
-        }
-        joiningRequest.shifts = selectedShifts
+        //Cleaning up Final JSON
+        joiningRequest.business.jobProfiles = emptyList()
+        joiningRequest.jobProfile.dynamicInputFields = emptyList()
 
-
-        submitJoiningData(joiningRequest)
+        joiningRequest.dataFromDynamicFields = dataFromDynamicFieldsFromPreviousPages + dataFromDynamicFields
+        submitJoiningData(
+            joiningRequest
+        )
     }
 
 
@@ -270,7 +320,7 @@ class NewSelectionForm2ViewModel @Inject constructor(
         joiningRequest: SubmitJoiningRequest
     ) = viewModelScope.launch {
 
-        if(currentlySubmittingAnyJoiningRequuest){
+        if (currentlySubmittingAnyJoiningRequuest) {
             logger.d(
                 TAG,
                 "Already a joining request submission in progress, ignoring this one",
@@ -306,7 +356,9 @@ class NewSelectionForm2ViewModel @Inject constructor(
             )
 
             _viewState.value = NewSelectionForm2ViewState.JoiningDataSubmitted(
-                shareLink = shareLink
+                shareLink = shareLink,
+                businessName = joiningRequest.business.name.toString(),
+                jobProfileName = joiningRequest.jobProfile.name.toString()
             )
             _viewState.value = null
             logger.d(

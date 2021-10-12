@@ -1076,6 +1076,14 @@
         android:name="com.gigforce.ambassador.user_rollment.kycdocs.aadhardetail.UserAadharDetailInfoFragment"
         android:label="UserAadharDetailInfoFragment"
         />
+    <dialog
+        android:id="@+id/joiningFilterFragment"
+        android:name="com.gigforce.lead_management.ui.joining_list_2.JoiningFilterFragment"
+        android:label="JoiningFilterFragment" />
+    <fragment
+        android:id="@+id/dropSelectionBottomSheetDialogFragment"
+        android:name="com.gigforce.lead_management.ui.drop_selection.DropSelectionBottomSheetDialogFragment"
+        android:label="DropSelectionBottomSheetDialogFragment" />
 
 </navigation>
 

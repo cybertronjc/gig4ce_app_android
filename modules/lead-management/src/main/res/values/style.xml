@@ -11,8 +11,6 @@
         </item>
     </style>
 
-
-
     <style name="style_h5">
         <item name="android:textSize">
             16sp
@@ -33,7 +31,7 @@
             14sp
         </item>
         <item name="android:textColor">
-            #000000
+            #202325
         </item>
         <item name="android:fontFamily">
             @font/lato
@@ -53,11 +51,31 @@
         <item name="android:textColor">
             #979C9E
         </item>
+        <item name="android:fontFamily">
+            @font/lato
+        </item>
 
     </style>
 
-    <style name="ShapeAppearanceOverlay.MaterialComponents.Chip" parent="">
-        <item name="cornerSize">130%</item>
+    <style name="body_primary_2">
+
+        <item name="android:textSize">
+            12sp
+        </item>
+        <item name="android:fontFamily">
+            @font/lato
+        </item>
+
+    </style>
+
+    <style name="DialogStyle" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:colorBackground">@android:color/transparent</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
+
+    <style name="LeadMgmtMaterialButtonStyle" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="backgroundTint">@color/button_state_color</item>
     </style>
 
 

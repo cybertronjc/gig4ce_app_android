@@ -13,14 +13,15 @@ data class SubmitJoiningRequest(
     @SerializedName("jobProfile")
     var jobProfile: JobProfilesItem,
 
-    @SerializedName("gigerClientId")
-    var gigerClientId: String?,
 
     @SerializedName("gigerName")
     var gigerName: String,
 
     @SerializedName("gigerMobileNo")
     var gigerMobileNo: String,
+
+    @SerializedName("dataFromDynamicFields")
+    var dataFromDynamicFields : List<DataFromDynamicInputField>,
 
     @SerializedName("assignGigsFrom")
     var assignGigsFrom: String = "",
@@ -39,5 +40,7 @@ data class SubmitJoiningRequest(
 
     @SerializedName("shareLink")
     var shareLink: String = "",
+
+
 
 ) : Parcelable

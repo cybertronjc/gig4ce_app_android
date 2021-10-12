@@ -2,6 +2,7 @@ package com.gigforce.lead_management.models
 
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JoiningBusiness
 import com.gigforce.core.SimpleDVM
+import com.gigforce.lead_management.ui.joining_list_2.JoiningList2ViewModel
 import com.gigforce.lead_management.views.LeadActivationViewTypes
 
 open class JoiningList2RecyclerItemData(
@@ -9,7 +10,8 @@ open class JoiningList2RecyclerItemData(
 ) : SimpleDVM(type) {
 
     data class JoiningListRecyclerStatusItemData(
-        val status: String
+        val status: String,
+        val dropEnabled: Boolean
     ) : JoiningList2RecyclerItemData(
         LeadActivationViewTypes.JoiningListStatus
     )
@@ -31,7 +33,10 @@ open class JoiningList2RecyclerItemData(
         val status: String,
         var selected: Boolean,
         val createdAt: String?,
-        val updatedAt: String?
+        val updatedAt: String?,
+        val isVisible: Boolean,
+        val selectEnable: Boolean,
+        val viewModel: JoiningList2ViewModel
     ): JoiningList2RecyclerItemData(
         LeadActivationViewTypes.JoiningList2
     )

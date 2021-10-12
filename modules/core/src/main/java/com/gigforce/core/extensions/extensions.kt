@@ -280,11 +280,19 @@ fun EditText.getTextChangeAsStateFlow(): StateFlow<String> {
     val query = MutableStateFlow("")
 
     addTextChangedListener {
-        onTextChanged {
-            query.value = it
-        }
+        query.value = it?.toString() ?: ""
+//        onTextChanged {
+//
+//        }
     }
     return query
+}
+
+fun EditText.getTextIfNotBlankElseNull(): String? {
+    return if (text.isBlank()) {
+        null
+    } else
+        text.toString()
 }
 
 fun Number.roundTo(
