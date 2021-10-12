@@ -12,7 +12,6 @@ import com.gigforce.common_ui.viewdatamodels.models.SlideContentRemote
 import com.gigforce.common_ui.viewdatamodels.models.progress.CourseMapping
 import com.gigforce.common_ui.viewdatamodels.models.progress.ModuleProgress
 import com.gigforce.common_ui.viewdatamodels.models.progress.ProgressConstants
-import com.gigforce.common_ui.viewmodels.LearningViewModel
 //import com.gigforce.common_ui.viewdatamodels.models.progress.ModuleProgress
 //import com.gigforce.common_ui.viewdatamodels.models.progress.ProgressConstants
 import com.gigforce.core.datamodels.learning.LessonProgress
@@ -361,14 +360,14 @@ class LearningRepository : BaseFirestoreDBRepository() {
     }
 
     suspend fun updateModuleProgress(progressTrackingId: String, moduleProgress: ModuleProgress) {
-        moduleProgress.setUpdatedOnAndBy()
+        moduleProgress.setUpdatedAtAndBy()
         db.collection(COURSE_PROGRESS_NAME)
             .document(progressTrackingId)
             .setOrThrow(moduleProgress)
     }
 
     suspend fun updateCourseProgress(progressTrackingId: String, courseProgress: CourseProgress) {
-        courseProgress.setUpdatedOnAndBy()
+        courseProgress.setUpdatedAtAndBy()
         db.collection(COURSE_PROGRESS_NAME)
             .document(progressTrackingId)
             .setOrThrow(courseProgress)

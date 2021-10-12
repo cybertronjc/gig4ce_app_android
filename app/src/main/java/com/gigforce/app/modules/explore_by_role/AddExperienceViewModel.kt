@@ -16,7 +16,7 @@ class AddExperienceViewModel :ViewModel() {
 
 
     fun addExperience(list: MutableList<Experience>) {
-        var map = mapOf("experiences" to list, "updatedOn" to Timestamp.now(), "updatedBy" to StringConstants.APP.value)
+        var map = mapOf("experiences" to list, "updatedAt" to Timestamp.now(), "updatedBy" to StringConstants.APP.value)
         experienceRepo.getCollectionReference().document(experienceRepo.getUID())
             .update(map).addOnCompleteListener {
                 if (it.isSuccessful) {

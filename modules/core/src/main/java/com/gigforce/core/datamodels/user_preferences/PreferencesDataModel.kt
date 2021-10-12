@@ -18,7 +18,7 @@ class PreferencesDataModel{
     var languageName : String = ""
     var languageCode : String = ""
     var earning : EarningDataModel = EarningDataModel()
-    var updatedOn : Timestamp?= Timestamp.now()
+    var updatedAt : Timestamp?= Timestamp.now()
     var updatedBy : String ?= StringConstants.APP.value
-    var createdOn : Timestamp?= Timestamp.now()
+    var createdAt : Timestamp?= Timestamp.now()
 }

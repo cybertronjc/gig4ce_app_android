@@ -46,9 +46,9 @@ class ModelAssessmentFragment : BaseFirestoreDBRepository(), ModelCallbacks {
                 }
                 mapOf("is_correct" to is_correct)
             },
-            "updatedOn" to Timestamp.now(),
+            "updatedAt" to Timestamp.now(),
             "updatedBy" to StringConstants.APP,
-            "createdOn" to Timestamp.now()
+            "createdAt" to Timestamp.now()
 
         )).addOnCompleteListener {
             if (it.isSuccessful) {

@@ -1,7 +1,6 @@
 package com.gigforce.core.base.basefirestore
 
 import com.gigforce.core.StringConstants
-import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -26,7 +25,7 @@ abstract class BaseFirestoreDBRepository {
     //set data object
     public fun setDefaultData(data: Any) {
         getDBCollection().set(data)
-        setUpdatedOnUpdatedBy()
+        setUpdatedAtUpdatedBy()
     }
 
 
@@ -38,12 +37,12 @@ abstract class BaseFirestoreDBRepository {
 
     public fun <M : BaseFirestoreDataModel> setData(obj: M) {
         getDBCollection().update(obj.tableName, FieldValue.arrayUnion(obj))
-        setUpdatedOnUpdatedBy()
+        setUpdatedAtUpdatedBy()
     }
 
     public fun <M : BaseFirestoreDataModel> setDataAsKeyValue(obj: M) {
         getDBCollection().update(obj.tableName, obj)
-        setUpdatedOnUpdatedBy()
+        setUpdatedAtUpdatedBy()
     }
 
     // set data object end
@@ -56,7 +55,7 @@ abstract class BaseFirestoreDBRepository {
 
     public fun setData(tableName: String, data: String) {
         getDBCollection().update(tableName, FieldValue.arrayUnion(data))
-        setUpdatedOnUpdatedBy()
+        setUpdatedAtUpdatedBy()
     }
 
     public fun setDataAndDeleteOldData(tableName: String, data: String) {
@@ -78,24 +77,24 @@ abstract class BaseFirestoreDBRepository {
 
     public fun setDataAsKeyValue(tableName: String, data: String) {
         getDBCollection().update(tableName, data)
-        setUpdatedOnUpdatedBy()
+        setUpdatedAtUpdatedBy()
     }
 
     //set data string end
     // set data boolean
     public fun setData(tableName: String, data: Boolean) {
         getDBCollection().update(tableName, data)
-        setUpdatedOnUpdatedBy()
+        setUpdatedAtUpdatedBy()
     }
 
-    private fun setUpdatedOnUpdatedBy(){
-        getDBCollection().update("updatedOn", Timestamp.now())
+    private fun setUpdatedAtUpdatedBy(){
+        getDBCollection().update("updatedAt", Timestamp.now())
         getDBCollection().update("updatedBy", StringConstants.APP.value)
     }
 
     public fun setDataAsKeyValue(tableName: String, data: Boolean) {
         getDBCollection().update(tableName, data)
-        setUpdatedOnUpdatedBy()
+        setUpdatedAtUpdatedBy()
     }
     //set data boolean end
     // for set DB data--------end
@@ -109,7 +108,7 @@ abstract class BaseFirestoreDBRepository {
 
     fun <M : BaseFirestoreDataModel> removeData(obj: M) {
         getDBCollection().update(obj.tableName, FieldValue.arrayRemove(obj))
-        setUpdatedOnUpdatedBy()
+        setUpdatedAtUpdatedBy()
     }
 
     public fun removeData(tableName: String, arrData: ArrayList<String>) {
@@ -120,7 +119,7 @@ abstract class BaseFirestoreDBRepository {
 
     fun removeData(tableName: String, data: String) {
         getDBCollection().update(tableName, FieldValue.arrayRemove(data))
-        setUpdatedOnUpdatedBy()
+        setUpdatedAtUpdatedBy()
     }
     //for remove data------------------
 

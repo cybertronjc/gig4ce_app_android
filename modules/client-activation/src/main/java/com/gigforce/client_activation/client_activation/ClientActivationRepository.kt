@@ -61,7 +61,7 @@ class ClientActivationRepository : BaseFirestoreDBRepository(), ClientActivation
         mInviteUserId: String, location: Location,
         responseCallbacks: ClientActivationNavCallbacks.ClientActivationResponseCallbacks
     ) {
-        val map = mapOf("updatedOn" to Timestamp.now(), "invited_client_activations" to
+        val map = mapOf("updatedAt" to Timestamp.now(), "invited_client_activations" to
             FieldValue.arrayUnion(
                 ClientActs(
                     jobProfileId = jobProfileID,
