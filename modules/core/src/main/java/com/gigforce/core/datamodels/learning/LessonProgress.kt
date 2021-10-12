@@ -1,5 +1,6 @@
 package com.gigforce.core.datamodels.learning
 
+import com.gigforce.core.StringConstants
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.PropertyName
 
@@ -80,7 +81,7 @@ data class LessonProgress(
 
     @get:PropertyName("updatedBy")
     @set:PropertyName("updatedBy")
-    var updatedBy : String ?= "APP",
+    var updatedBy : String ?= StringConstants.APP.value,
 
     @get:PropertyName("createdOn")
     @set:PropertyName("createdOn")
@@ -89,7 +90,7 @@ data class LessonProgress(
 ){
     fun setUpdatedOnAndBy(){
         updatedOn = Timestamp.now()
-        updatedBy = "APP"
+        updatedBy = StringConstants.APP.value
     }
 
     fun setCreatedOn(){

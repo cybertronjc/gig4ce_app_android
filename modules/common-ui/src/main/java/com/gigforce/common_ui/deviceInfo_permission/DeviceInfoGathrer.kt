@@ -91,7 +91,7 @@ object DeviceInfoGatherer {
         permission.forEach {
             permissionDenied["permission-${formatPermissionName(it)}"] = "deny_dont_ask_again"
         }
-
+        permissionDenied["updatedOn"] = Timestamp.now()
         firebaseFirestore.collection(
             "Device_Version_info"
         ).document(
