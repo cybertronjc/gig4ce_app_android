@@ -4,6 +4,7 @@ import android.location.Location
 import com.gigforce.common_ui.viewdatamodels.client_activation.Media
 import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
 import com.gigforce.core.datamodels.profile.ClientActs
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ListenerRegistration
 
@@ -60,6 +61,15 @@ class ClientActivationRepository : BaseFirestoreDBRepository(), ClientActivation
         mInviteUserId: String, location: Location,
         responseCallbacks: ClientActivationNavCallbacks.ClientActivationResponseCallbacks
     ) {
+        val map = mapOf("updatedOn" to Timestamp.now(), "invited_client_activations" to
+            FieldValue.arrayUnion(
+                ClientActs(
+                    jobProfileId = jobProfileID,
+                    lat = location.latitude.toString(),
+                    lon = location.longitude.toString(),
+                    invitedBy = mInviteUserId
+                )
+            ))
         db.collection("Profiles").document(getUID())
             .update(
                 "invited_client_activations",
