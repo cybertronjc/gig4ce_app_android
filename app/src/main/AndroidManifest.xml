@@ -104,7 +104,7 @@
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/PhotoCrop" />
-        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+        <activity android:name="com.canhub.cropper.CropImageActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ImageCropper" />
 
