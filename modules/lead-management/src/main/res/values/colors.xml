@@ -7,9 +7,9 @@
     <color name="status_background_pink">#FDF2F6</color>
     <color name="status_background_blue">#CCD9F7</color>
     <color name="pink_text">#E42C64</color>
-    <color name="tab_background_unselected">#FFFFFF</color>
+    <color name="tab_background_unselected">#D0F6F5F5</color>
     <color name="tab_background_selected">#E42C64</color>
-    <color name="tab_background_color">#F4F4F4</color>
+    <color name="tab_background_color">#FFFFFF</color>
     <color name="view_bg">#E1E0E0</color>
     <color name="pink_dot">#E42C64</color>
     <color name="blue_dot">#407BFF</color>

@@ -86,6 +86,7 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
         initListeners(viewBinding)
         initViewModel()
 //        initSharedViewModel()
+
     }
 
     var title = ""
@@ -191,6 +192,8 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
         else
             setAppBarTitle(context.getString(R.string.joinings_lead))
         changeBackButtonDrawable()
+        makeBackgroundMoreRound()
+        makeTitleBold()
         setBackButtonListener(View.OnClickListener {
             activity?.onBackPressed()
         })
@@ -309,7 +312,13 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
 
             if (it.key == "All") {
                 this.statusTabLayout.getTabAt(2)?.text = "All (${it.value})"
+                if (joiningDataState == JoiningDataState.DEFAULT && it.value > 0){
+                    joiningDataState = JoiningDataState.HAS_DATA
+                }else if (joiningDataState == JoiningDataState.DEFAULT && it.value == 0){
+                    joiningDataState = JoiningDataState.NO_DATA
+                }
             }
+            checkForNoData()
         }
     }
 
@@ -340,12 +349,6 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
             joiningShimmerContainer,
             R.id.shimmer_controller
         )
-        if (joiningDataState == JoiningDataState.DEFAULT){
-            joiningDataState = JoiningDataState.HAS_DATA
-            statusTabLayout.visible()
-            appBarComp.searchImageButton.visible()
-            appBarComp.filterFrameLayout.visible()
-        }
         joiningShimmerContainer.gone()
         joiningListInfoLayout.root.gone()
         joiningsRecyclerView.collection = joiningList
@@ -374,12 +377,6 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
             joiningShimmerContainer,
             R.id.shimmer_controller
         )
-        if (joiningDataState == JoiningDataState.DEFAULT){
-            joiningDataState = JoiningDataState.NO_DATA
-            statusTabLayout.gone()
-            appBarComp.searchImageButton.gone()
-            appBarComp.filterFrameLayout.gone()
-        }
         joiningShimmerContainer.gone()
         joiningListInfoLayout.root.visible()
         joiningListInfoLayout.infoIv.loadImage(R.drawable.ic_no_selection)
@@ -407,6 +404,18 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
         joiningListInfoLayout.infoIv.requestLayout()
         joiningListInfoLayout.infoMessageTv.text = error
         swipeRefresh.isRefreshing = false
+    }
+
+    private fun checkForNoData() = viewBinding.apply {
+        if (joiningDataState == JoiningDataState.HAS_DATA){
+            statusTabLayout.visible()
+            appBarComp.searchImageButton.visible()
+            appBarComp.filterFrameLayout.visible()
+        }else if (joiningDataState == JoiningDataState.NO_DATA){
+            statusTabLayout.gone()
+            appBarComp.searchImageButton.gone()
+            appBarComp.filterFrameLayout.gone()
+        }
     }
 
 }

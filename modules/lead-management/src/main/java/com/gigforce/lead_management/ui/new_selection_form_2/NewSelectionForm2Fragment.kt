@@ -189,7 +189,8 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
             navigation.navigateUp()
         }
         setBackButtonDrawable(R.drawable.ic_chevron)
-        stepsTextView.text = getString(R.string.step_2_2_lead)
+        makeBackgroundMoreRound()
+        makeTitleBold()
     }
 
     private fun initViewModel() = viewModel
