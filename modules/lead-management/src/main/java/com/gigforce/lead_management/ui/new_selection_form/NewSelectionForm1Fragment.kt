@@ -10,6 +10,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
+import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import androidx.activity.result.contract.ActivityResultContracts
@@ -246,7 +247,8 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
             activity?.onBackPressed()
         }
         setBackButtonDrawable(R.drawable.ic_chevron)
-        this.stepsTextView.setText(context.getString(R.string.step_1_2_lead))
+        makeBackgroundMoreRound()
+        makeTitleBold()
     }
 
     private fun initViewModel() = viewModel
@@ -289,6 +291,7 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
                         viewBinding.mainForm.gigerNameEt.isEnabled = false
                         viewBinding.mainForm.gigerNameEt.setText(state.profile.name)
                     }
+                    checkForNextButtonEnabled()
                 }
 
                 //Open data selection screen states
@@ -494,6 +497,7 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
 
         viewBinding.mainForm.businessError.errorTextview.text = null
         viewBinding.mainForm.businessError.root.gone()
+        checkForNextButtonEnabled()
     }
 
     private fun showSelectedJobProfile(
@@ -514,6 +518,13 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
 
         viewBinding.mainForm.jobProfileError.errorTextview.text = null
         viewBinding.mainForm.jobProfileError.root.gone()
+        checkForNextButtonEnabled()
+    }
+
+    private fun checkForNextButtonEnabled() = viewBinding.apply {
+        mainForm.nextButton.isEnabled = (mainForm.businessSelectedLabel.text != getString(R.string.click_to_select_business_lead)
+                && mainForm.selectedJobProfileLabel.text != getString(R.string.click_to_select_job_profile_lead)
+                && mainForm.gigerNameEt.text.toString().isNotEmpty())
     }
 
     private fun readContactsPermissionsGranted(): Boolean {
