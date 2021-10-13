@@ -50,7 +50,7 @@ class CityAdapter(
         if (selectedId == null)
             return null
         else {
-            return filteredCityList[getIndexFromId(selectedId!!)]
+            return filteredCityList.getOrNull(getIndexFromId(selectedId!!))
         }
     }
 

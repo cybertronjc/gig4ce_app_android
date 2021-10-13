@@ -36,7 +36,7 @@ class EarlyOrLateCheckInBottomSheet : BottomSheetDialogFragment() {
             newCal.set(Calendar.MILLISECOND, 0)
 
             checkInTimeAccToUser = newCal.time
-            your_time_tv.text = timeFormatter.format(newCal.time)
+            your_time_tv?.text = timeFormatter.format(newCal.time)
         },
                 cal.get(Calendar.HOUR_OF_DAY),
                 cal.get(Calendar.MINUTE),
