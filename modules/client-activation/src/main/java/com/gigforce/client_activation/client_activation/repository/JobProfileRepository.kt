@@ -5,7 +5,7 @@ import com.gigforce.client_activation.client_activation.dataviewmodel.JobProfile
 import com.gigforce.common_ui.ext.bodyOrThrow
 import com.gigforce.common_ui.remote.ReferralService
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfileOverview
-import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
+import com.gigforce.core.fb.BaseFirestoreDBRepository
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.retrofit.RetrofitFactory

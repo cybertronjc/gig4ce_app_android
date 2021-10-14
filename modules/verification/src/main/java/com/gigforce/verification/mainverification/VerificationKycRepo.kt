@@ -2,7 +2,7 @@ package com.gigforce.verification.mainverification
 
 import android.util.Log
 import com.gigforce.core.StringConstants
-import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
+import com.gigforce.core.fb.BaseFirestoreDBRepository
 import com.gigforce.core.datamodels.client_activation.States
 import com.gigforce.core.datamodels.verification.VerificationBaseModel
 import com.gigforce.core.di.interfaces.IBuildConfigVM

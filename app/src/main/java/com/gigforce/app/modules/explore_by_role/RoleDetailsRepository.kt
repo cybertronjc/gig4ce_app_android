@@ -1,7 +1,7 @@
 package com.gigforce.app.modules.explore_by_role
 
 import android.annotation.SuppressLint
-import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
+import com.gigforce.core.fb.BaseFirestoreDBRepository
 import com.gigforce.app.modules.explore_by_role.models.Completed
 import com.gigforce.core.StringConstants
 import com.gigforce.core.datamodels.verification.VerificationBaseModel

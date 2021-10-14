@@ -1,7 +1,7 @@
 package com.gigforce.app.modules.explore_by_role
 
 import com.gigforce.core.StringConstants
-import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
+import com.gigforce.core.fb.BaseFirestoreDBRepository
 import com.google.firebase.Timestamp
 import kotlinx.coroutines.tasks.await
 

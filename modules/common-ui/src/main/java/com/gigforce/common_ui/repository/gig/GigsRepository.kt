@@ -3,7 +3,7 @@ package com.gigforce.common_ui.repository.gig
 import android.location.Location
 import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 import com.gigforce.common_ui.viewdatamodels.GigStatus
-import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
+import com.gigforce.core.fb.BaseFirestoreDBRepository
 import com.gigforce.core.datamodels.gigpage.BussinessLocation
 import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.datamodels.gigpage.GigOrder

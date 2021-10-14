@@ -1,7 +1,7 @@
 package com.gigforce.app.modules.profile
 
 import com.gigforce.core.StringConstants
-import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
+import com.gigforce.core.fb.BaseFirestoreDBRepository
 import com.gigforce.core.datamodels.profile.Contact
 import com.gigforce.core.datamodels.profile.ContactEmail
 import com.gigforce.core.datamodels.profile.ContactPhone

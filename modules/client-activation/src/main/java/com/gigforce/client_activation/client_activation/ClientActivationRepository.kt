@@ -3,7 +3,7 @@ package com.gigforce.client_activation.client_activation
 import android.location.Location
 import com.gigforce.common_ui.viewdatamodels.client_activation.Media
 import com.gigforce.core.StringConstants
-import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
+import com.gigforce.core.fb.BaseFirestoreDBRepository
 import com.gigforce.core.datamodels.profile.ClientActs
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
