@@ -287,6 +287,8 @@ class Joining2RecyclerItemView(
                 conversionTime+=(diffmin-diffhours*60).toString()+" min ago"
             }else if(diffsec>1){
                 conversionTime+=(diffsec-diffmin*60).toString()+" sec ago"
+            }else {
+                conversionTime+=" moments ago"
             }
         }catch (ex:java.lang.Exception){
             Log.d("formatTimeAgo",ex.toString())
