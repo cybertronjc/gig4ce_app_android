@@ -48,7 +48,7 @@ class ReportingLocationAdapter(
         if (selectedId == null)
             return null
         else {
-            return filteredLocationList[getIndexFromId(selectedId!!)]
+            return originalLocationList[getIndexFromIdFromOriginalList(selectedId!!)]
         }
     }
 
@@ -189,6 +189,17 @@ class ReportingLocationAdapter(
             return -1
         else
             filteredLocationList.indexOf(tl)
+    }
+
+    fun getIndexFromIdFromOriginalList(
+        id: String
+    ): Int {
+        val tl = originalLocationList.find { it.id == id }
+
+        return if (tl == null)
+            return -1
+        else
+            originalLocationList.indexOf(tl)
     }
 
 

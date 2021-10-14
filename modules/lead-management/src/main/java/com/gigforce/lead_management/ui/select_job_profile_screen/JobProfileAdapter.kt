@@ -50,7 +50,7 @@ class JobProfileAdapter(
         if (selectedId == null)
             return null
         else {
-            return filteredProfileList[getIndexFromId(selectedId!!)]
+            return originalProfileList[getIndexFromIdFromOriginalList(selectedId!!)]
         }
     }
 
@@ -190,6 +190,17 @@ class JobProfileAdapter(
             return -1
         else
             filteredProfileList.indexOf(city)
+    }
+
+    fun getIndexFromIdFromOriginalList(
+        id: String
+    ): Int {
+        val city = originalProfileList.find { it.id == id }
+
+        return if (city == null)
+            return -1
+        else
+            originalProfileList.indexOf(city)
     }
 
 

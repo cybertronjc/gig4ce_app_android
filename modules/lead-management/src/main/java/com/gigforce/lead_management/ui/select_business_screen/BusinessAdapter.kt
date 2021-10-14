@@ -51,7 +51,7 @@ class BusinessAdapter(
         if (selectedId == null)
             return null
         else {
-            return filteredBusinessList[getIndexFromId(selectedId!!)]
+            return originalBusinessList[getIndexFromIdFromOriginalList(selectedId!!)]
         }
     }
 
@@ -194,6 +194,17 @@ class BusinessAdapter(
             return -1
         else
             filteredBusinessList.indexOf(city)
+    }
+
+    fun getIndexFromIdFromOriginalList(
+        id: String
+    ): Int {
+        val city = originalBusinessList.find { it.id == id }
+
+        return if (city == null)
+            return -1
+        else
+            originalBusinessList.indexOf(city)
     }
 
 

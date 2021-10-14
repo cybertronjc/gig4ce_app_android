@@ -50,7 +50,7 @@ class CityAdapter(
         if (selectedId == null)
             return null
         else {
-            return filteredCityList[getIndexFromId(selectedId!!)]
+            return originalCityList[getIndexFromIdOriginalList(selectedId!!)]
         }
     }
 
@@ -190,6 +190,17 @@ class CityAdapter(
             return -1
         else
             filteredCityList.indexOf(city)
+    }
+
+    fun getIndexFromIdOriginalList(
+        id: String
+    ): Int {
+        val city = originalCityList.find { it.id == id }
+
+        return if (city == null)
+            return -1
+        else
+            originalCityList.indexOf(city)
     }
 
 
