@@ -40,6 +40,10 @@ abstract class BaseFirestoreDBRepository {
         setUpdatedAtUpdatedBy()
     }
 
+    public fun  setData(obj: Map<String,Any>) {
+        getDBCollection().update(obj)
+    }
+
     public fun <M : BaseFirestoreDataModel> setDataAsKeyValue(obj: M) {
         getDBCollection().update(obj.tableName, obj)
         setUpdatedAtUpdatedBy()

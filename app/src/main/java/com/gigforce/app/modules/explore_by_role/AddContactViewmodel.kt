@@ -7,6 +7,8 @@ import com.gigforce.core.datamodels.profile.ContactEmail
 import com.gigforce.core.datamodels.profile.ContactPhone
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.SingleLiveEvent
+import com.gigforce.core.StringConstants
+import com.google.firebase.Timestamp
 
 class AddContactViewmodel : ViewModel() {
     val repositoryAddContact = RepositoryAddContact()
@@ -41,9 +43,9 @@ class AddContactViewmodel : ViewModel() {
             .update(
                 mapOf(
                     "contactPhone" to items.map { it.contactPhone },
-                    "contactEmail" to items.map { it.contactEmail }
-
-
+                    "contactEmail" to items.map { it.contactEmail },
+                    "updatedAt" to Timestamp.now(),
+                    "updatedBy" to StringConstants.APP.value
                 )
             ).addOnCompleteListener {
                 if (it.isSuccessful) {
@@ -72,7 +74,9 @@ class AddContactViewmodel : ViewModel() {
         }
         val updateMap = mapOf(
             "contactPhone" to contact,
-            "contactEmail" to email
+            "contactEmail" to email,
+            "updatedAt" to Timestamp.now(),
+            "updatedBy" to StringConstants.APP.value
         )
         repositoryAddContact.getCollectionReference().document(repositoryAddContact.getUID())
             .update(updateMap)

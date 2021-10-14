@@ -54,12 +54,12 @@ data class LessonFeedback (
     @set:PropertyName("createdAt")
     var createdAt : Timestamp?= Timestamp.now()
 ){
-    fun setUpdatedOnAndBy(){
+    fun setUpdatedAtAndBy(){
         updatedAt = Timestamp.now()
         updatedBy = StringConstants.APP.value
     }
 
-    fun setCreatedOn(){
+    fun setCreatedAt(){
         createdAt = Timestamp.now()
     }
 }

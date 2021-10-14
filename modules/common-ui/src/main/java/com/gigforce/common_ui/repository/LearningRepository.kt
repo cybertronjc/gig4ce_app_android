@@ -1402,7 +1402,7 @@ class LearningRepository : BaseFirestoreDBRepository() {
             feedback.easyToUnderStand = easyToUnderStand
             feedback.videoQuality = videoQuality
             feedback.soundQuality = soundQuality
-            feedback.setUpdatedOnAndBy()
+            feedback.setUpdatedAtAndBy()
 
             db.collection(COLLECTION_LESSON_FEEDBACK)
                 .document(docSnap.id)

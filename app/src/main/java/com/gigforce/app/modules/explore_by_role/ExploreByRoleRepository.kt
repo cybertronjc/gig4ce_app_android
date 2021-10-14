@@ -1,8 +1,10 @@
 package com.gigforce.app.modules.explore_by_role
 
 import android.location.Location
+import com.gigforce.core.StringConstants
 import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
 import com.gigforce.core.datamodels.profile.RoleInterests
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
 
 class ExploreByRoleRepository : BaseFirestoreDBRepository(), ExploreByRoleCallbacks {
@@ -34,17 +36,19 @@ class ExploreByRoleRepository : BaseFirestoreDBRepository(), ExploreByRoleCallba
 
         responseCallbacks: ExploreByRoleCallbacks.ResponseCallbacks
     ) {
+        val map = mapOf("role_interests" to
+            FieldValue.arrayUnion(
+                RoleInterests(
+                    interestID = roleID,
+                    lat = location?.latitude.toString(),
+                    lon = location?.longitude.toString(),
+                    invitedBy = inviteID ?: ""
+                )
+            ), "updatedAt" to Timestamp.now(), "updatedBy" to StringConstants.APP.value
+        )
         db.collection("Profiles").document(getUID())
             .update(
-                "role_interests",
-                FieldValue.arrayUnion(
-                    RoleInterests(
-                        interestID = roleID,
-                        lat = location?.latitude.toString(),
-                        lon = location?.longitude.toString(),
-                        invitedBy = inviteID ?: ""
-                    )
-                )
+                map
             )
             .addOnCompleteListener {
                 responseCallbacks.markedAsInterestSuccess(it)

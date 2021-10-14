@@ -6,11 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.client_activation.client_activation.models.JpSettings
 import com.gigforce.core.SingleLiveEvent
+import com.gigforce.core.StringConstants
 import com.gigforce.core.datamodels.client_activation.Dependency
 import com.gigforce.core.datamodels.client_activation.JpApplication
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.datamodels.verification.VerificationBaseModel
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.launch
@@ -178,6 +180,7 @@ class ApplicationClientActivationViewModel : ViewModel() {
                         }
                     }
             } else {
+                model.setUpdatedAtAndBy()
                 repository.db.collection("JP_Applications").document(model.id).set(model)
                     .addOnCompleteListener {
                         if (it.isSuccessful) {
@@ -211,17 +214,19 @@ class ApplicationClientActivationViewModel : ViewModel() {
 
     fun apply(jobProfileId: String) = viewModelScope.launch {
         val application = getJPApplication(jobProfileId)
-        var statusUpdate = mapOf(
+        var statusUpdate = mutableMapOf<String, Any>(
             "stepsTotal" to (observableJobProfile.value?.step ?: 0),
             "status" to "Submitted",
-            "applicationComplete" to Date()
+            "applicationComplete" to Date(),
+            "updatedAt" to Timestamp.now(), "updatedBy" to StringConstants.APP.value
         )
         if (isActivationScreenFound) {
-            statusUpdate = mapOf(
-                "stepsTotal" to (observableJobProfile.value?.step ?: 0),
-                "status" to "Inprocess",
-                "applicationComplete" to Date()
-            )
+            statusUpdate["status"] = "Inprocess"
+//            mapOf(
+//                "stepsTotal" to (observableJobProfile.value?.step ?: 0),
+//                "status" to "Inprocess",
+//                "applicationComplete" to Date()
+//            )
         }
         repository.db.collection("JP_Applications").document(application.id)
             .update(
@@ -248,7 +253,9 @@ class ApplicationClientActivationViewModel : ViewModel() {
             repository.db.collection("JP_Applications").document(application.id)
                 .update(
                     mapOf(
-                        "status" to "Interested"
+                        "status" to "Interested",
+                        "updatedAt" to Timestamp.now(),
+                        "updatedBy" to StringConstants.APP.value
                     )
                 )
                 .addOnCompleteListener {

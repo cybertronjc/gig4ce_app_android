@@ -1,8 +1,10 @@
 package com.gigforce.profile.repo
 
+import com.gigforce.core.StringConstants
 import com.gigforce.core.extensions.updateOrThrow
 import com.gigforce.core.fb.BaseFirestoreDBRepository
 import com.gigforce.profile.onboarding.models.SkillModel
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -501,7 +503,9 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
         firebaseDB.collection(profileCollectionName)
                 .document(uid)
                 .updateOrThrow(mapOf(
-                        "skills" to interests
+                        "skills" to interests,
+                        "updatedAt" to Timestamp.now(),
+                        "updatedBy" to StringConstants.APP.value
                 ))
     }
 
@@ -511,7 +515,9 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
                 .updateOrThrow(mapOf(
                         "jobType" to jobType,
                         "workingDays" to workingDays,
-                        "timeSlots" to timeSlots
+                        "timeSlots" to timeSlots,
+                        "updatedAt" to Timestamp.now(),
+                        "updatedBy" to StringConstants.APP.value
                 ))
     }
 

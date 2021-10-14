@@ -1,6 +1,8 @@
 package com.gigforce.app.modules.explore_by_role
 
+import com.gigforce.core.StringConstants
 import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
+import com.google.firebase.Timestamp
 import kotlinx.coroutines.tasks.await
 
 class AddBioRepository : BaseFirestoreDBRepository(), AddBioViewModelCallbacks {
@@ -8,7 +10,8 @@ class AddBioRepository : BaseFirestoreDBRepository(), AddBioViewModelCallbacks {
             bio: String,
             responseCallbacks: AddBioViewModelCallbacks.ResponseCallbacks
     ) {
-        getCollectionReference().document(getUID()).update("aboutMe", bio).addOnCompleteListener {
+        val map = mapOf("aboutMe" to bio, "updatedAt" to Timestamp.now(), "updatedBy" to StringConstants.APP.value)
+        getCollectionReference().document(getUID()).update(map).addOnCompleteListener {
             responseCallbacks.saveBioResponse(it)
         }
     }
