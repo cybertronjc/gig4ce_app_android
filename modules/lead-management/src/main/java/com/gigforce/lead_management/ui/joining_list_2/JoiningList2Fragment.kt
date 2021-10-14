@@ -2,6 +2,7 @@ package com.gigforce.lead_management.ui.joining_list_2
 
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -85,7 +86,7 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
         initTabLayout()
         initListeners(viewBinding)
         initViewModel()
-//        initSharedViewModel()
+        initSharedViewModel()
 
     }
 
@@ -286,7 +287,22 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
             .observe(viewLifecycleOwner, {
 
                 when (it) {
-                    LeadManagementSharedViewModelState.OneOrMoreSelectionsDropped -> viewModel.getJoinings()
+                    LeadManagementSharedViewModelState.JoiningAdded -> {
+                        val r = Runnable {
+                            viewBinding.swipeRefresh.isRefreshing = true
+                            viewModel.resetViewModel()
+                            //viewBinding.appBarComp.setAppBarTitle(getString(R.string.joinings_lead))
+                            if (title.isNotBlank())
+                                viewBinding.appBarComp.setAppBarTitle(title)
+                            else
+                                viewBinding.appBarComp.setAppBarTitle(context?.getString(R.string.joinings_lead))
+                            viewBinding.joinNowButton.text = getString(R.string.add_new_lead)
+                            dropJoining?.clear()
+                            viewModel.getJoinings()
+                        }
+                        Handler().postDelayed(r, 1000)
+
+                    }
                 }
             })
     }
