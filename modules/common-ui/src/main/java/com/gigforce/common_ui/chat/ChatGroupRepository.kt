@@ -11,6 +11,7 @@ import androidx.core.net.toFile
 import androidx.core.net.toUri
 import com.gigforce.common_ui.chat.models.*
 import com.gigforce.common_ui.viewdatamodels.chat.ChatHeader
+import com.gigforce.core.StringConstants
 import com.gigforce.core.date.DateHelper
 import com.gigforce.core.extensions.*
 import com.gigforce.core.file.FileUtils
@@ -67,9 +68,9 @@ class ChatGroupRepository constructor(
         .collection(COLLECTION_GROUP_MESSAGES)
 
     fun groupEventsRef(groupId: String) = db.collection(COLLECTION_GROUP_CHATS)
-            .document(groupId)
-            .collection(COLLECTION_GROUP_EVENTS)
-            .whereArrayContains("showEventToUsersWithUid",getUID())
+        .document(groupId)
+        .collection(COLLECTION_GROUP_EVENTS)
+        .whereArrayContains("showEventToUsersWithUid", getUID())
 
     fun userGroupHeaderRef(groupId: String) = db.collection(COLLECTION_CHATS)
         .document(getUID())
@@ -407,7 +408,11 @@ class ChatGroupRepository constructor(
 
             batch.update(
                 headerRef,
-                mapOf("groupName" to newGroupName)
+                mapOf(
+                    "groupName" to newGroupName,
+                    "updatedAt" to Timestamp.now(),
+                    "updatedBy" to StringConstants.APP.value
+                )
             )
         }
         batch.commitOrThrow()
@@ -418,7 +423,13 @@ class ChatGroupRepository constructor(
             .document(getUID())
             .collection("headers")
             .document(groupHeaderId)
-            .updateOrThrow("unseenCount", 0)
+            .updateOrThrow(
+                mapOf(
+                    "unseenCount" to 0,
+                    "updatedAt" to Timestamp.now(),
+                    "updatedBy" to StringConstants.APP.value
+                )
+            )
     }
 
     suspend fun deactivateOrActivateGroup(groupHeaderId: String) {
@@ -427,7 +438,14 @@ class ChatGroupRepository constructor(
         val batch = db.batch()
         val groupRef = db.collection(COLLECTION_GROUP_CHATS)
             .document(groupHeaderId)
-        batch.update(groupRef, "groupDeactivated", !groupDetails.groupDeactivated)
+        batch.update(
+            groupRef,
+            mapOf(
+                "groupDeactivated" to !groupDetails.groupDeactivated,
+                "updatedAt" to Timestamp.now(),
+                "updatedBy" to StringConstants.APP.value
+            )
+        )
 
         groupDetails.groupMembers.forEach {
             val headerRef = db.collection("chats")
@@ -435,7 +453,13 @@ class ChatGroupRepository constructor(
                 .collection("headers")
                 .document(groupHeaderId)
 
-            batch.update(headerRef, "groupDeactivated", !groupDetails.groupDeactivated)
+            batch.update(
+                headerRef, mapOf(
+                    "groupDeactivated" to !groupDetails.groupDeactivated,
+                    "updatedAt" to Timestamp.now(),
+                    "updatedBy" to StringConstants.APP.value
+                )
+            )
         }
 
         batch.commit()
@@ -516,7 +540,13 @@ class ChatGroupRepository constructor(
             .document(userUid)
             .collection(COLLECTION_CHAT_HEADERS)
             .document(groupHeaderId)
-        batch.update(userHeaderRef, "removedFromGroup", true)
+        batch.update(
+            userHeaderRef, mapOf(
+                "removedFromGroup" to true,
+                "updatedAt" to Timestamp.now(),
+                "updatedBy" to StringConstants.APP.value
+            )
+        )
         batch.commit()
     }
 
@@ -563,7 +593,7 @@ class ChatGroupRepository constructor(
     ): String? {
 
         return if (ContentResolver.SCHEME_CONTENT.equals(uri.scheme)) {
-            val cr: ContentResolver = context.getContentResolver()
+            val cr: ContentResolver = context.contentResolver
             val mimeType = cr.getType(uri)
             MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
         } else {
@@ -604,14 +634,16 @@ class ChatGroupRepository constructor(
             .updateOrThrow("groupMembers", groupDetails.groupMembers)
 
         db.collection(COLLECTION_GROUP_CHATS)
-                .document(groupId)
-                .collection(COLLECTION_GROUP_EVENTS)
-                .addOrThrow(EventInfo(
-                        groupId = groupId,
-                        showEventToUsersWithUid = arrayListOf(uid),
-                        eventDoneByUserUid = currentUser.uid,
-                        eventText = "You're now an admin"
-                ))
+            .document(groupId)
+            .collection(COLLECTION_GROUP_EVENTS)
+            .addOrThrow(
+                EventInfo(
+                    groupId = groupId,
+                    showEventToUsersWithUid = arrayListOf(uid),
+                    eventDoneByUserUid = currentUser.uid,
+                    eventText = "You're now an admin"
+                )
+            )
     }
 
     suspend fun dismissUserAsGroupAdmin(
@@ -631,12 +663,14 @@ class ChatGroupRepository constructor(
         db.collection(COLLECTION_GROUP_CHATS)
             .document(groupId)
             .collection(COLLECTION_GROUP_EVENTS)
-            .addOrThrow(EventInfo(
+            .addOrThrow(
+                EventInfo(
                     groupId = groupId,
                     showEventToUsersWithUid = arrayListOf(uid),
                     eventDoneByUserUid = currentUser.uid,
                     eventText = "You've been dismissed as admin"
-            ))
+                )
+            )
     }
 
     suspend fun allowEveryoneToPostInThisGroup(
@@ -676,7 +710,9 @@ class ChatGroupRepository constructor(
             val messageRef = groupMessagesCollectionRef.document(it.id)
             batch.update(
                 messageRef,
-                mapOf("groupMessageReadBy" to FieldValue.arrayUnion(receivingObject))
+                mapOf("groupMessageReadBy" to FieldValue.arrayUnion(receivingObject),
+                    "updatedAt" to Timestamp.now(),
+                    "updatedBy" to StringConstants.APP.value)
             )
             checkBatchForOverFlowAndCommit()
         }
