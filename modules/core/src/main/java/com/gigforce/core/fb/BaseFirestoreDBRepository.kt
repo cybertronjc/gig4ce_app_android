@@ -1,7 +1,6 @@
 package com.gigforce.core.fb
 
 import com.gigforce.core.StringConstants
-import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -157,13 +156,13 @@ abstract class BaseFirestoreDBRepository {
     }
 
 
-    public fun <M : com.gigforce.core.base.basefirestore.BaseFirestoreDataModel> setData(arrData: ArrayList<M>) {
+    public fun <M : BaseFirestoreDataModel> setData(arrData: ArrayList<M>) {
         for (obj in arrData) {
             setData(obj)
         }
     }
 
-    public fun <M : com.gigforce.core.base.basefirestore.BaseFirestoreDataModel> setData(obj: M) {
+    public fun <M : BaseFirestoreDataModel> setData(obj: M) {
         getDBCollection().update(obj.tableName, FieldValue.arrayUnion(obj))
         setUpdatedAtUpdatedBy()
     }
@@ -172,7 +171,7 @@ abstract class BaseFirestoreDBRepository {
         getDBCollection().update(obj)
     }
 
-    public fun <M : com.gigforce.core.base.basefirestore.BaseFirestoreDataModel> setDataAsKeyValue(obj: M) {
+    public fun <M : BaseFirestoreDataModel> setDataAsKeyValue(obj: M) {
         getDBCollection().update(obj.tableName, obj)
         setUpdatedAtUpdatedBy()
     }
@@ -195,7 +194,7 @@ abstract class BaseFirestoreDBRepository {
         setData(tableName, data)
     }
 
-    public fun <M : com.gigforce.core.base.basefirestore.BaseFirestoreDataModel> setDataAndDeleteOldData(obj: M) {
+    public fun <M : BaseFirestoreDataModel> setDataAndDeleteOldData(obj: M) {
         removeData(obj)
         setData(obj)
     }
@@ -232,13 +231,13 @@ abstract class BaseFirestoreDBRepository {
     // for set DB data--------end
 
     //for remove data
-    fun <M : com.gigforce.core.base.basefirestore.BaseFirestoreDataModel> removeData(arrData: ArrayList<M>) {
+    fun <M : BaseFirestoreDataModel> removeData(arrData: ArrayList<M>) {
         for (obj in arrData) {
             removeData(obj)
         }
     }
 
-    fun <M : com.gigforce.core.base.basefirestore.BaseFirestoreDataModel> removeData(obj: M) {
+    fun <M : BaseFirestoreDataModel> removeData(obj: M) {
         getDBCollection().update(obj.tableName, FieldValue.arrayRemove(obj))
         setUpdatedAtUpdatedBy()
     }
