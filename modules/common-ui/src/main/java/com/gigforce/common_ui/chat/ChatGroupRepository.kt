@@ -189,6 +189,7 @@ class ChatGroupRepository constructor(
         val groupSnap = getGroupDetailsRef(groupId).getOrThrow()
         return groupSnap.toObject(ChatGroup::class.java)!!.apply {
             id = groupId
+            setUpdatedAtAndBy()
         }
     }
 
@@ -374,18 +375,20 @@ class ChatGroupRepository constructor(
         db.collection(COLLECTION_GROUP_CHATS)
             .document(groupId)
             .updateOrThrow(
-                "groupMedia", FieldValue.arrayUnion(
-                    GroupMedia(
-                        id = UUID.randomUUID().toString(),
-                        groupHeaderId = groupId,
-                        messageId = messageId,
-                        attachmentType = type,
-                        timestamp = Timestamp.now(),
-                        thumbnail = thumbnailPath,
-                        attachmentName = fileName,
-                        attachmentPath = pathOnServer,
-                        videoAttachmentLength = videoAttachmentLength
-                    )
+                mapOf(
+                    "groupMedia" to FieldValue.arrayUnion(
+                        GroupMedia(
+                            id = UUID.randomUUID().toString(),
+                            groupHeaderId = groupId,
+                            messageId = messageId,
+                            attachmentType = type,
+                            timestamp = Timestamp.now(),
+                            thumbnail = thumbnailPath,
+                            attachmentName = fileName,
+                            attachmentPath = pathOnServer,
+                            videoAttachmentLength = videoAttachmentLength
+                        )
+                    ), "updatedAt" to Timestamp.now(), "updatedBy" to StringConstants.APP.value
                 )
             )
     }
@@ -394,7 +397,13 @@ class ChatGroupRepository constructor(
 
         db.collection(COLLECTION_GROUP_CHATS)
             .document(groupId)
-            .updateOrThrow("name", newGroupName)
+            .updateOrThrow(
+                mapOf(
+                    "name" to newGroupName,
+                    "updatedAt" to Timestamp.now(),
+                    "updatedBy" to StringConstants.APP.value
+                )
+            )
 
         val groupDetails = getGroupDetails(groupId)
 
@@ -614,7 +623,9 @@ class ChatGroupRepository constructor(
         .updateOrThrow(
             mapOf(
                 "isDeleted" to true,
-                "deletedOn" to Timestamp.now()
+                "deletedOn" to Timestamp.now(),
+                "updatedAt" to Timestamp.now(),
+                "updatedBy" to StringConstants.APP.value
             )
         )
 
@@ -631,7 +642,13 @@ class ChatGroupRepository constructor(
 
         db.collection(COLLECTION_GROUP_CHATS)
             .document(groupId)
-            .updateOrThrow("groupMembers", groupDetails.groupMembers)
+            .updateOrThrow(
+                mapOf(
+                    "groupMembers" to groupDetails.groupMembers,
+                    "updatedAt" to Timestamp.now(),
+                    "updatedBy" to StringConstants.APP.value
+                )
+            )
 
         db.collection(COLLECTION_GROUP_CHATS)
             .document(groupId)
@@ -658,7 +675,13 @@ class ChatGroupRepository constructor(
 
         db.collection(COLLECTION_GROUP_CHATS)
             .document(groupId)
-            .updateOrThrow("groupMembers", groupDetails.groupMembers)
+            .updateOrThrow(
+                mapOf(
+                    "groupMembers" to groupDetails.groupMembers,
+                    "updatedAt" to Timestamp.now(),
+                    "updatedBy" to StringConstants.APP.value
+                )
+            )
 
         db.collection(COLLECTION_GROUP_CHATS)
             .document(groupId)
@@ -678,7 +701,13 @@ class ChatGroupRepository constructor(
     ) {
         db.collection(COLLECTION_GROUP_CHATS)
             .document(groupId)
-            .updateOrThrow("onlyAdminCanPostInGroup", false)
+            .updateOrThrow(
+                mapOf(
+                    "onlyAdminCanPostInGroup" to false,
+                    "updatedAt" to Timestamp.now(),
+                    "updatedBy" to StringConstants.APP.value
+                )
+            )
     }
 
     suspend fun limitPostingToAdminsInGroup(
@@ -686,7 +715,13 @@ class ChatGroupRepository constructor(
     ) {
         db.collection(COLLECTION_GROUP_CHATS)
             .document(groupId)
-            .updateOrThrow("onlyAdminCanPostInGroup", true)
+            .updateOrThrow(
+                mapOf(
+                    "onlyAdminCanPostInGroup" to true,
+                    "updatedAt" to Timestamp.now(),
+                    "updatedBy" to StringConstants.APP.value
+                )
+            )
     }
 
     private var currentBatchSize = 0
@@ -710,9 +745,11 @@ class ChatGroupRepository constructor(
             val messageRef = groupMessagesCollectionRef.document(it.id)
             batch.update(
                 messageRef,
-                mapOf("groupMessageReadBy" to FieldValue.arrayUnion(receivingObject),
+                mapOf(
+                    "groupMessageReadBy" to FieldValue.arrayUnion(receivingObject),
                     "updatedAt" to Timestamp.now(),
-                    "updatedBy" to StringConstants.APP.value)
+                    "updatedBy" to StringConstants.APP.value
+                )
             )
             checkBatchForOverFlowAndCommit()
         }
