@@ -329,6 +329,7 @@ abstract class ImageMessageView(
                 handleImageDownloaded(file)
             }
         } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 

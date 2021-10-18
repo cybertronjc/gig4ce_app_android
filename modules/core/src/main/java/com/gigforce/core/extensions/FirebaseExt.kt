@@ -126,3 +126,8 @@ suspend fun DocumentReference.deleteOrThrow() = suspendCoroutine<Unit?> { cont -
     delete().addOnSuccessListener { cont.resume(null) }
             .addOnFailureListener { cont.resumeWithException(it) }
 }
+
+suspend fun StorageReference.getFileOrThrow(destinationFile: Uri) = suspendCoroutine<FileDownloadTask.TaskSnapshot> { cont ->
+    getFile(destinationFile).addOnSuccessListener { cont.resume(it) }
+        .addOnFailureListener { cont.resumeWithException(it) }
+}
