@@ -60,7 +60,7 @@ class Joining2RecyclerItemView(
     private fun setListenersOnView() {
         viewBinding.root.setOnClickListener(this)
         viewBinding.callGigerBtn.setOnClickListener(this)
-        viewBinding.root.setOnLongClickListener(this)
+      //  viewBinding.root.setOnLongClickListener(this)
     }
 
     private fun setDefault() {

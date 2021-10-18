@@ -111,6 +111,11 @@ class ReportingLocationAdapter(
         override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
             filteredLocationList = results?.values as ArrayList<ReportingLocationsItem>
             notifyDataSetChanged()
+
+            onReportingLocationSelectedListener?.onReportingLocationFiltered(
+                reportingLocationCountVisibleAfterFiltering =  filteredLocationList.size,
+                selectedReportingLocationVisible  = filteredLocationList.find { it.id == selectedId } != null
+            )
         }
     }
 
@@ -205,6 +210,11 @@ class ReportingLocationAdapter(
 
 
     interface OnReportingLocationSelectedListener{
+
+        fun onReportingLocationFiltered(
+            reportingLocationCountVisibleAfterFiltering : Int,
+            selectedReportingLocationVisible : Boolean
+        )
 
         fun onReportingLocationSelected(reportingLocation : ReportingLocationsItem)
     }

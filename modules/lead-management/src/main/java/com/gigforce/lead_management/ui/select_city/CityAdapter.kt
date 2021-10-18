@@ -114,6 +114,11 @@ class CityAdapter(
         override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
             filteredCityList = results?.values as ArrayList<ReportingLocationsItem>
             notifyDataSetChanged()
+
+            onCitySelectedListener?.onCityFiltered(
+                cityCountVisibleAfterFiltering =  filteredCityList.size,
+                selectedCityVisible  =  filteredCityList.find { it.id == selectedId } != null
+            )
         }
     }
 
@@ -205,6 +210,11 @@ class CityAdapter(
 
 
     interface OnCitySelectedListener {
+
+        fun onCityFiltered(
+            cityCountVisibleAfterFiltering : Int,
+            selectedCityVisible : Boolean
+        )
 
         fun onCitySelected(selectedCity: ReportingLocationsItem)
     }

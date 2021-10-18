@@ -114,6 +114,11 @@ class JobProfileAdapter(
         override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
             filteredProfileList = results?.values as ArrayList<JobProfilesItem>
             notifyDataSetChanged()
+
+            onJobProfileSelectedListener?.onJobProfileFiltered(
+                jobProfileCountVisibleAfterFiltering =  filteredProfileList.size,
+                selectedJobProfileVisible =  filteredProfileList.find { it.id == selectedId } != null
+            )
         }
     }
 
@@ -206,6 +211,12 @@ class JobProfileAdapter(
 
 
     interface OnJobProfileSelectedListener{
+
+        fun onJobProfileFiltered(
+            jobProfileCountVisibleAfterFiltering : Int,
+            selectedJobProfileVisible : Boolean
+        )
+
 
         fun onJobProfileSelected(jobProfileSelected : JobProfilesItem)
     }

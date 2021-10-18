@@ -144,4 +144,19 @@ class SelectReportingLocationFragment : BaseFragment2<FragmentSelectReportingLoc
     override fun onReportingLocationSelected(reportingLocation: ReportingLocationsItem) {
         viewBinding.okayButton.isEnabled = true
     }
+
+    override fun onReportingLocationFiltered(
+        reportingLocationCountVisibleAfterFiltering: Int,
+        selectedReportingLocationVisible: Boolean
+    ) {
+        if(reportingLocationCountVisibleAfterFiltering != 0){
+            viewBinding.infoLayout.root.gone()
+            viewBinding.okayButton.isEnabled = selectedReportingLocationVisible
+        } else{
+            viewBinding.okayButton.isEnabled = false
+            viewBinding.infoLayout.root.visible()
+            viewBinding.infoLayout.infoMessageTv.text = getString(R.string.no_reporting_location_to_show_lead)
+            viewBinding.infoLayout.infoIv.loadImage(R.drawable.ic_no_selection)
+        }
+    }
 }

@@ -139,4 +139,20 @@ class SelectBusinessFragment : BaseFragment2<FragmentSelectBusinessBinding>(
     override fun onBusinessSelected(businessSelected: JoiningBusinessAndJobProfilesItem) {
         viewBinding.okayButton.isEnabled = true
     }
+
+    override fun onBusinessFiltered(
+        businessCountVisibleAfterFiltering: Int,
+        selectedBusinessVisible: Boolean
+    ) {
+
+        if(businessCountVisibleAfterFiltering != 0){
+            viewBinding.businessInfoLayout.root.gone()
+            viewBinding.okayButton.isEnabled = selectedBusinessVisible
+        } else{
+            viewBinding.okayButton.isEnabled = false
+            viewBinding.businessInfoLayout.root.visible()
+            viewBinding.businessInfoLayout.infoMessageTv.text = getString(R.string.no_business_to_show_lead)
+            viewBinding.businessInfoLayout.infoIv.loadImage(R.drawable.ic_no_selection)
+        }
+    }
 }

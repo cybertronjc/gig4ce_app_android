@@ -141,4 +141,20 @@ class SelectCityFragment : BaseFragment2<FragmentSelectBusinessBinding>(
     override fun onCitySelected(selectedCity: ReportingLocationsItem) {
         viewBinding.okayButton.isEnabled = true
     }
+
+    override fun onCityFiltered(
+        cityCountVisibleAfterFiltering: Int,
+        selectedCityVisible: Boolean
+    ) {
+
+        if(cityCountVisibleAfterFiltering != 0){
+            viewBinding.businessInfoLayout.root.gone()
+            viewBinding.okayButton.isEnabled = selectedCityVisible
+        } else{
+            viewBinding.okayButton.isEnabled = false
+            viewBinding.businessInfoLayout.root.visible()
+            viewBinding.businessInfoLayout.infoMessageTv.text = getString(R.string.no_city_to_show_lead)
+            viewBinding.businessInfoLayout.infoIv.loadImage(R.drawable.ic_no_selection)
+        }
+    }
 }
