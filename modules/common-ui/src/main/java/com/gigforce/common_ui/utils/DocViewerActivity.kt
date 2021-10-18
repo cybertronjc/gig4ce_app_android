@@ -55,19 +55,18 @@ class DocViewerActivity : BaseActivity() {
         setContentView(R.layout.acitivity_doc_viewer)
         pdfView = findViewById(R.id.webview)
         progress = findViewById(R.id.pb_doc)
-        val stringExtra = intent.getStringExtra(StringConstants.DOC_URL.value)
+        val stringExtra = intent.getStringExtra(StringConstants.DOC_URL.value) ?: ""
         purposeExtra = intent.getStringExtra(StringConstants.DOC_PURPOSE.value) ?: ""
         bundle = intent.extras
         //pageTitle = intent.getStringExtra(StringConstants.WEB_TITLE.value)
         showPdfFile(
             stringExtra,
-            stringExtra.contains(".jpg") || stringExtra.contains(".png"),
-            stringExtra.contains(".pdf")
+            stringExtra?.contains(".jpg") ?: false || stringExtra?.contains(".png") ?: false,
+            stringExtra?.contains(".pdf") ?: false
         )
         makeToolbarVisible(
-            stringExtra.contains(".jpg") || stringExtra.contains(".png") || stringExtra.contains(
-                ".pdf"
-            ), purposeExtra
+            stringExtra?.contains(".jpg") ?: false || stringExtra?.contains(".png") ?: false
+                    || stringExtra?.contains(".pdf") ?: false, purposeExtra
         )
 //        if(purposeExtra == "banner"){
 //            bannerEntered()
@@ -169,7 +168,7 @@ class DocViewerActivity : BaseActivity() {
         win?.statusBarColor = resources.getColor(R.color.status_bar_pink)
     }
 
-    private fun showPdfFile(imageString: String?, isImage: Boolean, isPdf: Boolean) {
+    private fun showPdfFile(imageString: String, isImage: Boolean, isPdf: Boolean) {
         showProgress()
         pdfView!!.invalidate()
         pdfView!!.settings.javaScriptEnabled = true

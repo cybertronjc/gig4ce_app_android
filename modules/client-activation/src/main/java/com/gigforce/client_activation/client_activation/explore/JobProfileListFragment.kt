@@ -126,7 +126,7 @@ class JobProfileListFragment : Fragment(), IOnBackPressedOverride, OnJobSelected
         exploreRv.adapter = jobProfileListAdapter
 
         jobProfileListAdapter.onItemClick = {jpExplore ->
-            Log.d("id", jpExplore.id)
+            Log.d("id", jpExplore.id + "")
             val id = jpExplore?.id ?: ""
             val title = jpExplore?.title ?: ""
             Log.d("title", jpExplore.title + "id $id")
@@ -393,7 +393,7 @@ class JobProfileListFragment : Fragment(), IOnBackPressedOverride, OnJobSelected
     }
 
     override fun onJobSelected(jpExplore: JobProfileDVM) {
-        Log.d("id", jpExplore.id)
+        Log.d("id", jpExplore.id + "")
         val id = jpExplore?.id ?: ""
         val title = jpExplore?.title ?: ""
         Log.d("title", jpExplore.title + "id $id")

@@ -295,7 +295,7 @@ class CalendarHomeScreen : Fragment(),
 
         try {
             result = context?.packageManager
-                ?.getPackageInfo(context?.packageName, 0)
+                ?.getPackageInfo(context?.packageName!!, 0)
                 ?.versionName ?: ""
         } catch (e: PackageManager.NameNotFoundException) {
 

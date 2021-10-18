@@ -136,7 +136,7 @@ class PhotoCrop : BaseActivity() {
         purpose = if (savedInstanceState != null)
             savedInstanceState.getString(INTENT_EXTRA_PURPOSE)!!
         else
-            intent.getStringExtra(INTENT_EXTRA_PURPOSE)
+            intent.getStringExtra(INTENT_EXTRA_PURPOSE) ?: ""
 
         if (purpose != PURPOSE_VERIFICATION) {
             cl_photo_crop.setBackgroundColor(getColor(R.color.gray_chat_module))
@@ -173,6 +173,7 @@ class PhotoCrop : BaseActivity() {
             }
         })
     }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString("purpose", purpose)
@@ -180,8 +181,8 @@ class PhotoCrop : BaseActivity() {
 
     private fun profilePictureOptions() {
         Log.e("PHOTO_CROP", "profile picture options started")
-        CLOUD_OUTPUT_FOLDER = intent.getStringExtra("folder")
-        incomingFile = intent.getStringExtra("file")
+        CLOUD_OUTPUT_FOLDER = intent.getStringExtra("folder") ?: ""
+        incomingFile = intent.getStringExtra("file") ?: ""
         cropX = 1F
         cropY = 1F
         PREFIX = "profile_" + intent.getStringExtra("uid")
@@ -198,7 +199,7 @@ class PhotoCrop : BaseActivity() {
 
     private fun verificationOptions() {
         Log.e("PHOTO_CROP", "verification options started")
-        CLOUD_OUTPUT_FOLDER = intent.getStringExtra("folder")
+        CLOUD_OUTPUT_FOLDER = intent.getStringExtra("folder") ?: ""
         incomingFile = "verification_" + intent.getStringExtra("file")
         cropX = 7F
         cropY = 5F
