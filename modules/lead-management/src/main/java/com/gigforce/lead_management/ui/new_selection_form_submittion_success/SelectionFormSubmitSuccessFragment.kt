@@ -117,6 +117,8 @@ class SelectionFormSubmitSuccessFragment : BaseFragment2<FragmentNewSelectionFor
                 false
             )
         }
+        toolbar.makeBackgroundMoreRound()
+        toolbar.makeTitleBold()
 
         shareLinkLayout.setOnClickListener {
             shareToAnyApp(whatsappTemplateModel.shareLink)
