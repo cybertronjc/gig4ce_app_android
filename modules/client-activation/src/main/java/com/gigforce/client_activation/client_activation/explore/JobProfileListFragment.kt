@@ -264,6 +264,7 @@ class JobProfileListFragment : Fragment(), IOnBackPressedOverride, OnJobSelected
                 //jobProfileListAdapter.filter.filter("")
                 jobProfileRequestModelCurrent.text = ""
                 jobProfilesList.clear()
+                exploreRv.adapter?.notifyDataSetChanged()
                 currentPage = 1
                 jobProfileRequestModelCurrent.pageNo = currentPage
                 viewModel.getAllJobProfiles(jobProfileRequestModelCurrent)
