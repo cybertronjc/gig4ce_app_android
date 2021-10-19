@@ -70,7 +70,8 @@ class JobProfileListAdapter(private val context: Context, private val clientActi
         this.selectedItemIndex = -1
         this.originalJobList = contacts
         this.filteredJobList = contacts
-        notifyItemRangeRemoved(0, filteredJobList.size)
+        //notifyItemRangeRemoved(0, filteredJobList.size)
+        notifyDataSetChanged()
     }
 
 //    fun updateList(list: List<JobProfileDVM>){
