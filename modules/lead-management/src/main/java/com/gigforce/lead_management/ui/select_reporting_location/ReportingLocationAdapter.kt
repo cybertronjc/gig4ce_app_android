@@ -109,7 +109,7 @@ class ReportingLocationAdapter(
         }
 
         override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-            val filterResult = results?.values as ArrayList<ReportingLocationsItem>
+            val filterResult = results?.values as? ArrayList<ReportingLocationsItem>
             filteredLocationList = if (filterResult.isNullOrEmpty()) emptyList() else filterResult
             notifyDataSetChanged()
         }
