@@ -46,6 +46,7 @@ sealed class LeadManagementSharedViewModelState {
     ): LeadManagementSharedViewModelState()
 
     object OneOrMoreSelectionsDropped : LeadManagementSharedViewModelState()
+    object JoiningAdded: LeadManagementSharedViewModelState()
 }
 
 class LeadManagementSharedViewModel : ViewModel() {
@@ -127,5 +128,9 @@ class LeadManagementSharedViewModel : ViewModel() {
     fun oneOrMoreSelectionsDropped()= viewModelScope.launch{
         _viewState.value = LeadManagementSharedViewModelState.OneOrMoreSelectionsDropped
         _viewStateFlow.send(LeadManagementSharedViewModelState.OneOrMoreSelectionsDropped)
+    }
+    fun joiningAdded()= viewModelScope.launch{
+        _viewState.value = LeadManagementSharedViewModelState.JoiningAdded
+        _viewStateFlow.send(LeadManagementSharedViewModelState.JoiningAdded)
     }
 }

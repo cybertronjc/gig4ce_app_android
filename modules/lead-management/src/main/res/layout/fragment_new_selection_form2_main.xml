@@ -40,10 +40,11 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="4dp"
+                    android:background="@drawable/drop_shadow_background_draw"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     app:cardCornerRadius="6dp"
-                    app:cardElevation="4dp">
+                    app:cardElevation="8dp">
 
                     <LinearLayout
                         android:id="@+id/select_city_layout"
@@ -112,10 +113,11 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="4dp"
+                    android:background="@drawable/drop_shadow_background_draw"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     app:cardCornerRadius="6dp"
-                    app:cardElevation="4dp">
+                    app:cardElevation="8dp">
 
                     <LinearLayout
                         android:id="@+id/select_reporting_location_layout"

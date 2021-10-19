@@ -278,15 +278,17 @@ class Joining2RecyclerItemView(
             val diffmin = diff / (60 * 1000)
             val diffsec = diff  / 1000
             if(diffDays in 1..7){
-                conversionTime+=diffDays.toString()+" days ago"
+                conversionTime+=diffDays.toString()+context.getString(R.string.days_ago)
             }else if (diffDays > 7){
                 conversionTime+= "on "+getFormattedDate(date1)
             } else if(diffhours>1){
-                conversionTime+=(diffhours-diffDays*24).toString()+" hours ago"
+                conversionTime+=(diffhours-diffDays*24).toString()+context.getString(R.string.hours_ago)
             }else if(diffmin>1){
-                conversionTime+=(diffmin-diffhours*60).toString()+" min ago"
+                conversionTime+=(diffmin-diffhours*60).toString()+context.getString(R.string.mins_ago)
             }else if(diffsec>1){
-                conversionTime+=(diffsec-diffmin*60).toString()+" sec ago"
+                conversionTime+=(diffsec-diffmin*60).toString()+context.getString(R.string.sec_ago)
+            }else {
+                conversionTime+=context.getString(R.string.moments_ago)
             }
         }catch (ex:java.lang.Exception){
             Log.d("formatTimeAgo",ex.toString())
