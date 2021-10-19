@@ -40,6 +40,7 @@
             android:text="@string/drop_selection_lead"
             android:textAlignment="center"
             android:gravity="center"
+            android:visibility="gone"
             android:fontFamily="@font/lato_bold"
             android:textColor="@color/pink_text"
             android:background="@drawable/bottom_secondary_button_background"
