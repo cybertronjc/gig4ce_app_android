@@ -289,16 +289,20 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
                 when (it) {
                     LeadManagementSharedViewModelState.JoiningAdded -> {
                         val r = Runnable {
-                            viewBinding.swipeRefresh.isRefreshing = true
-                            viewModel.resetViewModel()
-                            //viewBinding.appBarComp.setAppBarTitle(getString(R.string.joinings_lead))
-                            if (title.isNotBlank())
-                                viewBinding.appBarComp.setAppBarTitle(title)
-                            else
-                                viewBinding.appBarComp.setAppBarTitle(context?.getString(R.string.joinings_lead))
-                            viewBinding.joinNowButton.text = getString(R.string.add_new_lead)
-                            dropJoining?.clear()
-                            viewModel.getJoinings()
+                            try {
+                                viewBinding.swipeRefresh.isRefreshing = true
+                                viewModel.resetViewModel()
+                                //viewBinding.appBarComp.setAppBarTitle(getString(R.string.joinings_lead))
+                                if (title.isNotBlank())
+                                    viewBinding.appBarComp.setAppBarTitle(title)
+                                else
+                                    viewBinding.appBarComp.setAppBarTitle(context?.getString(R.string.joinings_lead))
+                                viewBinding.joinNowButton.text = getString(R.string.add_new_lead)
+                                dropJoining?.clear()
+                                viewModel.getJoinings()
+                            }catch(e: Exception){
+                                e.printStackTrace()
+                            }
                         }
                         Handler().postDelayed(r, 1000)
 
