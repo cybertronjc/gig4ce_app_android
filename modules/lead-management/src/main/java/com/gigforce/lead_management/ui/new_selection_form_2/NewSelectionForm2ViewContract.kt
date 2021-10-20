@@ -13,7 +13,8 @@ sealed class NewSelectionForm2ViewState {
     data class LocationAndTlDataLoaded(
         val selectedCity : String?,
         val selectedReportingLocation : String?,
-        val shiftAndTls : JoiningLocationTeamLeadersShifts
+        val shiftAndTls : JoiningLocationTeamLeadersShifts,
+        val locationType: String?
     ) : NewSelectionForm2ViewState()
 
     data class ErrorWhileLoadingLocationAndTlData(

@@ -40,10 +40,11 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="4dp"
+                    android:background="@drawable/drop_shadow_background_draw"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     app:cardCornerRadius="6dp"
-                    app:cardElevation="4dp">
+                    app:cardElevation="8dp">
 
                     <LinearLayout
                         android:id="@+id/select_city_layout"
@@ -86,6 +87,7 @@
                     android:visibility="gone" />
 
                 <LinearLayout
+                    android:id="@+id/reporting_location_label_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
@@ -106,16 +108,18 @@
                 </LinearLayout>
 
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/select_reporting_location_cardlayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="4dp"
+                    android:background="@drawable/drop_shadow_background_draw"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     app:cardCornerRadius="6dp"
-                    app:cardElevation="4dp">
+                    app:cardElevation="8dp">
 
                     <LinearLayout
                         android:id="@+id/select_reporting_location_layout"
@@ -312,7 +316,7 @@
             android:layout_marginStart="@dimen/size_16"
             android:layout_marginEnd="@dimen/size_16"
             android:layout_marginBottom="@dimen/size_16"
-            android:fontFamily="@font/lato"
+            android:fontFamily="@font/lato_bold"
             android:paddingTop="12dp"
             android:paddingBottom="12dp"
             android:text="@string/submit_lead"

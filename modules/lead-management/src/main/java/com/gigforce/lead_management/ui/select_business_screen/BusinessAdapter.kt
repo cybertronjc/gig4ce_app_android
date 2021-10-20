@@ -51,7 +51,7 @@ class BusinessAdapter(
         if (selectedId == null)
             return null
         else {
-            return filteredBusinessList[getIndexFromId(selectedId!!)]
+            return originalBusinessList[getIndexFromIdFromOriginalList(selectedId!!)]
         }
     }
 
@@ -114,6 +114,11 @@ class BusinessAdapter(
         override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
             filteredBusinessList = results?.values as ArrayList<JoiningBusinessAndJobProfilesItem>
             notifyDataSetChanged()
+
+            onBusinesssSelectedListener?.onBusinessFiltered(
+                businessCountVisibleAfterFiltering =  filteredBusinessList.size,
+                selectedBusinessVisible = filteredBusinessList.find { it.id == selectedId } != null
+            )
         }
     }
 
@@ -196,9 +201,25 @@ class BusinessAdapter(
             filteredBusinessList.indexOf(city)
     }
 
+    fun getIndexFromIdFromOriginalList(
+        id: String
+    ): Int {
+        val city = originalBusinessList.find { it.id == id }
+
+        return if (city == null)
+            return -1
+        else
+            originalBusinessList.indexOf(city)
+    }
+
 
 
     interface OnBusinessSelectedListener{
+
+        fun onBusinessFiltered(
+            businessCountVisibleAfterFiltering : Int,
+            selectedBusinessVisible : Boolean
+        )
 
         fun onBusinessSelected(businessSelected : JoiningBusinessAndJobProfilesItem)
     }
