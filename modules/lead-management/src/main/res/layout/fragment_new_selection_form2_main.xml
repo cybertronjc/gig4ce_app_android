@@ -87,6 +87,7 @@
                     android:visibility="gone" />
 
                 <LinearLayout
+                    android:id="@+id/reporting_location_label_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
@@ -107,6 +108,7 @@
                 </LinearLayout>
 
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/select_reporting_location_cardlayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"

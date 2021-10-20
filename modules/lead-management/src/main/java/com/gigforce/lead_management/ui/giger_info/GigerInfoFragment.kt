@@ -214,7 +214,7 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
             } else {
                  it.checkList?.let {
                 it.forEachIndexed { index, checkListItem ->
-                    val itemData = ApplicationChecklistRecyclerItemData.ApplicationChecklistItemData(checkListItem.name, checkListItem.status, checkListItem.optional)
+                    val itemData = ApplicationChecklistRecyclerItemData.ApplicationChecklistItemData(checkListItem.name, checkListItem.status, checkListItem.optional, checkListItem.frontImage , checkListItem.backImage)
                     checkListItemData.add(itemData)
                 }
                 if (checkListItemData.size > 0){

@@ -204,7 +204,8 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                 is NewSelectionForm2ViewState.LocationAndTlDataLoaded -> showMainForm(
                     state.shiftAndTls,
                     state.selectedCity,
-                    state.selectedReportingLocation
+                    state.selectedReportingLocation,
+                    state.showReportingLocation
                 )
                 is NewSelectionForm2ViewState.ErrorWhileLoadingLocationAndTlData -> showErrorInLoadingBusinessAndJobProfiles(
                     state.error
@@ -350,7 +351,8 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
     private fun showMainForm(
         shiftAndTls: JoiningLocationTeamLeadersShifts,
         selectedCity: String?,
-        selectedReportingLocation: String?
+        selectedReportingLocation: String?,
+        showReportingLocation: Boolean?
     ) = viewBinding.apply {
         stopShimmer(
             dataLoadingShimmerContainer,
@@ -366,6 +368,14 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
             mainForm.citySelectedLabel.setTypeface(mainForm.citySelectedLabel.typeface,Typeface.BOLD)
         } else{
             mainForm.citySelectedLabel.text = getString(R.string.click_to_select_city_lead)
+        }
+
+        if (showReportingLocation == true){
+            mainForm.reportingLocationLabelLayout.visible()
+            mainForm.selectReportingLocationCardlayout.visible()
+        }else{
+            mainForm.reportingLocationLabelLayout.gone()
+            mainForm.selectReportingLocationCardlayout.gone()
         }
 
         if(selectedReportingLocation != null) {

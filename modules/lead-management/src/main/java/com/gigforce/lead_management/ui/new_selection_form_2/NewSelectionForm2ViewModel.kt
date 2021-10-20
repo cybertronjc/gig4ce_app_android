@@ -42,6 +42,7 @@ class NewSelectionForm2ViewModel @Inject constructor(
     private var selectedDateOfJoining: LocalDate = LocalDate.now()
     private var selectedCity: ReportingLocationsItem? = null
     private var selectedReportingLocation: ReportingLocationsItem? = null
+    private var showReportingLocation: Boolean? = null
     private var selectedTL: BusinessTeamLeadersItem? = null
     private lateinit var joiningLocationsAndTLs: JoiningLocationTeamLeadersShifts
     private lateinit var joiningRequest: SubmitJoiningRequest
@@ -182,7 +183,8 @@ class NewSelectionForm2ViewModel @Inject constructor(
             _viewState.value = NewSelectionForm2ViewState.LocationAndTlDataLoaded(
                 selectedCity?.name,
                 selectedReportingLocation?.name,
-                joiningLocationsAndTLs
+                joiningLocationsAndTLs,
+                showReportingLocation
             )
             return@launch
         }
@@ -217,7 +219,8 @@ class NewSelectionForm2ViewModel @Inject constructor(
                 NewSelectionForm2ViewState.LocationAndTlDataLoaded(
                     selectedCity?.name,
                     selectedReportingLocation?.name,
-                    locationAndTlsData
+                    locationAndTlsData,
+                    showReportingLocation
                 )
         } catch (e: Exception) {
             logger.e(
