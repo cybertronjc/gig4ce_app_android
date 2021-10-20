@@ -34,6 +34,9 @@ data class JobProfilesItem(
     @field:SerializedName("id")
     val id: String? = null,
 
+    @field:SerializedName("locationType")
+    val locationType: String? = null,
+
     @field:SerializedName("dynamicInputFields")
     var dynamicInputFields: List<JobProfileDependentDynamicInputField> = emptyList(),
 

@@ -1,6 +1,7 @@
 package com.gigforce.lead_management.ui.new_selection_form_2
 
 import android.content.Context
+import android.util.Log
 import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import androidx.lifecycle.LiveData
@@ -182,7 +183,8 @@ class NewSelectionForm2ViewModel @Inject constructor(
             _viewState.value = NewSelectionForm2ViewState.LocationAndTlDataLoaded(
                 selectedCity?.name,
                 selectedReportingLocation?.name,
-                joiningLocationsAndTLs
+                joiningLocationsAndTLs,
+                joiningRequest.jobProfile.locationType
             )
             return@launch
         }
@@ -217,7 +219,8 @@ class NewSelectionForm2ViewModel @Inject constructor(
                 NewSelectionForm2ViewState.LocationAndTlDataLoaded(
                     selectedCity?.name,
                     selectedReportingLocation?.name,
-                    locationAndTlsData
+                    locationAndTlsData,
+                    joiningRequest.jobProfile.locationType
                 )
         } catch (e: Exception) {
             logger.e(
@@ -298,7 +301,12 @@ class NewSelectionForm2ViewModel @Inject constructor(
             )
             return
         }
-        joiningRequest.reportingLocation = selectedReportingLocation
+        if (joiningRequest.jobProfile.locationType == "On Site"){
+            joiningRequest.reportingLocation = selectedReportingLocation
+        }else{
+            joiningRequest.reportingLocation = null
+        }
+
         joiningRequest.assignGigsFrom = dateFormatter.format(selectedDateOfJoining)
 
         val selectedShift = joiningLocationsAndTLs.shiftTiming.firstOrNull()
