@@ -6,6 +6,7 @@ import android.content.Context
 import android.os.Build
 import android.text.Html
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,14 +17,19 @@ import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.utils.getCircularProgressDrawable
+import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.utils.GlideApp
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.LayoutApplicationChecklistItemBinding
 import com.gigforce.lead_management.models.ApplicationChecklistRecyclerItemData
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -75,11 +81,20 @@ class AppCheckListRecyclerComponent(
         setStatusIcon(viewData.status)
         showFrontAndBackImage(viewData.status, viewData.frontImage, viewData.backImage)
         viewBinding.frontImage.setOnClickListener {
-            viewData.frontImage?.let { it1 -> openDialogToShowImage(it1) }
-//            openDialogToShowImage("https://miro.medium.com/max/1400/1*QQFj4b9IwXSeKTAvcjurFg.jpeg")
+            viewData.frontImage?.let {
+                getDBImageUrl(it)?.let {
+                    val gsReference = FirebaseStorage.getInstance().getReferenceFromUrl(it)
+                    openDialogToShowImage(gsReference)
+                }
+            }
         }
         viewBinding.backImage.setOnClickListener {
-            viewData.backImage?.let { it1 -> openDialogToShowImage(it1) }
+            viewData.backImage?.let {
+                getDBImageUrl(it)?.let {
+                    val gsReference = FirebaseStorage.getInstance().getReferenceFromUrl(it)
+                    openDialogToShowImage(gsReference)
+                }
+            }
         }
     }
 
@@ -97,37 +112,32 @@ class AppCheckListRecyclerComponent(
     private fun showFrontAndBackImage(status: String, frontImage: String?, backImage: String?){
         //check if the status is completed
         if (status == "Completed"){
-            if (frontImage?.isNotBlank() == true){
+            if (frontImage?.isNullOrBlank() == false){
                 viewBinding.frontImage.visible()
+
                 frontImage?.let {
-                    Glide.with(context)
-                        .load(it)
-                        .placeholder(resources.getDrawable(R.drawable.ic_aadhar_front))
-                        .into(viewBinding.frontImage)
-//                    getDBImageUrl(it)?.let {
-//                        Glide.with(context)
-//                            .load(it)
-//                            .placeholder(getCircularProgressDrawable(context))
-//                            .into(viewBinding.frontImage)
-//                    }
+                    getDBImageUrl(it)?.let {
+                        val gsReference = FirebaseStorage.getInstance().getReferenceFromUrl(it)
+                        Glide.with(context)
+                            .load(gsReference)
+                            .placeholder(getCircularProgressDrawable(context))
+                            .into(viewBinding.frontImage)
+                    }
                 }
             }else{
                 viewBinding.frontImage.gone()
             }
 
-            if (backImage?.isNotBlank() == true){
+            if (backImage?.isNullOrBlank() == false){
                 viewBinding.backImage.visible()
                 backImage?.let {
-                    Glide.with(context)
-                        .load(it)
-                        .placeholder(getCircularProgressDrawable(context))
-                        .into(viewBinding.backImage)
-//                    getDBImageUrl(it)?.let {
-//                        Glide.with(context)
-//                            .load(it)
-//                            .placeholder(getCircularProgressDrawable(context))
-//                            .into(viewBinding.backImage)
-//                    }
+                    getDBImageUrl(it)?.let {
+                        val gsReference = FirebaseStorage.getInstance().getReferenceFromUrl(it)
+                        Glide.with(context)
+                            .load(gsReference)
+                            .placeholder(getCircularProgressDrawable(context))
+                            .into(viewBinding.backImage)
+                    }
                 }
             }else{
                 viewBinding.backImage.gone()
@@ -149,31 +159,22 @@ class AppCheckListRecyclerComponent(
         return null
     }
 
-    fun openDialogToShowImage(path: String){
-//        val materialAlertDialogBuilder = MaterialAlertDialogBuilder(context)
-//        val alertDialogView = LayoutInflater.from(context)
-//            .inflate(R.layout.image_layout_dialog, null, false)
-//
-//        // Building the Alert dialog using materialAlertDialogBuilder instance
-//        materialAlertDialogBuilder.setView(alertDialogView)
-//            .setTitle("Details")
-//            .setCancelable(true)
-//            .show()
-//
-//        val docImage: ImageView = alertDialogView.findViewById(R.id.documentImage)
-//        Glide.with(context)
-//            .load(path)
-//            .placeholder(getCircularProgressDrawable(context))
-//            .into(docImage)
+    fun openDialogToShowImage(path: StorageReference){
+        val materialAlertDialogBuilder = MaterialAlertDialogBuilder(context)
+        val alertDialogView = LayoutInflater.from(context)
+            .inflate(R.layout.image_layout_dialog, null, false)
+        materialAlertDialogBuilder.setView(alertDialogView)
 
-        //navigation.navigateToDocViewerActivity(context, path , "DOC_IMAGE")
-        navigation.navigateToDocViewerActivity(
-            null,
-            path,
-            "document_image",
-            null,
-            context
-        )
+        val docImage: ImageView = alertDialogView.findViewById(R.id.documentImage)
+        Glide.with(context)
+            .load(path)
+            .fitCenter()
+            .placeholder(getCircularProgressDrawable(context))
+            .into(docImage)
+        // Building the Alert dialog using materialAlertDialogBuilder instance
+        materialAlertDialogBuilder
+            .setCancelable(true)
+            .show()
     }
 
 }
