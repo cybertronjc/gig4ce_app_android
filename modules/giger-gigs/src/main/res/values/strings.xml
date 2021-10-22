@@ -305,4 +305,12 @@
     <string name="yes">Yes</string>
     <string name="logins_gigs">Logins</string>
     <string name="no_business_found_for_this_city">No Business found for this city</string>
+    <string name="filter_date_text_giger_gigs">Filter by Selection Date</string>
+    <string name="filter_date_sub_text_giger_gigs">Please select the filter from the following options.</string>
+    <string name="apply_filter_giger_gigs">APPLY FILTER</string>
+    <string name="remove_filter_giger_gigs">REMOVE FILTER</string>
+    <string name="yesterday_giger_gigs">Yesterday</string>
+    <string name="three_days_giger_gigs">Last 3 days</string>
+    <string name="seven_days_giger_gigs">Last 7 days</string>
+    <string name="one_month_giger_gigs">Last 1 month</string>
 </resources>

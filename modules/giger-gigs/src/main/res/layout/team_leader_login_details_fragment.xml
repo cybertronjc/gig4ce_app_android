@@ -12,7 +12,8 @@
             android:id="@+id/appBarComp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:backgroundType="WhiteBar"
+            app:backgroundType="PinkBar"
+            app:isFilterVisible="true"
             android:visibility="visible"
             android:elevation="2dp"
             app:titleText="@string/login_summary"
@@ -115,7 +116,7 @@
                 app:layout_constraintBottom_toTopOf="@id/addNew"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/datecity_rv" />
+                app:layout_constraintTop_toBottomOf="@id/swipeRefresh" />
 
             <Button
                 android:id="@+id/addNew"
