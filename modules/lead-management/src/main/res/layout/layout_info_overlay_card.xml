@@ -107,10 +107,15 @@
 
             <TextView
                 android:id="@+id/locationText"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/location_lead"
+                android:scrollHorizontally="true"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:layout_marginEnd="@dimen/size_16"
                 android:textAppearance="@style/body_primary_2"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/locationTextView"
                 app:layout_constraintStart_toStartOf="@id/guideline2"/>
 
