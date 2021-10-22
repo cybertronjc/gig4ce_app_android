@@ -14,7 +14,7 @@ sealed class NewSelectionForm2ViewState {
         val selectedCity : String?,
         val selectedReportingLocation : String?,
         val shiftAndTls : JoiningLocationTeamLeadersShifts,
-        val showReportingLocation: Boolean?
+        val locationType: String?
     ) : NewSelectionForm2ViewState()
 
     data class ErrorWhileLoadingLocationAndTlData(

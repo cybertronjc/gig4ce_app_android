@@ -1,6 +1,7 @@
 package com.gigforce.lead_management.ui.new_selection_form_2
 
 import android.content.Context
+import android.util.Log
 import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import androidx.lifecycle.LiveData
@@ -42,7 +43,6 @@ class NewSelectionForm2ViewModel @Inject constructor(
     private var selectedDateOfJoining: LocalDate = LocalDate.now()
     private var selectedCity: ReportingLocationsItem? = null
     private var selectedReportingLocation: ReportingLocationsItem? = null
-    private var showReportingLocation: Boolean? = null
     private var selectedTL: BusinessTeamLeadersItem? = null
     private lateinit var joiningLocationsAndTLs: JoiningLocationTeamLeadersShifts
     private lateinit var joiningRequest: SubmitJoiningRequest
@@ -184,7 +184,7 @@ class NewSelectionForm2ViewModel @Inject constructor(
                 selectedCity?.name,
                 selectedReportingLocation?.name,
                 joiningLocationsAndTLs,
-                showReportingLocation
+                joiningRequest.jobProfile.locationType
             )
             return@launch
         }
@@ -220,7 +220,7 @@ class NewSelectionForm2ViewModel @Inject constructor(
                     selectedCity?.name,
                     selectedReportingLocation?.name,
                     locationAndTlsData,
-                    showReportingLocation
+                    joiningRequest.jobProfile.locationType
                 )
         } catch (e: Exception) {
             logger.e(
@@ -301,7 +301,12 @@ class NewSelectionForm2ViewModel @Inject constructor(
             )
             return
         }
-        joiningRequest.reportingLocation = selectedReportingLocation
+        if (joiningRequest.jobProfile.locationType == "On Site"){
+            joiningRequest.reportingLocation = selectedReportingLocation
+        }else{
+            joiningRequest.reportingLocation = null
+        }
+
         joiningRequest.assignGigsFrom = dateFormatter.format(selectedDateOfJoining)
 
         val selectedShift = joiningLocationsAndTLs.shiftTiming.firstOrNull()

@@ -4,6 +4,7 @@ import android.app.DatePickerDialog
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
+import android.util.Log
 import android.widget.DatePicker
 import android.widget.LinearLayout
 import androidx.core.os.bundleOf
@@ -205,7 +206,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                     state.shiftAndTls,
                     state.selectedCity,
                     state.selectedReportingLocation,
-                    state.showReportingLocation
+                    state.locationType
                 )
                 is NewSelectionForm2ViewState.ErrorWhileLoadingLocationAndTlData -> showErrorInLoadingBusinessAndJobProfiles(
                     state.error
@@ -352,7 +353,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         shiftAndTls: JoiningLocationTeamLeadersShifts,
         selectedCity: String?,
         selectedReportingLocation: String?,
-        showReportingLocation: Boolean?
+        locationType: String?
     ) = viewBinding.apply {
         stopShimmer(
             dataLoadingShimmerContainer,
@@ -370,7 +371,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
             mainForm.citySelectedLabel.text = getString(R.string.click_to_select_city_lead)
         }
 
-        if (showReportingLocation == true){
+        if (locationType == "On Site"){
             mainForm.reportingLocationLabelLayout.visible()
             mainForm.selectReportingLocationCardlayout.visible()
         }else{
