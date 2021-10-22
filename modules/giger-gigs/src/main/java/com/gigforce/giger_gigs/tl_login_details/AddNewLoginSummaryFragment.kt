@@ -141,7 +141,6 @@ class AddNewLoginSummaryFragment : Fragment() {
         } else {
             viewBinding.submit.visible()
         }
-
     }
 
     private fun initToolbar() = viewBinding.apply {
@@ -154,6 +153,9 @@ class AddNewLoginSummaryFragment : Fragment() {
             } else {
                 setAppBarTitle(context.getString(R.string.add_new_login_summary_giger_gigs).toString())
             }
+            changeBackButtonDrawable()
+            makeBackgroundMoreRound()
+            makeTitleBold()
             setBackButtonListener(View.OnClickListener {
                 activity?.onBackPressed()
             })
