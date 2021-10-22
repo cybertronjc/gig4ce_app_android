@@ -183,7 +183,7 @@
         <View
             android:id="@+id/bottom_sheet_shadow_view"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="290dp"
             android:background="#90979797"
             android:clickable="true"
             android:elevation="30dp"
@@ -199,7 +199,14 @@
         app:layout_anchor="@+id/constraintLayout2"
         app:layout_anchorGravity="center">
 
-
+        <View
+            android:id="@+id/oval_gradient_iv1"
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+            android:elevation="10dp"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <LinearLayout
@@ -210,14 +217,13 @@
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@+id/oval_gradient_iv1">
 
             <com.gigforce.giger_app.components.CalendarView
                 android:id="@+id/calendarView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/main_calendar_rect_border"
-                android:paddingTop="30dp" />
+                android:background="@drawable/main_calendar_rect_border"/>
         </LinearLayout>
 
         <View

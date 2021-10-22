@@ -163,8 +163,8 @@ class CalendarHomeScreen : Fragment(),
             }
         })
         arrCalendarDependent =
-//            arrayOf(calendar_dependent, margin_40, below_oval, calendar_cv, bottom_sheet_top_shadow)
-            arrayOf(calendar_dependent, calendar_cv, bottom_sheet_top_shadow)
+            arrayOf(calendar_dependent, calendar_cv, bottom_sheet_top_shadow,oval_gradient_iv1)
+//            arrayOf(calendar_dependent, calendar_cv, bottom_sheet_top_shadow)
 
         selectedMonthModel = CalendarView.MonthModel(Calendar.getInstance().get(Calendar.MONTH))
         initializeViews()
@@ -348,6 +348,9 @@ class CalendarHomeScreen : Fragment(),
         date_container.setOnClickListener {
             changeVisibilityCalendarView()
         }
+        oval_gradient_iv.setOnClickListener{
+            changeVisibilityCalendarView()
+        }
         calendarView.setMonthChangeListener(object :
             CalendarView.MonthChangeAndDateClickedListener {
             override fun onMonthChange(monthModel: CalendarView.MonthModel) {
@@ -388,7 +391,7 @@ class CalendarHomeScreen : Fragment(),
                 "BottomSheetState ",
                 "changeVisibilityCalendarView  : ${viewModel.currentBottomSheetState}"
             )
-            extendedBottomSheetBehavior.state = viewModel.currentBottomSheetState
+            extendedBottomSheetBehavior.state =  ExtendedBottomSheetBehavior.STATE_COLLAPSED//viewModel.currentBottomSheetState
             extendedBottomSheetBehavior.isAllowUserDragging = false
         } else {
             if (selectedMonthModel.days != null && selectedMonthModel.days.size == 1) {
