@@ -16,8 +16,6 @@ data class JoiningLocationTeamLeadersShifts(
 	@field:SerializedName("shiftTiming")
 	val shiftTiming: List<ShiftTimingItem>,
 
-	@field:SerializedName("showReportingLocation")
-	val showReportingLocation: Boolean? = false
 )
 
 @Parcelize
