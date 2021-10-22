@@ -57,6 +57,34 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/divider3"/>
 
+    <ImageView
+        android:id="@+id/frontImage"
+        android:layout_width="50dp"
+        android:layout_height="25dp"
+        android:visibility="gone"
+        android:src="@drawable/ic_aadhar_front"
+        android:layout_marginTop="@dimen/size_20"
+        android:layout_marginBottom="@dimen/size_20"
+        android:layout_marginEnd="@dimen/size_8"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/backImage"
+        app:layout_constraintBottom_toTopOf="@id/divider3"
+        android:layout_marginStart="@dimen/size_16"/>
+
+    <ImageView
+        android:id="@+id/backImage"
+        android:layout_width="50dp"
+        android:layout_height="25dp"
+        android:src="@drawable/ic_aadhar_front"
+        android:visibility="gone"
+        android:layout_marginTop="@dimen/size_20"
+        android:layout_marginBottom="@dimen/size_20"
+        android:layout_marginEnd="@dimen/size_8"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/divider3"
+        android:layout_marginStart="@dimen/size_16"/>
+
     <View
         android:id="@+id/divider3"
         android:layout_width="wrap_content"
