@@ -14,7 +14,9 @@ import android.view.Window
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.getSystemService
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.os.bundleOf
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.utils.getCircularProgressDrawable
 import com.gigforce.core.crashlytics.CrashlyticsLogger
@@ -26,6 +28,8 @@ import com.gigforce.core.utils.GlideApp
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.LayoutApplicationChecklistItemBinding
 import com.gigforce.lead_management.models.ApplicationChecklistRecyclerItemData
+import com.gigforce.lead_management.ui.drop_selection.DropSelectionBottomSheetDialogFragment
+import com.gigforce.lead_management.ui.giger_info.ShowCheckListDocsBottomSheet
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.storage.FirebaseStorage
@@ -80,21 +84,21 @@ class AppCheckListRecyclerComponent(
         viewBinding.statusText.text = if (viewData.status == "Pending") context.getString(R.string.pending_lead) else ""
         setStatusIcon(viewData.status)
         showFrontAndBackImage(viewData.status, viewData.frontImage, viewData.backImage)
-        viewBinding.frontImage.setOnClickListener {
-            viewData.frontImage?.let {
-                getDBImageUrl(it)?.let {
-                    val gsReference = FirebaseStorage.getInstance().getReferenceFromUrl(it)
-                    openDialogToShowImage(gsReference)
-                }
+        viewBinding.viewPhotoText.setOnClickListener {
+            val arrayList = arrayListOf<String>()
+            if (!viewData.frontImage.isNullOrBlank()){
+                arrayList.add(getDBImageUrl(viewData.frontImage.toString()).toString())
             }
-        }
-        viewBinding.backImage.setOnClickListener {
-            viewData.backImage?.let {
-                getDBImageUrl(it)?.let {
-                    val gsReference = FirebaseStorage.getInstance().getReferenceFromUrl(it)
-                    openDialogToShowImage(gsReference)
-                }
+            if (!viewData.backImage.isNullOrBlank()){
+                arrayList.add(getDBImageUrl(viewData.backImage.toString()).toString())
             }
+
+            navigation.navigateTo("LeadMgmt/showDocImages",
+            bundleOf(
+                ShowCheckListDocsBottomSheet.INTENT_TOP_TITLE to viewData.checkName,
+                ShowCheckListDocsBottomSheet.INTENT_IMAGES_TO_SHOW to arrayList
+            ))
+
         }
     }
 
@@ -112,36 +116,12 @@ class AppCheckListRecyclerComponent(
     private fun showFrontAndBackImage(status: String, frontImage: String?, backImage: String?){
         //check if the status is completed
         if (status == "Completed"){
-            if (frontImage?.isNullOrBlank() == false){
-                viewBinding.frontImage.visible()
-
-                frontImage?.let {
-                    getDBImageUrl(it)?.let {
-                        val gsReference = FirebaseStorage.getInstance().getReferenceFromUrl(it)
-                        Glide.with(context)
-                            .load(gsReference)
-                            .placeholder(getCircularProgressDrawable(context))
-                            .into(viewBinding.frontImage)
-                    }
-                }
+            if (frontImage?.isNullOrBlank() == false || backImage?.isNullOrBlank() == false){
+                viewBinding.viewPhotoText.visible()
             }else{
-                viewBinding.frontImage.gone()
+                viewBinding.viewPhotoText.gone()
             }
 
-            if (backImage?.isNullOrBlank() == false){
-                viewBinding.backImage.visible()
-                backImage?.let {
-                    getDBImageUrl(it)?.let {
-                        val gsReference = FirebaseStorage.getInstance().getReferenceFromUrl(it)
-                        Glide.with(context)
-                            .load(gsReference)
-                            .placeholder(getCircularProgressDrawable(context))
-                            .into(viewBinding.backImage)
-                    }
-                }
-            }else{
-                viewBinding.backImage.gone()
-            }
         }
     }
 
