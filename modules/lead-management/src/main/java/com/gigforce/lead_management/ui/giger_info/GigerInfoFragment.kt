@@ -31,6 +31,7 @@ import com.gigforce.lead_management.databinding.GigerInfoFragmentBinding
 import com.gigforce.lead_management.models.ApplicationChecklistRecyclerItemData
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
 import com.gigforce.lead_management.ui.drop_selection.DropSelectionBottomSheetDialogFragment
+import com.gigforce.lead_management.ui.drop_selection_2.DropSelectionFragment2
 import com.gigforce.lead_management.ui.giger_info.views.AppCheckListRecyclerComponent
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -270,7 +271,7 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
     private fun initListeners() = viewBinding.apply {
         bottomButtonLayout.dropGigerBtn.setOnClickListener {
             //drop functionality
-            DropSelectionBottomSheetDialogFragment.launch(
+            DropSelectionFragment2.launch(
                 arrayListOf(joiningId),
                 childFragmentManager
             )

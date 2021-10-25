@@ -1084,6 +1084,10 @@
         android:id="@+id/dropSelectionBottomSheetDialogFragment"
         android:name="com.gigforce.lead_management.ui.drop_selection.DropSelectionBottomSheetDialogFragment"
         android:label="DropSelectionBottomSheetDialogFragment" />
+    <dialog
+        android:id="@+id/dropSelectionFragment2"
+        android:name="com.gigforce.lead_management.ui.drop_selection_2.DropSelectionFragment2"
+        android:label="DropSelectionFragment2" />
 
 </navigation>
 

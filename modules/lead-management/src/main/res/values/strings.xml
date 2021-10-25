@@ -200,6 +200,8 @@
     <string name="drop_bank_verification">Please get the <b> bank verification </b> done by giger before dropping.</string>
     <string name="drop_last_day_working"><b>Please enter the last date of working.</b></string>
     <string name="drop_selection_success"><b>Selection droped successfully!</b></string>
-    <string name="change_date_lead">Change Date</string>
     <string name="confirm_lead">Confirm</string>
+    <string name="select_an_option_lead">Please select an option.</string>
+    <string name="giger_not_joined_lead">Giger has not joined the gig.</string>
+    <string name="giger_joined_lead">Giger has resigned after working.</string>
 </resources>
