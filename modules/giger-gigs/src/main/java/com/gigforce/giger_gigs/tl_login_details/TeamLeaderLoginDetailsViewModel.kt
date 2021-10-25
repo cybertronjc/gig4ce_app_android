@@ -86,6 +86,9 @@ class TeamLeaderLoginDetailsViewModel @Inject constructor(
         val filteredList = response.filter {
             if (filterDaysVM == null || filterDaysVM == -1)
                 true
+            else if (filterDaysVM in 0..1){
+                getDateDifference(it.date) == filterDaysVM!!
+            }
             else {
                 getDateDifference(it.date) <= filterDaysVM!!
             }
