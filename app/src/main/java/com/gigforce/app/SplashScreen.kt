@@ -46,13 +46,22 @@ class SplashScreen : AppCompatActivity() {
                         if (parameters != null && parameters.size > 0) {
                             val param = parameters[parameters.size - 1]
                             if (param == "login_summary") {
-                                Log.d("datahere", "login summary")
                                 sharedPreAndCommonUtilInterface.saveDataBoolean(
                                     "deeplink_login",
                                     true
                                 )
                                 mainIntent.putExtra(
                                     StringConstants.LOGIN_SUMMARY_VIA_DEEP_LINK.value,
+                                    true
+                                )
+                                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                            }else if (param == "onboarding-form"){
+                                sharedPreAndCommonUtilInterface.saveDataBoolean(
+                                    "deeplink_onboarding",
+                                    true
+                                )
+                                mainIntent.putExtra(
+                                    StringConstants.ONBOARDING_FORM_VIA_DEEP_LINK.value,
                                     true
                                 )
                                 mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
