@@ -12,6 +12,7 @@ class NavForCommonModule(
         baseImplementation.registerRoute("${moduleName}/viewImageFullScreen", R.id.viewFullScreenImageDialogFragment)
         baseImplementation.registerRoute("${moduleName}/invite_friend", R.id.referrals_fragment)
         baseImplementation.registerRoute("${moduleName}/landingScreen", R.id.landinghomefragment)
+        baseImplementation.registerRoute("${moduleName}/calendarScreen", R.id.mainHomeScreen)
 
 
 
