@@ -10,7 +10,9 @@ open class ApplicationChecklistRecyclerItemData(
     data class ApplicationChecklistItemData(
         val checkName: String,
         val status: String,
-        val isOptional: Boolean
+        val isOptional: Boolean,
+        val frontImage: String?,
+        val backImage: String?
     ): ApplicationChecklistRecyclerItemData(
         LeadActivationViewTypes.GigerInfo
     )
