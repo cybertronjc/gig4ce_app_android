@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/drop_selection_title"
+            android:textColor="#202325"
+            android:layout_marginStart="@dimen/size_20"
+            android:layout_marginEnd="@dimen/size_20"
+            android:fontFamily="@font/lato_bold"
+            android:lineHeight="@dimen/font_12"
+            android:text="@string/drop_selection_lead"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp" />
+
+        <TextView
+            android:id="@+id/drop_selection_label"
+            style="@style/body_primary"
+            android:textColor="#202325"
+            android:text="@string/drop_last_day_working"
+            android:layout_marginStart="@dimen/size_20"
+            android:layout_marginEnd="@dimen/size_20"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/changeDateLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_20">
+
+            <TextView
+                android:id="@+id/dateText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="25 Oct, 2021"
+                android:textColor="#202325"
+                android:layout_marginTop="@dimen/size_4"
+                android:layout_marginStart="@dimen/size_20"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+            <TextView
+                android:id="@+id/changeDateText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/change_date_lead"
+                android:textColor="@color/colorPrimary"
+                android:layout_marginTop="@dimen/size_4"
+                android:layout_marginEnd="@dimen/size_20"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+            <View
+                android:id="@+id/bottom_view"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/size_2"
+                android:layout_marginStart="@dimen/size_20"
+                android:layout_marginEnd="@dimen/size_20"
+                android:background="@color/bottom_view_divider"
+                app:layout_constraintTop_toBottomOf="@id/dateText"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/confirm_button"
+            android:layout_width="match_parent"
+            android:layout_height="34dp"
+            android:layout_marginStart="@dimen/size_20"
+            android:layout_marginTop="@dimen/size_40"
+            android:layout_marginEnd="@dimen/size_20"
+            android:background="@drawable/bottom_primary_button_background"
+            android:gravity="center"
+            android:textAllCaps="true"
+            android:fontFamily="@font/lato_bold"
+            android:text="@string/confirm_lead"
+            android:textAlignment="center"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:id="@+id/cancelBtn"
+            android:layout_width="match_parent"
+            android:layout_height="34dp"
+            android:layout_marginStart="@dimen/size_20"
+            android:layout_marginTop="@dimen/size_20"
+            android:layout_marginEnd="@dimen/size_20"
+            android:layout_marginBottom="@dimen/size_16"
+            android:background="@drawable/bottom_secondary_button_background"
+            android:gravity="center"
+            android:textAllCaps="true"
+            android:fontFamily="@font/lato_bold"
+            android:text="@string/cancel_lead"
+            android:textAlignment="center"
+            android:textColor="@color/pink_text" />
+
+
+    </LinearLayout>
+</layout>

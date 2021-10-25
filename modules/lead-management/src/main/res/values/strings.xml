@@ -110,7 +110,6 @@
     <string name="app_submitted_lead">Application Submitted</string>
     <string name="application_checklist_lead">Application Checklist</string>
     <string name="call_giger_lead">CALL GIGER</string>
-    <string name="drop_selection_lead">DROP SELECTION</string>
     <string name="giger_name_lead">Giger name</string>
     <string name="del_executive_lead">Delivery Executive</string>
     <string name="company_text_lead">Company</string>
@@ -195,5 +194,12 @@
     <string name="mins_ago"> min ago</string>
     <string name="sec_ago"> sec ago</string>
     <string name="moments_ago"> moments ago</string>
-
+    <string name="drop_selection_lead">Drop Selection</string>
+    <string name="continue_lead">Continue</string>
+    <string name="drop_giger_no_payout">This <b> giger will not receive the payout </b> in coming cycle. Do you want to continue?</string>
+    <string name="drop_bank_verification">Please get the <b> bank verification </b> done by giger before dropping.</string>
+    <string name="drop_last_day_working"><b>Please enter the last date of working.</b></string>
+    <string name="drop_selection_success"><b>Selection droped successfully!</b></string>
+    <string name="change_date_lead">Change Date</string>
+    <string name="confirm_lead">Confirm</string>
 </resources>
