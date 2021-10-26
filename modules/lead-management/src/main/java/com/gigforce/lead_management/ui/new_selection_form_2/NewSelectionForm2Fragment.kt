@@ -10,6 +10,7 @@ import android.widget.LinearLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.gigforce.common_ui.UserInfoImp
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.hideSoftKeyboard
@@ -17,6 +18,7 @@ import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.core.base.BaseFragment2
+import com.gigforce.core.extensions.getTextChangeAsStateFlow
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toLocalDate
 import com.gigforce.core.extensions.visible
@@ -28,6 +30,7 @@ import com.gigforce.lead_management.databinding.FragmentNewSelectionForm2Binding
 import com.gigforce.lead_management.models.WhatsappTemplateModel
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModelState
+import com.gigforce.lead_management.ui.new_selection_form.NewSelectionForm1Events
 import com.gigforce.lead_management.ui.new_selection_form_submittion_success.SelectionFormSubmitSuccessFragment
 import com.gigforce.lead_management.ui.select_city.SelectCityFragment
 import com.gigforce.lead_management.ui.select_reporting_location.SelectReportingLocationFragment
@@ -38,6 +41,11 @@ import com.github.razir.progressbutton.hideProgress
 import com.github.razir.progressbutton.showProgress
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flowOn
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -131,12 +139,28 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
     ) {
         if (viewCreatedForTheFirstTime) {
             showJobProfileRelatedDynamicFields(dynamicInputsFields)
+            setTextWatchers()
         }
 
         initToolbar(viewBinding)
         initListeners(viewBinding)
         initViewModel()
         initSharedViewModel()
+    }
+
+    private fun setTextWatchers() = viewBinding.mainForm.apply{
+
+        lifecycleScope.launchWhenCreated {
+
+            secondaryMobileText.getTextChangeAsStateFlow()
+                .debounce(200)
+                .distinctUntilChanged()
+                .flowOn(Dispatchers.Default)
+                .collect {
+                    viewModel.handleEvent(NewSelectionForm2Events.SecondaryPhoneNumberChanged("+91$it"))
+                }
+        }
+
     }
 
     private fun initListeners(
@@ -327,6 +351,14 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         } else {
             viewBinding.mainForm.reportingLocationError.errorTextview.text = null
             viewBinding.mainForm.reportingLocationError.root.gone()
+        }
+
+        if (errorState.secondaryPhoneNumberError != null) {
+            viewBinding.mainForm.secondaryMobileErrorLayout.root.visible()
+            viewBinding.mainForm.secondaryMobileErrorLayout.errorTextview.text = errorState.secondaryPhoneNumberError
+        } else {
+            viewBinding.mainForm.secondaryMobileErrorLayout.errorTextview.text = null
+            viewBinding.mainForm.secondaryMobileErrorLayout.root.gone()
         }
     }
 

@@ -41,6 +41,7 @@ sealed class NewSelectionForm2ViewState {
         val clientTLError: SpannedString? = null,
         val assignGigsFromError: SpannedString? = null,
         val shiftsError: SpannedString? = null,
+        val secondaryPhoneNumberError: SpannedString? = null
     ) : NewSelectionForm2ViewState()
 
 
@@ -69,6 +70,10 @@ sealed class NewSelectionForm2Events {
     object SelectReportingLocationClicked : NewSelectionForm2Events()
 
     object SelectClientTLClicked : NewSelectionForm2Events()
+
+    data class SecondaryPhoneNumberChanged(
+        val secondaryPhoneNumber : String
+    ) :NewSelectionForm2Events()
 
     data class CitySelected(
         val city: ReportingLocationsItem

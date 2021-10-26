@@ -47,6 +47,7 @@ class NewSelectionForm1ViewModel @Inject constructor(
     private var gigerName: String? = null
     private var selectedBusiness: JoiningBusinessAndJobProfilesItem? = null
     private var selectedJobProfile: JobProfilesItem? = null
+
     private lateinit var joiningBusinessAndJobProfiles: List<JoiningBusinessAndJobProfilesItem>
 
     init {
