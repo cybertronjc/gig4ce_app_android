@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout>
-    <FrameLayout
+    <LinearLayout
+        android:id="@+id/rootLayout"
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,6 +16,11 @@
             android:id="@+id/mainLayout"
             android:visibility="gone"
             layout="@layout/drop_selection_2_bottom_sheet_main"/>
+
+        <include
+            android:id="@+id/bankVerifyLayout"
+            android:visibility="gone"
+            layout="@layout/drop_selection_ask_bank_details_to_verify_layout"/>
 
         <include
             android:id="@+id/lastWorkingLayout"
@@ -31,5 +37,5 @@
             android:visibility="gone"
             layout="@layout/layout_error_with_retry"/>
 
-    </FrameLayout>
+    </LinearLayout>
 </layout>

@@ -64,6 +64,7 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
 
     var gigerPhone = ""
     private lateinit var joiningId: String
+    var isBankDetailVerified = false
 
     override fun viewCreated(viewBinding: GigerInfoFragmentBinding, savedInstanceState: Bundle?) {
         getDataFrom(arguments,savedInstanceState)
@@ -215,6 +216,9 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
             } else {
                  it.checkList?.let {
                 it.forEachIndexed { index, checkListItem ->
+                    if (checkListItem.type == "bank_details" && checkListItem.status == "Completed"){
+                        isBankDetailVerified = true
+                    }
                     val itemData = ApplicationChecklistRecyclerItemData.ApplicationChecklistItemData(checkListItem.name, checkListItem.status, checkListItem.optional)
                     checkListItemData.add(itemData)
                 }
@@ -273,6 +277,7 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
             //drop functionality
             DropSelectionFragment2.launch(
                 arrayListOf(joiningId),
+                isBankDetailVerified,
                 childFragmentManager
             )
         }

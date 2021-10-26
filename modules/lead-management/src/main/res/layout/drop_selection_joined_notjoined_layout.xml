@@ -79,6 +79,7 @@
             android:layout_marginEnd="@dimen/size_20"
             android:background="@drawable/bottom_primary_button_background"
             android:gravity="center"
+            android:enabled="false"
             android:textAllCaps="true"
             android:fontFamily="@font/lato_bold"
             android:text="@string/continue_lead"

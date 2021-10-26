@@ -33,5 +33,9 @@ object DateHelper {
         }
     }
 
+    fun getDateInDDMMMYYYYComma(date: Date): String{
+        return SimpleDateFormat("dd MMM, yyyy").format(date)
+    }
+
 
 }

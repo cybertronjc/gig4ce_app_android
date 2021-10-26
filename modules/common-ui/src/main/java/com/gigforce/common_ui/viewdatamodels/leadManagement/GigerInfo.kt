@@ -49,5 +49,8 @@ data class CheckListItem(
     val optional: Boolean,
 
     @SerializedName("status")
-    val status: String
+    val status: String,
+
+    @SerializedName("type")
+    val type: String,
 ){}
