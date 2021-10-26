@@ -21,7 +21,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -38,11 +37,11 @@ import com.gigforce.common_ui.viewmodels.gig.SharedGigViewModel
 import com.gigforce.common_ui.viewmodels.gig.SharedGigViewState
 import com.gigforce.core.AppConstants
 import com.gigforce.core.IEventTracker
+import com.gigforce.core.ScopedStorageConstants
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.datamodels.gigpage.ContactPerson
 import com.gigforce.core.datamodels.gigpage.Gig
-import com.gigforce.core.datamodels.gigpage.GigOrder
 import com.gigforce.core.datamodels.gigpage.models.AttendanceType
 import com.gigforce.core.datamodels.gigpage.models.OtherOption
 import com.gigforce.core.extensions.gone
@@ -58,7 +57,6 @@ import com.gigforce.giger_gigs.adapters.GigPeopleToExpectAdapterClickListener
 import com.gigforce.giger_gigs.adapters.OtherOptionClickListener
 import com.gigforce.giger_gigs.adapters.OtherOptionsAdapter
 import com.gigforce.giger_gigs.bottomsheets.EarlyOrLateCheckInBottomSheet
-import com.gigforce.giger_gigs.bottomsheets.GigContactPersonBottomSheet
 import com.gigforce.giger_gigs.bottomsheets.PermissionRequiredBottomSheet
 import com.gigforce.giger_gigs.dialogFragments.DeclineGigDialogFragment
 import com.gigforce.giger_gigs.dialogFragments.DeclineGigDialogFragmentResultListener
@@ -88,7 +86,6 @@ import kotlinx.android.synthetic.main.fragment_gig_page_2_main.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_other_options.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_people_to_expect.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_toolbar.*
-import kotlinx.coroutines.launch
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 import java.text.SimpleDateFormat
@@ -649,13 +646,14 @@ class GigPage2Fragment : Fragment(),
         gig_title_tv.text = gig.getGigTitle()
         gig_company_name_tv.text = "${gig.getFullCompanyName()}"
 
-        gig_type.text = if (gig.isFullDay) getString(R.string.full_time_giger_gigs) else getString(R.string.part_time_giger_gigs)
+        gig_type.text =
+            if (gig.isFullDay) getString(R.string.full_time_giger_gigs) else getString(R.string.part_time_giger_gigs)
 
         gig_duration.text =
             ": ${timeFormatter.format(gig.startDateTime.toDate())} - ${
-            timeFormatter.format(
-                gig.endDateTime.toDate()
-            )
+                timeFormatter.format(
+                    gig.endDateTime.toDate()
+                )
             }"
 
         if ((gig.latitude != null && gig.longitude != 0.0) || gig.geoPoint != null) {
@@ -708,25 +706,25 @@ class GigPage2Fragment : Fragment(),
         val status = GigStatus.fromGig(gig)
         //get gigorder
 
-         val IDENTITY_CARD = OtherOption(
+        val IDENTITY_CARD = OtherOption(
             id = ID_IDENTITY_CARD,
             name = getString(R.string.identity_card),
             icon = R.drawable.ic_identity_card
         )
 
-         val OFFER_LETTER = OtherOption(
+        val OFFER_LETTER = OtherOption(
             id = ID_OFFER_LETTER,
             name = getString(R.string.offer_letter),
             icon = R.drawable.ic_offer_letter_pink
         )
 
-         val ATTENDANCE_HISTORY = OtherOption(
+        val ATTENDANCE_HISTORY = OtherOption(
             id = ID_ATTENDANCE_HISTORY,
             name = getString(R.string.attendance_history),
             icon = R.drawable.ic_attendance
         )
 
-         val DECLINE_GIG = OtherOption(
+        val DECLINE_GIG = OtherOption(
             id = ID_DECLINE_GIG,
             name = getString(R.string.decline_gig),
             icon = R.drawable.ic_gig_decline
@@ -794,7 +792,11 @@ class GigPage2Fragment : Fragment(),
             }
             ID_OFFER_LETTER -> {
                 //navigate to show offer letter
-                navigation.navigateToDocViewerActivity(requireActivity(),viewModel.gigOrder?.offerLetter.toString() ?: "" , "OFFER_LETTER")
+                navigation.navigateToDocViewerActivity(
+                    requireActivity(),
+                    viewModel.gigOrder?.offerLetter.toString() ?: "",
+                    "OFFER_LETTER"
+                )
             }
 
             else -> {
@@ -996,19 +998,16 @@ class GigPage2Fragment : Fragment(),
 
         if (askPermissionUsingSystemsdk) {
 
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-                requestPermissions(
+            val permissionToAskList = if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
+
+                if (Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
                     arrayOf(
                         Manifest.permission.ACCESS_COARSE_LOCATION,
                         Manifest.permission.ACCESS_FINE_LOCATION,
                         Manifest.permission.CAMERA,
-                        Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
-                    ),
-                    REQUEST_PERMISSIONS_SYTEM_SDK
-                )
-            } else {
-                requestPermissions(
+                        Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                    )
+                } else {
                     arrayOf(
                         Manifest.permission.ACCESS_COARSE_LOCATION,
                         Manifest.permission.ACCESS_FINE_LOCATION,
@@ -1016,21 +1015,46 @@ class GigPage2Fragment : Fragment(),
                         Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE,
                         Manifest.permission.ACCESS_BACKGROUND_LOCATION
-                    ),
-                    REQUEST_PERMISSIONS_SYTEM_SDK
+                    )
+                }
+            } else {
+                arrayOf(
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
                 )
             }
-        } else {
-            EasyPermissions.requestPermissions(
-                this,
-                getString(R.string.need_to_accept_permission_giger_gigs),
-                REQUEST_PERMISSIONS_DEV_REL_LIB,
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.CAMERA,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
+
+            requestPermissions(
+                permissionToAskList,
+                REQUEST_PERMISSIONS_SYTEM_SDK
             )
+        } else {
+
+            if (Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
+
+                EasyPermissions.requestPermissions(
+                    this,
+                    getString(R.string.need_to_accept_permission_giger_gigs),
+                    REQUEST_PERMISSIONS_DEV_REL_LIB,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.CAMERA
+                )
+            } else {
+                EasyPermissions.requestPermissions(
+                    this,
+                    getString(R.string.need_to_accept_permission_giger_gigs),
+                    REQUEST_PERMISSIONS_DEV_REL_LIB,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                )
+            }
         }
     }
 
@@ -1045,19 +1069,25 @@ class GigPage2Fragment : Fragment(),
             Manifest.permission.CAMERA
         )
         if (!cameraPermissionGranted) {
-            permissionRequiredAndTheirReasons.put("CAMERA", getString(R.string.to_click_image_for_checkin_giger_gigs))
+            permissionRequiredAndTheirReasons.put(
+                "CAMERA",
+                getString(R.string.to_click_image_for_checkin_giger_gigs)
+            )
         }
 
-        val storagePermissionGranted = EasyPermissions.hasPermissions(
-            requireContext(),
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-        )
-        if (!storagePermissionGranted) {
-            permissionRequiredAndTheirReasons.put(
-                "STORAGE",
-                getString(R.string.to_store_image_while_checkin_giger_gigs)
+        if (Build.VERSION.SDK_INT < ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
+
+            val storagePermissionGranted = EasyPermissions.hasPermissions(
+                requireContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
             )
+            if (!storagePermissionGranted) {
+                permissionRequiredAndTheirReasons.put(
+                    "STORAGE",
+                    getString(R.string.to_store_image_while_checkin_giger_gigs)
+                )
+            }
         }
 
         val locationPermissionGranted = EasyPermissions.hasPermissions(
@@ -1155,15 +1185,36 @@ class GigPage2Fragment : Fragment(),
 
     private fun isNecessaryPermissionGranted(): Boolean {
 
-        return EasyPermissions.hasPermissions(
-            requireContext(),
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.CAMERA,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.READ_EXTERNAL_STORAGE
-        )
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+
+            if (Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
+                return EasyPermissions.hasPermissions(
+                    requireContext(),
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.CAMERA
+                )
+            } else {
+                return EasyPermissions.hasPermissions(
+                    requireContext(),
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                )
+            }
+        } else {
+            return EasyPermissions.hasPermissions(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.CAMERA,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            )
+        }
     }
 
     override fun onRequestPermissionsResult(
@@ -1207,9 +1258,5 @@ class GigPage2Fragment : Fragment(),
         private const val MAX_ALLOWED_LOCATION_FROM_GIG_IN_METERS = 200L
 
         const val REMOTE_CONFIG_SHOULD_USE_OLD_CAMERA = "should_use_old_camera"
-
-
     }
-
-
 }

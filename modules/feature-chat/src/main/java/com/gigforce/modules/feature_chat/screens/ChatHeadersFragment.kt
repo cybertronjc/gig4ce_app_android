@@ -1,8 +1,11 @@
 package com.gigforce.modules.feature_chat.screens
 
+import android.app.Activity
 import android.app.NotificationManager
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.text.format.DateUtils
 import android.util.Log
@@ -26,6 +29,9 @@ import com.gigforce.common_ui.chat.models.ChatHeader
 import com.gigforce.common_ui.chat.models.ChatListItemDataObject
 import com.gigforce.common_ui.chat.models.ChatListItemDataWrapper
 import com.gigforce.common_ui.views.GigforceToolbar
+import com.gigforce.core.crashlytics.CrashlyticsLogger
+import com.gigforce.core.documentFileHelper.DocumentPrefHelper
+import com.gigforce.core.documentFileHelper.RequestDocumentTreeAccessFragment
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.recyclerView.CoreRecyclerView
 import com.gigforce.modules.feature_chat.ChatNavigation
@@ -54,6 +60,8 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
 
     @Inject
     lateinit var navigation: INavigation
+    @Inject
+    lateinit var documentPrefHelper : DocumentPrefHelper
 
     private val chatNavigation: ChatNavigation by lazy {
         ChatNavigation(navigation)
@@ -149,8 +157,10 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
             requireActivity(),
             ResourcesCompat.getColor(resources, R.color.lipstick_2, null)
         )
+
         return inflater.inflate(R.layout.fragment_chat_list, container, false)
     }
+
 
     private fun cancelAnyNotificationIfShown() {
         val mNotificationManager =
@@ -158,17 +168,35 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
         mNotificationManager.cancel(67)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == OPEN_DIRECTORY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            val directoryUri = data?.data ?: return
+
+            requireContext().contentResolver.takePersistableUriPermission(
+                directoryUri,
+                Intent.FLAG_GRANT_READ_URI_PERMISSION
+            )
+        }
+    }
+
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         getDataFrom(arguments, savedInstanceState)
         findViews(view)
         initListeners()
         setObserver(this.viewLifecycleOwner)
 
+        if (!documentPrefHelper.documentUriSaved()) {
+            navigation.navigateTo(RequestDocumentTreeAccessFragment.REQUEST_DOCUMENT_TREE_ACCESS_FRAGMENT)
+            return
+        }
+
         if (!isStoragePermissionGranted())
             askForStoragePermission()
 
-        super.onViewCreated(view, savedInstanceState)
     }
 
     var title = ""
@@ -257,30 +285,51 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
 
     private fun askForStoragePermission() {
         Log.v(ChatPageFragment.TAG, "Permission Required. Requesting Permission")
-        requestPermissions(
-            arrayOf(
-                android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                android.Manifest.permission.CAMERA
-            ),
-            23
-        )
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+
+            requestPermissions(
+                arrayOf(
+                    android.Manifest.permission.CAMERA
+                ),
+                23
+            )
+        } else {
+
+            requestPermissions(
+                arrayOf(
+                    android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    android.Manifest.permission.CAMERA
+                ),
+                23
+            )
+        }
     }
 
     private fun isStoragePermissionGranted(): Boolean {
 
-        return ContextCompat.checkSelfPermission(
-            requireContext(),
-            android.Manifest.permission.READ_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(
-            requireContext(),
-            android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(
-            requireContext(),
-            android.Manifest.permission.CAMERA
-        ) == PackageManager.PERMISSION_GRANTED
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+
+            return ContextCompat.checkSelfPermission(
+                requireContext(),
+                android.Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        } else {
+
+            return ContextCompat.checkSelfPermission(
+                requireContext(),
+                android.Manifest.permission.READ_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED
+                    && ContextCompat.checkSelfPermission(
+                requireContext(),
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED
+                    && ContextCompat.checkSelfPermission(
+                requireContext(),
+                android.Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        }
     }
 
     override fun onSearchTextChanged(newText: String) {
@@ -315,6 +364,7 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
     }
 
     companion object {
+        private const val OPEN_DIRECTORY_REQUEST_CODE = 0xf11e
         const val INTENT_EXTRA_SHARED_FILE_DEPLOYED_TO_ITEMS_ONCE = "deployed_once"
     }
 }

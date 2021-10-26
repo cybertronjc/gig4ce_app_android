@@ -93,7 +93,7 @@ class ReportingLocationAdapter(
             if (charString.isEmpty()) {
                 filterResults.values  = originalLocationList
             } else {
-                val filteredList = ArrayList<ReportingLocationsItem>()
+                val filteredList = mutableListOf<ReportingLocationsItem>()
                 for (contact in originalLocationList) {
                     if (contact.name?.contains(
                             charString,
@@ -109,7 +109,7 @@ class ReportingLocationAdapter(
         }
 
         override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-            filteredLocationList = results?.values as ArrayList<ReportingLocationsItem>
+            filteredLocationList = results?.values as List<ReportingLocationsItem>
             notifyDataSetChanged()
         }
     }

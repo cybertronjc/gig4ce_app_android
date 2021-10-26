@@ -8,6 +8,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
@@ -36,6 +37,7 @@ import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.AppConstants
+import com.gigforce.core.ScopedStorageConstants
 import com.gigforce.core.datamodels.verification.BankDetailsDataModel
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.gone
@@ -68,7 +70,8 @@ enum class VerificationScreenStatus {
 
 @AndroidEntryPoint
 class BankAccountFragment : Fragment(),
-    VerificationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener, IOnBackPressedOverride {
+    VerificationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener,
+    IOnBackPressedOverride {
 
     companion object {
         const val REQUEST_CODE_CAPTURE_BANK_PHOTO = 2333
@@ -115,9 +118,13 @@ class BankAccountFragment : Fragment(),
 
     private fun initViews() {
 
-        viewBinding.toplayoutblock.setIdonthaveDocContent(resources.getString(R.string.no_doc_title_bank_amb),"")
+        viewBinding.toplayoutblock.setIdonthaveDocContent(
+            resources.getString(R.string.no_doc_title_bank_amb),
+            ""
+        )
 
     }
+
     private var userId: String? = ""
     private var userName: String? = ""
     var allNavigationList = ArrayList<String>()
@@ -194,10 +201,10 @@ class BankAccountFragment : Fragment(),
 
 
         viewModelUser.bankDetailedObject.observe(viewLifecycleOwner, Observer {
-            Log.e("loaderissue","first")
+            Log.e("loaderissue", "first")
             if (!ocrOrVerificationRquested) {
                 viewBinding.screenLoaderBar.gone()
-                Log.e("loaderissue","fifth")
+                Log.e("loaderissue", "fifth")
                 it?.let {
 
                     if (it.verified) {
@@ -607,11 +614,10 @@ class BankAccountFragment : Fragment(),
                             dialog.dismiss()
                         }
                         .show()
-                }
-                else{
+                } else {
                     showToast(getString(R.string.user_not_found_amb))
                 }
-            }?: run {
+            } ?: run {
                 showToast(getString(R.string.user_not_found_amb))
             }
 
@@ -694,27 +700,48 @@ class BankAccountFragment : Fragment(),
 
     private fun requestStoragePermission() {
 
-        requestPermissions(
-            arrayOf(
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.CAMERA
-            ),
-            REQUEST_STORAGE_PERMISSION
-        )
+        if (Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
+
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.CAMERA
+                ),
+                REQUEST_STORAGE_PERMISSION
+            )
+        } else {
+
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.CAMERA
+                ),
+                REQUEST_STORAGE_PERMISSION
+            )
+        }
     }
 
     private fun hasStoragePermissions(): Boolean {
-        return ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.READ_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.CAMERA
-        ) == PackageManager.PERMISSION_GRANTED
+
+        if (Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
+
+            return ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        } else {
+
+            return ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        }
     }
 
     private fun showCameraAndGalleryOption() {
@@ -782,8 +809,9 @@ class BankAccountFragment : Fragment(),
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
 
             }
-        }else if (requestCode == ImageCropActivity.CROP_RESULT_CODE && resultCode == Activity.RESULT_OK) {
-            val imageUriResultCrop: Uri? =  Uri.parse(data?.getStringExtra(ImageCropActivity.CROPPED_IMAGE_URL_EXTRA))
+        } else if (requestCode == ImageCropActivity.CROP_RESULT_CODE && resultCode == Activity.RESULT_OK) {
+            val imageUriResultCrop: Uri? =
+                Uri.parse(data?.getStringExtra(ImageCropActivity.CROPPED_IMAGE_URL_EXTRA))
             Log.d("ImageUri", imageUriResultCrop.toString())
             clickedImagePath = imageUriResultCrop
             showPassbookInfoCard(clickedImagePath!!)
@@ -877,7 +905,7 @@ class BankAccountFragment : Fragment(),
         return options
     }
 
-//    override fun onBackPressed(): Boolean {
+    //    override fun onBackPressed(): Boolean {
 //        if (verificationScreenStatus == VerificationScreenStatus.STARTED_VERIFYING) {
 //            reContinueDialog()
 //            return true
@@ -897,9 +925,11 @@ class BankAccountFragment : Fragment(),
             .setNegativeButton(getString(R.string.no_amb)) { _, _ -> }
             .show()
     }
+
     private fun goBackToUsersList() {
         findNavController().navigateUp()
     }
+
     private fun reContinueDialog() {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(getString(R.string.want_to_wait_amb))

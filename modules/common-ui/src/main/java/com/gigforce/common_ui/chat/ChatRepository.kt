@@ -15,6 +15,7 @@ import com.gigforce.common_ui.chat.models.ChatMessage
 import com.gigforce.common_ui.chat.models.ChatReportedUser
 import com.gigforce.common_ui.chat.models.ContactModel
 import com.gigforce.common_ui.chat.models.VideoInfo
+import com.gigforce.common_ui.metaDataHelper.ImageMetaDataHelpers
 import com.gigforce.common_ui.viewdatamodels.chat.ChatHeader
 import com.gigforce.core.date.DateHelper
 import com.gigforce.core.extensions.addOrThrow
@@ -29,6 +30,7 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import java.io.File
+import kotlin.contracts.contract
 
 
 class ChatRepository constructor(
@@ -124,15 +126,12 @@ class ChatRepository constructor(
             message: ChatMessage,
             imageUri: Uri
     ) {
-        //todo check if need compression
-
-        val file = imageUri.toFile()
         val thumbnailPathOnServer = if (message.thumbnailBitmap != null) {
             val thumbnail = message.thumbnailBitmap!!.copy(message.thumbnailBitmap?.config, true)
 
             val imageInBytes = ImageUtils.convertToByteArray(thumbnail)
             uploadChatAttachment(
-                    fileNameWithExtension = "thumb-${file.name}",
+                    fileNameWithExtension = "thumb-${message.imageMetaData?.name}",
                     file = imageInBytes,
                     headerId = chatHeaderId,
                     isGroupChatMessage = false,
@@ -143,7 +142,7 @@ class ChatRepository constructor(
         }
 
         val pathOnServer = uploadChatAttachment(
-                fileNameWithExtension = file.name,
+                fileNameWithExtension = message.imageMetaData?.name ?: "",
                 file = imageUri,
                 headerId = chatHeaderId,
                 isGroupChatMessage = false,

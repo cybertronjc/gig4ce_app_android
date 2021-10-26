@@ -1084,6 +1084,10 @@
         android:id="@+id/dropSelectionBottomSheetDialogFragment"
         android:name="com.gigforce.lead_management.ui.drop_selection.DropSelectionBottomSheetDialogFragment"
         android:label="DropSelectionBottomSheetDialogFragment" />
+    <fragment
+        android:id="@+id/requestDocumentTreeAccessFragment"
+        android:name="com.gigforce.core.documentFileHelper.RequestDocumentTreeAccessFragment"
+        android:label="RequestDocumentTreeAccessFragment" />
 
 </navigation>
 

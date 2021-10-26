@@ -248,7 +248,7 @@ abstract class VideoMessageView(
 
         if (file != null) {
 
-            chatNavigation.openFullScreenVideoDialogFragment(file.toUri())
+            chatNavigation.openFullScreenVideoDialogFragment(file)
         } else {
             downloadAttachment()
         }
