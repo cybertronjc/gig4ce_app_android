@@ -38,6 +38,7 @@
             android:layout_marginEnd="@dimen/size_16"
             android:layout_marginTop="@dimen/size_8"
             android:text="@string/drop_selection_lead"
+            android:textAllCaps="true"
             android:textAlignment="center"
             android:gravity="center"
             android:visibility="visible"

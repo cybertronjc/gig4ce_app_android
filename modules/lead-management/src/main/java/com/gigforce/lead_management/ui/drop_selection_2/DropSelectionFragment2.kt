@@ -4,6 +4,7 @@ import android.app.DatePickerDialog
 import android.graphics.Color
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,8 @@ import android.view.ViewGroup
 import android.widget.DatePicker
 import androidx.core.os.bundleOf
 import androidx.fragment.app.*
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator
+import androidx.transition.AutoTransition
 import androidx.transition.Slide
 import androidx.transition.Transition
 import androidx.transition.TransitionManager
@@ -121,7 +124,6 @@ class DropSelectionFragment2 : BaseBottomSheetDialogFragment<DropSelectionFragme
                             }else{
                                 //ask giger to upload bank details
                                 showAskBankDetails()
-                                //showLastWorkingLayout()
                             }
                         }
                         R.id.notJoinedRadio -> {
@@ -163,6 +165,7 @@ class DropSelectionFragment2 : BaseBottomSheetDialogFragment<DropSelectionFragme
             }
             confirmButton.setOnClickListener {
                 //call drop api
+                viewModel.dropSelections(selectionIdsToDrop)
             }
             cancelBtn.setOnClickListener {
                 dismiss()
@@ -215,7 +218,7 @@ class DropSelectionFragment2 : BaseBottomSheetDialogFragment<DropSelectionFragme
                 newCal.set(Calendar.MONTH, month)
                 newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
                 viewBinding.lastWorkingLayout.dateText.text = DateHelper.getDateInDDMMMYYYYComma(newCal.time)
-//                viewBinding.calendarLabel.visible()
+
             },
             cal.get(Calendar.YEAR),
             cal.get(Calendar.MONTH),
