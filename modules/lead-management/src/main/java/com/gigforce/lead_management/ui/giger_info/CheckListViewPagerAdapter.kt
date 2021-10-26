@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.gigforce.common_ui.utils.getCircularProgressDrawable
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.extensions.gone
@@ -56,6 +57,7 @@ class CheckListViewPagerAdapter : RecyclerView.Adapter<CheckListViewPagerAdapter
                         val gsReference = FirebaseStorage.getInstance().getReferenceFromUrl(it)
                         GlideApp.with(itemView.context)
                             .load(gsReference)
+                            .placeholder(getCircularProgressDrawable(itemView.context))
                             .into(backgroundImage)
                     } catch (e: Exception) {
                         CrashlyticsLogger.d("Viewpager Checklist", "${e.message} $it")
