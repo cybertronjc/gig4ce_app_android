@@ -55,7 +55,7 @@
         android:layout_marginLeft="@dimen/size_20"
         android:layout_marginRight="@dimen/size_20"
         android:gravity="center"
-        android:text="Go back"
+        android:text="@string/go_back"
         style="@style/ActionOutlineButtonStyle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
