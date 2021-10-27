@@ -119,40 +119,18 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
     }
 
     fun disableImageClick() {
-        if (this::adapter.isInitialized) {
-            adapter.let {
-                it.setImageClickable(false)
-                it.notifyDataSetChanged()
+        adapter.let {
+            it.setImageClickable(false)
+            it.notifyDataSetChanged()
 
-            }
-        }else{
-            adapter = ViewPagerAdapter {
-                pageClickListener?.onClick(it)
-            }
-            adapter.let {
-                it.setImageClickable(false)
-                it.notifyDataSetChanged()
-
-            }
         }
     }
 
     fun enableImageClick() {
-        if (this::adapter.isInitialized){
-            adapter.let {
-                it.setImageClickable(true)
-                it.notifyDataSetChanged()
-            }
-        }else{
-            adapter = ViewPagerAdapter {
-                pageClickListener?.onClick(it)
-            }
-            adapter.let {
-                it.setImageClickable(true)
-                it.notifyDataSetChanged()
-            }
+        adapter.let {
+            it.setImageClickable(true)
+            it.notifyDataSetChanged()
         }
-
     }
 
     fun setImageViewPager(list: List<KYCImageModel>) {
