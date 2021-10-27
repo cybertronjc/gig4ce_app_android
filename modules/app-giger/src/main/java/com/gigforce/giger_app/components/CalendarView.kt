@@ -67,8 +67,10 @@ class CalendarView : LinearLayout {
                         RecyclerGenericAdapter.ItemInterface<MonthModel?> { obj, viewHolder, position ->
                             var calendarDataAdapter = CalendarBaseAdapter(context)
                             calendarDataAdapter.list = obj?.days!!
-                            (viewHolder.getView(R.id.calendar_grid_view) as GridView).adapter =
+                            var gridView = (viewHolder.getView(R.id.calendar_grid_view) as GridView)
+                                gridView.adapter =
                                     calendarDataAdapter
+                            gridView.smoothScrollToPosition(calendarDataAdapter.count)
                             if (this::dateClickListener.isInitialized)
                                 calendarDataAdapter.setDateClickedListener(dateClickListener)
                         })
