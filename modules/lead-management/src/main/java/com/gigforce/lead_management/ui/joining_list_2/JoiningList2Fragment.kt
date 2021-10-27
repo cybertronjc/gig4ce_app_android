@@ -220,7 +220,7 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
 
         statusTabLayout.addTab(statusTabLayout.newTab().setText("Pending (0)"))
         statusTabLayout.addTab(statusTabLayout.newTab().setText("Completed (0)"))
-        statusTabLayout.addTab(statusTabLayout.newTab().setText("All (0)"))
+        statusTabLayout.addTab(statusTabLayout.newTab().setText("Dropped (0)"))
 
         val betweenSpace = 25
 
@@ -330,8 +330,8 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
                 this.statusTabLayout.getTabAt(1)?.text = "Completed (${it.value})"
             }
 
-            if (it.key == "All") {
-                this.statusTabLayout.getTabAt(2)?.text = "All (${it.value})"
+            if (it.key == "Dropped") {
+                this.statusTabLayout.getTabAt(2)?.text = "Dropped (${it.value})"
                 if (joiningDataState == JoiningDataState.DEFAULT && it.value > 0){
                     joiningDataState = JoiningDataState.HAS_DATA
                 }else if (joiningDataState == JoiningDataState.DEFAULT && it.value == 0){

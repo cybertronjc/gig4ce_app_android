@@ -243,7 +243,7 @@ class JoiningList2ViewModel @Inject constructor(
             filterMap.put(LeadManagementConstants.STATUS_COMPLETED, 0)
         }
 
-        filterMap.put("All", totalCount)
+        filterMap.put("Dropped", totalCount)
         _filtersMap.postValue(filterMap)
 
         gigforceLogger.d(
@@ -269,7 +269,7 @@ class JoiningList2ViewModel @Inject constructor(
             .apply {
                 this.add(
                     0, JoiningStatusAndCountItemData(
-                        status = "All",
+                        status = "Dropped",
                         attendanceCount = joiningDa.size,
                         statusSelected = true
                     )
