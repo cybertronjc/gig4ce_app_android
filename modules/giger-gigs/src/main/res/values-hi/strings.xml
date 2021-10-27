@@ -311,5 +311,7 @@
     <string name="three_days_giger_gigs">पिछले 3 दिन</string>
     <string name="seven_days_giger_gigs">पिछले 7 दिन</string>
     <string name="one_month_giger_gigs">पिछले 1 महीने</string>
+    <string name="weekly_off_for_giger_gigs">गिगर साप्ताहिक अवकाश पर है।</string>
+    <string name="weekly_off_for_me_gigs">मैं साप्ताहिक अवकाश पर हूं।</string>
 
 </resources>
