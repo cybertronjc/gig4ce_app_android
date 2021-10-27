@@ -221,6 +221,12 @@ class MainActivity : BaseActivity(),
                     Log.d("datahere", "main")
                    handleLoginSummaryNav()
                 }
+
+                //deep linking for onboarding form is handled here
+                intent.getBooleanExtra(StringConstants.ONBOARDING_FORM_VIA_DEEP_LINK.value, false) -> {
+                    Log.d("datahere", "main")
+                    handleOnboardingFormNav()
+                }
                 else -> {
                     proceedWithNormalNavigation()
                 }
@@ -241,6 +247,17 @@ class MainActivity : BaseActivity(),
         navController.popBackStack()
         navController.navigate(R.id.teamLeaderLoginDetailsFragment, bundleOf(
             StringConstants.CAME_FROM_LOGIN_SUMMARY_DEEPLINK.value to true
+        ))
+
+    }
+    private fun handleOnboardingFormNav() {
+        if (!isUserLoggedIn()) {
+            proceedWithNormalNavigation()
+            return
+        }
+        navController.popBackStack()
+        navController.navigate(R.id.joiningList2Fragment, bundleOf(
+            StringConstants.CAME_FROM_ONBOARDING_FORM_DEEPLINK.value to true
         ))
 
     }

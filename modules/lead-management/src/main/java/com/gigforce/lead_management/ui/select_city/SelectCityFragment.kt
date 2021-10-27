@@ -30,12 +30,14 @@ class SelectCityFragment : BaseFragment2<FragmentSelectBusinessBinding>(
     companion object {
         private const val TAG = "SelectCityFragment"
         const val INTENT_EXTRA_CITY_LIST = "city_list"
+        const val INTENT_ONSITE_OFFSITE = "onsite_offsite"
     }
 
     @Inject
     lateinit var navigation: INavigation
     private val sharedViewModel: LeadManagementSharedViewModel by activityViewModels()
     private var cityList: ArrayList<ReportingLocationsItem> = arrayListOf()
+    private var locationType: String? = null
 
     private val glide: RequestManager by lazy {
         Glide.with(requireContext())
@@ -70,10 +72,12 @@ class SelectCityFragment : BaseFragment2<FragmentSelectBusinessBinding>(
 
         arguments?.let {
             cityList = it.getParcelableArrayList(INTENT_EXTRA_CITY_LIST) ?: return@let
+            locationType = it.getString(INTENT_ONSITE_OFFSITE) ?: return@let
         }
 
         savedInstanceState?.let {
             cityList = it.getParcelableArrayList(INTENT_EXTRA_CITY_LIST) ?: return@let
+            locationType = it.getString(INTENT_ONSITE_OFFSITE) ?: return@let
         }
     }
 
@@ -84,6 +88,10 @@ class SelectCityFragment : BaseFragment2<FragmentSelectBusinessBinding>(
         outState.putParcelableArrayList(
             INTENT_EXTRA_CITY_LIST,
             cityList
+        )
+        outState.putString(
+            INTENT_ONSITE_OFFSITE,
+            locationType
         )
     }
 
@@ -111,15 +119,23 @@ class SelectCityFragment : BaseFragment2<FragmentSelectBusinessBinding>(
 
 
             okayButton.postDelayed({
+                if (locationType == "On Site"){
+                    navigation.navigateTo(
+                        LeadManagementNavDestinations.FRAGMENT_SELECT_REPORTING_LOCATION,
+                        bundleOf(
+                            SelectReportingLocationFragment.INTENT_EXTRA_REPORTING_LOCATIONS to selectedCity.reportingLocations,
+                            SelectReportingLocationFragment.INTENT_EXTRA_SELECTED_CITY to selectedCity
+                        ),
+                        getNavOptions()
+                    )
+                }else{
+                    navigation.popBackStack(
+                        LeadManagementNavDestinations.FRAGMENT_SELECTION_FORM_2,
+                        false
+                    )
+                }
 
-                navigation.navigateTo(
-                    LeadManagementNavDestinations.FRAGMENT_SELECT_REPORTING_LOCATION,
-                    bundleOf(
-                        SelectReportingLocationFragment.INTENT_EXTRA_REPORTING_LOCATIONS to selectedCity.reportingLocations,
-                        SelectReportingLocationFragment.INTENT_EXTRA_SELECTED_CITY to selectedCity
-                    ),
-                    getNavOptions()
-                )
+
             },200)
 
         }
