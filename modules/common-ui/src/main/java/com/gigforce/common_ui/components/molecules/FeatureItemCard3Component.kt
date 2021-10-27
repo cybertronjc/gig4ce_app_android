@@ -8,6 +8,7 @@ import android.widget.FrameLayout
 import androidx.core.os.bundleOf
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.viewdatamodels.FeatureItemCard2DVM
+import com.gigforce.common_ui.viewdatamodels.FeatureItemCard3DVM
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.StringConstants
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
@@ -22,14 +23,14 @@ import kotlinx.android.synthetic.main.feature_item_card2.view.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class FeatureItemCard2Component(context: Context, attrs: AttributeSet?) :
+class FeatureItemCard3Component(context: Context, attrs: AttributeSet?) :
     FrameLayout(context, attrs),
     IViewHolder {
 
     init {
         this.layoutParams =
             LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-        LayoutInflater.from(context).inflate(R.layout.feature_item_card2, this, true)
+        LayoutInflater.from(context).inflate(R.layout.feature_item_card3, this, true)
     }
 
     @Inject
@@ -52,7 +53,7 @@ class FeatureItemCard2Component(context: Context, attrs: AttributeSet?) :
             .into(feature_icon)
     }
 
-    fun setImage(data: FeatureItemCard2DVM) {
+    fun setImage(data: FeatureItemCard3DVM) {
         data.imageUrl?.let {
             setImageFromUrl(it)
             return
@@ -73,7 +74,7 @@ class FeatureItemCard2Component(context: Context, attrs: AttributeSet?) :
 
         this.setOnClickListener(null)
 
-        if (data is FeatureItemCard2DVM) {
+        if (data is FeatureItemCard3DVM) {
             if (sharedPreAndCommonUtilInterface.getAppLanguageCode() == "hi") {
                 feature_title.text = data.hi?.title ?: data.title
             } else
@@ -102,7 +103,7 @@ class FeatureItemCard2Component(context: Context, attrs: AttributeSet?) :
         }
     }
 
-    private fun navigate(data: FeatureItemCard2DVM) {
+    private fun navigate(data: FeatureItemCard3DVM) {
         data.getNavArgs()?.let {
             it.args?.let { it.putString("title", feature_title.text.toString()) }
             navigation.navigateTo(it.navPath, it.args)
