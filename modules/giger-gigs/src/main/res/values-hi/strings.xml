@@ -303,6 +303,14 @@
     <string name="yes">हां</string>
     <string name="logins_gigs">लॉगिन</string>
     <string name="no_business_found_for_this_city">No Business found for this city</string>
+    <string name="filter_date_text_giger_gigs">चयन तिथि के अनुसार फ़िल्टर करें</string>
+    <string name="filter_date_sub_text_giger_gigs">कृपया निम्नलिखित विकल्पों में से फ़िल्टर का चयन करें.</string>
+    <string name="apply_filter_giger_gigs">फिल्टर लागू करें</string>
+    <string name="remove_filter_giger_gigs">फ़िल्टर निकालें</string>
+    <string name="yesterday_giger_gigs">बीता हुआ कल</string>
+    <string name="three_days_giger_gigs">पिछले 3 दिन</string>
+    <string name="seven_days_giger_gigs">पिछले 7 दिन</string>
+    <string name="one_month_giger_gigs">पिछले 1 महीने</string>
     <string name="weekly_off_for_giger_gigs">गिगर साप्ताहिक अवकाश पर है।</string>
     <string name="weekly_off_for_me_gigs">मैं साप्ताहिक अवकाश पर हूं।</string>
 

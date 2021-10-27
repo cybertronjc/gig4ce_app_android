@@ -7,7 +7,7 @@
     <TextView
         android:id="@+id/textView69"
         android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:text="S"
         android:textColor="#989db3"
@@ -20,7 +20,7 @@
     <TextView
         android:id="@+id/textView72"
         android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:gravity="center"
         android:text="M"
@@ -34,7 +34,7 @@
     <TextView
         android:id="@+id/textView73"
         android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:text="T"
         android:textColor="#989db3"
@@ -47,7 +47,7 @@
     <TextView
         android:id="@+id/textView76"
         android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:text="W"
         android:textColor="#989db3"
@@ -60,7 +60,7 @@
     <TextView
         android:id="@+id/textView103"
         android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:text="T"
         android:textColor="#989db3"
@@ -73,7 +73,7 @@
     <TextView
         android:id="@+id/textView115"
         android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:text="F"
         android:textColor="#989db3"
@@ -86,7 +86,7 @@
     <TextView
         android:id="@+id/textView134"
         android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:text="S"
         android:textColor="#989db3"

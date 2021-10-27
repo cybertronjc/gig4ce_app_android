@@ -182,7 +182,9 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
             toolbar.setTitleTypeface(Typeface.BOLD)
             overlayCardLayout.companyName.text = ": "+it.businessName ?: ""
             overlayCardLayout.jobProfileTitle.text = it.jobProfileTitle ?: ""
-            overlayCardLayout.locationText.text = ": "+it.reportingLocation + ", " + it.businessLocation ?: ""
+            val reportingLocText = if (!it.reportingLocation.isNullOrBlank() && it.reportingLocation != "null") it.reportingLocation + ", " else ""
+            val businessLocText = if (!it.businessLocation.isNullOrBlank() && it.businessLocation != "null") it.businessLocation else ""
+            overlayCardLayout.locationText.text = ": "+reportingLocText + businessLocText ?: ""
 
             gigerPhone = it.gigerPhone.toString()
             toolbar.showSubtitle(gigerPhone)
@@ -214,7 +216,7 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
             } else {
                  it.checkList?.let {
                 it.forEachIndexed { index, checkListItem ->
-                    val itemData = ApplicationChecklistRecyclerItemData.ApplicationChecklistItemData(checkListItem.name, checkListItem.status, checkListItem.optional)
+                    val itemData = ApplicationChecklistRecyclerItemData.ApplicationChecklistItemData(checkListItem.name, checkListItem.status, checkListItem.optional, checkListItem.frontImage , checkListItem.backImage)
                     checkListItemData.add(itemData)
                 }
                 if (checkListItemData.size > 0){

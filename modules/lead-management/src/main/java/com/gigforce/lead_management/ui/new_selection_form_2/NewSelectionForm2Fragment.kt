@@ -217,7 +217,8 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
 
                 //Open data selection screen states
                 is NewSelectionForm2ViewState.OpenSelectCityScreen -> openSelectCityScreen(
-                    ArrayList(state.cities)
+                    ArrayList(state.cities),
+                    state.locationType.toString()
                 )
                 is NewSelectionForm2ViewState.OpenSelectReportingScreen -> openSelectReportingLocationScreen(
                     state.selectedCity,
@@ -289,11 +290,14 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
     }
 
     private fun openSelectCityScreen(
-        cities: ArrayList<ReportingLocationsItem>
+        cities: ArrayList<ReportingLocationsItem>,
+        locationType: String
     ) {
         navigation.navigateTo(
             LeadManagementNavDestinations.FRAGMENT_SELECT_CITY,
-            bundleOf(SelectCityFragment.INTENT_EXTRA_CITY_LIST to cities),
+            bundleOf(SelectCityFragment.INTENT_EXTRA_CITY_LIST to cities,
+                SelectCityFragment.INTENT_ONSITE_OFFSITE to locationType
+            ),
             getNavOptions()
         )
         hideSoftKeyboard()
