@@ -46,6 +46,9 @@ class DropSelectionFragment2 : BaseBottomSheetDialogFragment<DropSelectionFragme
         const val TAG = "DropSelectionFragment2"
         const val INTENT_SELECTIONS_TO_DROP = "selections_to_drop"
         const val INTENT_BANK_DETAILS_VERIFIED = "bank_verified"
+        const val INTENT_GIG_START_DATE = "gig_start_date"
+        const val INTENT_GIG_END_DATE = "gig_end_date"
+        const val INTENT_CURRENT_DATE = "current_date"
 
         fun launch(
             selectionIdsToDrop: ArrayList<String>,
@@ -55,7 +58,10 @@ class DropSelectionFragment2 : BaseBottomSheetDialogFragment<DropSelectionFragme
             DropSelectionFragment2().apply {
                 arguments = bundleOf(
                     INTENT_SELECTIONS_TO_DROP to selectionIdsToDrop,
-                    INTENT_BANK_DETAILS_VERIFIED to isBankDetailVerified
+                    INTENT_BANK_DETAILS_VERIFIED to isBankDetailVerified,
+                    INTENT_GIG_START_DATE to gigStartDate,
+                    INTENT_GIG_END_DATE to gigEndDate,
+                    INTENT_CURRENT_DATE to currentDate
                 )
             }.show(childFragmentManager,TAG)
         }
@@ -64,6 +70,9 @@ class DropSelectionFragment2 : BaseBottomSheetDialogFragment<DropSelectionFragme
 
     private lateinit var selectionIdsToDrop: ArrayList<String>
     private var isBankDetailsVerified: Boolean = false
+    private var gigStartDate: String? = ""
+    private var gigEndDate: String? = ""
+    private var currentDate: String? = ""
     private val viewModel: DropSelectionFragment2ViewModel by viewModels()
     private val sharedLeadMgmtViewModel: LeadManagementSharedViewModel by activityViewModels()
 
@@ -139,6 +148,7 @@ class DropSelectionFragment2 : BaseBottomSheetDialogFragment<DropSelectionFragme
             }
 
             radioGroup.setOnCheckedChangeListener { radioGroup, i ->
+                confirmDrop.alpha = 1f
                 confirmDrop.isEnabled = true
             }
         }
@@ -171,7 +181,15 @@ class DropSelectionFragment2 : BaseBottomSheetDialogFragment<DropSelectionFragme
                 dismiss()
             }
         }
-
+        directDropLayout.apply {
+            dropSelectionDirect.setOnClickListener {
+                //call drop api
+                showJoinedNotJoinedLayout()
+            }
+            cancelButton.setOnClickListener {
+                dismiss()
+            }
+        }
 
     }
 
@@ -184,6 +202,7 @@ class DropSelectionFragment2 : BaseBottomSheetDialogFragment<DropSelectionFragme
         TransitionManager.beginDelayedTransition(viewBinding.rootLayout, transition)
         this.bankVerifyLayout.root.visible()
         this.joinedNotJoinedLayout.root.gone()
+        this.directDropLayout.root.gone()
     }
 
     private fun showMainLayout() = viewBinding.apply {
@@ -195,6 +214,7 @@ class DropSelectionFragment2 : BaseBottomSheetDialogFragment<DropSelectionFragme
         this.lastWorkingLayout.root.gone()
         this.bankVerifyLayout.root.gone()
         this.joinedNotJoinedLayout.root.gone()
+        this.directDropLayout.root.gone()
     }
 
     private fun showLastWorkingLayout() = viewBinding.apply {
@@ -206,6 +226,26 @@ class DropSelectionFragment2 : BaseBottomSheetDialogFragment<DropSelectionFragme
         this.lastWorkingLayout.root.visible()
         this.bankVerifyLayout.root.gone()
         this.joinedNotJoinedLayout.root.gone()
+        this.directDropLayout.root.gone()
+    }
+
+    private fun showDirectDropLayout() = viewBinding.apply {
+        this.successLayout.root.gone()
+        this.errorLayout.root.gone()
+        this.mainLayout.root.gone()
+        this.lastWorkingLayout.root.gone()
+        this.bankVerifyLayout.root.gone()
+        this.joinedNotJoinedLayout.root.gone()
+        this.directDropLayout.root.visible()
+    }
+    private fun showJoinedNotJoinedLayout() = viewBinding.apply {
+        this.successLayout.root.gone()
+        this.errorLayout.root.gone()
+        this.mainLayout.root.gone()
+        this.lastWorkingLayout.root.gone()
+        this.bankVerifyLayout.root.gone()
+        this.joinedNotJoinedLayout.root.visible()
+        this.directDropLayout.root.gone()
     }
 
     private val lastWorkingDatePicker: DatePickerDialog by lazy {
@@ -226,6 +266,7 @@ class DropSelectionFragment2 : BaseBottomSheetDialogFragment<DropSelectionFragme
         )
 
         datePickerDialog.datePicker.maxDate = Calendar.getInstance().timeInMillis
+        datePickerDialog.datePicker.minDate = Calendar.getInstance().timeInMillis
         datePickerDialog
     }
 
@@ -243,8 +284,8 @@ class DropSelectionFragment2 : BaseBottomSheetDialogFragment<DropSelectionFragme
                     viewBinding.lastWorkingLayout.root.gone()
                     viewBinding.joinedNotJoinedLayout.root.gone()
                     viewBinding.bankVerifyLayout.root.gone()
+                    viewBinding.directDropLayout.root.gone()
                     viewBinding.errorLayout.root.visible()
-
                     viewBinding.errorLayout.infoMessageTv.text = it.error
                     viewBinding.errorLayout.retryBtn.visible()
                 }
@@ -255,6 +296,17 @@ class DropSelectionFragment2 : BaseBottomSheetDialogFragment<DropSelectionFragme
                     }
                     viewBinding.mainLayout.dropSelectionButton.isEnabled = false
 
+                    viewBinding.lastWorkingLayout.confirmButton.showProgress {
+                        buttonText = "Dropping..."
+                        progressColor = Color.WHITE
+                    }
+                    viewBinding.lastWorkingLayout.confirmButton.isEnabled = false
+
+                    viewBinding.lastWorkingLayout.confirmButton.showProgress {
+                        buttonText = "Dropping..."
+                        progressColor = Color.WHITE
+                    }
+                    viewBinding.lastWorkingLayout.confirmButton.isEnabled = false
 
                 }
                 is Lce.Content -> {
@@ -264,13 +316,13 @@ class DropSelectionFragment2 : BaseBottomSheetDialogFragment<DropSelectionFragme
                     viewBinding.lastWorkingLayout.root.gone()
                     viewBinding.joinedNotJoinedLayout.root.gone()
                     viewBinding.bankVerifyLayout.root.gone()
+                    viewBinding.directDropLayout.root.gone()
                     if (selectionIdsToDrop.size == 1){
                         viewBinding.successLayout.dropedSelectionLabel.text = getString(R.string.one_selection_drop_lead)
                     } else {
                         viewBinding.successLayout.dropedSelectionLabel.text =
                             selectionIdsToDrop.size.toString() + getString(R.string.selection_drop_lead)
                     }
-                    //dismiss()
                 }
             }
         })

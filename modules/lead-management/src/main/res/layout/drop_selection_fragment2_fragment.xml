@@ -9,7 +9,12 @@
         android:background="@drawable/filter_bottom_background">
 
         <include
+            android:id="@+id/directDropLayout"
+            layout="@layout/bottom_sheet_dialog_fragment_drop_selection_main"/>
+
+        <include
             android:id="@+id/joinedNotJoinedLayout"
+            android:visibility="gone"
             layout="@layout/drop_selection_joined_notjoined_layout"/>
 
         <include

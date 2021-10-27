@@ -3,7 +3,7 @@
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="390dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <ImageView
@@ -13,6 +13,18 @@
             android:src="@drawable/ic_drop_selection_illustration" />
 
         <TextView
+            android:id="@+id/drop_selection_title"
+            android:textColor="#202325"
+            android:layout_marginStart="@dimen/size_20"
+            android:layout_marginEnd="@dimen/size_20"
+            android:fontFamily="@font/lato_bold"
+            android:lineHeight="@dimen/font_12"
+            android:text="@string/drop_selection_lead"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp" />
+
+        <TextView
             android:id="@+id/drop_selection_label"
             style="@style/body_primary"
             android:textColor="#202325"
@@ -20,10 +32,11 @@
             android:layout_marginEnd="@dimen/size_20"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="@string/are_you_sure_drop_lead"
             android:layout_marginTop="20dp" />
 
         <TextView
-            android:id="@+id/drop_selection_button"
+            android:id="@+id/drop_selection_direct"
             android:layout_width="match_parent"
             android:layout_height="34dp"
             android:layout_marginStart="@dimen/size_20"
@@ -31,6 +44,7 @@
             android:layout_marginEnd="@dimen/size_20"
             android:background="@drawable/bottom_primary_button_background"
             android:gravity="center"
+            android:textAllCaps="true"
             android:fontFamily="@font/lato_bold"
             android:text="@string/drop_selection_lead"
             android:textAlignment="center"
@@ -46,6 +60,7 @@
             android:layout_marginBottom="@dimen/size_16"
             android:background="@drawable/bottom_secondary_button_background"
             android:gravity="center"
+            android:textAllCaps="true"
             android:fontFamily="@font/lato_bold"
             android:text="@string/cancel_lead"
             android:textAlignment="center"
