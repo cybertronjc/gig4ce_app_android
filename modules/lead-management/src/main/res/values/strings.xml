@@ -195,5 +195,6 @@
     <string name="mins_ago"> min ago</string>
     <string name="sec_ago"> sec ago</string>
     <string name="moments_ago"> moments ago</string>
+    <string name="lead_alternate_mobile_number">Alternate mobile number</string>
 
 </resources>

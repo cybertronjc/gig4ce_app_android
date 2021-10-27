@@ -194,5 +194,6 @@
     <string name="mins_ago"> मिनट पहले</string>
     <string name="sec_ago"> सेकंड पहले</string>
     <string name="moments_ago"> क्षण भर पहले</string>
+    <string name="lead_alternate_mobile_number">वैकल्पिक मोबाइल नंबर</string>
 
 </resources>

@@ -4,6 +4,7 @@ import android.text.SpannedString
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.lead_management.models.JoiningStatusAndCountItemData
+import com.gigforce.lead_management.ui.new_selection_form.NewSelectionForm1ViewState
 import java.time.LocalDate
 
 sealed class NewSelectionForm2ViewState {
@@ -57,6 +58,10 @@ sealed class NewSelectionForm2ViewState {
         val error: String,
         val shouldShowErrorButton: Boolean
     ) : NewSelectionForm2ViewState()
+
+    data class EnteredPhoneNumberSanitized(
+        val sanitizedPhoneNumber : String
+    ): NewSelectionForm2ViewState()
 }
 
 sealed class NewSelectionForm2Events {

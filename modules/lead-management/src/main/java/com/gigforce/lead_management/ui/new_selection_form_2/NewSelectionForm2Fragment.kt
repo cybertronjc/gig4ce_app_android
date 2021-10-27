@@ -1,19 +1,29 @@
 package com.gigforce.lead_management.ui.new_selection_form_2
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.Typeface
+import android.net.Uri
 import android.os.Bundle
-import android.util.Log
+import android.provider.Settings
 import android.widget.DatePicker
 import android.widget.LinearLayout
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.gigforce.common_ui.UserInfoImp
+import com.gigforce.common_ui.contacts.ContactsDelegate
+import com.gigforce.common_ui.contacts.PhoneContact
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.hideSoftKeyboard
+import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
@@ -31,6 +41,7 @@ import com.gigforce.lead_management.models.WhatsappTemplateModel
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModelState
 import com.gigforce.lead_management.ui.new_selection_form.NewSelectionForm1Events
+import com.gigforce.lead_management.ui.new_selection_form.NewSelectionForm1Fragment
 import com.gigforce.lead_management.ui.new_selection_form_submittion_success.SelectionFormSubmitSuccessFragment
 import com.gigforce.lead_management.ui.select_city.SelectCityFragment
 import com.gigforce.lead_management.ui.select_reporting_location.SelectReportingLocationFragment
@@ -102,6 +113,79 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         datePickerDialog
     }
 
+    @SuppressLint("NewApi")
+    private val requestContactPermissionContract = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { contactPermissionGranted ->
+
+        if (contactPermissionGranted) {
+            pickContactContract.launch(null)
+        } else {
+            val hasUserOptedForDoNotAskAgain =
+                requireActivity().shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS)
+                    .not()
+            if (hasUserOptedForDoNotAskAgain) {
+
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(getString(R.string.read_contact_permission_required_lead))
+                    .setMessage(getString(R.string.please_grant_read_permissions_to_lead))
+                    .setPositiveButton(getString(R.string.okay_common_ui)) { _, _ -> openSettingsPage() }
+                    .setNegativeButton(getString(R.string.cancel_common_ui)) { _, _ -> }
+                    .show()
+            }
+        }
+    }
+
+    private val contactsDelegate: ContactsDelegate by lazy {
+        ContactsDelegate(requireContext().contentResolver)
+    }
+
+    @SuppressLint("NewApi")
+    private val pickContactContract = registerForActivityResult(
+        ActivityResultContracts.PickContact()
+    ) {
+        if (it == null) return@registerForActivityResult
+
+        contactsDelegate.parseResults(
+            uri = it,
+            onSuccess = { contacts ->
+                showContactNoOnMobileNo(contacts)
+            }, onFailure = { exception ->
+                logger.e(NewSelectionForm1Fragment.TAG, "while picking contact", exception)
+                showToast(getString(R.string.unable_to_pick_contact_lead))
+            })
+    }
+
+    private fun showContactNoOnMobileNo(contacts: List<PhoneContact>) {
+        if (contacts.isEmpty()) return
+
+        val pickedContact = contacts.first()
+        if (pickedContact.phoneNumbers.isEmpty()) return
+
+        if (pickedContact.phoneNumbers.size > 1) {
+            //show choose no dialog
+
+            val builder = MaterialAlertDialogBuilder(requireContext())
+            builder.setTitle("Select Phone Number")
+            builder.setItems(pickedContact.phoneNumbers.toTypedArray()) { _, item ->
+                val number = pickedContact.phoneNumbers[item]
+                setMobileNoOnEditText(number)
+            }
+            builder.show()
+        } else {
+            setMobileNoOnEditText(pickedContact.phoneNumbers.first())
+        }
+    }
+
+    private fun setMobileNoOnEditText(number: String) {
+        viewBinding.mainForm.alternateMobileNoEt.setText(number)
+
+        viewBinding.mainForm.alternateMobileNoEt.post {
+            viewBinding.mainForm.alternateMobileNoEt.setSelection(viewBinding.mainForm.alternateMobileNoEt.length())
+        }
+        viewModel.handleEvent(NewSelectionForm2Events.SecondaryPhoneNumberChanged("+91" + number))
+    }
+
     override fun shouldPreventViewRecreationOnNavigation(): Boolean {
         return true
     }
@@ -152,7 +236,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
 
         lifecycleScope.launchWhenCreated {
 
-            secondaryMobileText.getTextChangeAsStateFlow()
+            alternateMobileNoEt.getTextChangeAsStateFlow()
                 .debounce(200)
                 .distinctUntilChanged()
                 .flowOn(Dispatchers.Default)
@@ -190,6 +274,18 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         nextButton.attachTextChangeAnimator()
         nextButton.setOnClickListener {
             validateDataAndSubmitData()
+        }
+
+        pickContactsButton.setOnClickListener {
+
+            if (readContactsPermissionsGranted()) {
+                pickContactContract.launch(null)
+            } else {
+
+                requestContactPermissionContract.launch(
+                    Manifest.permission.READ_CONTACTS
+                )
+            }
         }
     }
 
@@ -283,6 +379,9 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                     }
                     viewBinding.mainForm.nextButton.isEnabled = false
                 }
+                is NewSelectionForm2ViewState.EnteredPhoneNumberSanitized -> setMobileNoOnEditText(
+                    state.sanitizedPhoneNumber
+                )
             }
         })
 
@@ -354,11 +453,11 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         }
 
         if (errorState.secondaryPhoneNumberError != null) {
-            viewBinding.mainForm.secondaryMobileErrorLayout.root.visible()
-            viewBinding.mainForm.secondaryMobileErrorLayout.errorTextview.text = errorState.secondaryPhoneNumberError
+            viewBinding.mainForm.contactNoError.root.visible()
+            viewBinding.mainForm.contactNoError.errorTextview.text = errorState.secondaryPhoneNumberError
         } else {
-            viewBinding.mainForm.secondaryMobileErrorLayout.errorTextview.text = null
-            viewBinding.mainForm.secondaryMobileErrorLayout.root.gone()
+            viewBinding.mainForm.contactNoError.errorTextview.text = null
+            viewBinding.mainForm.contactNoError.root.gone()
         }
     }
 
@@ -510,4 +609,18 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
             view.bind(it)
         }
     }
+
+    private fun readContactsPermissionsGranted(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            requireContext(), Manifest.permission.READ_CONTACTS
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun openSettingsPage() {
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+        val uri = Uri.fromParts("package", requireContext().packageName, null)
+        intent.data = uri
+        startActivity(intent)
+    }
+
 }
