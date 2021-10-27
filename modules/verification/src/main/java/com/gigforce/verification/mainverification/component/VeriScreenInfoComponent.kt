@@ -130,7 +130,6 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
         adapter.let {
             it.setImageClickable(true)
             it.notifyDataSetChanged()
-
         }
     }
 
