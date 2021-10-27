@@ -1197,6 +1197,10 @@ class CalendarHomeScreen : Fragment(),
 
     var calPosition = -1
     private fun showTodaysGigDialog(gigOnDay: Int) {
+        if(gigOnDay == 0){
+            gigListForDeclineBS()
+            return
+        }
         val view =
             layoutInflater.inflate(R.layout.dialog_confirm_gig_denial, null)
 
@@ -1210,19 +1214,7 @@ class CalendarHomeScreen : Fragment(),
 
         view.findViewById<View>(R.id.yesBtn)
             .setOnClickListener {
-                val date = temporaryData.getLocalDate()
-                navigation.navigateTo(
-                    "gigsListForDeclineBottomSheet", bundleOf(
-                        AppConstants.INTEN_EXTRA_DATE to date
-                    )
-                )
-//                navigate(
-//                    R.id.gigsListForDeclineBottomSheet, bundleOf(
-//                        GigsListForDeclineBottomSheet.INTEN_EXTRA_DATE to date
-//                    )
-//                )
-
-                makeChangesToCalendarItem(calPosition, true)
+                gigListForDeclineBS()
                 dialog?.dismiss()
             }
 
@@ -1231,6 +1223,19 @@ class CalendarHomeScreen : Fragment(),
                 makeChangesToCalendarItem(calPosition, true)
                 dialog?.dismiss()
             }
+    }
+
+
+    private fun gigListForDeclineBS(){
+        val date = temporaryData.getLocalDate()
+        navigation.navigateTo(
+            "gigsListForDeclineBottomSheet", bundleOf(
+                AppConstants.INTEN_EXTRA_DATE to date
+            )
+        )
+
+        makeChangesToCalendarItem(calPosition, true)
+
     }
 
     fun makeChangesToCalendarItem(position: Int, status: Boolean) {
