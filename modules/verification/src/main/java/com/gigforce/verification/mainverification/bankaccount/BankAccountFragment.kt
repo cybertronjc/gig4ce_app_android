@@ -726,21 +726,22 @@ class BankAccountFragment : Fragment(),
 
     private fun initializeImages() {
         // verification_doc_image ic_passbook_illustration
-        val frontUri = Uri.Builder()
-            .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
-            .authority(resources.getResourcePackageName(R.drawable.verification_doc_image))
-            .appendPath(resources.getResourceTypeName(R.drawable.verification_doc_image))
-            .appendPath(resources.getResourceEntryName(R.drawable.verification_doc_image))
-            .build()
-        val list =
-            listOf(
-                KYCImageModel(
-                    text = getString(R.string.upload_bank_account_new_veri),
-                    imageIcon = frontUri,
-                    imageUploaded = false
-                )
-            )
-        //viewBinding.toplayoutblock.setImageViewPager(list) need to remove uploading option 2856 ticket
+        // need to remove uploading option 2856 ticket
+//        val frontUri = Uri.Builder()
+//            .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
+//            .authority(resources.getResourcePackageName(R.drawable.verification_doc_image))
+//            .appendPath(resources.getResourceTypeName(R.drawable.verification_doc_image))
+//            .appendPath(resources.getResourceEntryName(R.drawable.verification_doc_image))
+//            .build()
+//        val list =
+//            listOf(
+//                KYCImageModel(
+//                    text = getString(R.string.upload_bank_account_new_veri),
+//                    imageIcon = frontUri,
+//                    imageUploaded = false
+//                )
+//            )
+        viewBinding.toplayoutblock.initAdapter()
         viewBinding.toplayoutblock.hideUploadOption(true)
     }
 

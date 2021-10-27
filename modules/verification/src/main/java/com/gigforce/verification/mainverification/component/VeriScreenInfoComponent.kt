@@ -132,7 +132,11 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
             it.notifyDataSetChanged()
         }
     }
-
+    fun initAdapter(){
+        adapter = ViewPagerAdapter {
+            pageClickListener?.onClick(it)
+        }
+    }
     fun setImageViewPager(list: List<KYCImageModel>) {
 
         if (list.isEmpty()) {

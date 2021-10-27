@@ -109,6 +109,7 @@ class BankAccountFragment : Fragment(),
         viewModelUser = ViewModelProviders.of(this).get(UserBankAccountViewModel::class.java)
         getDataFromIntent(savedInstanceState)
         initViews()
+        viewBinding.toplayoutblock.initAdapter()
         viewBinding.toplayoutblock.hideUploadOption(true)
 //        initializeImages()
         observer()
