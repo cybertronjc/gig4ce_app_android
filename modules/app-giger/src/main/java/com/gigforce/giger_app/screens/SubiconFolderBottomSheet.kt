@@ -9,8 +9,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
+import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.viewdatamodels.FeatureItemCard2DVM
+import com.gigforce.common_ui.viewdatamodels.FeatureItemCard3DVM
 import com.gigforce.core.StringConstants
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.navigation.INavigation
@@ -25,7 +28,7 @@ import kotlinx.android.synthetic.main.subicon_list_fragment.subiconsrv
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class SubiconFolderBottomSheet : BottomSheetDialogFragment() {
+class SubiconFolderBottomSheet : BottomSheetDialogFragment(), IOnBackPressedOverride {
 
     private val viewModel: SubiconFolderBSViewModel by activityViewModels()
 
@@ -35,6 +38,12 @@ class SubiconFolderBottomSheet : BottomSheetDialogFragment() {
     @Inject
     lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
+        isCancelable = false
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -43,7 +52,7 @@ class SubiconFolderBottomSheet : BottomSheetDialogFragment() {
         return inflater.inflate(R.layout.subicon_folder_bottomsheet, container, false)
     }
 
-    var data: FeatureItemCard2DVM? = null
+    var data: FeatureItemCard3DVM? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getDataFromIntent(savedInstanceState)
@@ -57,7 +66,7 @@ class SubiconFolderBottomSheet : BottomSheetDialogFragment() {
     private fun listener() {
         subiconsrv.itemClickListener = object : ItemClickListener {
             override fun onItemClick(view: View, position: Int, dataModel: Any) {
-                if (dataModel is FeatureItemCard2DVM) {
+                if (dataModel is FeatureItemCard3DVM) {
                     dataModel.subicons?.let {
                         indicatorList.add(dataModel)
                         refreshScreen(it)
@@ -67,13 +76,30 @@ class SubiconFolderBottomSheet : BottomSheetDialogFragment() {
                 }
             }
         }
+
+        go_back_btn.setOnClickListener{
+            activity?.onBackPressed()
+
+        }
     }
 
     private fun refreshScreen(subicons: List<Long>) {
         setIndicatorData()
+        resetTitle()
         recyclerSubList.clear()
         recyclerSubList.addAll(getFilteredList(subicons, allIconsList))
         subiconsrv.adapter?.notifyDataSetChanged()
+    }
+
+    private fun resetTitle() {
+        indicatorList[indicatorList.size-1].let {
+            var title = if (sharedPreAndCommonUtilInterface.getAppLanguageCode() == "hi") {
+                it.hi?.title ?: it.title
+            } else
+                it.title
+
+            heading.text = title
+        }
     }
 
     private fun backStackIcons(): Boolean {
@@ -124,7 +150,7 @@ class SubiconFolderBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun getIndexForIndicator(): Int {
-        var titleLengthFilter = arrayListOf<FeatureItemCard2DVM>()
+        var titleLengthFilter = arrayListOf<FeatureItemCard3DVM>()
         titleLengthFilter.addAll(indicatorList)
         var lengthLong = true
         while (lengthLong) {
@@ -162,17 +188,30 @@ class SubiconFolderBottomSheet : BottomSheetDialogFragment() {
     }
 
 
-    var indicatorList = arrayListOf<FeatureItemCard2DVM>()
+    var indicatorList = arrayListOf<FeatureItemCard3DVM>()
     private fun initViews() {
         data?.let {
             indicatorList.add(it)
         }
         setIndicatorData()
-        subiconsrv.setOrientationAndRows(1, 4)
+//        subiconsrv.setOrientationAndRows(0, 1)
+        setTitle()
     }
 
-    var allIconsList = arrayListOf<FeatureItemCard2DVM>()
-    var recyclerSubList = arrayListOf<FeatureItemCard2DVM>()
+    private fun setTitle() {
+        data?.let {
+            var title = if (sharedPreAndCommonUtilInterface.getAppLanguageCode() == "hi") {
+                it.hi?.title ?: it.title
+            } else
+                it.title
+
+            heading.text = title
+        }
+
+    }
+
+    var allIconsList = arrayListOf<FeatureItemCard3DVM>()
+    var recyclerSubList = arrayListOf<FeatureItemCard3DVM>()
     private fun observer() {
         viewModel.allIconsLiveData.observeForever {
             if (it != null)
@@ -188,9 +227,9 @@ class SubiconFolderBottomSheet : BottomSheetDialogFragment() {
 
     private fun getFilteredList(
         arrayLong: List<Long>?,
-        allIconsList: List<FeatureItemCard2DVM>
-    ): ArrayList<FeatureItemCard2DVM> {
-        var filteredList = arrayListOf<FeatureItemCard2DVM>()
+        allIconsList: List<FeatureItemCard3DVM>
+    ): ArrayList<FeatureItemCard3DVM> {
+        var filteredList = arrayListOf<FeatureItemCard3DVM>()
         allIconsList.forEach {
             arrayLong?.forEach { subIcons ->
                 if (it.index == subIcons) {
@@ -201,7 +240,7 @@ class SubiconFolderBottomSheet : BottomSheetDialogFragment() {
         return filteredList
     }
 
-    private fun navigate(view: View, data: FeatureItemCard2DVM) {
+    private fun navigate(view: View, data: FeatureItemCard3DVM) {
         data.getNavArgs()?.let {
             it.args?.let {
                 it.putString(
@@ -218,13 +257,13 @@ class SubiconFolderBottomSheet : BottomSheetDialogFragment() {
         savedInstanceState?.let {
             data = Gson().fromJson(
                 it.getString(StringConstants.ICON.value),
-                FeatureItemCard2DVM::class.java
+                FeatureItemCard3DVM::class.java
             )
         } ?: run {
             arguments?.let {
                 data = Gson().fromJson(
                     it.getString(StringConstants.ICON.value),
-                    FeatureItemCard2DVM::class.java
+                    FeatureItemCard3DVM::class.java
                 )
             }
         }
@@ -235,13 +274,17 @@ class SubiconFolderBottomSheet : BottomSheetDialogFragment() {
         return super.onCreateDialog(savedInstanceState).apply {
             setOnKeyListener { _: DialogInterface, keyCode: Int, keyEvent: KeyEvent ->
                 if (keyCode == KeyEvent.KEYCODE_BACK && keyEvent.action == KeyEvent.ACTION_UP) {
-                    if (!backStackIcons())
+//                    if (!backStackIcons())
                         dismiss()
 
-                    return@setOnKeyListener true
+                    return@setOnKeyListener false
                 }
                 return@setOnKeyListener false
             }
         }
+    }
+
+    override fun onBackPressed(): Boolean {
+        return backStackIcons()
     }
 }

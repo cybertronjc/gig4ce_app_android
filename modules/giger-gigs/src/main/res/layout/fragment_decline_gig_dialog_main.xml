@@ -115,6 +115,18 @@
                  />
 
             <RadioButton
+                android:id="@+id/weekly_off"
+                style="@style/Theme.RadioButtonLipstickPink"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="0dp"
+                android:paddingStart="@dimen/size_8"
+                android:paddingTop="8dp"
+                android:paddingEnd="@dimen/size_8"
+                android:paddingBottom="8dp"
+                />
+
+            <RadioButton
                 android:id="@+id/reason_others"
                 style="@style/Theme.RadioButtonLipstickPink"
                 android:layout_width="match_parent"

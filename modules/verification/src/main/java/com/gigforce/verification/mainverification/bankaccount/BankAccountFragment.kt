@@ -257,7 +257,7 @@ class BankAccountFragment : Fragment(),
                         viewBinding.belowLayout.visible()
                         setAlreadyfilledData(it, false)
                         viewBinding.toplayoutblock.toggleChangeTextView(true)
-                        viewBinding.toplayoutblock.disableImageClick()//keep this line in end only
+                        //viewBinding.toplayoutblock.disableImageClick()//keep this line in end only //need to remove uploading option 2856 ticket
                     } else {
                         checkforStatusAndVerified(it)
                     }
@@ -347,7 +347,7 @@ class BankAccountFragment : Fragment(),
 //                                viewBinding.editBankDetail.visible()
                                 viewBinding.belowLayout.visible()
                                 setAlreadyfilledData(obj, false)
-                                viewBinding.toplayoutblock.disableImageClick()//keep this line in end only
+                                //viewBinding.toplayoutblock.disableImageClick()//keep this line in end only  //need to remove uploading option 2856 ticket
                             }
                         } catch (e: Exception) {
 
@@ -355,7 +355,7 @@ class BankAccountFragment : Fragment(),
                     }, WAITING_TIME)
                     viewBinding.belowLayout.visible()
                     setAlreadyfilledData(obj, false)
-                    viewBinding.toplayoutblock.disableImageClick()//keep this line in end only
+                    //viewBinding.toplayoutblock.disableImageClick()//keep this line in end only //need to remove uploading option 2856 ticket
                 }
                 "failed" -> {
                     verificationScreenStatus = VerificationScreenStatus.FAILED
@@ -370,20 +370,20 @@ class BankAccountFragment : Fragment(),
                         initializeImages()
                     }
                     viewBinding.toplayoutblock.toggleChangeTextView(false)
-                    viewBinding.toplayoutblock.enableImageClick()//keep this line in end only
+                    //viewBinding.toplayoutblock.enableImageClick()//keep this line in end only //need to remove uploading option 2856 ticket
                 }
                 "" -> {
                     verificationScreenStatus = VerificationScreenStatus.DEFAULT
                     resetInitializeViews()
                     setAlreadyfilledData(null, true)
                     viewBinding.toplayoutblock.toggleChangeTextView(false)
-                    viewBinding.toplayoutblock.enableImageClick()//keep this line in end only
+                    //viewBinding.toplayoutblock.enableImageClick()//keep this line in end only //need to remove uploading option 2856 ticket
                 }
                 "completed" -> {
                     verificationScreenStatus = VerificationScreenStatus.COMPLETED
                     showBankBeneficiaryName(obj)
                     viewBinding.toplayoutblock.toggleChangeTextView(false)
-                    viewBinding.toplayoutblock.disableImageClick()//keep this line in end only
+                    //viewBinding.toplayoutblock.disableImageClick()//keep this line in end only  //need to remove uploading option 2856 ticket
 
                 }
                 else -> "unmatched status"
@@ -726,21 +726,22 @@ class BankAccountFragment : Fragment(),
 
     private fun initializeImages() {
         // verification_doc_image ic_passbook_illustration
-        val frontUri = Uri.Builder()
-            .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
-            .authority(resources.getResourcePackageName(R.drawable.verification_doc_image))
-            .appendPath(resources.getResourceTypeName(R.drawable.verification_doc_image))
-            .appendPath(resources.getResourceEntryName(R.drawable.verification_doc_image))
-            .build()
-        val list =
-            listOf(
-                KYCImageModel(
-                    text = getString(R.string.upload_bank_account_new_veri),
-                    imageIcon = frontUri,
-                    imageUploaded = false
-                )
-            )
-        viewBinding.toplayoutblock.setImageViewPager(list)
+        // need to remove uploading option 2856 ticket
+//        val frontUri = Uri.Builder()
+//            .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
+//            .authority(resources.getResourcePackageName(R.drawable.verification_doc_image))
+//            .appendPath(resources.getResourceTypeName(R.drawable.verification_doc_image))
+//            .appendPath(resources.getResourceEntryName(R.drawable.verification_doc_image))
+//            .build()
+//        val list =
+//            listOf(
+//                KYCImageModel(
+//                    text = getString(R.string.upload_bank_account_new_veri),
+//                    imageIcon = frontUri,
+//                    imageUploaded = false
+//                )
+//            )
+        viewBinding.toplayoutblock.initAdapter()
         viewBinding.toplayoutblock.hideUploadOption(true)
     }
 

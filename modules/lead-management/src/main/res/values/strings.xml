@@ -190,10 +190,11 @@
     <string name="selections_lead"> selection(s)?</string>
     <string name="type_lead">Type</string>
     <string name="here_lead">here</string>
-    <string name="days_ago"> days ago</string>
-    <string name="hours_ago"> hours ago</string>
-    <string name="mins_ago"> min ago</string>
-    <string name="sec_ago"> sec ago</string>
-    <string name="moments_ago"> moments ago</string>
+    <string name="days_ago">\u0020days ago</string>
+    <string name="hours_ago">\u0020hours ago</string>
+    <string name="mins_ago">\u0020min ago</string>
+    <string name="sec_ago">\u0020sec ago</string>
+    <string name="moments_ago">\u0020moments ago</string>
+    <string name="view_photo_lead">VIEW PHOTO</string>
 
 </resources>

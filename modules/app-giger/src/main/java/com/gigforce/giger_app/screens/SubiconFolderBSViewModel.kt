@@ -11,7 +11,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SubiconFolderBSViewModel  @Inject constructor(private val repository: IFeatureIconsDataRepository) : ViewModel()  {
 
-    var allIconsLiveData = repository.getData()
+    var allIconsLiveData = repository.getDataBS()
 
 
 }

@@ -84,6 +84,7 @@ class FeatureItemCard2Component(context: Context, attrs: AttributeSet?) :
             this.setOnClickListener {
                 data.subicons?.let {
                     if (it.isNotEmpty()) {
+                        var subiconFolderBS = 
                         navigation.navigateTo(
                             "subiconfolderBottomSheet",
                             bundleOf(
