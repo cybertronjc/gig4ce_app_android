@@ -4,7 +4,6 @@ import android.app.DatePickerDialog
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
-import android.util.Log
 import android.widget.DatePicker
 import android.widget.LinearLayout
 import androidx.core.os.bundleOf
@@ -12,6 +11,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.gigforce.common_ui.UserInfoImp
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
+import com.gigforce.common_ui.dynamic_fields.DynamicFieldsInflaterHelper
+import com.gigforce.common_ui.dynamic_fields.data.DynamicField
 import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
@@ -23,7 +24,6 @@ import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
-import com.gigforce.lead_management.common_views.JobProfileRelatedDynamicFieldView
 import com.gigforce.lead_management.databinding.FragmentNewSelectionForm2Binding
 import com.gigforce.lead_management.models.WhatsappTemplateModel
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
@@ -61,13 +61,16 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
     lateinit var navigation: INavigation
     @Inject
     lateinit var userinfo: UserInfoImp
+    @Inject
+    lateinit var dynamicFieldsInflaterHelper: DynamicFieldsInflaterHelper
+
     private val viewModel: NewSelectionForm2ViewModel by viewModels()
     private val leadMgmtSharedViewModel: LeadManagementSharedViewModel by activityViewModels()
     private val dateFormatter =  SimpleDateFormat("dd/MMM/yy",Locale.getDefault())
 
     //Data from previous screen
     private lateinit var joiningRequest: SubmitJoiningRequest
-    private lateinit var dynamicInputsFields : ArrayList<JobProfileDependentDynamicInputField>
+    private lateinit var dynamicInputsFields : ArrayList<DynamicField>
 
     private val expectedStartDatePicker: DatePickerDialog by lazy {
         val cal = Calendar.getInstance()
@@ -171,15 +174,8 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
 
     private fun validateDataAndSubmitData() = viewBinding.mainForm.jobProfileDependentDynamicFieldsContainer.apply{
 
-        val dynamicFieldsData = mutableListOf<DataFromDynamicInputField>()
-        for( i in 0 until childCount){
-
-            val dynamicFieldView = getChildAt(i) as JobProfileRelatedDynamicFieldView
-            val dataFromField = dynamicFieldView.validateDataReturnIfValid() ?: return@apply
-            dynamicFieldsData.add(dataFromField)
-        }
-
-        viewModel.handleEvent(NewSelectionForm2Events.SubmitButtonPressed(dynamicFieldsData))
+        val dynamicFieldsData = dynamicFieldsInflaterHelper.validateDynamicFieldsReturnFieldValueIfValid(this) ?: return@apply
+        viewModel.handleEvent(NewSelectionForm2Events.SubmitButtonPressed(dynamicFieldsData.toMutableList()))
     }
 
     private fun initToolbar(
@@ -471,15 +467,10 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
     }
 
     private fun showJobProfileRelatedDynamicFields(
-        dynamicFields: List<JobProfileDependentDynamicInputField>
-    ) = viewBinding.mainForm.jobProfileDependentDynamicFieldsContainer.apply {
-        removeAllViews()
-
-        dynamicFields.forEach {
-
-            val view = JobProfileRelatedDynamicFieldView(requireContext(), null)
-            addView(view)
-            view.bind(it)
-        }
-    }
+        dynamicFields: List<DynamicField>
+    ) = dynamicFieldsInflaterHelper.inflateDynamicFields(
+        requireContext(),
+        viewBinding.mainForm.jobProfileDependentDynamicFieldsContainer,
+        dynamicFields
+    )
 }

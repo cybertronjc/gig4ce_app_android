@@ -1,6 +1,7 @@
 package com.gigforce.common_ui.viewdatamodels.leadManagement
 
 import android.os.Parcelable
+import com.gigforce.common_ui.dynamic_fields.data.DataFromDynamicInputField
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
@@ -42,5 +43,4 @@ data class SubmitJoiningRequest(
     var shareLink: String = "",
 
 
-
-) : Parcelable
+    ) : Parcelable

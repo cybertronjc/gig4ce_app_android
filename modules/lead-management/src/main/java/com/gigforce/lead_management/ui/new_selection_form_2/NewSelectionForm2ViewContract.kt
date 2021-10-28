@@ -1,6 +1,7 @@
 package com.gigforce.lead_management.ui.new_selection_form_2
 
 import android.text.SpannedString
+import com.gigforce.common_ui.dynamic_fields.data.DataFromDynamicInputField
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.lead_management.models.JoiningStatusAndCountItemData

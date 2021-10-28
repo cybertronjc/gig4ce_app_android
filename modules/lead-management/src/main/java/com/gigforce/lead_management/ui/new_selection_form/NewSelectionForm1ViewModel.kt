@@ -7,8 +7,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.common_ui.dynamic_fields.data.DataFromDynamicInputField
+import com.gigforce.common_ui.dynamic_fields.data.DynamicField
+import com.gigforce.common_ui.dynamic_fields.data.FieldTypes
+import com.gigforce.common_ui.dynamic_fields.data.InputTypes
 import com.gigforce.common_ui.repository.LeadManagementRepository
-import com.gigforce.common_ui.viewdatamodels.leadManagement.DataFromDynamicInputField
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfilesItem
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JoiningBusinessAndJobProfilesItem
 import com.gigforce.common_ui.viewdatamodels.leadManagement.SubmitJoiningRequest
@@ -82,12 +85,48 @@ class NewSelectionForm1ViewModel @Inject constructor(
          checkForDataAndEnabledOrDisableSubmitButton()
     }
 
-    private fun inflateDynamicFieldsRelatedToSelectedJobProfile(jobProfile: JobProfilesItem) =
-        viewModelScope.launch {
+    private fun inflateDynamicFieldsRelatedToSelectedJobProfile(
+        jobProfile: JobProfilesItem
+    ) = viewModelScope.launch {
 
-            val selectedJobProfileDependentDynamicFields = jobProfile.dynamicInputFields.filter {
+            val selectedJobProfileDependentDynamicFields = /*jobProfile.dynamicFields.filter {
                 it.screenIdToShowIn == NewSelectionForm1Fragment.SCREEN_ID
-            }
+            }*/ listOf(
+                DynamicField(
+                    id = "x1z",
+                    title = "First one",
+                    mandatory = true,
+                    fieldType = FieldTypes.DATE_PICKER,
+                    screenIdToShowIn = "S",
+                    defaultSelectedDate = "2021-08-11"
+                ),
+                DynamicField(
+                    id = "x1z",
+                    title = "Sec one",
+                    mandatory = true,
+                    fieldType = FieldTypes.DATE_PICKER,
+                    screenIdToShowIn = "S",
+                    minDateAvailableForSelection = "2021-10-05",
+                    defaultSelectedDate = "today"
+                ),
+                DynamicField(
+                    id = "x1z",
+                    title = "thirst one",
+                    mandatory = false,
+                    fieldType = FieldTypes.DATE_PICKER,
+                    screenIdToShowIn = "S",
+                    maxDateAvailableForSelection = "2021-11-05"
+                ),
+                DynamicField(
+                    id = "x1z",
+                    title = "Sec one",
+                    mandatory = false,
+                    fieldType = FieldTypes.DATE_PICKER,
+                    screenIdToShowIn = "S",
+                    maxDateAvailableForSelection = "2021-11-05",
+                    minDateAvailableForSelection = "2021-10-05"
+                ),
+            )
 
             _viewState.value = NewSelectionForm1ViewState.ShowJobProfileRelatedField(
                 selectedJobProfileDependentDynamicFields
@@ -238,7 +277,7 @@ class NewSelectionForm1ViewModel @Inject constructor(
             return
         }
 
-        val dynamicFieldsForNextForm = selectedJobProfile!!.dynamicInputFields?.filter {
+        val dynamicFieldsForNextForm = selectedJobProfile!!.dynamicFields?.filter {
             it.screenIdToShowIn == NewSelectionForm2Fragment.SCREEN_ID
         }
 

@@ -1,13 +1,13 @@
 package com.gigforce.lead_management.ui.new_selection_form_2
 
 import android.content.Context
-import android.util.Log
 import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.common_ui.dynamic_fields.data.DataFromDynamicInputField
 import com.gigforce.common_ui.repository.LeadManagementRepository
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.core.logger.GigforceLogger
@@ -316,7 +316,7 @@ class NewSelectionForm2ViewModel @Inject constructor(
 
         //Cleaning up Final JSON
         joiningRequest.business.jobProfiles = emptyList()
-        joiningRequest.jobProfile.dynamicInputFields = emptyList()
+        joiningRequest.jobProfile.dynamicFields = emptyList()
 
         joiningRequest.dataFromDynamicFields = dataFromDynamicFieldsFromPreviousPages + dataFromDynamicFields
         submitJoiningData(
