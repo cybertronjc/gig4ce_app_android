@@ -58,7 +58,7 @@ class DynamicDropDownView(
         settingFieldAsOptionalOrMandatory(fieldDetails)
         setDataOnSpinner(
             fieldDetails.title,
-            fieldDetails.dataToShow
+            fieldDetails.data
         )
     }
 

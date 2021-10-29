@@ -56,7 +56,7 @@ class DynamicRadioButtonGroupView(
 
         setTitle(fieldDetails.title)
         settingFieldAsOptionalOrMandatory(fieldDetails)
-        showOptionsInRadioButton(fieldDetails.dataToShow)
+        showOptionsInRadioButton(fieldDetails.data)
     }
 
     private fun showOptionsInRadioButton(

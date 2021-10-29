@@ -8,6 +8,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.DatePicker
 import android.widget.LinearLayout
+import androidx.core.text.bold
+import androidx.core.text.buildSpannedString
+import com.gigforce.common_ui.R
 import com.gigforce.common_ui.databinding.LayoutDynamicFieldDatePickerBinding
 import com.gigforce.common_ui.dynamic_fields.DynamicFieldView
 import com.gigforce.common_ui.dynamic_fields.data.DataFromDynamicInputField
@@ -18,9 +21,7 @@ import com.gigforce.common_ui.ext.toDate
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import java.time.LocalDate
-import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.util.*
 
 
 class DynamicDatePickerView(
@@ -56,13 +57,7 @@ class DynamicDatePickerView(
     private val datePicker: DatePickerDialog by lazy {
 
         val defaultSelectedDate = if (viewData.defaultSelectedDate != null) {
-
-            if(viewData.defaultSelectedDate == "today"){
-                LocalDate.now()
-            } else{
-                LocalDate.parse(viewData.defaultSelectedDate, dateFormatter)
-            }
-
+            getDateFromText(viewData.defaultSelectedDate!!)
         } else {
             LocalDate.now()
         }
@@ -85,17 +80,25 @@ class DynamicDatePickerView(
 
         if(viewData.minDateAvailableForSelection != null){
 
-            val minimumDateAvailableForSelection = LocalDate.parse(viewData.minDateAvailableForSelection, dateFormatter)
+            val minimumDateAvailableForSelection = getDateFromText(viewData.minDateAvailableForSelection!!)
             datePickerDialog.datePicker.minDate = minimumDateAvailableForSelection.toDate().time
         }
 
         if(viewData.maxDateAvailableForSelection != null){
 
-            val maxDateAvailableForSelection = LocalDate.parse(viewData.maxDateAvailableForSelection, dateFormatter)
+            val maxDateAvailableForSelection = getDateFromText(viewData.maxDateAvailableForSelection!!)
             datePickerDialog.datePicker.maxDate = maxDateAvailableForSelection.toDate().time
         }
 
         datePickerDialog
+    }
+
+    private fun getDateFromText(
+        dateText : String
+    ) = if (dateText == "today") {
+        LocalDate.now()
+    } else {
+        LocalDate.parse(dateText, dateFormatter)
     }
 
     override fun bind(
@@ -120,13 +123,7 @@ class DynamicDatePickerView(
     ) {
 
         if(defaultSelectedDate != null){
-
-            if(defaultSelectedDate == "today"){
-                selectedDate = LocalDate.now()
-            } else{
-                selectedDate = LocalDate.parse(viewData.defaultSelectedDate, dateFormatter)
-            }
-
+            selectedDate =  getDateFromText(defaultSelectedDate)
             viewBinding.selectedDateLabel.text = dateFormatterForViewing.format(selectedDate)
         } else if (prefillText != null) {
             viewBinding.selectedDateLabel.text = prefillText
@@ -193,6 +190,22 @@ class DynamicDatePickerView(
 
     private fun checkDataAndSetError() {
 
+        if (viewData.mandatory) {
+
+            if (!isEnteredOrSelectedDataValid()) {
+
+                setError(buildSpannedString {
+                    bold {
+                        append(
+                            resources.getString(R.string.common_note_with_colon)
+                        )
+                    }
+                    append(" Please select ${viewData.title}")
+                })
+            } else {
+                removeError()
+            }
+        }
     }
 
     private fun setListenersOnView() = viewBinding.apply {
