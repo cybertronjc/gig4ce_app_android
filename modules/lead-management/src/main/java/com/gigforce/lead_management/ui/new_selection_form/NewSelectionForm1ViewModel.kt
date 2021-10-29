@@ -89,44 +89,9 @@ class NewSelectionForm1ViewModel @Inject constructor(
         jobProfile: JobProfilesItem
     ) = viewModelScope.launch {
 
-            val selectedJobProfileDependentDynamicFields = /*jobProfile.dynamicFields.filter {
+            val selectedJobProfileDependentDynamicFields = jobProfile.dynamicFields.filter {
                 it.screenIdToShowIn == NewSelectionForm1Fragment.SCREEN_ID
-            }*/ listOf(
-                DynamicField(
-                    id = "x1z",
-                    title = "First one",
-                    mandatory = true,
-                    fieldType = FieldTypes.DATE_PICKER,
-                    screenIdToShowIn = "S",
-                    defaultSelectedDate = "2021-08-11"
-                ),
-                DynamicField(
-                    id = "x1z",
-                    title = "Sec one",
-                    mandatory = true,
-                    fieldType = FieldTypes.DATE_PICKER,
-                    screenIdToShowIn = "S",
-                    minDateAvailableForSelection = "2021-10-05",
-                    defaultSelectedDate = "today"
-                ),
-                DynamicField(
-                    id = "x1z",
-                    title = "thirst one",
-                    mandatory = false,
-                    fieldType = FieldTypes.DATE_PICKER,
-                    screenIdToShowIn = "S",
-                    maxDateAvailableForSelection = "2021-11-05"
-                ),
-                DynamicField(
-                    id = "x1z",
-                    title = "Sec one",
-                    mandatory = false,
-                    fieldType = FieldTypes.DATE_PICKER,
-                    screenIdToShowIn = "S",
-                    maxDateAvailableForSelection = "2021-11-05",
-                    minDateAvailableForSelection = "2021-10-05"
-                ),
-            )
+            }
 
             _viewState.value = NewSelectionForm1ViewState.ShowJobProfileRelatedField(
                 selectedJobProfileDependentDynamicFields
