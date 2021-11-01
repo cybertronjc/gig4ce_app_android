@@ -42,5 +42,7 @@ data class SubmitJoiningRequest(
     @SerializedName("shareLink")
     var shareLink: String = "",
 
+    @SerializedName("secondaryMobileNumber")
+    var secondaryMobileNumber: String? = null
 
     ) : Parcelable

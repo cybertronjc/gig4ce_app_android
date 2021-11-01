@@ -12,7 +12,11 @@ import com.gigforce.common_ui.repository.LeadManagementRepository
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.common_ui.repository.ProfileFirebaseRepository
+import com.gigforce.core.ValidationHelper
+import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.lead_management.R
+import com.gigforce.lead_management.ui.new_selection_form.NewSelectionForm1ViewModel
+import com.gigforce.lead_management.ui.new_selection_form.NewSelectionForm1ViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
@@ -44,6 +48,9 @@ class NewSelectionForm2ViewModel @Inject constructor(
     private var selectedCity: ReportingLocationsItem? = null
     private var selectedReportingLocation: ReportingLocationsItem? = null
     private var selectedTL: BusinessTeamLeadersItem? = null
+    private var secondaryPhoneNumber : String? = null
+
+    //Data from previous screen
     private lateinit var joiningLocationsAndTLs: JoiningLocationTeamLeadersShifts
     private lateinit var joiningRequest: SubmitJoiningRequest
     private var currentlySubmittingAnyJoiningRequuest = false
@@ -88,6 +95,77 @@ class NewSelectionForm2ViewModel @Inject constructor(
                     joiningRequest.jobProfile.id!!,
                 )
             }
+            is NewSelectionForm2Events.SecondaryPhoneNumberChanged -> secondaryMobileNumberChanged(event.secondaryPhoneNumber)
+        }
+    }
+
+    private fun secondaryMobileNumberChanged(
+        mobileNumber: String
+    ) = viewModelScope.launch {
+
+        if( secondaryPhoneNumber == mobileNumber){
+            return@launch
+        }
+        secondaryPhoneNumber = mobileNumber
+
+        if(mobileNumber.length == 3) { //+91
+
+            _viewState.value = NewSelectionForm2ViewState.ValidationError(
+                secondaryPhoneNumberError = null
+            )
+            _viewState.value = null
+            return@launch
+        }
+
+        val doesMobileNoContainsMoreThan10digits = mobileNumber.length > 13
+        if (doesMobileNoContainsMoreThan10digits) {
+            logger.d(TAG,"alternate Mobile no received : '${mobileNumber}', checking if can be fixed..")
+            tryToFixPhoneNumberEntered(mobileNumber)
+            return@launch
+        }
+
+        val mobileNumber10Dig = mobileNumber.substring(3)
+        val mobileNumberValid = ValidationHelper.isValidIndianMobileNo(mobileNumber10Dig)
+
+        if(!mobileNumberValid) {
+
+            _viewState.value = NewSelectionForm2ViewState.ValidationError(
+                secondaryPhoneNumberError = buildSpannedString {
+                    bold {
+                        append(appContext.getString(R.string.note_with_colon_lead))
+                    }
+                    append(
+                        appContext.getString(R.string.number_you_entered_is_invalid_number_lead)
+                    )
+                }
+            )
+            _viewState.value = null
+        } else{
+
+            _viewState.value = NewSelectionForm2ViewState.ValidationError(
+                secondaryPhoneNumberError = null
+            )
+            _viewState.value = null
+        }
+    }
+
+    private fun tryToFixPhoneNumberEntered(
+        mobileNo: String
+    ) {
+        if (mobileNo.length <= 13) {
+            //Not fixing mobile number that have less than 11 (+91 + phone number)Digits
+            return
+        }
+
+        //replacing 91 , starting 0s and spaces from text with empty string
+        val sanitizedNumber = mobileNo.substring(3).replace(
+            "(\\\\s|^0+|^91)".toRegex(), ""
+        )
+
+        logger.d(TAG,"phone number sanitized : $sanitizedNumber")
+
+        if (ValidationHelper.isValidIndianMobileNo(sanitizedNumber)) {
+            _viewState.value = NewSelectionForm2ViewState.EnteredPhoneNumberSanitized(sanitizedNumber)
         }
     }
 
@@ -306,6 +384,32 @@ class NewSelectionForm2ViewModel @Inject constructor(
             joiningRequest.reportingLocation = selectedReportingLocation
         }else{
             joiningRequest.reportingLocation = null
+        }
+
+        if(!secondaryPhoneNumber.isNullOrBlank() && secondaryPhoneNumber!!.length > 3) { //+91
+
+            val mobileNumber10Dig = secondaryPhoneNumber!!.substring(3)
+            val mobileNumberValid = ValidationHelper.isValidIndianMobileNo(mobileNumber10Dig)
+
+            if(!mobileNumberValid) {
+
+                _viewState.value = NewSelectionForm2ViewState.ValidationError(
+                    secondaryPhoneNumberError = buildSpannedString {
+                        bold {
+                            append(appContext.getString(R.string.note_with_colon_lead))
+                        }
+                        append(
+                            appContext.getString(R.string.number_you_entered_is_invalid_number_lead)
+                        )
+                    }
+                )
+                _viewState.value = null
+                return
+            }
+
+            joiningRequest.secondaryMobileNumber = secondaryPhoneNumber
+        } else{
+            joiningRequest.secondaryMobileNumber = null
         }
 
         joiningRequest.assignGigsFrom = dateFormatter.format(selectedDateOfJoining)
