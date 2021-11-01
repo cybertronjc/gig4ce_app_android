@@ -114,26 +114,29 @@ class ChatPageFragment : Fragment(),
         ChatLocalDirectoryReferenceManager()
     }
 
-    private val chatFileManager : ChatFileManager by lazy {
-        ChatFileManager(requireContext(),documentPrefHelper)
+    private val chatFileManager: ChatFileManager by lazy {
+        ChatFileManager(requireContext(), documentPrefHelper)
     }
 
-    private val imageCropOptions: ImageCropOptions
-        get() {
+    private fun getImageCropOptions(
+        shouldCreatedDestinationFile : Boolean
+    ) : ImageCropOptions {
 
-            if (!chatLocalDirectoryReferenceManager.imagesDirectoryRef.exists()) {
-                chatLocalDirectoryReferenceManager.imagesDirectoryRef.mkdirs()
+
+        return ImageCropOptions
+            .Builder()
+            .shouldOpenImageCrop(true)
+            .setShouldEnableFaceDetector(false)
+            .shouldEnableFreeCrop(true).apply {
+
+                if(shouldCreatedDestinationFile){
+                    val image = chatFileManager.createImageFile()
+                    setOutputFileUri(image)
+                    Log.d("ChatPage","creating file ...")
+                }
             }
-
-            val requiredOutputFile = chatFileManager.createImageFile()
-            return ImageCropOptions
-                .Builder()
-                .shouldOpenImageCrop(true)
-                .setShouldEnableFaceDetector(false)
-                .shouldEnableFreeCrop(true)
-                .setOutputFileUri(requiredOutputFile)
-                .build()
-        }
+            .build()
+    }
 
     private val messageSwipeController: MessageSwipeController by lazy {
         MessageSwipeController(requireContext(), this)
@@ -193,7 +196,7 @@ class ChatPageFragment : Fragment(),
             sharedFile = imagesShared.first()
             cameraAndGalleryIntegrator.startImageCropper(
                 imagesShared.first().file,
-                imageCropOptions
+                getImageCropOptions(true)
             )
         }
 
@@ -899,7 +902,7 @@ class ChatPageFragment : Fragment(),
                         requestCode,
                         resultCode,
                         data,
-                        imageCropOptions,
+                        getImageCropOptions(requestCode == CameraAndGalleryIntegrator.REQUEST_CAPTURE_IMAGE || requestCode == CameraAndGalleryIntegrator.REQUEST_PICK_IMAGE),
                         this@ChatPageFragment
                     )
                 }

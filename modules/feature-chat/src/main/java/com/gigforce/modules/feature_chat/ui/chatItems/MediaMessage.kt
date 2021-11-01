@@ -20,6 +20,7 @@ import com.gigforce.core.extensions.getDownloadUrlOrThrow
 import com.gigforce.core.fb.FirebaseUtils
 import com.gigforce.core.file.FileUtils
 import com.gigforce.core.retrofit.RetrofitFactory
+import com.gigforce.modules.feature_chat.filemanager.ChatFileManager
 import com.gigforce.modules.feature_chat.models.ChatMessageWrapper
 import com.gigforce.modules.feature_chat.repositories.DownloadChatAttachmentService
 import com.gigforce.modules.feature_chat.screens.vm.ChatPageViewModel
@@ -41,6 +42,12 @@ abstract class MediaMessage(
 
     @Inject
     lateinit var documentPrefHelper: DocumentPrefHelper
+
+    private val chatFileManager : ChatFileManager by lazy {
+        ChatFileManager(
+            context,documentPrefHelper
+        )
+    }
 
     private val refToGigForceAttachmentDirectory: File =
         Environment.getExternalStoragePublicDirectory(ChatConstants.DIRECTORY_APP_DATA_ROOT)!!
@@ -158,33 +165,13 @@ abstract class MediaMessage(
     }
 
     fun getMediaFolderRef(): DocumentFile {
-        val rootTreeUri = documentPrefHelper.getSavedDocumentTreeUri() ?: throw IllegalStateException("root tree uri not saved")
-        val documentsTree = DocumentFile.fromTreeUri(context, rootTreeUri) ?: throw IllegalStateException("root tree uri not saved")
 
-        var mediaFolder = when (iMediaMessage?.type) {
-            ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE -> documentsTree.findFile(ChatConstants.DIRECTORY_IMAGES)
-            ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO -> documentsTree.findFile(ChatConstants.DIRECTORY_VIDEOS)
-            ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT -> documentsTree.findFile(ChatConstants.DIRECTORY_DOCUMENTS)
-            else -> throw IllegalArgumentException()
+        return when (iMediaMessage?.type) {
+            ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE -> chatFileManager.imageFilesDirectory
+            ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO -> chatFileManager.videoFilesDirectory
+            ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT -> chatFileManager.documentFilesDirectory
+            else -> chatFileManager.otherFilesDirectory
         }
-
-        if (mediaFolder == null) {
-
-            mediaFolder = when (iMediaMessage?.type) {
-                ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE -> documentsTree.createDirectory(
-                    ChatConstants.DIRECTORY_IMAGES
-                )
-                ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO -> documentsTree.createDirectory(
-                    ChatConstants.DIRECTORY_VIDEOS
-                )
-                ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT -> documentsTree.createDirectory(
-                    ChatConstants.DIRECTORY_DOCUMENTS
-                )
-                else -> throw IllegalArgumentException()
-            }
-        }
-
-        return mediaFolder!!
     }
 
     fun returnFileIfAlreadyDownloadedElseNull(): Uri? {
