@@ -133,6 +133,9 @@ class JoiningList2ViewModel @Inject constructor(
         }.filter {
             if (filterDaysVM == null || filterDaysVM == -1)
                 true
+            else if (filterDaysVM in 0..1){
+                getDateDifference(it.createdAt.toString()) == filterDaysVM!!
+            }
             else {
                 getDateDifference(it.createdAt.toString()) <= filterDaysVM!!
             }
@@ -224,6 +227,9 @@ class JoiningList2ViewModel @Inject constructor(
         }.filter {
             if (filterDaysVM == null || filterDaysVM == -1)
                 true
+            else if (filterDaysVM in 0..1){
+                getDateDifference(it.createdAt.toString()) == filterDaysVM!!
+            }
             else {
                 getDateDifference(it.createdAt.toString()) <= filterDaysVM!!
             }

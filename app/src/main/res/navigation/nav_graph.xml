@@ -1084,6 +1084,14 @@
         android:id="@+id/dropSelectionBottomSheetDialogFragment"
         android:name="com.gigforce.lead_management.ui.drop_selection.DropSelectionBottomSheetDialogFragment"
         android:label="DropSelectionBottomSheetDialogFragment" />
+    <dialog
+        android:id="@+id/teamLeaderLoginFilterFragment"
+        android:name="com.gigforce.giger_gigs.tl_login_details.TeamLeaderLoginFilterFragment"
+        android:label="TeamLeaderLoginFilterFragment" />
+    <dialog
+        android:id="@+id/showCheckListDocsBottomSheet"
+        android:name="com.gigforce.lead_management.ui.giger_info.ShowCheckListDocsBottomSheet"
+        android:label="ShowCheckListDocsBottomSheet" />
 
 </navigation>
 

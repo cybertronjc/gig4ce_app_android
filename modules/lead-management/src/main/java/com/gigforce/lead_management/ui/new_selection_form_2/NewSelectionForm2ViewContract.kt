@@ -24,7 +24,8 @@ sealed class NewSelectionForm2ViewState {
     ) : NewSelectionForm2ViewState()
 
     data class OpenSelectCityScreen(
-        val cities: List<ReportingLocationsItem>
+        val cities: List<ReportingLocationsItem>,
+        val locationType: String?
     ) : NewSelectionForm2ViewState()
 
     data class OpenSelectReportingScreen(

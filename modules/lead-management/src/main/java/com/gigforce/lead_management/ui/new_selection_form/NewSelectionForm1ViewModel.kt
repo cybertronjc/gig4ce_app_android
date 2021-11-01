@@ -80,7 +80,7 @@ class NewSelectionForm1ViewModel @Inject constructor(
             )
         }
 
-        // checkForDataAndEnabledOrDisableSubmitButton()
+         checkForDataAndEnabledOrDisableSubmitButton()
     }
 
     private fun inflateDynamicFieldsRelatedToSelectedJobProfile(jobProfile: JobProfilesItem) =
@@ -115,6 +115,17 @@ class NewSelectionForm1ViewModel @Inject constructor(
             _viewState.value = NewSelectionForm1ViewState.DisableSubmitButton
             return
         }
+
+        if (gigerName!!.isNotBlank()
+            && mobilePhoneNumber!!.isNotBlank()
+            && ValidationHelper.isValidIndianMobileNo(mobilePhoneNumber!!.substring(3))
+            && selectedBusiness != null
+            && selectedJobProfile != null
+            ){
+            _viewState.value = NewSelectionForm1ViewState.EnableSubmitButton
+            return
+        }
+
     }
 
     private fun openJobProfilesScreen() {

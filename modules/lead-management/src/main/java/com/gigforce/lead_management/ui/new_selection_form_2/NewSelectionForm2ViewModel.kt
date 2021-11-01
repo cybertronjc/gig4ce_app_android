@@ -182,7 +182,8 @@ class NewSelectionForm2ViewModel @Inject constructor(
         _viewState.value = NewSelectionForm2ViewState.OpenSelectCityScreen(
             cities = cities.sortedBy {
                 it.name
-            }
+            },
+            joiningRequest.jobProfile.locationType
         )
         _viewState.value = null
     }
@@ -365,7 +366,7 @@ class NewSelectionForm2ViewModel @Inject constructor(
         }
         joiningRequest.city = selectedCity!!
 
-        if (selectedCity!!.reportingLocations.isNotEmpty() && selectedReportingLocation == null) {
+        if (selectedCity!!.reportingLocations.isNotEmpty() && selectedReportingLocation == null && joiningRequest.jobProfile.locationType == "On Site") {
 
             _viewState.value = NewSelectionForm2ViewState.ValidationError(
                 reportingLocationError = buildSpannedString {

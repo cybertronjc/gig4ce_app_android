@@ -49,5 +49,11 @@ data class CheckListItem(
     val optional: Boolean,
 
     @SerializedName("status")
-    val status: String
+    val status: String,
+
+    @SerializedName("frontImage")
+    val frontImage: String? = "",
+
+    @SerializedName("backImage")
+    val backImage: String? = ""
 ){}

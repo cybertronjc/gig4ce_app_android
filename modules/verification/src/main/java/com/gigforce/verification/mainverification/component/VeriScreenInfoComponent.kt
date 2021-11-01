@@ -130,10 +130,13 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
         adapter.let {
             it.setImageClickable(true)
             it.notifyDataSetChanged()
-
         }
     }
-
+    fun initAdapter(){
+        adapter = ViewPagerAdapter {
+            pageClickListener?.onClick(it)
+        }
+    }
     fun setImageViewPager(list: List<KYCImageModel>) {
 
         if (list.isEmpty()) {

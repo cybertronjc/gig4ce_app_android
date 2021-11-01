@@ -181,6 +181,11 @@ class DeclineGigDialogFragment : DialogFragment() {
         else
             getString(R.string.this_gig_is_unsuitable_for_me_giger_gigs)
 
+        weekly_off.text = if (isAnyUserOtherThanGigerIsDecliningTheGig)
+            getString(R.string.weekly_off_for_giger_gigs)
+        else
+            getString(R.string.weekly_off_for_me_gigs)
+
         reason_radio_group.setOnCheckedChangeListener { _, checkedId ->
             submitBtn.isEnabled = true
 
@@ -228,7 +233,7 @@ class DeclineGigDialogFragment : DialogFragment() {
                     if (isAnyUserOtherThanGigerIsDecliningTheGig)
                         "Giger is on sick leave"
                     else
-                        "Iam on sick leave"
+                        "I am on sick leave"
                 } else if (checkedRadioButtonId == R.id.reason_on_leave) {
 
                     if (isAnyUserOtherThanGigerIsDecliningTheGig)
@@ -247,7 +252,14 @@ class DeclineGigDialogFragment : DialogFragment() {
                         "This gig is unsuitable for giger"
                     else
                         "This gig is unsuitable for me"
-                } else
+                }
+                else if(checkedRadioButtonId == R.id.weekly_off){
+                    if (isAnyUserOtherThanGigerIsDecliningTheGig)
+                        "Giger is on weekly off."
+                    else
+                        "I am on weekly off."
+                }
+                else
                     reason_radio_group.findViewById<RadioButton>(checkedRadioButtonId).text.toString()
             }
 

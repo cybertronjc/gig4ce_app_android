@@ -24,4 +24,5 @@ object LeadManagementNavDestinations {
     const val FRAGMENT_SELECT_FORM_SUCCESS = "${moduleName}/formSubmittedSuccess"
     const val FRAGMENT_JOINING_FILTER = "${moduleName}/joiningFilter"
     const val FRAGMENT_JOINING_DROP_SELECTION = "${moduleName}/dropSelection"
+    const val FRAGMENT_SHOW_DOC_IMAGES = "${moduleName}/showDocImages"
 }

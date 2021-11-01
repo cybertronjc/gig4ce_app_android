@@ -293,7 +293,6 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
                         viewBinding.mainForm.gigerNameEt.isEnabled = false
                         viewBinding.mainForm.gigerNameEt.setText(state.profile.name)
                     }
-                    checkForNextButtonEnabled()
                 }
 
                 //Open data selection screen states
@@ -316,8 +315,18 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
                 is NewSelectionForm1ViewState.EnteredPhoneNumberSanitized -> {
                     setMobileNoOnEditText(state.sanitizedPhoneNumber)
                 }
+                is NewSelectionForm1ViewState.DisableSubmitButton -> {
+                    enableDisableSubmitButton(false)
+                }
+                is NewSelectionForm1ViewState.EnableSubmitButton -> {
+                    enableDisableSubmitButton(true)
+                }
             }
         })
+
+    private fun enableDisableSubmitButton(b: Boolean) {
+        viewBinding.mainForm.nextButton.isEnabled = b
+    }
 
     private fun showJobProfileRelatedFields(
         dynamicFields: List<JobProfileDependentDynamicInputField>
@@ -499,7 +508,7 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
 
         viewBinding.mainForm.businessError.errorTextview.text = null
         viewBinding.mainForm.businessError.root.gone()
-        checkForNextButtonEnabled()
+
     }
 
     private fun showSelectedJobProfile(
@@ -520,14 +529,9 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
 
         viewBinding.mainForm.jobProfileError.errorTextview.text = null
         viewBinding.mainForm.jobProfileError.root.gone()
-        checkForNextButtonEnabled()
+
     }
 
-    private fun checkForNextButtonEnabled() = viewBinding.apply {
-        mainForm.nextButton.isEnabled = (mainForm.businessSelectedLabel.text != getString(R.string.click_to_select_business_lead)
-                && mainForm.selectedJobProfileLabel.text != getString(R.string.click_to_select_job_profile_lead)
-                && mainForm.gigerNameEt.text.toString().isNotEmpty())
-    }
 
     private fun readContactsPermissionsGranted(): Boolean {
         return ContextCompat.checkSelfPermission(

@@ -89,4 +89,5 @@
     <string name="decline_gigs">Decline Gigs</string>
     <string name="no_gig_assigned_giger">No gigs assigned</string>
     <string name="marked_not_working_giger">Marked not working</string>
+    <string name="go_back">Go back</string>
 </resources>
