@@ -22,7 +22,6 @@ import com.gigforce.common_ui.UserInfoImp
 import com.gigforce.common_ui.contacts.ContactsDelegate
 import com.gigforce.common_ui.contacts.PhoneContact
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
-import com.gigforce.common_ui.dynamic_fields.data.DynamicField
 import com.gigforce.common_ui.dynamic_fields.DynamicFieldsInflaterHelper
 import com.gigforce.common_ui.dynamic_fields.data.DynamicField
 import com.gigforce.common_ui.ext.hideSoftKeyboard
