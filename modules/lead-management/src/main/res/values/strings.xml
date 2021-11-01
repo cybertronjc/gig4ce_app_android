@@ -204,4 +204,5 @@
     <string name="select_an_option_lead">Please select an option.</string>
     <string name="giger_not_joined_lead">Giger has not joined the gig.</string>
     <string name="giger_joined_lead">Giger has resigned after working.</string>
+    <string name="giger_already_disabled_lead">This giger is already disabled</string>
 </resources>

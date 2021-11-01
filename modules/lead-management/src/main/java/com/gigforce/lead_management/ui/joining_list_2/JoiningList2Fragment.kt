@@ -243,7 +243,7 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
         statusTabLayout.onTabSelected {
 
             val statusText = it?.text?.split("(")?.get(0).toString().trim()
-            if (statusText == "All") {
+            if (statusText == "Dropped") {
                 viewModel.filterJoinings("")
             } else {
                 viewModel.filterJoinings(statusText)
@@ -332,11 +332,11 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
 
             if (it.key == "Dropped") {
                 this.statusTabLayout.getTabAt(2)?.text = "Dropped (${it.value})"
-                if (joiningDataState == JoiningDataState.DEFAULT && it.value > 0){
-                    joiningDataState = JoiningDataState.HAS_DATA
-                }else if (joiningDataState == JoiningDataState.DEFAULT && it.value == 0){
-                    joiningDataState = JoiningDataState.NO_DATA
-                }
+//                if (joiningDataState == JoiningDataState.DEFAULT && it.value > 0){
+//                    joiningDataState = JoiningDataState.HAS_DATA
+//                }else if (joiningDataState == JoiningDataState.DEFAULT && it.value == 0){
+//                    joiningDataState = JoiningDataState.NO_DATA
+//                }
             }
             checkForNoData()
         }

@@ -13,6 +13,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
+import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.utils.getCircularProgressDrawable
@@ -29,6 +30,7 @@ import com.gigforce.lead_management.R
 import com.gigforce.lead_management.analytics.LeadManagementAnalyticsEvents
 import com.gigforce.lead_management.databinding.GigerInfoFragmentBinding
 import com.gigforce.lead_management.models.ApplicationChecklistRecyclerItemData
+import com.gigforce.lead_management.models.DropScreenIntentModel
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
 import com.gigforce.lead_management.ui.drop_selection.DropSelectionBottomSheetDialogFragment
 import com.gigforce.lead_management.ui.drop_selection_2.DropSelectionFragment2
@@ -64,15 +66,23 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
 
     var gigerPhone = ""
     private lateinit var joiningId: String
-    var isBankDetailVerified = false
+    var hasStartEndDate = false
+    var dropScreenIntentModel: DropScreenIntentModel? = null
 
     override fun viewCreated(viewBinding: GigerInfoFragmentBinding, savedInstanceState: Bundle?) {
         getDataFrom(arguments,savedInstanceState)
         initToolbar(viewBinding)
+        initViews()
         initListeners()
         initViewModel()
         checkForDropSelection()
         //initSharedViewModel()
+    }
+
+    private fun initViews() {
+        joiningId?.let {
+            dropScreenIntentModel = DropScreenIntentModel(joiningId = joiningId, false, "", "", "")
+        }
     }
 
     private fun getDataFrom(
@@ -209,6 +219,16 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
             overlayCardLayout.selectionDate.text = ": "+getFormattedDate(it.selectionDate)
             overlayCardLayout.joiningDate.text = ": "+getFormattedDateFromYYMMDD(it.joiningDate) ?: ""
 
+            //check for gigStartDate and gigEndDate
+            if (!it.gigStartDate.isNullOrBlank() && !it.gigEndDate.isNullOrBlank()){
+                hasStartEndDate = true
+                dropScreenIntentModel?.gigStartDate = it.gigStartDate
+                dropScreenIntentModel?.gigEndDate = it.gigEndDate
+            }
+            if (!it.currentDate.isNullOrBlank()){
+                dropScreenIntentModel?.currentDate = it.currentDate
+            }
+
             val checkListItemData = arrayListOf<ApplicationChecklistRecyclerItemData.ApplicationChecklistItemData>()
             if (it.checkList == null){
                 checklistText.gone()
@@ -217,8 +237,9 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
                  it.checkList?.let {
                 it.forEachIndexed { index, checkListItem ->
                     if (checkListItem.type == "bank_details" && checkListItem.status == "Completed"){
-                        isBankDetailVerified = true
+                        dropScreenIntentModel?.isBankVerified = true
                     }
+
                     val itemData = ApplicationChecklistRecyclerItemData.ApplicationChecklistItemData(checkListItem.name, checkListItem.status, checkListItem.optional)
                     checkListItemData.add(itemData)
                 }
@@ -275,11 +296,16 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
     private fun initListeners() = viewBinding.apply {
         bottomButtonLayout.dropGigerBtn.setOnClickListener {
             //drop functionality
-            DropSelectionFragment2.launch(
-                arrayListOf(joiningId),
-                isBankDetailVerified,
-                childFragmentManager
-            )
+            if (hasStartEndDate){
+                DropSelectionFragment2.launch(
+                    arrayListOf<DropScreenIntentModel>(dropScreenIntentModel!!),
+                    childFragmentManager
+                )
+            }else{
+                //gigStartDate and gigEndDate are not availble -> cannot drop giger
+                showToast(getString(R.string.giger_already_disabled_lead))
+            }
+
         }
         bottomButtonLayout.callLayout.setOnClickListener {
             //call functionality
@@ -365,5 +391,6 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
         val formatted = output.format(d)
         return formatted ?: ""
     }
+
 
 }

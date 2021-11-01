@@ -27,12 +27,15 @@ import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.BottomSheetDialogFragmentDropSelectionBinding
 import com.gigforce.lead_management.databinding.DropSelection2BottomSheetMainBinding
 import com.gigforce.lead_management.databinding.DropSelectionFragment2FragmentBinding
+import com.gigforce.lead_management.models.DropScreenIntentModel
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
 import com.gigforce.lead_management.ui.drop_selection.DropSelectionBottomSheetDialogFragment
 import com.gigforce.lead_management.ui.drop_selection.DropSelectionViewModel
 import com.github.razir.progressbutton.hideProgress
 import com.github.razir.progressbutton.showProgress
 import dagger.hilt.android.AndroidEntryPoint
+import java.text.ParseException
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -51,28 +54,26 @@ class DropSelectionFragment2 : BaseBottomSheetDialogFragment<DropSelectionFragme
         const val INTENT_CURRENT_DATE = "current_date"
 
         fun launch(
-            selectionIdsToDrop: ArrayList<String>,
-            isBankDetailVerified: Boolean,
+            selectionJoiningsToDrop: ArrayList<DropScreenIntentModel>,
             childFragmentManager : FragmentManager
         ){
             DropSelectionFragment2().apply {
                 arguments = bundleOf(
-                    INTENT_SELECTIONS_TO_DROP to selectionIdsToDrop,
-                    INTENT_BANK_DETAILS_VERIFIED to isBankDetailVerified,
-                    INTENT_GIG_START_DATE to gigStartDate,
-                    INTENT_GIG_END_DATE to gigEndDate,
-                    INTENT_CURRENT_DATE to currentDate
+                    INTENT_SELECTIONS_TO_DROP to selectionJoiningsToDrop,
+
                 )
             }.show(childFragmentManager,TAG)
         }
     }
 
 
-    private lateinit var selectionIdsToDrop: ArrayList<String>
+    private lateinit var selectionJoiningsToDrop: ArrayList<DropScreenIntentModel>
+    private var selectionJoiningIdsToDrop = arrayListOf<String>()
     private var isBankDetailsVerified: Boolean = false
-    private var gigStartDate: String? = ""
-    private var gigEndDate: String? = ""
-    private var currentDate: String? = ""
+    private var gigStartDate: Date? = null
+    private var gigEndDate: Date? = null
+    private var currentDate: Date? = null
+
     private val viewModel: DropSelectionFragment2ViewModel by viewModels()
     private val sharedLeadMgmtViewModel: LeadManagementSharedViewModel by activityViewModels()
 
@@ -80,26 +81,33 @@ class DropSelectionFragment2 : BaseBottomSheetDialogFragment<DropSelectionFragme
         super.onCreate(savedInstanceState)
         setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
         arguments?.let {
-            selectionIdsToDrop = it.getStringArrayList(DropSelectionFragment2.INTENT_SELECTIONS_TO_DROP) ?: return@let
-            isBankDetailsVerified = it.getBoolean(DropSelectionFragment2.INTENT_BANK_DETAILS_VERIFIED) ?: return@let
+            selectionJoiningsToDrop = it.getParcelableArrayList<DropScreenIntentModel>(INTENT_SELECTIONS_TO_DROP) ?: return@let
         }
 
         savedInstanceState?.let {
-            selectionIdsToDrop = it.getStringArrayList(DropSelectionFragment2.INTENT_SELECTIONS_TO_DROP) ?: return@let
-            isBankDetailsVerified = it.getBoolean(DropSelectionFragment2.INTENT_BANK_DETAILS_VERIFIED) ?: return@let
+            selectionJoiningsToDrop = it.getParcelableArrayList<DropScreenIntentModel>(INTENT_SELECTIONS_TO_DROP) ?: return@let
         }
+        logDataReceivedFromBundles()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putStringArrayList(
-            DropSelectionFragment2.INTENT_SELECTIONS_TO_DROP,
-            selectionIdsToDrop
+        outState.putParcelableArrayList(
+            INTENT_SELECTIONS_TO_DROP,
+            selectionJoiningsToDrop
         )
-        outState.putBoolean(
-            DropSelectionFragment2.INTENT_BANK_DETAILS_VERIFIED,
-            isBankDetailsVerified
+    }
+
+    private fun logDataReceivedFromBundles() {
+        if (::selectionJoiningsToDrop.isInitialized) {
+            logger.d(logTag, "Joinings received from bundles : $selectionJoiningsToDrop")
+        } else {
+            logger.e(
+                logTag,
+                "no selectionJoiningsToDrop-id received from bundles",
+                Exception("no selectionJoiningsToDrop-id received from bundles")
             )
+        }
     }
 
     override fun viewCreated(
@@ -112,9 +120,25 @@ class DropSelectionFragment2 : BaseBottomSheetDialogFragment<DropSelectionFragme
     }
 
     private fun initView() = viewBinding.apply {
-
+        selectionJoiningsToDrop.forEach {
+            selectionJoiningIdsToDrop.add(it.joiningId)
+        }
         lastWorkingLayout.dateText.text = DateHelper.getDateInDDMMMYYYYComma(Date())
-
+        if (selectionJoiningsToDrop.size == 1){
+            //single selection
+            currentDate = DateHelper.getDateFromString(selectionJoiningsToDrop.get(0).currentDate)
+            gigStartDate = DateHelper.getDateFromString(selectionJoiningsToDrop.get(0).gigStartDate)
+            gigEndDate = DateHelper.getDateFromString(selectionJoiningsToDrop.get(0).gigEndDate)
+            isBankDetailsVerified = selectionJoiningsToDrop.get(0).isBankVerified
+            if (currentDate!! < gigStartDate){
+                //normal drop
+                showDirectDropLayout()
+            }else{
+                showJoinedNotJoinedLayout()
+            }
+        }else{
+            //for multi selection in future
+        }
     }
 
     private fun initListeners() = viewBinding.apply{
@@ -157,7 +181,7 @@ class DropSelectionFragment2 : BaseBottomSheetDialogFragment<DropSelectionFragme
             //giger has not joined the gig
             dropSelectionButton.setOnClickListener {
                 //call drop api
-                viewModel.dropSelections(selectionIdsToDrop)
+                viewModel.dropSelections(selectionJoiningIdsToDrop)
 
             }
             cancelButton.setOnClickListener {
@@ -175,7 +199,7 @@ class DropSelectionFragment2 : BaseBottomSheetDialogFragment<DropSelectionFragme
             }
             confirmButton.setOnClickListener {
                 //call drop api
-                viewModel.dropSelections(selectionIdsToDrop)
+                viewModel.dropSelections(selectionJoiningIdsToDrop)
             }
             cancelBtn.setOnClickListener {
                 dismiss()
@@ -184,7 +208,7 @@ class DropSelectionFragment2 : BaseBottomSheetDialogFragment<DropSelectionFragme
         directDropLayout.apply {
             dropSelectionDirect.setOnClickListener {
                 //call drop api
-                showJoinedNotJoinedLayout()
+                viewModel.dropSelections(selectionJoiningIdsToDrop)
             }
             cancelButton.setOnClickListener {
                 dismiss()
@@ -265,8 +289,8 @@ class DropSelectionFragment2 : BaseBottomSheetDialogFragment<DropSelectionFragme
             cal.get(Calendar.DAY_OF_MONTH)
         )
 
-        datePickerDialog.datePicker.maxDate = Calendar.getInstance().timeInMillis
-        datePickerDialog.datePicker.minDate = Calendar.getInstance().timeInMillis
+        datePickerDialog.datePicker.maxDate = gigEndDate!!.time
+        datePickerDialog.datePicker.minDate = gigStartDate!!.time
         datePickerDialog
     }
 
@@ -302,11 +326,11 @@ class DropSelectionFragment2 : BaseBottomSheetDialogFragment<DropSelectionFragme
                     }
                     viewBinding.lastWorkingLayout.confirmButton.isEnabled = false
 
-                    viewBinding.lastWorkingLayout.confirmButton.showProgress {
+                    viewBinding.directDropLayout.dropSelectionDirect.showProgress {
                         buttonText = "Dropping..."
                         progressColor = Color.WHITE
                     }
-                    viewBinding.lastWorkingLayout.confirmButton.isEnabled = false
+                    viewBinding.directDropLayout.dropSelectionDirect.isEnabled = false
 
                 }
                 is Lce.Content -> {
@@ -317,14 +341,13 @@ class DropSelectionFragment2 : BaseBottomSheetDialogFragment<DropSelectionFragme
                     viewBinding.joinedNotJoinedLayout.root.gone()
                     viewBinding.bankVerifyLayout.root.gone()
                     viewBinding.directDropLayout.root.gone()
-                    if (selectionIdsToDrop.size == 1){
-                        viewBinding.successLayout.dropedSelectionLabel.text = getString(R.string.one_selection_drop_lead)
-                    } else {
-                        viewBinding.successLayout.dropedSelectionLabel.text =
-                            selectionIdsToDrop.size.toString() + getString(R.string.selection_drop_lead)
-                    }
+//                    if (selectionIdsToDrop.size == 1){
+//                        viewBinding.successLayout.dropedSelectionLabel.text = getString(R.string.one_selection_drop_lead)
+//                    } else {
+//                        viewBinding.successLayout.dropedSelectionLabel.text =
+//                            selectionIdsToDrop.size.toString() + getString(R.string.selection_drop_lead)
+//                    }
                 }
             }
         })
-
 }

@@ -142,7 +142,7 @@ class JoiningList2ViewModel @Inject constructor(
 
 
         val filterMap = HashMap<String, Int>()
-        var totalCount = 0
+        var droppedCount = 0
         val joiningListForView = mutableListOf<JoiningList2RecyclerItemData>()
         businessToJoiningGroupedList.forEach { (business, joinings) ->
             gigforceLogger.d(TAG, "processing data, Status : $business : ${joinings.size} Joinings")
@@ -229,9 +229,22 @@ class JoiningList2ViewModel @Inject constructor(
             }
         }.groupBy { it.status }.toSortedMap(compareBy { it })
 
+
         statusToJoiningGroupedList.forEach {
-            totalCount += it.value.size
+            //totalCount += it.value.size
+            it.value.forEach {
+                if (it.isActive == false){
+                    droppedCount ++
+                }
+            }
         }
+//        val activeJoinings = statusToJoiningGroupedList.filter { it.key == true }.values
+//        activeJoinings.forEach {
+//            if (it.all { it.status == "Pending" }){
+//                filterMap.put(LeadManagementConstants.STATUS_PENDING, it.all { it.status == "Pending"})
+//            }
+//        }
+
         if (statusToJoiningGroupedList.containsKey("Pending")){
             filterMap.put(LeadManagementConstants.STATUS_PENDING, statusToJoiningGroupedList.get("Pending")?.size!!)
         } else {
@@ -243,7 +256,7 @@ class JoiningList2ViewModel @Inject constructor(
             filterMap.put(LeadManagementConstants.STATUS_COMPLETED, 0)
         }
 
-        filterMap.put("Dropped", totalCount)
+        filterMap.put("Dropped", droppedCount)
         _filtersMap.postValue(filterMap)
 
         gigforceLogger.d(
