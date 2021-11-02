@@ -112,7 +112,6 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
                 navigation.popBackStack()
             }
         }
-
     }
 
     private fun initViewModel() {

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/frameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginTop="@dimen/size_32"
+            android:layout_marginEnd="@dimen/size_16"
+            android:background="@drawable/info_card_background"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/detailsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_24"
+                android:layout_marginBottom="@dimen/size_24">
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_begin="160dp"
+                    app:layout_constraintStart_toEndOf="@id/team_lead_name_label" />
+
+                <com.gigforce.common_ui.views.GigforceImageView
+                    android:id="@+id/job_profile_image"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:scaleType="centerCrop"
+                    android:layout_marginStart="20dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:shapeAppearanceOverlay="@style/circleImageView"
+                    tools:srcCompat="@tools:sample/avatars" />
+
+                <TextView
+                    android:id="@+id/businessNameTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:fontFamily="@font/lato_bold"
+                    android:text="@string/del_executive_lead"
+                    android:textColor="@color/pink_text"
+                    android:textSize="@dimen/font14"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintStart_toEndOf="@id/job_profile_image"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/job_profile_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/size_20"
+                    android:text="@string/company_text_lead"
+                    android:textAppearance="@style/body_primary_2"
+                    app:layout_constraintStart_toStartOf="@id/job_profile_image"
+                    app:layout_constraintTop_toBottomOf="@id/job_profile_image" />
+
+                <TextView
+                    android:id="@+id/team_lead_name_label"
+                    android:layout_width="125dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/size_10"
+                    android:text="@string/joining_date_lead"
+                    android:textAppearance="@style/body_primary_2"
+                    app:layout_constraintStart_toStartOf="@id/job_profile_image"
+                    app:layout_constraintTop_toBottomOf="@id/job_profile_label" />
+
+                <TextView
+                    android:id="@+id/locationTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/size_10"
+                    android:text="@string/location_lead"
+                    android:textAppearance="@style/body_primary_2"
+                    app:layout_constraintStart_toStartOf="@id/job_profile_image"
+                    app:layout_constraintTop_toBottomOf="@id/team_lead_name_label" />
+
+                <TextView
+                    android:id="@+id/selectionDateTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/size_10"
+                    android:text="@string/selection_date_lead"
+                    android:textAppearance="@style/body_primary_2"
+                    app:layout_constraintStart_toStartOf="@id/job_profile_image"
+                    app:layout_constraintTop_toBottomOf="@id/locationTextView" />
+
+                <TextView
+                    android:id="@+id/job_profile_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/company_text_lead"
+                    android:textAppearance="@style/body_primary_2"
+                    app:layout_constraintStart_toStartOf="@id/guideline2"
+                    app:layout_constraintTop_toTopOf="@id/job_profile_label" />
+
+                <TextView
+                    android:id="@+id/team_leader_name_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/joining_date_lead"
+                    android:textAppearance="@style/body_primary_2"
+                    app:layout_constraintStart_toStartOf="@id/guideline2"
+                    app:layout_constraintTop_toTopOf="@id/team_lead_name_label" />
+
+                <TextView
+                    android:id="@+id/locationText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/size_4"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:scrollHorizontally="true"
+                    android:text="@string/location_lead"
+                    android:textAppearance="@style/body_primary_2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/guideline2"
+                    app:layout_constraintTop_toTopOf="@id/locationTextView" />
+
+                <TextView
+                    android:id="@+id/selectionDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/selection_date_lead"
+                    android:textAppearance="@style/body_primary_2"
+                    app:layout_constraintStart_toStartOf="@id/guideline2"
+                    app:layout_constraintTop_toTopOf="@id/selectionDateTextView" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+
+
+    </FrameLayout>
+</layout>

@@ -37,7 +37,7 @@ data class GigerInfo(
     val status: String,
 
     @SerializedName("checkList")
-    val checkList: List<CheckListItem>? = null,
+    val checkList: List<CheckListItem> = emptyList(),
 ) {
 }
 
