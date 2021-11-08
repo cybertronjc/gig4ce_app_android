@@ -2,7 +2,6 @@ package com.gigforce.lead_management.ui.pending_joining_details
 
 import android.os.Bundle
 import android.widget.LinearLayout
-import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.utils.getCircularProgressDrawable

@@ -1092,6 +1092,10 @@
         android:id="@+id/showCheckListDocsBottomSheet"
         android:name="com.gigforce.lead_management.ui.giger_info.ShowCheckListDocsBottomSheet"
         android:label="ShowCheckListDocsBottomSheet" />
+    <fragment
+        android:id="@+id/pendingJoiningDetailsFragment"
+        android:name="com.gigforce.lead_management.ui.pending_joining_details.PendingJoiningDetailsFragment"
+        android:label="PendingJoiningDetailsFragment" />
 
 </navigation>
 
