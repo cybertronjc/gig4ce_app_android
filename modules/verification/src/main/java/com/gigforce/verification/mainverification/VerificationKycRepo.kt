@@ -23,6 +23,7 @@ class VerificationKycRepo(private val iBuildConfigVM: IBuildConfigVM) :
 
     suspend fun getVerificationOcrResult(
         type: String,
+        uid: String,
         subType: String,
         image: MultipartBody.Part
     ): KycOcrResultModel {
@@ -34,7 +35,7 @@ class VerificationKycRepo(private val iBuildConfigVM: IBuildConfigVM) :
 //        )//FirebaseAuth.getInstance().currentUser?.uid)
 //        jsonObject.addProperty("subType", subType)
 
-        var model = OCRQueryModel(type, getUID(), subType)
+        var model = OCRQueryModel(type,uid, subType)
         var kycOcrStatus =
             kycService.getKycOcrResult(iBuildConfigVM.getVerificationKycOcrResult(), model, image)
         if (kycOcrStatus.isSuccessful) {
@@ -48,9 +49,9 @@ class VerificationKycRepo(private val iBuildConfigVM: IBuildConfigVM) :
         }
     }
 
-    suspend fun getKycVerification(type: String, list: List<Data>): KycOcrResultModel {
+    suspend fun getKycVerification(type: String, list: List<Data>, uid: String): KycOcrResultModel {
         Log.d("Here", type + " list " + list.toString())
-        val kycVerifyReqModel = KycVerifyReqModel(type, getUID(), list)
+        val kycVerifyReqModel = KycVerifyReqModel(type, uid, list)
         val kycOcrStatus = kycService.getKycVerificationService(
             iBuildConfigVM.getKycVerificationUrl(),
             kycVerifyReqModel
@@ -100,9 +101,9 @@ class VerificationKycRepo(private val iBuildConfigVM: IBuildConfigVM) :
         }
     }
 
-    suspend fun setVerifiedStatus(status: Boolean?) : Boolean{
+    suspend fun setVerifiedStatus(status: Boolean?, uid: String) : Boolean{
         try {
-            db.collection(getCollectionName()).document(getUID()).updateOrThrow(
+            db.collection(getCollectionName()).document(uid).updateOrThrow(
                 mapOf(
                     "bank_details.verified" to status,
                     "bank_details.verifiedOn" to Timestamp.now()

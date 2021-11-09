@@ -47,10 +47,10 @@ class AadharDetailInfoViewModel @Inject constructor(private val aadharDetailsRep
 
     }
 
-    fun getKycOcrResult(type: String, subType: String, image: MultipartBody.Part) =
+    fun getKycOcrResult(type: String, subType: String, image: MultipartBody.Part, uid: String) =
             viewModelScope.launch {
                 try {
-                    _kycOcrResult.value = verificationKycRepo.getVerificationOcrResult(type, subType, image)
+                    _kycOcrResult.value = verificationKycRepo.getVerificationOcrResult(type, uid, subType, image)
                 } catch (e: Exception) {
                     _kycOcrResult.value = KycOcrResultModel(status = false, message = e.message)
                 }
@@ -86,7 +86,7 @@ class AadharDetailInfoViewModel @Inject constructor(private val aadharDetailsRep
         }
 
     }
-    fun setAadhaarDetails(submitDataModel: AadhaarDetailsDataModel, nomineeAsFather : Boolean ,mJobProfileId : String)= viewModelScope.launch {
+    fun setAadhaarDetails(submitDataModel: AadhaarDetailsDataModel, nomineeAsFather : Boolean ,mJobProfileId : String, uid: String)= viewModelScope.launch {
             try {
                 val updated = aadharDetailsRepo.setAadhaarFromVerificationModule(nomineeAsFather, submitDataModel)
                 updatedResult.postValue(updated)
@@ -95,7 +95,7 @@ class AadharDetailInfoViewModel @Inject constructor(private val aadharDetailsRep
                             .whereEqualTo("jpid", mJobProfileId)
                             .whereEqualTo(
                                     "gigerId",
-                                    FirebaseAuthStateListener.getInstance().getCurrentSignInUserInfoOrThrow().uid
+                                    uid
                             ).addSnapshotListener { jp_application, _ ->
 
                                 jp_application?.let {

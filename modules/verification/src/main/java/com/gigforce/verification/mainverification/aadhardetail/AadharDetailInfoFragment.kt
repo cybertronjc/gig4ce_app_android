@@ -44,6 +44,8 @@ import com.gigforce.verification.mainverification.VerificationClickOrSelectImage
 import com.gigforce.verification.mainverification.pancard.VerificationScreenStatus
 import com.gigforce.verification.util.VerificationConstants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.veri_screen_info_component.view.*
 import okhttp3.MediaType
@@ -73,6 +75,12 @@ class AadharDetailInfoFragment : Fragment(),
     private var aadharBackImagePath: String? = null
     private var mJobProfileId: String = ""
     private var FROM_CLIENT_ACTIVATON: Boolean = false
+    private var userId: String? = null
+    private val user: FirebaseUser?
+        get() {
+            return FirebaseAuth.getInstance().currentUser
+        }
+    private var userIdToUse: String? = null
 
     @Inject
     lateinit var buildConfig: IBuildConfig
@@ -122,6 +130,11 @@ class AadharDetailInfoFragment : Fragment(),
             resources.getString(R.string.no_doc_title_aadhaar_veri),
             resources.getString(R.string.no_doc_subtitle_aadhaar_veri)
         )
+        userIdToUse = if (userId != null) {
+            userId
+        }else{
+            user?.uid
+        }
     }
 
     var allNavigationList = ArrayList<String>()
@@ -136,6 +149,7 @@ class AadharDetailInfoFragment : Fragment(),
             }
             intentBundle = it
             mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
+            userId = it.getString(StringConstants.INTENT_USER_ID.value) ?: return@let
         } ?: run {
             arguments?.let {
 
@@ -146,6 +160,7 @@ class AadharDetailInfoFragment : Fragment(),
                 }
                 intentBundle = it
                 mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
+                userId = it.getString(StringConstants.INTENT_USER_ID.value) ?: return@let
             }
 
         }
@@ -589,9 +604,9 @@ class AadharDetailInfoFragment : Fragment(),
             ) else null
         )
         if (FROM_CLIENT_ACTIVATON)
-            viewModel.setAadhaarDetails(submitDataModel, false, mJobProfileId)
+            viewModel.setAadhaarDetails(submitDataModel, false, mJobProfileId, userIdToUse.toString())
         else
-            viewModel.setAadhaarDetails(submitDataModel, false, "")
+            viewModel.setAadhaarDetails(submitDataModel, false, "", userIdToUse.toString())
 
     }
 
@@ -1247,7 +1262,8 @@ class AadharDetailInfoFragment : Fragment(),
             viewModel.getKycOcrResult(
                 "aadhar",
                 if (viewBinding.toplayoutblock.viewPager2.currentItem == 0) "front" else "back",
-                it
+                it,
+                userIdToUse.toString()
             )
         }
     }

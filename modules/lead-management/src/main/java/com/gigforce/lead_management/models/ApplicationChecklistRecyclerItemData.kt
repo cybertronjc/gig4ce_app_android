@@ -9,7 +9,10 @@ open class ApplicationChecklistRecyclerItemData(
 
     data class ApplicationChecklistItemData(
         val checkName: String,
+        val gigerUid: String,
+        val gigerName: String,
         val status: String,
+        val docType: String,
         val isOptional: Boolean,
         val frontImage: String?,
         val backImage: String?

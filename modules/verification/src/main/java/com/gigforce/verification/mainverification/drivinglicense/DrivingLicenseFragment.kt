@@ -53,6 +53,8 @@ import com.gigforce.verification.mainverification.VerificationClickOrSelectImage
 import com.gigforce.verification.util.VerificationConstants
 import com.gigforce.verification.util.VerificationEvents
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.jaeger.library.StatusBarUtil
 import com.yalantis.ucrop.UCrop
 import dagger.hilt.android.AndroidEntryPoint
@@ -111,6 +113,12 @@ class DrivingLicenseFragment : Fragment(),
     private var FROM_CLIENT_ACTIVATON: Boolean = false
     private val viewModel: DrivingLicenseViewModel by viewModels()
     private lateinit var viewBinding: DrivingLicenseFragmentBinding
+    private var userId: String? = null
+    private val user: FirebaseUser?
+        get() {
+            return FirebaseAuth.getInstance().currentUser
+        }
+    private var userIdToUse: String? = null
     private var dlFrontImagePath: Uri? = null
     private var dlBackImagePath: Uri? = null
     private var currentlyClickingImageOfSide: DrivingLicenseSides? = null
@@ -141,6 +149,11 @@ class DrivingLicenseFragment : Fragment(),
             resources.getString(R.string.no_doc_title_dl_veri),
             resources.getString(R.string.no_doc_subtitle_dl_veri)
         )
+        userIdToUse = if (userId != null) {
+            userId
+        }else{
+            user?.uid
+        }
     }
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -157,6 +170,7 @@ class DrivingLicenseFragment : Fragment(),
                 allNavigationList = arr
             }
             intentBundle = it
+            userId = it.getString(com.gigforce.common_ui.StringConstants.INTENT_USER_ID.value) ?: return@let
         } ?: run {
             arguments?.let {
                 FROM_CLIENT_ACTIVATON =
@@ -165,6 +179,7 @@ class DrivingLicenseFragment : Fragment(),
                     allNavigationList = arrData
                 }
                 intentBundle = it
+                userId = it.getString(com.gigforce.common_ui.StringConstants.INTENT_USER_ID.value) ?: return@let
             }
         }
     }
@@ -459,7 +474,7 @@ class DrivingLicenseFragment : Fragment(),
             ocrOrVerificationRquested = false
         })
 
-        viewModel.getVerifiedStatus()
+        viewModel.getVerifiedStatus(userIdToUse.toString())
         viewModel.verifiedStatus.observe(viewLifecycleOwner, Observer {
             if (!ocrOrVerificationRquested) {
                 viewBinding.screenLoaderBar.gone()
@@ -557,7 +572,8 @@ class DrivingLicenseFragment : Fragment(),
             viewModel.getKycOcrResult(
                 "DL",
                 if (currentlyClickingImageOfSide == DrivingLicenseSides.FRONT_SIDE) "front" else "back",
-                it
+                it,
+                userIdToUse.toString()
             )
         }
     }
@@ -575,7 +591,6 @@ class DrivingLicenseFragment : Fragment(),
     }
 
     private fun requestStoragePermission() {
-
         requestPermissions(
             arrayOf(
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -757,7 +772,7 @@ class DrivingLicenseFragment : Fragment(),
         )
 
         activeLoader(true)
-        viewModel.getKycVerificationResult("DL", list)
+        viewModel.getKycVerificationResult("DL", list, userIdToUse.toString())
     }
 
     private fun showFrontDrivingLicense(drivingFrontPath: Uri) {
