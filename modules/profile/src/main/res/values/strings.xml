@@ -108,6 +108,7 @@
     <string name="what_have_you_deliver_before_profile">What have you delivered earlier?</string>
     <string name="camera_and_storage_permission_required">Storage and Camera permission required</string>
     <string name="please_grant_storage_camera_permission">Please grant camera and storage permission, so we can click and save your profile picture</string>
-
+    <string name="camera_permission_required">Camera permission required</string>
+    <string name="please_grant_camera_permission">Please grant camera permission, so we can click and save your profile picture</string>
 
 </resources>

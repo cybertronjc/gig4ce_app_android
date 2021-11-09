@@ -149,6 +149,7 @@ class ImageViewerFragment : Fragment() {
 
             catch (e: Exception) {
                 sharedCameraViewModel.clickedImageApproved(
+                    requireContext(),
                     shouldUploadImageToo,
                     image,
                     parentDirectoryNameInFirebaseStorage

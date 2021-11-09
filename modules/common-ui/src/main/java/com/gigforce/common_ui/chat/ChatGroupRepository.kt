@@ -204,13 +204,11 @@ class ChatGroupRepository constructor(
         imageUri: Uri
     ) = GlobalScope.launch(Dispatchers.IO) {
 
-        val file = imageUri.toFile()
         val thumbnail = message.thumbnailBitmap?.copy(message.thumbnailBitmap?.config, true)
-
         val thumbnailPathOnServer = if (thumbnail != null) {
             val imageInBytes = ImageUtils.convertToByteArray(thumbnail)
             uploadChatAttachment(
-                "thumb-${file.name}",
+                "thumb-${message.imageMetaData?.name}",
                 imageInBytes,
                 groupId,
                 isGroupChatMessage = true,
@@ -221,7 +219,7 @@ class ChatGroupRepository constructor(
         }
 
         val pathOnServer = uploadChatAttachment(
-            file.name,
+            message.imageMetaData!!.name,
             imageUri,
             groupId,
             isGroupChatMessage = true,

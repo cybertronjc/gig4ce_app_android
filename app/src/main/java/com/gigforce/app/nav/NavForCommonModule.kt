@@ -3,7 +3,6 @@ package com.gigforce.app.nav
 import com.gigforce.app.R
 import com.gigforce.common_ui.BaseNavigationImpl
 import com.gigforce.core.documentFileHelper.RequestDocumentTreeAccessFragment
-import com.gigforce.core.documentFileHelper.RequestDocumentTreeAccessFragment
 
 class NavForCommonModule(
     baseImplementation: BaseNavigationImpl
