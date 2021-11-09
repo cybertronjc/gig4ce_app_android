@@ -10,6 +10,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
+import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import androidx.activity.result.contract.ActivityResultContracts
@@ -246,7 +247,8 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
             activity?.onBackPressed()
         }
         setBackButtonDrawable(R.drawable.ic_chevron)
-        this.stepsTextView.setText(context.getString(R.string.step_1_2_lead))
+        makeBackgroundMoreRound()
+        makeTitleBold()
     }
 
     private fun initViewModel() = viewModel
@@ -311,8 +313,18 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
                 is NewSelectionForm1ViewState.EnteredPhoneNumberSanitized -> {
                     setMobileNoOnEditText(state.sanitizedPhoneNumber)
                 }
+                is NewSelectionForm1ViewState.DisableSubmitButton -> {
+                    enableDisableSubmitButton(false)
+                }
+                is NewSelectionForm1ViewState.EnableSubmitButton -> {
+                    enableDisableSubmitButton(true)
+                }
             }
         })
+
+    private fun enableDisableSubmitButton(b: Boolean) {
+        viewBinding.mainForm.nextButton.isEnabled = b
+    }
 
     private fun showJobProfileRelatedFields(
         dynamicFields: List<JobProfileDependentDynamicInputField>
@@ -494,6 +506,7 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
 
         viewBinding.mainForm.businessError.errorTextview.text = null
         viewBinding.mainForm.businessError.root.gone()
+
     }
 
     private fun showSelectedJobProfile(
@@ -514,7 +527,9 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
 
         viewBinding.mainForm.jobProfileError.errorTextview.text = null
         viewBinding.mainForm.jobProfileError.root.gone()
+
     }
+
 
     private fun readContactsPermissionsGranted(): Boolean {
         return ContextCompat.checkSelfPermission(

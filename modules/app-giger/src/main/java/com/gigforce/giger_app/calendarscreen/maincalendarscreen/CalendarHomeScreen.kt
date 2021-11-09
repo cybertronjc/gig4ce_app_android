@@ -163,8 +163,8 @@ class CalendarHomeScreen : Fragment(),
             }
         })
         arrCalendarDependent =
-//            arrayOf(calendar_dependent, margin_40, below_oval, calendar_cv, bottom_sheet_top_shadow)
-            arrayOf(calendar_dependent, calendar_cv, bottom_sheet_top_shadow)
+            arrayOf(calendar_dependent, calendar_cv, bottom_sheet_top_shadow,oval_gradient_iv1)
+//            arrayOf(calendar_dependent, calendar_cv, bottom_sheet_top_shadow)
 
         selectedMonthModel = CalendarView.MonthModel(Calendar.getInstance().get(Calendar.MONTH))
         initializeViews()
@@ -197,11 +197,18 @@ class CalendarHomeScreen : Fragment(),
 
     private fun checkForDeepLink() {
         try {
-            val cameFromDeepLink = sharedPreAndCommonUtilInterface.getDataBoolean("deeplink_login")
-            if (cameFromDeepLink == true){
+            val cameFromLoginDeepLink = sharedPreAndCommonUtilInterface.getDataBoolean("deeplink_login")
+            val cameFromOnboardingDeepLink = sharedPreAndCommonUtilInterface.getDataBoolean("deeplink_onboarding")
+            if (cameFromLoginDeepLink == true){
                 Log.d("deepLink", "here")
                 navigation.navigateTo("gig/tlLoginDetails", bundleOf(
                     StringConstants.CAME_FROM_LOGIN_SUMMARY_DEEPLINK.value to true
+                )
+                )
+            }else if (cameFromOnboardingDeepLink == true){
+                Log.d("deepLink", "onboarding")
+                navigation.navigateTo("LeadMgmt/joiningListFragment", bundleOf(
+                    StringConstants.CAME_FROM_ONBOARDING_FORM_DEEPLINK.value to true
                 )
                 )
             }
@@ -348,6 +355,9 @@ class CalendarHomeScreen : Fragment(),
         date_container.setOnClickListener {
             changeVisibilityCalendarView()
         }
+        oval_gradient_iv.setOnClickListener{
+            changeVisibilityCalendarView()
+        }
         calendarView.setMonthChangeListener(object :
             CalendarView.MonthChangeAndDateClickedListener {
             override fun onMonthChange(monthModel: CalendarView.MonthModel) {
@@ -388,7 +398,7 @@ class CalendarHomeScreen : Fragment(),
                 "BottomSheetState ",
                 "changeVisibilityCalendarView  : ${viewModel.currentBottomSheetState}"
             )
-            extendedBottomSheetBehavior.state = viewModel.currentBottomSheetState
+            extendedBottomSheetBehavior.state =  ExtendedBottomSheetBehavior.STATE_COLLAPSED//viewModel.currentBottomSheetState
             extendedBottomSheetBehavior.isAllowUserDragging = false
         } else {
             if (selectedMonthModel.days != null && selectedMonthModel.days.size == 1) {
@@ -1187,6 +1197,10 @@ class CalendarHomeScreen : Fragment(),
 
     var calPosition = -1
     private fun showTodaysGigDialog(gigOnDay: Int) {
+        if(gigOnDay == 0){
+            gigListForDeclineBS()
+            return
+        }
         val view =
             layoutInflater.inflate(R.layout.dialog_confirm_gig_denial, null)
 
@@ -1200,19 +1214,7 @@ class CalendarHomeScreen : Fragment(),
 
         view.findViewById<View>(R.id.yesBtn)
             .setOnClickListener {
-                val date = temporaryData.getLocalDate()
-                navigation.navigateTo(
-                    "gigsListForDeclineBottomSheet", bundleOf(
-                        AppConstants.INTEN_EXTRA_DATE to date
-                    )
-                )
-//                navigate(
-//                    R.id.gigsListForDeclineBottomSheet, bundleOf(
-//                        GigsListForDeclineBottomSheet.INTEN_EXTRA_DATE to date
-//                    )
-//                )
-
-                makeChangesToCalendarItem(calPosition, true)
+                gigListForDeclineBS()
                 dialog?.dismiss()
             }
 
@@ -1221,6 +1223,19 @@ class CalendarHomeScreen : Fragment(),
                 makeChangesToCalendarItem(calPosition, true)
                 dialog?.dismiss()
             }
+    }
+
+
+    private fun gigListForDeclineBS(){
+        val date = temporaryData.getLocalDate()
+        navigation.navigateTo(
+            "gigsListForDeclineBottomSheet", bundleOf(
+                AppConstants.INTEN_EXTRA_DATE to date
+            )
+        )
+
+        makeChangesToCalendarItem(calPosition, true)
+
     }
 
     fun makeChangesToCalendarItem(position: Int, status: Boolean) {

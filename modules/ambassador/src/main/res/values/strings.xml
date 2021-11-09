@@ -133,7 +133,7 @@
     <string name="do_you_have_bank_passbook_amb">Do you have Bank Account ?</string>
     <string name="err_driving_license_amb">Error : Uploaded Image is not a Driving License Image</string>
     <string name="yes_i_have_bank_passbook_amb">Yes, I have bank account</string>
-    <string name="no_i_dont_have_bank_passbook_amb">No, I dont have bank account</string>
+    <string name="no_i_dont_have_bank_passbook_amb">No, I don\'t have Bank account</string>
     <string name="please_provide_following_details_amb">Please provide following details.</string>
     <string name="ifsc_eg_sbin0000572_bkid0000048_amb">IFSC* (Eg: SBIN0000572, BKID0000048)</string>
     <string name="bank_name_amb">Bank Name *</string>
@@ -209,7 +209,7 @@
     <string name="find_gigs_on_amb">find gigs on Gigforce.</string>
     <string name="upload_pan_card_new_amb">Please upload your PAN card\nfor verification</string>
     <string name="upload_bank_account_new_amb">Upload your Bank Passbook\nFront Page</string>
-    <string name="why_do_we_need_this_bank_amb">A Bank Passbook is mandatory for profile verification. It helps verify your name and date of birth and also helps with payments to your wallet.</string>
+    <string name="why_do_we_need_this_bank_amb">A verified bank account is mandatory for your payout transfer on time.</string>
     <string name="got_it_amb">Got it</string>
     <string name="bank_name_too_short_amb">Bank name is too short</string>
     <string name="enter_bank_name_amb">Enter bank name</string>

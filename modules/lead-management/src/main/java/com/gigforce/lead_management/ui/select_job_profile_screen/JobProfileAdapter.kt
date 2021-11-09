@@ -50,7 +50,7 @@ class JobProfileAdapter(
         if (selectedId == null)
             return null
         else {
-            return filteredProfileList[getIndexFromId(selectedId!!)]
+            return originalProfileList[getIndexFromIdFromOriginalList(selectedId!!)]
         }
     }
 
@@ -114,6 +114,11 @@ class JobProfileAdapter(
         override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
             filteredProfileList = results?.values as ArrayList<JobProfilesItem>
             notifyDataSetChanged()
+
+            onJobProfileSelectedListener?.onJobProfileFiltered(
+                jobProfileCountVisibleAfterFiltering =  filteredProfileList.size,
+                selectedJobProfileVisible =  filteredProfileList.find { it.id == selectedId } != null
+            )
         }
     }
 
@@ -192,9 +197,26 @@ class JobProfileAdapter(
             filteredProfileList.indexOf(city)
     }
 
+    fun getIndexFromIdFromOriginalList(
+        id: String
+    ): Int {
+        val city = originalProfileList.find { it.id == id }
+
+        return if (city == null)
+            return -1
+        else
+            originalProfileList.indexOf(city)
+    }
+
 
 
     interface OnJobProfileSelectedListener{
+
+        fun onJobProfileFiltered(
+            jobProfileCountVisibleAfterFiltering : Int,
+            selectedJobProfileVisible : Boolean
+        )
+
 
         fun onJobProfileSelected(jobProfileSelected : JobProfilesItem)
     }

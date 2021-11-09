@@ -13,7 +13,8 @@ sealed class NewSelectionForm2ViewState {
     data class LocationAndTlDataLoaded(
         val selectedCity : String?,
         val selectedReportingLocation : String?,
-        val shiftAndTls : JoiningLocationTeamLeadersShifts
+        val shiftAndTls : JoiningLocationTeamLeadersShifts,
+        val locationType: String?
     ) : NewSelectionForm2ViewState()
 
     data class ErrorWhileLoadingLocationAndTlData(
@@ -22,7 +23,8 @@ sealed class NewSelectionForm2ViewState {
     ) : NewSelectionForm2ViewState()
 
     data class OpenSelectCityScreen(
-        val cities: List<ReportingLocationsItem>
+        val cities: List<ReportingLocationsItem>,
+        val locationType: String?
     ) : NewSelectionForm2ViewState()
 
     data class OpenSelectReportingScreen(

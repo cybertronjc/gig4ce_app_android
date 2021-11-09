@@ -147,8 +147,12 @@ class ImageViewerFragment : Fragment() {
                 )
             }
 
-            catch (e: IOException) {
-                e.printStackTrace()
+            catch (e: Exception) {
+                sharedCameraViewModel.clickedImageApproved(
+                    shouldUploadImageToo,
+                    image,
+                    parentDirectoryNameInFirebaseStorage
+                )
             }
 
     }

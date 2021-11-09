@@ -251,6 +251,7 @@ class JobProfileListFragment : Fragment(), IOnBackPressedOverride, OnJobSelected
 
         swipeRefresh.setOnRefreshListener {
             jobProfilesList.clear()
+            exploreRv.adapter?.notifyDataSetChanged()
             currentPage = 1
             exploreRv.gone()
             exploreError.gone()
@@ -264,6 +265,7 @@ class JobProfileListFragment : Fragment(), IOnBackPressedOverride, OnJobSelected
                 //jobProfileListAdapter.filter.filter("")
                 jobProfileRequestModelCurrent.text = ""
                 jobProfilesList.clear()
+                exploreRv.adapter?.notifyDataSetChanged()
                 currentPage = 1
                 jobProfileRequestModelCurrent.pageNo = currentPage
                 viewModel.getAllJobProfiles(jobProfileRequestModelCurrent)
@@ -306,6 +308,7 @@ class JobProfileListFragment : Fragment(), IOnBackPressedOverride, OnJobSelected
                 }
 
                 jobProfilesList.clear()
+                exploreRv.adapter?.notifyDataSetChanged()
                 exploreRv.gone()
                 exploreError.gone()
                 noGigs.gone()

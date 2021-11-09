@@ -81,8 +81,8 @@ android {
 
             applicationId "com.gigforce.app"
             resValue "string", "app_name", "Gigforce"
-            versionCode 161
-            versionName "1.35.2"
+            versionCode 163
+            versionName "1.35.4"
             buildConfigField "String", 'REFERRAL_BASE_URL', '"https://gig4ce.page.link/"'
             buildConfigField "String", 'GENERATE_PAYSLIP_URL', '"https://45nydq0i5g.execute-api.ap-south-1.amazonaws.com/default/get-or-create-payment-advice-prod"'
             buildConfigField "String", 'DRIVING_CERTIFICATE_URL', '"https://d1rdwfmrsl.execute-api.ap-south-1.amazonaws.com/default/"'
@@ -233,6 +233,7 @@ dependencies {
     implementation project(path: ':modules:landing')
     implementation project(path: ':modules:common-image-capture-picker')
     implementation project(path: ':modules:user-tracking')
+    implementation project(path: ':modules:cropper')
 
 
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.9'
@@ -331,7 +332,7 @@ dependencies {
 
     implementation "com.github.StephenVinouze:MaterialNumberPicker:1.0.0"
 
-    implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
+    //implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.+' //removed because package name for CropImageView has been changed
     implementation 'com.google.firebase:firebase-core:17.4.0'
     //ID fy
 

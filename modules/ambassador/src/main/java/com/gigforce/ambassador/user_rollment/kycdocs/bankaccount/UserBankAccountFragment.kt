@@ -82,6 +82,7 @@ class BankAccountFragment : Fragment(),
         private const val EXTENSION: String = ".jpg"
 
         private const val REQUEST_STORAGE_PERMISSION = 102
+        private const val IFSC_ZERO_TEXT_INDEX_POSITION = 4
     }
 
     var verificationScreenStatus = VerificationScreenStatus.DEFAULT
@@ -111,7 +112,9 @@ class BankAccountFragment : Fragment(),
         viewModelUser = ViewModelProviders.of(this).get(UserBankAccountViewModel::class.java)
         getDataFromIntent(savedInstanceState)
         initViews()
-        initializeImages()
+        viewBinding.toplayoutblock.initAdapter()
+        viewBinding.toplayoutblock.hideUploadOption(true)
+//        initializeImages()
         observer()
         listeners()
     }
@@ -213,7 +216,7 @@ class BankAccountFragment : Fragment(),
                         viewBinding.belowLayout.visible()
                         setAlreadyfilledData(it, false)
                         viewBinding.toplayoutblock.toggleChangeTextView(true)
-                        viewBinding.toplayoutblock.disableImageClick()//keep this line in end only
+                        //viewBinding.toplayoutblock.disableImageClick()//keep this line in end only //need to remove uploading option 2856 ticket
                     } else {
                         checkforStatusAndVerified(it)
                     }
@@ -247,7 +250,7 @@ class BankAccountFragment : Fragment(),
                 )
             }
         }
-        viewBinding.toplayoutblock.setImageViewPager(list)
+//        viewBinding.toplayoutblock.setImageViewPager(list) need to remove uploading option 2856 ticket
         viewBinding.confirmBeneficiaryLayout.gone()
     }
 
@@ -278,7 +281,7 @@ class BankAccountFragment : Fragment(),
                 )
             }
         }
-        viewBinding.toplayoutblock.setImageViewPager(list)
+//        viewBinding.toplayoutblock.setImageViewPager(list) need to remove uploading option 2856 ticket
 
     }
 
@@ -303,7 +306,7 @@ class BankAccountFragment : Fragment(),
 //                                viewBinding.editBankDetail.visible()
                                 viewBinding.belowLayout.visible()
                                 setAlreadyfilledData(obj, false)
-                                viewBinding.toplayoutblock.disableImageClick()//keep this line in end only
+                                //viewBinding.toplayoutblock.disableImageClick()//keep this line in end only //need to remove uploading option 2856 ticket
                             }
                         } catch (e: Exception) {
 
@@ -311,7 +314,7 @@ class BankAccountFragment : Fragment(),
                     }, WAITING_TIME)
                     viewBinding.belowLayout.visible()
                     setAlreadyfilledData(obj, false)
-                    viewBinding.toplayoutblock.disableImageClick()//keep this line in end only
+                    //viewBinding.toplayoutblock.disableImageClick()//keep this line in end only //need to remove uploading option 2856 ticket
                 }
                 "failed" -> {
                     verificationScreenStatus = VerificationScreenStatus.FAILED
@@ -326,19 +329,19 @@ class BankAccountFragment : Fragment(),
                         initializeImages()
                     }
                     viewBinding.toplayoutblock.toggleChangeTextView(false)
-                    viewBinding.toplayoutblock.enableImageClick()//keep this line in end only
+                    //viewBinding.toplayoutblock.enableImageClick()//keep this line in end only //need to remove uploading option 2856 ticket
                 }
                 "" -> {
                     verificationScreenStatus = VerificationScreenStatus.DEFAULT
                     resetInitializeViews()
                     viewBinding.toplayoutblock.toggleChangeTextView(false)
-                    viewBinding.toplayoutblock.enableImageClick()//keep this line in end only
+                    //viewBinding.toplayoutblock.enableImageClick()//keep this line in end only //need to remove uploading option 2856 ticket
                 }
                 "completed" -> {
                     verificationScreenStatus = VerificationScreenStatus.COMPLETED
                     showBankBeneficiaryName(obj)
                     viewBinding.toplayoutblock.toggleChangeTextView(false)
-                    viewBinding.toplayoutblock.disableImageClick()//keep this line in end only
+                    //viewBinding.toplayoutblock.disableImageClick()//keep this line in end only //need to remove uploading option 2856 ticket
                 }
                 else -> "unmatched status"
             }
@@ -377,7 +380,7 @@ class BankAccountFragment : Fragment(),
                     )
                 }
             }
-            viewBinding.toplayoutblock.setImageViewPager(list)
+//            viewBinding.toplayoutblock.setImageViewPager(list) need to remove uploading option 2856 ticket
 
         }
 
@@ -439,7 +442,7 @@ class BankAccountFragment : Fragment(),
                         )
                     }
                 }
-                viewBinding.toplayoutblock.setImageViewPager(list)
+//                viewBinding.toplayoutblock.setImageViewPager(list) need to remove uploading option 2856 ticket
             }
         }
     }
@@ -471,6 +474,32 @@ class BankAccountFragment : Fragment(),
     }
 
     var anyDataEntered = false
+
+    inner class IFSCCodeTextWatcher : TextWatcher {
+        override fun afterTextChanged(text: Editable?) {
+            if (text.toString().length == 5 && fifthCharIsNotZero(text.toString())) {
+                var str = text?.let { StringBuilder(it) }
+                str?.setCharAt(4, '0')
+                    .also {
+                        if (str != null) {
+                            viewBinding.ifscCode.editText?.setText(str.toString())
+                            viewBinding.ifscCode.editText?.setSelection(str.length)
+                        }
+                    }
+            }
+
+        }
+
+        private fun fifthCharIsNotZero(text: String): Boolean {
+            return text[IFSC_ZERO_TEXT_INDEX_POSITION] != '0'
+        }
+
+        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+        }
+
+        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+        }
+    }
 
     inner class ValidationTextWatcher : TextWatcher {
         override fun afterTextChanged(text: Editable?) {
@@ -516,7 +545,8 @@ class BankAccountFragment : Fragment(),
         })
         viewBinding.bankNameTil.editText?.addTextChangedListener(ValidationTextWatcher())
         viewBinding.bankAccNumberItl.editText?.addTextChangedListener(ValidationTextWatcher())
-        viewBinding.ifscCode.editText?.addTextChangedListener(ValidationTextWatcher())
+        //        viewBinding.ifscCode.editText?.addTextChangedListener(ValidationTextWatcher())
+        viewBinding.ifscCode.editText?.addTextChangedListener(IFSCCodeTextWatcher())
 
         viewBinding.toplayoutblock.setPrimaryClick(View.OnClickListener {
             //call for bottom sheet
@@ -662,7 +692,7 @@ class BankAccountFragment : Fragment(),
                     imageUploaded = false
                 )
             )
-        viewBinding.toplayoutblock.setImageViewPager(list)
+//            viewBinding.toplayoutblock.setImageViewPager(list) need to remove uploading option 2856 ticket
     }
 
     private fun callKycOcrApi(path: Uri) {

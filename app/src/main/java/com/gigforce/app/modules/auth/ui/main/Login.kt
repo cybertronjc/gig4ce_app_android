@@ -136,14 +136,19 @@ class Login : Fragment() {
         win?.statusBarColor = resources.getColor(R.color.colorStatusBar)
     }
 
-    @Throws(IntentSender.SendIntentException::class)
+//    @Throws(IntentSender.SendIntentException::class)
     private fun requestHint() {
         val hintRequest = HintRequest.Builder()
             .setPhoneNumberIdentifierSupported(true)
             .build()
         val intent: PendingIntent? =
             context?.let { Credentials.getClient(it).getHintPickerIntent(hintRequest) }
-        startIntentSenderForResult(intent?.intentSender, RC_HINT, null, 0, 0, 0, null)
+        try {
+            startIntentSenderForResult(intent?.intentSender, RC_HINT, null, 0, 0, 0, null)
+        }catch (e: IntentSender.SendIntentException){
+            e.printStackTrace()
+        }
+
     }
 
 

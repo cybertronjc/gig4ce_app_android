@@ -61,7 +61,7 @@
     <string name="cancel_veri">CANCEL</string>
     <string name="why_do_we_need_this_veri">Why we need this ?</string>
     <string name="why_do_we_need_this_dl_veri">A driving license is mandatory for driving and delivery gigs</string>
-    <string name="why_do_we_need_this_bank_veri">A Bank Passbook is mandatory for profile verification. It helps verify your name and date of birth and also helps with payments to your wallet.</string>
+    <string name="why_do_we_need_this_bank_veri">A verified bank account is mandatory for your payout transfer on time.</string>
     <string name="license_number_with_colon_veri">License Number :</string>
     <string name="address_with_colon_veri">Address :</string>
     <string name="license_validity_with_colon_veri">License Validity :</string>
@@ -70,7 +70,7 @@
     <string name="bank_account_details_veri">Bank Account Details</string>
     <string name="do_you_have_bank_passbook_veri">Do you have Bank Passbook ?</string>
     <string name="yes_i_have_bank_passbook_veri">Yes, I have Bank Passbook</string>
-    <string name="no_i_dont_have_bank_passbook_veri">No, I dont have Bank Passbook</string>
+    <string name="no_i_dont_have_bank_passbook_veri">No, I don\'t have Bank account</string>
     <string name="cif_number_with_colon_veri">CIF Number :</string>
     <string name="account_number_with_colon_veri">Account Number :</string>
     <string name="ifsc_with_colon_veri">IFSC :</string>
@@ -450,4 +450,5 @@
 <!--    <string name="veri_done">Hurray!!!\nKYC Documents submitted.\nWe will let you know once Verified.</string>-->
     <string name="upload_pan_image_first_veri">Upload PAN card image first</string>
     <string name="upload_dl_front_first_veri">Upload DL front image first</string>
+    <string name="please_enter_bank_info_below">Please enter your Bank information below.</string>
 </resources>

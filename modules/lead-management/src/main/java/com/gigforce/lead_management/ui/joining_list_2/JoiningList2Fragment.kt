@@ -2,6 +2,7 @@ package com.gigforce.lead_management.ui.joining_list_2
 
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.onTabSelected
 import com.gigforce.common_ui.ext.showToast
@@ -23,6 +25,7 @@ import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.utils.PushDownAnim
 import com.gigforce.common_ui.viewdatamodels.FeatureItemCard2DVM
 import com.gigforce.core.base.BaseFragment2
+import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.extensions.getTextChangeAsStateFlow
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
@@ -62,10 +65,14 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
     fragmentName = "JoiningListFragment",
     layoutId = R.layout.fragment_joining_list_2,
     statusBarColor = R.color.lipstick_2
-) {
+), IOnBackPressedOverride {
 
     @Inject
     lateinit var navigation: INavigation
+
+    @Inject
+    lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
+
     private val viewModel: JoiningList2ViewModel by viewModels()
     private val sharedViewModel: LeadManagementSharedViewModel by activityViewModels()
     var selectedTab = 0
@@ -73,6 +80,7 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
     var joiningDataState = JoiningDataState.DEFAULT
     val dropSelectionIds = arrayListOf<String>()
     var dropJoining : HashMap<String, Boolean>? = HashMap<String, Boolean>()
+    var cameFromDeeplink = false
 
     override fun viewCreated(
         viewBinding: FragmentJoiningList2Binding,
@@ -85,18 +93,30 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
         initTabLayout()
         initListeners(viewBinding)
         initViewModel()
-//        initSharedViewModel()
+        initSharedViewModel()
+
     }
 
     var title = ""
     private fun getIntentData(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
             title = it.getString("title") ?: ""
+            cameFromDeeplink = it.getBoolean(StringConstants.CAME_FROM_ONBOARDING_FORM_DEEPLINK.value) ?: return@let
         } ?: run {
             arguments?.let {
                 title = it.getString("title") ?: ""
+                cameFromDeeplink = it.getBoolean(StringConstants.CAME_FROM_ONBOARDING_FORM_DEEPLINK.value) ?: return@let
+                if (cameFromDeeplink) sharedPreAndCommonUtilInterface.saveDataBoolean("deeplink_onboarding", false)
             }
         }
+    }
+
+    override fun onSaveInstanceState(
+        outState: Bundle
+    ) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(StringConstants.CAME_FROM_ONBOARDING_FORM_DEEPLINK.value, cameFromDeeplink)
+
     }
 
     private fun initListeners(
@@ -191,6 +211,8 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
         else
             setAppBarTitle(context.getString(R.string.joinings_lead))
         changeBackButtonDrawable()
+        makeBackgroundMoreRound()
+        makeTitleBold()
         setBackButtonListener(View.OnClickListener {
             activity?.onBackPressed()
         })
@@ -283,7 +305,26 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
             .observe(viewLifecycleOwner, {
 
                 when (it) {
-                    LeadManagementSharedViewModelState.OneOrMoreSelectionsDropped -> viewModel.getJoinings()
+                    LeadManagementSharedViewModelState.JoiningAdded -> {
+                        val r = Runnable {
+                            try {
+                                viewBinding.swipeRefresh.isRefreshing = true
+                                viewModel.resetViewModel()
+                                //viewBinding.appBarComp.setAppBarTitle(getString(R.string.joinings_lead))
+                                if (title.isNotBlank())
+                                    viewBinding.appBarComp.setAppBarTitle(title)
+                                else
+                                    viewBinding.appBarComp.setAppBarTitle(context?.getString(R.string.joinings_lead))
+                                viewBinding.joinNowButton.text = getString(R.string.add_new_lead)
+                                dropJoining?.clear()
+                                viewModel.getJoinings()
+                            }catch(e: Exception){
+                                e.printStackTrace()
+                            }
+                        }
+                        Handler().postDelayed(r, 1000)
+
+                    }
                 }
             })
     }
@@ -309,7 +350,13 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
 
             if (it.key == "All") {
                 this.statusTabLayout.getTabAt(2)?.text = "All (${it.value})"
+                if (joiningDataState == JoiningDataState.DEFAULT && it.value > 0){
+                    joiningDataState = JoiningDataState.HAS_DATA
+                }else if (joiningDataState == JoiningDataState.DEFAULT && it.value == 0){
+                    joiningDataState = JoiningDataState.NO_DATA
+                }
             }
+            checkForNoData()
         }
     }
 
@@ -340,12 +387,6 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
             joiningShimmerContainer,
             R.id.shimmer_controller
         )
-        if (joiningDataState == JoiningDataState.DEFAULT){
-            joiningDataState = JoiningDataState.HAS_DATA
-            statusTabLayout.visible()
-            appBarComp.searchImageButton.visible()
-            appBarComp.filterFrameLayout.visible()
-        }
         joiningShimmerContainer.gone()
         joiningListInfoLayout.root.gone()
         joiningsRecyclerView.collection = joiningList
@@ -374,12 +415,6 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
             joiningShimmerContainer,
             R.id.shimmer_controller
         )
-        if (joiningDataState == JoiningDataState.DEFAULT){
-            joiningDataState = JoiningDataState.NO_DATA
-            statusTabLayout.gone()
-            appBarComp.searchImageButton.gone()
-            appBarComp.filterFrameLayout.gone()
-        }
         joiningShimmerContainer.gone()
         joiningListInfoLayout.root.visible()
         joiningListInfoLayout.infoIv.loadImage(R.drawable.ic_no_selection)
@@ -407,6 +442,27 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
         joiningListInfoLayout.infoIv.requestLayout()
         joiningListInfoLayout.infoMessageTv.text = error
         swipeRefresh.isRefreshing = false
+    }
+
+    private fun checkForNoData() = viewBinding.apply {
+        if (joiningDataState == JoiningDataState.HAS_DATA){
+            statusTabLayout.visible()
+            appBarComp.searchImageButton.visible()
+            appBarComp.filterFrameLayout.visible()
+        }else if (joiningDataState == JoiningDataState.NO_DATA){
+            statusTabLayout.gone()
+            appBarComp.searchImageButton.gone()
+            appBarComp.filterFrameLayout.gone()
+        }
+    }
+
+    override fun onBackPressed(): Boolean {
+        if (cameFromDeeplink){
+            navigation.popBackStack()
+            navigation.navigateTo("common/calendarScreen")
+            return true
+        }
+        return false
     }
 
 }

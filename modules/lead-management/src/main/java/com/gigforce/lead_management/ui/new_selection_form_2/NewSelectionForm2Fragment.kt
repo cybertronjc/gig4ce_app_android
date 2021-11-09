@@ -4,6 +4,7 @@ import android.app.DatePickerDialog
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
+import android.util.Log
 import android.widget.DatePicker
 import android.widget.LinearLayout
 import androidx.core.os.bundleOf
@@ -189,7 +190,8 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
             navigation.navigateUp()
         }
         setBackButtonDrawable(R.drawable.ic_chevron)
-        stepsTextView.text = getString(R.string.step_2_2_lead)
+        makeBackgroundMoreRound()
+        makeTitleBold()
     }
 
     private fun initViewModel() = viewModel
@@ -203,7 +205,8 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                 is NewSelectionForm2ViewState.LocationAndTlDataLoaded -> showMainForm(
                     state.shiftAndTls,
                     state.selectedCity,
-                    state.selectedReportingLocation
+                    state.selectedReportingLocation,
+                    state.locationType
                 )
                 is NewSelectionForm2ViewState.ErrorWhileLoadingLocationAndTlData -> showErrorInLoadingBusinessAndJobProfiles(
                     state.error
@@ -214,7 +217,8 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
 
                 //Open data selection screen states
                 is NewSelectionForm2ViewState.OpenSelectCityScreen -> openSelectCityScreen(
-                    ArrayList(state.cities)
+                    ArrayList(state.cities),
+                    state.locationType.toString()
                 )
                 is NewSelectionForm2ViewState.OpenSelectReportingScreen -> openSelectReportingLocationScreen(
                     state.selectedCity,
@@ -286,11 +290,14 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
     }
 
     private fun openSelectCityScreen(
-        cities: ArrayList<ReportingLocationsItem>
+        cities: ArrayList<ReportingLocationsItem>,
+        locationType: String
     ) {
         navigation.navigateTo(
             LeadManagementNavDestinations.FRAGMENT_SELECT_CITY,
-            bundleOf(SelectCityFragment.INTENT_EXTRA_CITY_LIST to cities),
+            bundleOf(SelectCityFragment.INTENT_EXTRA_CITY_LIST to cities,
+                SelectCityFragment.INTENT_ONSITE_OFFSITE to locationType
+            ),
             getNavOptions()
         )
         hideSoftKeyboard()
@@ -349,7 +356,8 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
     private fun showMainForm(
         shiftAndTls: JoiningLocationTeamLeadersShifts,
         selectedCity: String?,
-        selectedReportingLocation: String?
+        selectedReportingLocation: String?,
+        locationType: String?
     ) = viewBinding.apply {
         stopShimmer(
             dataLoadingShimmerContainer,
@@ -365,6 +373,14 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
             mainForm.citySelectedLabel.setTypeface(mainForm.citySelectedLabel.typeface,Typeface.BOLD)
         } else{
             mainForm.citySelectedLabel.text = getString(R.string.click_to_select_city_lead)
+        }
+
+        if (locationType == "On Site"){
+            mainForm.reportingLocationLabelLayout.visible()
+            mainForm.selectReportingLocationCardlayout.visible()
+        }else{
+            mainForm.reportingLocationLabelLayout.gone()
+            mainForm.selectReportingLocationCardlayout.gone()
         }
 
         if(selectedReportingLocation != null) {

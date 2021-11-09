@@ -31,6 +31,7 @@
             android:layout_marginEnd="@dimen/size_20"
             android:background="@drawable/bottom_primary_button_background"
             android:gravity="center"
+            android:fontFamily="@font/lato_bold"
             android:text="@string/drop_selection_lead"
             android:textAlignment="center"
             android:textColor="@color/white" />
@@ -45,6 +46,7 @@
             android:layout_marginBottom="@dimen/size_16"
             android:background="@drawable/bottom_secondary_button_background"
             android:gravity="center"
+            android:fontFamily="@font/lato_bold"
             android:text="@string/cancel_lead"
             android:textAlignment="center"
             android:textColor="@color/pink_text" />

@@ -11,6 +11,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.content.FileProvider
 import androidx.core.os.bundleOf
 import androidx.core.text.bold
+import androidx.fragment.app.activityViewModels
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.leadManagement.AssignGigRequest
 import com.gigforce.core.base.BaseFragment2
@@ -20,6 +21,7 @@ import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.FragmentNewSelectionFormSuccessBinding
 import com.gigforce.lead_management.models.WhatsappTemplateModel
+import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
 import com.gigforce.lead_management.ui.share_application_link.ShareApplicationLinkFragment
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
@@ -41,6 +43,7 @@ class SelectionFormSubmitSuccessFragment : BaseFragment2<FragmentNewSelectionFor
     @Inject
     lateinit var navigation : INavigation
     private lateinit var whatsappTemplateModel: WhatsappTemplateModel
+    private val sharedViewModel: LeadManagementSharedViewModel by activityViewModels()
 
     private val backPressHandler = object : OnBackPressedCallback(true) {
 
@@ -114,6 +117,8 @@ class SelectionFormSubmitSuccessFragment : BaseFragment2<FragmentNewSelectionFor
                 false
             )
         }
+        toolbar.makeBackgroundMoreRound()
+        toolbar.makeTitleBold()
 
         shareLinkLayout.setOnClickListener {
             shareToAnyApp(whatsappTemplateModel.shareLink)
@@ -128,6 +133,7 @@ class SelectionFormSubmitSuccessFragment : BaseFragment2<FragmentNewSelectionFor
                 false
             )
         }
+        sharedViewModel.joiningAdded()
     }
 
     private fun shareToAnyApp(url: String) {
