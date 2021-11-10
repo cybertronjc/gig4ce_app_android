@@ -19,6 +19,7 @@ import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.utils.getCircularProgressDrawable
 import com.gigforce.common_ui.viewdatamodels.leadManagement.GigerInfo
+import com.gigforce.core.AppConstants
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.base.BaseFragment2
@@ -259,8 +260,8 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
             viewPhotoText.setOnClickListener { it1 ->
                 if (viewPhotoText.text == "ADD"){
                     var bundleForFragment = bundleOf(
-                        com.gigforce.common_ui.StringConstants.ACTION.value to UPLOAD_PROFILE_PIC,
-                        com.gigforce.common_ui.StringConstants.INTENT_USER_ID.value  to it.gigerUid
+                        AppConstants.INTENT_EXTRA_USER_CAME_FROM_ONBOARDING_FORM to true,
+                        "uid" to it.gigerUid
                     )
                     val navString = getNavigationStr(it.docType)
                     navigation.navigateTo(navString, bundleForFragment)
@@ -398,7 +399,7 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
     private fun getNavigationStr(data: String): String {
         when (data) {
             "profile_pic" -> {
-                return "profile"
+                return "userinfo/addProfilePictureFragment"
             }
             "about_me" -> {
                 return "profile/addBio"

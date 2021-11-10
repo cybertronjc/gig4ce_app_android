@@ -152,6 +152,7 @@ class BankAccountFragment : Fragment(),
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, FROM_CLIENT_ACTIVATON)
+        outState.putString(AppConstants.INTENT_EXTRA_UID, userId)
     }
 
     var allNavigationList = ArrayList<String>()
@@ -164,7 +165,7 @@ class BankAccountFragment : Fragment(),
                 allNavigationList = arr
             }
             intentBundle = it
-            userId = it.getString(com.gigforce.common_ui.StringConstants.INTENT_USER_ID.value) ?: return@let
+            userId = it.getString(AppConstants.INTENT_EXTRA_UID) ?: return@let
         } ?: run {
             arguments?.let {
                 FROM_CLIENT_ACTIVATON =
@@ -173,7 +174,7 @@ class BankAccountFragment : Fragment(),
                     allNavigationList = arrData
                 }
                 intentBundle = it
-                userId = it.getString(com.gigforce.common_ui.StringConstants.INTENT_USER_ID.value) ?: return@let
+                userId = it.getString(AppConstants.INTENT_EXTRA_UID) ?: return@let
             }
         }
 

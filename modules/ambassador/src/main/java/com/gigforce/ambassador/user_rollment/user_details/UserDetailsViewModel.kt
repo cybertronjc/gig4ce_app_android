@@ -131,7 +131,8 @@ class UserDetailsViewModel @Inject constructor(
     fun uploadProfilePicture(
         userId: String?,
         uri: Uri?,
-        data: ByteArray
+        data: ByteArray,
+        cameFromOnboarding: Boolean
     ) = viewModelScope.launch(Dispatchers.IO) {
         _submitUserDetailsState.postValue(Lse.loading())
 
@@ -150,7 +151,7 @@ class UserDetailsViewModel @Inject constructor(
             val thumnailNameOnServer = uploadThumbnailAndReturnNameOnServer(fname, uri)
             profileFirebaseRepository.setProfileAvatarName(userId, fname, thumnailNameOnServer)
 
-            if (userId != null) {
+            if (userId != null && !cameFromOnboarding) {
                 enrolledUserListRepository.updateUserProfilePicture(
                     userId,
                     fname,

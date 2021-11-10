@@ -170,7 +170,7 @@ class DrivingLicenseFragment : Fragment(),
                 allNavigationList = arr
             }
             intentBundle = it
-            userId = it.getString(com.gigforce.common_ui.StringConstants.INTENT_USER_ID.value) ?: return@let
+            userId = it.getString(AppConstants.INTENT_EXTRA_UID) ?: return@let
         } ?: run {
             arguments?.let {
                 FROM_CLIENT_ACTIVATON =
@@ -179,7 +179,7 @@ class DrivingLicenseFragment : Fragment(),
                     allNavigationList = arrData
                 }
                 intentBundle = it
-                userId = it.getString(com.gigforce.common_ui.StringConstants.INTENT_USER_ID.value) ?: return@let
+                userId = it.getString(AppConstants.INTENT_EXTRA_UID) ?: return@let
             }
         }
     }

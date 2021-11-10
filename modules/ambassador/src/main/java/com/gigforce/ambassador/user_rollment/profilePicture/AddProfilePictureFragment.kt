@@ -64,6 +64,7 @@ class AddProfilePictureFragment : Fragment(),
     private var pincode = ""
     private var mode: Int = EnrollmentConstants.MODE_UNSPECIFIED
     private var cameFromEnrollment = false
+    private var cameFromOnboarding = false
     private var navFragmentsData: NavFragmentsData? = null
     @Inject
     lateinit var navigation: INavigation
@@ -99,6 +100,7 @@ class AddProfilePictureFragment : Fragment(),
     }
 
     private fun getProfilePictureForUser() {
+
         if (mode != EnrollmentConstants.MODE_EDIT) {
             checkForPermissionElseShowCameraGalleryBottomSheet()
         }
@@ -111,6 +113,10 @@ class AddProfilePictureFragment : Fragment(),
             skipButton.gone()
             submitBtn.text = getString(R.string.upload_photo_amb)
             editLayout.gone()
+        } else if (cameFromOnboarding){
+            skipButton.gone()
+            submitBtn.text = getString(R.string.done_amb)
+            viewModel.getProfileForUser(userId)
         } else {
             val isRequirementMode = mode != EnrollmentConstants.MODE_ENROLLMENT_REQUIREMENT
             submitBtn.text = if (isRequirementMode) getString(R.string.change_photo_amb) else getString(R.string.next_amb)
@@ -125,6 +131,10 @@ class AddProfilePictureFragment : Fragment(),
                 AppConstants.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT,
                 false
             )
+            cameFromOnboarding = it.getBoolean(
+                AppConstants.INTENT_EXTRA_USER_CAME_FROM_ONBOARDING_FORM,
+                false
+            )
             mode = it.getInt(EnrollmentConstants.INTENT_EXTRA_MODE)
             userId = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_ID)
             userName = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_NAME) ?: return@let
@@ -134,6 +144,10 @@ class AddProfilePictureFragment : Fragment(),
         savedInstanceState?.let {
             cameFromEnrollment = it.getBoolean(
                 AppConstants.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT,
+                false
+            )
+            cameFromOnboarding = it.getBoolean(
+                AppConstants.INTENT_EXTRA_USER_CAME_FROM_ONBOARDING_FORM,
                 false
             )
             mode = it.getInt(EnrollmentConstants.INTENT_EXTRA_MODE)
@@ -153,6 +167,7 @@ class AddProfilePictureFragment : Fragment(),
             AppConstants.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT,
             cameFromEnrollment
         )
+        outState.putBoolean(AppConstants.INTENT_EXTRA_USER_CAME_FROM_ONBOARDING_FORM, cameFromOnboarding)
 
     }
 
@@ -188,7 +203,10 @@ class AddProfilePictureFragment : Fragment(),
 //                            EnrollmentConstants.INTENT_EXTRA_MODE to mode
 //                        )
 //                    )
-                } else {
+                } else if (submitBtn.text == "Done"){
+                    navigation.popBackStack()
+                }
+                else {
                     checkForPermissionElseShowCameraGalleryBottomSheet()
                 }
             } else {
@@ -335,7 +353,7 @@ class AddProfilePictureFragment : Fragment(),
 //                                //Normal User login
 //                                submitBtn.text = "Back"
 //                            } else {
-                        submitBtn.text = getString(R.string.next_amb)
+                        submitBtn.text = if(cameFromOnboarding) getString(R.string.done_amb) else getString(R.string.next_amb)
 //                            }
 
                         showToast(getString(R.string.profile_pic_uploaded_amb))
@@ -461,7 +479,7 @@ class AddProfilePictureFragment : Fragment(),
     }
 
     private fun imageClickedOrSelectedNowUpload(uri: Uri?, data: ByteArray) {
-        viewModel.uploadProfilePicture(userId, uri, data)
+        viewModel.uploadProfilePicture(userId, uri, data, cameFromOnboarding)
     }
 
     private fun startCrop(uri: Uri): Unit {
@@ -505,7 +523,10 @@ class AddProfilePictureFragment : Fragment(),
         }
         return if (userId == null) {
             false
-        } else {
+        }else if (cameFromOnboarding){
+            false
+        }
+        else {
             showGoBackConfirmationDialog()
             true
         }

@@ -149,7 +149,7 @@ class AadharDetailInfoFragment : Fragment(),
             }
             intentBundle = it
             mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
-            userId = it.getString(StringConstants.INTENT_USER_ID.value) ?: return@let
+            userId = it.getString(AppConstants.INTENT_EXTRA_UID) ?: return@let
         } ?: run {
             arguments?.let {
 
@@ -160,7 +160,7 @@ class AadharDetailInfoFragment : Fragment(),
                 }
                 intentBundle = it
                 mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
-                userId = it.getString(StringConstants.INTENT_USER_ID.value) ?: return@let
+                userId = it.getString(AppConstants.INTENT_EXTRA_UID) ?: return@let
             }
 
         }
