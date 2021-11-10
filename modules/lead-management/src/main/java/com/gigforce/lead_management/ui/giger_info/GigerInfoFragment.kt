@@ -66,6 +66,7 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
 
     var gigerPhone = ""
     private lateinit var joiningId: String
+    private var isActive: Boolean = false
     var hasStartEndDate = false
     var dropScreenIntentModel: DropScreenIntentModel? = null
 
@@ -83,6 +84,12 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
         joiningId?.let {
             dropScreenIntentModel = DropScreenIntentModel(joiningId = joiningId, false, "", "", "")
         }
+
+        if (isActive){
+            viewBinding.bottomButtonLayout.dropGigerBtn.visible()
+        }else{
+            viewBinding.bottomButtonLayout.dropGigerBtn.gone()
+        }
     }
 
     private fun getDataFrom(
@@ -91,12 +98,13 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
     ) {
         arguments?.let {
             joiningId = it.getString(LeadManagementConstants.INTENT_EXTRA_JOINING_ID) ?: return@let
+            isActive = it.getBoolean(LeadManagementConstants.INTENT_EXTRA_IS_ACTIVE) ?: return@let
 
         }
 
         savedInstanceState?.let {
             joiningId = it.getString(LeadManagementConstants.INTENT_EXTRA_JOINING_ID) ?: return@let
-
+            isActive = it.getBoolean(LeadManagementConstants.INTENT_EXTRA_IS_ACTIVE) ?: return@let
         }
     }
     override fun onSaveInstanceState(
@@ -104,6 +112,7 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
     ) {
         super.onSaveInstanceState(outState)
         outState.putString(LeadManagementConstants.INTENT_EXTRA_JOINING_ID, joiningId)
+        outState.putBoolean(LeadManagementConstants.INTENT_EXTRA_IS_ACTIVE, isActive)
     }
 
 
@@ -215,6 +224,7 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
                 applicationStatusLayout.statusIconImg.setImageDrawable(ResourcesCompat.getDrawable(resources,R.drawable.ic_blue_tick,null))
                 applicationStatusLayout.root.setBackgroundColor(ResourcesCompat.getColor(resources,R.color.status_background_blue,null))
             }
+
 
             overlayCardLayout.selectionDate.text = ": "+getFormattedDate(it.selectionDate)
             overlayCardLayout.joiningDate.text = ": "+getFormattedDateFromYYMMDD(it.joiningDate) ?: ""

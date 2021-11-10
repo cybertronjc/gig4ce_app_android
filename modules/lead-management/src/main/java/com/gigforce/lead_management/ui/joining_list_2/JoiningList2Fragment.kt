@@ -243,11 +243,12 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
         statusTabLayout.onTabSelected {
 
             val statusText = it?.text?.split("(")?.get(0).toString().trim()
-            if (statusText == "Dropped") {
-                viewModel.filterJoinings("")
-            } else {
-                viewModel.filterJoinings(statusText)
-            }
+            viewModel.filterJoinings(statusText)
+//            if (statusText == "Dropped") {
+//                viewModel.filterJoinings("")
+//            } else {
+//                viewModel.filterJoinings(statusText)
+//            }
 
             selectedTab = it?.position!!
         }

@@ -8,6 +8,19 @@ import kotlinx.android.parcel.Parcelize
 data class DropSelectionRequest(
 
     @SerializedName("selectionsToDrop")
-    var selectionsToDrop: List<String>? = null
+    var selectionsToDrop: List<DropDetail>? = null
 ): Parcelable {
 }
+
+@Parcelize
+data class DropDetail (
+
+    @SerializedName("joiningId")
+    var joiningId: String? = null,
+
+    @SerializedName("lastWorkingDate")
+    var lastWorkingDate: String? = null,
+
+    @SerializedName("message")
+    var message: String? = null
+): Parcelable

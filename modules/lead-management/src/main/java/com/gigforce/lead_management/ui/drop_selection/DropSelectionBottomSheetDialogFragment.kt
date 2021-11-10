@@ -87,9 +87,9 @@ class DropSelectionBottomSheetDialogFragment :
         }
 
         this.mainLayout.dropSelectionDirect.setOnClickListener {
-            viewModel.dropSelections(
-                selectionIdsToDrop
-            )
+//            viewModel.dropSelections(
+//                selectionIdsToDrop
+//            )
         }
 
         this.mainLayout.cancelButton.setOnClickListener {

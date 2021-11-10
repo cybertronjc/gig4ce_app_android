@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.repository.LeadManagementRepository
+import com.gigforce.common_ui.viewdatamodels.leadManagement.DropDetail
 import com.gigforce.common_ui.viewdatamodels.leadManagement.DropSelectionResponse
 import com.gigforce.core.utils.Lce
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +21,7 @@ class DropSelectionFragment2ViewModel @Inject constructor(
     val submitDropSelectionState : LiveData<Lce<DropSelectionResponse>> = _submitDropSelectionState
 
     fun dropSelections(
-        selectionsToDrop : ArrayList<String>
+        selectionsToDrop : List<DropDetail>
     ) = viewModelScope.launch{
 
         try {

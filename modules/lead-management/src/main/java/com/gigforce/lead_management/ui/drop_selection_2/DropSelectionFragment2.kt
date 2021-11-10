@@ -18,6 +18,7 @@ import androidx.transition.Slide
 import androidx.transition.Transition
 import androidx.transition.TransitionManager
 import com.gigforce.common_ui.ext.showToast
+import com.gigforce.common_ui.viewdatamodels.leadManagement.DropDetail
 import com.gigforce.core.base.BaseBottomSheetDialogFragment
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
@@ -69,11 +70,12 @@ class DropSelectionFragment2 : BaseBottomSheetDialogFragment<DropSelectionFragme
 
     private lateinit var selectionJoiningsToDrop: ArrayList<DropScreenIntentModel>
     private var selectionJoiningIdsToDrop = arrayListOf<String>()
+    private var selectionsToDrop = arrayListOf<DropDetail>()
     private var isBankDetailsVerified: Boolean = false
     private var gigStartDate: Date? = null
     private var gigEndDate: Date? = null
     private var currentDate: Date? = null
-
+    private var selectedLastWorkingDate: String? = null
     private val viewModel: DropSelectionFragment2ViewModel by viewModels()
     private val sharedLeadMgmtViewModel: LeadManagementSharedViewModel by activityViewModels()
 
@@ -181,7 +183,12 @@ class DropSelectionFragment2 : BaseBottomSheetDialogFragment<DropSelectionFragme
             //giger has not joined the gig
             dropSelectionButton.setOnClickListener {
                 //call drop api
-                viewModel.dropSelections(selectionJoiningIdsToDrop)
+                val joiningId = selectionJoiningsToDrop.get(0).joiningId
+                val lastWorkingDate = getFormattedDateInYYYYMMDD(selectionJoiningsToDrop.get(0).currentDate)
+                val message = "Giger has not joined the gig"
+                val dropDetail = DropDetail(joiningId = joiningId, lastWorkingDate, message )
+                selectionsToDrop.add(dropDetail)
+                viewModel.dropSelections(selectionsToDrop)
 
             }
             cancelButton.setOnClickListener {
@@ -198,8 +205,13 @@ class DropSelectionFragment2 : BaseBottomSheetDialogFragment<DropSelectionFragme
                 lastWorkingDatePicker.show()
             }
             confirmButton.setOnClickListener {
-                //call drop api
-                viewModel.dropSelections(selectionJoiningIdsToDrop)
+                //call drop api this will have the last working date
+                val joiningId = selectionJoiningsToDrop.get(0).joiningId
+                val lastWorkingDate = selectedLastWorkingDate
+                val message = "Giger has resigned after working"
+                val dropDetail = DropDetail(joiningId = joiningId, lastWorkingDate, message)
+                selectionsToDrop.add(dropDetail)
+                viewModel.dropSelections(selectionsToDrop)
             }
             cancelBtn.setOnClickListener {
                 dismiss()
@@ -207,10 +219,22 @@ class DropSelectionFragment2 : BaseBottomSheetDialogFragment<DropSelectionFragme
         }
         directDropLayout.apply {
             dropSelectionDirect.setOnClickListener {
-                //call drop api
-                viewModel.dropSelections(selectionJoiningIdsToDrop)
+                //call drop api, current date is lesser than gig start date
+                val joiningId = selectionJoiningsToDrop.get(0).joiningId
+                val lastWorkingDate = getFormattedDateInYYYYMMDD(selectionJoiningsToDrop.get(0).currentDate)
+                val message = "Giger has not joined the gig"
+                val dropDetail = DropDetail(joiningId = joiningId, lastWorkingDate, message )
+                selectionsToDrop.add(dropDetail)
+                viewModel.dropSelections(selectionsToDrop)
             }
             cancelButton.setOnClickListener {
+                dismiss()
+            }
+        }
+
+        successLayout.apply {
+            okayButton.setOnClickListener {
+                setFragmentResult("drop_status", bundleOf("drop_status" to "dropped"))
                 dismiss()
             }
         }
@@ -282,6 +306,7 @@ class DropSelectionFragment2 : BaseBottomSheetDialogFragment<DropSelectionFragme
                 newCal.set(Calendar.MONTH, month)
                 newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
                 viewBinding.lastWorkingLayout.dateText.text = DateHelper.getDateInDDMMMYYYYComma(newCal.time)
+                selectedLastWorkingDate = DateHelper.getDateInYYYYMMDD(newCal.time)
 
             },
             cal.get(Calendar.YEAR),
@@ -302,7 +327,6 @@ class DropSelectionFragment2 : BaseBottomSheetDialogFragment<DropSelectionFragme
                 is Lce.Error -> {
                     viewBinding.mainLayout.dropSelectionButton.hideProgress("Drop Selection")
                     viewBinding.mainLayout.dropSelectionButton.isEnabled = false
-
                     viewBinding.successLayout.root.gone()
                     viewBinding.mainLayout.root.gone()
                     viewBinding.lastWorkingLayout.root.gone()
@@ -334,20 +358,44 @@ class DropSelectionFragment2 : BaseBottomSheetDialogFragment<DropSelectionFragme
 
                 }
                 is Lce.Content -> {
-                    viewBinding.successLayout.root.visible()
-                    viewBinding.mainLayout.root.gone()
-                    viewBinding.errorLayout.root.gone()
-                    viewBinding.lastWorkingLayout.root.gone()
-                    viewBinding.joinedNotJoinedLayout.root.gone()
-                    viewBinding.bankVerifyLayout.root.gone()
-                    viewBinding.directDropLayout.root.gone()
-//                    if (selectionIdsToDrop.size == 1){
-//                        viewBinding.successLayout.dropedSelectionLabel.text = getString(R.string.one_selection_drop_lead)
-//                    } else {
-//                        viewBinding.successLayout.dropedSelectionLabel.text =
-//                            selectionIdsToDrop.size.toString() + getString(R.string.selection_drop_lead)
-//                    }
+                    //check if the api call was successful and drop api status is true
+                    if (it.content.status){
+                        viewBinding.successLayout.root.visible()
+                        viewBinding.mainLayout.root.gone()
+                        viewBinding.errorLayout.root.gone()
+                        viewBinding.lastWorkingLayout.root.gone()
+                        viewBinding.joinedNotJoinedLayout.root.gone()
+                        viewBinding.bankVerifyLayout.root.gone()
+                        viewBinding.directDropLayout.root.gone()
+                    }else{
+                        //drop selection failed
+                        viewBinding.mainLayout.dropSelectionButton.hideProgress("Drop Selection")
+                        viewBinding.mainLayout.dropSelectionButton.isEnabled = false
+                        viewBinding.successLayout.root.gone()
+                        viewBinding.mainLayout.root.gone()
+                        viewBinding.lastWorkingLayout.root.gone()
+                        viewBinding.joinedNotJoinedLayout.root.gone()
+                        viewBinding.bankVerifyLayout.root.gone()
+                        viewBinding.directDropLayout.root.gone()
+                        viewBinding.errorLayout.root.visible()
+                        viewBinding.errorLayout.infoMessageTv.text = it.content.misingFields?.get(0)?.errorMessage
+                        viewBinding.errorLayout.retryBtn.visible()
+                    }
                 }
             }
         })
+
+    fun getFormattedDateInYYYYMMDD(date: String): String {
+        val input = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+        val output = SimpleDateFormat("yyyy-MM-dd",Locale.getDefault())
+
+        var d: Date? = null
+        try {
+            d = input.parse(date)
+        } catch (e: ParseException) {
+            e.printStackTrace()
+        }
+        val formatted = output.format(d)
+        return formatted ?: ""
+    }
 }
