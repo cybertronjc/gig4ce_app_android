@@ -90,7 +90,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
             cal.get(Calendar.MONTH),
             cal.get(Calendar.DAY_OF_MONTH)
         )
-
+        datePickerDialog.datePicker.minDate = cal.timeInMillis
         datePickerDialog
     }
 
