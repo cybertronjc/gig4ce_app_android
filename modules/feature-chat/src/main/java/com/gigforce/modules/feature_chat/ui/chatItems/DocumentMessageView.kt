@@ -170,14 +170,11 @@ abstract class DocumentMessageView(
     }
 
 
-    private fun openDocument(file: File) {
+    private fun openDocument(file: Uri) {
         Intent(Intent.ACTION_VIEW).apply {
             setDataAndType(
-                    FileProvider.getUriForFile(
-                            context,
-                            "${context.packageName}.provider",
-                            file
-                    ), getMimeType(Uri.fromFile(file))
+                file,
+                getMimeType(file)
             )
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)

@@ -4,6 +4,8 @@ object MimeTypes {
 
     const val IMAGE = "image/*"
     const val IMAGE_MATCHER = "image/"
+    const val PNG = "image/png"
+
     const val VIDEO = "video/*"
     const val VIDEO_MATCHER = "video/"
     const val DOC = "application/msword"

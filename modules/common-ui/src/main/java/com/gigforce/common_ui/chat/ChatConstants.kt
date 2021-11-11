@@ -24,6 +24,7 @@ object ChatConstants {
     const val DIRECTORY_IMAGES = "Images"
     const val DIRECTORY_VIDEOS = "Videos"
     const val DIRECTORY_DOCUMENTS = "Documents"
+    const val DIRECTORY_OTHERS = "Others"
 
     const val OPERATION_PICK_IMAGE = 0
     const val OPERATION_PICK_VIDEO = 1

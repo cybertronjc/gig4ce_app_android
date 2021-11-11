@@ -27,6 +27,7 @@ import com.gigforce.common_image_picker.image_cropper.ImageCropActivity
 import com.gigforce.common_ui.shimmer.ShimmerHelper
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.ProfilePropArgs
+import com.gigforce.core.ScopedStorageConstants
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.date.DateHelper
@@ -299,15 +300,23 @@ class OnboardingAddProfilePictureFragment() : Fragment(), ImageCropCallback, Onb
     }
 
     private fun requestStoragePermission() {
-
-        requestPermissions(
-            arrayOf(
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.CAMERA
-            ),
-            REQUEST_STORAGE_PERMISSION
-        )
+        if (Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.CAMERA
+                ),
+                REQUEST_STORAGE_PERMISSION
+            )
+        } else {
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.CAMERA
+                ),
+                REQUEST_STORAGE_PERMISSION
+            )
+        }
     }
 
     override fun onRequestPermissionsResult(
@@ -333,16 +342,30 @@ class OnboardingAddProfilePictureFragment() : Fragment(), ImageCropCallback, Onb
                     val userOptedForDontAskAgainWriteStoragePermission = !requireActivity().shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     val userOptedForDontAskAgainCameraStoragePermission = !requireActivity().shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)
 
-                    if(userOptedForDontAskAgainCameraStoragePermission ||
-                        userOptedForDontAskAgainWriteStoragePermission ||
-                        userOptedForDontAskAgainReadStoragePermission ){
+                    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
+                        if(userOptedForDontAskAgainCameraStoragePermission){
 
-                        MaterialAlertDialogBuilder(requireContext())
-                            .setTitle(getString(R.string.camera_and_storage_permission_required))
-                            .setMessage(getString(R.string.please_grant_storage_camera_permission))
-                            .setPositiveButton(getString(R.string.okay_common_ui)){_,_ -> openSettingsPage() }
-                            .setNegativeButton(getString(R.string.cancel_common_ui)) { _, _ ->}
-                            .show()
+                            MaterialAlertDialogBuilder(requireContext())
+                                .setTitle(getString(R.string.camera_permission_required))
+                                .setMessage(getString(R.string.please_grant_camera_permission))
+                                .setPositiveButton(getString(R.string.okay_common_ui)) { _, _ -> openSettingsPage() }
+                                .setNegativeButton(getString(R.string.cancel_common_ui)) { _, _ -> }
+                                .show()
+                        }
+                    } else {
+
+                        if (userOptedForDontAskAgainCameraStoragePermission ||
+                            userOptedForDontAskAgainWriteStoragePermission ||
+                            userOptedForDontAskAgainReadStoragePermission
+                        ) {
+
+                            MaterialAlertDialogBuilder(requireContext())
+                                .setTitle(getString(R.string.camera_and_storage_permission_required))
+                                .setMessage(getString(R.string.please_grant_storage_camera_permission))
+                                .setPositiveButton(getString(R.string.okay_common_ui)) { _, _ -> openSettingsPage() }
+                                .setNegativeButton(getString(R.string.cancel_common_ui)) { _, _ -> }
+                                .show()
+                        }
                     }
                 }
             }

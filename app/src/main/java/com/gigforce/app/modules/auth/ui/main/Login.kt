@@ -343,7 +343,7 @@ class Login : Fragment() {
         if (requestCode == RC_HINT && resultCode == Activity.RESULT_OK) {
 
             try {/*You will receive user selected phone number here if selected and send it to the server for request the otp*/
-                var credential: Credential = data!!.getParcelableExtra(Credential.EXTRA_KEY)
+                var credential: Credential = data!!.getParcelableExtra(Credential.EXTRA_KEY) ?: return
                 if (credential.id != null) {
 
                     invisible_edit_mobile.setText(credential.id.substring(3))
