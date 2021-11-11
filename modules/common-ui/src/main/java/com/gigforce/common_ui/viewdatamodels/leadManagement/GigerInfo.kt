@@ -1,5 +1,6 @@
 package com.gigforce.common_ui.viewdatamodels.leadManagement
 
+import com.gigforce.core.datamodels.client_activation.Dependency
 import com.google.gson.annotations.SerializedName
 
 data class GigerInfo(
@@ -17,6 +18,9 @@ data class GigerInfo(
 
     @SerializedName("businessLogo")
     val businessLogo: String,
+
+    @SerializedName("jobProfileId")
+    val jobProfileId: String,
 
     @SerializedName("jobProfileTitle")
     val jobProfileTitle: String,
@@ -55,5 +59,12 @@ data class CheckListItem(
     val frontImage: String? = "",
 
     @SerializedName("backImage")
-    val backImage: String? = ""
+    val backImage: String? = "",
+
+    @SerializedName("type")
+    val type: String? = "",
+
+    @SerializedName("typeOptions")
+    val dependency: Dependency?,
+
 ){}

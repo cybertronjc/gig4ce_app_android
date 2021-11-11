@@ -9,18 +9,19 @@ import com.gigforce.common_ui.viewdatamodels.leadManagement.GigerInfo
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
+import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.FragmentPendingJoiningDetailsBinding
 import com.gigforce.lead_management.models.ApplicationChecklistRecyclerItemData
 import com.gigforce.lead_management.ui.giger_info.GigerInfoState
 import com.gigforce.lead_management.ui.giger_info.GigerInfoViewModel
-import com.gigforce.lead_management.ui.giger_info.views.AppCheckListRecyclerComponent
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class PendingJoiningDetailsFragment : BaseFragment2<FragmentPendingJoiningDetailsBinding>(
@@ -34,6 +35,8 @@ class PendingJoiningDetailsFragment : BaseFragment2<FragmentPendingJoiningDetail
         const val INTENT_EXTRA_JOINING_ID = "joining_id"
     }
 
+    @Inject
+    lateinit var navigation : INavigation
 
     private var gigerPhone = ""
     private lateinit var joiningId : String
@@ -148,12 +151,24 @@ class PendingJoiningDetailsFragment : BaseFragment2<FragmentPendingJoiningDetail
             } else {
                 it.checkList?.let {
                     it.forEachIndexed { index, checkListItem ->
-                        val itemData = ApplicationChecklistRecyclerItemData.ApplicationChecklistItemData(checkListItem.name, checkListItem.status, checkListItem.optional, checkListItem.frontImage , checkListItem.backImage)
+                        val itemData = ApplicationChecklistRecyclerItemData.ApplicationChecklistItemData(
+                            checkListItem.name,
+                            checkListItem.status,
+                            checkListItem.optional,
+                            checkListItem.frontImage,
+                            checkListItem.backImage,
+                            checkListItem.type,
+                            checkListItem.dependency
+                        )
+
                         checkListItemData.add(itemData)
                     }
                     if (checkListItemData.size > 0){
                         checklistLayout.visible()
-                        inflateCheckListInCheckListContainer(checkListItemData)
+                        inflateCheckListInCheckListContainer(
+                            checkListItemData,
+                            gigerInfo.jobProfileId
+                            )
                     } else {
                         checklistText.gone()
                         checklistLayout.gone()
@@ -171,13 +186,20 @@ class PendingJoiningDetailsFragment : BaseFragment2<FragmentPendingJoiningDetail
     }
 
     private fun inflateCheckListInCheckListContainer(
-        checkListItemData: ArrayList<ApplicationChecklistRecyclerItemData.ApplicationChecklistItemData>
+        checkListItemData: ArrayList<ApplicationChecklistRecyclerItemData.ApplicationChecklistItemData>,
+        jobProfileId: String
     ) = viewBinding.checklistLayout.apply{
         removeAllViews()
 
         checkListItemData.forEach {
 
-            val view = AppCheckListRecyclerComponent(requireContext(),null)
+            val view = PendingJoiningCheckListItemComponent(
+                requireContext(),
+                null,
+                navigation = navigation,
+                jobProfileId = jobProfileId
+            )
+
             addView(view)
             view.bind(it)
         }

@@ -3,22 +3,50 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <FrameLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/selection_details_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Selection details"
+            style="@style/style_h5"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/white"
+            android:layout_marginStart="@dimen/size_16"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/skip_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SKIP"
+            android:padding="8dp"
+            style="@style/style_h5"
+            android:textColor="@color/white"
+            android:layout_marginEnd="@dimen/size_16"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
 
         <LinearLayout
             android:id="@+id/frameLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/size_16"
-            android:layout_marginTop="@dimen/size_32"
+            android:layout_marginTop="@dimen/size_24"
             android:layout_marginEnd="@dimen/size_16"
             android:background="@drawable/info_card_background"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/selection_details_label">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/detailsLayout"
@@ -145,5 +173,5 @@
         </LinearLayout>
 
 
-    </FrameLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

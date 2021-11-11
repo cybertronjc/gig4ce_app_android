@@ -75,9 +75,8 @@ class JoiningPendingCardComponent(
 
         pendingJoining?.let {
             navigation.navigateTo(
-                "client_activation/applicationClientActivation", bundleOf(
-                    StringConstants.JOB_PROFILE_ID.value to it.jobProfileId,
-                    StringConstants.JOB_PROFILE_TITLE.value to it.jobProfileName
+                "LeadMgmt/PendingJoiningDetails", bundleOf(
+                    "joining_id" to it.joiningId
                 )
             )
         }

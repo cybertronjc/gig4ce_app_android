@@ -1,7 +1,9 @@
 package com.gigforce.lead_management.models
 
 import com.gigforce.core.SimpleDVM
+import com.gigforce.core.datamodels.client_activation.Dependency
 import com.gigforce.lead_management.views.LeadActivationViewTypes
+import com.google.gson.annotations.SerializedName
 
 open class ApplicationChecklistRecyclerItemData(
     val type: Int
@@ -12,7 +14,10 @@ open class ApplicationChecklistRecyclerItemData(
         val status: String,
         val isOptional: Boolean,
         val frontImage: String?,
-        val backImage: String?
+        val backImage: String?,
+        val checkListItemType : String?,
+        val options : Dependency?
+
     ): ApplicationChecklistRecyclerItemData(
         LeadActivationViewTypes.GigerInfo
     )

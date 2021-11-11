@@ -37,11 +37,13 @@
                         android:background="@drawable/info_toolbar_background"
                         android:orientation="vertical"/>
 
+
                     <include
                         android:id="@+id/overlay_card_layout"
                         layout="@layout/fragment_pending_joining_details_joining_details_card"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
                         android:layout_marginBottom="@dimen/size_2" />
 
                 </FrameLayout>
