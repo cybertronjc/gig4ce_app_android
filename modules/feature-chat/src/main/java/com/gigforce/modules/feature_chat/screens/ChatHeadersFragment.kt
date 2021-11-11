@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
@@ -29,13 +30,15 @@ import com.gigforce.common_ui.chat.models.ChatHeader
 import com.gigforce.common_ui.chat.models.ChatListItemDataObject
 import com.gigforce.common_ui.chat.models.ChatListItemDataWrapper
 import com.gigforce.common_ui.views.GigforceToolbar
-import com.gigforce.core.crashlytics.CrashlyticsLogger
-import com.gigforce.core.documentFileHelper.DocumentPrefHelper
-import com.gigforce.core.documentFileHelper.RequestDocumentTreeAccessFragment
+import com.gigforce.core.ScopedStorageConstants
+import com.gigforce.core.documentFileHelper.DocumentTreeDelegate
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.recyclerView.CoreRecyclerView
 import com.gigforce.modules.feature_chat.ChatNavigation
 import com.gigforce.modules.feature_chat.R
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.jaeger.library.StatusBarUtil
@@ -61,7 +64,7 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
     @Inject
     lateinit var navigation: INavigation
     @Inject
-    lateinit var documentPrefHelper : DocumentPrefHelper
+    lateinit var documentTreeDelegate : DocumentTreeDelegate
 
     private val chatNavigation: ChatNavigation by lazy {
         ChatNavigation(navigation)
@@ -75,6 +78,10 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
     private lateinit var contactsButton: Button
     private lateinit var toolbar: GigforceToolbar
     private lateinit var coreRecyclerView: CoreRecyclerView
+
+    private lateinit var mainChatListLayout : View
+    private lateinit var needStorageAccessLayout : View
+    private lateinit var grantStorageAccessButton : View
 
     private var sharedFileSubmitted = false
 
@@ -92,8 +99,43 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
         }
     }
 
-    private fun handleBackPress() {
+    private val openDocumentTreeContract = registerForActivityResult(
+        ActivityResultContracts.OpenDocumentTree()
+    ) {
+        if (it == null) return@registerForActivityResult
 
+        documentTreeDelegate.handleDocumentTreeSelectionResult(
+            context = requireContext(),
+            uri = it,
+            onSuccess = {
+               handleStorageTreeSelectedResult()
+            },
+            onFailure = {
+                handleStorageTreeSelectionFailure(it)
+            }
+        )
+    }
+
+    private fun handleStorageTreeSelectionFailure(
+        e : Exception
+    ) {
+
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Select storage")
+            .setMessage(e.message.toString())
+            .setPositiveButton("Okay"){_,_ ->}
+            .show()
+    }
+
+    private fun handleStorageTreeSelectedResult() {
+
+        needStorageAccessLayout.gone()
+        mainChatListLayout.visible()
+
+        setObserver(this.viewLifecycleOwner)
+        if (!isStoragePermissionGranted()) {
+            askForStoragePermission()
+        }
     }
 
     private fun setObserver(owner: LifecycleOwner) {
@@ -103,7 +145,6 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
             Log.d("chat/header/fragment", it.toString())
             this.setCollectionData(ArrayList(it))
         })
-
     }
 
     private fun setCollectionData(list: ArrayList<ChatHeader>) {
@@ -148,6 +189,7 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
 
     }
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -180,8 +222,6 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
         }
     }
 
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getDataFrom(arguments, savedInstanceState)
@@ -189,14 +229,19 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
         initListeners()
         setObserver(this.viewLifecycleOwner)
 
-        if (!documentPrefHelper.documentUriSaved()) {
-            navigation.navigateTo(RequestDocumentTreeAccessFragment.REQUEST_DOCUMENT_TREE_ACCESS_FRAGMENT)
+        if (!documentTreeDelegate.storageTreeSelected()) {
+
+            mainChatListLayout.gone()
+            needStorageAccessLayout.visible()
             return
+        } else{
+            needStorageAccessLayout.gone()
+            mainChatListLayout.visible()
         }
 
-        if (!isStoragePermissionGranted())
+        if (!isStoragePermissionGranted()) {
             askForStoragePermission()
-
+        }
     }
 
     var title = ""
@@ -232,6 +277,16 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
         noChatsLayout = view.findViewById(R.id.no_chat_layout)
         contactsButton = view.findViewById(R.id.go_to_contacts_btn)
         toolbar = view.findViewById(R.id.toolbar)
+        needStorageAccessLayout = view.findViewById(R.id.storage_access_required_layout)
+        grantStorageAccessButton = view.findViewById(R.id.storage_access_btn)
+        mainChatListLayout = view.findViewById(R.id.main_chat_list_layout)
+
+        grantStorageAccessButton.setOnClickListener {
+
+            if (!documentTreeDelegate.storageTreeSelected()) {
+                openDocumentTreeContract.launch(null)
+            }
+        }
 
         contactsButton.isEnabled = true
         contactsButton.setOnClickListener {
@@ -286,7 +341,7 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
     private fun askForStoragePermission() {
         Log.v(ChatPageFragment.TAG, "Permission Required. Requesting Permission")
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        if(Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
 
             requestPermissions(
                 arrayOf(
@@ -309,7 +364,7 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
 
     private fun isStoragePermissionGranted(): Boolean {
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        if (Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
 
             return ContextCompat.checkSelfPermission(
                 requireContext(),
@@ -334,24 +389,6 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
 
     override fun onSearchTextChanged(newText: String) {
         viewModel.filterChatList(newText)
-
-//        if (newText.isBlank()) {
-//            coreRecyclerView.resetFilter()
-//        } else {
-//            coreRecyclerView.filter {
-//
-//                val itemWrapper = it as ChatListItemDataWrapper
-//                val item = itemWrapper.chatItem
-//                item.groupName.contains(
-//                    newText, true
-//                ) || item.title.contains(
-//                    newText, true
-//                ) || item.subtitle.contains(
-//                    newText, true
-//                )
-//
-//            }
-//        }
     }
 
     private fun hideSoftKeyboard() {

@@ -4,7 +4,7 @@ import android.net.Uri
 
 object DocumentTreeHelper {
 
-    const val EXTERNAL_STORAGE_AUTHORITY = "com.android.externalstorage.documents"
+    private const val EXTERNAL_STORAGE_AUTHORITY = "com.android.externalstorage.documents"
 
     fun isRootUri(
         uri : Uri

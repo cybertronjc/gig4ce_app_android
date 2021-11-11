@@ -88,6 +88,7 @@ class RequestDocumentTreeAccessFragment : Fragment() {
 
 
     private lateinit var grantPermission: Button
+    private var askedOneTime = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -103,6 +104,13 @@ class RequestDocumentTreeAccessFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         findViews(view)
+
+        if(!askedOneTime){
+            openDocumentTreeContract.launch(
+                null
+            )
+            askedOneTime = true
+        }
     }
 
     private fun findViews(view: View) {

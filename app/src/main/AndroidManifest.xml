@@ -37,6 +37,7 @@
         android:supportsRtl="true"
         android:theme="@style/GigforceTheme"
         tools:node="merge"
+        android:requestLegacyExternalStorage="true"
         android:usesCleartextTraffic="true"
         tools:replace="android:label,android:allowBackup">
         <!--
