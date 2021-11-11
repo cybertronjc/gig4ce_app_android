@@ -1,6 +1,6 @@
 package com.gigforce.core.datamodels.custom_gig_preferences
 
-import com.gigforce.core.base.basefirestore.BaseFirestoreDataModel
+import com.gigforce.core.fb.BaseFirestoreDataModel
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -8,7 +8,7 @@ class CustomPreferencesDataModel {
     var unavailable = ArrayList<UnavailableDataModel>()
 }
 
-class UnavailableDataModel : BaseFirestoreDataModel{
+class UnavailableDataModel : BaseFirestoreDataModel {
     lateinit var date :Date
     var timeSlots = ArrayList<TimeSlotsDataModel>()
     var dayUnavailable: Boolean = false

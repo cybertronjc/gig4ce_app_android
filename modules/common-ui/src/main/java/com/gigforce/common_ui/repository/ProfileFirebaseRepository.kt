@@ -1,7 +1,7 @@
 package com.gigforce.common_ui.repository
 
 import android.util.Log
-import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
+import com.gigforce.core.fb.BaseFirestoreDBRepository
 import com.gigforce.core.datamodels.profile.*
 import com.gigforce.core.di.repo.IProfileFirestoreRepository
 import com.gigforce.core.extensions.replace

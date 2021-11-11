@@ -6,8 +6,10 @@ import android.util.Log
 import androidx.core.app.TaskStackBuilder
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.gigforce.app.MainActivity
+import com.gigforce.core.StringConstants
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.extensions.toBundle
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
@@ -54,7 +56,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                         hashMapOf(
                             "uid" to it.uid,
                             "type" to "fcm",
-                            "timestamp" to Date().time
+                            "timestamp" to Date().time,
+                            "updatedAt" to Timestamp.now(),
+                            "updatedBy" to StringConstants.APP.value,
+                            "createdAt" to Timestamp.now()
                         )
                     ).addOnSuccessListener {
                         Log.v(TAG, "Token Updated on Firestore Successfully")

@@ -1,12 +1,11 @@
 package com.gigforce.profile.repository
 
-import androidx.lifecycle.LiveData
+import com.gigforce.core.StringConstants
 import com.gigforce.core.extensions.updateOrThrow
 import com.gigforce.core.fb.BaseFirestoreDBRepository
 import com.gigforce.profile.models.OnboardingProfileData
-import com.gigforce.profile.onboarding.fragments.assetsowned.AssestDM
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -33,70 +32,72 @@ class OnboardingProfileFirebaseRepository : BaseFirestoreDBRepository() {
 
     fun addNewTag(tag: String) {
         firebaseDB.collection(tagsCollectionName)
-                .document("all_tags").update("tagName", FieldValue.arrayUnion(tag))
+            .document("all_tags").update("tagName", FieldValue.arrayUnion(tag))
     }
 
 
     fun setProfileSkill(skills: ArrayList<String>) {
         for (sk in skills) {
             firebaseDB.collection(profileCollectionName)
-                    .document(uid).update("skills", FieldValue.arrayUnion(sk))
+                .document(uid).update("skills", FieldValue.arrayUnion(sk))
         }
     }
 
     fun removeProfileSkill(skill: String) {
         firebaseDB.collection(profileCollectionName).document(uid)
-                .update("skills", FieldValue.arrayRemove(skill))
+            .update("skills", FieldValue.arrayRemove(skill))
     }
 
 
     fun setProfileTags(tags: ArrayList<String>) {
         for (tag in tags) {
             firebaseDB.collection(profileCollectionName)
-                    .document(uid).update("tags", FieldValue.arrayUnion(tag))
+                .document(uid).update("tags", FieldValue.arrayUnion(tag))
         }
     }
 
     fun setProfileAvatarName(profileAvatarName: String) {
         firebaseDB.collection(profileCollectionName)
-                .document(uid).update("profileAvatarName", profileAvatarName)
+            .document(uid).update("profileAvatarName", profileAvatarName)
 
     }
 
     fun setProfileThumbNail(profileAvatarName: String) {
         firebaseDB.collection(profileCollectionName)
-                .document(uid).update("profilePicThumbnail", profileAvatarName)
+            .document(uid).update("profilePicThumbnail", profileAvatarName)
 
     }
 
     fun setProfileAvatarName(
-            profileAvatarName: String,
-            profileAvatarNameThumbnail: String? = null
+        profileAvatarName: String,
+        profileAvatarNameThumbnail: String? = null
     ) {
         firebaseDB.collection(profileCollectionName)
-                .document(getUID()).update(
-                        mapOf(
-                                "profileAvatarName" to profileAvatarName,
-                                "profilePicThumbnail" to profileAvatarNameThumbnail
-                        )
+            .document(getUID()).update(
+                mapOf(
+                    "profileAvatarName" to profileAvatarName,
+                    "profilePicThumbnail" to profileAvatarNameThumbnail,
+                    "updatedAt" to Timestamp.now(),
+                    "updatedBy" to StringConstants.APP.value
                 )
+            )
     }
 
     fun removeProfileTag(tags: ArrayList<String>) {
         for (tag in tags) {
             firebaseDB.collection(profileCollectionName)
-                    .document(uid).update("tags", FieldValue.arrayRemove(tag))
+                .document(uid).update("tags", FieldValue.arrayRemove(tag))
         }
     }
 
     fun setProfileBio(bio: String) {
         firebaseDB.collection(profileCollectionName)
-                .document(uid).update("bio", bio)
+            .document(uid).update("bio", bio)
     }
 
     fun setProfileAboutMe(aboutMe: String) {
         firebaseDB.collection(profileCollectionName)
-                .document(uid).update("aboutMe", aboutMe)
+            .document(uid).update("aboutMe", aboutMe)
     }
 
     fun addInviteToProfile() {
@@ -104,52 +105,68 @@ class OnboardingProfileFirebaseRepository : BaseFirestoreDBRepository() {
     }
 
     suspend fun getProfileData(userId: String? = null): OnboardingProfileData =
-            suspendCoroutine { cont ->
+        suspendCoroutine { cont ->
 
-                getCollectionReference()
-                        .document(userId ?: uid)
-                        .get()
-                        .addOnSuccessListener {
+            getCollectionReference()
+                .document(userId ?: uid)
+                .get()
+                .addOnSuccessListener {
 
-                            if (it.exists()) {
-                                val profileData = it.toObject(OnboardingProfileData::class.java)
-                                        ?: throw  IllegalStateException("unable to parse profile object")
-                                profileData.id = it.id
-                                cont.resume(profileData)
-                            } else {
-                                cont.resume(OnboardingProfileData())
-                            }
-                        }
-                        .addOnFailureListener {
-                            cont.resumeWithException(it)
-                        }
-            }
+                    if (it.exists()) {
+                        val profileData = it.toObject(OnboardingProfileData::class.java)
+                            ?: throw  IllegalStateException("unable to parse profile object")
+                        profileData.id = it.id
+                        cont.resume(profileData)
+                    } else {
+                        cont.resume(OnboardingProfileData())
+                    }
+                }
+                .addOnFailureListener {
+                    cont.resumeWithException(it)
+                }
+        }
 
-    suspend fun setPreferredJobLocation(cityId: String, cityName: String, stateCode: String, subLocation: List<String>) {
-        firebaseDB.collection(profileCollectionName)
-                .document(uid)
-                .updateOrThrow(mapOf(
-                        "preferredJobLocation.city_id" to cityId,
-                        "preferredJobLocation.city_name" to cityName,
-                        "preferredJobLocation.sub_location" to subLocation,
-                        "preferredJobLocation.state_code" to stateCode
-                ))
-    }
-
-    suspend fun setLeadSource(sourceMap: HashMap<String, String>){
+    suspend fun setPreferredJobLocation(
+        cityId: String,
+        cityName: String,
+        stateCode: String,
+        subLocation: List<String>
+    ) {
         firebaseDB.collection(profileCollectionName)
             .document(uid)
-            .updateOrThrow("leadSource", sourceMap)
+            .updateOrThrow(
+                mapOf(
+                    "preferredJobLocation.city_id" to cityId,
+                    "preferredJobLocation.city_name" to cityName,
+                    "preferredJobLocation.sub_location" to subLocation,
+                    "preferredJobLocation.state_code" to stateCode,
+                    "updatedAt" to Timestamp.now(),
+                    "updatedBy" to StringConstants.APP.value
+                )
+            )
     }
 
-     fun getSkills(): Query {
-
-         val collectionRef =  firebaseDB.collection(skillsCollectionName).whereEqualTo("isActive", true)
-         return collectionRef
+    suspend fun setLeadSource(sourceMap: HashMap<String, String>) {
+        firebaseDB.collection(profileCollectionName)
+            .document(uid)
+            .updateOrThrow(
+                mapOf(
+                    "leadSource" to sourceMap, "updatedAt" to Timestamp.now(),
+                    "updatedBy" to StringConstants.APP.value
+                )
+            )
     }
 
-     fun getAssets(): Query {
-         val collectionRef = firebaseDB.collection(assetsCollectionName).whereEqualTo("isActive", true)
-         return collectionRef
+    fun getSkills(): Query {
+
+        val collectionRef =
+            firebaseDB.collection(skillsCollectionName).whereEqualTo("isActive", true)
+        return collectionRef
+    }
+
+    fun getAssets(): Query {
+        val collectionRef =
+            firebaseDB.collection(assetsCollectionName).whereEqualTo("isActive", true)
+        return collectionRef
     }
 }

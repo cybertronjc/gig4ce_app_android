@@ -4,8 +4,11 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.core.SingleLiveEvent
+import com.gigforce.core.StringConstants
 import com.gigforce.core.datamodels.client_activation.JpApplication
+import com.gigforce.core.extensions.updateOrThrow
 import com.gigforce.core.utils.Lse
+import com.google.firebase.Timestamp
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -90,6 +93,8 @@ class UploadDrivingCertificateViewmodel : ViewModel() {
                                         .update("activation", jpApplication.activation)
                                         .addOnCompleteListener {
                                             if (it.isSuccessful) {
+                                                repository.db.collection("JP_Applications")
+                                                    .document(items.documents[0].id).update(mapOf("updatedAt" to Timestamp.now(), "updatedBy" to StringConstants.APP.value))
                                                 _documentUploadState.postValue(Lse.success())
 
                                             }
@@ -118,6 +123,8 @@ class UploadDrivingCertificateViewmodel : ViewModel() {
                                     .update("activation", jpApplication.activation)
                                     .addOnCompleteListener {
                                         if (it.isSuccessful) {
+                                            repository.db.collection("JP_Applications")
+                                                .document(items.documents[0].id).update(mapOf("updatedAt" to Timestamp.now(), "updatedBy" to StringConstants.APP.value))
                                             _documentUploadState.postValue(Lse.success())
                                         }
                                     }
