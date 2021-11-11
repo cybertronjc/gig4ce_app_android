@@ -1,6 +1,7 @@
 package com.gigforce.common_ui.components.cells
 
 import android.content.Context
+import android.graphics.Typeface
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
@@ -72,7 +73,6 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
         var backGroundType:BackgroundType
             get() = _backGroundType
             set(value) {
-                Log.i("background", "Setting Value as ${value}")
                 this._backGroundType = value
                 val backgroundRes = when(value){
                     BackgroundType.Default -> R.drawable.white_app_bar_background
@@ -227,6 +227,12 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
 
     fun setAppBarTitle(appTitle: CharSequence?) {
         titleText.setText(appTitle.toString())
+    }
+    fun makeTitleBold(){
+        titleText.setTypeface(null, Typeface.BOLD)
+    }
+    fun makeBackgroundMoreRound(){
+        this.background = context.resources.getDrawable(R.drawable.app_bar_background_more_rounded)
     }
 
     fun setSteps(step: String){

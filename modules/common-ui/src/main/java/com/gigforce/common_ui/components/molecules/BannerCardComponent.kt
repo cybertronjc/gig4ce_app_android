@@ -81,9 +81,21 @@ open class BannerCardComponent(context: Context, attrs: AttributeSet?) :
             if (data.image.isNullOrEmpty()) {
                 topLayout.gone()
             } else {
-                if (data.image.isNotBlank()) {
+
+                if (sharedPreAndCommonUtilInterface.getAppLanguageCode() == "hi") {
+                    if(data.hi?.image.isNullOrBlank()){
+                        setImage(data.image)
+                    }else {
+                        data.hi?.image?.let {
+                            setImage(it)
+                        }?: run{
+                            setImage(data.image)
+                        }
+                    }
+                }else{
                     setImage(data.image)
                 }
+
                 if (sharedPreAndCommonUtilInterface.getAppLanguageCode() == "hi") {
                     if (data.hi?.title.isNullOrBlank()) {
                         if (data.title.isNullOrBlank()) {

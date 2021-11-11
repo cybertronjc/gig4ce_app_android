@@ -1,6 +1,8 @@
 package com.gigforce.lead_management.ui.new_selection_form
 
 import android.text.SpannedString
+import com.gigforce.common_ui.dynamic_fields.data.DataFromDynamicInputField
+import com.gigforce.common_ui.dynamic_fields.data.DynamicField
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.core.datamodels.profile.ProfileData
 
@@ -45,7 +47,7 @@ sealed class NewSelectionForm1ViewState {
 
     data class NavigateToForm2(
         val submitJoiningRequest: SubmitJoiningRequest,
-        val dynamicInputsFields : List<JobProfileDependentDynamicInputField>
+        val dynamicInputsFields : List<DynamicField>
     ) : NewSelectionForm1ViewState()
 
     object EnableSubmitButton : NewSelectionForm1ViewState()
@@ -53,7 +55,7 @@ sealed class NewSelectionForm1ViewState {
     object DisableSubmitButton : NewSelectionForm1ViewState()
 
     data class ShowJobProfileRelatedField(
-        val dynamicFields : List<JobProfileDependentDynamicInputField>
+        val dynamicFields : List<DynamicField>
     ): NewSelectionForm1ViewState()
 
     data class EnteredPhoneNumberSanitized(

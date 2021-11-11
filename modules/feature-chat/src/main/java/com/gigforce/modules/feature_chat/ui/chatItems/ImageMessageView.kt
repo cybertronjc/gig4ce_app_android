@@ -2,6 +2,7 @@ package com.gigforce.modules.feature_chat.ui.chatItems
 
 import android.content.Context
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.text.util.Linkify
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -9,7 +10,6 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.*
 import androidx.cardview.widget.CardView
-import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.core.text.util.LinkifyCompat
 import androidx.core.view.isVisible
@@ -17,7 +17,6 @@ import com.bumptech.glide.Glide
 import com.gigforce.common_ui.chat.ChatConstants
 import com.gigforce.common_ui.chat.models.ChatMessage
 import com.gigforce.common_ui.shimmer.ShimmerHelper
-import com.gigforce.common_ui.views.GigforceImageView
 import com.gigforce.core.extensions.dp
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toDisplayText
@@ -31,7 +30,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.io.File
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -49,6 +47,8 @@ abstract class ImageMessageView(
 
     @Inject
     lateinit var navigation: INavigation
+
+
 
     private val chatNavigation: ChatNavigation by lazy {
         ChatNavigation(navigation)
@@ -136,12 +136,17 @@ abstract class ImageMessageView(
             loadThumbnail(msg)
         } else {
 
-            val downloadedFile = returnFileIfAlreadyDownloadedElseNull()
-            if (downloadedFile != null) {
-                handleImageDownloaded(downloadedFile)
-            } else {
-                loadThumbnail(msg)
-                handleImageNotDownloaded()
+            GlobalScope.launch(Dispatchers.IO) {
+
+                val downloadedFile = returnFileIfAlreadyDownloadedElseNull()
+                this.launch(Dispatchers.Main) {
+                    if (downloadedFile != null) {
+                        handleImageDownloaded(downloadedFile)
+                    } else {
+                        loadThumbnail(msg)
+                        handleImageNotDownloaded()
+                    }
+                }
             }
         }
     }
@@ -188,7 +193,7 @@ abstract class ImageMessageView(
     }
 
     private fun handleImageDownloaded(
-            downloadedFile: File
+            downloadedFile: Uri
     ) {
 
         attachmentDownloadingProgressBar.gone()
@@ -277,11 +282,13 @@ abstract class ImageMessageView(
         val view = v ?: return
 
         if(view.id == R.id.reply_messages_quote_container_layout){
+
+
         } else {
 
             val file = returnFileIfAlreadyDownloadedElseNull()
             if (file != null) {
-                chatNavigation.openFullScreenImageViewDialogFragment(file.toUri())
+                chatNavigation.openFullScreenImageViewDialogFragment(file)
             } else {
                 downloadAttachment()
             }
@@ -316,7 +323,7 @@ abstract class ImageMessageView(
         }
     }
 
-    private fun downloadAttachment() = GlobalScope.launch {
+    private fun downloadAttachment() = GlobalScope.launch(Dispatchers.IO) {
 
         this.launch(Dispatchers.Main) {
             handleDownloadInProgress()
@@ -329,6 +336,8 @@ abstract class ImageMessageView(
                 handleImageDownloaded(file)
             }
         } catch (e: Exception) {
+            Toast.makeText(context, "error", Toast.LENGTH_SHORT).show()
+            e.printStackTrace()
         }
     }
 

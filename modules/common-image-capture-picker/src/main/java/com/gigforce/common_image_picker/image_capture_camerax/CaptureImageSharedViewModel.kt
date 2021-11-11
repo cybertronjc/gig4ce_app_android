@@ -1,6 +1,7 @@
 package com.gigforce.common_image_picker.image_capture_camerax
 
 
+import android.content.Context
 import android.graphics.*
 import android.net.Uri
 import android.os.Environment
@@ -81,6 +82,7 @@ class CaptureImageSharedViewModel : ViewModel() {
     }
 
     fun clickedImageApproved(
+        context : Context,
         shouldUploadImageToo: Boolean,
         file: File,
         parentDirectoryNameInFirebaseStorage: String?
@@ -131,7 +133,7 @@ class CaptureImageSharedViewModel : ViewModel() {
                 val resizedBitmapCount = resizedBitmap.allocationByteCount
                 Log.d("count", "original $resizedBitmapCount")
 
-                uploadPathInFirebaseStorage = bitmapToFile(resizedBitmap, "temp.jpg")?.let {
+                uploadPathInFirebaseStorage = bitmapToFile(context,resizedBitmap, "temp.jpg")?.let {
                     uploadImageInFirebase(
                         parentDirectoryNameInFirebaseStorage!!,
                         "Image",
@@ -153,18 +155,16 @@ class CaptureImageSharedViewModel : ViewModel() {
     }
 
 
-    fun bitmapToFile(
+    private fun bitmapToFile(
+        context: Context,
         bitmap: Bitmap,
         fileNameToSave: String
     ): File? { // File name like "image.png"
         //create a file to write bitmap data
         var file: File? = null
         return try {
-            file = File(
-                Environment.getExternalStorageDirectory()
-                    .toString() + File.separator + fileNameToSave
-            )
-            file!!.createNewFile()
+            file = File(context.filesDir,fileNameToSave)
+            file.createNewFile()
 
             //Convert bitmap to byte array
             val bos = ByteArrayOutputStream()

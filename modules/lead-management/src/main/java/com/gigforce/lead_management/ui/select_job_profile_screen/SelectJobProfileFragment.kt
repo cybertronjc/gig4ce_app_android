@@ -135,4 +135,19 @@ class SelectJobProfileFragment : BaseFragment2<FragmentSelectJobProfileBinding>(
     override fun onJobProfileSelected(jobProfileSelected: JobProfilesItem) {
         viewBinding.okayButton.isEnabled = true
     }
+
+    override fun onJobProfileFiltered(
+        jobProfileCountVisibleAfterFiltering: Int,
+        selectedJobProfileVisible: Boolean
+    ) {
+        if(jobProfileCountVisibleAfterFiltering != 0){
+            viewBinding.infoLayout.root.gone()
+            viewBinding.okayButton.isEnabled = selectedJobProfileVisible
+        } else{
+            viewBinding.okayButton.isEnabled = false
+            viewBinding.infoLayout.root.visible()
+            viewBinding.infoLayout.infoMessageTv.text = getString(R.string.no_job_profile_to_show_lead)
+            viewBinding.infoLayout.infoIv.loadImage(R.drawable.ic_no_selection)
+        }
+    }
 }

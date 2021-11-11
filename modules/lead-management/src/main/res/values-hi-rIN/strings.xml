@@ -189,5 +189,12 @@
     <string name="one_selection_drop_lead">1 चयन सफलतापूर्वक गिराया गया</string>
     <string name="type_lead">Type</string>
     <string name="here_lead">here</string>
+    <string name="days_ago">\u0020दिन पहले</string>
+    <string name="hours_ago">\u0020घंंटों पहले</string>
+    <string name="mins_ago">\u0020मिनट पहले</string>
+    <string name="sec_ago">\u0020सेकंड पहले</string>
+    <string name="moments_ago">\u0020क्षण भर पहले</string>
+    <string name="view_photo_lead">फ़ोटो देखें</string>
+    <string name="lead_alternate_mobile_number">वैकल्पिक मोबाइल नंबर</string>
 
 </resources>

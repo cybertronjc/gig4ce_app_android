@@ -157,11 +157,18 @@ class LandingFragment : Fragment(),
 
     private fun checkForDeepLink() {
         try {
-            val cameFromDeepLink = sharedPreAndCommonUtilInterface.getDataBoolean("deeplink_login")
-            if (cameFromDeepLink == true){
-                Log.d("deepLink", "here")
+            val cameFromLoginDeepLink = sharedPreAndCommonUtilInterface.getDataBoolean("deeplink_login")
+            val cameFromOnboardingDeepLink = sharedPreAndCommonUtilInterface.getDataBoolean("deeplink_onboarding")
+            if (cameFromLoginDeepLink == true){
+                Log.d("deepLink", "login")
                 navigation.navigateTo("gig/tlLoginDetails", bundleOf(
                     StringConstants.CAME_FROM_LOGIN_SUMMARY_DEEPLINK.value to true
+                )
+                )
+            }else if (cameFromOnboardingDeepLink == true){
+                Log.d("deepLink", "onboarding")
+                navigation.navigateTo("LeadMgmt/joiningListFragment", bundleOf(
+                    StringConstants.CAME_FROM_ONBOARDING_FORM_DEEPLINK.value to true
                 )
                 )
             }
@@ -367,8 +374,8 @@ class LandingFragment : Fragment(),
             requestPermissionContract.launch(
                 arrayOf(
                     Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION,
-                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                    Manifest.permission.ACCESS_COARSE_LOCATION/*,
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION*/
                 )
             )
         }

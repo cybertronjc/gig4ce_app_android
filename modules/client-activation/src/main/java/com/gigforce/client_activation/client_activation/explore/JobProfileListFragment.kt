@@ -126,7 +126,7 @@ class JobProfileListFragment : Fragment(), IOnBackPressedOverride, OnJobSelected
         exploreRv.adapter = jobProfileListAdapter
 
         jobProfileListAdapter.onItemClick = {jpExplore ->
-            Log.d("id", jpExplore.id)
+            Log.d("id", jpExplore.id + "")
             val id = jpExplore?.id ?: ""
             val title = jpExplore?.title ?: ""
             Log.d("title", jpExplore.title + "id $id")
@@ -251,6 +251,7 @@ class JobProfileListFragment : Fragment(), IOnBackPressedOverride, OnJobSelected
 
         swipeRefresh.setOnRefreshListener {
             jobProfilesList.clear()
+            exploreRv.adapter?.notifyDataSetChanged()
             currentPage = 1
             exploreRv.gone()
             exploreError.gone()
@@ -264,6 +265,7 @@ class JobProfileListFragment : Fragment(), IOnBackPressedOverride, OnJobSelected
                 //jobProfileListAdapter.filter.filter("")
                 jobProfileRequestModelCurrent.text = ""
                 jobProfilesList.clear()
+                exploreRv.adapter?.notifyDataSetChanged()
                 currentPage = 1
                 jobProfileRequestModelCurrent.pageNo = currentPage
                 viewModel.getAllJobProfiles(jobProfileRequestModelCurrent)
@@ -306,6 +308,7 @@ class JobProfileListFragment : Fragment(), IOnBackPressedOverride, OnJobSelected
                 }
 
                 jobProfilesList.clear()
+                exploreRv.adapter?.notifyDataSetChanged()
                 exploreRv.gone()
                 exploreError.gone()
                 noGigs.gone()
@@ -393,7 +396,7 @@ class JobProfileListFragment : Fragment(), IOnBackPressedOverride, OnJobSelected
     }
 
     override fun onJobSelected(jpExplore: JobProfileDVM) {
-        Log.d("id", jpExplore.id)
+        Log.d("id", jpExplore.id + "")
         val id = jpExplore?.id ?: ""
         val title = jpExplore?.title ?: ""
         Log.d("title", jpExplore.title + "id $id")

@@ -23,12 +23,12 @@ import android.widget.*
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import com.gigforce.common_image_picker.image_cropper.ImageCropActivity
 import com.gigforce.common_ui.viewmodels.ProfileViewModel
 import com.gigforce.common_ui.widgets.ImagePicker
+import com.gigforce.core.ScopedStorageConstants
 import com.gigforce.core.base.BaseActivity
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.ImageUtils
@@ -136,7 +136,7 @@ class PhotoCrop : BaseActivity() {
         purpose = if (savedInstanceState != null)
             savedInstanceState.getString(INTENT_EXTRA_PURPOSE)!!
         else
-            intent.getStringExtra(INTENT_EXTRA_PURPOSE)
+            intent.getStringExtra(INTENT_EXTRA_PURPOSE) ?: ""
 
         if (purpose != PURPOSE_VERIFICATION) {
             cl_photo_crop.setBackgroundColor(getColor(R.color.gray_chat_module))
@@ -157,6 +157,7 @@ class PhotoCrop : BaseActivity() {
 
 
     }
+
     private fun setProfilePicHeight() {
         val vto: ViewTreeObserver = imageView.getViewTreeObserver()
         vto.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
@@ -173,6 +174,7 @@ class PhotoCrop : BaseActivity() {
             }
         })
     }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString("purpose", purpose)
@@ -180,8 +182,8 @@ class PhotoCrop : BaseActivity() {
 
     private fun profilePictureOptions() {
         Log.e("PHOTO_CROP", "profile picture options started")
-        CLOUD_OUTPUT_FOLDER = intent.getStringExtra("folder")
-        incomingFile = intent.getStringExtra("file")
+        CLOUD_OUTPUT_FOLDER = intent.getStringExtra("folder") ?: ""
+        incomingFile = intent.getStringExtra("file") ?: ""
         cropX = 1F
         cropY = 1F
         PREFIX = "profile_" + intent.getStringExtra("uid")
@@ -198,7 +200,7 @@ class PhotoCrop : BaseActivity() {
 
     private fun verificationOptions() {
         Log.e("PHOTO_CROP", "verification options started")
-        CLOUD_OUTPUT_FOLDER = intent.getStringExtra("folder")
+        CLOUD_OUTPUT_FOLDER = intent.getStringExtra("folder") ?: ""
         incomingFile = "verification_" + intent.getStringExtra("file")
         cropX = 7F
         cropY = 5F
@@ -262,7 +264,11 @@ class PhotoCrop : BaseActivity() {
                 outputFileUri?.let { it -> startCropImage(it) }
 
             } else {
-                Toast.makeText(this, getString(R.string.issue_capturing_image_giger_gigs), Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    this,
+                    getString(R.string.issue_capturing_image_giger_gigs),
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
 
@@ -475,7 +481,11 @@ class PhotoCrop : BaseActivity() {
                                     val thumbNail: String = it.metadata?.reference?.name.toString()
                                     updateViewModel(purpose, thumbNail, true)
                                     loadImage(folder, fname)
-                                    Toast.makeText(this, getString(R.string.upload_success_giger_gigs), Toast.LENGTH_LONG)
+                                    Toast.makeText(
+                                        this,
+                                        getString(R.string.upload_success_giger_gigs),
+                                        Toast.LENGTH_LONG
+                                    )
                                         .show()
                                     resultIntent.putExtra(
                                         "image_url",
@@ -488,7 +498,11 @@ class PhotoCrop : BaseActivity() {
                                 }
 
                             } else {
-                                Toast.makeText(this, getString(R.string.some_seems_off_giger_gigs), Toast.LENGTH_LONG).show()
+                                Toast.makeText(
+                                    this,
+                                    getString(R.string.some_seems_off_giger_gigs),
+                                    Toast.LENGTH_LONG
+                                ).show()
 
                             }
                         } catch (e: Exception) {
@@ -507,7 +521,11 @@ class PhotoCrop : BaseActivity() {
                     }
                     progress_circular.visibility = View.GONE
                     //loadImage(folder, fname)
-                    Toast.makeText(this, getString(R.string.upload_success_giger_gigs), Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        this,
+                        getString(R.string.upload_success_giger_gigs),
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
 
                 updateViewModel(purpose, fname, false)
@@ -611,8 +629,8 @@ class PhotoCrop : BaseActivity() {
     private fun showBottomSheet() {
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         linear_layout_bottomsheet.updateProfilePicture.setOnClickListener {
-            if(hasStoragePermissions())
-            getImageFromPhone()
+            if (hasStoragePermissions())
+                getImageFromPhone()
             else
                 requestStoragePermission()
         }
@@ -620,28 +638,47 @@ class PhotoCrop : BaseActivity() {
     }
 
     private fun hasStoragePermissions(): Boolean {
-        return ContextCompat.checkSelfPermission(
-            applicationContext,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-            applicationContext,
-            Manifest.permission.READ_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-            applicationContext,
-            Manifest.permission.CAMERA
-        ) == PackageManager.PERMISSION_GRANTED
+
+        if (Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
+
+            return ContextCompat.checkSelfPermission(
+                applicationContext,
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        } else {
+            return ContextCompat.checkSelfPermission(
+                applicationContext,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                applicationContext,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                applicationContext,
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        }
+
     }
 
     private fun requestStoragePermission() {
 
-        requestPermissions(
-            arrayOf(
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.CAMERA
-            ),
-            REQUEST_STORAGE_PERMISSION
-        )
+        if (Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.CAMERA
+                ),
+                REQUEST_STORAGE_PERMISSION
+            )
+        } else {
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.CAMERA
+                ),
+                REQUEST_STORAGE_PERMISSION
+            )
+        }
     }
 
 
@@ -661,8 +698,7 @@ class PhotoCrop : BaseActivity() {
                     }
                 }
 
-                if (!allPermsGranted)
-                    {
+                if (!allPermsGranted) {
                     Toast.makeText(
                         applicationContext,
                         getString(R.string.grant_permission_giger_gigs),

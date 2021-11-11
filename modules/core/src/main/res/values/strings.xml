@@ -2,4 +2,6 @@
 <resources>
     <string name="location_cant_be_found_core">Location can\'t be found</string>
     <string name="provide_permission_core">you need to provide permissions to proceed further</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

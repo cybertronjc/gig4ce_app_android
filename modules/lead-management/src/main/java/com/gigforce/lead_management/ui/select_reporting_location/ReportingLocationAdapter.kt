@@ -48,7 +48,7 @@ class ReportingLocationAdapter(
         if (selectedId == null)
             return null
         else {
-            return filteredLocationList[getIndexFromId(selectedId!!)]
+            return originalLocationList[getIndexFromIdFromOriginalList(selectedId!!)]
         }
     }
 
@@ -109,8 +109,14 @@ class ReportingLocationAdapter(
         }
 
         override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-            filteredLocationList = results?.values as ArrayList<ReportingLocationsItem>
+            val filterResult = results?.values as? ArrayList<ReportingLocationsItem>
+            filteredLocationList = if (filterResult.isNullOrEmpty()) emptyList() else filterResult
             notifyDataSetChanged()
+
+            onReportingLocationSelectedListener?.onReportingLocationFiltered(
+                reportingLocationCountVisibleAfterFiltering =  filteredLocationList.size,
+                selectedReportingLocationVisible  = filteredLocationList.find { it.id == selectedId } != null
+            )
         }
     }
 
@@ -191,9 +197,25 @@ class ReportingLocationAdapter(
             filteredLocationList.indexOf(tl)
     }
 
+    fun getIndexFromIdFromOriginalList(
+        id: String
+    ): Int {
+        val tl = originalLocationList.find { it.id == id }
+
+        return if (tl == null)
+            return -1
+        else
+            originalLocationList.indexOf(tl)
+    }
+
 
 
     interface OnReportingLocationSelectedListener{
+
+        fun onReportingLocationFiltered(
+            reportingLocationCountVisibleAfterFiltering : Int,
+            selectedReportingLocationVisible : Boolean
+        )
 
         fun onReportingLocationSelected(reportingLocation : ReportingLocationsItem)
     }

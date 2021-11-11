@@ -81,7 +81,7 @@ class CameraAndGalleryIntegrator : ClickOrSelectImageBottomSheet.OnPickOrCapture
         val intents = ImagePicker.getCaptureImageIntentsOnly(context) ?: return
         if (openFrontCamera) {
             when {
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1 && Build.VERSION.SDK_INT < Build.VERSION_CODES.O -> {
+                Build.VERSION.SDK_INT < Build.VERSION_CODES.O -> {
                     intents.putExtra("android.intent.extras.CAMERA_FACING", CameraCharacteristics.LENS_FACING_FRONT)  // Tested on API 24 Android version 7.0(Samsung S6)
                 }
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.O -> {
@@ -217,12 +217,8 @@ class CameraAndGalleryIntegrator : ClickOrSelectImageBottomSheet.OnPickOrCapture
         photoCropIntent.putExtra("outgoingUri", imageUri.toString())
         photoCropIntent.putExtra(ImageCropActivity.INTENT_EXTRA_DESTINATION_URI,imageCropOptions.outputFileUri)
 
-        val outputFileUri = if(imageCropOptions.outputFileUri == null ) {
-            Uri.fromFile(File(context.cacheDir, "IMG_" + System.currentTimeMillis() + EXTENSION))
-        }
-        else {
-            imageCropOptions.outputFileUri!!
-        }
+        val outputFileUri = imageCropOptions.outputFileUri
+            ?: Uri.fromFile(File(context.cacheDir, "IMG_" + System.currentTimeMillis() + EXTENSION))
         photoCropIntent.putExtra(ImageCropActivity.INTENT_EXTRA_DESTINATION_URI,outputFileUri)
         photoCropIntent.putExtra(ImageCropActivity.INTENT_EXTRA_ENABLE_FREE_CROP,imageCropOptions.freeCropEnabled)
 

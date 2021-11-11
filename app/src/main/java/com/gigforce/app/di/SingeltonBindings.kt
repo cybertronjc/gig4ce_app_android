@@ -1,5 +1,7 @@
 package com.gigforce.app.di
 
+import android.content.Context
+import android.content.SharedPreferences
 import com.gigforce.app.di.implementations.BuildConfigImp
 import com.gigforce.common_ui.remote.JoiningProfileService
 import com.gigforce.common_ui.remote.ProfileCommonService
@@ -16,7 +18,10 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Named
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -78,6 +83,26 @@ abstract class SingeltonBindings {
             retrofitServiceFactory : RetrofitServiceFactory
         ): ProfileCommonService {
             return retrofitServiceFactory.prepareService(ProfileCommonService::class.java)
+        }
+
+        @Singleton
+        @Provides
+        @Named("session_independent_pref")
+        @JvmStatic
+        fun provideSessionIndependentPreferences(@ApplicationContext context: Context): SharedPreferences {
+            // Returns a [SharedPreferences] which will be not be cleared when user logs out,
+            // great for storing things like language selected, app intro shown etc
+            return context.getSharedPreferences("session_independent_pref", Context.MODE_PRIVATE)
+        }
+
+        @Singleton
+        @Provides
+        @Named("session_dependent_pref")
+        @JvmStatic
+        fun provideSessionDependentPreferences(@ApplicationContext context: Context): SharedPreferences {
+            // Returns a [SharedPreferences] which will be cleared when user logs out,
+            // great for storing things like Current users related data
+            return context.getSharedPreferences("session_dependent_pref", Context.MODE_PRIVATE)
         }
     }
 }

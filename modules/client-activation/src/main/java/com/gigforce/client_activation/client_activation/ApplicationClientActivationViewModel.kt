@@ -120,7 +120,7 @@ class ApplicationClientActivationViewModel : ViewModel() {
                 }
             }
 
-
+            var allStatus = arrayListOf("started", "completed", "failed")
             // need to change for KYC, profile pic and about_me
             val profileModel = getProfile()
             val verification = getVerification()
@@ -135,9 +135,9 @@ class ApplicationClientActivationViewModel : ViewModel() {
                     }
                     "driving_licence" -> {
                         it.isDone =
-                            verification?.driving_license != null && (verification.driving_license?.status?.equals(
-                                "started"
-                            ) ?: false || verification.driving_license?.verified ?: false)
+                            verification?.driving_license != null && (verification.driving_license?.status != null && allStatus.contains(
+                                verification.driving_license?.status ?: ""
+                            ) || verification.driving_license?.verified ?: false)
                     }
                     "aadhar_card" -> {
                         it.isDone =
@@ -158,7 +158,7 @@ class ApplicationClientActivationViewModel : ViewModel() {
                     }
                     "aadhar_card_questionnaire" -> {
                         it.isDone =
-                            verification?.aadhaar_card_questionnaire != null && verification.aadhaar_card_questionnaire?.aadhaarCardNo?.length == 12
+                            verification?.aadhaar_card_questionnaire != null && verification.aadhaar_card_questionnaire?.verified == true
                     }
 
                     "pf_esic" -> {

@@ -50,7 +50,7 @@ class CityAdapter(
         if (selectedId == null)
             return null
         else {
-            return filteredCityList[getIndexFromId(selectedId!!)]
+            return originalCityList[getIndexFromIdOriginalList(selectedId!!)]
         }
     }
 
@@ -114,6 +114,11 @@ class CityAdapter(
         override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
             filteredCityList = results?.values as ArrayList<ReportingLocationsItem>
             notifyDataSetChanged()
+
+            onCitySelectedListener?.onCityFiltered(
+                cityCountVisibleAfterFiltering =  filteredCityList.size,
+                selectedCityVisible  =  filteredCityList.find { it.id == selectedId } != null
+            )
         }
     }
 
@@ -192,8 +197,24 @@ class CityAdapter(
             filteredCityList.indexOf(city)
     }
 
+    fun getIndexFromIdOriginalList(
+        id: String
+    ): Int {
+        val city = originalCityList.find { it.id == id }
+
+        return if (city == null)
+            return -1
+        else
+            originalCityList.indexOf(city)
+    }
+
 
     interface OnCitySelectedListener {
+
+        fun onCityFiltered(
+            cityCountVisibleAfterFiltering : Int,
+            selectedCityVisible : Boolean
+        )
 
         fun onCitySelected(selectedCity: ReportingLocationsItem)
     }
