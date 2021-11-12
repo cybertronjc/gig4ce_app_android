@@ -1,6 +1,6 @@
 package com.gigforce.client_activation.client_activation.repository
 
-import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
+import com.gigforce.core.fb.BaseFirestoreDBRepository
 
 class ClientActiExploreRepository : BaseFirestoreDBRepository() {
 

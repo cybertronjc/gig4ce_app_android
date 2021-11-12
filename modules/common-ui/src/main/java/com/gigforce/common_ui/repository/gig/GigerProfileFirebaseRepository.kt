@@ -1,6 +1,6 @@
 package com.gigforce.common_ui.repository.gig
 
-import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
+import com.gigforce.core.fb.BaseFirestoreDBRepository
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.utils.EventLogs.getOrThrow
 import javax.inject.Inject

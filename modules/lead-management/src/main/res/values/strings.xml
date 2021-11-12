@@ -196,5 +196,6 @@
     <string name="sec_ago">\u0020sec ago</string>
     <string name="moments_ago">\u0020moments ago</string>
     <string name="view_photo_lead">VIEW PHOTO</string>
+    <string name="lead_alternate_mobile_number">Alternate mobile number</string>
 
 </resources>

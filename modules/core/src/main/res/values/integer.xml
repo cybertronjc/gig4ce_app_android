@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="scoped_storage_to_implement_from_sdk">29</integer>
+</resources>

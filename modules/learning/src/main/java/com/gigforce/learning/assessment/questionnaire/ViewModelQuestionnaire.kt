@@ -4,12 +4,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.core.StringConstants
 import com.gigforce.core.datamodels.client_activation.Cities
 import com.gigforce.core.datamodels.client_activation.JpApplication
 import com.gigforce.core.datamodels.client_activation.States
 import com.gigforce.learning.assessment.questionnaire.models.GfUsers
 import com.gigforce.learning.assessment.questionnaire.models.QuestionnaireResponse
 import com.gigforce.learning.assessment.questionnaire.models.Questions
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -98,7 +100,9 @@ class ViewModelQuestionnaire(private val savedStateHandle: SavedStateHandle) : V
 
                                                                 )
                                                             },
-                                                            "submissionDate" to Date()
+                                                            "submissionDate" to Date(),
+                                                            "updatedAt" to Timestamp.now(),
+                                                            "updatedBy" to StringConstants.APP.value
 
                                                     )
                                             ).addOnCompleteListener { complete ->
@@ -112,9 +116,10 @@ class ViewModelQuestionnaire(private val savedStateHandle: SavedStateHandle) : V
                                                                 draft.isDone = true
                                                             }
                                                         }
+                                                        var map = mapOf("application" to jpApplication.application, "updatedAt" to Timestamp.now(), "updatedBy" to StringConstants.APP.value)
                                                         questionnaireRepository.db.collection("JP_Applications")
                                                                 .document(jp_application.documents[0].id)
-                                                                .update("application", jpApplication.application)
+                                                                .update(map)
                                                                 .addOnCompleteListener {
                                                                     if (it.isSuccessful) {
                                                                         _observableAddApplicationSuccess.value =
@@ -155,9 +160,10 @@ class ViewModelQuestionnaire(private val savedStateHandle: SavedStateHandle) : V
                                                             draft.isDone = true
                                                         }
                                                     }
+                                                    var map = mapOf("application" to jpApplication.application, "updatedAt" to Timestamp.now(), "updatedBy" to StringConstants.APP.value)
                                                     questionnaireRepository.db.collection("JP_Applications")
                                                             .document(jp_application.documents[0].id)
-                                                            .update("application", jpApplication.application)
+                                                            .update(map)
                                                             .addOnCompleteListener {
                                                                 if (it.isSuccessful) {
                                                                     _observableAddApplicationSuccess.value =
@@ -202,7 +208,7 @@ class ViewModelQuestionnaire(private val savedStateHandle: SavedStateHandle) : V
 
     fun getCities(states: States) = viewModelScope.launch {
 
-        _observableCities.value = getCitiesFromDb(states)
+        _observableCities.value = getCitiesFromDb(states)!!
     }
 
     suspend fun getCitiesFromDb(states: States): MutableList<Cities> {
