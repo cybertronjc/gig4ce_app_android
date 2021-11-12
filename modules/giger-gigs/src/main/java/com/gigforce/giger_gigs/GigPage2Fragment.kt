@@ -998,7 +998,7 @@ class GigPage2Fragment : Fragment(),
 
         if (askPermissionUsingSystemsdk) {
 
-            val permissionToAskList = if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
+            val permissionToAskList = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
 
                 if (Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
                     arrayOf(

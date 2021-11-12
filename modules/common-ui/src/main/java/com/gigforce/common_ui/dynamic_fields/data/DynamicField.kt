@@ -100,7 +100,7 @@ data class DynamicField(
      * Data to show on fields works only works for [FieldTypes.RADIO_BUTTON], [FieldTypes.DROP_DOWN]
      */
     @field:SerializedName("data")
-    val data: List<DynamicFieldData> = emptyList()
+    val data: List<DynamicFieldData>? = emptyList()
 
 ) : Parcelable
 

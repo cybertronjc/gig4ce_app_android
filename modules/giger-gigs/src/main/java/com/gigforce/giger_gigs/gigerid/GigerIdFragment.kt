@@ -203,7 +203,7 @@ class GigerIdFragment : Fragment() {
         }
         iv_share_giger_id.setOnClickListener {
             viewModelGigerID.showProgress(true)
-            viewModelGigerID.checkForPermissionsAndInitSharing(checkForRequiredPermissions())
+            viewModelGigerID.checkForPermissionsAndInitSharing(true)
         }
 
         gig_act_code_copy_btn.setOnClickListener {
