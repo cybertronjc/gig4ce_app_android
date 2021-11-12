@@ -56,10 +56,13 @@ class DynamicDropDownView(
 
         setTitle(fieldDetails.title)
         settingFieldAsOptionalOrMandatory(fieldDetails)
-        setDataOnSpinner(
-            fieldDetails.title,
-            fieldDetails.data
-        )
+
+        if(fieldDetails.data != null) {
+            setDataOnSpinner(
+                fieldDetails.title,
+                fieldDetails.data
+            )
+        }
     }
 
     private fun setDataOnSpinner(
