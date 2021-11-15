@@ -111,6 +111,8 @@ class ImageViewerFragment : Fragment() {
                 //  Face detect - Check if face is present in the image or not.
                 val result = detector.process(image1)
                     .addOnSuccessListener { faces ->
+                        if(!isAdded) return@addOnSuccessListener
+
                         // Task completed successfully
                         if (faces.size > 0) {
                             Log.d("FaceDetect", "success")
