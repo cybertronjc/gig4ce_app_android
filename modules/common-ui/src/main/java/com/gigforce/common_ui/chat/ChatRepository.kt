@@ -17,6 +17,7 @@ import com.gigforce.common_ui.chat.models.ContactModel
 import com.gigforce.common_ui.chat.models.VideoInfo
 import com.gigforce.common_ui.metaDataHelper.ImageMetaDataHelpers
 import com.gigforce.common_ui.viewdatamodels.chat.ChatHeader
+import com.gigforce.core.StringConstants
 import com.gigforce.core.date.DateHelper
 import com.gigforce.core.extensions.addOrThrow
 import com.gigforce.core.extensions.commitOrThrow
@@ -34,45 +35,45 @@ import kotlin.contracts.contract
 
 
 class ChatRepository constructor(
-        private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance(),
-        private val chatLocalDirectoryReferenceManager: ChatLocalDirectoryReferenceManager = ChatLocalDirectoryReferenceManager()
+    private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance(),
+    private val chatLocalDirectoryReferenceManager: ChatLocalDirectoryReferenceManager = ChatLocalDirectoryReferenceManager()
 //    ,
 //    private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository()
 ) : BaseChatRepository(),
-        IChatService {
+    IChatService {
 
     private val userChatCollectionRef: DocumentReference by lazy {
         FirebaseFirestore.getInstance()
-                .collection(ChatGroupRepository.COLLECTION_CHATS)
-                .document(getUID())
+            .collection(ChatGroupRepository.COLLECTION_CHATS)
+            .document(getUID())
     }
 
     private val userReportedCollectionRef: CollectionReference by lazy {
         FirebaseFirestore.getInstance()
-                .collection(ChatGroupRepository.COLLECTION_CHAT_REPORTED_USER)
+            .collection(ChatGroupRepository.COLLECTION_CHAT_REPORTED_USER)
     }
 
     private fun getChatHeaderCollectionRef(userId: String): DocumentReference {
         return FirebaseFirestore.getInstance()
-                .collection(ChatGroupRepository.COLLECTION_CHATS)
-                .document(userId)
+            .collection(ChatGroupRepository.COLLECTION_CHATS)
+            .document(userId)
     }
 
     private fun getChatMessagesCollectionRef(
-            headerId: String
+        headerId: String
     ) = userChatCollectionRef
-            .collection(COLLECTION_CHAT_HEADERS)
-            .document(headerId)
-            .collection(COLLECTION_CHATS_MESSAGES)
+        .collection(COLLECTION_CHAT_HEADERS)
+        .document(headerId)
+        .collection(COLLECTION_CHATS_MESSAGES)
 
     suspend fun getChatHeader(chatHeaderId: String): ChatHeader? {
         if (chatHeaderId.isBlank())
             return null
 
         val docRef = userChatCollectionRef
-                .collection(COLLECTION_CHAT_HEADERS)
-                .document(chatHeaderId)
-                .getOrThrow()
+            .collection(COLLECTION_CHAT_HEADERS)
+            .document(chatHeaderId)
+            .getOrThrow()
 
         if (docRef.exists()) {
             return docRef.toObject(ChatHeader::class.java)!!.apply {
@@ -89,28 +90,28 @@ class ChatRepository constructor(
     }
 
     override suspend fun sendTextMessage(
-            chatHeaderId: String,
-            message: ChatMessage
+        chatHeaderId: String,
+        message: ChatMessage
     ) {
 
         getChatMessagesCollectionRef(chatHeaderId)
-                .addOrThrow(message)
+            .addOrThrow(message)
     }
 
     override suspend fun sendLocationMessage(
-            chatHeaderId: String,
-            message: ChatMessage,
-            bitmap: Bitmap?
+        chatHeaderId: String,
+        message: ChatMessage,
+        bitmap: Bitmap?
     ) {
 
         val attachmentPathOnServer = if (bitmap != null) {
             val imageInBytes = ImageUtils.convertToByteArray(bitmap)
             uploadChatAttachment(
-                    fileNameWithExtension = "map-${DateHelper.getFullDateTimeStamp()}.png",
-                    file = imageInBytes,
-                    headerId = chatHeaderId,
-                    isGroupChatMessage = false,
-                    messageType = ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION
+                fileNameWithExtension = "map-${DateHelper.getFullDateTimeStamp()}.png",
+                file = imageInBytes,
+                headerId = chatHeaderId,
+                isGroupChatMessage = false,
+                messageType = ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION
             )
         } else {
             null
@@ -118,13 +119,13 @@ class ChatRepository constructor(
 
         message.attachmentPath = attachmentPathOnServer
         getChatMessagesCollectionRef(chatHeaderId)
-                .addOrThrow(message)
+            .addOrThrow(message)
     }
 
     override suspend fun sendImageMessage(
-            chatHeaderId: String,
-            message: ChatMessage,
-            imageUri: Uri
+        chatHeaderId: String,
+        message: ChatMessage,
+        imageUri: Uri
     ) {
         val thumbnailPathOnServer = if (message.thumbnailBitmap != null) {
             val thumbnail = message.thumbnailBitmap!!.copy(message.thumbnailBitmap?.config, true)
@@ -153,15 +154,15 @@ class ChatRepository constructor(
         message.attachmentPath = pathOnServer
 
         getChatMessagesCollectionRef(chatHeaderId)
-                .addOrThrow(message)
+            .addOrThrow(message)
     }
 
     override suspend fun sendVideoMessage(
-            context: Context,
-            chatHeaderId: String,
-            message: ChatMessage,
-            uri: Uri,
-            videoInfo: VideoInfo
+        context: Context,
+        chatHeaderId: String,
+        message: ChatMessage,
+        uri: Uri,
+        videoInfo: VideoInfo
     ) {
 
         val newFileName = if (videoInfo.name.isBlank()) {
@@ -182,8 +183,8 @@ class ChatRepository constructor(
         val shouldCompressVideo = shouldCompressVideo(videoInfo)
         val compressedFileUri = if (shouldCompressVideo) {
             val transcodedFile = File(
-                    videosDirectoryRef,
-                    newFileName
+                videosDirectoryRef,
+                newFileName
             )
             transcodeVideo(context, uri, transcodedFile)
             transcodedFile.toUri()
@@ -196,49 +197,49 @@ class ChatRepository constructor(
 
         val thumbnailPathOnServer = if (message.thumbnailBitmap != null) {
             val thumbnail = message.thumbnailBitmap!!.copy(
-                    message.thumbnailBitmap?.config,
-                    message.thumbnailBitmap!!.isMutable
+                message.thumbnailBitmap?.config,
+                message.thumbnailBitmap!!.isMutable
             )
 
             val imageInBytes = ImageUtils.convertToByteArray(thumbnail)
             uploadChatAttachment(
-                    "thumb-$newFileName",
-                    imageInBytes,
-                    chatHeaderId,
-                    isGroupChatMessage = false,
-                    messageType = ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO
+                "thumb-$newFileName",
+                imageInBytes,
+                chatHeaderId,
+                isGroupChatMessage = false,
+                messageType = ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO
             )
         } else {
             null
         }
 
         val pathOnServer = uploadChatAttachment(
-                newFileName,
-                compressedFileUri,
-                chatHeaderId,
-                isGroupChatMessage = false,
-                messageType = ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO
+            newFileName,
+            compressedFileUri,
+            chatHeaderId,
+            isGroupChatMessage = false,
+            messageType = ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO
         )
 
         message.attachmentPath = pathOnServer
         message.thumbnail = thumbnailPathOnServer
 
         getChatMessagesCollectionRef(chatHeaderId)
-                .addOrThrow(message)
+            .addOrThrow(message)
     }
 
     override suspend fun sendDocumentMessage(
-            context: Context,
-            chatHeaderId: String,
-            message: ChatMessage,
-            fileName: String,
-            uri: Uri
+        context: Context,
+        chatHeaderId: String,
+        message: ChatMessage,
+        fileName: String,
+        uri: Uri
     ) {
 
         val newFileName = "Doc-${getUID()}-${DateHelper.getFullDateTimeStamp()}.${
             getExtensionFromUri(
-                    context,
-                    uri
+                context,
+                uri
             )
         }"
 
@@ -247,68 +248,74 @@ class ChatRepository constructor(
         FileUtils.copyFile(context.applicationContext, fileName, uri, documentFile)
 
         val pathOnServer = uploadChatAttachment(
-                fileNameWithExtension = newFileName,
-                file = uri,
-                headerId = chatHeaderId,
-                isGroupChatMessage = false,
-                messageType = ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT
+            fileNameWithExtension = newFileName,
+            file = uri,
+            headerId = chatHeaderId,
+            isGroupChatMessage = false,
+            messageType = ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT
         )
         message.attachmentPath = pathOnServer
 
         getChatMessagesCollectionRef(headerId = chatHeaderId)
-                .addOrThrow(message)
+            .addOrThrow(message)
     }
 
     override suspend fun createHeaders(
-            otherUserId: String
+        otherUserId: String
     ) {
         TODO("Not yet implemented")
     }
 
     override suspend fun getHeaderFromHeaders(
-            userId: String
+        userId: String
     ) {
         TODO("Not yet implemented")
     }
 
 
     override suspend fun reportAndBlockUser(
-            chatHeaderId: String,
-            otherUserId: String,
-            reason: String
+        chatHeaderId: String,
+        otherUserId: String,
+        reason: String
     ) {
 
         blockOrUnblockUser(
-                chatHeaderId,
-                otherUserId,
-                true
+            chatHeaderId,
+            otherUserId,
+            true
         )
 
         userReportedCollectionRef
-                .addOrThrow(
-                        ChatReportedUser(
-                                id = null,
-                                reportedUserUid = otherUserId,
-                                reportedBy = getUID(),
-                                reportedOn = Timestamp.now(),
-                                reportingReason = reason
-                        )
+            .addOrThrow(
+                ChatReportedUser(
+                    id = null,
+                    reportedUserUid = otherUserId,
+                    reportedBy = getUID(),
+                    reportedOn = Timestamp.now(),
+                    reportingReason = reason
                 )
+            )
 
     }
 
     override suspend fun blockOrUnblockUser(
-            chatHeaderId: String,
-            otherUserId: String,
-            forceBlock: Boolean
+        chatHeaderId: String,
+        otherUserId: String,
+        forceBlock: Boolean
     ) {
         if (forceBlock) {
 
             if (chatHeaderId.isNotBlank()) {
                 userChatCollectionRef
-                        .collection(COLLECTION_CHAT_HEADERS)
-                        .document(chatHeaderId)
-                        .updateOrThrow("isBlocked", true)
+                    .collection(COLLECTION_CHAT_HEADERS)
+                    .document(chatHeaderId)
+                    .updateOrThrow(
+                        mapOf(
+                            "isBlocked" to true,
+                            "updatedAt" to Timestamp.now(),
+                            "updatedBy" to StringConstants.APP.value
+                        )
+                    )
             }
 
             val contactDetails = if (otherUserId.isNotBlank())
@@ -334,9 +341,15 @@ class ChatRepository constructor(
 
             if (chatHeaderId.isNotBlank()) {
                 userChatCollectionRef
-                        .collection(COLLECTION_CHAT_HEADERS)
-                        .document(chatHeaderId)
-                        .updateOrThrow("isBlocked", !isUserBlocked)
+                    .collection(COLLECTION_CHAT_HEADERS)
+                    .document(chatHeaderId)
+                    .updateOrThrow(
+                        mapOf(
+                            "isBlocked" to !isUserBlocked,
+                            "updatedAt" to Timestamp.now(),
+                            "updatedBy" to StringConstants.APP.value
+                        )
+                    )
             }
 
             if (contactDetails != null)
@@ -345,19 +358,25 @@ class ChatRepository constructor(
     }
 
     private suspend fun tryUpdatingBlockedInFlagInContacts(
-            otherUserMobileNo: String,
-            block: Boolean
+        otherUserMobileNo: String,
+        block: Boolean
     ) {
         if (otherUserMobileNo.isEmpty())
             return
 
         try {
             getDetailsOfUserFromContactsQuery(
-                    otherUserMobileNo = formatMobileNoForChatContact(
-                            otherUserMobileNo
-                    )
+                otherUserMobileNo = formatMobileNoForChatContact(
+                    otherUserMobileNo
+                )
             )
-                    .updateOrThrow("isUserBlocked", block)
+                .updateOrThrow(
+                    mapOf(
+                        "isUserBlocked" to block,
+                        "updatedAt" to Timestamp.now(),
+                        "updatedBy" to StringConstants.APP.value
+                    )
+                )
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -374,15 +393,15 @@ class ChatRepository constructor(
                 .collection(ChatGroupRepository.COLLECTION_CHATS)
                 .document(senderId)
                 .collection(COLLECTION_CHAT_HEADERS)
-                .document(headerId);
+                .document(headerId)
 
-            val chatHeader = headerRef.getOrThrow();
-            val lastMessageIdInHeader = chatHeader.getString("lastMsgId");
+            val chatHeader = headerRef.getOrThrow()
+            val lastMessageIdInHeader = chatHeader.getString("lastMsgId")
 
-            val chatMessageCollection = headerRef.collection(COLLECTION_CHATS_MESSAGES);
+            val chatMessageCollection = headerRef.collection(COLLECTION_CHATS_MESSAGES)
 
             val batch = db.batch()
-            if(lastMessageIdInHeader != null) {
+            if (lastMessageIdInHeader != null) {
                 val shouldUpdateInHeader = getChatMessagesCollectionRef(headerId)
                     .document(lastMessageIdInHeader)
                     .getOrThrow()
@@ -391,7 +410,9 @@ class ChatRepository constructor(
                 if (shouldUpdateInHeader) {
                     batch.update(
                         headerRef, mapOf(
-                            "status" to ChatConstants.MESSAGE_STATUS_READ_BY_USER
+                            "status" to ChatConstants.MESSAGE_STATUS_READ_BY_USER,
+                            "updatedAt" to Timestamp.now(),
+                            "updatedBy" to StringConstants.APP.value
                         )
                     )
                 }
@@ -401,9 +422,12 @@ class ChatRepository constructor(
 
                 val messageRef = chatMessageCollection.document(it.senderMessageId)
                 batch.update(
-                        messageRef, mapOf(
-                        "status" to ChatConstants.MESSAGE_STATUS_READ_BY_USER
-                ))
+                    messageRef, mapOf(
+                        "status" to ChatConstants.MESSAGE_STATUS_READ_BY_USER,
+                        "updatedAt" to Timestamp.now(),
+                        "updatedBy" to StringConstants.APP.value
+                    )
+                )
             }
 
             batch.commitOrThrow()
@@ -426,10 +450,10 @@ class ChatRepository constructor(
 
     suspend fun getDetailsOfUserFromContacts(otherUserId: String): ContactModel {
         val contactRef = db.collection(COLLECTION_CHATS)
-                .document(getUID())
-                .collection(COLLECTION_CHATS_CONTACTS)
-                .whereEqualTo("uid", otherUserId)
-                .getOrThrow()
+            .document(getUID())
+            .collection(COLLECTION_CHATS_CONTACTS)
+            .whereEqualTo("uid", otherUserId)
+            .getOrThrow()
 
         return if (contactRef.isEmpty) {
             ContactModel(id = otherUserId)
@@ -442,49 +466,52 @@ class ChatRepository constructor(
 
     fun getDetailsOfUserFromContactsQuery(otherUserMobileNo: String): DocumentReference {
         return db.collection(COLLECTION_CHATS)
-                .document(getUID())
-                .collection(COLLECTION_CHATS_CONTACTS)
-                .document(otherUserMobileNo)
+            .document(getUID())
+            .collection(COLLECTION_CHATS_CONTACTS)
+            .document(otherUserMobileNo)
 
     }
 
     suspend fun sentMessagesSentMessageAsDelivered(
-            headerId: String,
-            otherUserId: String
+        headerId: String,
+        otherUserId: String
     ) {
 
         val headerRef = getChatHeaderCollectionRef(otherUserId)
-                .collection(COLLECTION_CHAT_HEADERS)
-                .document(headerId)
+            .collection(COLLECTION_CHAT_HEADERS)
+            .document(headerId)
 
         val chatHeader = headerRef.getOrThrow()
         val lastMessageIdInHeader = chatHeader.getString("lastMsgId")
 
         val chatCollectionRef = headerRef.collection(COLLECTION_CHATS_MESSAGES)
         val querySnap = chatCollectionRef
-                .whereLessThan("status", ChatConstants.MESSAGE_STATUS_RECEIVED_BY_USER)
-                .getOrThrow()
+            .whereLessThan("status", ChatConstants.MESSAGE_STATUS_RECEIVED_BY_USER)
+            .getOrThrow()
 
         Log.d("ChatRepo", "Other User - $otherUserId, header-id - $headerId")
         if (querySnap.size() > 0) {
 
             val batch = db.batch()
             querySnap.documents.forEach {
-                val blockedDuringMessageWasSent = it.getBoolean("wasUserBlockedByOtherUserWhenMessageWasSent") ?: false
+                val blockedDuringMessageWasSent =
+                    it.getBoolean("wasUserBlockedByOtherUserWhenMessageWasSent") ?: false
 
-                if(!blockedDuringMessageWasSent) {
+                if (!blockedDuringMessageWasSent) {
                     Log.d("ChatRepo", "Message Id - ${it.id}")
                     val messageDocRef = chatCollectionRef.document(it.id)
                     batch.update(
                         messageDocRef, mapOf(
-                            "status" to ChatConstants.MESSAGE_STATUS_RECEIVED_BY_USER
+                            "status" to ChatConstants.MESSAGE_STATUS_RECEIVED_BY_USER,
+                            "updatedAt" to Timestamp.now(),
+                            "updatedBy" to StringConstants.APP.value
                         )
                     )
                 }
             }
 
-            if(lastMessageIdInHeader != null) {
-               val shouldUpdateInHeader = getChatMessagesCollectionRef(headerId)
+            if (lastMessageIdInHeader != null) {
+                val shouldUpdateInHeader = getChatMessagesCollectionRef(headerId)
                     .document(lastMessageIdInHeader)
                     .getOrThrow()
                     .exists()
@@ -492,7 +519,9 @@ class ChatRepository constructor(
                 if (shouldUpdateInHeader) {
                     batch.update(
                         headerRef, mapOf(
-                            "status" to ChatConstants.MESSAGE_STATUS_RECEIVED_BY_USER
+                            "status" to ChatConstants.MESSAGE_STATUS_RECEIVED_BY_USER,
+                            "updatedAt" to Timestamp.now(),
+                            "updatedBy" to StringConstants.APP.value
                         )
                     )
                 }
@@ -503,24 +532,24 @@ class ChatRepository constructor(
     }
 
     fun getExtensionFromUri(
-            context: Context,
-            uri: Uri
+        context: Context,
+        uri: Uri
     ): String? {
 
         return if (ContentResolver.SCHEME_CONTENT.equals(uri.scheme)) {
-            val cr: ContentResolver = context.getContentResolver()
+            val cr: ContentResolver = context.contentResolver
             val mimeType = cr.getType(uri)
             MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
         } else {
             val fileExtension: String = MimeTypeMap.getFileExtensionFromUrl(uri.toString())
             val mimeType =
-                    MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension.toLowerCase())
+                MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension.toLowerCase())
             MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
         }
     }
 
     fun formatMobileNoForChatContact(
-            mobileNo: String
+        mobileNo: String
     ): String {
         return if (mobileNo.length == 10) {
             "91$mobileNo"
@@ -538,18 +567,21 @@ class ChatRepository constructor(
      * a trigger runs and updated flag in other users messages
      */
     suspend fun deleteMessage(
-            chatHeaderId: String,
-            messageId: String
+        chatHeaderId: String,
+        messageId: String
     ) = db.collection(COLLECTION_CHATS)
-            .document(getUID())
-            .collection(COLLECTION_CHAT_HEADERS)
-            .document(chatHeaderId)
-            .collection(COLLECTION_CHATS_MESSAGES)
-            .document(messageId)
-            .updateOrThrow(mapOf(
-                    "isDeleted" to true,
-                    "deletedOn" to Timestamp.now()
-            ))
+        .document(getUID())
+        .collection(COLLECTION_CHAT_HEADERS)
+        .document(chatHeaderId)
+        .collection(COLLECTION_CHATS_MESSAGES)
+        .document(messageId)
+        .updateOrThrow(
+            mapOf(
+                "isDeleted" to true,
+                "deletedOn" to Timestamp.now(),
+                "updatedAt" to Timestamp.now(), "updatedBy" to StringConstants.APP.value
+            )
+        )
 
 
     companion object {

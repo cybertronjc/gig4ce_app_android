@@ -1,8 +1,10 @@
 package com.gigforce.client_activation.client_activation.repository
 
+import com.gigforce.core.StringConstants
 import com.gigforce.core.datamodels.profile.PFESICDataModel
 import com.gigforce.core.extensions.updateOrThrow
 import com.gigforce.core.fb.BaseFirestoreDBRepository
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -35,7 +37,9 @@ class PFESICDetailsRepository @Inject constructor() : BaseFirestoreDBRepository(
         try {
             db.collection(getCollectionName()).document(uid).updateOrThrow(
                 mapOf(
-                    "pfesic" to pfesicData
+                    "pfesic" to pfesicData,
+                    "updatedAt" to Timestamp.now(),
+                    "updatedBy" to StringConstants.APP.value
                 )
             )
             return true

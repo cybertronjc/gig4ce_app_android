@@ -1,6 +1,6 @@
 package com.gigforce.client_activation.client_activation
 
-import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
+import com.gigforce.core.fb.BaseFirestoreDBRepository
 
 class ScheduleDrivingTestRepository : BaseFirestoreDBRepository() {
     //    private val createUserApi: CreateUserAccEnrollmentAPi = com.gigforce.verification.oldverification.service.RetrofitFactory.createUserAccEnrollmentAPi()

@@ -1,10 +1,12 @@
 package com.gigforce.client_activation.client_activation.info
 
+import com.gigforce.core.StringConstants
 import com.gigforce.core.datamodels.client_activation.JpApplication
 import com.gigforce.core.extensions.getOrThrow
 import com.gigforce.core.extensions.setOrThrow
 import com.gigforce.core.extensions.updateOrThrow
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.lang.Exception
@@ -60,6 +62,11 @@ class HubSubmissionRepository {
                             )
                         )
                 }
+
+                FirebaseFirestore.getInstance()
+                    .collection("JP_Applications")
+                    .document(jpApplication.id).updateOrThrow(mapOf("updatedAt" to Timestamp.now(), "updatedBy" to StringConstants.APP.value))
+
                 return jpApplication
             }
             return null

@@ -1,5 +1,6 @@
 package com.gigforce.ambassador.user_rollment.kycdocs.aadhardetail
 
+import com.gigforce.core.StringConstants
 import com.gigforce.core.datamodels.City
 import com.gigforce.core.datamodels.State
 import com.gigforce.core.datamodels.profile.AddressModel
@@ -9,6 +10,7 @@ import com.gigforce.core.datamodels.verification.VerificationBaseModel
 import com.gigforce.core.extensions.toFirebaseTimeStamp
 import com.gigforce.core.extensions.updateOrThrow
 import com.gigforce.core.fb.BaseFirestoreDBRepository
+import com.google.firebase.Timestamp
 import kotlinx.coroutines.tasks.await
 import java.util.*
 import javax.inject.Inject
@@ -121,7 +123,9 @@ class UserAadharDetailRepository @Inject constructor() : BaseFirestoreDBReposito
                     "aadhaar_card_questionnaire.landmark" to aadhaardetails.landmark,
                     "aadhaar_card_questionnaire.currentAddSameAsParmanent" to aadhaardetails.currentAddSameAsParmanent,
                     "aadhaar_card_questionnaire.currentAddress" to aadhaardetails.currentAddress,
-                    "aadhaar_card_questionnaire.verified" to true
+                    "aadhaar_card_questionnaire.verified" to true,
+                    "updatedAt" to Timestamp.now(),
+                    "updatedBy" to StringConstants.APP.value
             )
 
             db.collection(verificationCollectionName).document(uid).updateOrThrow(

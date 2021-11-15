@@ -12,11 +12,10 @@ import com.gigforce.common_ui.viewdatamodels.models.SlideContentRemote
 import com.gigforce.common_ui.viewdatamodels.models.progress.CourseMapping
 import com.gigforce.common_ui.viewdatamodels.models.progress.ModuleProgress
 import com.gigforce.common_ui.viewdatamodels.models.progress.ProgressConstants
-import com.gigforce.common_ui.viewmodels.LearningViewModel
 //import com.gigforce.common_ui.viewdatamodels.models.progress.ModuleProgress
 //import com.gigforce.common_ui.viewdatamodels.models.progress.ProgressConstants
 import com.gigforce.core.datamodels.learning.LessonProgress
-import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
+import com.gigforce.core.fb.BaseFirestoreDBRepository
 import com.gigforce.core.datamodels.learning.Course
 import com.gigforce.core.datamodels.learning.CourseContent
 import com.gigforce.core.utils.EventLogs.addOrThrow
@@ -361,12 +360,14 @@ class LearningRepository : BaseFirestoreDBRepository() {
     }
 
     suspend fun updateModuleProgress(progressTrackingId: String, moduleProgress: ModuleProgress) {
+        moduleProgress.setUpdatedAtAndBy()
         db.collection(COURSE_PROGRESS_NAME)
             .document(progressTrackingId)
             .setOrThrow(moduleProgress)
     }
 
     suspend fun updateCourseProgress(progressTrackingId: String, courseProgress: CourseProgress) {
+        courseProgress.setUpdatedAtAndBy()
         db.collection(COURSE_PROGRESS_NAME)
             .document(progressTrackingId)
             .setOrThrow(courseProgress)
@@ -1401,6 +1402,7 @@ class LearningRepository : BaseFirestoreDBRepository() {
             feedback.easyToUnderStand = easyToUnderStand
             feedback.videoQuality = videoQuality
             feedback.soundQuality = soundQuality
+            feedback.setUpdatedAtAndBy()
 
             db.collection(COLLECTION_LESSON_FEEDBACK)
                 .document(docSnap.id)

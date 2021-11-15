@@ -1,6 +1,6 @@
 package com.gigforce.core.datamodels.profile
 
-import com.gigforce.core.base.basefirestore.BaseFirestoreDataModel
+import com.gigforce.core.fb.BaseFirestoreDataModel
 import com.google.firebase.firestore.Exclude
 import java.util.*
 

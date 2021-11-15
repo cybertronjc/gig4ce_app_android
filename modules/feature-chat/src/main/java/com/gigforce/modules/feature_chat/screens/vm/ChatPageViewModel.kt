@@ -18,6 +18,7 @@ import com.gigforce.common_ui.core.ChatConstants
 import com.gigforce.common_ui.metaDataHelper.ImageMetaDataHelpers
 import com.gigforce.common_ui.viewdatamodels.chat.ChatHeader
 import com.gigforce.common_ui.viewdatamodels.chat.UserInfo
+import com.gigforce.core.StringConstants
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.extensions.*
 import com.gigforce.core.fb.FirebaseUtils
@@ -81,7 +82,7 @@ class ChatPageViewModel constructor(
     private var messagesListener: ListenerRegistration? = null
     private var headerInfoChangeListener: ListenerRegistration? = null
     private var contactInfoChangeListener: ListenerRegistration? = null
-    private var currentChatHeader : ChatHeader? = null
+    private var currentChatHeader: ChatHeader? = null
 
 
     fun setRequiredDataAndStartListeningToMessages(
@@ -142,8 +143,8 @@ class ChatPageViewModel constructor(
                         id = it.id
                     }
 
-                        currentChatHeader = chatHeader
-                        _headerInfo.value = chatHeader
+                    currentChatHeader = chatHeader
+                    _headerInfo.value = chatHeader
 
                     if (chatHeader.unseenCount != 0) {
                         setMessagesUnseenCountToZero()
@@ -247,26 +248,27 @@ class ChatPageViewModel constructor(
                 Log.v(TAG, "new Snapshot Received")
                 Log.v(TAG, "${snapshot?.documents?.size} Documents")
 
-                    snapshot?.let {
-                        val messages = it.documents.map {
-                            it.toObject(ChatMessage::class.java)!!.apply {
-                                this.id = it.id
-                                this.chatType = ChatConstants.CHAT_TYPE_USER
-                            }
+                snapshot?.let {
+                    val messages = it.documents.map {
+                        it.toObject(ChatMessage::class.java)!!.apply {
+                            this.id = it.id
+                            this.chatType = ChatConstants.CHAT_TYPE_USER
+                        }
+                    }
+
+                    messages.forEach { message ->
+                        if (message.isAReplyToOtherMessage && message.replyForMessageId != null) {
+                            message.replyForMessage =
+                                messages.find { it.id == message.replyForMessageId || message.replyForMessageId == it.otherUsersMessageId }
                         }
 
-                        messages.forEach { message ->
-                            if(message.isAReplyToOtherMessage && message.replyForMessageId != null){
-                                message.replyForMessage = messages.find { it.id == message.replyForMessageId || message.replyForMessageId == it.otherUsersMessageId}
-                            }
-
-                            if(message.flowType == ChatConstants.FLOW_TYPE_IN){
-                                message.senderInfo.name = currentChatHeader?.otherUser?.name ?: ""
-                            }
+                        if (message.flowType == ChatConstants.FLOW_TYPE_IN) {
+                            message.senderInfo.name = currentChatHeader?.otherUser?.name ?: ""
                         }
+                    }
 
-                        this.chatMessages = messages.toMutableList()
-                        chatMessages?.let {
+                    this.chatMessages = messages.toMutableList()
+                    chatMessages?.let {
 
                         val unreadMessages = it.filter {
                             it.flowType == ChatConstants.FLOW_TYPE_IN &&
@@ -277,17 +279,17 @@ class ChatPageViewModel constructor(
                     }
 
 
-                        _messages.postValue(messages)
-                    }
+                    _messages.postValue(messages)
                 }
+            }
     }
 
     private var _sendingMessage = MutableLiveData<ChatMessage>()
     val sendingMessageOld: LiveData<ChatMessage> = _sendingMessage
 
     fun sendNewText(
-            text: String,
-            replyToMessage : ChatMessage?
+        text: String,
+        replyToMessage: ChatMessage?
     ) = viewModelScope.launch {
 
         try {
@@ -298,23 +300,23 @@ class ChatPageViewModel constructor(
             }
 
             val message = ChatMessage(
-                    id = UUID.randomUUID().toString(),
-                    headerId = headerId,
-                    senderInfo = UserInfo(
-                            id = currentUser.uid,
-                            mobileNo = currentUser.phoneNumber!!
-                    ),
-                    receiverInfo = UserInfo(
-                            id = otherUserId
-                    ),
-                    flowType = "out",
-                    chatType = ChatConstants.CHAT_TYPE_USER,
-                    type = ChatConstants.MESSAGE_TYPE_TEXT,
-                    content = text,
-                    timestamp = Timestamp.now(),
-                    isAReplyToOtherMessage = replyToMessage != null,
-                    replyForMessageId = replyToMessage?.id,
-                    replyForMessage = replyToMessage
+                id = UUID.randomUUID().toString(),
+                headerId = headerId,
+                senderInfo = UserInfo(
+                    id = currentUser.uid,
+                    mobileNo = currentUser.phoneNumber!!
+                ),
+                receiverInfo = UserInfo(
+                    id = otherUserId
+                ),
+                flowType = "out",
+                chatType = ChatConstants.CHAT_TYPE_USER,
+                type = ChatConstants.MESSAGE_TYPE_TEXT,
+                content = text,
+                timestamp = Timestamp.now(),
+                isAReplyToOtherMessage = replyToMessage != null,
+                replyForMessageId = replyToMessage?.id,
+                replyForMessage = replyToMessage
             )
             getReference(headerId).document(message.id).setOrThrow(message)
 
@@ -329,7 +331,9 @@ class ChatPageViewModel constructor(
                         "lastMsgText" to text,
                         "lastMsgTimestamp" to Timestamp.now(),
                         "lastMsgFlowType" to ChatConstants.FLOW_TYPE_OUT,
-                        "unseenCount" to 0
+                        "unseenCount" to 0,
+                        "updatedAt" to Timestamp.now(),
+                        "updatedBy" to StringConstants.APP.value
                     )
                 )
         } catch (e: Exception) {
@@ -442,7 +446,7 @@ class ChatPageViewModel constructor(
             unseenCount = 0,
             otherUser = UserInfo(
                 id = uid,
-                name = userName ?: "",
+                name = userName,
                 profilePic = fullPath,
                 type = "user",
                 mobileNo = profileData?.loginMobile ?: ""
@@ -722,7 +726,13 @@ class ChatPageViewModel constructor(
                 .document(uid)
                 .collection("contacts")
                 .document(userDocumentId)
-                .updateOrThrow("headerId", headerId)
+                .updateOrThrow(
+                    mapOf(
+                        "headerId" to headerId,
+                        "updatedAt" to Timestamp.now(),
+                        "updatedBy" to StringConstants.APP.value
+                    )
+                )
         }
     }
 
@@ -738,7 +748,7 @@ class ChatPageViewModel constructor(
                 .document(uid)
                 .collection("headers")
                 .document(headerId)
-                .updateOrThrow("unseenCount", 0)
+                .updateOrThrow(mapOf("unseenCount" to 0,"updatedAt" to Timestamp.now(), "updatedBy" to StringConstants.APP.value))
         } catch (e: Exception) {
             Log.e(TAG, "Unable to set unseen count to zero", e)
         }
@@ -909,12 +919,12 @@ class ChatPageViewModel constructor(
 
     fun scrollToMessage(
         replyMessage: ChatMessage
-    ){
-       val messageList =  chatMessages ?: return
-       val index =  messageList.indexOf(replyMessage)
-       if(index != -1){
+    ) {
+        val messageList = chatMessages ?: return
+        val index = messageList.indexOf(replyMessage)
+        if (index != -1) {
             _scrollToMessage.value = index
             _scrollToMessage.value = null
-       }
+        }
     }
 }

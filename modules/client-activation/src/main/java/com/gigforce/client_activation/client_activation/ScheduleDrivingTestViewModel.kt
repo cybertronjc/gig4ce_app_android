@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.client_activation.client_activation.models.*
 import com.gigforce.core.SingleLiveEvent
+import com.gigforce.core.StringConstants
 import com.gigforce.core.datamodels.ambassador.RegisterMobileNoResponse
 import com.gigforce.core.datamodels.ambassador.VerifyOtpResponse
 import com.gigforce.core.datamodels.client_activation.JpApplication
@@ -12,6 +13,7 @@ import com.gigforce.core.datamodels.login.LoginResponse
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.di.repo.UserEnrollmentRepository
 import com.gigforce.core.utils.Lce
+import com.google.firebase.Timestamp
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -145,7 +147,7 @@ class ScheduleDrivingTestViewModel @Inject constructor(private val buildConfig: 
             .collection("Submissions")
         tlMobileNo?.let {
             repository.getCollectionReference().document(items.documents[0].id)
-                .update(mapOf("verifiedTLNumber" to it))
+                .update(mapOf("verifiedTLNumber" to it, "updatedAt" to Timestamp.now(), "updatedBy" to StringConstants.APP.value))
         }
 
         val task = if (submissions?.documents?.isEmpty() == true)
@@ -187,7 +189,8 @@ class ScheduleDrivingTestViewModel @Inject constructor(private val buildConfig: 
                     .update(
                         mapOf(
                             "activation" to jpApplication.activation,
-                            "status" to jpApplication.status
+                            "status" to jpApplication.status,
+                            "updatedAt" to Timestamp.now(), "updatedBy" to StringConstants.APP.value
                         )
                     )
                     .addOnCompleteListener {

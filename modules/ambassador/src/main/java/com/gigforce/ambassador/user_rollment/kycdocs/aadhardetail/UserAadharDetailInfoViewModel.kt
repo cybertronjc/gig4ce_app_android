@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.ambassador.user_rollment.kycdocs.KycOcrResultModel
 import com.gigforce.ambassador.user_rollment.kycdocs.VerificationKycRepo
+import com.gigforce.core.StringConstants
 import com.gigforce.core.datamodels.City
 import com.gigforce.core.datamodels.State
 import com.gigforce.core.datamodels.client_activation.JpApplication
@@ -14,8 +15,8 @@ import com.gigforce.core.datamodels.profile.ProfileNominee
 import com.gigforce.core.datamodels.verification.AadhaarDetailsDataModel
 import com.gigforce.core.datamodels.verification.VerificationBaseModel
 import com.gigforce.core.di.interfaces.IBuildConfigVM
-import com.gigforce.core.di.repo.IAadhaarDetailsRepository
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -23,20 +24,22 @@ import okhttp3.MultipartBody
 import javax.inject.Inject
 
 @HiltViewModel
-class UserAadharDetailInfoViewModel @Inject constructor( private val iBuildConfigVM: IBuildConfigVM) : ViewModel() {
+class UserAadharDetailInfoViewModel @Inject constructor(private val iBuildConfigVM: IBuildConfigVM) :
+    ViewModel() {
     private val aadharDetailsRepo: UserAadharDetailRepository = UserAadharDetailRepository()
     val statesResult: MutableLiveData<MutableList<State>> = MutableLiveData<MutableList<State>>()
     val _kycOcrResult = MutableLiveData<KycOcrResultModel>()
     val kycOcrResult: LiveData<KycOcrResultModel> = _kycOcrResult
-    val verificationResult: MutableLiveData<VerificationBaseModel> = MutableLiveData<VerificationBaseModel>()
+    val verificationResult: MutableLiveData<VerificationBaseModel> =
+        MutableLiveData<VerificationBaseModel>()
     val caCitiesResult: MutableLiveData<MutableList<City>> = MutableLiveData<MutableList<City>>()
     val citiesResult: MutableLiveData<MutableList<City>> = MutableLiveData<MutableList<City>>()
     val updatedResult: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
     private val _observableAddApplicationSuccess: MutableLiveData<Boolean> = MutableLiveData()
     val observableAddApplicationSuccess: MutableLiveData<Boolean> = _observableAddApplicationSuccess
     val verificationKycRepo = VerificationKycRepo(iBuildConfigVM)
-    val _profileNominee : MutableLiveData<ProfileNominee> = MutableLiveData<ProfileNominee>()
-    val profileNominee : LiveData<ProfileNominee> = _profileNominee
+    val _profileNominee: MutableLiveData<ProfileNominee> = MutableLiveData<ProfileNominee>()
+    val profileNominee: LiveData<ProfileNominee> = _profileNominee
     fun getStates() = viewModelScope.launch {
         try {
             val states = aadharDetailsRepo.getStatesFromDb()
@@ -47,10 +50,11 @@ class UserAadharDetailInfoViewModel @Inject constructor( private val iBuildConfi
 
     }
 
-    fun getKycOcrResult(uid : String,type: String, subType: String, image: MultipartBody.Part) =
+    fun getKycOcrResult(uid: String, type: String, subType: String, image: MultipartBody.Part) =
         viewModelScope.launch {
             try {
-                _kycOcrResult.value = verificationKycRepo.getVerificationOcrResult(uid,type, subType, image)
+                _kycOcrResult.value =
+                    verificationKycRepo.getVerificationOcrResult(uid, type, subType, image)
             } catch (e: Exception) {
                 _kycOcrResult.value = KycOcrResultModel(status = false, message = e.message)
             }
@@ -77,6 +81,7 @@ class UserAadharDetailInfoViewModel @Inject constructor( private val iBuildConfi
         }
 
     }
+
     fun getCurrentAddCities(stateCode: String) = viewModelScope.launch {
         try {
             val cities = aadharDetailsRepo.getCities(stateCode)
@@ -86,16 +91,27 @@ class UserAadharDetailInfoViewModel @Inject constructor( private val iBuildConfi
         }
 
     }
-    fun setAadhaarDetails(uid: String,submitDataModel: AadhaarDetailsDataModel, nomineeAsFather : Boolean, mJobProfileId : String)= viewModelScope.launch {
+
+    fun setAadhaarDetails(
+        uid: String,
+        submitDataModel: AadhaarDetailsDataModel,
+        nomineeAsFather: Boolean,
+        mJobProfileId: String
+    ) = viewModelScope.launch {
         try {
-            val updated = aadharDetailsRepo.setAadhaarFromVerificationModule(uid,nomineeAsFather, submitDataModel)
+            val updated = aadharDetailsRepo.setAadhaarFromVerificationModule(
+                uid,
+                nomineeAsFather,
+                submitDataModel
+            )
             updatedResult.postValue(updated)
-            if (mJobProfileId.isNotEmpty()){
+            if (mJobProfileId.isNotEmpty()) {
                 FirebaseFirestore.getInstance().collection("JP_Applications")
                     .whereEqualTo("jpid", mJobProfileId)
                     .whereEqualTo(
                         "gigerId",
-                        FirebaseAuthStateListener.getInstance().getCurrentSignInUserInfoOrThrow().uid
+                        FirebaseAuthStateListener.getInstance()
+                            .getCurrentSignInUserInfoOrThrow().uid
                     ).addSnapshotListener { jp_application, _ ->
 
                         jp_application?.let {
@@ -106,9 +122,14 @@ class UserAadharDetailInfoViewModel @Inject constructor( private val iBuildConfi
                                     draft.isDone = true
                                 }
                             }
+                            var map = mapOf(
+                                "application" to jpApplication.application,
+                                "updatedAt" to Timestamp.now(),
+                                "updatedBy" to StringConstants.APP.value
+                            )
                             FirebaseFirestore.getInstance().collection("JP_Applications")
                                 .document(jp_application.documents[0].id)
-                                .update("application", jpApplication.application)
+                                .update(map)
                                 .addOnCompleteListener {
                                     if (it.isSuccessful) {
                                         _observableAddApplicationSuccess.value =
@@ -119,7 +140,7 @@ class UserAadharDetailInfoViewModel @Inject constructor( private val iBuildConfi
                     }
             }
 
-        }catch (e:Exception){
+        } catch (e: Exception) {
             updatedResult.postValue(false)
         }
     }

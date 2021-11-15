@@ -1,5 +1,6 @@
 package com.gigforce.core.datamodels.profile
 
+import com.gigforce.core.StringConstants
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.PropertyName
@@ -98,7 +99,19 @@ data class ProfileData(
 
     @get:PropertyName("reference")
     @set:PropertyName("reference")
-    var reference: Reference? = null
+    var reference: Reference? = null,
+
+    @get:PropertyName("updatedAt")
+    @set:PropertyName("updatedAt")
+    var updatedAt : Timestamp ?= Timestamp.now(),
+
+    @get:PropertyName("updatedBy")
+    @set:PropertyName("updatedBy")
+    var updatedBy : String ?= StringConstants.APP.value,
+
+    @get:PropertyName("createdAt")
+    @set:PropertyName("createdAt")
+    var createdAt : Timestamp ?= Timestamp.now()
 
 ) {
 
