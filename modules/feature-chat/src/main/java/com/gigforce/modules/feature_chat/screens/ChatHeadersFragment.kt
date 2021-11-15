@@ -229,11 +229,15 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
         initListeners()
         setObserver(this.viewLifecycleOwner)
 
-        if (!documentTreeDelegate.storageTreeSelected()) {
+        if(Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
+            if (!documentTreeDelegate.storageTreeSelected()) {
 
-            mainChatListLayout.gone()
-            needStorageAccessLayout.visible()
-            return
+                mainChatListLayout.gone()
+                needStorageAccessLayout.visible()
+            } else {
+                needStorageAccessLayout.gone()
+                mainChatListLayout.visible()
+            }
         } else{
             needStorageAccessLayout.gone()
             mainChatListLayout.visible()
