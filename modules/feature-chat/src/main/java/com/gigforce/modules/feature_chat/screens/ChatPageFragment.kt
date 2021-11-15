@@ -27,6 +27,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.net.toUri
@@ -47,10 +48,13 @@ import com.gigforce.common_ui.chat.models.ChatGroup
 import com.gigforce.common_ui.chat.models.ChatMessage
 import com.gigforce.common_ui.chat.models.VideoInfo
 import com.gigforce.core.PermissionUtils
+import com.gigforce.core.ScopedStorageConstants
 import com.gigforce.core.StringConstants
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.date.DateHelper
 import com.gigforce.core.documentFileHelper.DocumentPrefHelper
+import com.gigforce.core.documentFileHelper.DocumentTreeDelegate
+import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toDisplayText
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
@@ -89,6 +93,26 @@ class ChatPageFragment : Fragment(),
     @Inject
     lateinit var documentPrefHelper: DocumentPrefHelper
 
+    @Inject
+    lateinit var documentTreeDelegate : DocumentTreeDelegate
+
+    private val openDocumentTreeContract = registerForActivityResult(
+        ActivityResultContracts.OpenDocumentTree()
+    ) {
+        if (it == null) return@registerForActivityResult
+
+        documentTreeDelegate.handleDocumentTreeSelectionResult(
+            context = requireContext(),
+            uri = it,
+            onSuccess = {
+                handleStorageTreeSelectedResult()
+            },
+            onFailure = {
+                handleStorageTreeSelectionFailure(it)
+            }
+        )
+    }
+
     private val chatNavigation: ChatNavigation by lazy {
         ChatNavigation(navigation)
     }
@@ -97,6 +121,9 @@ class ChatPageFragment : Fragment(),
     private lateinit var chatRecyclerView: CoreRecyclerView
     private lateinit var chatFooter: ChatFooter
     private var cameFromLinkInOtherChat: Boolean = false
+    private lateinit var mainChatLayout: View
+    private lateinit var needStorageAccessLayout: View
+    private lateinit var requestStorageAccessButton: View
 
     private val viewModel: ChatPageViewModel by viewModels()
     private val groupChatViewModel: GroupChatViewModel by lazy {
@@ -172,14 +199,55 @@ class ChatPageFragment : Fragment(),
         super.onViewCreated(view, savedInstanceState)
         getDataFromIntents(arguments, savedInstanceState)
         validateIfRequiredDataIsAvailable()
+        findView(view)
         StatusBarUtil.setColorNoTranslucent(
             requireActivity(),
             ResourcesCompat.getColor(resources, R.color.lipstick_2, null)
         )
 
-        checkForPermissionElseRequest()
+        if(Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
+
+            if (!documentTreeDelegate.storageTreeSelected()) {
+                showPermissionRequiredLayout()
+            } else {
+                showChatLayout()
+                initChat()
+            }
+        } else{
+
+            if (!isStoragePermissionGranted()) {
+                showPermissionRequiredLayout()
+                askForStoragePermission()
+            } else {
+                showChatLayout()
+                initChat()
+            }
+        }
+    }
+
+    private fun findView(view: View) {
+        mainChatLayout = view.findViewById(R.id.main_chat_layout)
+        needStorageAccessLayout = view.findViewById(R.id.storage_access_required_layout)
+        requestStorageAccessButton = view.findViewById(R.id.storage_access_btn)
+
+        requestStorageAccessButton.setOnClickListener {
+
+            if(Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
+                openDocumentTreeContract.launch(null)
+            } else{
+                askForStoragePermission()
+            }
+        }
+    }
+
+    private fun showPermissionRequiredLayout() {
+        mainChatLayout.gone()
+        needStorageAccessLayout.visible()
+    }
+
+    private fun initChat(){
         cancelAnyNotificationIfShown()
-        findViews(view)
+        findViews(requireView())
         init()
         manageNewMessageToContact()
         checkForChatTypeAndSubscribeToRespectiveViewModel()
@@ -231,6 +299,25 @@ class ChatPageFragment : Fragment(),
         if (!isStoragePermissionGranted()) {
             askForStoragePermission()
         }
+    }
+
+    private fun handleStorageTreeSelectedResult() {
+
+        needStorageAccessLayout.gone()
+        mainChatLayout.visible()
+
+        initChat()
+    }
+
+    private fun handleStorageTreeSelectionFailure(
+        e : Exception
+    ) {
+
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Select storage")
+            .setMessage(e.message.toString())
+            .setPositiveButton("Okay"){_,_ ->}
+            .show()
     }
 
     private fun cancelAnyNotificationIfShown() {
@@ -741,7 +828,7 @@ class ChatPageFragment : Fragment(),
     private fun askForStoragePermission() {
         Log.v(TAG, "Permission Required. Requesting Permission")
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        if (Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
 
             requestPermissions(
             arrayOf(
@@ -858,6 +945,9 @@ class ChatPageFragment : Fragment(),
             }
 
             if (allPermsGranted) {
+                showChatLayout()
+                initChat()
+
                 if (selectedOperation == ChatConstants.OPERATION_PICK_IMAGE) {
                     pickImage()
                     selectedOperation = -1
@@ -877,6 +967,10 @@ class ChatPageFragment : Fragment(),
         }
     }
 
+    private fun showChatLayout() {
+        needStorageAccessLayout.gone()
+        mainChatLayout.visible()
+    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
