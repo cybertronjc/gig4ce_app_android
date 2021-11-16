@@ -246,7 +246,7 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
             } else {
                  it.checkList?.let {
                 it.forEachIndexed { index, checkListItem ->
-                    if (checkListItem.type == "bank_details" && checkListItem.status == "Completed"){
+                    if (checkListItem.type == "bank_account" && checkListItem.status == "Completed"){
                         dropScreenIntentModel?.isBankVerified = true
                     }
 

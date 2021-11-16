@@ -126,6 +126,7 @@ class DropSelectionFragment2 : BaseBottomSheetDialogFragment<DropSelectionFragme
             selectionJoiningIdsToDrop.add(it.joiningId)
         }
         lastWorkingLayout.dateText.text = DateHelper.getDateInDDMMMYYYYComma(Date())
+        selectedLastWorkingDate = DateHelper.getDateInYYYYMMDD(Date())
         if (selectionJoiningsToDrop.size == 1){
             //single selection
             currentDate = DateHelper.getDateFromString(selectionJoiningsToDrop.get(0).currentDate)
