@@ -211,11 +211,13 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
         gigerInfo.let {
             toolbar.showTitle(it.gigerName)
             toolbar.setTitleTypeface(Typeface.BOLD)
-            overlayCardLayout.companyName.text = ": "+it.businessName ?: ""
+            overlayCardLayout.companyName.text = ": " + it.businessName ?: ""
             overlayCardLayout.jobProfileTitle.text = it.jobProfileTitle ?: ""
-            val reportingLocText = if (!it.reportingLocation.isNullOrBlank() && it.reportingLocation != "null") it.reportingLocation + ", " else ""
-            val businessLocText = if (!it.businessLocation.isNullOrBlank() && it.businessLocation != "null") it.businessLocation else ""
-            overlayCardLayout.locationText.text = ": "+reportingLocText + businessLocText ?: ""
+            val reportingLocText =
+                if (!it.reportingLocation.isNullOrBlank() && it.reportingLocation != "null") it.reportingLocation + ", " else ""
+            val businessLocText =
+                if (!it.businessLocation.isNullOrBlank() && it.businessLocation != "null") it.businessLocation else ""
+            overlayCardLayout.locationText.text = ": " + reportingLocText + businessLocText ?: ""
 
             gigerPhone = it.gigerPhone.toString()
             toolbar.showSubtitle(gigerPhone)
@@ -228,57 +230,95 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
                     .into(overlayCardLayout.profileImageOverlay.companyImg)
             }
 
-            applicationStatusLayout.statusText.text = getString(R.string.application_lead,it.status)
-            if (it.status == "Pending"){
-                applicationStatusLayout.statusIconImg.setImageDrawable(ResourcesCompat.getDrawable(resources,R.drawable.ic_pending_icon,null))
-                applicationStatusLayout.root.setBackgroundColor(ResourcesCompat.getColor(resources,R.color.status_background_pink,null))
+            applicationStatusLayout.statusText.text =
+                getString(R.string.application_lead, it.status)
+            if (it.status == "Pending") {
+                applicationStatusLayout.statusIconImg.setImageDrawable(
+                    ResourcesCompat.getDrawable(
+                        resources,
+                        R.drawable.ic_pending_icon,
+                        null
+                    )
+                )
+                applicationStatusLayout.root.setBackgroundColor(
+                    ResourcesCompat.getColor(
+                        resources,
+                        R.color.status_background_pink,
+                        null
+                    )
+                )
             } else {
-                applicationStatusLayout.statusIconImg.setImageDrawable(ResourcesCompat.getDrawable(resources,R.drawable.ic_blue_tick,null))
-                applicationStatusLayout.root.setBackgroundColor(ResourcesCompat.getColor(resources,R.color.status_background_blue,null))
+                applicationStatusLayout.statusIconImg.setImageDrawable(
+                    ResourcesCompat.getDrawable(
+                        resources,
+                        R.drawable.ic_blue_tick,
+                        null
+                    )
+                )
+                applicationStatusLayout.root.setBackgroundColor(
+                    ResourcesCompat.getColor(
+                        resources,
+                        R.color.status_background_blue,
+                        null
+                    )
+                )
             }
 
 
-            overlayCardLayout.selectionDate.text = ": "+getFormattedDate(it.selectionDate)
-            overlayCardLayout.joiningDate.text = ": "+getFormattedDateFromYYMMDD(it.joiningDate) ?: ""
+            overlayCardLayout.selectionDate.text = ": " + getFormattedDate(it.selectionDate)
+            overlayCardLayout.joiningDate.text =
+                ": " + getFormattedDateFromYYMMDD(it.joiningDate) ?: ""
 
             //check for gigStartDate and gigEndDate
-            if (!it.gigStartDate.isNullOrBlank() && !it.gigEndDate.isNullOrBlank()){
+            if (!it.gigStartDate.isNullOrBlank() && !it.gigEndDate.isNullOrBlank()) {
                 hasStartEndDate = true
                 dropScreenIntentModel?.gigStartDate = it.gigStartDate
                 dropScreenIntentModel?.gigEndDate = it.gigEndDate
             }
-            if (!it.currentDate.isNullOrBlank()){
+            if (!it.currentDate.isNullOrBlank()) {
                 dropScreenIntentModel?.currentDate = it.currentDate
             }
 
-            val checkListItemData = arrayListOf<ApplicationChecklistRecyclerItemData.ApplicationChecklistItemData>()
-            if (it.checkList == null){
+            val checkListItemData =
+                arrayListOf<ApplicationChecklistRecyclerItemData.ApplicationChecklistItemData>()
+            if (it.checkList == null) {
                 checklistText.gone()
                 checklistLayout.gone()
             } else {
-                 it.checkList?.let { it1 ->
-                it1.forEachIndexed { index, checkListItem ->
-                    if (checkListItem.type == "bank_account" && checkListItem.status == "Completed"){
-                        dropScreenIntentModel?.isBankVerified = true
+                it.checkList?.let { it1 ->
+                    it1.forEachIndexed { index, checkListItem ->
+                        if (checkListItem.type == "bank_account" && checkListItem.status == "Completed") {
+                            dropScreenIntentModel?.isBankVerified = true
+                        }
+                        val itemData =
+                            ApplicationChecklistRecyclerItemData.ApplicationChecklistItemData(
+                                checkListItem.name,
+                                it.gigerId.toString(),
+                                it.gigerName,
+                                checkListItem.status,
+                                checkListItem.type,
+                                checkListItem.optional,
+                                checkListItem.frontImage,
+                                checkListItem.backImage
+                            )
+                        checkListItemData.add(itemData)
+                        if (checkListItemData.size > 0) {
+                            checklistLayout.visible()
+                            inflateCheckListInCheckListContainer(checkListItemData)
+                        } else {
+                            checklistText.gone()
+                            checklistLayout.gone()
+                        }
+
                     }
-                    val itemData = ApplicationChecklistRecyclerItemData.ApplicationChecklistItemData(checkListItem.name, it.gigerId.toString(), it.gigerName , checkListItem.status, checkListItem.type,  checkListItem.optional, checkListItem.frontImage , checkListItem.backImage)
-                    checkListItemData.add(itemData)
-                if (checkListItemData.size > 0){
-                    checklistLayout.visible()
-                    inflateCheckListInCheckListContainer(checkListItemData)
-                } else {
-                    checklistText.gone()
-                    checklistLayout.gone()
                 }
+                stopShimmer(
+                    gigerinfoShimmerContainer as LinearLayout,
+                    R.id.shimmer_controller
+                )
+                gigerinfoShimmerContainer.gone()
 
-                }
             }
-            stopShimmer(
-                gigerinfoShimmerContainer as LinearLayout,
-                R.id.shimmer_controller
-            )
-            gigerinfoShimmerContainer.gone()
-
         }
     }
 
