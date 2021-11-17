@@ -7,6 +7,8 @@
         android:layout_marginTop="10dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
+        android:layout_marginBottom="10dp"
+        app:cardElevation="6dp"
         android:layout_height="wrap_content">
 
         <LinearLayout
@@ -31,7 +33,6 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="@string/checklist_name_lead"
                 android:textFontWeight="400"
                 android:lineHeight="18dp"
                 style="@style/style_h6"

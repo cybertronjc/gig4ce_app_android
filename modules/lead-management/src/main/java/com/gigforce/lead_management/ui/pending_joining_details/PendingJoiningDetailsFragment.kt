@@ -3,6 +3,7 @@ package com.gigforce.lead_management.ui.pending_joining_details
 import android.os.Bundle
 import android.widget.LinearLayout
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.utils.getCircularProgressDrawable
 import com.gigforce.common_ui.viewdatamodels.leadManagement.GigerInfo
@@ -16,6 +17,7 @@ import com.gigforce.lead_management.databinding.FragmentPendingJoiningDetailsBin
 import com.gigforce.lead_management.models.ApplicationChecklistRecyclerItemData
 import com.gigforce.lead_management.ui.giger_info.GigerInfoState
 import com.gigforce.lead_management.ui.giger_info.GigerInfoViewModel
+import com.gigforce.lead_management.ui.giger_info.views.AppCheckListRecyclerComponent
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.ParseException
@@ -51,8 +53,15 @@ class PendingJoiningDetailsFragment : BaseFragment2<FragmentPendingJoiningDetail
             arguments,
             savedInstanceState
         )
+        initUi()
         initViewModel()
         getJoiningDetails()
+    }
+
+    private fun initUi() {
+        viewBinding.overlayCardLayout.skipLabel.setOnClickListener {
+            findNavController().navigateUp()
+        }
     }
 
     private fun getDataFrom(
@@ -125,14 +134,16 @@ class PendingJoiningDetailsFragment : BaseFragment2<FragmentPendingJoiningDetail
 
        val totalStepsInCheckList =  gigerInfo.checkList.size
        val totalCompletedStepsInCheckList = gigerInfo.checkList.filter { it.status != "Pending" }
-       checklistText.text = "${getString(R.string.application_checklist_lead)} ($totalCompletedStepsInCheckList/$totalStepsInCheckList)}"
+       checklistText.text = "${getString(R.string.application_checklist_lead)} (${totalCompletedStepsInCheckList.size}/$totalStepsInCheckList)"
 
         gigerInfo.let {
             overlayCardLayout.jobProfileTextview.text = ": "+it.jobProfileTitle ?: ""
             overlayCardLayout.businessNameTV.text = it.businessName
+            overlayCardLayout.teamLeaderNameTextview.text = ": " + it.joiningDate
             val reportingLocText = if (!it.reportingLocation.isNullOrBlank() && it.reportingLocation != "null") it.reportingLocation + ", " else ""
             val businessLocText = if (!it.businessLocation.isNullOrBlank() && it.businessLocation != "null") it.businessLocation else ""
             overlayCardLayout.locationText.text = ": "+reportingLocText + businessLocText ?: ""
+            it.jobProfileId = ""
 
             gigerPhone = it.gigerPhone.toString()
 
@@ -193,30 +204,17 @@ class PendingJoiningDetailsFragment : BaseFragment2<FragmentPendingJoiningDetail
 
         checkListItemData.forEach {
 
-            val view = PendingJoiningCheckListItemComponent(
+            val item = PendingJoiningCheckListItemComponent(
                 requireContext(),
-                null,
-                navigation = navigation,
-                jobProfileId = jobProfileId
+                null
             )
-
-            addView(view)
-            view.bind(it)
+            addView(item)
+            item.bind(
+                it,
+                navigation,
+                jobProfileId
+            )
         }
-    }
-
-    fun getFormattedDateFromYYMMDD(date: String): String {
-        val input = SimpleDateFormat("yyyy-MM-dd")
-        val output = SimpleDateFormat("dd/MMM/yy", Locale.getDefault())
-
-        var d: Date? = null
-        try {
-            d = input.parse(date)
-        } catch (e: ParseException) {
-            e.printStackTrace()
-        }
-        val formatted = output.format(d)
-        return formatted ?: ""
     }
 
     fun getFormattedDate(date: String): String {

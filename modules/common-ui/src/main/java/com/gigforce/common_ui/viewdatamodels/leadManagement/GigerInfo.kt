@@ -20,7 +20,7 @@ data class GigerInfo(
     val businessLogo: String,
 
     @SerializedName("jobProfileId")
-    val jobProfileId: String,
+    var jobProfileId: String,
 
     @SerializedName("jobProfileTitle")
     val jobProfileTitle: String,

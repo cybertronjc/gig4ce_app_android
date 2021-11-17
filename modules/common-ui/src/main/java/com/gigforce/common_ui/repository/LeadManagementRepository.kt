@@ -712,22 +712,19 @@ class LeadManagementRepository @Inject constructor(
     }
 
     suspend fun getPendingJoinings(): List<PendingJoiningItemDVM> {
+
+//        return listOf(
+//            PendingJoiningItemDVM(
+//                jobProfileId = "SmUK9BWoFGjNKaHgLwWB",
+//                joiningId = "SmUK9BWoFGjNKaHgLwWB",
+//                jobProfileName = "Some profile",
+//                location = "Test location",
+//                expectedStartDate = "19-ovt-233",
+//                image = "https://firebasestorage.googleapis.com/v0/b/gigforce-staging.appspot.com/o/webimage%2F1632312738454?alt=media&token=14e7a9f5-f251-4f9a-8bab-eaf0a46a489a"
+//            )
+//        )
+
         return joiningProfileRemoteService.getPendingJoining().bodyOrThrow().data
-    }
-
-    private var pendingJoiningFlowCollector: FlowCollector<List<PendingJoiningItemDVM>>? = null
-    val pendingJoiningflow = flow<List<PendingJoiningItemDVM>> {
-        pendingJoiningFlowCollector = this
-    }
-
-    suspend fun getPendingJoiningsAndDisptachResultsOnFlow() {
-        try {
-
-            MutableSharedFlow<List<PendingJoiningItemDVM>>()
-            val joinings = getPendingJoinings()
-            pendingJoiningFlowCollector?.emit(joinings)
-        } catch (e: Exception) {
-        }
     }
 
     suspend fun getUserInfoFromMobileNumber(

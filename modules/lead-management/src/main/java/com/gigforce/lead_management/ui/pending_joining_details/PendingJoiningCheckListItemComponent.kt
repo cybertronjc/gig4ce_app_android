@@ -21,9 +21,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 class PendingJoiningCheckListItemComponent(
     context: Context,
-    attrs: AttributeSet?,
-    private val navigation: INavigation,
-    private val jobProfileId: String
+    attrs: AttributeSet?
 ) : FrameLayout(
     context,
     attrs
@@ -31,6 +29,9 @@ class PendingJoiningCheckListItemComponent(
 
     private var viewBinding: LayoutPendingJoiningChecklistItemBinding
     private lateinit var viewData: ApplicationChecklistRecyclerItemData.ApplicationChecklistItemData
+
+    private var navigation: INavigation? = null
+    private var jobProfileId : String? = null
 
     init {
         this.layoutParams =
@@ -46,9 +47,15 @@ class PendingJoiningCheckListItemComponent(
         viewBinding.root.setOnClickListener(this)
     }
 
-    fun bind(data: ApplicationChecklistRecyclerItemData.ApplicationChecklistItemData) {
+    fun bind(
+        data: ApplicationChecklistRecyclerItemData.ApplicationChecklistItemData,
+        navigation: INavigation,
+        jobProfileId: String
+    ) {
+        this.navigation = navigation
+        this.jobProfileId = jobProfileId
+        this.viewData = data
 
-        viewData = data
         if (viewData.isOptional) {
             viewBinding.checkListItemText.text = viewData.checkName
         } else {
@@ -93,7 +100,7 @@ class PendingJoiningCheckListItemComponent(
     override fun onClick(v: View?) {
         when (viewData.checkListItemType) {
             "profile_pic" -> {
-                navigation.navigateTo(
+                navigation?.navigateTo(
                     "profile", bundleOf(
                         StringConstants.FROM_CLIENT_ACTIVATON.value to true,
                         StringConstants.ACTION.value to 1
@@ -101,13 +108,13 @@ class PendingJoiningCheckListItemComponent(
                 )
             }
             "about_me" -> {
-                navigation.navigateTo(
+                navigation?.navigateTo(
                     "profile/addBio", bundleOf(
                         StringConstants.FROM_CLIENT_ACTIVATON.value to true
                     )
                 )
             }
-            "questionnaire" -> navigation.navigateTo(
+            "questionnaire" -> navigation?.navigateTo(
                 "learning/questionnair", bundleOf(
                     StringConstants.JOB_PROFILE_ID.value to jobProfileId,
                     StringConstants.TITLE.value to viewData.options!!.title,
@@ -115,11 +122,11 @@ class PendingJoiningCheckListItemComponent(
                     StringConstants.FROM_CLIENT_ACTIVATON.value to true
                 )
             )
-            "driving_licence" -> navigation.navigateTo(
+            "driving_licence" -> navigation?.navigateTo(
                 "verification/drivinglicenseimageupload",
                 bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
             )
-            "learning" -> navigation.navigateTo(
+            "learning" -> navigation?.navigateTo(
                 "learning/coursedetails",
                 bundleOf(
                     INTENT_EXTRA_COURSE_ID to viewData.options!!.courseId,
@@ -127,17 +134,17 @@ class PendingJoiningCheckListItemComponent(
                 )
             )
 
-            "aadhar_card" -> navigation.navigateTo(
+            "aadhar_card" -> navigation?.navigateTo(
                 "verification/aadhaarcardimageupload",
                 bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
             )
 
-            "pan_card" -> navigation.navigateTo(
+            "pan_card" -> navigation?.navigateTo(
                 "verification/pancardimageupload",
                 bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
             )
 
-            "bank_account" -> navigation.navigateTo(
+            "bank_account" -> navigation?.navigateTo(
                 "verification/bank_account_fragment",
                 bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
             )
