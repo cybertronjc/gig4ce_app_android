@@ -31,28 +31,28 @@ class DrivingLicenseViewModel @Inject constructor(
     val _verifiedStatus = MutableLiveData<DrivingLicenseDataModel>()
     val verifiedStatus: LiveData<DrivingLicenseDataModel> = _verifiedStatus
 
-    fun getKycOcrResult(type: String, subType: String, image: MultipartBody.Part) =
+    fun getKycOcrResult(type: String, subType: String, image: MultipartBody.Part, uid: String) =
             viewModelScope.launch {
                 try {
-                    _kycOcrResult.value = verificationKycRepo.getVerificationOcrResult(type, subType, image)
+                    _kycOcrResult.value = verificationKycRepo.getVerificationOcrResult(type, uid, subType, image)
                 } catch (e: Exception) {
                     _kycOcrResult.value = KycOcrResultModel(status = false, message = e.message)
                 }
                 Log.d("result", kycOcrResultModel.toString())
             }
 
-    fun getKycVerificationResult(type: String, list: List<Data>) =
+    fun getKycVerificationResult(type: String, list: List<Data>, uid: String) =
             viewModelScope.launch {
                 try {
-                    _kycVerifyResult.value = verificationKycRepo.getKycVerification(type, list)
+                    _kycVerifyResult.value = verificationKycRepo.getKycVerification(type, list, uid)
                 } catch (e: Exception) {
                     _kycVerifyResult.value = KycOcrResultModel(status = false, message = e.message)
                 }
                 Log.d("result", kycOcrResultModel.toString())
             }
 
-    fun getVerifiedStatus() {
-        verificationKycRepo.db.collection("Verification").document(verificationKycRepo.getUID())
+    fun getVerifiedStatus(uid: String) {
+        verificationKycRepo.db.collection("Verification").document(uid)
                 .addSnapshotListener { value, error ->
                     value?.data?.let {
                         val doc = value.toObject(VerificationBaseModel::class.java)

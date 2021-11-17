@@ -19,8 +19,8 @@ class AadhaarCardImageUploadViewModel @Inject constructor(
     val verifiedStatus: LiveData<AadharCardDataModel> = _verifiedStatus
 
 
-    fun getVerifiedStatus() {
-        verificationKycRepo.db.collection("Verification").document(verificationKycRepo.getUID())
+    fun getVerifiedStatus(uid: String) {
+        verificationKycRepo.db.collection("Verification").document(uid)
                 .addSnapshotListener { value, error ->
                     value?.data?.let {
                         val doc = value.toObject(VerificationBaseModel::class.java)

@@ -70,7 +70,7 @@ class AadhaarDetailsRepository @Inject constructor() : BaseFirestoreDBRepository
         }
     }
 
-    override suspend fun getVerificationDetails(): VerificationBaseModel? {
+    override suspend fun getVerificationDetails(uid: String): VerificationBaseModel? {
         try {
             val await = db.collection(verificationCollectionName).document(uid).get().await()
             if (!await.exists()) {
@@ -111,7 +111,7 @@ class AadhaarDetailsRepository @Inject constructor() : BaseFirestoreDBRepository
         }
     }
 
-    override suspend fun setAadhaarFromVerificationModule(nomineeAsFather: Boolean, aadhaardetails: AadhaarDetailsDataModel): Boolean {
+    override suspend fun setAadhaarFromVerificationModule(uid: String, nomineeAsFather: Boolean, aadhaardetails: AadhaarDetailsDataModel): Boolean {
         try {
 //            "aadhaar_card_questionnaire.frontImagePath" to aadhaardetails.frontImagePath,
 //            "aadhaar_card_questionnaire.backImagePath" to aadhaardetails.backImagePath,
@@ -146,7 +146,7 @@ class AadhaarDetailsRepository @Inject constructor() : BaseFirestoreDBRepository
         }
     }
 
-    override suspend fun getProfileNominee(): ProfileNominee? {
+    override suspend fun getProfileNominee(uid: String): ProfileNominee? {
         try {
             val await = db.collection("Profiles").document(uid).get().await()
             if (!await.exists()) {

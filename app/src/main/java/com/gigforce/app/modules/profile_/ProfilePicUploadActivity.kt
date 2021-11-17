@@ -260,7 +260,8 @@ class ProfilePicUploadActivity : BaseActivity(),
         viewModelUser.uploadProfilePicture(
             viewModel.userProfileData.value?.enrolledBy?.id,
             uri,
-            data
+            data,
+            false
         )
     }
 
