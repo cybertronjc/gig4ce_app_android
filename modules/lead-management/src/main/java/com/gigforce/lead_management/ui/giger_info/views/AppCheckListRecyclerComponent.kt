@@ -210,7 +210,7 @@ class AppCheckListRecyclerComponent(
                 return "userinfo/addUserBankDetailsInfoFragment"
             }
             "aadhar_card_questionnaire" -> {
-                return "userinfo/AadharDetailInfoFragment"
+                return "userinfo/addUserAadharCardInfoFragment"
             }
             "jp_hub_location" -> {
                 return "client_activation/fragment_business_loc_hub"
@@ -223,7 +223,7 @@ class AppCheckListRecyclerComponent(
     }
 
     private fun isVerificationDoc(type: String): Boolean {
-        val veriArray = arrayListOf<String>("aadhar_card", "driving_licence", "pan_card", "bank_account", "profile_pic")
+        val veriArray = arrayListOf<String>("aadhar_card_questionnaire", "driving_licence", "pan_card", "bank_account", "profile_pic")
         return veriArray.contains(type)
     }
 

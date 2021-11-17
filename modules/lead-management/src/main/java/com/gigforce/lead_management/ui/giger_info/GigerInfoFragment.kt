@@ -423,7 +423,7 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
                 return "verification/bank_account_fragment"
             }
             "aadhar_card_questionnaire" -> {
-                return "client_activation/joining_form"
+                return "verification/AadharDetailInfoFragment"
             }
             "jp_hub_location" -> {
                 return "client_activation/fragment_business_loc_hub"
