@@ -5,10 +5,13 @@ import android.content.Intent
 import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -18,9 +21,11 @@ import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.utils.getCircularProgressDrawable
 import com.gigforce.common_ui.viewdatamodels.leadManagement.GigerInfo
+import com.gigforce.core.AppConstants
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.base.BaseFragment2
+import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
@@ -53,10 +58,14 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
     companion object {
         fun newInstance() = GigerInfoFragment()
         private const val TAG = "GigerInfoFragment"
+        val UPLOAD_PROFILE_PIC = 1
     }
 
     @Inject
     lateinit var navigation: INavigation
+
+    @Inject
+    lateinit var buildConfig: IBuildConfig
 
     @Inject
     lateinit var eventTracker: IEventTracker
@@ -138,6 +147,7 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
 
     private fun initViewModel() {
         viewModel.getGigerJoiningInfo(joiningId)
+
         //observe data
         viewModel.viewState.observe(viewLifecycleOwner, Observer {
             val state = it ?: return@Observer
@@ -246,15 +256,13 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
                 checklistText.gone()
                 checklistLayout.gone()
             } else {
-                 it.checkList?.let {
-                it.forEachIndexed { index, checkListItem ->
+                 it.checkList?.let { it1 ->
+                it1.forEachIndexed { index, checkListItem ->
                     if (checkListItem.type == "bank_account" && checkListItem.status == "Completed"){
                         dropScreenIntentModel?.isBankVerified = true
                     }
-
-                    val itemData = ApplicationChecklistRecyclerItemData.ApplicationChecklistItemData(checkListItem.name, checkListItem.status, checkListItem.optional, checkListItem.frontImage , checkListItem.backImage)
+                    val itemData = ApplicationChecklistRecyclerItemData.ApplicationChecklistItemData(checkListItem.name, it.gigerId.toString(), it.gigerName , checkListItem.status, checkListItem.type,  checkListItem.optional, checkListItem.frontImage , checkListItem.backImage)
                     checkListItemData.add(itemData)
-                }
                 if (checkListItemData.size > 0){
                     checklistLayout.visible()
                     inflateCheckListInCheckListContainer(checkListItemData)
@@ -284,6 +292,31 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
             val view = AppCheckListRecyclerComponent(requireContext(),null)
             addView(view)
             view.bind(it)
+            val viewPhotoText = view.findViewById<TextView>(R.id.viewPhotoText)
+            viewPhotoText.setOnClickListener { it1 ->
+                if (viewPhotoText.text == "ADD"){
+                    var bundleForFragment = bundleOf(
+                        AppConstants.INTENT_EXTRA_USER_CAME_FROM_ONBOARDING_FORM to true,
+                        "uid" to it.gigerUid
+                    )
+                    val navString = getNavigationStr(it.docType)
+                    navigation.navigateTo(navString, bundleForFragment)
+                }else if (viewPhotoText.text == "VIEW PHOTO"){
+                    val arrayList = arrayListOf<String>()
+                    if (!it.frontImage.isNullOrBlank()){
+                        arrayList.add(getDBImageUrl(it.frontImage.toString()).toString())
+                    }
+                    if (!it.backImage.isNullOrBlank()){
+                        arrayList.add(getDBImageUrl(it.backImage.toString()).toString())
+                    }
+
+                    navigation.navigateTo("LeadMgmt/showDocImages",
+                        bundleOf(
+                            ShowCheckListDocsBottomSheet.INTENT_TOP_TITLE to it.checkName,
+                            ShowCheckListDocsBottomSheet.INTENT_IMAGES_TO_SHOW to arrayList
+                        ))
+                }
+            }
         }
     }
 
@@ -336,6 +369,7 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
             context?.startActivity(intent)
 
         }
+
 
     }
 
@@ -404,5 +438,58 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
         return formatted ?: ""
     }
 
+
+    private fun getNavigationStr(data: String): String {
+        when (data) {
+            "profile_pic" -> {
+                return "userinfo/addProfilePictureFragment"
+            }
+            "about_me" -> {
+                return "profile/addBio"
+            }
+            "questionnaire" -> {
+                return "learning/questionnair"
+            }
+            "driving_licence" -> {
+                return "verification/drivinglicenseimageupload"
+            }
+            "learning" -> {
+                return "learning/coursedetails"
+            }
+            "aadhar_card" -> {
+                return "verification/AadharDetailInfoFragment"
+            }
+            "pan_card" -> {
+                return "verification/pancardimageupload"
+            }
+            "bank_account" -> {
+                return "verification/bank_account_fragment"
+            }
+            "aadhar_card_questionnaire" -> {
+                return "verification/AadharDetailInfoFragment"
+            }
+            "jp_hub_location" -> {
+                return "client_activation/fragment_business_loc_hub"
+            }
+            "pf_esic" -> {
+                return "client_activation/pfesicFragment"
+            }
+            else -> return ""
+        }
+    }
+
+    fun getDBImageUrl(imagePath: String): String? {
+        if (imagePath.isNotBlank()) {
+            try {
+                var modifiedString = imagePath
+                if (!imagePath.startsWith("/"))
+                    modifiedString = "/$imagePath"
+                return buildConfig.getStorageBaseUrl() + modifiedString
+            } catch (e: Exception) {
+                return null
+            }
+        }
+        return null
+    }
 
 }

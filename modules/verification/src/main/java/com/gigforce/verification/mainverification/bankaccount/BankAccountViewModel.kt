@@ -31,21 +31,21 @@ class BankAccountViewModel @Inject constructor(
     val bankDetailedObject: LiveData<BankDetailsDataModel> = _bankDetailedObject
 
 
-    fun getKycOcrResult(type: String, subType: String, image: MultipartBody.Part) =
+    fun getKycOcrResult(type: String, subType: String, image: MultipartBody.Part, uid: String) =
         viewModelScope.launch {
             try {
                 _kycOcrResult.value =
-                    verificationKycRepo.getVerificationOcrResult(type, subType, image)
+                    verificationKycRepo.getVerificationOcrResult(type, uid, subType, image)
             } catch (e: Exception) {
                 _kycOcrResult.value = KycOcrResultModel(status = false, message = e.message)
             }
             Log.d("result", kycOcrResultModel.toString())
         }
 
-    fun getKycVerificationResult(type: String, list: List<Data>) =
+    fun getKycVerificationResult(type: String, list: List<Data>, uid: String) =
         viewModelScope.launch {
             try {
-                _kycVerifyResult.value = verificationKycRepo.getKycVerification(type, list)
+                _kycVerifyResult.value = verificationKycRepo.getKycVerification(type, list, uid)
             } catch (e: Exception) {
                 _kycVerifyResult.value = KycOcrResultModel(status = false, message = e.message)
             }
@@ -64,8 +64,8 @@ class BankAccountViewModel @Inject constructor(
             }
     }
 
-    fun getBankDetailsStatus() {
-        verificationKycRepo.db.collection("Verification").document(verificationKycRepo.getUID())
+    fun getBankDetailsStatus(uid: String) {
+        verificationKycRepo.db.collection("Verification").document(uid)
             .addSnapshotListener { value, error ->
                 value?.data?.let {
                     val doc = value.toObject(VerificationBaseModel::class.java)
@@ -76,19 +76,19 @@ class BankAccountViewModel @Inject constructor(
             }
     }
 
-    fun setVerificationStatusInDB(status: Boolean) =
+    fun setVerificationStatusInDB(status: Boolean, uid: String) =
         viewModelScope.launch {
             try {
-                verificationKycRepo.setVerifiedStatus(status)
+                verificationKycRepo.setVerifiedStatus(status, uid)
             } catch (e: Exception) {
 
             }
         }
 
-    fun setVerificationStatusStringToBlank() =
+    fun setVerificationStatusStringToBlank(uid: String) =
         viewModelScope.launch {
             try {
-                verificationKycRepo.setVerificationStatusStringToBlank()
+                verificationKycRepo.setVerificationStatusStringToBlank(uid)
             } catch (e: Exception) {
 
             }

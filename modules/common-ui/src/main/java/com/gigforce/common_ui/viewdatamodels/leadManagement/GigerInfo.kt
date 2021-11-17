@@ -9,6 +9,9 @@ data class GigerInfo(
     @SerializedName("gigerMobileNo")
     val gigerPhone: String?,
 
+    @SerializedName("gigerId")
+    val gigerId: String?,
+
     @SerializedName("gigerProfilePicture")
     val gigerProfilePicture: String?,
 

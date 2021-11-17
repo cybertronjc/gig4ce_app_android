@@ -49,21 +49,21 @@ class AadharDetailInfoViewModel @Inject constructor(private val aadharDetailsRep
 
     }
 
-    fun getKycOcrResult(type: String, subType: String, image: MultipartBody.Part) =
+    fun getKycOcrResult(type: String, subType: String, image: MultipartBody.Part, uid: String) =
             viewModelScope.launch {
                 try {
-                    _kycOcrResult.value = verificationKycRepo.getVerificationOcrResult(type, subType, image)
+                    _kycOcrResult.value = verificationKycRepo.getVerificationOcrResult(type, uid, subType, image)
                 } catch (e: Exception) {
                     _kycOcrResult.value = KycOcrResultModel(status = false, message = e.message)
                 }
                 Log.d("result", _kycOcrResult.toString())
             }
 
-    fun getVerificationData() = viewModelScope.launch {
+    fun getVerificationData(uid: String) = viewModelScope.launch {
         try {
-            val veriData = aadharDetailsRepo.getVerificationDetails()
+            val veriData = aadharDetailsRepo.getVerificationDetails(uid)
             verificationResult.postValue(veriData)
-            val profileNominee = aadharDetailsRepo.getProfileNominee()
+            val profileNominee = aadharDetailsRepo.getProfileNominee(uid)
             _profileNominee.postValue(profileNominee)
         } catch (e: Exception) {
             e.printStackTrace()
@@ -88,16 +88,16 @@ class AadharDetailInfoViewModel @Inject constructor(private val aadharDetailsRep
         }
 
     }
-    fun setAadhaarDetails(submitDataModel: AadhaarDetailsDataModel, nomineeAsFather : Boolean ,mJobProfileId : String)= viewModelScope.launch {
+    fun setAadhaarDetails(submitDataModel: AadhaarDetailsDataModel, nomineeAsFather : Boolean ,mJobProfileId : String, uid: String)= viewModelScope.launch {
             try {
-                val updated = aadharDetailsRepo.setAadhaarFromVerificationModule(nomineeAsFather, submitDataModel)
+                val updated = aadharDetailsRepo.setAadhaarFromVerificationModule(uid, nomineeAsFather, submitDataModel)
                 updatedResult.postValue(updated)
                 if (mJobProfileId.isNotEmpty()){
                     FirebaseFirestore.getInstance().collection("JP_Applications")
                             .whereEqualTo("jpid", mJobProfileId)
                             .whereEqualTo(
                                     "gigerId",
-                                    FirebaseAuthStateListener.getInstance().getCurrentSignInUserInfoOrThrow().uid
+                                    uid
                             ).addSnapshotListener { jp_application, _ ->
 
                                 jp_application?.let {

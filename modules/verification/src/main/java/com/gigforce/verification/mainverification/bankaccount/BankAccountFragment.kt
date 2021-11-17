@@ -49,6 +49,8 @@ import com.gigforce.verification.mainverification.aadhardetail.AadharDetailInfoF
 import com.gigforce.verification.util.VerificationConstants
 import com.gigforce.verification.util.VerificationEvents
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.jaeger.library.StatusBarUtil
 import com.yalantis.ucrop.UCrop
 import dagger.hilt.android.AndroidEntryPoint
@@ -92,6 +94,12 @@ class BankAccountFragment : Fragment(),
 
     var verificationScreenStatus = VerificationScreenStatus.DEFAULT
     var ocrOrVerificationRquested = false
+    private var userId: String? = null
+    private val user: FirebaseUser?
+        get() {
+            return FirebaseAuth.getInstance().currentUser
+        }
+    private var userIdToUse: String? = null
 
     @Inject
     lateinit var navigation: INavigation
@@ -132,12 +140,18 @@ class BankAccountFragment : Fragment(),
             resources.getString(R.string.no_doc_title_bank_veri),
             resources.getString(R.string.no_doc_subtitle_bank_veri)
         )
+        userIdToUse = if (userId != null) {
+            userId
+        }else{
+            user?.uid
+        }
 
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, FROM_CLIENT_ACTIVATON)
+        outState.putString(AppConstants.INTENT_EXTRA_UID, userId)
     }
 
     var allNavigationList = ArrayList<String>()
@@ -150,6 +164,7 @@ class BankAccountFragment : Fragment(),
                 allNavigationList = arr
             }
             intentBundle = it
+            userId = it.getString(AppConstants.INTENT_EXTRA_UID) ?: return@let
         } ?: run {
             arguments?.let {
                 FROM_CLIENT_ACTIVATON =
@@ -158,6 +173,7 @@ class BankAccountFragment : Fragment(),
                     allNavigationList = arrData
                 }
                 intentBundle = it
+                userId = it.getString(AppConstants.INTENT_EXTRA_UID) ?: return@let
             }
         }
 
@@ -244,7 +260,7 @@ class BankAccountFragment : Fragment(),
         })
 
 //        viewModel.getBankVerificationUpdation()
-        viewModel.getBankDetailsStatus()
+        viewModel.getBankDetailsStatus(userIdToUse.toString())
         viewModel.bankDetailedObject.observe(viewLifecycleOwner, Observer {
             if (!ocrOrVerificationRquested) {
                 viewBinding.screenLoaderBar.gone()
@@ -673,7 +689,7 @@ class BankAccountFragment : Fragment(),
                     props = null
                 )
             )
-            viewModel.setVerificationStatusInDB(true)
+            viewModel.setVerificationStatusInDB(true, userIdToUse.toString())
             viewBinding.toplayoutblock.hideOnVerifiedDocuments()
         }
         viewBinding.notConfirmButton.setOnClickListener {
@@ -686,7 +702,7 @@ class BankAccountFragment : Fragment(),
                             props = null
                         )
                     )
-                    viewModel.setVerificationStatusStringToBlank()
+                    viewModel.setVerificationStatusStringToBlank(userIdToUse.toString())
                 }
                 .setNegativeButton(getString(R.string.no_veri)) { dialog, _ ->
                     dialog.dismiss()
@@ -759,7 +775,7 @@ class BankAccountFragment : Fragment(),
         }
         image?.let {
             eventTracker.pushEvent(TrackingEventArgs(VerificationEvents.BANK_OCR_STARTED, null))
-            viewModel.getKycOcrResult("bank", "dummy", it)
+            viewModel.getKycOcrResult("bank", "dummy", it, userIdToUse.toString())
         }
     }
 
@@ -923,7 +939,7 @@ class BankAccountFragment : Fragment(),
                 props = map
             )
         )
-        viewModel.getKycVerificationResult("bank", list)
+        viewModel.getKycVerificationResult("bank", list, userIdToUse.toString())
     }
 
     private fun showPassbookInfoCard(bankInfoPath: Uri) {
