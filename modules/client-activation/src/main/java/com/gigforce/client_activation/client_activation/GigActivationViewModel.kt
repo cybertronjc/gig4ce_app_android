@@ -142,6 +142,7 @@ class GigActivationViewModel(private val savedStateHandle: SavedStateHandle) : V
                             }
                         }
                 } else {
+                    model.setUpdatedAtAndBy()
                     repository.db.collection("JP_Applications").document(model.id).set(model)
                         .addOnCompleteListener {
                             if (it.isSuccessful) {

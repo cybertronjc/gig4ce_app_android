@@ -3,6 +3,8 @@ package com.gigforce.app.modules.explore_by_role
 import androidx.lifecycle.ViewModel
 import com.gigforce.core.datamodels.profile.Experience
 import com.gigforce.core.SingleLiveEvent
+import com.gigforce.core.StringConstants
+import com.google.firebase.Timestamp
 
 class AddExperienceViewModel :ViewModel() {
     val experienceRepo = AddExperienceRepository()
@@ -14,8 +16,9 @@ class AddExperienceViewModel :ViewModel() {
 
 
     fun addExperience(list: MutableList<Experience>) {
+        var map = mapOf("experiences" to list, "updatedAt" to Timestamp.now(), "updatedBy" to StringConstants.APP.value)
         experienceRepo.getCollectionReference().document(experienceRepo.getUID())
-            .update("experiences", list).addOnCompleteListener {
+            .update(map).addOnCompleteListener {
                 if (it.isSuccessful) {
                     observableSuccess.value = "true"
                 } else {

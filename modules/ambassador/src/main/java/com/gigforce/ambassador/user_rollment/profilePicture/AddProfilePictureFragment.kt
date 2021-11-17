@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -29,13 +30,14 @@ import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewmodels.ProfileViewModel
 import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.AppConstants
-import com.gigforce.core.utils.NavFragmentsData
+import com.gigforce.core.ScopedStorageConstants
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.Lce
 import com.gigforce.core.utils.Lse
+import com.gigforce.core.utils.NavFragmentsData
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -55,7 +57,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class AddProfilePictureFragment : Fragment(),
-    ClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener,IOnBackPressedOverride {
+    ClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener, IOnBackPressedOverride {
 
     private val viewModel: UserDetailsViewModel by viewModels()
     private val profileViewModel: ProfileViewModel by viewModels()
@@ -66,6 +68,7 @@ class AddProfilePictureFragment : Fragment(),
     private var cameFromEnrollment = false
     private var cameFromOnboarding = false
     private var navFragmentsData: NavFragmentsData? = null
+
     @Inject
     lateinit var navigation: INavigation
 
@@ -119,7 +122,8 @@ class AddProfilePictureFragment : Fragment(),
             viewModel.getProfileForUser(userId)
         } else {
             val isRequirementMode = mode != EnrollmentConstants.MODE_ENROLLMENT_REQUIREMENT
-            submitBtn.text = if (isRequirementMode) getString(R.string.change_photo_amb) else getString(R.string.next_amb)
+            submitBtn.text =
+                if (isRequirementMode) getString(R.string.change_photo_amb) else getString(R.string.next_amb)
             skipButton.isVisible = isRequirementMode
             viewModel.getProfileForUser(userId)
         }
@@ -264,28 +268,49 @@ class AddProfilePictureFragment : Fragment(),
     }
 
     private fun hasStoragePermissions(): Boolean {
-        return ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.READ_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.CAMERA
-        ) == PackageManager.PERMISSION_GRANTED
+
+        if (Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
+
+            return ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        } else {
+
+            return ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        }
     }
 
     private fun requestStoragePermission() {
 
-        requestPermissions(
-            arrayOf(
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.CAMERA
-            ),
-            REQUEST_STORAGE_PERMISSION
-        )
+        if (Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
+
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.CAMERA
+                ),
+                REQUEST_STORAGE_PERMISSION
+            )
+        } else {
+
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.CAMERA
+                ),
+                REQUEST_STORAGE_PERMISSION
+            )
+        }
     }
 
     private fun showAlertDialog(title: String, message: String) {

@@ -12,6 +12,7 @@ import android.graphics.Bitmap
 import android.media.MediaMetadataRetriever
 import android.media.ThumbnailUtils
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.provider.OpenableColumns
@@ -26,10 +27,10 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.net.toUri
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -47,15 +48,20 @@ import com.gigforce.common_ui.chat.models.ChatGroup
 import com.gigforce.common_ui.chat.models.ChatMessage
 import com.gigforce.common_ui.chat.models.VideoInfo
 import com.gigforce.core.PermissionUtils
+import com.gigforce.core.ScopedStorageConstants
 import com.gigforce.core.StringConstants
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.date.DateHelper
+import com.gigforce.core.documentFileHelper.DocumentPrefHelper
+import com.gigforce.core.documentFileHelper.DocumentTreeDelegate
+import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toDisplayText
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.recyclerView.CoreRecyclerView
 import com.gigforce.modules.feature_chat.ChatNavigation
 import com.gigforce.modules.feature_chat.R
+import com.gigforce.modules.feature_chat.filemanager.ChatFileManager
 import com.gigforce.modules.feature_chat.models.ChatMessageWrapper
 import com.gigforce.modules.feature_chat.models.SharedFile
 import com.gigforce.modules.feature_chat.screens.vm.ChatPageViewModel
@@ -84,6 +90,29 @@ class ChatPageFragment : Fragment(),
     @Inject
     lateinit var navigation: INavigation
 
+    @Inject
+    lateinit var documentPrefHelper: DocumentPrefHelper
+
+    @Inject
+    lateinit var documentTreeDelegate : DocumentTreeDelegate
+
+    private val openDocumentTreeContract = registerForActivityResult(
+        ActivityResultContracts.OpenDocumentTree()
+    ) {
+        if (it == null) return@registerForActivityResult
+
+        documentTreeDelegate.handleDocumentTreeSelectionResult(
+            context = requireContext(),
+            uri = it,
+            onSuccess = {
+                handleStorageTreeSelectedResult()
+            },
+            onFailure = {
+                handleStorageTreeSelectionFailure(it)
+            }
+        )
+    }
+
     private val chatNavigation: ChatNavigation by lazy {
         ChatNavigation(navigation)
     }
@@ -92,6 +121,9 @@ class ChatPageFragment : Fragment(),
     private lateinit var chatRecyclerView: CoreRecyclerView
     private lateinit var chatFooter: ChatFooter
     private var cameFromLinkInOtherChat: Boolean = false
+    private lateinit var mainChatLayout: View
+    private lateinit var needStorageAccessLayout: View
+    private lateinit var requestStorageAccessButton: View
 
     private val viewModel: ChatPageViewModel by viewModels()
     private val groupChatViewModel: GroupChatViewModel by lazy {
@@ -109,24 +141,29 @@ class ChatPageFragment : Fragment(),
         ChatLocalDirectoryReferenceManager()
     }
 
-    private val imageCropOptions: ImageCropOptions
-        get() {
+    private val chatFileManager: ChatFileManager by lazy {
+        ChatFileManager(requireContext(), documentPrefHelper)
+    }
 
-            if (!chatLocalDirectoryReferenceManager.imagesDirectoryRef.exists()) {
-                chatLocalDirectoryReferenceManager.imagesDirectoryRef.mkdirs()
+    private fun getImageCropOptions(
+        shouldCreatedDestinationFile : Boolean
+    ) : ImageCropOptions {
+
+
+        return ImageCropOptions
+            .Builder()
+            .shouldOpenImageCrop(true)
+            .setShouldEnableFaceDetector(false)
+            .shouldEnableFreeCrop(true).apply {
+
+                if(shouldCreatedDestinationFile){
+                    val image = chatFileManager.createImageFile()
+                    setOutputFileUri(image)
+                    Log.d("ChatPage","creating file ...")
+                }
             }
-
-            val newFileName = "Chat-${DateHelper.getFullDateTimeStamp()}.png"
-            val imageFile = File(chatLocalDirectoryReferenceManager.imagesDirectoryRef, newFileName)
-
-            return ImageCropOptions
-                .Builder()
-                .shouldOpenImageCrop(true)
-                .setShouldEnableFaceDetector(false)
-                .shouldEnableFreeCrop(true)
-                .setOutputFileUri(imageFile.toUri())
-                .build()
-        }
+            .build()
+    }
 
     private val messageSwipeController: MessageSwipeController by lazy {
         MessageSwipeController(requireContext(), this)
@@ -162,14 +199,55 @@ class ChatPageFragment : Fragment(),
         super.onViewCreated(view, savedInstanceState)
         getDataFromIntents(arguments, savedInstanceState)
         validateIfRequiredDataIsAvailable()
+        findView(view)
         StatusBarUtil.setColorNoTranslucent(
             requireActivity(),
             ResourcesCompat.getColor(resources, R.color.lipstick_2, null)
         )
 
-        checkForPermissionElseRequest()
+        if(Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
+
+            if (!documentTreeDelegate.storageTreeSelected()) {
+                showPermissionRequiredLayout()
+            } else {
+                showChatLayout()
+                initChat()
+            }
+        } else{
+
+            if (!isStoragePermissionGranted()) {
+                showPermissionRequiredLayout()
+                askForStoragePermission()
+            } else {
+                showChatLayout()
+                initChat()
+            }
+        }
+    }
+
+    private fun findView(view: View) {
+        mainChatLayout = view.findViewById(R.id.main_chat_layout)
+        needStorageAccessLayout = view.findViewById(R.id.storage_access_required_layout)
+        requestStorageAccessButton = view.findViewById(R.id.storage_access_btn)
+
+        requestStorageAccessButton.setOnClickListener {
+
+            if(Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
+                openDocumentTreeContract.launch(null)
+            } else{
+                askForStoragePermission()
+            }
+        }
+    }
+
+    private fun showPermissionRequiredLayout() {
+        mainChatLayout.gone()
+        needStorageAccessLayout.visible()
+    }
+
+    private fun initChat(){
         cancelAnyNotificationIfShown()
-        findViews(view)
+        findViews(requireView())
         init()
         manageNewMessageToContact()
         checkForChatTypeAndSubscribeToRespectiveViewModel()
@@ -186,7 +264,7 @@ class ChatPageFragment : Fragment(),
             sharedFile = imagesShared.first()
             cameraAndGalleryIntegrator.startImageCropper(
                 imagesShared.first().file,
-                imageCropOptions
+                getImageCropOptions(true)
             )
         }
 
@@ -221,6 +299,25 @@ class ChatPageFragment : Fragment(),
         if (!isStoragePermissionGranted()) {
             askForStoragePermission()
         }
+    }
+
+    private fun handleStorageTreeSelectedResult() {
+
+        needStorageAccessLayout.gone()
+        mainChatLayout.visible()
+
+        initChat()
+    }
+
+    private fun handleStorageTreeSelectionFailure(
+        e : Exception
+    ) {
+
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Select storage")
+            .setMessage(e.message.toString())
+            .setPositiveButton("Okay"){_,_ ->}
+            .show()
     }
 
     private fun cancelAnyNotificationIfShown() {
@@ -334,31 +431,31 @@ class ChatPageFragment : Fragment(),
             .groupInfo
             .observe(viewLifecycleOwner, {
 
-                    showGroupDetails(it)
-                    if (it.groupDeactivated) {
-                        chatFooter.disableInput("This group is deactivated by an admin")
-                        messageSwipeController.disableSwipe()
+                showGroupDetails(it)
+                if (it.groupDeactivated) {
+                    chatFooter.disableInput("This group is deactivated by an admin")
+                    messageSwipeController.disableSwipe()
                     //                        userBlockedOrRemovedLayout.text = getString(R.string.group_deactivated_by_admin_chat)
-                    } else if (it.currenUserRemovedFromGroup) {
-                        chatFooter.disableInput("You have been removed from this group")
-                        messageSwipeController.disableSwipe()
+                } else if (it.currenUserRemovedFromGroup) {
+                    chatFooter.disableInput("You have been removed from this group")
+                    messageSwipeController.disableSwipe()
                     //                        chatFooter.replyBlockedLayout.text = getString(R.string.removed_from_group_chat)
-                    } else if (it.onlyAdminCanPostInGroup) {
-                        chatFooter.visible()
+                } else if (it.onlyAdminCanPostInGroup) {
+                    chatFooter.visible()
 
-                        if (groupChatViewModel.isUserGroupAdmin()) {
-                            chatFooter.enableInput()
-                            messageSwipeController.enableSwipe()
-                        } else {
-                            chatFooter.disableInput("Only admins can post in this group")
-                            messageSwipeController.disableSwipe()
-//                                                    chatFooter.replyBlockedLayout.text = getString(R.string.only_admin_can_post_chat)
-                        }
-                    } else {
+                    if (groupChatViewModel.isUserGroupAdmin()) {
                         chatFooter.enableInput()
                         messageSwipeController.enableSwipe()
+                    } else {
+                        chatFooter.disableInput("Only admins can post in this group")
+                        messageSwipeController.disableSwipe()
+//                                                    chatFooter.replyBlockedLayout.text = getString(R.string.only_admin_can_post_chat)
                     }
-                })
+                } else {
+                    chatFooter.enableInput()
+                    messageSwipeController.enableSwipe()
+                }
+            })
 
 
         groupChatViewModel
@@ -546,16 +643,16 @@ class ChatPageFragment : Fragment(),
                     )
                 }
 
-                    if (it.isUserBlocked) {
-                        chatFooter.disableInput("You've blocked this contact")
-                        messageSwipeController.disableSwipe()
+                if (it.isUserBlocked) {
+                    chatFooter.disableInput("You've blocked this contact")
+                    messageSwipeController.disableSwipe()
 //                        userBlockedOrRemovedLayout.text = getString(R.string.you_have_blocked_chat)
 
-                    } else {
-                        chatFooter.enableInput()
-                        messageSwipeController.enableSwipe()
-                    }
-                })
+                } else {
+                    chatFooter.enableInput()
+                    messageSwipeController.enableSwipe()
+                }
+            })
 
         viewModel.messages
             .observe(viewLifecycleOwner, { messages ->
@@ -571,31 +668,35 @@ class ChatPageFragment : Fragment(),
             })
 
         viewModel.headerInfo
-                .observe(viewLifecycleOwner, {
+            .observe(viewLifecycleOwner, {
 
-                    if (it.isBlocked) {
-                        chatFooter.disableInput("You've blocked this contact")
-                        messageSwipeController.disableSwipe()
+                if (it.isBlocked) {
+                    chatFooter.disableInput("You've blocked this contact")
+                    messageSwipeController.disableSwipe()
 //                        userBlockedOrRemovedLayout.text = getString(R.string.you_have_blocked_chat)
-                    } else {
-                        chatFooter.enableInput()
-                        messageSwipeController.enableSwipe()
-                    }
+                } else {
+                    chatFooter.enableInput()
+                    messageSwipeController.enableSwipe()
+                }
 
-                    if (it.isOtherUserOnline) {
-                        toolbar.showSubtitle("Online")
+                if (it.isOtherUserOnline) {
+                    toolbar.showSubtitle("Online")
 //                        toolbar.showSubtitle(getString(R.string.offline_chat))
-                    } else {
-                        if (it.lastUserStatusActivityAt != 0L) {
+                } else {
+                    if (it.lastUserStatusActivityAt != 0L) {
 
                         val timeStamp = Timestamp(it.lastUserStatusActivityAt)
                         val date = Date(timeStamp.time)
 
                         var timeToDisplayText = ""
                         timeToDisplayText = if (DateUtils.isToday(date.time)) {
-                            getString(R.string.last_seen_today_chat)+"${date.toDisplayText()}"
+                            getString(R.string.last_seen_today_chat) + "${date.toDisplayText()}"
                         } else {
-                            getString(R.string.last_seen_chat) +"${SimpleDateFormat("MMM dd yyyy").format(date)}"
+                            getString(R.string.last_seen_chat) + "${
+                                SimpleDateFormat("MMM dd yyyy").format(
+                                    date
+                                )
+                            }"
                         }
                         toolbar.showSubtitle(timeToDisplayText)
                     } else {
@@ -614,10 +715,10 @@ class ChatPageFragment : Fragment(),
 
     private fun showErrorDialog(error: String) {
         MaterialAlertDialogBuilder(requireContext())
-                .setTitle(getString(R.string.message_chat))
-                .setMessage(error)
-                .setPositiveButton(getString(R.string.okay_chat)) { _, _ -> }
-                .show()
+            .setTitle(getString(R.string.message_chat))
+            .setMessage(error)
+            .setPositiveButton(getString(R.string.okay_chat)) { _, _ -> }
+            .show()
     }
 
 
@@ -643,10 +744,10 @@ class ChatPageFragment : Fragment(),
             popUp.setOnMenuItemClickListener(this)
             popUp.inflate(R.menu.menu_chat_toolbar)
             popUp.menu.findItem(R.id.action_block).title =
-                    if (chatFooter.isTypingEnabled())
-                        getString(R.string.block_chat)
-                    else
-                        getString(R.string.unblock_chat)
+                if (chatFooter.isTypingEnabled())
+                    getString(R.string.block_chat)
+                else
+                    getString(R.string.unblock_chat)
             popUp.show()
         })
 
@@ -726,14 +827,26 @@ class ChatPageFragment : Fragment(),
 
     private fun askForStoragePermission() {
         Log.v(TAG, "Permission Required. Requesting Permission")
-        requestPermissions(
+
+        if (Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
+
+            requestPermissions(
             arrayOf(
-                android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                android.Manifest.permission.CAMERA
+                Manifest.permission.CAMERA
             ),
             REQUEST_STORAGE_PERMISSION
-        )
+            )
+        } else {
+
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.CAMERA
+                ),
+                REQUEST_STORAGE_PERMISSION
+            )
+        }
     }
 
     private fun pickVideo() {
@@ -832,6 +945,9 @@ class ChatPageFragment : Fragment(),
             }
 
             if (allPermsGranted) {
+                showChatLayout()
+                initChat()
+
                 if (selectedOperation == ChatConstants.OPERATION_PICK_IMAGE) {
                     pickImage()
                     selectedOperation = -1
@@ -844,13 +960,17 @@ class ChatPageFragment : Fragment(),
                 }
             } else
                 Toast.makeText(
-                        requireContext(),
-                        getString(R.string.grant_storage_permission_chat),
-                        Toast.LENGTH_SHORT
+                    requireContext(),
+                    getString(R.string.grant_storage_permission_chat),
+                    Toast.LENGTH_SHORT
                 ).show()
         }
     }
 
+    private fun showChatLayout() {
+        needStorageAccessLayout.gone()
+        mainChatLayout.visible()
+    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -867,7 +987,7 @@ class ChatPageFragment : Fragment(),
             CameraAndGalleryIntegrator.REQUEST_CAPTURE_IMAGE,
             CameraAndGalleryIntegrator.REQUEST_PICK_IMAGE,
             CameraAndGalleryIntegrator.REQUEST_CROP,
-            ImageCropActivity.CROP_RESULT_CODE-> {
+            ImageCropActivity.CROP_RESULT_CODE -> {
 
 
                 if (resultCode == Activity.RESULT_OK) {
@@ -876,7 +996,7 @@ class ChatPageFragment : Fragment(),
                         requestCode,
                         resultCode,
                         data,
-                        imageCropOptions,
+                        getImageCropOptions(requestCode == CameraAndGalleryIntegrator.REQUEST_CAPTURE_IMAGE || requestCode == CameraAndGalleryIntegrator.REQUEST_PICK_IMAGE),
                         this@ChatPageFragment
                     )
                 }
@@ -1075,18 +1195,27 @@ class ChatPageFragment : Fragment(),
 
     private fun isStoragePermissionGranted(): Boolean {
 
-        return ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.READ_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.CAMERA
-        ) == PackageManager.PERMISSION_GRANTED
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+
+            return ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+
+        } else {
+            return ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED
+                    && ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED
+                    && ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        }
     }
 
     fun checkForContact(number: String?, name: String): String {
@@ -1107,16 +1236,16 @@ class ChatPageFragment : Fragment(),
                 ContactsContract.PhoneLookup.DISPLAY_NAME
             )
             val cur: Cursor? = requireActivity().contentResolver.query(
-                    lookupUri,
-                    mPhoneNumberProjection,
-                    null,
-                    null,
-                    null
+                lookupUri,
+                mPhoneNumberProjection,
+                null,
+                null,
+                null
             )
             cur.use { cur ->
                 if (cur?.moveToFirst() == true) {
                     nameFromDB =
-                            cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY))
+                        cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY))
 
                 }
             }
@@ -1131,7 +1260,7 @@ class ChatPageFragment : Fragment(),
         val activity = activity ?: return
 
         val inputMethodManager =
-                activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(activity.currentFocus?.windowToken, 0)
     }
 
@@ -1151,27 +1280,27 @@ class ChatPageFragment : Fragment(),
 
     override fun imageResult(uri: Uri) {
         sendImageMessage(
-                uri,
-                sharedFile?.text ?: ""
+            uri,
+            sharedFile?.text ?: ""
         )
         sharedFile = null
     }
 
     private fun sendImageMessage(
-            uri: Uri,
-            text: String
+        uri: Uri,
+        text: String
     ) {
         if (chatType == ChatConstants.CHAT_TYPE_USER)
             viewModel.sendNewImageMessage(
-                    context = requireContext().applicationContext,
-                    text = text,
-                    uri = uri
+                context = requireContext().applicationContext,
+                text = text,
+                uri = uri
             )
         else {
             groupChatViewModel.sendNewImageMessage(
-                    context = requireContext().applicationContext,
-                    text = text,
-                    uri = uri
+                context = requireContext().applicationContext,
+                text = text,
+                uri = uri
             )
         }
     }

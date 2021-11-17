@@ -10,9 +10,9 @@ import com.gigforce.client_activation.client_activation.info.JPApplicationDOJ
 import com.gigforce.client_activation.client_activation.info.hubform.BusinessLocationDM
 import com.gigforce.client_activation.client_activation.info.hubform.HubServerDM
 import com.gigforce.client_activation.client_activation.repository.AadhaarDetailsRepository
+import com.gigforce.core.StringConstants
 import com.gigforce.core.datamodels.City
 import com.gigforce.core.datamodels.State
-import com.gigforce.core.datamodels.client_activation.JpApplication
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.datamodels.verification.AadhaarDetailsDataModel
 import com.gigforce.core.datamodels.verification.VerificationBaseModel
@@ -20,9 +20,9 @@ import com.gigforce.core.extensions.getOrThrow
 import com.gigforce.core.extensions.toFirebaseTimeStamp
 import com.gigforce.core.extensions.updateOrThrow
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -30,8 +30,8 @@ class JoiningFormViewModel : ViewModel() {
     var uid = FirebaseAuth.getInstance().currentUser?.uid!!
     val updatedResult: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
 
-    val _dojObserver : MutableLiveData<JPApplicationDOJ> = MutableLiveData<JPApplicationDOJ>()
-    val dojObserver : LiveData<JPApplicationDOJ> = _dojObserver
+    val _dojObserver: MutableLiveData<JPApplicationDOJ> = MutableLiveData<JPApplicationDOJ>()
+    val dojObserver: LiveData<JPApplicationDOJ> = _dojObserver
 //    private val _observableAddApplicationSuccess: MutableLiveData<Boolean> = MutableLiveData()
 //    val observableAddApplicationSuccess: MutableLiveData<Boolean> = _observableAddApplicationSuccess
 
@@ -42,26 +42,27 @@ class JoiningFormViewModel : ViewModel() {
 
     val caCitiesResult: MutableLiveData<MutableList<City>> = MutableLiveData<MutableList<City>>()
 
-    val verificationResult: MutableLiveData<VerificationBaseModel> = MutableLiveData<VerificationBaseModel>()
+    val verificationResult: MutableLiveData<VerificationBaseModel> =
+        MutableLiveData<VerificationBaseModel>()
 
     val _hub_states = MutableLiveData<List<String>>()
-    val hub_states : LiveData<List<String>> = _hub_states
+    val hub_states: LiveData<List<String>> = _hub_states
 
     val _hub_cities = MutableLiveData<List<String>>()
-    val hub_cities : LiveData<List<String>> = _hub_cities
+    val hub_cities: LiveData<List<String>> = _hub_cities
 
     val _hub_names = MutableLiveData<List<String>>()
-    val hub_names : LiveData<List<String>> = _hub_names
+    val hub_names: LiveData<List<String>> = _hub_names
 
     val _hub_submitted_data = MutableLiveData<HubServerDM>()
-    val hub_submitted_data : LiveData<HubServerDM> = _hub_submitted_data
+    val hub_submitted_data: LiveData<HubServerDM> = _hub_submitted_data
 
     val _profileData = MutableLiveData<ProfileData>()
-    val profileData : LiveData<ProfileData> = _profileData
+    val profileData: LiveData<ProfileData> = _profileData
     val _allBusinessLocactionsList = MutableLiveData<List<BusinessLocationDM>>()
     val allBusinessLocactionsList: LiveData<List<BusinessLocationDM>> = _allBusinessLocactionsList
 
-    fun getStates()= viewModelScope.launch {
+    fun getStates() = viewModelScope.launch {
         try {
             val states = aadharDetailsRepo.getStatesFromDb()
             statesResult.postValue(states)
@@ -150,8 +151,9 @@ class JoiningFormViewModel : ViewModel() {
         _hub_cities.value = hubCitiesList
     }
 
-    fun loadHubNames(state: String,city : String) {
-        var filteredHub = allBusinessLocactionsList.value?.filter { it.state?.name == state }?.filter { it.city?.name == city }
+    fun loadHubNames(state: String, city: String) {
+        var filteredHub = allBusinessLocactionsList.value?.filter { it.state?.name == state }
+            ?.filter { it.city?.name == city }
         var hubList = arrayListOf<String>()
         filteredHub?.forEach {
             it.name?.let {
@@ -160,7 +162,6 @@ class JoiningFormViewModel : ViewModel() {
         }
         _hub_names.value = hubList
     }
-
 
 
     fun loadHubData(mJobProfileId: String) {
@@ -189,18 +190,32 @@ class JoiningFormViewModel : ViewModel() {
     }
 
 
-    fun submitJoiningFormData(data: AadhaarDetailsDataModel, mJobProfileId : String, state:String, city:String, hubname:String, email: String,
-                              dateOfBirth: Date,
-                              fName: String,
-                              maritalStatus: String,
-                              emergencyContact: String,
-                                dateOfJoining : Date) = viewModelScope.launch {
+    fun submitJoiningFormData(
+        data: AadhaarDetailsDataModel,
+        mJobProfileId: String,
+        state: String,
+        city: String,
+        hubname: String,
+        email: String,
+        dateOfBirth: Date,
+        fName: String,
+        maritalStatus: String,
+        emergencyContact: String,
+        dateOfJoining: Date
+    ) = viewModelScope.launch {
         try {
             var aadharDetailUpdated = aadharDetailsRepo.setAadhaarDetailsFromJoiningForm(uid, data)
-            if(aadharDetailUpdated){
-                aadharDetailUpdated = aadharDetailsRepo.setProfileRelatedData(uid,email,dateOfBirth,fName,maritalStatus,emergencyContact)
+            if (aadharDetailUpdated) {
+                aadharDetailUpdated = aadharDetailsRepo.setProfileRelatedData(
+                    uid,
+                    email,
+                    dateOfBirth,
+                    fName,
+                    maritalStatus,
+                    emergencyContact
+                )
             }
-            if(aadharDetailUpdated) {
+            if (aadharDetailUpdated) {
                 val hubSubmissionUpdated = hubSubmissionRepo.submitHubData(
                     state,
                     getStateId(state, city, hubname) ?: "",
@@ -210,30 +225,29 @@ class JoiningFormViewModel : ViewModel() {
                     getHubDocId(state, city, hubname) ?: "",
                     mJobProfileId
                 )
-                if(hubSubmissionUpdated?.id?.isNotBlank() == true){
+                if (hubSubmissionUpdated?.id?.isNotBlank() == true) {
                     hubSubmissionUpdated.application.forEach { draft ->
                         if (draft.type == "jp_hub_location" || draft.type == "aadhar_hub_questionnaire") {
                             draft.isDone = true
                         }
                     }
+
                     FirebaseFirestore.getInstance()
                         .collection("JP_Applications")
-                        .document(hubSubmissionUpdated?.id)
+                        .document(hubSubmissionUpdated.id)
                         .updateOrThrow(
-                            "application",
-                            hubSubmissionUpdated.application
-                        )
-                    FirebaseFirestore.getInstance()
-                        .collection("JP_Applications")
-                        .document(hubSubmissionUpdated?.id)
-                        .updateOrThrow(
-                            mapOf("dateOfJoining" to dateOfJoining.toFirebaseTimeStamp())
+                            mapOf(
+                                "dateOfJoining" to dateOfJoining.toFirebaseTimeStamp(),
+                                "application" to
+                                        hubSubmissionUpdated.application,
+                                "updatedAt" to Timestamp.now(),
+                                "updatedBy" to StringConstants.APP.value
+                            )
                         )
                     updatedResult.postValue(true)
-                }else
-                updatedResult.postValue(false)
-            }
-            else updatedResult.postValue(false)
+                } else
+                    updatedResult.postValue(false)
+            } else updatedResult.postValue(false)
 
         } catch (e: Exception) {
             e.printStackTrace()
@@ -241,50 +255,51 @@ class JoiningFormViewModel : ViewModel() {
         }
     }
 
-    fun getHubDocId(state: String,city:String, hub: String): String? {
-        return _allBusinessLocactionsList.value?.filter { it.state?.name == state && it.name == hub && it.city?.name == city}
+    fun getHubDocId(state: String, city: String, hub: String): String? {
+        return _allBusinessLocactionsList.value?.filter { it.state?.name == state && it.name == hub && it.city?.name == city }
             ?.get(0)?.id
     }
 
-    fun getStateId(state: String,city:String, hub: String): String? {
+    fun getStateId(state: String, city: String, hub: String): String? {
         return _allBusinessLocactionsList.value?.filter { it.state?.name == state && it.name == hub && it.city?.name == city }
             ?.get(0)?.state?.id
     }
 
-    fun getCityId(state: String,city:String, hub: String):String?{
-        return _allBusinessLocactionsList.value?.filter { it.state?.name == state && it.name == hub && it.city?.name == city }?.get(0)?.city?.id
+    fun getCityId(state: String, city: String, hub: String): String? {
+        return _allBusinessLocactionsList.value?.filter { it.state?.name == state && it.name == hub && it.city?.name == city }
+            ?.get(0)?.city?.id
     }
 
-    fun loadProfileData()= viewModelScope.launch {
+    fun loadProfileData() = viewModelScope.launch {
         try {
-            var profileDataSnapShot = FirebaseFirestore.getInstance().collection("Profiles").document(uid).getOrThrow()
+            var profileDataSnapShot =
+                FirebaseFirestore.getInstance().collection("Profiles").document(uid).getOrThrow()
             var profileData = profileDataSnapShot.toObject(ProfileData::class.java)
             profileData?.let {
                 _profileData.postValue(it)
             }
 
-        }
-        catch (e:Exception){
+        } catch (e: Exception) {
 
         }
 
     }
 
-     fun loadApplicationDataDOJ(mJobProfileId: String) = viewModelScope.launch {
-         try {
-             var jpApplicationSnapshot =
-                 FirebaseFirestore.getInstance().collection("JP_Applications")
-                     .whereEqualTo("jpid", mJobProfileId)
-                     .whereEqualTo(
-                         "gigerId",
-                         FirebaseAuthStateListener.getInstance()
-                             .getCurrentSignInUserInfoOrThrow().uid
-                     ).getOrThrow()
-             var jpApplication =  jpApplicationSnapshot.toObjects(JPApplicationDOJ::class.java)[0]
-             _dojObserver.postValue(jpApplication)
-         }catch (e:Exception){
+    fun loadApplicationDataDOJ(mJobProfileId: String) = viewModelScope.launch {
+        try {
+            var jpApplicationSnapshot =
+                FirebaseFirestore.getInstance().collection("JP_Applications")
+                    .whereEqualTo("jpid", mJobProfileId)
+                    .whereEqualTo(
+                        "gigerId",
+                        FirebaseAuthStateListener.getInstance()
+                            .getCurrentSignInUserInfoOrThrow().uid
+                    ).getOrThrow()
+            var jpApplication = jpApplicationSnapshot.toObjects(JPApplicationDOJ::class.java)[0]
+            _dojObserver.postValue(jpApplication)
+        } catch (e: Exception) {
 
-         }
+        }
 
     }
 

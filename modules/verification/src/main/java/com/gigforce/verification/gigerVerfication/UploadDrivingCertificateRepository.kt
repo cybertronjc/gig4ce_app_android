@@ -1,6 +1,6 @@
 package com.gigforce.verification.gigerVerfication
 
-import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
+import com.gigforce.core.fb.BaseFirestoreDBRepository
 
 class UploadDrivingCertificateRepository : BaseFirestoreDBRepository() {
     override fun getCollectionName(): String {

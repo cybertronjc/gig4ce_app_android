@@ -1,4 +1,4 @@
-package com.gigforce.lead_management.common_views
+package com.gigforce.common_ui.dynamic_fields.types
 
 import android.content.Context
 import android.os.Parcelable
@@ -12,24 +12,27 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
+import com.gigforce.common_ui.R
+import com.gigforce.common_ui.databinding.LayoutDynamicFieldTextFieldBinding
+import com.gigforce.common_ui.dynamic_fields.DynamicFieldView
+import com.gigforce.common_ui.dynamic_fields.data.DataFromDynamicInputField
+import com.gigforce.common_ui.dynamic_fields.data.InputTypes
+import com.gigforce.common_ui.dynamic_fields.data.DynamicField
+import com.gigforce.common_ui.dynamic_fields.data.FieldTypes
 import com.gigforce.common_ui.ext.addMandatorySymbolToTextEnd
-import com.gigforce.common_ui.viewdatamodels.leadManagement.DataFromDynamicInputField
-import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfileDependentDynamicInputField
 import com.gigforce.core.extensions.*
-import com.gigforce.lead_management.R
-import com.gigforce.lead_management.databinding.LayoutDynamicFieldBinding
 import kotlinx.android.parcel.Parcelize
 
 
-class JobProfileRelatedDynamicFieldView(
+class DynamicTextFieldView(
     context: Context,
     attrs: AttributeSet?
 ) : LinearLayout(
     context,
     attrs
-) {
-    private var viewBinding: LayoutDynamicFieldBinding
-    private lateinit var viewData: JobProfileDependentDynamicInputField
+), DynamicFieldView {
+    private var viewBinding: LayoutDynamicFieldTextFieldBinding
+    private lateinit var viewData: DynamicField
     private var editTextString: String = ""
 
     init {
@@ -38,7 +41,7 @@ class JobProfileRelatedDynamicFieldView(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
-        viewBinding = LayoutDynamicFieldBinding.inflate(
+        viewBinding = LayoutDynamicFieldTextFieldBinding.inflate(
             LayoutInflater.from(context),
             this,
             true
@@ -49,8 +52,8 @@ class JobProfileRelatedDynamicFieldView(
         }
     }
 
-    fun bind(
-        fieldDetails: JobProfileDependentDynamicInputField
+    override fun bind(
+        fieldDetails: DynamicField
     ) {
         viewData = fieldDetails
         tag = id //setting id of dynamic view as view tag to identify layout at runtime
@@ -70,7 +73,7 @@ class JobProfileRelatedDynamicFieldView(
             viewBinding.editText.setText(prefillText)
         } else {
             val hint =
-                "${resources.getString(R.string.type_lead)} $title ${resources.getString(R.string.here_lead)}"
+                "${resources.getString(R.string.common_type)} $title ${resources.getString(R.string.common_here)}"
             viewBinding.editText.setHint(hint)
         }
     }
@@ -85,7 +88,7 @@ class JobProfileRelatedDynamicFieldView(
         viewBinding.titleTextview.text = title
     }
 
-    private fun settingFieldAsOptionalOrMandatory(fieldDetails: JobProfileDependentDynamicInputField) {
+    private fun settingFieldAsOptionalOrMandatory(fieldDetails: DynamicField) {
         if (fieldDetails.mandatory) {
             viewBinding.optionalTextview.gone()
             viewBinding.titleTextview.addMandatorySymbolToTextEnd()
@@ -96,74 +99,10 @@ class JobProfileRelatedDynamicFieldView(
 
     private fun setInputType(inputType: String?) {
         viewBinding.editText.inputType = when (inputType) {
-            JobProfileDependentDynamicInputField.INPUT_TYPE_NUMBER -> InputType.TYPE_CLASS_NUMBER
-            JobProfileDependentDynamicInputField.INPUT_TYPE_NUMBER_WITH_DECIMAL ->InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+            InputTypes.INPUT_TYPE_NUMBER -> InputType.TYPE_CLASS_NUMBER
+            InputTypes.INPUT_TYPE_NUMBER_WITH_DECIMAL -> InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
             else -> InputType.TYPE_CLASS_TEXT
         }
-    }
-
-    private fun setError(
-        error: SpannedString
-    ) {
-        viewBinding.errorLayout.root.visible()
-        viewBinding.errorLayout.errorTextview.text = error
-    }
-
-    private fun removeError() {
-        viewBinding.errorLayout.errorTextview.text = null
-        viewBinding.errorLayout.root.gone()
-    }
-
-    fun validateDataReturnIfValid(): DataFromDynamicInputField? {
-        val valueFilled = viewBinding.editText.getTextIfNotBlankElseNull()
-
-        if (viewData.mandatory) {
-
-            val isInputTypeNumber =
-                viewData.inputType == JobProfileDependentDynamicInputField.INPUT_TYPE_NUMBER_WITH_DECIMAL ||
-                        viewData.inputType == JobProfileDependentDynamicInputField.INPUT_TYPE_NUMBER
-
-            if (isInputTypeNumber) {
-                val valueInFloat = valueFilled?.toFloatOrNull()
-                if (valueInFloat == null || valueInFloat <= 0.0f) {
-
-                    setError(buildSpannedString {
-                        bold { append(
-                            resources.getString(R.string.note_with_colon_lead)
-                        )}
-                        append(" Please fill a non zero value for ${viewData.title}")
-                    })
-                    return null
-                }
-            } else {
-                if (valueFilled.isNullOrBlank()) {
-
-                    setError(buildSpannedString {
-                        bold { append(
-                            resources.getString(R.string.note_with_colon_lead)
-                        )}
-                        append(" Please fill a value for ${viewData.title}")
-                    })
-                    return null
-                }
-            }
-        }
-
-        removeError()
-        return DataFromDynamicInputField(
-            id = viewData.id,
-            title = viewData.title,
-            value = valueFilled
-        )
-    }
-
-    fun getFilledData(): DataFromDynamicInputField {
-        val valueFilled = viewBinding.editText.text?.toString()
-        return DataFromDynamicInputField(
-            id = viewData.id,
-            title = viewData.title,
-            value = valueFilled
-        )
     }
 
 
@@ -182,11 +121,101 @@ class JobProfileRelatedDynamicFieldView(
             viewBinding.editText.setText(editTextString)
     }
 
+    override fun isEnteredOrSelectedDataValid(): Boolean {
+        val valueFilled = viewBinding.editText.getTextIfNotBlankElseNull()
+
+        if (viewData.mandatory) {
+
+            val isInputTypeNumber = viewData.inputType == InputTypes.INPUT_TYPE_NUMBER_WITH_DECIMAL
+                    || viewData.inputType == InputTypes.INPUT_TYPE_NUMBER
+
+            if (isInputTypeNumber) {
+                val valueInFloat = valueFilled?.toFloatOrNull()
+                if (valueInFloat == null || valueInFloat <= 0.0f) {
+                    return false
+                }
+            } else {
+                if (valueFilled.isNullOrBlank()) {
+                    return false
+                }
+            }
+        }
+
+        return true
+    }
+
+
+
+    override fun setError(
+        error: SpannedString
+    ) {
+        viewBinding.errorLayout.root.visible()
+        viewBinding.errorLayout.errorTextview.text = error
+    }
+
+    override fun removeError() {
+        viewBinding.errorLayout.errorTextview.text = null
+        viewBinding.errorLayout.root.gone()
+    }
+
+    override fun validateDataAndReturnDataElseNull(): DataFromDynamicInputField? {
+        return if(isEnteredOrSelectedDataValid()){
+            removeError()
+            getUserEnteredOrSelectedData()
+        } else{
+            checkDataAndSetError()
+            null
+        }
+    }
+
+    private fun getUserEnteredOrSelectedData(): DataFromDynamicInputField {
+        val valueFilled = viewBinding.editText.text?.toString()
+        return DataFromDynamicInputField(
+            id = viewData.id,
+            title = viewData.title,
+            value = valueFilled,
+            fieldType = FieldTypes.TEXT_FIELD
+        )
+    }
+
+    private fun checkDataAndSetError() {
+
+        val valueFilled = viewBinding.editText.getTextIfNotBlankElseNull()
+
+        if (viewData.mandatory) {
+
+            val isInputTypeNumber =
+                viewData.inputType == InputTypes.INPUT_TYPE_NUMBER_WITH_DECIMAL ||
+                        viewData.inputType == InputTypes.INPUT_TYPE_NUMBER
+
+            if (isInputTypeNumber) {
+                val valueInFloat = valueFilled?.toFloatOrNull()
+                if (valueInFloat == null || valueInFloat <= 0.0f) {
+
+                    setError(buildSpannedString {
+                        bold { append(
+                            resources.getString(R.string.common_note_with_colon)
+                        )}
+                        append(" Please fill a non zero value for ${viewData.title}")
+                    })
+                }
+            } else {
+                if (valueFilled.isNullOrBlank()) {
+
+                    setError(buildSpannedString {
+                        bold { append(
+                            resources.getString(R.string.common_note_with_colon)
+                        )}
+                        append(" Please fill a value for ${viewData.title}")
+                    })
+                }
+            }
+        }
+    }
 
     @Parcelize
     class StateSavingObject(
         val parcelable: Parcelable?,
         val editTextText: String
     ) : View.BaseSavedState(parcelable)
-
 }

@@ -4,6 +4,7 @@ import com.gigforce.common_ui.remote.GigerAttendanceService
 import com.gigforce.common_ui.repository.gig.GigsRepository
 import com.gigforce.common_ui.viewdatamodels.GigStatus
 import com.gigforce.common_ui.viewdatamodels.gig.GigerAttendance
+import com.gigforce.core.StringConstants
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.extensions.updateOrThrow
@@ -76,6 +77,8 @@ class GigersAttendanceRepository constructor(
                 "declinedBy" to FieldValue.delete(),
                 "declineReason" to FieldValue.delete(),
                 "declinedOn" to FieldValue.delete(),
+                "updatedAt" to Timestamp.now(),
+                "updatedBy" to StringConstants.APP.value
             )
         )
 

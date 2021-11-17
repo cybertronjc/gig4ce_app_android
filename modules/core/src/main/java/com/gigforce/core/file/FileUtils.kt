@@ -44,6 +44,36 @@ object FileUtils {
         }
     }
 
+    fun writeResponseBodyToDisk(body: ResponseBody, outputStream: OutputStream): Boolean {
+        return try {
+            var inputStream: InputStream? = null
+            try {
+                val fileReader = ByteArray(4096)
+                val fileSize: Long = body.contentLength()
+                var fileSizeDownloaded: Long = 0
+                inputStream = body.byteStream()
+                while (true) {
+                    val read: Int = inputStream.read(fileReader)
+                    if (read == -1) {
+                        break
+                    }
+                    outputStream.write(fileReader, 0, read)
+                    fileSizeDownloaded += read.toLong()
+                    Log.d("DownloadPath", "file download: $fileSizeDownloaded of $fileSize")
+                }
+                outputStream.flush()
+                true
+            } catch (e: IOException) {
+                false
+            } finally {
+                inputStream?.close()
+                outputStream.close()
+            }
+        } catch (e: IOException) {
+            false
+        }
+    }
+
     fun isVirtualFile(context: Context, uri: Uri): Boolean {
 
         if (!DocumentsContract.isDocumentUri(context, uri)) {

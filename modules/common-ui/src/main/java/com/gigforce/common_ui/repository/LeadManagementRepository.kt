@@ -10,6 +10,7 @@ import com.gigforce.common_ui.remote.ReferralService
 import com.gigforce.common_ui.viewdatamodels.PendingJoiningItemDVM
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.common_ui.viewdatamodels.referral.ReferralRequest
+import com.gigforce.core.StringConstants
 import com.gigforce.core.datamodels.ambassador.*
 import com.gigforce.core.datamodels.auth.UserAuthStatusModel
 import com.gigforce.core.datamodels.profile.Contact
@@ -96,7 +97,9 @@ class LeadManagementRepository @Inject constructor(
             mapOf(
                 "reference.name" to name,
                 "reference.relation" to relation,
-                "reference.contactNo" to contactNo
+                "reference.contactNo" to contactNo,
+                "updatedAt" to Timestamp.now(),
+                "updatedBy" to StringConstants.APP.value
             )
         )
 
@@ -200,7 +203,9 @@ class LeadManagementRepository @Inject constructor(
                         "name" to name,
                         "uid" to userUid,
                         "tradeName" to tradeName,
-                        "jobProfileIcon" to jobProfileIcon
+                        "jobProfileIcon" to jobProfileIcon,
+                        "updatedAt" to Timestamp.now(),
+                        "updatedBy" to StringConstants.APP.value
                     )
                 )
 

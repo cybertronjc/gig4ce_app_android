@@ -9,6 +9,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
@@ -32,10 +33,7 @@ import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
-import com.gigforce.core.AppConstants
-import com.gigforce.core.IEventTracker
-import com.gigforce.core.StringConstants
-import com.gigforce.core.TrackingEventArgs
+import com.gigforce.core.*
 import com.gigforce.core.datamodels.verification.PanCardDataModel
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.gone
@@ -103,8 +101,10 @@ class PanCardFragment : Fragment(),
 
     @Inject
     lateinit var navigation: INavigation
+
     @Inject
     lateinit var eventTracker: IEventTracker
+
     @Inject
     lateinit var buildConfig: IBuildConfig
     private var FROM_CLIENT_ACTIVATON: Boolean = false
@@ -150,7 +150,7 @@ class PanCardFragment : Fragment(),
     }
 
     var allNavigationList = ArrayList<String>()
-    var intentBundle : Bundle? = null
+    var intentBundle: Bundle? = null
     private fun getDataFromIntent(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
             FROM_CLIENT_ACTIVATON =
@@ -366,8 +366,7 @@ class PanCardFragment : Fragment(),
             hideSoftKeyboard()
             if (viewBinding.toplayoutblock.isDocDontOptChecked() || !anyDataEntered || verificationScreenStatus == VerificationScreenStatus.VERIFIED || verificationScreenStatus == VerificationScreenStatus.STARTED_VERIFYING) {
                 checkForNextDoc()
-            }
-            else {
+            } else {
                 if (verificationScreenStatus == VerificationScreenStatus.FAILED) {
                     viewBinding.toplayoutblock.statusDialogLayoutvisibilityGone()
                 }
@@ -478,7 +477,8 @@ class PanCardFragment : Fragment(),
                 java.util.ArrayList(navigationsForBundle)
             )
             navigation.navigateTo(
-                allNavigationList.get(0),intentBundle)
+                allNavigationList.get(0), intentBundle
+            )
 //            navigation.navigateTo(
 //                allNavigationList.get(0),
 //                bundleOf(VerificationConstants.NAVIGATION_STRINGS to navigationsForBundle,if(FROM_CLIENT_ACTIVATON) StringConstants.FROM_CLIENT_ACTIVATON.value to true else StringConstants.FROM_CLIENT_ACTIVATON.value to false)
@@ -519,27 +519,50 @@ class PanCardFragment : Fragment(),
 
     private fun requestStoragePermission() {
 
-        requestPermissions(
-            arrayOf(
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.CAMERA
-            ),
-            REQUEST_STORAGE_PERMISSION
-        )
+        if (Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
+
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.CAMERA
+                ),
+                REQUEST_STORAGE_PERMISSION
+            )
+
+        } else {
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.CAMERA
+                ),
+                REQUEST_STORAGE_PERMISSION
+            )
+        }
+
+
     }
 
     private fun hasStoragePermissions(): Boolean {
-        return ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.READ_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.CAMERA
-        ) == PackageManager.PERMISSION_GRANTED
+
+        if (Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
+
+            return ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        } else {
+
+            return ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        }
     }
 
     private fun callKycOcrApi(path: Uri) {
@@ -638,19 +661,22 @@ class PanCardFragment : Fragment(),
             Log.d("ImageUri", imageUriResultCrop.toString())
             clickedImagePath = imageUriResultCrop
             showPanInfoCard(clickedImagePath!!)
-        }else if (requestCode == ImageCropActivity.CROP_RESULT_CODE && resultCode == Activity.RESULT_OK) {
-            val imageUriResultCrop: Uri? =  Uri.parse(data?.getStringExtra(ImageCropActivity.CROPPED_IMAGE_URL_EXTRA))
+        } else if (requestCode == ImageCropActivity.CROP_RESULT_CODE && resultCode == Activity.RESULT_OK) {
+            val imageUriResultCrop: Uri? =
+                Uri.parse(data?.getStringExtra(ImageCropActivity.CROPPED_IMAGE_URL_EXTRA))
             Log.d("ImageUri", imageUriResultCrop.toString())
             clickedImagePath = imageUriResultCrop
             showPanInfoCard(clickedImagePath!!)
         }
     }
+
     private fun startCropImage(imageUri: Uri): Unit {
         val photoCropIntent = Intent(context, ImageCropActivity::class.java)
         photoCropIntent.putExtra("outgoingUri", imageUri.toString())
         startActivityForResult(photoCropIntent, ImageCropActivity.CROP_RESULT_CODE)
 
     }
+
     private fun callKycVerificationApi() {
         var list = listOf(
 //            Data("name", viewBinding.nameTil.editText?.text.toString()),

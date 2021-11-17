@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.core.StringConstants
 import com.gigforce.core.datamodels.City
 import com.gigforce.core.datamodels.State
 import com.gigforce.core.datamodels.client_activation.JpApplication
@@ -16,6 +17,7 @@ import com.gigforce.core.di.repo.IAadhaarDetailsRepository
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.verification.mainverification.KycOcrResultModel
 import com.gigforce.verification.mainverification.VerificationKycRepo
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -106,9 +108,10 @@ class AadharDetailInfoViewModel @Inject constructor(private val aadharDetailsRep
                                             draft.isDone = true
                                         }
                                     }
+                                    var map = mapOf("application" to jpApplication.application, "updatedAt" to Timestamp.now(), "updatedBy" to StringConstants.APP.value)
                                     FirebaseFirestore.getInstance().collection("JP_Applications")
                                             .document(jp_application.documents[0].id)
-                                            .update("application", jpApplication.application)
+                                            .update(map)
                                             .addOnCompleteListener {
                                                 if (it.isSuccessful) {
                                                     _observableAddApplicationSuccess.value =

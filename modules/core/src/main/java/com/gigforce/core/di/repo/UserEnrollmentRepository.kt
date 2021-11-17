@@ -1,7 +1,7 @@
 package com.gigforce.core.di.repo
 
 import com.gigforce.core.AppConstants
-import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
+import com.gigforce.core.fb.BaseFirestoreDBRepository
 import com.gigforce.core.datamodels.ambassador.*
 import com.gigforce.core.datamodels.profile.Contact
 import com.gigforce.core.datamodels.profile.EnrollmentInfo

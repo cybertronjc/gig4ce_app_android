@@ -1,6 +1,6 @@
 package com.gigforce.wallet.models
 
-import com.gigforce.core.base.basefirestore.BaseFirestoreDataModel
+import com.gigforce.core.fb.BaseFirestoreDataModel
 
 data class QA(
     var question: String = "",

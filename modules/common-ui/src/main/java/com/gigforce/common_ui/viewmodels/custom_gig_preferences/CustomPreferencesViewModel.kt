@@ -23,7 +23,7 @@ class CustomPreferencesViewModel(var owner: LifecycleOwner) : ViewModel() {
                 }
                 if (value?.data != null) {
                     customPreferencesLiveDataModel.postValue(
-                        value!!.toObject(CustomPreferencesDataModel::class.java)
+                        value.toObject(CustomPreferencesDataModel::class.java)
                     )
                 } else {
                     var customPreferencesDataModel1 =
