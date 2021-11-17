@@ -196,11 +196,6 @@
     <string name="moments_ago">\u0020क्षण भर पहले</string>
     <string name="view_photo_lead">फ़ोटो देखें</string>
     <string name="lead_alternate_mobile_number">वैकल्पिक मोबाइल नंबर</string>
-    <string name="days_ago"> दिन पहले</string>
-    <string name="hours_ago"> घंंटों पहले</string>
-    <string name="mins_ago"> मिनट पहले</string>
-    <string name="sec_ago"> सेकंड पहले</string>
-    <string name="moments_ago"> क्षण भर पहले</string>
     <string name="continue_lead">जारी रखना</string>
     <string name="drop_giger_no_payout">आने वाले चक्र में इस <b> गिगर को पेआउट प्राप्त नहीं होगा।</b> क्या आप जारी रखना चाहते हैं?</string>
     <string name="drop_bank_verification">कृपया ड्रॉप करने से पहले गिगर द्वारा <b> बैंक सत्यापन </b> करवाएं।</string>

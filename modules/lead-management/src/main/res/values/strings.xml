@@ -196,12 +196,6 @@
     <string name="moments_ago">\u0020moments ago</string>
     <string name="view_photo_lead">VIEW PHOTO</string>
     <string name="lead_alternate_mobile_number">Alternate mobile number</string>
-
-    <string name="days_ago"> days ago</string>
-    <string name="hours_ago"> hours ago</string>
-    <string name="mins_ago"> min ago</string>
-    <string name="sec_ago"> sec ago</string>
-    <string name="moments_ago"> moments ago</string>
     <string name="drop_selection_lead">Drop Selection</string>
     <string name="continue_lead">Continue</string>
     <string name="drop_giger_no_payout">This <b> giger will not receive the payout </b> in coming cycle. Do you want to continue?</string>
