@@ -1,5 +1,6 @@
 package com.gigforce.common_ui.viewdatamodels.models.progress
 
+import com.gigforce.core.StringConstants
 import com.gigforce.core.datamodels.learning.LessonProgress
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.PropertyName
@@ -58,5 +59,26 @@ data class ModuleProgress(
 
     @get:PropertyName("isActive")
     @set:PropertyName("isActive")
-    var isActive : Boolean = true
-)
+    var isActive : Boolean = true,
+
+    @get:PropertyName("updatedAt")
+    @set:PropertyName("updatedAt")
+    var updatedAt : Timestamp ?= Timestamp.now(),
+
+    @get:PropertyName("updatedBy")
+    @set:PropertyName("updatedBy")
+    var updatedBy : String ?= StringConstants.APP.value,
+
+    @get:PropertyName("createdAt")
+    @set:PropertyName("createdAt")
+    var createdAt : Timestamp ?= Timestamp.now()
+
+){
+    fun setUpdatedAtAndBy(){
+        updatedAt = Timestamp.now()
+        updatedBy = StringConstants.APP.value
+    }
+    fun setCreatedAt(){
+        createdAt = Timestamp.now()
+    }
+}

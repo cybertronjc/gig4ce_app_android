@@ -1,6 +1,6 @@
 package com.gigforce.ambassador
 
-import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
+import com.gigforce.core.fb.BaseFirestoreDBRepository
 
 class AmbassadorEnrollmentRepository  : BaseFirestoreDBRepository() {
 

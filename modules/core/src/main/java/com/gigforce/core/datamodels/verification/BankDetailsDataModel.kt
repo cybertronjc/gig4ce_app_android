@@ -1,7 +1,7 @@
 package com.gigforce.core.datamodels.verification
 
 import androidx.annotation.Keep
-import com.gigforce.core.base.basefirestore.BaseFirestoreDataModel
+import com.gigforce.core.fb.BaseFirestoreDataModel
 
 @Keep
 data class BankDetailsDataModel(

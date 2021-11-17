@@ -62,4 +62,10 @@ data class CheckListItem(
 
     @SerializedName("type")
     val type: String,
+
+    @SerializedName("frontImage")
+    val frontImage: String? = "",
+
+    @SerializedName("backImage")
+    val backImage: String? = ""
 ){}

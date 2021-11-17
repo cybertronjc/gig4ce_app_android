@@ -1,5 +1,6 @@
 package com.gigforce.client_activation.client_activation.repository
 
+import com.gigforce.core.StringConstants
 import com.gigforce.core.datamodels.City
 import com.gigforce.core.datamodels.State
 import com.gigforce.core.datamodels.profile.AddressModel
@@ -10,6 +11,7 @@ import com.gigforce.core.di.repo.IAadhaarDetailsRepository
 import com.gigforce.core.extensions.toFirebaseTimeStamp
 import com.gigforce.core.extensions.updateOrThrow
 import com.gigforce.core.fb.BaseFirestoreDBRepository
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.tasks.await
 import java.util.*
@@ -97,7 +99,9 @@ class AadhaarDetailsRepository @Inject constructor() : BaseFirestoreDBRepository
                             "aadhaar_card_questionnaire.pincode" to aadhaardetails.pincode,
                             "aadhaar_card_questionnaire.landmark" to aadhaardetails.landmark,
                             "aadhaar_card_questionnaire.currentAddSameAsParmanent" to aadhaardetails.currentAddSameAsParmanent,
-                            "aadhaar_card_questionnaire.currentAddress" to aadhaardetails.currentAddress
+                            "aadhaar_card_questionnaire.currentAddress" to aadhaardetails.currentAddress,
+                            "updatedAt" to Timestamp.now(),
+                            "updatedBy" to StringConstants.APP.value
                     )
             )
             //                "aadhaar_card_questionnaire" to aadhaardetails
@@ -125,14 +129,16 @@ class AadhaarDetailsRepository @Inject constructor() : BaseFirestoreDBRepository
                     "aadhaar_card_questionnaire.landmark" to aadhaardetails.landmark,
                     "aadhaar_card_questionnaire.currentAddSameAsParmanent" to aadhaardetails.currentAddSameAsParmanent,
                     "aadhaar_card_questionnaire.currentAddress" to aadhaardetails.currentAddress,
-                    "aadhaar_card_questionnaire.verified" to true
+                    "aadhaar_card_questionnaire.verified" to true,
+                    "updatedAt" to Timestamp.now(),
+                    "updatedBy" to StringConstants.APP.value
             )
 
             db.collection(verificationCollectionName).document(uid).updateOrThrow(
                     mapData
             )
             db.collection("Profiles").document(uid).updateOrThrow(mapOf(
-                    "pfNominee" to if (nomineeAsFather) "father" else ""))
+                    "pfNominee" to if (nomineeAsFather) "father" else "", "updatedAt" to Timestamp.now(), "updatedBy" to StringConstants.APP.value))
 
             return true
         } catch (e: Exception) {
@@ -170,7 +176,9 @@ class AadhaarDetailsRepository @Inject constructor() : BaseFirestoreDBRepository
                             "aadhaar_card_questionnaire.currentAddress.addLine1" to aadhaardetails.currentAddress?.addLine1,
                             "aadhaar_card_questionnaire.currentAddress.addLine2" to aadhaardetails.currentAddress?.addLine2,
                             "aadhaar_card_questionnaire.currentAddress.state" to aadhaardetails.currentAddress?.state,
-                            "aadhaar_card_questionnaire.currentAddress.city" to aadhaardetails.currentAddress?.city
+                            "aadhaar_card_questionnaire.currentAddress.city" to aadhaardetails.currentAddress?.city,
+                            "updatedAt" to Timestamp.now(),
+                            "updatedBy" to StringConstants.APP.value
                     )
             )
             //                "aadhaar_card_questionnaire" to aadhaardetails
@@ -195,7 +203,9 @@ class AadhaarDetailsRepository @Inject constructor() : BaseFirestoreDBRepository
                             "dateOfBirth" to dateOfBirth.toFirebaseTimeStamp(),
                             "fName" to fName,
                             "maritalStatus" to maritalStatus,
-                            "emergencyContact" to emergencyContact
+                            "emergencyContact" to emergencyContact,
+                            "updatedAt" to Timestamp.now(),
+                            "updatedBy" to StringConstants.APP.value
                     )
             )
             true

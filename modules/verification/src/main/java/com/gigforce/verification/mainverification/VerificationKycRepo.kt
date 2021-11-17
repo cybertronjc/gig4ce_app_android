@@ -1,7 +1,8 @@
 package com.gigforce.verification.mainverification
 
 import android.util.Log
-import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
+import com.gigforce.core.StringConstants
+import com.gigforce.core.fb.BaseFirestoreDBRepository
 import com.gigforce.core.datamodels.client_activation.States
 import com.gigforce.core.datamodels.verification.VerificationBaseModel
 import com.gigforce.core.di.interfaces.IBuildConfigVM
@@ -105,7 +106,9 @@ class VerificationKycRepo(private val iBuildConfigVM: IBuildConfigVM) :
             db.collection(getCollectionName()).document(getUID()).updateOrThrow(
                 mapOf(
                     "bank_details.verified" to status,
-                    "bank_details.verifiedOn" to Timestamp.now()
+                    "bank_details.verifiedOn" to Timestamp.now(),
+                    "updatedAt" to Timestamp.now(),
+                    "updatedBy" to StringConstants.APP.value
                 )
             )
             return true

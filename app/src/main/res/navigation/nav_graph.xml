@@ -1088,6 +1088,18 @@
         android:id="@+id/dropSelectionFragment2"
         android:name="com.gigforce.lead_management.ui.drop_selection_2.DropSelectionFragment2"
         android:label="DropSelectionFragment2" />
+    <dialog
+        android:id="@+id/teamLeaderLoginFilterFragment"
+        android:name="com.gigforce.giger_gigs.tl_login_details.TeamLeaderLoginFilterFragment"
+        android:label="TeamLeaderLoginFilterFragment" />
+    <dialog
+        android:id="@+id/showCheckListDocsBottomSheet"
+        android:name="com.gigforce.lead_management.ui.giger_info.ShowCheckListDocsBottomSheet"
+        android:label="ShowCheckListDocsBottomSheet" />
+    <fragment
+        android:id="@+id/requestDocumentTreeAccessFragment"
+        android:name="com.gigforce.core.documentFileHelper.RequestDocumentTreeAccessFragment"
+        android:label="RequestDocumentTreeAccessFragment" />
 
 </navigation>
 

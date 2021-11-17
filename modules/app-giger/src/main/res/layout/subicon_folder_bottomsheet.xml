@@ -1,44 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/bottom_sheet_bg">
 
-    <View
-        android:id="@+id/view"
-        android:layout_width="100dp"
-        android:layout_height="2dp"
-        app:layout_constraintStart_toStartOf="parent"
+    <TextView
+        android:id="@+id/heading"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:gravity="center_vertical|start"
+        android:text="Testing "
+        style="@style/Caption2"
+        android:textStyle="bold"
+        android:background="@drawable/title_bg"
+        android:paddingLeft="@dimen/size_20"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="@dimen/dp_sm1"
-        android:background="@color/grey"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <LinearLayout
         android:id="@+id/indicator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="@dimen/dp_sm1"
         android:layout_marginLeft="@dimen/dp_sm1"
+        android:layout_marginTop="@dimen/dp_sm1"
+        android:orientation="horizontal"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view"/>
+        app:layout_constraintTop_toBottomOf="@+id/heading" />
 
 
     <com.gigforce.core.recyclerView.CoreRecyclerView
         android:id="@+id/subiconsrv"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="280dp"
+        android:layout_marginTop="@dimen/dp_xsm1"
         android:clipToPadding="false"
-        android:nestedScrollingEnabled="false"
+        android:nestedScrollingEnabled="true"
+        android:orientation="vertical"
         android:paddingLeft="@dimen/size16"
         android:paddingRight="@dimen/size16"
-        android:layout_marginTop="@dimen/dp_xsm1"
         android:scrollbars="none"
+        app:layout_constraintBottom_toTopOf="@+id/go_back_btn"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/indicator"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@+id/heading" />
 
-
+    <Button
+        android:id="@+id/go_back_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/size_20"
+        android:layout_marginLeft="@dimen/size_20"
+        android:layout_marginRight="@dimen/size_20"
+        android:gravity="center"
+        android:text="@string/go_back"
+        style="@style/ActionOutlineButtonStyle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

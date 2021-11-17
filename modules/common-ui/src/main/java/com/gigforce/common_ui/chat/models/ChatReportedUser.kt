@@ -1,5 +1,6 @@
 package com.gigforce.common_ui.chat.models
 
+import com.gigforce.core.StringConstants
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.PropertyName
 
@@ -23,5 +24,17 @@ data class ChatReportedUser(
 
     @get:PropertyName("reportingReason")
     @set:PropertyName("reportingReason")
-    var reportingReason: String = ""
+    var reportingReason: String = "",
+
+    @get:PropertyName("updatedAt")
+    @set:PropertyName("updatedAt")
+    var updatedAt : Timestamp ?= Timestamp.now(),
+
+    @get:PropertyName("updatedBy")
+    @set:PropertyName("updatedBy")
+    var updatedBy : String ?= StringConstants.APP.value,
+
+    @get:PropertyName("createdAt")
+    @set:PropertyName("createdAt")
+    var createdAt : Timestamp ?= Timestamp.now()
 )

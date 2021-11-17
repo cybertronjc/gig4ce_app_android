@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.gigforce.common_ui.viewdatamodels.FeatureItemCard2DVM
+import com.gigforce.common_ui.viewdatamodels.FeatureItemCard3DVM
 import com.gigforce.common_ui.viewdatamodels.HindiTranslationMapping
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.retrofit.RetrofitFactory
@@ -25,6 +26,7 @@ import javax.inject.Inject
 interface IFeatureIconsDataRepository {
     fun reload()
     fun getData(): LiveData<List<FeatureItemCard2DVM>>
+    fun getDataBS(): LiveData<List<FeatureItemCard3DVM>>
 }
 
 class FeatureIconsDataRepository @Inject constructor(
@@ -34,10 +36,12 @@ class FeatureIconsDataRepository @Inject constructor(
     IFeatureIconsDataRepository {
     private val appRenderingService = RetrofitFactory.createService(APPRenderingService::class.java)
     private var data: MutableLiveData<List<FeatureItemCard2DVM>> = MutableLiveData()
+    private var dataBS: MutableLiveData<List<FeatureItemCard3DVM>> = MutableLiveData()
     private var reloadCount = 0
 
     init {
         reload()
+
     }
 
     override fun reload() {
@@ -172,6 +176,104 @@ class FeatureIconsDataRepository @Inject constructor(
             e.printStackTrace()
         }
         return 0
+    }
+
+    //------------------------------second type of views - for bottom sheet(pop up)----------
+    fun loadBS() {
+
+        FirebaseFirestore.getInstance().collection("AppConfigs")
+            .whereEqualTo("uid", FirebaseAuth.getInstance().currentUser?.uid)
+            .addSnapshotListener { value, error ->
+                value?.documents?.let {
+                    if (it.isNotEmpty() && reloadCount < 4) {
+                        var docData = it[0].data as? Map<String, Any>
+                        docData?.let { docMapData ->
+                            var versionCodeList = ArrayList<Int>()
+                            docMapData.forEach { mapEntry ->
+                                mapEntry.key.toIntOrNull()?.let {
+                                    versionCodeList.add(it)
+                                }
+                            }
+                            var sortedVersionCodeList = versionCodeList.sortedDescending()
+                            var foundVersionMapping = false
+                            sortedVersionCodeList.forEach { dbVersionCode ->
+                                if (getCurrentVersionCode() >= dbVersionCode) {
+                                    docMapData.get(dbVersionCode.toString())?.let { iconList ->
+                                        arrangeDataAndSetObserverBS(iconList)
+                                    }
+                                    foundVersionMapping = true
+                                    return@let
+                                }
+                            }
+                            if (!foundVersionMapping) {
+                                docMapData.get("data")?.let { iconList ->
+                                    arrangeDataAndSetObserverBS(iconList)
+                                }
+                            }
+                        }
+
+                    } else {
+                        reloadCount = 1
+                        receivedNotifyToServer()
+                    }
+                }
+            }
+    }
+
+    private fun arrangeDataAndSetObserverBS(iconList: Any) {
+        val list = iconList as? List<Map<String, Any>>
+        list?.let {
+            val mainNavData = ArrayList<FeatureItemCard3DVM>()
+            for (item in list) {
+                try {
+                    val title = item.get("title") as? String ?: "-"
+                    val index = (item.get("index") as? Long) ?: 500
+                    val icon_type = item.get("icon") as? String
+                    val navPath = item.get("navPath") as? String
+                    val active = item.get("active") as? Boolean ?: true
+                    val type = item.get("type") as? String ?: ""
+                    val subicons = item.get("subicons") as? List<Long> ?: null
+                    var hi: HindiTranslationMapping? = null
+                    item.get("hi")?.let {
+                        try {
+                            hi = Gson().fromJson(
+                                JSONObject(it as? Map<*, *>).toString(),
+                                HindiTranslationMapping::class.java
+                            )
+                        } catch (e: Exception) {
+                        }
+                    }
+                    mainNavData.add(
+                        FeatureItemCard3DVM(
+                            active = active,
+                            title = title,
+                            icon = icon_type,
+                            navPath = navPath,
+                            index = index,
+                            type = type,
+                            subicons = subicons,
+                            hi = hi
+                        )
+                    )
+                } catch (e: Exception) {
+
+                }
+
+            }
+            val tempMainNavData =
+                mainNavData.filter { it.active == true }
+                    .filter { (it.type != "folder" && it.type != "sub_folder") || !it.subicons.isNullOrEmpty() } as ArrayList<FeatureItemCard3DVM>
+            tempMainNavData.sortBy { it.index }
+            mainNavData.clear()
+            mainNavData.addAll(tempMainNavData)
+            dataBS.value = mainNavData
+            receivedNotifyToServer()
+            reloadCount++
+        }
+    }
+    override fun getDataBS(): LiveData<List<FeatureItemCard3DVM>> {
+        loadBS()
+        return dataBS
     }
 
 }

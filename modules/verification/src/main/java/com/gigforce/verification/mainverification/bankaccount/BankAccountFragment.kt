@@ -8,6 +8,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
@@ -30,10 +31,7 @@ import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
-import com.gigforce.core.AppConstants
-import com.gigforce.core.IEventTracker
-import com.gigforce.core.StringConstants
-import com.gigforce.core.TrackingEventArgs
+import com.gigforce.core.*
 import com.gigforce.core.datamodels.verification.BankDetailsDataModel
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.gone
@@ -47,6 +45,7 @@ import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.gigforce.verification.mainverification.Data
 import com.gigforce.verification.mainverification.OLDStateHolder
 import com.gigforce.verification.mainverification.VerificationClickOrSelectImageBottomSheet
+import com.gigforce.verification.mainverification.aadhardetail.AadharDetailInfoFragment
 import com.gigforce.verification.util.VerificationConstants
 import com.gigforce.verification.util.VerificationEvents
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -257,7 +256,7 @@ class BankAccountFragment : Fragment(),
                         viewBinding.belowLayout.visible()
                         setAlreadyfilledData(it, false)
                         viewBinding.toplayoutblock.toggleChangeTextView(true)
-                        viewBinding.toplayoutblock.disableImageClick()//keep this line in end only
+                        //viewBinding.toplayoutblock.disableImageClick()//keep this line in end only //need to remove uploading option 2856 ticket
                     } else {
                         checkforStatusAndVerified(it)
                     }
@@ -347,7 +346,7 @@ class BankAccountFragment : Fragment(),
 //                                viewBinding.editBankDetail.visible()
                                 viewBinding.belowLayout.visible()
                                 setAlreadyfilledData(obj, false)
-                                viewBinding.toplayoutblock.disableImageClick()//keep this line in end only
+                                //viewBinding.toplayoutblock.disableImageClick()//keep this line in end only  //need to remove uploading option 2856 ticket
                             }
                         } catch (e: Exception) {
 
@@ -355,7 +354,7 @@ class BankAccountFragment : Fragment(),
                     }, WAITING_TIME)
                     viewBinding.belowLayout.visible()
                     setAlreadyfilledData(obj, false)
-                    viewBinding.toplayoutblock.disableImageClick()//keep this line in end only
+                    //viewBinding.toplayoutblock.disableImageClick()//keep this line in end only //need to remove uploading option 2856 ticket
                 }
                 "failed" -> {
                     verificationScreenStatus = VerificationScreenStatus.FAILED
@@ -370,20 +369,20 @@ class BankAccountFragment : Fragment(),
                         initializeImages()
                     }
                     viewBinding.toplayoutblock.toggleChangeTextView(false)
-                    viewBinding.toplayoutblock.enableImageClick()//keep this line in end only
+                    //viewBinding.toplayoutblock.enableImageClick()//keep this line in end only //need to remove uploading option 2856 ticket
                 }
                 "" -> {
                     verificationScreenStatus = VerificationScreenStatus.DEFAULT
                     resetInitializeViews()
                     setAlreadyfilledData(null, true)
                     viewBinding.toplayoutblock.toggleChangeTextView(false)
-                    viewBinding.toplayoutblock.enableImageClick()//keep this line in end only
+                    //viewBinding.toplayoutblock.enableImageClick()//keep this line in end only //need to remove uploading option 2856 ticket
                 }
                 "completed" -> {
                     verificationScreenStatus = VerificationScreenStatus.COMPLETED
                     showBankBeneficiaryName(obj)
                     viewBinding.toplayoutblock.toggleChangeTextView(false)
-                    viewBinding.toplayoutblock.disableImageClick()//keep this line in end only
+                    //viewBinding.toplayoutblock.disableImageClick()//keep this line in end only  //need to remove uploading option 2856 ticket
 
                 }
                 else -> "unmatched status"
@@ -726,21 +725,22 @@ class BankAccountFragment : Fragment(),
 
     private fun initializeImages() {
         // verification_doc_image ic_passbook_illustration
-        val frontUri = Uri.Builder()
-            .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
-            .authority(resources.getResourcePackageName(R.drawable.verification_doc_image))
-            .appendPath(resources.getResourceTypeName(R.drawable.verification_doc_image))
-            .appendPath(resources.getResourceEntryName(R.drawable.verification_doc_image))
-            .build()
-        val list =
-            listOf(
-                KYCImageModel(
-                    text = getString(R.string.upload_bank_account_new_veri),
-                    imageIcon = frontUri,
-                    imageUploaded = false
-                )
-            )
-        viewBinding.toplayoutblock.setImageViewPager(list)
+        // need to remove uploading option 2856 ticket
+//        val frontUri = Uri.Builder()
+//            .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
+//            .authority(resources.getResourcePackageName(R.drawable.verification_doc_image))
+//            .appendPath(resources.getResourceTypeName(R.drawable.verification_doc_image))
+//            .appendPath(resources.getResourceEntryName(R.drawable.verification_doc_image))
+//            .build()
+//        val list =
+//            listOf(
+//                KYCImageModel(
+//                    text = getString(R.string.upload_bank_account_new_veri),
+//                    imageIcon = frontUri,
+//                    imageUploaded = false
+//                )
+//            )
+        viewBinding.toplayoutblock.initAdapter()
         viewBinding.toplayoutblock.hideUploadOption(true)
     }
 
@@ -777,28 +777,44 @@ class BankAccountFragment : Fragment(),
 
     private fun requestStoragePermission() {
 
-        requestPermissions(
-            arrayOf(
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.CAMERA
-            ),
-            REQUEST_STORAGE_PERMISSION
-        )
-    }
+            if(Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK){
+                requestPermissions(
+                    arrayOf(
+                        Manifest.permission.CAMERA
+                    ),
+                    REQUEST_STORAGE_PERMISSION
+                )
+            } else{
+                requestPermissions(
+                    arrayOf(
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.CAMERA
+                    ),
+                    REQUEST_STORAGE_PERMISSION
+                )
+            }
+        }
 
-    private fun hasStoragePermissions(): Boolean {
-        return ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.READ_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.CAMERA
-        ) == PackageManager.PERMISSION_GRANTED
-    }
+        private fun hasStoragePermissions(): Boolean {
+            if(Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK){
+                return ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.CAMERA
+                ) == PackageManager.PERMISSION_GRANTED
+            } else{
+                return ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.CAMERA
+                ) == PackageManager.PERMISSION_GRANTED
+            }
+        }
 
     private fun showCameraAndGalleryOption() {
         val photoCropIntent = Intent()

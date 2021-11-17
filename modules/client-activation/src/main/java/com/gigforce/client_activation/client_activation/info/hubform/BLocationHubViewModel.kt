@@ -5,9 +5,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.core.StringConstants
 import com.gigforce.core.datamodels.client_activation.JpApplication
 import com.gigforce.core.extensions.getOrThrow
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.launch
@@ -138,7 +140,9 @@ class BLocationHubViewModel : ViewModel() {
                                                             "hubName" to hub,
                                                             "stateName" to state,
                                                             "stateId" to getStateId(state, hub),
-                                                            "type" to "hub_location"
+                                                            "type" to "hub_location",
+                                                            "updatedAt" to Timestamp.now(),
+                                                            "updatedBy" to StringConstants.APP.value
                                                         )
                                                     ).addOnCompleteListener { complete ->
                                                         run {
@@ -153,12 +157,14 @@ class BLocationHubViewModel : ViewModel() {
                                                                         draft.isDone = true
                                                                     }
                                                                 }
+                                                                val map = mapOf("application" to
+                                                                    jpApplication.application, "updatedAt" to Timestamp.now(),
+                                                                    "updatedBy" to StringConstants.APP.value)
                                                                 FirebaseFirestore.getInstance()
                                                                     .collection("JP_Applications")
                                                                     .document(jp_application.documents[0].id)
                                                                     .update(
-                                                                        "application",
-                                                                        jpApplication.application
+                                                                        map
                                                                     )
                                                                     .addOnCompleteListener {
                                                                         if (it.isSuccessful) {
@@ -181,7 +187,9 @@ class BLocationHubViewModel : ViewModel() {
                                                             "hubName" to hub,
                                                             "stateName" to state,
                                                             "stateId" to getStateId(state, hub),
-                                                            "type" to "hub_location"
+                                                            "type" to "hub_location",
+                                                            "updatedAt" to Timestamp.now(),
+                                                            "updatedBy" to StringConstants.APP.value
                                                         )
                                                     )
                                                     .addOnCompleteListener { complete ->
@@ -195,12 +203,14 @@ class BLocationHubViewModel : ViewModel() {
                                                                     draft.isDone = true
                                                                 }
                                                             }
+                                                            val map = mapOf("application" to jpApplication.application,
+                                                                "updatedAt" to Timestamp.now(),
+                                                                "updatedBy" to StringConstants.APP.value)
                                                             FirebaseFirestore.getInstance()
                                                                 .collection("JP_Applications")
                                                                 .document(jp_application.documents[0].id)
                                                                 .update(
-                                                                    "application",
-                                                                    jpApplication.application
+                                                                    map
                                                                 )
                                                                 .addOnCompleteListener {
                                                                     if (it.isSuccessful) {

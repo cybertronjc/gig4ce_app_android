@@ -16,6 +16,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.onTabSelected
 import com.gigforce.common_ui.ext.showToast
@@ -24,6 +25,7 @@ import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.utils.PushDownAnim
 import com.gigforce.common_ui.viewdatamodels.FeatureItemCard2DVM
 import com.gigforce.core.base.BaseFragment2
+import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.extensions.getTextChangeAsStateFlow
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
@@ -63,10 +65,14 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
     fragmentName = "JoiningListFragment",
     layoutId = R.layout.fragment_joining_list_2,
     statusBarColor = R.color.lipstick_2
-) {
+), IOnBackPressedOverride {
 
     @Inject
     lateinit var navigation: INavigation
+
+    @Inject
+    lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
+
     private val viewModel: JoiningList2ViewModel by viewModels()
     private val sharedViewModel: LeadManagementSharedViewModel by activityViewModels()
     var selectedTab = 0
@@ -74,6 +80,7 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
     var joiningDataState = JoiningDataState.DEFAULT
     val dropSelectionIds = arrayListOf<String>()
     var dropJoining : HashMap<String, Boolean>? = HashMap<String, Boolean>()
+    var cameFromDeeplink = false
 
     override fun viewCreated(
         viewBinding: FragmentJoiningList2Binding,
@@ -94,11 +101,22 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
     private fun getIntentData(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
             title = it.getString("title") ?: ""
+            cameFromDeeplink = it.getBoolean(StringConstants.CAME_FROM_ONBOARDING_FORM_DEEPLINK.value) ?: return@let
         } ?: run {
             arguments?.let {
                 title = it.getString("title") ?: ""
+                cameFromDeeplink = it.getBoolean(StringConstants.CAME_FROM_ONBOARDING_FORM_DEEPLINK.value) ?: return@let
+                if (cameFromDeeplink) sharedPreAndCommonUtilInterface.saveDataBoolean("deeplink_onboarding", false)
             }
         }
+    }
+
+    override fun onSaveInstanceState(
+        outState: Bundle
+    ) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(StringConstants.CAME_FROM_ONBOARDING_FORM_DEEPLINK.value, cameFromDeeplink)
+
     }
 
     private fun initListeners(
@@ -437,6 +455,15 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
             appBarComp.searchImageButton.gone()
             appBarComp.filterFrameLayout.gone()
         }
+    }
+
+    override fun onBackPressed(): Boolean {
+        if (cameFromDeeplink){
+            navigation.popBackStack()
+            navigation.navigateTo("common/calendarScreen")
+            return true
+        }
+        return false
     }
 
 }

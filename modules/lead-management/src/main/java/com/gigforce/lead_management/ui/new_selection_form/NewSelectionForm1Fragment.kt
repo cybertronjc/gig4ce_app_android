@@ -9,8 +9,8 @@ import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
-import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import androidx.activity.result.contract.ActivityResultContracts
@@ -22,6 +22,8 @@ import androidx.lifecycle.lifecycleScope
 import com.gigforce.common_ui.contacts.ContactsDelegate
 import com.gigforce.common_ui.contacts.PhoneContact
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
+import com.gigforce.common_ui.dynamic_fields.DynamicFieldsInflaterHelper
+import com.gigforce.common_ui.dynamic_fields.data.DynamicField
 import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.ext.startShimmer
@@ -34,7 +36,6 @@ import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
-import com.gigforce.lead_management.common_views.JobProfileRelatedDynamicFieldView
 import com.gigforce.lead_management.databinding.FragmentNewSelectionForm1Binding
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModelState
@@ -48,6 +49,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
+import java.util.concurrent.Executor
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -65,6 +67,10 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
 
     @Inject
     lateinit var navigation: INavigation
+
+    @Inject
+    lateinit var dynamicFieldsInflaterHelper: DynamicFieldsInflaterHelper
+
     private val viewModel: NewSelectionForm1ViewModel by viewModels()
     private val leadMgmtSharedViewModel: LeadManagementSharedViewModel by activityViewModels()
 
@@ -229,15 +235,8 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
 
     private fun validateDataAndSubmitData() = viewBinding.mainForm.jobProfileDependentDynamicFieldsContainer.apply{
 
-        val dynamicFieldsData = mutableListOf<DataFromDynamicInputField>()
-        for( i in 0 until childCount){
-
-            val dynamicFieldView = getChildAt(i) as JobProfileRelatedDynamicFieldView
-            val dataFromField = dynamicFieldView.validateDataReturnIfValid() ?: return@apply
-            dynamicFieldsData.add(dataFromField)
-        }
-
-        viewModel.handleEvent(NewSelectionForm1Events.SubmitButtonPressed(dynamicFieldsData))
+        val dynamicFieldsData = dynamicFieldsInflaterHelper.validateDynamicFieldsReturnFieldValueIfValid(this) ?: return@apply
+        viewModel.handleEvent(NewSelectionForm1Events.SubmitButtonPressed(dynamicFieldsData.toMutableList()))
     }
 
     private fun initToolbar(
@@ -291,7 +290,6 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
                         viewBinding.mainForm.gigerNameEt.isEnabled = false
                         viewBinding.mainForm.gigerNameEt.setText(state.profile.name)
                     }
-                    checkForNextButtonEnabled()
                 }
 
                 //Open data selection screen states
@@ -314,25 +312,30 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
                 is NewSelectionForm1ViewState.EnteredPhoneNumberSanitized -> {
                     setMobileNoOnEditText(state.sanitizedPhoneNumber)
                 }
+                is NewSelectionForm1ViewState.DisableSubmitButton -> {
+                    enableDisableSubmitButton(false)
+                }
+                is NewSelectionForm1ViewState.EnableSubmitButton -> {
+                    enableDisableSubmitButton(true)
+                }
             }
         })
 
-    private fun showJobProfileRelatedFields(
-        dynamicFields: List<JobProfileDependentDynamicInputField>
-    ) = viewBinding.mainForm.jobProfileDependentDynamicFieldsContainer.apply {
-        removeAllViews()
-
-        dynamicFields.forEach {
-
-            val view = JobProfileRelatedDynamicFieldView(requireContext(), null)
-            addView(view)
-            view.bind(it)
-        }
+    private fun enableDisableSubmitButton(b: Boolean) {
+        viewBinding.mainForm.nextButton.isEnabled = b
     }
+
+    private fun showJobProfileRelatedFields(
+        dynamicFields: List<DynamicField>
+    ) = dynamicFieldsInflaterHelper.inflateDynamicFields(
+            requireContext(),
+            viewBinding.mainForm.jobProfileDependentDynamicFieldsContainer,
+            dynamicFields
+    )
 
     private fun openForm2(
         submitJoiningRequest: SubmitJoiningRequest,
-        dynamicInputsFieldValues : ArrayList<JobProfileDependentDynamicInputField>
+        dynamicInputsFieldValues : ArrayList<DynamicField>
     ) {
 
         navigation.navigateTo(
@@ -441,7 +444,7 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
         mainForm.root.visible()
 
         if (viewCreatedForTheFirstTime) {
-            Handler().postDelayed({
+            Handler(Looper.getMainLooper()).postDelayed({
                 requestFocusOnMobileNoEditText()
             }, 300)
         }
@@ -497,7 +500,7 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
 
         viewBinding.mainForm.businessError.errorTextview.text = null
         viewBinding.mainForm.businessError.root.gone()
-        checkForNextButtonEnabled()
+
     }
 
     private fun showSelectedJobProfile(
@@ -518,22 +521,13 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
 
         viewBinding.mainForm.jobProfileError.errorTextview.text = null
         viewBinding.mainForm.jobProfileError.root.gone()
-        checkForNextButtonEnabled()
+
     }
 
-    private fun checkForNextButtonEnabled() = viewBinding.apply {
-        mainForm.nextButton.isEnabled = (mainForm.businessSelectedLabel.text != getString(R.string.click_to_select_business_lead)
-                && mainForm.selectedJobProfileLabel.text != getString(R.string.click_to_select_job_profile_lead)
-                && mainForm.gigerNameEt.text.toString().isNotEmpty())
-    }
 
     private fun readContactsPermissionsGranted(): Boolean {
         return ContextCompat.checkSelfPermission(
             requireContext(), Manifest.permission.READ_CONTACTS
         ) == PackageManager.PERMISSION_GRANTED
-                &&
-                ContextCompat.checkSelfPermission(
-                    requireContext(), Manifest.permission.READ_CONTACTS
-                ) == PackageManager.PERMISSION_GRANTED
     }
 }

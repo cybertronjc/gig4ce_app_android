@@ -1,7 +1,7 @@
 package com.gigforce.core.datamodels.gigpage
 
 import androidx.annotation.Keep
-import com.gigforce.core.base.basefirestore.BaseFirestoreDataModel
+import com.gigforce.core.fb.BaseFirestoreDataModel
 import java.io.Serializable
 import java.util.*
 

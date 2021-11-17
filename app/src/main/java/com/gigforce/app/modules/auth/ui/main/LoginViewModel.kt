@@ -10,12 +10,14 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.app.modules.auth.UserAuthRepo
 import com.gigforce.core.datamodels.auth.UserAuthStatusModel
 import com.gigforce.core.IEventTracker
+import com.gigforce.core.StringConstants
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.analytics.AuthEvents
 import com.gigforce.core.datamodels.login.LoginResponse
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.google.firebase.FirebaseException
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
@@ -251,7 +253,7 @@ class LoginViewModel @Inject constructor(
         FirebaseAuth.getInstance().currentUser?.let { it ->
             FirebaseFirestore
                 .getInstance()
-                .collection("Profiles").document(it.uid).update(mapOf("termsAccepted" to true)).addOnFailureListener { exception ->
+                .collection("Profiles").document(it.uid).update(mapOf("termsAccepted" to true, "updatedAt" to Timestamp.now(), "updatedBy" to StringConstants.APP.value)).addOnFailureListener { exception ->
                     FirebaseCrashlytics.getInstance().log("Exception : updateTermsAcceptedToDB Method $exception")
                 }
         }
@@ -261,7 +263,7 @@ class LoginViewModel @Inject constructor(
         FirebaseAuth.getInstance().currentUser?.let { it ->
             FirebaseFirestore
                     .getInstance()
-                    .collection("Profiles").document(it.uid).update(mapOf("isUserRegistered" to true)).addOnFailureListener { exception ->
+                    .collection("Profiles").document(it.uid).update(mapOf("isUserRegistered" to true, "updatedAt" to Timestamp.now(), "updatedBy" to StringConstants.APP.value)).addOnFailureListener { exception ->
                         FirebaseCrashlytics.getInstance().log("Exception : updateRegisterStatusToDB Method $exception")
                     }
         }
@@ -317,7 +319,10 @@ class LoginViewModel @Inject constructor(
                         hashMapOf(
                                 "uid" to uid,
                                 "type" to "fcm",
-                                "timestamp" to Date().time
+                                "timestamp" to Date().time,
+                                "updatedAt" to Timestamp.now(),
+                                "updatedBy" to StringConstants.APP.value,
+                                "createdAt" to Timestamp.now()
                         )
                 ).addOnSuccessListener {
                     Log.v(TAG, "Token Updated on Firestore Successfully")

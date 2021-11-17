@@ -1,6 +1,7 @@
 package com.gigforce.core.crashlytics
 
 import android.util.Log
+import com.gigforce.core.logger.GigforceLogger
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 
 object CrashlyticsLogger {
@@ -21,6 +22,8 @@ object CrashlyticsLogger {
         msg: String,
         e: Throwable
     ) {
+
+
         firebaseCrashlytics.log("$tag : $msg")
         firebaseCrashlytics.recordException(e)
     }

@@ -93,6 +93,7 @@ class ImageViewerFragment : Fragment() {
                 detectFace()
             } else {
                 sharedCameraViewModel.clickedImageApproved(
+                    requireContext(),
                     shouldUploadImageToo,
                     image,
                     parentDirectoryNameInFirebaseStorage
@@ -106,15 +107,18 @@ class ImageViewerFragment : Fragment() {
 
             var image1: InputImage? = null
             try {
-                image1 = InputImage.fromFilePath(context, image.toUri())
+                image1 = InputImage.fromFilePath(requireContext(), image.toUri())
                 //  Face detect - Check if face is present in the image or not.
                 val result = detector.process(image1)
                     .addOnSuccessListener { faces ->
+                        if(!isAdded) return@addOnSuccessListener
+
                         // Task completed successfully
                         if (faces.size > 0) {
                             Log.d("FaceDetect", "success")
                             context?.getString(R.string.face_detected_common)?.let { showToast(it) }
                             sharedCameraViewModel.clickedImageApproved(
+                                requireContext(),
                                 shouldUploadImageToo,
                                 image,
                                 parentDirectoryNameInFirebaseStorage
@@ -129,6 +133,7 @@ class ImageViewerFragment : Fragment() {
                         // Task failed with an exception
                         Log.d("FaceDetect", "failed ${e.message}")
                         sharedCameraViewModel.clickedImageApproved(
+                            requireContext(),
                             shouldUploadImageToo,
                             image,
                             parentDirectoryNameInFirebaseStorage
@@ -137,6 +142,7 @@ class ImageViewerFragment : Fragment() {
             } catch (e: OutOfMemoryError){
                 Log.d("FaceDetect", "failed (out of memory) ${e.message}")
                 sharedCameraViewModel.clickedImageApproved(
+                    requireContext(),
                     shouldUploadImageToo,
                     image,
                     parentDirectoryNameInFirebaseStorage
@@ -145,6 +151,7 @@ class ImageViewerFragment : Fragment() {
 
             catch (e: Exception) {
                 sharedCameraViewModel.clickedImageApproved(
+                    requireContext(),
                     shouldUploadImageToo,
                     image,
                     parentDirectoryNameInFirebaseStorage

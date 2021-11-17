@@ -320,6 +320,12 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
             uploadHereText.gone()
         }
     }
+
+    fun initAdapter() {
+        adapter = ViewPagerAdapter {
+            pageClickListener?.onClick(it)
+        }
+    }
 }
 
 

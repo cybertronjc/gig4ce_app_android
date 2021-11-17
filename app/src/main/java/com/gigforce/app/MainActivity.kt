@@ -221,6 +221,12 @@ class MainActivity : BaseActivity(),
                     Log.d("datahere", "main")
                    handleLoginSummaryNav()
                 }
+
+                //deep linking for onboarding form is handled here
+                intent.getBooleanExtra(StringConstants.ONBOARDING_FORM_VIA_DEEP_LINK.value, false) -> {
+                    Log.d("datahere", "main")
+                    handleOnboardingFormNav()
+                }
                 else -> {
                     proceedWithNormalNavigation()
                 }
@@ -241,6 +247,17 @@ class MainActivity : BaseActivity(),
         navController.popBackStack()
         navController.navigate(R.id.teamLeaderLoginDetailsFragment, bundleOf(
             StringConstants.CAME_FROM_LOGIN_SUMMARY_DEEPLINK.value to true
+        ))
+
+    }
+    private fun handleOnboardingFormNav() {
+        if (!isUserLoggedIn()) {
+            proceedWithNormalNavigation()
+            return
+        }
+        navController.popBackStack()
+        navController.navigate(R.id.joiningList2Fragment, bundleOf(
+            StringConstants.CAME_FROM_ONBOARDING_FORM_DEEPLINK.value to true
         ))
 
     }
@@ -289,7 +306,7 @@ class MainActivity : BaseActivity(),
     }
 
     private fun formatMultipleDataSharedAndOpenChat(intent: Intent) {
-        val filesSelectedUris = intent.getParcelableArrayListExtra<Uri>(Intent.EXTRA_STREAM)
+        val filesSelectedUris = intent.getParcelableArrayListExtra<Uri>(Intent.EXTRA_STREAM) ?: arrayListOf<Uri>()
 
         if (filesSelectedUris.size > 10) {
             Toast.makeText(this, getString(R.string.max_10_files), Toast.LENGTH_SHORT).show()
@@ -332,7 +349,7 @@ class MainActivity : BaseActivity(),
     }
 
     private fun handleDocumentSend(intent: Intent) {
-        val documentUri = intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)
+        val documentUri = intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM) ?: return
 
         val sharedFile = SharedFile(
                 file = documentUri,
@@ -349,7 +366,7 @@ class MainActivity : BaseActivity(),
     }
 
     private fun handleVideoImage(intent: Intent) {
-        val videoUri = intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)
+        val videoUri = intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM) ?: return
 
         val sharedFile = SharedFile(
                 file = videoUri,
@@ -365,7 +382,7 @@ class MainActivity : BaseActivity(),
     }
 
     private fun handleSendImage(intent: Intent) {
-        val documentUri = intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)
+        val documentUri = intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM) ?: return
         val sharedFile = SharedFile(
                 file = documentUri,
                 text = intent.getStringExtra(Intent.EXTRA_TEXT)
@@ -491,7 +508,6 @@ class MainActivity : BaseActivity(),
 
     private fun proceedWithNormalNavigation() {
         checkForAllAuthentication()
-        GetFirebaseInstanceID()
 //        CleverTapAPI.getDefaultInstance(applicationContext)?.pushEvent("MAIN_ACTIVITY_CREATED")
     }
 
@@ -553,24 +569,6 @@ class MainActivity : BaseActivity(),
         }
     }
 
-    private fun GetFirebaseInstanceID() {
-        FirebaseInstanceId.getInstance().instanceId
-                .addOnCompleteListener(OnCompleteListener { task ->
-                    if (!task.isSuccessful) {
-                        Log.w("Firebase/InstanceId", "getInstanceId failed", task.exception)
-                        return@OnCompleteListener
-                    }
-
-                    // Get new Instance ID token
-                    val token = task.result?.token
-
-                    // Log and toast
-                    val msg = token //getString(R.string.msg_token_fmt, token)
-                    Log.v("Firebase/InstanceId", "Firebase Token Received")
-                    Log.v("Firebase/InstanceId", msg)
-                    //  Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
-                })
-    }
 
     private fun checkForAllAuthentication() {
         navController.popAllBackStates()

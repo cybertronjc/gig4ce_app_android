@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.app.BuildConfig
 import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 import com.gigforce.common_ui.repository.gig.GigsRepository
+import com.gigforce.core.StringConstants
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.datamodels.profile.ProfileData
@@ -30,7 +31,10 @@ data class ProfileAnGigInfo(
 data class UserVersionInfo(
     var currentVersion: String = "",
     var time: Timestamp = Timestamp.now(),
-    var uid : String?= FirebaseAuthStateListener.getInstance().getCurrentSignInUserInfoOrThrow().uid
+    var uid : String?= FirebaseAuthStateListener.getInstance().getCurrentSignInUserInfoOrThrow().uid,
+    var updatedAt : Timestamp? = Timestamp.now(),
+    var updatedBy : String? = StringConstants.APP.value,
+    var createdAt : Timestamp? = Timestamp.now()
 )
 
 class LoginSuccessfulViewModel constructor(
