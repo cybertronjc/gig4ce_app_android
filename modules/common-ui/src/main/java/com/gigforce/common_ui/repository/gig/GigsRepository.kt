@@ -3,7 +3,8 @@ package com.gigforce.common_ui.repository.gig
 import android.location.Location
 import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 import com.gigforce.common_ui.viewdatamodels.GigStatus
-import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
+import com.gigforce.core.StringConstants
+import com.gigforce.core.fb.BaseFirestoreDBRepository
 import com.gigforce.core.datamodels.gigpage.BussinessLocation
 import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.datamodels.gigpage.GigOrder
@@ -73,7 +74,9 @@ open class GigsRepository : BaseFirestoreDBRepository() {
                 "attendance.checkInTime" to checkInTime,
                 "attendance.checkInDistanceBetweenGigAndUser" to distanceBetweenGigAndUser,
                 "attendance.checkInSource" to "from_gig_in_app",
-                "gigStatus" to GigStatus.ONGOING.getStatusString()
+                "gigStatus" to GigStatus.ONGOING.getStatusString(),
+                "updatedAt" to Timestamp.now(),
+                "updatedBy" to StringConstants.APP.value
             )
         } else {
             mapOf(
@@ -97,7 +100,9 @@ open class GigsRepository : BaseFirestoreDBRepository() {
                 "regularisationRequest.remarksFromUser" to remarks,
                 "regularisationRequest.remarksFromManager" to null,
                 "attendance.checkInSource" to "from_gig_in_app",
-                "gigStatus" to GigStatus.ONGOING.getStatusString()
+                "gigStatus" to GigStatus.ONGOING.getStatusString(),
+                "updatedAt" to Timestamp.now(),
+                "updatedBy" to StringConstants.APP.value
             )
         }
 
@@ -143,7 +148,9 @@ open class GigsRepository : BaseFirestoreDBRepository() {
                 "attendance.checkOutTime" to checkOutTime,
                 "attendance.checkOutDistanceBetweenGigAndUser" to distanceBetweenGigAndUser,
                 "attendance.checkOutSource" to "from_gig_in_app",
-                "gigStatus" to GigStatus.COMPLETED.getStatusString()
+                "gigStatus" to GigStatus.COMPLETED.getStatusString(),
+                "updatedAt" to Timestamp.now(),
+                "updatedBy" to StringConstants.APP.value
             )
         } else {
             mapOf(
@@ -166,7 +173,9 @@ open class GigsRepository : BaseFirestoreDBRepository() {
                 "regularisationRequest.remarksFromUser" to remarks,
                 "regularisationRequest.remarksFromManager" to null,
                 "attendance.checkOutSource" to "from_gig_in_app",
-                "gigStatus" to GigStatus.COMPLETED.getStatusString()
+                "gigStatus" to GigStatus.COMPLETED.getStatusString(),
+                "updatedAt" to Timestamp.now(),
+                "updatedBy" to StringConstants.APP.value
             )
         }
 

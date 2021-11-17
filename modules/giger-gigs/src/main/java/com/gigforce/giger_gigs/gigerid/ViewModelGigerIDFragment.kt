@@ -63,10 +63,7 @@ class ViewModelGigerIDFragment(private val gigerIDCallbacks: GigerIDCallbacks) :
 
 
     fun checkForPermissionsAndInitSharing(checkForPermission: Boolean) {
-        if (checkForPermission) {
             observablePermGranted.value = fileNameToShare
-        }
-
     }
 
     fun checkIfPermGranted(

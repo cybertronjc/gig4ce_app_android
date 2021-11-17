@@ -8,7 +8,7 @@ import com.gigforce.common_ui.datamodels.datamodels.UserInterestsAndRolesDM
 import com.gigforce.common_ui.viewdatamodels.FeatureItemCardDVM
 import com.gigforce.common_ui.viewdatamodels.models.progress.CourseMapping
 import com.gigforce.core.StringConstants
-import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
+import com.gigforce.core.fb.BaseFirestoreDBRepository
 import com.gigforce.core.datamodels.learning.Course
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.google.firebase.auth.FirebaseAuth

@@ -1,43 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".screens.ChatPageFragment">
+    android:layout_height="match_parent">
 
-    <com.gigforce.common_ui.views.GigforceToolbar
-        android:id="@+id/toolbar"
+    <LinearLayout
+        android:id="@+id/main_chat_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".screens.ChatPageFragment">
 
-
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-
-        <ImageView
+        <com.gigforce.common_ui.views.GigforceToolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="fitXY"
-            android:src="@drawable/bg_group_wallpaper" />
+            android:layout_height="wrap_content" />
 
-        <com.gigforce.core.recyclerView.CoreRecyclerView
-            android:id="@+id/rv_chat_messages"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingBottom="56dp" />
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
-        <com.gigforce.modules.feature_chat.ui.ChatFooter
-            android:id="@+id/chat_footer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:minHeight="56dp" />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:src="@drawable/bg_group_wallpaper" />
 
-    </FrameLayout>
+            <com.gigforce.core.recyclerView.CoreRecyclerView
+                android:id="@+id/rv_chat_messages"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="56dp" />
 
+            <com.gigforce.modules.feature_chat.ui.ChatFooter
+                android:id="@+id/chat_footer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:minHeight="56dp" />
 
-</LinearLayout>
+        </FrameLayout>
+    </LinearLayout>
+
+    <include
+        android:id="@+id/storage_access_required_layout"
+        layout="@layout/layout_need_permission"
+        />
+
+</FrameLayout>
+

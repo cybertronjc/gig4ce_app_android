@@ -7,8 +7,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.common_ui.dynamic_fields.data.DataFromDynamicInputField
+import com.gigforce.common_ui.dynamic_fields.data.DynamicField
+import com.gigforce.common_ui.dynamic_fields.data.FieldTypes
+import com.gigforce.common_ui.dynamic_fields.data.InputTypes
 import com.gigforce.common_ui.repository.LeadManagementRepository
-import com.gigforce.common_ui.viewdatamodels.leadManagement.DataFromDynamicInputField
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfilesItem
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JoiningBusinessAndJobProfilesItem
 import com.gigforce.common_ui.viewdatamodels.leadManagement.SubmitJoiningRequest
@@ -47,6 +50,7 @@ class NewSelectionForm1ViewModel @Inject constructor(
     private var gigerName: String? = null
     private var selectedBusiness: JoiningBusinessAndJobProfilesItem? = null
     private var selectedJobProfile: JobProfilesItem? = null
+
     private lateinit var joiningBusinessAndJobProfiles: List<JoiningBusinessAndJobProfilesItem>
 
     init {
@@ -82,10 +86,11 @@ class NewSelectionForm1ViewModel @Inject constructor(
          checkForDataAndEnabledOrDisableSubmitButton()
     }
 
-    private fun inflateDynamicFieldsRelatedToSelectedJobProfile(jobProfile: JobProfilesItem) =
-        viewModelScope.launch {
+    private fun inflateDynamicFieldsRelatedToSelectedJobProfile(
+        jobProfile: JobProfilesItem
+    ) = viewModelScope.launch {
 
-            val selectedJobProfileDependentDynamicFields = jobProfile.dynamicInputFields.filter {
+            val selectedJobProfileDependentDynamicFields = jobProfile.dynamicFields.filter {
                 it.screenIdToShowIn == NewSelectionForm1Fragment.SCREEN_ID
             }
 
@@ -238,7 +243,7 @@ class NewSelectionForm1ViewModel @Inject constructor(
             return
         }
 
-        val dynamicFieldsForNextForm = selectedJobProfile!!.dynamicInputFields?.filter {
+        val dynamicFieldsForNextForm = selectedJobProfile!!.dynamicFields?.filter {
             it.screenIdToShowIn == NewSelectionForm2Fragment.SCREEN_ID
         }
 

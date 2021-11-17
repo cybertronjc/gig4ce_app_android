@@ -1,33 +1,48 @@
 package com.gigforce.lead_management.ui.new_selection_form_2
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.Typeface
+import android.net.Uri
 import android.os.Bundle
-import android.util.Log
+import android.provider.Settings
 import android.widget.DatePicker
 import android.widget.LinearLayout
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.gigforce.common_ui.UserInfoImp
+import com.gigforce.common_ui.contacts.ContactsDelegate
+import com.gigforce.common_ui.contacts.PhoneContact
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
+import com.gigforce.common_ui.dynamic_fields.DynamicFieldsInflaterHelper
+import com.gigforce.common_ui.dynamic_fields.data.DynamicField
 import com.gigforce.common_ui.ext.hideSoftKeyboard
+import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.core.base.BaseFragment2
+import com.gigforce.core.extensions.getTextChangeAsStateFlow
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toLocalDate
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
-import com.gigforce.lead_management.common_views.JobProfileRelatedDynamicFieldView
 import com.gigforce.lead_management.databinding.FragmentNewSelectionForm2Binding
 import com.gigforce.lead_management.models.WhatsappTemplateModel
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModelState
+import com.gigforce.lead_management.ui.new_selection_form.NewSelectionForm1Events
+import com.gigforce.lead_management.ui.new_selection_form.NewSelectionForm1Fragment
 import com.gigforce.lead_management.ui.new_selection_form_submittion_success.SelectionFormSubmitSuccessFragment
 import com.gigforce.lead_management.ui.select_city.SelectCityFragment
 import com.gigforce.lead_management.ui.select_reporting_location.SelectReportingLocationFragment
@@ -38,6 +53,11 @@ import com.github.razir.progressbutton.hideProgress
 import com.github.razir.progressbutton.showProgress
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flowOn
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -61,13 +81,16 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
     lateinit var navigation: INavigation
     @Inject
     lateinit var userinfo: UserInfoImp
+    @Inject
+    lateinit var dynamicFieldsInflaterHelper: DynamicFieldsInflaterHelper
+
     private val viewModel: NewSelectionForm2ViewModel by viewModels()
     private val leadMgmtSharedViewModel: LeadManagementSharedViewModel by activityViewModels()
     private val dateFormatter =  SimpleDateFormat("dd/MMM/yy",Locale.getDefault())
 
     //Data from previous screen
     private lateinit var joiningRequest: SubmitJoiningRequest
-    private lateinit var dynamicInputsFields : ArrayList<JobProfileDependentDynamicInputField>
+    private lateinit var dynamicInputsFields : ArrayList<DynamicField>
 
     private val expectedStartDatePicker: DatePickerDialog by lazy {
         val cal = Calendar.getInstance()
@@ -92,6 +115,79 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         )
 
         datePickerDialog
+    }
+
+    @SuppressLint("NewApi")
+    private val requestContactPermissionContract = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { contactPermissionGranted ->
+
+        if (contactPermissionGranted) {
+            pickContactContract.launch(null)
+        } else {
+            val hasUserOptedForDoNotAskAgain =
+                requireActivity().shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS)
+                    .not()
+            if (hasUserOptedForDoNotAskAgain) {
+
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(getString(R.string.read_contact_permission_required_lead))
+                    .setMessage(getString(R.string.please_grant_read_permissions_to_lead))
+                    .setPositiveButton(getString(R.string.okay_common_ui)) { _, _ -> openSettingsPage() }
+                    .setNegativeButton(getString(R.string.cancel_common_ui)) { _, _ -> }
+                    .show()
+            }
+        }
+    }
+
+    private val contactsDelegate: ContactsDelegate by lazy {
+        ContactsDelegate(requireContext().contentResolver)
+    }
+
+    @SuppressLint("NewApi")
+    private val pickContactContract = registerForActivityResult(
+        ActivityResultContracts.PickContact()
+    ) {
+        if (it == null) return@registerForActivityResult
+
+        contactsDelegate.parseResults(
+            uri = it,
+            onSuccess = { contacts ->
+                showContactNoOnMobileNo(contacts)
+            }, onFailure = { exception ->
+                logger.e(NewSelectionForm1Fragment.TAG, "while picking contact", exception)
+                showToast(getString(R.string.unable_to_pick_contact_lead))
+            })
+    }
+
+    private fun showContactNoOnMobileNo(contacts: List<PhoneContact>) {
+        if (contacts.isEmpty()) return
+
+        val pickedContact = contacts.first()
+        if (pickedContact.phoneNumbers.isEmpty()) return
+
+        if (pickedContact.phoneNumbers.size > 1) {
+            //show choose no dialog
+
+            val builder = MaterialAlertDialogBuilder(requireContext())
+            builder.setTitle("Select Phone Number")
+            builder.setItems(pickedContact.phoneNumbers.toTypedArray()) { _, item ->
+                val number = pickedContact.phoneNumbers[item]
+                setMobileNoOnEditText(number)
+            }
+            builder.show()
+        } else {
+            setMobileNoOnEditText(pickedContact.phoneNumbers.first())
+        }
+    }
+
+    private fun setMobileNoOnEditText(number: String) {
+        viewBinding.mainForm.alternateMobileNoEt.setText(number)
+
+        viewBinding.mainForm.alternateMobileNoEt.post {
+            viewBinding.mainForm.alternateMobileNoEt.setSelection(viewBinding.mainForm.alternateMobileNoEt.length())
+        }
+        viewModel.handleEvent(NewSelectionForm2Events.SecondaryPhoneNumberChanged("+91" + number))
     }
 
     override fun shouldPreventViewRecreationOnNavigation(): Boolean {
@@ -131,12 +227,28 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
     ) {
         if (viewCreatedForTheFirstTime) {
             showJobProfileRelatedDynamicFields(dynamicInputsFields)
+            setTextWatchers()
         }
 
         initToolbar(viewBinding)
         initListeners(viewBinding)
         initViewModel()
         initSharedViewModel()
+    }
+
+    private fun setTextWatchers() = viewBinding.mainForm.apply{
+
+        lifecycleScope.launchWhenCreated {
+
+            alternateMobileNoEt.getTextChangeAsStateFlow()
+                .debounce(200)
+                .distinctUntilChanged()
+                .flowOn(Dispatchers.Default)
+                .collect {
+                    viewModel.handleEvent(NewSelectionForm2Events.SecondaryPhoneNumberChanged("+91$it"))
+                }
+        }
+
     }
 
     private fun initListeners(
@@ -167,19 +279,24 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         nextButton.setOnClickListener {
             validateDataAndSubmitData()
         }
+
+        pickContactsButton.setOnClickListener {
+
+            if (readContactsPermissionsGranted()) {
+                pickContactContract.launch(null)
+            } else {
+
+                requestContactPermissionContract.launch(
+                    Manifest.permission.READ_CONTACTS
+                )
+            }
+        }
     }
 
     private fun validateDataAndSubmitData() = viewBinding.mainForm.jobProfileDependentDynamicFieldsContainer.apply{
 
-        val dynamicFieldsData = mutableListOf<DataFromDynamicInputField>()
-        for( i in 0 until childCount){
-
-            val dynamicFieldView = getChildAt(i) as JobProfileRelatedDynamicFieldView
-            val dataFromField = dynamicFieldView.validateDataReturnIfValid() ?: return@apply
-            dynamicFieldsData.add(dataFromField)
-        }
-
-        viewModel.handleEvent(NewSelectionForm2Events.SubmitButtonPressed(dynamicFieldsData))
+        val dynamicFieldsData = dynamicFieldsInflaterHelper.validateDynamicFieldsReturnFieldValueIfValid(this) ?: return@apply
+        viewModel.handleEvent(NewSelectionForm2Events.SubmitButtonPressed(dynamicFieldsData.toMutableList()))
     }
 
     private fun initToolbar(
@@ -260,6 +377,9 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                     }
                     viewBinding.mainForm.nextButton.isEnabled = false
                 }
+                is NewSelectionForm2ViewState.EnteredPhoneNumberSanitized -> setMobileNoOnEditText(
+                    state.sanitizedPhoneNumber
+                )
             }
         })
 
@@ -331,6 +451,14 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         } else {
             viewBinding.mainForm.reportingLocationError.errorTextview.text = null
             viewBinding.mainForm.reportingLocationError.root.gone()
+        }
+
+        if (errorState.secondaryPhoneNumberError != null) {
+            viewBinding.mainForm.contactNoError.root.visible()
+            viewBinding.mainForm.contactNoError.errorTextview.text = errorState.secondaryPhoneNumberError
+        } else {
+            viewBinding.mainForm.contactNoError.errorTextview.text = null
+            viewBinding.mainForm.contactNoError.root.gone()
         }
     }
 
@@ -471,15 +599,24 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
     }
 
     private fun showJobProfileRelatedDynamicFields(
-        dynamicFields: List<JobProfileDependentDynamicInputField>
-    ) = viewBinding.mainForm.jobProfileDependentDynamicFieldsContainer.apply {
-        removeAllViews()
+        dynamicFields: List<DynamicField>
+    ) = dynamicFieldsInflaterHelper.inflateDynamicFields(
+        requireContext(),
+        viewBinding.mainForm.jobProfileDependentDynamicFieldsContainer,
+        dynamicFields
+    )
 
-        dynamicFields.forEach {
-
-            val view = JobProfileRelatedDynamicFieldView(requireContext(), null)
-            addView(view)
-            view.bind(it)
-        }
+    private fun readContactsPermissionsGranted(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            requireContext(), Manifest.permission.READ_CONTACTS
+        ) == PackageManager.PERMISSION_GRANTED
     }
+
+    private fun openSettingsPage() {
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+        val uri = Uri.fromParts("package", requireContext().packageName, null)
+        intent.data = uri
+        startActivity(intent)
+    }
+
 }

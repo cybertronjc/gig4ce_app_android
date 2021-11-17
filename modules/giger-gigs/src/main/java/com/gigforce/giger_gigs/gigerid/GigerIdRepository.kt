@@ -1,6 +1,6 @@
 package com.gigforce.giger_gigs.gigerid
 
-import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
+import com.gigforce.core.fb.BaseFirestoreDBRepository
 import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.datamodels.gigpage.GigOrder
 //import com.gigforce.user_preferences.PreferencesFragment

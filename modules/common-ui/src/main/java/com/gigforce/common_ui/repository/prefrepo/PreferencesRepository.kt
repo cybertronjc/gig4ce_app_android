@@ -1,6 +1,6 @@
 package com.gigforce.common_ui.repository.prefrepo
 
-import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
+import com.gigforce.core.fb.BaseFirestoreDBRepository
 
 class PreferencesRepository : BaseFirestoreDBRepository() {
     var COLLECTION_NAME = "Preferences"

@@ -1096,6 +1096,10 @@
         android:id="@+id/pendingJoiningDetailsFragment"
         android:name="com.gigforce.lead_management.ui.pending_joining_details.PendingJoiningDetailsFragment"
         android:label="PendingJoiningDetailsFragment" />
+    <fragment
+        android:id="@+id/requestDocumentTreeAccessFragment"
+        android:name="com.gigforce.core.documentFileHelper.RequestDocumentTreeAccessFragment"
+        android:label="RequestDocumentTreeAccessFragment" />
 
 </navigation>
 

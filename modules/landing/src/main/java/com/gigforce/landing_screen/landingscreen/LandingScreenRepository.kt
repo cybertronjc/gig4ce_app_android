@@ -1,6 +1,6 @@
 package com.gigforce.landing_screen.landingscreen
 
-import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
+import com.gigforce.core.fb.BaseFirestoreDBRepository
 import com.google.firebase.firestore.ListenerRegistration
 
 class LandingScreenRepository : BaseFirestoreDBRepository(), LandingScreenCallbacks {

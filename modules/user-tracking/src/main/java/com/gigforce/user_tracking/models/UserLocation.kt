@@ -1,5 +1,6 @@
 package com.gigforce.user_tracking.models
 
+import com.gigforce.core.StringConstants
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.PropertyName
@@ -16,7 +17,19 @@ data class UserGigLocationTrack(
         val userPhoneNumber : String?,
 
         @get:PropertyName("locations")
-        val locations : List<UserLocation>
+        val locations : List<UserLocation>,
+
+        @get:PropertyName("updatedAt")
+        @set:PropertyName("updatedAt")
+        var updatedAt : Timestamp ?= Timestamp.now(),
+
+        @get:PropertyName("updatedBy")
+        @set:PropertyName("updatedBy")
+        var updatedBy : String ?= StringConstants.APP.value,
+
+        @get:PropertyName("createdAt")
+        @set:PropertyName("createdAt")
+        var createdAt : Timestamp ?= Timestamp.now()
 )
 
 data class UserLocation(

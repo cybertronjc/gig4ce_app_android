@@ -84,5 +84,9 @@
     <string name="your_joining_is_pending">Your joining is pending</string>
     <string name="expected_joining_date">Expected joining date -</string>
     <string name="complete_joining">Complete joining</string>
-
+    <string name="common_type">Type</string>
+    <string name="common_here">here</string>
+    <string name="common_note_with_colon">Note : </string>
+    <string name="common_optional">(Optional)</string>
+    <string name="common_change_date">Change Date</string>
 </resources>

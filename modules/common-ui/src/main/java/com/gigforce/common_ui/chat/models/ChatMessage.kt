@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import com.gigforce.common_ui.chat.ChatConstants
 import com.gigforce.common_ui.metaDataHelper.ImageMetaData
 import com.gigforce.common_ui.viewdatamodels.chat.UserInfo
+import com.gigforce.core.StringConstants
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.Exclude
@@ -157,7 +158,19 @@ class ChatMessage(
 
     @get:Exclude
     @set:Exclude
-    var thumbnailBitmap: Bitmap? = null
+    var thumbnailBitmap: Bitmap? = null,
+
+    @get:PropertyName("updatedAt")
+    @set:PropertyName("updatedAt")
+    var updatedAt : Timestamp ?= Timestamp.now(),
+
+    @get:PropertyName("updatedBy")
+    @set:PropertyName("updatedBy")
+    var updatedBy : String ?= StringConstants.APP.value,
+
+    @get:PropertyName("createdAt")
+    @set:PropertyName("createdAt")
+    var createdAt : Timestamp ?= Timestamp.now()
 
 ) : IMediaMessage
 
@@ -182,8 +195,29 @@ data class EventInfo(
 
         @get:PropertyName("eventTime")
         @set:PropertyName("eventTime")
-        var eventTime: Timestamp =  Timestamp.now()
+        var eventTime: Timestamp =  Timestamp.now(),
+
+        @get:PropertyName("updatedAt")
+        @set:PropertyName("updatedAt")
+        var updatedAt : Timestamp ?= Timestamp.now(),
+
+        @get:PropertyName("updatedBy")
+        @set:PropertyName("updatedBy")
+        var updatedBy : String ?= StringConstants.APP.value,
+
+        @get:PropertyName("createdAt")
+        @set:PropertyName("createdAt")
+        var createdAt : Timestamp ?= Timestamp.now()
 ){
+
+    fun setUpdatedAtAndBy(){
+        updatedAt = Timestamp.now()
+        updatedBy = StringConstants.APP.value
+    }
+
+    fun setCreatedAt(){
+        createdAt = Timestamp.now()
+    }
 
     fun toChatMessage(): ChatMessage{
         return ChatMessage(
