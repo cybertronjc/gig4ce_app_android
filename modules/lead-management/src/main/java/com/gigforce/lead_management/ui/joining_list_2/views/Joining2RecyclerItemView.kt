@@ -236,7 +236,8 @@ class Joining2RecyclerItemView(
                 navigation.navigateTo(
                     LeadManagementNavDestinations.FRAGMENT_GIGER_INFO,
                     bundleOf(
-                        LeadManagementConstants.INTENT_EXTRA_JOINING_ID to currentViewData._id
+                        LeadManagementConstants.INTENT_EXTRA_JOINING_ID to currentViewData._id,
+                        LeadManagementConstants.INTENT_EXTRA_IS_ACTIVE to viewData?.isActive
                     )
                 )
             }

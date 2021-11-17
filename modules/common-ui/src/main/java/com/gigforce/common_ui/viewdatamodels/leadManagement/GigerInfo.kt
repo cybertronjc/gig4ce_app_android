@@ -36,6 +36,15 @@ data class GigerInfo(
     @SerializedName("selectionDate")
     val selectionDate: String,
 
+    @SerializedName("gigStartDate")
+    val gigStartDate: String,
+
+    @SerializedName("gigEndDate")
+    val gigEndDate: String,
+
+    @SerializedName("currentDate")
+    val currentDate: String,
+
     @SerializedName("status")
     val status: String,
 

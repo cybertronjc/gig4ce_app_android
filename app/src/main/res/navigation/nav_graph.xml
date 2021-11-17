@@ -1085,6 +1085,10 @@
         android:name="com.gigforce.lead_management.ui.drop_selection.DropSelectionBottomSheetDialogFragment"
         android:label="DropSelectionBottomSheetDialogFragment" />
     <dialog
+        android:id="@+id/dropSelectionFragment2"
+        android:name="com.gigforce.lead_management.ui.drop_selection_2.DropSelectionFragment2"
+        android:label="DropSelectionFragment2" />
+    <dialog
         android:id="@+id/teamLeaderLoginFilterFragment"
         android:name="com.gigforce.giger_gigs.tl_login_details.TeamLeaderLoginFilterFragment"
         android:label="TeamLeaderLoginFilterFragment" />

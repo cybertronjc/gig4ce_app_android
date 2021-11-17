@@ -706,7 +706,7 @@ class LeadManagementRepository @Inject constructor(
     }
 
     suspend fun dropSelections(
-        selectionIds : List<String>
+        selectionIds : List<DropDetail>
     ): DropSelectionResponse{
         val dropRequest = DropSelectionRequest(selectionIds)
         return joiningProfileRemoteService.dropSelections(jsonObject = dropRequest).bodyOrThrow()
