@@ -85,10 +85,10 @@ class BankAccountViewModel @Inject constructor(
             }
         }
 
-    fun setVerificationStatusStringToBlank() =
+    fun setVerificationStatusStringToBlank(uid: String) =
         viewModelScope.launch {
             try {
-                verificationKycRepo.setVerificationStatusStringToBlank()
+                verificationKycRepo.setVerificationStatusStringToBlank(uid)
             } catch (e: Exception) {
 
             }

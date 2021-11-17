@@ -19,6 +19,7 @@ import com.gigforce.client_activation.databinding.JoiningFormFragmentBinding
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.showToast
+import com.gigforce.core.AppConstants
 import com.gigforce.core.datamodels.City
 import com.gigforce.core.datamodels.State
 import com.gigforce.core.datamodels.profile.ProfileData
@@ -31,6 +32,8 @@ import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.DateHelper
 import com.gigforce.core.utils.NavFragmentsData
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 import java.util.regex.Pattern
@@ -82,6 +85,13 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
 
     var aadhaarDetailsDataModel: AadhaarDetailsDataModel? = null
     private lateinit var viewBinding: JoiningFormFragmentBinding
+
+    private var userId: String? = null
+    private val user: FirebaseUser?
+        get() {
+            return FirebaseAuth.getInstance().currentUser
+        }
+    private var userIdToUse: String? = null
 
     @Inject
     lateinit var navigation: INavigation
@@ -363,10 +373,15 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
         }
         Log.d("map", "$statesesMap")
         stateAdapter?.notifyDataSetChanged()
-        viewModel.getVerificationData()
+        viewModel.getVerificationData(userIdToUse.toString())
     }
 
     private fun initViews() {
+        userIdToUse = if (userId != null) {
+            userId
+        }else{
+            user?.uid
+        }
         viewModel.getStates()
         viewModel.loadHubStates(mJobProfileId)
         viewModel.loadProfileData()
@@ -899,6 +914,7 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
                 allNavigationList = arr
             }
             intentBundle = it
+            userId = it.getString(AppConstants.INTENT_EXTRA_UID) ?: return@let
         }
 
         arguments?.let {
@@ -909,6 +925,7 @@ class JoiningFormFragment : Fragment(), IOnBackPressedOverride {
                 allNavigationList = arr
             }
             intentBundle = it
+            userId = it.getString(AppConstants.INTENT_EXTRA_UID) ?: return@let
         }
     }
 

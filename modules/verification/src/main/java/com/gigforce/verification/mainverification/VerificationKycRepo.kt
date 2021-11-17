@@ -114,9 +114,9 @@ class VerificationKycRepo(private val iBuildConfigVM: IBuildConfigVM) :
             return false
         }
     }
-    suspend fun setVerificationStatusStringToBlank(){
+    suspend fun setVerificationStatusStringToBlank(uid: String){
         try {
-            db.collection(getCollectionName()).document(getUID()).updateOrThrow(
+            db.collection(getCollectionName()).document(uid).updateOrThrow(
                 mapOf(
                     "bank_details.status" to ""
                 )

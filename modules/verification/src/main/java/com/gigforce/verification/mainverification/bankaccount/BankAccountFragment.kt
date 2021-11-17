@@ -703,7 +703,7 @@ class BankAccountFragment : Fragment(),
                             props = null
                         )
                     )
-                    viewModel.setVerificationStatusStringToBlank()
+                    viewModel.setVerificationStatusStringToBlank(userIdToUse.toString())
                 }
                 .setNegativeButton(getString(R.string.no_veri)) { dialog, _ ->
                     dialog.dismiss()

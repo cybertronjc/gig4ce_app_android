@@ -130,11 +130,6 @@ class AadharDetailInfoFragment : Fragment(),
             resources.getString(R.string.no_doc_title_aadhaar_veri),
             resources.getString(R.string.no_doc_subtitle_aadhaar_veri)
         )
-        userIdToUse = if (userId != null) {
-            userId
-        }else{
-            user?.uid
-        }
     }
 
     var allNavigationList = ArrayList<String>()
@@ -148,8 +143,9 @@ class AadharDetailInfoFragment : Fragment(),
                 allNavigationList = arr
             }
             intentBundle = it
-            mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
             userId = it.getString(AppConstants.INTENT_EXTRA_UID) ?: return@let
+            mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
+
         } ?: run {
             arguments?.let {
 
@@ -159,13 +155,20 @@ class AadharDetailInfoFragment : Fragment(),
                     allNavigationList = arrData
                 }
                 intentBundle = it
-                mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
                 userId = it.getString(AppConstants.INTENT_EXTRA_UID) ?: return@let
+                mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
+
             }
 
         }
 
     }
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, FROM_CLIENT_ACTIVATON)
+        outState.putString(AppConstants.INTENT_EXTRA_UID, userId)
+    }
+
 
     var anyDataEntered = false
     var verificationScreenStatus = VerificationScreenStatus.DEFAULT
@@ -765,7 +768,7 @@ class AadharDetailInfoFragment : Fragment(),
             viewBinding.progressBar.gone()
             if (updated) {
                 showToast(getString(R.string.data_uploaded_veri))
-                viewModel.getVerificationData()
+                viewModel.getVerificationData(userIdToUse.toString())
             }
 
         })
@@ -1033,6 +1036,12 @@ class AadharDetailInfoFragment : Fragment(),
     }
 
     private fun setViews() {
+        userIdToUse = if (userId != null) {
+            userId
+        }else{
+            user?.uid
+        }
+        Log.d("myuidintent", userIdToUse.toString() + ", userId: $userId")
         viewBinding.toplayoutblock.whyweneeditInvisible()
         viewModel.getStates()
 
@@ -1109,7 +1118,7 @@ class AadharDetailInfoFragment : Fragment(),
         }
         Log.d("map", "$statesesMap")
         stateAdapter?.notifyDataSetChanged()
-        viewModel.getVerificationData()
+        viewModel.getVerificationData(userIdToUse.toString())
     }
 
 

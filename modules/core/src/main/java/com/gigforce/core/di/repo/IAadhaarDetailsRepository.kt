@@ -8,8 +8,8 @@ import com.gigforce.core.datamodels.verification.VerificationBaseModel
 
 interface IAadhaarDetailsRepository {
     suspend fun getStatesFromDb(): MutableList<State>
-    suspend fun getVerificationDetails(): VerificationBaseModel?
+    suspend fun getVerificationDetails(uid: String): VerificationBaseModel?
     suspend fun getCities(stateCode: String): MutableList<City>
-    suspend fun setAadhaarFromVerificationModule(nomineeAsFather : Boolean,aadhaardetails: AadhaarDetailsDataModel): Boolean
-    suspend fun getProfileNominee():ProfileNominee?
+    suspend fun setAadhaarFromVerificationModule(uid: String, nomineeAsFather : Boolean,aadhaardetails: AadhaarDetailsDataModel): Boolean
+    suspend fun getProfileNominee(uid: String):ProfileNominee?
 }
