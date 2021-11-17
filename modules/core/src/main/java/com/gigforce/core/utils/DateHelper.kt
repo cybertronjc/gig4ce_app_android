@@ -53,5 +53,9 @@ object DateHelper {
         return d
     }
 
+    fun getDateInyyyyMMddHHmmss(date: Date): String{
+        return SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date)
+    }
+
 
 }

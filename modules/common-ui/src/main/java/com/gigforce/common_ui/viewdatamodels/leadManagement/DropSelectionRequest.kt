@@ -22,5 +22,8 @@ data class DropDetail (
     var lastWorkingDate: String? = null,
 
     @SerializedName("message")
-    var message: String? = null
+    var message: String? = null,
+
+    @SerializedName("droppedDate")
+    var droppedDate: String? = null
 ): Parcelable

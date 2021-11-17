@@ -187,7 +187,9 @@ class DropSelectionFragment2 : BaseBottomSheetDialogFragment<DropSelectionFragme
                 val joiningId = selectionJoiningsToDrop.get(0).joiningId
                 val lastWorkingDate = getFormattedDateInYYYYMMDD(selectionJoiningsToDrop.get(0).currentDate)
                 val message = "Giger has not joined the gig"
-                val dropDetail = DropDetail(joiningId = joiningId, lastWorkingDate, message )
+                val newCal = Calendar.getInstance()
+                val droppedDate = DateHelper.getDateInyyyyMMddHHmmss(newCal.time)
+                val dropDetail = DropDetail(joiningId = joiningId, lastWorkingDate, message, droppedDate )
                 selectionsToDrop.add(dropDetail)
                 viewModel.dropSelections(selectionsToDrop)
 
@@ -210,7 +212,9 @@ class DropSelectionFragment2 : BaseBottomSheetDialogFragment<DropSelectionFragme
                 val joiningId = selectionJoiningsToDrop.get(0).joiningId
                 val lastWorkingDate = selectedLastWorkingDate
                 val message = "Giger has resigned after working"
-                val dropDetail = DropDetail(joiningId = joiningId, lastWorkingDate, message)
+                val newCal = Calendar.getInstance()
+                val droppedDate = DateHelper.getDateInyyyyMMddHHmmss(newCal.time)
+                val dropDetail = DropDetail(joiningId = joiningId, lastWorkingDate, message, droppedDate)
                 selectionsToDrop.add(dropDetail)
                 viewModel.dropSelections(selectionsToDrop)
             }
@@ -224,7 +228,9 @@ class DropSelectionFragment2 : BaseBottomSheetDialogFragment<DropSelectionFragme
                 val joiningId = selectionJoiningsToDrop.get(0).joiningId
                 val lastWorkingDate = getFormattedDateInYYYYMMDD(selectionJoiningsToDrop.get(0).currentDate)
                 val message = "Giger has not joined the gig"
-                val dropDetail = DropDetail(joiningId = joiningId, lastWorkingDate, message )
+                val newCal = Calendar.getInstance()
+                val droppedDate = DateHelper.getDateInyyyyMMddHHmmss(newCal.time)
+                val dropDetail = DropDetail(joiningId = joiningId, lastWorkingDate, message, droppedDate )
                 selectionsToDrop.add(dropDetail)
                 viewModel.dropSelections(selectionsToDrop)
             }
