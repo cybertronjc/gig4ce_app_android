@@ -26,6 +26,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -36,6 +37,7 @@ import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.chat.ChatHeadersViewModel
 import com.gigforce.common_ui.configrepository.ConfigRepository
 import com.gigforce.common_ui.core.TextDrawable
+import com.gigforce.common_ui.repository.LeadManagementRepository
 import com.gigforce.common_ui.utils.BsBackgroundAndLocationAccess
 import com.gigforce.common_ui.viewmodels.ProfileViewModel
 import com.gigforce.common_ui.viewmodels.custom_gig_preferences.CustomPreferencesViewModel
@@ -69,6 +71,7 @@ import com.jaeger.library.StatusBarUtil
 import com.riningan.widget.ExtendedBottomSheetBehavior
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.calendar_home_screen.*
+import kotlinx.coroutines.launch
 import pub.devrel.easypermissions.EasyPermissions
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
@@ -116,6 +119,9 @@ class CalendarHomeScreen : Fragment(),
 
     @Inject
     lateinit var appDialogsInterface: AppDialogsInterface
+
+    @Inject lateinit var leadManagementRepository: LeadManagementRepository
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -126,6 +132,25 @@ class CalendarHomeScreen : Fragment(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
        // checkForLocationPermission()
+        checkForPendingJoining()
+    }
+
+    private fun checkForPendingJoining()  = lifecycleScope.launch{
+        try {
+            leadManagementRepository.getPendingJoinings().apply {
+                if(isNotEmpty()){
+
+                    first().let {
+                        navigation.navigateTo(
+                            "LeadMgmt/PendingJoiningDetails", bundleOf(
+                                "joining_id" to it.joiningId
+                            )
+                        )
+                    }
+                }
+            }
+        } catch (e: Exception) {
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

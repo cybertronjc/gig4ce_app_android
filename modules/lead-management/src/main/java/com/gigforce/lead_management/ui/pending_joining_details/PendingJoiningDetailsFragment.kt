@@ -143,7 +143,6 @@ class PendingJoiningDetailsFragment : BaseFragment2<FragmentPendingJoiningDetail
             val reportingLocText = if (!it.reportingLocation.isNullOrBlank() && it.reportingLocation != "null") it.reportingLocation + ", " else ""
             val businessLocText = if (!it.businessLocation.isNullOrBlank() && it.businessLocation != "null") it.businessLocation else ""
             overlayCardLayout.locationText.text = ": "+reportingLocText + businessLocText ?: ""
-            it.jobProfileId = ""
 
             gigerPhone = it.gigerPhone.toString()
 
