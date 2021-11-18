@@ -24,6 +24,9 @@ data class JoiningNew(
     @SerializedName("profilePicture")
     var profilePicture: String? = null,
 
+    @SerializedName("isActive")
+    var isActive: Boolean? = null,
+
     @SerializedName("status")
     var status: String,
 

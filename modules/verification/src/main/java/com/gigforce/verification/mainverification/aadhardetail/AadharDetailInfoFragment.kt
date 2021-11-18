@@ -46,6 +46,8 @@ import com.gigforce.verification.mainverification.VerificationClickOrSelectImage
 import com.gigforce.verification.mainverification.pancard.VerificationScreenStatus
 import com.gigforce.verification.util.VerificationConstants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.veri_screen_info_component.view.*
 import okhttp3.MediaType
@@ -75,6 +77,12 @@ class AadharDetailInfoFragment : Fragment(),
     private var aadharBackImagePath: String? = null
     private var mJobProfileId: String = ""
     private var FROM_CLIENT_ACTIVATON: Boolean = false
+    private var userId: String? = null
+    private val user: FirebaseUser?
+        get() {
+            return FirebaseAuth.getInstance().currentUser
+        }
+    private var userIdToUse: String? = null
 
     @Inject
     lateinit var buildConfig: IBuildConfig
@@ -137,7 +145,9 @@ class AadharDetailInfoFragment : Fragment(),
                 allNavigationList = arr
             }
             intentBundle = it
+            userId = it.getString(AppConstants.INTENT_EXTRA_UID) ?: return@let
             mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
+
         } ?: run {
             arguments?.let {
 
@@ -147,12 +157,20 @@ class AadharDetailInfoFragment : Fragment(),
                     allNavigationList = arrData
                 }
                 intentBundle = it
+                userId = it.getString(AppConstants.INTENT_EXTRA_UID) ?: return@let
                 mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
+
             }
 
         }
 
     }
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, FROM_CLIENT_ACTIVATON)
+        outState.putString(AppConstants.INTENT_EXTRA_UID, userId)
+    }
+
 
     var anyDataEntered = false
     var verificationScreenStatus = VerificationScreenStatus.DEFAULT
@@ -591,9 +609,9 @@ class AadharDetailInfoFragment : Fragment(),
             ) else null
         )
         if (FROM_CLIENT_ACTIVATON)
-            viewModel.setAadhaarDetails(submitDataModel, false, mJobProfileId)
+            viewModel.setAadhaarDetails(submitDataModel, false, mJobProfileId, userIdToUse.toString())
         else
-            viewModel.setAadhaarDetails(submitDataModel, false, "")
+            viewModel.setAadhaarDetails(submitDataModel, false, "", userIdToUse.toString())
 
     }
 
@@ -752,7 +770,7 @@ class AadharDetailInfoFragment : Fragment(),
             viewBinding.progressBar.gone()
             if (updated) {
                 showToast(getString(R.string.data_uploaded_veri))
-                viewModel.getVerificationData()
+                viewModel.getVerificationData(userIdToUse.toString())
             }
 
         })
@@ -1020,6 +1038,12 @@ class AadharDetailInfoFragment : Fragment(),
     }
 
     private fun setViews() {
+        userIdToUse = if (userId != null) {
+            userId
+        }else{
+            user?.uid
+        }
+        Log.d("myuidintent", userIdToUse.toString() + ", userId: $userId")
         viewBinding.toplayoutblock.whyweneeditInvisible()
         viewModel.getStates()
 
@@ -1096,7 +1120,7 @@ class AadharDetailInfoFragment : Fragment(),
         }
         Log.d("map", "$statesesMap")
         stateAdapter?.notifyDataSetChanged()
-        viewModel.getVerificationData()
+        viewModel.getVerificationData(userIdToUse.toString())
     }
 
 
@@ -1267,7 +1291,8 @@ class AadharDetailInfoFragment : Fragment(),
             viewModel.getKycOcrResult(
                 "aadhar",
                 if (viewBinding.toplayoutblock.viewPager2.currentItem == 0) "front" else "back",
-                it
+                it,
+                userIdToUse.toString()
             )
         }
     }

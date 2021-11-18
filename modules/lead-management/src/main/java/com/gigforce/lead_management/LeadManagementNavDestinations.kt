@@ -25,4 +25,5 @@ object LeadManagementNavDestinations {
     const val FRAGMENT_JOINING_FILTER = "${moduleName}/joiningFilter"
     const val FRAGMENT_JOINING_DROP_SELECTION = "${moduleName}/dropSelection"
     const val FRAGMENT_SHOW_DOC_IMAGES = "${moduleName}/showDocImages"
+    const val FRAGMENT_PENDING_JOINING_DETAILS = "${moduleName}/PendingJoiningDetails"
 }

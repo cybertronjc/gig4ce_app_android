@@ -18,6 +18,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.gigforce.common_ui.AppDialogsInterface
 import com.gigforce.common_ui.ConfirmationDialogOnClickListener
 import com.gigforce.common_ui.StringConstants
@@ -25,6 +26,7 @@ import com.gigforce.common_ui.chat.ChatHeadersViewModel
 import com.gigforce.common_ui.configrepository.ConfigRepository
 import com.gigforce.common_ui.core.TextDrawable
 import com.gigforce.common_ui.deviceInfo_permission.DeviceInfoGatherer
+import com.gigforce.common_ui.repository.LeadManagementRepository
 import com.gigforce.common_ui.utils.BsBackgroundAndLocationAccess
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.extensions.visible
@@ -38,6 +40,7 @@ import com.jaeger.library.StatusBarUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.calendar_home_screen.*
 import kotlinx.android.synthetic.main.fragment_landing.*
+import kotlinx.coroutines.launch
 import pub.devrel.easypermissions.EasyPermissions
 import javax.inject.Inject
 
@@ -46,6 +49,8 @@ import javax.inject.Inject
 class LandingFragment : Fragment(),
     BsBackgroundAndLocationAccess.OnLocationOkayButtonPressClickListener {
     val viewModel: LandingViewModel by viewModels()
+
+    @Inject lateinit var leadManagementRepository: LeadManagementRepository
 
     private val requestPermissionContract =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissionsAndResult ->
@@ -153,6 +158,24 @@ class LandingFragment : Fragment(),
         super.onCreate(savedInstanceState)
         checkForLocationPermission()
         checkForDeepLink()
+        checkForPendingJoining()
+    }
+
+    private fun checkForPendingJoining()  = lifecycleScope.launch{
+        try {
+            leadManagementRepository.getPendingJoinings().apply {
+                if(isNotEmpty()){
+                    first().let {
+                        navigation.navigateTo(
+                            "LeadMgmt/PendingJoiningDetails", bundleOf(
+                                "joining_id" to it.joiningId
+                            )
+                        )
+                    }
+                }
+            }
+        } catch (e: Exception) {
+        }
     }
 
     private fun checkForDeepLink() {

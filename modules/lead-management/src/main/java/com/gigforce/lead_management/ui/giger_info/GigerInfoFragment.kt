@@ -5,21 +5,27 @@ import android.content.Intent
 import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
+import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.utils.getCircularProgressDrawable
 import com.gigforce.common_ui.viewdatamodels.leadManagement.GigerInfo
+import com.gigforce.core.AppConstants
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.base.BaseFragment2
+import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
@@ -29,8 +35,10 @@ import com.gigforce.lead_management.R
 import com.gigforce.lead_management.analytics.LeadManagementAnalyticsEvents
 import com.gigforce.lead_management.databinding.GigerInfoFragmentBinding
 import com.gigforce.lead_management.models.ApplicationChecklistRecyclerItemData
+import com.gigforce.lead_management.models.DropScreenIntentModel
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
 import com.gigforce.lead_management.ui.drop_selection.DropSelectionBottomSheetDialogFragment
+import com.gigforce.lead_management.ui.drop_selection_2.DropSelectionFragment2
 import com.gigforce.lead_management.ui.giger_info.views.AppCheckListRecyclerComponent
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -50,10 +58,14 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
     companion object {
         fun newInstance() = GigerInfoFragment()
         private const val TAG = "GigerInfoFragment"
+        val UPLOAD_PROFILE_PIC = 1
     }
 
     @Inject
     lateinit var navigation: INavigation
+
+    @Inject
+    lateinit var buildConfig: IBuildConfig
 
     @Inject
     lateinit var eventTracker: IEventTracker
@@ -63,14 +75,30 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
 
     var gigerPhone = ""
     private lateinit var joiningId: String
+    private var isActive: Boolean = false
+    var hasStartEndDate = false
+    var dropScreenIntentModel: DropScreenIntentModel? = null
 
     override fun viewCreated(viewBinding: GigerInfoFragmentBinding, savedInstanceState: Bundle?) {
         getDataFrom(arguments,savedInstanceState)
         initToolbar(viewBinding)
+        initViews()
         initListeners()
         initViewModel()
         checkForDropSelection()
         //initSharedViewModel()
+    }
+
+    private fun initViews() {
+        joiningId?.let {
+            dropScreenIntentModel = DropScreenIntentModel(joiningId = joiningId, false, false, "", "", "")
+        }
+
+        if (isActive){
+            viewBinding.bottomButtonLayout.dropGigerBtn.visible()
+        }else{
+            viewBinding.bottomButtonLayout.dropGigerBtn.gone()
+        }
     }
 
     private fun getDataFrom(
@@ -79,12 +107,13 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
     ) {
         arguments?.let {
             joiningId = it.getString(LeadManagementConstants.INTENT_EXTRA_JOINING_ID) ?: return@let
+            isActive = it.getBoolean(LeadManagementConstants.INTENT_EXTRA_IS_ACTIVE) ?: return@let
 
         }
 
         savedInstanceState?.let {
             joiningId = it.getString(LeadManagementConstants.INTENT_EXTRA_JOINING_ID) ?: return@let
-
+            isActive = it.getBoolean(LeadManagementConstants.INTENT_EXTRA_IS_ACTIVE) ?: return@let
         }
     }
     override fun onSaveInstanceState(
@@ -92,6 +121,7 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
     ) {
         super.onSaveInstanceState(outState)
         outState.putString(LeadManagementConstants.INTENT_EXTRA_JOINING_ID, joiningId)
+        outState.putBoolean(LeadManagementConstants.INTENT_EXTRA_IS_ACTIVE, isActive)
     }
 
 
@@ -117,6 +147,7 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
 
     private fun initViewModel() {
         viewModel.getGigerJoiningInfo(joiningId)
+
         //observe data
         viewModel.viewState.observe(viewLifecycleOwner, Observer {
             val state = it ?: return@Observer
@@ -180,11 +211,13 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
         gigerInfo.let {
             toolbar.showTitle(it.gigerName)
             toolbar.setTitleTypeface(Typeface.BOLD)
-            overlayCardLayout.companyName.text = ": "+it.businessName ?: ""
+            overlayCardLayout.companyName.text = ": " + it.businessName ?: ""
             overlayCardLayout.jobProfileTitle.text = it.jobProfileTitle ?: ""
-            val reportingLocText = if (!it.reportingLocation.isNullOrBlank() && it.reportingLocation != "null") it.reportingLocation + ", " else ""
-            val businessLocText = if (!it.businessLocation.isNullOrBlank() && it.businessLocation != "null") it.businessLocation else ""
-            overlayCardLayout.locationText.text = ": "+reportingLocText + businessLocText ?: ""
+            val reportingLocText =
+                if (!it.reportingLocation.isNullOrBlank() && it.reportingLocation != "null") it.reportingLocation + ", " else ""
+            val businessLocText =
+                if (!it.businessLocation.isNullOrBlank() && it.businessLocation != "null") it.businessLocation else ""
+            overlayCardLayout.locationText.text = ": " + reportingLocText + businessLocText ?: ""
 
             gigerPhone = it.gigerPhone.toString()
             toolbar.showSubtitle(gigerPhone)
@@ -197,44 +230,98 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
                     .into(overlayCardLayout.profileImageOverlay.companyImg)
             }
 
-            applicationStatusLayout.statusText.text = getString(R.string.application_lead,it.status)
-            if (it.status == "Pending"){
-                applicationStatusLayout.statusIconImg.setImageDrawable(ResourcesCompat.getDrawable(resources,R.drawable.ic_pending_icon,null))
-                applicationStatusLayout.root.setBackgroundColor(ResourcesCompat.getColor(resources,R.color.status_background_pink,null))
+            applicationStatusLayout.statusText.text =
+                getString(R.string.application_lead, it.status)
+            if (it.status == "Pending") {
+                applicationStatusLayout.statusIconImg.setImageDrawable(
+                    ResourcesCompat.getDrawable(
+                        resources,
+                        R.drawable.ic_pending_icon,
+                        null
+                    )
+                )
+                applicationStatusLayout.root.setBackgroundColor(
+                    ResourcesCompat.getColor(
+                        resources,
+                        R.color.status_background_pink,
+                        null
+                    )
+                )
             } else {
-                applicationStatusLayout.statusIconImg.setImageDrawable(ResourcesCompat.getDrawable(resources,R.drawable.ic_blue_tick,null))
-                applicationStatusLayout.root.setBackgroundColor(ResourcesCompat.getColor(resources,R.color.status_background_blue,null))
+                applicationStatusLayout.statusIconImg.setImageDrawable(
+                    ResourcesCompat.getDrawable(
+                        resources,
+                        R.drawable.ic_blue_tick,
+                        null
+                    )
+                )
+                applicationStatusLayout.root.setBackgroundColor(
+                    ResourcesCompat.getColor(
+                        resources,
+                        R.color.status_background_blue,
+                        null
+                    )
+                )
             }
 
-            overlayCardLayout.selectionDate.text = ": "+getFormattedDate(it.selectionDate)
-            overlayCardLayout.joiningDate.text = ": "+getFormattedDateFromYYMMDD(it.joiningDate) ?: ""
 
-            val checkListItemData = arrayListOf<ApplicationChecklistRecyclerItemData.ApplicationChecklistItemData>()
-            if (it.checkList == null){
-                checklistText.gone()
+            overlayCardLayout.selectionDate.text = ": " + getFormattedDate(it.selectionDate)
+            overlayCardLayout.joiningDate.text =
+                ": " + getFormattedDateFromYYMMDD(it.joiningDate) ?: ""
+
+            //check for gigStartDate and gigEndDate
+            if (!it.gigStartDate.isNullOrBlank() && !it.gigEndDate.isNullOrBlank()) {
+                hasStartEndDate = true
+                dropScreenIntentModel?.gigStartDate = it.gigStartDate
+                dropScreenIntentModel?.gigEndDate = it.gigEndDate
+                dropScreenIntentModel?.hasStartEndDate = true
+            }
+            if (!it.currentDate.isNullOrBlank()) {
+                dropScreenIntentModel?.currentDate = it.currentDate
+            }
+
+            val checkListItemData =
+                arrayListOf<ApplicationChecklistRecyclerItemData.ApplicationChecklistItemData>()
+            if (it.checkList == null) {
+                checkListTextview.gone()
                 checklistLayout.gone()
             } else {
-                 it.checkList?.let {
-                it.forEachIndexed { index, checkListItem ->
-                    val itemData = ApplicationChecklistRecyclerItemData.ApplicationChecklistItemData(checkListItem.name, checkListItem.status, checkListItem.optional, checkListItem.frontImage , checkListItem.backImage)
-                    checkListItemData.add(itemData)
-                }
-                if (checkListItemData.size > 0){
-                    checklistLayout.visible()
-                    inflateCheckListInCheckListContainer(checkListItemData)
-                } else {
-                    checklistText.gone()
-                    checklistLayout.gone()
-                }
+                it.checkList?.let { it1 ->
+                    it1.forEachIndexed { index, checkListItem ->
+                        if (checkListItem.type == "bank_account" && checkListItem.status == "Completed") {
+                            dropScreenIntentModel?.isBankVerified = true
+                        }
+                        val itemData =
+                            ApplicationChecklistRecyclerItemData.ApplicationChecklistItemData(
+                                checkListItem.name,
+                                it.gigerId.toString(),
+                                it.gigerName,
+                                checkListItem.status,
+                                checkListItem.type,
+                                checkListItem.optional,
+                                checkListItem.frontImage,
+                                checkListItem.backImage,
+                                checkListItem.type,
+                                checkListItem.dependency
+                            )
+                        checkListItemData.add(itemData)
+                        if (checkListItemData.size > 0) {
+                            checklistLayout.visible()
+                            inflateCheckListInCheckListContainer(checkListItemData)
+                        } else {
+                            checkListTextview.gone()
+                            checklistLayout.gone()
+                        }
 
+                    }
                 }
+                stopShimmer(
+                    gigerinfoShimmerContainer as LinearLayout,
+                    R.id.shimmer_controller
+                )
+                gigerinfoShimmerContainer.gone()
+
             }
-            stopShimmer(
-                gigerinfoShimmerContainer as LinearLayout,
-                R.id.shimmer_controller
-            )
-            gigerinfoShimmerContainer.gone()
-
         }
     }
 
@@ -248,6 +335,31 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
             val view = AppCheckListRecyclerComponent(requireContext(),null)
             addView(view)
             view.bind(it)
+            val viewPhotoText = view.findViewById<TextView>(R.id.viewPhotoText)
+            viewPhotoText.setOnClickListener { it1 ->
+                if (viewPhotoText.text == "ADD"){
+                    var bundleForFragment = bundleOf(
+                        AppConstants.INTENT_EXTRA_USER_CAME_FROM_ONBOARDING_FORM to true,
+                        "uid" to it.gigerUid
+                    )
+                    val navString = getNavigationStr(it.docType)
+                    navigation.navigateTo(navString, bundleForFragment)
+                }else if (viewPhotoText.text == "VIEW PHOTO"){
+                    val arrayList = arrayListOf<String>()
+                    if (!it.frontImage.isNullOrBlank()){
+                        arrayList.add(getDBImageUrl(it.frontImage.toString()).toString())
+                    }
+                    if (!it.backImage.isNullOrBlank()){
+                        arrayList.add(getDBImageUrl(it.backImage.toString()).toString())
+                    }
+
+                    navigation.navigateTo("LeadMgmt/showDocImages",
+                        bundleOf(
+                            ShowCheckListDocsBottomSheet.INTENT_TOP_TITLE to it.checkName,
+                            ShowCheckListDocsBottomSheet.INTENT_IMAGES_TO_SHOW to arrayList
+                        ))
+                }
+            }
         }
     }
 
@@ -272,10 +384,11 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
     private fun initListeners() = viewBinding.apply {
         bottomButtonLayout.dropGigerBtn.setOnClickListener {
             //drop functionality
-            DropSelectionBottomSheetDialogFragment.launch(
-                arrayListOf(joiningId),
+            DropSelectionFragment2.launch(
+                arrayListOf<DropScreenIntentModel>(dropScreenIntentModel!!),
                 childFragmentManager
             )
+
         }
         bottomButtonLayout.callLayout.setOnClickListener {
             //call functionality
@@ -294,6 +407,7 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
             context?.startActivity(intent)
 
         }
+
 
     }
 
@@ -360,6 +474,60 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
         }
         val formatted = output.format(d)
         return formatted ?: ""
+    }
+
+
+    private fun getNavigationStr(data: String): String {
+        when (data) {
+            "profile_pic" -> {
+                return "userinfo/addProfilePictureFragment"
+            }
+            "about_me" -> {
+                return "profile/addBio"
+            }
+            "questionnaire" -> {
+                return "learning/questionnair"
+            }
+            "driving_licence" -> {
+                return "verification/drivinglicenseimageupload"
+            }
+            "learning" -> {
+                return "learning/coursedetails"
+            }
+            "aadhar_card" -> {
+                return "verification/AadharDetailInfoFragment"
+            }
+            "pan_card" -> {
+                return "verification/pancardimageupload"
+            }
+            "bank_account" -> {
+                return "verification/bank_account_fragment"
+            }
+            "aadhar_card_questionnaire" -> {
+                return "verification/AadharDetailInfoFragment"
+            }
+            "jp_hub_location" -> {
+                return "client_activation/fragment_business_loc_hub"
+            }
+            "pf_esic" -> {
+                return "client_activation/pfesicFragment"
+            }
+            else -> return ""
+        }
+    }
+
+    fun getDBImageUrl(imagePath: String): String? {
+        if (imagePath.isNotBlank()) {
+            try {
+                var modifiedString = imagePath
+                if (!imagePath.startsWith("/"))
+                    modifiedString = "/$imagePath"
+                return buildConfig.getStorageBaseUrl() + modifiedString
+            } catch (e: Exception) {
+                return null
+            }
+        }
+        return null
     }
 
 }

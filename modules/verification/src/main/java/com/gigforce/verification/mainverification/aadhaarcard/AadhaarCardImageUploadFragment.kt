@@ -33,6 +33,8 @@ import com.gigforce.verification.R
 import com.gigforce.verification.databinding.AadhaarCardImageUploadFragmentBinding
 import com.gigforce.verification.util.VerificationConstants
 import com.gigforce.verification.util.VerificationEvents
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.gson.Gson
 import com.jaeger.library.StatusBarUtil
 import dagger.hilt.android.AndroidEntryPoint
@@ -66,6 +68,12 @@ class AadhaarCardImageUploadFragment : Fragment(),
     }
 
     var verificationScreenStatus = VerificationScreenStatus.DEFAULT
+    private var userId: String? = null
+    private val user: FirebaseUser?
+        get() {
+            return FirebaseAuth.getInstance().currentUser
+        }
+    private var userIdToUse: String? = null
 
     @Inject
     lateinit var navigation: INavigation
@@ -115,9 +123,15 @@ class AadhaarCardImageUploadFragment : Fragment(),
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, FROM_CLIENT_ACTIVATON)
+        outState.putString(AppConstants.INTENT_EXTRA_UID, userId)
     }
 
     private fun initializeImageViews() {
+        userIdToUse = if (userId != null) {
+            userId
+        }else{
+            user?.uid
+        }
         viewBinding.toplayoutblock.showUploadHere()
         //ic_pan_illustration
         val frontUri = Uri.Builder()
@@ -204,6 +218,7 @@ class AadhaarCardImageUploadFragment : Fragment(),
                 allNavigationList = arr
             }
             intentBundle = it
+            userId = it.getString(AppConstants.INTENT_EXTRA_UID) ?: return@let
         } ?: run {
             arguments?.let {
                 FROM_CLIENT_ACTIVATON =
@@ -212,6 +227,7 @@ class AadhaarCardImageUploadFragment : Fragment(),
                     allNavigationList = arrData
                 }
                 intentBundle = it
+                userId = it.getString(AppConstants.INTENT_EXTRA_UID) ?: return@let
             }
 
         }
@@ -284,7 +300,7 @@ class AadhaarCardImageUploadFragment : Fragment(),
 
     private fun observer() {
 
-        viewModel.getVerifiedStatus() //getting userHasVerified status
+        viewModel.getVerifiedStatus(userIdToUse.toString()) //getting userHasVerified status
         viewModel.verifiedStatus.observe(viewLifecycleOwner, Observer {
             it?.let {
 

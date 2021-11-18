@@ -196,5 +196,15 @@
     <string name="moments_ago">\u0020क्षण भर पहले</string>
     <string name="view_photo_lead">फ़ोटो देखें</string>
     <string name="lead_alternate_mobile_number">वैकल्पिक मोबाइल नंबर</string>
+    <string name="continue_lead">जारी रखना</string>
+    <string name="drop_giger_no_payout">आने वाले चक्र में इस <b> गिगर को पेआउट प्राप्त नहीं होगा।</b> क्या आप जारी रखना चाहते हैं?</string>
+    <string name="drop_bank_verification">कृपया ड्रॉप करने से पहले गिगर द्वारा <b> बैंक सत्यापन </b> करवाएं।</string>
+    <string name="drop_last_day_working"><b>कृपया कार्य करने की अंतिम तिथि दर्ज करें।</b></string>
+    <string name="drop_selection_success"><b>चयन सफलतापूर्वक गिरा!</b></string>
+    <string name="confirm_lead">पुष्टि करना</string>
+    <string name="select_an_option_lead">कृपया एक विकल्प चुनें।</string>
+    <string name="giger_not_joined_lead">गिगर गिग में शामिल नहीं हुए हैं।</string>
+    <string name="giger_joined_lead">काम करने के बाद गिगर ने इस्तीफा दे दिया है।</string>
+    <string name="giger_already_disabled_lead">This giger is already disabled</string>
 
 </resources>

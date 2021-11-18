@@ -52,6 +52,8 @@ import com.gigforce.verification.mainverification.VerificationClickOrSelectImage
 import com.gigforce.verification.util.VerificationConstants
 import com.gigforce.verification.util.VerificationEvents
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.jaeger.library.StatusBarUtil
 import com.yalantis.ucrop.UCrop
 import dagger.hilt.android.AndroidEntryPoint
@@ -111,6 +113,12 @@ class PanCardFragment : Fragment(),
     private lateinit var viewBinding: PanCardFragmentBinding
     var verificationScreenStatus = VerificationScreenStatus.DEFAULT
     var ocrOrVerificationRquested = false
+    private var userId: String? = null
+    private val user: FirebaseUser?
+        get() {
+            return FirebaseAuth.getInstance().currentUser
+        }
+    private var userIdToUse: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -134,6 +142,11 @@ class PanCardFragment : Fragment(),
             resources.getString(R.string.no_doc_title_pan_veri),
             resources.getString(R.string.no_doc_subtitle_pan_veri)
         )
+        userIdToUse = if (userId != null) {
+            userId
+        }else{
+            user?.uid
+        }
     }
 
     var allNavigationList = ArrayList<String>()
@@ -146,6 +159,7 @@ class PanCardFragment : Fragment(),
                 allNavigationList = arr
             }
             intentBundle = it
+            userId = it.getString(AppConstants.INTENT_EXTRA_UID) ?: return@let
         } ?: run {
             arguments?.let {
                 FROM_CLIENT_ACTIVATON =
@@ -154,6 +168,7 @@ class PanCardFragment : Fragment(),
                     allNavigationList = arrData
                 }
                 intentBundle = it
+                userId = it.getString(AppConstants.INTENT_EXTRA_UID) ?: return@let
             }
         }
 
@@ -162,6 +177,7 @@ class PanCardFragment : Fragment(),
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, FROM_CLIENT_ACTIVATON)
+        outState.putString(AppConstants.INTENT_EXTRA_UID, userId)
     }
 
     private fun observer() {
@@ -249,7 +265,7 @@ class PanCardFragment : Fragment(),
             ocrOrVerificationRquested = false
         })
 
-        viewModel.getVerifiedStatus()
+        viewModel.getVerifiedStatus(userIdToUse.toString())
         viewModel.verifiedStatus.observe(viewLifecycleOwner, Observer {
             if (!ocrOrVerificationRquested) {
                 viewBinding.screenLoaderBar.gone()
@@ -564,7 +580,7 @@ class PanCardFragment : Fragment(),
         }
         image?.let {
             eventTracker.pushEvent(TrackingEventArgs(VerificationEvents.PAN_OCR_STARTED, null))
-            viewModel.getKycOcrResult("pan", "dsd", it)
+            viewModel.getKycOcrResult("pan", "dsd", it, userIdToUse.toString())
         }
     }
 
@@ -678,7 +694,7 @@ class PanCardFragment : Fragment(),
             )
         )
         activeLoader(true)
-        viewModel.getKycVerificationResult("pan", list)
+        viewModel.getKycVerificationResult("pan", list, userIdToUse.toString())
 
     }
 

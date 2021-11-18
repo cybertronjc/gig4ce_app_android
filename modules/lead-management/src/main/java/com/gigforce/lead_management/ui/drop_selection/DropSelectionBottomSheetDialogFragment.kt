@@ -86,10 +86,10 @@ class DropSelectionBottomSheetDialogFragment :
             showMainLayout()
         }
 
-        this.mainLayout.dropSelectionButton.setOnClickListener {
-            viewModel.dropSelections(
-                selectionIdsToDrop
-            )
+        this.mainLayout.dropSelectionDirect.setOnClickListener {
+//            viewModel.dropSelections(
+//                selectionIdsToDrop
+//            )
         }
 
         this.mainLayout.cancelButton.setOnClickListener {
@@ -120,8 +120,8 @@ class DropSelectionBottomSheetDialogFragment :
 
             when (it) {
                 is Lce.Error -> {
-                    viewBinding.mainLayout.dropSelectionButton.hideProgress("Drop Selection")
-                    viewBinding.mainLayout.dropSelectionButton.isEnabled = false
+                    viewBinding.mainLayout.dropSelectionDirect.hideProgress("Drop Selection")
+                    viewBinding.mainLayout.dropSelectionDirect.isEnabled = false
 
                     viewBinding.successLayout.root.gone()
                     viewBinding.mainLayout.root.gone()
@@ -131,11 +131,11 @@ class DropSelectionBottomSheetDialogFragment :
                     viewBinding.errorLayout.retryBtn.visible()
                 }
                 Lce.Loading -> {
-                    viewBinding.mainLayout.dropSelectionButton.showProgress {
+                    viewBinding.mainLayout.dropSelectionDirect.showProgress {
                         buttonText = "Dropping..."
                         progressColor = Color.WHITE
                     }
-                    viewBinding.mainLayout.dropSelectionButton.isEnabled = false
+                    viewBinding.mainLayout.dropSelectionDirect.isEnabled = false
 
 
                 }

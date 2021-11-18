@@ -35,6 +35,7 @@ open class JoiningList2RecyclerItemData(
         val createdAt: String?,
         val updatedAt: String?,
         val isVisible: Boolean,
+        val isActive: Boolean,
         val selectEnable: Boolean,
         val viewModel: JoiningList2ViewModel
     ): JoiningList2RecyclerItemData(

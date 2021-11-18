@@ -126,9 +126,15 @@ class JoiningList2ViewModel @Inject constructor(
             if (currentFilterString.isNullOrBlank())
                 true
             else {
-                it.status.contains(
-                    currentFilterString!!, true
-                )
+                if (currentFilterString == "Dropped"){
+                    it.isActive == false
+                }else{
+                    it.status.contains(
+                        currentFilterString!!, true
+                    ) && it.isActive == true
+
+                }
+
             }
         }.filter {
             if (filterDaysVM == null || filterDaysVM == -1)
@@ -145,7 +151,9 @@ class JoiningList2ViewModel @Inject constructor(
 
 
         val filterMap = HashMap<String, Int>()
-        var totalCount = 0
+        var droppedCount = 0
+        var pendingCount = 0
+        var completedCount = 0
         val joiningListForView = mutableListOf<JoiningList2RecyclerItemData>()
         businessToJoiningGroupedList.forEach { (business, joinings) ->
             gigforceLogger.d(TAG, "processing data, Status : $business : ${joinings.size} Joinings")
@@ -188,6 +196,7 @@ class JoiningList2ViewModel @Inject constructor(
                         createdAt = it.createdAt,
                         updatedAt = it.updatedAt,
                         isVisible = isVisible,
+                        isActive = it.isActive!!,
                         isSelectEnable,
                         this
                     )
@@ -235,21 +244,42 @@ class JoiningList2ViewModel @Inject constructor(
             }
         }.groupBy { it.status }.toSortedMap(compareBy { it })
 
-        statusToJoiningGroupedList.forEach {
-            totalCount += it.value.size
-        }
-        if (statusToJoiningGroupedList.containsKey("Pending")){
-            filterMap.put(LeadManagementConstants.STATUS_PENDING, statusToJoiningGroupedList.get("Pending")?.size!!)
-        } else {
-            filterMap.put(LeadManagementConstants.STATUS_PENDING, 0)
-        }
-        if (statusToJoiningGroupedList.containsKey("Completed")){
-            filterMap.put(LeadManagementConstants.STATUS_COMPLETED, statusToJoiningGroupedList.get("Completed")?.size!!)
-        } else  {
-            filterMap.put(LeadManagementConstants.STATUS_COMPLETED, 0)
-        }
 
-        filterMap.put("All", totalCount)
+        statusToJoiningGroupedList.forEach {
+            //totalCount += it.value.size
+            it.value.forEach {
+                if (it.isActive == false){
+                    droppedCount ++
+                }else {
+                    if (it.status == "Pending"){
+                        pendingCount ++
+                    }else if (it.status == "Completed"){
+                        completedCount ++
+                    }
+                }
+            }
+        }
+//        val activeJoinings = statusToJoiningGroupedList.filter { it.key == true }.values
+//        activeJoinings.forEach {
+//            if (it.all { it.status == "Pending" }){
+//                filterMap.put(LeadManagementConstants.STATUS_PENDING, it.all { it.status == "Pending"})
+//            }
+//        }
+
+//        if (statusToJoiningGroupedList.containsKey("Pending")){
+//            filterMap.put(LeadManagementConstants.STATUS_PENDING, statusToJoiningGroupedList.get("Pending")?.size!!)
+//        } else {
+//            filterMap.put(LeadManagementConstants.STATUS_PENDING, 0)
+//        }
+//        if (statusToJoiningGroupedList.containsKey("Completed")){
+//            filterMap.put(LeadManagementConstants.STATUS_COMPLETED, statusToJoiningGroupedList.get("Completed")?.size!!)
+//        } else  {
+//            filterMap.put(LeadManagementConstants.STATUS_COMPLETED, 0)
+//        }
+
+        filterMap.put("Dropped", droppedCount)
+        filterMap.put("Pending", pendingCount)
+        filterMap.put("Completed", completedCount)
         _filtersMap.postValue(filterMap)
 
         gigforceLogger.d(
@@ -275,7 +305,7 @@ class JoiningList2ViewModel @Inject constructor(
             .apply {
                 this.add(
                     0, JoiningStatusAndCountItemData(
-                        status = "All",
+                        status = "Dropped",
                         attendanceCount = joiningDa.size,
                         statusSelected = true
                     )
