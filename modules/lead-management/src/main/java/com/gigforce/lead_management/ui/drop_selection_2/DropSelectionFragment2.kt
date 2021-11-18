@@ -72,6 +72,7 @@ class DropSelectionFragment2 : BaseBottomSheetDialogFragment<DropSelectionFragme
     private var selectionJoiningIdsToDrop = arrayListOf<String>()
     private var selectionsToDrop = arrayListOf<DropDetail>()
     private var isBankDetailsVerified: Boolean = false
+    private var hasStartEndDate: Boolean = false
     private var gigStartDate: Date? = null
     private var gigEndDate: Date? = null
     private var currentDate: Date? = null
@@ -129,15 +130,20 @@ class DropSelectionFragment2 : BaseBottomSheetDialogFragment<DropSelectionFragme
         selectedLastWorkingDate = DateHelper.getDateInYYYYMMDD(Date())
         if (selectionJoiningsToDrop.size == 1){
             //single selection
-            currentDate = DateHelper.getDateFromString(selectionJoiningsToDrop.get(0).currentDate)
-            gigStartDate = DateHelper.getDateFromString(selectionJoiningsToDrop.get(0).gigStartDate)
-            gigEndDate = DateHelper.getDateFromString(selectionJoiningsToDrop.get(0).gigEndDate)
+            hasStartEndDate = selectionJoiningsToDrop.get(0).hasStartEndDate
             isBankDetailsVerified = selectionJoiningsToDrop.get(0).isBankVerified
-            if (currentDate!! < gigStartDate){
-                //normal drop
+            if (!hasStartEndDate){
                 showDirectDropLayout()
-            }else{
-                showJoinedNotJoinedLayout()
+            }else {
+                currentDate = DateHelper.getDateFromString(selectionJoiningsToDrop.get(0).currentDate)
+                gigStartDate = DateHelper.getDateFromString(selectionJoiningsToDrop.get(0).gigStartDate)
+                gigEndDate = DateHelper.getDateFromString(selectionJoiningsToDrop.get(0).gigEndDate)
+                if ((currentDate!! < gigStartDate)){
+                    //normal drop
+                    showDirectDropLayout()
+                }else{
+                    showJoinedNotJoinedLayout()
+                }
             }
         }else{
             //for multi selection in future
@@ -225,10 +231,10 @@ class DropSelectionFragment2 : BaseBottomSheetDialogFragment<DropSelectionFragme
         directDropLayout.apply {
             dropSelectionDirect.setOnClickListener {
                 //call drop api, current date is lesser than gig start date
-                val joiningId = selectionJoiningsToDrop.get(0).joiningId
-                val lastWorkingDate = getFormattedDateInYYYYMMDD(selectionJoiningsToDrop.get(0).currentDate)
-                val message = "Giger has not joined the gig"
                 val newCal = Calendar.getInstance()
+                val joiningId = selectionJoiningsToDrop.get(0).joiningId
+                val lastWorkingDate = DateHelper.getDateInYYYYMMDD(newCal.time)
+                val message = "Giger has not joined the gig"
                 val droppedDate = DateHelper.getDateInyyyyMMddHHmmss(newCal.time)
                 val dropDetail = DropDetail(joiningId = joiningId, lastWorkingDate, message, droppedDate )
                 selectionsToDrop.add(dropDetail)

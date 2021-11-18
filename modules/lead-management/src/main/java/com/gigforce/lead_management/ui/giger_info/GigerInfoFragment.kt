@@ -91,7 +91,7 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
 
     private fun initViews() {
         joiningId?.let {
-            dropScreenIntentModel = DropScreenIntentModel(joiningId = joiningId, false, "", "", "")
+            dropScreenIntentModel = DropScreenIntentModel(joiningId = joiningId, false, false, "", "", "")
         }
 
         if (isActive){
@@ -274,6 +274,7 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
                 hasStartEndDate = true
                 dropScreenIntentModel?.gigStartDate = it.gigStartDate
                 dropScreenIntentModel?.gigEndDate = it.gigEndDate
+                dropScreenIntentModel?.hasStartEndDate = true
             }
             if (!it.currentDate.isNullOrBlank()) {
                 dropScreenIntentModel?.currentDate = it.currentDate
@@ -383,15 +384,10 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
     private fun initListeners() = viewBinding.apply {
         bottomButtonLayout.dropGigerBtn.setOnClickListener {
             //drop functionality
-            if (hasStartEndDate){
-                DropSelectionFragment2.launch(
-                    arrayListOf<DropScreenIntentModel>(dropScreenIntentModel!!),
-                    childFragmentManager
-                )
-            }else{
-                //gigStartDate and gigEndDate are not availble -> cannot drop giger
-                showToast(getString(R.string.giger_already_disabled_lead))
-            }
+            DropSelectionFragment2.launch(
+                arrayListOf<DropScreenIntentModel>(dropScreenIntentModel!!),
+                childFragmentManager
+            )
 
         }
         bottomButtonLayout.callLayout.setOnClickListener {
