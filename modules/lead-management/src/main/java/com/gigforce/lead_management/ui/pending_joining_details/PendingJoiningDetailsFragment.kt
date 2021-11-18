@@ -1,5 +1,7 @@
 package com.gigforce.lead_management.ui.pending_joining_details
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.widget.LinearLayout
 import androidx.fragment.app.viewModels
@@ -61,6 +63,16 @@ class PendingJoiningDetailsFragment : BaseFragment2<FragmentPendingJoiningDetail
     private fun initUi() {
         viewBinding.overlayCardLayout.skipLabel.setOnClickListener {
             findNavController().navigateUp()
+        }
+
+        viewBinding.bottomButtonLayout.callLayout.setOnClickListener {
+
+            val intent =
+                Intent(
+                    Intent.ACTION_DIAL,
+                    Uri.fromParts("tel", gigerPhone, null)
+                )
+            context?.startActivity(intent)
         }
     }
 
@@ -144,7 +156,7 @@ class PendingJoiningDetailsFragment : BaseFragment2<FragmentPendingJoiningDetail
             val businessLocText = if (!it.businessLocation.isNullOrBlank() && it.businessLocation != "null") it.businessLocation else ""
             overlayCardLayout.locationText.text = ": "+reportingLocText + businessLocText ?: ""
 
-            gigerPhone = it.gigerPhone.toString()
+            gigerPhone = it.teamLeaderMobileNo.toString()
 
             context?.let { it1 ->
                 GlideApp.with(it1)

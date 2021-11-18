@@ -24,6 +24,7 @@
             app:iconGravity="textStart"
             app:iconPadding="10dp"
             app:strokeWidth="1dp"
+            android:textSize="12sp"
             app:strokeColor="@color/lipstick_2"
             app:shapeAppearanceOverlay="@style/RoundCornerButtonShapeOverlay"
             android:textColor="@color/lipstick_2"
