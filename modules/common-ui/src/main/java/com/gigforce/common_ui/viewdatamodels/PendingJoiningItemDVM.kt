@@ -7,6 +7,9 @@ import com.google.gson.annotations.SerializedName
 
 class PendingJoiningItemDVM(
 
+    @SerializedName("_id")
+    val joiningId: String = "",
+
     @SerializedName("jobProfileId")
     val jobProfileId: String = "",
 

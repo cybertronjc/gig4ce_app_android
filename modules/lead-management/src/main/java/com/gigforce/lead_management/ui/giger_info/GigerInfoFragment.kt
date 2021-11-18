@@ -282,7 +282,7 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
             val checkListItemData =
                 arrayListOf<ApplicationChecklistRecyclerItemData.ApplicationChecklistItemData>()
             if (it.checkList == null) {
-                checklistText.gone()
+                checkListTextview.gone()
                 checklistLayout.gone()
             } else {
                 it.checkList?.let { it1 ->
@@ -299,14 +299,16 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
                                 checkListItem.type,
                                 checkListItem.optional,
                                 checkListItem.frontImage,
-                                checkListItem.backImage
+                                checkListItem.backImage,
+                                checkListItem.type,
+                                checkListItem.dependency
                             )
                         checkListItemData.add(itemData)
                         if (checkListItemData.size > 0) {
                             checklistLayout.visible()
                             inflateCheckListInCheckListContainer(checkListItemData)
                         } else {
-                            checklistText.gone()
+                            checkListTextview.gone()
                             checklistLayout.gone()
                         }
 

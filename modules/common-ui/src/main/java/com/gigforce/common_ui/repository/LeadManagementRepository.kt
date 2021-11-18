@@ -35,26 +35,25 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.ktx.Firebase
-import com.google.gson.Gson
-import com.google.gson.JsonArray
-import com.google.gson.JsonObject
-import org.json.JSONArray
-import org.json.JSONObject
+import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
+@Singleton
 class LeadManagementRepository @Inject constructor(
     private val firebaseFirestore: FirebaseFirestore,
     private val firebaseAuthStateListener: FirebaseAuthStateListener,
     private val joiningProfileRemoteService: JoiningProfileService,
     private val referralService: ReferralService,
     private val buildConfig: IBuildConfig,
-    private val logger : GigforceLogger,
+    private val logger: GigforceLogger,
     private val profileCommonService: ProfileCommonService
 ) {
-
 
     companion object {
 
@@ -655,17 +654,17 @@ class LeadManagementRepository @Inject constructor(
         .bodyOrThrow()
 
     suspend fun getBusinessLocationsAndTeamLeaders(
-        businessId : String,
+        businessId: String,
         jobProfileId: String
     ) = joiningProfileRemoteService
-        .getBusinessLocationAndTeamLeaders(businessId,jobProfileId)
+        .getBusinessLocationAndTeamLeaders(businessId, jobProfileId)
         .bodyOrThrow()
 
     suspend fun submitJoiningRequest(
         joiningRequest: SubmitJoiningRequest
-    )  {
+    ) {
 
-        val response =  joiningProfileRemoteService.submitJoiningRequest(joiningRequest)
+        val response = joiningProfileRemoteService.submitJoiningRequest(joiningRequest)
         if (!response.isSuccessful) {
             throw Exception(response.errorBody()?.string() ?: "Unable to submit joining data")
         }
@@ -712,14 +711,26 @@ class LeadManagementRepository @Inject constructor(
         return joiningProfileRemoteService.dropSelections(jsonObject = dropRequest).bodyOrThrow()
     }
 
-    suspend fun getPendingJoinings() : List<PendingJoiningItemDVM>{
+    suspend fun getPendingJoinings(): List<PendingJoiningItemDVM> {
+
+//        return listOf(
+//            PendingJoiningItemDVM(
+//                jobProfileId = "SmUK9BWoFGjNKaHgLwWB",
+//                joiningId = "SmUK9BWoFGjNKaHgLwWB",
+//                jobProfileName = "Some profile",
+//                location = "Test location",
+//                expectedStartDate = "19-ovt-233",
+//                image = "https://firebasestorage.googleapis.com/v0/b/gigforce-staging.appspot.com/o/webimage%2F1632312738454?alt=media&token=14e7a9f5-f251-4f9a-8bab-eaf0a46a489a"
+//            )
+//        )
+
         return joiningProfileRemoteService.getPendingJoining().bodyOrThrow().data
     }
 
     suspend fun getUserInfoFromMobileNumber(
-        mobileNo10digit : String
-    ) : UserAuthStatusModel{
-       return profileCommonService.getUserInfoFromMobile(mobileNo10digit)
+        mobileNo10digit: String
+    ): UserAuthStatusModel {
+        return profileCommonService.getUserInfoFromMobile(mobileNo10digit)
             .bodyOrThrow()
     }
 }
