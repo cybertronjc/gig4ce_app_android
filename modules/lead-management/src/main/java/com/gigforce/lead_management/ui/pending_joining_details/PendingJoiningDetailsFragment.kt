@@ -162,8 +162,11 @@ class PendingJoiningDetailsFragment : BaseFragment2<FragmentPendingJoiningDetail
                 it.checkList?.let {
                     it.forEachIndexed { index, checkListItem ->
                         val itemData = ApplicationChecklistRecyclerItemData.ApplicationChecklistItemData(
-                            checkListItem.name,
+                            checkName = checkListItem.name,
+                            gigerUid = null,
+                            null,
                             checkListItem.status,
+                            checkListItem.type,
                             checkListItem.optional,
                             checkListItem.frontImage,
                             checkListItem.backImage,

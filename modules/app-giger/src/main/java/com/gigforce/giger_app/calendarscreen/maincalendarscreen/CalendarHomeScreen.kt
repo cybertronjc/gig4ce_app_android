@@ -157,7 +157,7 @@ class CalendarHomeScreen : Fragment(),
         super.onViewCreated(view, savedInstanceState)
 
         checkForDeepLink()
-        viewModelProfile = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+        viewModelProfile = ViewModelProvider(this).get(ProfileViewModel::class.java)
         viewModelCustomPreference =
             ViewModelProvider(this, ParamCustPreferViewModel(viewLifecycleOwner)).get(
                 CustomPreferencesViewModel::class.java

@@ -10,6 +10,9 @@ data class GigerInfo(
     @SerializedName("gigerMobileNo")
     val gigerPhone: String?,
 
+    @SerializedName("gigerId")
+    val gigerId: String?,
+
     @SerializedName("gigerProfilePicture")
     val gigerProfilePicture: String?,
 
@@ -37,6 +40,15 @@ data class GigerInfo(
     @SerializedName("selectionDate")
     val selectionDate: String,
 
+    @SerializedName("gigStartDate")
+    val gigStartDate: String,
+
+    @SerializedName("gigEndDate")
+    val gigEndDate: String,
+
+    @SerializedName("currentDate")
+    val currentDate: String,
+
     @SerializedName("status")
     val status: String,
 
@@ -55,14 +67,14 @@ data class CheckListItem(
     @SerializedName("status")
     val status: String,
 
+    @SerializedName("type")
+    val type: String,
+
     @SerializedName("frontImage")
     val frontImage: String? = "",
 
     @SerializedName("backImage")
     val backImage: String? = "",
-
-    @SerializedName("type")
-    val type: String? = "",
 
     @SerializedName("typeOptions")
     val dependency: Dependency?,

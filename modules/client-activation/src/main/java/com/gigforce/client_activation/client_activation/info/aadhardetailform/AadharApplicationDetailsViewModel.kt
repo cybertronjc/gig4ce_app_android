@@ -80,9 +80,9 @@ class AadharApplicationDetailsViewModel @Inject constructor(
 
     }
 
-    fun getVerificationData() = viewModelScope.launch {
+    fun getVerificationData(uid: String) = viewModelScope.launch {
         try {
-            val veriData = aadharDetailsRepo.getVerificationDetails()
+            val veriData = aadharDetailsRepo.getVerificationDetails(uid)
             verificationResult.postValue(veriData)
         } catch (e: Exception) {
             e.printStackTrace()

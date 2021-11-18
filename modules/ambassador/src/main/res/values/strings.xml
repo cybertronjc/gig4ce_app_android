@@ -248,6 +248,7 @@
     <string name="otp_sent_amb">OTP sent</string>
     <string name="change_photo_amb">Change Photo</string>
     <string name="upload_photo_amb">Upload Photo</string>
+    <string name="done_amb">Done</string>
     <string name="sent_otp_to_the_number_amb">We sent it to the number +91 - </string>
     <string name="enter_valid_otp_amb">Enter a valid OTP</string>
     <string name="otp_confimed_amb">OTP Confirmed, Profile Created</string>

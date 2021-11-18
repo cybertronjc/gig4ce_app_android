@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
             android:gravity="center"
-            android:text="shuhuhduhde"
+            android:text="@string/drop_selection_success"
             app:layout_constraintTop_toBottomOf="@id/tick_image_imageview" />
 
         <ImageView
