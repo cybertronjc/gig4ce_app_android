@@ -1,6 +1,7 @@
 package com.gigforce.common_ui.repository
 
 import android.util.Log
+import com.gigforce.core.StringConstants
 import com.gigforce.core.fb.BaseFirestoreDBRepository
 import com.gigforce.core.datamodels.profile.*
 import com.gigforce.core.di.repo.IProfileFirestoreRepository
@@ -244,19 +245,36 @@ class ProfileFirebaseRepository @Inject constructor() : BaseFirestoreDBRepositor
     fun setProfileTags(tags: ArrayList<String>) {
         for (tag in tags) {
             firebaseDB.collection(profileCollectionName)
-                    .document(uid).update("tags", FieldValue.arrayUnion(tag))
+                    .document(uid).update(
+                    mapOf(
+                        "tags" to FieldValue.arrayUnion(tag),
+                        "updatedAt" to Timestamp.now(),
+                        "updatedBy" to StringConstants.APP.value
+                    ))
         }
     }
 
     fun setProfileAvatarName(profileAvatarName: String) {
         firebaseDB.collection(profileCollectionName)
-                .document(uid).update("profileAvatarName", profileAvatarName)
+                .document(uid).update(
+                mapOf(
+                    "profileAvatarName" to profileAvatarName,
+                    "updatedAt" to Timestamp.now(),
+                    "updatedBy" to StringConstants.APP.value
+                )
+            )
 
     }
 
     fun setProfileThumbNail(profileAvatarName: String) {
         firebaseDB.collection(profileCollectionName)
-                .document(uid).update("profilePicThumbnail", profileAvatarName)
+                .document(uid).update(
+                mapOf(
+                    "profilePicThumbnail" to profileAvatarName,
+                    "updatedAt" to Timestamp.now(),
+                    "updatedBy" to StringConstants.APP.value
+                )
+            )
 
     }
 
@@ -269,7 +287,9 @@ class ProfileFirebaseRepository @Inject constructor() : BaseFirestoreDBRepositor
                 .document(userId ?: getUID()).update(
                         mapOf(
                                 "profileAvatarName" to profileAvatarName,
-                                "profilePicThumbnail" to profileAvatarNameThumbnail
+                                "profilePicThumbnail" to profileAvatarNameThumbnail,
+                                "updatedAt" to Timestamp.now(),
+                                "updatedBy" to StringConstants.APP.value
                         )
                 )
     }
@@ -283,12 +303,24 @@ class ProfileFirebaseRepository @Inject constructor() : BaseFirestoreDBRepositor
 
     fun setProfileBio(bio: String) {
         firebaseDB.collection(profileCollectionName)
-                .document(uid).update("bio", bio)
+                .document(uid).update(
+                mapOf(
+                    "bio" to bio,
+                    "updatedAt" to Timestamp.now(),
+                    "updatedBy" to StringConstants.APP.value
+                )
+                )
     }
 
     fun setProfileAboutMe(aboutMe: String) {
         firebaseDB.collection(profileCollectionName)
-                .document(uid).update("aboutMe", aboutMe)
+                .document(uid).update(
+                mapOf(
+                    "aboutMe" to aboutMe,
+                    "updatedAt" to Timestamp.now(),
+                    "updatedBy" to StringConstants.APP.value
+                )
+                )
     }
 
     fun addInviteToProfile() {
@@ -365,6 +397,7 @@ class ProfileFirebaseRepository @Inject constructor() : BaseFirestoreDBRepositor
     fun setAddress(address: AddressFirestoreModel) {
         firebaseDB.collection(profileCollectionName).document(uid)
                 .update("address", FieldValue.delete())
+        //doubt: why is it two times
         firebaseDB.collection(profileCollectionName).document(uid).update("address", address)
     }
 
@@ -378,7 +411,10 @@ class ProfileFirebaseRepository @Inject constructor() : BaseFirestoreDBRepositor
                                 "address.current.area" to address.area,
                                 "address.current.city" to address.city,
                                 "address.current.state" to address.state,
-                                "address.current.pincode" to address.pincode
+                                "address.current.pincode" to address.pincode,
+                                "updatedAt" to Timestamp.now(),
+                                "updatedBy" to StringConstants.APP.value
+
                         )
                 )
     }
@@ -432,7 +468,8 @@ class ProfileFirebaseRepository @Inject constructor() : BaseFirestoreDBRepositor
                 this.isonboardingdone = true
             }
             firebaseDB
-                    .collection(profileCollectionName).document(uid).update(mapOf("name" to name, "dateOfBirth" to dateOfBirth.toFirebaseTimeStamp(), "gender" to gender, "highestEducation" to highestQualification, "isonboardingdone" to true)).addOnFailureListener { exception ->
+                    .collection(profileCollectionName).document(uid).update(mapOf("name" to name, "dateOfBirth" to dateOfBirth.toFirebaseTimeStamp(), "gender" to gender, "highestEducation" to highestQualification, "isonboardingdone" to true, "updatedAt" to Timestamp.now(),
+                    "updatedBy" to StringConstants.APP.value)).addOnFailureListener { exception ->
                         FirebaseCrashlytics.getInstance().log("Exception : updateUserDetails Method $exception")
                     }
         }
@@ -467,7 +504,9 @@ class ProfileFirebaseRepository @Inject constructor() : BaseFirestoreDBRepositor
                                     "address.current.pincode" to pinCode,
                                     "address.current.state" to state,
                                     "address.current.city" to city,
-                                    "address.current.empty" to false
+                                    "address.current.empty" to false,
+                                    "updatedAt" to Timestamp.now(),
+                                    "updatedBy" to StringConstants.APP.value
                             )
                     )
         } else {
@@ -484,7 +523,9 @@ class ProfileFirebaseRepository @Inject constructor() : BaseFirestoreDBRepositor
                                     "address.home.state" to homeState,
                                     "address.home.city" to homeCity,
                                     "address.current.empty" to false,
-                                    "address.current.preferredDistanceActive" to true
+                                    "address.current.preferredDistanceActive" to true,
+                                    "updatedAt" to Timestamp.now(),
+                                    "updatedBy" to StringConstants.APP.value
                             )
                     )
         }
