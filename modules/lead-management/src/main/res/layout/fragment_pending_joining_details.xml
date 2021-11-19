@@ -48,36 +48,29 @@
 
                 </FrameLayout>
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+
+                <TextView
+                    android:id="@+id/checklistText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/size_16"
                     android:layout_marginTop="@dimen/size_24"
-                    android:orientation="vertical">
+                    android:fontFamily="@font/lato_bold"
+                    android:text="@string/application_checklist_lead"
+                    android:textColor="@color/pink_text"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
+                <LinearLayout
+                    android:id="@+id/checklist_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginTop="@dimen/size_16"
+                    android:layout_marginEnd="@dimen/size_16"
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toBottomOf="@id/checklistText" />
 
-                    <TextView
-                        android:id="@+id/checklistText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/size_16"
-                        android:layout_marginTop="@dimen/size_16"
-                        android:fontFamily="@font/lato_bold"
-                        android:text="@string/application_checklist_lead"
-                        android:textColor="@color/pink_text"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <LinearLayout
-                        android:id="@+id/checklist_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="200dp"
-                        android:layout_marginTop="@dimen/size_16"
-                        android:layout_marginEnd="@dimen/size_16"
-                        android:orientation="vertical"
-                        app:layout_constraintTop_toBottomOf="@id/checklistText" />
-
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
             </LinearLayout>
         </ScrollView>
 
@@ -97,7 +90,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/size_16"
             android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            app:layout_constraintTop_toBottomOf="@id/mainScrollView"
             app:layout_constraintBottom_toTopOf="@id/bottomButtonLayout" />
 
 
