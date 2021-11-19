@@ -257,6 +257,10 @@ class BankAccountFragment : Fragment(),
 
         viewModel.kycVerifyResult.observe(viewLifecycleOwner, Observer {
             ocrOrVerificationRquested = false
+            if (!it.status){
+                activeLoader(false)
+                it.message?.let { it1 -> showToast(it1) }
+            }
         })
 
 //        viewModel.getBankVerificationUpdation()
