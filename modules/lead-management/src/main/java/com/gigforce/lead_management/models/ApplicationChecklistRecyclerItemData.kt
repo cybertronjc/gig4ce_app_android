@@ -9,7 +9,7 @@ open class ApplicationChecklistRecyclerItemData(
 
     data class ApplicationChecklistItemData(
         val checkName: String,
-        val gigerUid: String,
+        var gigerUid: String?=null,
         val gigerName: String,
         val status: String,
         val docType: String,

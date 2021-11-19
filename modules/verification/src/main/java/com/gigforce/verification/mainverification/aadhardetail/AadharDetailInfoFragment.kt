@@ -1043,7 +1043,6 @@ class AadharDetailInfoFragment : Fragment(),
         }else{
             user?.uid
         }
-        Log.d("myuidintent", userIdToUse.toString() + ", userId: $userId")
         viewBinding.toplayoutblock.whyweneeditInvisible()
         viewModel.getStates()
 
