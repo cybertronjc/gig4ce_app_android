@@ -1,13 +1,11 @@
-package com.gigforce.lead_management.ui.drop_selection
+package com.gigforce.lead_management.ui.drop_selection_2
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gigforce.core.utils.Lse
 import com.gigforce.common_ui.repository.LeadManagementRepository
 import com.gigforce.common_ui.viewdatamodels.leadManagement.DropDetail
-import com.gigforce.common_ui.viewdatamodels.leadManagement.DropSelectionRequest
 import com.gigforce.common_ui.viewdatamodels.leadManagement.DropSelectionResponse
 import com.gigforce.core.utils.Lce
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,7 +13,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class DropSelectionViewModel @Inject constructor(
+class DropSelectionFragment2ViewModel @Inject constructor(
     private val leadManagementRepository: LeadManagementRepository
 ): ViewModel() {
 

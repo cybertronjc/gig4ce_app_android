@@ -1,5 +1,6 @@
 package com.gigforce.common_ui.viewdatamodels.leadManagement
 
+import com.gigforce.core.datamodels.client_activation.Dependency
 import com.google.gson.annotations.SerializedName
 
 data class GigerInfo(
@@ -21,6 +22,9 @@ data class GigerInfo(
     @SerializedName("businessLogo")
     val businessLogo: String,
 
+    @SerializedName("jobProfileId")
+    var jobProfileId: String,
+
     @SerializedName("jobProfileTitle")
     val jobProfileTitle: String,
 
@@ -36,11 +40,24 @@ data class GigerInfo(
     @SerializedName("selectionDate")
     val selectionDate: String,
 
+    @SerializedName("gigStartDate")
+    val gigStartDate: String,
+
+    @SerializedName("gigEndDate")
+    val gigEndDate: String,
+
+    @SerializedName("currentDate")
+    val currentDate: String,
+
     @SerializedName("status")
     val status: String,
 
     @SerializedName("checkList")
-    val checkList: List<CheckListItem>? = null,
+    val checkList: List<CheckListItem> = emptyList(),
+
+    @SerializedName("teamLeadMobileNo")
+    val teamLeaderMobileNo: String? = null
+
 ) {
 }
 
@@ -61,5 +78,9 @@ data class CheckListItem(
     val frontImage: String? = "",
 
     @SerializedName("backImage")
-    val backImage: String? = ""
+    val backImage: String? = "",
+
+    @SerializedName("typeOptions")
+    val dependency: Dependency?,
+
 ){}
