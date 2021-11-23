@@ -129,6 +129,7 @@ class PendingJoiningDetailsFragment : BaseFragment2<FragmentPendingJoiningDetail
 
         errorLayout.root.visible()
         errorLayout.infoMessageTv.text = error
+        errorLayout.infoIv.loadImage(R.drawable.ic_no_selection)
     }
 
     private fun showJoiningDetails(
