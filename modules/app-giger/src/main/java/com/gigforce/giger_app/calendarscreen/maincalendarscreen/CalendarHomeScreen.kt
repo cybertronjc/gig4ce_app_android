@@ -54,6 +54,7 @@ import com.gigforce.core.datamodels.custom_gig_preferences.UnavailableDataModel
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.navigation.NavigationOptions
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.Lce
 import com.gigforce.giger_app.R
@@ -142,9 +143,11 @@ class CalendarHomeScreen : Fragment(),
 
                     first().let {
                         navigation.navigateTo(
-                            "LeadMgmt/PendingJoiningDetails", bundleOf(
+                            "LeadMgmt/PendingJoiningDetails",
+                            bundleOf(
                                 "joining_id" to it.joiningId
-                            )
+                            ),
+                            NavigationOptions.getNavOptions()
                         )
                     }
                 }
