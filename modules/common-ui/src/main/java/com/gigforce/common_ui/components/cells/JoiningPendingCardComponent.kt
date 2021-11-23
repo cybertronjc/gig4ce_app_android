@@ -14,6 +14,7 @@ import com.gigforce.common_ui.viewdatamodels.PendingJoiningItemDVM
 import com.gigforce.common_ui.views.GigforceImageView
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.navigation.NavigationOptions
 import com.google.android.material.button.MaterialButton
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -75,9 +76,11 @@ class JoiningPendingCardComponent(
 
         pendingJoining?.let {
             navigation.navigateTo(
-                "LeadMgmt/PendingJoiningDetails", bundleOf(
+                "LeadMgmt/PendingJoiningDetails",
+                bundleOf(
                     "joining_id" to it.joiningId
-                )
+                ),
+                NavigationOptions.getNavOptions()
             )
         }
     }

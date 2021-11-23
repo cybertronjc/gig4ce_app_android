@@ -13,6 +13,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.core.AppConstants.INTENT_EXTRA_COURSE_ID
+import com.gigforce.core.datamodels.client_activation.Dependency
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.LayoutPendingJoiningChecklistItemBinding
@@ -97,57 +98,147 @@ class PendingJoiningCheckListItemComponent(
         }
     }
 
+    private fun getNavigationStr(data: Dependency): String {
+        when (data.type) {
+            "profile_pic" -> {
+                return "profile"
+            }
+            "about_me" -> {
+                return "profile/addBio"
+            }
+            "questionnaire" -> {
+                return "learning/questionnair"
+            }
+            "driving_licence" -> {
+                return "verification/drivinglicenseimageupload"
+            }
+            "learning" -> {
+                return "learning/coursedetails"
+            }
+            "aadhar_card" -> {
+                return "verification/aadhaarcardimageupload"
+            }
+            "pan_card" -> {
+                return "verification/pancardimageupload"
+            }
+            "bank_account" -> {
+                return "verification/bank_account_fragment"
+            }
+            "aadhar_card_questionnaire" -> {
+                return "verification/AadharDetailInfoFragment"
+            }
+            "jp_hub_location" -> {
+                return "client_activation/fragment_business_loc_hub"
+            }
+            "aadhar_hub_questionnaire" -> {
+                return "client_activation/joining_form"
+            }
+            "pf_esic" -> {
+                return "client_activation/pfesicFragment"
+            }
+            else -> return ""
+        }
+    }
+
+
     override fun onClick(v: View?) {
+
+        var navigationsForBundle = ArrayList<String>()
+        var startCreateNavBundle = false
+        var title = ""
+        var typeForQuestionair = ""
+        var courseId = ""
+
+        if(viewData.options != null) {
+
+            if (startCreateNavBundle && !viewData.options!!.isDone) {
+                navigationsForBundle.add(getNavigationStr(viewData.options!!))
+            }
+            if (viewData.options!!.type == viewData.options!!.type) {
+                startCreateNavBundle = true
+            }
+            if (viewData.options!!.type == "questionnaire") {
+                title = viewData.options!!.title ?: ""
+                typeForQuestionair = viewData.options!!.type ?: ""
+            }
+            if (viewData.options!!.type == "learning") {
+                courseId = viewData.options!!.courseId
+            }
+            //code to get data for title type
+        }
+
+        var bundleForFragment = bundleOf(
+            StringConstants.NAVIGATION_STRING_ARRAY.value to navigationsForBundle,
+            StringConstants.FROM_CLIENT_ACTIVATON.value to true,
+            StringConstants.ACTION.value to 1,
+            StringConstants.JOB_PROFILE_ID.value to jobProfileId,
+            StringConstants.TITLE.value to title,
+            StringConstants.TYPE.value to typeForQuestionair,
+            INTENT_EXTRA_COURSE_ID to courseId
+        )
         when (viewData.checkListItemType) {
             "profile_pic" -> {
                 navigation?.navigateTo(
-                    "profile", bundleOf(
-                        StringConstants.FROM_CLIENT_ACTIVATON.value to true,
-                        StringConstants.ACTION.value to 1
-                    )
+                    "profile", bundleForFragment
                 )
+
             }
             "about_me" -> {
                 navigation?.navigateTo(
-                    "profile/addBio", bundleOf(
-                        StringConstants.FROM_CLIENT_ACTIVATON.value to true
-                    )
+                    "profile/addBio", bundleForFragment
                 )
             }
             "questionnaire" -> navigation?.navigateTo(
-                "learning/questionnair", bundleOf(
-                    StringConstants.JOB_PROFILE_ID.value to jobProfileId,
-                    StringConstants.TITLE.value to viewData.options!!.title,
-                    StringConstants.TYPE.value to viewData.options!!.type,
-                    StringConstants.FROM_CLIENT_ACTIVATON.value to true
-                )
+                "learning/questionnair", bundleForFragment
             )
             "driving_licence" -> navigation?.navigateTo(
                 "verification/drivinglicenseimageupload",
-                bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
+                bundleForFragment
             )
-            "learning" -> navigation?.navigateTo(
-                "learning/coursedetails",
-                bundleOf(
-                    INTENT_EXTRA_COURSE_ID to viewData.options!!.courseId,
-                    StringConstants.FROM_CLIENT_ACTIVATON.value to true
+            "learning" ->
+
+                navigation?.navigateTo(
+                    "learning/coursedetails",
+                    bundleForFragment
                 )
-            )
 
             "aadhar_card" -> navigation?.navigateTo(
                 "verification/aadhaarcardimageupload",
-                bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
+
+                bundleForFragment
             )
 
             "pan_card" -> navigation?.navigateTo(
                 "verification/pancardimageupload",
-                bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
+                bundleForFragment
             )
 
             "bank_account" -> navigation?.navigateTo(
                 "verification/bank_account_fragment",
-                bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
+                bundleForFragment
+            )
+
+            "aadhar_card_questionnaire" -> navigation?.navigateTo(
+                "verification/AadharDetailInfoFragment",
+                bundleForFragment
+            )
+
+            "jp_hub_location" -> navigation?.navigateTo(
+                "client_activation/fragment_business_loc_hub",
+                bundleForFragment
+            )
+
+            "aadhar_hub_questionnaire" -> navigation?.navigateTo(
+                "client_activation/joining_form",
+                bundleForFragment
+            )
+
+            "pf_esic" -> navigation?.navigateTo(
+                "client_activation/pfesicFragment",
+                bundleForFragment
             )
         }
+
+
     }
 }

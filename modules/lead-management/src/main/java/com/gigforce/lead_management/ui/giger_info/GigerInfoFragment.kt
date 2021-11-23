@@ -331,7 +331,8 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
         removeAllViews()
 
         checkListItemData.forEach {
-
+            if(it.gigerUid == "null")
+                it.gigerUid = null
             val view = AppCheckListRecyclerComponent(requireContext(),null)
             addView(view)
             view.bind(it)

@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.widget.LinearLayout
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.gigforce.common_ui.datamodels.ShimmerDataModel
+import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.utils.getCircularProgressDrawable
 import com.gigforce.common_ui.viewdatamodels.leadManagement.GigerInfo
@@ -115,34 +117,32 @@ class PendingJoiningDetailsFragment : BaseFragment2<FragmentPendingJoiningDetail
     private fun showJoiningDetailsError(
         error: String
     ) = viewBinding.apply{
+
+        mainDetailLayout.gone()
         checklistLayout.removeAllViews()
+
         stopShimmer(
             gigerinfoShimmerContainer as LinearLayout,
             R.id.shimmer_controller
         )
         gigerinfoShimmerContainer.gone()
-        mainScrollView.visible()
 
-
-        MaterialAlertDialogBuilder(
-            requireContext()
-        ).setTitle("Unable to load info")
-            .setMessage(error)
-            .setPositiveButton("Okay"){_,_ ->}
-            .show()
+        errorLayout.root.visible()
+        errorLayout.infoMessageTv.text = error
+        errorLayout.infoIv.loadImage(R.drawable.ic_no_selection)
     }
 
     private fun showJoiningDetails(
         gigerInfo: GigerInfo
     ) = viewBinding.apply {
 
+        errorLayout.root.visible()
         stopShimmer(
             gigerinfoShimmerContainer as LinearLayout,
             R.id.shimmer_controller
         )
         gigerinfoShimmerContainer.gone()
-        mainScrollView.visible()
-
+        mainDetailLayout.visible()
 
        val totalStepsInCheckList =  gigerInfo.checkList.size
        val totalCompletedStepsInCheckList = gigerInfo.checkList.filter { it.status != "Pending" }
@@ -245,7 +245,21 @@ class PendingJoiningDetailsFragment : BaseFragment2<FragmentPendingJoiningDetail
         return formatted ?: ""
     }
 
-    private fun showDetailsLoading() {
+    private fun showDetailsLoading() = viewBinding.apply{
 
+        mainDetailLayout.gone()
+        errorLayout.root.gone()
+        gigerinfoShimmerContainer.visible()
+        startShimmer(
+            gigerinfoShimmerContainer as LinearLayout,
+            ShimmerDataModel(
+                minHeight = R.dimen.size_120,
+                minWidth = LinearLayout.LayoutParams.MATCH_PARENT,
+                marginRight = R.dimen.size_16,
+                marginTop = R.dimen.size_1,
+                orientation = LinearLayout.VERTICAL
+            ),
+            R.id.shimmer_controller
+        )
     }
 }

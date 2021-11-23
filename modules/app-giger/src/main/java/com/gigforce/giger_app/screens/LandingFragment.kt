@@ -32,6 +32,7 @@ import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.navigation.NavigationOptions
 import com.gigforce.giger_app.R
 import com.gigforce.giger_app.vm.LandingViewModel
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -169,7 +170,8 @@ class LandingFragment : Fragment(),
                         navigation.navigateTo(
                             "LeadMgmt/PendingJoiningDetails", bundleOf(
                                 "joining_id" to it.joiningId
-                            )
+                            ),
+                            navOptions = NavigationOptions.getNavOptions()
                         )
                     }
                 }
