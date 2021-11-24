@@ -603,7 +603,8 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
     ) = dynamicFieldsInflaterHelper.inflateDynamicFields(
         requireContext(),
         viewBinding.mainForm.jobProfileDependentDynamicFieldsContainer,
-        dynamicFields
+        dynamicFields,
+        childFragmentManager
     )
 
     private fun readContactsPermissionsGranted(): Boolean {

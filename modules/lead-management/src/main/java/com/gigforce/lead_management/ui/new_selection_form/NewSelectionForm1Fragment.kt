@@ -330,7 +330,8 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
     ) = dynamicFieldsInflaterHelper.inflateDynamicFields(
             requireContext(),
             viewBinding.mainForm.jobProfileDependentDynamicFieldsContainer,
-            dynamicFields
+            dynamicFields,
+            childFragmentManager
     )
 
     private fun openForm2(

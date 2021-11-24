@@ -2,13 +2,11 @@ package com.gigforce.common_ui.dynamic_fields
 
 import android.content.Context
 import android.widget.LinearLayout
+import androidx.fragment.app.FragmentManager
 import com.gigforce.common_ui.dynamic_fields.data.DataFromDynamicInputField
 import com.gigforce.common_ui.dynamic_fields.data.FieldTypes
 import com.gigforce.common_ui.dynamic_fields.data.DynamicField
-import com.gigforce.common_ui.dynamic_fields.types.DynamicDatePickerView
-import com.gigforce.common_ui.dynamic_fields.types.DynamicDropDownView
-import com.gigforce.common_ui.dynamic_fields.types.DynamicRadioButtonGroupView
-import com.gigforce.common_ui.dynamic_fields.types.DynamicTextFieldView
+import com.gigforce.common_ui.dynamic_fields.types.*
 import com.gigforce.core.logger.GigforceLogger
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -25,7 +23,8 @@ class DynamicFieldsInflaterHelper @Inject constructor(
     fun inflateDynamicFields(
         context: Context,
         containerLayout: LinearLayout,
-        fields: List<DynamicField>
+        fields: List<DynamicField>,
+        fragmentManger : FragmentManager
     ) = fields.apply {
         containerLayout.removeAllViews()
 
@@ -34,7 +33,8 @@ class DynamicFieldsInflaterHelper @Inject constructor(
             compareFieldTypeAndInflateRequiredLayout(
                 context,
                 containerLayout,
-                it
+                it,
+                fragmentManger
             )
         }
     }
@@ -42,13 +42,15 @@ class DynamicFieldsInflaterHelper @Inject constructor(
     private fun compareFieldTypeAndInflateRequiredLayout(
         context: Context,
         containerLayout: LinearLayout,
-        it: DynamicField
+        it: DynamicField,
+        fragmentManger : FragmentManager
     ) {
         when (it.fieldType) {
             FieldTypes.TEXT_FIELD -> inflateTextField(context, containerLayout, it)
             FieldTypes.DATE_PICKER -> inflateDatePicker(context, containerLayout, it)
             FieldTypes.DROP_DOWN -> inflateDropDown(context, containerLayout, it)
             FieldTypes.RADIO_BUTTON -> inflateRadioButtons(context, containerLayout, it)
+            FieldTypes.SIGNATURE_DRAWER -> inflateSignatureDrawer(context,containerLayout,it,fragmentManger)
             else -> {
                 logger.d(
                     TAG,
@@ -57,6 +59,8 @@ class DynamicFieldsInflaterHelper @Inject constructor(
             }
         }
     }
+
+
 
     private fun inflateRadioButtons(
         context: Context,
@@ -98,12 +102,17 @@ class DynamicFieldsInflaterHelper @Inject constructor(
         view.bind(it)
     }
 
-    fun inflateDynamicField(
+    private fun inflateSignatureDrawer(
         context: Context,
         containerLayout: LinearLayout,
-        field: DynamicField
-    ) = compareFieldTypeAndInflateRequiredLayout(context, containerLayout, field)
-
+        it: DynamicField,
+        fragmentManger : FragmentManager
+    ) {
+        val view = DynamicSignatureDrawerView(context, null)
+        containerLayout.addView(view)
+        view.bind(it)
+        view.setFragmentManager(fragmentManger)
+    }
 
     fun validateDynamicFieldsReturnFieldValueIfValid(
         container: LinearLayout
@@ -119,6 +128,4 @@ class DynamicFieldsInflaterHelper @Inject constructor(
 
         return dynamicFieldsData
     }
-
-
 }
