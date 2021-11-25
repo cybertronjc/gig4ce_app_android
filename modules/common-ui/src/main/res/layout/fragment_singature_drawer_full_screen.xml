@@ -1,16 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical">
 
-    <com.google.android.exoplayer2.ui.PlayerView
-        android:id="@+id/playerView"
+
+
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:controller_layout_id="@layout/fragment_play_video_controls"
-        app:show_buffering="always" />
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="Draw your signature here" />
+
+        <com.gigforce.common_ui.views.GigforceSignatureView
+            android:id="@+id/signature_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:controller_layout_id="@layout/fragment_play_video_controls"
+            app:show_buffering="always" />
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="8dp"
+            android:text="Okay" />
 
 
-</LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/image_uploading_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="60dp"
+            android:layout_height="60dp"/>
+
+
+    </LinearLayout>
+
+
+</FrameLayout>
