@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
@@ -20,7 +21,6 @@ import com.bumptech.glide.Glide
 import com.gigforce.common_image_picker.R
 import com.gigforce.common_image_picker.image_capture_camerax.CaptureImageSharedViewModel
 import com.gigforce.common_image_picker.image_capture_camerax.CaptureImageSharedViewState
-import com.gigforce.common_ui.ext.showToast
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.face.FaceDetection
@@ -216,6 +216,12 @@ class ImageViewerFragment : Fragment() {
                     }
                 }
             })
+    }
+
+    fun showToast(
+        text : String
+    ){
+        Toast.makeText(requireContext(), text, Toast.LENGTH_SHORT).show()
     }
 
 

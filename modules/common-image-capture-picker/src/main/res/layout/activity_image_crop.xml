@@ -10,13 +10,13 @@
         tools:context="com.gigforce.common_image_picker.image_cropper.ImageCropActivity">
 
 
-        <com.gigforce.common_ui.components.cells.AppBar
-            android:id="@+id/appBar"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/size_56"
-            app:backgroundType="PinkBar"
-            android:minHeight="@dimen/size_56"
-            app:titleText="Crop or rotate" />
+<!--        <com.gigforce.common_ui.components.cells.AppBar-->
+<!--            android:id="@+id/appBar"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="@dimen/size_56"-->
+<!--            app:backgroundType="PinkBar"-->
+<!--            android:minHeight="@dimen/size_56"-->
+<!--            app:titleText="Crop or rotate" />-->
 
         <com.canhub.cropper.CropImageView
             android:id="@+id/cropImageView"

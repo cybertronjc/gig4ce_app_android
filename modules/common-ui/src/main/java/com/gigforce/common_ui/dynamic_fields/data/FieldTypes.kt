@@ -7,4 +7,5 @@ object FieldTypes {
     const val DATE_PICKER = "date_picker"
     const val RADIO_BUTTON = "radio_button"
     const val SIGNATURE_DRAWER = "signature_drawer"
+    const val SIGNATURE_DRAWER_2 = "signature_drawer_2"
 }

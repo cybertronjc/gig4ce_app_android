@@ -114,11 +114,11 @@ class ImageCropActivity : AppCompatActivity() {
 
         })
 
-        appBar.apply {
-            setBackButtonListener(View.OnClickListener {
-                onBackPressed()
-            })
-        }
+//        appBar.apply {
+//            setBackButtonListener(View.OnClickListener {
+//                onBackPressed()
+//            })
+//        }
 
     }
 

@@ -51,6 +51,7 @@ class DynamicFieldsInflaterHelper @Inject constructor(
             FieldTypes.DROP_DOWN -> inflateDropDown(context, containerLayout, it)
             FieldTypes.RADIO_BUTTON -> inflateRadioButtons(context, containerLayout, it)
             FieldTypes.SIGNATURE_DRAWER -> inflateSignatureDrawer(context,containerLayout,it,fragmentManger)
+            FieldTypes.SIGNATURE_DRAWER_2 -> inflateSignatureDrawer2(context,containerLayout,it,fragmentManger)
             else -> {
                 logger.d(
                     TAG,
@@ -109,6 +110,18 @@ class DynamicFieldsInflaterHelper @Inject constructor(
         fragmentManger : FragmentManager
     ) {
         val view = DynamicSignatureDrawerView(context, null)
+        containerLayout.addView(view)
+        view.bind(it)
+        view.setFragmentManager(fragmentManger)
+    }
+
+    private fun inflateSignatureDrawer2(
+        context: Context,
+        containerLayout: LinearLayout,
+        it: DynamicField,
+        fragmentManger : FragmentManager
+    ) {
+        val view = DynamicSignatureDrawerView2(context, null)
         containerLayout.addView(view)
         view.bind(it)
         view.setFragmentManager(fragmentManger)
