@@ -30,9 +30,9 @@ data class JpApplication(
         var createdAt: Timestamp? = Timestamp.now()
 
 ){
-        fun setUpdatedAtAndBy(){
+        fun setUpdatedAtAndBy(uid : String){
                 updatedAt = Timestamp.now()
-                updatedBy = StringConstants.APP.value
+                updatedBy = uid
         }
 
         fun setCreatedAt(){

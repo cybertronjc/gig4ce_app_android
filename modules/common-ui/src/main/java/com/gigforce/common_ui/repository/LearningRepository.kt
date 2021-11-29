@@ -400,7 +400,8 @@ class LearningRepository : BaseFirestoreDBRepository() {
                     ongoing = false,
                     priority = lesson.priority,
                     completed = false,
-                    lessonType = lesson.type
+                    lessonType = lesson.type,
+                    updatedBy = getUID()
                 )
             )
 
@@ -543,7 +544,8 @@ class LearningRepository : BaseFirestoreDBRepository() {
                         ongoing = false,
                         priority = cc.priority,
                         completed = false,
-                        lessonType = cc.type
+                        lessonType = cc.type,
+                        updatedBy = getUID()
                     )
                 }
 
@@ -1236,7 +1238,8 @@ class LearningRepository : BaseFirestoreDBRepository() {
                         ongoing = false,
                         priority = cc.priority,
                         completed = false,
-                        lessonType = cc.type
+                        lessonType = cc.type,
+                        updatedBy = getUID()
                     )
                 }
 
@@ -1290,7 +1293,8 @@ class LearningRepository : BaseFirestoreDBRepository() {
                                 ongoing = false,
                                 priority = it.priority,
                                 completed = false,
-                                lessonType = it.type
+                                lessonType = it.type,
+                                updatedBy = getUID()
                             )
                         )
                     }

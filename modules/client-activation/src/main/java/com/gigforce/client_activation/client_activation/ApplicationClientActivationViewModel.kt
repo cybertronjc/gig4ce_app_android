@@ -181,7 +181,8 @@ class ApplicationClientActivationViewModel : ViewModel() {
                         }
                     }
             } else {
-                model.setUpdatedAtAndBy()
+                model.setUpdatedAtAndBy(uid = FirebaseAuthStateListener.getInstance()
+                    .getCurrentSignInUserInfoOrThrow().uid)
                 repository.db.collection("JP_Applications").document(model.id).set(model)
                     .addOnCompleteListener {
                         if (it.isSuccessful) {

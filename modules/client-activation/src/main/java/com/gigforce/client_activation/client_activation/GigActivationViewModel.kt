@@ -9,6 +9,7 @@ import com.gigforce.client_activation.client_activation.models.GigActivation
 import com.gigforce.core.datamodels.client_activation.JpApplication
 import com.gigforce.core.SingleLiveEvent
 import com.gigforce.core.datamodels.learning.LessonProgress
+import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.util.*
@@ -142,7 +143,8 @@ class GigActivationViewModel(private val savedStateHandle: SavedStateHandle) : V
                             }
                         }
                 } else {
-                    model.setUpdatedAtAndBy()
+                    model.setUpdatedAtAndBy(uid = FirebaseAuthStateListener.getInstance()
+                        .getCurrentSignInUserInfoOrThrow().uid)
                     repository.db.collection("JP_Applications").document(model.id).set(model)
                         .addOnCompleteListener {
                             if (it.isSuccessful) {
