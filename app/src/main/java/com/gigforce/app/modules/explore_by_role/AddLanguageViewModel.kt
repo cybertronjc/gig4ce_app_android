@@ -14,7 +14,7 @@ class AddLanguageViewModel : ViewModel() {
     val addLanguageRepo = AddLanguageRepository()
 
     fun addLanguages(list: MutableList<Language>) {
-        val map = mapOf("languages" to list, "updatedAt" to Timestamp.now(), "updatedBy" to StringConstants.APP.value)
+        val map = mapOf("languages" to list, "updatedAt" to Timestamp.now(), "updatedBy" to addLanguageRepo.getUID())
         addLanguageRepo.getCollectionReference().document(addLanguageRepo.getUID())
             .update(map).addOnCompleteListener {
                 if (it.isSuccessful) {

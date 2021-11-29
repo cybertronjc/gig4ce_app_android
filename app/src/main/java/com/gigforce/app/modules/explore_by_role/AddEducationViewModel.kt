@@ -16,7 +16,7 @@ class AddEducationViewModel : ViewModel() {
 
 
     fun addEducation(list: MutableList<Education>) {
-        val map = mapOf("educations" to list, "updatedAt" to Timestamp.now(), "updatedBy" to StringConstants.APP.value)
+        val map = mapOf("educations" to list, "updatedAt" to Timestamp.now(), "updatedBy" to educationRepository.getUID())
         educationRepository.getCollectionReference().document(educationRepository.getUID())
             .update(map).addOnCompleteListener {
                 if (it.isSuccessful) {

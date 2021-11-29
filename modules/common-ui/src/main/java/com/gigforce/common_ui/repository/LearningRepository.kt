@@ -360,14 +360,14 @@ class LearningRepository : BaseFirestoreDBRepository() {
     }
 
     suspend fun updateModuleProgress(progressTrackingId: String, moduleProgress: ModuleProgress) {
-        moduleProgress.setUpdatedAtAndBy()
+        moduleProgress.setUpdatedAtAndBy(getUID())
         db.collection(COURSE_PROGRESS_NAME)
             .document(progressTrackingId)
             .setOrThrow(moduleProgress)
     }
 
     suspend fun updateCourseProgress(progressTrackingId: String, courseProgress: CourseProgress) {
-        courseProgress.setUpdatedAtAndBy()
+        courseProgress.setUpdatedAtAndBy(getUID())
         db.collection(COURSE_PROGRESS_NAME)
             .document(progressTrackingId)
             .setOrThrow(courseProgress)
@@ -1402,7 +1402,7 @@ class LearningRepository : BaseFirestoreDBRepository() {
             feedback.easyToUnderStand = easyToUnderStand
             feedback.videoQuality = videoQuality
             feedback.soundQuality = soundQuality
-            feedback.setUpdatedAtAndBy()
+            feedback.setUpdatedAtAndBy(getUID())
 
             db.collection(COLLECTION_LESSON_FEEDBACK)
                 .document(docSnap.id)

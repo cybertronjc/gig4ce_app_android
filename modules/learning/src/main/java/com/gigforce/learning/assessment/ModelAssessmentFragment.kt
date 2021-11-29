@@ -2,6 +2,7 @@ package com.gigforce.learning.assessment
 
 import com.gigforce.core.StringConstants
 import com.gigforce.core.fb.BaseFirestoreDBRepository
+import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.learning.assessment.models.AssementQuestionsReponse
 import com.google.firebase.Timestamp
 import java.util.*
@@ -47,7 +48,8 @@ class ModelAssessmentFragment : BaseFirestoreDBRepository(), ModelCallbacks {
                 mapOf("is_correct" to is_correct)
             },
             "updatedAt" to Timestamp.now(),
-            "updatedBy" to StringConstants.APP,
+            "updatedBy" to FirebaseAuthStateListener.getInstance()
+                .getCurrentSignInUserInfoOrThrow().uid,
             "createdAt" to Timestamp.now()
 
         )).addOnCompleteListener {

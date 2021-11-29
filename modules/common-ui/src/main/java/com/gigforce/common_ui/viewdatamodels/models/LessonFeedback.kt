@@ -48,15 +48,15 @@ data class LessonFeedback (
 
     @get:PropertyName("updatedBy")
     @set:PropertyName("updatedBy")
-    var updatedBy : String ?= StringConstants.APP.value,
+    var updatedBy : String ?= null,
 
     @get:PropertyName("createdAt")
     @set:PropertyName("createdAt")
     var createdAt : Timestamp?= Timestamp.now()
 ){
-    fun setUpdatedAtAndBy(){
+    fun setUpdatedAtAndBy(uid: String){
         updatedAt = Timestamp.now()
-        updatedBy = StringConstants.APP.value
+        updatedBy = uid
     }
 
     fun setCreatedAt(){

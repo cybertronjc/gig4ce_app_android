@@ -65,7 +65,8 @@ class HubSubmissionRepository {
 
                 FirebaseFirestore.getInstance()
                     .collection("JP_Applications")
-                    .document(jpApplication.id).updateOrThrow(mapOf("updatedAt" to Timestamp.now(), "updatedBy" to StringConstants.APP.value))
+                    .document(jpApplication.id).updateOrThrow(mapOf("updatedAt" to Timestamp.now(), "updatedBy" to FirebaseAuthStateListener.getInstance()
+                        .getCurrentSignInUserInfoOrThrow().uid))
 
                 return jpApplication
             }
