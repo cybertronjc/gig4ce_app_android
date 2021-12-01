@@ -225,8 +225,14 @@ class DynamicFieldsInflaterHelper @Inject constructor(
     }
 
     fun handleVerificationSubmissionEvent(
+       verificationRelatedDynamicFieldsContainer : LinearLayout,
        event : SharedVerificationViewModelEvent
     ){
 
+        for (i in 0 until verificationRelatedDynamicFieldsContainer.childCount) {
+
+            val dynamicFieldView = verificationRelatedDynamicFieldsContainer.getChildAt(i) as DynamicVerificationFieldView
+            dynamicFieldView.handleVerificationResult(event)
+        }
     }
 }

@@ -15,20 +15,28 @@ import com.gigforce.common_ui.databinding.LayoutDynamicFieldVerificationViewBind
 import com.gigforce.common_ui.dynamic_fields.DynamicVerificationFieldView
 import com.gigforce.common_ui.dynamic_fields.data.DynamicField
 import com.gigforce.common_ui.ext.addMandatorySymbolToTextEnd
+import com.gigforce.common_ui.navigation.JoiningVerificationFormsNavigation
 import com.gigforce.common_ui.viewmodels.verification.SharedVerificationViewModelEvent
 import com.gigforce.core.datamodels.verification.AadhaarDetailsDataModel
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
+import com.gigforce.core.navigation.INavigation
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.parcel.Parcelize
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class DynamicAadhaarVerificationView(
     context: Context,
     attrs: AttributeSet?
 ) : LinearLayout(
     context,
     attrs
-), DynamicVerificationFieldView {
+), DynamicVerificationFieldView,
+    View.OnClickListener {
+
+    @Inject
+    lateinit var joiningVerificationNavigation: JoiningVerificationFormsNavigation
 
     private var viewBinding: LayoutDynamicFieldVerificationViewBinding
     private lateinit var viewData: DynamicField
@@ -45,6 +53,7 @@ class DynamicAadhaarVerificationView(
             this,
             true
         )
+        viewBinding.root.setOnClickListener(this)
     }
 
     override fun bind(
@@ -151,6 +160,13 @@ class DynamicAadhaarVerificationView(
 
     private fun showAadhaarInfoAsSubmitted() {
 
+    }
+
+    override fun onClick(v: View?) {
+        joiningVerificationNavigation.openAadhaarVerificationQuestionnaireForJoiningFragment(
+            userId = "ss",
+            jobProfileId = "SS"
+        )
     }
 
     @Parcelize

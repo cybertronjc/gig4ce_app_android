@@ -20,7 +20,6 @@ open class ApplicationChecklistRecyclerItemData(
         val backImage: String?,
         val checkListItemType : String?,
         val options : Dependency?
-
     ): ApplicationChecklistRecyclerItemData(
         LeadActivationViewTypes.GigerInfo
     )

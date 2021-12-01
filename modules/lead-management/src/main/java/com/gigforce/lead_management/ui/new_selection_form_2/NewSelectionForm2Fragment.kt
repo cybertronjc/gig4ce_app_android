@@ -29,6 +29,7 @@ import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
+import com.gigforce.common_ui.viewmodels.verification.SharedVerificationViewModel
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.getTextChangeAsStateFlow
 import com.gigforce.core.extensions.gone
@@ -41,7 +42,6 @@ import com.gigforce.lead_management.databinding.FragmentNewSelectionForm2Binding
 import com.gigforce.lead_management.models.WhatsappTemplateModel
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModelState
-import com.gigforce.lead_management.ui.new_selection_form.NewSelectionForm1Events
 import com.gigforce.lead_management.ui.new_selection_form.NewSelectionForm1Fragment
 import com.gigforce.lead_management.ui.new_selection_form_submittion_success.SelectionFormSubmitSuccessFragment
 import com.gigforce.lead_management.ui.select_city.SelectCityFragment
@@ -75,22 +75,27 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         const val SCREEN_ID = "form_2"
         const val INTENT_EXTRA_JOINING_DATA = "joining_data"
         const val INTENT_EXTRA_DYNAMIC_FIELDS = "dynamic_fields"
+        const val INTENT_EXTRA_VERIFICATION_DYNAMIC_FIELDS = "verification_dynamic_fields"
     }
 
     @Inject
     lateinit var navigation: INavigation
+
     @Inject
     lateinit var userinfo: UserInfoImp
+
     @Inject
     lateinit var dynamicFieldsInflaterHelper: DynamicFieldsInflaterHelper
 
     private val viewModel: NewSelectionForm2ViewModel by viewModels()
     private val leadMgmtSharedViewModel: LeadManagementSharedViewModel by activityViewModels()
-    private val dateFormatter =  SimpleDateFormat("dd/MMM/yy",Locale.getDefault())
+    private val verificationSharedViewModel : SharedVerificationViewModel by activityViewModels()
+    private val dateFormatter = SimpleDateFormat("dd/MMM/yy", Locale.getDefault())
 
     //Data from previous screen
     private lateinit var joiningRequest: SubmitJoiningRequest
-    private lateinit var dynamicInputsFields : ArrayList<DynamicField>
+    private lateinit var dynamicInputsFields: ArrayList<DynamicField>
+    private lateinit var verificationRelatedDynamicInputsFields: ArrayList<DynamicField>
 
     private val expectedStartDatePicker: DatePickerDialog by lazy {
         val cal = Calendar.getInstance()
@@ -198,12 +203,18 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         super.onCreate(savedInstanceState)
         arguments?.let {
             joiningRequest = it.getParcelable(INTENT_EXTRA_JOINING_DATA) ?: return@let
-            dynamicInputsFields = it.getParcelableArrayList(INTENT_EXTRA_DYNAMIC_FIELDS) ?: arrayListOf()
+            dynamicInputsFields =
+                it.getParcelableArrayList(INTENT_EXTRA_DYNAMIC_FIELDS) ?: arrayListOf()
+            verificationRelatedDynamicInputsFields =
+                it.getParcelableArrayList(INTENT_EXTRA_VERIFICATION_DYNAMIC_FIELDS) ?: arrayListOf()
         }
 
         savedInstanceState?.let {
             joiningRequest = it.getParcelable(INTENT_EXTRA_JOINING_DATA) ?: return@let
-            dynamicInputsFields = it.getParcelableArrayList(INTENT_EXTRA_DYNAMIC_FIELDS) ?: arrayListOf()
+            dynamicInputsFields =
+                it.getParcelableArrayList(INTENT_EXTRA_DYNAMIC_FIELDS) ?: arrayListOf()
+            verificationRelatedDynamicInputsFields =
+                it.getParcelableArrayList(INTENT_EXTRA_VERIFICATION_DYNAMIC_FIELDS) ?: arrayListOf()
         }
 
         viewModel.handleEvent(
@@ -226,7 +237,10 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         savedInstanceState: Bundle?
     ) {
         if (viewCreatedForTheFirstTime) {
-            showJobProfileRelatedDynamicFields(dynamicInputsFields)
+            showJobProfileRelatedDynamicFields(
+                dynamicInputsFields,
+                verificationRelatedDynamicInputsFields
+            )
             setTextWatchers()
         }
 
@@ -234,9 +248,10 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         initListeners(viewBinding)
         initViewModel()
         initSharedViewModel()
+        initVerificationSharedViewModel()
     }
 
-    private fun setTextWatchers() = viewBinding.mainForm.apply{
+    private fun setTextWatchers() = viewBinding.mainForm.apply {
 
         lifecycleScope.launchWhenCreated {
 
@@ -293,11 +308,14 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         }
     }
 
-    private fun validateDataAndSubmitData() = viewBinding.mainForm.jobProfileDependentDynamicFieldsContainer.apply{
+    private fun validateDataAndSubmitData() =
+        viewBinding.mainForm.jobProfileDependentDynamicFieldsContainer.apply {
 
-        val dynamicFieldsData = dynamicFieldsInflaterHelper.validateDynamicFieldsReturnFieldValueIfValid(this) ?: return@apply
-        viewModel.handleEvent(NewSelectionForm2Events.SubmitButtonPressed(dynamicFieldsData.toMutableList()))
-    }
+            val dynamicFieldsData =
+                dynamicFieldsInflaterHelper.validateDynamicFieldsReturnFieldValueIfValid(this)
+                    ?: return@apply
+            viewModel.handleEvent(NewSelectionForm2Events.SubmitButtonPressed(dynamicFieldsData.toMutableList()))
+        }
 
     private fun initToolbar(
         viewBinding: FragmentNewSelectionForm2Binding
@@ -357,7 +375,13 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                 }
                 is NewSelectionForm2ViewState.JoiningDataSubmitted -> {
                     try {
-                        val whatsAppIntentData = WhatsappTemplateModel(state.shareLink, state.businessName, userinfo.getData().profileName, state.jobProfileName, userinfo.sharedPreAndCommonUtilInterface.getLoggedInMobileNumber())
+                        val whatsAppIntentData = WhatsappTemplateModel(
+                            state.shareLink,
+                            state.businessName,
+                            userinfo.getData().profileName,
+                            state.jobProfileName,
+                            userinfo.sharedPreAndCommonUtilInterface.getLoggedInMobileNumber()
+                        )
                         navigation.navigateTo(
                             LeadManagementNavDestinations.FRAGMENT_SELECT_FORM_SUCCESS,
                             bundleOf(
@@ -365,7 +389,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
 
                                 )
                         )
-                    }catch (e: Exception){
+                    } catch (e: Exception) {
 
                     }
                 }
@@ -415,7 +439,8 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
     ) {
         navigation.navigateTo(
             LeadManagementNavDestinations.FRAGMENT_SELECT_CITY,
-            bundleOf(SelectCityFragment.INTENT_EXTRA_CITY_LIST to cities,
+            bundleOf(
+                SelectCityFragment.INTENT_EXTRA_CITY_LIST to cities,
                 SelectCityFragment.INTENT_ONSITE_OFFSITE to locationType
             ),
             getNavOptions()
@@ -430,7 +455,8 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         if (errorState.assignGigsFromError != null) {
 
             viewBinding.mainForm.expectedDateOfJoiningError.root.visible()
-            viewBinding.mainForm.expectedDateOfJoiningError.errorTextview.text = errorState.assignGigsFromError
+            viewBinding.mainForm.expectedDateOfJoiningError.errorTextview.text =
+                errorState.assignGigsFromError
         } else {
             viewBinding.mainForm.expectedDateOfJoiningError.errorTextview.text = null
             viewBinding.mainForm.expectedDateOfJoiningError.root.gone()
@@ -447,7 +473,8 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
 
         if (errorState.reportingLocationError != null) {
             viewBinding.mainForm.reportingLocationError.root.visible()
-            viewBinding.mainForm.reportingLocationError.errorTextview.text = errorState.reportingLocationError
+            viewBinding.mainForm.reportingLocationError.errorTextview.text =
+                errorState.reportingLocationError
         } else {
             viewBinding.mainForm.reportingLocationError.errorTextview.text = null
             viewBinding.mainForm.reportingLocationError.root.gone()
@@ -455,7 +482,8 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
 
         if (errorState.secondaryPhoneNumberError != null) {
             viewBinding.mainForm.contactNoError.root.visible()
-            viewBinding.mainForm.contactNoError.errorTextview.text = errorState.secondaryPhoneNumberError
+            viewBinding.mainForm.contactNoError.errorTextview.text =
+                errorState.secondaryPhoneNumberError
         } else {
             viewBinding.mainForm.contactNoError.errorTextview.text = null
             viewBinding.mainForm.contactNoError.root.gone()
@@ -496,26 +524,33 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
 
         mainForm.root.visible()
 
-        if(selectedCity != null) {
+        if (selectedCity != null) {
             mainForm.citySelectedLabel.text = selectedCity
-            mainForm.citySelectedLabel.setTypeface(mainForm.citySelectedLabel.typeface,Typeface.BOLD)
-        } else{
+            mainForm.citySelectedLabel.setTypeface(
+                mainForm.citySelectedLabel.typeface,
+                Typeface.BOLD
+            )
+        } else {
             mainForm.citySelectedLabel.text = getString(R.string.click_to_select_city_lead)
         }
 
-        if (locationType == "On Site"){
+        if (locationType == "On Site") {
             mainForm.reportingLocationLabelLayout.visible()
             mainForm.selectReportingLocationCardlayout.visible()
-        }else{
+        } else {
             mainForm.reportingLocationLabelLayout.gone()
             mainForm.selectReportingLocationCardlayout.gone()
         }
 
-        if(selectedReportingLocation != null) {
+        if (selectedReportingLocation != null) {
             mainForm.reportingLocationSelectedLabel.text = selectedReportingLocation
-            mainForm.reportingLocationSelectedLabel.setTypeface(mainForm.reportingLocationSelectedLabel.typeface,Typeface.BOLD)
-        } else{
-            mainForm.reportingLocationSelectedLabel.text = getString(R.string.click_to_select_location_lead)
+            mainForm.reportingLocationSelectedLabel.setTypeface(
+                mainForm.reportingLocationSelectedLabel.typeface,
+                Typeface.BOLD
+            )
+        } else {
+            mainForm.reportingLocationSelectedLabel.text =
+                getString(R.string.click_to_select_location_lead)
         }
     }
 
@@ -551,11 +586,23 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
             })
     }
 
+    private fun initVerificationSharedViewModel() = lifecycleScope.launchWhenCreated{
+
+        verificationSharedViewModel
+            .submissionEvents
+            .collect{
+                dynamicFieldsInflaterHelper.handleVerificationSubmissionEvent(
+                    viewBinding.mainForm.verificationRelatedDynamicFieldsContainer,
+                    it
+                )
+            }
+    }
+
     private fun showSelectedCity(
         citySelected: ReportingLocationsItem
     ) = viewBinding.mainForm.apply {
         citySelectedLabel.text = citySelected.name
-        citySelectedLabel.setTypeface(citySelectedLabel.typeface,Typeface.BOLD)
+        citySelectedLabel.setTypeface(citySelectedLabel.typeface, Typeface.BOLD)
 
         viewModel.handleEvent(NewSelectionForm2Events.CitySelected(citySelected))
 
@@ -595,17 +642,28 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         selectedClientTlLabel.text = tlSelected.name
         viewModel.handleEvent(NewSelectionForm2Events.ClientTLSelected(tlSelected))
 
-        selectedClientTlLabel.setTypeface(selectedClientTlLabel.typeface,Typeface.BOLD)
+        selectedClientTlLabel.setTypeface(selectedClientTlLabel.typeface, Typeface.BOLD)
     }
 
     private fun showJobProfileRelatedDynamicFields(
-        dynamicFields: List<DynamicField>
-    ) = dynamicFieldsInflaterHelper.inflateDynamicFields(
-        requireContext(),
-        viewBinding.mainForm.jobProfileDependentDynamicFieldsContainer,
-        dynamicFields,
-        childFragmentManager
-    )
+        dynamicFields: List<DynamicField>,
+        verificationRelatedDynamicInputsFields: List<DynamicField>
+    ) = dynamicFieldsInflaterHelper.apply {
+
+        inflateDynamicFields(
+            requireContext(),
+            viewBinding.mainForm.verificationRelatedDynamicFieldsContainer,
+            verificationRelatedDynamicInputsFields,
+            childFragmentManager
+        )
+
+        inflateDynamicFields(
+            requireContext(),
+            viewBinding.mainForm.jobProfileDependentDynamicFieldsContainer,
+            dynamicFields,
+            childFragmentManager
+        )
+    }
 
     private fun readContactsPermissionsGranted(): Boolean {
         return ContextCompat.checkSelfPermission(

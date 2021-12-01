@@ -238,10 +238,16 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
     private fun validateDataAndSubmitData() =
         viewBinding.mainForm.jobProfileDependentDynamicFieldsContainer.apply {
 
+            val verificationRelatedDynamicFieldsData = dynamicFieldsInflaterHelper.validateVerificationDynamicFieldsAndReturnVerificationDetails(this)
+                    ?: return@apply
+
             val dynamicFieldsData =
                 dynamicFieldsInflaterHelper.validateDynamicFieldsReturnFieldValueIfValid(this)
                     ?: return@apply
-            viewModel.handleEvent(NewSelectionForm1Events.SubmitButtonPressed(dynamicFieldsData.toMutableList()))
+            viewModel.handleEvent(NewSelectionForm1Events.SubmitButtonPressed(
+                dataFromDynamicFields = dynamicFieldsData.toMutableList(),
+                dataFromVerificationDynamicFields = verificationRelatedDynamicFieldsData
+            ))
         }
 
     private fun initToolbar(
@@ -309,7 +315,8 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
                 //Data submit states
                 is NewSelectionForm1ViewState.NavigateToForm2 -> openForm2(
                     state.submitJoiningRequest,
-                    ArrayList(state.dynamicInputsFields)
+                    ArrayList(state.dynamicInputsFields),
+                    ArrayList(state.verificationRelatedDynamicInputsFields)
                 )
                 is NewSelectionForm1ViewState.ShowJobProfileRelatedField -> showJobProfileRelatedFields(
                     state.verificationRelatedFields,
@@ -355,13 +362,15 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
 
     private fun openForm2(
         submitJoiningRequest: SubmitJoiningRequest,
-        dynamicInputsFieldValues: ArrayList<DynamicField>
+        dynamicInputsFieldValues: ArrayList<DynamicField>,
+        verificationRelatedDynamicInputsFieldValues: ArrayList<DynamicField>
     ) {
 
         navigation.navigateTo(
             LeadManagementNavDestinations.FRAGMENT_SELECTION_FORM_2, bundleOf(
                 NewSelectionForm2Fragment.INTENT_EXTRA_JOINING_DATA to submitJoiningRequest,
-                NewSelectionForm2Fragment.INTENT_EXTRA_DYNAMIC_FIELDS to dynamicInputsFieldValues
+                NewSelectionForm2Fragment.INTENT_EXTRA_DYNAMIC_FIELDS to dynamicInputsFieldValues,
+                NewSelectionForm2Fragment.INTENT_EXTRA_VERIFICATION_DYNAMIC_FIELDS to verificationRelatedDynamicInputsFieldValues
             )
         )
         hideSoftKeyboard()
@@ -511,8 +520,10 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
         verificationSharedViewModel
             .submissionEvents
             .collect{
-
-            dynamicFieldsInflaterHelper.
+                dynamicFieldsInflaterHelper.handleVerificationSubmissionEvent(
+                    viewBinding.mainForm.verificationRelatedDynamicFieldsContainer,
+                    it
+                )
         }
     }
 

@@ -1,4 +1,4 @@
-package com.gigforce.verification.joiningVerficationForms
+package com.gigforce.common_ui.navigation
 
 object JoiningVerificationNavDestinations {
 

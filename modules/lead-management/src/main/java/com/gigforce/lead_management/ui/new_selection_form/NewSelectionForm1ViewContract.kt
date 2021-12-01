@@ -5,6 +5,7 @@ import com.gigforce.common_ui.dynamic_fields.data.DataFromDynamicInputField
 import com.gigforce.common_ui.dynamic_fields.data.DynamicField
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.core.datamodels.profile.ProfileData
+import com.gigforce.core.datamodels.verification.VerificationDocuments
 
 sealed class NewSelectionForm1ViewState {
 
@@ -47,7 +48,8 @@ sealed class NewSelectionForm1ViewState {
 
     data class NavigateToForm2(
         val submitJoiningRequest: SubmitJoiningRequest,
-        val dynamicInputsFields : List<DynamicField>
+        val dynamicInputsFields : List<DynamicField>,
+        val verificationRelatedDynamicInputsFields : List<DynamicField>
     ) : NewSelectionForm1ViewState()
 
     object EnableSubmitButton : NewSelectionForm1ViewState()
@@ -83,6 +85,7 @@ sealed class NewSelectionForm1Events {
     ) : NewSelectionForm1Events()
 
     data class SubmitButtonPressed(
+        val dataFromVerificationDynamicFields : VerificationDocuments,
         val dataFromDynamicFields : MutableList<DataFromDynamicInputField>
     ) : NewSelectionForm1Events()
 

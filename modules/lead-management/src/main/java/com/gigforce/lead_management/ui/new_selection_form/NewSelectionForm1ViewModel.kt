@@ -8,12 +8,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.dynamic_fields.data.DataFromDynamicInputField
+import com.gigforce.common_ui.dynamic_fields.data.DynamicField
+import com.gigforce.common_ui.dynamic_fields.data.FieldTypes
 import com.gigforce.common_ui.repository.LeadManagementRepository
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfilesItem
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JoiningBusinessAndJobProfilesItem
 import com.gigforce.common_ui.viewdatamodels.leadManagement.SubmitJoiningRequest
 import com.gigforce.core.ValidationHelper
 import com.gigforce.core.datamodels.profile.ProfileData
+import com.gigforce.core.datamodels.verification.VerificationDocuments
 import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.lead_management.R
@@ -76,7 +79,8 @@ class NewSelectionForm1ViewModel @Inject constructor(
             NewSelectionForm1Events.OpenSelectBusinessScreenSelected -> openSelectBusinessScreen()
             NewSelectionForm1Events.OpenSelectJobProfileScreenSelected -> openJobProfilesScreen()
             is NewSelectionForm1Events.SubmitButtonPressed -> validateDataAndNavigateToForm2(
-                event.dataFromDynamicFields
+                event.dataFromDynamicFields,
+                event.dataFromVerificationDynamicFields
             )
         }
 
@@ -87,9 +91,41 @@ class NewSelectionForm1ViewModel @Inject constructor(
         jobProfile: JobProfilesItem
     ) = viewModelScope.launch {
 
-        val selectedJobProfileVerificationDependentDynamicFields = jobProfile.verificationRelatedFields.filter {
-            it.screenIdToShowIn == NewSelectionForm1Fragment.SCREEN_ID
-        }
+        val selectedJobProfileVerificationDependentDynamicFields = listOf(
+
+            DynamicField(
+                fieldType = FieldTypes.AADHAAR_VERIFICATION_VIEW,
+                mandatory = true,
+                prefillText = "Provide Aadhaar details",
+                screenIdToShowIn = NewSelectionForm1Fragment.SCREEN_ID,
+                title = "Giger Aadhar Card"
+            ),
+            DynamicField(
+                fieldType = FieldTypes.BANK_VERIFICATION_VIEW,
+                mandatory = true,
+                prefillText = "Provide Bank details",
+                screenIdToShowIn = NewSelectionForm1Fragment.SCREEN_ID,
+                title = "Giger Bank Details"
+            ),
+            DynamicField(
+                fieldType = FieldTypes.DL_VERIFICATION_VIEW,
+                mandatory = true,
+                prefillText = "Provide Driving license",
+                screenIdToShowIn = NewSelectionForm1Fragment.SCREEN_ID,
+                title = "Giger DL Card"
+            ),
+            DynamicField(
+                fieldType = FieldTypes.PAN_VERIFICATION_VIEW,
+                mandatory = true,
+                prefillText = "Provide pan details",
+                screenIdToShowIn = NewSelectionForm1Fragment.SCREEN_ID,
+                title = "Giger PAN Card"
+            )
+        )
+
+//        val selectedJobProfileVerificationDependentDynamicFields = jobProfile.verificationRelatedFields.filter {
+//            it.screenIdToShowIn == NewSelectionForm1Fragment.SCREEN_ID
+//        }
 
         val selectedJobProfileDependentDynamicFields = jobProfile.dynamicFields.filter {
             it.screenIdToShowIn == NewSelectionForm1Fragment.SCREEN_ID
@@ -181,7 +217,8 @@ class NewSelectionForm1ViewModel @Inject constructor(
     }
 
     private fun validateDataAndNavigateToForm2(
-        dataFromDynamicFields: MutableList<DataFromDynamicInputField>
+        dataFromDynamicFields: MutableList<DataFromDynamicInputField>,
+        verificationDocuments: VerificationDocuments
     ) {
 
         if (mobilePhoneNumber.isNullOrBlank() || !ValidationHelper.isValidIndianMobileNo(
@@ -245,7 +282,11 @@ class NewSelectionForm1ViewModel @Inject constructor(
             return
         }
 
-        val dynamicFieldsForNextForm = selectedJobProfile!!.dynamicFields?.filter {
+        val dynamicFieldsForNextForm = selectedJobProfile!!.dynamicFields.filter {
+            it.screenIdToShowIn == NewSelectionForm2Fragment.SCREEN_ID
+        }
+
+        val verificationRelatedDynamicFieldsForNextForm = selectedJobProfile!!.verificationRelatedFields.filter {
             it.screenIdToShowIn == NewSelectionForm2Fragment.SCREEN_ID
         }
 
@@ -255,9 +296,11 @@ class NewSelectionForm1ViewModel @Inject constructor(
                 jobProfile = selectedJobProfile!!,
                 gigerName = gigerName!!,
                 gigerMobileNo = mobilePhoneNumber!!,
-                dataFromDynamicFields = dataFromDynamicFields
+                dataFromDynamicFields = dataFromDynamicFields,
+                verificationDocuments = verificationDocuments
             ),
-            dynamicInputsFields = dynamicFieldsForNextForm
+            dynamicInputsFields = dynamicFieldsForNextForm,
+            verificationRelatedDynamicInputsFields = verificationRelatedDynamicFieldsForNextForm
         )
         _viewState.value = null
     }

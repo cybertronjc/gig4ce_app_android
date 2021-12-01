@@ -42,9 +42,11 @@ class SharedVerificationViewModel : ViewModel() {
         bankAccountNumber : String
     ) = _submissionEvents.tryEmit(
         SharedVerificationViewModelEvent.BankDetailsInfoSubmitted(
-            bankName = bankName,
-            ifsc = ifsc,
-            bankAccountNumber = bankAccountNumber
+            BankAccountDetailsDataModel(
+                bankName = bankName,
+                ifsc = ifsc,
+                bankAccountNumber = bankAccountNumber
+            )
         )
     )
 
@@ -56,11 +58,13 @@ class SharedVerificationViewModel : ViewModel() {
         dateOfBirth : String
     ) = _submissionEvents.tryEmit(
         SharedVerificationViewModelEvent.DrivingLicenseInfoSubmitted(
-            name = name,
-            drivingLicenseNo = drivingLicenseNo,
-            issueDate = issueDate,
-            expiryDate = expiryDate,
-            dateOfBirth = dateOfBirth
+            DrivingLicenseDetailsDataModel(
+                name = name,
+                drivingLicenseNo = drivingLicenseNo,
+                issueDate = issueDate,
+                expiryDate = expiryDate,
+                dateOfBirth = dateOfBirth
+            )
         )
     )
 
@@ -69,8 +73,10 @@ class SharedVerificationViewModel : ViewModel() {
         panCardNo : String
     ) = _submissionEvents.tryEmit(
         SharedVerificationViewModelEvent.PanCardInfoSubmitted(
-            panCardImagePath = panCardImagePath,
-            panCardNo = panCardNo
+            PanDetailsDataModel(
+                panCardImagePath = panCardImagePath,
+                panCardNo = panCardNo
+            )
         )
     )
 

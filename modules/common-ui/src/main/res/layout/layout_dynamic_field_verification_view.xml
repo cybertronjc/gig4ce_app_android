@@ -7,6 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
+        android:paddingBottom="6dp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -47,18 +48,17 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="4dp"
-            android:background="@drawable/drop_shadow_background_draw"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             app:cardCornerRadius="6dp"
-            app:cardElevation="8dp">
+            app:cardElevation="6dp">
 
             <LinearLayout
                 android:id="@+id/verification_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/rectangle_2"
                 android:gravity="center_vertical"
+                android:minHeight="40dp"
                 android:orientation="horizontal">
 
                 <TextView

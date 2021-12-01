@@ -2,7 +2,7 @@ package com.gigforce.app.nav
 
 import com.gigforce.app.R
 import com.gigforce.common_ui.BaseNavigationImpl
-import com.gigforce.verification.joiningVerficationForms.JoiningVerificationNavDestinations
+import com.gigforce.common_ui.navigation.JoiningVerificationNavDestinations
 
 class NavForVerificationModule(
     baseImplementation: BaseNavigationImpl

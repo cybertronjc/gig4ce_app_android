@@ -1,7 +1,10 @@
 package com.gigforce.core.datamodels.verification
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class VerificationDocuments(
 
     @SerializedName("aadhaarDocument")
@@ -15,4 +18,4 @@ data class VerificationDocuments(
 
     @SerializedName("panDetails")
     var panDetails : PanDetailsDataModel? = null
-)
+) : Parcelable

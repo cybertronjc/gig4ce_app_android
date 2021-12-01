@@ -1,7 +1,10 @@
 package com.gigforce.core.datamodels.verification
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class AadhaarDetailsDataModel(
 
         @SerializedName("frontImagePath")
@@ -48,8 +51,9 @@ data class AadhaarDetailsDataModel(
 
         @SerializedName("verified")
         var verified : Boolean?=false
-) : VerificationUserSubmittedData
+) : VerificationUserSubmittedData, Parcelable
 
+@Parcelize
 data class CurrentAddressDetailDataModel(
 
         @SerializedName("addLine1")
@@ -69,4 +73,4 @@ data class CurrentAddressDetailDataModel(
 
         @SerializedName("landmark")
         var landmark: String? = ""
-)
+) : Parcelable

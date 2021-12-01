@@ -1,8 +1,10 @@
 package com.gigforce.core.datamodels.verification
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
-
+@Parcelize
 data class BankAccountDetailsDataModel(
 
         @SerializedName("bankName")
@@ -14,5 +16,5 @@ data class BankAccountDetailsDataModel(
         @SerializedName("bankAccountNumber")
         var bankAccountNumber: String? = ""
 
-) : VerificationUserSubmittedData
+) : VerificationUserSubmittedData, Parcelable
 

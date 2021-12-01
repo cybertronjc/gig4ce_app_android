@@ -1,8 +1,10 @@
 package com.gigforce.core.datamodels.verification
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
-
+@Parcelize
 data class DrivingLicenseDetailsDataModel(
 
     @SerializedName("name")
@@ -20,4 +22,4 @@ data class DrivingLicenseDetailsDataModel(
     @SerializedName("dateOfBirth")
     var dateOfBirth: String? = ""
 
-) : VerificationUserSubmittedData
+) : VerificationUserSubmittedData, Parcelable

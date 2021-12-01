@@ -1,8 +1,11 @@
 package com.gigforce.core.datamodels.verification
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
 
+@Parcelize
 data class PanDetailsDataModel(
 
         @SerializedName("panCardImagePath")
@@ -11,4 +14,4 @@ data class PanDetailsDataModel(
         @SerializedName("panCardNo")
         var panCardNo: String? = ""
 
-) : VerificationUserSubmittedData
+) : VerificationUserSubmittedData, Parcelable

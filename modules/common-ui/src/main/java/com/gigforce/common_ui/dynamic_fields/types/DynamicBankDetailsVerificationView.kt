@@ -15,12 +15,14 @@ import com.gigforce.common_ui.databinding.LayoutDynamicFieldVerificationViewBind
 import com.gigforce.common_ui.dynamic_fields.DynamicVerificationFieldView
 import com.gigforce.common_ui.dynamic_fields.data.DynamicField
 import com.gigforce.common_ui.ext.addMandatorySymbolToTextEnd
+import com.gigforce.common_ui.navigation.JoiningVerificationFormsNavigation
 import com.gigforce.common_ui.viewmodels.verification.SharedVerificationViewModelEvent
 import com.gigforce.core.datamodels.verification.AadhaarDetailsDataModel
 import com.gigforce.core.datamodels.verification.BankAccountDetailsDataModel
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import kotlinx.android.parcel.Parcelize
+import javax.inject.Inject
 
 class DynamicBankDetailsVerificationView(
     context: Context,
@@ -28,7 +30,11 @@ class DynamicBankDetailsVerificationView(
 ) : LinearLayout(
     context,
     attrs
-), DynamicVerificationFieldView {
+), DynamicVerificationFieldView,
+View.OnClickListener{
+
+    @Inject
+    lateinit var joiningVerificationNavigation: JoiningVerificationFormsNavigation
 
     private var viewBinding: LayoutDynamicFieldVerificationViewBinding
     private lateinit var viewData: DynamicField
@@ -45,6 +51,7 @@ class DynamicBankDetailsVerificationView(
             this,
             true
         )
+        viewBinding.root.setOnClickListener(this)
     }
 
     override fun bind(
@@ -153,9 +160,16 @@ class DynamicBankDetailsVerificationView(
 
     }
 
+
     @Parcelize
     class StateSavingObject(
         val parcelable: Parcelable?,
         val editTextText: String
     ) : View.BaseSavedState(parcelable)
+
+    override fun onClick(v: View?) {
+        joiningVerificationNavigation.openBankDetailsVerificationForJoiningFragment(
+            "sss"
+        )
+    }
 }
