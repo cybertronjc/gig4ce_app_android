@@ -1,24 +1,24 @@
 package com.gigforce.ambassador.user_rollment.kycdocs
 
 import android.util.Log
-import com.gigforce.core.fb.BaseFirestoreDBRepository
-import com.gigforce.core.datamodels.client_activation.States
-import com.gigforce.core.datamodels.verification.VerificationBaseModel
+import com.gigforce.common_ui.remote.verification.KycOcrResultModel
+import com.gigforce.common_ui.remote.verification.OCRQueryModel
+import com.gigforce.common_ui.remote.verification.VerificationKycService
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.extensions.updateOrThrow
 import com.gigforce.core.retrofit.RetrofitFactory
 import com.google.firebase.Timestamp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.tasks.await
 import okhttp3.MultipartBody
+import javax.inject.Inject
 
-class VerificationKycRepo(private val iBuildConfigVM: IBuildConfigVM)  {
+class VerificationKycRepo @Inject constructor(private val iBuildConfigVM: IBuildConfigVM, private val kycService : VerificationKycService)  {
     private var firebaseDB = FirebaseFirestore.getInstance()
     val db: FirebaseFirestore get() = firebaseDB
-    private val kycService: VerificationKycService = RetrofitFactory.createService(
-        VerificationKycService::class.java
-    )
+//    private val kycService: VerificationKycService = RetrofitFactory.createService(
+//        VerificationKycService::class.java
+//    )
 
     suspend fun getVerificationOcrResult(
         uid: String,

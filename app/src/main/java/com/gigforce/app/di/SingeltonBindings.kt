@@ -6,6 +6,7 @@ import com.gigforce.app.di.implementations.BuildConfigImp
 import com.gigforce.common_ui.remote.JoiningProfileService
 import com.gigforce.common_ui.remote.ProfileCommonService
 import com.gigforce.common_ui.remote.ReferralService
+import com.gigforce.common_ui.remote.verification.VerificationKycService
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.core.retrofit.GeneratePaySlipService
@@ -83,6 +84,13 @@ abstract class SingeltonBindings {
             retrofitServiceFactory : RetrofitServiceFactory
         ): ProfileCommonService {
             return retrofitServiceFactory.prepareService(ProfileCommonService::class.java)
+        }
+
+        @Provides
+        fun provideKYCService(
+            retrofitServiceFactory : RetrofitServiceFactory
+        ): VerificationKycService {
+            return retrofitServiceFactory.prepareService(VerificationKycService::class.java)
         }
 
         @Singleton

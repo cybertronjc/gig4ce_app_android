@@ -375,7 +375,7 @@ class DrivingLicenseFragment : Fragment(),
                             getString(R.string.dl_captured_amb)
                         )
                         if (!it.dateOfBirth.isNullOrBlank()) {
-                            if (it.dateOfBirth.contains("/") || it.dateOfBirth.contains("-")) {
+                            if (it.dateOfBirth!!.contains("/") || it.dateOfBirth!!.contains("-")) {
                                 viewBinding.dobDate.text = it.dateOfBirth
                                 viewBinding.calendarLabel.visible()
                             }
@@ -385,11 +385,11 @@ class DrivingLicenseFragment : Fragment(),
                             viewBinding.dlnoTil.editText?.setText(it.dlNumber)
 
                         if (!it.validTill.isNullOrBlank()) {
-                            if (it.validTill.contains("-")) {
-                                var dateInFormat = getDDMMYYYYFormat(it.validTill)
+                            if (it.validTill!!.contains("-")) {
+                                var dateInFormat = getDDMMYYYYFormat(it.validTill!!)
                                 if (dateInFormat.isNotBlank())
                                     viewBinding.expiryDate.text = dateInFormat
-                            } else if (it.validTill.contains("/"))
+                            } else if (it.validTill!!.contains("/"))
                                 viewBinding.expiryDate.text = it.validTill
                         }
 
