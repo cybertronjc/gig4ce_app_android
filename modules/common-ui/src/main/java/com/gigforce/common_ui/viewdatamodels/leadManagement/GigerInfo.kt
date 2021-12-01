@@ -83,4 +83,13 @@ data class CheckListItem(
     @SerializedName("typeOptions")
     val dependency: Dependency?,
 
+    @SerializedName("courseId")
+    val courseId: String? = "",
+
+    @SerializedName("moduleId")
+    val moduleId: String? = "",
+
+    @SerializedName("title")
+    var title: String? = "",
+
 ){}
