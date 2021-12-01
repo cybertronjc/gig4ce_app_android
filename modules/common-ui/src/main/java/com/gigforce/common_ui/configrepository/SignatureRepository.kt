@@ -23,7 +23,7 @@ class SignatureRepository @Inject constructor(
         val imageBody = RequestBody.create(MediaType.parse("image/*"), file)
         val formData = MultipartBody.Part.createFormData("file", file.name, imageBody)
 
-        signatureImageService.uploadSignatureImage(
+      return  signatureImageService.uploadSignatureImage(
             formData
         ).bodyOrThrow()
     }

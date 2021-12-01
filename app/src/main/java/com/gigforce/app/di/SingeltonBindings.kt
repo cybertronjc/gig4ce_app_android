@@ -6,6 +6,7 @@ import com.gigforce.app.di.implementations.BuildConfigImp
 import com.gigforce.common_ui.remote.JoiningProfileService
 import com.gigforce.common_ui.remote.ProfileCommonService
 import com.gigforce.common_ui.remote.ReferralService
+import com.gigforce.common_ui.remote.SignatureImageService
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.core.retrofit.GeneratePaySlipService
@@ -14,6 +15,7 @@ import com.gigforce.core.retrofit.RetrofitServiceFactory
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.giger_gigs.tl_login_details.LoginSummaryService
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -36,6 +38,11 @@ abstract class SingeltonBindings {
         @Provides
         fun provideFirebaseFirestore(): FirebaseFirestore {
             return FirebaseFirestore.getInstance()
+        }
+
+        @Provides
+        fun provideFirebaseStorage(): FirebaseStorage {
+            return FirebaseStorage.getInstance()
         }
 
         @Provides
@@ -84,6 +91,14 @@ abstract class SingeltonBindings {
         ): ProfileCommonService {
             return retrofitServiceFactory.prepareService(ProfileCommonService::class.java)
         }
+
+        @Provides
+        fun provideSignatureImageService(
+            retrofitServiceFactory : RetrofitServiceFactory
+        ): SignatureImageService {
+            return retrofitServiceFactory.prepareService(SignatureImageService::class.java)
+        }
+
 
         @Singleton
         @Provides

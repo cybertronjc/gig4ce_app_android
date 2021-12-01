@@ -4,6 +4,7 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
+
 @Parcelize
 data class DynamicField(
 
@@ -29,6 +30,12 @@ data class DynamicField(
      * [FieldTypes.DROP_DOWN]
      * [FieldTypes.DATE_PICKER]
      * [FieldTypes.RADIO_BUTTON]
+     * [FieldTypes.SIGNATURE_DRAWER]
+     * [FieldTypes.SIGNATURE_DRAWER_2]
+     * [FieldTypes.AADHAAR_VERIFICATION_VIEW]
+     * [FieldTypes.BANK_VERIFICATION_VIEW]
+     * [FieldTypes.DL_VERIFICATION_VIEW]
+     * [FieldTypes.PAN_VERIFICATION_VIEW]
      */
     @field:SerializedName("fieldType")
     val fieldType: String? = FieldTypes.TEXT_FIELD,

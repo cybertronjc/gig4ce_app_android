@@ -319,6 +319,12 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
+            <LinearLayout
+                android:id="@+id/verification_related_dynamic_fields_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical"/>
 
             <LinearLayout
                 android:id="@+id/job_profile_dependent_dynamic_fields_container"

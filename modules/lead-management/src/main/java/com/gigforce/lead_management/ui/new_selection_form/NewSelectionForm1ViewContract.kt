@@ -55,6 +55,7 @@ sealed class NewSelectionForm1ViewState {
     object DisableSubmitButton : NewSelectionForm1ViewState()
 
     data class ShowJobProfileRelatedField(
+        val verificationRelatedFields : List<DynamicField>,
         val dynamicFields : List<DynamicField>
     ): NewSelectionForm1ViewState()
 

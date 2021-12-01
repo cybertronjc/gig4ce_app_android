@@ -1104,6 +1104,22 @@
         android:id="@+id/requestDocumentTreeAccessFragment"
         android:name="com.gigforce.core.documentFileHelper.RequestDocumentTreeAccessFragment"
         android:label="RequestDocumentTreeAccessFragment" />
+    <fragment
+        android:id="@+id/joiningAadhaarVerificationFragment"
+        android:name="com.gigforce.verification.joiningVerficationForms.JoiningAadhaarVerificationFragment"
+        android:label="JoiningAadhaarVerificationFragment"/>
+    <fragment
+        android:id="@+id/joiningBankDetailsVerificationFragment"
+        android:name="com.gigforce.verification.joiningVerficationForms.JoiningBankDetailsVerificationFragment"
+        android:label="JoiningBankDetailsVerificationFragment"/>
+    <fragment
+        android:id="@+id/joiningDLVerificationFragment"
+        android:name="com.gigforce.verification.joiningVerficationForms.JoiningDLVerificationFragment"
+        android:label="JoiningBankDetailsVerificationFragment"/>
+    <fragment
+        android:id="@+id/joiningPanVerificationFragment"
+        android:name="com.gigforce.verification.joiningVerficationForms.JoiningPanVerificationFragment"
+        android:label="JoiningPanVerificationFragment"/>
 
 </navigation>
 

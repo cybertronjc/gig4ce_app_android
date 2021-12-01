@@ -38,6 +38,9 @@ data class JobProfilesItem(
     @field:SerializedName("locationType")
     val locationType: String? = null,
 
+    @field:SerializedName("verificationRelatedFields")
+    var verificationRelatedFields: List<DynamicField> = emptyList(),
+
     @field:SerializedName("dynamicInputFields")
     var dynamicFields: List<DynamicField> = emptyList(),
 

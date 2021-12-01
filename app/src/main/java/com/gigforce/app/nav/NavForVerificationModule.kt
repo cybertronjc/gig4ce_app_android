@@ -2,6 +2,7 @@ package com.gigforce.app.nav
 
 import com.gigforce.app.R
 import com.gigforce.common_ui.BaseNavigationImpl
+import com.gigforce.verification.joiningVerficationForms.JoiningVerificationNavDestinations
 
 class NavForVerificationModule(
     baseImplementation: BaseNavigationImpl
@@ -35,5 +36,22 @@ class NavForVerificationModule(
         baseImplementation.registerRoute("${moduleName}/drivinglicenseimageupload",R.id.drivingLicenseFragment)
         baseImplementation.registerRoute("${moduleName}/AadharDetailInfoFragment",R.id.adharDetailInfoFragment)
 
+        //Joining verification
+        baseImplementation.registerRoute(
+            JoiningVerificationNavDestinations.JOINING_AADHAAR_VERIFICATION_FRAGMENT,
+            R.id.joiningAadhaarVerificationFragment
+        )
+        baseImplementation.registerRoute(
+            JoiningVerificationNavDestinations.JOINING_BANK_DETAIL_VERIFICATION_FRAGMENT,
+            R.id.joiningBankDetailsVerificationFragment
+        )
+        baseImplementation.registerRoute(
+            JoiningVerificationNavDestinations.JOINING_DL_VERIFICATION_FRAGMENT,
+            R.id.joiningDLVerificationFragment
+        )
+        baseImplementation.registerRoute(
+            JoiningVerificationNavDestinations.JOINING_PAN_VERIFICATION_FRAGMENT,
+            R.id.joiningPanVerificationFragment
+        )
     }
 }

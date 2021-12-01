@@ -2,7 +2,6 @@ package com.gigforce.verification.verificationCore.bank
 
 import android.Manifest
 import android.app.Activity
-import android.content.ContentResolver
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -22,7 +21,6 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.common_image_picker.image_cropper.ImageCropActivity
-import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
@@ -30,7 +28,6 @@ import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.*
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.datamodels.verification.BankDetailsDataModel
-import com.gigforce.core.datamodels.verification.PanCardDataModel
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
@@ -74,9 +71,7 @@ abstract class BaseBankAccountVerificationFragment constructor(
     fragmentName = fragmentName,
     layoutId = R.layout.bank_account_fragment,
     statusBarColor = R.color.lipstick_2
-),
-    VerificationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener,
-    IOnBackPressedOverride {
+), VerificationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener {
 
     companion object {
 
@@ -188,7 +183,7 @@ abstract class BaseBankAccountVerificationFragment constructor(
 
         viewModel.kycVerifyResult.observe(viewLifecycleOwner, Observer {
             ocrOrVerificationRquested = false
-            if (!it.status){
+            if (!it.status) {
                 activeLoader(false)
                 it.message?.let { it1 -> showToast(it1) }
             }
@@ -688,44 +683,44 @@ abstract class BaseBankAccountVerificationFragment constructor(
 
     private fun requestStoragePermission() {
 
-            if(Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK){
-                requestPermissions(
-                    arrayOf(
-                        Manifest.permission.CAMERA
-                    ),
-                    REQUEST_STORAGE_PERMISSION
-                )
-            } else{
-                requestPermissions(
-                    arrayOf(
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.CAMERA
-                    ),
-                    REQUEST_STORAGE_PERMISSION
-                )
-            }
+        if (Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.CAMERA
+                ),
+                REQUEST_STORAGE_PERMISSION
+            )
+        } else {
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.CAMERA
+                ),
+                REQUEST_STORAGE_PERMISSION
+            )
         }
+    }
 
-        private fun hasStoragePermissions(): Boolean {
-            if(Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK){
-                return ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.CAMERA
-                ) == PackageManager.PERMISSION_GRANTED
-            } else{
-                return ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.READ_EXTERNAL_STORAGE
-                ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.CAMERA
-                ) == PackageManager.PERMISSION_GRANTED
-            }
+    private fun hasStoragePermissions(): Boolean {
+        if (Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
+            return ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        } else {
+            return ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
         }
+    }
 
     private fun showCameraAndGalleryOption() {
         val photoCropIntent = Intent()
@@ -922,7 +917,12 @@ abstract class BaseBankAccountVerificationFragment constructor(
 
     abstract fun shouldUploadDocumentsToFirebase(): Boolean
 
-    fun dataValidatedAndSubmitted(
-        data: PanCardDataModel
-    ) {}
+    abstract fun shouldUploadEventsToAnalytics(): Boolean
+
+    open fun dataValidatedAndSubmitted(
+        bankName: String,
+        ifsc: String,
+        bankAccountNumber: String
+    ) {
+    }
 }

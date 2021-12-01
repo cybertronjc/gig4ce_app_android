@@ -1235,12 +1235,12 @@ abstract class BaseAadharDetailInfoFragment constructor(
 
     abstract fun shouldUploadDocumentsToFirebase(): Boolean
 
-    fun getJobProfileIdToUpdateAadharStatusIn() : String{
+    open fun getJobProfileIdToUpdateAadharStatusIn() : String{
         return ""
     }
 
-    fun dataValidatedAndSubmitted(
-        data: PanCardDataModel
+    open fun dataValidatedAndSubmitted(
+        data: AadhaarDetailsDataModel
     ) {
     }
 }

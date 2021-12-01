@@ -1091,8 +1091,12 @@ abstract class BaseDrivingLicenseVerificationFragment constructor(
 
     abstract fun shouldUploadDocumentsToFirebase(): Boolean
 
-    fun dataValidatedAndSubmitted(
-        data: PanCardDataModel
+    open fun dataValidatedAndSubmitted(
+        name : String?,
+        drivingLicenseNo : String,
+        issueDate : String,
+        expiryDate : String,
+        dateOfBirth : String
     ) {
     }
 }
