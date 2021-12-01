@@ -10,6 +10,7 @@ import com.gigforce.core.datamodels.verification.VerificationBaseModel
 import com.gigforce.core.extensions.toFirebaseTimeStamp
 import com.gigforce.core.extensions.updateOrThrow
 import com.gigforce.core.fb.BaseFirestoreDBRepository
+import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.google.firebase.Timestamp
 import kotlinx.coroutines.tasks.await
 import java.util.*
@@ -125,7 +126,8 @@ class UserAadharDetailRepository @Inject constructor() : BaseFirestoreDBReposito
                     "aadhaar_card_questionnaire.currentAddress" to aadhaardetails.currentAddress,
                     "aadhaar_card_questionnaire.verified" to true,
                     "updatedAt" to Timestamp.now(),
-                    "updatedBy" to StringConstants.APP.value
+                    "updatedBy" to FirebaseAuthStateListener.getInstance()
+                        .getCurrentSignInUserInfoOrThrow().uid
             )
 
             db.collection(verificationCollectionName).document(uid).updateOrThrow(

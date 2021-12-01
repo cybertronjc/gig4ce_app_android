@@ -31,7 +31,7 @@ class ModelAboutExpandedFragment : ModelCallbacksAboutExpandedFragment,
         val map = mapOf(
             "contactPhone" to contactList,
             "updatedAt" to Timestamp.now(),
-            "updatedBy" to StringConstants.APP.value
+            "updatedBy" to profileID
         )
         getCollectionReference().document(profileID).update(map)
             .addOnCompleteListener {
@@ -67,7 +67,7 @@ class ModelAboutExpandedFragment : ModelCallbacksAboutExpandedFragment,
             "contactPhone" to contact,
             "contactEmail" to email,
             "updatedAt" to Timestamp.now(),
-            "updatedBy" to StringConstants.APP.value
+            "updatedBy" to profileID
         )
         getCollectionReference().document(profileID).update(updateMap)
             .addOnCompleteListener {
@@ -100,7 +100,7 @@ class ModelAboutExpandedFragment : ModelCallbacksAboutExpandedFragment,
             val map = mapOf(
                 "contactPhone" to FieldValue.arrayUnion(newContact),
                 "updatedAt" to Timestamp.now(),
-                "updatedBy" to StringConstants.APP.value
+                "updatedBy" to profileID
             )
             getCollectionReference().document(profileID)
                 .update(map)
@@ -127,7 +127,7 @@ class ModelAboutExpandedFragment : ModelCallbacksAboutExpandedFragment,
                 }
             }
             val map = mapOf("contactPhone" to contactList, "updatedAt" to Timestamp.now(),
-                "updatedBy" to StringConstants.APP.value)
+                "updatedBy" to profileID)
             getCollectionReference().document(profileID).update(map)
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
@@ -158,7 +158,7 @@ class ModelAboutExpandedFragment : ModelCallbacksAboutExpandedFragment,
                 return
             }
             val map = mapOf("contactEmail" to FieldValue.arrayUnion(newContact), "updatedAt" to Timestamp.now(),
-                "updatedBy" to StringConstants.APP.value)
+                "updatedBy" to profileID)
             getCollectionReference().document(profileID)
                 .update(map)
                 .addOnCompleteListener {
@@ -185,7 +185,7 @@ class ModelAboutExpandedFragment : ModelCallbacksAboutExpandedFragment,
                 }
             }
             val map = mapOf("contactEmail" to contactList, "updatedAt" to Timestamp.now(),
-                "updatedBy" to StringConstants.APP.value)
+                "updatedBy" to profileID)
             getCollectionReference().document(profileID).update(map)
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
@@ -207,7 +207,7 @@ class ModelAboutExpandedFragment : ModelCallbacksAboutExpandedFragment,
                     "contactPhone" to arrayListOf<ContactPhone>(),
                     "contact" to arrayListOf<Contact>(),
                     "updatedAt" to Timestamp.now(),
-                    "updatedBy" to StringConstants.APP.value
+                    "updatedBy" to profileID
                 )
             )
 

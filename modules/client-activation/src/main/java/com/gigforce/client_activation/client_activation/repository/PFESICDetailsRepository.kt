@@ -39,7 +39,7 @@ class PFESICDetailsRepository @Inject constructor() : BaseFirestoreDBRepository(
                 mapOf(
                     "pfesic" to pfesicData,
                     "updatedAt" to Timestamp.now(),
-                    "updatedBy" to StringConstants.APP.value
+                    "updatedBy" to uid
                 )
             )
             return true

@@ -8,6 +8,7 @@ import com.gigforce.core.datamodels.verification.VerificationBaseModel
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.extensions.updateOrThrow
 import com.gigforce.core.retrofit.RetrofitFactory
+import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.google.firebase.Timestamp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.FirebaseFirestore
@@ -109,7 +110,8 @@ class VerificationKycRepo(private val iBuildConfigVM: IBuildConfigVM) :
                     "bank_details.verified" to status,
                     "bank_details.verifiedOn" to Timestamp.now(),
                     "updatedAt" to Timestamp.now(),
-                    "updatedBy" to StringConstants.APP.value
+                    "updatedBy" to FirebaseAuthStateListener.getInstance()
+                        .getCurrentSignInUserInfoOrThrow().uid
                 )
             )
             return true

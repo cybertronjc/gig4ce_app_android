@@ -17,7 +17,7 @@ class QuestionnaireFragmentViewModel : ViewModel() {
 
 
     fun addQuestionnaire(answers: List<QuestionnaireResponse>) {
-        val map = mapOf("questionnaire" to answers, "updatedAt" to Timestamp.now(), "updatedBy" to StringConstants.APP.value)
+        val map = mapOf("questionnaire" to answers, "updatedAt" to Timestamp.now(), "updatedBy" to questionaireRepo.getUID())
         questionaireRepo.getCollectionReference().document(questionaireRepo.getUID())
             .update(map).addOnCompleteListener {
                 if (it.isSuccessful) {

@@ -78,7 +78,8 @@ class GigersAttendanceRepository constructor(
                 "declineReason" to FieldValue.delete(),
                 "declinedOn" to FieldValue.delete(),
                 "updatedAt" to Timestamp.now(),
-                "updatedBy" to StringConstants.APP.value
+                "updatedBy" to FirebaseAuthStateListener.getInstance()
+                    .getCurrentSignInUserInfoOrThrow().uid
             )
         )
 

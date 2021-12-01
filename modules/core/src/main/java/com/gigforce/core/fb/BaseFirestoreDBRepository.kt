@@ -152,7 +152,7 @@ abstract class BaseFirestoreDBRepository {
     //set data object
     public fun setDefaultData(data: Any) {
         getDBCollection().set(data)
-        setUpdatedAtUpdatedBy()
+        setUpdatedAtUpdatedBy(getUID())
     }
 
 
@@ -164,7 +164,7 @@ abstract class BaseFirestoreDBRepository {
 
     public fun <M : BaseFirestoreDataModel> setData(obj: M) {
         getDBCollection().update(obj.tableName, FieldValue.arrayUnion(obj))
-        setUpdatedAtUpdatedBy()
+        setUpdatedAtUpdatedBy(getUID())
     }
 
     public fun  setData(obj: Map<String,Any>) {
@@ -173,7 +173,7 @@ abstract class BaseFirestoreDBRepository {
 
     public fun <M : BaseFirestoreDataModel> setDataAsKeyValue(obj: M) {
         getDBCollection().update(obj.tableName, obj)
-        setUpdatedAtUpdatedBy()
+        setUpdatedAtUpdatedBy(getUID())
     }
 
     // set data object end
@@ -186,7 +186,7 @@ abstract class BaseFirestoreDBRepository {
 
     public fun setData(tableName: String, data: String) {
         getDBCollection().update(tableName, FieldValue.arrayUnion(data))
-        setUpdatedAtUpdatedBy()
+        setUpdatedAtUpdatedBy(getUID())
     }
 
     public fun setDataAndDeleteOldData(tableName: String, data: String) {
@@ -208,24 +208,24 @@ abstract class BaseFirestoreDBRepository {
 
     public fun setDataAsKeyValue(tableName: String, data: String) {
         getDBCollection().update(tableName, data)
-        setUpdatedAtUpdatedBy()
+        setUpdatedAtUpdatedBy(getUID())
     }
 
     //set data string end
     // set data boolean
     public fun setData(tableName: String, data: Boolean) {
         getDBCollection().update(tableName, data)
-        setUpdatedAtUpdatedBy()
+        setUpdatedAtUpdatedBy(getUID())
     }
 
-    private fun setUpdatedAtUpdatedBy(){
+    private fun setUpdatedAtUpdatedBy(uid:String){
         getDBCollection().update("updatedAt", Timestamp.now())
-        getDBCollection().update("updatedBy", StringConstants.APP.value)
+        getDBCollection().update("updatedBy", uid)
     }
 
     public fun setDataAsKeyValue(tableName: String, data: Boolean) {
         getDBCollection().update(tableName, data)
-        setUpdatedAtUpdatedBy()
+        setUpdatedAtUpdatedBy(getUID())
     }
     //set data boolean end
     // for set DB data--------end
@@ -239,7 +239,7 @@ abstract class BaseFirestoreDBRepository {
 
     fun <M : BaseFirestoreDataModel> removeData(obj: M) {
         getDBCollection().update(obj.tableName, FieldValue.arrayRemove(obj))
-        setUpdatedAtUpdatedBy()
+        setUpdatedAtUpdatedBy(getUID())
     }
 
     public fun removeData(tableName: String, arrData: ArrayList<String>) {
@@ -250,7 +250,7 @@ abstract class BaseFirestoreDBRepository {
 
     fun removeData(tableName: String, data: String) {
         getDBCollection().update(tableName, FieldValue.arrayRemove(data))
-        setUpdatedAtUpdatedBy()
+        setUpdatedAtUpdatedBy(getUID())
     }
     //for remove data------------------
 

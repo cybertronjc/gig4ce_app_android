@@ -45,7 +45,7 @@ class AddContactViewmodel : ViewModel() {
                     "contactPhone" to items.map { it.contactPhone },
                     "contactEmail" to items.map { it.contactEmail },
                     "updatedAt" to Timestamp.now(),
-                    "updatedBy" to StringConstants.APP.value
+                    "updatedBy" to repositoryAddContact.getUID()
                 )
             ).addOnCompleteListener {
                 if (it.isSuccessful) {
@@ -76,7 +76,7 @@ class AddContactViewmodel : ViewModel() {
             "contactPhone" to contact,
             "contactEmail" to email,
             "updatedAt" to Timestamp.now(),
-            "updatedBy" to StringConstants.APP.value
+            "updatedBy" to repositoryAddContact.getUID()
         )
         repositoryAddContact.getCollectionReference().document(repositoryAddContact.getUID())
             .update(updateMap)

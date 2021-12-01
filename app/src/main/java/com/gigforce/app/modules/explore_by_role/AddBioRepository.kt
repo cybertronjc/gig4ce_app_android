@@ -10,7 +10,7 @@ class AddBioRepository : BaseFirestoreDBRepository(), AddBioViewModelCallbacks {
             bio: String,
             responseCallbacks: AddBioViewModelCallbacks.ResponseCallbacks
     ) {
-        val map = mapOf("aboutMe" to bio, "updatedAt" to Timestamp.now(), "updatedBy" to StringConstants.APP.value)
+        val map = mapOf("aboutMe" to bio, "updatedAt" to Timestamp.now(), "updatedBy" to getUID())
         getCollectionReference().document(getUID()).update(map).addOnCompleteListener {
             responseCallbacks.saveBioResponse(it)
         }

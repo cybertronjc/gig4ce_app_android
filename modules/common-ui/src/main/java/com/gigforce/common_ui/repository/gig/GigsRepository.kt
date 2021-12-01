@@ -10,6 +10,7 @@ import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.datamodels.gigpage.GigOrder
 import com.gigforce.core.datamodels.gigpage.JobProfileFull
 import com.gigforce.core.extensions.*
+import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.user_tracking.models.UserGigLocationTrack
 import com.gigforce.user_tracking.models.UserLocation
 import com.google.firebase.Timestamp
@@ -75,7 +76,8 @@ open class GigsRepository : BaseFirestoreDBRepository() {
                 "attendance.checkInSource" to "from_gig_in_app",
                 "gigStatus" to GigStatus.ONGOING.getStatusString(),
                 "updatedAt" to Timestamp.now(),
-                "updatedBy" to StringConstants.APP.value
+                "updatedBy" to FirebaseAuthStateListener.getInstance()
+                    .getCurrentSignInUserInfoOrThrow().uid
             )
         } else {
             mapOf(
@@ -101,7 +103,8 @@ open class GigsRepository : BaseFirestoreDBRepository() {
                 "attendance.checkInSource" to "from_gig_in_app",
                 "gigStatus" to GigStatus.ONGOING.getStatusString(),
                 "updatedAt" to Timestamp.now(),
-                "updatedBy" to StringConstants.APP.value
+                "updatedBy" to FirebaseAuthStateListener.getInstance()
+                    .getCurrentSignInUserInfoOrThrow().uid
             )
         }
 
@@ -149,7 +152,8 @@ open class GigsRepository : BaseFirestoreDBRepository() {
                 "attendance.checkOutSource" to "from_gig_in_app",
                 "gigStatus" to GigStatus.COMPLETED.getStatusString(),
                 "updatedAt" to Timestamp.now(),
-                "updatedBy" to StringConstants.APP.value
+                "updatedBy" to FirebaseAuthStateListener.getInstance()
+                    .getCurrentSignInUserInfoOrThrow().uid
             )
         } else {
             mapOf(
@@ -174,7 +178,8 @@ open class GigsRepository : BaseFirestoreDBRepository() {
                 "attendance.checkOutSource" to "from_gig_in_app",
                 "gigStatus" to GigStatus.COMPLETED.getStatusString(),
                 "updatedAt" to Timestamp.now(),
-                "updatedBy" to StringConstants.APP.value
+                "updatedBy" to FirebaseAuthStateListener.getInstance()
+                    .getCurrentSignInUserInfoOrThrow().uid
             )
         }
 

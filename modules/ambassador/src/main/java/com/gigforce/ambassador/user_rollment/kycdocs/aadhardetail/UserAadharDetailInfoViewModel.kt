@@ -125,7 +125,8 @@ class UserAadharDetailInfoViewModel @Inject constructor(private val iBuildConfig
                             var map = mapOf(
                                 "application" to jpApplication.application,
                                 "updatedAt" to Timestamp.now(),
-                                "updatedBy" to StringConstants.APP.value
+                                "updatedBy" to FirebaseAuthStateListener.getInstance()
+                                    .getCurrentSignInUserInfoOrThrow().uid
                             )
                             FirebaseFirestore.getInstance().collection("JP_Applications")
                                 .document(jp_application.documents[0].id)

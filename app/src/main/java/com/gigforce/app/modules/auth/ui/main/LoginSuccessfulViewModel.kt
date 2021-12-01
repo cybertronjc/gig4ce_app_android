@@ -33,7 +33,7 @@ data class UserVersionInfo(
     var time: Timestamp = Timestamp.now(),
     var uid : String?= FirebaseAuthStateListener.getInstance().getCurrentSignInUserInfoOrThrow().uid,
     var updatedAt : Timestamp? = Timestamp.now(),
-    var updatedBy : String? = StringConstants.APP.value,
+    var updatedBy : String? = null,
     var createdAt : Timestamp? = Timestamp.now()
 )
 
@@ -135,7 +135,8 @@ class LoginSuccessfulViewModel constructor(
                 .add(
                     UserVersionInfo(
                         currentVersion = BuildConfig.VERSION_NAME,
-                        uid = it
+                        uid = it,
+                        updatedBy = it
                     )
                 )
         }
