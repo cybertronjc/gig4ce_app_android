@@ -7,6 +7,7 @@ import com.gigforce.common_ui.remote.verification.VerificationKycService
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.extensions.updateOrThrow
 import com.gigforce.core.retrofit.RetrofitFactory
+import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.google.firebase.Timestamp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.FirebaseFirestore
@@ -77,7 +78,12 @@ class VerificationKycRepo @Inject constructor(private val iBuildConfigVM: IBuild
         try {
             db.collection(getCollectionName()).document(uid).updateOrThrow(
                 mapOf(
-                    "bank_details.status" to ""
+                    "bank_details.status" to "",
+                    "bank_details.updatedAt" to Timestamp.now(),
+                    "bank_details.updatedBy" to FirebaseAuthStateListener.getInstance().getCurrentSignInUserInfoOrThrow().uid,
+                    "updatedAt" to Timestamp.now(),
+                    "updatedBy" to FirebaseAuthStateListener.getInstance()
+                        .getCurrentSignInUserInfoOrThrow().uid
                 )
             )
         } catch (e: Exception) {

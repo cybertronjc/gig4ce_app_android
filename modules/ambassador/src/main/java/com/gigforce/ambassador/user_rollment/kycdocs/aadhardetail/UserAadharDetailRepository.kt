@@ -96,7 +96,12 @@ class UserAadharDetailRepository @Inject constructor() : BaseFirestoreDBReposito
                             "aadhaar_card_questionnaire.pincode" to aadhaardetails.pincode,
                             "aadhaar_card_questionnaire.landmark" to aadhaardetails.landmark,
                             "aadhaar_card_questionnaire.currentAddSameAsParmanent" to aadhaardetails.currentAddSameAsParmanent,
-                            "aadhaar_card_questionnaire.currentAddress" to aadhaardetails.currentAddress
+                            "aadhaar_card_questionnaire.currentAddress" to aadhaardetails.currentAddress,
+                            "aadhaar_card_questionnaire.updatedAt" to Timestamp.now(),
+                            "aadhaar_card_questionnaire.updatedBy" to FirebaseAuthStateListener.getInstance().getCurrentSignInUserInfoOrThrow().uid,
+                            "updatedAt" to Timestamp.now(),
+                            "updatedBy" to FirebaseAuthStateListener.getInstance().getCurrentSignInUserInfoOrThrow().uid
+
                     )
             )
             //                "aadhaar_card_questionnaire" to aadhaardetails
@@ -125,6 +130,8 @@ class UserAadharDetailRepository @Inject constructor() : BaseFirestoreDBReposito
                     "aadhaar_card_questionnaire.currentAddSameAsParmanent" to aadhaardetails.currentAddSameAsParmanent,
                     "aadhaar_card_questionnaire.currentAddress" to aadhaardetails.currentAddress,
                     "aadhaar_card_questionnaire.verified" to true,
+                    "aadhaar_card_questionnaire.updatedAt" to Timestamp.now(),
+                    "aadhaar_card_questionnaire.updatedBy" to FirebaseAuthStateListener.getInstance().getCurrentSignInUserInfoOrThrow().uid,
                     "updatedAt" to Timestamp.now(),
                     "updatedBy" to FirebaseAuthStateListener.getInstance()
                         .getCurrentSignInUserInfoOrThrow().uid
@@ -134,7 +141,9 @@ class UserAadharDetailRepository @Inject constructor() : BaseFirestoreDBReposito
                     mapData
             )
             db.collection("Profiles").document(uid).updateOrThrow(mapOf(
-                    "pfNominee" to if (nomineeAsFather) "father" else ""))
+                    "pfNominee" to if (nomineeAsFather) "father" else "","updatedAt" to Timestamp.now(),
+                "updatedBy" to FirebaseAuthStateListener.getInstance()
+                    .getCurrentSignInUserInfoOrThrow().uid))
 
             return true
         } catch (e: Exception) {
@@ -172,7 +181,12 @@ class UserAadharDetailRepository @Inject constructor() : BaseFirestoreDBReposito
                             "aadhaar_card_questionnaire.currentAddress.addLine1" to aadhaardetails.currentAddress?.addLine1,
                             "aadhaar_card_questionnaire.currentAddress.addLine2" to aadhaardetails.currentAddress?.addLine2,
                             "aadhaar_card_questionnaire.currentAddress.state" to aadhaardetails.currentAddress?.state,
-                            "aadhaar_card_questionnaire.currentAddress.city" to aadhaardetails.currentAddress?.city
+                            "aadhaar_card_questionnaire.currentAddress.city" to aadhaardetails.currentAddress?.city,
+                            "aadhaar_card_questionnaire.updatedAt" to Timestamp.now(),
+                            "aadhaar_card_questionnaire.updatedBy" to FirebaseAuthStateListener.getInstance().getCurrentSignInUserInfoOrThrow().uid,
+                            "updatedAt" to Timestamp.now(),
+                            "updatedBy" to FirebaseAuthStateListener.getInstance()
+                            .getCurrentSignInUserInfoOrThrow().uid
                     )
             )
             //                "aadhaar_card_questionnaire" to aadhaardetails
@@ -197,7 +211,10 @@ class UserAadharDetailRepository @Inject constructor() : BaseFirestoreDBReposito
                             "dateOfBirth" to dateOfBirth.toFirebaseTimeStamp(),
                             "fName" to fName,
                             "maritalStatus" to maritalStatus,
-                            "emergencyContact" to emergencyContact
+                            "emergencyContact" to emergencyContact,
+                            "updatedAt" to Timestamp.now(),
+                            "updatedBy" to FirebaseAuthStateListener.getInstance()
+                            .getCurrentSignInUserInfoOrThrow().uid
                     )
             )
             true
