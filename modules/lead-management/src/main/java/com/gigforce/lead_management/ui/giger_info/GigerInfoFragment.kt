@@ -302,7 +302,10 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
                                 checkListItem.frontImage,
                                 checkListItem.backImage,
                                 checkListItem.type,
-                                checkListItem.dependency
+                                checkListItem.dependency,
+                                checkListItem.courseId,
+                                checkListItem.moduleId,
+                                checkListItem.title
                             )
                         checkListItemData.add(itemData)
                         if (checkListItemData.size > 0) {

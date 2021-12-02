@@ -183,7 +183,10 @@ class PendingJoiningDetailsFragment : BaseFragment2<FragmentPendingJoiningDetail
                             checkListItem.frontImage,
                             checkListItem.backImage,
                             checkListItem.type,
-                            checkListItem.dependency
+                            checkListItem.dependency,
+                            checkListItem.courseId,
+                            checkListItem.moduleId,
+                            checkListItem.title
                         )
 
                         checkListItemData.add(itemData)

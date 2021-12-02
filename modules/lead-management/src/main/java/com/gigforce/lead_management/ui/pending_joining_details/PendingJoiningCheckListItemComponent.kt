@@ -145,9 +145,9 @@ class PendingJoiningCheckListItemComponent(
 
         var navigationsForBundle = ArrayList<String>()
         var startCreateNavBundle = false
-        var title = ""
-        var typeForQuestionair = ""
-        var courseId = ""
+        var title = viewData.title ?: ""
+        var typeForQuestionair = viewData.checkListItemType
+        var courseId = viewData.courseId ?: ""
 
         if(viewData.options != null) {
 
@@ -160,9 +160,6 @@ class PendingJoiningCheckListItemComponent(
             if (viewData.options!!.type == "questionnaire") {
                 title = viewData.options!!.title ?: ""
                 typeForQuestionair = viewData.options!!.type ?: ""
-            }
-            if (viewData.options!!.type == "learning") {
-                courseId = viewData.options!!.courseId
             }
             //code to get data for title type
         }
