@@ -32,4 +32,30 @@ object DateHelper {
             null
         }
     }
+
+    fun getDateInDDMMMYYYYComma(date: Date): String{
+        return SimpleDateFormat("dd MMM, yyyy").format(date)
+    }
+
+    fun getDateInYYYYMMDD(date: Date): String{
+        return SimpleDateFormat("yyyy-MM-dd").format(date)
+    }
+
+    fun getDateFromString(input: String): Date?{
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+        dateFormat.setTimeZone(TimeZone.getTimeZone("IST"));
+        var d: Date? = null
+        try {
+            d = dateFormat.parse(input)
+        } catch (e: ParseException) {
+            e.printStackTrace()
+        }
+        return d
+    }
+
+    fun getDateInyyyyMMddHHmmss(date: Date): String{
+        return SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date)
+    }
+
+
 }

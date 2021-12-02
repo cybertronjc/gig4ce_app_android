@@ -4,6 +4,7 @@ import android.app.Activity
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
+import android.text.Editable
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
 import android.view.LayoutInflater
@@ -47,7 +48,7 @@ class VerifyOTP : BaseFragment() {
     private var verificationId: String = ""
     private var mobile_number: String = ""
     var layout: View? = null;
-
+    var handler = Handler()
     private val viewModel: LoginViewModel by viewModels()
 
     var otpresentcounter = 0;
@@ -100,7 +101,7 @@ class VerifyOTP : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.activity = this.requireActivity()
-//        viewModel.sendVerificationCode("+91"+mobile_number)
+        viewModel.sendVerificationCode("+91"+mobile_number)
         initializeViews()
 //        startSmsRetriver()
         listeners()
@@ -219,13 +220,17 @@ class VerifyOTP : BaseFragment() {
     }
 
     private fun observer() {
-        viewModel.liveState.observe(viewLifecycleOwner, Observer { it ->
-
+        viewModel.liveState.observe(viewLifecycleOwner, {
+            progressBar.visibility = View.GONE
+            verify_otp_button.isEnabled = true
             when (it.stateResponse) {
                 LoginViewModel.STATE_CODE_SENT -> {
                     showToast("OTP sent")
                 }
                 LoginViewModel.STATE_VERIFY_FAILED -> {
+                    if(!it.msg.isNullOrEmpty() && it.msg.toLowerCase().contains("toomanyrequests") && it.msg.toLowerCase().contains("blocked")){
+                        showToast(resources.getString(R.string.account_blocked_app))
+                    }else
                     showToast(it.msg)
                 }
                 LoginViewModel.STATE_VERIFY_SUCCESS -> {
@@ -254,14 +259,16 @@ class VerifyOTP : BaseFragment() {
             if (match.matches()) {
                 progressBar.visibility = View.VISIBLE
                 verify_otp_button.setEnabled(false)
-                Handler().postDelayed(Runnable {
-                    // This method will be executed once the timer is over
-                    if (verify_otp_button != null) {
-                        verify_otp_button.setEnabled(true)
-                        progressBar.visibility = View.GONE
-                    }
-                }, 3000)
-                viewModel.verifyPhoneNumberWithCode(otpIn.toString(), "+91" + mobile_number)
+//                Handler().postDelayed({
+//                    // This method will be executed once the timer is over
+//                    if (verify_otp_button != null) {
+//                        verify_otp_button.setEnabled(true)
+//                        progressBar.visibility = View.GONE
+//                    }
+//                }, 3000)
+
+                verifyOTP(otpIn)
+
             } else {
                 showWrongOTPLayout(true)
             }
@@ -293,7 +300,28 @@ class VerifyOTP : BaseFragment() {
         }
 
     }
-
+    var count = 0
+    private fun verifyOTP(otpIn : Editable?) {
+        viewModel.verificationId?.let {
+            if(it.isNotEmpty())
+            viewModel.verifyPhoneNumberWithCode(otpIn.toString(), "+91" + mobile_number)
+            else requestVerifyOTP(otpIn)
+        }?:run {
+            requestVerifyOTP(otpIn)
+        }
+    }
+    private fun requestVerifyOTP(otpIn : Editable?){
+        count++
+        if (count > 3) {
+            progressBar?.visibility = View.GONE
+            verify_otp_button?.isEnabled = true
+            context?.let { showToast("Try again!!") }
+        } else {
+            Handler().postDelayed({
+                verifyOTP(otpIn)
+            }, 3000)
+        }
+    }
     private fun navigateToLoginScreen() {
         countDownTimer?.cancel()
         val bundle = bundleOf(

@@ -1,5 +1,6 @@
 package com.gigforce.common_ui.viewdatamodels.leadManagement
 
+import com.gigforce.core.StringConstants
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.Exclude
@@ -70,6 +71,18 @@ data class Joining(
 	@get:PropertyName("lastStatusChangeSource")
 	@set:PropertyName("lastStatusChangeSource")
 	var lastStatusChangeSource: String? = null,
+
+	@get:PropertyName("updatedAt")
+	@set:PropertyName("updatedAt")
+	var updatedAt : Timestamp ?= Timestamp.now(),
+
+	@get:PropertyName("updatedBy")
+	@set:PropertyName("updatedBy")
+	var updatedBy : String ?= StringConstants.APP.value,
+
+	@get:PropertyName("createdAt")
+	@set:PropertyName("createdAt")
+	var createdAt : Timestamp ?= Timestamp.now()
 ) {
 
 	@Exclude

@@ -27,4 +27,5 @@ class BuildConfigImp @Inject constructor(): IBuildConfig {
     override val appBuildType: String = BuildConfig.BUILD_TYPE
 
     override fun getListingBaseUrl(): String = BuildConfig.LISTING_BASE_URL
+    override fun getSiplyCompleteUrl(): String = baseUrl+BuildConfig.SIPLY_URL
 }

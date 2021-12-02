@@ -7,6 +7,7 @@ import android.content.ContentResolver
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -27,6 +28,7 @@ import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.AppConstants
+import com.gigforce.core.ScopedStorageConstants
 import com.gigforce.core.datamodels.City
 import com.gigforce.core.datamodels.State
 import com.gigforce.core.datamodels.verification.AadhaarDetailsDataModel
@@ -44,6 +46,8 @@ import com.gigforce.verification.mainverification.VerificationClickOrSelectImage
 import com.gigforce.verification.mainverification.pancard.VerificationScreenStatus
 import com.gigforce.verification.util.VerificationConstants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.veri_screen_info_component.view.*
 import okhttp3.MediaType
@@ -57,7 +61,8 @@ import kotlin.collections.ArrayList
 
 
 @AndroidEntryPoint
-class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener {
+class AadharDetailInfoFragment : Fragment(),
+    VerificationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener {
 
     companion object {
         private const val REQUEST_STORAGE_PERMISSION = 102
@@ -72,6 +77,12 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
     private var aadharBackImagePath: String? = null
     private var mJobProfileId: String = ""
     private var FROM_CLIENT_ACTIVATON: Boolean = false
+    private var userId: String? = null
+    private val user: FirebaseUser?
+        get() {
+            return FirebaseAuth.getInstance().currentUser
+        }
+    private var userIdToUse: String? = null
 
     @Inject
     lateinit var buildConfig: IBuildConfig
@@ -100,8 +111,8 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
 
     private lateinit var viewBinding: AadharDetailInfoFragmentBinding
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         viewBinding = AadharDetailInfoFragmentBinding.inflate(inflater, container, false)
         return viewBinding.root
@@ -110,9 +121,17 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getDataFromIntent(savedInstanceState)
+        initviews()
         setViews()
         observer()
         listener()
+    }
+
+    private fun initviews() {
+        viewBinding.toplayoutblock.setIdonthaveDocContent(
+            resources.getString(R.string.no_doc_title_aadhaar_veri),
+            resources.getString(R.string.no_doc_subtitle_aadhaar_veri)
+        )
     }
 
     var allNavigationList = ArrayList<String>()
@@ -121,43 +140,54 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
         savedInstanceState?.let {
 
             FROM_CLIENT_ACTIVATON =
-                    it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
+                it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
             it.getStringArrayList(VerificationConstants.NAVIGATION_STRINGS)?.let { arr ->
                 allNavigationList = arr
             }
             intentBundle = it
+            userId = it.getString(AppConstants.INTENT_EXTRA_UID) ?: return@let
             mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
+
         } ?: run {
             arguments?.let {
 
                 FROM_CLIENT_ACTIVATON =
-                        it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
+                    it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
                 it.getStringArrayList(VerificationConstants.NAVIGATION_STRINGS)?.let { arrData ->
                     allNavigationList = arrData
                 }
                 intentBundle = it
+                userId = it.getString(AppConstants.INTENT_EXTRA_UID) ?: return@let
                 mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
+
             }
 
         }
 
     }
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, FROM_CLIENT_ACTIVATON)
+        outState.putString(AppConstants.INTENT_EXTRA_UID, userId)
+    }
+
 
     var anyDataEntered = false
     var verificationScreenStatus = VerificationScreenStatus.DEFAULT
 
     inner class ValidationTextWatcher :
-            TextWatcher {
+        TextWatcher {
         override fun afterTextChanged(text: Editable?) {
             context?.let { cxt ->
                 if (verificationScreenStatus == VerificationScreenStatus.DEFAULT || verificationScreenStatus == VerificationScreenStatus.OCR_COMPLETED || verificationScreenStatus == VerificationScreenStatus.STARTED) {
                     text?.toString().let {
                         viewBinding.apply {
                             if (aadharNo.editText?.text
-                                            .isNullOrBlank() && addLine1Input.text.toString()
-                                            .isNullOrBlank() && addLine2Input.text.toString()
-                                            .isNullOrBlank() && pincodeInput.text.toString()
-                                            .isNullOrBlank() && landmarkInput.text.toString().isNullOrEmpty()
+                                    .isNullOrBlank() && addLine1Input.text.toString()
+                                    .isNullOrBlank() && addLine2Input.text.toString()
+                                    .isNullOrBlank() && pincodeInput.text.toString()
+                                    .isNullOrBlank() && landmarkInput.text.toString()
+                                    .isNullOrEmpty()
                             ) {
                                 verificationScreenStatus = VerificationScreenStatus.DEFAULT
                                 submitButton.text = getString(R.string.skip_veri)
@@ -275,9 +305,9 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
 
         stateAdapter = context?.let { it1 ->
             ArrayAdapter(
-                    it1,
-                    android.R.layout.simple_spinner_dropdown_item,
-                    statesArray
+                it1,
+                android.R.layout.simple_spinner_dropdown_item,
+                statesArray
             )
         }
         stateSpinner.setAdapter(stateAdapter)
@@ -291,9 +321,9 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
 
         citiesAdapter = context?.let { it1 ->
             ArrayAdapter(
-                    it1,
-                    android.R.layout.simple_spinner_dropdown_item,
-                    citiesArray
+                it1,
+                android.R.layout.simple_spinner_dropdown_item,
+                citiesArray
             )
         }
         citySpinner.setAdapter(citiesAdapter)
@@ -311,9 +341,9 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
 
         caCitiesAdapter = context?.let { it1 ->
             ArrayAdapter(
-                    it1,
-                    android.R.layout.simple_spinner_dropdown_item,
-                    caCitiesArray
+                it1,
+                android.R.layout.simple_spinner_dropdown_item,
+                caCitiesArray
             )
         }
         caCitySpinner.setAdapter(caCitiesAdapter)
@@ -326,173 +356,182 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
                 if (anyDataEntered) {
                     if (aadharFrontImagePath == null || aadharFrontImagePath?.isEmpty() == true) {
                         MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert_veri))
-                                .setMessage(getString(R.string.upload_aadhar_front_veri))
-                                .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
-                                .show()
+                            .setTitle(getString(R.string.alert_veri))
+                            .setMessage(getString(R.string.upload_aadhar_front_veri))
+                            .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
+                            .show()
                         return@setOnClickListener
                     }
 
                     if (aadharBackImagePath == null || aadharBackImagePath?.isEmpty() == true) {
                         MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert_veri))
-                                .setMessage(getString(R.string.upload_aadhar_back_veri))
-                                .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
-                                .show()
+                            .setTitle(getString(R.string.alert_veri))
+                            .setMessage(getString(R.string.upload_aadhar_back_veri))
+                            .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
+                            .show()
                         return@setOnClickListener
                     }
 
-                    if (name.editText?.text.toString().isBlank() || name.editText?.text.toString().length < 3) {
+                    if (name.editText?.text.toString()
+                            .isBlank() || name.editText?.text.toString().length < 3
+                    ) {
                         MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert_veri))
-                                .setMessage(getString(R.string.enter_name_veri))
-                                .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
-                                .show()
+                            .setTitle(getString(R.string.alert_veri))
+                            .setMessage(getString(R.string.enter_name_veri))
+                            .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
+                            .show()
                         return@setOnClickListener
                     }
 
                     if (aadharNo.editText?.text.toString()
-                                    .isBlank() || aadharNo.editText?.text.toString().length != 12
+                            .isBlank() || aadharNo.editText?.text.toString().length != 12
                     ) {
                         MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert_veri))
-                                .setMessage(getString(R.string.enter_valid_aadhar_veri))
-                                .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
-                                .show()
+                            .setTitle(getString(R.string.alert_veri))
+                            .setMessage(getString(R.string.enter_valid_aadhar_veri))
+                            .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
+                            .show()
                         return@setOnClickListener
                     }
 
                     if (dateOfBirth.text.toString().isBlank()) {
                         MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert_veri))
-                                .setMessage(getString(R.string.select_dob_veri))
-                                .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
-                                .show()
+                            .setTitle(getString(R.string.alert_veri))
+                            .setMessage(getString(R.string.select_dob_veri))
+                            .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
+                            .show()
                         return@setOnClickListener
                     }
-
+                    if (fatherNameTil.editText?.text.toString().isBlank()) {
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert_veri))
+                            .setMessage(getString(R.string.enter_father_name_veri))
+                            .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
+                            .show()
+                        return@setOnClickListener
+                    }
                     if (addLine1Input.text.toString().isBlank()) {
                         MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert_veri))
-                                .setMessage(getString(R.string.enter_add1_veri))
-                                .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
-                                .show()
+                            .setTitle(getString(R.string.alert_veri))
+                            .setMessage(getString(R.string.enter_add1_veri))
+                            .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
+                            .show()
                         return@setOnClickListener
                     }
 
                     if (addLine2Input.text.toString().isBlank()) {
                         MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert_veri))
-                                .setMessage(getString(R.string.enter_add2_veri))
-                                .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
-                                .show()
+                            .setTitle(getString(R.string.alert_veri))
+                            .setMessage(getString(R.string.enter_add2_veri))
+                            .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
+                            .show()
                         return@setOnClickListener
                     }
 
                     if (stateSpinner.text.toString()
-                                    .isEmpty() || !statesArray.contains(stateSpinner.text.toString())
+                            .isEmpty() || !statesArray.contains(stateSpinner.text.toString())
                     ) {
                         MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert_veri))
-                                .setMessage(getString(R.string.select_state_veri))
-                                .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
-                                .show()
+                            .setTitle(getString(R.string.alert_veri))
+                            .setMessage(getString(R.string.select_state_veri))
+                            .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
+                            .show()
                         return@setOnClickListener
                     }
 
                     if (citySpinner.text.toString()
-                                    .isEmpty() || !citiesArray.contains(citySpinner.text.toString())
+                            .isEmpty() || !citiesArray.contains(citySpinner.text.toString())
                     ) {
                         MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert_veri))
-                                .setMessage(getString(R.string.select_city_veri))
-                                .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
-                                .show()
+                            .setTitle(getString(R.string.alert_veri))
+                            .setMessage(getString(R.string.select_city_veri))
+                            .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
+                            .show()
                         return@setOnClickListener
                     }
 
                     if (pincodeInput.text.toString()
-                                    .isBlank() || pincodeInput.text.toString().length != 6
+                            .isBlank() || pincodeInput.text.toString().length != 6
                     ) {
                         MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert_veri))
-                                .setMessage(getString(R.string.enter_valid_pin_veri))
-                                .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
-                                .show()
+                            .setTitle(getString(R.string.alert_veri))
+                            .setMessage(getString(R.string.enter_valid_pin_veri))
+                            .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
+                            .show()
                         return@setOnClickListener
                     }
 
-                    if (landmarkInput.text.toString().isBlank()) {
-                        MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert_veri))
-                                .setMessage(getString(R.string.enter_landmark_veri))
-                                .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
-                                .show()
-                        return@setOnClickListener
-                    }
+//                    if (landmarkInput.text.toString().isBlank()) {
+//                        MaterialAlertDialogBuilder(requireContext())
+//                                .setTitle(getString(R.string.alert_veri))
+//                                .setMessage(getString(R.string.enter_landmark_veri))
+//                                .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
+//                                .show()
+//                        return@setOnClickListener
+//                    }
 
                     //current address validation
                     if (!currentAddCheckbox.isChecked) {
 
                         if (caAddLine1Input.text.toString().isBlank()) {
                             MaterialAlertDialogBuilder(requireContext())
-                                    .setTitle(getString(R.string.alert_veri))
-                                    .setMessage(getString(R.string.curr_add1_veri))
-                                    .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
-                                    .show()
+                                .setTitle(getString(R.string.alert_veri))
+                                .setMessage(getString(R.string.curr_add1_veri))
+                                .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
+                                .show()
                             return@setOnClickListener
                         }
 
                         if (caAddLine2Input.text.toString().isBlank()) {
                             MaterialAlertDialogBuilder(requireContext())
-                                    .setTitle(getString(R.string.alert_veri))
-                                    .setMessage(getString(R.string.curr_add2_veri))
-                                    .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
-                                    .show()
+                                .setTitle(getString(R.string.alert_veri))
+                                .setMessage(getString(R.string.curr_add2_veri))
+                                .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
+                                .show()
                             return@setOnClickListener
                         }
 
                         if (caStateSpinner.text.toString()
-                                        .isEmpty() || !statesArray.contains(caStateSpinner.text.toString())
+                                .isEmpty() || !statesArray.contains(caStateSpinner.text.toString())
                         ) {
                             MaterialAlertDialogBuilder(requireContext())
-                                    .setTitle(getString(R.string.alert_veri))
-                                    .setMessage(getString(R.string.select_state_veri))
-                                    .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
-                                    .show()
+                                .setTitle(getString(R.string.alert_veri))
+                                .setMessage(getString(R.string.select_state_veri))
+                                .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
+                                .show()
                             return@setOnClickListener
                         }
 
                         if (caCitySpinner.text.toString()
-                                        .isEmpty() || !caCitiesArray.contains(caCitySpinner.text.toString())
+                                .isEmpty() || !caCitiesArray.contains(caCitySpinner.text.toString())
                         ) {
                             MaterialAlertDialogBuilder(requireContext())
-                                    .setTitle(getString(R.string.alert_veri))
-                                    .setMessage(getString(R.string.select_city_veri))
-                                    .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
-                                    .show()
+                                .setTitle(getString(R.string.alert_veri))
+                                .setMessage(getString(R.string.select_city_veri))
+                                .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
+                                .show()
                             return@setOnClickListener
                         }
 
                         if (caPincodeInput.text.toString()
-                                        .isBlank() || caPincodeInput.text.toString().length != 6
+                                .isBlank() || caPincodeInput.text.toString().length != 6
                         ) {
                             MaterialAlertDialogBuilder(requireContext())
-                                    .setTitle(getString(R.string.alert_veri))
-                                    .setMessage(getString(R.string.enter_valid_pin_veri))
-                                    .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
-                                    .show()
+                                .setTitle(getString(R.string.alert_veri))
+                                .setMessage(getString(R.string.enter_valid_pin_veri))
+                                .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
+                                .show()
                             return@setOnClickListener
                         }
 
-                        if (caLandmarkInput.text.toString().isBlank()) {
-                            MaterialAlertDialogBuilder(requireContext())
-                                    .setTitle(getString(R.string.alert_veri))
-                                    .setMessage(getString(R.string.enter_landmark_veri))
-                                    .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
-                                    .show()
-                            return@setOnClickListener
-                        }
+//                        if (caLandmarkInput.text.toString().isBlank()) {
+//                            MaterialAlertDialogBuilder(requireContext())
+//                                    .setTitle(getString(R.string.alert_veri))
+//                                    .setMessage(getString(R.string.enter_landmark_veri))
+//                                    .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
+//                                    .show()
+//                            return@setOnClickListener
+//                        }
                     }
 
                     submitData()
@@ -505,28 +544,28 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
 
 
         landmarkInput.addTextChangedListener(
-                ValidationTextWatcher(
-                )
+            ValidationTextWatcher(
+            )
         )
         pincodeInput.addTextChangedListener(
-                ValidationTextWatcher(
-                )
+            ValidationTextWatcher(
+            )
         )
         addLine2Input.addTextChangedListener(
-                ValidationTextWatcher(
-                )
+            ValidationTextWatcher(
+            )
         )
         addLine1Input.addTextChangedListener(
-                ValidationTextWatcher(
-                )
+            ValidationTextWatcher(
+            )
         )
         dateOfBirth.addTextChangedListener(
-                ValidationTextWatcher(
-                )
+            ValidationTextWatcher(
+            )
         )
         aadharNo.editText?.addTextChangedListener(
-                ValidationTextWatcher(
-                )
+            ValidationTextWatcher(
+            )
         )
         appBarAadhar.apply {
             setBackButtonListener {
@@ -547,32 +586,32 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
     private fun submitData() = viewBinding.apply {
         viewBinding.progressBar.visibility = View.VISIBLE
         var submitDataModel = AadhaarDetailsDataModel(
-                frontImagePath = aadharFrontImagePath,
-                backImagePath = aadharBackImagePath,
-                aadhaarCardNo = aadharNo.editText?.text.toString(),
-                dateOfBirth = dateOfBirth.text.toString(),
-                fName = fatherNameTil.editText?.text.toString(),
-                addLine1 = addLine1Input.text.toString(),
-                addLine2 = addLine2Input.text.toString(),
-                state = stateSpinner.text.toString(),
-                city = citySpinner.text.toString(),
-                pincode = pincode.editText?.text.toString(),
-                landmark = landmark.editText?.text.toString(),
-                name = name.editText?.text.toString(),
-                currentAddSameAsParmanent = currentAddCheckbox.isChecked,
-                currentAddress = if (!currentAddCheckbox.isChecked) CurrentAddressDetailDataModel(
-                        addLine1 = caAddLine1Input.text.toString(),
-                        addLine2 = caAddLine2Input.text.toString(),
-                        state = caStateSpinner.text.toString(),
-                        city = caCitySpinner.text.toString(),
-                        pincode = caPincodeInput.text.toString(),
-                        landmark = caLandmarkInput.text.toString()
-                ) else null
+            frontImagePath = aadharFrontImagePath,
+            backImagePath = aadharBackImagePath,
+            aadhaarCardNo = aadharNo.editText?.text.toString(),
+            dateOfBirth = dateOfBirth.text.toString(),
+            fName = fatherNameTil.editText?.text.toString(),
+            addLine1 = addLine1Input.text.toString(),
+            addLine2 = addLine2Input.text.toString(),
+            state = stateSpinner.text.toString(),
+            city = citySpinner.text.toString(),
+            pincode = pincode.editText?.text.toString(),
+            landmark = landmark.editText?.text.toString(),
+            name = name.editText?.text.toString(),
+            currentAddSameAsParmanent = currentAddCheckbox.isChecked,
+            currentAddress = if (!currentAddCheckbox.isChecked) CurrentAddressDetailDataModel(
+                addLine1 = caAddLine1Input.text.toString(),
+                addLine2 = caAddLine2Input.text.toString(),
+                state = caStateSpinner.text.toString(),
+                city = caCitySpinner.text.toString(),
+                pincode = caPincodeInput.text.toString(),
+                landmark = caLandmarkInput.text.toString()
+            ) else null
         )
         if (FROM_CLIENT_ACTIVATON)
-            viewModel.setAadhaarDetails(submitDataModel, false, mJobProfileId)
+            viewModel.setAadhaarDetails(submitDataModel, false, mJobProfileId, userIdToUse.toString())
         else
-            viewModel.setAadhaarDetails(submitDataModel, false, "")
+            viewModel.setAadhaarDetails(submitDataModel, false, "", userIdToUse.toString())
 
     }
 
@@ -584,35 +623,37 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
             var navigationsForBundle = emptyList<String>()
             if (allNavigationList.size > 1) {
                 navigationsForBundle =
-                        allNavigationList.slice(IntRange(1, allNavigationList.size - 1))
-                                .filter { it.length > 0 }
+                    allNavigationList.slice(IntRange(1, allNavigationList.size - 1))
+                        .filter { it.length > 0 }
             }
             navigation.popBackStack()
 
             intentBundle?.putStringArrayList(
-                    com.gigforce.common_ui.StringConstants.NAVIGATION_STRING_ARRAY.value,
-                    java.util.ArrayList(navigationsForBundle)
+                com.gigforce.common_ui.StringConstants.NAVIGATION_STRING_ARRAY.value,
+                java.util.ArrayList(navigationsForBundle)
             )
             navigation.navigateTo(
-                    allNavigationList.get(0), intentBundle)
+                allNavigationList.get(0), intentBundle
+            )
         }
     }
+
     private var dobYear = 1990
     private val dateOfBirthPicker: DatePickerDialog by lazy {
         val cal = Calendar.getInstance()
         val datePickerDialog = DatePickerDialog(
-                requireContext(),
-                DatePickerDialog.OnDateSetListener { _: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
-                    val newCal = Calendar.getInstance()
-                    newCal.set(Calendar.YEAR, year)
-                    newCal.set(Calendar.MONTH, month)
-                    newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                    viewBinding.dateOfBirth.text = DateHelper.getDateInDDMMYYYYHiphen(newCal.time)
-                    viewBinding.dobLabel.visible()
-                },
-                dobYear,
-                cal.get(Calendar.MONTH),
-                cal.get(Calendar.DAY_OF_MONTH)
+            requireContext(),
+            DatePickerDialog.OnDateSetListener { _: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
+                val newCal = Calendar.getInstance()
+                newCal.set(Calendar.YEAR, year)
+                newCal.set(Calendar.MONTH, month)
+                newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                viewBinding.dateOfBirth.text = DateHelper.getDateInDDMMYYYYHiphen(newCal.time)
+                viewBinding.dobLabel.visible()
+            },
+            dobYear,
+            cal.get(Calendar.MONTH),
+            cal.get(Calendar.DAY_OF_MONTH)
         )
 
         datePickerDialog.datePicker.maxDate = Calendar.getInstance().timeInMillis
@@ -635,13 +676,13 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
                             }
                             it.dateOfBirth?.let {
                                 if (it.isNotEmpty()) {
-                                    if(it.contains("-") && it.length > 8) {
+                                    if (it.contains("-") && it.length > 8) {
                                         dateOfBirth.text = it
                                         dobLabel.visible()
-                                    }else if(it.length == 4){
-                                        try{
+                                    } else if (it.length == 4) {
+                                        try {
                                             dobYear = it.toInt()
-                                        }catch (e:Exception){
+                                        } catch (e: Exception) {
 
                                         }
                                     }
@@ -656,9 +697,10 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
                                 }
                             }
                             toplayoutblock.uploadStatusLayout(
-                                    AppConstants.UPLOAD_SUCCESS,
-                                    getString(R.string.upload_success_veri),
-                                    getString(R.string.info_of_aadhar_success_veri))
+                                AppConstants.UPLOAD_SUCCESS,
+                                getString(R.string.upload_success_veri),
+                                getString(R.string.info_of_aadhar_success_veri)
+                            )
                         }
 
                     } else if (!it.city.isNullOrEmpty() || !it.state.isNullOrEmpty() || !it.pinCode.isNullOrEmpty() || !it.district.isNullOrEmpty() || !it.address1.isNullOrEmpty() || !it.address2.isNullOrEmpty()) {
@@ -700,23 +742,24 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
 
 
                             toplayoutblock.uploadStatusLayout(
-                                    AppConstants.UPLOAD_SUCCESS,
-                                    getString(R.string.upload_success_veri),
-                                    getString(R.string.info_of_aadhar_success_veri))
+                                AppConstants.UPLOAD_SUCCESS,
+                                getString(R.string.upload_success_veri),
+                                getString(R.string.info_of_aadhar_success_veri)
+                            )
                         }
                     } else {
                         viewBinding.toplayoutblock.uploadStatusLayout(
-                                AppConstants.UNABLE_TO_FETCH_DETAILS,
-                                getString(R.string.unable_to_fetch_info_veri),
-                                getString(R.string.enter_aadhar_details_veri)
+                            AppConstants.UNABLE_TO_FETCH_DETAILS,
+                            getString(R.string.unable_to_fetch_info_veri),
+                            getString(R.string.enter_aadhar_details_veri)
                         )
                     }
 
                 } else {
                     viewBinding.toplayoutblock.uploadStatusLayout(
-                            AppConstants.UNABLE_TO_FETCH_DETAILS,
-                            getString(R.string.unable_to_fetch_info_veri),
-                            getString(R.string.enter_aadhar_details_veri)
+                        AppConstants.UNABLE_TO_FETCH_DETAILS,
+                        getString(R.string.unable_to_fetch_info_veri),
+                        getString(R.string.enter_aadhar_details_veri)
                     )
                 }
             }
@@ -727,7 +770,7 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
             viewBinding.progressBar.gone()
             if (updated) {
                 showToast(getString(R.string.data_uploaded_veri))
-                viewModel.getVerificationData()
+                viewModel.getVerificationData(userIdToUse.toString())
             }
 
         })
@@ -765,7 +808,7 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
             Log.d("kycData", "data : $kycData")
             processKycData(kycData)
             it.aadhaar_card_questionnaire?.apply {
-                if (!name.isNullOrEmpty() && !aadhaarCardNo.isNullOrEmpty() && !dateOfBirth.isNullOrEmpty()) {
+                if (verified == true) {
                     allFieldsEnable(false)
                     viewBinding.toplayoutblock.toggleChangeTextView(true)
                     viewBinding.submitButton.text = getString(R.string.next_veri)
@@ -782,12 +825,12 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
         })
 
         viewModel.observableAddApplicationSuccess.observe(
-                viewLifecycleOwner,
-                androidx.lifecycle.Observer {
-                    if (it) {
-                        checkForNextDoc()
-                    }
+            viewLifecycleOwner,
+            androidx.lifecycle.Observer {
+                if (it) {
+                    checkForNextDoc()
                 }
+            }
         )
     }
 
@@ -814,12 +857,12 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
         caCitiesAdapter?.notifyDataSetChanged()
 
         if (!caCityFilled && caCitiesArray.contains(
-                        aadhaarDetailsDataModel?.currentAddress?.city ?: ""
-                )
+                aadhaarDetailsDataModel?.currentAddress?.city ?: ""
+            )
         ) {
             viewBinding.caCitySpinner.setText(
-                    aadhaarDetailsDataModel?.currentAddress?.city ?: "",
-                    false
+                aadhaarDetailsDataModel?.currentAddress?.city ?: "",
+                false
             )
             caCityFilled = true
         }
@@ -852,8 +895,8 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
 
         if (enable) {
             viewBinding.toplayoutblock.setVerificationSuccessfulView(
-                    getString(R.string.aadhaar_card_veri),
-                    getString(R.string.you_need_to_upload_veri)
+                getString(R.string.aadhaar_card_veri),
+                getString(R.string.you_need_to_upload_veri)
             )
             viewBinding.toplayoutblock.showUploadHere()
             viewBinding.toplayoutblock.statusDialogLayoutvisibilityGone()
@@ -862,9 +905,9 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
             viewBinding.toplayoutblock.setVerificationSuccessfulView(getString(R.string.aadhar_submitted_veri))
 
             viewBinding.toplayoutblock.uploadStatusLayout(
-                    AppConstants.UPLOAD_SUCCESS,
-                    getString(R.string.document_submitted_veri),
-                    getString(R.string.aadhar_submitted_successfully_veri)
+                AppConstants.UPLOAD_SUCCESS,
+                getString(R.string.document_submitted_veri),
+                getString(R.string.aadhar_submitted_successfully_veri)
             )
             viewBinding.toplayoutblock.viewChangeOnVerified()
         }
@@ -883,11 +926,11 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
                 aadharFrontImagePath = it
                 getDBImageUrl(it).let {
                     list.add(
-                            KYCImageModel(
-                                    text = getString(R.string.upload_front_side_first_veri),
-                                    imagePath = it,
-                                    imageUploaded = true
-                            )
+                        KYCImageModel(
+                            text = getString(R.string.upload_front_side_first_veri),
+                            imagePath = it,
+                            imageUploaded = true
+                        )
                     )
 
                 }
@@ -896,11 +939,11 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
                 aadharBackImagePath = it
                 getDBImageUrl(it).let {
                     list.add(
-                            KYCImageModel(
-                                    text = getString(R.string.upload_aadhar_card_back_side_veri),
-                                    imagePath = it,
-                                    imageUploaded = true
-                            )
+                        KYCImageModel(
+                            text = getString(R.string.upload_aadhar_card_back_side_veri),
+                            imagePath = it,
+                            imageUploaded = true
+                        )
                     )
 
                 }
@@ -995,32 +1038,37 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
     }
 
     private fun setViews() {
+        userIdToUse = if (userId != null) {
+            userId
+        }else{
+            user?.uid
+        }
         viewBinding.toplayoutblock.whyweneeditInvisible()
         viewModel.getStates()
 
         val frontUri = Uri.Builder()
-                .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
-                .authority(resources.getResourcePackageName(R.drawable.ic_aadhar_front))
-                .appendPath(resources.getResourceTypeName(R.drawable.ic_aadhar_front))
-                .appendPath(resources.getResourceEntryName(R.drawable.ic_aadhar_front))
-                .build()
+            .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
+            .authority(resources.getResourcePackageName(R.drawable.ic_aadhar_front))
+            .appendPath(resources.getResourceTypeName(R.drawable.ic_aadhar_front))
+            .appendPath(resources.getResourceEntryName(R.drawable.ic_aadhar_front))
+            .build()
         val backUri = Uri.Builder()
-                .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
-                .authority(resources.getResourcePackageName(R.drawable.ic_aadhar_front))
-                .appendPath(resources.getResourceTypeName(R.drawable.ic_aadhar_front))
-                .appendPath(resources.getResourceEntryName(R.drawable.ic_aadhar_front))
-                .build()
+            .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
+            .authority(resources.getResourcePackageName(R.drawable.ic_aadhar_front))
+            .appendPath(resources.getResourceTypeName(R.drawable.ic_aadhar_front))
+            .appendPath(resources.getResourceEntryName(R.drawable.ic_aadhar_front))
+            .build()
         val list = listOf(
-                KYCImageModel(
-                        text = getString(R.string.upload_aadhar_card_front_side_veri),
-                        imageIcon = frontUri,
-                        imageUploaded = false
-                ),
-                KYCImageModel(
-                        text = getString(R.string.upload_aadhar_card_back_side_veri),
-                        imageIcon = backUri,
-                        imageUploaded = false
-                )
+            KYCImageModel(
+                text = getString(R.string.upload_aadhar_card_front_side_veri),
+                imageIcon = frontUri,
+                imageUploaded = false
+            ),
+            KYCImageModel(
+                text = getString(R.string.upload_aadhar_card_back_side_veri),
+                imageIcon = backUri,
+                imageUploaded = false
+            )
         )
         viewBinding.toplayoutblock.setImageViewPager(list)
     }
@@ -1071,24 +1119,24 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
         }
         Log.d("map", "$statesesMap")
         stateAdapter?.notifyDataSetChanged()
-        viewModel.getVerificationData()
+        viewModel.getVerificationData(userIdToUse.toString())
     }
 
 
     private fun checkForPermissionElseShowCameraGalleryBottomSheet() {
         if (hasStoragePermissions()) {
             VerificationClickOrSelectImageBottomSheet.launch(
-                    parentFragmentManager,
-                    getString(R.string.upload_aadhar_card_veri),
-                    this
+                parentFragmentManager,
+                getString(R.string.upload_aadhar_card_veri),
+                this
             )
         } else
             requestStoragePermission()
     }
 
     override fun onRequestPermissionsResult(
-            requestCode: Int,
-            permissions: Array<String>, grantResults: IntArray
+        requestCode: Int,
+        permissions: Array<String>, grantResults: IntArray
     ) {
         when (requestCode) {
             REQUEST_STORAGE_PERMISSION -> {
@@ -1102,9 +1150,9 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
 
                 if (allPermsGranted)
                     VerificationClickOrSelectImageBottomSheet.launch(
-                            parentFragmentManager,
-                            getString(R.string.upload_aadhar_card_veri),
-                            this
+                        parentFragmentManager,
+                        getString(R.string.upload_aadhar_card_veri),
+                        this
                     )
                 else {
                     showToast(getString(R.string.grant_storage_permission_veri))
@@ -1115,29 +1163,47 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
 
 
     private fun hasStoragePermissions(): Boolean {
-        return ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.READ_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+        if(Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK){
+            return ContextCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.CAMERA
-        ) == PackageManager.PERMISSION_GRANTED
+            ) == PackageManager.PERMISSION_GRANTED
+        } else{
+            return ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        }
     }
 
 
     private fun requestStoragePermission() {
 
-        requestPermissions(
+        if(Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK){
+            requestPermissions(
                 arrayOf(
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.CAMERA
+                    Manifest.permission.CAMERA
                 ),
                 REQUEST_STORAGE_PERMISSION
-        )
+            )
+        } else{
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.CAMERA
+                ),
+                REQUEST_STORAGE_PERMISSION
+            )
+        }
+
+
     }
 
     override fun onClickPictureThroughCameraClicked() {
@@ -1160,11 +1226,15 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
                 Log.d("image", outputFileUri.toString())
             }
         } else if (requestCode == ImageCropActivity.CROP_RESULT_CODE && resultCode == Activity.RESULT_OK) {
-            val imageUriResultCrop: Uri? = Uri.parse(data?.getStringExtra(ImageCropActivity.CROPPED_IMAGE_URL_EXTRA))
+            val imageUriResultCrop: Uri? =
+                Uri.parse(data?.getStringExtra(ImageCropActivity.CROPPED_IMAGE_URL_EXTRA))
             Log.d("ImageUri", imageUriResultCrop.toString())
             clickedImagePath = imageUriResultCrop
             if (imageUriResultCrop != null) {
-                showAadharImage(imageUriResultCrop, viewBinding.toplayoutblock.viewPager2.currentItem)
+                showAadharImage(
+                    imageUriResultCrop,
+                    viewBinding.toplayoutblock.viewPager2.currentItem
+                )
                 uploadImage(imageUriResultCrop)
             }
 
@@ -1211,13 +1281,18 @@ class AadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageBotto
             Log.d("Register", "Nombre del archivo " + file.name)
             // create RequestBody instance from file
             val requestFile: RequestBody =
-                    RequestBody.create(MediaType.parse("image/png"), file)
+                RequestBody.create(MediaType.parse("image/png"), file)
             // MultipartBody.Part is used to send also the actual file name
             image =
-                    MultipartBody.Part.createFormData("file", file.name, requestFile)
+                MultipartBody.Part.createFormData("file", file.name, requestFile)
         }
         image?.let {
-            viewModel.getKycOcrResult("aadhar", if (viewBinding.toplayoutblock.viewPager2.currentItem == 0) "front" else "back", it)
+            viewModel.getKycOcrResult(
+                "aadhar",
+                if (viewBinding.toplayoutblock.viewPager2.currentItem == 0) "front" else "back",
+                it,
+                userIdToUse.toString()
+            )
         }
     }
 }

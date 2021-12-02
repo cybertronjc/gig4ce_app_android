@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.client_activation.client_activation.repository.AadhaarDetailsRepository
 import com.gigforce.common_ui.repository.ProfileFirebaseRepository
+import com.gigforce.core.StringConstants
 import com.gigforce.core.datamodels.City
 import com.gigforce.core.datamodels.State
 import com.gigforce.core.datamodels.client_activation.JpApplication
@@ -15,6 +16,7 @@ import com.gigforce.core.datamodels.verification.KYCdata
 import com.gigforce.core.datamodels.verification.VerificationBaseModel
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -78,9 +80,9 @@ class AadharApplicationDetailsViewModel @Inject constructor(
 
     }
 
-    fun getVerificationData() = viewModelScope.launch {
+    fun getVerificationData(uid: String) = viewModelScope.launch {
         try {
-            val veriData = aadharDetailsRepo.getVerificationDetails()
+            val veriData = aadharDetailsRepo.getVerificationDetails(uid)
             verificationResult.postValue(veriData)
         } catch (e: Exception) {
             e.printStackTrace()
@@ -116,9 +118,10 @@ class AadharApplicationDetailsViewModel @Inject constructor(
                                 draft.isDone = true
                             }
                         }
+                        val map = mapOf("application" to jpApplication.application, "updatedAt" to Timestamp.now(), "updatedBy" to StringConstants.APP.value)
                         FirebaseFirestore.getInstance().collection("JP_Applications")
                             .document(jp_application.documents[0].id)
-                            .update("application", jpApplication.application)
+                            .update(map)
                             .addOnCompleteListener {
                                 if (it.isSuccessful) {
                                     _observableAddApplicationSuccess.value =

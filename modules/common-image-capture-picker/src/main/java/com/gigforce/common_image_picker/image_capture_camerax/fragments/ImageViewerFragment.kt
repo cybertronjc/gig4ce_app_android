@@ -3,6 +3,7 @@ package com.gigforce.common_image_picker.image_capture_camerax.fragments
 import android.graphics.*
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -92,6 +93,7 @@ class ImageViewerFragment : Fragment() {
                 detectFace()
             } else {
                 sharedCameraViewModel.clickedImageApproved(
+                    requireContext(),
                     shouldUploadImageToo,
                     image,
                     parentDirectoryNameInFirebaseStorage
@@ -102,44 +104,60 @@ class ImageViewerFragment : Fragment() {
 
 
     fun detectFace() {
-        try {
+
             var image1: InputImage? = null
             try {
-                image1 = InputImage.fromFilePath(context, image.toUri())
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
+                image1 = InputImage.fromFilePath(requireContext(), image.toUri())
+                //  Face detect - Check if face is present in the image or not.
+                val result = detector.process(image1)
+                    .addOnSuccessListener { faces ->
+                        if(!isAdded) return@addOnSuccessListener
 
-            //  Face detect - Check if face is present in the image or not.
-            val result = detector.process(image1)
-                .addOnSuccessListener { faces ->
-                    // Task completed successfully
-                    if (faces.size > 0) {
-                        Log.d("FaceDetect", "success")
-                        showToast(getString(R.string.face_detected_common))
+                        // Task completed successfully
+                        if (faces.size > 0) {
+                            Log.d("FaceDetect", "success")
+                            context?.getString(R.string.face_detected_common)?.let { showToast(it) }
+                            sharedCameraViewModel.clickedImageApproved(
+                                requireContext(),
+                                shouldUploadImageToo,
+                                image,
+                                parentDirectoryNameInFirebaseStorage
+                            )
+
+                        } else {
+                            Log.d("FaceDetect", "failed")
+                            context?.let { showToast(it?.getString(R.string.something_seems_off_common)) }
+                        }
+                    }
+                    .addOnFailureListener { e ->
+                        // Task failed with an exception
+                        Log.d("FaceDetect", "failed ${e.message}")
                         sharedCameraViewModel.clickedImageApproved(
+                            requireContext(),
                             shouldUploadImageToo,
                             image,
                             parentDirectoryNameInFirebaseStorage
                         )
-
-                    } else {
-                        Log.d("FaceDetect", "failed")
-                        showToast(getString(R.string.something_seems_off_common))
                     }
-                }
-                .addOnFailureListener { e ->
-                    // Task failed with an exception
-                    Log.d("FaceDetect", "failed ${e.message}")
-                    sharedCameraViewModel.clickedImageApproved(
-                        shouldUploadImageToo,
-                        image,
-                        parentDirectoryNameInFirebaseStorage
-                    )
-                }
-        } catch (e: Exception) {
-            Log.d("exception", "${e.message}")
-        }
+            } catch (e: OutOfMemoryError){
+                Log.d("FaceDetect", "failed (out of memory) ${e.message}")
+                sharedCameraViewModel.clickedImageApproved(
+                    requireContext(),
+                    shouldUploadImageToo,
+                    image,
+                    parentDirectoryNameInFirebaseStorage
+                )
+            }
+
+            catch (e: Exception) {
+                sharedCameraViewModel.clickedImageApproved(
+                    requireContext(),
+                    shouldUploadImageToo,
+                    image,
+                    parentDirectoryNameInFirebaseStorage
+                )
+            }
+
     }
 
     private fun getArgumentsFrom(arguments: Bundle?, savedInstanceState: Bundle?) {

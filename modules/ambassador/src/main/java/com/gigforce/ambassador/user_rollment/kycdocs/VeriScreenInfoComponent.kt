@@ -306,6 +306,26 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
         else
             editBankDetail.gone()
     }
+
+    fun hideUploadOption(visible: Boolean){
+        if(visible) {
+            viewPager2.gone()
+            tabLayout.gone()
+            docsubtitledetail.gone()
+            uploadHereText.gone()
+        }else{
+            viewPager2.visible()
+            tabLayout.visible()
+            docsubtitledetail.visible()
+            uploadHereText.gone()
+        }
+    }
+
+    fun initAdapter() {
+        adapter = ViewPagerAdapter {
+            pageClickListener?.onClick(it)
+        }
+    }
 }
 
 

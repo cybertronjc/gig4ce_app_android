@@ -1,9 +1,11 @@
 package com.gigforce.app.modules.profile
 
-import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
+import com.gigforce.core.StringConstants
+import com.gigforce.core.fb.BaseFirestoreDBRepository
 import com.gigforce.core.datamodels.profile.Contact
 import com.gigforce.core.datamodels.profile.ContactEmail
 import com.gigforce.core.datamodels.profile.ContactPhone
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
 
 
@@ -26,7 +28,12 @@ class ModelAboutExpandedFragment : ModelCallbacksAboutExpandedFragment,
                 break
             }
         }
-        getCollectionReference().document(profileID).update("contactPhone", contactList)
+        val map = mapOf(
+            "contactPhone" to contactList,
+            "updatedAt" to Timestamp.now(),
+            "updatedBy" to StringConstants.APP.value
+        )
+        getCollectionReference().document(profileID).update(map)
             .addOnCompleteListener {
                 if (it.isSuccessful) {
                     responseCallbacks.reloadProfile(true)
@@ -58,7 +65,9 @@ class ModelAboutExpandedFragment : ModelCallbacksAboutExpandedFragment,
         }
         val updateMap = mapOf(
             "contactPhone" to contact,
-            "contactEmail" to email
+            "contactEmail" to email,
+            "updatedAt" to Timestamp.now(),
+            "updatedBy" to StringConstants.APP.value
         )
         getCollectionReference().document(profileID).update(updateMap)
             .addOnCompleteListener {
@@ -88,9 +97,13 @@ class ModelAboutExpandedFragment : ModelCallbacksAboutExpandedFragment,
                 responseCallbacks.errorUpdatingContact("Contact Already Exists!!!")
                 return
             }
-
+            val map = mapOf(
+                "contactPhone" to FieldValue.arrayUnion(newContact),
+                "updatedAt" to Timestamp.now(),
+                "updatedBy" to StringConstants.APP.value
+            )
             getCollectionReference().document(profileID)
-                .update("contactPhone", FieldValue.arrayUnion(newContact))
+                .update(map)
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
                         contactList.add(newContact ?: ContactPhone())
@@ -113,7 +126,9 @@ class ModelAboutExpandedFragment : ModelCallbacksAboutExpandedFragment,
                     }
                 }
             }
-            getCollectionReference().document(profileID).update("contactPhone", contactList)
+            val map = mapOf("contactPhone" to contactList, "updatedAt" to Timestamp.now(),
+                "updatedBy" to StringConstants.APP.value)
+            getCollectionReference().document(profileID).update(map)
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
                         responseCallbacks.reloadProfile(false)
@@ -142,9 +157,10 @@ class ModelAboutExpandedFragment : ModelCallbacksAboutExpandedFragment,
                 responseCallbacks.errorUpdatingContact("Email Already Exists!!!")
                 return
             }
-
+            val map = mapOf("contactEmail" to FieldValue.arrayUnion(newContact), "updatedAt" to Timestamp.now(),
+                "updatedBy" to StringConstants.APP.value)
             getCollectionReference().document(profileID)
-                .update("contactEmail", FieldValue.arrayUnion(newContact))
+                .update(map)
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
                         contactList.add(newContact ?: ContactEmail())
@@ -162,13 +178,15 @@ class ModelAboutExpandedFragment : ModelCallbacksAboutExpandedFragment,
                         contactList.removeAt(i)
                         break
                     } else {
-                        contactList[i] = newContact ?: ContactEmail();
+                        contactList[i] = newContact ?: ContactEmail()
                         break
                     }
 
                 }
             }
-            getCollectionReference().document(profileID).update("contactEmail", contactList)
+            val map = mapOf("contactEmail" to contactList, "updatedAt" to Timestamp.now(),
+                "updatedBy" to StringConstants.APP.value)
+            getCollectionReference().document(profileID).update(map)
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
                         responseCallbacks.reloadProfile(false)
@@ -187,10 +205,11 @@ class ModelAboutExpandedFragment : ModelCallbacksAboutExpandedFragment,
                 mapOf(
                     "contactEmail" to arrayListOf<ContactEmail>(),
                     "contactPhone" to arrayListOf<ContactPhone>(),
-                    "contact" to arrayListOf<Contact>()
-
+                    "contact" to arrayListOf<Contact>(),
+                    "updatedAt" to Timestamp.now(),
+                    "updatedBy" to StringConstants.APP.value
                 )
-            );
+            )
 
     }
 

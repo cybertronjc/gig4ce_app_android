@@ -11,5 +11,8 @@ data class UserAuthStatusModel(
     val isUserRegistered: Boolean = false,
 
     @field:SerializedName("uId")
-    val uId: String? = null
+    val uId: String? = null,
+
+    @field:SerializedName("name")
+    val name: String? = null
 )

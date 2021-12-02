@@ -153,7 +153,7 @@ class GigViewModel constructor(
                 distanceBetweenGigAndUser = distanceBetweenGigAndUser
             )
             _markingAttendanceState.postValue(Lce.content(AttendanceType.CHECK_IN))
-//            _markingAttendanceState.postValue(null)
+            _markingAttendanceState.postValue(null)
         } catch (e: Exception) {
             _markingAttendanceState.postValue(Lce.error(e.toString()))
             _markingAttendanceState.postValue(null)
@@ -183,10 +183,10 @@ class GigViewModel constructor(
                 distanceBetweenGigAndUser = distanceBetweenGigAndUser
             )
             _markingAttendanceState.value = Lce.content(AttendanceType.CHECK_OUT)
-//            _markingAttendanceState.value = null
+            _markingAttendanceState.value = null
         } catch (e: Exception) {
             _markingAttendanceState.postValue(Lce.error(e.toString()))
-//            _markingAttendanceState.postValue(null)
+            _markingAttendanceState.postValue(null)
         }
     }
 
@@ -685,10 +685,10 @@ class GigViewModel constructor(
             }
 
             _todaysGigs.value = Lce.content(upcomingAndPendingGigs)
-//            _todaysGigs.value = null
+            _todaysGigs.value = null
         } catch (e: Exception) {
             _todaysGigs.value = Lce.error(e.message!!)
-//            _todaysGigs.value = null
+            _todaysGigs.value = null
         }
 
     }

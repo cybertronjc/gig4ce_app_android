@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/no_chat_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:orientation="vertical"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/app_bar_contact">
+
+    <ImageView
+        android:layout_width="226dp"
+        android:layout_height="189dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="38dp"
+        android:gravity="center_horizontal"
+        android:text="Need storage access"
+        android:textColor="@color/lipstick"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="32dp"
+        android:gravity="center_horizontal"
+        android:text="PLease grant storage access in next screen"
+        android:textColor="@color/black_666"
+        android:textSize="16sp"
+        android:textStyle="normal" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/storage_access_btn"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="38dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="16dp"
+        android:text="Grant access"
+        app:strokeColor="@color/colorPrimary" />
+
+
+</LinearLayout>
+

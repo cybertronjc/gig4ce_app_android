@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -29,13 +30,14 @@ import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewmodels.ProfileViewModel
 import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.AppConstants
-import com.gigforce.core.utils.NavFragmentsData
+import com.gigforce.core.ScopedStorageConstants
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.Lce
 import com.gigforce.core.utils.Lse
+import com.gigforce.core.utils.NavFragmentsData
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -55,7 +57,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class AddProfilePictureFragment : Fragment(),
-    ClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener,IOnBackPressedOverride {
+    ClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener, IOnBackPressedOverride {
 
     private val viewModel: UserDetailsViewModel by viewModels()
     private val profileViewModel: ProfileViewModel by viewModels()
@@ -64,7 +66,9 @@ class AddProfilePictureFragment : Fragment(),
     private var pincode = ""
     private var mode: Int = EnrollmentConstants.MODE_UNSPECIFIED
     private var cameFromEnrollment = false
+    private var cameFromOnboarding = false
     private var navFragmentsData: NavFragmentsData? = null
+
     @Inject
     lateinit var navigation: INavigation
 
@@ -99,6 +103,7 @@ class AddProfilePictureFragment : Fragment(),
     }
 
     private fun getProfilePictureForUser() {
+
         if (mode != EnrollmentConstants.MODE_EDIT) {
             checkForPermissionElseShowCameraGalleryBottomSheet()
         }
@@ -111,9 +116,14 @@ class AddProfilePictureFragment : Fragment(),
             skipButton.gone()
             submitBtn.text = getString(R.string.upload_photo_amb)
             editLayout.gone()
+        } else if (cameFromOnboarding){
+            skipButton.gone()
+            submitBtn.text = getString(R.string.done_amb)
+            viewModel.getProfileForUser(userId)
         } else {
             val isRequirementMode = mode != EnrollmentConstants.MODE_ENROLLMENT_REQUIREMENT
-            submitBtn.text = if (isRequirementMode) getString(R.string.change_photo_amb) else getString(R.string.next_amb)
+            submitBtn.text =
+                if (isRequirementMode) getString(R.string.change_photo_amb) else getString(R.string.next_amb)
             skipButton.isVisible = isRequirementMode
             viewModel.getProfileForUser(userId)
         }
@@ -125,6 +135,10 @@ class AddProfilePictureFragment : Fragment(),
                 AppConstants.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT,
                 false
             )
+            cameFromOnboarding = it.getBoolean(
+                AppConstants.INTENT_EXTRA_USER_CAME_FROM_ONBOARDING_FORM,
+                false
+            )
             mode = it.getInt(EnrollmentConstants.INTENT_EXTRA_MODE)
             userId = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_ID)
             userName = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_NAME) ?: return@let
@@ -134,6 +148,10 @@ class AddProfilePictureFragment : Fragment(),
         savedInstanceState?.let {
             cameFromEnrollment = it.getBoolean(
                 AppConstants.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT,
+                false
+            )
+            cameFromOnboarding = it.getBoolean(
+                AppConstants.INTENT_EXTRA_USER_CAME_FROM_ONBOARDING_FORM,
                 false
             )
             mode = it.getInt(EnrollmentConstants.INTENT_EXTRA_MODE)
@@ -153,6 +171,7 @@ class AddProfilePictureFragment : Fragment(),
             AppConstants.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT,
             cameFromEnrollment
         )
+        outState.putBoolean(AppConstants.INTENT_EXTRA_USER_CAME_FROM_ONBOARDING_FORM, cameFromOnboarding)
 
     }
 
@@ -188,7 +207,10 @@ class AddProfilePictureFragment : Fragment(),
 //                            EnrollmentConstants.INTENT_EXTRA_MODE to mode
 //                        )
 //                    )
-                } else {
+                } else if (submitBtn.text == "Done"){
+                    navigation.popBackStack()
+                }
+                else {
                     checkForPermissionElseShowCameraGalleryBottomSheet()
                 }
             } else {
@@ -246,28 +268,49 @@ class AddProfilePictureFragment : Fragment(),
     }
 
     private fun hasStoragePermissions(): Boolean {
-        return ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.READ_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.CAMERA
-        ) == PackageManager.PERMISSION_GRANTED
+
+        if (Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
+
+            return ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        } else {
+
+            return ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        }
     }
 
     private fun requestStoragePermission() {
 
-        requestPermissions(
-            arrayOf(
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.CAMERA
-            ),
-            REQUEST_STORAGE_PERMISSION
-        )
+        if (Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
+
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.CAMERA
+                ),
+                REQUEST_STORAGE_PERMISSION
+            )
+        } else {
+
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.CAMERA
+                ),
+                REQUEST_STORAGE_PERMISSION
+            )
+        }
     }
 
     private fun showAlertDialog(title: String, message: String) {
@@ -335,7 +378,7 @@ class AddProfilePictureFragment : Fragment(),
 //                                //Normal User login
 //                                submitBtn.text = "Back"
 //                            } else {
-                        submitBtn.text = getString(R.string.next_amb)
+                        submitBtn.text = if(cameFromOnboarding) getString(R.string.done_amb) else getString(R.string.next_amb)
 //                            }
 
                         showToast(getString(R.string.profile_pic_uploaded_amb))
@@ -461,7 +504,7 @@ class AddProfilePictureFragment : Fragment(),
     }
 
     private fun imageClickedOrSelectedNowUpload(uri: Uri?, data: ByteArray) {
-        viewModel.uploadProfilePicture(userId, uri, data)
+        viewModel.uploadProfilePicture(userId, uri, data, cameFromOnboarding)
     }
 
     private fun startCrop(uri: Uri): Unit {
@@ -505,7 +548,10 @@ class AddProfilePictureFragment : Fragment(),
         }
         return if (userId == null) {
             false
-        } else {
+        }else if (cameFromOnboarding){
+            false
+        }
+        else {
             showGoBackConfirmationDialog()
             true
         }

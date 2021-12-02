@@ -9,6 +9,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
@@ -39,6 +40,7 @@ import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.AppConstants
+import com.gigforce.core.ScopedStorageConstants
 import com.gigforce.core.StringConstants
 import com.gigforce.core.datamodels.verification.DrivingLicenseDataModel
 import com.gigforce.core.di.interfaces.IBuildConfig
@@ -127,8 +129,12 @@ class DrivingLicenseFragment : Fragment(),
     }
 
     private fun initviews() {
-        viewBinding.toplayoutblock.setIdonthaveDocContent(resources.getString(R.string.no_doc_title_dl_amb),"")
+        viewBinding.toplayoutblock.setIdonthaveDocContent(
+            resources.getString(R.string.no_doc_title_dl_amb),
+            ""
+        )
     }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(EnrollmentConstants.INTENT_EXTRA_USER_ID, userId)
@@ -159,6 +165,7 @@ class DrivingLicenseFragment : Fragment(),
             }
         }
     }
+
     private fun checkForNextDoc() {
         if (allNavigationList.size == 0) {
             activity?.onBackPressed()
@@ -229,6 +236,7 @@ class DrivingLicenseFragment : Fragment(),
             .setNegativeButton(getString(R.string.no_amb)) { _, _ -> }
             .show()
     }
+
     private fun goBackToUsersList() {
         findNavController().navigateUp()
         var navigationsForBundleOld = ArrayList<String>()
@@ -289,6 +297,14 @@ class DrivingLicenseFragment : Fragment(),
             if (viewBinding.toplayoutblock.isDocDontOptChecked() || verificationScreenStatus == VerificationScreenStatus.VERIFIED || verificationScreenStatus == VerificationScreenStatus.STARTED_VERIFYING || !anyDataEntered) {
                 checkForNextDoc()
             } else {
+                if (dlFrontImagePath == null || dlFrontImagePath.toString().isBlank()) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert_amb))
+                        .setMessage(getString(R.string.upload_dl_front_first_amb))
+                        .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
+                        .show()
+                    return@setOnClickListener
+                }
                 if (viewBinding.stateSpinner.text.equals("Select State")) {
                     MaterialAlertDialogBuilder(requireContext())
                         .setTitle(getString(R.string.alert_amb))
@@ -400,7 +416,7 @@ class DrivingLicenseFragment : Fragment(),
             ocrOrVerificationRquested = false
         })
         userId?.let {
-            if(it.isNotBlank()){
+            if (it.isNotBlank()) {
                 viewModelUser.getVerifiedStatus(it)
             }
         }
@@ -492,10 +508,11 @@ class DrivingLicenseFragment : Fragment(),
             image =
                 MultipartBody.Part.createFormData("file", file.name, requestFile)
         }
-        image?.let {mutlipart->
+        image?.let { mutlipart ->
             userId?.let {
-                if(it.isNotBlank()){
-                    viewModelUser.getKycOcrResult(it,
+                if (it.isNotBlank()) {
+                    viewModelUser.getKycOcrResult(
+                        it,
                         "DL",
                         if (currentlyClickingImageOfSide == DrivingLicenseSides.FRONT_SIDE) "front" else "back",
                         mutlipart
@@ -520,27 +537,48 @@ class DrivingLicenseFragment : Fragment(),
 
     private fun requestStoragePermission() {
 
-        requestPermissions(
-            arrayOf(
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.CAMERA
-            ),
-            REQUEST_STORAGE_PERMISSION
-        )
+        if (Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
+
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.CAMERA
+                ),
+                REQUEST_STORAGE_PERMISSION
+            )
+        } else {
+
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.CAMERA
+                ),
+                REQUEST_STORAGE_PERMISSION
+            )
+        }
+
+
     }
 
     private fun hasStoragePermissions(): Boolean {
-        return ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.READ_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.CAMERA
-        ) == PackageManager.PERMISSION_GRANTED
+
+        if (Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
+            return ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        } else {
+            return ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        }
     }
 
     private val issueDatePicker: DatePickerDialog by lazy {
@@ -661,8 +699,9 @@ class DrivingLicenseFragment : Fragment(),
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
 
             }
-        }else if (requestCode == ImageCropActivity.CROP_RESULT_CODE && resultCode == Activity.RESULT_OK){
-            val imageUriResultCrop: Uri? =  Uri.parse(data?.getStringExtra(ImageCropActivity.CROPPED_IMAGE_URL_EXTRA))
+        } else if (requestCode == ImageCropActivity.CROP_RESULT_CODE && resultCode == Activity.RESULT_OK) {
+            val imageUriResultCrop: Uri? =
+                Uri.parse(data?.getStringExtra(ImageCropActivity.CROPPED_IMAGE_URL_EXTRA))
             Log.d("ImageUri", imageUriResultCrop.toString())
             if (DrivingLicenseSides.FRONT_SIDE == currentlyClickingImageOfSide) {
                 dlFrontImagePath = imageUriResultCrop
@@ -693,8 +732,8 @@ class DrivingLicenseFragment : Fragment(),
         )
         activeLoader(true)
         userId?.let {
-            if(it.isNotBlank()){
-                viewModelUser.getKycVerificationResult(it,"DL", list)
+            if (it.isNotBlank()) {
+                viewModelUser.getKycVerificationResult(it, "DL", list)
 
             }
         }
@@ -878,9 +917,9 @@ class DrivingLicenseFragment : Fragment(),
                         getString(R.string.details_incorrect_amb)
                     )
                     var listData = setAlreadyfilledData(drivingLicenseDataModel, true)
-                    if(listData.isEmpty()){
+                    if (listData.isEmpty()) {
                         initializeImages()
-                    }else{
+                    } else {
                         //single if showing error
                     }
                     viewBinding.toplayoutblock.enableImageClick()//keep this line in end only
@@ -899,7 +938,7 @@ class DrivingLicenseFragment : Fragment(),
     private fun setAlreadyfilledData(
         drivingLicenseDataModel: DrivingLicenseDataModel,
         enableFields: Boolean
-    ) : ArrayList<KYCImageModel> {
+    ): ArrayList<KYCImageModel> {
 
         viewBinding.nameTilDl.editText?.setText(drivingLicenseDataModel.name)
 
@@ -948,6 +987,7 @@ class DrivingLicenseFragment : Fragment(),
                     )
 
                 )
+                dlFrontImagePath = Uri.parse(it)
 
             }
 
@@ -970,6 +1010,7 @@ class DrivingLicenseFragment : Fragment(),
                     )
 
                 )
+                dlBackImagePath = Uri.parse(it)
 
             }
 

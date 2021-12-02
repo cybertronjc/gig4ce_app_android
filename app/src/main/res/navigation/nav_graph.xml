@@ -442,6 +442,11 @@
         android:label="EditHeadlineBottomSheet" />
 
     <dialog
+        android:id="@+id/subiconfolderBottomSheet"
+        android:name="com.gigforce.giger_app.screens.SubiconFolderBottomSheet"
+        android:label="SubiconFolderBottomSheet" />
+
+    <dialog
         android:id="@+id/editTagBottomSheet"
         android:name="com.gigforce.app.modules.profile.EditTagBottomSheet"
         android:label="EditTagBottomSheet" />
@@ -993,6 +998,11 @@
         android:label="AddNewLoginSummaryFragment" />
 
     <fragment
+        android:id="@+id/iconsubiconfragment"
+        android:name="com.gigforce.giger_app.fragments.SubiconListFragment"
+        android:label="Iconsubicon" />
+
+    <fragment
         android:id="@+id/addLoginReportFragment"
         android:name="com.gigforce.giger_gigs.tl_login_report.AddDailyLoginReportFragment"
         android:label="AddDailyLoginReportFragment" />
@@ -1012,6 +1022,48 @@
         android:id="@+id/jobProfileListFragment"
         android:name="com.gigforce.client_activation.client_activation.explore.JobProfileListFragment"
         android:label="JobProfileListFragment" />
+    <fragment
+        android:id="@+id/gigerInfoFragment"
+        android:name="com.gigforce.lead_management.ui.giger_info.GigerInfoFragment"
+        android:label="GigerInfoFragment" />
+    <fragment
+        android:id="@+id/joiningList2Fragment"
+        android:name="com.gigforce.lead_management.ui.joining_list_2.JoiningList2Fragment"
+        android:label="JoiningList2Fragment" />
+
+    <fragment
+        android:id="@+id/newSelectionForm1Fragment"
+        android:name="com.gigforce.lead_management.ui.new_selection_form.NewSelectionForm1Fragment"
+        android:label="NewSelectionForm1Fragment" />
+    <fragment
+        android:id="@+id/selectBusinessFragment"
+        android:name="com.gigforce.lead_management.ui.select_business_screen.SelectBusinessFragment"
+        android:label="SelectBusinessFragment" />
+    <fragment
+        android:id="@+id/selectJobProfileFragment"
+        android:name="com.gigforce.lead_management.ui.select_job_profile_screen.SelectJobProfileFragment"
+        android:label="SelectJobProfileFragment" />
+    <fragment
+        android:id="@+id/selectCityFragment"
+        android:name="com.gigforce.lead_management.ui.select_city.SelectCityFragment"
+        android:label="SelectCityFragment" />
+    <fragment
+        android:id="@+id/selectReportingLocationFragment"
+        android:name="com.gigforce.lead_management.ui.select_reporting_location.SelectReportingLocationFragment"
+        android:label="SelectReportingLocationFragment" />
+    <fragment
+        android:id="@+id/selectClientTlFragment"
+        android:name="com.gigforce.lead_management.ui.select_tls.SelectClientTlFragment"
+        android:label="SelectClientTlFragment" />
+    <fragment
+        android:id="@+id/newSelectionForm2Fragment"
+        android:name="com.gigforce.lead_management.ui.new_selection_form_2.NewSelectionForm2Fragment"
+        android:label="NewSelectionForm2Fragment" />
+
+    <fragment
+        android:id="@+id/newSelectionFormSubmitSuccessFragment"
+        android:name="com.gigforce.lead_management.ui.new_selection_form_submittion_success.SelectionFormSubmitSuccessFragment"
+        android:label="SelectionFormSubmitSuccessFragment" />
 
     <fragment
         android:id="@+id/adharDetailInfoFragment"
@@ -1024,6 +1076,34 @@
         android:name="com.gigforce.ambassador.user_rollment.kycdocs.aadhardetail.UserAadharDetailInfoFragment"
         android:label="UserAadharDetailInfoFragment"
         />
+    <dialog
+        android:id="@+id/joiningFilterFragment"
+        android:name="com.gigforce.lead_management.ui.joining_list_2.JoiningFilterFragment"
+        android:label="JoiningFilterFragment" />
+    <fragment
+        android:id="@+id/dropSelectionBottomSheetDialogFragment"
+        android:name="com.gigforce.lead_management.ui.drop_selection.DropSelectionBottomSheetDialogFragment"
+        android:label="DropSelectionBottomSheetDialogFragment" />
+    <dialog
+        android:id="@+id/dropSelectionFragment2"
+        android:name="com.gigforce.lead_management.ui.drop_selection_2.DropSelectionFragment2"
+        android:label="DropSelectionFragment2" />
+    <dialog
+        android:id="@+id/teamLeaderLoginFilterFragment"
+        android:name="com.gigforce.giger_gigs.tl_login_details.TeamLeaderLoginFilterFragment"
+        android:label="TeamLeaderLoginFilterFragment" />
+    <dialog
+        android:id="@+id/showCheckListDocsBottomSheet"
+        android:name="com.gigforce.lead_management.ui.giger_info.ShowCheckListDocsBottomSheet"
+        android:label="ShowCheckListDocsBottomSheet" />
+    <fragment
+        android:id="@+id/pendingJoiningDetailsFragment"
+        android:name="com.gigforce.lead_management.ui.pending_joining_details.PendingJoiningDetailsFragment"
+        android:label="PendingJoiningDetailsFragment" />
+    <fragment
+        android:id="@+id/requestDocumentTreeAccessFragment"
+        android:name="com.gigforce.core.documentFileHelper.RequestDocumentTreeAccessFragment"
+        android:label="RequestDocumentTreeAccessFragment" />
 
 </navigation>
 

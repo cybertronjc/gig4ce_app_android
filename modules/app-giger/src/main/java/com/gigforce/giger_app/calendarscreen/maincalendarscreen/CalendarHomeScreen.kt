@@ -26,15 +26,18 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.request.RequestOptions
 import com.gigforce.common_ui.AppDialogsInterface
 import com.gigforce.common_ui.ConfirmationDialogOnClickListener
+import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.chat.ChatHeadersViewModel
 import com.gigforce.common_ui.configrepository.ConfigRepository
 import com.gigforce.common_ui.core.TextDrawable
+import com.gigforce.common_ui.repository.LeadManagementRepository
 import com.gigforce.common_ui.utils.BsBackgroundAndLocationAccess
 import com.gigforce.common_ui.viewmodels.ProfileViewModel
 import com.gigforce.common_ui.viewmodels.custom_gig_preferences.CustomPreferencesViewModel
@@ -45,11 +48,13 @@ import com.gigforce.core.IEventTracker
 import com.gigforce.core.ProfilePropArgs
 import com.gigforce.core.base.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.core.base.genericadapter.RecyclerGenericAdapter
+import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.datamodels.custom_gig_preferences.UnavailableDataModel
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.navigation.NavigationOptions
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.Lce
 import com.gigforce.giger_app.R
@@ -67,6 +72,7 @@ import com.jaeger.library.StatusBarUtil
 import com.riningan.widget.ExtendedBottomSheetBehavior
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.calendar_home_screen.*
+import kotlinx.coroutines.launch
 import pub.devrel.easypermissions.EasyPermissions
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
@@ -110,7 +116,13 @@ class CalendarHomeScreen : Fragment(),
     lateinit var navigation: INavigation
 
     @Inject
+    lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
+
+    @Inject
     lateinit var appDialogsInterface: AppDialogsInterface
+
+    @Inject lateinit var leadManagementRepository: LeadManagementRepository
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -121,12 +133,34 @@ class CalendarHomeScreen : Fragment(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
        // checkForLocationPermission()
+        checkForPendingJoining()
+    }
+
+    private fun checkForPendingJoining()  = lifecycleScope.launch{
+        try {
+            leadManagementRepository.getPendingJoinings().apply {
+                if(isNotEmpty()){
+
+                    first().let {
+                        navigation.navigateTo(
+                            "LeadMgmt/PendingJoiningDetails",
+                            bundleOf(
+                                "joining_id" to it.joiningId
+                            ),
+                            NavigationOptions.getNavOptions()
+                        )
+                    }
+                }
+            }
+        } catch (e: Exception) {
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        
-        viewModelProfile = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+
+        checkForDeepLink()
+        viewModelProfile = ViewModelProvider(this).get(ProfileViewModel::class.java)
         viewModelCustomPreference =
             ViewModelProvider(this, ParamCustPreferViewModel(viewLifecycleOwner)).get(
                 CustomPreferencesViewModel::class.java
@@ -157,8 +191,8 @@ class CalendarHomeScreen : Fragment(),
             }
         })
         arrCalendarDependent =
-//            arrayOf(calendar_dependent, margin_40, below_oval, calendar_cv, bottom_sheet_top_shadow)
-            arrayOf(calendar_dependent, calendar_cv, bottom_sheet_top_shadow)
+            arrayOf(calendar_dependent, calendar_cv, bottom_sheet_top_shadow,oval_gradient_iv1)
+//            arrayOf(calendar_dependent, calendar_cv, bottom_sheet_top_shadow)
 
         selectedMonthModel = CalendarView.MonthModel(Calendar.getInstance().get(Calendar.MONTH))
         initializeViews()
@@ -187,6 +221,28 @@ class CalendarHomeScreen : Fragment(),
             showLocationDialog()
         }
 
+    }
+
+    private fun checkForDeepLink() {
+        try {
+            val cameFromLoginDeepLink = sharedPreAndCommonUtilInterface.getDataBoolean("deeplink_login")
+            val cameFromOnboardingDeepLink = sharedPreAndCommonUtilInterface.getDataBoolean("deeplink_onboarding")
+            if (cameFromLoginDeepLink == true){
+                Log.d("deepLink", "here")
+                navigation.navigateTo("gig/tlLoginDetails", bundleOf(
+                    StringConstants.CAME_FROM_LOGIN_SUMMARY_DEEPLINK.value to true
+                )
+                )
+            }else if (cameFromOnboardingDeepLink == true){
+                Log.d("deepLink", "onboarding")
+                navigation.navigateTo("LeadMgmt/joiningListFragment", bundleOf(
+                    StringConstants.CAME_FROM_ONBOARDING_FORM_DEEPLINK.value to true
+                )
+                )
+            }
+        }catch (e: Exception){
+
+        }
     }
 
     private fun showLocationDialog() {
@@ -274,7 +330,7 @@ class CalendarHomeScreen : Fragment(),
 
         try {
             result = context?.packageManager
-                ?.getPackageInfo(context?.packageName, 0)
+                ?.getPackageInfo(context?.packageName!!, 0)
                 ?.versionName ?: ""
         } catch (e: PackageManager.NameNotFoundException) {
 
@@ -327,6 +383,9 @@ class CalendarHomeScreen : Fragment(),
         date_container.setOnClickListener {
             changeVisibilityCalendarView()
         }
+        oval_gradient_iv.setOnClickListener{
+            changeVisibilityCalendarView()
+        }
         calendarView.setMonthChangeListener(object :
             CalendarView.MonthChangeAndDateClickedListener {
             override fun onMonthChange(monthModel: CalendarView.MonthModel) {
@@ -367,7 +426,7 @@ class CalendarHomeScreen : Fragment(),
                 "BottomSheetState ",
                 "changeVisibilityCalendarView  : ${viewModel.currentBottomSheetState}"
             )
-            extendedBottomSheetBehavior.state = viewModel.currentBottomSheetState
+            extendedBottomSheetBehavior.state =  ExtendedBottomSheetBehavior.STATE_COLLAPSED//viewModel.currentBottomSheetState
             extendedBottomSheetBehavior.isAllowUserDragging = false
         } else {
             if (selectedMonthModel.days != null && selectedMonthModel.days.size == 1) {
@@ -1166,6 +1225,10 @@ class CalendarHomeScreen : Fragment(),
 
     var calPosition = -1
     private fun showTodaysGigDialog(gigOnDay: Int) {
+        if(gigOnDay == 0){
+            gigListForDeclineBS()
+            return
+        }
         val view =
             layoutInflater.inflate(R.layout.dialog_confirm_gig_denial, null)
 
@@ -1179,19 +1242,7 @@ class CalendarHomeScreen : Fragment(),
 
         view.findViewById<View>(R.id.yesBtn)
             .setOnClickListener {
-                val date = temporaryData.getLocalDate()
-                navigation.navigateTo(
-                    "gigsListForDeclineBottomSheet", bundleOf(
-                        AppConstants.INTEN_EXTRA_DATE to date
-                    )
-                )
-//                navigate(
-//                    R.id.gigsListForDeclineBottomSheet, bundleOf(
-//                        GigsListForDeclineBottomSheet.INTEN_EXTRA_DATE to date
-//                    )
-//                )
-
-                makeChangesToCalendarItem(calPosition, true)
+                gigListForDeclineBS()
                 dialog?.dismiss()
             }
 
@@ -1200,6 +1251,19 @@ class CalendarHomeScreen : Fragment(),
                 makeChangesToCalendarItem(calPosition, true)
                 dialog?.dismiss()
             }
+    }
+
+
+    private fun gigListForDeclineBS(){
+        val date = temporaryData.getLocalDate()
+        navigation.navigateTo(
+            "gigsListForDeclineBottomSheet", bundleOf(
+                AppConstants.INTEN_EXTRA_DATE to date
+            )
+        )
+
+        makeChangesToCalendarItem(calPosition, true)
+
     }
 
     fun makeChangesToCalendarItem(position: Int, status: Boolean) {

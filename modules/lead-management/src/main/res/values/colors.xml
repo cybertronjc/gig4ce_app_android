@@ -4,4 +4,16 @@
     <color name="limeGrey">#6D7278</color>
     <color name="submitted">#E59840</color>
     <color name="search_bg_border">#E6E6E6</color>
+    <color name="status_background_pink">#FDF2F6</color>
+    <color name="status_background_blue">#0F407BFF</color>
+    <color name="pink_text">#E42C64</color>
+    <color name="tab_background_unselected">#D0F6F5F5</color>
+    <color name="tab_background_selected">#E42C64</color>
+    <color name="tab_background_color">#FFFFFF</color>
+    <color name="view_bg">#E1E0E0</color>
+    <color name="pink_dot">#E42C64</color>
+    <color name="blue_dot">#407BFF</color>
+    <color name="filter_text_color">#202325</color>
+    <color name="bottom_view_divider">#EBEBEB</color>
+
 </resources>

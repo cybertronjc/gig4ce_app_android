@@ -41,10 +41,25 @@ class VerificationMainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        getIntentData(savedInstanceState)
+        initViews()
         observer()
         listener()
     }
-
+    private fun initViews() {
+        if (title.isNotBlank())
+            appBar2.setAppBarTitle(title)
+    }
+    var title = ""
+    private fun getIntentData(savedInstanceState: Bundle?) {
+        savedInstanceState?.let {
+            title = it.getString("title") ?: ""
+        } ?: run {
+            arguments?.let {
+                title = it.getString("title") ?: ""
+            }
+        }
+    }
     private fun listener() {
 
         next.setOnClickListener {

@@ -92,8 +92,8 @@
                         <com.google.android.material.textfield.TextInputEditText
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/size_46"
-                            android:digits="abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz "
-                            android:maxLength="12"
+                            android:digits="abcdefghijklmnopqrstuvwxyz QWERTYUIOPASDFGHJKLZXCVBNM"
+                            android:maxLength="40"
                             android:padding="4dp"
                             android:singleLine="true" />
 
@@ -169,6 +169,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/dp_xsm1"
                             android:background="@color/white"
+                            android:textColor="@color/textview_text_colors"
                             android:text="@string/date_of_birth_spaced_veri"
                             android:visibility="gone"
                             app:layout_constraintStart_toStartOf="parent"
@@ -185,7 +186,6 @@
                         android:layout_marginTop="@dimen/size_16"
                         android:layout_marginRight="@dimen/size_16"
                         android:hint="@string/father_s_name_veri"
-                        android:visibility="gone"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/dateOfBirthLabel">

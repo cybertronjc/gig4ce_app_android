@@ -1,6 +1,6 @@
 package com.gigforce.common_ui.configrepository
 
-import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
+import com.gigforce.core.fb.BaseFirestoreDBRepository
 
 class ConfigRepository : BaseFirestoreDBRepository() {
     var COLLECTION_NAME = "Configuration"

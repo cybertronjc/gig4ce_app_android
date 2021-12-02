@@ -11,7 +11,7 @@
     <string name="add_bank_veri">बैंक विवरण जोड़ें</string>
     <string name="done_veri_veri">हुर्रे!!!\nKYC दस्तावेज़ सबमिट किए गए.\nवेरिफिकेशन होने के बाद हम आपको बताएंगे.</string>
     <string name="hint_address_line1_veri">पता पंक्ति 1</string>
-    <string name="hint_address_line2_veri">पता पंक्ति नं। 2</string>
+    <string name="hint_address_line2_veri">पता पंक्ति 2</string>
     <string name="hint_city_veri">शहर</string>
     <string name="hint_state_veri">राज्य</string>
     <string name="hint_pin_veri">पिन कोड</string>
@@ -57,7 +57,7 @@
     <string name="cancel_veri">रद्द करना</string>
     <string name="why_do_we_need_this_veri">हमें इसकी आवश्यकता क्यों है?</string>
     <string name="why_do_we_need_this_dl_veri">ड्राइविंग और डिलीवरी के लिए ड्राइविंग लाइसेंस अनिवार्य है</string>
-    <string name="why_do_we_need_this_bank_veri">प्रोफाइल वेरिफिकेशन के लिए बैंक पासबुक अनिवार्य है। यह आपके नाम और जन्मतिथि को सत्यापित करने में मदद करता है और आपके वॉलेट में भुगतान में भी मदद करता है।</string>
+    <string name="why_do_we_need_this_bank_veri">समय पर आपके भुगतान हस्तांतरण के लिए एक सत्यापित बैंक खाता अनिवार्य है।</string>
     <string name="license_number_with_colon_veri">लाइसेंस संख्या :</string>
     <string name="address_with_colon_veri">पता :</string>
     <string name="license_validity_with_colon_veri">लाइसेंस वैधता:</string>
@@ -66,7 +66,7 @@
     <string name="bank_account_details_veri">बैंक के खाते का विवरण</string>
     <string name="do_you_have_bank_passbook_veri">क्या आपके पास बैंक पासबुक है?</string>
     <string name="yes_i_have_bank_passbook_veri">हाँ, मेरे पास बैंक पासबुक है</string>
-    <string name="no_i_dont_have_bank_passbook_veri">नहीं, मेरे पास बैंक पासबुक नहीं है</string>
+    <string name="no_i_dont_have_bank_passbook_veri">नहीं, मेरे पास बैंक खाता नहीं है</string>
     <string name="cif_number_with_colon_veri">सीआईएफ नंबर:</string>
     <string name="account_number_with_colon_veri">खाता संख्या :</string>
     <string name="ifsc_with_colon_veri">आईएफएससी:</string>
@@ -333,7 +333,7 @@
     <string name="why_we_need_this_veri">हमें इसकी आवश्यकता क्यों है</string>
     <string name="aadhaar_card_number_veri">आधार कार्ड नंबर</string>
     <string name="date_of_birth_veri">जन्म की तारीख</string>
-    <string name="skip_veri">छोड़ें</string>
+    <string name="skip_veri">स्किप</string>
     <string name="you_need_to_upload_veri">आपको अपलोड करने की आवश्यकता है</string>
     <string name="aadhaar_card_veri">आधार कार्ड</string>
     <string name="select_the_method_you_want_for_verifying_your_aadhaar_card_veri">अपना आधार कार्ड सत्यापित करने के लिए इच्छित विधि का चयन करें</string>
@@ -391,14 +391,14 @@
     <string name="select_dob_veri">जन्म तिथि चुनें</string>
     <string name="enter_father_name_veri">पिता का नाम दर्ज करें</string>
     <string name="enter_valid_pin_veri">मान्य पिनकोड दर्ज करें</string>
-    <string name="enter_landmark_veri">मील का पत्थर दर्ज करें</string>
+    <string name="enter_landmark_veri">सीमाचिह्न दर्ज करें</string>
 
-    <string name="select_city_veri">Select City</string>
-    <string name="select_state_veri">Select state</string>
-    <string name="address_line_1_veri">Address Line 1</string>
-    <string name="address_line_2_veri">Address Line 2</string>
+    <string name="select_city_veri">कृपया शहर दर्ज करें</string>
+    <string name="select_state_veri">कृपया राज्य दर्ज करें</string>
+    <string name="address_line_1_veri">पता पंक्ति 1</string>
+    <string name="address_line_2_veri">पता पंक्ति 2</string>
     <string name="date_of_birth_spaced_veri">"   जन्म की तारीख   "</string>
-    <string name="aadhar_card_number_veri">AADHAR Card Number</string>
+    <string name="aadhar_card_number_veri">आधार कार्ड संख्या</string>
     <string name="please_enter_the_below_details_of_your_aadhar_this_step_is_mandatory_for_this_application_veri">कृपया अपने आधार का विवरण नीचे दर्ज करें। इस आवेदन के लिए यह कदम अनिवार्य है।</string>
     <string name="enter_aadhar_veri">आधार विवरण दर्ज करें</string>
     <string name="aadhar_card_detail_veri">आधार कार्ड विवरण</string>
@@ -411,7 +411,8 @@
     <string name="enter_aadhar_details_veri">आधार कार्ड विवरण नीचे मैन्युअल रूप से दर्ज करें</string>
     <string name="upload_aadhar_card_veri">अपलोड आधार कार्ड</string>
     <string name="please_upload_aadhar_veri">कृपया अपना आधार कार्ड अपलोड करें या मैन्युअल रूप से विवरण दर्ज करें</string>
-
+    <string name="no_doc_title_aadhaar_veri">आधार उपलब्ध नहीं है!</string>
+    <string name="no_doc_subtitle_aadhaar_veri">कोई चिंता नहीं! एक बार जब आप आधार के मालिक हो जाते हैं तो आप इसे सत्यापित करने के लिए चेकबॉक्स को अनचेक कर सकते हैं</string>
     <!--    <string name="veri_add_doc_front">सामने की ओर</string>-->
     <!--    <string name="veri_add_doc_back">पीछे की ओर</string>-->
     <!--    <string name="veri_pan_title">चरण 5: अपना पैन अपलोड करें</string>-->
@@ -421,4 +422,9 @@
     <!--    <string name="veri_bank_title">चरण 4 : कृपया अपना बैंक विवरण जोड़ें</string>-->
     <!--    <string name="veri_add_bank">बैंक विवरण जोड़ें</string>-->
     <!--    <string name="veri_done">हुर्रे!!!\nKYC दस्तावेज़ सबमिट किए गए.\nसत्यापित होने के बाद हम आपको बताएंगे.</string>-->
+
+    <string name="upload_pan_image_first_veri">पहले पैन कार्ड की इमेज अपलोड करें</string>
+    <string name="upload_dl_front_first_veri">पहले DL फ्रंट इमेज अपलोड करें</string>
+    <string name="please_enter_bank_info_below">कृपया नीचे अपनी बैंक जानकारी दर्ज करें।</string>
+
 </resources>

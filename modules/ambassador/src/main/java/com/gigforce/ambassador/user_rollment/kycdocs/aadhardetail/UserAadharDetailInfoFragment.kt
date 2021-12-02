@@ -7,6 +7,7 @@ import android.content.ContentResolver
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -39,6 +40,7 @@ import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.AppConstants
+import com.gigforce.core.ScopedStorageConstants
 import com.gigforce.core.datamodels.City
 import com.gigforce.core.datamodels.State
 import com.gigforce.core.datamodels.verification.AadhaarDetailsDataModel
@@ -120,11 +122,19 @@ class UserAadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageB
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getDataFromIntent(savedInstanceState)
+        initviews()
         initializeNavigations()
         setViews()
         observer()
         listener()
     }
+    private fun initviews() {
+        viewBinding.toplayoutblock.setIdonthaveDocContent(
+            resources.getString(R.string.no_doc_title_aadhaar_amb),
+            resources.getString(R.string.no_doc_subtitle_aadhaar_amb)
+        )
+    }
+
     var navigationsForBundle = ArrayList<String>()
 
     private fun initializeNavigations() {
@@ -397,7 +407,14 @@ class UserAadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageB
                                 .show()
                         return@setOnClickListener
                     }
-
+                    if (fatherNameTil.editText?.text.toString().isBlank()) {
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert_amb))
+                            .setMessage(getString(R.string.enter_father_name_amb))
+                            .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
+                            .show()
+                        return@setOnClickListener
+                    }
                     if (addLine1Input.text.toString().isBlank()) {
                         MaterialAlertDialogBuilder(requireContext())
                                 .setTitle(getString(R.string.alert_amb))
@@ -449,14 +466,14 @@ class UserAadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageB
                         return@setOnClickListener
                     }
 
-                    if (landmarkInput.text.toString().isBlank()) {
-                        MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert_amb))
-                                .setMessage(getString(R.string.enter_landmark_amb))
-                                .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
-                                .show()
-                        return@setOnClickListener
-                    }
+//                    if (landmarkInput.text.toString().isBlank()) {
+//                        MaterialAlertDialogBuilder(requireContext())
+//                                .setTitle(getString(R.string.alert_amb))
+//                                .setMessage(getString(R.string.enter_landmark_amb))
+//                                .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
+//                                .show()
+//                        return@setOnClickListener
+//                    }
 
                     //current address validation
                     if (!currentAddCheckbox.isChecked) {
@@ -512,14 +529,14 @@ class UserAadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageB
                             return@setOnClickListener
                         }
 
-                        if (caLandmarkInput.text.toString().isBlank()) {
-                            MaterialAlertDialogBuilder(requireContext())
-                                    .setTitle(getString(R.string.alert_amb))
-                                    .setMessage(getString(R.string.enter_landmark_amb))
-                                    .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
-                                    .show()
-                            return@setOnClickListener
-                        }
+//                        if (caLandmarkInput.text.toString().isBlank()) {
+//                            MaterialAlertDialogBuilder(requireContext())
+//                                    .setTitle(getString(R.string.alert_amb))
+//                                    .setMessage(getString(R.string.enter_landmark_amb))
+//                                    .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
+//                                    .show()
+//                            return@setOnClickListener
+//                        }
                     }
 
                     submitData()
@@ -578,6 +595,7 @@ class UserAadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageB
                 backImagePath = aadharBackImagePath,
                 aadhaarCardNo = aadharNo.editText?.text.toString(),
                 dateOfBirth = dateOfBirth.text.toString(),
+                fName = fatherNameTil.editText?.text.toString(),
                 addLine1 = addLine1Input.text.toString(),
                 addLine2 = addLine2Input.text.toString(),
                 state = stateSpinner.text.toString(),
@@ -806,7 +824,7 @@ class UserAadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageB
             Log.d("kycData", "data : $kycData")
             processKycData(kycData)
             it.aadhaar_card_questionnaire?.apply {
-                if (!name.isNullOrEmpty() && !aadhaarCardNo.isNullOrEmpty() && !dateOfBirth.isNullOrEmpty()) {
+                if (verified == true){
                     allFieldsEnable(false)
                     viewBinding.toplayoutblock.toggleChangeTextView(true)
                     viewBinding.submitButton.text = getString(R.string.next_amb)
@@ -958,6 +976,9 @@ class UserAadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageB
                     dateOfBirth.text = it
                     dobLabel.visible()
                 }
+            }
+            it.fName.let {
+                fatherNameTil.editText?.setText(it)
             }
             it.addLine1.let {
                 addLine1.editText?.setText(it)
@@ -1155,29 +1176,49 @@ class UserAadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageB
 
 
     private fun hasStoragePermissions(): Boolean {
-        return ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.READ_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+
+        if(Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
+
+            return ContextCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.CAMERA
-        ) == PackageManager.PERMISSION_GRANTED
-    }
+            ) == PackageManager.PERMISSION_GRANTED
+        } else{
 
+            return ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        }
+    }
 
     private fun requestStoragePermission() {
 
-        requestPermissions(
+        if(Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
+
+            requestPermissions(
                 arrayOf(
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.CAMERA
+                    Manifest.permission.CAMERA
                 ),
                 REQUEST_STORAGE_PERMISSION
-        )
+            )
+        } else{
+
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.CAMERA
+                ),
+                REQUEST_STORAGE_PERMISSION
+            )
+        }
     }
 
     override fun onClickPictureThroughCameraClicked() {

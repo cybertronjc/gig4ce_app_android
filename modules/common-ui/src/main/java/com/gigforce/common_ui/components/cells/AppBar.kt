@@ -1,6 +1,7 @@
 package com.gigforce.common_ui.components.cells
 
 import android.content.Context
+import android.graphics.Typeface
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,6 +13,8 @@ import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.annotation.DrawableRes
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.UserInfoImp
@@ -50,10 +53,13 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
     lateinit var navigation: INavigation
 
 
-    var titleText: TextView
+     var titleText: TextView
      var backImageButton: ImageButton
      var menuImageButton: ImageButton
      var searchImageButton: ImageButton
+     var filterImageButton: ImageButton
+     var filterDotImageButton: ImageButton
+     var filterFrameLayout: FrameLayout
      var stepsTextView: TextView
      var search_item: EditText
      var profilePic: AppProfilePicComponent
@@ -67,7 +73,6 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
         var backGroundType:BackgroundType
             get() = _backGroundType
             set(value) {
-                Log.i("background", "Setting Value as ${value}")
                 this._backGroundType = value
                 val backgroundRes = when(value){
                     BackgroundType.Default -> R.drawable.white_app_bar_background
@@ -111,6 +116,7 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
         val isMenuItemVisible = styledAttributeSet.getBoolean(R.styleable.AppBar_isMenuItemVisible, false)
         val isProfileVisible = styledAttributeSet.getBoolean(R.styleable.AppBar_isProfileVisible, false)
         val searchHint = styledAttributeSet.getString(R.styleable.AppBar_searchHint)
+        val isFilterVisible = styledAttributeSet.getBoolean(R.styleable.AppBar_isFilterVisible, false)
         val isStepsVisible = styledAttributeSet.getBoolean(R.styleable.AppBar_isStepsVisible, false)
         this.backGroundType = BackgroundType.getByValue(styledAttributeSet.getInt(R.styleable.AppBar_backgroundType, 0))
 
@@ -119,6 +125,9 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
         backImageButton = findViewById(R.id.backImageButton)
         menuImageButton = findViewById(R.id.menuImageButton)
         searchImageButton = findViewById(R.id.searchImageButton)
+        filterImageButton = findViewById(R.id.filterImageButton)
+        filterDotImageButton = findViewById(R.id.filterDot)
+        filterFrameLayout = findViewById(R.id.filterImageFrame)
         search_item = findViewById(R.id.search_item)
         profilePic = findViewById(R.id.profilePicComp)
         stepsTextView = findViewById(R.id.steps)
@@ -134,6 +143,7 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
         makeMenuItemVisible(isMenuItemVisible)
         makeProfileVisible(isProfileVisible)
         makeStepsVisible(isStepsVisible)
+        makeFilterVisible(isFilterVisible)
         searchHint?.let { setHint(it) }
         userinfo.getData().profilePicPath?.let {
             setProfilePicture = it
@@ -151,6 +161,17 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
         styledAttributeSet.recycle()
 
     }
+
+    private fun makeFilterVisible(filterVisible: Boolean) {
+        if (filterVisible){
+            filterImageButton.visible()
+            filterFrameLayout.visible()
+        }  else{
+            filterImageButton.gone()
+            filterFrameLayout.gone()
+        }
+    }
+
     val isSearchCurrentlyShown: Boolean get() = search_item.isVisible
     fun setBackButtonListener(listener: View.OnClickListener) {
         onBackClickListener = listener
@@ -207,6 +228,12 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
     fun setAppBarTitle(appTitle: CharSequence?) {
         titleText.setText(appTitle.toString())
     }
+    fun makeTitleBold(){
+        titleText.setTypeface(null, Typeface.BOLD)
+    }
+    fun makeBackgroundMoreRound(){
+        this.background = context.resources.getDrawable(R.drawable.app_bar_background_more_rounded)
+    }
 
     fun setSteps(step: String){
         stepsTextView.setText(step)
@@ -230,8 +257,20 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
         if (visible) menuImageButton.visible() else menuImageButton.invisible()
     }
 
+    fun changeBackButtonDrawable(){
+        backImageButton.setImageDrawable(resources.getDrawable(R.drawable.ic_chevron))
+    }
+
     override fun bind(data: Any?) {
 
+    }
+
+    fun setBackButtonDrawable(
+        @DrawableRes drawable : Int
+    ){
+        backImageButton.setImageDrawable(
+            ResourcesCompat.getDrawable(resources,drawable,null)
+        )
     }
 
     fun hideKeyboard(view: View) {

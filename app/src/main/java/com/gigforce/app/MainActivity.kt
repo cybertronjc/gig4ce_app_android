@@ -11,7 +11,6 @@ import android.os.Handler
 import android.util.Log
 import android.view.MotionEvent
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -69,8 +68,8 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity(),
-        NavFragmentsData,
-        INavigationProvider, InstallStateUpdatedListener {
+    NavFragmentsData,
+    INavigationProvider, InstallStateUpdatedListener {
 
     private var bundle: Bundle? = null
     private lateinit var navController: NavController
@@ -217,6 +216,17 @@ class MainActivity : BaseActivity(),
                 intent.getStringExtra(IS_DEEPLINK) == "true" -> {
                     handleDeepLink()
                 }
+                //deep linking for login summary is handled here
+                intent.getBooleanExtra(StringConstants.LOGIN_SUMMARY_VIA_DEEP_LINK.value, false) -> {
+                    Log.d("datahere", "main")
+                   handleLoginSummaryNav()
+                }
+
+                //deep linking for onboarding form is handled here
+                intent.getBooleanExtra(StringConstants.ONBOARDING_FORM_VIA_DEEP_LINK.value, false) -> {
+                    Log.d("datahere", "main")
+                    handleOnboardingFormNav()
+                }
                 else -> {
                     proceedWithNormalNavigation()
                 }
@@ -227,6 +237,29 @@ class MainActivity : BaseActivity(),
             lookForNewChatMessages()
         }
         profileDataSnapshot()
+    }
+
+    private fun handleLoginSummaryNav() {
+        if (!isUserLoggedIn()) {
+            proceedWithNormalNavigation()
+            return
+        }
+        navController.popBackStack()
+        navController.navigate(R.id.teamLeaderLoginDetailsFragment, bundleOf(
+            StringConstants.CAME_FROM_LOGIN_SUMMARY_DEEPLINK.value to true
+        ))
+
+    }
+    private fun handleOnboardingFormNav() {
+        if (!isUserLoggedIn()) {
+            proceedWithNormalNavigation()
+            return
+        }
+        navController.popBackStack()
+        navController.navigate(R.id.joiningList2Fragment, bundleOf(
+            StringConstants.CAME_FROM_ONBOARDING_FORM_DEEPLINK.value to true
+        ))
+
     }
 
     private fun profileDataSnapshot() {
@@ -273,7 +306,7 @@ class MainActivity : BaseActivity(),
     }
 
     private fun formatMultipleDataSharedAndOpenChat(intent: Intent) {
-        val filesSelectedUris = intent.getParcelableArrayListExtra<Uri>(Intent.EXTRA_STREAM)
+        val filesSelectedUris = intent.getParcelableArrayListExtra<Uri>(Intent.EXTRA_STREAM) ?: arrayListOf<Uri>()
 
         if (filesSelectedUris.size > 10) {
             Toast.makeText(this, getString(R.string.max_10_files), Toast.LENGTH_SHORT).show()
@@ -316,7 +349,7 @@ class MainActivity : BaseActivity(),
     }
 
     private fun handleDocumentSend(intent: Intent) {
-        val documentUri = intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)
+        val documentUri = intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM) ?: return
 
         val sharedFile = SharedFile(
                 file = documentUri,
@@ -333,7 +366,7 @@ class MainActivity : BaseActivity(),
     }
 
     private fun handleVideoImage(intent: Intent) {
-        val videoUri = intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)
+        val videoUri = intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM) ?: return
 
         val sharedFile = SharedFile(
                 file = videoUri,
@@ -349,7 +382,7 @@ class MainActivity : BaseActivity(),
     }
 
     private fun handleSendImage(intent: Intent) {
-        val documentUri = intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)
+        val documentUri = intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM) ?: return
         val sharedFile = SharedFile(
                 file = documentUri,
                 text = intent.getStringExtra(Intent.EXTRA_TEXT)
@@ -411,7 +444,7 @@ class MainActivity : BaseActivity(),
             NotificationConstants.CLICK_ACTIONS.OPEN_CALENDAR_HOME_SCREEN -> {
                 Log.d("MainActivity", "redirecting to OPEN_CALENDAR_HOME_SCREEN")
                 navController.popAllBackStates()
-                navController.navigate(R.id.homeScreenFragment)
+                navController.navigate(R.id.mainHomeScreen)
             }
             NotificationConstants.CLICK_ACTIONS.OPEN_CHAT_PAGE -> {
                 Log.d("MainActivity", "redirecting to gig verification page")
@@ -439,11 +472,35 @@ class MainActivity : BaseActivity(),
                         }
                 )
             }
+            NotificationConstants.CLICK_ACTIONS.OPEN_VERIFICATION_PAN_SCREEN -> {
+                navController.popAllBackStates()
+                navController.navigate(R.id.onboardingLoaderfragment)
+                navController.navigate(R.id.gigerVerificationFragment)
+                navController.navigate(R.id.panCardFragment)
+            }
+            NotificationConstants.CLICK_ACTIONS.OPEN_VERIFICATION_DL_SCREEN -> {
+                navController.popAllBackStates()
+                navController.navigate(R.id.onboardingLoaderfragment)
+                navController.navigate(R.id.gigerVerificationFragment)
+                navController.navigate(R.id.drivingLicenseFragment)
+            }
+            NotificationConstants.CLICK_ACTIONS.OPEN_VERIFICATION_BANK_SCREEN -> {
+                navController.popAllBackStates()
+                navController.navigate(R.id.onboardingLoaderfragment)
+                navController.navigate(R.id.gigerVerificationFragment)
+                navController.navigate(R.id.bank_account_fragment)
+            }
+            NotificationConstants.CLICK_ACTIONS.OPEN_VERIFICATION_AADHAAR_SCREEN -> {
+                navController.popAllBackStates()
+                navController.navigate(R.id.onboardingLoaderfragment)
+                navController.navigate(R.id.gigerVerificationFragment)
+                navController.navigate(R.id.adharDetailInfoFragment)
+            }
             else -> {
                 navController.popAllBackStates()
                 navController.navigate(
-                        R.id.landinghomefragment,
-                        intent.extras
+                    R.id.landinghomefragment,
+                    intent.extras
                 )
             }
         }
@@ -451,7 +508,6 @@ class MainActivity : BaseActivity(),
 
     private fun proceedWithNormalNavigation() {
         checkForAllAuthentication()
-        GetFirebaseInstanceID()
 //        CleverTapAPI.getDefaultInstance(applicationContext)?.pushEvent("MAIN_ACTIVITY_CREATED")
     }
 
@@ -469,27 +525,50 @@ class MainActivity : BaseActivity(),
             formatMultipleDataSharedAndOpenChat(intent)
         } else if (intent?.getStringExtra(IS_DEEPLINK) == "true") {
             handleDeepLink()
+        } else {
+            if(intent?.getBooleanExtra(StringConstants.NAV_TO_CLIENT_ACT.value, false) == true) {
+
+                if (!isUserLoggedIn()) {
+                    proceedWithNormalNavigation()
+                    return
+                }
+
+                navController.popBackStack()
+                navController.navigate(
+                    R.id.fragment_client_activation, bundleOf(
+                        StringConstants.JOB_PROFILE_ID.value to intent.getStringExtra(
+                            StringConstants.JOB_PROFILE_ID.value
+                        ),
+                        StringConstants.INVITE_USER_ID.value to intent.getStringExtra(
+                            StringConstants.INVITE_USER_ID.value
+                        ),
+                        StringConstants.CLIENT_ACTIVATION_VIA_DEEP_LINK.value to true
+                    )
+                )
+            } else if(intent?.getBooleanExtra(StringConstants.NAV_TO_ROLE.value, false) == true) {
+
+                if (!isUserLoggedIn()) {
+                    proceedWithNormalNavigation()
+                    return
+                }
+
+//                LandingScreenFragmentDirections.openRoleDetailsHome( intent.getStringExtra(StringConstants.ROLE_ID.value),true)
+                navController.popBackStack()
+                navController.navigate(
+                    R.id.fragment_role_details, bundleOf(
+                        StringConstants.ROLE_ID.value to intent.getStringExtra(
+                            StringConstants.ROLE_ID.value
+                        ),
+                        StringConstants.INVITE_USER_ID.value to intent.getStringExtra(
+                            StringConstants.INVITE_USER_ID.value
+                        ),
+                        StringConstants.ROLE_VIA_DEEPLINK.value to true
+                    )
+                )
+            }
         }
     }
 
-    private fun GetFirebaseInstanceID() {
-        FirebaseInstanceId.getInstance().instanceId
-                .addOnCompleteListener(OnCompleteListener { task ->
-                    if (!task.isSuccessful) {
-                        Log.w("Firebase/InstanceId", "getInstanceId failed", task.exception)
-                        return@OnCompleteListener
-                    }
-
-                    // Get new Instance ID token
-                    val token = task.result?.token
-
-                    // Log and toast
-                    val msg = token //getString(R.string.msg_token_fmt, token)
-                    Log.v("Firebase/InstanceId", "Firebase Token Received")
-                    Log.v("Firebase/InstanceId", msg)
-                    //  Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
-                })
-    }
 
     private fun checkForAllAuthentication() {
         navController.popAllBackStates()
@@ -637,8 +716,8 @@ class MainActivity : BaseActivity(),
 
     fun getUpdatePriority(currentAppVersion: Int, info: VersionUpdateInfo): Int {
         val mostImportantUpdate = info.updates
-                .filter { it.version > currentAppVersion }
-                ?.sortedByDescending { it.updatePriority }
+            .filter { it.version > currentAppVersion }
+            .sortedByDescending { it.updatePriority }
         return if (mostImportantUpdate.size > 0) mostImportantUpdate[0].updatePriority else -1
     }
 

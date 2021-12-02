@@ -10,12 +10,12 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import com.gigforce.app.MainActivity
 import com.gigforce.app.R
-import com.gigforce.giger_gigs.captureimage.AttendanceImageCaptureActivity
-import com.gigforce.giger_gigs.photocrop.PhotoCrop
-import com.gigforce.common_ui.utils.DocViewerActivity
 import com.gigforce.client_activation.client_activation.PlayVideoDialogWithUrl
 import com.gigforce.common_ui.BaseNavigationImpl
 import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.utils.DocViewerActivity
+import com.gigforce.giger_gigs.captureimage.AttendanceImageCaptureActivity
+import com.gigforce.giger_gigs.photocrop.PhotoCrop
 import com.gigforce.learning.learning.learningVideo.PlayVideoDialogFragment
 import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
 import dagger.hilt.android.qualifiers.ActivityContext
@@ -60,6 +60,7 @@ class NavManagerImpl @Inject constructor(
         this.registerRoute("week_day", R.id.weekDayFragment)
         this.registerRoute("week_end", R.id.weekEndFragment)
         this.registerRoute("location", R.id.locationFragment)
+        this.registerRoute("subiconfolderBottomSheet", R.id.subiconfolderBottomSheet)
         this.registerForWalletAndPayouts()
         NavForSettingsModule(this)
         NavForAmbassadorModule(this)
@@ -82,11 +83,21 @@ class NavManagerImpl @Inject constructor(
         this.registerRoute("${moduleName}/main", R.id.walletBalancePage)
     }
 
-    override fun navigateToDocViewerActivity(activity: Activity, url: String, purpose: String) {
+    override fun navigateToDocViewerActivity(
+        activity: Activity?,
+        url: String,
+        purpose: String,
+        bundle: Bundle?,
+        context: Context?
+    ) {
+        var contextoractivity = if(activity!=null)activity else context
         val docIntent = Intent(
-            activity,
+            contextoractivity,
             DocViewerActivity::class.java
         )
+        bundle?.let {
+            docIntent.putExtras(it)
+        }
         docIntent.putExtra(
             StringConstants.DOC_URL.value,
             url
@@ -95,19 +106,23 @@ class NavManagerImpl @Inject constructor(
             StringConstants.DOC_PURPOSE.value,
             purpose
         )
-        activity.startActivity(docIntent)
+        activity?.let {
+            it.startActivity(docIntent)
+        } ?: run {
+            context?.startActivity(docIntent)
+        }
     }
 
 
     override fun navigateToPlayVideoDialogFragment(
         fragment: Fragment,
-        moduleId : String?,
+        moduleId: String?,
         lessonId: String,
         shouldShowFeedbackDialog: Boolean
     ) {
         PlayVideoDialogFragment.launch(
             childFragmentManager = fragment.childFragmentManager,
-            moduleId = if(moduleId.isNullOrBlank()) "" else moduleId,
+            moduleId = if (moduleId.isNullOrBlank()) "" else moduleId,
             lessonId = lessonId,
             shouldShowFeedbackDialog = shouldShowFeedbackDialog,
             disableLessonCompleteAction = true

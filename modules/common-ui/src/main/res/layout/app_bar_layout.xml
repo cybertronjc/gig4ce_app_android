@@ -4,12 +4,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="56dp">
+    android:minHeight="66dp">
 
     <ImageButton
         android:id="@+id/backImageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_marginStart="@dimen/size16"
         android:padding="@dimen/size_4"
         android:src="@drawable/ic_arrow_back_white"
@@ -20,7 +20,7 @@
 
     <TextView
         android:id="@+id/textTitle"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/size16"
         android:fontFamily="@font/lato"
@@ -29,9 +29,12 @@
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="normal"
+        android:ellipsize="end"
+        android:maxLines="1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/backImageButton"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/searchImageButton"/>
 
     <TextView
         android:id="@+id/steps"
@@ -92,8 +95,40 @@
         android:layout_marginEnd="@dimen/size_16"
         android:src="@drawable/ic_baseline_search_24"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/filterImageFrame"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/filterImageFrame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <ImageButton
+            android:id="@+id/filterImageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/size_4"
+            android:visibility="gone"
+            android:background="@color/fui_transparent"
+            app:tint="@color/white"
+            android:layout_marginEnd="@dimen/size_16"
+            android:src="@drawable/ic_filter_icon"
+             />
+        <ImageButton
+            android:id="@+id/filterDot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/size_14"
+            android:layout_gravity="end|top"
+            android:visibility="gone"
+            android:background="@color/fui_transparent"
+            android:src="@drawable/ic_filter_dot"
+            />
+    </FrameLayout>
+
+
 
     <com.gigforce.common_ui.components.cells.AppProfilePicComponent
         android:id="@+id/profilePicComp"

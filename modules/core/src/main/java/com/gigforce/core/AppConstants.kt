@@ -39,6 +39,8 @@ object AppConstants {
 
 
     const val INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT = "user_came_from_amb_screen"
+    const val INTENT_EXTRA_USER_CAME_FROM_ONBOARDING_FORM = "came_from_onboarding_form"
+    const val INTENT_EXTRA_UID = "uid"
 
     const val INTENT_EXTRA_COURSE_ID = "course_id"
 

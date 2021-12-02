@@ -2,6 +2,8 @@ package com.gigforce.core.retrofit
 
 
 import com.gigforce.core.di.interfaces.IBuildConfig
+import com.gigforce.core.exceptions.InternalServerErrorException
+import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -12,6 +14,8 @@ import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.IOException
+import java.net.UnknownHostException
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -19,8 +23,13 @@ import javax.inject.Singleton
 @Singleton
 class RetrofitServiceFactory @Inject constructor(
     private val buildConfig: IBuildConfig,
-    private val firebaseAuthStateListener: FirebaseAuthStateListener
+    private val firebaseAuthStateListener: FirebaseAuthStateListener,
+    private val logger : GigforceLogger
 ) {
+    companion object{
+        const val TAG = "RetrofitServiceFactory"
+    }
+
     private val retrofit: Retrofit
 
     init {
@@ -95,6 +104,7 @@ class RetrofitServiceFactory @Inject constructor(
 
     private fun makeMoshi(): Gson {
         return GsonBuilder()
+            .setExclusionStrategies(GsonExclusionStrategy())
             .setLenient()
             .serializeNulls()
             .setDateFormat("yyyy-MM-dd HH:mm:ss")
@@ -115,7 +125,43 @@ class RetrofitServiceFactory @Inject constructor(
 
         override fun intercept(chain: Interceptor.Chain): Response {
             val modifiedRequest = addNecessaryInfoToHeadersAndQueryParam(chain.request())
-            return chain.proceed(modifiedRequest)
+
+
+            // Spying on the call and Changing Error Message
+            try {
+                val response = chain.proceed(modifiedRequest)
+
+                when (response.code()) {
+                    in 500..599 -> throw InternalServerErrorException(response.message())
+                    else -> return response
+                }
+            } catch (exception: Exception) {
+
+                when (exception) {
+                    is IOException -> {
+                        //It Was an Internet or Server Connection Issue ,not need to log it
+                        throw IOException("Unable To Reach Server, Check Internet Connection")
+                    }
+                    is UnknownHostException -> {
+                        //It Was an Internet or Server Connection Issue ,not need to log it
+                        throw IOException("Unable To Reach Server, Check Internet Connection")
+                    }
+
+                    // An Ugly Hack to remove *HTTP 500* text from exception message
+                    // why to [IOException] -> because it does not break the app
+                    is InternalServerErrorException -> {
+
+                        //todo add more info to logs
+                        logger.e("ServerError","calling api",exception)
+                        throw IOException("Some internal server while processing your request, please try again later")
+                    }
+                    else -> {
+                        //Some Serious Issue occurred, Logging it
+                        logger.e(TAG, "Some Serious Error While Networking",exception)
+                        throw exception
+                    }
+                }
+            }
         }
     }
 }

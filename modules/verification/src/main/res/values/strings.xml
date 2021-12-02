@@ -61,16 +61,16 @@
     <string name="cancel_veri">CANCEL</string>
     <string name="why_do_we_need_this_veri">Why we need this ?</string>
     <string name="why_do_we_need_this_dl_veri">A driving license is mandatory for driving and delivery gigs</string>
-    <string name="why_do_we_need_this_bank_veri">A Bank Passbook is mandatory for profile verification. It helps verify your name and date of birth and also helps with payments to your wallet.</string>
+    <string name="why_do_we_need_this_bank_veri">A verified bank account is mandatory for your payout transfer on time.</string>
     <string name="license_number_with_colon_veri">License Number :</string>
     <string name="address_with_colon_veri">Address :</string>
     <string name="license_validity_with_colon_veri">License Validity :</string>
     <string name="gender_with_colon_veri">Gender :</string>
-    <string name="aadhar_number_with_colon_veri">Aadhar Number :</string>
+    <string name="aadhar_number_with_colon_veri">Aadhaar Number :</string>
     <string name="bank_account_details_veri">Bank Account Details</string>
     <string name="do_you_have_bank_passbook_veri">Do you have Bank Passbook ?</string>
     <string name="yes_i_have_bank_passbook_veri">Yes, I have Bank Passbook</string>
-    <string name="no_i_dont_have_bank_passbook_veri">No, I dont have Bank Passbook</string>
+    <string name="no_i_dont_have_bank_passbook_veri">No, I don\'t have Bank account</string>
     <string name="cif_number_with_colon_veri">CIF Number :</string>
     <string name="account_number_with_colon_veri">Account Number :</string>
     <string name="ifsc_with_colon_veri">IFSC :</string>
@@ -194,7 +194,7 @@
     <string name="i_have_collect_receipt_of_my_documents_veri">I have collect receipt of my documents.</string>
     <string name="giger_verification_desc_veri">We need to verify your information. Please submit the documents below to process giger verification</string>
     <string name="giger_verification_veri">Giger Verification</string>
-    <string name="aadhar_number_eg_444433332222_veri">Aadhar Number* (Eg: 444433332222)</string>
+    <string name="aadhar_number_eg_444433332222_veri">Aadhaar Number* (Eg: 444433332222)</string>
     <string name="please_provide_the_following_information_veri">Please provide the following information.</string>
     <string name="document_under_verification__veri">Document Under Verification</string>
     <string name="under_verification_veri">Under Verification</string>
@@ -207,7 +207,7 @@
     <string name="ifsc_code_veri">IFSC Code :</string>
     <string name="bank_name_with_colon_veri">Bank Name :</string>
     <string name="bank_account_no_veri">Bank Account No :</string>
-    <string name="aadhar_number_veri">Aadhar Number *</string>
+    <string name="aadhar_number_veri">Aadhaar Number *</string>
     <string name="state_pascal_case_veri">State</string>
     <string name="driving_license_number_veri">Driving License Number *</string>
     <string name="driving_license_front_image_veri">Driving License (Front Image)</string>
@@ -248,7 +248,7 @@
 
     <string name="area_veri">Area</string>
     <string name="permanent_address_veri">Permanent Address</string>
-    <string name="address_proof_smalls_veri">Adhaar Card</string>
+    <string name="address_proof_smalls_veri">Aadhaar Card</string>
     <string name="document_under_verification_veri">Document Under Verification</string>
     <string name="save_veri">SAVE</string>
     <string name="preferred_locations_veri">Preferred Locations</string>
@@ -278,7 +278,7 @@
 
     <string name="no_doc_title_bank_veri">Bank details not available!</string>
     <string name="no_doc_subtitle_bank_veri">No Worries! Once you own Bank details you can untick the checkbox to verify it</string>
-    <string name="aadhar_verified_veri">The Aadhar card details have been verified successfully.</string>
+    <string name="aadhar_verified_veri">The Aadhaar card details have been verified successfully.</string>
     <string name="aadhar_verified_success_veri">Aadhaar card verified</string>
     <string name="upload_front_side_first_veri">Please upload the front side first!</string>
     <string name="upload_aadhar_before_processding_veri">Please upload the Aadhaar before proceeding</string>
@@ -359,7 +359,7 @@
     <string name="select_the_method_you_want_for_verifying_your_aadhaar_card_veri">Select the method you want for verifying your Aadhaar Card</string>
     <string name="or_veri">OR</string>
     <string name="next_step_veri">Next Step</string>
-    <string name="verify_aadhar_with_phone_number_veri">Verify Aadhar with Phone Number</string>
+    <string name="verify_aadhar_with_phone_number_veri">Verify Aadhaar with Phone Number</string>
     <string name="enter_aadhaar_number_veri">Enter Aadhaar Number</string>
     <string name="enter_aadhar_and_verify_veri">Enter Aadhaar Card number and then verify details with a 6-Digit OTP sent on the registered Phone Number.</string>
     <string name="confirm_beneficiary_veri">Please confirm the beneficiary name</string>
@@ -403,7 +403,7 @@
     <string name="verified_status_veri">Verified</string>
     <string name="pending_status_veri">Pending</string>
     <string name="failed_status_veri">Failed</string>
-    <string name="please_upload_aadhar_here_veri">Please upload your aadhar card here</string>
+    <string name="please_upload_aadhar_here_veri">Please upload your aadhaar card here</string>
 
     <string name="upload_aadhar_front_veri">Upload aadhaar card front photo</string>
     <string name="upload_aadhar_back_veri">Upload aadhaar card back photo</string>
@@ -418,26 +418,27 @@
     <string name="address_line_1_veri">Address Line 1</string>
     <string name="address_line_2_veri">Address Line 2</string>
     <string name="date_of_birth_spaced_veri">"   Date of birth   "</string>
-    <string name="aadhar_card_number_veri">AADHAR Card Number</string>
-    <string name="please_enter_the_below_details_of_your_aadhar_this_step_is_mandatory_for_this_application_veri">Please enter the below details of your Aadhar. This step is mandatory for this application.</string>
-    <string name="enter_aadhar_veri">Enter Aadhar Details</string>
+    <string name="aadhar_card_number_veri">AADHAAR Card Number</string>
+    <string name="please_enter_the_below_details_of_your_aadhar_this_step_is_mandatory_for_this_application_veri">Please enter the below details of your Aadhaar. This step is mandatory for this application.</string>
+    <string name="enter_aadhar_veri">Enter Aadhaar Details</string>
     <string name="aadhar_card_detail_veri">Aadhaar Card Details</string>
     <string name="data_uploaded_veri">Data uploaded successfully</string>
     <string name="make_my_father_as_nominee">Make my father as nominee</string>
     <string name="enter_name_veri">Please enter your name</string>
     <string name="submitted_status_veri">Submitted</string>
     <string name="no_i_dont_have_aadhar_veri">No, I dont have Aadhaar card</string>
-    <string name="info_of_aadhar_success_veri">Information of Aadhar card captured successfully.</string>
-    <string name="enter_aadhar_details_veri">Enter the Aadhar card details manually below</string>
-    <string name="upload_aadhar_card_veri">Upload Aadhar Card</string>
-    <string name="please_upload_aadhar_veri">Please upload your Aadhar card or enter the details manually</string>
-    <string name="aadhar_submitted_successfully_veri">The Aadhar card details have been submitted successfully.</string>
+    <string name="info_of_aadhar_success_veri">Information of Aadhaar card captured successfully.</string>
+    <string name="enter_aadhar_details_veri">Enter the Aadhaar card details manually below</string>
+    <string name="upload_aadhar_card_veri">Upload Aadhaar Card</string>
+    <string name="please_upload_aadhar_veri">Please upload your Aadhaar card or enter the details manually</string>
+    <string name="aadhar_submitted_successfully_veri">The Aadhaar card details have been submitted successfully.</string>
     <string name="document_submitted_veri">Document Submitted</string>
-    <string name="aadhar_submitted_veri">Aadhar card submitted</string>
+    <string name="aadhar_submitted_veri">Aadhaar card submitted</string>
     <string name="same_as_permanent_veri">Same as permanent address</string>
     <string name="curr_add1_veri">Enter Current Address Line 1</string>
     <string name="curr_add2_veri">Enter Current Address Line 2</string>
-
+    <string name="no_doc_title_aadhaar_veri">Aadhaar not available!</string>
+    <string name="no_doc_subtitle_aadhaar_veri">No Worries! Once you own Aadhaar you can untick the checkbox to verify it</string>
     <!--    <string name="veri_add_doc_front">"Front Side"</string>-->
 <!--    <string name="veri_add_doc_back">"Back Side"</string>-->
 <!--    <string name="veri_pan_title">"Step 5 : Upload your Pan"</string>-->
@@ -447,4 +448,7 @@
 <!--    <string name="veri_bank_title">"Step 4 : Please add your Bank Details"</string>-->
 <!--    <string name="veri_add_bank">"Add Bank Details"</string>-->
 <!--    <string name="veri_done">Hurray!!!\nKYC Documents submitted.\nWe will let you know once Verified.</string>-->
+    <string name="upload_pan_image_first_veri">Upload PAN card image first</string>
+    <string name="upload_dl_front_first_veri">Upload DL front image first</string>
+    <string name="please_enter_bank_info_below">Please enter your Bank information below.</string>
 </resources>

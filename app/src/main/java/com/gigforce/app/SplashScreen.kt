@@ -7,24 +7,23 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.gigforce.app.di.implementations.SharedPreAndCommonUtilDataImp
 import com.gigforce.common_ui.StringConstants
+import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
+import dagger.hilt.android.AndroidEntryPoint
 import io.branch.referral.Branch
 import io.branch.referral.Branch.BranchReferralInitListener
 import io.branch.referral.BranchError
 import org.json.JSONObject
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class SplashScreen : AppCompatActivity() {
 
     val TAG: String = "activity/main"
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        //Handling if Firebase Dynamic link is being clicked in any other application
-
-    }
+    @Inject
+    lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
 
     override fun onResume() {
         super.onResume()
@@ -37,6 +36,40 @@ class SplashScreen : AppCompatActivity() {
             .addOnSuccessListener(this) { pendingDynamicLinkData ->
                 // Get deep link from result (may be null if no link is found)
                 var deepLink: Uri? = null
+                val mainIntent = Intent(this, MainActivity::class.java)
+                //handling deep links
+                intent?.let {
+                    val uri = intent.data
+                    if (uri != null) {
+                        val parameters = uri.pathSegments
+                        // after that we are extracting string from that parameters.
+                        if (parameters != null && parameters.size > 0) {
+                            val param = parameters[parameters.size - 1]
+                            if (param == "login_summary") {
+                                sharedPreAndCommonUtilInterface.saveDataBoolean(
+                                    "deeplink_login",
+                                    true
+                                )
+                                mainIntent.putExtra(
+                                    StringConstants.LOGIN_SUMMARY_VIA_DEEP_LINK.value,
+                                    true
+                                )
+                                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                            }else if (param == "onboarding-form"){
+                                sharedPreAndCommonUtilInterface.saveDataBoolean(
+                                    "deeplink_onboarding",
+                                    true
+                                )
+                                mainIntent.putExtra(
+                                    StringConstants.ONBOARDING_FORM_VIA_DEEP_LINK.value,
+                                    true
+                                )
+                                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                            }
+                        }
+                    }
+                }
+
                 if (pendingDynamicLinkData != null) {
                     deepLink = pendingDynamicLinkData.link
                     val inviteID = deepLink?.getQueryParameter("invite")
@@ -54,54 +87,72 @@ class SplashScreen : AppCompatActivity() {
                         inviteID
                     )
                     if (!jobProfileID.isNullOrEmpty()) {
-                        val intent = Intent(this, MainActivity::class.java)
-                        intent.putExtra(StringConstants.NAV_TO_CLIENT_ACT.value, true)
-                        intent.putExtra(StringConstants.INVITE_USER_ID.value, inviteID)
-                        intent.putExtra(
+                        mainIntent.putExtra(StringConstants.NAV_TO_CLIENT_ACT.value, true)
+                        mainIntent.putExtra(StringConstants.INVITE_USER_ID.value, inviteID)
+                        mainIntent.putExtra(
                             StringConstants.JOB_PROFILE_ID.value,
                             jobProfileID
                         )
-                        initApp(intent)
+                        initApp(mainIntent)
                         return@addOnSuccessListener
                     } else if (!roleID.isNullOrEmpty()) {
-                        val intent = Intent(this, MainActivity::class.java)
-                        intent.putExtra(StringConstants.NAV_TO_ROLE.value, true)
-                        intent.putExtra(StringConstants.INVITE_USER_ID.value, inviteID)
-                        intent.putExtra(StringConstants.ROLE_ID.value, roleID)
-                        initApp(intent)
+                        mainIntent.putExtra(StringConstants.NAV_TO_ROLE.value, true)
+                        mainIntent.putExtra(StringConstants.INVITE_USER_ID.value, inviteID)
+                        mainIntent.putExtra(StringConstants.ROLE_ID.value, roleID)
+                        initApp(mainIntent)
                         return@addOnSuccessListener
-                    }else if(!isAmbassador.isNullOrEmpty()){
+                    } else if (!isAmbassador.isNullOrEmpty()) {
                         sp.saveData(
                             StringConstants.INVITE_BY_AMBASSADOR.value,
                             "true"
                         )
                         sp.saveData(
                             StringConstants.AMBASSADOR_LATITUDE.value,
-                            ambassadorLatitude?:"0.0"
+                            ambassadorLatitude ?: "0.0"
                         )
                         sp.saveData(
                             StringConstants.AMBASSADOR_LONGITUDE.value,
-                            ambassadorLongitude?:"0.0"
+                            ambassadorLongitude ?: "0.0"
                         )
-                        val intent = Intent(this, MainActivity::class.java)
-                        intent.putExtra(StringConstants.INVITE_BY_AMBASSADOR.value, true)
-                        intent.putExtra(StringConstants.INVITE_USER_ID.value, inviteID)
-                        intent.putExtra(StringConstants.AMBASSADOR_LATITUDE.value,ambassadorLatitude?.toDouble())
-                        intent.putExtra(StringConstants.AMBASSADOR_LONGITUDE.value,ambassadorLongitude?.toDouble())
-                        initApp(intent)
+                        mainIntent.putExtra(StringConstants.INVITE_BY_AMBASSADOR.value, true)
+                        mainIntent.putExtra(StringConstants.INVITE_USER_ID.value, inviteID)
+                        mainIntent.putExtra(
+                            StringConstants.AMBASSADOR_LATITUDE.value,
+                            ambassadorLatitude?.toDouble()
+                        )
+                        mainIntent.putExtra(
+                            StringConstants.AMBASSADOR_LONGITUDE.value,
+                            ambassadorLongitude?.toDouble()
+                        )
+                        initApp(mainIntent)
                         return@addOnSuccessListener
                     }
                 }
 
-                initApp(Intent(this, MainActivity::class.java))
+                initApp(mainIntent)
 
 
             }
             .addOnFailureListener(this)
             { e ->
                 run {
-                    initApp(Intent(this, MainActivity::class.java))
-
+                    val mainIntent = Intent(this, MainActivity::class.java)
+                    //handling deep links
+                    intent?.let {
+                        val uri = intent.data
+                        if (uri != null) {
+                            val parameters = uri.pathSegments
+                            // after that we are extracting string from that parameters.
+                            val param = parameters[parameters.size - 1]
+                            if (param == "login_summary") {
+                                mainIntent.putExtra(
+                                    StringConstants.LOGIN_SUMMARY_VIA_DEEP_LINK.value,
+                                    true
+                                )
+                            }
+                        }
+                    }
+                    initApp(mainIntent)
                 }
             }
     }
@@ -113,8 +164,8 @@ class SplashScreen : AppCompatActivity() {
             && intent.action.equals(Intent.ACTION_MAIN)
         ) {
             startActivity(intent)
-            finish();
-            return;
+            finish()
+            return
         }
         startActivity(intent)
         finish()
@@ -129,10 +180,10 @@ class SplashScreen : AppCompatActivity() {
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        setIntent(intent);
+        setIntent(intent)
         // if activity is in foreground (or in backstack but partially visible) launching the same
         // activity will skip onStart, handle this case with reInitSession
-        Branch.sessionBuilder(this).withCallback(branchReferralInitListener).reInit();
+        Branch.sessionBuilder(this).withCallback(branchReferralInitListener).reInit()
     }
 
     private val branchReferralInitListener: BranchReferralInitListener =

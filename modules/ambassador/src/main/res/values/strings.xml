@@ -33,7 +33,7 @@
     <string name="upload_aadhar_card_front_side_amb">Upload Aadhaar Card(Front Side)</string>
     <string name="upload_your_aadhar_card_amb">Please upload your Aadhaar Card for\nyour verification</string>
     <string name="upload_aadhar_card_back_side_amb">Upload Aadhaar Card(Back Side)</string>
-    <string name="upload_aadhar_details_amb">Upload Aadhar Details</string>
+    <string name="upload_aadhar_details_amb">Upload Aadhaar Details</string>
     <string name="you_are_reuploading_aadhar_amb">You are re-uploading your Aadhaar details. They will be verified once again, which may take up to 7 days.</string>
     <string name="cancel_amb">CANCEL</string>
     <string name="update_amb">UPDATE</string>
@@ -107,7 +107,7 @@
     <string name="added_amb">Added</string>
     <string name="days_ago_amb">days ago</string>
     <string name="you_have_to_look_for_amb">You have to look for people who are looking for Jobs like Driver, Warehouse Helper, Delivery Executive etc</string>
-    <string name="if_they_are_interested_amb">If they are interested, you have to create their profiles on Gigforce app. Creating profile means entering their basic details and uploading  verifiying Documents like Adhaar, PAN, Bank passbook etc.</string>
+    <string name="if_they_are_interested_amb">If they are interested, you have to create their profiles on Gigforce app. Creating profile means entering their basic details and uploading  verifiying Documents like Aadhaar, PAN, Bank passbook etc.</string>
     <string name="related_learnings_amb">Related Learnings</string>
     <string name="ambassador_amb">Ambassador</string>
     <string name="gigforce_amb">Gigforce</string>
@@ -127,13 +127,13 @@
     <string name="skip_underline_amb"><u>Skip</u></string>
     <string name="under_verification_amb">Under Verification</string>
     <string name="edit_amb">Edit</string>
-    <string name="aadhar_number_with_colon_amb">Aadhar Number :</string>
+    <string name="aadhar_number_with_colon_amb">Aadhaar Number :</string>
     <string name="skip_amb">Skip</string>
     <string name="bank_account_details_amb">Bank Account Details</string>
     <string name="do_you_have_bank_passbook_amb">Do you have Bank Account ?</string>
     <string name="err_driving_license_amb">Error : Uploaded Image is not a Driving License Image</string>
     <string name="yes_i_have_bank_passbook_amb">Yes, I have bank account</string>
-    <string name="no_i_dont_have_bank_passbook_amb">No, I dont have bank account</string>
+    <string name="no_i_dont_have_bank_passbook_amb">No, I don\'t have Bank account</string>
     <string name="please_provide_following_details_amb">Please provide following details.</string>
     <string name="ifsc_eg_sbin0000572_bkid0000048_amb">IFSC* (Eg: SBIN0000572, BKID0000048)</string>
     <string name="bank_name_amb">Bank Name *</string>
@@ -209,7 +209,7 @@
     <string name="find_gigs_on_amb">find gigs on Gigforce.</string>
     <string name="upload_pan_card_new_amb">Please upload your PAN card\nfor verification</string>
     <string name="upload_bank_account_new_amb">Upload your Bank Passbook\nFront Page</string>
-    <string name="why_do_we_need_this_bank_amb">A Bank Passbook is mandatory for profile verification. It helps verify your name and date of birth and also helps with payments to your wallet.</string>
+    <string name="why_do_we_need_this_bank_amb">A verified bank account is mandatory for your payout transfer on time.</string>
     <string name="got_it_amb">Got it</string>
     <string name="bank_name_too_short_amb">Bank name is too short</string>
     <string name="enter_bank_name_amb">Enter bank name</string>
@@ -248,6 +248,7 @@
     <string name="otp_sent_amb">OTP sent</string>
     <string name="change_photo_amb">Change Photo</string>
     <string name="upload_photo_amb">Upload Photo</string>
+    <string name="done_amb">Done</string>
     <string name="sent_otp_to_the_number_amb">We sent it to the number +91 - </string>
     <string name="enter_valid_otp_amb">Enter a valid OTP</string>
     <string name="otp_confimed_amb">OTP Confirmed, Profile Created</string>
@@ -256,7 +257,7 @@
     <string name="unable_to_send_message_amb">\"Unable to send message, \"</string>
     <string name="valid_10_digits_amb">Phone Number should be of 10 digits</string>
     <string name="gigforce_desc_amb">Flexible work and learning platform</string>
-    <string name="aadhar_details_verified_amb">The Aadhar card details have been verified successfully.</string>
+    <string name="aadhar_details_verified_amb">The Aadhaar card details have been verified successfully.</string>
     <string name="aadhar_card_verified_amb">Aadhaar card verified</string>
     <string name="upload_succcess_amb">Upload Successful</string>
     <string name="bank_info_captured_amb">Information of Bank Captured Successfully.</string>
@@ -355,7 +356,7 @@
     <string name="permanent_address_amb">Permanent Address</string>
     <string name="crop_and_rotate_amb">Crop or rotate</string>
     <string name="to_earn_incentive_for_the_profile_created_atleast_one_document_is_mandatory_amb">To earn incentive for the profile created, atleast One document is mandatory</string>
-    <string name="upload_aadhar_card_back_side_new_amb">Upload aadhar card back side</string>
+    <string name="upload_aadhar_card_back_side_new_amb">Upload aadhaar card back side</string>
     <string name="do_you_have_pan_card">Do you have PAN Card ?</string>
     <string name="yes_i_have_pan_card">Yes, I have Pan Card.</string>
     <string name="no_i_don_t_have_pan_card">No, I don\'t have Pan Card.</string>
@@ -365,24 +366,26 @@
     <string name="next_amb">Next</string>
     <string name="invite_link_amb">Invite link will be shared via SMS on registered number.</string>
     <string name="edit_propercase">Edit</string>
+    <string name="upload_pan_image_first_amb">Upload PAN card image first</string>
+    <string name="upload_dl_front_first_amb">Upload DL front image first</string>
 
 
-    <string name="aadhar_card_number_amb">AADHAR Card Number</string>
-    <string name="please_enter_the_below_details_of_your_aadhar_this_step_is_mandatory_for_this_application_amb">Please enter the below details of your Aadhar. This step is mandatory for this application.</string>
-    <string name="enter_aadhar_amb">Enter Aadhar Details</string>
+    <string name="aadhar_card_number_amb">AADHAAR Card Number</string>
+    <string name="please_enter_the_below_details_of_your_aadhar_this_step_is_mandatory_for_this_application_amb">Please enter the below details of your Aadhaar. This step is mandatory for this application.</string>
+    <string name="enter_aadhar_amb">Enter Aadhaar Details</string>
     <string name="aadhar_card_detail_amb">Aadhaar Card Details</string>
     <string name="data_uploaded_amb">Data uploaded successfully</string>
     <string name="make_my_father_as_nominee_amb">Make my father as nominee</string>
     <string name="enter_name_amb">Please enter your name</string>
     <string name="submitted_status_amb">Submitted</string>
     <string name="no_i_dont_have_aadhar_amb">No, I dont have Aadhaar card</string>
-    <string name="info_of_aadhar_success_amb">Information of Aadhar card captured successfully.</string>
-    <string name="enter_aadhar_details_amb">Enter the Aadhar card details manually below</string>
-    <string name="upload_aadhar_card_amb">Upload Aadhar Card</string>
-    <string name="please_upload_aadhar_amb">Please upload your Aadhar card or enter the details manually</string>
-    <string name="aadhar_submitted_successfully_amb">The Aadhar card details have been submitted successfully.</string>
+    <string name="info_of_aadhar_success_amb">Information of Aadhaar card captured successfully.</string>
+    <string name="enter_aadhar_details_amb">Enter the Aadhaar card details manually below</string>
+    <string name="upload_aadhar_card_amb">Upload Aadhaar Card</string>
+    <string name="please_upload_aadhar_amb">Please upload your Aadhaar card or enter the details manually</string>
+    <string name="aadhar_submitted_successfully_amb">The Aadhaar card details have been submitted successfully.</string>
     <string name="document_submitted_amb">Document Submitted</string>
-    <string name="aadhar_submitted_amb">Aadhar card submitted</string>
+    <string name="aadhar_submitted_amb">Aadhaar card submitted</string>
     <string name="same_as_permanent_amb">Same as permanent address</string>
     <string name="curr_add1_amb">Enter Current Address Line 1</string>
     <string name="curr_add2_amb">Enter Current Address Line 2</string>
@@ -397,6 +400,9 @@
     <string name="enter_add1_amb">Please enter address1</string>
     <string name="select_dob_amb">Select date of birth</string>
     <string name="date_of_birth_spaced_amb">"   Date of birth   "</string>
-
+    <string name="no_doc_title_aadhaar_amb">Aadhaar not available!</string>
+    <string name="no_doc_subtitle_aadhaar_amb">No Worries! Once you own Aadhaar you can untick the checkbox to verify it</string>
+    <string name="father_s_name_amb">Father\'s Name</string>
+    <string name="enter_father_name_amb">Enter father name</string>
 
 </resources>

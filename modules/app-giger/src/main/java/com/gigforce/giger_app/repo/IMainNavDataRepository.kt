@@ -1,25 +1,30 @@
 package com.gigforce.giger_app.repo
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.gigforce.common_ui.viewdatamodels.FeatureItemCard2DVM
+import com.gigforce.common_ui.viewdatamodels.HindiTranslationMapping
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.retrofit.RetrofitFactory
+import com.gigforce.giger_app.R
 import com.gigforce.giger_app.service.APPRenderingService
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.gson.Gson
 import com.google.gson.JsonObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 import javax.inject.Inject
 
 interface IMainNavDataRepository {
     fun reload()
     fun getData(): LiveData<List<FeatureItemCard2DVM>>
-    fun getDefaultData(): List<FeatureItemCard2DVM>
+    fun getDefaultData(context: Context): List<FeatureItemCard2DVM>
 }
 
 class MainNavDataRepository @Inject constructor(
@@ -81,24 +86,45 @@ class MainNavDataRepository @Inject constructor(
         list?.let {
             val mainNavData = ArrayList<FeatureItemCard2DVM>()
             for (item in list) {
-                val title = item.get("title") as? String ?: "-"
-                val index = (item.get("index") as? Long) ?: 500
-                val icon_type = item.get("icon") as? String
-                val navPath = item.get("navPath") as? String
-                val active = item.get("active") as? Boolean
-                mainNavData.add(
-                    FeatureItemCard2DVM(
-                        active = active,
-                        title = title,
-                        icon = icon_type,
-                        navPath = navPath,
-                        index = index.toInt()
+                try {
+                    val title = item.get("title") as? String ?: "-"
+                    val index = (item.get("index") as? Long) ?: 500
+                    val icon_type = item.get("icon") as? String
+                    val navPath = item.get("navPath") as? String
+                    val active = item.get("active") as? Boolean ?: true
+                    val type = item.get("type") as? String ?: ""
+                    val subicons = item.get("subicons") as? List<Long> ?: null
+                    var hi: HindiTranslationMapping? = null
+                    item.get("hi")?.let {
+                        try {
+                            hi = Gson().fromJson(
+                                JSONObject(it as? Map<*, *>).toString(),
+                                HindiTranslationMapping::class.java
+                            )
+                        } catch (e: Exception) {
+                        }
+                    }
+                    mainNavData.add(
+                        FeatureItemCard2DVM(
+                            active = active,
+                            title = title,
+                            icon = icon_type,
+                            navPath = navPath,
+                            index = index,
+                            type = type,
+                            subicons = subicons,
+                            hi = hi
+                        )
                     )
-                )
+                } catch (e: Exception) {
+
+                }
 
             }
-            mainNavData.sortBy { it.index }
-            var tempMainNavData = mainNavData.filter { it.active == true }
+            val tempMainNavData =
+                mainNavData.filter { it.active == true }
+                    .filter { (it.type != "folder" && it.type != "sub_folder") || !it.subicons.isNullOrEmpty() } as ArrayList<FeatureItemCard2DVM>
+            tempMainNavData.sortBy { it.index }
             mainNavData.clear()
             mainNavData.addAll(tempMainNavData)
             data.value = mainNavData
@@ -133,11 +159,11 @@ class MainNavDataRepository @Inject constructor(
         return data
     }
 
-    override fun getDefaultData(): List<FeatureItemCard2DVM> {
+    override fun getDefaultData(context: Context): List<FeatureItemCard2DVM> {
         val mainNavData = ArrayList<FeatureItemCard2DVM>()
         mainNavData.add(
             FeatureItemCard2DVM(
-                title = "Chat",
+                title = context.resources.getString(R.string.chat_app_giger),
                 icon = "chat",
                 navPath = "chats/chatList",
                 index = 150
@@ -145,7 +171,7 @@ class MainNavDataRepository @Inject constructor(
         )
         mainNavData.add(
             FeatureItemCard2DVM(
-                title = "My Gig",
+                title = context.resources.getString(R.string.my_gig_app_giger),
                 icon = "mygig",
                 navPath = "gig/mygig",
                 index = 100
@@ -154,7 +180,7 @@ class MainNavDataRepository @Inject constructor(
 
         mainNavData.add(
             FeatureItemCard2DVM(
-                title = "Setting",
+                title = context.resources.getString(R.string.settings_app_giger),
                 icon = "setting",
                 navPath = "setting",
                 index = 140
@@ -162,7 +188,7 @@ class MainNavDataRepository @Inject constructor(
         )
         mainNavData.add(
             FeatureItemCard2DVM(
-                title = "Learning",
+                title = context.resources.getString(R.string.learning_app_giger),
                 icon = "learning",
                 navPath = "learning/main",
                 index = 130
@@ -171,7 +197,7 @@ class MainNavDataRepository @Inject constructor(
 
         mainNavData.add(
             FeatureItemCard2DVM(
-                title = "Profile",
+                title = context.resources.getString(R.string.profile_app_giger),
                 icon = "profile",
                 navPath = "profile",
                 index = 120
@@ -180,7 +206,7 @@ class MainNavDataRepository @Inject constructor(
 
         mainNavData.add(
             FeatureItemCard2DVM(
-                title = "Wallet",
+                title = context.resources.getString(R.string.wallet_app_giger),
                 icon = "wallet",
                 navPath = "payslipMonthlyFragment",
                 index = 110
@@ -189,7 +215,7 @@ class MainNavDataRepository @Inject constructor(
 
         mainNavData.add(
             FeatureItemCard2DVM(
-                title = "Verification",
+                title = context.resources.getString(R.string.verification_app_giger),
                 icon = "shield",
                 navPath = "verification/main",
                 index = 160
@@ -197,7 +223,7 @@ class MainNavDataRepository @Inject constructor(
         )
         mainNavData.add(
             FeatureItemCard2DVM(
-                title = "Invoices",
+                title = context.resources.getString(R.string.invoices_app_giger),
                 icon = "wallet",
                 navPath = "wallet/invoicesList",
                 index = 170

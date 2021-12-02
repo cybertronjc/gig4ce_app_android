@@ -23,6 +23,7 @@ class JobProfileListAdapter(private val context: Context, private val clientActi
 
     private var originalJobList: List<JobProfileDVM> = emptyList()
     private var filteredJobList: List<JobProfileDVM> = emptyList()
+    var onItemClick: ((JobProfileDVM) -> Unit)? = null
 
     private val jobsFilter = JobsFilter()
 
@@ -69,24 +70,25 @@ class JobProfileListAdapter(private val context: Context, private val clientActi
         this.selectedItemIndex = -1
         this.originalJobList = contacts
         this.filteredJobList = contacts
-        //notifyDataSetChanged()
-    }
-
-    fun updateList(list: List<JobProfileDVM>){
-        val tempList = filteredJobList.toMutableList()
-        tempList.addAll(list)
-        this.submitList(tempList)
-//        filteredList = tempList
-
-    }
-
-    fun setData(contacts: List<JobProfileDVM>) {
-
-        this.selectedItemIndex = -1
-        this.originalJobList = contacts
-        this.filteredJobList = contacts
+        //notifyItemRangeRemoved(0, filteredJobList.size)
         notifyDataSetChanged()
     }
+
+//    fun updateList(list: List<JobProfileDVM>){
+//        val tempList = filteredJobList.toMutableList()
+//        tempList.addAll(list)
+//        this.submitList(tempList)
+////        filteredList = tempList
+//
+//    }
+//
+//    fun setData(contacts: List<JobProfileDVM>) {
+//
+//        this.selectedItemIndex = -1
+//        this.originalJobList = contacts
+//        this.filteredJobList = contacts
+//        notifyDataSetChanged()
+//    }
 
     override fun getFilter(): Filter = jobsFilter
 
@@ -119,21 +121,22 @@ class JobProfileListAdapter(private val context: Context, private val clientActi
 
         override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
             filteredJobList = results?.values as List<JobProfileDVM>
-            notifyDataSetChanged()
+//            notifyDataSetChanged()
         }
     }
 
 
     inner class JobProfilesViewHolder(
         itemView: View
-    ) : RecyclerView.ViewHolder(itemView),
-        View.OnClickListener {
+    ) : RecyclerView.ViewHolder(itemView){
 
         private var jobProfileCard: JobProfileCardComponent =
             itemView.findViewById(R.id.jobProfileCard)
 
         init {
-            itemView.setOnClickListener(this)
+            itemView.setOnClickListener {
+                onItemClick?.invoke(filteredJobList[adapterPosition])
+            }
         }
 
         fun bindValues(jobProfile: JobProfileDVM, position: Int) {
@@ -160,10 +163,10 @@ class JobProfileListAdapter(private val context: Context, private val clientActi
             })
         }
 
-        override fun onClick(v: View?) {
-            val newPosition = adapterPosition
-            val jobProfile = filteredJobList[newPosition]
-            onJobSelectedListener?.onJobSelected(jobProfile)
-        }
+//        override fun onClick(v: View?) {
+//            val newPosition = adapterPosition
+//            val jobProfile = filteredJobList[newPosition]
+//            onJobSelectedListener?.onJobSelected(jobProfile)
+//        }
     }
 }

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.gigforce.common_ui.components.cells.AppBar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:titleText="@string/new_selection_lead"
+            app:backgroundType="PinkBar"
+            android:minHeight="?android:actionBarSize" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingTop="12dp">
+
+            <include
+                layout="@layout/fragment_new_selection_form1_main"
+                android:id="@+id/main_form"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <include
+                android:id="@+id/data_loading_shimmer_container"
+                layout="@layout/shimmer_container"
+                android:visibility="visible" />
+
+            <include
+                android:id="@+id/form_main_info_layout"
+                layout="@layout/layout_error_with_retry" />
+
+        </FrameLayout>
+
+
+
+    </LinearLayout>
+</layout>
+

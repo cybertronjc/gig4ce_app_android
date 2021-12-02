@@ -129,6 +129,7 @@
         <attr name="isMenuItemVisible" format="boolean"/>
         <attr name="isProfileVisible" format="boolean"/>
         <attr name="isStepsVisible" format="boolean"/>
+        <attr name="isFilterVisible" format="boolean"/>
         <attr name="backgroundType" format="enum">
             <enum name="PinkBar" value="101"/>
             <enum name="WhiteBar" value="102"/>

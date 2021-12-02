@@ -7,13 +7,12 @@ plugins {
 }
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion buildConfig.compileSdk
+    buildToolsVersion buildConfig.buildToolVersion
 
     defaultConfig {
-        minSdkVersion 23
-        targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion buildConfig.minSdk
+        targetSdkVersion buildConfig.targetSdk
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -66,7 +65,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-runtime:2.3.2'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
-
+    implementation "androidx.fragment:fragment-ktx:1.2.5"
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinCoroutineVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutineVersion"
@@ -125,5 +124,8 @@ dependencies {
 
     implementation 'pub.devrel:easypermissions:3.0.0'
     implementation 'com.akexorcist:localization:1.2.10'
+    implementation "ru.tinkoff.scrollingpagerindicator:scrollingpagerindicator:1.2.1"
 
+    implementation 'com.google.firebase:firebase-dynamic-links-ktx:19.1.0'
+    implementation 'com.google.firebase:firebase-analytics-ktx:17.5.0'
 }

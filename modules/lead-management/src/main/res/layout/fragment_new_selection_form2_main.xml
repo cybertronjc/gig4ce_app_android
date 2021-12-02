@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fillViewport="true"
+            android:orientation="vertical">
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:id="@+id/select_city_label"
+                    android:layout_width="134dp"
+                    android:layout_height="18dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="40dp"
+                    android:gravity="top"
+                    android:lineSpacingExtra="1sp"
+                    android:text="@string/select_city_lead"
+                    android:textAppearance="@style/style_h5"
+                    android:translationY="-0.6sp" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="4dp"
+                    android:background="@drawable/drop_shadow_background_draw"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    app:cardCornerRadius="6dp"
+                    app:cardElevation="8dp">
+
+                    <LinearLayout
+                        android:id="@+id/select_city_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/rectangle_2"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/city_selected_label"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="2dp"
+                            android:layout_weight="1"
+                            android:gravity="top"
+                            android:lineSpacingExtra="4sp"
+                            android:text="@string/click_to_select_city_lead"
+                            android:textAppearance="@style/body_primary"
+                            android:textColor="@color/lipstick_2"
+                            android:translationY="-1.8sp" />
+
+                        <ImageView
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_marginEnd="15dp"
+                            android:src="@drawable/right_arrow_24" />
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+
+                <include
+                    android:id="@+id/city_error"
+                    layout="@layout/layout_validation_error"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone" />
+
+
+                <LinearLayout
+                    android:id="@+id/reporting_location_label_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="28dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/select_reporting_location"
+                        android:layout_width="wrap_content"
+                        android:layout_height="18dp"
+                        android:gravity="top"
+                        android:lineSpacingExtra="1sp"
+                        android:text="@string/reporting_location_lead"
+                        android:textAppearance="@style/style_h5"
+                        android:translationY="-0.6sp" />
+
+
+                </LinearLayout>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/select_reporting_location_cardlayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="4dp"
+                    android:background="@drawable/drop_shadow_background_draw"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    app:cardCornerRadius="6dp"
+                    app:cardElevation="8dp">
+
+                    <LinearLayout
+                        android:id="@+id/select_reporting_location_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/rectangle_2"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/reporting_location_selected_label"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_weight="1"
+                            android:gravity="top"
+                            android:lineSpacingExtra="4sp"
+                            android:text="@string/click_to_select_location_lead"
+                            android:textAppearance="@style/body_primary"
+                            android:textColor="@color/lipstick_2"
+                            android:translationY="-1.8sp" />
+
+                        <ImageView
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_marginEnd="15dp"
+                            android:src="@drawable/right_arrow_24" />
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+
+                <include
+                    android:id="@+id/reporting_location_error"
+                    layout="@layout/layout_validation_error"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone" />
+
+
+
+
+
+
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="28dp"
+                    android:visibility="gone"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/client_tl_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="top"
+                        android:lineSpacingExtra="1sp"
+                        android:text="@string/client_tl_lead"
+                        android:textAppearance="@style/style_h5"
+                        android:translationY="-0.6sp" />
+
+                    <TextView
+                        android:id="@+id/client_tl_label_optional"
+                        android:layout_width="134dp"
+                        android:layout_height="18dp"
+                        android:layout_marginStart="4dp"
+                        android:gravity="top"
+                        android:lineSpacingExtra="1sp"
+                        android:text="@string/optional_lead"
+                        android:textAppearance="@style/body_primary"
+                        android:translationY="-0.6sp" />
+
+                </LinearLayout>
+
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="10dp"
+                    android:visibility="gone"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="4dp"
+                    app:cardCornerRadius="6dp"
+                    app:cardElevation="4dp">
+
+                    <LinearLayout
+                        android:id="@+id/select_client_tl_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/rectangle_2"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/selected_client_tl_label"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_weight="1"
+                            android:gravity="top"
+                            android:lineSpacingExtra="4sp"
+                            android:text="@string/click_to_select_team_leader_lead"
+                            android:textAppearance="@style/body_primary"
+                            android:textColor="@color/lipstick_2"
+                            android:translationY="-1.8sp" />
+
+                        <ImageView
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_marginEnd="15dp"
+                            android:src="@drawable/right_arrow_24" />
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+
+                <TextView
+                    android:id="@+id/expected_date_of_joining_label"
+                    android:layout_width="134dp"
+                    android:layout_height="18dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="28dp"
+                    android:gravity="top"
+                    android:lineSpacingExtra="1sp"
+                    android:text="@string/date_of_joining_lead"
+                    android:textAppearance="@style/style_h5"
+                    android:translationY="-0.6sp" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="16dp"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:id="@+id/selected_date_label"
+                        style="@style/style_h6"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+
+                    <TextView
+                        android:id="@+id/change_date_btn"
+                        style="@style/style_h5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="4dp"
+                        android:paddingBottom="4dp"
+                        android:text="@string/change_date_lead"
+                        android:textColor="@color/lipstick_2" />
+
+
+                </LinearLayout>
+
+                <include
+                    android:id="@+id/expected_date_of_joining_error"
+                    layout="@layout/layout_validation_error"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone" />
+
+                <View
+                    android:id="@+id/line_79"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="#EBEBEB" />
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="30dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/title_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="top"
+                        android:lineSpacingExtra="1sp"
+                        android:textAppearance="@style/style_h5"
+                        android:translationY="-0.6sp"
+                        android:text="@string/lead_alternate_mobile_number" />
+
+                    <TextView
+                        android:id="@+id/optional_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="18dp"
+                        android:layout_marginStart="4dp"
+                        android:gravity="top"
+                        android:lineSpacingExtra="1sp"
+                        android:text="@string/optional_lead"
+                        android:textAppearance="@style/body_primary"
+                        android:translationY="-0.6sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="7dp"
+                        android:background="@drawable/drop_shadow_background_draw"
+                        android:layout_marginBottom="4dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        app:cardCornerRadius="6dp"
+                        app:cardElevation="8dp">
+
+                        <EditText
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@null"
+                            android:enabled="false"
+                            android:gravity="center"
+                            android:inputType="none"
+                            android:text="+91"
+                            android:textColor="@drawable/edit_text_color_selector" />
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="7dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="14dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/drop_shadow_background_draw"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        app:cardCornerRadius="6dp"
+                        app:cardElevation="8dp">
+
+                        <EditText
+                            android:id="@+id/alternate_mobile_no_et"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:inputType="number"
+                            android:maxLength="20"
+                            android:paddingStart="10dp" />
+
+                        <ImageButton
+                            android:id="@+id/pick_contacts_button"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_gravity="end"
+                            android:background="@null"
+                            android:src="@drawable/ic_contact_book" />
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                </LinearLayout>
+
+                <include
+                    android:id="@+id/contact_no_error"
+                    layout="@layout/layout_validation_error"
+                    android:layout_width="match_parent"
+                    android:visibility="gone"
+                    android:layout_height="wrap_content" />
+
+
+                <LinearLayout
+                    android:id="@+id/job_profile_dependent_dynamic_fields_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:orientation="vertical" />
+
+            </LinearLayout>
+
+
+        </ScrollView>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/next_button"
+            style="@style/LeadMgmtMaterialButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginEnd="@dimen/size_16"
+            android:layout_marginBottom="@dimen/size_16"
+            android:fontFamily="@font/lato_bold"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:text="@string/submit_lead"
+            android:textColor="@color/white"
+            app:shapeAppearanceOverlay="@style/RoundCornerButtonShapeOverlay" />
+
+    </LinearLayout>
+</layout>
+

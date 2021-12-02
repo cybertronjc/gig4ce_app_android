@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/tab_background_color"
+        android:orientation="vertical">
+
+
+        <com.gigforce.common_ui.components.cells.AppBar
+            android:id="@+id/appBarComp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            app:backgroundType="PinkBar"
+            app:isFilterVisible="true"
+            app:isSearchVisible="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:titleText="@string/joinings_lead" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/status_tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:layout_marginStart="@dimen/size_8"
+            android:layout_marginTop="@dimen/size_40"
+            android:layout_marginEnd="@dimen/size_8"
+            android:textAlignment="center"
+            android:visibility="visible"
+            android:background="@color/tab_background_color"
+            app:tabBackground="@drawable/tab_selector_background"
+            app:tabGravity="center"
+            app:tabIndicatorHeight="0dp"
+            app:tabMode="fixed"
+            app:tabSelectedTextColor="@color/white"
+            app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
+            app:tabTextColor="@color/black" >
+
+        </com.google.android.material.tabs.TabLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingTop="12dp">
+
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/swipeRefresh"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.gigforce.core.recyclerView.CoreRecyclerView
+                    android:id="@+id/joinings_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+            <include
+                android:id="@+id/joining_shimmer_container"
+                layout="@layout/shimmer_container"
+                android:visibility="visible" />
+
+            <include
+                android:id="@+id/joining_list_info_layout"
+                layout="@layout/layout_error_with_retry" />
+
+        </FrameLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/join_now_button"
+            style="@style/LeadMgmtMaterialButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginEnd="@dimen/size_16"
+            android:layout_marginBottom="@dimen/size_16"
+            android:fontFamily="@font/lato_bold"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:text="@string/add_new_lead"
+            android:textColor="@color/white"
+            app:shapeAppearanceOverlay="@style/RoundCornerButtonShapeOverlay" />
+
+
+    </LinearLayout>
+</layout>
+
+
+

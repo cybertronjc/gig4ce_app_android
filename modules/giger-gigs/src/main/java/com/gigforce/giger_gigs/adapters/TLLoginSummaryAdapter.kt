@@ -4,6 +4,8 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.common_ui.ext.showToast
@@ -13,6 +15,7 @@ import com.gigforce.giger_gigs.models.ListingTLModel
 import com.gigforce.giger_gigs.tl_login_details.TeamLeaderLoginDetailsFragment
 import com.gigforce.giger_gigs.tl_login_details.views.OnTlItemSelectedListener
 import kotlinx.android.synthetic.main.date_city_recycler_item_layout.view.*
+import java.time.Duration
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -21,11 +24,13 @@ import java.util.*
 
 class TLLoginSummaryAdapter(
     private val context: Context, private val teamLeaderLoginDetailsFragment: TeamLeaderLoginDetailsFragment
-) : RecyclerView.Adapter<TLLoginSummaryAdapter.TlLoginViewHolder>() {
+) : RecyclerView.Adapter<TLLoginSummaryAdapter.TlLoginViewHolder>(), Filterable {
 
      var originalList: List<ListingTLModel> = emptyList()
      var filteredList: List<ListingTLModel> = emptyList()
     private var selectedItemIndex: Int = -1
+
+    private val loginFilter = LoginFilter()
 
     private var onTlItemSelectedListener : OnTlItemSelectedListener? = null
 
@@ -108,5 +113,59 @@ class TLLoginSummaryAdapter(
 
     override fun getItemCount(): Int {
         return filteredList.size
+    }
+
+    override fun getFilter(): Filter = loginFilter
+
+    private inner class LoginFilter : Filter() {
+
+        override fun performFiltering(constraint: CharSequence?): FilterResults {
+            val charString = constraint.toString()
+
+            if (charString.isEmpty()) {
+                val filterResults = FilterResults()
+                filterResults.values = filteredList
+                return filterResults
+            } else {
+                val filteredList: MutableList<ListingTLModel> = mutableListOf()
+                for (job in filteredList) {
+                    val filterDayInt = charString.toInt()
+                    if (getDateDifference(job.date) <= filterDayInt){
+                        filteredList.add(job)
+                    }
+//                    if (job.title?.contains(
+//                            charString,
+//                            true
+//                        ) == true
+//                    ) filteredList.add(job)
+                }
+
+                val filterResults = FilterResults()
+                filterResults.values = filteredList
+                return filterResults
+            }
+
+
+        }
+
+        override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+            filteredList = results?.values as List<ListingTLModel>
+//            notifyDataSetChanged()
+        }
+    }
+
+    private fun getDateDifference(createdAt: String): Int {
+        val currentDate = LocalDate.now()
+        val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy", Locale.ENGLISH)
+        val date = LocalDate.parse(createdAt, formatter)
+        return if (currentDate.isEqual(date)){
+            0
+        } else {
+            val daysDiff = Duration.between(
+                date.atStartOfDay(),
+                currentDate.atStartOfDay()
+            ).toDays()
+            daysDiff.toInt()
+        }
     }
 }

@@ -1,10 +1,11 @@
 package com.gigforce.common_ui.remote
 
-import com.gigforce.common_ui.viewdatamodels.leadManagement.AssignGigRequest
-import com.gigforce.common_ui.viewdatamodels.leadManagement.AssignGigResponse
-import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfileDetails
-import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfileOverview
+import com.gigforce.common_ui.viewdatamodels.BaseResponse
+import com.gigforce.common_ui.viewdatamodels.PendingJoiningItemDVM
+import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.core.datamodels.auth.UserAuthStatusModel
+import com.google.gson.JsonObject
+import org.json.JSONObject
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -27,4 +28,39 @@ interface JoiningProfileService {
     suspend fun createGigs(
         @Body request : AssignGigRequest
     ): Response<AssignGigResponse>
+
+
+
+    @GET("joining/listing")
+    suspend fun getJoiningListing(
+
+    ): Response<List<JoiningNew>>
+
+    @GET("business/listing/businessandjobProfile")
+    suspend fun getBusinessAndJobProfiles(): Response<List<JoiningBusinessAndJobProfilesItem>>
+
+    @GET("business/businessLocations")
+    suspend fun getBusinessLocationAndTeamLeaders(
+        @Query("businessId") businessId : String,
+        @Query("jobProfileId") jobProfileId : String
+    ): Response<JoiningLocationTeamLeadersShifts>
+
+    @POST("joining/submit")
+    suspend fun submitJoiningRequest(
+        @Body joiningRequest: SubmitJoiningRequest
+    ): Response<AssignGigResponse>
+
+
+    @GET("joining/detail/{id}")
+    suspend fun getJoiningInfo(
+        @Path("id") id: String
+    ): Response<GigerInfo>
+
+    @GET("joining/pendingEjoining")
+    suspend fun getPendingJoining(): Response<BaseResponse<PendingJoiningItemDVM>>
+
+    @POST("joining/dropEjoining")
+    suspend fun dropSelections(
+        @Body jsonObject: DropSelectionRequest
+    ): Response<DropSelectionResponse>
 }

@@ -22,11 +22,11 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
 class ReferenceCheckFragment : BaseFragment2<ReferenceCheckFragmentBinding>(
@@ -263,6 +263,7 @@ class ReferenceCheckFragment : BaseFragment2<ReferenceCheckFragmentBinding>(
 
     private fun referenceDataSubmitted() = viewBinding.apply {
         // submitButton.hideProgress("Submitted")
+        showToast(getString(R.string.reference_submitted_lead))
         assignGigRequest.userUid = userUid
         AssignGigsDialogFragment.launch(
             fragmentManager = childFragmentManager,
@@ -271,7 +272,7 @@ class ReferenceCheckFragment : BaseFragment2<ReferenceCheckFragmentBinding>(
     }
 
     private fun showReferenceSubmittingState() = viewBinding.apply {
-        showToast(getString(R.string.reference_submitted_lead))
+        showToast(getString(R.string.submitting_data_lead))
 //        submitButton.showProgress {
 //            this.buttonText = "Submitting..."
 //            this.progressColor = R.color.white

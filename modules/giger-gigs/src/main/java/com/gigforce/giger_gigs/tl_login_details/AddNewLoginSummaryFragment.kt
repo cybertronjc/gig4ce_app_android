@@ -79,7 +79,6 @@ class AddNewLoginSummaryFragment : Fragment() {
         return viewBinding.root
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(AddNewLoginSummaryViewModel::class.java)
@@ -142,7 +141,6 @@ class AddNewLoginSummaryFragment : Fragment() {
         } else {
             viewBinding.submit.visible()
         }
-
     }
 
     private fun initToolbar() = viewBinding.apply {
@@ -155,6 +153,9 @@ class AddNewLoginSummaryFragment : Fragment() {
             } else {
                 setAppBarTitle(context.getString(R.string.add_new_login_summary_giger_gigs).toString())
             }
+            changeBackButtonDrawable()
+            makeBackgroundMoreRound()
+            makeTitleBold()
             setBackButtonListener(View.OnClickListener {
                 activity?.onBackPressed()
             })
@@ -537,7 +538,6 @@ class AddNewLoginSummaryFragment : Fragment() {
         }
         Log.d("count", "count $count , map: $map")
 
-        viewBinding.submit.isEnabled = count != 0
         viewBinding.submit.setText("${getString(R.string.submit_giger_gigs)} ($count ${getString(R.string.logins_giger_gigs)})")
         viewBinding.loginsCount.setText("$count")
 

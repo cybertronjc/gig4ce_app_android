@@ -33,6 +33,7 @@ import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
+import com.gigforce.core.AppConstants
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.datamodels.City
 import com.gigforce.core.datamodels.State
@@ -48,6 +49,8 @@ import com.gigforce.core.utils.DateHelper
 import com.gigforce.core.utils.NavFragmentsData
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.storage.FirebaseStorage
 import com.yalantis.ucrop.UCrop
@@ -129,6 +132,13 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
     var caSelectedCity = City()
     var caSelectedState = State()
 
+    private var userId: String? = null
+    private val user: FirebaseUser?
+        get() {
+            return FirebaseAuth.getInstance().currentUser
+        }
+    private var userIdToUse: String? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -162,6 +172,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
                 allNavigationList = arr
             }
             intentBundle = it
+            userId = it.getString(AppConstants.INTENT_EXTRA_UID) ?: return@let
         }
 
         arguments?.let {
@@ -172,6 +183,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
                 allNavigationList = arr
             }
             intentBundle = it
+            userId = it.getString(AppConstants.INTENT_EXTRA_UID) ?: return@let
         }
     }
 
@@ -814,8 +826,12 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
     }
 
     private fun setViews() {
+        userIdToUse = if (userId != null) {
+            userId
+        }else{
+            user?.uid
+        }
         viewModel.getStates()
-
 
         val frontUri = Uri.Builder()
             .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
@@ -953,8 +969,8 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
                             progressBar.gone()
                         }.addOnCanceledListener { progressBar.gone() }
                 } catch (e: Exception) {
-                    CrashlyticsLogger.d("Aadhar Application Detail Fragment", "${e.message} $it")
-                    FirebaseCrashlytics.getInstance().log("Exception : Aadhar Application Detail Fragment ${e.message} $it")
+                    CrashlyticsLogger.d("Aadhaar Application Detail Fragment", "${e.message} $it")
+                    FirebaseCrashlytics.getInstance().log("Exception : Aadhaar Application Detail Fragment ${e.message} $it")
                 }
             }
 
@@ -1223,7 +1239,7 @@ class AadharApplicationDetailsFragment : Fragment(), IOnBackPressedOverride,
         }
         Log.d("map", "$statesesMap")
         stateAdapter?.notifyDataSetChanged()
-        viewModel.getVerificationData()
+        viewModel.getVerificationData(userIdToUse.toString())
         //getCitiesWhenStateNotEmpty(viewBinding.stateSpinner.text.toString().trim())
     }
 

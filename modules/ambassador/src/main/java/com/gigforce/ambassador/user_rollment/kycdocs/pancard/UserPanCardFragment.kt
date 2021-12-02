@@ -9,6 +9,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
@@ -38,6 +39,7 @@ import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.AppConstants
+import com.gigforce.core.ScopedStorageConstants
 import com.gigforce.core.datamodels.verification.PanCardDataModel
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.gone
@@ -315,6 +317,14 @@ class PanCardFragment : Fragment(),
                 }
                 val panCardNo =
                     viewBinding.panTil.editText?.text.toString().toUpperCase(Locale.getDefault())
+                if (clickedImagePath == null || clickedImagePath.toString().isBlank()) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert_amb))
+                        .setMessage(getString(R.string.upload_pan_image_first_amb))
+                        .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
+                        .show()
+                    return@setOnClickListener
+                }
                 if (!VerificationValidations.isPanCardValid(panCardNo)) {
 
                     MaterialAlertDialogBuilder(requireContext())
@@ -374,6 +384,7 @@ class PanCardFragment : Fragment(),
                         imageUploaded = true
                     )
                 )
+                clickedImagePath = Uri.parse(it)
             }
 
         }
@@ -446,27 +457,48 @@ class PanCardFragment : Fragment(),
 
     private fun requestStoragePermission() {
 
-        requestPermissions(
-            arrayOf(
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.CAMERA
+        if (Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
+
+             requestPermissions(
+              arrayOf(
+                  Manifest.permission.CAMERA
             ),
             REQUEST_STORAGE_PERMISSION
         )
+
+        } else{
+
+            requestPermissions(
+              arrayOf(
+                  Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                  Manifest.permission.READ_EXTERNAL_STORAGE,
+                  Manifest.permission.CAMERA
+            ),
+            REQUEST_STORAGE_PERMISSION
+        )
+        }
     }
 
     private fun hasStoragePermissions(): Boolean {
-        return ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.READ_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.CAMERA
-        ) == PackageManager.PERMISSION_GRANTED
+        if (Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
+            return ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        } else{
+            return ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        }
+
+
     }
 
     private fun callKycOcrApi(path: Uri) {

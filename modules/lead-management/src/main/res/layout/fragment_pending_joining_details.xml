@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/main_detail_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ScrollView
+                android:id="@+id/mainScrollView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginBottom="8dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toTopOf="@id/bottomButtonLayout"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBottom_toTopOf="@id/bottomButtonLayout"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
+
+
+                        <LinearLayout
+                            android:id="@+id/toolbarLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="126dp"
+                            android:background="@drawable/info_toolbar_background"
+                            android:orientation="vertical" />
+
+
+                        <include
+                            android:id="@+id/overlay_card_layout"
+                            layout="@layout/fragment_pending_joining_details_joining_details_card"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="24dp"
+                            android:layout_marginBottom="@dimen/size_2" />
+
+                    </FrameLayout>
+
+
+                    <TextView
+                        android:id="@+id/checklistText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/size_16"
+                        android:layout_marginTop="@dimen/size_24"
+                        android:fontFamily="@font/lato_bold"
+                        android:text="@string/application_checklist_lead"
+                        android:textColor="@color/pink_text"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <LinearLayout
+                        android:id="@+id/checklist_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="@dimen/size_16"
+                        android:layout_marginEnd="@dimen/size_16"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        app:layout_constraintTop_toBottomOf="@id/checklistText" />
+
+                </LinearLayout>
+            </ScrollView>
+
+            <include
+                android:id="@+id/bottomButtonLayout"
+                layout="@layout/layout_below_pending_joining_functionality"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <include
+            android:id="@+id/gigerinfo_shimmer_container"
+            layout="@layout/shimmer_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_16"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/bottomButtonLayout"
+            app:layout_constraintTop_toBottomOf="@id/mainScrollView" />
+
+        <include
+            android:id="@+id/error_layout"
+            layout="@layout/layout_error_with_retry"/>
+
+    </FrameLayout>
+</layout>

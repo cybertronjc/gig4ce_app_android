@@ -9,6 +9,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
@@ -32,10 +33,7 @@ import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
-import com.gigforce.core.AppConstants
-import com.gigforce.core.IEventTracker
-import com.gigforce.core.StringConstants
-import com.gigforce.core.TrackingEventArgs
+import com.gigforce.core.*
 import com.gigforce.core.datamodels.verification.DrivingLicenseDataModel
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.gone
@@ -53,6 +51,8 @@ import com.gigforce.verification.mainverification.VerificationClickOrSelectImage
 import com.gigforce.verification.util.VerificationConstants
 import com.gigforce.verification.util.VerificationEvents
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.jaeger.library.StatusBarUtil
 import com.yalantis.ucrop.UCrop
 import dagger.hilt.android.AndroidEntryPoint
@@ -111,6 +111,12 @@ class DrivingLicenseFragment : Fragment(),
     private var FROM_CLIENT_ACTIVATON: Boolean = false
     private val viewModel: DrivingLicenseViewModel by viewModels()
     private lateinit var viewBinding: DrivingLicenseFragmentBinding
+    private var userId: String? = null
+    private val user: FirebaseUser?
+        get() {
+            return FirebaseAuth.getInstance().currentUser
+        }
+    private var userIdToUse: String? = null
     private var dlFrontImagePath: Uri? = null
     private var dlBackImagePath: Uri? = null
     private var currentlyClickingImageOfSide: DrivingLicenseSides? = null
@@ -141,10 +147,16 @@ class DrivingLicenseFragment : Fragment(),
             resources.getString(R.string.no_doc_title_dl_veri),
             resources.getString(R.string.no_doc_subtitle_dl_veri)
         )
+        userIdToUse = if (userId != null) {
+            userId
+        }else{
+            user?.uid
+        }
     }
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, FROM_CLIENT_ACTIVATON)
+        outState.putString(AppConstants.INTENT_EXTRA_UID, userId)
     }
 
     var allNavigationList = ArrayList<String>()
@@ -157,6 +169,7 @@ class DrivingLicenseFragment : Fragment(),
                 allNavigationList = arr
             }
             intentBundle = it
+            userId = it.getString(AppConstants.INTENT_EXTRA_UID) ?: return@let
         } ?: run {
             arguments?.let {
                 FROM_CLIENT_ACTIVATON =
@@ -165,6 +178,7 @@ class DrivingLicenseFragment : Fragment(),
                     allNavigationList = arrData
                 }
                 intentBundle = it
+                userId = it.getString(AppConstants.INTENT_EXTRA_UID) ?: return@let
             }
         }
     }
@@ -318,6 +332,14 @@ class DrivingLicenseFragment : Fragment(),
             if (viewBinding.toplayoutblock.isDocDontOptChecked() || verificationScreenStatus == VerificationScreenStatus.VERIFIED || verificationScreenStatus == VerificationScreenStatus.STARTED_VERIFYING || !anyDataEntered) {
                 checkForNextDoc()
             } else {
+                if (dlFrontImagePath == null || dlFrontImagePath.toString().isBlank()){
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert_veri))
+                        .setMessage(getString(R.string.upload_dl_front_first_veri))
+                        .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
+                        .show()
+                    return@setOnClickListener
+                }
                 if (viewBinding.stateSpinner.text.equals("Select State")) {
                     MaterialAlertDialogBuilder(requireContext())
                         .setTitle(getString(R.string.alert_veri))
@@ -449,9 +471,13 @@ class DrivingLicenseFragment : Fragment(),
 
         viewModel.kycVerifyResult.observe(viewLifecycleOwner, Observer {
             ocrOrVerificationRquested = false
+            if (!it.status){
+                activeLoader(false)
+                it.message?.let { it1 -> showToast(it1) }
+            }
         })
 
-        viewModel.getVerifiedStatus()
+        viewModel.getVerifiedStatus(userIdToUse.toString())
         viewModel.verifiedStatus.observe(viewLifecycleOwner, Observer {
             if (!ocrOrVerificationRquested) {
                 viewBinding.screenLoaderBar.gone()
@@ -549,7 +575,8 @@ class DrivingLicenseFragment : Fragment(),
             viewModel.getKycOcrResult(
                 "DL",
                 if (currentlyClickingImageOfSide == DrivingLicenseSides.FRONT_SIDE) "front" else "back",
-                it
+                it,
+                userIdToUse.toString()
             )
         }
     }
@@ -568,27 +595,47 @@ class DrivingLicenseFragment : Fragment(),
 
     private fun requestStoragePermission() {
 
-        requestPermissions(
+        if(Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK){
+            requestPermissions(
             arrayOf(
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.CAMERA
             ),
             REQUEST_STORAGE_PERMISSION
         )
+        } else{
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.CAMERA
+                ),
+                REQUEST_STORAGE_PERMISSION
+            )
+
+        }
     }
 
     private fun hasStoragePermissions(): Boolean {
-        return ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.READ_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.CAMERA
-        ) == PackageManager.PERMISSION_GRANTED
+
+        if(Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK){
+            return ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        } else{
+            return ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        }
+
+
     }
 
     private val issueDatePicker: DatePickerDialog by lazy {
@@ -749,7 +796,7 @@ class DrivingLicenseFragment : Fragment(),
         )
 
         activeLoader(true)
-        viewModel.getKycVerificationResult("DL", list)
+        viewModel.getKycVerificationResult("DL", list, userIdToUse.toString())
     }
 
     private fun showFrontDrivingLicense(drivingFrontPath: Uri) {
@@ -1007,6 +1054,7 @@ class DrivingLicenseFragment : Fragment(),
                     )
 
                 )
+                dlFrontImagePath = Uri.parse(it)
 
             }
 
@@ -1029,6 +1077,7 @@ class DrivingLicenseFragment : Fragment(),
                     )
 
                 )
+                dlBackImagePath = Uri.parse(it)
 
             }
 

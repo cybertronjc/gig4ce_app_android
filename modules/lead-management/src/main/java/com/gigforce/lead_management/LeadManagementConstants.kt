@@ -1,6 +1,7 @@
 package com.gigforce.lead_management
 
 object LeadManagementConstants {
+
     const val INTENT_EXTRA_USER_ID = "uid"
     const val INTENT_EXTRA_PHONE_NUMBER = "phone_number"
     const val INTENT_EXTRA_USER_NAME = "user_name"
@@ -18,7 +19,11 @@ object LeadManagementConstants {
 
     const val INTENT_EXTRA_SHARE_TYPE = "share_type"
     const val INTENT_EXTRA_JOINING_ID = "joining_id"
+    const val INTENT_EXTRA_IS_ACTIVE = "is_active"
     const val INTENT_EXTRA_CURRENT_JOINING_USER_INFO = "current_joining_info"
 
     const val INTENT_EXTRA_JOB_PROFILE_ICON = "job_profile_icon"
+
+    const val STATUS_PENDING = "Pending"
+    const val STATUS_COMPLETED = "Completed"
 }

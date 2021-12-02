@@ -8,11 +8,13 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.app.BuildConfig
 import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 import com.gigforce.common_ui.repository.gig.GigsRepository
+import com.gigforce.core.StringConstants
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.QuerySnapshot
@@ -29,7 +31,10 @@ data class ProfileAnGigInfo(
 data class UserVersionInfo(
     var currentVersion: String = "",
     var time: Timestamp = Timestamp.now(),
-    var uid : String?= FirebaseAuthStateListener.getInstance().getCurrentSignInUserInfoOrThrow().uid
+    var uid : String?= FirebaseAuthStateListener.getInstance().getCurrentSignInUserInfoOrThrow().uid,
+    var updatedAt : Timestamp? = Timestamp.now(),
+    var updatedBy : String? = StringConstants.APP.value,
+    var createdAt : Timestamp? = Timestamp.now()
 )
 
 class LoginSuccessfulViewModel constructor(
@@ -73,7 +78,7 @@ class LoginSuccessfulViewModel constructor(
                         insertDataToDB()
                     }
                 }
-                .addOnFailureListener { exception ->
+                .addOnFailureListener {
                     insertDataToDB()
                 }
 
@@ -123,14 +128,18 @@ class LoginSuccessfulViewModel constructor(
     private fun insertDataToDB() {
 
         //            .document(profileFirebaseRepository.getUID())
-        profileFirebaseRepository
+        FirebaseAuth.getInstance().currentUser?.uid?.let {
+            profileFirebaseRepository
                 .db
                 .collection("Version_info")
                 .add(
-                   UserVersionInfo(
-                    currentVersion = BuildConfig.VERSION_NAME
-                  )
+                    UserVersionInfo(
+                        currentVersion = BuildConfig.VERSION_NAME,
+                        uid = it
+                    )
                 )
+        }
+
     }
 
     private fun checkForGigData(profileData: ProfileData) {

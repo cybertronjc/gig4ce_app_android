@@ -37,7 +37,7 @@
                 app:docinfotext="Please upload your Aadhaar Card (FRONT and BACK Side) for Document verification Process"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:missingdoctext="I don’t have an Aadhhar Card"
+                app:missingdoctext="I don’t have an Aadhaar Card"
                 app:title="Aadhaar Card"
                 app:uppercaption="You need to upload" />
 

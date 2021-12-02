@@ -21,4 +21,5 @@ interface IBuildConfig {
     val appBuildType : String
     fun getApiBaseURL() : String
     fun getListingBaseUrl(): String
+    fun getSiplyCompleteUrl():String
 }

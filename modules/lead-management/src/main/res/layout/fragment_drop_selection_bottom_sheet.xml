@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.giger_info.DropSelectionBottomSheet">
+
+    <ImageView
+        android:id="@+id/dropImageVIew"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_undraw_throw_away_re_x60k_1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/dropSelectionText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/sure_to_drop_lead"
+        android:fontFamily="@font/lato"
+        android:layout_marginTop="@dimen/size_20"
+        android:layout_marginStart="@dimen/size_16"
+        android:textColor="#202325"
+        app:layout_constraintTop_toBottomOf="@id/dropImageVIew"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <Button
+        android:id="@+id/dropGigerBtn"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:layout_marginStart="@dimen/size_16"
+        android:layout_marginEnd="@dimen/size_16"
+        android:layout_marginTop="@dimen/size_16"
+        android:text="@string/drop_selection_lead"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:background="@drawable/bottom_primary_button_background"
+        app:layout_constraintTop_toBottomOf="@+id/dropSelectionText"
+        android:layout_marginBottom="@dimen/size_16"/>
+
+    <TextView
+        android:id="@+id/cancelDropBtn"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:layout_marginStart="@dimen/size_16"
+        android:layout_marginEnd="@dimen/size_16"
+        android:layout_marginTop="@dimen/size_16"
+        android:text="@string/cancel_lead"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:textColor="@color/pink_text"
+        android:background="@drawable/bottom_secondary_button_background"
+        app:layout_constraintTop_toBottomOf="@+id/dropGigerBtn"
+        android:layout_marginBottom="@dimen/size_16"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

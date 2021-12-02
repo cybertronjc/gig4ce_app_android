@@ -1,7 +1,9 @@
 package com.gigforce.learning.assessment
 
-import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
+import com.gigforce.core.StringConstants
+import com.gigforce.core.fb.BaseFirestoreDBRepository
 import com.gigforce.learning.assessment.models.AssementQuestionsReponse
+import com.google.firebase.Timestamp
 import java.util.*
 
 class ModelAssessmentFragment : BaseFirestoreDBRepository(), ModelCallbacks {
@@ -43,7 +45,11 @@ class ModelAssessmentFragment : BaseFirestoreDBRepository(), ModelCallbacks {
 
                 }
                 mapOf("is_correct" to is_correct)
-            }
+            },
+            "updatedAt" to Timestamp.now(),
+            "updatedBy" to StringConstants.APP,
+            "createdAt" to Timestamp.now()
+
         )).addOnCompleteListener {
             if (it.isSuccessful) {
                 callbacks.submitAnswerSuccess()

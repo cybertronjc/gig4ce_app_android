@@ -130,10 +130,13 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
         adapter.let {
             it.setImageClickable(true)
             it.notifyDataSetChanged()
-
         }
     }
-
+    fun initAdapter(){
+        adapter = ViewPagerAdapter {
+            pageClickListener?.onClick(it)
+        }
+    }
     fun setImageViewPager(list: List<KYCImageModel>) {
 
         if (list.isEmpty()) {
@@ -311,6 +314,20 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
             editBankDetail.visible()
         else
             editBankDetail.gone()
+    }
+
+    fun hideUploadOption(visible: Boolean){
+        if(visible) {
+            viewPager2.gone()
+            tabLayout.gone()
+            docsubtitledetail.gone()
+            uploadHereText.gone()
+        }else{
+            viewPager2.visible()
+            tabLayout.visible()
+            docsubtitledetail.visible()
+            uploadHereText.gone()
+        }
     }
 }
 

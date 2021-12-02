@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout>
+    <FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="390dp"
+        android:background="@drawable/filter_bottom_background">
+
+        <include
+            android:id="@+id/mainLayout"
+            layout="@layout/bottom_sheet_dialog_fragment_drop_selection_main"/>
+
+        <include
+            android:id="@+id/successLayout"
+            android:visibility="gone"
+            layout="@layout/bottom_sheet_dialog_fragment_drop_selection_sucess"/>
+
+        <include
+            android:id="@+id/errorLayout"
+            android:visibility="gone"
+            layout="@layout/layout_error_with_retry"/>
+
+    </FrameLayout>
+</layout>

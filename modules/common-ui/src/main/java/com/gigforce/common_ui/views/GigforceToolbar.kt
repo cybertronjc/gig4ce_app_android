@@ -1,6 +1,7 @@
 package com.gigforce.common_ui.views
 
 import android.content.Context
+import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,7 @@ import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.annotation.MenuRes
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import com.gigforce.common_ui.R
 import com.gigforce.core.extensions.getTextChangeAsStateFlow
@@ -232,6 +234,12 @@ class GigforceToolbar(
             titleTV.text = title
     }
 
+    fun setTitleTypeface(
+        style : Int
+     ) {
+        titleTV.setTypeface(titleTV.typeface,style)
+    }
+
     fun hideTitle() {
         titleTV.visibility = View.GONE
     }
@@ -248,6 +256,18 @@ class GigforceToolbar(
 
     fun hideSubTitle() {
         subTitleTV.visibility = View.GONE
+    }
+
+    fun changeBackButtonDrawable(){
+        backButton.setImageDrawable(resources.getDrawable(R.drawable.ic_chevron))
+    }
+
+    fun setBackButtonDrawable(
+        @DrawableRes drawable : Int
+    ){
+        backButton.setImageDrawable(
+            ResourcesCompat.getDrawable(resources,drawable,null)
+        )
     }
 
     fun setTitleClickListener(

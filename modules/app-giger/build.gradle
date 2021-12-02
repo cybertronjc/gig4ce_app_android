@@ -5,13 +5,12 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
 //
 android {
-    compileSdkVersion 29
+    compileSdkVersion buildConfig.compileSdk
+    buildToolsVersion buildConfig.buildToolVersion
 
     defaultConfig {
-        minSdkVersion 23
-        targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion buildConfig.minSdk
+        targetSdkVersion buildConfig.targetSdk
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -41,6 +40,7 @@ dependencies {
     implementation project(path: ':modules:common-image-capture-picker')
     implementation project(path: ':modules:profile')
     implementation project(path: ':modules:landing')
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.1'
 
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.1'
 

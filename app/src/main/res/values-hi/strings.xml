@@ -842,7 +842,7 @@
     <string name="title_app">शीर्षक</string>
     <string name="mock_name">नकली नाम</string>
     <string name="restart_update">अद्यतन पुनरारंभ करें</string>
-    <string name="restart">रद्द करें</string>
+    <string name="restart">रीस्टार्ट</string>
     <string name="add_headline">शीर्षक जोड़ें</string>
     <string name="add_tag">टैग जोड़ो</string>
     <string name="newtag">#Newtag</string>
@@ -956,4 +956,6 @@
     <string name="from_contacts_app">\"आपके संपर्कों से!!!\"</string>
     <string name="from_emails_app">\"आपके ईमेल से!!!\"</string>
     <string name="know_lang_app">\"ज्ञात भाषा: \"</string>
+    <string name="account_blocked_app">आपका खाता अस्थायी रूप से लॉक कर दिया गया है। कृपया कुछ समय बाद पुन: प्रयास करें।</string>
+
 </resources>

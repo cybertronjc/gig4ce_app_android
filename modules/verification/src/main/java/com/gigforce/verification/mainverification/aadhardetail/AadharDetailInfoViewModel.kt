@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.core.StringConstants
 import com.gigforce.core.datamodels.City
 import com.gigforce.core.datamodels.State
 import com.gigforce.core.datamodels.client_activation.JpApplication
@@ -16,6 +17,7 @@ import com.gigforce.core.di.repo.IAadhaarDetailsRepository
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.verification.mainverification.KycOcrResultModel
 import com.gigforce.verification.mainverification.VerificationKycRepo
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -47,21 +49,21 @@ class AadharDetailInfoViewModel @Inject constructor(private val aadharDetailsRep
 
     }
 
-    fun getKycOcrResult(type: String, subType: String, image: MultipartBody.Part) =
+    fun getKycOcrResult(type: String, subType: String, image: MultipartBody.Part, uid: String) =
             viewModelScope.launch {
                 try {
-                    _kycOcrResult.value = verificationKycRepo.getVerificationOcrResult(type, subType, image)
+                    _kycOcrResult.value = verificationKycRepo.getVerificationOcrResult(type, uid, subType, image)
                 } catch (e: Exception) {
                     _kycOcrResult.value = KycOcrResultModel(status = false, message = e.message)
                 }
                 Log.d("result", _kycOcrResult.toString())
             }
 
-    fun getVerificationData() = viewModelScope.launch {
+    fun getVerificationData(uid: String) = viewModelScope.launch {
         try {
-            val veriData = aadharDetailsRepo.getVerificationDetails()
+            val veriData = aadharDetailsRepo.getVerificationDetails(uid)
             verificationResult.postValue(veriData)
-            val profileNominee = aadharDetailsRepo.getProfileNominee()
+            val profileNominee = aadharDetailsRepo.getProfileNominee(uid)
             _profileNominee.postValue(profileNominee)
         } catch (e: Exception) {
             e.printStackTrace()
@@ -86,16 +88,16 @@ class AadharDetailInfoViewModel @Inject constructor(private val aadharDetailsRep
         }
 
     }
-    fun setAadhaarDetails(submitDataModel: AadhaarDetailsDataModel, nomineeAsFather : Boolean ,mJobProfileId : String)= viewModelScope.launch {
+    fun setAadhaarDetails(submitDataModel: AadhaarDetailsDataModel, nomineeAsFather : Boolean ,mJobProfileId : String, uid: String)= viewModelScope.launch {
             try {
-                val updated = aadharDetailsRepo.setAadhaarFromVerificationModule(nomineeAsFather, submitDataModel)
+                val updated = aadharDetailsRepo.setAadhaarFromVerificationModule(uid, nomineeAsFather, submitDataModel)
                 updatedResult.postValue(updated)
                 if (mJobProfileId.isNotEmpty()){
                     FirebaseFirestore.getInstance().collection("JP_Applications")
                             .whereEqualTo("jpid", mJobProfileId)
                             .whereEqualTo(
                                     "gigerId",
-                                    FirebaseAuthStateListener.getInstance().getCurrentSignInUserInfoOrThrow().uid
+                                    uid
                             ).addSnapshotListener { jp_application, _ ->
 
                                 jp_application?.let {
@@ -106,9 +108,10 @@ class AadharDetailInfoViewModel @Inject constructor(private val aadharDetailsRep
                                             draft.isDone = true
                                         }
                                     }
+                                    var map = mapOf("application" to jpApplication.application, "updatedAt" to Timestamp.now(), "updatedBy" to StringConstants.APP.value)
                                     FirebaseFirestore.getInstance().collection("JP_Applications")
                                             .document(jp_application.documents[0].id)
-                                            .update("application", jpApplication.application)
+                                            .update(map)
                                             .addOnCompleteListener {
                                                 if (it.isSuccessful) {
                                                     _observableAddApplicationSuccess.value =
