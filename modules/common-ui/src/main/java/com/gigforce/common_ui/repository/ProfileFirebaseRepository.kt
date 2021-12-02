@@ -7,6 +7,7 @@ import com.gigforce.core.datamodels.profile.*
 import com.gigforce.core.di.repo.IProfileFirestoreRepository
 import com.gigforce.core.extensions.replace
 import com.gigforce.core.extensions.toFirebaseTimeStamp
+import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.core.utils.EventLogs.getOrThrow
 import com.gigforce.core.utils.EventLogs.setOrThrow
 import com.gigforce.core.utils.EventLogs.updateOrThrow
@@ -249,7 +250,7 @@ class ProfileFirebaseRepository @Inject constructor() : BaseFirestoreDBRepositor
                     mapOf(
                         "tags" to FieldValue.arrayUnion(tag),
                         "updatedAt" to Timestamp.now(),
-                        "updatedBy" to StringConstants.APP.value
+                        "updatedBy" to FirebaseAuthStateListener.getInstance().getCurrentSignInUserInfoOrThrow().uid
                     ))
         }
     }
@@ -260,7 +261,7 @@ class ProfileFirebaseRepository @Inject constructor() : BaseFirestoreDBRepositor
                 mapOf(
                     "profileAvatarName" to profileAvatarName,
                     "updatedAt" to Timestamp.now(),
-                    "updatedBy" to StringConstants.APP.value
+                    "updatedBy" to FirebaseAuthStateListener.getInstance().getCurrentSignInUserInfoOrThrow().uid
                 )
             )
 
@@ -272,7 +273,7 @@ class ProfileFirebaseRepository @Inject constructor() : BaseFirestoreDBRepositor
                 mapOf(
                     "profilePicThumbnail" to profileAvatarName,
                     "updatedAt" to Timestamp.now(),
-                    "updatedBy" to StringConstants.APP.value
+                    "updatedBy" to FirebaseAuthStateListener.getInstance().getCurrentSignInUserInfoOrThrow().uid
                 )
             )
 
@@ -289,7 +290,7 @@ class ProfileFirebaseRepository @Inject constructor() : BaseFirestoreDBRepositor
                                 "profileAvatarName" to profileAvatarName,
                                 "profilePicThumbnail" to profileAvatarNameThumbnail,
                                 "updatedAt" to Timestamp.now(),
-                                "updatedBy" to StringConstants.APP.value
+                                "updatedBy" to FirebaseAuthStateListener.getInstance().getCurrentSignInUserInfoOrThrow().uid
                         )
                 )
     }
@@ -307,7 +308,7 @@ class ProfileFirebaseRepository @Inject constructor() : BaseFirestoreDBRepositor
                 mapOf(
                     "bio" to bio,
                     "updatedAt" to Timestamp.now(),
-                    "updatedBy" to StringConstants.APP.value
+                    "updatedBy" to FirebaseAuthStateListener.getInstance().getCurrentSignInUserInfoOrThrow().uid
                 )
                 )
     }
@@ -318,7 +319,7 @@ class ProfileFirebaseRepository @Inject constructor() : BaseFirestoreDBRepositor
                 mapOf(
                     "aboutMe" to aboutMe,
                     "updatedAt" to Timestamp.now(),
-                    "updatedBy" to StringConstants.APP.value
+                    "updatedBy" to FirebaseAuthStateListener.getInstance().getCurrentSignInUserInfoOrThrow().uid
                 )
                 )
     }
@@ -413,7 +414,7 @@ class ProfileFirebaseRepository @Inject constructor() : BaseFirestoreDBRepositor
                                 "address.current.state" to address.state,
                                 "address.current.pincode" to address.pincode,
                                 "updatedAt" to Timestamp.now(),
-                                "updatedBy" to StringConstants.APP.value
+                                "updatedBy" to FirebaseAuthStateListener.getInstance().getCurrentSignInUserInfoOrThrow().uid
 
                         )
                 )
@@ -469,7 +470,7 @@ class ProfileFirebaseRepository @Inject constructor() : BaseFirestoreDBRepositor
             }
             firebaseDB
                     .collection(profileCollectionName).document(uid).update(mapOf("name" to name, "dateOfBirth" to dateOfBirth.toFirebaseTimeStamp(), "gender" to gender, "highestEducation" to highestQualification, "isonboardingdone" to true, "updatedAt" to Timestamp.now(),
-                    "updatedBy" to StringConstants.APP.value)).addOnFailureListener { exception ->
+                    "updatedBy" to FirebaseAuthStateListener.getInstance().getCurrentSignInUserInfoOrThrow().uid)).addOnFailureListener { exception ->
                         FirebaseCrashlytics.getInstance().log("Exception : updateUserDetails Method $exception")
                     }
         }
@@ -506,7 +507,7 @@ class ProfileFirebaseRepository @Inject constructor() : BaseFirestoreDBRepositor
                                     "address.current.city" to city,
                                     "address.current.empty" to false,
                                     "updatedAt" to Timestamp.now(),
-                                    "updatedBy" to StringConstants.APP.value
+                                    "updatedBy" to FirebaseAuthStateListener.getInstance().getCurrentSignInUserInfoOrThrow().uid
                             )
                     )
         } else {
@@ -525,7 +526,7 @@ class ProfileFirebaseRepository @Inject constructor() : BaseFirestoreDBRepositor
                                     "address.current.empty" to false,
                                     "address.current.preferredDistanceActive" to true,
                                     "updatedAt" to Timestamp.now(),
-                                    "updatedBy" to StringConstants.APP.value
+                                    "updatedBy" to FirebaseAuthStateListener.getInstance().getCurrentSignInUserInfoOrThrow().uid
                             )
                     )
         }
