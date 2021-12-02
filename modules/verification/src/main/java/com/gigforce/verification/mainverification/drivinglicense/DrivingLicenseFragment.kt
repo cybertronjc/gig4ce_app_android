@@ -27,6 +27,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import com.gigforce.ambassador.user_rollment.kycdocs.Data
 import com.gigforce.common_image_picker.image_cropper.ImageCropActivity
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.hideSoftKeyboard
@@ -45,7 +46,6 @@ import com.gigforce.verification.R
 import com.gigforce.verification.databinding.DrivingLicenseFragmentBinding
 import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.gigforce.verification.gigerVerfication.drivingLicense.DrivingLicenseSides
-import com.gigforce.verification.mainverification.Data
 import com.gigforce.verification.mainverification.OLDStateHolder
 import com.gigforce.verification.mainverification.VerificationClickOrSelectImageBottomSheet
 import com.gigforce.verification.util.VerificationConstants
@@ -420,7 +420,7 @@ class DrivingLicenseFragment : Fragment(),
                             getString(R.string.info_of_dl_success_veri)
                         )
                         if (!it.dateOfBirth.isNullOrBlank()) {
-                            if (it.dateOfBirth.contains("/") || it.dateOfBirth.contains("-")) {
+                            if (it.dateOfBirth!!.contains("/") || it.dateOfBirth!!.contains("-")) {
                                 viewBinding.dobDate.text = it.dateOfBirth
                                 viewBinding.calendarLabel.visible()
                             }
@@ -430,11 +430,11 @@ class DrivingLicenseFragment : Fragment(),
                             viewBinding.dlnoTil.editText?.setText(it.dlNumber)
 
                         if (!it.validTill.isNullOrBlank()) {
-                            if (it.validTill.contains("-")) {
-                                var dateInFormat = getDDMMYYYYFormat(it.validTill)
+                            if (it.validTill!!.contains("-")) {
+                                var dateInFormat = getDDMMYYYYFormat(it.validTill!!)
                                 if (dateInFormat.isNotBlank())
                                     viewBinding.expiryDate.text = dateInFormat
-                            } else if (it.validTill.contains("/"))
+                            } else if (it.validTill!!.contains("/"))
                                 viewBinding.expiryDate.text = it.validTill
                         }
 

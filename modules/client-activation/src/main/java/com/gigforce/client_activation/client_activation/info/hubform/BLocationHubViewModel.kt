@@ -142,7 +142,8 @@ class BLocationHubViewModel : ViewModel() {
                                                             "stateId" to getStateId(state, hub),
                                                             "type" to "hub_location",
                                                             "updatedAt" to Timestamp.now(),
-                                                            "updatedBy" to StringConstants.APP.value
+                                                            "updatedBy" to FirebaseAuthStateListener.getInstance()
+                                                                .getCurrentSignInUserInfoOrThrow().uid
                                                         )
                                                     ).addOnCompleteListener { complete ->
                                                         run {
@@ -159,7 +160,8 @@ class BLocationHubViewModel : ViewModel() {
                                                                 }
                                                                 val map = mapOf("application" to
                                                                     jpApplication.application, "updatedAt" to Timestamp.now(),
-                                                                    "updatedBy" to StringConstants.APP.value)
+                                                                    "updatedBy" to FirebaseAuthStateListener.getInstance()
+                                                                        .getCurrentSignInUserInfoOrThrow().uid)
                                                                 FirebaseFirestore.getInstance()
                                                                     .collection("JP_Applications")
                                                                     .document(jp_application.documents[0].id)
@@ -189,7 +191,8 @@ class BLocationHubViewModel : ViewModel() {
                                                             "stateId" to getStateId(state, hub),
                                                             "type" to "hub_location",
                                                             "updatedAt" to Timestamp.now(),
-                                                            "updatedBy" to StringConstants.APP.value
+                                                            "updatedBy" to FirebaseAuthStateListener.getInstance()
+                                                                .getCurrentSignInUserInfoOrThrow().uid
                                                         )
                                                     )
                                                     .addOnCompleteListener { complete ->
@@ -205,7 +208,8 @@ class BLocationHubViewModel : ViewModel() {
                                                             }
                                                             val map = mapOf("application" to jpApplication.application,
                                                                 "updatedAt" to Timestamp.now(),
-                                                                "updatedBy" to StringConstants.APP.value)
+                                                                "updatedBy" to FirebaseAuthStateListener.getInstance()
+                                                                    .getCurrentSignInUserInfoOrThrow().uid)
                                                             FirebaseFirestore.getInstance()
                                                                 .collection("JP_Applications")
                                                                 .document(jp_application.documents[0].id)

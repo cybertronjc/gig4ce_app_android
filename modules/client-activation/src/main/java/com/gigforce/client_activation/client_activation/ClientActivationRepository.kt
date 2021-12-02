@@ -5,6 +5,7 @@ import com.gigforce.common_ui.viewdatamodels.client_activation.Media
 import com.gigforce.core.StringConstants
 import com.gigforce.core.fb.BaseFirestoreDBRepository
 import com.gigforce.core.datamodels.profile.ClientActs
+import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ListenerRegistration
@@ -62,7 +63,8 @@ class ClientActivationRepository : BaseFirestoreDBRepository(), ClientActivation
         mInviteUserId: String, location: Location,
         responseCallbacks: ClientActivationNavCallbacks.ClientActivationResponseCallbacks
     ) {
-        val map = mapOf("updatedAt" to Timestamp.now(),"updatedBy" to StringConstants.APP.value, "invited_client_activations" to
+        val map = mapOf("updatedAt" to Timestamp.now(),"updatedBy" to FirebaseAuthStateListener.getInstance()
+            .getCurrentSignInUserInfoOrThrow().uid, "invited_client_activations" to
             FieldValue.arrayUnion(
                 ClientActs(
                     jobProfileId = jobProfileID,

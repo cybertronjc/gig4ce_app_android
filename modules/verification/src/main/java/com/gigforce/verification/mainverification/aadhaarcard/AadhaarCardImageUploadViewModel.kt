@@ -12,9 +12,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AadhaarCardImageUploadViewModel @Inject constructor(
-        private val iBuildConfigVM: IBuildConfigVM
+    private val verificationKycRepo: VerificationKycRepo
 ) : ViewModel() {
-    val verificationKycRepo = VerificationKycRepo(iBuildConfigVM)
+//    val verificationKycRepo = VerificationKycRepo(iBuildConfigVM)
     val _verifiedStatus = MutableLiveData<AadharCardDataModel>()
     val verifiedStatus: LiveData<AadharCardDataModel> = _verifiedStatus
 

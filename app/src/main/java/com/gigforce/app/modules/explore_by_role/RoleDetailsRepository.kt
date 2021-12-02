@@ -37,7 +37,7 @@ class RoleDetailsRepository : BaseFirestoreDBRepository(), RoleDetailsCallbacks 
         roleID: String?,
         responseCallbacks: RoleDetailsCallbacks.ResponseCallbacks
     ) {
-        val map = mapOf("role_interests" to FieldValue.arrayUnion(RoleInterests(roleID)), "updatedAt" to Timestamp.now(), "updatedBy" to StringConstants.APP.value)
+        val map = mapOf("role_interests" to FieldValue.arrayUnion(RoleInterests(roleID)), "updatedAt" to Timestamp.now(), "updatedBy" to getUID())
         db.collection("Profiles").document(getUID())
             .update(map)
             .addOnCompleteListener {

@@ -24,6 +24,7 @@ import com.gigforce.core.extensions.*
 import com.gigforce.core.fb.FirebaseUtils
 import com.gigforce.core.file.FileUtils
 import com.gigforce.core.retrofit.RetrofitFactory
+import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.core.utils.Lse
 import com.gigforce.modules.feature_chat.ChatAttachmentDownloadState
 import com.gigforce.modules.feature_chat.DownloadCompleted
@@ -333,7 +334,8 @@ class ChatPageViewModel constructor(
                         "lastMsgFlowType" to ChatConstants.FLOW_TYPE_OUT,
                         "unseenCount" to 0,
                         "updatedAt" to Timestamp.now(),
-                        "updatedBy" to StringConstants.APP.value
+                        "updatedBy" to FirebaseAuthStateListener.getInstance()
+                            .getCurrentSignInUserInfoOrThrow().uid
                     )
                 )
         } catch (e: Exception) {
@@ -730,7 +732,8 @@ class ChatPageViewModel constructor(
                     mapOf(
                         "headerId" to headerId,
                         "updatedAt" to Timestamp.now(),
-                        "updatedBy" to StringConstants.APP.value
+                        "updatedBy" to FirebaseAuthStateListener.getInstance()
+                            .getCurrentSignInUserInfoOrThrow().uid
                     )
                 )
         }
@@ -748,7 +751,8 @@ class ChatPageViewModel constructor(
                 .document(uid)
                 .collection("headers")
                 .document(headerId)
-                .updateOrThrow(mapOf("unseenCount" to 0,"updatedAt" to Timestamp.now(), "updatedBy" to StringConstants.APP.value))
+                .updateOrThrow(mapOf("unseenCount" to 0,"updatedAt" to Timestamp.now(), "updatedBy" to FirebaseAuthStateListener.getInstance()
+                    .getCurrentSignInUserInfoOrThrow().uid))
         } catch (e: Exception) {
             Log.e(TAG, "Unable to set unseen count to zero", e)
         }

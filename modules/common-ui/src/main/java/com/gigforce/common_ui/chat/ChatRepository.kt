@@ -25,6 +25,7 @@ import com.gigforce.core.extensions.getOrThrow
 import com.gigforce.core.extensions.updateOrThrow
 import com.gigforce.core.file.FileUtils
 import com.gigforce.core.image.ImageUtils
+import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
@@ -313,7 +314,8 @@ class ChatRepository constructor(
                         mapOf(
                             "isBlocked" to true,
                             "updatedAt" to Timestamp.now(),
-                            "updatedBy" to StringConstants.APP.value
+                            "updatedBy" to FirebaseAuthStateListener.getInstance()
+                                .getCurrentSignInUserInfoOrThrow().uid
                         )
                     )
             }
@@ -347,7 +349,8 @@ class ChatRepository constructor(
                         mapOf(
                             "isBlocked" to !isUserBlocked,
                             "updatedAt" to Timestamp.now(),
-                            "updatedBy" to StringConstants.APP.value
+                            "updatedBy" to FirebaseAuthStateListener.getInstance()
+                                .getCurrentSignInUserInfoOrThrow().uid
                         )
                     )
             }
@@ -374,7 +377,8 @@ class ChatRepository constructor(
                     mapOf(
                         "isUserBlocked" to block,
                         "updatedAt" to Timestamp.now(),
-                        "updatedBy" to StringConstants.APP.value
+                        "updatedBy" to FirebaseAuthStateListener.getInstance()
+                            .getCurrentSignInUserInfoOrThrow().uid
                     )
                 )
         } catch (e: Exception) {
@@ -412,7 +416,8 @@ class ChatRepository constructor(
                         headerRef, mapOf(
                             "status" to ChatConstants.MESSAGE_STATUS_READ_BY_USER,
                             "updatedAt" to Timestamp.now(),
-                            "updatedBy" to StringConstants.APP.value
+                            "updatedBy" to FirebaseAuthStateListener.getInstance()
+                                .getCurrentSignInUserInfoOrThrow().uid
                         )
                     )
                 }
@@ -425,7 +430,8 @@ class ChatRepository constructor(
                     messageRef, mapOf(
                         "status" to ChatConstants.MESSAGE_STATUS_READ_BY_USER,
                         "updatedAt" to Timestamp.now(),
-                        "updatedBy" to StringConstants.APP.value
+                        "updatedBy" to FirebaseAuthStateListener.getInstance()
+                            .getCurrentSignInUserInfoOrThrow().uid
                     )
                 )
             }
@@ -504,7 +510,8 @@ class ChatRepository constructor(
                         messageDocRef, mapOf(
                             "status" to ChatConstants.MESSAGE_STATUS_RECEIVED_BY_USER,
                             "updatedAt" to Timestamp.now(),
-                            "updatedBy" to StringConstants.APP.value
+                            "updatedBy" to FirebaseAuthStateListener.getInstance()
+                                .getCurrentSignInUserInfoOrThrow().uid
                         )
                     )
                 }
@@ -521,7 +528,8 @@ class ChatRepository constructor(
                         headerRef, mapOf(
                             "status" to ChatConstants.MESSAGE_STATUS_RECEIVED_BY_USER,
                             "updatedAt" to Timestamp.now(),
-                            "updatedBy" to StringConstants.APP.value
+                            "updatedBy" to FirebaseAuthStateListener.getInstance()
+                                .getCurrentSignInUserInfoOrThrow().uid
                         )
                     )
                 }
@@ -579,7 +587,7 @@ class ChatRepository constructor(
             mapOf(
                 "isDeleted" to true,
                 "deletedOn" to Timestamp.now(),
-                "updatedAt" to Timestamp.now(), "updatedBy" to StringConstants.APP.value
+                "updatedAt" to Timestamp.now(), "updatedBy" to getUID()
             )
         )
 

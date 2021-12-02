@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.ambassador.user_rollment.kycdocs.Data
-import com.gigforce.ambassador.user_rollment.kycdocs.KycOcrResultModel
+import com.gigforce.common_ui.remote.verification.KycOcrResultModel
 import com.gigforce.ambassador.user_rollment.kycdocs.VerificationKycRepo
 import com.gigforce.core.datamodels.verification.DrivingLicenseDataModel
 import com.gigforce.core.datamodels.verification.VerificationBaseModel
@@ -18,9 +18,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class UserDrivingLicenseViewModel @Inject constructor(
-        private val iBuildConfigVM: IBuildConfigVM
+    private val verificationKycRepo: VerificationKycRepo
 ) : ViewModel() {
-    val verificationKycRepo = VerificationKycRepo(iBuildConfigVM)
+//    val verificationKycRepo = VerificationKycRepo(iBuildConfigVM)
     var kycOcrResultModel: KycOcrResultModel? = null
     val _kycOcrResult = MutableLiveData<KycOcrResultModel>()
     val kycOcrResult: LiveData<KycOcrResultModel> = _kycOcrResult

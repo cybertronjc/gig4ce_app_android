@@ -44,7 +44,7 @@ class ExploreByRoleRepository : BaseFirestoreDBRepository(), ExploreByRoleCallba
                     lon = location?.longitude.toString(),
                     invitedBy = inviteID ?: ""
                 )
-            ), "updatedAt" to Timestamp.now(), "updatedBy" to StringConstants.APP.value
+            ), "updatedAt" to Timestamp.now(), "updatedBy" to getUID()
         )
         db.collection("Profiles").document(getUID())
             .update(

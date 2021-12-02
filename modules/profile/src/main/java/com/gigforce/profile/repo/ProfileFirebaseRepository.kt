@@ -505,7 +505,7 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
                 .updateOrThrow(mapOf(
                         "skills" to interests,
                         "updatedAt" to Timestamp.now(),
-                        "updatedBy" to StringConstants.APP.value
+                        "updatedBy" to uid
                 ))
     }
 
@@ -517,7 +517,7 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
                         "workingDays" to workingDays,
                         "timeSlots" to timeSlots,
                         "updatedAt" to Timestamp.now(),
-                        "updatedBy" to StringConstants.APP.value
+                        "updatedBy" to uid
                 ))
     }
 
