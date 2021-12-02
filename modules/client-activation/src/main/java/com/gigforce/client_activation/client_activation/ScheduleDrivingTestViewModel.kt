@@ -12,6 +12,7 @@ import com.gigforce.core.datamodels.client_activation.JpApplication
 import com.gigforce.core.datamodels.login.LoginResponse
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.di.repo.UserEnrollmentRepository
+import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.core.utils.Lce
 import com.google.firebase.Timestamp
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -147,7 +148,7 @@ class ScheduleDrivingTestViewModel @Inject constructor(private val buildConfig: 
             .collection("Submissions")
         tlMobileNo?.let {
             repository.getCollectionReference().document(items.documents[0].id)
-                .update(mapOf("verifiedTLNumber" to it, "updatedAt" to Timestamp.now(), "updatedBy" to StringConstants.APP.value))
+                .update(mapOf("verifiedTLNumber" to it, "updatedAt" to Timestamp.now(), "updatedBy" to FirebaseAuthStateListener.getInstance().getCurrentSignInUserInfoOrThrow().uid))
         }
 
         val task = if (submissions?.documents?.isEmpty() == true)
@@ -190,7 +191,7 @@ class ScheduleDrivingTestViewModel @Inject constructor(private val buildConfig: 
                         mapOf(
                             "activation" to jpApplication.activation,
                             "status" to jpApplication.status,
-                            "updatedAt" to Timestamp.now(), "updatedBy" to StringConstants.APP.value
+                            "updatedAt" to Timestamp.now(), "updatedBy" to FirebaseAuthStateListener.getInstance().getCurrentSignInUserInfoOrThrow().uid
                         )
                     )
                     .addOnCompleteListener {
