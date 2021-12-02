@@ -98,7 +98,7 @@ class LeadManagementRepository @Inject constructor(
                 "reference.relation" to relation,
                 "reference.contactNo" to contactNo,
                 "updatedAt" to Timestamp.now(),
-                "updatedBy" to StringConstants.APP.value
+                "updatedBy" to FirebaseAuthStateListener.getInstance().getCurrentSignInUserInfoOrThrow().uid
             )
         )
 
@@ -204,7 +204,7 @@ class LeadManagementRepository @Inject constructor(
                         "tradeName" to tradeName,
                         "jobProfileIcon" to jobProfileIcon,
                         "updatedAt" to Timestamp.now(),
-                        "updatedBy" to StringConstants.APP.value
+                        "updatedBy" to FirebaseAuthStateListener.getInstance().getCurrentSignInUserInfoOrThrow().uid
                     )
                 )
 

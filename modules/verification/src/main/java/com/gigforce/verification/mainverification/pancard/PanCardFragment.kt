@@ -27,6 +27,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import com.gigforce.ambassador.user_rollment.kycdocs.Data
 import com.gigforce.common_image_picker.image_cropper.ImageCropActivity
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.hideSoftKeyboard
@@ -46,7 +47,6 @@ import com.gigforce.verification.R
 import com.gigforce.verification.databinding.PanCardFragmentBinding
 import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.gigforce.verification.gigerVerfication.panCard.AddPanCardInfoFragment
-import com.gigforce.verification.mainverification.Data
 import com.gigforce.verification.mainverification.OLDStateHolder
 import com.gigforce.verification.mainverification.VerificationClickOrSelectImageBottomSheet
 import com.gigforce.verification.util.VerificationConstants
@@ -188,7 +188,7 @@ class PanCardFragment : Fragment(),
                 if (it.status) {
                     if (!it.panNumber.isNullOrBlank()) {
 
-                        if (VerificationValidations.isPanCardValid(it.panNumber)) {
+                        if (VerificationValidations.isPanCardValid(it.panNumber!!)) {
                             var map = mapOf(
                                 "PAN number" to it.panNumber.toString()
                             )

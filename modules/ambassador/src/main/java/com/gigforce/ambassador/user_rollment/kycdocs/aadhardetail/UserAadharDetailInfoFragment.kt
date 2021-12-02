@@ -751,7 +751,7 @@ class UserAadharDetailInfoFragment : Fragment(), VerificationClickOrSelectImageB
                                         getCitiesWhenStateNotEmpty(state)
                                         cityAutofillRequire = true
                                         if (it.city?.isNotBlank() == true) {
-                                            autofillCityName = it.city
+                                            autofillCityName = it.city?:""
                                         }
                                     }
                                 }

@@ -1,5 +1,6 @@
-package com.gigforce.ambassador.user_rollment.kycdocs
+package com.gigforce.common_ui.remote.verification
 
+import com.gigforce.ambassador.user_rollment.kycdocs.KycVerifyReqModel
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.*

@@ -5,9 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gigforce.ambassador.user_rollment.kycdocs.KycOcrResultModel
+import com.gigforce.common_ui.remote.verification.KycOcrResultModel
 import com.gigforce.ambassador.user_rollment.kycdocs.VerificationKycRepo
-import com.gigforce.core.StringConstants
 import com.gigforce.core.datamodels.City
 import com.gigforce.core.datamodels.State
 import com.gigforce.core.datamodels.client_activation.JpApplication
@@ -24,7 +23,7 @@ import okhttp3.MultipartBody
 import javax.inject.Inject
 
 @HiltViewModel
-class UserAadharDetailInfoViewModel @Inject constructor(private val iBuildConfigVM: IBuildConfigVM) :
+class UserAadharDetailInfoViewModel @Inject constructor(private val verificationKycRepo: VerificationKycRepo) :
     ViewModel() {
     private val aadharDetailsRepo: UserAadharDetailRepository = UserAadharDetailRepository()
     val statesResult: MutableLiveData<MutableList<State>> = MutableLiveData<MutableList<State>>()
@@ -37,7 +36,7 @@ class UserAadharDetailInfoViewModel @Inject constructor(private val iBuildConfig
     val updatedResult: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
     private val _observableAddApplicationSuccess: MutableLiveData<Boolean> = MutableLiveData()
     val observableAddApplicationSuccess: MutableLiveData<Boolean> = _observableAddApplicationSuccess
-    val verificationKycRepo = VerificationKycRepo(iBuildConfigVM)
+//    val verificationKycRepo = VerificationKycRepo(iBuildConfigVM)
     val _profileNominee: MutableLiveData<ProfileNominee> = MutableLiveData<ProfileNominee>()
     val profileNominee: LiveData<ProfileNominee> = _profileNominee
     fun getStates() = viewModelScope.launch {

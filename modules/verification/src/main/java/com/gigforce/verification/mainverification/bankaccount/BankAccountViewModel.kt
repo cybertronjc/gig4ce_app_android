@@ -5,11 +5,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.ambassador.user_rollment.kycdocs.Data
 import com.gigforce.core.datamodels.verification.BankDetailsDataModel
 import com.gigforce.core.datamodels.verification.VerificationBaseModel
-import com.gigforce.core.di.interfaces.IBuildConfigVM
-import com.gigforce.verification.mainverification.Data
-import com.gigforce.verification.mainverification.KycOcrResultModel
+import com.gigforce.common_ui.remote.verification.KycOcrResultModel
 import com.gigforce.verification.mainverification.VerificationKycRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -18,9 +17,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class BankAccountViewModel @Inject constructor(
-    private val iBuildConfigVM: IBuildConfigVM
+//    private val iBuildConfigVM: IBuildConfigVM
+    private val verificationKycRepo: VerificationKycRepo
 ) : ViewModel() {
-    val verificationKycRepo = VerificationKycRepo(iBuildConfigVM)
+//    val verificationKycRepo = VerificationKycRepo(iBuildConfigVM)
     var kycOcrResultModel: KycOcrResultModel? = null
     val _kycOcrResult = MutableLiveData<KycOcrResultModel>()
     val kycOcrResult: LiveData<KycOcrResultModel> = _kycOcrResult

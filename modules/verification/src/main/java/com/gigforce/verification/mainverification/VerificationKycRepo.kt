@@ -1,7 +1,9 @@
 package com.gigforce.verification.mainverification
 
 import android.util.Log
-import com.gigforce.core.StringConstants
+import com.gigforce.ambassador.user_rollment.kycdocs.Data
+import com.gigforce.ambassador.user_rollment.kycdocs.KycVerifyReqModel
+import com.gigforce.common_ui.remote.verification.*
 import com.gigforce.core.fb.BaseFirestoreDBRepository
 import com.gigforce.core.datamodels.client_activation.States
 import com.gigforce.core.datamodels.verification.VerificationBaseModel
@@ -11,17 +13,15 @@ import com.gigforce.core.retrofit.RetrofitFactory
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.google.firebase.Timestamp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.gson.JsonArray
-import com.google.gson.JsonObject
 import kotlinx.coroutines.tasks.await
 import okhttp3.MultipartBody
+import javax.inject.Inject
 
-class VerificationKycRepo(private val iBuildConfigVM: IBuildConfigVM) :
+class VerificationKycRepo @Inject constructor(private val iBuildConfigVM: IBuildConfigVM, private val kycService : VerificationKycService) :
     BaseFirestoreDBRepository() {
-    private val kycService: VerificationKycService = RetrofitFactory.createService(
-        VerificationKycService::class.java
-    )
+//    private val kycService: VerificationKycService = RetrofitFactory.createService(
+//        VerificationKycService::class.java
+//    )
 
     suspend fun getVerificationOcrResult(
         type: String,

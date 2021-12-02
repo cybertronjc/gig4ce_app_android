@@ -17,7 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class VerificationMainViewModel @Inject constructor(
     @ApplicationContext private val appContext: Context,
-    private val iBuildConfigVM: IBuildConfigVM
+//    private val iBuildConfigVM: IBuildConfigVM,
+    private val verificationKycRepo : VerificationKycRepo
 ) : ViewModel() {
     var _allDocumentsData = MutableLiveData<List<SimpleCardDVM>>()
     var allDocumentsData: LiveData<List<SimpleCardDVM>> = _allDocumentsData
@@ -25,7 +26,7 @@ class VerificationMainViewModel @Inject constructor(
     var _allDocumentsVerified = MutableLiveData<Boolean>()
     var allDocumentsVerified: LiveData<Boolean> = _allDocumentsVerified
 
-    val verificationKycRepo = VerificationKycRepo(iBuildConfigVM)
+//    val verificationKycRepo = VerificationKycRepo(iBuildConfigVM)
     val TAP_TO_SELECT = "Tap to select"
 
     init {

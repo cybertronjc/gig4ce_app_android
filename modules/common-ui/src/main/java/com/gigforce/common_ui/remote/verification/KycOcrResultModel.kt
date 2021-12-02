@@ -1,4 +1,4 @@
-package com.gigforce.verification.mainverification
+package com.gigforce.common_ui.remote.verification
 
 import com.google.gson.annotations.SerializedName
 
@@ -35,7 +35,6 @@ data class KycOcrResultModel(
     val accountNumber: String? = "",
     @SerializedName("bankName")
     val bankName: String? = "",
-
     @SerializedName("city")
     val city: String? = "",
     @SerializedName("state")
@@ -48,4 +47,5 @@ data class KycOcrResultModel(
     val address1: String? = "",
     @SerializedName("address2")
     val address2: String? = ""
+
 )

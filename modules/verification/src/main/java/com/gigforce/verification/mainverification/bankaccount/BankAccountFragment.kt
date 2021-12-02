@@ -25,6 +25,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.gigforce.ambassador.user_rollment.kycdocs.Data
 import com.gigforce.common_image_picker.image_cropper.ImageCropActivity
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.hideSoftKeyboard
@@ -42,10 +43,8 @@ import com.gigforce.core.utils.VerificationValidations
 import com.gigforce.verification.R
 import com.gigforce.verification.databinding.BankAccountFragmentBinding
 import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
-import com.gigforce.verification.mainverification.Data
 import com.gigforce.verification.mainverification.OLDStateHolder
 import com.gigforce.verification.mainverification.VerificationClickOrSelectImageBottomSheet
-import com.gigforce.verification.mainverification.aadhardetail.AadharDetailInfoFragment
 import com.gigforce.verification.util.VerificationConstants
 import com.gigforce.verification.util.VerificationEvents
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
