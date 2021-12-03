@@ -11,7 +11,6 @@ import androidx.core.text.buildSpannedString
 import androidx.fragment.app.FragmentManager
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.databinding.LayoutDynamicFieldSignatureView2Binding
-import com.gigforce.common_ui.databinding.LayoutDynamicFieldSignatureViewBinding
 import com.gigforce.common_ui.dynamic_fields.DynamicFieldView
 import com.gigforce.common_ui.dynamic_fields.data.DataFromDynamicInputField
 import com.gigforce.common_ui.dynamic_fields.data.DynamicField
@@ -106,13 +105,13 @@ class DynamicSignatureDrawerView2(
     override fun setError(
         error: SpannedString
     ) {
-        viewBinding.errorLayout.root.visible()
-        viewBinding.errorLayout.errorTextview.text = error
+//        viewBinding.errorLayout.root.visible()
+//        viewBinding.errorLayout.errorTextview.text = error
     }
 
     override fun removeError() {
-        viewBinding.errorLayout.errorTextview.text = null
-        viewBinding.errorLayout.root.gone()
+//        viewBinding.errorLayout.errorTextview.text = null
+//        viewBinding.errorLayout.root.gone()
     }
 
     override fun validateDataAndReturnDataElseNull(): DataFromDynamicInputField? {

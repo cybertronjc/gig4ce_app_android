@@ -10,7 +10,6 @@ import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import androidx.fragment.app.FragmentManager
 import com.gigforce.common_ui.R
-import com.gigforce.common_ui.databinding.LayoutDynamicFieldSignatureViewBinding
 import com.gigforce.common_ui.dynamic_fields.DynamicFieldView
 import com.gigforce.common_ui.dynamic_fields.data.DataFromDynamicInputField
 import com.gigforce.common_ui.dynamic_fields.data.DynamicField
@@ -27,9 +26,9 @@ class DynamicSignatureDrawerView(
 ) : LinearLayout(
     context,
     attrs
-), DynamicFieldView {
+) {
 
-    private var viewBinding: LayoutDynamicFieldSignatureViewBinding
+//    private var viewBinding: LayoutDynamicFieldSignatureViewBinding
     private lateinit var viewData: DynamicField
     private lateinit var fragmentManager : FragmentManager
     private var signatureImagePath : String? = null
@@ -40,29 +39,29 @@ class DynamicSignatureDrawerView(
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
 
-        viewBinding = LayoutDynamicFieldSignatureViewBinding.inflate(
-            LayoutInflater.from(context),
-            this,
-            true
-        )
+//        viewBinding = LayoutDynamicFieldSignatureViewBinding.inflate(
+//            LayoutInflater.from(context),
+//            this,
+//            true
+//        )
 
-        setListenersOnView()
+//        setListenersOnView()
     }
 
-    override fun bind(
-        fieldDetails: DynamicField
-    ) {
-        viewData = fieldDetails
-        tag = id //setting id of dynamic view as view tag to identify layout at runtime
-
-        setTitle(fieldDetails.title)
-        settingFieldAsOptionalOrMandatory(fieldDetails)
-        setPrefillTextOrHint(
-            fieldDetails.defaultSelectedDate,
-            fieldDetails.prefillText,
-            fieldDetails.title
-        )
-    }
+//    override fun bind(
+//        fieldDetails: DynamicField
+//    ) {
+//        viewData = fieldDetails
+//        tag = id //setting id of dynamic view as view tag to identify layout at runtime
+//
+//        setTitle(fieldDetails.title)
+//        settingFieldAsOptionalOrMandatory(fieldDetails)
+//        setPrefillTextOrHint(
+//            fieldDetails.defaultSelectedDate,
+//            fieldDetails.prefillText,
+//            fieldDetails.title
+//        )
+//    }
 
     fun setFragmentManager(
         fragmentManager : FragmentManager
@@ -80,47 +79,47 @@ class DynamicSignatureDrawerView(
 
 
     private fun setTitle(title: String?) {
-        viewBinding.titleTextview.text = title
+//        viewBinding.titleTextview.text = title
     }
 
     private fun settingFieldAsOptionalOrMandatory(fieldDetails: DynamicField) {
-        if (fieldDetails.mandatory) {
-            viewBinding.optionalTextview.gone()
-            viewBinding.titleTextview.addMandatorySymbolToTextEnd()
-        } else {
-            viewBinding.optionalTextview.visible()
-        }
+//        if (fieldDetails.mandatory) {
+//            viewBinding.optionalTextview.gone()
+//            viewBinding.titleTextview.addMandatorySymbolToTextEnd()
+//        } else {
+//            viewBinding.optionalTextview.visible()
+//        }
     }
 
-    override fun isEnteredOrSelectedDataValid(): Boolean {
-        return if(viewData.mandatory){
-            signatureImagePath != null
-        } else
-            true
-    }
-
-
-    override fun setError(
-        error: SpannedString
-    ) {
-        viewBinding.errorLayout.root.visible()
-        viewBinding.errorLayout.errorTextview.text = error
-    }
-
-    override fun removeError() {
-        viewBinding.errorLayout.errorTextview.text = null
-        viewBinding.errorLayout.root.gone()
-    }
-
-    override fun validateDataAndReturnDataElseNull(): DataFromDynamicInputField? {
-        return if (isEnteredOrSelectedDataValid()) {
-            removeError()
-            getUserEnteredOrSelectedData()
-        } else {
-            checkDataAndSetError()
-            null
-        }
-    }
+//    override fun isEnteredOrSelectedDataValid(): Boolean {
+//        return if(viewData.mandatory){
+//            signatureImagePath != null
+//        } else
+//            true
+//    }
+//
+//
+//    override fun setError(
+//        error: SpannedString
+//    ) {
+////        viewBinding.errorLayout.root.visible()
+////        viewBinding.errorLayout.errorTextview.text = error
+//    }
+//
+//    override fun removeError() {
+////        viewBinding.errorLayout.errorTextview.text = null
+////        viewBinding.errorLayout.root.gone()
+//    }
+//
+//    override fun validateDataAndReturnDataElseNull(): DataFromDynamicInputField? {
+//        return if (isEnteredOrSelectedDataValid()) {
+//            removeError()
+//            getUserEnteredOrSelectedData()
+//        } else {
+//            checkDataAndSetError()
+//            null
+//        }
+//    }
 
     private fun getUserEnteredOrSelectedData(): DataFromDynamicInputField {
         return DataFromDynamicInputField(
@@ -131,30 +130,30 @@ class DynamicSignatureDrawerView(
         )
     }
 
-    private fun checkDataAndSetError() {
+//    private fun checkDataAndSetError() {
+//
+//        if (viewData.mandatory) {
+//
+//            if (!isEnteredOrSelectedDataValid()) {
+//
+//                setError(buildSpannedString {
+//                    bold {
+//                        append(
+//                            resources.getString(R.string.common_note_with_colon)
+//                        )
+//                    }
+//                    append(" Please select ${viewData.title}")
+//                })
+//            } else {
+//                removeError()
+//            }
+//        }
+//    }
 
-        if (viewData.mandatory) {
-
-            if (!isEnteredOrSelectedDataValid()) {
-
-                setError(buildSpannedString {
-                    bold {
-                        append(
-                            resources.getString(R.string.common_note_with_colon)
-                        )
-                    }
-                    append(" Please select ${viewData.title}")
-                })
-            } else {
-                removeError()
-            }
-        }
-    }
-
-    private fun setListenersOnView() = viewBinding.apply {
-
-        this.clickImageBtn.setOnClickListener {
-            FullScreenSignatureDialogFragment.launch(fragmentManager)
-        }
-    }
+//    private fun setListenersOnView() = viewBinding.apply {
+//
+//        this.clickImageBtn.setOnClickListener {
+//            FullScreenSignatureDialogFragment.launch(fragmentManager)
+//        }
+//    }
 }

@@ -13,12 +13,11 @@ import androidx.core.text.buildSpannedString
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.databinding.LayoutDynamicFieldVerificationViewBinding
 import com.gigforce.common_ui.dynamic_fields.DynamicVerificationFieldView
-import com.gigforce.common_ui.dynamic_fields.data.DynamicField
+import com.gigforce.common_ui.dynamic_fields.data.DynamicVerificationField
+import com.gigforce.common_ui.dynamic_fields.data.FieldTypes
 import com.gigforce.common_ui.ext.addMandatorySymbolToTextEnd
 import com.gigforce.common_ui.navigation.JoiningVerificationFormsNavigation
 import com.gigforce.common_ui.viewmodels.verification.SharedVerificationViewModelEvent
-import com.gigforce.core.datamodels.verification.AadhaarDetailsDataModel
-import com.gigforce.core.datamodels.verification.DrivingLicenseDetailsDataModel
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import kotlinx.android.parcel.Parcelize
@@ -36,8 +35,7 @@ class DynamicDLDetailsVerificationView(
     lateinit var joiningVerificationNavigation: JoiningVerificationFormsNavigation
 
     private var viewBinding: LayoutDynamicFieldVerificationViewBinding
-    private lateinit var viewData: DynamicField
-    private var drivingLicenseDetails : DrivingLicenseDetailsDataModel? = null
+    private lateinit var viewData: DynamicVerificationField
 
     init {
         this.layoutParams =
@@ -53,8 +51,11 @@ class DynamicDLDetailsVerificationView(
         viewBinding.root.setOnClickListener(this)
     }
 
+    override val fieldType: String
+        get() = FieldTypes.DL_VERIFICATION_VIEW
+
     override fun bind(
-        fieldDetails: DynamicField
+        fieldDetails: DynamicVerificationField
     ) {
         viewData = fieldDetails
         tag = id //setting id of dynamic view as view tag to identify layout at runtime
@@ -75,7 +76,7 @@ class DynamicDLDetailsVerificationView(
         viewBinding.titleTextview.text = title
     }
 
-    private fun settingFieldAsOptionalOrMandatory(fieldDetails: DynamicField) {
+    private fun settingFieldAsOptionalOrMandatory(fieldDetails: DynamicVerificationField) {
         if (fieldDetails.mandatory) {
             viewBinding.optionalTextview.gone()
             viewBinding.titleTextview.addMandatorySymbolToTextEnd()
@@ -84,23 +85,14 @@ class DynamicDLDetailsVerificationView(
         }
     }
 
-
     override fun onRestoreInstanceState(state: Parcelable?) {
         val myState = state as? StateSavingObject
         super.onRestoreInstanceState(myState?.superState ?: state)
     }
 
-    override fun isEnteredOrSelectedDataValid(): Boolean {
-        if (viewData.mandatory) {
-
-            if (drivingLicenseDetails == null) {
-                return false
-            }
-        }
-
-        return true
+    override fun updateDocumentStatus(status: String) {
+        TODO("Not yet implemented")
     }
-
 
     override fun setError(
         error: SpannedString
@@ -114,50 +106,7 @@ class DynamicDLDetailsVerificationView(
         viewBinding.errorLayout.root.gone()
     }
 
-    override fun validateDataAndReturnDataElseNull(): DrivingLicenseDetailsDataModel? {
-        return if (isEnteredOrSelectedDataValid()) {
-            removeError()
-            getUserEnteredOrSelectedData()
-        } else {
-            checkDataAndSetError()
-            null
-        }
-    }
 
-    private fun getUserEnteredOrSelectedData(): DrivingLicenseDetailsDataModel? {
-        return drivingLicenseDetails
-    }
-
-    private fun checkDataAndSetError() {
-
-        if (viewData.mandatory) {
-
-            if (drivingLicenseDetails == null) {
-                setError(buildSpannedString {
-                    bold {
-                        append(
-                            resources.getString(R.string.common_note_with_colon)
-                        )
-                    }
-                    append(" Please fill a non zero value for ${viewData.title}")
-                })
-            } else {
-                removeError()
-            }
-        }
-    }
-
-    override fun handleVerificationResult(event: SharedVerificationViewModelEvent) {
-
-        if (event is SharedVerificationViewModelEvent.DrivingLicenseInfoSubmitted) {
-            drivingLicenseDetails = event.drivingLicenseDetails
-            showDocumentStatusAsSubmitted()
-        }
-    }
-
-    private fun showDocumentStatusAsSubmitted() {
-
-    }
 
     @Parcelize
     class StateSavingObject(
@@ -167,7 +116,7 @@ class DynamicDLDetailsVerificationView(
 
     override fun onClick(v: View?) {
         joiningVerificationNavigation.openDrivingLicenseVerificationForJoiningFragment(
-            "sss"
+            viewData.userId
         )
     }
 }

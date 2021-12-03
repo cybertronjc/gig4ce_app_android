@@ -24,4 +24,5 @@ class PendingJoiningItemDVM(
 
     @SerializedName("image")
     val image: String = ""
+
 ) : SimpleDVM(AppModuleLevelViewTypes.VIEW_PENDING_JOINING_SECTION_ITEM)

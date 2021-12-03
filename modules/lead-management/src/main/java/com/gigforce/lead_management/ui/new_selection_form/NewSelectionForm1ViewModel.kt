@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.dynamic_fields.data.DataFromDynamicInputField
 import com.gigforce.common_ui.dynamic_fields.data.DynamicField
+import com.gigforce.common_ui.dynamic_fields.data.DynamicVerificationField
 import com.gigforce.common_ui.dynamic_fields.data.FieldTypes
 import com.gigforce.common_ui.repository.LeadManagementRepository
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfilesItem
@@ -16,7 +17,6 @@ import com.gigforce.common_ui.viewdatamodels.leadManagement.JoiningBusinessAndJo
 import com.gigforce.common_ui.viewdatamodels.leadManagement.SubmitJoiningRequest
 import com.gigforce.core.ValidationHelper
 import com.gigforce.core.datamodels.profile.ProfileData
-import com.gigforce.core.datamodels.verification.VerificationDocuments
 import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.lead_management.R
@@ -79,8 +79,7 @@ class NewSelectionForm1ViewModel @Inject constructor(
             NewSelectionForm1Events.OpenSelectBusinessScreenSelected -> openSelectBusinessScreen()
             NewSelectionForm1Events.OpenSelectJobProfileScreenSelected -> openJobProfilesScreen()
             is NewSelectionForm1Events.SubmitButtonPressed -> validateDataAndNavigateToForm2(
-                event.dataFromDynamicFields,
-                event.dataFromVerificationDynamicFields
+                event.dataFromDynamicFields
             )
         }
 
@@ -123,16 +122,12 @@ class NewSelectionForm1ViewModel @Inject constructor(
             )
         )
 
-//        val selectedJobProfileVerificationDependentDynamicFields = jobProfile.verificationRelatedFields.filter {
-//            it.screenIdToShowIn == NewSelectionForm1Fragment.SCREEN_ID
-//        }
 
         val selectedJobProfileDependentDynamicFields = jobProfile.dynamicFields.filter {
             it.screenIdToShowIn == NewSelectionForm1Fragment.SCREEN_ID
         }
 
         _viewState.value = NewSelectionForm1ViewState.ShowJobProfileRelatedField(
-            selectedJobProfileVerificationDependentDynamicFields,
             selectedJobProfileDependentDynamicFields
         )
         delay(1000)
@@ -217,8 +212,7 @@ class NewSelectionForm1ViewModel @Inject constructor(
     }
 
     private fun validateDataAndNavigateToForm2(
-        dataFromDynamicFields: MutableList<DataFromDynamicInputField>,
-        verificationDocuments: VerificationDocuments
+        dataFromDynamicFields: MutableList<DataFromDynamicInputField>
     ) {
 
         if (mobilePhoneNumber.isNullOrBlank() || !ValidationHelper.isValidIndianMobileNo(
@@ -286,9 +280,6 @@ class NewSelectionForm1ViewModel @Inject constructor(
             it.screenIdToShowIn == NewSelectionForm2Fragment.SCREEN_ID
         }
 
-        val verificationRelatedDynamicFieldsForNextForm = selectedJobProfile!!.verificationRelatedFields.filter {
-            it.screenIdToShowIn == NewSelectionForm2Fragment.SCREEN_ID
-        }
 
         _viewState.value = NewSelectionForm1ViewState.NavigateToForm2(
             submitJoiningRequest = SubmitJoiningRequest(
@@ -296,11 +287,10 @@ class NewSelectionForm1ViewModel @Inject constructor(
                 jobProfile = selectedJobProfile!!,
                 gigerName = gigerName!!,
                 gigerMobileNo = mobilePhoneNumber!!,
-                dataFromDynamicFields = dataFromDynamicFields,
-                verificationDocuments = verificationDocuments
+                dataFromDynamicFields = dataFromDynamicFields
             ),
             dynamicInputsFields = dynamicFieldsForNextForm,
-            verificationRelatedDynamicInputsFields = verificationRelatedDynamicFieldsForNextForm
+            verificationRelatedDynamicInputsFields = selectedJobProfile!!.verificationRelatedFields
         )
         _viewState.value = null
     }

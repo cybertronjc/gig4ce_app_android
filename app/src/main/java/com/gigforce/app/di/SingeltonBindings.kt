@@ -3,10 +3,7 @@ package com.gigforce.app.di
 import android.content.Context
 import android.content.SharedPreferences
 import com.gigforce.app.di.implementations.BuildConfigImp
-import com.gigforce.common_ui.remote.JoiningProfileService
-import com.gigforce.common_ui.remote.ProfileCommonService
-import com.gigforce.common_ui.remote.ReferralService
-import com.gigforce.common_ui.remote.SignatureImageService
+import com.gigforce.common_ui.remote.*
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.core.retrofit.GeneratePaySlipService
@@ -97,6 +94,13 @@ abstract class SingeltonBindings {
             retrofitServiceFactory : RetrofitServiceFactory
         ): SignatureImageService {
             return retrofitServiceFactory.prepareService(SignatureImageService::class.java)
+        }
+
+        @Provides
+        fun provideAuthService(
+            retrofitServiceFactory : RetrofitServiceFactory
+        ): AuthService {
+            return retrofitServiceFactory.prepareService(AuthService::class.java)
         }
 
 

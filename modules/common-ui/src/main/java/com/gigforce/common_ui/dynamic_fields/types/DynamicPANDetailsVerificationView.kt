@@ -8,17 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import androidx.core.text.bold
-import androidx.core.text.buildSpannedString
-import com.gigforce.common_ui.R
 import com.gigforce.common_ui.databinding.LayoutDynamicFieldVerificationViewBinding
 import com.gigforce.common_ui.dynamic_fields.DynamicVerificationFieldView
-import com.gigforce.common_ui.dynamic_fields.data.DynamicField
+import com.gigforce.common_ui.dynamic_fields.data.DynamicVerificationField
+import com.gigforce.common_ui.dynamic_fields.data.FieldTypes
 import com.gigforce.common_ui.ext.addMandatorySymbolToTextEnd
 import com.gigforce.common_ui.navigation.JoiningVerificationFormsNavigation
-import com.gigforce.common_ui.viewmodels.verification.SharedVerificationViewModelEvent
-import com.gigforce.core.datamodels.verification.AadhaarDetailsDataModel
-import com.gigforce.core.datamodels.verification.PanDetailsDataModel
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import kotlinx.android.parcel.Parcelize
@@ -36,8 +31,7 @@ class DynamicPANDetailsVerificationView(
     lateinit var joiningVerificationNavigation: JoiningVerificationFormsNavigation
 
     private var viewBinding: LayoutDynamicFieldVerificationViewBinding
-    private lateinit var viewData: DynamicField
-    private var panDetails: PanDetailsDataModel? = null
+    private lateinit var viewData: DynamicVerificationField
 
     init {
         this.layoutParams =
@@ -53,8 +47,11 @@ class DynamicPANDetailsVerificationView(
         viewBinding.root.setOnClickListener(this)
     }
 
+    override val fieldType: String
+        get() = FieldTypes.PAN_VERIFICATION_VIEW
+
     override fun bind(
-        fieldDetails: DynamicField
+        fieldDetails: DynamicVerificationField
     ) {
         viewData = fieldDetails
         tag = id //setting id of dynamic view as view tag to identify layout at runtime
@@ -75,7 +72,7 @@ class DynamicPANDetailsVerificationView(
         viewBinding.titleTextview.text = title
     }
 
-    private fun settingFieldAsOptionalOrMandatory(fieldDetails: DynamicField) {
+    private fun settingFieldAsOptionalOrMandatory(fieldDetails: DynamicVerificationField) {
         if (fieldDetails.mandatory) {
             viewBinding.optionalTextview.gone()
             viewBinding.titleTextview.addMandatorySymbolToTextEnd()
@@ -90,18 +87,6 @@ class DynamicPANDetailsVerificationView(
         super.onRestoreInstanceState(myState?.superState ?: state)
     }
 
-    override fun isEnteredOrSelectedDataValid(): Boolean {
-        if (viewData.mandatory) {
-
-            if (panDetails == null) {
-                return false
-            }
-        }
-
-        return true
-    }
-
-
     override fun setError(
         error: SpannedString
     ) {
@@ -114,49 +99,9 @@ class DynamicPANDetailsVerificationView(
         viewBinding.errorLayout.root.gone()
     }
 
-    override fun validateDataAndReturnDataElseNull(): PanDetailsDataModel? {
-        return if (isEnteredOrSelectedDataValid()) {
-            removeError()
-            getUserEnteredOrSelectedData()
-        } else {
-            checkDataAndSetError()
-            null
-        }
-    }
 
-    private fun getUserEnteredOrSelectedData(): PanDetailsDataModel? {
-        return panDetails
-    }
-
-    private fun checkDataAndSetError() {
-
-        if (viewData.mandatory) {
-
-            if (panDetails == null) {
-                setError(buildSpannedString {
-                    bold {
-                        append(
-                            resources.getString(R.string.common_note_with_colon)
-                        )
-                    }
-                    append(" Please fill a non zero value for ${viewData.title}")
-                })
-            } else {
-                removeError()
-            }
-        }
-    }
-
-    override fun handleVerificationResult(event: SharedVerificationViewModelEvent) {
-
-        if (event is SharedVerificationViewModelEvent.PanCardInfoSubmitted) {
-            panDetails = event.panCardDetails
-            showDocumentStatusAsSubmitted()
-        }
-    }
-
-    private fun showDocumentStatusAsSubmitted() {
-
+    override fun updateDocumentStatus(status: String) {
+        TODO("Not yet implemented")
     }
 
     @Parcelize
@@ -167,7 +112,7 @@ class DynamicPANDetailsVerificationView(
 
     override fun onClick(v: View?) {
         joiningVerificationNavigation.openPanVerificationForJoiningFragment(
-            "s"
+            viewData.userId
         )
     }
 }

@@ -14,6 +14,8 @@ import com.gigforce.common_ui.R
 import com.gigforce.common_ui.databinding.LayoutDynamicFieldVerificationViewBinding
 import com.gigforce.common_ui.dynamic_fields.DynamicVerificationFieldView
 import com.gigforce.common_ui.dynamic_fields.data.DynamicField
+import com.gigforce.common_ui.dynamic_fields.data.DynamicVerificationField
+import com.gigforce.common_ui.dynamic_fields.data.FieldTypes
 import com.gigforce.common_ui.ext.addMandatorySymbolToTextEnd
 import com.gigforce.common_ui.navigation.JoiningVerificationFormsNavigation
 import com.gigforce.common_ui.viewmodels.verification.SharedVerificationViewModelEvent
@@ -39,8 +41,7 @@ class DynamicAadhaarVerificationView(
     lateinit var joiningVerificationNavigation: JoiningVerificationFormsNavigation
 
     private var viewBinding: LayoutDynamicFieldVerificationViewBinding
-    private lateinit var viewData: DynamicField
-    private var aadharInfo: AadhaarDetailsDataModel? = null
+    private lateinit var viewData: DynamicVerificationField
 
     init {
         this.layoutParams =
@@ -56,8 +57,10 @@ class DynamicAadhaarVerificationView(
         viewBinding.root.setOnClickListener(this)
     }
 
+    override val fieldType: String get() = FieldTypes.AADHAAR_VERIFICATION_VIEW
+
     override fun bind(
-        fieldDetails: DynamicField
+        fieldDetails: DynamicVerificationField
     ) {
         viewData = fieldDetails
         tag = id //setting id of dynamic view as view tag to identify layout at runtime
@@ -65,6 +68,7 @@ class DynamicAadhaarVerificationView(
         setTitle(fieldDetails.title)
         settingFieldAsOptionalOrMandatory(fieldDetails)
         setPrefillTextOrHint(fieldDetails.prefillText, fieldDetails.title)
+        updateDocumentStatus(fieldDetails.status)
     }
 
     private fun setPrefillTextOrHint(
@@ -78,7 +82,7 @@ class DynamicAadhaarVerificationView(
         viewBinding.titleTextview.text = title
     }
 
-    private fun settingFieldAsOptionalOrMandatory(fieldDetails: DynamicField) {
+    private fun settingFieldAsOptionalOrMandatory(fieldDetails: DynamicVerificationField) {
         if (fieldDetails.mandatory) {
             viewBinding.optionalTextview.gone()
             viewBinding.titleTextview.addMandatorySymbolToTextEnd()
@@ -93,18 +97,6 @@ class DynamicAadhaarVerificationView(
         super.onRestoreInstanceState(myState?.superState ?: state)
     }
 
-    override fun isEnteredOrSelectedDataValid(): Boolean {
-        if (viewData.mandatory) {
-
-            if (aadharInfo == null) {
-                return false
-            }
-        }
-
-        return true
-    }
-
-
     override fun setError(
         error: SpannedString
     ) {
@@ -117,55 +109,18 @@ class DynamicAadhaarVerificationView(
         viewBinding.errorLayout.root.gone()
     }
 
-    override fun validateDataAndReturnDataElseNull(): AadhaarDetailsDataModel? {
-        return if (isEnteredOrSelectedDataValid()) {
-            removeError()
-            getUserEnteredOrSelectedData()
-        } else {
-            checkDataAndSetError()
-            null
-        }
-    }
 
-    private fun getUserEnteredOrSelectedData(): AadhaarDetailsDataModel? {
-        return aadharInfo
-    }
-
-    private fun checkDataAndSetError() {
-
-        if (viewData.mandatory) {
-
-            if (aadharInfo == null) {
-                setError(buildSpannedString {
-                    bold {
-                        append(
-                            resources.getString(R.string.common_note_with_colon)
-                        )
-                    }
-                    append(" Please fill a non zero value for ${viewData.title}")
-                })
-            } else {
-                removeError()
-            }
-        }
-    }
-
-    override fun handleVerificationResult(event: SharedVerificationViewModelEvent) {
-
-        if (event is SharedVerificationViewModelEvent.AadhaarCardInfoSubmitted) {
-            aadharInfo = event.aadhaarInfo
-            showAadhaarInfoAsSubmitted()
-        }
-    }
-
-    private fun showAadhaarInfoAsSubmitted() {
-
+    override fun updateDocumentStatus(status: String) {
+        updateDocumentStatusImage(
+            status,
+            viewBinding.statusIv
+        )
     }
 
     override fun onClick(v: View?) {
         joiningVerificationNavigation.openAadhaarVerificationQuestionnaireForJoiningFragment(
-            userId = "ss",
-            jobProfileId = "SS"
+            userId = viewData.userId,
+            jobProfileId = viewData.jobProfileId
         )
     }
 

@@ -24,12 +24,12 @@ import com.gigforce.common_ui.contacts.PhoneContact
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.dynamic_fields.DynamicFieldsInflaterHelper
 import com.gigforce.common_ui.dynamic_fields.data.DynamicField
+import com.gigforce.common_ui.dynamic_fields.data.DynamicVerificationField
 import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
-import com.gigforce.common_ui.viewmodels.verification.SharedVerificationViewModel
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.getTextChangeAsStateFlow
 import com.gigforce.core.extensions.gone
@@ -73,7 +73,6 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
 
     private val viewModel: NewSelectionForm1ViewModel by viewModels()
     private val leadMgmtSharedViewModel: LeadManagementSharedViewModel by activityViewModels()
-    private val verificationSharedViewModel : SharedVerificationViewModel by activityViewModels()
 
     private val contactsDelegate: ContactsDelegate by lazy {
         ContactsDelegate(requireContext().contentResolver)
@@ -172,7 +171,6 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
         initListeners(viewBinding)
         initViewModel()
         initSharedViewModel()
-        initVerificationSharedViewModel()
     }
 
     private fun requestFocusOnMobileNoEditText() = viewBinding.mainForm.apply {
@@ -238,15 +236,11 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
     private fun validateDataAndSubmitData() =
         viewBinding.mainForm.jobProfileDependentDynamicFieldsContainer.apply {
 
-            val verificationRelatedDynamicFieldsData = dynamicFieldsInflaterHelper.validateVerificationDynamicFieldsAndReturnVerificationDetails(this)
-                    ?: return@apply
-
             val dynamicFieldsData =
                 dynamicFieldsInflaterHelper.validateDynamicFieldsReturnFieldValueIfValid(this)
                     ?: return@apply
             viewModel.handleEvent(NewSelectionForm1Events.SubmitButtonPressed(
-                dataFromDynamicFields = dynamicFieldsData.toMutableList(),
-                dataFromVerificationDynamicFields = verificationRelatedDynamicFieldsData
+                dataFromDynamicFields = dynamicFieldsData.toMutableList()
             ))
         }
 
@@ -319,7 +313,6 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
                     ArrayList(state.verificationRelatedDynamicInputsFields)
                 )
                 is NewSelectionForm1ViewState.ShowJobProfileRelatedField -> showJobProfileRelatedFields(
-                    state.verificationRelatedFields,
                     state.dynamicFields
                 )
                 is NewSelectionForm1ViewState.EnteredPhoneNumberSanitized -> {
@@ -339,17 +332,8 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
     }
 
     private fun showJobProfileRelatedFields(
-        verificationRelatedFields: List<DynamicField>,
         dynamicFields: List<DynamicField>
     ) = dynamicFieldsInflaterHelper.apply {
-
-        //Inflating Verification related fields
-        inflateDynamicFields(
-            requireContext(),
-            viewBinding.mainForm.verificationRelatedDynamicFieldsContainer,
-            verificationRelatedFields,
-            childFragmentManager
-        )
 
         //Inflating
         inflateDynamicFields(
@@ -363,7 +347,7 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
     private fun openForm2(
         submitJoiningRequest: SubmitJoiningRequest,
         dynamicInputsFieldValues: ArrayList<DynamicField>,
-        verificationRelatedDynamicInputsFieldValues: ArrayList<DynamicField>
+        verificationRelatedDynamicInputsFieldValues: ArrayList<DynamicVerificationField>
     ) {
 
         navigation.navigateTo(
@@ -513,18 +497,6 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
                     }
                 }
             })
-    }
-
-    private fun initVerificationSharedViewModel() = lifecycleScope.launchWhenCreated{
-
-        verificationSharedViewModel
-            .submissionEvents
-            .collect{
-                dynamicFieldsInflaterHelper.handleVerificationSubmissionEvent(
-                    viewBinding.mainForm.verificationRelatedDynamicFieldsContainer,
-                    it
-                )
-        }
     }
 
     private fun showSelectedBusiness(

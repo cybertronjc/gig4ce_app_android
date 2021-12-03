@@ -43,13 +43,7 @@ class JoiningPanVerificationFragment : BaseDrivingLicenseVerificationFragment(
         dateOfBirth: String
     ) {
 
-        sharedViewModel.drivingLicenseInfoSubmitted(
-            name = name,
-            drivingLicenseNo = drivingLicenseNo,
-            issueDate = issueDate,
-            expiryDate = expiryDate,
-            dateOfBirth = dateOfBirth
-        )
+        sharedViewModel.drivingLicenseInfoSubmitted()
         findNavController().navigateUp()
     }
 }

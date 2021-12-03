@@ -2,13 +2,12 @@ package com.gigforce.lead_management.ui.new_selection_form_2
 
 import android.text.SpannedString
 import com.gigforce.common_ui.dynamic_fields.data.DataFromDynamicInputField
+import com.gigforce.common_ui.dynamic_fields.data.DynamicField
+import com.gigforce.common_ui.dynamic_fields.data.DynamicVerificationField
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
-import com.gigforce.core.datamodels.profile.ProfileData
-import com.gigforce.lead_management.models.JoiningStatusAndCountItemData
-import com.gigforce.lead_management.ui.new_selection_form.NewSelectionForm1ViewState
 import java.time.LocalDate
 
-sealed class NewSelectionForm2ViewState {
+sealed class NewSelectionForm2ViewState  {
 
     object LoadingLocationAndTLData : NewSelectionForm2ViewState()
 
@@ -16,7 +15,8 @@ sealed class NewSelectionForm2ViewState {
         val selectedCity : String?,
         val selectedReportingLocation : String?,
         val shiftAndTls : JoiningLocationTeamLeadersShifts,
-        val locationType: String?
+        val locationType: String?,
+        val doesUserHaveToUploadAnyVerificationDocuments : Boolean
     ) : NewSelectionForm2ViewState()
 
     data class ErrorWhileLoadingLocationAndTlData(
@@ -56,6 +56,12 @@ sealed class NewSelectionForm2ViewState {
         val jobProfileName: String
     ) : NewSelectionForm2ViewState()
 
+    data class NavigateToJoiningVerificationForm(
+        val joiningRequest : SubmitJoiningRequest,
+        val userId : String,
+        val verificationDynamicFields : List<DynamicVerificationField>
+    ) : NewSelectionForm2ViewState()
+
     data class ErrorWhileSubmittingJoiningData(
         val error: String,
         val shouldShowErrorButton: Boolean
@@ -69,7 +75,8 @@ sealed class NewSelectionForm2ViewState {
 sealed class NewSelectionForm2Events {
 
     data class JoiningDataReceivedFromPreviousScreen(
-        val submitJoiningRequest: SubmitJoiningRequest
+        val submitJoiningRequest: SubmitJoiningRequest,
+        val verificationRelatedDynamicInputsFields: ArrayList<DynamicVerificationField>
     ) :NewSelectionForm2Events()
 
     object SelectCityClicked : NewSelectionForm2Events()

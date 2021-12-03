@@ -7,21 +7,13 @@ import kotlinx.coroutines.flow.asSharedFlow
 
 sealed class SharedVerificationViewModelEvent {
 
-    data class AadhaarCardInfoSubmitted(
-        val aadhaarInfo: AadhaarDetailsDataModel
-    ) : SharedVerificationViewModelEvent()
+    object AadhaarCardInfoSubmitted : SharedVerificationViewModelEvent()
 
-    data class BankDetailsInfoSubmitted(
-        val bankDetails : BankAccountDetailsDataModel
-    ) : SharedVerificationViewModelEvent()
+    object BankDetailsInfoSubmitted: SharedVerificationViewModelEvent()
 
-    data class DrivingLicenseInfoSubmitted(
-        val drivingLicenseDetails : DrivingLicenseDetailsDataModel
-    ) : SharedVerificationViewModelEvent()
+    object DrivingLicenseInfoSubmitted : SharedVerificationViewModelEvent()
 
-    data class PanCardInfoSubmitted(
-        val panCardDetails : PanDetailsDataModel
-    ) : SharedVerificationViewModelEvent()
+    object PanCardInfoSubmitted : SharedVerificationViewModelEvent()
 
 }
 
@@ -30,54 +22,20 @@ class SharedVerificationViewModel : ViewModel() {
     private val _submissionEvents = MutableSharedFlow<SharedVerificationViewModelEvent>()
     val submissionEvents = _submissionEvents.asSharedFlow()
 
-    fun aadhaarInfoSubmitted(
-        aadhaarInfo: AadhaarDetailsDataModel
-    ) = _submissionEvents.tryEmit(
-        SharedVerificationViewModelEvent.AadhaarCardInfoSubmitted(aadhaarInfo)
+    fun aadhaarInfoSubmitted() = _submissionEvents.tryEmit(
+        SharedVerificationViewModelEvent.AadhaarCardInfoSubmitted
     )
 
-    fun bankDetailsSubmitted(
-        bankName : String,
-        ifsc : String,
-        bankAccountNumber : String
-    ) = _submissionEvents.tryEmit(
-        SharedVerificationViewModelEvent.BankDetailsInfoSubmitted(
-            BankAccountDetailsDataModel(
-                bankName = bankName,
-                ifsc = ifsc,
-                bankAccountNumber = bankAccountNumber
-            )
-        )
+    fun bankDetailsSubmitted() = _submissionEvents.tryEmit(
+        SharedVerificationViewModelEvent.BankDetailsInfoSubmitted
     )
 
-    fun drivingLicenseInfoSubmitted(
-        name : String?,
-        drivingLicenseNo : String,
-        issueDate : String,
-        expiryDate : String,
-        dateOfBirth : String
-    ) = _submissionEvents.tryEmit(
-        SharedVerificationViewModelEvent.DrivingLicenseInfoSubmitted(
-            DrivingLicenseDetailsDataModel(
-                name = name,
-                drivingLicenseNo = drivingLicenseNo,
-                issueDate = issueDate,
-                expiryDate = expiryDate,
-                dateOfBirth = dateOfBirth
-            )
-        )
+    fun drivingLicenseInfoSubmitted() = _submissionEvents.tryEmit(
+        SharedVerificationViewModelEvent.DrivingLicenseInfoSubmitted
     )
 
-    fun panInfoSubmitted(
-        panCardImagePath : String,
-        panCardNo : String
-    ) = _submissionEvents.tryEmit(
-        SharedVerificationViewModelEvent.PanCardInfoSubmitted(
-            PanDetailsDataModel(
-                panCardImagePath = panCardImagePath,
-                panCardNo = panCardNo
-            )
-        )
+    fun panInfoSubmitted() = _submissionEvents.tryEmit(
+        SharedVerificationViewModelEvent.PanCardInfoSubmitted
     )
 
 }

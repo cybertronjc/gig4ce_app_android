@@ -41,11 +41,7 @@ class JoiningBankDetailsVerificationFragment : BaseBankAccountVerificationFragme
         bankAccountNumber: String
     ) {
 
-        sharedViewModel.bankDetailsSubmitted(
-            bankName = bankName,
-            ifsc = ifsc,
-            bankAccountNumber = bankAccountNumber
-        )
+        sharedViewModel.bankDetailsSubmitted()
         findNavController().navigateUp()
     }
 }

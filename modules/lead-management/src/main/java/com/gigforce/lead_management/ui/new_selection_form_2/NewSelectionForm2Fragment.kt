@@ -24,12 +24,12 @@ import com.gigforce.common_ui.contacts.PhoneContact
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.dynamic_fields.DynamicFieldsInflaterHelper
 import com.gigforce.common_ui.dynamic_fields.data.DynamicField
+import com.gigforce.common_ui.dynamic_fields.data.DynamicVerificationField
 import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
-import com.gigforce.common_ui.viewmodels.verification.SharedVerificationViewModel
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.getTextChangeAsStateFlow
 import com.gigforce.core.extensions.gone
@@ -43,6 +43,8 @@ import com.gigforce.lead_management.models.WhatsappTemplateModel
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModelState
 import com.gigforce.lead_management.ui.new_selection_form.NewSelectionForm1Fragment
+import com.gigforce.lead_management.ui.new_selection_form_3_verification_documents.NewSelectionForm3Events
+import com.gigforce.lead_management.ui.new_selection_form_3_verification_documents.NewSelectionVerificationDocumentsForm3Fragment
 import com.gigforce.lead_management.ui.new_selection_form_submittion_success.SelectionFormSubmitSuccessFragment
 import com.gigforce.lead_management.ui.select_city.SelectCityFragment
 import com.gigforce.lead_management.ui.select_reporting_location.SelectReportingLocationFragment
@@ -89,13 +91,12 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
 
     private val viewModel: NewSelectionForm2ViewModel by viewModels()
     private val leadMgmtSharedViewModel: LeadManagementSharedViewModel by activityViewModels()
-    private val verificationSharedViewModel : SharedVerificationViewModel by activityViewModels()
     private val dateFormatter = SimpleDateFormat("dd/MMM/yy", Locale.getDefault())
 
     //Data from previous screen
     private lateinit var joiningRequest: SubmitJoiningRequest
     private lateinit var dynamicInputsFields: ArrayList<DynamicField>
-    private lateinit var verificationRelatedDynamicInputsFields: ArrayList<DynamicField>
+    private lateinit var verificationRelatedDynamicInputsFields: ArrayList<DynamicVerificationField>
 
     private val expectedStartDatePicker: DatePickerDialog by lazy {
         val cal = Calendar.getInstance()
@@ -219,7 +220,8 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
 
         viewModel.handleEvent(
             NewSelectionForm2Events.JoiningDataReceivedFromPreviousScreen(
-                joiningRequest
+                joiningRequest,
+                verificationRelatedDynamicInputsFields
             )
         )
     }
@@ -238,8 +240,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
     ) {
         if (viewCreatedForTheFirstTime) {
             showJobProfileRelatedDynamicFields(
-                dynamicInputsFields,
-                verificationRelatedDynamicInputsFields
+                dynamicInputsFields
             )
             setTextWatchers()
         }
@@ -248,7 +249,6 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         initListeners(viewBinding)
         initViewModel()
         initSharedViewModel()
-        initVerificationSharedViewModel()
     }
 
     private fun setTextWatchers() = viewBinding.mainForm.apply {
@@ -341,7 +341,8 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                     state.shiftAndTls,
                     state.selectedCity,
                     state.selectedReportingLocation,
-                    state.locationType
+                    state.locationType,
+                    state.doesUserHaveToUploadAnyVerificationDocuments
                 )
                 is NewSelectionForm2ViewState.ErrorWhileLoadingLocationAndTlData -> showErrorInLoadingBusinessAndJobProfiles(
                     state.error
@@ -396,7 +397,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                 NewSelectionForm2ViewState.SubmittingJoiningData -> {
 
                     viewBinding.mainForm.nextButton.showProgress {
-                        buttonText = getString(R.string.submitting_data_lead)
+                        buttonText = "Processing..."
                         progressColor = Color.WHITE
                     }
                     viewBinding.mainForm.nextButton.isEnabled = false
@@ -404,8 +405,32 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                 is NewSelectionForm2ViewState.EnteredPhoneNumberSanitized -> setMobileNoOnEditText(
                     state.sanitizedPhoneNumber
                 )
+                is NewSelectionForm2ViewState.NavigateToJoiningVerificationForm -> openDocumentVerificationPage(
+                    state.joiningRequest,
+                    state.userId,
+                    state.verificationDynamicFields
+                )
             }
         })
+
+    private fun openDocumentVerificationPage(
+        joiningRequest: SubmitJoiningRequest,
+        userId: String,
+        verificationDynamicFields: List<DynamicVerificationField>
+    ) {
+        viewBinding.mainForm.nextButton.hideProgress(getString(R.string.next_lead))
+        viewBinding.mainForm.nextButton.isEnabled = true
+
+        navigation.navigateTo(
+            LeadManagementNavDestinations.FRAGMENT_SELECTION_FORM_3,
+            bundleOf(
+                NewSelectionVerificationDocumentsForm3Fragment.INTENT_EXTRA_JOINING_DATA to joiningRequest,
+                NewSelectionVerificationDocumentsForm3Fragment.INTENT_EXTRA_USER_UID to userId,
+                NewSelectionVerificationDocumentsForm3Fragment.INTENT_EXTRA_VERIFICATION_DYNAMIC_FIELDS to verificationDynamicFields,
+            ),
+            getNavOptions()
+        )
+    }
 
     private fun openSelectReportingLocationScreen(
         selectedCity: ReportingLocationsItem,
@@ -513,7 +538,8 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         shiftAndTls: JoiningLocationTeamLeadersShifts,
         selectedCity: String?,
         selectedReportingLocation: String?,
-        locationType: String?
+        locationType: String?,
+        doesUserHaveToUploadAnyVerificationDocuments : Boolean
     ) = viewBinding.apply {
         stopShimmer(
             dataLoadingShimmerContainer,
@@ -552,6 +578,12 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
             mainForm.reportingLocationSelectedLabel.text =
                 getString(R.string.click_to_select_location_lead)
         }
+
+        viewBinding.mainForm.nextButton.text =  if(doesUserHaveToUploadAnyVerificationDocuments){
+            getString(R.string.next_camel_case_common_ui)
+        } else {
+            getString(R.string.submit_lead)
+        }
     }
 
     private fun showErrorInLoadingBusinessAndJobProfiles(
@@ -586,17 +618,6 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
             })
     }
 
-    private fun initVerificationSharedViewModel() = lifecycleScope.launchWhenCreated{
-
-        verificationSharedViewModel
-            .submissionEvents
-            .collect{
-                dynamicFieldsInflaterHelper.handleVerificationSubmissionEvent(
-                    viewBinding.mainForm.verificationRelatedDynamicFieldsContainer,
-                    it
-                )
-            }
-    }
 
     private fun showSelectedCity(
         citySelected: ReportingLocationsItem
@@ -646,16 +667,8 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
     }
 
     private fun showJobProfileRelatedDynamicFields(
-        dynamicFields: List<DynamicField>,
-        verificationRelatedDynamicInputsFields: List<DynamicField>
+        dynamicFields: List<DynamicField>
     ) = dynamicFieldsInflaterHelper.apply {
-
-        inflateDynamicFields(
-            requireContext(),
-            viewBinding.mainForm.verificationRelatedDynamicFieldsContainer,
-            verificationRelatedDynamicInputsFields,
-            childFragmentManager
-        )
 
         inflateDynamicFields(
             requireContext(),

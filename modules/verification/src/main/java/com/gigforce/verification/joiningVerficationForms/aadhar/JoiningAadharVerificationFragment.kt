@@ -40,7 +40,7 @@ class JoiningAadhaarVerificationFragment : BaseAadharDetailInfoFragment(
     override fun dataValidatedAndSubmitted(
         data: AadhaarDetailsDataModel
     ) {
-        sharedViewModel.aadhaarInfoSubmitted(data)
+        sharedViewModel.aadhaarInfoSubmitted()
         findNavController().navigateUp()
     }
 }
