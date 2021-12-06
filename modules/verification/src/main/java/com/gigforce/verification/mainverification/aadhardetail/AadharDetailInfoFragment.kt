@@ -29,6 +29,7 @@ import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.AppConstants
 import com.gigforce.core.ScopedStorageConstants
+import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.datamodels.City
 import com.gigforce.core.datamodels.State
 import com.gigforce.core.datamodels.verification.AadhaarDetailsDataModel
@@ -83,7 +84,8 @@ class AadharDetailInfoFragment : Fragment(),
             return FirebaseAuth.getInstance().currentUser
         }
     private var userIdToUse: String? = null
-
+    @Inject
+    lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
     @Inject
     lateinit var buildConfig: IBuildConfig
 
@@ -120,6 +122,10 @@ class AadharDetailInfoFragment : Fragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        sharedPreAndCommonUtilInterface.saveDataBoolean(
+            StringConstants.AADHAR_DETAIL_SP.value,
+            false
+        )
         getDataFromIntent(savedInstanceState)
         initviews()
         setViews()

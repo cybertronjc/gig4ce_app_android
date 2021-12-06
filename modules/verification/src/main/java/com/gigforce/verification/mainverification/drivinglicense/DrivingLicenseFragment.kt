@@ -35,6 +35,7 @@ import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.*
+import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.datamodels.verification.DrivingLicenseDataModel
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.gone
@@ -100,7 +101,8 @@ class DrivingLicenseFragment : Fragment(),
 
     var verificationScreenStatus = VerificationScreenStatus.DEFAULT
     var ocrOrVerificationRquested = false
-
+    @Inject
+    lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
     @Inject
     lateinit var navigation: INavigation
     @Inject
@@ -133,6 +135,10 @@ class DrivingLicenseFragment : Fragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        sharedPreAndCommonUtilInterface.saveDataBoolean(
+            com.gigforce.common_ui.StringConstants.DRIVING_LICENCE_SP.value,
+            false
+        )
         getDataFromIntents(savedInstanceState)
         initviews()
         setViews()

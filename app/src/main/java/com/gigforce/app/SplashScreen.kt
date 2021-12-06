@@ -65,6 +65,59 @@ class SplashScreen : AppCompatActivity() {
                                     true
                                 )
                                 mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                            }else if(param == "bankdetails"){
+                                sharedPreAndCommonUtilInterface.saveDataBoolean(
+                                    StringConstants.BANK_DETAIL_SP.value,
+                                    true
+                                )
+                                mainIntent.putExtra(
+                                    StringConstants.BANK_DETAIL_DEEP_LINK.value,
+                                    true
+                                )
+                                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                            }else if(param == "pancard"){
+                                sharedPreAndCommonUtilInterface.saveDataBoolean(
+                                    StringConstants.PAN_CARD_SP.value,
+                                    true
+                                )
+                                mainIntent.putExtra(
+                                    StringConstants.PAN_CARD_DEEP_LINK.value,
+                                    true
+                                )
+                                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+
+                            }else if(param == "aadhardetails"){
+                                sharedPreAndCommonUtilInterface.saveDataBoolean(
+                                    StringConstants.AADHAR_DETAIL_SP.value,
+                                    true
+                                )
+                                mainIntent.putExtra(
+                                    StringConstants.AADHAR_DETAIL_DEEP_LINK.value,
+                                    true
+                                )
+                                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                            }
+                            else if(param == "drivinglicence"){
+                                sharedPreAndCommonUtilInterface.saveDataBoolean(
+                                    StringConstants.DRIVING_LICENCE_SP.value,
+                                    true
+                                )
+                                mainIntent.putExtra(
+                                    StringConstants.DRIVING_LICENCE_DEEP_LINK.value,
+                                    true
+                                )
+                                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+
+                            }else if(param == "verification"){
+                                sharedPreAndCommonUtilInterface.saveDataBoolean(
+                                    StringConstants.VERIFICATION_SP.value,
+                                    true
+                                )
+                                mainIntent.putExtra(
+                                    StringConstants.VERIFICATION_DEEP_LINK.value,
+                                    true
+                                )
+                                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                             }
                         }
                     }
