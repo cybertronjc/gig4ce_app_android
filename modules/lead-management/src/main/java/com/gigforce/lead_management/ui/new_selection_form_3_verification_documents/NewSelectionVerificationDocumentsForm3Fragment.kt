@@ -138,7 +138,6 @@ class NewSelectionVerificationDocumentsForm3Fragment :
         }
         setBackButtonDrawable(R.drawable.ic_chevron)
         makeBackgroundMoreRound()
-        makeTitleBold()
     }
 
     private fun initViewModel() = viewModel

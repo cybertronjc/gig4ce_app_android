@@ -6,7 +6,6 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
         android:paddingBottom="6dp"
         android:orientation="vertical">
 
@@ -23,6 +22,9 @@
                 android:layout_height="wrap_content"
                 android:gravity="top"
                 android:lineSpacingExtra="1sp"
+                android:textFontWeight="500"
+                android:lineHeight="18sp"
+                android:textSize="14sp"
                 android:textAppearance="@style/style_h5"
                 android:translationY="-0.6sp"
                 tools:text="Some title" />
@@ -35,6 +37,8 @@
                 android:gravity="top"
                 android:lineSpacingExtra="1sp"
                 android:text="@string/common_optional"
+                android:textFontWeight="500"
+                android:lineHeight="18sp"
                 android:textAppearance="@style/body_primary"
                 android:translationY="-0.6sp" />
 
@@ -63,8 +67,8 @@
 
                 <com.gigforce.common_ui.views.GigforceImageView
                     android:id="@+id/status_iv"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
                     android:layout_marginStart="10dp"
                     />
 
@@ -76,6 +80,7 @@
                     android:layout_weight="1"
                     android:gravity="top"
                     android:lineSpacingExtra="4sp"
+                    android:layout_marginTop="2dp"
                     tools:text="string/click_to_select_city_lead"
                     android:textAppearance="@style/body_primary"
                     android:textColor="@color/lipstick_2"

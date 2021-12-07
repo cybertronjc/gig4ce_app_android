@@ -114,16 +114,16 @@ class NewSelectionForm3VerificationDocumentViewModel @Inject constructor(
             verificationDynamicFields
         )
 
-        val anyDocumentNotUploaded = verificationDynamicFields.find {
-            it.status == VerificationStatus.NOT_UPLOADED
-        } != null
-
-        if (anyDocumentNotUploaded) {
+        if (checkIfAnyRequiredDocumentNotUploaded()) {
             _viewState.value = NewSelectionForm3ViewState.DisableSubmitButton
         } else {
             _viewState.value = NewSelectionForm3ViewState.EnableSubmitButton
         }
     }
+
+    private fun checkIfAnyRequiredDocumentNotUploaded() = verificationDynamicFields.find {
+       it.mandatory &&  it.status == VerificationStatus.NOT_UPLOADED
+    } != null
 
 
     private fun submitJoiningData(

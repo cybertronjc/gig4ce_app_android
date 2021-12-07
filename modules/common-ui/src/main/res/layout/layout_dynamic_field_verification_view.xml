@@ -6,7 +6,6 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
         android:paddingBottom="6dp"
         android:orientation="vertical">
 
@@ -25,6 +24,9 @@
                 android:lineSpacingExtra="1sp"
                 android:textAppearance="@style/style_h5"
                 android:translationY="-0.6sp"
+                android:textFontWeight="500"
+                android:lineHeight="18sp"
+                android:textSize="14sp"
                 tools:text="Some title" />
 
             <TextView
@@ -35,6 +37,8 @@
                 android:gravity="top"
                 android:lineSpacingExtra="1sp"
                 android:text="@string/common_optional"
+                android:textFontWeight="500"
+                android:lineHeight="18sp"
                 android:textAppearance="@style/body_primary"
                 android:translationY="-0.6sp" />
 
@@ -75,6 +79,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_weight="1"
                     android:gravity="top"
+                    android:layout_marginTop="2dp"
                     android:lineSpacingExtra="4sp"
                     tools:text="string/click_to_select_city_lead"
                     android:textAppearance="@style/body_primary"

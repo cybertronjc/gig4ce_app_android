@@ -125,7 +125,7 @@ View.OnClickListener{
 
     override fun onClick(v: View?) {
         joiningVerificationNavigation.openBankDetailsVerificationForJoiningFragment(
-            "sss"
+            viewData.userId
         )
     }
 }
