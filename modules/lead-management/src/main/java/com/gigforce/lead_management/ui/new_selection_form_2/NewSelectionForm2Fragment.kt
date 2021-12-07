@@ -29,6 +29,8 @@ import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
+import com.gigforce.common_ui.signature.SharedSignatureUploadViewModel
+import com.gigforce.common_ui.signature.SharedSignatureUploadViewModelViewState
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.getTextChangeAsStateFlow
@@ -43,7 +45,6 @@ import com.gigforce.lead_management.models.WhatsappTemplateModel
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModelState
 import com.gigforce.lead_management.ui.new_selection_form.NewSelectionForm1Fragment
-import com.gigforce.lead_management.ui.new_selection_form_3_verification_documents.NewSelectionForm3Events
 import com.gigforce.lead_management.ui.new_selection_form_3_verification_documents.NewSelectionVerificationDocumentsForm3Fragment
 import com.gigforce.lead_management.ui.new_selection_form_submittion_success.SelectionFormSubmitSuccessFragment
 import com.gigforce.lead_management.ui.select_city.SelectCityFragment
@@ -91,6 +92,8 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
 
     private val viewModel: NewSelectionForm2ViewModel by viewModels()
     private val leadMgmtSharedViewModel: LeadManagementSharedViewModel by activityViewModels()
+    private val sharedSignatureViewModel: SharedSignatureUploadViewModel by activityViewModels()
+
     private val dateFormatter = SimpleDateFormat("dd/MMM/yy", Locale.getDefault())
 
     //Data from previous screen
@@ -249,6 +252,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         initListeners(viewBinding)
         initViewModel()
         initSharedViewModel()
+        initSharedSingatureViewModel()
     }
 
     private fun setTextWatchers() = viewBinding.mainForm.apply {
@@ -539,7 +543,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         selectedCity: String?,
         selectedReportingLocation: String?,
         locationType: String?,
-        doesUserHaveToUploadAnyVerificationDocuments : Boolean
+        doesUserHaveToUploadAnyVerificationDocuments: Boolean
     ) = viewBinding.apply {
         stopShimmer(
             dataLoadingShimmerContainer,
@@ -579,7 +583,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                 getString(R.string.click_to_select_location_lead)
         }
 
-        viewBinding.mainForm.nextButton.text =  if(doesUserHaveToUploadAnyVerificationDocuments){
+        viewBinding.mainForm.nextButton.text = if (doesUserHaveToUploadAnyVerificationDocuments) {
             getString(R.string.next_camel_case_common_ui)
         } else {
             getString(R.string.submit_lead)
@@ -616,6 +620,25 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                     )
                 }
             })
+    }
+
+    private fun initSharedSingatureViewModel() = lifecycleScope.launchWhenCreated {
+        sharedSignatureViewModel
+            .viewState
+            .collect {
+
+                when (it) {
+                    is SharedSignatureUploadViewModelViewState.SignatureCaptured -> {
+                        dynamicFieldsInflaterHelper.signatureCapturedUpdateStatus(
+                            viewBinding.mainForm.jobProfileDependentDynamicFieldsContainer,
+                            it.pathOnFirebase
+                        )
+                    }
+                    else -> {
+                    }
+                }
+
+            }
     }
 
 

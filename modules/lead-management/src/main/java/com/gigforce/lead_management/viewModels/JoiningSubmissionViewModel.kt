@@ -43,6 +43,7 @@ open class JoiningSubmissionViewModel constructor(
         //Cleaning up Final JSON
         joiningRequest.business.jobProfiles = emptyList()
         joiningRequest.jobProfile.dynamicFields = emptyList()
+        joiningRequest.jobProfile.verificationRelatedFields = emptyList()
 
        return submitJoiningData(
             joiningRequest

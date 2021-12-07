@@ -24,7 +24,10 @@
                 android:lineSpacingExtra="1sp"
                 android:textAppearance="@style/style_h5"
                 android:translationY="-0.6sp"
-                tools:text="ss" />
+                tools:text="ss"
+                android:textFontWeight="500"
+                android:lineHeight="18sp"
+                android:textSize="14sp"/>
 
             <TextView
                 android:id="@+id/optional_textview"
@@ -32,6 +35,9 @@
                 android:layout_height="18dp"
                 android:layout_marginStart="4dp"
                 android:gravity="top"
+                android:textFontWeight="500"
+                android:lineHeight="18sp"
+                android:textSize="14sp"
                 android:lineSpacingExtra="1sp"
                 android:text="@string/common_optional"
                 android:textAppearance="@style/body_primary"
@@ -63,10 +69,12 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <ImageView
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
+                <com.gigforce.common_ui.views.GigforceImageView
+                    android:id="@+id/status_imageview"
                     android:layout_marginEnd="8dp"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:layout_marginStart="10dp"
                     android:src="@drawable/ic_pending_yellow" />
 
                 <TextView
@@ -93,12 +101,12 @@
         </com.google.android.material.card.MaterialCardView>
 
 
-<!--        <include-->
-<!--            android:id="@+id/error_layout"-->
-<!--            layout="@layout/layout_validation_error"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:visibility="gone" />-->
+        <include
+            android:id="@+id/error_layout"
+            layout="@layout/layout_validation_error"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
 
     </LinearLayout>
 

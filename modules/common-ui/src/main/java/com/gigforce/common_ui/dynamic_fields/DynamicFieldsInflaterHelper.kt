@@ -186,25 +186,18 @@ class DynamicFieldsInflaterHelper @Inject constructor(
         return dynamicFieldsData
     }
 
-    fun handleVerificationSubmissionEvent(
-       verificationRelatedDynamicFieldsContainer : LinearLayout,
-       event : SharedVerificationViewModelEvent
+    fun signatureCapturedUpdateStatus(
+       dynamicFieldsContainer : LinearLayout,
+       signatureImagePathInFirebase : String
     ){
 
-        for (i in 0 until verificationRelatedDynamicFieldsContainer.childCount) {
+        for (i in 0 until dynamicFieldsContainer.childCount) {
 
-            val dynamicFieldView = verificationRelatedDynamicFieldsContainer.getChildAt(i) as DynamicVerificationFieldView
+            val dynamicFieldView = dynamicFieldsContainer.getChildAt(i) as DynamicFieldView
 
-            if (dynamicFieldView.fieldType == FieldTypes.AADHAAR_VERIFICATION_VIEW && event is SharedVerificationViewModelEvent.AadhaarCardInfoSubmitted) {
-                dynamicFieldView.updateDocumentStatus(VerificationStatus.UNDER_PROCESSING)
-            } else if (dynamicFieldView.fieldType == FieldTypes.BANK_VERIFICATION_VIEW && event is SharedVerificationViewModelEvent.BankDetailsInfoSubmitted) {
-                dynamicFieldView.updateDocumentStatus(VerificationStatus.UNDER_PROCESSING)
-            } else if (dynamicFieldView.fieldType == FieldTypes.DL_VERIFICATION_VIEW && event is SharedVerificationViewModelEvent.DrivingLicenseInfoSubmitted) {
-                dynamicFieldView.updateDocumentStatus(VerificationStatus.UNDER_PROCESSING)
-            } else if (dynamicFieldView.fieldType == FieldTypes.PAN_VERIFICATION_VIEW && event is SharedVerificationViewModelEvent.PanCardInfoSubmitted) {
-                dynamicFieldView.updateDocumentStatus(VerificationStatus.UNDER_PROCESSING)
+            if (dynamicFieldView.fieldType == FieldTypes.SIGNATURE_DRAWER_2 ) {
+                (dynamicFieldView as DynamicSignatureDrawerView2).signatureCapturedUpdateStatus(signatureImagePathInFirebase)
             }
-
         }
     }
 }

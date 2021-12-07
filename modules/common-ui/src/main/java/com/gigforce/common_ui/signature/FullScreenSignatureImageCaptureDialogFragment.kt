@@ -12,8 +12,9 @@ import com.gigforce.common_image_picker.ImageCropOptions
 import com.gigforce.common_image_picker.image_cropper.ImageCropActivity
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.databinding.FragmentSingatureCaptureFullScreenBinding
-import com.gigforce.common_ui.viewmodels.signature.SharedSignatureViewModel
 import com.gigforce.core.base.BaseFragment2
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,7 +35,7 @@ class FullScreenSignatureImageCaptureDialogFragment : BaseFragment2<FragmentSing
     @Inject lateinit var navigation : INavigation
 
     private val viewModel : SignatureUploadViewModel by viewModels()
-    private val sharedViewModel : SharedSignatureViewModel by activityViewModels()
+    private val sharedViewModel : SharedSignatureUploadViewModel by activityViewModels()
 
     private val cameraAndGalleryIntegrator: CameraAndGalleryIntegrator by lazy {
         CameraAndGalleryIntegrator(this)
@@ -64,6 +65,10 @@ class FullScreenSignatureImageCaptureDialogFragment : BaseFragment2<FragmentSing
         this.submitBtn.setOnClickListener {
             cameraAndGalleryIntegrator.showCameraAndGalleryBottomSheet()
         }
+
+        this.cancelBtn.setOnClickListener {
+            viewModel.handleEvent(SignatureViewEvents.DoneOrCancelButtonClicked)
+        }
     }
 
     private fun initViewModel() {
@@ -73,17 +78,56 @@ class FullScreenSignatureImageCaptureDialogFragment : BaseFragment2<FragmentSing
             .observe(viewLifecycleOwner,{
 
                 when(it){
-                    is SignatureUploadViewState.BackgroundRemovedFromSignature -> TODO()
-                    is SignatureUploadViewState.ErrorUploadingSignatureImage -> TODO()
-                    is SignatureUploadViewState.ErrorWhileRemovingBackgroundFromSignature -> TODO()
-                    SignatureUploadViewState.RemovingBackgroundFromSignature -> TODO()
-                    is SignatureUploadViewState.SignatureUploadCompletedOrCancelled -> handleSignatureUploadCompleteOrOperationCancellation(
-                        it.signature
+                    SignatureUploadViewState.RemovingBackgroundFromSignature -> showBackgroundImageBackgroundRemovingLayout()
+                    is SignatureUploadViewState.BackgroundRemovedFromSignature -> {
+                        showImageWithBackgroundRemoved(it.processedImage)
+                    }
+                    is SignatureUploadViewState.ErrorWhileRemovingBackgroundFromSignature -> showImageWithBackgroundRemoved(
+                        it.processedImage
                     )
-                    is SignatureUploadViewState.SignatureUploaded -> TODO()
-                    SignatureUploadViewState.UploadingSignature -> TODO()
+                    is SignatureUploadViewState.ErrorUploadingSignatureImage -> {
+                        viewBinding.previewScreen.uploadingAnimationView.gone()
+
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setMessage("Unable to upload image")
+                            .setPositiveButton("Okay"){_,_ ->}
+                            .show()
+                    }
+                    SignatureUploadViewState.NavigateBackToPreviousScreen -> navigation.navigateUp()
+                    is SignatureUploadViewState.SignatureUploaded -> handleSignatureUploadCompleteOrOperationCancellation(
+                        it.firebaseCompletePath
+                    )
+                    SignatureUploadViewState.UploadingSignature -> showSignatureUploading()
                 }
             })
+    }
+
+    private fun showSignatureUploading() {
+        viewBinding.captureLayout.root.gone()
+        viewBinding.previewScreen.root.visible()
+
+        viewBinding.previewScreen.uploadingAnimationView.visible()
+    }
+
+    private fun showErrorWhileRemovingBackground(
+        processedImage: Uri
+    ) {
+        viewBinding.captureLayout.removingBackgroundProgressBar.gone()
+    }
+
+    private fun showBackgroundImageBackgroundRemovingLayout() {
+        viewBinding.captureLayout.removingBackgroundProgressBar.visible()
+    }
+
+    private fun showImageWithBackgroundRemoved(processedImage: Uri) {
+        viewBinding.captureLayout.removingBackgroundProgressBar.gone()
+        viewBinding.captureLayout.root.gone()
+
+        viewBinding.previewScreen.root.visible()
+        viewBinding.previewScreen.signatureImage.loadImage(processedImage)
+
+        viewBinding.submitBtn.text = "Change"
+        viewBinding.cancelBtn.text = "Done"
     }
 
     private fun handleSignatureUploadCompleteOrOperationCancellation(
@@ -91,7 +135,7 @@ class FullScreenSignatureImageCaptureDialogFragment : BaseFragment2<FragmentSing
     ) {
 
         if(signature != null){
-            sharedViewModel.signatureUploaded(signature)
+            sharedViewModel.signatureCapturedAndUploaded(signature)
         }
 
         navigation.navigateUp()

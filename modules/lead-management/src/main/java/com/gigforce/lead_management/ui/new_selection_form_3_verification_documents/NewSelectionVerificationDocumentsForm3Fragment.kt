@@ -13,6 +13,9 @@ import com.gigforce.common_ui.dynamic_fields.DynamicFieldsInflaterHelper
 import com.gigforce.common_ui.dynamic_fields.data.DynamicVerificationField
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
+import com.gigforce.common_ui.signature.SharedSignatureUploadViewModel
+import com.gigforce.common_ui.signature.SharedSignatureUploadViewModelViewState
+import com.gigforce.common_ui.signature.SignatureUploadViewModel
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.common_ui.viewmodels.verification.SharedVerificationViewModel
 import com.gigforce.common_ui.viewmodels.verification.SharedVerificationViewModelEvent
@@ -61,6 +64,7 @@ class NewSelectionVerificationDocumentsForm3Fragment :
     lateinit var dynamicFieldsInflaterHelper: DynamicFieldsInflaterHelper
 
     private val viewModel: NewSelectionForm3VerificationDocumentViewModel by viewModels()
+
 
     //Data from previous screen
     private lateinit var joiningRequest: SubmitJoiningRequest
@@ -116,7 +120,6 @@ class NewSelectionVerificationDocumentsForm3Fragment :
         initListeners(viewBinding)
         initViewModel()
     }
-
 
     private fun initListeners(
         viewBinding: FragmentNewSelectionForm3VerificationBinding
@@ -185,11 +188,6 @@ class NewSelectionVerificationDocumentsForm3Fragment :
     private fun updateVerificationDocumentStatus(
         event: SharedVerificationViewModelEvent
     ) {
-
-        dynamicFieldsInflaterHelper.handleVerificationSubmissionEvent(
-            viewBinding.mainForm.verificationRelatedDynamicFieldsContainer,
-            event
-        )
     }
 
     private fun errorWhileSubmittingJoiningRequest(

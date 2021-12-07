@@ -13,6 +13,8 @@ import com.gigforce.core.datamodels.verification.VerificationUserSubmittedData
 
 interface BaseDynamicFieldView {
 
+    val fieldType : String
+
     fun setError(
         error: SpannedString
     )
@@ -33,7 +35,7 @@ interface DynamicFieldView : BaseDynamicFieldView {
 
 interface DynamicVerificationFieldView : BaseDynamicFieldView {
 
-    val fieldType : String
+
 
     fun bind(
         fieldDetails: DynamicVerificationField

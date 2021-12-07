@@ -93,5 +93,6 @@
     <string name="common_optional">(वैकल्पिक)</string>
     <string name="common_change_date">बदलाव दिनांक</string>
     <string name="note_aadhaar_verfication">Note</string>
+    <string name="signature_instruction">Note: Please upload the image of signature with white background.</string>
 
 </resources>

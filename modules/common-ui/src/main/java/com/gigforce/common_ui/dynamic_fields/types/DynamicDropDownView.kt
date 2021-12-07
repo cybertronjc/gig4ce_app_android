@@ -35,6 +35,9 @@ class DynamicDropDownView(
     private lateinit var viewData: DynamicField
     private var editTextString: String = ""
 
+    override val fieldType: String
+        get() = FieldTypes.DROP_DOWN
+
     init {
         this.layoutParams =
             LayoutParams(

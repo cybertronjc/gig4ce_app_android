@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:id="@+id/signature_not_removed_instruction_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_camera_round" />
+
+            <TextView
+                style="@style/body_primary"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:lineHeight="18dp"
+                android:text="If the background is not removed completely,
+try uploading another image."
+                android:textColor="@color/black"
+                android:textFontWeight="500" />
+
+
+        </LinearLayout>
+
+
+        <com.gigforce.common_ui.views.GigforceImageView
+            android:id="@+id/signature_image"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="fitXY"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:src="@drawable/ic_singature_background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/signature_not_removed_instruction_layout"
+            tools:layout_editor_absoluteX="8dp" />
+
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/uploading_animation_view"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/signature_image"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/signature_image"
+            app:lottie_autoPlay="true"
+            app:lottie_fileName="lottie_uploading_animation.json"
+            app:lottie_loop="false" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

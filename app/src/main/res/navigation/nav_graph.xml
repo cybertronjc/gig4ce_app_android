@@ -1105,25 +1105,16 @@
         android:name="com.gigforce.core.documentFileHelper.RequestDocumentTreeAccessFragment"
         android:label="RequestDocumentTreeAccessFragment" />
     <fragment
-        android:id="@+id/joiningAadhaarVerificationFragment"
-        android:name="com.gigforce.verification.joiningVerficationForms.JoiningAadhaarVerificationFragment"
-        android:label="JoiningAadhaarVerificationFragment"/>
-    <fragment
-        android:id="@+id/joiningBankDetailsVerificationFragment"
-        android:name="com.gigforce.verification.joiningVerficationForms.JoiningBankDetailsVerificationFragment"
-        android:label="JoiningBankDetailsVerificationFragment"/>
-    <fragment
-        android:id="@+id/joiningDLVerificationFragment"
-        android:name="com.gigforce.verification.joiningVerficationForms.JoiningDLVerificationFragment"
-        android:label="JoiningBankDetailsVerificationFragment"/>
-    <fragment
-        android:id="@+id/joiningPanVerificationFragment"
-        android:name="com.gigforce.verification.joiningVerficationForms.JoiningPanVerificationFragment"
-        android:label="JoiningPanVerificationFragment"/>
-    <fragment
         android:id="@+id/newSelectionVerificationDocumentsForm3Fragment"
         android:name="com.gigforce.lead_management.ui.new_selection_form_3_verification_documents.NewSelectionVerificationDocumentsForm3Fragment"
         android:label="NewSelectionVerificationDocumentsForm3Fragment"/>
-
+    <fragment
+        android:id="@+id/signatureImageCaptureDialogFragment"
+        android:name="com.gigforce.common_ui.signature.FullScreenSignatureImageCaptureDialogFragment"
+        android:label="FullScreenSignatureImageCaptureDialogFragment"/>
+    <fragment
+        android:id="@+id/signatureDrawerDialogFragment"
+        android:name="com.gigforce.common_ui.signature.FullScreenSignatureDrawerDialogFragment"
+        android:label="FullScreenSignatureDrawerDialogFragment"/>
 </navigation>
 

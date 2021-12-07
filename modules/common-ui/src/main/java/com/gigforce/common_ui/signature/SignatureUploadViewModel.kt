@@ -42,9 +42,7 @@ sealed class SignatureUploadViewState {
         val error: String
     ) : SignatureUploadViewState()
 
-    data class SignatureUploadCompletedOrCancelled(
-        val signature: String?
-    ) : SignatureUploadViewState()
+    object NavigateBackToPreviousScreen: SignatureUploadViewState()
 }
 
 @HiltViewModel
@@ -74,9 +72,7 @@ class SignatureUploadViewModel @Inject constructor(
         if(processedImageUri != null){
             uploadImage(processedImageUri!!)
         } else{
-            _viewState.value = SignatureUploadViewState.SignatureUploadCompletedOrCancelled(
-                null
-            )
+            _viewState.value = SignatureUploadViewState.NavigateBackToPreviousScreen
         }
     }
 

@@ -35,23 +35,5 @@ class NavForVerificationModule(
         baseImplementation.registerRoute("${moduleName}/pancardimageupload",R.id.panCardFragment)
         baseImplementation.registerRoute("${moduleName}/drivinglicenseimageupload",R.id.drivingLicenseFragment)
         baseImplementation.registerRoute("${moduleName}/AadharDetailInfoFragment",R.id.adharDetailInfoFragment)
-
-        //Joining verification
-        baseImplementation.registerRoute(
-            JoiningVerificationNavDestinations.JOINING_AADHAAR_VERIFICATION_FRAGMENT,
-            R.id.joiningAadhaarVerificationFragment
-        )
-        baseImplementation.registerRoute(
-            JoiningVerificationNavDestinations.JOINING_BANK_DETAIL_VERIFICATION_FRAGMENT,
-            R.id.joiningBankDetailsVerificationFragment
-        )
-        baseImplementation.registerRoute(
-            JoiningVerificationNavDestinations.JOINING_DL_VERIFICATION_FRAGMENT,
-            R.id.joiningDLVerificationFragment
-        )
-        baseImplementation.registerRoute(
-            JoiningVerificationNavDestinations.JOINING_PAN_VERIFICATION_FRAGMENT,
-            R.id.joiningPanVerificationFragment
-        )
     }
 }

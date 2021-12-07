@@ -29,6 +29,8 @@ import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
+import com.gigforce.common_ui.signature.SharedSignatureUploadViewModel
+import com.gigforce.common_ui.signature.SharedSignatureUploadViewModelViewState
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.getTextChangeAsStateFlow
@@ -73,6 +75,7 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
 
     private val viewModel: NewSelectionForm1ViewModel by viewModels()
     private val leadMgmtSharedViewModel: LeadManagementSharedViewModel by activityViewModels()
+    private val sharedSignatureViewModel: SharedSignatureUploadViewModel by activityViewModels()
 
     private val contactsDelegate: ContactsDelegate by lazy {
         ContactsDelegate(requireContext().contentResolver)
@@ -171,6 +174,7 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
         initListeners(viewBinding)
         initViewModel()
         initSharedViewModel()
+        initSharedSingatureViewModel()
     }
 
     private fun requestFocusOnMobileNoEditText() = viewBinding.mainForm.apply {
@@ -498,6 +502,23 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
                 }
             })
     }
+
+    private fun initSharedSingatureViewModel() = lifecycleScope.launchWhenCreated {
+        sharedSignatureViewModel
+            .viewState
+            .collect {
+
+                when (it) {
+                    is SharedSignatureUploadViewModelViewState.SignatureCaptured -> {
+                        dynamicFieldsInflaterHelper.signatureCapturedUpdateStatus(
+                            viewBinding.mainForm.jobProfileDependentDynamicFieldsContainer,
+                            it.pathOnFirebase
+                        )
+                    }
+                }
+            }
+    }
+
 
     private fun showSelectedBusiness(
         businessSelected: JoiningBusinessAndJobProfilesItem

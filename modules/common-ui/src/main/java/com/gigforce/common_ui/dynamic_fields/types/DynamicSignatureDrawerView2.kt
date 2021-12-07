@@ -16,11 +16,14 @@ import com.gigforce.common_ui.dynamic_fields.data.DataFromDynamicInputField
 import com.gigforce.common_ui.dynamic_fields.data.DynamicField
 import com.gigforce.common_ui.dynamic_fields.data.FieldTypes
 import com.gigforce.common_ui.ext.addMandatorySymbolToTextEnd
+import com.gigforce.common_ui.navigation.signature.SignatureNavigation
 import com.gigforce.common_ui.signature.FullScreenSignatureImageCaptureDialogFragment
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class DynamicSignatureDrawerView2(
     context: Context,
     attrs: AttributeSet?
@@ -29,6 +32,8 @@ class DynamicSignatureDrawerView2(
     attrs
 ), DynamicFieldView {
 
+
+    @Inject lateinit var signatureNavigation : SignatureNavigation
     private var viewBinding: LayoutDynamicFieldSignatureView2Binding
     private lateinit var viewData: DynamicField
     private lateinit var fragmentManager : FragmentManager
@@ -48,6 +53,8 @@ class DynamicSignatureDrawerView2(
 
         setListenersOnView()
     }
+
+    override val fieldType: String get() = FieldTypes.SIGNATURE_DRAWER_2
 
     override fun bind(
         fieldDetails: DynamicField
@@ -103,13 +110,13 @@ class DynamicSignatureDrawerView2(
     override fun setError(
         error: SpannedString
     ) {
-//        viewBinding.errorLayout.root.visible()
-//        viewBinding.errorLayout.errorTextview.text = error
+        viewBinding.errorLayout.root.visible()
+        viewBinding.errorLayout.errorTextview.text = error
     }
 
     override fun removeError() {
-//        viewBinding.errorLayout.errorTextview.text = null
-//        viewBinding.errorLayout.root.gone()
+        viewBinding.errorLayout.errorTextview.text = null
+        viewBinding.errorLayout.root.gone()
     }
 
     override fun validateDataAndReturnDataElseNull(): DataFromDynamicInputField? {
@@ -143,7 +150,7 @@ class DynamicSignatureDrawerView2(
                             resources.getString(R.string.common_note_with_colon)
                         )
                     }
-                    append(" Please select ${viewData.title}")
+                    append(" Please click ${viewData.title}")
                 })
             } else {
                 removeError()
@@ -151,10 +158,17 @@ class DynamicSignatureDrawerView2(
         }
     }
 
+    fun signatureCapturedUpdateStatus(
+        signaturePathOnFirebase : String
+    ){
+        signatureImagePath = signaturePathOnFirebase
+        viewBinding.statusImageview.loadImage(R.drawable.ic_success_round_green)
+    }
+
     private fun setListenersOnView() = viewBinding.apply {
 
         this.signatureLayout.setOnClickListener {
-
+            signatureNavigation.openCaptureSignatureFragment()
         }
     }
 }

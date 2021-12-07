@@ -16,7 +16,7 @@ class DynamicSignatureDrawerView(
 ) : LinearLayout(
     context,
     attrs
-) {
+){
 
 //    private var viewBinding: LayoutDynamicFieldSignatureViewBinding
     private lateinit var viewData: DynamicField
@@ -116,7 +116,7 @@ class DynamicSignatureDrawerView(
             id = viewData.id,
             title = viewData.title,
             value = signatureImagePath,
-            fieldType = FieldTypes.DATE_PICKER
+            fieldType = FieldTypes.SIGNATURE_DRAWER_2
         )
     }
 
