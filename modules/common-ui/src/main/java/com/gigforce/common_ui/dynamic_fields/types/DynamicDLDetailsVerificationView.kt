@@ -20,9 +20,11 @@ import com.gigforce.common_ui.navigation.JoiningVerificationFormsNavigation
 import com.gigforce.common_ui.viewmodels.verification.SharedVerificationViewModelEvent
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.parcel.Parcelize
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class DynamicDLDetailsVerificationView(
     context: Context,
     attrs: AttributeSet?
@@ -63,6 +65,7 @@ class DynamicDLDetailsVerificationView(
         setTitle(fieldDetails.title)
         settingFieldAsOptionalOrMandatory(fieldDetails)
         setPrefillTextOrHint(fieldDetails.prefillText, fieldDetails.title)
+        updateDocumentStatus(fieldDetails.status)
     }
 
     private fun setPrefillTextOrHint(
@@ -91,7 +94,12 @@ class DynamicDLDetailsVerificationView(
     }
 
     override fun updateDocumentStatus(status: String) {
-        TODO("Not yet implemented")
+        updateDocumentStatusImage(
+            status,
+            viewBinding.statusIv,
+            viewBinding.verificationSubtitleLabel,
+            viewData.prefillText ?: "Upload"
+        )
     }
 
     override fun setError(

@@ -14,7 +14,7 @@ import com.gigforce.common_ui.R
 import com.gigforce.common_ui.views.GigforceSignatureView
 
 
-class FullScreenSignatureDialogFragment : DialogFragment() {
+class FullScreenSignatureDrawerDialogFragment : DialogFragment() {
 
     private var currentOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     private lateinit var signatureView: GigforceSignatureView
@@ -89,7 +89,7 @@ class FullScreenSignatureDialogFragment : DialogFragment() {
         fun launch(
             childFragmentManager: FragmentManager,
         ) {
-            val frag = FullScreenSignatureDialogFragment()
+            val frag = FullScreenSignatureDrawerDialogFragment()
             frag.show(childFragmentManager, TAG)
         }
     }

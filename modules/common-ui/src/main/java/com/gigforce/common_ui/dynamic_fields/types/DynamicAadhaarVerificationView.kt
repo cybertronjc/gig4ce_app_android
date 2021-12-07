@@ -11,6 +11,7 @@ import android.widget.LinearLayout
 import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import com.gigforce.common_ui.R
+import com.gigforce.common_ui.databinding.LayoutDynamicFieldAadhaarViewBinding
 import com.gigforce.common_ui.databinding.LayoutDynamicFieldVerificationViewBinding
 import com.gigforce.common_ui.dynamic_fields.DynamicVerificationFieldView
 import com.gigforce.common_ui.dynamic_fields.data.DynamicField
@@ -40,7 +41,7 @@ class DynamicAadhaarVerificationView(
     @Inject
     lateinit var joiningVerificationNavigation: JoiningVerificationFormsNavigation
 
-    private var viewBinding: LayoutDynamicFieldVerificationViewBinding
+    private var viewBinding: LayoutDynamicFieldAadhaarViewBinding
     private lateinit var viewData: DynamicVerificationField
 
     init {
@@ -49,7 +50,7 @@ class DynamicAadhaarVerificationView(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
-        viewBinding = LayoutDynamicFieldVerificationViewBinding.inflate(
+        viewBinding = LayoutDynamicFieldAadhaarViewBinding.inflate(
             LayoutInflater.from(context),
             this,
             true
@@ -63,6 +64,7 @@ class DynamicAadhaarVerificationView(
         fieldDetails: DynamicVerificationField
     ) {
         viewData = fieldDetails
+
         tag = id //setting id of dynamic view as view tag to identify layout at runtime
 
         setTitle(fieldDetails.title)
@@ -113,7 +115,9 @@ class DynamicAadhaarVerificationView(
     override fun updateDocumentStatus(status: String) {
         updateDocumentStatusImage(
             status,
-            viewBinding.statusIv
+            viewBinding.statusIv,
+            viewBinding.verificationSubtitleLabel,
+            viewData.prefillText ?: "Upload"
         )
     }
 

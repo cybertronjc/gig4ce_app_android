@@ -46,9 +46,5 @@ sealed class NewSelectionForm3Events {
         val requiredVerificationDocument : List<DynamicVerificationField>
     ) : NewSelectionForm3Events()
 
-    data class VerificationSubmissionEventReceived(
-      val event : SharedVerificationViewModelEvent
-    ) : NewSelectionForm3Events()
-
     object SubmitButtonPressed : NewSelectionForm3Events()
 }

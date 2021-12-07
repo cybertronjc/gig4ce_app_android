@@ -16,9 +16,11 @@ import com.gigforce.common_ui.ext.addMandatorySymbolToTextEnd
 import com.gigforce.common_ui.navigation.JoiningVerificationFormsNavigation
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.parcel.Parcelize
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class DynamicPANDetailsVerificationView(
     context: Context,
     attrs: AttributeSet?
@@ -59,6 +61,7 @@ class DynamicPANDetailsVerificationView(
         setTitle(fieldDetails.title)
         settingFieldAsOptionalOrMandatory(fieldDetails)
         setPrefillTextOrHint(fieldDetails.prefillText, fieldDetails.title)
+        updateDocumentStatus(fieldDetails.status)
     }
 
     private fun setPrefillTextOrHint(
@@ -101,7 +104,12 @@ class DynamicPANDetailsVerificationView(
 
 
     override fun updateDocumentStatus(status: String) {
-        TODO("Not yet implemented")
+        updateDocumentStatusImage(
+            status,
+            viewBinding.statusIv,
+            viewBinding.verificationSubtitleLabel,
+            viewData.prefillText ?: "Upload"
+        )
     }
 
     @Parcelize

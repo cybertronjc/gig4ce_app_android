@@ -1,23 +1,13 @@
 package com.gigforce.common_ui.dynamic_fields.types
 
 import android.content.Context
-import android.text.SpannedString
 import android.util.AttributeSet
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import androidx.core.text.bold
-import androidx.core.text.buildSpannedString
 import androidx.fragment.app.FragmentManager
-import com.gigforce.common_ui.R
-import com.gigforce.common_ui.dynamic_fields.DynamicFieldView
 import com.gigforce.common_ui.dynamic_fields.data.DataFromDynamicInputField
 import com.gigforce.common_ui.dynamic_fields.data.DynamicField
 import com.gigforce.common_ui.dynamic_fields.data.FieldTypes
-import com.gigforce.common_ui.ext.addMandatorySymbolToTextEnd
-import com.gigforce.common_ui.signature.FullScreenSignatureDialogFragment
-import com.gigforce.core.extensions.gone
-import com.gigforce.core.extensions.visible
 
 
 class DynamicSignatureDrawerView(

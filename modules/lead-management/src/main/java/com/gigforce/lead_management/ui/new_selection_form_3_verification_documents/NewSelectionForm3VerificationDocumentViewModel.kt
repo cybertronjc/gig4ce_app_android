@@ -3,7 +3,6 @@ package com.gigforce.lead_management.ui.new_selection_form_3_verification_docume
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.gigforce.common_ui.UserInfoImp
 import com.gigforce.common_ui.dynamic_fields.data.DynamicVerificationField
 import com.gigforce.common_ui.dynamic_fields.data.FieldTypes
 import com.gigforce.common_ui.dynamic_fields.data.VerificationStatus
@@ -11,7 +10,6 @@ import com.gigforce.common_ui.repository.GigerVerificationRepository
 import com.gigforce.common_ui.repository.LeadManagementRepository
 import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
-import com.gigforce.common_ui.viewmodels.verification.SharedVerificationViewModelEvent
 import com.gigforce.core.datamodels.verification.VerificationBaseModel
 import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.lead_management.models.WhatsappTemplateModel
@@ -58,9 +56,6 @@ class NewSelectionForm3VerificationDocumentViewModel @Inject constructor(
     ) {
         when (event) {
             NewSelectionForm3Events.SubmitButtonPressed -> submitJoiningData(joiningRequest)
-            is NewSelectionForm3Events.VerificationSubmissionEventReceived -> checkVerificationDocumentStatus(
-                event.event
-            )
             is NewSelectionForm3Events.RequiredVerificationDocumentListAcquiredFromPreviousPage -> {
 
                 joiningRequest = event.joiningRequest
@@ -72,27 +67,6 @@ class NewSelectionForm3VerificationDocumentViewModel @Inject constructor(
         }
     }
 
-    private fun checkVerificationDocumentStatus(
-        event: SharedVerificationViewModelEvent
-    ) = viewModelScope.launch {
-
-        verificationDynamicFields.onEach {
-
-            if (it.fieldType == FieldTypes.AADHAAR_VERIFICATION_VIEW && event is SharedVerificationViewModelEvent.AadhaarCardInfoSubmitted) {
-                it.status = VerificationStatus.UNDER_PROCESSING
-                _viewState.value = NewSelectionForm3ViewState.UpdateVerificationDocumentStatus(event)
-            } else if (it.fieldType == FieldTypes.BANK_VERIFICATION_VIEW && event is SharedVerificationViewModelEvent.BankDetailsInfoSubmitted) {
-                it.status = VerificationStatus.UNDER_PROCESSING
-                _viewState.value = NewSelectionForm3ViewState.UpdateVerificationDocumentStatus(event)
-            } else if (it.fieldType == FieldTypes.DL_VERIFICATION_VIEW && event is SharedVerificationViewModelEvent.DrivingLicenseInfoSubmitted) {
-                it.status = VerificationStatus.UNDER_PROCESSING
-                _viewState.value = NewSelectionForm3ViewState.UpdateVerificationDocumentStatus(event)
-            } else if (it.fieldType == FieldTypes.PAN_VERIFICATION_VIEW && event is SharedVerificationViewModelEvent.PanCardInfoSubmitted) {
-                it.status = VerificationStatus.UNDER_PROCESSING
-                _viewState.value = NewSelectionForm3ViewState.UpdateVerificationDocumentStatus(event)
-            }
-        }
-    }
 
     private fun checkVerificationDocumentStatusAndShowIn() = viewModelScope.launch {
         _viewState.value = NewSelectionForm3ViewState.CheckingVerificationDocumentsStatus
@@ -120,25 +94,19 @@ class NewSelectionForm3VerificationDocumentViewModel @Inject constructor(
 
         val userUploadedAadhaarCard =
             verificationDocument.aadhaar_card_questionnaire?.aadhaarCardNo != null
-        val userUploadedBankDetails =
-            verificationDocument.bank_details?.userHasPassBook != null
-        val userUploadedDL =
-            verificationDocument.driving_license?.userHasDL != null
-        val userUploadedPAN =
-            verificationDocument.pan_card?.userHasPanCard != null
-
 
         verificationDynamicFields.onEach {
             it.userId = userUid
 
             if (it.fieldType == FieldTypes.AADHAAR_VERIFICATION_VIEW) {
-                it.status = if(userUploadedAadhaarCard) VerificationStatus.VERIFIED else VerificationStatus.NOT_UPLOADED
+                it.status =
+                    if (userUploadedAadhaarCard) VerificationStatus.VERIFIED else VerificationStatus.NOT_UPLOADED
             } else if (it.fieldType == FieldTypes.BANK_VERIFICATION_VIEW) {
-                it.status = VerificationStatus.VERIFIED
+                it.status = verificationDocument.bank_details?.status ?: VerificationStatus.NOT_UPLOADED
             } else if (it.fieldType == FieldTypes.DL_VERIFICATION_VIEW) {
-                it.status = VerificationStatus.VERIFIED
+                it.status = verificationDocument.driving_license?.status ?: VerificationStatus.NOT_UPLOADED
             } else if (it.fieldType == FieldTypes.PAN_VERIFICATION_VIEW) {
-                it.status = VerificationStatus.VERIFIED
+                it.status = verificationDocument.pan_card?.status ?: VerificationStatus.NOT_UPLOADED
             }
         }
 
@@ -150,9 +118,9 @@ class NewSelectionForm3VerificationDocumentViewModel @Inject constructor(
             it.status == VerificationStatus.NOT_UPLOADED
         } != null
 
-        if(anyDocumentNotUploaded){
+        if (anyDocumentNotUploaded) {
             _viewState.value = NewSelectionForm3ViewState.DisableSubmitButton
-        } else{
+        } else {
             _viewState.value = NewSelectionForm3ViewState.EnableSubmitButton
         }
     }

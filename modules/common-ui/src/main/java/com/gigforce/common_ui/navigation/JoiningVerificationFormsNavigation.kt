@@ -28,18 +28,36 @@ class JoiningVerificationFormsNavigation @Inject constructor(
     fun openBankDetailsVerificationForJoiningFragment(
         userId: String
     ) {
-        navigation.navigateTo(JoiningVerificationNavDestinations.JOINING_BANK_DETAIL_VERIFICATION_FRAGMENT)
+        navigation.navigateTo(
+            JoiningVerificationNavDestinations.VERIFICATION_BANK_DETAILS,
+            bundleOf(
+                AppConstants.INTENT_EXTRA_UID to userId
+            ),
+            NavigationOptions.getNavOptions()
+        )
     }
 
     fun openPanVerificationForJoiningFragment(
         userId: String
     ) {
-        navigation.navigateTo(JoiningVerificationNavDestinations.JOINING_PAN_VERIFICATION_FRAGMENT)
+        navigation.navigateTo(
+            JoiningVerificationNavDestinations.VERIFICATION_PAN_CARD,
+            bundleOf(
+                AppConstants.INTENT_EXTRA_UID to userId
+            ),
+            NavigationOptions.getNavOptions()
+        )
     }
 
     fun openDrivingLicenseVerificationForJoiningFragment(
         userId: String
     ) {
-        navigation.navigateTo(JoiningVerificationNavDestinations.JOINING_DL_VERIFICATION_FRAGMENT)
+        navigation.navigateTo(
+            JoiningVerificationNavDestinations.VERIFICATION_DRIVER_LICENSE,
+            bundleOf(
+                AppConstants.INTENT_EXTRA_UID to userId
+            ),
+            NavigationOptions.getNavOptions()
+        )
     }
 }

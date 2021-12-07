@@ -1,6 +1,7 @@
 package com.gigforce.common_ui.dynamic_fields
 
 import android.text.SpannedString
+import android.widget.TextView
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.dynamic_fields.data.DataFromDynamicInputField
 import com.gigforce.common_ui.dynamic_fields.data.DynamicField
@@ -44,13 +45,27 @@ interface DynamicVerificationFieldView : BaseDynamicFieldView {
 
     fun updateDocumentStatusImage(
         status : String,
-        imageView: GigforceImageView
+        imageView: GigforceImageView,
+        statusTextView : TextView,
+        defaultStatusString : String
     ){
         when (status) {
-            VerificationStatus.VERIFIED -> imageView.loadImage(R.drawable.ic_success_round_green)
-            VerificationStatus.REJECTED -> imageView.loadImage(R.drawable.ic_rejected_round_red)
-            VerificationStatus.UNDER_PROCESSING -> imageView.loadImage(R.drawable.ic_pending_round_yellow)
-            else -> imageView.loadImage(R.drawable.ic_pending_round_yellow)
+            VerificationStatus.VERIFIED -> {
+                imageView.loadImage(R.drawable.ic_success_round_green)
+                statusTextView.text = "Verified"
+            }
+            VerificationStatus.REJECTED -> {
+                imageView.loadImage(R.drawable.ic_rejected_round_red)
+                statusTextView.text = "Rejected"
+            }
+            VerificationStatus.UNDER_PROCESSING -> {
+                imageView.loadImage(R.drawable.ic_pending_round_yellow)
+                statusTextView.text = "Under Processing"
+            }
+            else -> {
+                imageView.loadImage(R.drawable.ic_pending_round_yellow)
+                statusTextView.text = if(defaultStatusString.isNotBlank()) defaultStatusString else "Upload"
+            }
         }
 
     }

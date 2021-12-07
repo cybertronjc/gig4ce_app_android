@@ -22,9 +22,11 @@ import com.gigforce.common_ui.viewmodels.verification.SharedVerificationViewMode
 import com.gigforce.core.datamodels.verification.AadhaarDetailsDataModel
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.parcel.Parcelize
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class DynamicBankDetailsVerificationView(
     context: Context,
     attrs: AttributeSet?
@@ -65,6 +67,7 @@ View.OnClickListener{
         setTitle(fieldDetails.title)
         settingFieldAsOptionalOrMandatory(fieldDetails)
         setPrefillTextOrHint(fieldDetails.prefillText, fieldDetails.title)
+        updateDocumentStatus(fieldDetails.status)
     }
 
     private fun setPrefillTextOrHint(
@@ -106,7 +109,12 @@ View.OnClickListener{
     }
 
     override fun updateDocumentStatus(status: String) {
-
+        updateDocumentStatusImage(
+            status,
+            viewBinding.statusIv,
+            viewBinding.verificationSubtitleLabel,
+            viewData.prefillText ?: "Upload"
+        )
     }
 
     @Parcelize

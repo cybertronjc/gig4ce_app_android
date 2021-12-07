@@ -61,7 +61,6 @@ class NewSelectionVerificationDocumentsForm3Fragment :
     lateinit var dynamicFieldsInflaterHelper: DynamicFieldsInflaterHelper
 
     private val viewModel: NewSelectionForm3VerificationDocumentViewModel by viewModels()
-    private val verificationSharedViewModel: SharedVerificationViewModel by activityViewModels()
 
     //Data from previous screen
     private lateinit var joiningRequest: SubmitJoiningRequest
@@ -116,7 +115,6 @@ class NewSelectionVerificationDocumentsForm3Fragment :
         initToolbar(viewBinding)
         initListeners(viewBinding)
         initViewModel()
-        initVerificationSharedViewModel()
     }
 
 
@@ -271,18 +269,6 @@ class NewSelectionVerificationDocumentsForm3Fragment :
 
         formMainInfoLayout.infoIv.loadImage(R.drawable.ic_no_selection)
         formMainInfoLayout.infoMessageTv.text = error
-    }
-
-    private fun initVerificationSharedViewModel() = lifecycleScope.launchWhenCreated {
-
-        verificationSharedViewModel
-            .submissionEvents
-            .collect {
-                dynamicFieldsInflaterHelper.handleVerificationSubmissionEvent(
-                    viewBinding.mainForm.verificationRelatedDynamicFieldsContainer,
-                    it
-                )
-            }
     }
 
     private fun showVerificationRelatedDynamicFields(

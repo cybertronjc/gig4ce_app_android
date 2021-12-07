@@ -16,8 +16,7 @@ import com.gigforce.common_ui.dynamic_fields.data.DataFromDynamicInputField
 import com.gigforce.common_ui.dynamic_fields.data.DynamicField
 import com.gigforce.common_ui.dynamic_fields.data.FieldTypes
 import com.gigforce.common_ui.ext.addMandatorySymbolToTextEnd
-import com.gigforce.common_ui.signature.FullScreenSignatureDialogFragment
-import com.gigforce.common_ui.signature.FullScreenSignatureImageCatpureDialogFragment
+import com.gigforce.common_ui.signature.FullScreenSignatureImageCaptureDialogFragment
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 
@@ -28,8 +27,7 @@ class DynamicSignatureDrawerView2(
 ) : LinearLayout(
     context,
     attrs
-), DynamicFieldView,
-    FullScreenSignatureImageCatpureDialogFragment.FullScreenSignatureImageCaptureDialogFragmentListener {
+), DynamicFieldView {
 
     private var viewBinding: LayoutDynamicFieldSignatureView2Binding
     private lateinit var viewData: DynamicField
@@ -156,14 +154,7 @@ class DynamicSignatureDrawerView2(
     private fun setListenersOnView() = viewBinding.apply {
 
         this.signatureLayout.setOnClickListener {
-            FullScreenSignatureImageCatpureDialogFragment.launch(fragmentManager,this@DynamicSignatureDrawerView2)
+
         }
-    }
-
-    override fun onSignatureImageCaptured(
-        uploadedSignatureImageUrl: String,
-        signaturePathInFirebase: String
-    ) {
-
     }
 }

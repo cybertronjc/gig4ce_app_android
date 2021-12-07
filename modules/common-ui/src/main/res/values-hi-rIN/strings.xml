@@ -92,5 +92,6 @@
     <string name="common_note_with_colon">ध्यान दें : </string>
     <string name="common_optional">(वैकल्पिक)</string>
     <string name="common_change_date">बदलाव दिनांक</string>
+    <string name="note_aadhaar_verfication">Note</string>
 
 </resources>
