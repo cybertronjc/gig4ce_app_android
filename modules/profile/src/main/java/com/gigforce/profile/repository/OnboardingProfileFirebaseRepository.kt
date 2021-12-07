@@ -78,7 +78,7 @@ class OnboardingProfileFirebaseRepository : BaseFirestoreDBRepository() {
                     "profileAvatarName" to profileAvatarName,
                     "profilePicThumbnail" to profileAvatarNameThumbnail,
                     "updatedAt" to Timestamp.now(),
-                    "updatedBy" to StringConstants.APP.value
+                    "updatedBy" to getUID()
                 )
             )
     }
@@ -141,7 +141,7 @@ class OnboardingProfileFirebaseRepository : BaseFirestoreDBRepository() {
                     "preferredJobLocation.sub_location" to subLocation,
                     "preferredJobLocation.state_code" to stateCode,
                     "updatedAt" to Timestamp.now(),
-                    "updatedBy" to StringConstants.APP.value
+                    "updatedBy" to uid
                 )
             )
     }
@@ -152,7 +152,7 @@ class OnboardingProfileFirebaseRepository : BaseFirestoreDBRepository() {
             .updateOrThrow(
                 mapOf(
                     "leadSource" to sourceMap, "updatedAt" to Timestamp.now(),
-                    "updatedBy" to StringConstants.APP.value
+                    "updatedBy" to uid
                 )
             )
     }

@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gigforce.core.StringConstants
 import com.gigforce.core.datamodels.City
 import com.gigforce.core.datamodels.State
 import com.gigforce.core.datamodels.client_activation.JpApplication
@@ -15,7 +14,7 @@ import com.gigforce.core.datamodels.verification.VerificationBaseModel
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.di.repo.IAadhaarDetailsRepository
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
-import com.gigforce.verification.mainverification.KycOcrResultModel
+import com.gigforce.common_ui.remote.verification.KycOcrResultModel
 import com.gigforce.verification.mainverification.VerificationKycRepo
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
@@ -25,7 +24,7 @@ import okhttp3.MultipartBody
 import javax.inject.Inject
 
 @HiltViewModel
-class AadharDetailInfoViewModel @Inject constructor(private val aadharDetailsRepo: IAadhaarDetailsRepository, private val iBuildConfigVM: IBuildConfigVM) : ViewModel() {
+class AadharDetailInfoViewModel @Inject constructor(private val aadharDetailsRepo: IAadhaarDetailsRepository, private val verificationKycRepo: VerificationKycRepo) : ViewModel() {
 
     val statesResult: MutableLiveData<MutableList<State>> = MutableLiveData<MutableList<State>>()
     val _kycOcrResult = MutableLiveData<KycOcrResultModel>()
@@ -36,7 +35,7 @@ class AadharDetailInfoViewModel @Inject constructor(private val aadharDetailsRep
     val updatedResult: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
     private val _observableAddApplicationSuccess: MutableLiveData<Boolean> = MutableLiveData()
     val observableAddApplicationSuccess: MutableLiveData<Boolean> = _observableAddApplicationSuccess
-    val verificationKycRepo = VerificationKycRepo(iBuildConfigVM)
+//    val verificationKycRepo = VerificationKycRepo(iBuildConfigVM)
     val _profileNominee :  MutableLiveData<ProfileNominee> = MutableLiveData<ProfileNominee>()
     val profileNominee : LiveData<ProfileNominee> = _profileNominee
     fun getStates() = viewModelScope.launch {
@@ -113,7 +112,8 @@ class AadharDetailInfoViewModel @Inject constructor(private val aadharDetailsRep
                                             draft.isDone = true
                                         }
                                     }
-                                    var map = mapOf("application" to jpApplication.application, "updatedAt" to Timestamp.now(), "updatedBy" to StringConstants.APP.value)
+                                    var map = mapOf("application" to jpApplication.application, "updatedAt" to Timestamp.now(), "updatedBy" to FirebaseAuthStateListener.getInstance()
+                                        .getCurrentSignInUserInfoOrThrow().uid)
                                     FirebaseFirestore.getInstance().collection("JP_Applications")
                                             .document(jp_application.documents[0].id)
                                             .update(map)

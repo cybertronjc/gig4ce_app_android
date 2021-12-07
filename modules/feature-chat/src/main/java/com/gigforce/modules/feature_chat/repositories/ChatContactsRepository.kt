@@ -7,6 +7,7 @@ import com.gigforce.core.extensions.commitOrThrow
 import com.gigforce.core.extensions.getOrThrow
 import com.gigforce.core.fb.BaseFirestoreDBRepository
 import com.gigforce.core.retrofit.RetrofitFactory
+import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.modules.feature_chat.service.SyncPref
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
@@ -202,7 +203,8 @@ class ChatContactsRepository constructor(
         newContact: ContactModel
     ) {
         val contactRef = userChatContactsCollectionRef.document(oldContact.mobile)
-        batch.update(contactRef, mapOf("name" to newContact.name, "updatedAt" to Timestamp.now(), "updatedBy" to StringConstants.APP.value))
+        batch.update(contactRef, mapOf("name" to newContact.name, "updatedAt" to Timestamp.now(), "updatedBy" to FirebaseAuthStateListener.getInstance()
+            .getCurrentSignInUserInfoOrThrow().uid))
         Log.d(TAG, "${oldContact.mobile} - Updating, new contact-name : ${newContact.name}")
 
         checkBatchForOverFlowAndCommit()

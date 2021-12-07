@@ -58,7 +58,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                             "type" to "fcm",
                             "timestamp" to Date().time,
                             "updatedAt" to Timestamp.now(),
-                            "updatedBy" to StringConstants.APP.value,
+                            "updatedBy" to it.uid,
                             "createdAt" to Timestamp.now()
                         )
                     ).addOnSuccessListener {

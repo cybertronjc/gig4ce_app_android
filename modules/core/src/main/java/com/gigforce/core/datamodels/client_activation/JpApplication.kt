@@ -26,13 +26,13 @@ data class JpApplication(
         var verifiedTLNumber: String? = null,
         var dateOfJoining: Timestamp? = null,
         var updatedAt: Timestamp? = Timestamp.now(),
-        var updatedBy: String? = StringConstants.APP.value,
+        var updatedBy: String? = null,
         var createdAt: Timestamp? = Timestamp.now()
 
 ){
-        fun setUpdatedAtAndBy(){
+        fun setUpdatedAtAndBy(uid : String){
                 updatedAt = Timestamp.now()
-                updatedBy = StringConstants.APP.value
+                updatedBy = uid
         }
 
         fun setCreatedAt(){

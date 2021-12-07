@@ -162,7 +162,7 @@ class PanCardFragment : Fragment(),
             it?.let {
                 if (it.status) {
                     if (!it.panNumber.isNullOrBlank()) {
-                        if (VerificationValidations.isPanCardValid(it.panNumber)) {
+                        if (VerificationValidations.isPanCardValid(it.panNumber!!)) {
                             viewBinding.panTil.editText?.setText(it.panNumber)
                             viewBinding.toplayoutblock.uploadStatusLayout(
                                 AppConstants.UPLOAD_SUCCESS,

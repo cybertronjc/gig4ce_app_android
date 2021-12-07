@@ -16,6 +16,7 @@ import com.gigforce.core.date.DateHelper
 import com.gigforce.core.extensions.*
 import com.gigforce.core.file.FileUtils
 import com.gigforce.core.image.ImageUtils
+import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.modules.feature_chat.repositories.ChatProfileFirebaseRepository
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
@@ -189,7 +190,7 @@ class ChatGroupRepository constructor(
         val groupSnap = getGroupDetailsRef(groupId).getOrThrow()
         return groupSnap.toObject(ChatGroup::class.java)!!.apply {
             id = groupId
-            setUpdatedAtAndBy()
+            setUpdatedAtAndBy(getUID())
         }
     }
 
@@ -386,7 +387,8 @@ class ChatGroupRepository constructor(
                             attachmentPath = pathOnServer,
                             videoAttachmentLength = videoAttachmentLength
                         )
-                    ), "updatedAt" to Timestamp.now(), "updatedBy" to StringConstants.APP.value
+                    ), "updatedAt" to Timestamp.now(), "updatedBy" to FirebaseAuthStateListener.getInstance()
+                        .getCurrentSignInUserInfoOrThrow().uid
                 )
             )
     }
@@ -399,7 +401,8 @@ class ChatGroupRepository constructor(
                 mapOf(
                     "name" to newGroupName,
                     "updatedAt" to Timestamp.now(),
-                    "updatedBy" to StringConstants.APP.value
+                    "updatedBy" to FirebaseAuthStateListener.getInstance()
+                        .getCurrentSignInUserInfoOrThrow().uid
                 )
             )
 
@@ -418,7 +421,7 @@ class ChatGroupRepository constructor(
                 mapOf(
                     "groupName" to newGroupName,
                     "updatedAt" to Timestamp.now(),
-                    "updatedBy" to StringConstants.APP.value
+                    "updatedBy" to it.uid!!
                 )
             )
         }
@@ -434,7 +437,7 @@ class ChatGroupRepository constructor(
                 mapOf(
                     "unseenCount" to 0,
                     "updatedAt" to Timestamp.now(),
-                    "updatedBy" to StringConstants.APP.value
+                    "updatedBy" to getUID()
                 )
             )
     }
@@ -450,7 +453,8 @@ class ChatGroupRepository constructor(
             mapOf(
                 "groupDeactivated" to !groupDetails.groupDeactivated,
                 "updatedAt" to Timestamp.now(),
-                "updatedBy" to StringConstants.APP.value
+                "updatedBy" to FirebaseAuthStateListener.getInstance()
+                    .getCurrentSignInUserInfoOrThrow().uid
             )
         )
 
@@ -464,7 +468,7 @@ class ChatGroupRepository constructor(
                 headerRef, mapOf(
                     "groupDeactivated" to !groupDetails.groupDeactivated,
                     "updatedAt" to Timestamp.now(),
-                    "updatedBy" to StringConstants.APP.value
+                    "updatedBy" to it.uid!!
                 )
             )
         }
@@ -551,7 +555,7 @@ class ChatGroupRepository constructor(
             userHeaderRef, mapOf(
                 "removedFromGroup" to true,
                 "updatedAt" to Timestamp.now(),
-                "updatedBy" to StringConstants.APP.value
+                "updatedBy" to userUid
             )
         )
         batch.commit()
@@ -623,7 +627,8 @@ class ChatGroupRepository constructor(
                 "isDeleted" to true,
                 "deletedOn" to Timestamp.now(),
                 "updatedAt" to Timestamp.now(),
-                "updatedBy" to StringConstants.APP.value
+                "updatedBy" to FirebaseAuthStateListener.getInstance()
+                    .getCurrentSignInUserInfoOrThrow().uid
             )
         )
 
@@ -644,7 +649,8 @@ class ChatGroupRepository constructor(
                 mapOf(
                     "groupMembers" to groupDetails.groupMembers,
                     "updatedAt" to Timestamp.now(),
-                    "updatedBy" to StringConstants.APP.value
+                    "updatedBy" to FirebaseAuthStateListener.getInstance()
+                        .getCurrentSignInUserInfoOrThrow().uid
                 )
             )
 
@@ -677,7 +683,8 @@ class ChatGroupRepository constructor(
                 mapOf(
                     "groupMembers" to groupDetails.groupMembers,
                     "updatedAt" to Timestamp.now(),
-                    "updatedBy" to StringConstants.APP.value
+                    "updatedBy" to FirebaseAuthStateListener.getInstance()
+                        .getCurrentSignInUserInfoOrThrow().uid
                 )
             )
 
@@ -703,7 +710,8 @@ class ChatGroupRepository constructor(
                 mapOf(
                     "onlyAdminCanPostInGroup" to false,
                     "updatedAt" to Timestamp.now(),
-                    "updatedBy" to StringConstants.APP.value
+                    "updatedBy" to FirebaseAuthStateListener.getInstance()
+                        .getCurrentSignInUserInfoOrThrow().uid
                 )
             )
     }
@@ -717,7 +725,8 @@ class ChatGroupRepository constructor(
                 mapOf(
                     "onlyAdminCanPostInGroup" to true,
                     "updatedAt" to Timestamp.now(),
-                    "updatedBy" to StringConstants.APP.value
+                    "updatedBy" to FirebaseAuthStateListener.getInstance()
+                        .getCurrentSignInUserInfoOrThrow().uid
                 )
             )
     }
@@ -746,7 +755,8 @@ class ChatGroupRepository constructor(
                 mapOf(
                     "groupMessageReadBy" to FieldValue.arrayUnion(receivingObject),
                     "updatedAt" to Timestamp.now(),
-                    "updatedBy" to StringConstants.APP.value
+                    "updatedBy" to FirebaseAuthStateListener.getInstance()
+                        .getCurrentSignInUserInfoOrThrow().uid
                 )
             )
             checkBatchForOverFlowAndCommit()

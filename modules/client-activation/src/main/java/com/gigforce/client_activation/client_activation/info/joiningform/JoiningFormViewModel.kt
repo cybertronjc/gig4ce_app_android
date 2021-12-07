@@ -241,7 +241,8 @@ class JoiningFormViewModel : ViewModel() {
                                 "application" to
                                         hubSubmissionUpdated.application,
                                 "updatedAt" to Timestamp.now(),
-                                "updatedBy" to StringConstants.APP.value
+                                "updatedBy" to FirebaseAuthStateListener.getInstance()
+                                    .getCurrentSignInUserInfoOrThrow().uid
                             )
                         )
                     updatedResult.postValue(true)

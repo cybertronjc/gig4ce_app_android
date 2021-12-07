@@ -11,6 +11,7 @@ import com.gigforce.core.datamodels.client_activation.Dependency
 import com.gigforce.core.datamodels.client_activation.JpApplication
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.datamodels.verification.VerificationBaseModel
+import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.QueryDocumentSnapshot
@@ -180,7 +181,8 @@ class ApplicationClientActivationViewModel : ViewModel() {
                         }
                     }
             } else {
-                model.setUpdatedAtAndBy()
+                model.setUpdatedAtAndBy(uid = FirebaseAuthStateListener.getInstance()
+                    .getCurrentSignInUserInfoOrThrow().uid)
                 repository.db.collection("JP_Applications").document(model.id).set(model)
                     .addOnCompleteListener {
                         if (it.isSuccessful) {
@@ -218,7 +220,8 @@ class ApplicationClientActivationViewModel : ViewModel() {
             "stepsTotal" to (observableJobProfile.value?.step ?: 0),
             "status" to "Submitted",
             "applicationComplete" to Date(),
-            "updatedAt" to Timestamp.now(), "updatedBy" to StringConstants.APP.value
+            "updatedAt" to Timestamp.now(), "updatedBy" to FirebaseAuthStateListener.getInstance()
+                .getCurrentSignInUserInfoOrThrow().uid
         )
         if (isActivationScreenFound) {
             statusUpdate["status"] = "Inprocess"
@@ -255,7 +258,8 @@ class ApplicationClientActivationViewModel : ViewModel() {
                     mapOf(
                         "status" to "Interested",
                         "updatedAt" to Timestamp.now(),
-                        "updatedBy" to StringConstants.APP.value
+                        "updatedBy" to FirebaseAuthStateListener.getInstance()
+                            .getCurrentSignInUserInfoOrThrow().uid
                     )
                 )
                 .addOnCompleteListener {

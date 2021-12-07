@@ -32,7 +32,7 @@ data class ChatReportedUser(
 
     @get:PropertyName("updatedBy")
     @set:PropertyName("updatedBy")
-    var updatedBy : String ?= StringConstants.APP.value,
+    var updatedBy : String ?= null,
 
     @get:PropertyName("createdAt")
     @set:PropertyName("createdAt")

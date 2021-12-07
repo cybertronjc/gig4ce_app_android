@@ -253,7 +253,7 @@ class LoginViewModel @Inject constructor(
         FirebaseAuth.getInstance().currentUser?.let { it ->
             FirebaseFirestore
                 .getInstance()
-                .collection("Profiles").document(it.uid).update(mapOf("termsAccepted" to true, "updatedAt" to Timestamp.now(), "updatedBy" to StringConstants.APP.value)).addOnFailureListener { exception ->
+                .collection("Profiles").document(it.uid).update(mapOf("termsAccepted" to true, "updatedAt" to Timestamp.now(), "updatedBy" to it.uid)).addOnFailureListener { exception ->
                     FirebaseCrashlytics.getInstance().log("Exception : updateTermsAcceptedToDB Method $exception")
                 }
         }
@@ -263,7 +263,7 @@ class LoginViewModel @Inject constructor(
         FirebaseAuth.getInstance().currentUser?.let { it ->
             FirebaseFirestore
                     .getInstance()
-                    .collection("Profiles").document(it.uid).update(mapOf("isUserRegistered" to true, "updatedAt" to Timestamp.now(), "updatedBy" to StringConstants.APP.value)).addOnFailureListener { exception ->
+                    .collection("Profiles").document(it.uid).update(mapOf("isUserRegistered" to true, "updatedAt" to Timestamp.now(), "updatedBy" to it.uid)).addOnFailureListener { exception ->
                         FirebaseCrashlytics.getInstance().log("Exception : updateRegisterStatusToDB Method $exception")
                     }
         }
@@ -321,7 +321,7 @@ class LoginViewModel @Inject constructor(
                                 "type" to "fcm",
                                 "timestamp" to Date().time,
                                 "updatedAt" to Timestamp.now(),
-                                "updatedBy" to StringConstants.APP.value,
+                                "updatedBy" to uid,
                                 "createdAt" to Timestamp.now()
                         )
                 ).addOnSuccessListener {
