@@ -45,6 +45,7 @@ class SplashScreen : AppCompatActivity() {
                         // after that we are extracting string from that parameters.
                         if (parameters != null && parameters.size > 0) {
                             val param = parameters[parameters.size - 1]
+                            resetDeeplinkSharedPreferences()
                             if (param == "login_summary") {
                                 sharedPreAndCommonUtilInterface.saveDataBoolean(
                                     "deeplink_login",
@@ -118,6 +119,8 @@ class SplashScreen : AppCompatActivity() {
                                     true
                                 )
                                 mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                            }else{
+                                resetDeeplinkSharedPreferences()
                             }
                         }
                     }
@@ -208,6 +211,38 @@ class SplashScreen : AppCompatActivity() {
                     initApp(mainIntent)
                 }
             }
+    }
+
+    private fun resetDeeplinkSharedPreferences() {
+
+        sharedPreAndCommonUtilInterface.saveDataBoolean(
+            "deeplink_login",
+            false
+        )
+        sharedPreAndCommonUtilInterface.saveDataBoolean(
+            "deeplink_onboarding",
+            false
+        )
+        sharedPreAndCommonUtilInterface.saveDataBoolean(
+            StringConstants.BANK_DETAIL_SP.value,
+            false
+        )
+        sharedPreAndCommonUtilInterface.saveDataBoolean(
+            StringConstants.PAN_CARD_SP.value,
+            false
+        )
+        sharedPreAndCommonUtilInterface.saveDataBoolean(
+            StringConstants.AADHAR_DETAIL_SP.value,
+            false
+        )
+        sharedPreAndCommonUtilInterface.saveDataBoolean(
+            StringConstants.DRIVING_LICENCE_SP.value,
+            false
+        )
+        sharedPreAndCommonUtilInterface.saveDataBoolean(
+            StringConstants.VERIFICATION_SP.value,
+            false
+        )
     }
 
     fun initApp(intent: Intent) {
