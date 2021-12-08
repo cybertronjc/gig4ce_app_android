@@ -12,7 +12,6 @@ import com.gigforce.common_image_picker.ImageCropOptions
 import com.gigforce.common_image_picker.image_cropper.ImageCropActivity
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.databinding.FragmentSingatureCaptureFullScreenBinding
-import com.gigforce.common_ui.metaDataHelper.ImageMetaDataHelpers
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
@@ -31,6 +30,7 @@ class FullScreenSignatureImageCaptureDialogFragment :
 
     companion object {
         const val TAG = "FullScreenSignatureImageCaptureDialogFragment"
+        const val INTENT_EXTRA_SIGNATURE_IMAGE_URL = "signature_image_url_path"
         private const val SHOULD_REMOVE_BACKGROUND_FROM_SIGNATURE = false
     }
 
@@ -54,6 +54,16 @@ class FullScreenSignatureImageCaptureDialogFragment :
             .build()
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        arguments?.let {
+            val imageFromPrevious = it.getString(INTENT_EXTRA_SIGNATURE_IMAGE_URL) ?: return@let
+            viewModel.handleEvent(SignatureViewEvents.SignatureReceivedFromPreviousScreen(Uri.parse(imageFromPrevious)))
+        }
+
+    }
+
 
     override fun viewCreated(
         viewBinding: FragmentSingatureCaptureFullScreenBinding,
@@ -65,11 +75,11 @@ class FullScreenSignatureImageCaptureDialogFragment :
 
     private fun initListeners() = viewBinding.apply {
 
-        this.submitBtn.setOnClickListener {
+        this.clikImageBtn.setOnClickListener {
             cameraAndGalleryIntegrator.showCameraAndGalleryBottomSheet()
         }
 
-        this.cancelBtn.setOnClickListener {
+        this.submitCancelBtn.setOnClickListener {
             viewModel.handleEvent(SignatureViewEvents.DoneOrCancelButtonClicked)
         }
     }
@@ -83,10 +93,11 @@ class FullScreenSignatureImageCaptureDialogFragment :
                 when (it) {
                     SignatureUploadViewState.RemovingBackgroundFromSignature -> showBackgroundImageBackgroundRemovingLayout()
                     is SignatureUploadViewState.BackgroundRemovedFromSignature -> {
-                        showImageWithBackgroundRemoved(it.processedImage)
+                        showImageWithBackgroundRemoved(it.processedImage,it.enableSubmitButton)
                     }
                     is SignatureUploadViewState.ErrorWhileRemovingBackgroundFromSignature -> showImageWithBackgroundRemoved(
-                        it.processedImage
+                        it.processedImage,
+                        true
                     )
                     is SignatureUploadViewState.ErrorUploadingSignatureImage -> {
                         viewBinding.previewScreen.uploadingAnimationView.gone()
@@ -123,15 +134,25 @@ class FullScreenSignatureImageCaptureDialogFragment :
         viewBinding.captureLayout.removingBackgroundProgressBar.visible()
     }
 
-    private fun showImageWithBackgroundRemoved(processedImage: Uri) {
+    private fun showImageWithBackgroundRemoved(processedImage: Uri, enableSubmitButton: Boolean) {
         viewBinding.captureLayout.removingBackgroundProgressBar.gone()
         viewBinding.captureLayout.root.gone()
 
         viewBinding.previewScreen.root.visible()
         viewBinding.previewScreen.signatureImage.loadImage(processedImage)
 
-        viewBinding.submitBtn.text = "Change"
-        viewBinding.cancelBtn.text = "Done"
+        viewBinding.clikImageBtn.text = "Change"
+        viewBinding.submitCancelBtn.text = "Done"
+
+
+        if(enableSubmitButton){
+            viewBinding.submitCancelBtn.isEnabled = true
+            viewBinding.submitCancelBtn.setStrokeColorResource(R.color.lipstick_2)
+        } else{
+            viewBinding.submitCancelBtn.isEnabled = false
+            viewBinding.submitCancelBtn.setStrokeColorResource(R.color.grey)
+        }
+
     }
 
     private fun handleSignatureUploadCompleteOrOperationCancellation(
@@ -178,8 +199,7 @@ class FullScreenSignatureImageCaptureDialogFragment :
     }
 
     override fun imageResult(uri: Uri) {
-        val mimeType = ImageMetaDataHelpers.getImageMimeType(requireContext(),uri)
-
+        viewBinding.submitCancelBtn.isEnabled = true
         viewModel.handleEvent(SignatureViewEvents.SignatureCaptured(uri))
     }
 }

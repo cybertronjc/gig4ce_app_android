@@ -18,6 +18,10 @@ import javax.inject.Inject
 
 sealed class SignatureViewEvents {
 
+    data class SignatureReceivedFromPreviousScreen(
+        val signature: Uri
+    ) : SignatureViewEvents()
+
     data class SignatureCaptured(
         val signature: Uri
     ) : SignatureViewEvents()
@@ -30,7 +34,8 @@ sealed class SignatureUploadViewState {
     object RemovingBackgroundFromSignature : SignatureUploadViewState()
 
     data class BackgroundRemovedFromSignature(
-        val processedImage: Uri
+        val processedImage: Uri,
+        val enableSubmitButton : Boolean
     ) : SignatureUploadViewState()
 
     data class ErrorWhileRemovingBackgroundFromSignature(
@@ -72,6 +77,10 @@ class SignatureUploadViewModel @Inject constructor(
             is SignatureViewEvents.SignatureCaptured -> checkedIfBackgroundNeedsToBeRemoved(
                 event.signature
             )
+            is SignatureViewEvents.SignatureReceivedFromPreviousScreen -> _viewState.value = SignatureUploadViewState.BackgroundRemovedFromSignature(
+                event.signature,
+                false
+            )
         }
     }
 
@@ -93,7 +102,8 @@ class SignatureUploadViewModel @Inject constructor(
 
             processedImageUri = signatureUnProcessed
             _viewState.value = SignatureUploadViewState.BackgroundRemovedFromSignature(
-                signatureUnProcessed
+                signatureUnProcessed,
+                true
             )
         }
     }
@@ -108,7 +118,8 @@ class SignatureUploadViewModel @Inject constructor(
 
 //            val uploadSignatureResponse = signatureRepository.removeBackgroundFromSignature(unprocessedSignature)
             _viewState.value = SignatureUploadViewState.BackgroundRemovedFromSignature(
-                unprocessedSignature
+                unprocessedSignature,
+                true
             )
         } catch (e: Exception) {
             _viewState.value = SignatureUploadViewState.ErrorWhileRemovingBackgroundFromSignature(

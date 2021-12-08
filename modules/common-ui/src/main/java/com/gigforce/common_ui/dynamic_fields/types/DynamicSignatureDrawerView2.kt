@@ -173,7 +173,10 @@ class DynamicSignatureDrawerView2(
     private fun setListenersOnView() = viewBinding.apply {
 
         this.signatureLayout.setOnClickListener {
-            signatureNavigation.openCaptureSignatureFragment()
+
+            signatureNavigation.openCaptureSignatureFragment(
+                signatureImageFullUrl
+            )
         }
     }
 }

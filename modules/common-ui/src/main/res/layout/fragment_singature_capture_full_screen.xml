@@ -26,7 +26,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:background="@color/white"
-            app:layout_constraintBottom_toTopOf="@id/submit_btn"
+            app:layout_constraintBottom_toTopOf="@id/submit_cancel_btn"
             app:layout_constraintTop_toBottomOf="@id/appBar">
 
             <include
@@ -44,17 +44,17 @@
 
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/submit_btn"
+            android:id="@+id/clik_image_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="10dp"
             android:text="Upload"
-            app:layout_constraintBottom_toTopOf="@id/cancel_btn" />
+            app:layout_constraintBottom_toTopOf="@id/submit_cancel_btn" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/cancel_btn"
+            android:id="@+id/submit_cancel_btn"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
