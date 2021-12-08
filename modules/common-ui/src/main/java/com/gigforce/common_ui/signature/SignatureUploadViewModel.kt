@@ -1,11 +1,16 @@
 package com.gigforce.common_ui.signature
 
+import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.configrepository.SignatureRepository
+import com.gigforce.common_ui.metaDataHelper.FileMetaDataExtractor
+import com.gigforce.core.extensions.getDownloadUrlOrReturnNull
+import com.gigforce.core.extensions.getDownloadUrlOrThrow
+import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -35,7 +40,8 @@ sealed class SignatureUploadViewState {
     object UploadingSignature : SignatureUploadViewState()
 
     data class SignatureUploaded(
-        val firebaseCompletePath: String
+        val firebaseCompletePath: String,
+        val firebaseImageFullUrl : String
     ) : SignatureUploadViewState()
 
     data class ErrorUploadingSignatureImage(
@@ -47,7 +53,8 @@ sealed class SignatureUploadViewState {
 
 @HiltViewModel
 class SignatureUploadViewModel @Inject constructor(
-    private val signatureRepository: SignatureRepository
+    private val signatureRepository: SignatureRepository,
+    private val firebaseStorage: FirebaseStorage
 ) : ViewModel() {
 
 
@@ -118,7 +125,11 @@ class SignatureUploadViewModel @Inject constructor(
         try {
 
             val uploadSignatureResponse = signatureRepository.uploadSignatureImageToFirebase(uri)
-            _viewState.value = SignatureUploadViewState.SignatureUploaded(uploadSignatureResponse)
+            val imageFullUrl = createFullUrl(uploadSignatureResponse)
+            _viewState.value = SignatureUploadViewState.SignatureUploaded(
+                uploadSignatureResponse,
+                imageFullUrl
+            )
         } catch (e: Exception) {
 
             _viewState.value = SignatureUploadViewState.ErrorUploadingSignatureImage(
@@ -126,4 +137,14 @@ class SignatureUploadViewModel @Inject constructor(
             )
         }
     }
+
+    private suspend fun createFullUrl(
+        imagePathOnFirebase : String
+    ) : String {
+        return firebaseStorage
+            .reference
+            .child(imagePathOnFirebase)
+            .getDownloadUrlOrReturnNull()?.toString() ?: ""
+    }
+
 }

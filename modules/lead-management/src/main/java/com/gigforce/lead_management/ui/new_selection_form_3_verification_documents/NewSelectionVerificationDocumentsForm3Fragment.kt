@@ -119,6 +119,7 @@ class NewSelectionVerificationDocumentsForm3Fragment :
         initToolbar(viewBinding)
         initListeners(viewBinding)
         initViewModel()
+        initViewModelForUiEffects()
     }
 
     private fun initListeners(
@@ -157,13 +158,6 @@ class NewSelectionVerificationDocumentsForm3Fragment :
                     state.error
                 )
 
-                NewSelectionForm3ViewState.DisableSubmitButton -> disableSubmitButton()
-                NewSelectionForm3ViewState.EnableSubmitButton -> enableSubmitButton()
-
-                is NewSelectionForm3ViewState.UpdateVerificationDocumentStatus -> {
-                    updateVerificationDocumentStatus(state.event)
-                }
-
                 NewSelectionForm3ViewState.SubmittingJoiningData -> submittingJoiningRequest()
                 is NewSelectionForm3ViewState.JoiningDataSubmitted -> navigateToSubmitSuccessScreen(state.whatsappTemplate)
                 is NewSelectionForm3ViewState.ErrorWhileSubmittingJoiningData -> errorWhileSubmittingJoiningRequest(
@@ -171,6 +165,17 @@ class NewSelectionVerificationDocumentsForm3Fragment :
                 )
             }
         })
+
+    private fun initViewModelForUiEffects() = lifecycleScope.launchWhenCreated {
+
+        viewModel.uiEffects.collect {
+
+            when (it) {
+                NewSelectionForm3UiEffects.DisableSubmitButton -> disableSubmitButton()
+                NewSelectionForm3UiEffects.EnableSubmitButton -> enableSubmitButton()
+            }
+        }
+    }
 
     private fun navigateToSubmitSuccessScreen(
         whatsAppIntentData: WhatsappTemplateModel

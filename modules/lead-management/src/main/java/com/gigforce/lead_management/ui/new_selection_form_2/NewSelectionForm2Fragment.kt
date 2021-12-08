@@ -631,7 +631,8 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
                     is SharedSignatureUploadViewModelViewState.SignatureCaptured -> {
                         dynamicFieldsInflaterHelper.signatureCapturedUpdateStatus(
                             viewBinding.mainForm.jobProfileDependentDynamicFieldsContainer,
-                            it.pathOnFirebase
+                            it.pathOnFirebase,
+                            it.imageFullUrl
                         )
                     }
                     else -> {

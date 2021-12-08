@@ -188,7 +188,8 @@ class DynamicFieldsInflaterHelper @Inject constructor(
 
     fun signatureCapturedUpdateStatus(
        dynamicFieldsContainer : LinearLayout,
-       signatureImagePathInFirebase : String
+       signatureImagePathInFirebase : String,
+       signatureImageFullUrl : String
     ){
 
         for (i in 0 until dynamicFieldsContainer.childCount) {
@@ -196,7 +197,10 @@ class DynamicFieldsInflaterHelper @Inject constructor(
             val dynamicFieldView = dynamicFieldsContainer.getChildAt(i) as DynamicFieldView
 
             if (dynamicFieldView.fieldType == FieldTypes.SIGNATURE_DRAWER_2 ) {
-                (dynamicFieldView as DynamicSignatureDrawerView2).signatureCapturedUpdateStatus(signatureImagePathInFirebase)
+                (dynamicFieldView as DynamicSignatureDrawerView2).signatureCapturedUpdateStatus(
+                    signatureImagePathInFirebase,
+                    signatureImageFullUrl
+                )
             }
         }
     }

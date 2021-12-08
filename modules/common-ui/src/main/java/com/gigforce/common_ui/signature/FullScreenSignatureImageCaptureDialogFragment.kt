@@ -12,6 +12,7 @@ import com.gigforce.common_image_picker.ImageCropOptions
 import com.gigforce.common_image_picker.image_cropper.ImageCropActivity
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.databinding.FragmentSingatureCaptureFullScreenBinding
+import com.gigforce.common_ui.metaDataHelper.ImageMetaDataHelpers
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
@@ -21,27 +22,29 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class FullScreenSignatureImageCaptureDialogFragment : BaseFragment2<FragmentSingatureCaptureFullScreenBinding>(
-    fragmentName = "FullScreenSignatureImageCaptureDialogFragment",
-    layoutId = R.layout.fragment_singature_capture_full_screen,
-    statusBarColor = R.color.lipstick_2
-), ImageCropCallback {
+class FullScreenSignatureImageCaptureDialogFragment :
+    BaseFragment2<FragmentSingatureCaptureFullScreenBinding>(
+        fragmentName = "FullScreenSignatureImageCaptureDialogFragment",
+        layoutId = R.layout.fragment_singature_capture_full_screen,
+        statusBarColor = R.color.lipstick_2
+    ), ImageCropCallback {
 
     companion object {
         const val TAG = "FullScreenSignatureImageCaptureDialogFragment"
         private const val SHOULD_REMOVE_BACKGROUND_FROM_SIGNATURE = false
     }
 
-    @Inject lateinit var navigation : INavigation
+    @Inject
+    lateinit var navigation: INavigation
 
-    private val viewModel : SignatureUploadViewModel by viewModels()
-    private val sharedViewModel : SharedSignatureUploadViewModel by activityViewModels()
+    private val viewModel: SignatureUploadViewModel by viewModels()
+    private val sharedViewModel: SharedSignatureUploadViewModel by activityViewModels()
 
     private val cameraAndGalleryIntegrator: CameraAndGalleryIntegrator by lazy {
         CameraAndGalleryIntegrator(this)
     }
 
-    private fun getImageCropOptions() : ImageCropOptions {
+    private fun getImageCropOptions(): ImageCropOptions {
 
         return ImageCropOptions
             .Builder()
@@ -72,12 +75,12 @@ class FullScreenSignatureImageCaptureDialogFragment : BaseFragment2<FragmentSing
     }
 
     private fun initViewModel() {
-       viewModel.shouldRemoveBackgroundFromSignature = SHOULD_REMOVE_BACKGROUND_FROM_SIGNATURE
+        viewModel.shouldRemoveBackgroundFromSignature = SHOULD_REMOVE_BACKGROUND_FROM_SIGNATURE
 
         viewModel.viewState
-            .observe(viewLifecycleOwner,{
+            .observe(viewLifecycleOwner, {
 
-                when(it){
+                when (it) {
                     SignatureUploadViewState.RemovingBackgroundFromSignature -> showBackgroundImageBackgroundRemovingLayout()
                     is SignatureUploadViewState.BackgroundRemovedFromSignature -> {
                         showImageWithBackgroundRemoved(it.processedImage)
@@ -90,12 +93,13 @@ class FullScreenSignatureImageCaptureDialogFragment : BaseFragment2<FragmentSing
 
                         MaterialAlertDialogBuilder(requireContext())
                             .setMessage("Unable to upload image")
-                            .setPositiveButton("Okay"){_,_ ->}
+                            .setPositiveButton("Okay") { _, _ -> }
                             .show()
                     }
                     SignatureUploadViewState.NavigateBackToPreviousScreen -> navigation.navigateUp()
                     is SignatureUploadViewState.SignatureUploaded -> handleSignatureUploadCompleteOrOperationCancellation(
-                        it.firebaseCompletePath
+                        it.firebaseCompletePath,
+                        it.firebaseImageFullUrl
                     )
                     SignatureUploadViewState.UploadingSignature -> showSignatureUploading()
                 }
@@ -131,12 +135,14 @@ class FullScreenSignatureImageCaptureDialogFragment : BaseFragment2<FragmentSing
     }
 
     private fun handleSignatureUploadCompleteOrOperationCancellation(
-        signature: String?
+        signature: String,
+        fullImageUrl: String
     ) {
 
-        if(signature != null){
-            sharedViewModel.signatureCapturedAndUploaded(signature)
-        }
+        sharedViewModel.signatureCapturedAndUploaded(
+            signature,
+            fullImageUrl
+        )
 
         navigation.navigateUp()
     }
@@ -167,11 +173,13 @@ class FullScreenSignatureImageCaptureDialogFragment : BaseFragment2<FragmentSing
     override fun errorWhileCapturingOrPickingImage(e: Exception) {
         MaterialAlertDialogBuilder(requireContext())
             .setMessage("Unable to capture image")
-            .setPositiveButton("Okay"){_,_ -> }
+            .setPositiveButton("Okay") { _, _ -> }
             .show()
     }
 
     override fun imageResult(uri: Uri) {
-       viewModel.handleEvent(SignatureViewEvents.SignatureCaptured(uri))
+        val mimeType = ImageMetaDataHelpers.getImageMimeType(requireContext(),uri)
+
+        viewModel.handleEvent(SignatureViewEvents.SignatureCaptured(uri))
     }
 }

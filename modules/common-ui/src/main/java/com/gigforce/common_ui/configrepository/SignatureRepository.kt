@@ -5,6 +5,7 @@ import android.webkit.MimeTypeMap
 import androidx.core.net.toFile
 import com.gigforce.common_ui.MimeTypes
 import com.gigforce.common_ui.ext.bodyOrThrow
+import com.gigforce.common_ui.metaDataHelper.FileMetaDataExtractor
 import com.gigforce.common_ui.remote.SignatureImageService
 import com.gigforce.core.date.DateHelper
 import com.google.firebase.storage.FirebaseStorage
@@ -20,7 +21,8 @@ import kotlin.coroutines.resumeWithException
 @Singleton
 class SignatureRepository @Inject constructor(
     private val signatureImageService: SignatureImageService,
-    private val firebaseStorage: FirebaseStorage
+    private val firebaseStorage: FirebaseStorage,
+    private val metaDataExtractor: FileMetaDataExtractor
 ) {
 
     companion object {
@@ -47,7 +49,7 @@ class SignatureRepository @Inject constructor(
         val uploadFileTask = firebaseStorage
             .reference
             .child(DIRECTORY_SIGNATURES)
-            .child(createImageFile())
+            .child(createImageFile(uri))
             .putFile(uri)
 
         uploadFileTask.addOnSuccessListener {
@@ -65,9 +67,15 @@ class SignatureRepository @Inject constructor(
     }
 
     private fun createImageFile(
-        mimeType: String = MimeTypes.PNG
+        uri : Uri
     ): String {
-        val extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
+       val fileMimeType =  try {
+            metaDataExtractor.getMimeTypeOrThrow(uri)
+        } catch (e: Exception) {
+            MimeTypes.PNG
+        }
+
+        val extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(fileMimeType)
         return "IMG-${DateHelper.getFullDateTimeStamp()}.$extension"
     }
 }

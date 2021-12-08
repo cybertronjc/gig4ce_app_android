@@ -18,13 +18,6 @@ sealed class NewSelectionForm3ViewState {
         val shouldShowErrorButton: Boolean
     ) : NewSelectionForm3ViewState()
 
-    data class UpdateVerificationDocumentStatus(
-        val event : SharedVerificationViewModelEvent
-    ) : NewSelectionForm3ViewState()
-
-    object EnableSubmitButton : NewSelectionForm3ViewState()
-
-    object DisableSubmitButton : NewSelectionForm3ViewState()
 
     object SubmittingJoiningData : NewSelectionForm3ViewState()
 
@@ -36,6 +29,14 @@ sealed class NewSelectionForm3ViewState {
         val error: String,
         val shouldShowErrorButton: Boolean
     ) : NewSelectionForm3ViewState()
+}
+
+sealed class NewSelectionForm3UiEffects {
+
+    object EnableSubmitButton : NewSelectionForm3UiEffects()
+
+    object DisableSubmitButton : NewSelectionForm3UiEffects()
+
 }
 
 sealed class NewSelectionForm3Events {

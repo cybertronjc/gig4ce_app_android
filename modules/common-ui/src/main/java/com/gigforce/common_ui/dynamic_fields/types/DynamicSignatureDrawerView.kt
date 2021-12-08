@@ -116,7 +116,7 @@ class DynamicSignatureDrawerView(
             id = viewData.id,
             title = viewData.title,
             value = signatureImagePath,
-            fieldType = FieldTypes.SIGNATURE_DRAWER_2
+            fieldType = FieldTypes.SIGNATURE_DRAWER
         )
     }
 

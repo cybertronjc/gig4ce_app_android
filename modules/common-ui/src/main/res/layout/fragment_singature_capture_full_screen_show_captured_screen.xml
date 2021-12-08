@@ -25,7 +25,7 @@
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_camera_round" />
+                android:src="@drawable/ic_tip_round" />
 
             <TextView
                 style="@style/body_primary"

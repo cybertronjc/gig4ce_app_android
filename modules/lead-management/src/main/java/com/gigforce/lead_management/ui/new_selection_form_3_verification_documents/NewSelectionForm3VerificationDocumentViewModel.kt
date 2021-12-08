@@ -17,6 +17,8 @@ import com.gigforce.lead_management.viewModels.JoiningSubmissionViewModel
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ListenerRegistration
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -35,6 +37,9 @@ class NewSelectionForm3VerificationDocumentViewModel @Inject constructor(
         private const val TAG = "NewSelectionForm3VerificationDocumentViewModel"
     }
 
+    private val _uiEffects = MutableSharedFlow<NewSelectionForm3UiEffects>()
+    val uiEffects = _uiEffects.asSharedFlow()
+
     private val _viewState = MutableLiveData<NewSelectionForm3ViewState>()
     val viewState: LiveData<NewSelectionForm3ViewState> = _viewState
 
@@ -49,6 +54,7 @@ class NewSelectionForm3VerificationDocumentViewModel @Inject constructor(
     override fun onCleared() {
         super.onCleared()
         userDocumentListenerRegistration?.remove()
+        logger.d(TAG,"removing verification snapshot listener ....")
     }
 
     fun handleEvent(
@@ -70,6 +76,7 @@ class NewSelectionForm3VerificationDocumentViewModel @Inject constructor(
 
     private fun checkVerificationDocumentStatusAndShowIn() = viewModelScope.launch {
         _viewState.value = NewSelectionForm3ViewState.CheckingVerificationDocumentsStatus
+        logger.d(TAG,"Starting to listen to verification document of user $userUid")
 
         userDocumentListenerRegistration = verificationRepository.verificationDocumentReference(
             userUid
@@ -80,6 +87,7 @@ class NewSelectionForm3VerificationDocumentViewModel @Inject constructor(
             }
 
             error?.let {
+                logger.e(TAG,"ERROR in listening to verification document of user $userUid",it)
 
                 _viewState.value = NewSelectionForm3ViewState.ShowVerificationDocumentFields(
                     verificationDynamicFields
@@ -88,19 +96,31 @@ class NewSelectionForm3VerificationDocumentViewModel @Inject constructor(
         }
     }
 
-    private fun processVerificationChange(it: DocumentSnapshot) {
-        val verificationDocument = it.toObject(VerificationBaseModel::class.java)
-            ?: VerificationBaseModel()
+    private fun processVerificationChange(
+        it: DocumentSnapshot
+    ) = viewModelScope.launch {
+        val verificationDocument = if(it.exists()) {
+            it.toObject(VerificationBaseModel::class.java)
+                ?: VerificationBaseModel()
+        } else{
+            logger.d(TAG,"[Important] Verification document doesn't exist ")
+            VerificationBaseModel()
+        }
+
 
         val userUploadedAadhaarCard =
             verificationDocument.aadhaar_card_questionnaire?.aadhaarCardNo != null
+
+        logger.d(TAG,"Aadhaar Filled : ${verificationDocument.aadhaar_card_questionnaire?.aadhaarCardNo != null}")
+        logger.d(TAG,"Bank status : ${verificationDocument.bank_details?.status}")
+        logger.d(TAG,"Driving status : ${verificationDocument.driving_license?.status}")
+        logger.d(TAG,"PAN status : ${verificationDocument.pan_card?.status}")
 
         verificationDynamicFields.onEach {
             it.userId = userUid
 
             if (it.fieldType == FieldTypes.AADHAAR_VERIFICATION_VIEW) {
-                it.status =
-                    if (userUploadedAadhaarCard) VerificationStatus.VERIFIED else VerificationStatus.NOT_UPLOADED
+                it.status = if (userUploadedAadhaarCard) VerificationStatus.VERIFIED else VerificationStatus.NOT_UPLOADED
             } else if (it.fieldType == FieldTypes.BANK_VERIFICATION_VIEW) {
                 it.status = verificationDocument.bank_details?.status ?: VerificationStatus.NOT_UPLOADED
             } else if (it.fieldType == FieldTypes.DL_VERIFICATION_VIEW) {
@@ -110,14 +130,15 @@ class NewSelectionForm3VerificationDocumentViewModel @Inject constructor(
             }
         }
 
+        logger.d(TAG,"Updating Status views Verification item list: $verificationDynamicFields")
         _viewState.value = NewSelectionForm3ViewState.ShowVerificationDocumentFields(
             verificationDynamicFields
         )
 
         if (checkIfAnyRequiredDocumentNotUploaded()) {
-            _viewState.value = NewSelectionForm3ViewState.DisableSubmitButton
+            _uiEffects.emit(NewSelectionForm3UiEffects.DisableSubmitButton)
         } else {
-            _viewState.value = NewSelectionForm3ViewState.EnableSubmitButton
+            _uiEffects.emit(NewSelectionForm3UiEffects.EnableSubmitButton)
         }
     }
 
@@ -157,7 +178,6 @@ class NewSelectionForm3VerificationDocumentViewModel @Inject constructor(
                     tlMobileNumber = ""
                 )
             )
-            _viewState.value = null
         } catch (e: Exception) {
             currentlySubmittingAnyJoiningRequuest = false
 

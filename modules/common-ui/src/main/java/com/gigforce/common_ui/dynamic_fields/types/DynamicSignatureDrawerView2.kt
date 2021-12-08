@@ -38,6 +38,7 @@ class DynamicSignatureDrawerView2(
     private lateinit var viewData: DynamicField
     private lateinit var fragmentManager : FragmentManager
     private var signatureImagePath : String? = null
+    private var signatureImageFullUrl : String? = null
 
     init {
         this.layoutParams = LayoutParams(
@@ -134,7 +135,8 @@ class DynamicSignatureDrawerView2(
             id = viewData.id,
             title = viewData.title,
             value = signatureImagePath,
-            fieldType = FieldTypes.DATE_PICKER
+            valueId = signatureImageFullUrl,
+            fieldType = FieldTypes.SIGNATURE_DRAWER_2
         )
     }
 
@@ -159,9 +161,12 @@ class DynamicSignatureDrawerView2(
     }
 
     fun signatureCapturedUpdateStatus(
-        signaturePathOnFirebase : String
+        signaturePathOnFirebase : String,
+        fullImageUrl : String
     ){
         signatureImagePath = signaturePathOnFirebase
+        signatureImageFullUrl =fullImageUrl
+
         viewBinding.statusImageview.loadImage(R.drawable.ic_success_round_green)
     }
 
