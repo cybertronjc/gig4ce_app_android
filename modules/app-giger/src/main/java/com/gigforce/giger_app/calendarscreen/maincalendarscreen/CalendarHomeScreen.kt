@@ -25,7 +25,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -121,7 +120,8 @@ class CalendarHomeScreen : Fragment(),
     @Inject
     lateinit var appDialogsInterface: AppDialogsInterface
 
-    @Inject lateinit var leadManagementRepository: LeadManagementRepository
+    @Inject
+    lateinit var leadManagementRepository: LeadManagementRepository
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -132,14 +132,14 @@ class CalendarHomeScreen : Fragment(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-       // checkForLocationPermission()
+        // checkForLocationPermission()
         checkForPendingJoining()
     }
 
-    private fun checkForPendingJoining()  = lifecycleScope.launch{
+    private fun checkForPendingJoining() = lifecycleScope.launch {
         try {
             leadManagementRepository.getPendingJoinings().apply {
-                if(isNotEmpty()){
+                if (isNotEmpty()) {
 
                     first().let {
                         navigation.navigateTo(
@@ -191,7 +191,7 @@ class CalendarHomeScreen : Fragment(),
             }
         })
         arrCalendarDependent =
-            arrayOf(calendar_dependent, calendar_cv, bottom_sheet_top_shadow,oval_gradient_iv1)
+            arrayOf(calendar_dependent, calendar_cv, bottom_sheet_top_shadow, oval_gradient_iv1)
 //            arrayOf(calendar_dependent, calendar_cv, bottom_sheet_top_shadow)
 
         selectedMonthModel = CalendarView.MonthModel(Calendar.getInstance().get(Calendar.MONTH))
@@ -225,22 +225,74 @@ class CalendarHomeScreen : Fragment(),
 
     private fun checkForDeepLink() {
         try {
-            val cameFromLoginDeepLink = sharedPreAndCommonUtilInterface.getDataBoolean("deeplink_login")
-            val cameFromOnboardingDeepLink = sharedPreAndCommonUtilInterface.getDataBoolean("deeplink_onboarding")
-            if (cameFromLoginDeepLink == true){
-                Log.d("deepLink", "here")
-                navigation.navigateTo("gig/tlLoginDetails", bundleOf(
-                    StringConstants.CAME_FROM_LOGIN_SUMMARY_DEEPLINK.value to true
-                )
-                )
-            }else if (cameFromOnboardingDeepLink == true){
-                Log.d("deepLink", "onboarding")
-                navigation.navigateTo("LeadMgmt/joiningListFragment", bundleOf(
-                    StringConstants.CAME_FROM_ONBOARDING_FORM_DEEPLINK.value to true
-                )
-                )
+
+            when {
+                sharedPreAndCommonUtilInterface.getDataBoolean("deeplink_login") ?: false -> {
+                    navigation.navigateTo(
+                        "gig/tlLoginDetails", bundleOf(
+                            StringConstants.CAME_FROM_LOGIN_SUMMARY_DEEPLINK.value to true
+                        )
+                    )
+                }
+                sharedPreAndCommonUtilInterface.getDataBoolean("deeplink_onboarding") ?: false -> {
+                    navigation.navigateTo(
+                        "LeadMgmt/joiningListFragment", bundleOf(
+                            StringConstants.CAME_FROM_ONBOARDING_FORM_DEEPLINK.value to true
+                        )
+                    )
+                }
+
+                sharedPreAndCommonUtilInterface.getDataBoolean(StringConstants.BANK_DETAIL_SP.value)
+                    ?: false -> {
+                    navigation.navigateTo("verification/bank_account_fragment")
+                }
+
+                sharedPreAndCommonUtilInterface.getDataBoolean(
+                    StringConstants.PAN_CARD_SP.value
+                ) ?: false -> {
+                    navigation.navigateTo("verification/pancardimageupload")
+
+                }
+
+                sharedPreAndCommonUtilInterface.getDataBoolean(
+                    StringConstants.AADHAR_DETAIL_SP.value
+                ) ?: false -> {
+                    navigation.navigateTo("verification/AadharDetailInfoFragment")
+
+                }
+
+                sharedPreAndCommonUtilInterface.getDataBoolean(
+                    StringConstants.DRIVING_LICENCE_SP.value
+                ) ?: false -> {
+                    navigation.navigateTo("verification/drivinglicenseimageupload")
+                }
+
+                sharedPreAndCommonUtilInterface.getDataBoolean(
+                    StringConstants.VERIFICATION_SP.value
+                ) ?: false -> {
+                    navigation.navigateTo("verification/main")
+
+                }
             }
-        }catch (e: Exception){
+
+//            val cameFromLoginDeepLink = sharedPreAndCommonUtilInterface.getDataBoolean("deeplink_login")
+//            val cameFromOnboardingDeepLink = sharedPreAndCommonUtilInterface.getDataBoolean("deeplink_onboarding")
+//            if (cameFromLoginDeepLink == true){
+//                Log.d("deepLink", "here")
+//                navigation.navigateTo("gig/tlLoginDetails", bundleOf(
+//                    StringConstants.CAME_FROM_LOGIN_SUMMARY_DEEPLINK.value to true
+//                )
+//                )
+//            }else if (cameFromOnboardingDeepLink == true){
+//                Log.d("deepLink", "onboarding")
+//                navigation.navigateTo("LeadMgmt/joiningListFragment", bundleOf(
+//                    StringConstants.CAME_FROM_ONBOARDING_FORM_DEEPLINK.value to true
+//                )
+//                )
+//            }
+
+
+        } catch (e: Exception) {
 
         }
     }
@@ -290,7 +342,6 @@ class CalendarHomeScreen : Fragment(),
                 )
             }
     }
-
 
 
     private fun isNotLatestVersion(latestAPPUpdateModel: ConfigRepository.LatestAPPUpdateModel): Boolean {
@@ -383,7 +434,7 @@ class CalendarHomeScreen : Fragment(),
         date_container.setOnClickListener {
             changeVisibilityCalendarView()
         }
-        oval_gradient_iv.setOnClickListener{
+        oval_gradient_iv.setOnClickListener {
             changeVisibilityCalendarView()
         }
         calendarView.setMonthChangeListener(object :
@@ -426,7 +477,8 @@ class CalendarHomeScreen : Fragment(),
                 "BottomSheetState ",
                 "changeVisibilityCalendarView  : ${viewModel.currentBottomSheetState}"
             )
-            extendedBottomSheetBehavior.state =  ExtendedBottomSheetBehavior.STATE_COLLAPSED//viewModel.currentBottomSheetState
+            extendedBottomSheetBehavior.state =
+                ExtendedBottomSheetBehavior.STATE_COLLAPSED//viewModel.currentBottomSheetState
             extendedBottomSheetBehavior.isAllowUserDragging = false
         } else {
             if (selectedMonthModel.days != null && selectedMonthModel.days.size == 1) {
@@ -651,11 +703,11 @@ class CalendarHomeScreen : Fragment(),
 //                        getView(viewHolder, R.id.coloredsideline).visibility = View.GONE
 //                        getView(viewHolder, R.id.graysideline).visibility = View.VISIBLE
                         showMonthLayout(false, viewHolder)
-                        if(obj.title == "No gigs assigned"){
+                        if (obj.title == "No gigs assigned") {
                             (viewHolder.getView(R.id.title) as TextView).text =
                                 getString(R.string.no_gig_assigned_giger)
-                        }else
-                        (viewHolder.getView(R.id.title) as TextView).text = obj.title
+                        } else
+                            (viewHolder.getView(R.id.title) as TextView).text = obj.title
 //                        getTextView(viewHolder, R.id.title).text = obj.title
                         if (obj.subTitle != null && !obj.subTitle.equals("")) {
                             viewHolder.getView(R.id.subtitle).visibility = View.VISIBLE
@@ -915,7 +967,7 @@ class CalendarHomeScreen : Fragment(),
 
                                 activity?.let {
                                     (viewHolder.getView(R.id.title) as TextView).text =
-                                    getString(R.string.no_gig_assigned_giger)
+                                        getString(R.string.no_gig_assigned_giger)
 //                                viewHolder.getView(R.id.subtitle).gone()
 
                                     viewHolder.getView(R.id.daydatecard).setBackgroundColor(
@@ -1225,7 +1277,7 @@ class CalendarHomeScreen : Fragment(),
 
     var calPosition = -1
     private fun showTodaysGigDialog(gigOnDay: Int) {
-        if(gigOnDay == 0){
+        if (gigOnDay == 0) {
             gigListForDeclineBS()
             return
         }
@@ -1254,7 +1306,7 @@ class CalendarHomeScreen : Fragment(),
     }
 
 
-    private fun gigListForDeclineBS(){
+    private fun gigListForDeclineBS() {
         val date = temporaryData.getLocalDate()
         navigation.navigateTo(
             "gigsListForDeclineBottomSheet", bundleOf(

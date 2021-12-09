@@ -9,8 +9,10 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.SimpleCardDVM
+import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.verification.R
@@ -27,7 +29,8 @@ class VerificationMainFragment : Fragment() {
     companion object {
         fun newInstance() = VerificationMainFragment()
     }
-
+    @Inject
+    lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
     @Inject
     lateinit var navigation: INavigation
     private val viewModel: VerificationMainViewModel by viewModels()
@@ -41,6 +44,10 @@ class VerificationMainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        sharedPreAndCommonUtilInterface.saveDataBoolean(
+            StringConstants.VERIFICATION_SP.value,
+            false
+        )
         getIntentData(savedInstanceState)
         initViews()
         observer()
