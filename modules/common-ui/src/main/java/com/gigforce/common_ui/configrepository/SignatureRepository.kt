@@ -1,5 +1,7 @@
 package com.gigforce.common_ui.configrepository
 
+import android.R.attr
+import android.graphics.Bitmap
 import android.net.Uri
 import android.webkit.MimeTypeMap
 import androidx.core.net.toFile
@@ -17,6 +19,9 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
+import android.R.attr.bitmap
+import java.io.ByteArrayOutputStream
+
 
 @Singleton
 class SignatureRepository @Inject constructor(
@@ -64,6 +69,38 @@ class SignatureRepository @Inject constructor(
                 uploadFileTask.cancel()
             }
         }
+    }
+
+    suspend fun uploadSignatureImageToFirebase(
+        uri: Bitmap
+    ): String = suspendCancellableCoroutine { cont ->
+
+        val baos = ByteArrayOutputStream()
+        uri.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+
+        val uploadFileTask = firebaseStorage
+            .reference
+            .child(DIRECTORY_SIGNATURES)
+            .child(createImageFile())
+            .putBytes(baos.toByteArray())
+
+        uploadFileTask.addOnSuccessListener {
+            cont.resume(it.metadata!!.path)
+        }.addOnFailureListener {
+            cont.resumeWithException(it)
+        }
+
+        cont.invokeOnCancellation {
+
+            if(!uploadFileTask.isCanceled) {
+                uploadFileTask.cancel()
+            }
+        }
+    }
+
+    private fun createImageFile(): String {
+        val extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(MimeTypes.JPEG)
+        return "IMG-${DateHelper.getFullDateTimeStamp()}.$extension"
     }
 
     private fun createImageFile(
