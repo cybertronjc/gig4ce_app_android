@@ -7,6 +7,7 @@ import android.util.AttributeSet
 import android.util.Patterns
 import androidx.annotation.DrawableRes
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory
 import com.gigforce.common_ui.R
 import com.google.android.material.imageview.ShapeableImageView
@@ -41,7 +42,9 @@ class GigforceImageView(
     ) {
         val pathRef = firebaseStorage.reference.child(firebasePath)
 
-        var requestManager = Glide.with(context).load(pathRef)
+        var requestManager = Glide.with(context)
+            .load(pathRef)
+            .transition(DrawableTransitionOptions().crossFade())
 
         if (placeHolder != -1) {
             requestManager = requestManager.placeholder(placeHolder)
@@ -95,6 +98,7 @@ class GigforceImageView(
 
         var requestManager = Glide.with(context)
                 .load(image)
+                .transition(DrawableTransitionOptions().crossFade())
 
         if (placeHolder != -1) {
             requestManager = requestManager.placeholder(placeHolder)
@@ -120,6 +124,7 @@ class GigforceImageView(
 
         var glideRequestManager = Glide.with(context)
                 .load(image)
+                .transition(DrawableTransitionOptions().crossFade())
                 .error(getErrorImage())
 
         if(centerCrop){
@@ -136,6 +141,7 @@ class GigforceImageView(
 
         var requestManager = Glide.with(context)
                 .load(image)
+                .transition(DrawableTransitionOptions().crossFade())
                 .error(getErrorImage())
 
         if (centerCrop) {
