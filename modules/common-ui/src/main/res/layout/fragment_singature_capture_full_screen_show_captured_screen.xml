@@ -68,7 +68,7 @@ try uploading another image."
             app:layout_constraintTop_toTopOf="@+id/signature_image"
             app:lottie_autoPlay="true"
             app:lottie_fileName="lottie_uploading_animation.json"
-            app:lottie_loop="false" />
+            app:lottie_loop="true" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
