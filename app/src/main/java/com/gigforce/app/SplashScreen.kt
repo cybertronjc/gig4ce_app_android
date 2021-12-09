@@ -27,6 +27,7 @@ class SplashScreen : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        resetDeeplinkSharedPreferences()
         handleDynamicLink()
     }
 
