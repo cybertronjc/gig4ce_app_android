@@ -7,8 +7,8 @@ import kotlinx.android.parcel.Parcelize
 data class WhatsappTemplateModel(
     val shareLink: String,
     val businessName: String,
-    val tlName: String,
+    var tlName: String,
     val jobProfileName: String,
-    val tlMobileNumber: String
+    var tlMobileNumber: String
 ): Parcelable {
 }

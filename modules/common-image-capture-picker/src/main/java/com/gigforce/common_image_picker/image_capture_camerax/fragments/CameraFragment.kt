@@ -13,6 +13,7 @@ import android.os.Handler
 import android.os.HandlerThread
 import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.os.bundleOf
 import androidx.exifinterface.media.ExifInterface
@@ -27,7 +28,6 @@ import com.gigforce.common_image_picker.image_capture_camerax.utils.AutoFitSurfa
 import com.gigforce.common_image_picker.image_capture_camerax.utils.OrientationLiveData
 import com.gigforce.common_image_picker.image_capture_camerax.utils.computeExifOrientation
 import com.gigforce.common_image_picker.image_capture_camerax.utils.getPreviewOutputSize
-import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import kotlinx.android.synthetic.main.fragment_camera.*
 import kotlinx.coroutines.Dispatchers
@@ -503,6 +503,13 @@ class CameraFragment : Fragment() {
         cameraThread.quitSafely()
         imageReaderThread.quitSafely()
     }
+
+    fun showToast(
+        text : String
+    ){
+        Toast.makeText(requireContext(), text, Toast.LENGTH_SHORT).show()
+    }
+
 
     companion object {
         private const val INTENT_EXTRA_CAMERA_ID = "camera_id"

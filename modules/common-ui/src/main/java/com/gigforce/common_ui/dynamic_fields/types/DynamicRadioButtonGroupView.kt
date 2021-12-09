@@ -35,6 +35,9 @@ class DynamicRadioButtonGroupView(
     private var viewBinding: LayoutDynamicFieldRadioButtonBinding
     private lateinit var viewData: DynamicField
 
+    override val fieldType: String
+        get() = FieldTypes.RADIO_BUTTON
+
     init {
         this.layoutParams =
             LayoutParams(

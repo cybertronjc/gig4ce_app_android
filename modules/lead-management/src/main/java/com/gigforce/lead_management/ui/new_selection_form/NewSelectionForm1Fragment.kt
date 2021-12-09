@@ -24,10 +24,13 @@ import com.gigforce.common_ui.contacts.PhoneContact
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.dynamic_fields.DynamicFieldsInflaterHelper
 import com.gigforce.common_ui.dynamic_fields.data.DynamicField
+import com.gigforce.common_ui.dynamic_fields.data.DynamicVerificationField
 import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
+import com.gigforce.common_ui.signature.SharedSignatureUploadViewModel
+import com.gigforce.common_ui.signature.SharedSignatureUploadViewModelViewState
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.getTextChangeAsStateFlow
@@ -49,7 +52,6 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
-import java.util.concurrent.Executor
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -73,6 +75,7 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
 
     private val viewModel: NewSelectionForm1ViewModel by viewModels()
     private val leadMgmtSharedViewModel: LeadManagementSharedViewModel by activityViewModels()
+    private val sharedSignatureViewModel: SharedSignatureUploadViewModel by activityViewModels()
 
     private val contactsDelegate: ContactsDelegate by lazy {
         ContactsDelegate(requireContext().contentResolver)
@@ -171,6 +174,7 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
         initListeners(viewBinding)
         initViewModel()
         initSharedViewModel()
+        initSharedSingatureViewModel()
     }
 
     private fun requestFocusOnMobileNoEditText() = viewBinding.mainForm.apply {
@@ -233,11 +237,16 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
         }
     }
 
-    private fun validateDataAndSubmitData() = viewBinding.mainForm.jobProfileDependentDynamicFieldsContainer.apply{
+    private fun validateDataAndSubmitData() =
+        viewBinding.mainForm.jobProfileDependentDynamicFieldsContainer.apply {
 
-        val dynamicFieldsData = dynamicFieldsInflaterHelper.validateDynamicFieldsReturnFieldValueIfValid(this) ?: return@apply
-        viewModel.handleEvent(NewSelectionForm1Events.SubmitButtonPressed(dynamicFieldsData.toMutableList()))
-    }
+            val dynamicFieldsData =
+                dynamicFieldsInflaterHelper.validateDynamicFieldsReturnFieldValueIfValid(this)
+                    ?: return@apply
+            viewModel.handleEvent(NewSelectionForm1Events.SubmitButtonPressed(
+                dataFromDynamicFields = dynamicFieldsData.toMutableList()
+            ))
+        }
 
     private fun initToolbar(
         viewBinding: FragmentNewSelectionForm1Binding
@@ -304,7 +313,8 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
                 //Data submit states
                 is NewSelectionForm1ViewState.NavigateToForm2 -> openForm2(
                     state.submitJoiningRequest,
-                    ArrayList(state.dynamicInputsFields)
+                    ArrayList(state.dynamicInputsFields),
+                    ArrayList(state.verificationRelatedDynamicInputsFields)
                 )
                 is NewSelectionForm1ViewState.ShowJobProfileRelatedField -> showJobProfileRelatedFields(
                     state.dynamicFields
@@ -327,21 +337,28 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
 
     private fun showJobProfileRelatedFields(
         dynamicFields: List<DynamicField>
-    ) = dynamicFieldsInflaterHelper.inflateDynamicFields(
+    ) = dynamicFieldsInflaterHelper.apply {
+
+        //Inflating
+        inflateDynamicFields(
             requireContext(),
             viewBinding.mainForm.jobProfileDependentDynamicFieldsContainer,
-            dynamicFields
-    )
+            dynamicFields,
+            childFragmentManager
+        )
+    }
 
     private fun openForm2(
         submitJoiningRequest: SubmitJoiningRequest,
-        dynamicInputsFieldValues : ArrayList<DynamicField>
+        dynamicInputsFieldValues: ArrayList<DynamicField>,
+        verificationRelatedDynamicInputsFieldValues: ArrayList<DynamicVerificationField>
     ) {
 
         navigation.navigateTo(
             LeadManagementNavDestinations.FRAGMENT_SELECTION_FORM_2, bundleOf(
                 NewSelectionForm2Fragment.INTENT_EXTRA_JOINING_DATA to submitJoiningRequest,
-                NewSelectionForm2Fragment.INTENT_EXTRA_DYNAMIC_FIELDS to dynamicInputsFieldValues
+                NewSelectionForm2Fragment.INTENT_EXTRA_DYNAMIC_FIELDS to dynamicInputsFieldValues,
+                NewSelectionForm2Fragment.INTENT_EXTRA_VERIFICATION_DYNAMIC_FIELDS to verificationRelatedDynamicInputsFieldValues
             )
         )
         hideSoftKeyboard()
@@ -466,10 +483,10 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
         formMainInfoLayout.infoMessageTv.text = error
     }
 
-    private fun initSharedViewModel()  {
+    private fun initSharedViewModel() {
         leadMgmtSharedViewModel
             .viewState
-            .observe(viewLifecycleOwner,{
+            .observe(viewLifecycleOwner, {
                 it ?: return@observe
 
                 when (it) {
@@ -485,6 +502,24 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
                 }
             })
     }
+
+    private fun initSharedSingatureViewModel() = lifecycleScope.launchWhenCreated {
+        sharedSignatureViewModel
+            .viewState
+            .collect {
+
+                when (it) {
+                    is SharedSignatureUploadViewModelViewState.SignatureCaptured -> {
+                        dynamicFieldsInflaterHelper.signatureCapturedUpdateStatus(
+                            viewBinding.mainForm.jobProfileDependentDynamicFieldsContainer,
+                            it.pathOnFirebase,
+                            it.imageFullUrl
+                        )
+                    }
+                }
+            }
+    }
+
 
     private fun showSelectedBusiness(
         businessSelected: JoiningBusinessAndJobProfilesItem

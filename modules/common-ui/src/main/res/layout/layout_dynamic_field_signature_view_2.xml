@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/title_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="top"
+                android:lineSpacingExtra="1sp"
+                android:textAppearance="@style/style_h5"
+                android:translationY="-0.6sp"
+                tools:text="ss"
+                android:textFontWeight="500"
+                android:lineHeight="18sp"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/optional_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="18dp"
+                android:layout_marginStart="4dp"
+                android:gravity="top"
+                android:textFontWeight="500"
+                android:lineHeight="18sp"
+                android:textSize="14sp"
+                android:lineSpacingExtra="1sp"
+                android:text="@string/common_optional"
+                android:textAppearance="@style/body_primary"
+                android:translationY="-0.6sp" />
+
+        </LinearLayout>
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/drop_shadow_background_draw"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:cardCornerRadius="6dp"
+            app:cardElevation="8dp">
+
+            <LinearLayout
+                android:id="@+id/signature_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="40dp"
+                android:background="@drawable/rectangle_2"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.gigforce.common_ui.views.GigforceImageView
+                    android:id="@+id/status_imageview"
+                    android:layout_marginEnd="8dp"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:layout_marginStart="10dp"
+                    android:src="@drawable/ic_pending_yellow" />
+
+                <TextView
+                    android:id="@+id/city_selected_label"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:layout_weight="1"
+                    android:gravity="top"
+                    android:lineSpacingExtra="4sp"
+                    android:text="Upload Sign of Giger"
+                    android:textAppearance="@style/body_primary"
+                    android:textColor="@color/lipstick_2"
+                    android:translationY="-1.8sp" />
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:src="@drawable/right_arrow_24" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <include
+            android:id="@+id/error_layout"
+            layout="@layout/layout_validation_error"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+</layout>

@@ -87,7 +87,12 @@ class AadharDetailInfoViewModel @Inject constructor(private val aadharDetailsRep
         }
 
     }
-    fun setAadhaarDetails(submitDataModel: AadhaarDetailsDataModel, nomineeAsFather : Boolean ,mJobProfileId : String, uid: String)= viewModelScope.launch {
+    fun setAadhaarDetails(
+        submitDataModel: AadhaarDetailsDataModel,
+        nomineeAsFather: Boolean,
+        mJobProfileId: String,
+        uid: String
+    )= viewModelScope.launch {
             try {
                 val updated = aadharDetailsRepo.setAadhaarFromVerificationModule(uid, nomineeAsFather, submitDataModel)
                 updatedResult.postValue(updated)
