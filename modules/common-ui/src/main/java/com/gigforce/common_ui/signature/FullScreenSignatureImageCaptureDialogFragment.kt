@@ -1,9 +1,15 @@
 package com.gigforce.common_ui.signature
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.gigforce.common_image_picker.CameraAndGalleryIntegrator
@@ -44,6 +50,36 @@ class FullScreenSignatureImageCaptureDialogFragment :
         CameraAndGalleryIntegrator(this)
     }
 
+    @SuppressLint("NewApi")
+    private val requestCameraPermissionContract = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { contactPermissionGranted ->
+
+        if (contactPermissionGranted) {
+            cameraAndGalleryIntegrator.showCameraAndGalleryBottomSheet()
+        } else {
+            val hasUserOptedForDoNotAskAgain =
+                requireActivity().shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)
+                    .not()
+            if (hasUserOptedForDoNotAskAgain) {
+
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("Camera permission granted")
+                    .setMessage("You will be redirected to setting page, please grant camera permission to capture signature image")
+                    .setPositiveButton(getString(R.string.okay_common_ui)) { _, _ -> openSettingsPage() }
+                    .setNegativeButton(getString(R.string.cancel_common_ui)) { _, _ -> }
+                    .show()
+            }
+        }
+    }
+
+    private fun openSettingsPage() {
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+        val uri = Uri.fromParts("package", requireContext().packageName, null)
+        intent.data = uri
+        startActivity(intent)
+    }
+
     private fun getImageCropOptions(): ImageCropOptions {
 
         return ImageCropOptions
@@ -76,7 +112,15 @@ class FullScreenSignatureImageCaptureDialogFragment :
     private fun initListeners() = viewBinding.apply {
 
         this.clikImageBtn.setOnClickListener {
-            cameraAndGalleryIntegrator.showCameraAndGalleryBottomSheet()
+
+            if (cameraPermissionsGranted()) {
+                cameraAndGalleryIntegrator.showCameraAndGalleryBottomSheet()
+            } else {
+
+                requestCameraPermissionContract.launch(
+                    Manifest.permission.CAMERA
+                )
+            }
         }
 
         this.submitCancelBtn.setOnClickListener {
@@ -202,4 +246,11 @@ class FullScreenSignatureImageCaptureDialogFragment :
         viewBinding.submitCancelBtn.isEnabled = true
         viewModel.handleEvent(SignatureViewEvents.SignatureCaptured(uri))
     }
+
+    private fun cameraPermissionsGranted(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            requireContext(), Manifest.permission.CAMERA
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
 }
