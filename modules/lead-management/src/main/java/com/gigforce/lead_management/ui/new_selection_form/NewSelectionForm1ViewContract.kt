@@ -3,6 +3,7 @@ package com.gigforce.lead_management.ui.new_selection_form
 import android.text.SpannedString
 import com.gigforce.common_ui.dynamic_fields.data.DataFromDynamicInputField
 import com.gigforce.common_ui.dynamic_fields.data.DynamicField
+import com.gigforce.common_ui.dynamic_fields.data.DynamicVerificationField
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.core.datamodels.profile.ProfileData
 
@@ -47,7 +48,8 @@ sealed class NewSelectionForm1ViewState {
 
     data class NavigateToForm2(
         val submitJoiningRequest: SubmitJoiningRequest,
-        val dynamicInputsFields : List<DynamicField>
+        val dynamicInputsFields : List<DynamicField>,
+        val verificationRelatedDynamicInputsFields : List<DynamicVerificationField>
     ) : NewSelectionForm1ViewState()
 
     object EnableSubmitButton : NewSelectionForm1ViewState()

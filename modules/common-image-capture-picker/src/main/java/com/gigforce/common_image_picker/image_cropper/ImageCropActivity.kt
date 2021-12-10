@@ -114,12 +114,10 @@ class ImageCropActivity : AppCompatActivity() {
 
         })
 
-        appBar.apply {
-            setBackButtonListener(View.OnClickListener {
-                onBackPressed()
-            })
-        }
 
+        backImageButton.setOnClickListener {
+            onBackPressed()
+        }
     }
 
     private fun changeStatusBarColor() {

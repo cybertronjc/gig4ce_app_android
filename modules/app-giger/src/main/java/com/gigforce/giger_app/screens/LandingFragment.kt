@@ -182,21 +182,65 @@ class LandingFragment : Fragment(),
 
     private fun checkForDeepLink() {
         try {
-            val cameFromLoginDeepLink = sharedPreAndCommonUtilInterface.getDataBoolean("deeplink_login")
-            val cameFromOnboardingDeepLink = sharedPreAndCommonUtilInterface.getDataBoolean("deeplink_onboarding")
-            if (cameFromLoginDeepLink == true){
-                Log.d("deepLink", "login")
-                navigation.navigateTo("gig/tlLoginDetails", bundleOf(
-                    StringConstants.CAME_FROM_LOGIN_SUMMARY_DEEPLINK.value to true
-                )
-                )
-            }else if (cameFromOnboardingDeepLink == true){
-                Log.d("deepLink", "onboarding")
-                navigation.navigateTo("LeadMgmt/joiningListFragment", bundleOf(
-                    StringConstants.CAME_FROM_ONBOARDING_FORM_DEEPLINK.value to true
-                )
-                )
+            when{
+                sharedPreAndCommonUtilInterface.getDataBoolean("deeplink_login")?:false->{
+                    navigation.navigateTo("gig/tlLoginDetails", bundleOf(
+                        StringConstants.CAME_FROM_LOGIN_SUMMARY_DEEPLINK.value to true
+                    )
+                    )
+                }
+                sharedPreAndCommonUtilInterface.getDataBoolean("deeplink_onboarding")?:false->{
+                    navigation.navigateTo("LeadMgmt/joiningListFragment", bundleOf(
+                        StringConstants.CAME_FROM_ONBOARDING_FORM_DEEPLINK.value to true
+                    )
+                    )
+                }
+
+                sharedPreAndCommonUtilInterface.getDataBoolean(StringConstants.BANK_DETAIL_SP.value)?:false->{
+                    navigation.navigateTo("verification/bank_account_fragment")
+                }
+
+                sharedPreAndCommonUtilInterface.getDataBoolean(
+                        StringConstants.PAN_CARD_SP.value)?:false->{
+                    navigation.navigateTo("verification/pancardimageupload")
+
+                        }
+
+                sharedPreAndCommonUtilInterface.getDataBoolean(
+                        StringConstants.AADHAR_DETAIL_SP.value)?:false->{
+                    navigation.navigateTo("verification/AadharDetailInfoFragment")
+
+                        }
+
+                sharedPreAndCommonUtilInterface.getDataBoolean(
+                    StringConstants.DRIVING_LICENCE_SP.value)?:false->{
+                    navigation.navigateTo("verification/drivinglicenseimageupload")
+                    }
+
+                sharedPreAndCommonUtilInterface.getDataBoolean(
+                        StringConstants.VERIFICATION_SP.value)?:false->{
+                    navigation.navigateTo("verification/main")
+
+                }
             }
+
+
+
+//            val cameFromLoginDeepLink = sharedPreAndCommonUtilInterface.getDataBoolean("deeplink_login")
+//            val cameFromOnboardingDeepLink = sharedPreAndCommonUtilInterface.getDataBoolean("deeplink_onboarding")
+//            if (cameFromLoginDeepLink == true){
+//                Log.d("deepLink", "login")
+//                navigation.navigateTo("gig/tlLoginDetails", bundleOf(
+//                    StringConstants.CAME_FROM_LOGIN_SUMMARY_DEEPLINK.value to true
+//                )
+//                )
+//            }else if (cameFromOnboardingDeepLink == true){
+//                Log.d("deepLink", "onboarding")
+//                navigation.navigateTo("LeadMgmt/joiningListFragment", bundleOf(
+//                    StringConstants.CAME_FROM_ONBOARDING_FORM_DEEPLINK.value to true
+//                )
+//                )
+//            }
         }catch (e: Exception){
 
         }
