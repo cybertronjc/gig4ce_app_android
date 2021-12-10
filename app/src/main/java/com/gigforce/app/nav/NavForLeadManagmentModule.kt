@@ -31,5 +31,6 @@ class NavForLeadManagmentModule(
         baseImplementation.registerRoute(LeadManagementNavDestinations.FRAGMENT_JOINING_DROP_SELECTION, R.id.dropSelectionBottomSheetDialogFragment)
         baseImplementation.registerRoute(LeadManagementNavDestinations.FRAGMENT_SHOW_DOC_IMAGES, R.id.showCheckListDocsBottomSheet)
         baseImplementation.registerRoute(LeadManagementNavDestinations.FRAGMENT_PENDING_JOINING_DETAILS, R.id.pendingJoiningDetailsFragment)
+        baseImplementation.registerRoute(LeadManagementNavDestinations.FRAGMENT_SELECTION_FORM_3, R.id.newSelectionVerificationDocumentsForm3Fragment)
     }
 }

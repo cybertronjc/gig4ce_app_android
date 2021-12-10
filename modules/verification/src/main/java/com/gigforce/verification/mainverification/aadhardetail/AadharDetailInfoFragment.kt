@@ -19,6 +19,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -29,6 +30,7 @@ import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.AppConstants
 import com.gigforce.core.ScopedStorageConstants
+import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.datamodels.City
 import com.gigforce.core.datamodels.State
 import com.gigforce.core.datamodels.verification.AadhaarDetailsDataModel
@@ -48,6 +50,7 @@ import com.gigforce.verification.util.VerificationConstants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.jaeger.library.StatusBarUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.veri_screen_info_component.view.*
 import okhttp3.MediaType
@@ -83,7 +86,8 @@ class AadharDetailInfoFragment : Fragment(),
             return FirebaseAuth.getInstance().currentUser
         }
     private var userIdToUse: String? = null
-
+    @Inject
+    lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
     @Inject
     lateinit var buildConfig: IBuildConfig
 
@@ -120,6 +124,10 @@ class AadharDetailInfoFragment : Fragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        sharedPreAndCommonUtilInterface.saveDataBoolean(
+            StringConstants.AADHAR_DETAIL_SP.value,
+            false
+        )
         getDataFromIntent(savedInstanceState)
         initviews()
         setViews()
@@ -1294,5 +1302,13 @@ class AadharDetailInfoFragment : Fragment(),
                 userIdToUse.toString()
             )
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        StatusBarUtil.setColorNoTranslucent(
+            requireActivity(),
+            ResourcesCompat.getColor(resources, R.color.lipstick_2, null)
+        )
     }
 }

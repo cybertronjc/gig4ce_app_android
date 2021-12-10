@@ -41,7 +41,6 @@ android {
 dependencies {
 
     implementation project(path: ':modules:core')
-    implementation project(path: ':modules:common-ui')
     implementation project(path: ':modules:cropper')
 
     implementation 'com.google.android.material:material:1.2.1'

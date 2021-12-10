@@ -104,4 +104,5 @@
     <color name="giger_card_text">#9D9D9D</color>
 
     <color name="edit_action">#e42c64</color>
+    <color name="semi_black_transparent">#99000000</color>
 </resources>

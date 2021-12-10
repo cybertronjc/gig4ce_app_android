@@ -2,8 +2,11 @@ package com.gigforce.common_ui.repository
 
 import com.gigforce.core.fb.BaseFirestoreDBRepository
 import com.google.firebase.firestore.DocumentReference
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class GigerVerificationRepository : BaseFirestoreDBRepository() {
+@Singleton
+class GigerVerificationRepository @Inject constructor(): BaseFirestoreDBRepository() {
 
     override fun getCollectionName(): String =
         COLLECTION_NAME
@@ -11,6 +14,12 @@ class GigerVerificationRepository : BaseFirestoreDBRepository() {
     companion object {
         private const val COLLECTION_NAME = "Verification"
     }
+
+    fun verificationDocumentReference(
+        userId: String
+    ) = db
+        .collection(COLLECTION_NAME)
+        .document(userId)
 
     fun checkForSignedContract(): DocumentReference {
         return db.collection("Verification").document(getUID())

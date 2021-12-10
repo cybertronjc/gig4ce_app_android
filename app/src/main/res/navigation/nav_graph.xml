@@ -1104,6 +1104,17 @@
         android:id="@+id/requestDocumentTreeAccessFragment"
         android:name="com.gigforce.core.documentFileHelper.RequestDocumentTreeAccessFragment"
         android:label="RequestDocumentTreeAccessFragment" />
-
+    <fragment
+        android:id="@+id/newSelectionVerificationDocumentsForm3Fragment"
+        android:name="com.gigforce.lead_management.ui.new_selection_form_3_verification_documents.NewSelectionVerificationDocumentsForm3Fragment"
+        android:label="NewSelectionVerificationDocumentsForm3Fragment"/>
+    <fragment
+        android:id="@+id/signatureImageCaptureDialogFragment"
+        android:name="com.gigforce.common_ui.signature.FullScreenSignatureImageCaptureDialogFragment"
+        android:label="FullScreenSignatureImageCaptureDialogFragment"/>
+    <fragment
+        android:id="@+id/signatureDrawerDialogFragment"
+        android:name="com.gigforce.common_ui.signature.FullScreenSignatureDrawerDialogFragment"
+        android:label="FullScreenSignatureDrawerDialogFragment"/>
 </navigation>
 

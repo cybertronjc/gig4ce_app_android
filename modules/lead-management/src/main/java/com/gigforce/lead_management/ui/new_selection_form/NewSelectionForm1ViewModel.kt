@@ -9,8 +9,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.dynamic_fields.data.DataFromDynamicInputField
 import com.gigforce.common_ui.dynamic_fields.data.DynamicField
+import com.gigforce.common_ui.dynamic_fields.data.DynamicVerificationField
 import com.gigforce.common_ui.dynamic_fields.data.FieldTypes
-import com.gigforce.common_ui.dynamic_fields.data.InputTypes
 import com.gigforce.common_ui.repository.LeadManagementRepository
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfilesItem
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JoiningBusinessAndJobProfilesItem
@@ -83,23 +83,56 @@ class NewSelectionForm1ViewModel @Inject constructor(
             )
         }
 
-         checkForDataAndEnabledOrDisableSubmitButton()
+        checkForDataAndEnabledOrDisableSubmitButton()
     }
 
     private fun inflateDynamicFieldsRelatedToSelectedJobProfile(
         jobProfile: JobProfilesItem
     ) = viewModelScope.launch {
 
-            val selectedJobProfileDependentDynamicFields = jobProfile.dynamicFields.filter {
-                it.screenIdToShowIn == NewSelectionForm1Fragment.SCREEN_ID
-            }
+        val selectedJobProfileVerificationDependentDynamicFields = listOf(
 
-            _viewState.value = NewSelectionForm1ViewState.ShowJobProfileRelatedField(
-                selectedJobProfileDependentDynamicFields
+            DynamicField(
+                fieldType = FieldTypes.AADHAAR_VERIFICATION_VIEW,
+                mandatory = true,
+                prefillText = "Provide Aadhaar details",
+                screenIdToShowIn = NewSelectionForm1Fragment.SCREEN_ID,
+                title = "Giger Aadhar Card"
+            ),
+            DynamicField(
+                fieldType = FieldTypes.BANK_VERIFICATION_VIEW,
+                mandatory = true,
+                prefillText = "Provide Bank details",
+                screenIdToShowIn = NewSelectionForm1Fragment.SCREEN_ID,
+                title = "Giger Bank Details"
+            ),
+            DynamicField(
+                fieldType = FieldTypes.DL_VERIFICATION_VIEW,
+                mandatory = true,
+                prefillText = "Provide Driving license",
+                screenIdToShowIn = NewSelectionForm1Fragment.SCREEN_ID,
+                title = "Giger DL Card"
+            ),
+            DynamicField(
+                fieldType = FieldTypes.PAN_VERIFICATION_VIEW,
+                mandatory = true,
+                prefillText = "Provide pan details",
+                screenIdToShowIn = NewSelectionForm1Fragment.SCREEN_ID,
+                title = "Giger PAN Card"
             )
-            delay(1000)
-            _viewState.value = null
+        )
+
+
+        val selectedJobProfileDependentDynamicFields = jobProfile.dynamicFields.filter {
+            it.screenIdToShowIn == NewSelectionForm1Fragment.SCREEN_ID
         }
+
+        _viewState.value = NewSelectionForm1ViewState.ShowJobProfileRelatedField(
+            selectedJobProfileDependentDynamicFields
+        )
+        delay(1000)
+        _viewState.value = null
+    }
 
     private fun checkForDataAndEnabledOrDisableSubmitButton() {
         if (gigerName.isNullOrBlank()) {
@@ -125,7 +158,7 @@ class NewSelectionForm1ViewModel @Inject constructor(
             && ValidationHelper.isValidIndianMobileNo(mobilePhoneNumber!!.substring(3))
             && selectedBusiness != null
             && selectedJobProfile != null
-            ){
+        ) {
             _viewState.value = NewSelectionForm1ViewState.EnableSubmitButton
             return
         }
@@ -243,9 +276,10 @@ class NewSelectionForm1ViewModel @Inject constructor(
             return
         }
 
-        val dynamicFieldsForNextForm = selectedJobProfile!!.dynamicFields?.filter {
+        val dynamicFieldsForNextForm = selectedJobProfile!!.dynamicFields.filter {
             it.screenIdToShowIn == NewSelectionForm2Fragment.SCREEN_ID
         }
+
 
         _viewState.value = NewSelectionForm1ViewState.NavigateToForm2(
             submitJoiningRequest = SubmitJoiningRequest(
@@ -255,7 +289,8 @@ class NewSelectionForm1ViewModel @Inject constructor(
                 gigerMobileNo = mobilePhoneNumber!!,
                 dataFromDynamicFields = dataFromDynamicFields
             ),
-            dynamicInputsFields = dynamicFieldsForNextForm
+            dynamicInputsFields = dynamicFieldsForNextForm,
+            verificationRelatedDynamicInputsFields = selectedJobProfile!!.verificationRelatedFields
         )
         _viewState.value = null
     }
@@ -265,14 +300,14 @@ class NewSelectionForm1ViewModel @Inject constructor(
     ) = viewModelScope.launch {
         gigforceLogger.d(TAG, "Mobile no changed : $mobileNo")
 
-        if( mobilePhoneNumber == mobileNo){
+        if (mobilePhoneNumber == mobileNo) {
             return@launch
         }
 
         mobilePhoneNumber = mobileNo
         val doesMobileNoContains10digits = mobileNo.length == 13
         if (!doesMobileNoContains10digits) {
-            gigforceLogger.d(TAG,"Mobile no received : '${mobileNo}', checking if can be fixed..")
+            gigforceLogger.d(TAG, "Mobile no received : '${mobileNo}', checking if can be fixed..")
             tryToFixPhoneNumberEntered(mobileNo)
             return@launch
         }
@@ -350,10 +385,11 @@ class NewSelectionForm1ViewModel @Inject constructor(
             "(\\\\s|^0+|^91)".toRegex(), ""
         )
 
-        gigforceLogger.d(TAG,"phone number sanitized : $sanitizedNumber")
+        gigforceLogger.d(TAG, "phone number sanitized : $sanitizedNumber")
 
         if (ValidationHelper.isValidIndianMobileNo(sanitizedNumber)) {
-            _viewState.value = NewSelectionForm1ViewState.EnteredPhoneNumberSanitized(sanitizedNumber)
+            _viewState.value =
+                NewSelectionForm1ViewState.EnteredPhoneNumberSanitized(sanitizedNumber)
         }
     }
 

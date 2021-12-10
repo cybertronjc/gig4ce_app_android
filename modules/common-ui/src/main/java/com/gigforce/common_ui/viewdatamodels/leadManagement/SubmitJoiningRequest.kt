@@ -14,7 +14,6 @@ data class SubmitJoiningRequest(
     @SerializedName("jobProfile")
     var jobProfile: JobProfilesItem,
 
-
     @SerializedName("gigerName")
     var gigerName: String,
 
@@ -43,6 +42,5 @@ data class SubmitJoiningRequest(
     var shareLink: String = "",
 
     @SerializedName("secondaryMobileNumber")
-    var secondaryMobileNumber: String? = null
-
-    ) : Parcelable
+    var secondaryMobileNumber: String? = null,
+) : Parcelable

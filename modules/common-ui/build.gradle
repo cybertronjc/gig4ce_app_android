@@ -42,6 +42,7 @@ dependencies {
 
     implementation project(path: ':modules:core')
     implementation project(path: ':modules:user-tracking')
+    implementation project(path: ':modules:common-image-capture-picker')
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.1'
 
     testImplementation 'junit:junit:4.12'
@@ -128,4 +129,6 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-dynamic-links-ktx:19.1.0'
     implementation 'com.google.firebase:firebase-analytics-ktx:17.5.0'
+
+    implementation 'com.airbnb.android:lottie:4.2.2'
 }
