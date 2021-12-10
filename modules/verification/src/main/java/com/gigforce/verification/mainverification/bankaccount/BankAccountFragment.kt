@@ -348,7 +348,14 @@ class BankAccountFragment : Fragment(),
     private fun checkforStatusAndVerified(obj: BankDetailsDataModel) {
         obj.status?.let {
             when (it) {
-                "started" -> {
+                "verified"->{
+                    verificationScreenStatus = VerificationScreenStatus.VERIFIED
+                    verifiedStatusViews(obj)
+                    viewBinding.belowLayout.visible()
+                    setAlreadyfilledData(obj, false)
+                    viewBinding.toplayoutblock.toggleChangeTextView(true)
+                }
+                "started","processing","validated" -> {
                     verificationScreenStatus = VerificationScreenStatus.STARTED_VERIFYING
                     startedStatusViews(obj)
                     Handler().postDelayed({
@@ -375,7 +382,7 @@ class BankAccountFragment : Fragment(),
                     setAlreadyfilledData(obj, false)
                     //viewBinding.toplayoutblock.disableImageClick()//keep this line in end only //need to remove uploading option 2856 ticket
                 }
-                "failed" -> {
+                "validation_failed" -> {
                     verificationScreenStatus = VerificationScreenStatus.FAILED
                     resetInitializeViews()
                     viewBinding.toplayoutblock.uploadStatusLayout(
@@ -390,14 +397,14 @@ class BankAccountFragment : Fragment(),
                     viewBinding.toplayoutblock.toggleChangeTextView(false)
                     //viewBinding.toplayoutblock.enableImageClick()//keep this line in end only //need to remove uploading option 2856 ticket
                 }
-                "" -> {
+                "","user_rejected" -> {
                     verificationScreenStatus = VerificationScreenStatus.DEFAULT
                     resetInitializeViews()
                     setAlreadyfilledData(null, true)
                     viewBinding.toplayoutblock.toggleChangeTextView(false)
                     //viewBinding.toplayoutblock.enableImageClick()//keep this line in end only //need to remove uploading option 2856 ticket
                 }
-                "completed" -> {
+                "verification_pending" -> {
                     verificationScreenStatus = VerificationScreenStatus.COMPLETED
                     showBankBeneficiaryName(obj)
                     viewBinding.toplayoutblock.toggleChangeTextView(false)
