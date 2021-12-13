@@ -2,7 +2,6 @@ package com.gigforce.verification.mainverification.bankaccount
 
 import android.Manifest
 import android.app.Activity
-import android.content.ContentResolver
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -25,7 +24,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.gigforce.ambassador.user_rollment.kycdocs.Data
+import com.gigforce.common_ui.remote.verification.Data
 import com.gigforce.common_image_picker.image_cropper.ImageCropActivity
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.hideSoftKeyboard
@@ -39,6 +38,7 @@ import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.utils.Lce
 import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.core.utils.VerificationValidations
 import com.gigforce.verification.R
@@ -137,7 +137,9 @@ class BankAccountFragment : Fragment(),
         initViews()
 
         initializeImages()
-        observer()
+        observer {
+
+        }
         listeners()
     }
 
@@ -200,14 +202,14 @@ class BankAccountFragment : Fragment(),
         return false
     }
 
-    private fun observer() {
+    private fun observer(function: () -> Unit) {
         viewModel.kycOcrResult.observe(viewLifecycleOwner, Observer {
             activeLoader(false)
             verificationScreenStatus = VerificationScreenStatus.OCR_COMPLETED
             it?.let {
                 if (it.status) {
                     if (!it.accountNumber.isNullOrBlank() || !it.ifscCode.isNullOrBlank() || !it.bankName.isNullOrBlank()) {
-                        var map = mapOf(
+                        val map = mapOf(
                             "Account number" to it.accountNumber.toString(),
                             "IFSC code" to it.ifscCode.toString(),
                             "Bank name" to it.bankName.toString()
@@ -276,13 +278,15 @@ class BankAccountFragment : Fragment(),
                 viewBinding.screenLoaderBar.gone()
                 it?.let {
 
-                    if (it.verified) {
-                        verificationScreenStatus = VerificationScreenStatus.VERIFIED
-                        verifiedStatusViews(it)
-                        viewBinding.belowLayout.visible()
-                        setAlreadyfilledData(it, false)
-                        viewBinding.toplayoutblock.toggleChangeTextView(true)
-                        //viewBinding.toplayoutblock.disableImageClick()//keep this line in end only //need to remove uploading option 2856 ticket
+                    if (it.verified && it.verified_source.toLowerCase() != "user_consent" && it.counter != "") {
+                        showUserAckPopup()
+
+//                        verificationScreenStatus = VerificationScreenStatus.VERIFIED
+//                        verifiedStatusViews(it)
+//                        viewBinding.belowLayout.visible()
+//                        setAlreadyfilledData(it, false)
+//                        viewBinding.toplayoutblock.toggleChangeTextView(true)
+//                        //viewBinding.toplayoutblock.disableImageClick()//keep this line in end only //need to remove uploading option 2856 ticket
                     } else {
                         checkforStatusAndVerified(it)
                     }
@@ -290,6 +294,25 @@ class BankAccountFragment : Fragment(),
             }
         })
 
+        viewModel.userConsentModel.observe(viewLifecycleOwner,Observer{
+            when(it){
+                is Lce.Loading -> {
+
+                }
+                is Lce.Content -> {
+
+                }
+                is Lce.Error -> {
+
+                }
+            }
+        })
+
+    }
+
+    private fun showUserAckPopup() {
+        //show bottomsheet to aknowledge user for beneficiary name
+        // on popup user will press the button and api will call which will update the counter value
 
     }
 
@@ -404,7 +427,7 @@ class BankAccountFragment : Fragment(),
                     viewBinding.toplayoutblock.toggleChangeTextView(false)
                     //viewBinding.toplayoutblock.enableImageClick()//keep this line in end only //need to remove uploading option 2856 ticket
                 }
-                "","user_rejected" -> {
+                "","rejected" -> {
                     verificationScreenStatus = VerificationScreenStatus.DEFAULT
                     resetInitializeViews()
                     setAlreadyfilledData(null, true)

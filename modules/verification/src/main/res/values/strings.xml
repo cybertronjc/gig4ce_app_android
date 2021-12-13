@@ -384,7 +384,7 @@
     <string name="license_number_veri">License Number</string>
     <string name="contract_status_veri">Contract Status</string>
 
-<!--    <string name="veriScreenTitle">Hello Giger!</string>-->
+    <!--    <string name="veriScreenTitle">Hello Giger!</string>-->
     <string name="veri_address_title">"Step 1 : Please add your Address"</string>
     <string name="veri_add_address">"Address"</string>
     <string name="upload_photo_veri">Upload Photo</string>
@@ -440,15 +440,17 @@
     <string name="no_doc_title_aadhaar_veri">Aadhaar not available!</string>
     <string name="no_doc_subtitle_aadhaar_veri">No Worries! Once you own Aadhaar you can untick the checkbox to verify it</string>
     <!--    <string name="veri_add_doc_front">"Front Side"</string>-->
-<!--    <string name="veri_add_doc_back">"Back Side"</string>-->
-<!--    <string name="veri_pan_title">"Step 5 : Upload your Pan"</string>-->
-<!--    <string name="veri_aadhaar_title">"Step 2 : Upload your Aadhaar"</string>-->
-<!--    <string name="veri_no_aadhaar">"No Aadhaar! Skip>>"</string>-->
-<!--    <string name="veri_dl_title">"Step 3 : Upload your Driving License"</string>-->
-<!--    <string name="veri_bank_title">"Step 4 : Please add your Bank Details"</string>-->
-<!--    <string name="veri_add_bank">"Add Bank Details"</string>-->
-<!--    <string name="veri_done">Hurray!!!\nKYC Documents submitted.\nWe will let you know once Verified.</string>-->
+    <!--    <string name="veri_add_doc_back">"Back Side"</string>-->
+    <!--    <string name="veri_pan_title">"Step 5 : Upload your Pan"</string>-->
+    <!--    <string name="veri_aadhaar_title">"Step 2 : Upload your Aadhaar"</string>-->
+    <!--    <string name="veri_no_aadhaar">"No Aadhaar! Skip>>"</string>-->
+    <!--    <string name="veri_dl_title">"Step 3 : Upload your Driving License"</string>-->
+    <!--    <string name="veri_bank_title">"Step 4 : Please add your Bank Details"</string>-->
+    <!--    <string name="veri_add_bank">"Add Bank Details"</string>-->
+    <!--    <string name="veri_done">Hurray!!!\nKYC Documents submitted.\nWe will let you know once Verified.</string>-->
     <string name="upload_pan_image_first_veri">Upload PAN card image first</string>
     <string name="upload_dl_front_first_veri">Upload DL front image first</string>
     <string name="please_enter_bank_info_below">Please enter your Bank information below.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

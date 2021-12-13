@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="IconOnlyButton" parent="Widget.MaterialComponents.Button.TextButton.Icon">
         <item name="iconPadding">0dp</item>
         <item name="iconGravity">textStart</item>
@@ -12,7 +13,10 @@
         <item name="android:minWidth">0dp</item>
     </style>
 
-
+    <style name="Widget.Theme.Gig4ce_app_android.MyView" parent="">
+        <item name="android:background">@color/gray_400</item>
+        <item name="exampleColor">@color/light_blue_400</item>
+    </style>
 
 
 </resources>

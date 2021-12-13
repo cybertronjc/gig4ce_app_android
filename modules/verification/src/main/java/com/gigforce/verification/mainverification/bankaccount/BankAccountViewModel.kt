@@ -5,10 +5,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gigforce.ambassador.user_rollment.kycdocs.Data
+import com.gigforce.common_ui.remote.verification.Data
 import com.gigforce.core.datamodels.verification.BankDetailsDataModel
 import com.gigforce.core.datamodels.verification.VerificationBaseModel
 import com.gigforce.common_ui.remote.verification.KycOcrResultModel
+import com.gigforce.common_ui.remote.verification.UserConsentResponse
+import com.gigforce.core.utils.Lce
 import com.gigforce.verification.mainverification.VerificationKycRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -22,15 +24,16 @@ class BankAccountViewModel @Inject constructor(
 ) : ViewModel() {
 //    val verificationKycRepo = VerificationKycRepo(iBuildConfigVM)
     var kycOcrResultModel: KycOcrResultModel? = null
-    val _kycOcrResult = MutableLiveData<KycOcrResultModel>()
+    private val _kycOcrResult = MutableLiveData<KycOcrResultModel>()
     val kycOcrResult: LiveData<KycOcrResultModel> = _kycOcrResult
-    val _kycVerifyResult = MutableLiveData<KycOcrResultModel>()
+    private val _kycVerifyResult = MutableLiveData<KycOcrResultModel>()
     val kycVerifyResult: LiveData<KycOcrResultModel> = _kycVerifyResult
 
-    val _bankDetailedObject = MutableLiveData<BankDetailsDataModel>()
+    private val _bankDetailedObject = MutableLiveData<BankDetailsDataModel>()
     val bankDetailedObject: LiveData<BankDetailsDataModel> = _bankDetailedObject
 
-
+    private val _userConsentModel = MutableLiveData<Lce<UserConsentResponse>>()
+    val userConsentModel : LiveData<Lce<UserConsentResponse>> = _userConsentModel
     fun getKycOcrResult(type: String, subType: String, image: MultipartBody.Part, uid: String) =
         viewModelScope.launch {
             try {
@@ -79,9 +82,9 @@ class BankAccountViewModel @Inject constructor(
     fun setVerificationStatusInDB(status: Boolean, uid: String) =
         viewModelScope.launch {
             try {
-                verificationKycRepo.setVerifiedStatus(status, uid)
+                _userConsentModel.value = Lce.content(verificationKycRepo.setVerifiedStatus(status, uid))
             } catch (e: Exception) {
-
+                _userConsentModel.value = Lce.error(e.toString())
             }
         }
 
@@ -93,4 +96,6 @@ class BankAccountViewModel @Inject constructor(
 
             }
         }
+
+
 }

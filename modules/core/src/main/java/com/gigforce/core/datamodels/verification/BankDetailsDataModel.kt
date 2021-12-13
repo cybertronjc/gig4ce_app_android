@@ -14,8 +14,12 @@ data class BankDetailsDataModel(
     val bankBeneficiaryName: String? = null,
     val state :Int = -1,
     val status : String? = "",
-    val verifiedString : String? = null
+    val verifiedString : String? = null,
+    val verified_source : String="",
+    val counter: String = ""
 ) : BaseFirestoreDataModel(TABLE_NAME) {
+
+
 
     companion object {
         const val TABLE_NAME = "bank_details"

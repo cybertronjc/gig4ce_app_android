@@ -5,12 +5,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gigforce.ambassador.user_rollment.kycdocs.Data
+import com.gigforce.common_ui.remote.verification.Data
 import com.gigforce.common_ui.remote.verification.KycOcrResultModel
 import com.gigforce.ambassador.user_rollment.kycdocs.VerificationKycRepo
 import com.gigforce.core.datamodels.verification.PanCardDataModel
 import com.gigforce.core.datamodels.verification.VerificationBaseModel
-import com.gigforce.core.di.interfaces.IBuildConfigVM
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
