@@ -1,11 +1,14 @@
 package com.gigforce.modules.feature_chat.screens.adapters
 
 import android.content.Context
+import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
@@ -17,6 +20,26 @@ import com.gigforce.core.extensions.visible
 import com.gigforce.modules.feature_chat.R
 import com.gigforce.common_ui.chat.models.ContactModel
 import com.google.firebase.storage.FirebaseStorage
+import android.text.Spannable
+
+import android.text.style.ForegroundColorSpan
+
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+
+import android.graphics.Typeface
+
+import android.text.style.TextAppearanceSpan
+
+import android.content.res.ColorStateList
+
+import android.text.SpannableString
+
+
+
+
+
+
 
 class ContactsRecyclerAdapter(
         private val context: Context,
@@ -32,6 +55,8 @@ class ContactsRecyclerAdapter(
     private val contactsFilter = ContactsFilter()
 
     private var createNewGroup: Boolean = false
+
+    private var searchText: String = ""
 
     private val firebaseStorage: FirebaseStorage by lazy {
         FirebaseStorage.getInstance()
@@ -80,7 +105,8 @@ class ContactsRecyclerAdapter(
         private var contactAvatarIV: GigforceImageView = itemView.findViewById(R.id.user_image_iv)
         private var contactNameTV: TextView = itemView.findViewById(R.id.user_name_tv)
         private var contactLastLiveTV: TextView = itemView.findViewById(R.id.last_online_time_tv)
-        private val contactSelectedTick: View = itemView.findViewById(R.id.user_selected_layout)
+        //private val contactSelectedTick: View = itemView.findViewById(R.id.user_selected_layout)
+        private val contactSelectUnselectTick: ImageView = itemView.findViewById(R.id.select_unselect_icon)
 
         init {
             itemView.setOnClickListener(this)
@@ -88,7 +114,50 @@ class ContactsRecyclerAdapter(
         }
 
         fun bindValues(contact: ContactModel) {
-            contactNameTV.text = contact.name
+            var sb =  SpannableStringBuilder("")
+            val dataString = contact.name
+            if (searchText != null && !searchText.isEmpty()) {
+                val startPos: Int = dataString.toString().toLowerCase()?.indexOf(searchText.toLowerCase())
+                val endPos: Int = startPos + searchText.length
+                if (startPos != -1) {
+                    val spannable: Spannable = SpannableString(dataString.toString())
+                    val colorStateList =
+                        ColorStateList(arrayOf(intArrayOf()), intArrayOf(context.getColor(R.color.colorPrimary)))
+                    val textAppearanceSpan =
+                        TextAppearanceSpan(null, Typeface.BOLD, -1, colorStateList, null)
+                    spannable.setSpan(
+                        textAppearanceSpan,
+                        startPos,
+                        endPos,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+                    contactNameTV.text = spannable
+
+                } else {
+                    contactNameTV.text = contact.name
+                }
+            } else {
+                contactNameTV.text = contact.name
+            }
+//            if (searchText.isNotEmpty() && filteredContactsList.contains(contact)){
+//                    //color your text here
+//                    var index: Int = dataString.toString().indexOf(searchText)
+//                    while (index > 0) {
+//                        sb = SpannableStringBuilder(dataString.toString())
+//                        val fcs = ForegroundColorSpan(context.resources.getColor(R.color.colorPrimary)) //specify color here
+//                        sb.setSpan(
+//                            fcs,
+//                            index,
+//                            index + searchText.length,
+//                            Spannable.SPAN_INCLUSIVE_INCLUSIVE
+//                        )
+//                        index = dataString.toString().indexOf(searchText, index + 1)
+//                    }
+//                contactNameTV.text = sb
+//            } else{
+//                contactNameTV.text = contact.name
+//            }
+
 
             val mobileWith91 = "+${contact.mobile}"
             contactLastLiveTV.text = mobileWith91.substring(0, 3) + "-" + mobileWith91.substring(3)
@@ -126,10 +195,18 @@ class ContactsRecyclerAdapter(
                         .into(contactAvatarIV)
             }
 
+            if (createNewGroup){
+                contactSelectUnselectTick.visible()
+            }else{
+                contactSelectUnselectTick.gone()
+            }
+
             if (selectedContacts.contains(contact)) {
-                contactSelectedTick.visible()
+                //contactSelectedTick.visible()
+                contactSelectUnselectTick.setImageDrawable(context.getDrawable(R.drawable.ic_icon_selected))
             } else {
-                contactSelectedTick.gone()
+                //contactSelectedTick.gone()
+                contactSelectUnselectTick.setImageDrawable(context.getDrawable(R.drawable.ic_icon_unselected))
             }
         }
 
@@ -143,14 +220,14 @@ class ContactsRecyclerAdapter(
                     selectedContacts.remove(contact)
                     notifyItemChanged(pos)
 
-                    onContactClickListener.onContactSelected(selectedContacts.size)
+                    onContactClickListener.onContactSelected(selectedContacts.size, filteredContactsList.size)
                 } else {
                     selectedContacts.add(contact)
                     notifyItemChanged(pos)
-                    onContactClickListener.onContactSelected(selectedContacts.size)
+                    onContactClickListener.onContactSelected(selectedContacts.size, filteredContactsList.size)
                 }
             } else {
-                onContactClickListener.onContactSelected(selectedContacts.size)
+                onContactClickListener.onContactSelected(selectedContacts.size, filteredContactsList.size)
                 onContactClickListener.contactClick(filteredContactsList[adapterPosition])
             }
         }
@@ -161,13 +238,14 @@ class ContactsRecyclerAdapter(
             if (selectedContacts.contains(contact)) {
                 //remove it
                 selectedContacts.remove(contact)
-                notifyItemChanged(pos)
+                notifyDataSetChanged()
 
-                onContactClickListener.onContactSelected(selectedContacts.size)
+                onContactClickListener.onContactSelected(selectedContacts.size, filteredContactsList.size)
             } else {
                 selectedContacts.add(contact)
-                notifyItemChanged(pos)
-                onContactClickListener.onContactSelected(selectedContacts.size)
+                notifyDataSetChanged()
+                //notifyItemChanged(pos)
+                onContactClickListener.onContactSelected(selectedContacts.size, filteredContactsList.size)
             }
 
             if (selectedContacts.isNullOrEmpty()) {
@@ -210,7 +288,7 @@ class ContactsRecyclerAdapter(
 
         override fun performFiltering(constraint: CharSequence?): FilterResults {
             val charString = constraint.toString()
-
+            searchText = charString
             if (charString.isEmpty()) {
                 filteredContactsList = originalContactsList
             } else {

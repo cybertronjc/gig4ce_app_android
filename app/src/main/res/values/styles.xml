@@ -19,7 +19,9 @@
 <!--        <item name="android:scrollbarStyle">outsideOverlay</item>-->
         <item name="android:itemTextAppearance">@style/itemTextStyle.AppTheme</item>
         <item name="android:windowBackground">@color/bg</item>
-        <!--        <item name="android:popupMenuStyle">@style/PopupMenu</item>-->
+<!--        <item name="popupMenuStyle">@style/PopupMenu</item>-->
+<!--        <item name="android:popupMenuStyle">@style/PopupMenu</item>-->
+<!--        <item name="itemBackground">@drawable/popup_background</item>-->
     </style>
 
     <style name="SplashTheme" parent="AppTheme">
@@ -461,6 +463,9 @@
 
     <style name="PopupMenu" parent="@android:style/Widget.PopupMenu">
         <item name="android:popupBackground">@drawable/popup_background</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:textColor">#075E98</item>
+        <item name="android:fontFamily">@font/lato</item>
     </style>
 
     <style name="Theme.App.Dialog.FullScreenNoDim" parent="Theme.MaterialComponents.Dialog">

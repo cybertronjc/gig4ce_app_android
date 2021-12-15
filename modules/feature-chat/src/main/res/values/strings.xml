@@ -70,7 +70,9 @@
     <string name="add_new_giger_chat">Add new Giger</string>
     <string name="deactivate_group_chat">Deactivate Group</string>
     <string name="media_chat">Media</string>
-    <string name="no_chat_chat">No Chat …</string>
+    <string name="no_chat_chat">No Chat Found!</string>
+    <string name="start_chatting_chat">START CHATTING</string>
+    <string name="no_chat_chat_subtitle_chat">Start chatting with other Gigforce app users added in your contacts</string>
     <string name="oops_it_looks_like_you_have_not_started_chat_with_anyone_chat">Oops…it looks like you have not started chat with anyone.</string>
     <string name="contacts_chat">Contacts</string>
     <string name="search_gigers_chat">Search Gigers</string>
@@ -111,4 +113,35 @@
     <string name="remove_from_group">Remove from group</string>
     <string name="share_propercase">Share</string>
     <string name="contacts_with_space"> Contact(s)</string>
+    <string name="chat_settings_chat">Settings</string>
+    <string name="select_chat_settings_chat">Select chat</string>
+    <string name="new_group_settings_chat">New Group</string>
+    <string name="chat_settings_media_and_storage_chat">Media Auto Download</string>
+    <string name="community_chat">Community</string>
+    <string name="sync_contacts_chat">Sync Contacts</string>
+    <string name="sync_contacts_to_start_chatting_chat">Please sync contacts to start chatting.</string>
+    <string name="syncing_contacts_chat">Syncing Contacts</string>
+    <string name="please_be_patient_chat">Please be patient. This might take a moment.</string>
+    <string name="create_new_group_chat">New Group</string>
+    <string name="create_new_broadcast">New Broadcast</string>
+    <string name="group_name_hint">Type group name here...</string>
+    <string name="choose_photo_and_name">Choose option group photo and type group name</string>
+    <string name="participants_chat">Participants</string>
+    <string name="group_icon_chat">Group icon</string>
+    <string name="add_subject_chat">Add Subject</string>
+    <string name="mute_notifications_chat">Mute Notifications</string>
+    <string name="unmute_notifications_chat">Unmute Notifications</string>
+    <string name="mark_as_read_chat">Mark as Read</string>
+    <string name="mark_as_unread_chat">Mark as Unead</string>
+    <string name="delete_chat">Delete</string>
+    <string name="chat_selected_chat">Chat Selected</string>
+    <string name="notifications_chat">Notifications</string>
+    <string name="report_user_chat">Report User</string>
+    <string name="report_chat">Report</string>
+    <string name="do_you_really_want_to_block_chat">Do you really want to block this contact?
+Blocked contact will no longer be able to send you message on Gigforce application.</string>
+    <string name="select_reason_to_block_chat">Please select the reason to report this user</string>
+    <string name="type_your_concern_reason">Type your concern here...</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

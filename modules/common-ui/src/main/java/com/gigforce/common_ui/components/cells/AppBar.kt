@@ -14,6 +14,8 @@ import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.annotation.DrawableRes
+import androidx.annotation.MenuRes
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import com.gigforce.common_ui.R
@@ -45,7 +47,7 @@ enum class BackgroundType(val value: Int){
 
 @AndroidEntryPoint
 class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context, attributeSet),
-        IViewHolder, AppBarClicks.OnSearchClickListener, AppBarClicks.OnMenuClickListener{
+        IViewHolder, AppBarClicks.OnSearchClickListener{
 
     @Inject
     lateinit var userinfo: UserInfoImp
@@ -54,10 +56,12 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
 
 
      var titleText: TextView
+     var subTitleText: TextView
      var backImageButton: ImageButton
      var menuImageButton: ImageButton
      var searchImageButton: ImageButton
      var filterImageButton: ImageButton
+     var refreshImageButton: ImageButton
      var filterDotImageButton: ImageButton
      var filterFrameLayout: FrameLayout
      var stepsTextView: TextView
@@ -65,6 +69,11 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
      var profilePic: AppProfilePicComponent
      var onBackClickListener: View.OnClickListener? = null
      var searchTextChangeListener: SearchTextChangeListener? = null
+     private lateinit var subTitleTV: TextView
+     private var optionMenuClickListener: PopupMenu.OnMenuItemClickListener? = null
+     @MenuRes
+     private var menu: Int = -1
+     private var subtitleEnabled = false
 
     fun setOnSearchTextChangeListener(listener: SearchTextChangeListener) {
         this.searchTextChangeListener = listener
@@ -114,6 +123,7 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
         val app_title = styledAttributeSet.getText(R.styleable.AppBar_titleText)
         val isSearchVisible = styledAttributeSet.getBoolean(R.styleable.AppBar_isSearchVisible, false)
         val isMenuItemVisible = styledAttributeSet.getBoolean(R.styleable.AppBar_isMenuItemVisible, false)
+        val isRefreshVisible = styledAttributeSet.getBoolean(R.styleable.AppBar_isRefreshVisible, false)
         val isProfileVisible = styledAttributeSet.getBoolean(R.styleable.AppBar_isProfileVisible, false)
         val searchHint = styledAttributeSet.getString(R.styleable.AppBar_searchHint)
         val isFilterVisible = styledAttributeSet.getBoolean(R.styleable.AppBar_isFilterVisible, false)
@@ -122,15 +132,19 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
 
 
         titleText = findViewById(R.id.textTitle)
+        subTitleText = findViewById(R.id.subTitleTV)
         backImageButton = findViewById(R.id.backImageButton)
         menuImageButton = findViewById(R.id.menuImageButton)
         searchImageButton = findViewById(R.id.searchImageButton)
         filterImageButton = findViewById(R.id.filterImageButton)
+        refreshImageButton = findViewById(R.id.refreshImageButton)
         filterDotImageButton = findViewById(R.id.filterDot)
         filterFrameLayout = findViewById(R.id.filterImageFrame)
         search_item = findViewById(R.id.search_item)
         profilePic = findViewById(R.id.profilePicComp)
         stepsTextView = findViewById(R.id.steps)
+
+
 
         if (app_title.isNotEmpty()){
             titleText.visible()
@@ -143,6 +157,7 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
         makeMenuItemVisible(isMenuItemVisible)
         makeProfileVisible(isProfileVisible)
         makeStepsVisible(isStepsVisible)
+        makeRefreshVisible(isRefreshVisible)
         makeFilterVisible(isFilterVisible)
         searchHint?.let { setHint(it) }
         userinfo.getData().profilePicPath?.let {
@@ -153,10 +168,10 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
             searchClickListener?.onSearchClick(it)
             onSearchClick(it)
         }
-        menuImageButton.setOnClickListener {
-            menuClickListener?.onMenuClick(it)
-            onMenuClick(it)
-        }
+//        menuImageButton.setOnClickListener {
+//            menuClickListener?.onMenuClick(it)
+//            onMenuClick(it)
+//        }
         setColorsOnViews(backGroundType)
         styledAttributeSet.recycle()
 
@@ -231,6 +246,21 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
     fun makeTitleBold(){
         titleText.setTypeface(null, Typeface.BOLD)
     }
+
+    fun showSubtitle(
+        subTitle: String?
+    ) {
+        subtitleEnabled = true
+        subTitleText.visibility = View.VISIBLE
+
+        if (subTitle != null)
+            subTitleText.text = subTitle
+    }
+
+    fun hideSubTitle() {
+        subTitleText.visibility = View.GONE
+    }
+
     fun makeBackgroundMoreRound(){
         this.background = context.resources.getDrawable(R.drawable.app_bar_background_more_rounded)
     }
@@ -245,6 +275,10 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
         if (visible) profilePic.visible() else profilePic.gone()
     }
 
+    fun makeRefreshVisible(visible: Boolean){
+        if (visible) refreshImageButton.visible() else refreshImageButton.gone()
+    }
+
     fun makeStepsVisible(visible: Boolean){
         if (visible) stepsTextView.visible() else stepsTextView.gone()
     }
@@ -257,12 +291,28 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
         if (visible) menuImageButton.visible() else menuImageButton.invisible()
     }
 
+
+    fun setOnOpenActionMenuItemClickListener(listener: View.OnClickListener) {
+        this.menuImageButton.setOnClickListener(listener)
+    }
+
+
     fun changeBackButtonDrawable(){
         backImageButton.setImageDrawable(resources.getDrawable(R.drawable.ic_chevron))
     }
 
+    fun setOnMenuItemClickListener(
+        menuItemClickListener: PopupMenu.OnMenuItemClickListener
+    ) {
+        this.optionMenuClickListener = menuItemClickListener
+    }
+
     override fun bind(data: Any?) {
 
+    }
+
+    fun getOptionMenuViewForAnchor(): View {
+        return menuImageButton
     }
 
     fun setBackButtonDrawable(
@@ -315,9 +365,6 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
         }
     }
 
-    override fun onMenuClick(v: View) {
-        Log.d("Click", "Menu")
-    }
 
 
 

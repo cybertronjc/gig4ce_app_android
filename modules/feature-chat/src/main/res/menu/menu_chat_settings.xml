@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_chat_settings"
+        android:orderInCategory="100"
+        android:title="@string/chat_settings_chat"
+        app:showAsAction="collapseActionView" />
+
+    <item
+        android:id="@+id/action_select_chat"
+        android:orderInCategory="100"
+        android:title="@string/select_chat_settings_chat"
+        app:showAsAction="collapseActionView" />
+
+    <item
+        android:id="@+id/action_new_group"
+        android:orderInCategory="100"
+        android:title="@string/new_group_settings_chat"
+        app:showAsAction="collapseActionView" />
+</menu>

@@ -1104,6 +1104,18 @@
         android:id="@+id/requestDocumentTreeAccessFragment"
         android:name="com.gigforce.core.documentFileHelper.RequestDocumentTreeAccessFragment"
         android:label="RequestDocumentTreeAccessFragment" />
+    <fragment
+        android:id="@+id/chatSettingsFragment"
+        android:name="com.gigforce.modules.feature_chat.screens.ChatSettingsFragment"
+        android:label="ChatSettingsFragment" />
+    <dialog
+        android:id="@+id/syncContactsBottomSheetFragment"
+        android:name="com.gigforce.modules.feature_chat.screens.SyncContactsBottomSheetFragment"
+        android:label="SyncContactsBottomSheetFragment" />
+    <fragment
+        android:id="@+id/contactsAndGroupFragment"
+        android:name="com.gigforce.modules.feature_chat.screens.ContactsAndGroupFragment"
+        android:label="ContactsAndGroupFragment" />
 
 </navigation>
 

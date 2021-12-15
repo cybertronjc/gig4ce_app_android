@@ -85,6 +85,12 @@ class ChatPageViewModel constructor(
     private var contactInfoChangeListener: ListenerRegistration? = null
     private var currentChatHeader: ChatHeader? = null
 
+    private var _askForPermission = MutableLiveData<Boolean>()
+    val askForPermission: LiveData<Boolean> = _askForPermission
+
+    private var _allStoragePermissionsGranted = MutableLiveData<Boolean>()
+    val allStoragePermissionsGranted: LiveData<Boolean> = _allStoragePermissionsGranted
+
 
     fun setRequiredDataAndStartListeningToMessages(
         otherUserId: String,
@@ -930,5 +936,17 @@ class ChatPageViewModel constructor(
             _scrollToMessage.value = index
             _scrollToMessage.value = null
         }
+    }
+
+    fun askForScopeAndStoragePermissionToDownload(ask: Boolean){
+        _askForPermission.value = ask
+    }
+
+    fun getScopeAndStoragePermission(): Boolean? {
+        return allStoragePermissionsGranted.value
+    }
+
+    fun setScopeAndStoragePermission(perm: Boolean){
+        _allStoragePermissionsGranted.value = perm
     }
 }

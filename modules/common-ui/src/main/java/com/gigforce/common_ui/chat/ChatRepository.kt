@@ -440,6 +440,34 @@ class ChatRepository constructor(
         }
     }
 
+    override suspend fun setHeadersAsRead(headerIds: List<String>, senderId: String) {
+        if (headerIds.isNotEmpty()){
+            val batch = db.batch()
+
+            headerIds.forEach {
+
+                val headerReference = FirebaseFirestore.getInstance()
+                    .collection(COLLECTION_CHATS)
+                    .document(senderId)
+                    .collection(COLLECTION_CHAT_HEADERS)
+                    .document(it)
+
+
+                batch.update(
+                    headerReference, mapOf(
+                        "unseenCount" to ChatConstants.MARK_AS_READ,
+                        "updatedAt" to Timestamp.now(),
+                        "updatedBy" to FirebaseAuthStateListener.getInstance()
+                            .getCurrentSignInUserInfoOrThrow().uid
+                    )
+                )
+            }
+
+            batch.commitOrThrow()
+
+        }
+    }
+
     private fun shouldCompressVideo(videoInfo: VideoInfo): Boolean {
         if (videoInfo.size != 0L) {
             if (videoInfo.size <= ChatConstants.MB_10) {

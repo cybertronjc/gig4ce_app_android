@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/name_group_card"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_20"
+            android:layout_marginTop="@dimen/size_25"
+            android:layout_marginEnd="@dimen/size_20"
+            app:cardElevation="4dp"
+            android:padding="@dimen/size_6"
+            app:cardCornerRadius="@dimen/size_6"
+            app:cardBackgroundColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.gigforce.common_ui.views.GigforceImageView
+                    android:id="@+id/group_icon"
+                    android:layout_width="@dimen/size_40"
+                    android:layout_height="@dimen/size_40"
+                    android:layout_marginStart="@dimen/size_10"
+                    android:layout_marginTop="@dimen/size_10"
+                    android:src="@drawable/ic_create_new_group"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                    android:id="@+id/group_name_edit"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/size_14"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:hint="@string/group_name_hint"
+                    android:textSize="@dimen/font_12"
+                    app:layout_constraintBottom_toBottomOf="@id/group_icon"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/group_icon"
+                    app:layout_constraintTop_toTopOf="@id/group_icon" />
+
+                <TextView
+                    android:id="@+id/choose_option_photo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/size_8"
+                    android:textColor="#979C9E"
+                    android:textSize="@dimen/font_10"
+                    android:paddingBottom="@dimen/size_10"
+                    android:text="@string/choose_photo_and_name"
+                    app:layout_constraintStart_toStartOf="@id/group_icon"
+                    app:layout_constraintTop_toBottomOf="@id/group_icon" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/participantsCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_23"
+            android:textColor="#979C9E"
+            android:text="@string/participants_chat"
+            app:layout_constraintStart_toStartOf="@id/name_group_card"
+            app:layout_constraintTop_toBottomOf="@id/name_group_card" />
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/create_and_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:visibility="visible"
+            app:backgroundTint="@color/colorPrimary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/name_group_card"
+            app:layout_constraintBottom_toTopOf="@id/group_contacts_rv"
+            app:srcCompat="@drawable/ic_icon_send"
+            app:tint="@android:color/white" />
+
+        <ScrollView
+            android:id="@+id/group_contacts_rv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/size_24"
+            app:layout_constraintTop_toBottomOf="@id/participantsCount"
+            app:layout_constraintStart_toStartOf="@id/participantsCount"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <LinearLayout
+                android:id="@+id/contacts_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"/>
+
+        </ScrollView>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

@@ -5,42 +5,29 @@
     android:id="@+id/txt_contact_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingStart="16dp"
+    android:paddingStart="20dp"
     android:paddingTop="8dp"
     android:paddingEnd="16dp"
     android:paddingBottom="8dp">
+
+    <ImageView
+        android:id="@+id/select_unselect_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:src="@drawable/ic_icon_unselected"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/user_image_iv"
+        app:layout_constraintBottom_toBottomOf="@id/user_image_iv"/>
 
     <com.gigforce.common_ui.views.GigforceImageView
         android:id="@+id/user_image_iv"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="@dimen/size_10"
+        app:layout_constraintStart_toEndOf="@id/select_unselect_icon"
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearanceOverlay="@style/circleImageView" />
-
-    <FrameLayout
-        android:id="@+id/user_selected_layout"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/selected_image_iv"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="@color/lipstick"
-            app:shapeAppearanceOverlay="@style/circleImageView" />
-
-        <ImageView
-            android:id="@+id/tick_iv"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:layout_gravity="center"
-            app:srcCompat="@drawable/ic_tick" />
-
-    </FrameLayout>
 
     <TextView
         android:id="@+id/user_name_tv"
@@ -48,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:layout_marginTop="4dp"
-        android:textColor="#646464"
+        android:textColor="#202325"
         android:textSize="16sp"
         android:letterSpacing="0"
         android:fontFamily="@font/lato_bold"
@@ -66,9 +53,21 @@
         tools:text="Last online: -"
         android:textStyle="normal"
         android:letterSpacing="0"
+        android:textColor="#979C9E"
         android:fontFamily="@font/lato"
         app:layout_constraintStart_toEndOf="@id/user_image_iv"
         app:layout_constraintTop_toBottomOf="@id/user_name_tv" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#F2F4F5"
+        android:layout_marginTop="@dimen/size_20"
+        android:layout_marginStart="@dimen/size_20"
+        android:layout_marginEnd="@dimen/size_20"
+        app:layout_constraintTop_toBottomOf="@id/user_image_iv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
