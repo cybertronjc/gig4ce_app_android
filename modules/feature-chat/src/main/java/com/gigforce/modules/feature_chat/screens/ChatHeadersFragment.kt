@@ -330,7 +330,7 @@ class ChatHeadersFragment : Fragment(), PopupMenu.OnMenuItemClickListener, Gigfo
 //            )
             navigation.navigateTo("chats/contactsFragment",
                 bundleOf(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE to viewModel.sharedFiles,
-                    ChatPageFragment.INTENT_EXTRA_NEW_GROUP to false
+                    ContactsAndGroupFragment.INTENT_EXTRA_NEW_GROUP to false
                 )
             )
             viewModel.sharedFiles = null
@@ -502,10 +502,10 @@ class ChatHeadersFragment : Fragment(), PopupMenu.OnMenuItemClickListener, Gigfo
             true
         }
         R.id.action_new_group -> {
-            //go to contacts screen
+            //go to contacts screenext
             navigation.navigateTo("chats/contactsFragment",
                 bundleOf(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE to viewModel.sharedFiles,
-                    ChatPageFragment.INTENT_EXTRA_NEW_GROUP to true
+                    ContactsAndGroupFragment.INTENT_EXTRA_NEW_GROUP to true
                 )
             )
             viewModel.sharedFiles = null

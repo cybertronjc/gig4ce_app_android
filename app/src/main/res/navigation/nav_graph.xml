@@ -1116,6 +1116,14 @@
         android:id="@+id/contactsAndGroupFragment"
         android:name="com.gigforce.modules.feature_chat.screens.ContactsAndGroupFragment"
         android:label="ContactsAndGroupFragment" />
+    <dialog
+        android:id="@+id/blockUserBottomSheetFragment"
+        android:name="com.gigforce.modules.feature_chat.screens.BlockUserBottomSheetFragment"
+        android:label="BlockUserBottomSheetFragment" />
+    <dialog
+        android:id="@+id/reportUserBottomSheetFragment"
+        android:name="com.gigforce.modules.feature_chat.screens.ReportUserBottomSheetFragment"
+        android:label="ReportUserBottomSheetFragment" />
 
 </navigation>
 

@@ -832,14 +832,18 @@ class ChatPageViewModel @Inject constructor(
     private var _blockingOrUnblockingUser = MutableLiveData<Lse>()
     val blockingOrUnblockingUser: LiveData<Lse> = _blockingOrUnblockingUser
 
-    fun blockOrUnBlockUser() = viewModelScope.launch {
+    fun blockOrUnBlockUser(
+        chatHeader: String,
+        otherUserId: String,
+        forceBlock: Boolean
+    ) = viewModelScope.launch {
         _blockingOrUnblockingUser.value = Lse.loading()
 
         try {
             chatRepository.blockOrUnblockUser(
-                chatHeaderId = headerId,
+                chatHeaderId = chatHeader,
                 otherUserId = otherUserId,
-                forceBlock = false
+                forceBlock = forceBlock
             )
 
             _blockingOrUnblockingUser.value = Lse.success()

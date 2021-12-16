@@ -90,6 +90,7 @@ class ContactsAndGroupFragment : BaseFragment2<ContactsAndGroupFragmentBinding>(
         const val TAG = "ContactsAndGroupFragment"
 
         const val INTENT_EXTRA_RETURN_SELECTED_RESULTS = "return_selected_results"
+        const val INTENT_EXTRA_NEW_GROUP = "new_group"
         private const val REQUEST_CAPTURE_IMAGE = 1011
         private const val REQUEST_PICK_IMAGE = 1012
         const val REQUEST_CONTACTS_PERMISSION = 101
@@ -385,13 +386,13 @@ class ContactsAndGroupFragment : BaseFragment2<ContactsAndGroupFragmentBinding>(
         arguments?.let {
             sharedFilesBundle = it.getBundle(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE)
             shouldReturnToPreviousScreen = it.getBoolean(ContactsFragment.INTENT_EXTRA_RETURN_SELECTED_RESULTS)
-            creatingGroup = it.getBoolean(ChatPageFragment.INTENT_EXTRA_NEW_GROUP)
+            creatingGroup = it.getBoolean(INTENT_EXTRA_NEW_GROUP)
         }
 
         savedInstanceState?.let {
             sharedFilesBundle = it.getBundle(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE)
             shouldReturnToPreviousScreen = it.getBoolean(ContactsFragment.INTENT_EXTRA_RETURN_SELECTED_RESULTS)
-            creatingGroup = it.getBoolean(ChatPageFragment.INTENT_EXTRA_NEW_GROUP)
+            creatingGroup = it.getBoolean(INTENT_EXTRA_NEW_GROUP)
         }
     }
 
