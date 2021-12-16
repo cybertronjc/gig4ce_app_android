@@ -134,7 +134,7 @@ class CalendarHomeScreen : Fragment(),
         super.onCreate(savedInstanceState)
         // checkForLocationPermission()
         checkForPendingJoining()
-        verificationObserver()
+
     }
     private fun verificationObserver() {
         viewModel.bankDetailedObject.observe(viewLifecycleOwner, Observer {
@@ -171,7 +171,7 @@ class CalendarHomeScreen : Fragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        verificationObserver()
         checkForDeepLink()
         viewModelProfile = ViewModelProvider(this).get(ProfileViewModel::class.java)
         viewModelCustomPreference =
