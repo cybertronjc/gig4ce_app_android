@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -28,7 +29,6 @@ import com.gigforce.common_ui.chat.models.GroupMedia
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.modules.feature_chat.screens.adapters.GroupMediaRecyclerAdapter
 import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel
-import com.gigforce.modules.feature_chat.screens.vm.factories.GroupChatViewModelFactory
 import kotlinx.android.synthetic.main.fragment_chat_group_media_list.*
 import kotlinx.android.synthetic.main.fragment_chat_group_media_list_main.*
 import java.io.File
@@ -37,9 +37,7 @@ import java.io.File
 class GroupMediaListFragment2 : Fragment(),
     GroupMediaRecyclerAdapter.OnGroupMediaClickListener {
 
-    private val viewModel: GroupChatViewModel by lazy {
-        ViewModelProvider(this, GroupChatViewModelFactory(requireContext())).get(GroupChatViewModel::class.java)
-    }
+    private val viewModel: GroupChatViewModel by viewModels()
     private lateinit var groupId: String
     private val groupMediaRecyclerAdapter: GroupMediaRecyclerAdapter by lazy {
         GroupMediaRecyclerAdapter(

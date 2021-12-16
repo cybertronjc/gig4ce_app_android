@@ -2,25 +2,20 @@ package com.gigforce.modules.feature_chat.ui.chatItems
 
 import android.content.Context
 import android.net.Uri
-import android.os.Build
-import android.os.Environment
 import android.util.AttributeSet
 import android.webkit.MimeTypeMap
 import android.widget.RelativeLayout
 import androidx.core.net.toUri
-import androidx.documentfile.provider.DocumentFile
 import com.gigforce.common_ui.chat.ChatConstants
 import com.gigforce.common_ui.chat.models.ChatMessage
 import com.gigforce.common_ui.chat.models.IMediaMessage
 import com.gigforce.core.IViewHolder
-import com.gigforce.core.ScopedStorageConstants
 import com.gigforce.core.documentFileHelper.DocumentPrefHelper
-import com.gigforce.core.documentFileHelper.openOutputStreamOrThrow
 import com.gigforce.core.extensions.getDownloadUrlOrThrow
 import com.gigforce.core.fb.FirebaseUtils
 import com.gigforce.core.file.FileUtils
 import com.gigforce.core.retrofit.RetrofitFactory
-import com.gigforce.modules.feature_chat.filemanager.ChatFileManager
+import com.gigforce.common_ui.chat.ChatFileManager
 import com.gigforce.modules.feature_chat.models.ChatMessageWrapper
 import com.gigforce.modules.feature_chat.repositories.DownloadChatAttachmentService
 import com.gigforce.modules.feature_chat.screens.vm.ChatPageViewModel
@@ -43,21 +38,11 @@ abstract class MediaMessage(
     @Inject
     lateinit var documentPrefHelper: DocumentPrefHelper
 
-    private val chatFileManager : ChatFileManager by lazy {
+    private val chatFileManager: ChatFileManager by lazy {
         ChatFileManager(
-            context,documentPrefHelper
+            context
         )
     }
-
-    private val refToGigForceAttachmentDirectory: File =
-        Environment.getExternalStoragePublicDirectory(ChatConstants.DIRECTORY_APP_DATA_ROOT)!!
-
-    private var imagesDirectoryRef: File =
-        File(refToGigForceAttachmentDirectory, ChatConstants.DIRECTORY_IMAGES)
-    private var videosDirectoryRef: File =
-        File(refToGigForceAttachmentDirectory, ChatConstants.DIRECTORY_VIDEOS)
-    private var documentsDirectoryRef: File =
-        File(refToGigForceAttachmentDirectory, ChatConstants.DIRECTORY_DOCUMENTS)
 
     protected lateinit var message: ChatMessage
     protected lateinit var oneToOneChatViewModel: ChatPageViewModel
@@ -75,71 +60,35 @@ abstract class MediaMessage(
     suspend fun downloadMediaFile(): Uri {
         iMediaMessage?.let {
 
-            if (Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
+            val downloadLink =
+                storage.reference.child(it.attachmentPath!!).getDownloadUrlOrThrow()
+            val fullDownloadLink = downloadLink.toString()
 
-                val downloadLink =
-                    storage.reference.child(it.attachmentPath!!).getDownloadUrlOrThrow()
-                val fullDownloadLink = downloadLink.toString()
+            val dirRef = getFilePathRef()
+            if (!dirRef.exists()) dirRef.mkdirs()
 
-                val dirRef = getMediaFolderRef()
-                val fileName: String = FirebaseUtils.extractFilePath(fullDownloadLink)
+            val fileName: String = FirebaseUtils.extractFilePath(fullDownloadLink)
+            val fileRef = File(dirRef, fileName)
 
-                if(dirRef.findFile(fileName) == null){
+            // download file from Server
+            val response = downloadAttachmentService.downloadAttachment(fullDownloadLink)
 
-                    val response = downloadAttachmentService.downloadAttachment(fullDownloadLink)
-                    if (response.isSuccessful) {
-                        val mediaFile = dirRef.createFile(
-                            getMimeTypeFromFileName(fileName),
-                            fileName
-                        ) ?: throw IllegalStateException("unable to create media file")
-
-                        val outputStreamToMediaFile = mediaFile.openOutputStreamOrThrow(
-                            context = context
-                        )
-
-                        val body = response.body()!!
-                        if (!FileUtils.writeResponseBodyToDisk(body, outputStreamToMediaFile)) {
-                            throw Exception("Unable to save downloaded chat attachment")
-                        }
-
-                        return mediaFile.uri
-                    } else {
-                        throw Exception("Unable to download attachment")
-                    }
+            if (response.isSuccessful) {
+                val body = response.body()!!
+                if (!FileUtils.writeResponseBodyToDisk(body, fileRef)) {
+                    throw Exception("Unable to save downloaded chat attachment")
                 }
-
             } else {
-                val downloadLink =
-                    storage.reference.child(it.attachmentPath!!).getDownloadUrlOrThrow()
-                val fullDownloadLink = downloadLink.toString()
-
-                val dirRef = getFilePathRef()
-                if (!dirRef.exists()) dirRef.mkdirs()
-
-                val fileName: String = FirebaseUtils.extractFilePath(fullDownloadLink)
-                val fileRef = File(dirRef, fileName)
-
-                // download file from Server
-                val response = downloadAttachmentService.downloadAttachment(fullDownloadLink)
-
-                if (response.isSuccessful) {
-                    val body = response.body()!!
-                    if (!FileUtils.writeResponseBodyToDisk(body, fileRef)) {
-                        throw Exception("Unable to save downloaded chat attachment")
-                    }
-                } else {
-                    throw Exception("Unable to download attachment")
-                }
-
-                return fileRef.toUri()
+                throw Exception("Unable to download attachment")
             }
+
+            return fileRef.toUri()
         }
 
         throw NullPointerException("No Attachment Path found")
     }
 
     fun downloadMediaFileUsingFirebase() {
-
     }
 
     override fun bind(data: Any?) {
@@ -157,16 +106,6 @@ abstract class MediaMessage(
 
     fun getFilePathRef(): File {
         return when (iMediaMessage?.type) {
-            ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE -> imagesDirectoryRef
-            ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO -> videosDirectoryRef
-            ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT -> documentsDirectoryRef
-            else -> throw java.lang.IllegalArgumentException()
-        }
-    }
-
-    fun getMediaFolderRef(): DocumentFile {
-
-        return when (iMediaMessage?.type) {
             ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE -> chatFileManager.imageFilesDirectory
             ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO -> chatFileManager.videoFilesDirectory
             ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT -> chatFileManager.documentFilesDirectory
@@ -174,25 +113,23 @@ abstract class MediaMessage(
         }
     }
 
+
     fun returnFileIfAlreadyDownloadedElseNull(): Uri? {
         iMediaMessage?.let {
             val attachmentPath = it.attachmentPath ?: return null
             val fileName: String = FirebaseUtils.extractFilePath(attachmentPath)
 
-            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                getMediaFolderRef().findFile(fileName)?.uri
-            } else{
-                val file = File(getFilePathRef(), fileName)
-                if (file.exists()) file.toUri() else null
-            }
+            val file = File(getFilePathRef(), fileName)
+            return if (file.exists()) file.toUri() else null
+
         }
         return null
     }
 
     private fun getMimeTypeFromFileName(
-        fullFileNameWithExtension : String
-    ) : String{
-       val extension =  fullFileNameWithExtension.substringAfterLast(".")
-       return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)!!
+        fullFileNameWithExtension: String
+    ): String {
+        val extension = fullFileNameWithExtension.substringAfterLast(".")
+        return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)!!
     }
 }

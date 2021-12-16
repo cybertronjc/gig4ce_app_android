@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.gigforce.core.extensions.gone
@@ -19,7 +20,6 @@ import com.gigforce.core.utils.Lce
 import com.gigforce.modules.feature_chat.R
 import com.gigforce.common_ui.chat.models.ContactModel
 import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel
-import com.gigforce.modules.feature_chat.screens.vm.factories.GroupChatViewModelFactory
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.util.*
 
@@ -46,13 +46,7 @@ class CreateGroupDialogFragment : DialogFragment() {
     }
 
 
-    private val chatGroupViewModel: GroupChatViewModel by lazy {
-        ViewModelProvider(
-                this,
-                GroupChatViewModelFactory(requireContext())
-        ).get(GroupChatViewModel::class.java)
-    }
-
+    private val chatGroupViewModel: GroupChatViewModel by viewModels()
 
     private var contacts: ArrayList<ContactModel> = arrayListOf()
     private var createGroupDialogFragmentListener: CreateGroupDialogFragmentListener? = null

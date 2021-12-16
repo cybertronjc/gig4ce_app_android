@@ -21,6 +21,7 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.loader.content.CursorLoader
@@ -38,7 +39,6 @@ import com.gigforce.modules.feature_chat.R
 import com.gigforce.modules.feature_chat.screens.adapters.ContactsRecyclerAdapter
 import com.gigforce.modules.feature_chat.screens.adapters.OnContactClickListener
 import com.gigforce.modules.feature_chat.screens.vm.NewContactsViewModel
-import com.gigforce.modules.feature_chat.screens.vm.factories.NewContactsViewModelFactory
 import com.gigforce.modules.feature_chat.service.SyncContactsService
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -60,12 +60,7 @@ class ContactsFragment : DialogFragment(),
         ChatNavigation(navigation)
     }
 
-    private val viewModelNew: NewContactsViewModel by lazy {
-        ViewModelProvider(
-            this,
-            NewContactsViewModelFactory(requireContext())
-        ).get(NewContactsViewModel::class.java)
-    }
+    private val viewModelNew: NewContactsViewModel by viewModels()
 
     // Views
     private lateinit var rootContactsLayout: View

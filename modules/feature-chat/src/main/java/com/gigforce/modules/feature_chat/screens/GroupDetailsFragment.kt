@@ -17,6 +17,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -38,7 +39,6 @@ import com.gigforce.modules.feature_chat.*
 import com.gigforce.modules.feature_chat.screens.adapters.GroupMediaRecyclerAdapter
 import com.gigforce.modules.feature_chat.screens.adapters.GroupMembersRecyclerAdapter
 import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel
-import com.gigforce.modules.feature_chat.screens.vm.factories.GroupChatViewModelFactory
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.jaeger.library.StatusBarUtil
@@ -63,12 +63,7 @@ class GroupDetailsFragment : Fragment(),
         ChatNavigation(navigation)
     }
 
-    private val viewModel: GroupChatViewModel by lazy {
-        ViewModelProvider(
-                this,
-                GroupChatViewModelFactory(requireContext())
-        ).get(GroupChatViewModel::class.java)
-    }
+    private val viewModel: GroupChatViewModel by viewModels()
     private lateinit var groupId: String
     private val dateFormatter = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
     private val groupMediaRecyclerAdapter: GroupMediaRecyclerAdapter by lazy {

@@ -1,118 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".screens.ChatHeadersFragment">
 
 
-    <LinearLayout
-        android:id="@+id/main_chat_list_layout"
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:visibility="gone"
-        tools:context=".screens.ChatHeadersFragment">
+        android:layout_height="wrap_content">
 
-
-        <com.google.android.material.appbar.AppBarLayout
+        <com.gigforce.common_ui.views.GigforceToolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content" />
 
-            <com.gigforce.common_ui.views.GigforceToolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+    </com.google.android.material.appbar.AppBarLayout>
 
-        </com.google.android.material.appbar.AppBarLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <FrameLayout
+        <com.gigforce.core.recyclerView.CoreRecyclerView
+            android:id="@+id/rv_chat_headers"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <com.gigforce.core.recyclerView.CoreRecyclerView
-                android:id="@+id/rv_chat_headers"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical" />
+            android:layout_height="match_parent"
+            android:orientation="vertical" />
 
 
+        <LinearLayout
+            android:id="@+id/no_chat_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/app_bar_contact">
 
-            <LinearLayout
-                android:id="@+id/no_chat_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/app_bar_contact">
+            <ImageView
+                android:layout_width="226dp"
+                android:layout_height="189dp"
+                android:src="@drawable/bg_no_chat" />
 
-                <ImageView
-                    android:layout_width="226dp"
-                    android:layout_height="189dp"
-                    android:src="@drawable/bg_no_chat" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-
-                    android:layout_marginTop="38dp"
-                    android:gravity="center_horizontal"
-                    android:text="@string/no_chat_chat"
-                    android:textColor="@color/lipstick"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginEnd="32dp"
-                    android:gravity="center_horizontal"
-                    android:text="@string/oops_it_looks_like_you_have_not_started_chat_with_anyone_chat"
-                    android:textColor="@color/gray_400"
-                    android:textSize="16sp"
-                    android:textStyle="normal" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/go_to_contacts_btn"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="38dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginRight="16dp"
-                    android:text="@string/contacts_chat"
-                    app:strokeColor="@color/colorPrimary" />
-
-            </LinearLayout>
-
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/contactsFab"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
-                android:layout_margin="16dp"
-                android:src="@drawable/ic_chat"
-                app:backgroundTint="@color/colorPrimary"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:tint="@android:color/white" />
 
-        </FrameLayout>
+                android:layout_marginTop="38dp"
+                android:gravity="center_horizontal"
+                android:text="@string/no_chat_chat"
+                android:textColor="@color/lipstick"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
-    </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="32dp"
+                android:gravity="center_horizontal"
+                android:text="@string/oops_it_looks_like_you_have_not_started_chat_with_anyone_chat"
+                android:textColor="@color/gray_400"
+                android:textSize="16sp"
+                android:textStyle="normal" />
 
-    <include
-        android:id="@+id/storage_access_required_layout"
-        layout="@layout/layout_need_permission"
-        />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/go_to_contacts_btn"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="38dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="16dp"
+                android:text="@string/contacts_chat"
+                app:strokeColor="@color/colorPrimary" />
 
-</FrameLayout>
+        </LinearLayout>
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/contactsFab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_chat"
+            app:backgroundTint="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:tint="@android:color/white" />
+
+    </FrameLayout>
+
+</LinearLayout>

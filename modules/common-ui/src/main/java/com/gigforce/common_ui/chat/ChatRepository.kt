@@ -32,14 +32,15 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import java.io.File
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.contracts.contract
 
 
-class ChatRepository constructor(
-    private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance(),
-    private val chatLocalDirectoryReferenceManager: ChatLocalDirectoryReferenceManager = ChatLocalDirectoryReferenceManager()
-//    ,
-//    private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository()
+@Singleton
+class ChatRepository @Inject constructor(
+    private val firebaseStorage: FirebaseStorage,
+    private val chatLocalDirectoryReferenceManager: ChatFileManager
 ) : BaseChatRepository(),
     IChatService {
 
@@ -177,7 +178,7 @@ class ChatRepository constructor(
             }
         }
 
-        val videosDirectoryRef = chatLocalDirectoryReferenceManager.videosDirectoryRef
+        val videosDirectoryRef = chatLocalDirectoryReferenceManager.videoFilesDirectory
         if (!videosDirectoryRef.exists())
             videosDirectoryRef.mkdirs()
 
@@ -244,7 +245,7 @@ class ChatRepository constructor(
             )
         }"
 
-        val documentsDirectoryRef = chatLocalDirectoryReferenceManager.documentsDirectoryRef
+        val documentsDirectoryRef = chatLocalDirectoryReferenceManager.documentFilesDirectory
         val documentFile = File(documentsDirectoryRef, newFileName)
         FileUtils.copyFile(context.applicationContext, fileName, uri, documentFile)
 

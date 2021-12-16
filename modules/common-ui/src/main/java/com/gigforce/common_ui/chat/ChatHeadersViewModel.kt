@@ -13,11 +13,14 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.Query
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ChatHeadersViewModel constructor(
-    private val chatRepository: ChatRepository = ChatRepository()
+@HiltViewModel
+class ChatHeadersViewModel @Inject constructor(
+    private val chatRepository: ChatRepository
 ) : ViewModel() {
 
     private var _chatHeaders: MutableLiveData<List<ChatHeader>> = MutableLiveData()

@@ -12,8 +12,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.chat.ChatConstants
+import com.gigforce.common_ui.chat.ChatFileManager
 import com.gigforce.common_ui.chat.ChatGroupRepository
-import com.gigforce.common_ui.chat.ChatLocalDirectoryReferenceManager
 import com.gigforce.common_ui.chat.models.*
 import com.gigforce.common_ui.metaDataHelper.ImageMetaDataHelpers
 import com.gigforce.common_ui.viewdatamodels.chat.ChatHeader
@@ -34,11 +34,13 @@ import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.File
 import java.util.*
+import javax.inject.Inject
 
 interface GroupChatViewModelOutputs {
 
@@ -55,12 +57,13 @@ interface GroupChatViewModelInputs {
 }
 
 
-class GroupChatViewModel constructor(
+@HiltViewModel
+class GroupChatViewModel @Inject constructor(
         private val chatContactsRepository: ChatContactsRepository,
-        private val chatGroupRepository: ChatGroupRepository = ChatGroupRepository(),
-        private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance(),
-        private val chatLocalDirectoryReferenceManager: ChatLocalDirectoryReferenceManager = ChatLocalDirectoryReferenceManager(),
-        private val chatProfileFirebaseRepository: ChatProfileFirebaseRepository = ChatProfileFirebaseRepository()
+        private val chatGroupRepository: ChatGroupRepository,
+        private val firebaseStorage: FirebaseStorage,
+        private val chatProfileFirebaseRepository: ChatProfileFirebaseRepository,
+        private val chatFileManager : ChatFileManager
 ) : ViewModel(),
         GroupChatViewModelInputs,
         GroupChatViewModelOutputs {
@@ -582,7 +585,7 @@ class GroupChatViewModel constructor(
             chatGroupRepository.sendNewVideoMessage(
                     context = context.applicationContext,
                     groupId = groupId,
-                    videosDirectoryRef = chatLocalDirectoryReferenceManager.videosDirectoryRef,
+                    videosDirectoryRef = chatFileManager.videoFilesDirectory,
                     videoInfo = videoInfo,
                     uri = uri,
                     message = message
