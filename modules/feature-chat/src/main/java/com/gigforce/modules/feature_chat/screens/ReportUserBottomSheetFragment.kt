@@ -22,7 +22,9 @@ import com.github.razir.progressbutton.showProgress
 import com.gigforce.modules.feature_chat.databinding.ReportUserBottomSheetFragmentBinding
 import com.gigforce.modules.feature_chat.screens.vm.ChatPageViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ReportUserBottomSheetFragment : BaseBottomSheetDialogFragment<ReportUserBottomSheetFragmentBinding>(
     fragmentName = "SyncContactsBottomSheetFragment",
     layoutId = R.layout.report_user_bottom_sheet_fragment
@@ -85,7 +87,7 @@ class ReportUserBottomSheetFragment : BaseBottomSheetDialogFragment<ReportUserBo
             when (it) {
                 Lse.Loading -> {
                     viewBinding.reportButton.showProgress{
-                        buttonText = "Dropping..."
+                        buttonText = "Reporting..."
                         progressColor = Color.WHITE
                     }
                     viewBinding.reportButton.isEnabled = false

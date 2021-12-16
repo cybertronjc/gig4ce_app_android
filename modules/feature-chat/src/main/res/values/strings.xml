@@ -138,10 +138,9 @@
     <string name="notifications_chat">Notifications</string>
     <string name="report_user_chat">Report User</string>
     <string name="report_chat">Report</string>
-    <string name="do_you_really_want_to_block_chat">Do you really want to block this contact?
-Blocked contact will no longer be able to send you message on Gigforce application.</string>
+    <string name="do_you_really_want_to_block_chat">Do you really want to block this contact? \nBlocked contact will no longer be able to send you message on Gigforce application.</string>
     <string name="select_reason_to_block_chat">Please select the reason to report this user</string>
     <string name="type_your_concern_reason">Type your concern here...</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="block_user_chat">Block User</string>
+    <string name="unable_to_block_user">Unable to block user</string>
 </resources>

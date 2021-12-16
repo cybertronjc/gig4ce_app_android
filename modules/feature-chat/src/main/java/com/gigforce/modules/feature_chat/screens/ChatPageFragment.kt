@@ -19,15 +19,13 @@ import android.provider.OpenableColumns
 import android.text.format.DateUtils
 import android.util.Log
 import android.util.Patterns
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.net.toUri
@@ -739,8 +737,8 @@ class ChatPageFragment : Fragment(),
 
 
         toolbar.setOnOpenActionMenuItemClickListener(View.OnClickListener {
-
-            val popUp = PopupMenu(requireContext(), toolbar.getOptionMenuViewForAnchor())
+            val ctw = ContextThemeWrapper(context, R.style.PopupMenuChat)
+            val popUp = PopupMenu(ctw, toolbar.getOptionMenuViewForAnchor(), Gravity.END)
             popUp.setOnMenuItemClickListener(this)
             popUp.inflate(R.menu.menu_chat_toolbar)
             popUp.menu.findItem(R.id.action_block).title =
@@ -752,7 +750,7 @@ class ChatPageFragment : Fragment(),
         })
 
         chatFooter.attachmentOptionButton.setOnClickListener {
-            val popUpMenu = PopupMenu(requireContext(), it)
+            val popUpMenu = PopupMenu( requireContext(), it)
             popUpMenu.setOnMenuItemClickListener(this)
             popUpMenu.inflate(R.menu.menu_chats)
 
@@ -773,7 +771,18 @@ class ChatPageFragment : Fragment(),
 
     override fun onMenuItemClick(item: MenuItem?): Boolean = when (item?.itemId) {
         R.id.action_block -> {
-            viewModel.blockOrUnBlockUser()
+            if (chatFooter.isTypingEnabled())
+                BlockUserBottomSheetFragment.launch(
+                    viewModel.headerId,
+                    viewModel.otherUserId,
+                    childFragmentManager
+                )
+            else
+                viewModel.blockOrUnBlockUser(
+                    viewModel.headerId,
+                    viewModel.otherUserId,
+                    false
+                )
             true
         }
         R.id.action_report -> {
