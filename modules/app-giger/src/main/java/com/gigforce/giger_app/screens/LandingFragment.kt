@@ -255,6 +255,21 @@ class LandingFragment : Fragment(),
         checkforForceupdate()
         logDeviceAndPermissionInfo()
         checkForChatCounts()
+        verificationObserver()
+    }
+
+    private fun verificationObserver() {
+        viewModel.bankDetailedObject.observe(viewLifecycleOwner, Observer {
+            it.status?.let {
+                when(it){
+                    "verification_pending" -> {
+                        navigation.navigateTo("bankdetailconfirmationbottomsheet")
+                    }
+                }
+            }
+
+
+        })
     }
 
     private fun checkForChatCounts() {

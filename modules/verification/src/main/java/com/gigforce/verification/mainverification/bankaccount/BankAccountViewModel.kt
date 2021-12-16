@@ -81,8 +81,19 @@ class BankAccountViewModel @Inject constructor(
 
     fun setVerificationStatusInDB(status: Boolean, uid: String) =
         viewModelScope.launch {
+            _userConsentModel.value = Lce.Loading
             try {
                 _userConsentModel.value = Lce.content(verificationKycRepo.setVerifiedStatus(status, uid))
+            } catch (e: Exception) {
+                _userConsentModel.value = Lce.error(e.toString())
+            }
+        }
+
+    fun setUserAknowledge(uid: String) =
+        viewModelScope.launch {
+            _userConsentModel.value = Lce.Loading
+            try {
+                _userConsentModel.value = Lce.content(verificationKycRepo.setUserAknowledge())
             } catch (e: Exception) {
                 _userConsentModel.value = Lce.error(e.toString())
             }

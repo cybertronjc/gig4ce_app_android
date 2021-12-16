@@ -149,8 +149,17 @@ class BankAccountFragment : Fragment(),
             resources.getString(R.string.no_doc_subtitle_bank_veri)
         )
         userIdToUse = if (userId != null) {
+        viewBinding.confirmBn.text = "Beneficiary Name Doesn’t Match"
+        viewBinding.confirmBnDetail.text = "Please ask the giger to confirm beneficiary name on Gigforce app. "
+        viewBinding.banificiaryDetail.gone()
+        viewBinding.cancelButton.gone()
+        viewBinding.confirmBnBs.gone()
+            viewBinding.okayButton.visible()
             userId
         }else{
+            viewBinding.cancelButton.visible()
+            viewBinding.confirmBnBs.visible()
+            viewBinding.okayButton.gone()
             user?.uid
         }
 
@@ -277,19 +286,17 @@ class BankAccountFragment : Fragment(),
             if (!ocrOrVerificationRquested) {
                 viewBinding.screenLoaderBar.gone()
                 it?.let {
-
-                    if (it.verified && it.verified_source.toLowerCase() != "user_consent" && it.counter != "") {
-                        showUserAckPopup()
-
+//                    if (it.verified && it.verified_source.toLowerCase() != "user_consent" && it.counter == null) {
+//                        showUserAckPopup()
 //                        verificationScreenStatus = VerificationScreenStatus.VERIFIED
 //                        verifiedStatusViews(it)
 //                        viewBinding.belowLayout.visible()
 //                        setAlreadyfilledData(it, false)
 //                        viewBinding.toplayoutblock.toggleChangeTextView(true)
 //                        //viewBinding.toplayoutblock.disableImageClick()//keep this line in end only //need to remove uploading option 2856 ticket
-                    } else {
+//                    } else {
                         checkforStatusAndVerified(it)
-                    }
+//                    }
                 }
             }
         })
@@ -297,23 +304,36 @@ class BankAccountFragment : Fragment(),
         viewModel.userConsentModel.observe(viewLifecycleOwner,Observer{
             when(it){
                 is Lce.Loading -> {
-
+                    viewBinding.screenLoaderBar.visible()
                 }
                 is Lce.Content -> {
-
+                    viewBinding.screenLoaderBar.gone()
                 }
                 is Lce.Error -> {
-
+                    showToast(it.error)
+                    viewBinding.screenLoaderBar.gone()
                 }
             }
         })
 
     }
 
-    private fun showUserAckPopup() {
+    private fun showUserAckPopup(benificiaryName : String) {
         //show bottomsheet to aknowledge user for beneficiary name
         // on popup user will press the button and api will call which will update the counter value
-
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(benificiaryName)
+            .setCancelable(false)
+            .setPositiveButton(getString(R.string.okay_lower_case_veri)) { _, _ ->
+                eventTracker.pushEvent(
+                    TrackingEventArgs(
+                        eventName = VerificationEvents.BANK_MISMATCH,
+                        props = null
+                    )
+                )
+                    viewModel.setUserAknowledge(userIdToUse.toString())
+            }
+             .show()
     }
 
     private fun startedStatusViews(bankDetailsDataModel: BankDetailsDataModel) {
@@ -379,11 +399,18 @@ class BankAccountFragment : Fragment(),
         obj.status?.let {
             when (it) {
                 "verified"->{
+                    if(obj.verified_source.toLowerCase() != "user_consent" && obj.counter == null) {
+                        showUserAckPopup(obj.bankBeneficiaryName ?: "")
+                    }
                     verificationScreenStatus = VerificationScreenStatus.VERIFIED
                     verifiedStatusViews(obj)
                     viewBinding.belowLayout.visible()
                     setAlreadyfilledData(obj, false)
                     viewBinding.toplayoutblock.toggleChangeTextView(true)
+                    viewBinding.bnConfirmationCl.gone()
+                    viewBinding.scrollView.visible()
+
+
                 }
                 "started","processing","validated" -> {
                     verificationScreenStatus = VerificationScreenStatus.STARTED_VERIFYING
@@ -402,6 +429,9 @@ class BankAccountFragment : Fragment(),
 //                                viewBinding.editBankDetail.visible()
                                 viewBinding.belowLayout.visible()
                                 setAlreadyfilledData(obj, false)
+                                viewBinding.bnConfirmationCl.gone()
+                                viewBinding.scrollView.visible()
+
                                 //viewBinding.toplayoutblock.disableImageClick()//keep this line in end only  //need to remove uploading option 2856 ticket
                             }
                         } catch (e: Exception) {
@@ -410,6 +440,9 @@ class BankAccountFragment : Fragment(),
                     }, WAITING_TIME)
                     viewBinding.belowLayout.visible()
                     setAlreadyfilledData(obj, false)
+                    viewBinding.bnConfirmationCl.gone()
+                    viewBinding.scrollView.visible()
+
                     //viewBinding.toplayoutblock.disableImageClick()//keep this line in end only //need to remove uploading option 2856 ticket
                 }
                 "validation_failed" -> {
@@ -425,6 +458,9 @@ class BankAccountFragment : Fragment(),
                         initializeImages()
                     }
                     viewBinding.toplayoutblock.toggleChangeTextView(false)
+                    viewBinding.bnConfirmationCl.gone()
+                    viewBinding.scrollView.visible()
+
                     //viewBinding.toplayoutblock.enableImageClick()//keep this line in end only //need to remove uploading option 2856 ticket
                 }
                 "","rejected" -> {
@@ -432,13 +468,17 @@ class BankAccountFragment : Fragment(),
                     resetInitializeViews()
                     setAlreadyfilledData(null, true)
                     viewBinding.toplayoutblock.toggleChangeTextView(false)
+                    viewBinding.bnConfirmationCl.gone()
+                    viewBinding.scrollView.visible()
+
                     //viewBinding.toplayoutblock.enableImageClick()//keep this line in end only //need to remove uploading option 2856 ticket
                 }
                 "verification_pending" -> {
                     verificationScreenStatus = VerificationScreenStatus.COMPLETED
                     showBankBeneficiaryName(obj)
-                    viewBinding.toplayoutblock.toggleChangeTextView(false)
+//                    viewBinding.toplayoutblock.toggleChangeTextView(false)
                     //viewBinding.toplayoutblock.disableImageClick()//keep this line in end only  //need to remove uploading option 2856 ticket
+//                    verificationScreenStatus = VerificationScreenStatus.COMPLETED
 
                 }
                 else -> "unmatched status"
@@ -516,31 +556,67 @@ class BankAccountFragment : Fragment(),
     }
 
     private fun showBankBeneficiaryName(obj: BankDetailsDataModel) {
+//        obj.bankBeneficiaryName?.let { beneficiary ->
+//            if (beneficiary.isNotBlank()) {
+//                viewBinding.toplayoutblock.viewChangeOnStarted()
+//                viewBinding.confirmBeneficiaryLayout.visible()
+//                viewBinding.belowLayout.gone()
+//                viewBinding.submitButton.gone()
+//                viewBinding.progressBar.gone()
+//                viewBinding.beneficiaryName.text = beneficiary
+//                viewBinding.toplayoutblock.setVerificationSuccessfulView(
+//                    getString(R.string.bank_verification_pending_veri),
+//                    getString(R.string.verifying_veri)
+//                )
+//                var list = ArrayList<KYCImageModel>()
+//                obj.passbookImagePath?.let {
+//                    getDBImageUrl(it)?.let {
+//                        list.add(
+//                            KYCImageModel(
+//                                text = getString(R.string.upload_pan_card_new_veri),
+//                                imagePath = it,
+//                                imageUploaded = true
+//                            )
+//                        )
+//                    }
+//                }
+////                viewBinding.toplayoutblock.setImageViewPager(list) need to remove uploading option 2856 ticket
+//            }
+//        }
+
         obj.bankBeneficiaryName?.let { beneficiary ->
             if (beneficiary.isNotBlank()) {
-                viewBinding.toplayoutblock.viewChangeOnStarted()
-                viewBinding.confirmBeneficiaryLayout.visible()
+                viewBinding.scrollView.gone()
+                viewBinding.toplayoutblock.gone()
+                viewBinding.confirmBeneficiaryLayout.gone()
                 viewBinding.belowLayout.gone()
                 viewBinding.submitButton.gone()
                 viewBinding.progressBar.gone()
-                viewBinding.beneficiaryName.text = beneficiary
-                viewBinding.toplayoutblock.setVerificationSuccessfulView(
-                    getString(R.string.bank_verification_pending_veri),
-                    getString(R.string.verifying_veri)
-                )
-                var list = ArrayList<KYCImageModel>()
-                obj.passbookImagePath?.let {
-                    getDBImageUrl(it)?.let {
-                        list.add(
-                            KYCImageModel(
-                                text = getString(R.string.upload_pan_card_new_veri),
-                                imagePath = it,
-                                imageUploaded = true
-                            )
-                        )
-                    }
-                }
-//                viewBinding.toplayoutblock.setImageViewPager(list) need to remove uploading option 2856 ticket
+                viewBinding.bnConfirmationCl.visible()
+                viewBinding.scrollView.gone()
+                viewBinding.submitButton.gone()
+
+//                viewBinding.beneficiaryName.text = beneficiary
+//                viewBinding.toplayoutblock.setVerificationSuccessfulView(
+//                    getString(R.string.bank_verification_pending_veri),
+//                    getString(R.string.verifying_veri)
+//                )
+//                var list = ArrayList<KYCImageModel>()
+//                obj.passbookImagePath?.let {
+//                    getDBImageUrl(it)?.let {
+//                        list.add(
+//                            KYCImageModel(
+//                                text = getString(R.string.upload_pan_card_new_veri),
+//                                imagePath = it,
+//                                imageUploaded = true
+//                            )
+//                        )
+//                    }
+//                }
+
+                viewBinding.bnTv.text = beneficiary
+                viewBinding.accountNoTv.text = obj.accountNo
+                viewBinding.ifscTv.text = obj.ifscCode
             }
         }
     }
@@ -658,6 +734,10 @@ class BankAccountFragment : Fragment(),
             viewBinding.submitButton.text = getString(R.string.skip_veri)
         })
 
+        viewBinding.okayButton.setOnClickListener{
+            checkForNextDoc()
+        }
+
         viewBinding.submitButton.setOnClickListener {
             hideSoftKeyboard()
 
@@ -742,13 +822,41 @@ class BankAccountFragment : Fragment(),
                             props = null
                         )
                     )
-                    viewModel.setVerificationStatusStringToBlank(userIdToUse.toString())
+                    viewModel.setVerificationStatusInDB(false, userIdToUse.toString())
+//                    viewModel.setVerificationStatusStringToBlank(userIdToUse.toString())
                 }
                 .setNegativeButton(getString(R.string.no_veri)) { dialog, _ ->
                     dialog.dismiss()
                 }
                 .show()
         }
+
+        viewBinding.confirmBnBs.setOnClickListener{
+            user?.uid?.let {
+                var props = HashMap<String, Any>()
+                props.put("Bank verified", true)
+                eventTracker.setUserProperty(props)
+                eventTracker.pushEvent(
+                    TrackingEventArgs(
+                        eventName = VerificationEvents.BANK_VERIFIED,
+                        props = null
+                    )
+                )
+                viewModel.setVerificationStatusInDB(true, it)
+            }
+
+        }
+
+        viewBinding.cancelButton.setOnClickListener{
+            eventTracker.pushEvent(
+                TrackingEventArgs(
+                    eventName = VerificationEvents.BANK_MISMATCH,
+                    props = null
+                )
+            )
+            viewModel.setVerificationStatusInDB(false, userIdToUse.toString())
+        }
+
     }
 
     var manuallyRequestBackpress = false

@@ -16,7 +16,7 @@ data class BankDetailsDataModel(
     val status : String? = "",
     val verifiedString : String? = null,
     val verified_source : String="",
-    val counter: String = ""
+    val counter: Long? = null
 ) : BaseFirestoreDataModel(TABLE_NAME) {
 
 

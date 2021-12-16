@@ -105,7 +105,7 @@ class VerificationKycRepo @Inject constructor(private val iBuildConfigVM: IBuild
     suspend fun setVerifiedStatus(status: Boolean?, uid: String) : UserConsentResponse{
         try {
             status?.let {
-                val userConsentResponse = kycService.onConfirmButton(iBuildConfigVM.getKycVerificationUrl(),UserConsentRequest(it))
+                val userConsentResponse = kycService.onConfirmButton(iBuildConfigVM.getKycUserConsentUrl(),UserConsentRequest(it))
                 if(userConsentResponse.isSuccessful){
                     return userConsentResponse.body()!!
                 }else{
@@ -125,9 +125,26 @@ class VerificationKycRepo @Inject constructor(private val iBuildConfigVM: IBuild
 //            )
             return throw Exception("Issue in user input}")
         }catch (e: Exception){
+            return throw Exception("Issue in network call ${e}")
+        }
+    }
+
+    suspend fun setUserAknowledge() : UserConsentResponse{
+        try {
+                val userConsentResponse = kycService.onConfirmButton(iBuildConfigVM.getKycUserConsentUrl(),UserConsentRequest(counter = 1))
+                if(userConsentResponse.isSuccessful){
+                    return userConsentResponse.body()!!
+                }else{
+                    FirebaseCrashlytics.getInstance()
+                        .log("Exception : kycOcrVerification Method ${userConsentResponse.message()}")
+                    throw Exception("Issue in KYC Ocr result ${userConsentResponse.message()}")
+                }
+
+        }catch (e: Exception){
             return throw Exception("Issue in network call}")
         }
     }
+
     suspend fun setVerificationStatusStringToBlank(uid: String){
         try {
             db.collection(getCollectionName()).document(uid).updateOrThrow(

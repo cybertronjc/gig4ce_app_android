@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".mainverification.bankaccount.ConfirmBNBankBS"
+    android:background="@drawable/bottom_sheet_bg"
+    android:layout_marginLeft="@dimen/sp_sm1"
+    android:layout_marginRight="@dimen/sp_sm1">
+
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Confirm Beneficiary Name"
+        style="@style/primary_color_heading_bs"
+        android:layout_marginLeft="@dimen/dp_normal"
+        android:layout_marginTop="@dimen/dp_xl5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Your bank account has been validated, please confirm your beneficiary name. "
+        android:layout_marginTop="@dimen/dp_large"
+        android:layout_marginRight="@dimen/dp_normal"
+        style="@style/section_value"
+        app:layout_constraintStart_toStartOf="@+id/textView9"
+        app:layout_constraintTop_toBottomOf="@+id/textView9"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/confirmation_section"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_20"
+        android:paddingBottom="@dimen/dp_sm1"
+        android:layout_marginRight="@dimen/dp_large"
+        android:layout_marginBottom="@dimen/dp_xl4"
+        android:background="@drawable/rect_light_pink_veri"
+        app:layout_constraintStart_toStartOf="@+id/textView13"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView13"
+        app:layout_constraintBottom_toTopOf="@+id/confirm_bn_bs">
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidline"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.32" />
+        <TextView
+            android:id="@+id/bn_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_large"
+            android:text="Beneficiary Name"
+            style="@style/dialog_label"
+            android:layout_marginLeft="@dimen/dp_sm1"
+            app:layout_constraintEnd_toStartOf="@+id/guidline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+
+
+        <TextView
+            android:id="@+id/colon_bn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="  :  "
+            style="@style/bn_name"
+            app:layout_constraintStart_toEndOf="@+id/guidline"
+            app:layout_constraintTop_toTopOf="@+id/bn_label" />
+        <TextView
+            android:id="@+id/bn_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Amit Dhiman S/O Premchand"
+            android:layout_marginRight="@dimen/dp_sm4"
+            style="@style/bn_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/colon_bn"
+            app:layout_constraintTop_toTopOf="@+id/bn_label" />
+
+
+
+
+        <TextView
+            android:id="@+id/account_no_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_sm4"
+            android:layout_marginLeft="@dimen/dp_sm1"
+            android:text="Account No "
+            style="@style/dialog_label"
+            app:layout_constraintEnd_toStartOf="@+id/guidline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/bn_label"
+            />
+
+
+
+        <TextView
+            android:id="@+id/colon_bn1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="  :  "
+            style="@style/dialog_label"
+            app:layout_constraintStart_toEndOf="@+id/guidline"
+            app:layout_constraintTop_toTopOf="@+id/account_no_label" />
+        <TextView
+            android:id="@+id/account_no_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="446301999029"
+            style="@style/dialog_label"
+            android:layout_marginRight="@dimen/dp_sm4"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/colon_bn1"
+            app:layout_constraintTop_toTopOf="@+id/account_no_label" />
+
+
+
+
+        <TextView
+            android:id="@+id/ifsc_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_sm4"
+            android:layout_marginLeft="@dimen/dp_sm1"
+            android:text="IFSC"
+            style="@style/dialog_label"
+            app:layout_constraintEnd_toStartOf="@+id/guidline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/account_no_label"
+            />
+
+        <TextView
+            android:id="@+id/colon_bn2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="  :  "
+            style="@style/dialog_label"
+            app:layout_constraintStart_toEndOf="@+id/guidline"
+            app:layout_constraintTop_toTopOf="@+id/ifsc_label" />
+
+        <TextView
+            android:id="@+id/ifsc_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="BARB0DELYA"
+            style="@style/dialog_label"
+            android:layout_marginRight="@dimen/dp_sm4"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/colon_bn1"
+            app:layout_constraintTop_toTopOf="@+id/ifsc_label" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/confirm_bn_bs"
+        android:layout_width="0dp"
+        android:layout_height="34dp"
+        app:layout_constraintStart_toStartOf="@+id/confirmation_section"
+        app:layout_constraintEnd_toEndOf="@+id/confirmation_section"
+        app:layout_constraintBottom_toTopOf="@+id/cancel_button"
+        android:layout_marginBottom="@dimen/dp_normal"
+        android:text="CONFIRM"
+        style="@style/button_style2"/>
+
+    <Button
+        android:id="@+id/cancel_button"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/confirmation_section"
+        app:layout_constraintEnd_toEndOf="@+id/confirmation_section"
+        android:layout_marginBottom="@dimen/dp_normal"
+        style="@style/ActionOutlineButtonStyle"
+        android:text="cancel"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

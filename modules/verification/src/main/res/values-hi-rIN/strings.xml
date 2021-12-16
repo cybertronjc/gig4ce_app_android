@@ -426,5 +426,5 @@
     <string name="upload_pan_image_first_veri">पहले पैन कार्ड की इमेज अपलोड करें</string>
     <string name="upload_dl_front_first_veri">पहले DL फ्रंट इमेज अपलोड करें</string>
     <string name="please_enter_bank_info_below">कृपया नीचे अपनी बैंक जानकारी दर्ज करें।</string>
-
+    <string name="aknowledge_your_account">आपका सत्यापित खाता</string>
 </resources>
