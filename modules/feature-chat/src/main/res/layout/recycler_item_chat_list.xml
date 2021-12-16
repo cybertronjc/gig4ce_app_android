@@ -9,26 +9,37 @@
     android:layout_height="wrap_content"
     android:clickable="true"
     android:focusable="true"
+    android:background="?android:attr/selectableItemBackground"
     android:paddingStart="16dp"
-    android:paddingTop="18dp"
-    android:paddingBottom="2dp">
+    android:paddingTop="18dp">
+
+    <ImageView
+        android:id="@+id/select_unselect_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:src="@drawable/ic_icon_unselected"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/iv_profile"
+        app:layout_constraintBottom_toBottomOf="@id/iv_profile"/>
 
     <com.gigforce.common_ui.views.GigforceImageView
         android:id="@+id/iv_profile"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:scaleType="centerCrop"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="@dimen/size_14"
+        app:layout_constraintStart_toEndOf="@id/select_unselect_icon"
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearanceOverlay="@style/circleImageView"
         tools:srcCompat="@tools:sample/avatars" />
 
     <ImageView
         android:id="@+id/user_online_iv"
-        android:layout_width="14dp"
-        android:layout_height="14dp"
-        android:layout_marginEnd="2dp"
-        android:layout_marginBottom="2dp"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginBottom="1dp"
         app:layout_constraintBottom_toBottomOf="@id/iv_profile"
         app:layout_constraintEnd_toEndOf="@id/iv_profile"
         app:srcCompat="@drawable/ic_online" />
@@ -53,12 +64,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:textColor="#646464"
-        android:textSize="16sp"
+        android:textColor="#202325"
+        android:textSize="14sp"
         android:scrollHorizontally="true"
         android:ellipsize="end"
         android:maxLines="1"
-        android:fontFamily="@font/lato_bold"
+        android:fontFamily="@font/lato"
+        android:textFontWeight="700"
         app:layout_constraintEnd_toStartOf="@id/txt_time"
         app:layout_constraintStart_toEndOf="@id/iv_profile"
         app:layout_constraintTop_toTopOf="parent"
@@ -114,12 +126,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:textColor="@color/dust_grey"
+            android:textColor="#979C9E"
             android:fontFamily="@font/lato"
+            android:textFontWeight="400"
             android:maxLines="1"
             android:scrollHorizontally="true"
             android:ellipsize="end"
-            android:textSize="16sp"
+            android:textSize="12sp"
             android:layout_weight="1"
             tools:text="Last messsage that I sent" />
 
@@ -136,7 +149,7 @@
         android:layout_marginTop="20dp"
         android:background="#35BDBDBD"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/txt_title"
+        app:layout_constraintStart_toStartOf="@id/iv_profile"
         app:layout_constraintTop_toBottomOf="@id/last_message_layout" />
 
 

@@ -49,7 +49,6 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class ContactsFragment : DialogFragment(),
-    PopupMenu.OnMenuItemClickListener,
     OnContactClickListener,
     CreateGroupDialogFragment.CreateGroupDialogFragmentListener {
 
@@ -70,14 +69,19 @@ class ContactsFragment : DialogFragment(),
     private lateinit var createGroupLayout: View
     private lateinit var createGroupLabel: TextView
     private lateinit var backArrow: View
+    private lateinit var refreshIcon: ImageView
     private lateinit var searchET: EditText
 
     private lateinit var noContactsLayout: View
     private lateinit var contactsSyncingLayout: View
     private lateinit var askPermissionView: View
-    private lateinit var toolbarOverflowMenu: View
+//    private lateinit var toolbarOverflowMenu: View
     private lateinit var searchGigersLayout: View
     private lateinit var searchGigersImageView: View
+    private lateinit var syncingGif: ImageView
+    private lateinit var createNewGroup: View
+    private lateinit var createNewBroadcast: View
+    private lateinit var groupAndBroadcastLayout: View
 
     private lateinit var contactsToolbarLabel: TextView
     private lateinit var contactsToolbarSubTitle: TextView
@@ -117,10 +121,11 @@ class ContactsFragment : DialogFragment(),
 
                     contactsAdapter.stateCreateGroup(false)
                     contactsAdapter.clearSelectedContacts()
+                    groupAndBroadcastLayout.visible()
                     contactsToolbarSubTitle.text = "${contactsAdapter.itemCount} ${getString(R.string.contacts_with_space)}"
 
-                    userSelectedLayout.isVisible = false
-                    selectedUserCountTV.text = getString(R.string.zero_contacts_selected_chat)
+                    //userSelectedLayout.isVisible = false
+                    //selectedUserCountTV.text = getString(R.string.zero_contacts_selected_chat)
 
                     createGroupFab.gone()
                 } else {
@@ -159,26 +164,30 @@ class ContactsFragment : DialogFragment(),
     private fun findViews(view: View) {
         contactRecyclerView = view.findViewById(R.id.rv_contactsList)
         backArrow = view.findViewById(R.id.back_arrow)
-        createGroupLayout = view.findViewById(R.id.create_group_layout)
+        refreshIcon = view.findViewById(R.id.refreshIcon)
+//        createGroupLayout = view.findViewById(R.id.create_group_layout)
         contactsSyncingLayout = view.findViewById(R.id.contactsSyncingLayout)
-        createGroupLabel = view.findViewById(R.id.create_group_label)
+        syncingGif = view.findViewById(R.id.syncGif)
+//        createGroupLabel = view.findViewById(R.id.create_group_label)
         contactsToolbarLabel = view.findViewById(R.id.textView101)
         contactsToolbarSubTitle = view.findViewById(R.id.tv_sub_heading_contacts_list)
         noContactsLayout = view.findViewById(R.id.noContactsLayout)
-
+        createNewGroup = view.findViewById(R.id.new_group_layout)
+        createNewBroadcast = view.findViewById(R.id.new_broadcast_layout)
         askPermissionView = view.findViewById(R.id.askContactsPermission)
         contactsPermissionLayout = view.findViewById(R.id.contactsPermissionLayout)
+        groupAndBroadcastLayout = view.findViewById(R.id.group_and_broadcast_layout)
 
         refreshingUserHorizontalProgressBar =
             view.findViewById(R.id.processing_contacts_horizontal_progressbar)
         refreshingUserCenterProgressBar = view.findViewById(R.id.processing_contacts_progressbar)
 
-        toolbarOverflowMenu = view.findViewById(R.id.imageView41)
+//        toolbarOverflowMenu = view.findViewById(R.id.imageView41)
         searchGigersLayout = view.findViewById(R.id.search_gigers_layout)
         searchET = view.findViewById(R.id.search_textview)
 
-        userSelectedLayout = view.findViewById(R.id.user_selected_layout)
-        selectedUserCountTV = view.findViewById(R.id.selected_user_count_tv)
+//        userSelectedLayout = view.findViewById(R.id.user_selected_layout)
+//        selectedUserCountTV = view.findViewById(R.id.selected_user_count_tv)
 
         searchGigersImageView = view.findViewById(R.id.imageView40)
         createGroupFab = view.findViewById(R.id.create_group_fab)
@@ -221,12 +230,25 @@ class ContactsFragment : DialogFragment(),
 
     private fun setListeners() {
 
+        Glide.with(this)
+            .asGif()
+            .load(R.drawable.sync)
+            .into(syncingGif)
+
         contactRecyclerView.layoutManager = LinearLayoutManager(
             requireContext(),
             RecyclerView.VERTICAL,
             false
         )
         contactRecyclerView.adapter = contactsAdapter
+
+        refreshIcon.setOnClickListener {
+            checkForPermissionElseSyncContacts(true)
+        }
+
+        createNewGroup.setOnClickListener {
+            stateCreateNewGroup()
+        }
 
         backArrow.setOnClickListener {
 
@@ -282,13 +304,13 @@ class ContactsFragment : DialogFragment(),
             )
         }
 
-        toolbarOverflowMenu.setOnClickListener {
-
-            val popUp = PopupMenu(requireContext(), it)
-            popUp.setOnMenuItemClickListener(this)
-            popUp.inflate(R.menu.menu_contacts)
-            popUp.show()
-        }
+//        toolbarOverflowMenu.setOnClickListener {
+//
+//            val popUp = PopupMenu(requireContext(), it)
+//            popUp.setOnMenuItemClickListener(this)
+//            popUp.inflate(R.menu.menu_contacts)
+//            popUp.show()
+//        }
 
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
@@ -343,13 +365,13 @@ class ContactsFragment : DialogFragment(),
             }
         }
 
-        toolbarOverflowMenu.setOnClickListener {
-
-            val popUp = PopupMenu(requireContext(), it)
-            popUp.setOnMenuItemClickListener(this)
-            popUp.inflate(R.menu.menu_contacts)
-            popUp.show()
-        }
+//        toolbarOverflowMenu.setOnClickListener {
+//
+//            val popUp = PopupMenu(requireContext(), it)
+//            popUp.setOnMenuItemClickListener(this)
+//            popUp.inflate(R.menu.menu_contacts)
+//            popUp.show()
+//        }
     }
 
     private fun startAppSettingsPage() {
@@ -433,16 +455,17 @@ class ContactsFragment : DialogFragment(),
 
     fun stateCreateNewGroup() {
         contactsToolbarSubTitle.visible()
-        contactsToolbarLabel.text = getString(R.string.select_members_chat)
-        contactsToolbarSubTitle.text = getString(R.string.tap_to_select_chat)
-        user_selected_layout.visible()
-        create_group_layout.gone()
+        contactsToolbarLabel.text = getString(R.string.create_new_group_chat)
+        contactsToolbarSubTitle.text = getString(R.string.select_members_chat)
+//        user_selected_layout.visible()
+//        create_group_layout.gone()
+        groupAndBroadcastLayout.gone()
         contactsAdapter.getSelectedItems().clear()
         contactsAdapter.notifyDataSetChanged()
         createGroupFab.show()
         contactsAdapter.stateCreateGroup(true)
 
-        selectedUserCountTV.text = getString(R.string._0_contacts_s_chat)
+        //selectedUserCountTV.text = getString(R.string._0_contacts_s_chat)
 
         onBackPressCallback.isEnabled = true
     }
@@ -538,12 +561,13 @@ class ContactsFragment : DialogFragment(),
         }
     }
 
-    override fun onContactSelected(selectedContactsCount: Int) {
+    override fun onContactSelected(selectedContactsCount: Int, totalContactsCount: Int) {
         onBackPressCallback.isEnabled = true
         contactsAdapter.stateCreateGroup(true)
 
-        userSelectedLayout.isVisible = selectedContactsCount != 0
-        selectedUserCountTV.text = "$selectedContactsCount Contact(s) Selected"
+        //userSelectedLayout.isVisible = selectedContactsCount != 0
+        contactsToolbarSubTitle.text = "$selectedContactsCount of $totalContactsCount Contact(s) Selected"
+        //selectedUserCountTV.text = "$selectedContactsCount  of $totalContactsCount Contact(s) Selected"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -555,27 +579,27 @@ class ContactsFragment : DialogFragment(),
         )
     }
 
-    override fun onMenuItemClick(item: MenuItem?): Boolean {
-        return when (item?.itemId) {
-            R.id.action_new_group -> {
-                stateCreateNewGroup()
-                true
-            }
-            R.id.action_referesh -> {
-                checkForPermissionElseSyncContacts(true)
-                true
-            }
-            R.id.action_invite_friends -> {
-
-                chatNavigation.openInviteAFriendFragment()
-                true
-            }
-            else -> {
-                showToast(getString(R.string.coming_soon_chat))
-                false
-            }
-        }
-    }
+//    override fun onMenuItemClick(item: MenuItem?): Boolean {
+//        return when (item?.itemId) {
+//            R.id.action_new_group -> {
+//                stateCreateNewGroup()
+//                true
+//            }
+//            R.id.action_referesh -> {
+//                checkForPermissionElseSyncContacts(true)
+//                true
+//            }
+//            R.id.action_invite_friends -> {
+//
+//                chatNavigation.openInviteAFriendFragment()
+//                true
+//            }
+//            else -> {
+//                showToast(getString(R.string.coming_soon_chat))
+//                false
+//            }
+//        }
+//    }
 
     private fun showToast(text: String) {
         Toast.makeText(requireContext(), text, Toast.LENGTH_SHORT).show()

@@ -6,9 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gigforce.common_ui.chat.models.ChatHeader
-//import com.gigforce.modules.feature_chat.core.ChatConstants
-//import com.gigforce.modules.feature_chat.models.ChatHeader
-//import com.gigforce.modules.feature_chat.repositories.ChatRepository
+import com.gigforce.common_ui.chat.models.ChatListItemDataObject
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
@@ -25,6 +23,13 @@ class ChatHeadersViewModel @Inject constructor(
 
     private var _chatHeaders: MutableLiveData<List<ChatHeader>> = MutableLiveData()
     val chatHeaders: LiveData<List<ChatHeader>> = _chatHeaders
+
+    private val _selectedChats : MutableLiveData<ArrayList<ChatListItemDataObject>> = MutableLiveData()
+    val selectedChats: LiveData<ArrayList<ChatListItemDataObject>>
+        get() = _selectedChats
+
+    private val _isMultiSelectEnable: MutableLiveData<Boolean> = MutableLiveData()
+    val isMultiSelectEnable: LiveData<Boolean> = _isMultiSelectEnable
 
     private val _unreadMessageCount: MutableLiveData<Int> = MutableLiveData()
     val unreadMessageCount: LiveData<Int> = _unreadMessageCount
@@ -98,6 +103,16 @@ class ChatHeadersViewModel @Inject constructor(
         }
     }
 
+    fun setHeadersMarkAsRead(
+        chatHeaders: List<String>
+    ) = GlobalScope.launch {
+        try {
+            chatRepository.setHeadersAsRead(chatHeaders, uid)
+        } catch (e: Exception){
+            e.printStackTrace()
+        }
+    }
+
     fun filterChatList(newText: String) {
         currentSearchTerm = newText
         filterChatHeadersAndEmit()
@@ -123,4 +138,38 @@ class ChatHeadersViewModel @Inject constructor(
 
         _chatHeaders.postValue(finalHeadersToShownOnView)
     }
+
+    fun addOrRemoveChatFromSelectedList(chatHeader: ChatListItemDataObject){
+        var list = _selectedChats.value
+        if(list == null){
+            list = ArrayList()
+        }
+        if (list.contains(chatHeader)){
+            list.remove(chatHeader)
+        }
+        else{
+            list.add(chatHeader)
+        }
+        _selectedChats.value = list
+        filterChatHeadersAndEmit()
+    }
+
+    fun isChatSelected(chatHeader: ChatListItemDataObject): Boolean{
+        return _selectedChats.value?.contains(chatHeader)?: false
+    }
+
+    fun isMultiSelectEnable(): Boolean? {
+        return _isMultiSelectEnable.value
+    }
+
+    fun setMultiSelectEnable(enable: Boolean){
+        _isMultiSelectEnable.value = enable
+        filterChatHeadersAndEmit()
+    }
+
+    fun clearSelectedChats(){
+        _selectedChats.value = null
+    }
+
+    fun getSelectedChats():ArrayList<ChatListItemDataObject> = _selectedChats.value?: ArrayList()
 }

@@ -10,4 +10,13 @@
 
     <color name="chat_incoming_mesage_background_color">#ffd9e6</color>
     <color name="chat_outgoing_mesage_background_color">#e42c64</color>
+    <color name="chat_switch_checked">#E42C64</color>
+    <color name="chat_switch_unchecked">#FCEAF0</color>
+    <color name="tab_background_color">#FFFFFF</color>
+
+    <color name="tab_background_unselected">#D0F6F5F5</color>
+    <color name="tab_background_selected">#E42C64</color>
+
+    <color name="subtitle_black_text_color">#202325</color>
+    <color name="gray_text_color">#979C9E</color>
 </resources>

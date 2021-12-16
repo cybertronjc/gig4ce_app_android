@@ -143,6 +143,7 @@ class CreateGroupDialogFragment : DialogFragment() {
             } else {
                 chatGroupViewModel.createGroup(
                         groupName = groupNameET.text.toString().capitalize(),
+                        null,
                         groupMembers = contacts
                 )
             }

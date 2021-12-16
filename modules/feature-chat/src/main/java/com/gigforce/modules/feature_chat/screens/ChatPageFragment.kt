@@ -745,7 +745,7 @@ class ChatPageFragment : Fragment(),
             true
         }
         R.id.action_report -> {
-            ReportUserDialogFragment.launch(
+            ReportUserBottomSheetFragment.launch(
                 viewModel.headerId,
                 viewModel.otherUserId,
                 childFragmentManager

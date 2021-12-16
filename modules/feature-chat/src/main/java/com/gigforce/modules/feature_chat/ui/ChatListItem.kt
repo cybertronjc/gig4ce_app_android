@@ -3,6 +3,7 @@ package com.gigforce.modules.feature_chat.ui
 import android.content.Context
 import android.graphics.Typeface
 import android.net.Uri
+import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.TextDrawable
 import com.gigforce.common_ui.chat.ChatHeadersViewModel
+import com.gigforce.common_ui.chat.models.ChatHeader
 import com.gigforce.common_ui.chat.models.ChatListItemDataObject
 import com.gigforce.common_ui.chat.models.ChatListItemDataWrapper
 import com.gigforce.common_ui.core.ChatConstants
@@ -26,6 +28,7 @@ import com.gigforce.modules.feature_chat.ChatNavigation
 import com.gigforce.modules.feature_chat.R
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.recycler_item_contact.view.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -34,7 +37,7 @@ class ChatListItem(
 ) :
         RelativeLayout(context),
         IViewHolder,
-        View.OnClickListener {
+        View.OnClickListener, View.OnLongClickListener {
 
     @Inject
     lateinit var navigation: INavigation
@@ -53,6 +56,7 @@ class ChatListItem(
     private lateinit var userOnlineIV: ImageView
     private lateinit var statusIV: ImageView
     private lateinit var viewModel: ChatHeadersViewModel
+    private lateinit var selectUnselectIcon: ImageView
 
     private val storage: FirebaseStorage by lazy {
         FirebaseStorage.getInstance()
@@ -62,6 +66,7 @@ class ChatListItem(
 
         LayoutInflater.from(context).inflate(R.layout.recycler_item_chat_list, this, true)
         this.findViewById<View>(R.id.contactItemRoot).setOnClickListener(this)
+        this.findViewById<View>(R.id.contactItemRoot).setOnLongClickListener(this)
 
         findViews()
     }
@@ -76,6 +81,7 @@ class ChatListItem(
         lastMessageType = this.findViewById(R.id.last_message_type_iv)
         unseenMessageCountIV = this.findViewById(R.id.unseen_msg_count_iv)
         statusIV = this.findViewById(R.id.tv_received_status)
+        selectUnselectIcon = this.findViewById(R.id.select_unselect_icon)
     }
 
     private var dObj: ChatListItemDataObject? = null
@@ -98,20 +104,22 @@ class ChatListItem(
                             ResourcesCompat.getColor(context.resources, R.color.lipstick, null)
                     )
                     unseenMessageCountIV.setImageDrawable(drawable)
-                    textViewName.setTextColor(
-                            ResourcesCompat.getColor(context.resources,
-                                    R.color.lipstick,
-                                    null
-                            )
-                    )
+//                    textViewName.setTextColor(
+//                            ResourcesCompat.getColor(context.resources,
+//                                    R.color.lipstick,
+//                                    null
+//                            )
+//                    )
+                    //txtSubtitle.setTypeface(null, Typeface.BOLD);
                 } else {
-                    textViewName.setTextColor(
-                            ResourcesCompat.getColor(context.resources,
-                                    R.color.dove_grey,
-                                    null
-                            )
-                    )
+//                    textViewName.setTextColor(
+//                            ResourcesCompat.getColor(context.resources,
+//                                    R.color.dove_grey,
+//                                    null
+//                            )
+//                    )
                     unseenMessageCountIV.setImageDrawable(null)
+                    //txtSubtitle.setTypeface(null, Typeface.NORMAL);
                 }
 
                 if (chatHeader.type == ChatConstants.CHAT_TYPE_USER) {
@@ -141,6 +149,7 @@ class ChatListItem(
 
                         Glide.with(context).load(R.drawable.ic_user_2).into(contextImageView)
                     }
+
                 } else if (chatHeader.type == ChatConstants.CHAT_TYPE_GROUP) {
 
                     textViewName.text = chatHeader.groupName
@@ -148,14 +157,14 @@ class ChatListItem(
                     if (userAvatarUrl.isBlank()) {
 
                         //Show Default User avatar
-                        Glide.with(context).load(R.drawable.ic_group).into(contextImageView)
+                        Glide.with(context).load(R.drawable.ic_create_new_group).into(contextImageView)
                     } else {
 
                         contextImageView.loadImageIfUrlElseTryFirebaseStorage(
                             userAvatarUrl,
                             R.drawable.ic_group,
                             R.drawable.ic_group
-                         )
+                        )
                     }
                 }
 
@@ -194,15 +203,41 @@ class ChatListItem(
                             txtSubtitle.text = messagePrefix + context.getString(R.string.location_chat)
                         }
                         else -> {
-                            //   lastMessageType.gone()
+                            lastMessageType.gone()
                             txtSubtitle.text = ""
                         }
                     }
                 }
+                if (chatHeader.unreadCount != 0){
+                    txtSubtitle.setTypeface(null, Typeface.BOLD)
+                    txtSubtitle.setTextColor(resources.getColor(R.color.subtitle_black_text_color))
+                } else{
+                    txtSubtitle.setTypeface(null, Typeface.NORMAL)
+                    txtSubtitle.setTextColor(resources.getColor(R.color.gray_text_color))
+                }
 
                 textViewTime.text = chatHeader.timeDisplay
                 setReceivedStatus(chatHeader.status)
+                setSelectEnable(chatHeader, viewModel)
             }
+        }
+    }
+
+    private fun setSelectEnable(
+        chatHeader: ChatListItemDataObject,
+        viewModel: ChatHeadersViewModel
+    ) {
+        if (viewModel.isMultiSelectEnable() == true){
+            Log.d("multiselect", "enable")
+            selectUnselectIcon.visible()
+            if (viewModel.isChatSelected(chatHeader = chatHeader)){
+                selectUnselectIcon.setImageDrawable(resources.getDrawable(R.drawable.ic_icon_selected))
+            }else{
+                selectUnselectIcon.setImageDrawable(resources.getDrawable(R.drawable.ic_icon_unselected))
+            }
+
+        }else{
+            selectUnselectIcon.gone()
         }
     }
 
@@ -237,16 +272,43 @@ class ChatListItem(
     override fun onClick(v: View?) {
         dObj?.let {
 
-            chatNavigation.navigateToChatPage(
+            if (viewModel.isMultiSelectEnable() == true){
+                //select/unselect
+                if (dObj?.let { viewModel.isChatSelected(it) } == true){
+                    selectUnselectIcon.setImageDrawable(resources.getDrawable(R.drawable.ic_icon_unselected))
+                    viewModel.addOrRemoveChatFromSelectedList(it)
+                }else{
+                    selectUnselectIcon.setImageDrawable(resources.getDrawable(R.drawable.ic_icon_selected))
+                    dObj?.let { viewModel.addOrRemoveChatFromSelectedList(it) }
+                }
+            }else{
+                chatNavigation.navigateToChatPage(
                     chatType = it.chatType,
                     otherUserId = it.profileId,
                     headerId = it.id,
                     otherUserName = it.title,
                     otherUserProfilePicture = it.profilePath,
                     sharedFileBundle = viewModel.sharedFiles
-            )
+                )
 
-            viewModel.sharedFiles = null
+                viewModel.sharedFiles = null
+            }
+
+
         }
+    }
+
+    override fun onLongClick(v: View?): Boolean {
+        selectUnselectIcon.visible()
+        viewModel.setMultiSelectEnable(true)
+        if (dObj?.let { viewModel.isChatSelected(it) } == true){
+            selectUnselectIcon.setImageDrawable(resources.getDrawable(R.drawable.ic_icon_unselected))
+            dObj?.let { viewModel.addOrRemoveChatFromSelectedList(it) }
+            return false
+        }else{
+            selectUnselectIcon.setImageDrawable(resources.getDrawable(R.drawable.ic_icon_selected))
+            dObj?.let { viewModel.addOrRemoveChatFromSelectedList(it) }
+        }
+        return true
     }
 }

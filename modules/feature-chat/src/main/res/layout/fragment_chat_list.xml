@@ -1,103 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".screens.ChatHeadersFragment">
+    android:layout_height="match_parent">
 
 
-    <com.google.android.material.appbar.AppBarLayout
+    <LinearLayout
+        android:id="@+id/main_chat_list_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <com.gigforce.common_ui.views.GigforceToolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <com.gigforce.core.recyclerView.CoreRecyclerView
-            android:id="@+id/rv_chat_headers"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="visible"
+        tools:context=".screens.ChatHeadersFragment">
 
 
-        <LinearLayout
-            android:id="@+id/no_chat_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/app_bar_contact">
-
-            <ImageView
-                android:layout_width="226dp"
-                android:layout_height="189dp"
-                android:src="@drawable/bg_no_chat" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:layout_marginTop="38dp"
-                android:gravity="center_horizontal"
-                android:text="@string/no_chat_chat"
-                android:textColor="@color/lipstick"
-                android:textSize="24sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="32dp"
-                android:gravity="center_horizontal"
-                android:text="@string/oops_it_looks_like_you_have_not_started_chat_with_anyone_chat"
-                android:textColor="@color/gray_400"
-                android:textSize="16sp"
-                android:textStyle="normal" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/go_to_contacts_btn"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            <com.gigforce.common_ui.components.cells.AppBar
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="38dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginRight="16dp"
-                android:text="@string/contacts_chat"
-                app:strokeColor="@color/colorPrimary" />
+                android:visibility="visible"
+                app:backgroundType="PinkBar"
+                app:isSearchVisible="true"
+                app:isMenuItemVisible="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:titleText="@string/community_chat" />
 
-        </LinearLayout>
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/contactsFab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="16dp"
-            android:src="@drawable/ic_chat"
-            app:backgroundTint="@color/colorPrimary"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:tint="@android:color/white" />
+            <com.gigforce.core.recyclerView.CoreRecyclerView
+                android:id="@+id/rv_chat_headers"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingBottom="@dimen/size_72"
+                android:orientation="vertical" />
 
-    </FrameLayout>
+            <include
+                android:id="@+id/no_chat_layout"
+                android:visibility="gone"
+                layout="@layout/layout_no_chat_found"
+                />
 
-</LinearLayout>
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/contactsFab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="16dp"
+                app:backgroundTint="@color/white"
+                android:elevation="4dp"
+                app:tint="@color/colorPrimary"
+                android:src="@drawable/ic_chat_icon_fab"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/chat_options"
+                android:layout_width="match_parent"
+                android:layout_height="72dp"
+                android:layout_gravity="bottom"
+                android:background="@drawable/background_more_chat_options"
+                android:orientation="horizontal"
+                android:paddingStart="@dimen/size_10"
+                android:elevation="@dimen/size_6"
+                android:paddingEnd="@dimen/size_10"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/muteNotifications"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/lato"
+                    android:text="@string/mute_notifications_chat"
+                    android:enabled="false"
+                    android:layout_marginTop="@dimen/size_20"
+                    android:layout_marginBottom="@dimen/size_40"
+                    android:gravity="center_horizontal"
+                    android:textColor="@color/gray_text_color"
+                    android:textFontWeight="500"
+                    app:layout_constraintEnd_toStartOf="@+id/markAsRead"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    />
+
+                <TextView
+                    android:id="@+id/markAsRead"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/lato"
+                    android:text="@string/mark_as_read_chat"
+                    android:enabled="true"
+                    android:layout_marginTop="@dimen/size_20"
+                    android:layout_marginBottom="@dimen/size_40"
+                    android:gravity="center_horizontal"
+                    android:textColor="@color/chat_switch_checked"
+                    android:textFontWeight="500"
+                    app:layout_constraintEnd_toStartOf="@+id/deleteChat"
+                    app:layout_constraintStart_toEndOf="@+id/muteNotifications"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+                <TextView
+                    android:id="@+id/deleteChat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/lato"
+                    android:text="@string/delete_chat"
+                    android:layout_marginTop="@dimen/size_20"
+                    android:layout_marginBottom="@dimen/size_40"
+                    android:enabled="false"
+                    android:gravity="center_horizontal"
+                    android:textAlignment="center"
+                    android:textColor="@color/gray_text_color"
+                    android:textFontWeight="500"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/markAsRead"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+<!--    <include-->
+<!--        android:id="@+id/storage_access_required_layout"-->
+<!--        layout="@layout/layout_need_permission"-->
+<!--        />-->
+
+</FrameLayout>
