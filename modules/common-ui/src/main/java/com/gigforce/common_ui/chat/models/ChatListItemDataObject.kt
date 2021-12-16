@@ -7,7 +7,8 @@ import com.gigforce.core.SimpleDVM
 
 data class ChatListItemDataWrapper(
         val chatItem : ChatListItemDataObject,
-        val viewModel  : ChatHeadersViewModel
+        val viewModel  : ChatHeadersViewModel,
+        val searchText: String
 ): SimpleDVM(ViewTypes.CHAT_HEADER)
 
 data class ChatListItemDataObject(

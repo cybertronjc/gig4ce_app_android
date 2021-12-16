@@ -1,8 +1,13 @@
 package com.gigforce.modules.feature_chat.ui
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.graphics.Typeface
 import android.net.Uri
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.style.TextAppearanceSpan
 import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
@@ -90,6 +95,7 @@ class ChatListItem(
         data?.let {
             val dataAndSharedData = data as ChatListItemDataWrapper
             viewModel = dataAndSharedData.viewModel
+            var searchText = dataAndSharedData.searchText
             dObj = dataAndSharedData.chatItem
             dObj?.let { chatHeader ->
 
@@ -123,7 +129,31 @@ class ChatListItem(
 
                 if (chatHeader.type == ChatConstants.CHAT_TYPE_USER) {
 
-                    textViewName.text = chatHeader.title
+                    //textViewName.text = chatHeader.title
+                    val dataString = chatHeader.title
+                    if (searchText != null && !searchText.isEmpty()) {
+                        val startPos: Int = dataString.toString().toLowerCase()?.indexOf(searchText.toLowerCase())
+                        val endPos: Int = startPos + searchText.length
+                        if (startPos != -1) {
+                            val spannable: Spannable = SpannableString(dataString.toString())
+                            val colorStateList =
+                                ColorStateList(arrayOf(intArrayOf()), intArrayOf(context.getColor(R.color.colorPrimary)))
+                            val textAppearanceSpan =
+                                TextAppearanceSpan(null, Typeface.BOLD, -1, colorStateList, null)
+                            spannable.setSpan(
+                                textAppearanceSpan,
+                                startPos,
+                                endPos,
+                                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
+                            textViewName.text = spannable
+
+                        } else {
+                            textViewName.text = chatHeader.title
+                        }
+                    } else {
+                        textViewName.text = chatHeader.title
+                    }
                     if (chatHeader.profilePath.isNotBlank()) {
 
                         if (Patterns.WEB_URL.matcher(chatHeader.profilePath).matches()) {
@@ -151,7 +181,31 @@ class ChatListItem(
 
                 } else if (chatHeader.type == ChatConstants.CHAT_TYPE_GROUP) {
 
-                    textViewName.text = chatHeader.groupName
+                    //textViewName.text = chatHeader.groupName
+                    val dataString = chatHeader.groupName
+                    if (searchText != null && !searchText.isEmpty()) {
+                        val startPos: Int = dataString.toString().toLowerCase()?.indexOf(searchText.toLowerCase())
+                        val endPos: Int = startPos + searchText.length
+                        if (startPos != -1) {
+                            val spannable: Spannable = SpannableString(dataString.toString())
+                            val colorStateList =
+                                ColorStateList(arrayOf(intArrayOf()), intArrayOf(context.getColor(R.color.colorPrimary)))
+                            val textAppearanceSpan =
+                                TextAppearanceSpan(null, Typeface.BOLD, -1, colorStateList, null)
+                            spannable.setSpan(
+                                textAppearanceSpan,
+                                startPos,
+                                endPos,
+                                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
+                            textViewName.text = spannable
+
+                        } else {
+                            textViewName.text = chatHeader.groupName
+                        }
+                    } else {
+                        textViewName.text = chatHeader.groupName
+                    }
                     val userAvatarUrl = chatHeader.groupAvatar
                     if (userAvatarUrl.isBlank()) {
 

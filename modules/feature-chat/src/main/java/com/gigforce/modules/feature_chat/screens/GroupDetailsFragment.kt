@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
 import android.text.InputFilter
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -29,10 +30,12 @@ import com.gigforce.common_ui.chat.models.ContactModel
 import com.gigforce.common_ui.chat.models.GroupMedia
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.crashlytics.CrashlyticsLogger
+import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.onTextChanged
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.Lse
 import com.gigforce.modules.feature_chat.*
 import com.gigforce.modules.feature_chat.screens.adapters.GroupMediaRecyclerAdapter
@@ -41,8 +44,11 @@ import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel
 import com.gigforce.modules.feature_chat.screens.vm.factories.GroupChatViewModelFactory
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.google.firebase.storage.FirebaseStorage
 import com.jaeger.library.StatusBarUtil
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_chat.*
 import kotlinx.android.synthetic.main.fragment_chat_group_details_main_2.*
 import java.io.File
 import java.text.SimpleDateFormat
@@ -62,6 +68,9 @@ class GroupDetailsFragment : Fragment(),
     private val chatNavigation: ChatNavigation by lazy {
         ChatNavigation(navigation)
     }
+
+    @Inject
+    lateinit var buildConfig: IBuildConfig
 
     private val viewModel: GroupChatViewModel by lazy {
         ViewModelProvider(
@@ -222,6 +231,20 @@ class GroupDetailsFragment : Fragment(),
 
     private fun showGroupDetails(content: ChatGroup) {
         group_name_tv.text = content.name
+        if (content.groupAvatarThumbnail.isNotBlank()) {
+            content.groupAvatarThumbnail.let {
+                showGroupIcon(it)
+                GlideApp.with(this).load(it).placeholder(R.drawable.ic_group).into(group_icon)
+            }
+        } else if (content.groupAvatar.isNotBlank()) {
+            content.groupAvatar.let {
+                showGroupIcon(it)
+                GlideApp.with(this).load(it).placeholder(R.drawable.ic_group).into(group_icon)
+            }
+        } else {
+            showGroupIcon("")
+            //toolbar.showImageBehindBackButton(R.drawable.ic_group_white)
+        }
         group_creation_date_tv.text =
             getString(R.string.created_on_chat) + dateFormatter.format(content.creationDetails!!.createdOn.toDate())
 
@@ -261,6 +284,34 @@ class GroupDetailsFragment : Fragment(),
         )
 
         showOrHideAddGroupOption(content)
+    }
+
+    private fun showGroupIcon(imagePath: String) {
+
+        if (imagePath.isNotBlank()){
+            getDBImageUrl(imagePath).let {
+                if (it.isNullOrBlank()) {
+                    GlideApp.with(this)
+                        .load(it)
+                        .into(group_icon)
+                } else {
+                    it?.let {
+                        try {
+                            val gsReference = FirebaseStorage.getInstance().getReferenceFromUrl(it)
+                            GlideApp.with(this)
+                                .load(gsReference)
+                                .into(group_icon)
+                        } catch (e: Exception) {
+                            CrashlyticsLogger.d("Ground details icon", "${e.message} $it")
+                            FirebaseCrashlytics.getInstance().log("Exception : Ground details icon ${e.message} $it")
+                        }
+                    }
+                }
+            }
+        } else{
+            GlideApp.with(this).load(R.drawable.ic_group).placeholder(R.drawable.ic_group).into(group_icon)
+        }
+
     }
 
     private fun showOrHideAddGroupOption(content: ChatGroup) {
@@ -545,6 +596,20 @@ class GroupDetailsFragment : Fragment(),
                 sharedFileBundle = null
         )
 
+    }
+
+    fun getDBImageUrl(imagePath: String): String? {
+        if (imagePath.isNotBlank()) {
+            try {
+                var modifiedString = imagePath
+                if (!imagePath.startsWith("/"))
+                    modifiedString = "/$imagePath"
+                return buildConfig.getStorageBaseUrl() + modifiedString
+            } catch (egetDBImageUrl: Exception) {
+                return null
+            }
+        }
+        return null
     }
 
     override fun onContactsSelected(contacts: List<ContactModel>) {

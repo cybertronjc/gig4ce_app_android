@@ -134,7 +134,8 @@
     <string name="mark_as_read_chat">Mark as Read</string>
     <string name="mark_as_unread_chat">Mark as Unead</string>
     <string name="delete_chat">Delete</string>
-    <string name="chat_selected_chat">Chat Selected</string>
+    <string name="chat_selected_chat">Chats Selected</string>
+    <string name="single_chat_selected_chat">Chat Selected</string>
     <string name="notifications_chat">Notifications</string>
     <string name="report_user_chat">Report User</string>
     <string name="report_chat">Report</string>

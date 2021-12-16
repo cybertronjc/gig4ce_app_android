@@ -6,7 +6,7 @@
             android:shape="rectangle"
             android:useLevel="false">
             <corners
-                android:radius="16dp"
+                android:radius="24dp"
                 />
 
             <solid
