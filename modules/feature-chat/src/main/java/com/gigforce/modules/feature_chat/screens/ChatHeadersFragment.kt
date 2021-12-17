@@ -284,9 +284,9 @@ class ChatHeadersFragment : Fragment(), PopupMenu.OnMenuItemClickListener, Gigfo
         initListeners()
         setObserver(this.viewLifecycleOwner)
 
-        if (!isStoragePermissionGranted()) {
-            askForStoragePermission()
-        }
+//        if (!isStoragePermissionGranted()) {
+//            askForStoragePermission()
+//        }
     }
 
     var title = ""

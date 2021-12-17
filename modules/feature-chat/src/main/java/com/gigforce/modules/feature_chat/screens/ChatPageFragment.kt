@@ -789,10 +789,7 @@ class ChatPageFragment : Fragment(),
                 // In case of SDK >= scoped storage
                 // we 1. launch document tree contract then
                 // 2. camera permission
-
-                if (isStoragePermissionGranted()) {
-                    //do something
-                } else if (!isCameraPermissionGranted()) {
+               if (!isCameraPermissionGranted()) {
                     requestPermissions(
                         Manifest.permission.CAMERA
                     )
