@@ -75,6 +75,7 @@ class ChatHeadersViewModel @Inject constructor(
                         unreadMessageCount += chatHeader.unseenCount
 
                         if (chatHeader.unseenCount != 0) {
+                            Log.d("ChatHeaderViewModel","setting useencount")
 
                             if (chatHeader.chatType == ChatConstants.CHAT_TYPE_USER) {
                                 setMessagesAsDeliveredForChat(
@@ -95,7 +96,7 @@ class ChatHeadersViewModel @Inject constructor(
     ) = GlobalScope.launch {
 
         try {
-
+            Log.d("ChatHeaderViewModel","setting message as delivered of header :$chatHeader")
             chatRepository.sentMessagesSentMessageAsDelivered(chatHeader, otherUserId)
 
         } catch (e: Exception) {

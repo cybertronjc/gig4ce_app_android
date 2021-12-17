@@ -147,6 +147,7 @@ class ChatPageViewModel @Inject constructor(
 
         headerInfoChangeListener = getHeaderReference(headerId)
             .addSnapshotListener { snapshot, error ->
+                Log.d(TAG,"header info changed/subscribed, $headerId")
 
                 snapshot?.let {
                     val chatHeader = it.toObject(ChatHeader::class.java)!!.apply {
@@ -199,8 +200,8 @@ class ChatPageViewModel @Inject constructor(
             formatMobileNoForChatContact(
                 mobileNo
             )
-        )
-            .addSnapshotListener { value, error ->
+        ).addSnapshotListener { value, error ->
+                Log.d(TAG,"contact info changed/subscribed")
 
                 value?.let {
 

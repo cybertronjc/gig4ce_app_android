@@ -94,13 +94,6 @@ class ChatPageFragment : Fragment(),
         }
     }
 
-    private val pickVideoContract = registerForActivityResult(
-        ActivityResultContracts.GetContent()
-    ) {
-        val uri = it ?: return@registerForActivityResult
-        sendVideoMessage(uri)
-    }
-
     private val chatNavigation: ChatNavigation by lazy {
         ChatNavigation(navigation)
     }
