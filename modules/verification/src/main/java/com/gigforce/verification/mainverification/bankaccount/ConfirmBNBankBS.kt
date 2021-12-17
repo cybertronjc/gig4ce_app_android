@@ -30,9 +30,9 @@ class ConfirmBNBankBS : BottomSheetDialogFragment() {
     @Inject
     lateinit var eventTracker : IEventTracker
 
-    private val user: FirebaseUser?
+    private val user: String?
         get() {
-            return FirebaseAuth.getInstance().currentUser
+            return FirebaseAuth.getInstance().currentUser?.uid
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,36 +50,47 @@ class ConfirmBNBankBS : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observer()
-        confirm_bn_bs.setOnClickListener{
-            user?.uid?.let {
-                var props = HashMap<String, Any>()
-                props.put("Bank verified", true)
-                eventTracker.setUserProperty(props)
-                eventTracker.pushEvent(
-                    TrackingEventArgs(
-                        eventName = VerificationEvents.BANK_VERIFIED,
-                        props = null
+        if(user == null)dismiss()
+        else {
+            requestBankDetailData()
+            observer()
+
+            confirm_bn_bs.setOnClickListener {
+                user?.let {
+                    var props = HashMap<String, Any>()
+                    props.put("Bank verified", true)
+                    eventTracker.setUserProperty(props)
+                    eventTracker.pushEvent(
+                        TrackingEventArgs(
+                            eventName = VerificationEvents.BANK_VERIFIED,
+                            props = null
+                        )
                     )
-                )
-                viewModel.setVerificationStatusInDB(true, it)
+                    viewModel.setVerificationStatusInDB(true, it)
+                }
+
             }
 
-        }
-
-        cancel_button.setOnClickListener{
-            user?.uid?.let {
-                eventTracker.pushEvent(
-                    TrackingEventArgs(
-                        eventName = VerificationEvents.BANK_MISMATCH,
-                        props = null
+            cancel_button.setOnClickListener {
+                user?.let {
+                    eventTracker.pushEvent(
+                        TrackingEventArgs(
+                            eventName = VerificationEvents.BANK_MISMATCH,
+                            props = null
+                        )
                     )
-                )
-                viewModel.setVerificationStatusInDB(false, it)
-            }
+                    viewModel.setVerificationStatusInDB(false, it)
+                }
 
+            }
         }
 
+    }
+
+    private fun requestBankDetailData() {
+        user?.let {
+            viewModel.getBankDetailsStatus(it)
+        }
     }
 
     private fun observer() {
@@ -96,5 +107,17 @@ class ConfirmBNBankBS : BottomSheetDialogFragment() {
                 }
             }
         })
+
+        viewModel.bankDetailedObject.observe(viewLifecycleOwner, Observer {
+            it.bankBeneficiaryName?.let { bnName->
+                bn_tv.text = bnName
+                account_no_tv.text = it.accountNo
+                ifsc_tv.text = it.ifscCode
+            }?: run {
+                dismiss()
+            }
+
+        })
+
     }
 }

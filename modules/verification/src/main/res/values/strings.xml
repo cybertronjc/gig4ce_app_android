@@ -454,6 +454,18 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="aknowledge_your_account">Your verified account</string>
+    <string name="confirm_beneficiary_title_veri">Confirm Beneficiary Name</string>
+    <string name="cinfirm_beneficiary_subtitle_veri">Your bank account has been validated, please confirm your beneficiary name.</string>
+    <string name="bn_label_detail_box_veri">Beneficiary Name</string>
+    <string name="account_label_in_box_veri">Account No</string>
+    <string name="ifsc_in_box_veri">IFSC</string>
+    <string name="bank_veri_section_detail_veri">Bank Verification (1/2)</string>
+    <string name="bank_validated_veri">Bank Validated</string>
+    <string name="bank_name_confirmation_title_veri">Beneficiary Name Confirmation</string>
+    <string name="confirm_bn_title_veri">Confirm Beneficiary Name</string>
+    <string name="confirm_bn_subtitle_veri">Your bank verification is pending. Please confirm the beneficiary name.</string>
+    <string name="bn_not_matched_veri">Beneficiary Name Doesn’t Match</string>
+    <string name="plz_ask_to_giger_to_confirm_bn_veri">Please ask the giger to confirm beneficiary name on Gigforce app.</string>
 
 
 </resources>

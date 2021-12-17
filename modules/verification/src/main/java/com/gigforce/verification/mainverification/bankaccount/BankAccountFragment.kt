@@ -149,8 +149,8 @@ class BankAccountFragment : Fragment(),
             resources.getString(R.string.no_doc_subtitle_bank_veri)
         )
         userIdToUse = if (userId != null) {
-        viewBinding.confirmBn.text = "Beneficiary Name Doesn’t Match"
-        viewBinding.confirmBnDetail.text = "Please ask the giger to confirm beneficiary name on Gigforce app. "
+        viewBinding.confirmBn.text = resources.getString(R.string.bn_not_matched_veri)
+        viewBinding.confirmBnDetail.text = resources.getString(R.string.plz_ask_to_giger_to_confirm_bn_veri)
         viewBinding.banificiaryDetail.gone()
         viewBinding.cancelButton.gone()
         viewBinding.confirmBnBs.gone()
@@ -409,7 +409,7 @@ class BankAccountFragment : Fragment(),
                     viewBinding.toplayoutblock.toggleChangeTextView(true)
                     viewBinding.bnConfirmationCl.gone()
                     viewBinding.scrollView.visible()
-
+                    viewBinding.toplayoutblock.visible()
 
                 }
                 "started","processing","validated" -> {
@@ -794,6 +794,8 @@ class BankAccountFragment : Fragment(),
         }
 
         viewBinding.appBarBank.apply {
+            changeBackButtonDrawable()
+            makeBackgroundMoreRound()
             setBackButtonListener(View.OnClickListener {
 //                navigation.popBackStack()
                 activity?.onBackPressed()
