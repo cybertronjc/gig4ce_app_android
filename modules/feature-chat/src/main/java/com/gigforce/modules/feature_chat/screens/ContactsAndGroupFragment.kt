@@ -109,7 +109,7 @@ class ContactsAndGroupFragment : BaseFragment2<ContactsAndGroupFragmentBinding>(
     @Inject
     lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
 
-    private var clickedImagePath: String? = null
+    private var clickedImagePath: String? = ""
     var fileName: String = ""
 
     private val firebaseStorage: FirebaseStorage by lazy {

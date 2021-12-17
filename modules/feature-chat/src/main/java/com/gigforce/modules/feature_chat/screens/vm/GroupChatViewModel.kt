@@ -102,7 +102,6 @@ class GroupChatViewModel constructor(
             groupMembers: List<ContactModel>
     ) = viewModelScope.launch {
         _createGroup.value = Lce.loading()
-        if (groupAvatar != null){
             try {
                 val groupId = chatGroupRepository.createGroup(groupName,groupAvatar, groupMembers)
                 _createGroup.value = Lce.content(groupId)
@@ -111,9 +110,6 @@ class GroupChatViewModel constructor(
                 _createGroup.value = Lce.error(e.toString())
                 _createGroup.value = null
             }
-        }else {
-            Log.d("groupAvatar", "null")
-        }
 
 
     }

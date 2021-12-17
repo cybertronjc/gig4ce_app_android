@@ -240,7 +240,13 @@ class ChatHeadersFragment : Fragment(), PopupMenu.OnMenuItemClickListener, Gigfo
     }
 
     private fun setCollectionData(list: ArrayList<ChatHeader>) {
-        noChatsLayout.isVisible = list.isEmpty()
+        if(list.isEmpty()){
+            noChatsLayout.visible()
+            contactsFab.gone()
+        } else{
+            noChatsLayout.gone()
+            contactsFab.visible()
+        }
 
         coreRecyclerView.collection =
             ArrayList(list.map {
