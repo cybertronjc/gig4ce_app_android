@@ -1,14 +1,13 @@
+
 package com.gigforce.modules.feature_chat.ui.chatItems
 
 import android.content.Context
+import android.net.Uri
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
-import android.widget.ImageView
-import android.widget.PopupMenu
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.widget.*
 import androidx.cardview.widget.CardView
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
@@ -17,6 +16,7 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.chat.ChatConstants
 import com.gigforce.common_ui.chat.models.ChatMessage
+import com.gigforce.common_ui.storage.MediaStoreApiHelpers
 import com.gigforce.common_ui.views.GigforceImageView
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toDisplayText
@@ -273,6 +273,7 @@ abstract class VideoMessageView(
         val popUpMenu = PopupMenu(context, v)
         popUpMenu.inflate(R.menu.menu_chat_clipboard)
 
+        popUpMenu.menu.findItem(R.id.action_save_to_gallery).isVisible = returnFileIfAlreadyDownloadedElseNull() != null
         popUpMenu.menu.findItem(R.id.action_copy).isVisible = false
         popUpMenu.menu.findItem(R.id.action_delete).isVisible = type == MessageFlowType.OUT
         popUpMenu.menu.findItem(R.id.action_message_info).isVisible = type == MessageFlowType.OUT && messageType == MessageType.GROUP_MESSAGE
@@ -287,11 +288,37 @@ abstract class VideoMessageView(
         val itemClicked = item ?: return true
 
         when (itemClicked.itemId) {
+            R.id.action_save_to_gallery -> saveToGallery(
+                returnFileIfAlreadyDownloadedElseNull()
+            )
             R.id.action_copy -> { }
             R.id.action_delete -> deleteMessage()
             R.id.action_message_info -> viewMessageInfo()
         }
         return true
+    }
+
+    private fun saveToGallery(
+        videoUri: Uri?
+    ) {
+        val uri = videoUri ?: return
+
+        GlobalScope.launch {
+            try {
+                MediaStoreApiHelpers.saveVideoToGallery(
+                    context,
+                    uri
+                )
+
+                GlobalScope.launch(Dispatchers.Main) {
+                    Toast.makeText(context, "Video saved to gallery", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                GlobalScope.launch(Dispatchers.Main) {
+                    Toast.makeText(context, "Unable to save video to gallery", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
     private fun viewMessageInfo() {

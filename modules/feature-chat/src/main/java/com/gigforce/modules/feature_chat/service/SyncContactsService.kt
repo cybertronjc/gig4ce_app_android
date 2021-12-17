@@ -14,16 +14,18 @@ import androidx.loader.content.Loader
 import com.gigforce.common_ui.chat.models.ContactModel
 import com.gigforce.modules.feature_chat.repositories.ChatContactsRepository
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class SyncContactsService : Service(), Loader.OnLoadCompleteListener<Cursor> {
 
     private val binder: LocalBinder = LocalBinder()
 
-    private val chatContactsRepository: ChatContactsRepository by lazy {
-        ChatContactsRepository(SyncPref.getInstance(applicationContext))
-    }
+    @Inject
+    lateinit var chatContactsRepository: ChatContactsRepository
 
     private val syncPref: SyncPref by lazy {
         SyncPref.getInstance(applicationContext)

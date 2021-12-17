@@ -8,14 +8,10 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
-import android.graphics.Bitmap
-import android.media.MediaMetadataRetriever
-import android.media.ThumbnailUtils
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.ContactsContract
-import android.provider.OpenableColumns
 import android.text.format.DateUtils
 import android.util.Log
 import android.util.Patterns
@@ -28,7 +24,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -41,17 +36,13 @@ import com.gigforce.common_image_picker.ImageCropOptions
 import com.gigforce.common_image_picker.image_cropper.ImageCropActivity
 import com.gigforce.common_ui.MimeTypes
 import com.gigforce.common_ui.chat.ChatConstants
-import com.gigforce.common_ui.chat.ChatLocalDirectoryReferenceManager
 import com.gigforce.common_ui.chat.models.ChatGroup
 import com.gigforce.common_ui.chat.models.ChatMessage
-import com.gigforce.common_ui.chat.models.VideoInfo
+import com.gigforce.common_ui.metaDataHelper.ImageMetaDataHelpers
 import com.gigforce.core.PermissionUtils
 import com.gigforce.core.ScopedStorageConstants
 import com.gigforce.core.StringConstants
 import com.gigforce.core.crashlytics.CrashlyticsLogger
-import com.gigforce.core.date.DateHelper
-import com.gigforce.core.documentFileHelper.DocumentPrefHelper
-import com.gigforce.core.documentFileHelper.DocumentTreeDelegate
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toDisplayText
 import com.gigforce.core.extensions.visible
@@ -59,12 +50,11 @@ import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.recyclerView.CoreRecyclerView
 import com.gigforce.modules.feature_chat.ChatNavigation
 import com.gigforce.modules.feature_chat.R
-import com.gigforce.modules.feature_chat.filemanager.ChatFileManager
+import com.gigforce.common_ui.chat.ChatFileManager
 import com.gigforce.modules.feature_chat.models.ChatMessageWrapper
 import com.gigforce.modules.feature_chat.models.SharedFile
 import com.gigforce.modules.feature_chat.screens.vm.ChatPageViewModel
 import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel
-import com.gigforce.modules.feature_chat.screens.vm.factories.GroupChatViewModelFactory
 import com.gigforce.modules.feature_chat.swipe.MessageSwipeController
 import com.gigforce.modules.feature_chat.swipe.SwipeControllerActions
 import com.gigforce.modules.feature_chat.ui.ChatFooter
@@ -88,27 +78,20 @@ class ChatPageFragment : Fragment(),
     @Inject
     lateinit var navigation: INavigation
 
-    @Inject
-    lateinit var documentPrefHelper: DocumentPrefHelper
-
-    @Inject
-    lateinit var documentTreeDelegate : DocumentTreeDelegate
-
-    private val openDocumentTreeContract = registerForActivityResult(
-        ActivityResultContracts.OpenDocumentTree()
+    private val requestPermissionContract = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
     ) {
-        if (it == null) return@registerForActivityResult
 
-        documentTreeDelegate.handleDocumentTreeSelectionResult(
-            context = requireContext(),
-            uri = it,
-            onSuccess = {
-                handleStorageTreeSelectedResult()
-            },
-            onFailure = {
-                handleStorageTreeSelectionFailure(it)
-            }
-        )
+        if (selectedOperation == ChatConstants.OPERATION_PICK_IMAGE && isCameraPermissionGranted() && isStoragePermissionGranted()) {
+            pickImage()
+            selectedOperation = -1
+        } else if (selectedOperation == ChatConstants.OPERATION_PICK_VIDEO && isStoragePermissionGranted()) {
+            pickVideo()
+            selectedOperation = -1
+        } else if (selectedOperation == ChatConstants.OPERATION_PICK_DOCUMENT && isStoragePermissionGranted()) {
+            pickDocument()
+            selectedOperation = -1
+        }
     }
 
     private val chatNavigation: ChatNavigation by lazy {
@@ -124,28 +107,19 @@ class ChatPageFragment : Fragment(),
     private lateinit var requestStorageAccessButton: View
 
     private val viewModel: ChatPageViewModel by viewModels()
-    private val groupChatViewModel: GroupChatViewModel by lazy {
-        ViewModelProvider(
-            this,
-            GroupChatViewModelFactory(requireContext())
-        ).get(GroupChatViewModel::class.java)
-    }
+    private val groupChatViewModel: GroupChatViewModel by viewModels()
 
     private val cameraAndGalleryIntegrator: CameraAndGalleryIntegrator by lazy {
         CameraAndGalleryIntegrator(this)
     }
 
-    private val chatLocalDirectoryReferenceManager: ChatLocalDirectoryReferenceManager by lazy {
-        ChatLocalDirectoryReferenceManager()
-    }
-
     private val chatFileManager: ChatFileManager by lazy {
-        ChatFileManager(requireContext(), documentPrefHelper)
+        ChatFileManager(requireContext())
     }
 
     private fun getImageCropOptions(
-        shouldCreatedDestinationFile : Boolean
-    ) : ImageCropOptions {
+        shouldCreatedDestinationFile: Boolean
+    ): ImageCropOptions {
 
 
         return ImageCropOptions
@@ -154,10 +128,11 @@ class ChatPageFragment : Fragment(),
             .setShouldEnableFaceDetector(false)
             .shouldEnableFreeCrop(true).apply {
 
-                if(shouldCreatedDestinationFile){
+                if (shouldCreatedDestinationFile) {
+
                     val image = chatFileManager.createImageFile()
                     setOutputFileUri(image)
-                    Log.d("ChatPage","creating file ...")
+                    Log.d("ChatPage", "creating file ...")
                 }
             }
             .build()
@@ -203,39 +178,14 @@ class ChatPageFragment : Fragment(),
             ResourcesCompat.getColor(resources, R.color.lipstick_2, null)
         )
 
-        if(Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
-
-            if (!documentTreeDelegate.storageTreeSelected()) {
-                showPermissionRequiredLayout()
-            } else {
-                showChatLayout()
-                initChat()
-            }
-        } else{
-
-            if (!isStoragePermissionGranted()) {
-                showPermissionRequiredLayout()
-                askForStoragePermission()
-            } else {
-                showChatLayout()
-                initChat()
-            }
-        }
+        showChatLayout()
+        initChat()
     }
 
     private fun findView(view: View) {
         mainChatLayout = view.findViewById(R.id.main_chat_layout)
         needStorageAccessLayout = view.findViewById(R.id.storage_access_required_layout)
         requestStorageAccessButton = view.findViewById(R.id.storage_access_btn)
-
-        requestStorageAccessButton.setOnClickListener {
-
-            if(Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
-                openDocumentTreeContract.launch(null)
-            } else{
-                askForStoragePermission()
-            }
-        }
     }
 
     private fun showPermissionRequiredLayout() {
@@ -243,7 +193,7 @@ class ChatPageFragment : Fragment(),
         needStorageAccessLayout.visible()
     }
 
-    private fun initChat(){
+    private fun initChat() {
         cancelAnyNotificationIfShown()
         findViews(requireView())
         init()
@@ -301,20 +251,31 @@ class ChatPageFragment : Fragment(),
 
     private fun handleStorageTreeSelectedResult() {
 
-        needStorageAccessLayout.gone()
-        mainChatLayout.visible()
+        if (selectedOperation == ChatConstants.OPERATION_PICK_IMAGE) {
 
-        initChat()
+            if (isCameraPermissionGranted()) {
+                askForStorageAndCameraPermission()
+            } else {
+                pickImage()
+                selectedOperation = -1
+            }
+        } else if (selectedOperation == ChatConstants.OPERATION_PICK_VIDEO) {
+            pickVideo()
+            selectedOperation = -1
+        } else if (selectedOperation == ChatConstants.OPERATION_PICK_DOCUMENT) {
+            pickDocument()
+            selectedOperation = -1
+        }
     }
 
     private fun handleStorageTreeSelectionFailure(
-        e : Exception
+        e: Exception
     ) {
 
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("Select storage")
             .setMessage(e.message.toString())
-            .setPositiveButton("Okay"){_,_ ->}
+            .setPositiveButton("Okay") { _, _ -> }
             .show()
     }
 
@@ -794,13 +755,7 @@ class ChatPageFragment : Fragment(),
             true
         }
         R.id.action_document -> {
-
-            if (isStoragePermissionGranted())
-                pickDocument()
-            else {
-                selectedOperation = ChatConstants.OPERATION_PICK_DOCUMENT
-                askForStoragePermission()
-            }
+            checkPermissionAndHandleActionPickDocument()
             true
         }
         R.id.action_location -> {
@@ -811,22 +766,11 @@ class ChatPageFragment : Fragment(),
             true
         }
         R.id.action_pick_image -> {
-            if (isStoragePermissionGranted()) {
-                pickImage()
-            } else {
-                selectedOperation = ChatConstants.OPERATION_PICK_IMAGE
-                askForStoragePermission()
-            }
+            checkPermissionAndHandleActionPickImage()
             true
         }
         R.id.action_video -> {
-            if (isStoragePermissionGranted())
-                pickVideo()
-            else {
-                selectedOperation = ChatConstants.OPERATION_PICK_VIDEO
-                askForStoragePermission()
-            }
-
+            checkPermissionAndHandleActionPickVideo()
             true
         }
         else -> {
@@ -834,16 +778,87 @@ class ChatPageFragment : Fragment(),
         }
     }
 
+    private fun checkPermissionAndHandleActionPickImage() {
+
+        if (isCameraPermissionGranted() && isStoragePermissionGranted()) {
+            pickImage()
+        } else {
+            selectedOperation = ChatConstants.OPERATION_PICK_IMAGE
+
+            if (Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
+                // In case of SDK >= scoped storage
+                // we 1. launch document tree contract then
+                // 2. camera permission
+
+                if (isStoragePermissionGranted()) {
+                    //do something
+                } else if (!isCameraPermissionGranted()) {
+                    requestPermissions(
+                        Manifest.permission.CAMERA
+                    )
+                }
+            } else {
+
+                requestPermissions(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.CAMERA
+                )
+            }
+        }
+    }
+
+    private fun checkPermissionAndHandleActionPickVideo() {
+        selectedOperation = ChatConstants.OPERATION_PICK_VIDEO
+        pickVideo()
+    }
+
+    private fun checkPermissionAndHandleActionPickDocument() {
+
+        if (isStoragePermissionGranted()) {
+            pickDocument()
+        } else {
+            selectedOperation = ChatConstants.OPERATION_PICK_DOCUMENT
+
+            if (Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
+//                requestDocumentStorageTree()
+            } else {
+                requestPermissions(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                )
+            }
+        }
+    }
+
+    private fun requestPermissions(
+        vararg permissions: String
+    ) {
+        requestPermissionContract.launch(permissions)
+    }
+
     private fun askForStoragePermission() {
         Log.v(TAG, "Permission Required. Requesting Permission")
+
+        if (isStoragePermissionGranted()) {
+
+        }
+
+        requestPermissionContract.launch(
+            arrayOf(
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
+        )
+
 
         if (Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
 
             requestPermissions(
-            arrayOf(
-                Manifest.permission.CAMERA
-            ),
-            REQUEST_STORAGE_PERMISSION
+                arrayOf(
+                    Manifest.permission.CAMERA
+                ),
+                REQUEST_STORAGE_PERMISSION
             )
         } else {
 
@@ -858,10 +873,15 @@ class ChatPageFragment : Fragment(),
         }
     }
 
+    private fun askForStorageAndCameraPermission() {
+
+    }
+
     private fun pickVideo() {
+
         try {
             Intent(Intent.ACTION_GET_CONTENT).apply {
-                type = "video/*"
+                type = MimeTypes.VIDEO
                 startActivityForResult(this, REQUEST_PICK_VIDEO)
             }
         } catch (e: ActivityNotFoundException) {
@@ -957,16 +977,7 @@ class ChatPageFragment : Fragment(),
                 showChatLayout()
                 initChat()
 
-                if (selectedOperation == ChatConstants.OPERATION_PICK_IMAGE) {
-                    pickImage()
-                    selectedOperation = -1
-                } else if (selectedOperation == ChatConstants.OPERATION_PICK_VIDEO) {
-                    pickVideo()
-                    selectedOperation = -1
-                } else if (selectedOperation == ChatConstants.OPERATION_PICK_DOCUMENT) {
-                    pickDocument()
-                    selectedOperation = -1
-                }
+
             } else
                 Toast.makeText(
                     requireContext(),
@@ -1026,10 +1037,10 @@ class ChatPageFragment : Fragment(),
         uri: Uri,
         text: String? = null
     ) {
-        val uriString = uri.toString()
-        val myFile = File(uriString)
-
-        val displayName: String? = getDisplayName(uriString, uri, myFile)
+        val displayName: String = ImageMetaDataHelpers.getImageName(
+            requireContext(),
+            uri
+        )
 
         if (chatType == ChatConstants.CHAT_TYPE_USER)
             viewModel.sendNewDocumentMessage(
@@ -1045,20 +1056,16 @@ class ChatPageFragment : Fragment(),
                 fileName = displayName ?: "Document",
                 uri = uri
             )
-
-
-        Log.d(TAG, displayName + "")
-        Log.d(TAG, uriString)
     }
 
     private fun sendVideoMessage(
         uri: Uri,
         text: String? = null
     ) {
-        val uriString = uri.toString()
-        val myFile = File(uri.path)
-
-        val videoInfo = getVideoInfo(uriString, uri, myFile)
+        val videoInfo = ImageMetaDataHelpers.getVideoInfo(
+            requireContext(),
+            uri
+        )
 
         if (chatType == ChatConstants.CHAT_TYPE_USER)
             viewModel.sendNewVideoMessage(
@@ -1104,113 +1111,19 @@ class ChatPageFragment : Fragment(),
         }
     }
 
-    private fun getDisplayName(
-        uriString: String,
-        uri: Uri,
-        myFile: File
-    ): String? {
-        if (uriString.startsWith("content://")) {
-            var cursor: Cursor? = null
-            try {
-                cursor = requireContext().contentResolver.query(uri, null, null, null, null)
-                if (cursor != null && cursor.moveToFirst()) {
-                    return cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
-                }
 
-            } finally {
-                cursor?.close()
-            }
-        } else if (uriString.startsWith("file://")) {
-            return myFile.name
-        }
-        return ""
-    }
+    private fun isCameraPermissionGranted(): Boolean {
 
-    private fun getVideoInfo(
-        uriString: String,
-        uri: Uri,
-        myFile: File
-    ): VideoInfo {
-        var fileName = ""
-        var fileSize = 0L
-
-        if (uriString.startsWith("content://")) {
-            var cursor: Cursor? = null
-            try {
-                cursor = requireContext().contentResolver.query(uri, null, null, null, null)
-                if (cursor != null && cursor.moveToFirst()) {
-                    fileName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
-                    val sizeInString = cursor.getString(cursor.getColumnIndex(OpenableColumns.SIZE))
-
-                    fileSize = try {
-                        sizeInString.toLong()
-                    } catch (e: Exception) {
-                        0L
-                    }
-                }
-            } finally {
-                cursor?.close()
-            }
-        } else if (uriString.startsWith("file://")) {
-            fileName = myFile.name
-            fileSize = myFile.length()
-        }
-
-        val videoLength = try {
-            val retriever = MediaMetadataRetriever()
-            retriever.setDataSource(requireContext(), uri)
-            val duration =
-                retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
-            retriever.release()
-            duration?.toLong() ?: 0L
-        } catch (e: Exception) {
-            Log.e("ChatGroupRepo", "Error while fetching video length", e)
-            0L
-        }
-
-        val mMMR = MediaMetadataRetriever()
-        mMMR.setDataSource(requireContext(), uri)
-        val thumbnail: Bitmap? =
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O_MR1) {
-                mMMR.getScaledFrameAtTime(
-                    -1,
-                    MediaMetadataRetriever.OPTION_CLOSEST_SYNC,
-                    196,
-                    196
-                )
-            } else {
-                try {
-                    val bigThumbnail = mMMR.frameAtTime
-                    val smallThumbnail = ThumbnailUtils.extractThumbnail(bigThumbnail, 196, 196)
-
-                    if (!bigThumbnail!!.isRecycled)
-                        bigThumbnail.recycle()
-
-                    smallThumbnail
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    null
-                }
-            }
-        mMMR.release()
-
-        return VideoInfo(
-            name = fileName,
-            duration = videoLength,
-            size = fileSize,
-            thumbnail = thumbnail
-        )
+        return ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.CAMERA
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun isStoragePermissionGranted(): Boolean {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-
-            return ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.CAMERA
-            ) == PackageManager.PERMISSION_GRANTED
-
+            return true
         } else {
             return ContextCompat.checkSelfPermission(
                 requireContext(),
@@ -1219,10 +1132,6 @@ class ChatPageFragment : Fragment(),
                     && ContextCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ) == PackageManager.PERMISSION_GRANTED
-                    && ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.CAMERA
             ) == PackageManager.PERMISSION_GRANTED
         }
     }

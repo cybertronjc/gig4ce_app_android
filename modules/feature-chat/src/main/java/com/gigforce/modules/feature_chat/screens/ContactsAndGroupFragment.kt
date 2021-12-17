@@ -23,6 +23,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.loader.content.CursorLoader
@@ -60,8 +61,6 @@ import com.gigforce.modules.feature_chat.screens.adapters.ContactsRecyclerAdapte
 import com.gigforce.modules.feature_chat.screens.adapters.OnContactClickListener
 import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel
 import com.gigforce.modules.feature_chat.screens.vm.NewContactsViewModel
-import com.gigforce.modules.feature_chat.screens.vm.factories.GroupChatViewModelFactory
-import com.gigforce.modules.feature_chat.screens.vm.factories.NewContactsViewModelFactory
 import com.gigforce.modules.feature_chat.service.SyncContactsService
 import com.google.android.gms.common.util.SharedPreferencesUtils
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -116,24 +115,13 @@ class ContactsAndGroupFragment : BaseFragment2<ContactsAndGroupFragmentBinding>(
         FirebaseStorage.getInstance()
     }
 
-    private val chatGroupViewModel: GroupChatViewModel by lazy {
-        ViewModelProvider(
-            this,
-            GroupChatViewModelFactory(requireContext())
-        ).get(GroupChatViewModel::class.java)
-    }
+    private val chatGroupViewModel: GroupChatViewModel by viewModels()
 
     private val chatNavigation: ChatNavigation by lazy {
         ChatNavigation(navigation)
     }
 
-    private val viewModelNew: NewContactsViewModel by lazy {
-        ViewModelProvider(
-            this,
-            NewContactsViewModelFactory(requireContext())
-        ).get(NewContactsViewModel::class.java)
-    }
-
+    private val viewModelNew: NewContactsViewModel by viewModels()
 
     private var onContactSelectedListener: OnContactsSelectedListener? = null
 

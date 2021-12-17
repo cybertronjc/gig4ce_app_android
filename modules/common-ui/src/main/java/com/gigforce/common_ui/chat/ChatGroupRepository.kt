@@ -33,14 +33,16 @@ import kotlinx.coroutines.sync.withLock
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-class ChatGroupRepository constructor(
-    private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance(),
-    private val chatProfileFirebaseRepository: ChatProfileFirebaseRepository = ChatProfileFirebaseRepository()
-    //  private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository()
+@Singleton
+class ChatGroupRepository @Inject constructor(
+    private val firebaseStorage: FirebaseStorage,
+    private val chatProfileFirebaseRepository: ChatProfileFirebaseRepository
 ) : BaseChatRepository() {
 
     private val currentUser = FirebaseAuth.getInstance().currentUser!!

@@ -24,6 +24,7 @@ import com.gigforce.common_ui.chat.models.ChatHeader
 import com.gigforce.common_ui.chat.models.ChatListItemDataObject
 import com.gigforce.common_ui.chat.models.ChatListItemDataWrapper
 import com.gigforce.common_ui.core.ChatConstants
+import com.gigforce.common_ui.views.GigforceImageView
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
@@ -51,7 +52,7 @@ class ChatListItem(
     }
 
     //Views
-    private lateinit var contextImageView: ImageView
+    private lateinit var contextImageView: GigforceImageView
     private lateinit var textViewName: TextView
     private lateinit var txtSubtitle: TextView
     private lateinit var textViewTime: TextView
@@ -213,9 +214,11 @@ class ChatListItem(
                         Glide.with(context).load(R.drawable.ic_create_new_group).into(contextImageView)
                     } else {
 
-                        val profilePathRef = storage.reference.child(chatHeader.groupAvatar)
-                        Glide.with(context).load(profilePathRef).placeholder(R.drawable.ic_create_new_group)
-                                .into(contextImageView)
+                        contextImageView.loadImageIfUrlElseTryFirebaseStorage(
+                            userAvatarUrl,
+                            R.drawable.ic_group,
+                            R.drawable.ic_group
+                        )
                     }
                 }
 

@@ -102,6 +102,7 @@ abstract class LocationMessageView(
             Glide.with(context)
                 .load(msg.thumbnailBitmap)
                 .placeholder(getCircularProgressDrawable())
+                .centerCrop()
                 .into(imageView)
         } else if (msg.thumbnail != null) {
 
@@ -109,12 +110,14 @@ abstract class LocationMessageView(
             Glide.with(context)
                 .load(thumbnailStorageRef)
                 .placeholder(getCircularProgressDrawable())
+                .centerCrop()
                 .into(imageView)
         } else if (msg.attachmentPath != null) {
             val thumbnailStorageRef = firebaseStorage.reference.child(msg.attachmentPath!!)
             Glide.with(context)
                 .load(thumbnailStorageRef)
                 .placeholder(getCircularProgressDrawable())
+                .centerCrop()
                 .into(imageView)
         }
     }
@@ -211,6 +214,7 @@ abstract class LocationMessageView(
         val popUpMenu = PopupMenu(context, v)
         popUpMenu.inflate(R.menu.menu_chat_clipboard)
 
+        popUpMenu.menu.findItem(R.id.action_save_to_gallery).isVisible = false
         popUpMenu.menu.findItem(R.id.action_copy).isVisible = false
         popUpMenu.menu.findItem(R.id.action_delete).isVisible = type == MessageFlowType.OUT
         popUpMenu.menu.findItem(R.id.action_message_info).isVisible =

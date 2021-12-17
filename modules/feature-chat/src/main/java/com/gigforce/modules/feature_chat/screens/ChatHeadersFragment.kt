@@ -70,15 +70,12 @@ class ChatHeadersFragment : Fragment(), PopupMenu.OnMenuItemClickListener, Gigfo
 
     @Inject
     lateinit var navigation: INavigation
-    @Inject
-    lateinit var documentTreeDelegate : DocumentTreeDelegate
 
     private val chatNavigation: ChatNavigation by lazy {
         ChatNavigation(navigation)
     }
 
     private val viewModel: ChatHeadersViewModel by viewModels()
-
 
     private lateinit var contactsFab: FloatingActionButton
     private lateinit var noChatsLayout: View
@@ -88,9 +85,6 @@ class ChatHeadersFragment : Fragment(), PopupMenu.OnMenuItemClickListener, Gigfo
     private lateinit var toolbar: AppBar
     private lateinit var coreRecyclerView: CoreRecyclerView
 
-    private lateinit var mainChatListLayout : View
-    private lateinit var needStorageAccessLayout : View
-    private lateinit var grantStorageAccessButton : View
     private lateinit var moreChatOptionsLayout: View
     private lateinit var muteNotifications: TextView
     private lateinit var markAsRead: TextView
@@ -119,45 +113,7 @@ class ChatHeadersFragment : Fragment(), PopupMenu.OnMenuItemClickListener, Gigfo
             }
         }
     }
-
-//    private val openDocumentTreeContract = registerForActivityResult(
-//        ActivityResultContracts.OpenDocumentTree()
-//    ) {
-//        if (it == null) return@registerForActivityResult
-//
-//        documentTreeDelegate.handleDocumentTreeSelectionResult(
-//            context = requireContext(),
-//            uri = it,
-//            onSuccess = {
-//               handleStorageTreeSelectedResult()
-//            },
-//            onFailure = {
-//                handleStorageTreeSelectionFailure(it)
-//            }
-//        )
-//    }
-
-    private fun handleStorageTreeSelectionFailure(
-        e : Exception
-    ) {
-
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Select storage")
-            .setMessage(e.message.toString())
-            .setPositiveButton("Okay"){_,_ ->}
-            .show()
-    }
-
-    private fun handleStorageTreeSelectedResult() {
-
-        needStorageAccessLayout.gone()
-        mainChatListLayout.visible()
-
-        setObserver(this.viewLifecycleOwner)
-        if (!isStoragePermissionGranted()) {
-            askForStoragePermission()
-        }
-    }
+    
 
     private fun setObserver(owner: LifecycleOwner) {
         Log.d("chat/header/fragment", "UserId " + FirebaseAuth.getInstance().currentUser!!.uid)
@@ -328,23 +284,9 @@ class ChatHeadersFragment : Fragment(), PopupMenu.OnMenuItemClickListener, Gigfo
         initListeners()
         setObserver(this.viewLifecycleOwner)
 
-//        if(Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
-//            if (!documentTreeDelegate.storageTreeSelected()) {
-//
-//                mainChatListLayout.gone()
-//                needStorageAccessLayout.visible()
-//            } else {
-//                needStorageAccessLayout.gone()
-//                mainChatListLayout.visible()
-//            }
-//        } else{
-//            needStorageAccessLayout.gone()
-//            mainChatListLayout.visible()
-//        }
-//
-//        if (!isStoragePermissionGranted()) {
-//            askForStoragePermission()
-//        }
+        if (!isStoragePermissionGranted()) {
+            askForStoragePermission()
+        }
     }
 
     var title = ""
@@ -383,7 +325,6 @@ class ChatHeadersFragment : Fragment(), PopupMenu.OnMenuItemClickListener, Gigfo
         toolbar = view.findViewById(R.id.toolbar)
 //        needStorageAccessLayout = view.findViewById(R.id.storage_access_required_layout)
 //        grantStorageAccessButton = view.findViewById(R.id.storage_access_btn)
-        mainChatListLayout = view.findViewById(R.id.main_chat_list_layout)
         moreChatOptionsLayout = view.findViewById(R.id.chat_options)
         muteNotifications = view.findViewById(R.id.muteNotifications)
         markAsRead = view.findViewById(R.id.markAsRead)

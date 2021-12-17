@@ -18,6 +18,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -41,7 +42,6 @@ import com.gigforce.modules.feature_chat.*
 import com.gigforce.modules.feature_chat.screens.adapters.GroupMediaRecyclerAdapter
 import com.gigforce.modules.feature_chat.screens.adapters.GroupMembersRecyclerAdapter
 import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel
-import com.gigforce.modules.feature_chat.screens.vm.factories.GroupChatViewModelFactory
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -69,15 +69,7 @@ class GroupDetailsFragment : Fragment(),
         ChatNavigation(navigation)
     }
 
-    @Inject
-    lateinit var buildConfig: IBuildConfig
-
-    private val viewModel: GroupChatViewModel by lazy {
-        ViewModelProvider(
-                this,
-                GroupChatViewModelFactory(requireContext())
-        ).get(GroupChatViewModel::class.java)
-    }
+    private val viewModel: GroupChatViewModel by viewModels()
     private lateinit var groupId: String
     private val dateFormatter = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
     private val groupMediaRecyclerAdapter: GroupMediaRecyclerAdapter by lazy {
@@ -289,25 +281,7 @@ class GroupDetailsFragment : Fragment(),
     private fun showGroupIcon(imagePath: String) {
 
         if (imagePath.isNotBlank()){
-            getDBImageUrl(imagePath).let {
-                if (it.isNullOrBlank()) {
-                    GlideApp.with(this)
-                        .load(it)
-                        .into(group_icon)
-                } else {
-                    it?.let {
-                        try {
-                            val gsReference = FirebaseStorage.getInstance().getReferenceFromUrl(it)
-                            GlideApp.with(this)
-                                .load(gsReference)
-                                .into(group_icon)
-                        } catch (e: Exception) {
-                            CrashlyticsLogger.d("Ground details icon", "${e.message} $it")
-                            FirebaseCrashlytics.getInstance().log("Exception : Ground details icon ${e.message} $it")
-                        }
-                    }
-                }
-            }
+            group_icon.loadImageIfUrlElseTryFirebaseStorage(imagePath)
         } else{
             GlideApp.with(this).load(R.drawable.ic_group).placeholder(R.drawable.ic_group).into(group_icon)
         }
@@ -596,20 +570,6 @@ class GroupDetailsFragment : Fragment(),
                 sharedFileBundle = null
         )
 
-    }
-
-    fun getDBImageUrl(imagePath: String): String? {
-        if (imagePath.isNotBlank()) {
-            try {
-                var modifiedString = imagePath
-                if (!imagePath.startsWith("/"))
-                    modifiedString = "/$imagePath"
-                return buildConfig.getStorageBaseUrl() + modifiedString
-            } catch (egetDBImageUrl: Exception) {
-                return null
-            }
-        }
-        return null
     }
 
     override fun onContactsSelected(contacts: List<ContactModel>) {
