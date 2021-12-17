@@ -208,9 +208,10 @@ class ContactsAndGroupFragment : BaseFragment2<ContactsAndGroupFragmentBinding>(
             .observe(viewLifecycleOwner, Observer {
                 when (it) {
                     Lce.Loading -> {
-                        viewBinding.nameGroupLayout.progressBar.gone()
+                        viewBinding.nameGroupLayout.progressBar.visible()
                     }
                     is Lce.Content -> {
+                        viewBinding.nameGroupLayout.progressBar.gone()
                         showToast(getString(R.string.group_created_chat))
                         chatNavigation.navigateToGroupChat(
                             headerId = it.content.toString()
@@ -232,6 +233,7 @@ class ContactsAndGroupFragment : BaseFragment2<ContactsAndGroupFragmentBinding>(
         val contacts = it ?: return
 
         if (it.isEmpty()) {
+            Log.d("synced", "contacts empty")
 
             val cursor = CursorLoader(
                 requireContext(),
@@ -707,7 +709,8 @@ class ContactsAndGroupFragment : BaseFragment2<ContactsAndGroupFragmentBinding>(
                 Uri.parse(data?.getStringExtra(ImageCropActivity.CROPPED_IMAGE_URL_EXTRA))
                 //startCropImage(imageUriResultCrop!!)
             imageUriResultCrop?.let {
-                viewBinding.nameGroupLayout.progressBar.visible()
+                viewBinding.nameGroupLayout.progressBarGroupIcon.visible()
+                viewBinding.nameGroupLayout.groupIcon.invisible()
                 val timeStamp = SimpleDateFormat(
                     "yyyyMMdd_HHmmss",
                     Locale.getDefault()
@@ -718,14 +721,15 @@ class ContactsAndGroupFragment : BaseFragment2<ContactsAndGroupFragmentBinding>(
                     .child("chat_attachments/group")
                     .child(fileName)
                     .putFile(it).addOnSuccessListener {
-                        viewBinding.nameGroupLayout.progressBar.gone()
+
                         if (imageUriResultCrop != null) {
                             clickedImagePath = it.metadata?.path
                             Log.d("groupAvatar", "$clickedImagePath")
                             showGroupIcon(imageUriResultCrop!!)
                         }
                     }.addOnFailureListener {
-                        viewBinding.nameGroupLayout.progressBar.gone()
+                        viewBinding.nameGroupLayout.progressBarGroupIcon.gone()
+                        viewBinding.nameGroupLayout.groupIcon.visible()
                     }.addOnCanceledListener { viewBinding.nameGroupLayout.progressBar.gone() }
             }
             }
@@ -762,6 +766,8 @@ class ContactsAndGroupFragment : BaseFragment2<ContactsAndGroupFragmentBinding>(
 
 
     private fun showGroupIcon(imagePath: Uri) {
+        viewBinding.nameGroupLayout.progressBarGroupIcon.gone()
+        viewBinding.nameGroupLayout.groupIcon.visible()
         Log.d("groupImageIcon", "$imagePath")
         GlideApp.with(this).load(imagePath).circleCrop().into(viewBinding.nameGroupLayout.groupIcon)
     }

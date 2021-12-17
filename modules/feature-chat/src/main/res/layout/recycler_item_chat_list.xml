@@ -9,7 +9,7 @@
     android:layout_height="wrap_content"
     android:clickable="true"
     android:focusable="true"
-    android:background="?android:attr/selectableItemBackground"
+    android:background="@drawable/card_background_ripple_effect"
     android:paddingStart="16dp"
     android:paddingTop="18dp">
 

@@ -461,7 +461,7 @@ class ChatPageFragment : Fragment(),
             )
         } else if (group.groupAvatar.isNotBlank()) {
             toolbar.showImageBehindBackButton(
-                group.groupAvatarThumbnail,
+                group.groupAvatar,
                 R.drawable.ic_group_white
             )
         } else {

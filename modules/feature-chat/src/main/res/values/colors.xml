@@ -19,4 +19,5 @@
 
     <color name="subtitle_black_text_color">#202325</color>
     <color name="gray_text_color">#979C9E</color>
+    <color name="light_pink_color">#FCEAF0</color>
 </resources>

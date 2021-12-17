@@ -90,6 +90,7 @@ class ChatHeadersFragment : Fragment(), PopupMenu.OnMenuItemClickListener, Gigfo
     private lateinit var markAsRead: TextView
     private lateinit var deleteButton: TextView
 
+
     private var sharedFileSubmitted = false
     private var isMultiSelectEnable = false
     private var unreadHeaderIds = arrayListOf<String>()
@@ -97,6 +98,7 @@ class ChatHeadersFragment : Fragment(), PopupMenu.OnMenuItemClickListener, Gigfo
 
     var anyUnreadMessages = false
     var anyReadMessages = false
+    var searchText = ""
 
     private val backPressHandler = object : OnBackPressedCallback(true) {
 
@@ -138,7 +140,12 @@ class ChatHeadersFragment : Fragment(), PopupMenu.OnMenuItemClickListener, Gigfo
 
     private fun makeSelectedChatListEnable(selectedChatList: java.util.ArrayList<ChatListItemDataObject>) {
         if (isMultiSelectEnable){
-            toolbar.setAppBarTitle("${selectedChatList.size}  ${getString(R.string.chat_selected_chat)}")
+            if (selectedChatList.size > 1){
+                toolbar.setAppBarTitle("${selectedChatList.size}  ${getString(R.string.chat_selected_chat)}")
+            } else{
+                toolbar.setAppBarTitle("${selectedChatList.size}  ${getString(R.string.single_chat_selected_chat)}")
+            }
+
             unreadHeaderIds.clear()
             readHeaderIds.clear()
             selectedChatList.forEach {
@@ -171,7 +178,12 @@ class ChatHeadersFragment : Fragment(), PopupMenu.OnMenuItemClickListener, Gigfo
             toolbar.backImageButton.setImageDrawable(resources.getDrawable(R.drawable.ic_baseline_close_24))
             //toolbar.setAppBarTitle("0  ${getString(R.string.chat_selected_chat)}")
             val countSelected = viewModel.getSelectedChats().size
-            toolbar.setAppBarTitle("$countSelected  ${getString(R.string.chat_selected_chat)}")
+            if (countSelected > 1){
+                toolbar.setAppBarTitle("$countSelected  ${getString(R.string.chat_selected_chat)}")
+            }else {
+                toolbar.setAppBarTitle("$countSelected  ${getString(R.string.single_chat_selected_chat)}")
+            }
+
         }else{
             isMultiSelectEnable = false
             moreChatOptionsLayout.gone()
@@ -219,7 +231,8 @@ class ChatHeadersFragment : Fragment(), PopupMenu.OnMenuItemClickListener, Gigfo
                         lastMessageDeleted = it.lastMessageDeleted,
                         senderName = it.senderName
                     ),
-                    viewModel = viewModel
+                    viewModel = viewModel,
+                    searchText
                 )
             })
 
@@ -389,6 +402,7 @@ class ChatHeadersFragment : Fragment(), PopupMenu.OnMenuItemClickListener, Gigfo
                 .flowOn(Dispatchers.Default)
                 .collect { searchString ->
                     Log.d("Search ", "Searhcingg...$searchString")
+                    searchText = searchString
                     viewModel.filterChatList(searchString)
                 }
         }

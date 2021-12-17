@@ -109,8 +109,8 @@ class BlockUserBottomSheetFragment : BaseBottomSheetDialogFragment<FragmentBlock
     private fun initListeners() {
         viewBinding.blockButton.setOnClickListener {
             viewModel.blockOrUnBlockUser(
-                userUid,
                 chatHeaderId,
+                userUid,
                 false
             )
         }

@@ -114,7 +114,6 @@ class ContactsRecyclerAdapter(
         }
 
         fun bindValues(contact: ContactModel) {
-            var sb =  SpannableStringBuilder("")
             val dataString = contact.name
             if (searchText != null && !searchText.isEmpty()) {
                 val startPos: Int = dataString.toString().toLowerCase()?.indexOf(searchText.toLowerCase())
