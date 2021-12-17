@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide
 import com.gigforce.common_ui.chat.ChatConstants
 import com.gigforce.common_ui.chat.models.ChatMessage
 import com.gigforce.common_ui.shimmer.ShimmerHelper
+import com.gigforce.common_ui.storage.MediaStoreApiHelpers
 import com.gigforce.core.extensions.dp
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toDisplayText
@@ -108,7 +109,7 @@ abstract class ImageMessageView(
 
     private fun setOnClickListeners() {
         imageContainerFrameLayout.setOnClickListener(this)
-        cardView.setOnLongClickListener(this)
+        imageContainerFrameLayout.setOnLongClickListener(this)
         //quotedMessagePreviewContainer.setOnClickListener(this)
     }
 
@@ -345,6 +346,7 @@ abstract class ImageMessageView(
         val popUpMenu = PopupMenu(context, v)
         popUpMenu.inflate(R.menu.menu_chat_clipboard)
 
+        popUpMenu.menu.findItem(R.id.action_save_to_gallery).isVisible = returnFileIfAlreadyDownloadedElseNull() != null
         popUpMenu.menu.findItem(R.id.action_copy).isVisible = false
         popUpMenu.menu.findItem(R.id.action_delete).isVisible = type == MessageFlowType.OUT
         popUpMenu.menu.findItem(R.id.action_message_info).isVisible = type == MessageFlowType.OUT && messageType == MessageType.GROUP_MESSAGE
@@ -363,9 +365,42 @@ abstract class ImageMessageView(
             }
             R.id.action_delete -> deleteMessage()
             R.id.action_message_info -> viewMessageInfo()
+            R.id.action_save_to_gallery -> saveImageToGallery(
+                returnFileIfAlreadyDownloadedElseNull()
+            )
         }
         return true
     }
+
+    private fun saveImageToGallery(
+        file: Uri?
+    ) {
+        saveToGallery(file)
+    }
+
+    private fun saveToGallery(
+        imageUri: Uri?
+    ) {
+        val uri = imageUri ?: return
+
+        GlobalScope.launch {
+            try {
+                MediaStoreApiHelpers.saveImageToGallery(
+                    context,
+                    uri
+                )
+
+                GlobalScope.launch(Dispatchers.Main) {
+                    Toast.makeText(context, "Image saved to gallery", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                GlobalScope.launch(Dispatchers.Main) {
+                    Toast.makeText(context, "Unable to save image to gallery", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
 
     private fun viewMessageInfo() {
         navigation.navigateTo("chats/messageInfo",

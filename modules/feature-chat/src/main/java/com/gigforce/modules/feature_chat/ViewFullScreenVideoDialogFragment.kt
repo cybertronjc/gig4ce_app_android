@@ -2,23 +2,39 @@ package com.gigforce.modules.feature_chat
 
 
 import android.app.Dialog
+import android.content.ContentValues
 import android.content.pm.ActivityInfo
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.PopupMenu
 import androidx.core.net.toUri
 import androidx.fragment.app.DialogFragment
+import com.gigforce.common_ui.ext.showToast
+import com.gigforce.common_ui.metaDataHelper.ImageMetaDataHelpers
+import com.gigforce.common_ui.storage.MediaStoreApiHelpers
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import kotlinx.android.synthetic.main.fragment_play_video_full_screen.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import java.io.File
+import java.io.FileOutputStream
+import java.io.InputStream
+import java.io.OutputStream
 
 
-class ViewFullScreenVideoDialogFragment : DialogFragment() {
+class ViewFullScreenVideoDialogFragment : DialogFragment(), PopupMenu.OnMenuItemClickListener {
 
     private var playWhenReady = true
     private var currentWindow = 0
@@ -60,11 +76,27 @@ class ViewFullScreenVideoDialogFragment : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NORMAL,  android.R.style.Theme_Black_NoTitleBar_Fullscreen)
+        setStyle(STYLE_NO_TITLE, android.R.style.Theme_DeviceDefault_Light_NoActionBar)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val optionsImageView : View = view.findViewById(R.id.options_iv)
+        val backImageView : View = view.findViewById(R.id.back_iv)
+
+        backImageView.setOnClickListener {
+            dismiss()
+        }
+
+        optionsImageView.setOnClickListener {
+
+            val popUpMenu = PopupMenu(context, it)
+            popUpMenu.inflate(R.menu.menu_image_viewer)
+
+            popUpMenu.setOnMenuItemClickListener(this)
+            popUpMenu.show()
+        }
 
 
         playerView
@@ -183,6 +215,30 @@ class ViewFullScreenVideoDialogFragment : DialogFragment() {
         val dataSourceFactory = DefaultDataSourceFactory(requireContext(), "gig4ce-agent")
         return ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(uri)
     }
+
+    override fun onMenuItemClick(item: MenuItem?): Boolean {
+
+        GlobalScope.launch {
+
+            try {
+                MediaStoreApiHelpers.saveVideoToGallery(
+                    requireContext(),
+                    uri
+                )
+                launch(Dispatchers.Main) {
+                    showToast("Video saved in gallery")
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                launch(Dispatchers.Main) {
+                    showToast("Unable to save image in gallery")
+                }
+            }
+        }
+
+        return true
+    }
+
 
     companion object {
         const val INTENT_EXTRA_URI = "uri"

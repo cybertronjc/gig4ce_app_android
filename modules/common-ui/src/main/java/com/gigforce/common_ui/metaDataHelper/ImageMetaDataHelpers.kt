@@ -180,8 +180,22 @@ object ImageMetaDataHelpers {
 
     fun getImageMimeType(
         context: Context,
-        image: Uri
-    ): String? = context.applicationContext.contentResolver.getType(image)
+        uri: Uri
+    ): String? {
+
+        //Check uri format to avoid null
+        return if (ContentResolver.SCHEME_CONTENT.equals(uri.scheme)) {
+            //If scheme is a content
+            val mime = MimeTypeMap.getSingleton()
+            mime.getExtensionFromMimeType(context.contentResolver.getType(uri))
+
+        } else if (ContentResolver.SCHEME_FILE.equals(uri.scheme)){
+            //If scheme is a File
+            MimeTypeMap.getSingleton().getMimeTypeFromExtension(uri.toFile().extension)
+        } else{
+            null
+        }
+    }
 
     fun getImageExtension(
         context: Context,
