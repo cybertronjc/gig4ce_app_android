@@ -762,7 +762,9 @@ class ChatPageViewModel @Inject constructor(
                 .document(currentUser.uid)
                 .collection("headers")
                 .document(headerId)
-                .updateOrThrow(mapOf("unseenCount" to 0,"updatedAt" to Timestamp.now(), "updatedBy" to FirebaseAuthStateListener.getInstance()
+                .updateOrThrow(mapOf("unseenCount" to 0,
+                    "updatedAt" to Timestamp.now(),
+                    "updatedBy" to FirebaseAuthStateListener.getInstance()
                     .getCurrentSignInUserInfoOrThrow().uid))
         } catch (e: Exception) {
             Log.e(TAG, "Unable to set unseen count to zero", e)
