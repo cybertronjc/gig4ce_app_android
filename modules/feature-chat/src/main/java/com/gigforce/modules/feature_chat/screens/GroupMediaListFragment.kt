@@ -19,37 +19,47 @@ import com.gigforce.common_ui.ViewFullScreenImageDialogFragment
 import com.gigforce.common_ui.ViewFullScreenVideoDialogFragment
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
-import com.gigforce.modules.feature_chat.DownloadCompleted
-import com.gigforce.modules.feature_chat.DownloadStarted
-import com.gigforce.modules.feature_chat.ErrorWhileDownloadingAttachment
-import com.gigforce.modules.feature_chat.R
 import com.gigforce.common_ui.chat.ChatConstants
+import com.gigforce.common_ui.chat.ChatFileManager
 import com.gigforce.common_ui.chat.models.ChatGroup
 import com.gigforce.common_ui.chat.models.GroupMedia
+import com.gigforce.common_ui.metaDataHelper.ImageMetaDataHelpers
 import com.gigforce.core.crashlytics.CrashlyticsLogger
+import com.gigforce.core.navigation.INavigation
+import com.gigforce.modules.feature_chat.*
 import com.gigforce.modules.feature_chat.screens.adapters.GroupMediaRecyclerAdapter
 import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_chat_group_media_list.*
 import kotlinx.android.synthetic.main.fragment_chat_group_media_list_main.*
 import java.io.File
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class GroupMediaListFragment2 : Fragment(),
     GroupMediaRecyclerAdapter.OnGroupMediaClickListener {
 
     private val viewModel: GroupChatViewModel by viewModels()
     private lateinit var groupId: String
+
+    @Inject
+    lateinit var chatFileManager : ChatFileManager
+
+    @Inject
+    lateinit var navigation: INavigation
+
+    private val chatNavigation: ChatNavigation by lazy {
+        ChatNavigation(navigation)
+    }
+
+
     private val groupMediaRecyclerAdapter: GroupMediaRecyclerAdapter by lazy {
         GroupMediaRecyclerAdapter(
             requireContext(),
-            appDirectoryFileRef,
+            chatFileManager.gigforceDirectory,
             Glide.with(requireContext()),
             this
         )
-    }
-
-    private val appDirectoryFileRef: File by lazy {
-        Environment.getExternalStoragePublicDirectory(ChatConstants.DIRECTORY_APP_DATA_ROOT)!!
     }
 
     override fun onCreateView(
@@ -159,19 +169,31 @@ class GroupMediaListFragment2 : Fragment(),
 
     private fun openDocument(file: File) {
         Intent(Intent.ACTION_VIEW).apply {
-            setDataAndType(
-                    FileProvider.getUriForFile(
-                            requireContext(),
-                            "com.gigforce.app.provider",
-                            file
-                    ), "application/pdf"
+
+            val uri = FileProvider.getUriForFile(
+                requireContext(),
+                requireContext().packageName + ".provider",
+                file
             )
+            setDataAndType(
+                uri,
+                ImageMetaDataHelpers.getImageMimeType(
+                    requireContext(),
+                    file.toUri()
+                )
+            )
+
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             try {
                 requireContext().startActivity(this)
             } catch (e: Exception) {
-                Toast.makeText(context, "Unable to open", Toast.LENGTH_SHORT).show()
+
+                Toast.makeText(
+                    requireContext(),
+                    "Unable to open document",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
@@ -198,18 +220,22 @@ class GroupMediaListFragment2 : Fragment(),
             //Open the file
             when (media.attachmentType) {
                 ChatConstants.ATTACHMENT_TYPE_IMAGE -> {
-                    ViewFullScreenImageDialogFragment.showImage(
-                        childFragmentManager,
-                        fileIfDownloaded?.toUri()!!
-                    )
 
+                    if (fileIfDownloaded != null) {
+                        chatNavigation.openFullScreenImageViewDialogFragment(
+                            fileIfDownloaded.toUri()
+                        )
+                    }
                 }
                 ChatConstants.ATTACHMENT_TYPE_VIDEO -> {
-                    ViewFullScreenVideoDialogFragment.launch(
-                        childFragmentManager,
-                        fileIfDownloaded?.toUri()!!
-                    )
+
+                    if (fileIfDownloaded != null) {
+                        chatNavigation.openFullScreenVideoDialogFragment(
+                            fileIfDownloaded.toUri()
+                        )
+                    }
                 }
+
                 ChatConstants.ATTACHMENT_TYPE_DOCUMENT -> {
                     openDocument(fileIfDownloaded!!)
                 }
@@ -217,7 +243,11 @@ class GroupMediaListFragment2 : Fragment(),
 
         } else {
             //Start downloading the file
-            viewModel.downloadAndSaveFile(appDirectoryFileRef, position, media)
+            viewModel.downloadAndSaveFile(
+                chatFileManager.gigforceDirectory,
+                position,
+                media
+            )
         }
     }
 

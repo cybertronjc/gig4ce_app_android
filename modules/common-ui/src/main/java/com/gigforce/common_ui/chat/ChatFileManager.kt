@@ -16,7 +16,7 @@ class ChatFileManager @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
 
-    private val gigforceDirectory: File by lazy {
+    val gigforceDirectory: File by lazy {
 
         File(context.filesDir, ChatConstants.DIRECTORY_APP_DATA_ROOT).apply {
 

@@ -15,6 +15,7 @@ import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.net.toFile
 import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -26,10 +27,12 @@ import com.bumptech.glide.Glide
 import com.gigforce.common_ui.ViewFullScreenImageDialogFragment
 import com.gigforce.common_ui.ViewFullScreenVideoDialogFragment
 import com.gigforce.common_ui.chat.ChatConstants
+import com.gigforce.common_ui.chat.ChatFileManager
 import com.gigforce.common_ui.chat.models.ChatGroup
 import com.gigforce.common_ui.chat.models.ContactModel
 import com.gigforce.common_ui.chat.models.GroupMedia
 import com.gigforce.common_ui.ext.showToast
+import com.gigforce.common_ui.metaDataHelper.ImageMetaDataHelpers
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.gone
@@ -69,13 +72,17 @@ class GroupDetailsFragment : Fragment(),
         ChatNavigation(navigation)
     }
 
+    @Inject
+    lateinit var chatFileManager: ChatFileManager
+
+
     private val viewModel: GroupChatViewModel by viewModels()
     private lateinit var groupId: String
     private val dateFormatter = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
     private val groupMediaRecyclerAdapter: GroupMediaRecyclerAdapter by lazy {
         GroupMediaRecyclerAdapter(
                 requireContext(),
-                appDirectoryFileRef,
+                chatFileManager.gigforceDirectory,
                 Glide.with(requireContext()),
                 this
         )
@@ -92,9 +99,6 @@ class GroupDetailsFragment : Fragment(),
         )
     }
 
-    private val appDirectoryFileRef: File by lazy {
-        Environment.getExternalStoragePublicDirectory(ChatConstants.DIRECTORY_APP_DATA_ROOT)!!
-    }
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -341,19 +345,31 @@ class GroupDetailsFragment : Fragment(),
     private fun openDocument(file: File) {
 
         Intent(Intent.ACTION_VIEW).apply {
-            setDataAndType(
-                    FileProvider.getUriForFile(
-                            requireContext(),
-                            "${requireContext().packageName}.provider",
-                            file
-                    ), "application/pdf"
+
+            val uri = FileProvider.getUriForFile(
+                requireContext(),
+                requireContext().packageName + ".provider",
+                file
             )
+            setDataAndType(
+                uri,
+                ImageMetaDataHelpers.getImageMimeType(
+                    requireContext(),
+                    file.toUri()
+                )
+            )
+
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             try {
                 requireContext().startActivity(this)
             } catch (e: Exception) {
-                Toast.makeText(context, getString(R.string.unable_to_open_chat), Toast.LENGTH_SHORT).show()
+
+                Toast.makeText(
+                    requireContext(),
+                    "Unable to open document",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
@@ -492,17 +508,20 @@ class GroupDetailsFragment : Fragment(),
             //Open the file
             when (media.attachmentType) {
                 ChatConstants.ATTACHMENT_TYPE_IMAGE -> {
-                    ViewFullScreenImageDialogFragment.showImage(
-                            childFragmentManager,
-                            fileIfDownloaded?.toUri()!!
-                    )
 
+                    if (fileIfDownloaded != null) {
+                        chatNavigation.openFullScreenImageViewDialogFragment(
+                            fileIfDownloaded.toUri()
+                        )
+                    }
                 }
                 ChatConstants.ATTACHMENT_TYPE_VIDEO -> {
-                    ViewFullScreenVideoDialogFragment.launch(
-                            childFragmentManager,
-                            fileIfDownloaded?.toUri()!!
-                    )
+
+                    if (fileIfDownloaded != null) {
+                        chatNavigation.openFullScreenVideoDialogFragment(
+                            fileIfDownloaded.toUri()
+                        )
+                    }
                 }
                 ChatConstants.ATTACHMENT_TYPE_DOCUMENT -> {
                     openDocument(fileIfDownloaded!!)
@@ -511,7 +530,7 @@ class GroupDetailsFragment : Fragment(),
 
         } else {
             //Start downloading the file
-            viewModel.downloadAndSaveFile(appDirectoryFileRef, position, media)
+            viewModel.downloadAndSaveFile(chatFileManager.gigforceDirectory, position, media)
         }
     }
 
