@@ -281,25 +281,7 @@ class GroupDetailsFragment : Fragment(),
     private fun showGroupIcon(imagePath: String) {
 
         if (imagePath.isNotBlank()){
-            getDBImageUrl(imagePath).let {
-                if (it.isNullOrBlank()) {
-                    GlideApp.with(this)
-                        .load(it)
-                        .into(group_icon)
-                } else {
-                    it?.let {
-                        try {
-                            val gsReference = FirebaseStorage.getInstance().getReferenceFromUrl(it)
-                            GlideApp.with(this)
-                                .load(gsReference)
-                                .into(group_icon)
-                        } catch (e: Exception) {
-                            CrashlyticsLogger.d("Ground details icon", "${e.message} $it")
-                            FirebaseCrashlytics.getInstance().log("Exception : Ground details icon ${e.message} $it")
-                        }
-                    }
-                }
-            }
+            group_icon.loadImageIfUrlElseTryFirebaseStorage(imagePath)
         } else{
             GlideApp.with(this).load(R.drawable.ic_group).placeholder(R.drawable.ic_group).into(group_icon)
         }
@@ -588,20 +570,6 @@ class GroupDetailsFragment : Fragment(),
                 sharedFileBundle = null
         )
 
-    }
-
-    fun getDBImageUrl(imagePath: String): String? {
-        if (imagePath.isNotBlank()) {
-            try {
-                var modifiedString = imagePath
-                if (!imagePath.startsWith("/"))
-                    modifiedString = "/$imagePath"
-                return buildConfig.getStorageBaseUrl() + modifiedString
-            } catch (egetDBImageUrl: Exception) {
-                return null
-            }
-        }
-        return null
     }
 
     override fun onContactsSelected(contacts: List<ContactModel>) {

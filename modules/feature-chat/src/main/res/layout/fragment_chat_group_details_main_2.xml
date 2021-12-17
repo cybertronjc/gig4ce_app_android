@@ -68,7 +68,7 @@
                     android:paddingBottom="20dp">
 
 
-                    <ImageView
+                    <com.gigforce.common_ui.views.GigforceImageView
                         android:id="@+id/group_icon"
                         android:layout_width="match_parent"
                         android:layout_height="226dp"

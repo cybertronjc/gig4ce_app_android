@@ -28,10 +28,6 @@ import kotlinx.android.synthetic.main.fragment_play_video_full_screen.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.io.File
-import java.io.FileOutputStream
-import java.io.InputStream
-import java.io.OutputStream
 
 
 class ViewFullScreenVideoDialogFragment : DialogFragment(), PopupMenu.OnMenuItemClickListener {
