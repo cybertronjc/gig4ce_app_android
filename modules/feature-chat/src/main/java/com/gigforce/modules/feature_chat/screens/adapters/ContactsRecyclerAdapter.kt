@@ -100,8 +100,7 @@ class ContactsRecyclerAdapter(
     inner class ContactViewHolder(
             itemView: View
     ) : RecyclerView.ViewHolder(itemView),
-            View.OnClickListener,
-            View.OnLongClickListener {
+            View.OnClickListener{
         private var contactAvatarIV: GigforceImageView = itemView.findViewById(R.id.user_image_iv)
         private var contactNameTV: TextView = itemView.findViewById(R.id.user_name_tv)
         private var contactLastLiveTV: TextView = itemView.findViewById(R.id.last_online_time_tv)
@@ -110,7 +109,7 @@ class ContactsRecyclerAdapter(
 
         init {
             itemView.setOnClickListener(this)
-            itemView.setOnLongClickListener(this)
+//            itemView.setOnLongClickListener(this)
         }
 
         fun bindValues(contact: ContactModel) {
@@ -231,28 +230,28 @@ class ContactsRecyclerAdapter(
             }
         }
 
-        override fun onLongClick(v: View?): Boolean {
-            val pos = adapterPosition
-            val contact = filteredContactsList[pos]
-            if (selectedContacts.contains(contact)) {
-                //remove it
-                selectedContacts.remove(contact)
-                notifyDataSetChanged()
-
-                onContactClickListener.onContactSelected(selectedContacts.size, filteredContactsList.size)
-            } else {
-                selectedContacts.add(contact)
-                notifyDataSetChanged()
-                //notifyItemChanged(pos)
-                onContactClickListener.onContactSelected(selectedContacts.size, filteredContactsList.size)
-            }
-
-            if (selectedContacts.isNullOrEmpty()) {
-                stateCreateGroup(true)
-            }
-
-            return true
-        }
+//        override fun onLongClick(v: View?): Boolean {
+//            val pos = adapterPosition
+//            val contact = filteredContactsList[pos]
+//            if (selectedContacts.contains(contact)) {
+//                //remove it
+//                selectedContacts.remove(contact)
+//                notifyDataSetChanged()
+//
+//                onContactClickListener.onContactSelected(selectedContacts.size, filteredContactsList.size)
+//            } else {
+//                selectedContacts.add(contact)
+//                notifyDataSetChanged()
+//                //notifyItemChanged(pos)
+//                onContactClickListener.onContactSelected(selectedContacts.size, filteredContactsList.size)
+//            }
+//
+//            if (selectedContacts.isNullOrEmpty()) {
+//                stateCreateGroup(true)
+//            }
+//
+//            return true
+//        }
     }
 
     fun stateCreateGroup(createGroup: Boolean) {

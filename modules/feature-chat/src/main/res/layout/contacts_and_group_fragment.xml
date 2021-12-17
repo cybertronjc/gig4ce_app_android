@@ -46,14 +46,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
-                    android:padding="@dimen/size_20"
+                    android:paddingTop="@dimen/size_20"
+                    android:paddingBottom="@dimen/size_20"
                     android:orientation="horizontal">
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_create_new_group"
-                        android:layout_marginStart="@dimen/size_10"
+                        android:layout_marginStart="@dimen/size_20"
                         />
 
                     <TextView

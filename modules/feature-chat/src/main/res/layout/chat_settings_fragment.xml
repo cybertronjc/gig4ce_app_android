@@ -42,6 +42,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/chat_settings_layout_shadow_background"
                 android:layout_marginTop="@dimen/size_20"
+                android:visibility="gone"
                 android:layout_marginEnd="@dimen/size_20"
                 android:layout_marginStart="@dimen/size_20">
 
