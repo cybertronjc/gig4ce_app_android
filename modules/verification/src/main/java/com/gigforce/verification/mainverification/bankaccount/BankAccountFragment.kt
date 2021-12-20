@@ -324,19 +324,20 @@ class BankAccountFragment : Fragment(),
     private fun showUserAckPopup(benificiaryName : String) {
         //show bottomsheet to aknowledge user for beneficiary name
         // on popup user will press the button and api will call which will update the counter value
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle(benificiaryName)
-            .setCancelable(false)
-            .setPositiveButton(getString(R.string.okay_lower_case_veri)) { _, _ ->
-                eventTracker.pushEvent(
-                    TrackingEventArgs(
-                        eventName = VerificationEvents.BANK_MISMATCH,
-                        props = null
-                    )
-                )
-                    viewModel.setUserAknowledge(userIdToUse.toString())
-            }
-             .show()
+//        MaterialAlertDialogBuilder(requireContext())
+//            .setTitle(benificiaryName)
+//            .setCancelable(false)
+//            .setPositiveButton(getString(R.string.okay_lower_case_veri)) { _, _ ->
+//                eventTracker.pushEvent(
+//                    TrackingEventArgs(
+//                        eventName = VerificationEvents.BANK_MISMATCH,
+//                        props = null
+//                    )
+//                )
+//                    viewModel.setUserAknowledge(userIdToUse.toString())
+//            }
+//             .show()
+        navigation.navigateTo("verification/acknowledgeBankBS")
     }
 
     private fun startedStatusViews(bankDetailsDataModel: BankDetailsDataModel) {
@@ -804,6 +805,10 @@ class BankAccountFragment : Fragment(),
 //                navigation.popBackStack()
                 activity?.onBackPressed()
             })
+            user?.let {
+                showSubtitle(it.phoneNumber)
+            }
+
         }
         viewBinding.confirmButton.setOnClickListener {
             var props = HashMap<String, Any>()

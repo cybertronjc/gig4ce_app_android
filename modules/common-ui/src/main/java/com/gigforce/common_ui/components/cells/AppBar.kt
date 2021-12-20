@@ -54,6 +54,7 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
 
 
      var titleText: TextView
+     var subTitleText: TextView
      var backImageButton: ImageButton
      var menuImageButton: ImageButton
      var searchImageButton: ImageButton
@@ -65,6 +66,8 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
      var profilePic: AppProfilePicComponent
      var onBackClickListener: View.OnClickListener? = null
      var searchTextChangeListener: SearchTextChangeListener? = null
+
+    private var subtitleEnabled = false
 
     fun setOnSearchTextChangeListener(listener: SearchTextChangeListener) {
         this.searchTextChangeListener = listener
@@ -122,6 +125,7 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
 
 
         titleText = findViewById(R.id.textTitle)
+        subTitleText = findViewById(R.id.subTitleTV)
         backImageButton = findViewById(R.id.backImageButton)
         menuImageButton = findViewById(R.id.menuImageButton)
         searchImageButton = findViewById(R.id.searchImageButton)
@@ -248,7 +252,19 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
     fun makeStepsVisible(visible: Boolean){
         if (visible) stepsTextView.visible() else stepsTextView.gone()
     }
+    fun showSubtitle(
+        subTitle: String?
+    ) {
+        subtitleEnabled = true
+        subTitleText.visibility = View.VISIBLE
 
+        if (subTitle != null)
+            subTitleText.text = subTitle
+    }
+
+    fun hideSubTitle() {
+        subTitleText.visibility = View.GONE
+    }
 
     fun makeSearchVisible(visible: Boolean){
          if (visible) searchImageButton.visible() else searchImageButton.invisible()
