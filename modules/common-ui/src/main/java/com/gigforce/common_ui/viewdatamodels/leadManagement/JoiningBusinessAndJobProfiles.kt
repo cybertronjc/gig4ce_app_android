@@ -50,3 +50,27 @@ data class JobProfilesItem(
 ) : Parcelable
 
 
+
+@Parcelize
+data class TeamLeader(
+
+    @field:SerializedName("name")
+    val name: String? = null,
+
+    @field:SerializedName("id")
+    val id: String? = null,
+
+    @field:SerializedName("locationType")
+    val locationType: String? = null,
+
+    @DoNotSerialize
+    var selected: Boolean = false
+) : Parcelable{
+
+    fun isTeamLeaderEqual(
+        teamLeaderUid : String
+    ) : Boolean = teamLeaderUid == id
+
+}
+
+

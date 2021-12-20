@@ -1,77 +1,73 @@
 package com.gigforce.lead_management.ui.select_team_leader
 
 import android.os.Bundle
-import android.view.View
-import android.widget.LinearLayout
-import androidx.core.os.bundleOf
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
-import com.gigforce.common_ui.components.atoms.ChipGroupComponent
-import com.gigforce.common_ui.components.atoms.models.ChipGroupModel
-import com.gigforce.common_ui.datamodels.ShimmerDataModel
-import com.gigforce.common_ui.ext.startShimmer
-import com.gigforce.common_ui.ext.stopShimmer
-import com.gigforce.common_ui.viewdatamodels.GigerProfileCardDVM
-import com.gigforce.common_ui.viewdatamodels.leadManagement.AssignGigRequest
-import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfileDetails
-import com.gigforce.common_ui.viewdatamodels.leadManagement.JobTeamLeader
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.gigforce.common_ui.components.cells.SearchTextChangeListener
+import com.gigforce.common_ui.viewdatamodels.leadManagement.TeamLeader
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.gone
-import com.gigforce.core.extensions.selectChipsWithText
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
-import com.gigforce.core.utils.Lce
-import com.gigforce.lead_management.LeadManagementConstants
-import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.lead_management.R
-import com.gigforce.lead_management.databinding.SelectTeamLeaderFragmentBinding
-import com.google.android.material.chip.ChipGroup
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.firebase.auth.FirebaseAuth
+import com.gigforce.lead_management.databinding.FragmentSelectBusinessBinding
+import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class SelectTeamLeaderFragment : BaseFragment2<SelectTeamLeaderFragmentBinding>(
-    fragmentName = "SelectTeamLeadersFragment",
-    layoutId = R.layout.select_team_leader_fragment,
+class SelectTeamLeaderFragment : BaseFragment2<FragmentSelectBusinessBinding>(
+    fragmentName = TAG,
+    layoutId = R.layout.fragment_select_business, // reusing xml
     statusBarColor = R.color.lipstick_2
-) {
+), TeamLeaderAdapter.OnTeamLeaderSelectedListener {
 
     companion object {
-        fun newInstance() = SelectTeamLeaderFragment()
         private const val TAG = "SelectTeamLeadersFragment"
+
+        const val INTENT_EXTRA_TEAM_LEADERS = "team_leaders"
     }
 
     @Inject
     lateinit var navigation: INavigation
+    private lateinit var teamLeaders: ArrayList<TeamLeader>
 
-    private val viewModel: SelectTeamLeaderViewModel by viewModels()
+    private val sharedViewModel: LeadManagementSharedViewModel by activityViewModels()
+    private val adapter: TeamLeaderAdapter by lazy {
+        TeamLeaderAdapter(requireContext()).apply {
+            setOnTLSelectedListener(this@SelectTeamLeaderFragment)
+        }
+    }
 
-    private lateinit var userUid: String
-    private lateinit var assignGigRequest: AssignGigRequest
-    private var currentGigerInfo: GigerProfileCardDVM? = null
+    override fun shouldPreventViewRecreationOnNavigation(): Boolean = true
 
-    val selectedGigforceTLs = arrayListOf<JobTeamLeader>()
-    val selectedBusinessTLs = arrayListOf<JobTeamLeader>()
-    var gigforceTeamLeaders = listOf<JobTeamLeader>()
-    var businessTeamLeaders = listOf<JobTeamLeader>()
-    val gigforceTeamLeaderChips = arrayListOf<ChipGroupModel>()
-    val businessTeamLeaderChips = arrayListOf<ChipGroupModel>()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-    override fun viewCreated(
-        viewBinding: SelectTeamLeaderFragmentBinding,
-        savedInstanceState: Bundle?
-    ) {
         getDataFrom(
             arguments,
             savedInstanceState
         )
-        initListeners()
-        initViewModel()
     }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelableArrayList(INTENT_EXTRA_TEAM_LEADERS, teamLeaders)
+    }
+
+    override fun viewCreated(
+        viewBinding: FragmentSelectBusinessBinding,
+        savedInstanceState: Bundle?
+    ) {
+
+        if (viewCreatedForTheFirstTime) {
+            initListeners()
+            setTLDataOnView()
+        }
+    }
+
 
     private fun getDataFrom(
         arguments: Bundle?,
@@ -79,245 +75,90 @@ class SelectTeamLeaderFragment : BaseFragment2<SelectTeamLeaderFragmentBinding>(
     ) {
 
         arguments?.let {
-            userUid = it.getString(LeadManagementConstants.INTENT_EXTRA_USER_ID) ?: return@let
-            assignGigRequest =
-                it.getParcelable(LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL)
-                    ?: return@let
-            currentGigerInfo =
-                it.getParcelable(LeadManagementConstants.INTENT_EXTRA_CURRENT_JOINING_USER_INFO)
-                    ?: return@let
+            teamLeaders = it.getParcelableArrayList(INTENT_EXTRA_TEAM_LEADERS) ?: arrayListOf()
         }
 
         savedInstanceState?.let {
-            userUid = it.getString(LeadManagementConstants.INTENT_EXTRA_USER_ID) ?: return@let
-            assignGigRequest =
-                it.getParcelable(LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL)
-                    ?: return@let
-            currentGigerInfo =
-                it.getParcelable(LeadManagementConstants.INTENT_EXTRA_CURRENT_JOINING_USER_INFO)
-                    ?: return@let
+            teamLeaders = it.getParcelableArrayList(INTENT_EXTRA_TEAM_LEADERS) ?: arrayListOf()
         }
         logDataReceivedFromBundles()
     }
 
     private fun logDataReceivedFromBundles() {
-        if (::userUid.isInitialized) {
-            logger.d(logTag, "User-id received from bundles : $userUid")
+
+        if (::teamLeaders.isInitialized) {
+            logger.d(logTag, "received ${teamLeaders.size} team leaders from previous screen")
         } else {
             logger.e(
                 logTag,
-                "no User-id received from bundles",
-                Exception("no User-id received from bundles")
+                "fetching tls from bundles from bundles",
+                Exception("null team-leader received from bundles")
             )
-        }
-
-        if (::assignGigRequest.isInitialized.not()) {
-            logger.e(
-                logTag,
-                "null assignGigRequest received from bundles",
-                Exception("null assignGigRequest received from bundles")
-            )
-        } else {
-            logger.d(logTag, "AssignGigRequest received from bundles : $assignGigRequest")
         }
     }
 
-    override fun onSaveInstanceState(
-        outState: Bundle
-    ) {
-        super.onSaveInstanceState(outState)
-        outState.putString(LeadManagementConstants.INTENT_EXTRA_USER_ID, userUid)
-        outState.putParcelable(
-            LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL,
-            assignGigRequest
-        )
-        outState.putParcelable(
-            LeadManagementConstants.INTENT_EXTRA_CURRENT_JOINING_USER_INFO,
-            currentGigerInfo
-        )
-    }
-
-    private fun initViewModel() {
-        viewModel.getJobProfileDetails(assignGigRequest.jobProfileId, userUid)
-        viewModel.viewState.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-            val jobProfileDetails = it
-
-            when (jobProfileDetails) {
-                is Lce.Content -> showGigTeamLeaders(jobProfileDetails.content)
-                is Lce.Error -> showErrorInLoadingGigTeamLeaders(jobProfileDetails.error)
-                Lce.Loading -> {
-                    showGigTeamLeadersAsLoading()
-                }
-            }
-        })
+    private fun setTLDataOnView() {
+        setDataOnView()
     }
 
     private fun initListeners() {
         viewBinding.toolbar.apply {
-            hideActionMenu()
-            showTitle(context.getString(R.string.team_leaders_lead))
-            setBackButtonListener(View.OnClickListener {
-                navigation.popBackStack()
-            })
-        }
-
-        viewBinding.submitBtn.setOnClickListener {
-            selectedGigforceTLs.clear()
-            selectedBusinessTLs.clear()
-            gigforceTeamLeaderChips.forEachIndexed { index, chipGroupModel ->
-                if (chipGroupModel.isSelected) {
-                    selectedGigforceTLs.add(gigforceTeamLeaders.get(index))
-                }
+            titleText.text = "Select Reporting TL"
+            setBackButtonListener {
+                navigation.navigateUp()
             }
-            businessTeamLeaderChips.forEachIndexed { index, chipGroupModel ->
-                if (chipGroupModel.isSelected) {
-                    selectedBusinessTLs.add(businessTeamLeaders.get(index))
+            setBackButtonDrawable(R.drawable.ic_chevron)
+            searchTextChangeListener = object : SearchTextChangeListener {
+                override fun onSearchTextChanged(text: String) {
+                    adapter.filter.filter(text)
                 }
-            }
-            if (selectedGigforceTLs.isNotEmpty()) {
-                assignGigRequest.gigForceTeamLeaders = selectedGigforceTLs
-                assignGigRequest.businessTeamLeaders = selectedBusinessTLs
-                logger.d(
-                    TAG,
-                    "Selected Business TLs $selectedBusinessTLs Selected Gigforce TLs $selectedGigforceTLs"
-                )
-                logger.d(TAG, "AssignGigReuest $assignGigRequest")
-
-                navigation.navigateTo(
-                    LeadManagementNavDestinations.FRAGMENT_REFERENCE_CHECK, bundleOf(
-                        LeadManagementConstants.INTENT_EXTRA_USER_ID to userUid,
-                        LeadManagementConstants.INTENT_EXTRA_ASSIGN_GIG_REQUEST_MODEL to assignGigRequest,
-                        LeadManagementConstants.INTENT_EXTRA_CURRENT_JOINING_USER_INFO to currentGigerInfo,
-                    )
-                )
-            } else {
-                MaterialAlertDialogBuilder(requireContext())
-                    .setMessage(getString(R.string.select_gf_tl_to_continue_lead))
-                    .setPositiveButton(getString(R.string.okay_lead)) { _, _ -> }
-                    .show()
             }
         }
 
-        if (currentGigerInfo != null) {
-            viewBinding.gigerProfileCard.setProfileCard(currentGigerInfo!!)
+        viewBinding.businessRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        viewBinding.businessRecyclerView.adapter = adapter
+
+        viewBinding.okayButton.setOnClickListener {
+            val selectedTL = adapter.getSelectedTL() ?: return@setOnClickListener
+
+            sharedViewModel.reportingTLSelected(
+                selectedTL
+            )
+            findNavController().navigateUp()
+        }
+    }
+
+
+    private fun setDataOnView() = viewBinding.apply {
+        if (teamLeaders.isEmpty()) {
+            this.businessInfoLayout.root.visible()
+            this.businessInfoLayout.infoMessageTv.text = getString(R.string.no_city_to_show_lead)
+            this.businessInfoLayout.infoIv.loadImage(R.drawable.ic_no_selection)
         } else {
-            viewLifecycleOwner.lifecycleScope.launch {
-                viewBinding.gigerProfileCard.setGigerProfileData(userUid)
-            }
+            this.businessInfoLayout.root.gone()
+            adapter.setData(teamLeaders)
         }
+
+        okayButton.isEnabled = teamLeaders.find { it.selected } != null
     }
 
-    private fun showGigTeamLeaders(jobProfile: JobProfileDetails) = viewBinding.apply {
-        stopShimmer(
-            this.teamLeaderShimmerContainer,
-            R.id.shimmer_controller
-        )
-        teamLeadersLayout.visible()
-        teamLeaderShimmerContainer.gone()
-        teamLeadersInfoLayout.root.gone()
-
-        val gfTeamLeaders = jobProfile.gigforceTeamLeaders
-        val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
-        gigforceTeamLeaders = gfTeamLeaders.filter { it.id.equals(currentUserUid) } + gfTeamLeaders.filter { !it.id.equals(currentUserUid) }
-
-        businessTeamLeaders = jobProfile.businessTeamLeaders
-        processTeamLeaders(gigforceTeamLeaders, businessTeamLeaders)
-    }
-
-    private fun processTeamLeaders(
-        gigforceTLs: List<JobTeamLeader>,
-        businessTLs: List<JobTeamLeader>
+    override fun onTeamLeaderFiltered(
+        tlCountVisibleAfterFiltering: Int,
+        selectedTLVisible: Boolean
     ) {
-        gigforceTeamLeaderChips.clear()
-        gigforceTLs.forEachIndexed { index, teamLeader ->
-            teamLeader.let {
-                gigforceTeamLeaderChips.add(ChipGroupModel(it.name.toString(), -1, index))
-            }
+        if (tlCountVisibleAfterFiltering != 0) {
+            viewBinding.businessInfoLayout.root.gone()
+            viewBinding.okayButton.isEnabled = selectedTLVisible
+        } else {
+            viewBinding.okayButton.isEnabled = false
+            viewBinding.businessInfoLayout.root.visible()
+            viewBinding.businessInfoLayout.infoMessageTv.text =
+                getString(R.string.no_city_to_show_lead)
+            viewBinding.businessInfoLayout.infoIv.loadImage(R.drawable.ic_no_selection)
         }
-        viewBinding.gigforceTLChipGroup.removeAllViews()
-        viewBinding.gigforceTLChipGroup.addChips(
-            gigforceTeamLeaderChips,
-            isSingleSelection = true,
-            true
-        )
-
-
-        logger.d(TAG, "Gigforce team leaders ${gigforceTeamLeaderChips.toArray()}")
-
-        businessTeamLeaderChips.clear()
-        businessTLs.forEachIndexed { index, teamLeader ->
-            teamLeader.let {
-                businessTeamLeaderChips.add(ChipGroupModel(it.name.toString(), -1, index))
-            }
-        }
-        viewBinding.businessTLChipGroup.removeAllViews()
-        viewBinding.businessTLChipGroup.addChips(
-            businessTeamLeaderChips,
-            isSingleSelection = false,
-            false
-        )
-
-        logger.d(TAG, "Business team leaders ${businessTeamLeaderChips.toArray()}")
-
-        if(selectedBusinessTLs.isNotEmpty()){
-            viewBinding.businessTLChipGroup.selectChipsWithText(
-                selectedBusinessTLs.map {
-                    it.name!!
-                }
-            )
-        }
-
-        if(selectedGigforceTLs.isNotEmpty()){
-            viewBinding.gigforceTLChipGroup.selectChipsWithText(
-                selectedGigforceTLs.map {
-                    it.name!!
-                }
-            )
-        }
-
     }
 
-
-    private fun showErrorInLoadingGigTeamLeaders(error: String) = viewBinding.apply {
-        stopShimmer(
-            teamLeaderShimmerContainer,
-            R.id.shimmer_controller
-        )
-        teamLeaderShimmerContainer.gone()
-        teamLeadersInfoLayout.root.visible()
-        teamLeadersLayout.gone()
-        teamLeadersInfoLayout.infoIv.loadImage(R.drawable.ic_no_joining_found)
-        teamLeadersInfoLayout.infoMessageTv.text = error
-
-    }
-
-    private fun showNoTeamLeadersFound() = viewBinding.apply {
-        stopShimmer(
-            teamLeaderShimmerContainer,
-            R.id.shimmer_controller
-        )
-        teamLeaderShimmerContainer.gone()
-        teamLeadersInfoLayout.root.visible()
-        teamLeadersLayout.gone()
-        teamLeadersInfoLayout.infoIv.loadImage(R.drawable.ic_no_joining_found)
-        teamLeadersInfoLayout.infoMessageTv.text = getString(R.string.no_team_leaders_lead)
-    }
-
-    private fun showGigTeamLeadersAsLoading() = viewBinding.apply {
-        teamLeadersLayout.gone()
-        teamLeadersInfoLayout.root.gone()
-        teamLeaderShimmerContainer.visible()
-
-        startShimmer(
-            this.teamLeaderShimmerContainer,
-            ShimmerDataModel(
-                minHeight = R.dimen.size_120,
-                minWidth = LinearLayout.LayoutParams.MATCH_PARENT,
-                marginRight = R.dimen.size_16,
-                marginTop = R.dimen.size_1,
-                orientation = LinearLayout.VERTICAL
-            ),
-            R.id.shimmer_controller
-        )
+    override fun onTeamLeaderSelected(selectedTL: TeamLeader) {
+        viewBinding.okayButton.isEnabled = true
     }
 }

@@ -12,9 +12,7 @@ import com.gigforce.common_ui.dynamic_fields.data.DynamicField
 import com.gigforce.common_ui.dynamic_fields.data.DynamicVerificationField
 import com.gigforce.common_ui.dynamic_fields.data.FieldTypes
 import com.gigforce.common_ui.repository.LeadManagementRepository
-import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfilesItem
-import com.gigforce.common_ui.viewdatamodels.leadManagement.JoiningBusinessAndJobProfilesItem
-import com.gigforce.common_ui.viewdatamodels.leadManagement.SubmitJoiningRequest
+import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.core.ValidationHelper
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.logger.GigforceLogger
@@ -50,6 +48,7 @@ class NewSelectionForm1ViewModel @Inject constructor(
     private var gigerName: String? = null
     private var selectedBusiness: JoiningBusinessAndJobProfilesItem? = null
     private var selectedJobProfile: JobProfilesItem? = null
+    private var selectedReportingTL: TeamLeader? = null
 
     private lateinit var joiningBusinessAndJobProfiles: List<JoiningBusinessAndJobProfilesItem>
 
@@ -81,6 +80,9 @@ class NewSelectionForm1ViewModel @Inject constructor(
             is NewSelectionForm1Events.SubmitButtonPressed -> validateDataAndNavigateToForm2(
                 event.dataFromDynamicFields
             )
+            is NewSelectionForm1Events.ReportingTeamLeaderSelected ->{
+                selectedReportingTL = event.teamLeader
+            }
         }
 
         checkForDataAndEnabledOrDisableSubmitButton()

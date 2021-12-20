@@ -34,6 +34,7 @@ sealed class NewSelectionForm1ViewState {
         val gigerNameError: SpannedString? = null,
         val businessError: SpannedString? = null,
         val jobProfilesError: SpannedString? = null,
+        val reportingTLError: SpannedString? = null,
     ) : NewSelectionForm1ViewState()
 
     data class UserDetailsFromProfiles(
@@ -81,6 +82,10 @@ sealed class NewSelectionForm1Events {
 
     data class JobProfileSelected(
         val jobProfile: JobProfilesItem
+    ) : NewSelectionForm1Events()
+
+    data class ReportingTeamLeaderSelected(
+        val teamLeader: TeamLeader
     ) : NewSelectionForm1Events()
 
     data class SubmitButtonPressed(
