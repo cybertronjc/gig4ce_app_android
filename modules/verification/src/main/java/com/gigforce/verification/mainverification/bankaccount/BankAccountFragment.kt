@@ -522,7 +522,8 @@ class BankAccountFragment : Fragment(),
             }
 //            viewBinding.toplayoutblock.setImageViewPager(list) need to remove uploading option 2856 ticket
 
-        }
+        }?: viewBinding.baneficiaryNameTil.gone()
+
 
         viewBinding.bankAccNumberItl.editText?.isEnabled = enableFields
         viewBinding.ifscCode.editText?.isEnabled = enableFields
