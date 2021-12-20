@@ -95,6 +95,20 @@ abstract class SingeltonBindings {
         }
 
         @Provides
+        fun provideSignatureImageService(
+            retrofitServiceFactory : RetrofitServiceFactory
+        ): SignatureImageService {
+            return retrofitServiceFactory.prepareService(SignatureImageService::class.java)
+        }
+
+        @Provides
+        fun provideAuthService(
+            retrofitServiceFactory : RetrofitServiceFactory
+        ): AuthService {
+            return retrofitServiceFactory.prepareService(AuthService::class.java)
+        }
+
+        @Provides
         fun provideKYCService(
             retrofitServiceFactory : RetrofitServiceFactory
         ): VerificationKycService {

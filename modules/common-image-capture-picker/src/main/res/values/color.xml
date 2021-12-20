@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="topBarDark">#d72467</color>
+    <color name="status_bar_pink">#e53369</color>
+    <color name="warm_grey">#888888</color>
 </resources>

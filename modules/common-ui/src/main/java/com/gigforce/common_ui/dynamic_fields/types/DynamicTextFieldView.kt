@@ -52,6 +52,9 @@ class DynamicTextFieldView(
         }
     }
 
+    override val fieldType: String
+        get() = FieldTypes.TEXT_FIELD
+
     override fun bind(
         fieldDetails: DynamicField
     ) {

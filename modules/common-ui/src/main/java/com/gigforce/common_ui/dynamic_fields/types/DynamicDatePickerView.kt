@@ -39,6 +39,9 @@ class DynamicDatePickerView(
     private lateinit var viewData: DynamicField
     private var selectedDate: LocalDate? = null
 
+    override val fieldType: String
+        get() = FieldTypes.DATE_PICKER
+
     init {
         this.layoutParams = LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,

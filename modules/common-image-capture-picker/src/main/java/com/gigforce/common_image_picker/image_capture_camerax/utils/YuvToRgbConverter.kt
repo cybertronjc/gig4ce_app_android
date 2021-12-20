@@ -11,19 +11,7 @@ import android.renderscript.RenderScript
 import android.renderscript.ScriptIntrinsicYuvToRGB
 import android.renderscript.Type
 
-/**
- * Helper class used to efficiently convert a [Media.Image] object from
- * [ImageFormat.YUV_420_888] format to an RGB [Bitmap] object.
- *
- * The [yuvToRgb] method is able to achieve the same FPS as the CameraX image
- * analysis use case on a Pixel 3 XL device at the default analyzer resolution,
- * which is 30 FPS with 640x480.
- *
- * NOTE: This has been tested in a limited number of devices and is not
- * considered production-ready code. It was created for illustration purposes,
- * since this is not an efficient camera pipeline due to the multiple copies
- * required to convert each frame.
- */
+
 class YuvToRgbConverter(context: Context) {
     private val rs = RenderScript.create(context)
     private val scriptYuvToRgb = ScriptIntrinsicYuvToRGB.create(rs, Element.U8_4(rs))
@@ -72,32 +60,8 @@ class YuvToRgbConverter(context: Context) {
         val imagePlanes = image.planes
 
         imagePlanes.forEachIndexed { planeIndex, plane ->
-            // How many values are read in input for each output value written
-            // Only the Y plane has a value for every pixel, U and V have half the resolution i.e.
-            //
-            // Y Plane            U Plane    V Plane
-            // ===============    =======    =======
-            // Y Y Y Y Y Y Y Y    U U U U    V V V V
-            // Y Y Y Y Y Y Y Y    U U U U    V V V V
-            // Y Y Y Y Y Y Y Y    U U U U    V V V V
-            // Y Y Y Y Y Y Y Y    U U U U    V V V V
-            // Y Y Y Y Y Y Y Y
-            // Y Y Y Y Y Y Y Y
-            // Y Y Y Y Y Y Y Y
-            val outputStride: Int
 
-            // The index in the output buffer the next value will be written at
-            // For Y it's zero, for U and V we start at the end of Y and interleave them i.e.
-            //
-            // First chunk        Second chunk
-            // ===============    ===============
-            // Y Y Y Y Y Y Y Y    V U V U V U V U
-            // Y Y Y Y Y Y Y Y    V U V U V U V U
-            // Y Y Y Y Y Y Y Y    V U V U V U V U
-            // Y Y Y Y Y Y Y Y    V U V U V U V U
-            // Y Y Y Y Y Y Y Y
-            // Y Y Y Y Y Y Y Y
-            // Y Y Y Y Y Y Y Y
+            val outputStride: Int
             var outputOffset: Int
 
             when (planeIndex) {

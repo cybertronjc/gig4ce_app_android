@@ -4,6 +4,7 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
+
 @Parcelize
 data class DynamicField(
 
@@ -11,27 +12,16 @@ data class DynamicField(
      * Id for fields
      */
     @field:SerializedName("id")
-    val id: String? = null,
+    override val id: String? = null,
 
     @field:SerializedName("title")
-    val title: String? = null,
+    override val title: String? = null,
 
-    /**
-     * Is field mandatory, user can't process if he doesn't enter or select this field
-     */
     @field:SerializedName("mandatory")
-    val mandatory: Boolean = false,
+    override val mandatory: Boolean = false,
 
-    /**
-     * Type of field to inflate, currently allowed options
-     *
-     * [FieldTypes.TEXT_FIELD]
-     * [FieldTypes.DROP_DOWN]
-     * [FieldTypes.DATE_PICKER]
-     * [FieldTypes.RADIO_BUTTON]
-     */
     @field:SerializedName("fieldType")
-    val fieldType: String? = FieldTypes.TEXT_FIELD,
+    override val fieldType: String? = FieldTypes.TEXT_FIELD,
 
     /**
      * Type of input to to take from user, only works for [FieldTypes.TEXT_FIELD]
@@ -50,17 +40,11 @@ data class DynamicField(
     @field:SerializedName("maxLength")
     val maxLength: Int = 0,
 
-    /**
-     * Screen to this field in currently can be Joining forms
-     */
     @field:SerializedName("screenIdToShowIn")
-    val screenIdToShowIn: String,
+    override val screenIdToShowIn: String,
 
-    /**
-     * Text to prefill, only works for [FieldTypes.TEXT_FIELD]
-     */
     @field:SerializedName("prefillText")
-    val prefillText: String? = null,
+    override val prefillText: String? = null,
 
 
     /**
@@ -102,7 +86,7 @@ data class DynamicField(
     @field:SerializedName("data")
     val data: List<DynamicFieldData>? = emptyList()
 
-) : Parcelable
+) : BaseDynamicField,Parcelable
 
 @Parcelize
 data class DynamicFieldData(

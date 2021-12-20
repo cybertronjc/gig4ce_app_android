@@ -35,6 +35,7 @@ import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.*
+import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.datamodels.verification.PanCardDataModel
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.gone
@@ -98,6 +99,8 @@ class PanCardFragment : Fragment(),
 
         private const val REQUEST_STORAGE_PERMISSION = 104
     }
+    @Inject
+    lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
 
     @Inject
     lateinit var navigation: INavigation
@@ -130,6 +133,10 @@ class PanCardFragment : Fragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        sharedPreAndCommonUtilInterface.saveDataBoolean(
+            com.gigforce.common_ui.StringConstants.PAN_CARD_SP.value,
+            false
+        )
         getDataFromIntent(savedInstanceState)
         initviews()
         initializeImageViews()

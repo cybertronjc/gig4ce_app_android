@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
-import com.gigforce.common_ui.StringConstants
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 
@@ -52,7 +51,7 @@ class ClickOrSelectImageBottomSheet : BottomSheetDialogFragment() {
 
             val fragment = ClickOrSelectImageBottomSheet()
             fragment.arguments =
-                bundleOf(StringConstants.PROFILE_PIC_PRESENT.value to isPicturePresent)
+                bundleOf("PROFILE_PIC_PRESENT" to isPicturePresent)
             fragment.listener = listener
 
             try {

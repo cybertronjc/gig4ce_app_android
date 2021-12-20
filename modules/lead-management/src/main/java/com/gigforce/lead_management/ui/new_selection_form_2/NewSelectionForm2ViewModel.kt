@@ -8,6 +8,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.dynamic_fields.data.DataFromDynamicInputField
+import com.gigforce.common_ui.dynamic_fields.data.DynamicVerificationField
+import com.gigforce.common_ui.repository.AuthRepository
 import com.gigforce.common_ui.repository.LeadManagementRepository
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.core.logger.GigforceLogger
@@ -17,6 +19,7 @@ import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.ui.new_selection_form.NewSelectionForm1ViewModel
 import com.gigforce.lead_management.ui.new_selection_form.NewSelectionForm1ViewState
+import com.gigforce.lead_management.viewModels.JoiningSubmissionViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
@@ -30,8 +33,12 @@ class NewSelectionForm2ViewModel @Inject constructor(
     @ApplicationContext private val appContext: Context,
     private val leadManagementRepository: LeadManagementRepository,
     private val profileFirebaseRepository: ProfileFirebaseRepository,
+    private val authRepository: AuthRepository,
     private val logger: GigforceLogger
-) : ViewModel() {
+) : JoiningSubmissionViewModel(
+    leadManagementRepository,
+    logger
+) {
 
     companion object {
         private const val TAG = "NewSelectionForm1ViewModel"
@@ -55,6 +62,7 @@ class NewSelectionForm2ViewModel @Inject constructor(
     private lateinit var joiningRequest: SubmitJoiningRequest
     private var currentlySubmittingAnyJoiningRequuest = false
     private var dataFromDynamicFieldsFromPreviousPages : List<DataFromDynamicInputField> = emptyList()
+    private var verificationDynamicFields  : List<DynamicVerificationField> = emptyList()
 
     fun handleEvent(
         event: NewSelectionForm2Events
@@ -88,7 +96,7 @@ class NewSelectionForm2ViewModel @Inject constructor(
                 joiningRequest = event.submitJoiningRequest
                 dataFromDynamicFieldsFromPreviousPages = event.submitJoiningRequest.dataFromDynamicFields
                 joiningRequest.dataFromDynamicFields = emptyList()
-
+                verificationDynamicFields = event.verificationRelatedDynamicInputsFields.toMutableList()
 
                 fetchJoiningForm2Data(
                     joiningRequest.business.id!!,
@@ -263,7 +271,8 @@ class NewSelectionForm2ViewModel @Inject constructor(
                 selectedCity?.name,
                 selectedReportingLocation?.name,
                 joiningLocationsAndTLs,
-                joiningRequest.jobProfile.locationType
+                joiningRequest.jobProfile.locationType,
+                verificationDynamicFields.isNotEmpty()
             )
             return@launch
         }
@@ -299,7 +308,8 @@ class NewSelectionForm2ViewModel @Inject constructor(
                     selectedCity?.name,
                     selectedReportingLocation?.name,
                     locationAndTlsData,
-                    joiningRequest.jobProfile.locationType
+                    joiningRequest.jobProfile.locationType,
+                    verificationDynamicFields.isNotEmpty()
                 )
         } catch (e: Exception) {
             logger.e(
@@ -423,23 +433,52 @@ class NewSelectionForm2ViewModel @Inject constructor(
         joiningRequest.jobProfile.dynamicFields = emptyList()
 
         joiningRequest.dataFromDynamicFields = dataFromDynamicFieldsFromPreviousPages + dataFromDynamicFields
-        submitJoiningData(
-            joiningRequest
-        )
+
+        if(verificationDynamicFields.isEmpty()){
+            submitJoiningData(joiningRequest)
+        } else{
+            addUserToAuthAndProfileIfNotExist(joiningRequest)
+        }
+    }
+
+    private fun addUserToAuthAndProfileIfNotExist(
+        joiningRequest: SubmitJoiningRequest
+    ) = viewModelScope.launch {
+
+        _viewState.value = NewSelectionForm2ViewState.SubmittingJoiningData
+
+        try {
+            val createOrGetUserResult = authRepository.getOrCreateUserInAuthAndProfile(
+                joiningRequest.gigerMobileNo,
+                joiningRequest.gigerName
+            )
+
+            verificationDynamicFields.onEach {
+
+                it.jobProfileId = joiningRequest.jobProfile.id!!
+                it.userId = createOrGetUserResult.uId!!
+            }
+
+            _viewState.value = NewSelectionForm2ViewState.NavigateToJoiningVerificationForm(
+                joiningRequest = joiningRequest,
+                userId = createOrGetUserResult.uId!!,
+                verificationDynamicFields = verificationDynamicFields
+            )
+            _viewState.value = null
+        } catch (e: Exception) {
+
+            _viewState.value = NewSelectionForm2ViewState.ErrorWhileSubmittingJoiningData(
+                error = e.message ?: "Unable to submit joining request, please try again later",
+                shouldShowErrorButton = false
+            )
+            _viewState.value = null
+        }
     }
 
 
     private fun submitJoiningData(
         joiningRequest: SubmitJoiningRequest
     ) = viewModelScope.launch {
-
-        if (currentlySubmittingAnyJoiningRequuest) {
-            logger.d(
-                TAG,
-                "Already a joining request submission in progress, ignoring this one",
-            )
-            return@launch
-        }
 
         currentlySubmittingAnyJoiningRequuest = true
         logger.d(
@@ -450,21 +489,7 @@ class NewSelectionForm2ViewModel @Inject constructor(
         try {
             _viewState.value = NewSelectionForm2ViewState.SubmittingJoiningData
 
-
-            logger.d(
-                TAG,
-                "Assigning gigs [Data]...., $joiningRequest",
-            )
-
-            val shareLink = try {
-                leadManagementRepository.createJobProfileReferralLink(joiningRequest.jobProfile.id!!)
-            } catch (e: Exception) {
-                logger.d(TAG, "error while creating job profile share link", e)
-                ""
-            }
-
-            joiningRequest.shareLink = shareLink
-            leadManagementRepository.submitJoiningRequest(
+            val shareLink = cleanUpJoiningDataAndSubmitJoiningData(
                 joiningRequest
             )
 
@@ -474,25 +499,16 @@ class NewSelectionForm2ViewModel @Inject constructor(
                 jobProfileName = joiningRequest.jobProfile.name.toString()
             )
             _viewState.value = null
-            logger.d(
-                TAG,
-                "[Success] Gigs assigned"
-            )
-            currentlySubmittingAnyJoiningRequuest = false
-        } catch (e: Exception) {
 
             currentlySubmittingAnyJoiningRequuest = false
+        } catch (e: Exception) {
+            currentlySubmittingAnyJoiningRequuest = false
+
             _viewState.value = NewSelectionForm2ViewState.ErrorWhileSubmittingJoiningData(
                 error = e.message ?: "Unable to submit joining request, please try again later",
                 shouldShowErrorButton = false
             )
             _viewState.value = null
-
-            logger.e(
-                TAG,
-                "[Failure] Gigs assign failed",
-                e
-            )
         }
 
     }

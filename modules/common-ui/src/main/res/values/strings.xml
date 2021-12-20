@@ -89,4 +89,6 @@
     <string name="common_note_with_colon">Note : </string>
     <string name="common_optional">(Optional)</string>
     <string name="common_change_date">Change Date</string>
+    <string name="note_aadhaar_verfication"><b>Note:</b> Aadhaar card verification is same as submission</string>
+    <string name="signature_instruction"><b>Note</b>: Please upload the image of signature with white background.</string>
 </resources>

@@ -2,6 +2,7 @@ package com.gigforce.app.nav
 
 import com.gigforce.app.R
 import com.gigforce.common_ui.BaseNavigationImpl
+import com.gigforce.common_ui.navigation.JoiningVerificationNavDestinations
 
 class NavForVerificationModule(
     baseImplementation: BaseNavigationImpl
@@ -34,6 +35,5 @@ class NavForVerificationModule(
         baseImplementation.registerRoute("${moduleName}/pancardimageupload",R.id.panCardFragment)
         baseImplementation.registerRoute("${moduleName}/drivinglicenseimageupload",R.id.drivingLicenseFragment)
         baseImplementation.registerRoute("${moduleName}/AadharDetailInfoFragment",R.id.adharDetailInfoFragment)
-
     }
 }

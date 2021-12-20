@@ -9,6 +9,7 @@ import androidx.annotation.DrawableRes
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory
 import com.gigforce.common_ui.R
+import com.gigforce.common_ui.shimmer.ShimmerHelper
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.firebase.storage.FirebaseStorage
 
@@ -98,6 +99,8 @@ class GigforceImageView(
 
         if (placeHolder != -1) {
             requestManager = requestManager.placeholder(placeHolder)
+        } else{
+            requestManager = requestManager.placeholder(ShimmerHelper.getShimmerDrawable())
         }
 
         if (error != -1) {
