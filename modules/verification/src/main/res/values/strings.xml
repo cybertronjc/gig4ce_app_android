@@ -466,6 +466,9 @@
     <string name="confirm_bn_subtitle_veri">Your bank verification is pending. Please confirm the beneficiary name.</string>
     <string name="bn_not_matched_veri">Beneficiary Name Doesn’t Match</string>
     <string name="plz_ask_to_giger_to_confirm_bn_veri">Please ask the giger to confirm beneficiary name on Gigforce app.</string>
+    <string name="deny_veri">Deny</string>
+    <string name="inprogress_veri">Inprogress</string>
+
 
 
 </resources>

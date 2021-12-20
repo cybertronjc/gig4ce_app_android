@@ -52,6 +52,7 @@ class ConfirmBNBankBS : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         if(user == null)dismiss()
         else {
+            isCancelable = false
             requestBankDetailData()
             observer()
 

@@ -208,6 +208,9 @@ class BankAccountFragment : Fragment(),
                 )
             }
         }
+        if(verificationScreenStatus == VerificationScreenStatus.COMPLETED){
+            return true
+        }
         return false
     }
 
@@ -542,6 +545,7 @@ class BankAccountFragment : Fragment(),
         viewBinding.belowLayout.visible()
         viewBinding.progressBar.gone()
         viewBinding.confirmBeneficiaryLayout.gone()
+        viewBinding.toplayoutblock.visible()
         viewBinding.toplayoutblock.toggleChangeTextView(false)
         viewBinding.toplayoutblock.setVerificationSuccessfulView(
             getString(R.string.bank_account_veri),
