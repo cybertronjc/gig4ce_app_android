@@ -6,8 +6,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".mainverification.bankaccount.ConfirmBNBankBS"
     android:background="@drawable/bottom_sheet_bg"
-    android:layout_marginLeft="@dimen/sp_sm1"
-    android:layout_marginRight="@dimen/sp_sm1">
+    android:layout_marginStart="@dimen/size_16"
+    android:layout_marginEnd="@dimen/size_16">
 
     <ImageView
         android:id="@+id/greenTickImage"
@@ -38,7 +38,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/size_40"
         android:paddingBottom="@dimen/dp_mid"
-        android:layout_marginRight="@dimen/dp_mid"
+        android:layout_marginStart="@dimen/size_20"
+        android:layout_marginEnd="@dimen/dp_mid"
         android:layout_marginBottom="@dimen/dp_xl4"
         android:background="@drawable/rect_light_pink_veri"
         app:layout_constraintStart_toStartOf="parent"

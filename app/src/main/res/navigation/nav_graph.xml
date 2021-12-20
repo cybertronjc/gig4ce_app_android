@@ -1122,7 +1122,7 @@
         android:id="@+id/signatureDrawerDialogFragment"
         android:name="com.gigforce.common_ui.signature.FullScreenSignatureDrawerDialogFragment"
         android:label="FullScreenSignatureDrawerDialogFragment"/>
-    <fragment
+    <dialog
         android:id="@+id/acknowledgeBankBS"
         android:name="com.gigforce.verification.mainverification.bankaccount.AcknowledgeBankBS"
         android:label="AcknowledgeBankBS" />

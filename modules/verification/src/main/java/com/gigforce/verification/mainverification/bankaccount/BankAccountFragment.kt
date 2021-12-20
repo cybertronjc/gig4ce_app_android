@@ -326,7 +326,7 @@ class BankAccountFragment : Fragment(),
         // on popup user will press the button and api will call which will update the counter value
 //        MaterialAlertDialogBuilder(requireContext())
 //            .setTitle(benificiaryName)
-//            .setCancelable(false)
+//            .setCancelable(false
 //            .setPositiveButton(getString(R.string.okay_lower_case_veri)) { _, _ ->
 //                eventTracker.pushEvent(
 //                    TrackingEventArgs(
