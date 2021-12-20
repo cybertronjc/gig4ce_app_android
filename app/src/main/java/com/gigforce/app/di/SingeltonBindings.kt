@@ -3,9 +3,7 @@ package com.gigforce.app.di
 import android.content.Context
 import android.content.SharedPreferences
 import com.gigforce.app.di.implementations.BuildConfigImp
-import com.gigforce.common_ui.remote.JoiningProfileService
-import com.gigforce.common_ui.remote.ProfileCommonService
-import com.gigforce.common_ui.remote.ReferralService
+import com.gigforce.common_ui.remote.*
 import com.gigforce.common_ui.remote.verification.VerificationKycService
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.logger.GigforceLogger
