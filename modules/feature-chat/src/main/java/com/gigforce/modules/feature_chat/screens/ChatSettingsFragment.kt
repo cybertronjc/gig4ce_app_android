@@ -13,6 +13,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.ScopedStorageConstants
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
@@ -38,9 +39,6 @@ class ChatSettingsFragment : Fragment() {
     lateinit var navigation: INavigation
 
     @Inject
-    lateinit var documentTreeDelegate : DocumentTreeDelegate
-
-    @Inject
     lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
 
     private  val viewModel: ChatSettingsViewModel by viewModels()
@@ -64,26 +62,16 @@ class ChatSettingsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initViews()
         initListeners()
-
+        initObserver()
     }
 
-
-    private val openDocumentTreeContract = registerForActivityResult(
-        ActivityResultContracts.OpenDocumentTree()
-    ) {
-        if (it == null) return@registerForActivityResult
-
-        documentTreeDelegate.handleDocumentTreeSelectionResult(
-            context = requireContext(),
-            uri = it,
-            onSuccess = {
-               handleStorageTreeSelectedResult()
-            },
-            onFailure = {
-                handleStorageTreeSelectionFailure(it)
-            }
-        )
+    private fun initObserver() {
+        viewModel.autoDownload.observe(viewLifecycleOwner, Observer {
+            it ?: return@Observer
+            viewBinding.autoDownloadSwitch.isChecked = it
+        })
     }
+
 
     private fun initListeners() = viewBinding.apply{
 
@@ -94,106 +82,15 @@ class ChatSettingsFragment : Fragment() {
 
         autoDownloadSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked){
-                showToast("auto download turned on")
-                checkForScopeAndStoragePermission()
+                viewModel.updateMediaAutoDownloadInDB(enable = true)
+            } else{
+                viewModel.updateMediaAutoDownloadInDB(enable = false)
             }
         }
 
     }
-
-    private fun checkForScopeAndStoragePermission(){
-        if(Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
-
-            if (!documentTreeDelegate.storageTreeSelected()) {
-                //launch folder selection
-                openDocumentTreeContract.launch(null)
-            } else {
-                //update value in db
-            }
-        } else{
-
-            if (!isStoragePermissionGranted()) {
-                askForStoragePermission()
-            } else {
-                //update value in db
-            }
-        }
-    }
-
 
     private fun initViews() {
-
+        viewModel.getMediaAutoDownload()
     }
-
-    private fun handleStorageTreeSelectionFailure(
-        e : Exception
-    ) {
-
-        //make the switch off
-        viewBinding.autoDownloadSwitch.isChecked = false
-
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Select storage")
-            .setMessage(e.message.toString())
-            .setPositiveButton("Okay"){_,_ ->}
-            .show()
-    }
-
-    private fun handleStorageTreeSelectedResult() {
-
-        sharedPreAndCommonUtilInterface.saveDataBoolean("auto_download", true)
-        if (!isStoragePermissionGranted()) {
-            askForStoragePermission()
-        }
-    }
-
-    private fun askForStoragePermission() {
-        Log.v(ChatPageFragment.TAG, "Permission Required. Requesting Permission")
-
-        if(Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
-
-            requestPermissions(
-                arrayOf(
-                    android.Manifest.permission.CAMERA
-                ),
-                23
-            )
-        } else {
-
-            requestPermissions(
-                arrayOf(
-                    android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    android.Manifest.permission.CAMERA
-                ),
-                23
-            )
-        }
-    }
-
-    private fun isStoragePermissionGranted(): Boolean {
-
-        if (Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
-
-            return ContextCompat.checkSelfPermission(
-                requireContext(),
-                android.Manifest.permission.CAMERA
-            ) == PackageManager.PERMISSION_GRANTED
-        } else {
-
-            return ContextCompat.checkSelfPermission(
-                requireContext(),
-                android.Manifest.permission.READ_EXTERNAL_STORAGE
-            ) == PackageManager.PERMISSION_GRANTED
-                    && ContextCompat.checkSelfPermission(
-                requireContext(),
-                android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ) == PackageManager.PERMISSION_GRANTED
-                    && ContextCompat.checkSelfPermission(
-                requireContext(),
-                android.Manifest.permission.CAMERA
-            ) == PackageManager.PERMISSION_GRANTED
-        }
-    }
-
 }

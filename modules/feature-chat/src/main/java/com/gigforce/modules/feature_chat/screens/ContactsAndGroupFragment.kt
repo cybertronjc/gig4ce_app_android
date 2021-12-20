@@ -162,7 +162,8 @@ class ContactsAndGroupFragment : BaseFragment2<ContactsAndGroupFragmentBinding>(
                     contactsAdapter.clearSelectedContacts()
                     viewBinding.groupAndBroadcastLayout.visible()
                     viewBinding.appBarComp.makeRefreshVisible(true)
-                    viewBinding.appBarComp.showSubtitle("${contactsAdapter.itemCount} ${getString(R.string.contacts_with_space)}")
+                    viewBinding.appBarComp.setAppBarTitle(getString(R.string.contacts_chat))
+                    viewBinding.appBarComp.showSubtitle("${contactsAdapter.itemCount} ${getString(R.string.contacts_chat)}")
                     viewBinding.createGroupFab.gone()
 
                 } else if (namingGroup) {
@@ -174,7 +175,7 @@ class ContactsAndGroupFragment : BaseFragment2<ContactsAndGroupFragmentBinding>(
                     contactsAdapter.stateCreateGroup(true)
                     viewBinding.appBarComp.makeRefreshVisible(true)
                     viewBinding.appBarComp.makeSearchVisible(true)
-                    viewBinding.appBarComp.showSubtitle("${contactsAdapter.itemCount} ${getString(R.string.contacts_with_space)}")
+                    viewBinding.appBarComp.showSubtitle("${contactsAdapter.getSelectedContact().size} of ${contactsAdapter.itemCount} ${getString(R.string.contacts_selected_chat)}")
                     viewBinding.createGroupFab.visible()
                 } else {
                     isEnabled = false

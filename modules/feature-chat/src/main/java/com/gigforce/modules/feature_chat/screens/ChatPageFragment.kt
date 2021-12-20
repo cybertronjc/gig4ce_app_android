@@ -3,9 +3,7 @@ package com.gigforce.modules.feature_chat.screens
 import android.Manifest
 import android.app.Activity
 import android.app.NotificationManager
-import android.content.ActivityNotFoundException
-import android.content.Context
-import android.content.Intent
+import android.content.*
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.net.Uri
@@ -51,6 +49,8 @@ import com.gigforce.core.recyclerView.CoreRecyclerView
 import com.gigforce.modules.feature_chat.ChatNavigation
 import com.gigforce.modules.feature_chat.R
 import com.gigforce.common_ui.chat.ChatFileManager
+import com.gigforce.common_ui.components.cells.AppBar
+import com.gigforce.common_ui.listeners.AppBarClicks
 import com.gigforce.modules.feature_chat.models.ChatMessageWrapper
 import com.gigforce.modules.feature_chat.models.SharedFile
 import com.gigforce.modules.feature_chat.screens.vm.ChatPageViewModel
@@ -105,6 +105,7 @@ class ChatPageFragment : Fragment(),
     private lateinit var mainChatLayout: View
     private lateinit var needStorageAccessLayout: View
     private lateinit var requestStorageAccessButton: View
+    private lateinit var appbar: AppBar
 
     private val viewModel: ChatPageViewModel by viewModels()
     private val groupChatViewModel: GroupChatViewModel by viewModels()
@@ -186,6 +187,12 @@ class ChatPageFragment : Fragment(),
         mainChatLayout = view.findViewById(R.id.main_chat_layout)
         needStorageAccessLayout = view.findViewById(R.id.storage_access_required_layout)
         requestStorageAccessButton = view.findViewById(R.id.storage_access_btn)
+        appbar = view.findViewById(R.id.appBarComp)
+        appbar.apply {
+            changeBackButtonDrawable()
+            makeBackgroundMoreRound()
+            makeTitleBold()
+        }
     }
 
     private fun showPermissionRequiredLayout() {
@@ -355,26 +362,26 @@ class ChatPageFragment : Fragment(),
 
     private fun adjustUiAccToOneToOneChat() {
 
-        toolbar.showSubtitle(getString(R.string.offline_chat))
+        //toolbar.showSubtitle(getString(R.string.offline_chat))
+        appbar.showSubtitle(getString(R.string.offline_chat))
     }
 
     private fun adjustUiAccToGroupChat() {
-        toolbar.hideActionMenu()
+        //toolbar.hideActionMenu()
+        appbar.makeMenuItemVisible(false)
         chatFooter.setGroupViewModel(groupChatViewModel)
         chatFooter.enableUserSuggestions()
 
-        toolbar.showSubtitle(getString(R.string.tap_to_open_details_chat))
-        toolbar.setSubtitleClickListener(View.OnClickListener {
-
+        //toolbar.showSubtitle(getString(R.string.tap_to_open_details_chat))
+        appbar.showSubtitle(getString(R.string.tap_to_open_details_chat))
+        appbar.setSubtitleClickListener(View.OnClickListener {
             val groupId = chatHeaderOrGroupId ?: return@OnClickListener
 
             if (chatType == ChatConstants.CHAT_TYPE_GROUP) {
                 chatNavigation.openGroupDetailsPage(groupId)
             }
         })
-
-        toolbar.setTitleClickListener(View.OnClickListener {
-
+        appbar.setTitleClickListener(View.OnClickListener {
             val groupId = chatHeaderOrGroupId ?: return@OnClickListener
 
             if (chatType == ChatConstants.CHAT_TYPE_GROUP) {
@@ -383,6 +390,7 @@ class ChatPageFragment : Fragment(),
                 )
             }
         })
+
     }
 
     private fun subscribeChatGroupViewModel() {
@@ -445,20 +453,21 @@ class ChatPageFragment : Fragment(),
     }
 
     private fun showGroupDetails(group: ChatGroup) {
-        toolbar.showTitle(group.name)
+        appbar.setAppBarTitle(group.name)
 
         if (group.groupAvatarThumbnail.isNotBlank()) {
-            toolbar.showImageBehindBackButton(
+
+            appbar.showMainImageView(
                 group.groupAvatarThumbnail,
                 R.drawable.ic_group_white
             )
         } else if (group.groupAvatar.isNotBlank()) {
-            toolbar.showImageBehindBackButton(
+            appbar.showMainImageView(
                 group.groupAvatar,
                 R.drawable.ic_group_white
             )
         } else {
-            toolbar.showImageBehindBackButton(R.drawable.ic_group_white)
+            appbar.showMainImageView(R.drawable.ic_group_white)
         }
     }
 
@@ -543,16 +552,16 @@ class ChatPageFragment : Fragment(),
             .observe(viewLifecycleOwner, Observer {
 
                 if (it.name.isNullOrBlank()) {
-                    toolbar.showTitle(it.mobile)
+                    appbar.setAppBarTitle(it.mobile)
                 } else {
-                    toolbar.showTitle(it.name ?: "")
+                    appbar.setAppBarTitle(it.name ?: "")
                 }
 
                 if (!it.imageThumbnailPathInStorage.isNullOrBlank()) {
 
                     if (Patterns.WEB_URL.matcher(it.imageThumbnailPathInStorage!!).matches()) {
 
-                        toolbar.showImageBehindBackButton(
+                        appbar.showMainImageView(
                             it.imageThumbnailPathInStorage!!,
                             R.drawable.ic_user_white,
                             R.drawable.ic_user_white
@@ -565,7 +574,7 @@ class ChatPageFragment : Fragment(),
                             else
                                 "profile_pics/${it.imageThumbnailPathInStorage}"
 
-                        toolbar.showImageBehindBackButton(
+                        appbar.showMainImageView(
                             profilePathRef,
                             R.drawable.ic_user_white,
                             R.drawable.ic_user_white
@@ -574,7 +583,7 @@ class ChatPageFragment : Fragment(),
                 } else if (!it.imagePathInStorage.isNullOrBlank()) {
 
                     if (Patterns.WEB_URL.matcher(it.imagePathInStorage!!).matches()) {
-                        toolbar.showImageBehindBackButton(
+                        appbar.showMainImageView(
                             it.imagePathInStorage!!,
                             R.drawable.ic_user_white,
                             R.drawable.ic_user_white
@@ -588,7 +597,7 @@ class ChatPageFragment : Fragment(),
                             else
                                 "profile_pics/${it.imagePathInStorage}"
 
-                        toolbar.showImageBehindBackButton(
+                        appbar.showMainImageView(
                             profilePathRef,
                             R.drawable.ic_user_white,
                             R.drawable.ic_user_white
@@ -597,7 +606,7 @@ class ChatPageFragment : Fragment(),
 
                 } else {
 
-                    toolbar.showImageBehindBackButton(
+                    appbar.showMainImageView(
                         R.drawable.ic_user_white
                     )
                 }
@@ -639,7 +648,8 @@ class ChatPageFragment : Fragment(),
                 }
 
                 if (it.isOtherUserOnline) {
-                    toolbar.showSubtitle("Online")
+                    appbar.showSubtitle("Online")
+                    appbar.makeOnlineImageVisible(visible = true)
 //                        toolbar.showSubtitle(getString(R.string.offline_chat))
                 } else {
                     if (it.lastUserStatusActivityAt != 0L) {
@@ -657,9 +667,11 @@ class ChatPageFragment : Fragment(),
                                 )
                             }"
                         }
-                        toolbar.showSubtitle(timeToDisplayText)
+                        appbar.showSubtitle(timeToDisplayText)
+                        appbar.makeOnlineImageVisible(false)
                     } else {
-                        toolbar.showSubtitle(getString(R.string.offline_chat))
+                        appbar.showSubtitle(getString(R.string.offline_chat))
+                        appbar.makeOnlineImageVisible(false)
                     }
                 }
             })
@@ -683,12 +695,11 @@ class ChatPageFragment : Fragment(),
 
     private fun initListeners() {
 
-        toolbar.setBackButtonListener {
-            activity?.onBackPressed()
-        }
+//        toolbar.setBackButtonListener {
+//            activity?.onBackPressed()
+//        }
 
-        toolbar.setImageClickListener(View.OnClickListener {
-
+        appbar.setImageClickListener(View.OnClickListener {
             val groupId = chatHeaderOrGroupId ?: return@OnClickListener
 
             if (chatType == ChatConstants.CHAT_TYPE_GROUP) {
@@ -696,10 +707,18 @@ class ChatPageFragment : Fragment(),
             }
         })
 
+        appbar.setBackButtonListener(View.OnClickListener {
+            hideSoftKeyboard()
 
-        toolbar.setOnOpenActionMenuItemClickListener(View.OnClickListener {
+            if (cameFromLinkInOtherChat)
+                chatNavigation.navigateUp()
+            else
+                chatNavigation.navigateBackToChatListIfExistElseOneStepBack()
+        })
+
+        appbar.setOnOpenActionMenuItemClickListener(View.OnClickListener {
             val ctw = ContextThemeWrapper(context, R.style.PopupMenuChat)
-            val popUp = PopupMenu(ctw, toolbar.getOptionMenuViewForAnchor(), Gravity.END)
+            val popUp = PopupMenu(ctw, appbar.getOptionMenuViewForAnchor(), Gravity.END)
             popUp.setOnMenuItemClickListener(this)
             popUp.inflate(R.menu.menu_chat_toolbar)
             popUp.menu.findItem(R.id.action_block).title =
@@ -954,10 +973,7 @@ class ChatPageFragment : Fragment(),
         if (requestCode == PermissionUtils.reqCodePerm
             && PermissionUtils.permissionsGrantedCheck(grantResults)
         ) {
-
-            toolbar.showTitle(
-                checkForContact(receiverMobileNumber, receiverName!!)
-            )
+            appbar.setAppBarTitle(checkForContact(receiverMobileNumber, receiverName!!))
         }
 
 
@@ -992,7 +1008,7 @@ class ChatPageFragment : Fragment(),
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            PermissionUtils.reqCodePerm -> toolbar.showTitle(
+            PermissionUtils.reqCodePerm -> appbar.setAppBarTitle(
                 checkForContact(receiverMobileNumber, receiverName!!)
             )
 

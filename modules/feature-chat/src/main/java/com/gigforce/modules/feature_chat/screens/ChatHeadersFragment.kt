@@ -387,8 +387,8 @@ class ChatHeadersFragment : Fragment(), PopupMenu.OnMenuItemClickListener, Gigfo
             }
         }
         toolbar.setOnOpenActionMenuItemClickListener(View.OnClickListener {
-            val ctw = ContextThemeWrapper(context, R.style.PopupMenuChat)
-            val popUp = PopupMenu(ctw, toolbar.getOptionMenuViewForAnchor(), Gravity.END)
+            //val ctw = ContextThemeWrapper(context, R.style.PopupMenuChat)
+            val popUp = PopupMenu(context, toolbar.getOptionMenuViewForAnchor(), Gravity.END)
             popUp.setOnMenuItemClickListener(this)
             popUp.inflate(R.menu.menu_chat_settings)
 //            popUp.menu.findItem(R.id.action_block).title =
