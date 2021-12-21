@@ -441,5 +441,6 @@
     <string name="bn_not_matched_veri">लाभार्थी का नाम मेल नहीं खाता</string>
     <string name="plz_ask_to_giger_to_confirm_bn_veri">कृपया Gigforce ऐप पर लाभार्थी के नाम की पुष्टि करने के लिए giger से पूछें।</string>
     <string name="deny_veri">मना है</string>
+    <string name="baneficiary_name_veri">लाभार्थी का नाम</string>
 
 </resources>

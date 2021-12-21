@@ -241,8 +241,6 @@ class BankAccountFragment : Fragment(),
                             viewBinding.bankAccNumberItl.editText?.setText(it.accountNumber)
                         if (!it.ifscCode.isNullOrBlank())
                             viewBinding.ifscCode.editText?.setText(it.ifscCode)
-                        if (!it.bankName.isNullOrBlank())
-                            viewBinding.bankNameTil.editText?.setText(it.bankName)
                     } else {
                         eventTracker.pushEvent(
                             TrackingEventArgs(
@@ -496,13 +494,17 @@ class BankAccountFragment : Fragment(),
     ): ArrayList<KYCImageModel> {
         var list = ArrayList<KYCImageModel>()
         obj1?.let { obj ->
-            viewBinding.bankNameTil.editText?.setText(obj.bankName)
+            if(verificationScreenStatus == VerificationScreenStatus.VERIFIED) {
+                viewBinding.baneficiaryNameTil.visible()
+                viewBinding.baneficiaryNameTil.editText?.isEnabled = false
+                viewBinding.baneficiaryNameTil.editText?.setText(obj.bankBeneficiaryName)
+            }else{
+                viewBinding.baneficiaryNameTil.gone()
+            }
 
             viewBinding.bankAccNumberItl.editText?.setText(obj.accountNo)
 
             viewBinding.ifscCode.editText?.setText(obj.ifscCode)
-
-
 
             obj.passbookImagePath?.let {
 
@@ -524,11 +526,9 @@ class BankAccountFragment : Fragment(),
             }
 //            viewBinding.toplayoutblock.setImageViewPager(list) need to remove uploading option 2856 ticket
 
-        }
+        }?: viewBinding.baneficiaryNameTil.gone()
 
 
-
-        viewBinding.bankNameTil.editText?.isEnabled = enableFields
         viewBinding.bankAccNumberItl.editText?.isEnabled = enableFields
         viewBinding.ifscCode.editText?.isEnabled = enableFields
         if (enableFields) {
@@ -556,7 +556,6 @@ class BankAccountFragment : Fragment(),
         viewBinding.toplayoutblock.resetAllViews()
 
         viewBinding.bankAccNumberItl.editText?.setText("")
-        viewBinding.bankNameTil.editText?.setText("")
         viewBinding.ifscCode.editText?.setText("")
     }
 
@@ -683,8 +682,7 @@ class BankAccountFragment : Fragment(),
             context?.let { cxt ->
                 if (verificationScreenStatus == VerificationScreenStatus.DEFAULT || verificationScreenStatus == VerificationScreenStatus.FAILED || verificationScreenStatus == VerificationScreenStatus.OCR_COMPLETED) {
                     text?.let {
-                        if (viewBinding.bankNameTil.editText?.text.toString()
-                                .isNullOrBlank() && viewBinding.bankAccNumberItl.editText?.text.toString()
+                        if (viewBinding.bankAccNumberItl.editText?.text.toString()
                                 .isNullOrBlank() && viewBinding.ifscCode.editText?.text.toString()
                                 .isNullOrBlank()
                         ) {
@@ -721,7 +719,6 @@ class BankAccountFragment : Fragment(),
             }
 
         })
-        viewBinding.bankNameTil.editText?.addTextChangedListener(ValidationTextWatcher())
         viewBinding.bankAccNumberItl.editText?.addTextChangedListener(ValidationTextWatcher())
 //        viewBinding.ifscCode.editText?.addTextChangedListener(ValidationTextWatcher())
         viewBinding.ifscCode.editText?.addTextChangedListener(IFSCCodeTextWatcher())
@@ -756,23 +753,6 @@ class BankAccountFragment : Fragment(),
                     MaterialAlertDialogBuilder(requireContext())
                         .setTitle(getString(R.string.alert_veri))
                         .setMessage(getString(R.string.enter_valid_ifsc_veri))
-                        .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
-                        .show()
-                    return@setOnClickListener
-                }
-
-                if (viewBinding.bankNameTil.editText?.text.toString().isNullOrBlank()) {
-                    MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert_veri))
-                        .setMessage(getString(R.string.enter_bank_name_veri))
-                        .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
-                        .show()
-                    return@setOnClickListener
-                }
-                if (viewBinding.bankNameTil.editText?.text.toString().length < 3) {
-                    MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert_veri))
-                        .setMessage(getString(R.string.bank_name_too_short_veri))
                         .setPositiveButton(getString(R.string.okay_veri)) { _, _ -> }
                         .show()
                     return@setOnClickListener
@@ -1082,15 +1062,13 @@ class BankAccountFragment : Fragment(),
 
     private fun callKycVerificationApi() {
         var list = listOf(
-            Data("name", viewBinding.bankNameTil.editText?.text.toString()),
             Data("no", viewBinding.bankAccNumberItl.editText?.text.toString()),
             Data("ifsccode", viewBinding.ifscCode.editText?.text.toString())
         )
         activeLoader(true)
         var map = mapOf(
             "Account number" to viewBinding.bankAccNumberItl.editText?.text.toString(),
-            "IFSC code" to viewBinding.ifscCode.editText?.text.toString(),
-            "Bank name" to viewBinding.bankNameTil.editText?.text.toString()
+            "IFSC code" to viewBinding.ifscCode.editText?.text.toString()
         )
         eventTracker.pushEvent(
             TrackingEventArgs(
