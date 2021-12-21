@@ -57,7 +57,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="16dp"
-          app:srcCompat="@drawable/ic_homescreen_chat"
+          app:srcCompat="@drawable/ic_top_chat_pink_icon"
         app:layout_constraintBottom_toBottomOf="@+id/cardView"
         app:layout_constraintEnd_toStartOf="@+id/cardView"
         app:layout_constraintTop_toTopOf="@+id/cardView" />

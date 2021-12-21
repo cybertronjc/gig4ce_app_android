@@ -2,11 +2,14 @@ package com.gigforce.modules.feature_chat.repositories
 
 import com.gigforce.core.fb.BaseFirestoreDBRepository
 import com.gigforce.common_ui.chat.models.ChatProfileData
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-class ChatProfileFirebaseRepository : BaseFirestoreDBRepository() {
+@Singleton
+class ChatProfileFirebaseRepository @Inject constructor() : BaseFirestoreDBRepository() {
 
 
     suspend fun getProfileDataIfExist(userId: String? = null): ChatProfileData? =

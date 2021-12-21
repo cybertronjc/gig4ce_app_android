@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/mainLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <com.gigforce.common_ui.components.cells.AppBar
+            android:id="@+id/appBarComp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            app:backgroundType="PinkBar"
+            app:isFilterVisible="false"
+            app:isSearchVisible="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:titleText="@string/chat_settings_chat" />
+
+        <LinearLayout
+            android:id="@+id/settings_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_20"
+            app:layout_constraintTop_toBottomOf="@id/appBarComp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/chat_settings_layout_shadow_background"
+                android:layout_marginTop="@dimen/size_20"
+                android:visibility="gone"
+                android:layout_marginEnd="@dimen/size_20"
+                android:layout_marginStart="@dimen/size_20">
+
+                <ImageView
+                    android:id="@+id/notification_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_notifications_icon"
+                    android:layout_marginStart="@dimen/size_20"
+                    android:layout_marginTop="@dimen/size_10"
+                    android:layout_marginBottom="@dimen/size_10"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+                <TextView
+                    android:id="@+id/notifications_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/size_20"
+                    android:fontFamily="@font/lato"
+                    android:textFontWeight="700"
+                    android:textColor="#202325"
+                    app:layout_constraintEnd_toStartOf="@id/notificationsSwitch"
+                    android:text="@string/notifications_chat"
+                    app:layout_constraintTop_toTopOf="@id/notification_icon"
+                    app:layout_constraintStart_toEndOf="@id/notification_icon"/>
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/notificationsSwitch"
+                    android:layout_width="wrap_content"
+                    style="@style/SwitchStyle"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/size_20"
+                    app:layout_constraintTop_toTopOf="@id/notification_icon"
+                    app:layout_constraintBottom_toBottomOf="@id/notification_icon"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/chat_settings_layout_shadow_background"
+                android:layout_marginTop="@dimen/size_20"
+                android:layout_marginEnd="@dimen/size_20"
+                android:layout_marginStart="@dimen/size_20">
+
+                <ImageView
+                    android:id="@+id/media_storage_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/size_20"
+                    android:layout_marginTop="@dimen/size_10"
+                    android:layout_marginBottom="@dimen/size_10"
+                    android:src="@drawable/ic_media_storage_icon"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+                <TextView
+                    android:id="@+id/media_storage_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/size_20"
+                    android:fontFamily="@font/lato"
+                    android:textFontWeight="700"
+                    android:textColor="#202325"
+                    app:layout_constraintEnd_toStartOf="@id/autoDownloadSwitch"
+                    android:text="@string/chat_settings_media_and_storage_chat"
+                    app:layout_constraintTop_toTopOf="@id/media_storage_icon"
+                    app:layout_constraintStart_toEndOf="@id/media_storage_icon"/>
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/autoDownloadSwitch"
+                    android:layout_width="wrap_content"
+                    style="@style/SwitchStyle"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/size_20"
+                    app:layout_constraintTop_toTopOf="@id/media_storage_icon"
+                    app:layout_constraintBottom_toBottomOf="@id/media_storage_icon"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <include
+            android:id="@+id/storage_access_required_layout"
+            android:visibility="gone"
+            layout="@layout/layout_need_permission"
+            />
+
+    </LinearLayout>
+</layout>

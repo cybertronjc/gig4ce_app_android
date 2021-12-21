@@ -192,6 +192,7 @@ abstract class TextMessageView(
         val popUpMenu = PopupMenu(context, v)
         popUpMenu.inflate(R.menu.menu_chat_clipboard)
 
+        popUpMenu.menu.findItem(R.id.action_save_to_gallery).isVisible = false
         popUpMenu.menu.findItem(R.id.action_copy).isVisible = true
         popUpMenu.menu.findItem(R.id.action_delete).isVisible = type == MessageFlowType.OUT
         popUpMenu.menu.findItem(R.id.action_message_info).isVisible =

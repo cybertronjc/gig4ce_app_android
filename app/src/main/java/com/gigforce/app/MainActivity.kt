@@ -145,6 +145,8 @@ class MainActivity : BaseActivity(),
             finish()
             return
         }
+
+
         super.onCreate(savedInstanceState)
         this.setContentView(R.layout.activity_main)
         eventTracker.setUpAnalyticsTools()

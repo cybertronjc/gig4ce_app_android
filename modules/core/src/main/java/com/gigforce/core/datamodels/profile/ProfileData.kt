@@ -97,6 +97,10 @@ data class ProfileData(
     @set:PropertyName("isUserRegistered")
     var isUserRegistered: Boolean = false,
 
+    @get:PropertyName("mediaAutoDownload")
+    @set:PropertyName("mediaAutoDownload")
+    var mediaAutoDownload: Boolean = false,
+
     @get:PropertyName("reference")
     @set:PropertyName("reference")
     var reference: Reference? = null,
