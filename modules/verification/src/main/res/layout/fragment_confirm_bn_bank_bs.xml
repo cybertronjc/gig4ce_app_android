@@ -181,6 +181,6 @@
         android:layout_marginBottom="@dimen/dp_normal"
         style="@style/ActionOutlineButtonStyle"
         android:textAllCaps="true"
-        android:text="@string/cancel_veri"/>
+        android:text="@string/deny_veri"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
