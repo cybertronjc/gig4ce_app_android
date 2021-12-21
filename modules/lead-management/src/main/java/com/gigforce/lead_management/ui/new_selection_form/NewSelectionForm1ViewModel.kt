@@ -8,9 +8,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.dynamic_fields.data.DataFromDynamicInputField
-import com.gigforce.common_ui.dynamic_fields.data.DynamicField
-import com.gigforce.common_ui.dynamic_fields.data.DynamicVerificationField
-import com.gigforce.common_ui.dynamic_fields.data.FieldTypes
 import com.gigforce.common_ui.repository.LeadManagementRepository
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.core.ValidationHelper
@@ -51,6 +48,7 @@ class NewSelectionForm1ViewModel @Inject constructor(
     private var selectedReportingTL: TeamLeader? = null
 
     private lateinit var joiningBusinessAndJobProfiles: List<JoiningBusinessAndJobProfilesItem>
+    private lateinit var teamLeaders: List<TeamLeader>
 
     init {
         fetchJoiningForm1Data()
@@ -80,7 +78,7 @@ class NewSelectionForm1ViewModel @Inject constructor(
             is NewSelectionForm1Events.SubmitButtonPressed -> validateDataAndNavigateToForm2(
                 event.dataFromDynamicFields
             )
-            is NewSelectionForm1Events.ReportingTeamLeaderSelected ->{
+            is NewSelectionForm1Events.ReportingTeamLeaderSelected -> {
                 selectedReportingTL = event.teamLeader
             }
         }
@@ -91,39 +89,6 @@ class NewSelectionForm1ViewModel @Inject constructor(
     private fun inflateDynamicFieldsRelatedToSelectedJobProfile(
         jobProfile: JobProfilesItem
     ) = viewModelScope.launch {
-
-        val selectedJobProfileVerificationDependentDynamicFields = listOf(
-
-            DynamicField(
-                fieldType = FieldTypes.AADHAAR_VERIFICATION_VIEW,
-                mandatory = true,
-                prefillText = "Provide Aadhaar details",
-                screenIdToShowIn = NewSelectionForm1Fragment.SCREEN_ID,
-                title = "Giger Aadhar Card"
-            ),
-            DynamicField(
-                fieldType = FieldTypes.BANK_VERIFICATION_VIEW,
-                mandatory = true,
-                prefillText = "Provide Bank details",
-                screenIdToShowIn = NewSelectionForm1Fragment.SCREEN_ID,
-                title = "Giger Bank Details"
-            ),
-            DynamicField(
-                fieldType = FieldTypes.DL_VERIFICATION_VIEW,
-                mandatory = true,
-                prefillText = "Provide Driving license",
-                screenIdToShowIn = NewSelectionForm1Fragment.SCREEN_ID,
-                title = "Giger DL Card"
-            ),
-            DynamicField(
-                fieldType = FieldTypes.PAN_VERIFICATION_VIEW,
-                mandatory = true,
-                prefillText = "Provide pan details",
-                screenIdToShowIn = NewSelectionForm1Fragment.SCREEN_ID,
-                title = "Giger PAN Card"
-            )
-        )
-
 
         val selectedJobProfileDependentDynamicFields = jobProfile.dynamicFields.filter {
             it.screenIdToShowIn == NewSelectionForm1Fragment.SCREEN_ID
@@ -278,6 +243,20 @@ class NewSelectionForm1ViewModel @Inject constructor(
             return
         }
 
+        if (selectedReportingTL == null) {
+            _viewState.value = NewSelectionForm1ViewState.ValidationError(
+                reportingTLError = buildSpannedString {
+                    bold {
+                        append(appContext.getString(R.string.note_with_colon_lead))
+                    }
+                    append(
+                        "Select Reporting TL"
+                    )
+                }
+            )
+            return
+        }
+
         val dynamicFieldsForNextForm = selectedJobProfile!!.dynamicFields.filter {
             it.screenIdToShowIn == NewSelectionForm2Fragment.SCREEN_ID
         }
@@ -289,7 +268,8 @@ class NewSelectionForm1ViewModel @Inject constructor(
                 jobProfile = selectedJobProfile!!,
                 gigerName = gigerName!!,
                 gigerMobileNo = mobilePhoneNumber!!,
-                dataFromDynamicFields = dataFromDynamicFields
+                dataFromDynamicFields = dataFromDynamicFields,
+                reportingTeamLeader = selectedReportingTL!!
             ),
             dynamicInputsFields = dynamicFieldsForNextForm,
             verificationRelatedDynamicInputsFields = selectedJobProfile!!.verificationRelatedFields
@@ -395,7 +375,7 @@ class NewSelectionForm1ViewModel @Inject constructor(
         }
     }
 
-    fun fetchJoiningForm1Data() = viewModelScope.launch {
+    private fun fetchJoiningForm1Data() = viewModelScope.launch {
         _viewState.value = NewSelectionForm1ViewState.LoadingBusinessAndJobProfiles
 
         gigforceLogger.d(
@@ -405,14 +385,20 @@ class NewSelectionForm1ViewModel @Inject constructor(
 
         try {
             val businessAndTeamLeaders = leadManagementRepository.getBusinessAndJobProfiles()
-            joiningBusinessAndJobProfiles = businessAndTeamLeaders
+
+            joiningBusinessAndJobProfiles = businessAndTeamLeaders.businessAndJobProfiles
+            teamLeaders = businessAndTeamLeaders.teamLeaders
+
+            setCurrentUserAsDefaultSelectedTL()
 
             gigforceLogger.d(
                 TAG,
                 " ${joiningBusinessAndJobProfiles.size} business received from server"
             )
 
-            _viewState.value = NewSelectionForm1ViewState.JobProfilesAndBusinessLoadSuccess
+            _viewState.value = NewSelectionForm1ViewState.JobProfilesAndBusinessLoadSuccess(
+                selectedTeamLeader = selectedReportingTL
+            )
         } catch (e: Exception) {
             gigforceLogger.e(
                 TAG,
@@ -425,6 +411,19 @@ class NewSelectionForm1ViewModel @Inject constructor(
                     ?: appContext.getString(R.string.unable_to_load_business_and_job_profiles_lead),
                 shouldShowErrorButton = false
             )
+        }
+    }
+
+    private fun setCurrentUserAsDefaultSelectedTL() {
+        val currentUser = firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow().uid
+
+        teamLeaders.onEach {
+            val isCurrentUser = it.isTeamLeaderEqual(currentUser)
+
+            if (isCurrentUser) {
+                selectedReportingTL = it
+                it.selected = true
+            }
         }
     }
 }

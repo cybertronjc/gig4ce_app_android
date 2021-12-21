@@ -613,7 +613,6 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
 
                 when (it) {
                     is LeadManagementSharedViewModelState.CitySelected -> showSelectedCity(it.city)
-                    is LeadManagementSharedViewModelState.ClientTLSelected -> showSelectedTL(it.tlSelected)
                     is LeadManagementSharedViewModelState.ReportingLocationSelected -> showSelectedReportingLocation(
                         it.citySelected,
                         it.reportingLocation
@@ -681,14 +680,6 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         viewBinding.mainForm.reportingLocationError.root.gone()
     }
 
-    private fun showSelectedTL(
-        tlSelected: BusinessTeamLeadersItem
-    ) = viewBinding.mainForm.apply {
-        selectedClientTlLabel.text = tlSelected.name
-        viewModel.handleEvent(NewSelectionForm2Events.ClientTLSelected(tlSelected))
-
-        selectedClientTlLabel.setTypeface(selectedClientTlLabel.typeface, Typeface.BOLD)
-    }
 
     private fun showJobProfileRelatedDynamicFields(
         dynamicFields: List<DynamicField>

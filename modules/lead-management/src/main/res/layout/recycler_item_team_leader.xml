@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout>
+
+    <data>
+        <variable
+            name="teamLeader"
+            type="com.gigforce.common_ui.viewdatamodels.leadManagement.TeamLeader" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="20dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="10dp">
+
+        <ImageView
+            android:id="@+id/selected_iv"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/ic_ellipse_pink_hollow"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/job_profile_root_layout"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/rectangle_2"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/selected_iv"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <com.gigforce.common_ui.views.GigforceImageView
+                android:id="@+id/team_leader_profile_picture_iv"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:id="@+id/team_leader_name_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:ellipsize="marquee"
+                android:gravity="center"
+                android:lineHeight="12sp"
+                android:lineSpacingExtra="3sp"
+                android:textAppearance="@style/body_primary"
+                android:textColor="#202325"
+                android:textFontWeight="700"
+                android:text="@{teamLeader.name}"
+                app:layout_constraintStart_toEndOf="@id/team_leader_profile_picture_iv"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Bangalore" />
+
+
+            <TextView
+                android:id="@+id/team_leader_designation_city_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="10dp"
+                android:ellipsize="marquee"
+                android:gravity="center"
+                android:lineHeight="12sp"
+                android:lineSpacingExtra="3sp"
+                android:textAppearance="@style/body_primary_2"
+                android:textColor="@color/lipstick_2"
+                android:textFontWeight="400"
+                android:text="@{teamLeader.designation + `, ` + teamLeader.city}"
+                app:layout_constraintStart_toEndOf="@id/team_leader_profile_picture_iv"
+                app:layout_constraintTop_toBottomOf="@id/team_leader_name_textview"
+                tools:text="Bangalore" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

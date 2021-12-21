@@ -36,6 +36,7 @@ class SelectTeamLeaderFragment : BaseFragment2<FragmentSelectBusinessBinding>(
 
     private val sharedViewModel: LeadManagementSharedViewModel by activityViewModels()
     private val adapter: TeamLeaderAdapter by lazy {
+
         TeamLeaderAdapter(requireContext()).apply {
             setOnTLSelectedListener(this@SelectTeamLeaderFragment)
         }

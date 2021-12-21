@@ -45,6 +45,7 @@ import com.gigforce.lead_management.ui.LeadManagementSharedViewModelState
 import com.gigforce.lead_management.ui.new_selection_form_2.NewSelectionForm2Fragment
 import com.gigforce.lead_management.ui.select_business_screen.SelectBusinessFragment
 import com.gigforce.lead_management.ui.select_job_profile_screen.SelectJobProfileFragment
+import com.gigforce.lead_management.ui.select_team_leader.SelectTeamLeaderFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -267,7 +268,9 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
             when (state) {
                 //Loading initial data states
                 NewSelectionForm1ViewState.LoadingBusinessAndJobProfiles -> loadingBusinessAndJobProfiles()
-                NewSelectionForm1ViewState.JobProfilesAndBusinessLoadSuccess -> showMainForm()
+                is NewSelectionForm1ViewState.JobProfilesAndBusinessLoadSuccess -> showMainForm(
+                    state.selectedTeamLeader
+                )
                 is NewSelectionForm1ViewState.ErrorWhileLoadingBusinessAndJobProfiles -> showErrorInLoadingBusinessAndJobProfiles(
                     state.error
                 )
@@ -309,6 +312,9 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
                     state.selectedBusiness,
                     ArrayList(state.jobProfiles)
                 )
+                is NewSelectionForm1ViewState.OpenSelectTLScreen -> openSelectTLScreen(
+                    state.teamLeaders
+                )
 
                 //Data submit states
                 is NewSelectionForm1ViewState.NavigateToForm2 -> openForm2(
@@ -330,6 +336,20 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
                 }
             }
         })
+
+    private fun openSelectTLScreen(
+        teamLeaders: List<TeamLeader>
+    ) {
+        navigation.navigateTo(
+            LeadManagementNavDestinations.FRAGMENT_SELECT_CLIENT_TL,
+            bundleOf(
+                SelectTeamLeaderFragment.INTENT_EXTRA_TEAM_LEADERS to teamLeaders
+            ),
+            getNavOptions()
+        )
+
+        hideSoftKeyboard()
+    }
 
     private fun enableDisableSubmitButton(b: Boolean) {
         viewBinding.mainForm.nextButton.isEnabled = b
@@ -429,6 +449,14 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
             viewBinding.mainForm.jobProfileError.errorTextview.text = null
             viewBinding.mainForm.jobProfileError.root.gone()
         }
+
+        if(errorState.reportingTLError != null){
+            viewBinding.mainForm.reportingTlError.root.visible()
+            viewBinding.mainForm.reportingTlError.errorTextview.text = errorState.reportingTLError
+        } else{
+            viewBinding.mainForm.reportingTlError.errorTextview.text = null
+            viewBinding.mainForm.reportingTlError.root.gone()
+        }
     }
 
     private fun loadingBusinessAndJobProfiles() = viewBinding.apply {
@@ -450,7 +478,9 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
         )
     }
 
-    private fun showMainForm() = viewBinding.apply {
+    private fun showMainForm(
+        selectedTeamLeader: TeamLeader?
+    ) = viewBinding.apply {
         stopShimmer(
             dataLoadingShimmerContainer,
             R.id.shimmer_controller
@@ -465,7 +495,15 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
                 requestFocusOnMobileNoEditText()
             }, 300)
         }
+
+        if(selectedTeamLeader != null) {
+            showSelectedTeamLeader(
+                selectedTeamLeader
+            )
+        }
     }
+
+
 
     private fun showErrorInLoadingBusinessAndJobProfiles(
         error: String
@@ -483,11 +521,10 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
         formMainInfoLayout.infoMessageTv.text = error
     }
 
-    private fun initSharedViewModel() {
+    private fun initSharedViewModel() = lifecycleScope.launchWhenCreated {
         leadMgmtSharedViewModel
-            .viewState
-            .observe(viewLifecycleOwner, {
-                it ?: return@observe
+            .viewStateFlow
+            .collect {
 
                 when (it) {
                     is LeadManagementSharedViewModelState.BusinessSelected -> showSelectedBusiness(
@@ -499,8 +536,12 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
                             it.jobProfileSelected
                         )
                     }
+                    is LeadManagementSharedViewModelState.ReportingTLSelected -> {
+                        viewModel.handleEvent(NewSelectionForm1Events.ReportingTeamLeaderSelected(it.tlSelected))
+                        showSelectedTeamLeader(it.tlSelected)
+                    }
                 }
-            })
+            }
     }
 
     private fun initSharedSingatureViewModel() = lifecycleScope.launchWhenCreated {
@@ -556,13 +597,19 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
 
         viewBinding.mainForm.jobProfileError.errorTextview.text = null
         viewBinding.mainForm.jobProfileError.root.gone()
-
     }
-
 
     private fun readContactsPermissionsGranted(): Boolean {
         return ContextCompat.checkSelfPermission(
             requireContext(), Manifest.permission.READ_CONTACTS
         ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun showSelectedTeamLeader(
+        selectedTeamLeader: TeamLeader
+    )  = viewBinding.mainForm.apply{
+
+        this.selectedReportingTlLabel.text = selectedTeamLeader.name
+        this.selectedReportingTlLabel.typeface = Typeface.DEFAULT_BOLD
     }
 }

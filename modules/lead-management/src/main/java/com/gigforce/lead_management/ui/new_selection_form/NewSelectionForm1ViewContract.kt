@@ -11,7 +11,9 @@ sealed class NewSelectionForm1ViewState {
 
     object LoadingBusinessAndJobProfiles : NewSelectionForm1ViewState()
 
-    object JobProfilesAndBusinessLoadSuccess : NewSelectionForm1ViewState()
+    data class JobProfilesAndBusinessLoadSuccess(
+        val selectedTeamLeader : TeamLeader?
+    ) : NewSelectionForm1ViewState()
 
     data class ErrorWhileLoadingBusinessAndJobProfiles(
         val error: String,
@@ -25,6 +27,10 @@ sealed class NewSelectionForm1ViewState {
     data class OpenSelectedJobProfileScreen(
         val selectedBusiness: JoiningBusinessAndJobProfilesItem,
         val jobProfiles: List<JobProfilesItem>
+    ) : NewSelectionForm1ViewState()
+
+    data class OpenSelectTLScreen(
+        val teamLeaders: List<TeamLeader>
     ) : NewSelectionForm1ViewState()
 
     object CheckingForUserDetailsFromProfiles : NewSelectionForm1ViewState()

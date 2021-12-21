@@ -37,7 +37,7 @@ interface JoiningProfileService {
     ): Response<List<JoiningNew>>
 
     @GET("business/listing/businessandjobProfile")
-    suspend fun getBusinessAndJobProfiles(): Response<List<JoiningBusinessAndJobProfilesItem>>
+    suspend fun getBusinessAndJobProfiles(): Response<JoiningBusinessJobProfilesAndTeamsLeaders>
 
     @GET("business/businessLocations")
     suspend fun getBusinessLocationAndTeamLeaders(

@@ -14,11 +14,11 @@ import com.google.android.material.imageview.ShapeableImageView
 import com.google.firebase.storage.FirebaseStorage
 
 class GigforceImageView(
-        context: Context,
-        attrs: AttributeSet
+    context: Context,
+    attrs: AttributeSet
 ) : ShapeableImageView(
-        context,
-        attrs
+    context,
+    attrs
 ) {
     @DrawableRes
     private var _errorImage: Int? = null
@@ -35,10 +35,10 @@ class GigforceImageView(
     }
 
     fun loadImageFromFirebase(
-            firebasePath: String,
-            @DrawableRes placeHolder: Int = -1,
-            @DrawableRes error: Int = -1,
-            centerCrop: Boolean = false
+        firebasePath: String,
+        @DrawableRes placeHolder: Int = -1,
+        @DrawableRes error: Int = -1,
+        centerCrop: Boolean = false
     ) {
         val pathRef = firebaseStorage.reference.child(firebasePath)
 
@@ -63,43 +63,43 @@ class GigforceImageView(
 
 
     fun loadImageIfUrlElseTryFirebaseStorage(
-            urlOrFirebasePath: String,
-            @DrawableRes placeHolder: Int = -1,
-            @DrawableRes error: Int = -1,
-            centerCrop: Boolean = false
+        urlOrFirebasePath: String,
+        @DrawableRes placeHolder: Int = -1,
+        @DrawableRes error: Int = -1,
+        centerCrop: Boolean = false
     ) {
 
         val isUrl = Patterns.WEB_URL.matcher(urlOrFirebasePath).matches()
         if (isUrl) {
             loadImage(
-                    Uri.parse(urlOrFirebasePath),
-                    placeHolder,
-                    error,
-                    centerCrop
+                Uri.parse(urlOrFirebasePath),
+                placeHolder,
+                error,
+                centerCrop
             )
         } else {
             loadImageFromFirebase(
-                    urlOrFirebasePath,
-                    placeHolder,
-                    error,
-                    centerCrop
+                urlOrFirebasePath,
+                placeHolder,
+                error,
+                centerCrop
             )
         }
     }
 
     fun loadImage(
-            image: Uri,
-            @DrawableRes placeHolder: Int = -1,
-            @DrawableRes error: Int = -1,
-            centerCrop: Boolean = false
+        image: Uri,
+        @DrawableRes placeHolder: Int = -1,
+        @DrawableRes error: Int = -1,
+        centerCrop: Boolean = false
     ) {
 
         var requestManager = Glide.with(context)
-                .load(image)
+            .load(image)
 
         if (placeHolder != -1) {
             requestManager = requestManager.placeholder(placeHolder)
-        } else{
+        } else {
             requestManager = requestManager.placeholder(ShimmerHelper.getShimmerDrawable())
         }
 
@@ -117,15 +117,15 @@ class GigforceImageView(
     }
 
     fun loadImage(
-            @DrawableRes image: Int,
-            centerCrop: Boolean = false
+        @DrawableRes image: Int,
+        centerCrop: Boolean = false
     ) {
 
         var glideRequestManager = Glide.with(context)
-                .load(image)
-                .error(getErrorImage())
+            .load(image)
+            .error(getErrorImage())
 
-        if(centerCrop){
+        if (centerCrop) {
             glideRequestManager = glideRequestManager.centerCrop()
         }
 
@@ -133,13 +133,13 @@ class GigforceImageView(
     }
 
     fun loadImage(
-            image: Bitmap,
-            centerCrop: Boolean
+        image: Bitmap,
+        centerCrop: Boolean
     ) {
 
         var requestManager = Glide.with(context)
-                .load(image)
-                .error(getErrorImage())
+            .load(image)
+            .error(getErrorImage())
 
         if (centerCrop) {
             requestManager = requestManager.centerCrop()
@@ -147,6 +147,76 @@ class GigforceImageView(
 
         requestManager.into(this)
     }
+
+    fun loadProfilePicture(
+        profilePictureThumbnail: String?,
+        profilePicture: String?
+    ) {
+        if (profilePicture.isNullOrEmpty() && profilePictureThumbnail.isNullOrEmpty()) {
+            loadDefaultUserAvatar()
+        } else {
+
+            if (!profilePictureThumbnail.isNullOrBlank()) {
+
+                val isUrl = Patterns.WEB_URL.matcher(profilePictureThumbnail).matches()
+                if (isUrl) {
+
+                    loadImage(
+                        Uri.parse(profilePictureThumbnail),
+                        getDefaultUserAvatar(),
+                        getDefaultUserAvatar()
+                    )
+                } else {
+
+                    val fullThumbnailPath = createFullProfilePicturePath(profilePictureThumbnail)
+                    loadImageFromFirebase(
+                        fullThumbnailPath,
+                        getDefaultUserAvatar(),
+                        getDefaultUserAvatar()
+                    )
+                }
+            } else {
+
+                val isUrl = Patterns.WEB_URL.matcher(profilePicture).matches()
+                if (isUrl) {
+
+                    loadImage(
+                        Uri.parse(profilePicture),
+                        getDefaultUserAvatar(),
+                        getDefaultUserAvatar()
+                    )
+                } else {
+
+                    val fullPath = createFullProfilePicturePath(
+                        profilePicture!!
+                    )
+                    loadImageFromFirebase(
+                        fullPath,
+                        getDefaultUserAvatar(),
+                        getDefaultUserAvatar()
+                    )
+                }
+            }
+        }
+    }
+
+    private fun createFullProfilePicturePath(
+        profilePicturePath: String
+    ): String {
+
+        return if (profilePicturePath.startsWith("profile_pics"))
+            profilePicturePath
+        else
+            "profile_pics/$profilePicturePath"
+
+    }
+
+    private fun loadDefaultUserAvatar() {
+        loadImage(getDefaultUserAvatar())
+    }
+
+    @DrawableRes
+    private fun getDefaultUserAvatar(): Int = R.drawable.ic_avatar_male
 
     fun clearImage() {
         Glide.with(context).clear(this)

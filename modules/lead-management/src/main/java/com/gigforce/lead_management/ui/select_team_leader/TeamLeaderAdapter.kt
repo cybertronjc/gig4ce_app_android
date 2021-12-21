@@ -4,13 +4,14 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Filter
+import android.widget.Filterable
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.gigforce.common_ui.core.TextDrawable
 import com.gigforce.common_ui.viewdatamodels.leadManagement.TeamLeader
+import com.gigforce.lead_management.BR
 import com.gigforce.lead_management.R
+import com.gigforce.lead_management.databinding.RecyclerItemTeamLeaderBinding
 
 class TeamLeaderAdapter(
     private val context: Context
@@ -35,14 +36,14 @@ class TeamLeaderAdapter(
         parent: ViewGroup,
         viewType: Int
     ): TeamLeaderViewHolder {
-        val view = LayoutInflater.from(
-            parent.context
-        ).inflate(
-            R.layout.recycler_item_city,
-            parent,
-            false
+
+        return TeamLeaderViewHolder(
+            RecyclerItemTeamLeaderBinding.inflate(
+                LayoutInflater.from(
+                    parent.context
+                )
+            )
         )
-        return TeamLeaderViewHolder(view)
     }
 
     fun getSelectedTL(): TeamLeader? {
@@ -62,7 +63,7 @@ class TeamLeaderAdapter(
         if (position != RecyclerView.NO_POSITION
             && position < filteredTLList.size
         ) {
-            holder.bindValues(filteredTLList.get(position), position)
+            holder.bindValues(filteredTLList.get(position))
         }
     }
 
@@ -72,7 +73,7 @@ class TeamLeaderAdapter(
             it.selected
         }
 
-        if(preSelectedItems.isNotEmpty()){
+        if (preSelectedItems.isNotEmpty()) {
             this.selectedId = preSelectedItems.first().id
         } else {
             this.selectedId = null
@@ -114,52 +115,42 @@ class TeamLeaderAdapter(
             notifyDataSetChanged()
 
             onTLSelectedListener?.onTeamLeaderFiltered(
-                tlCountVisibleAfterFiltering =  filteredTLList.size,
-                selectedTLVisible   =  filteredTLList.find { it.id == selectedId } != null
+                tlCountVisibleAfterFiltering = filteredTLList.size,
+                selectedTLVisible = filteredTLList.find { it.id == selectedId } != null
             )
         }
     }
 
 
     inner class TeamLeaderViewHolder(
-        itemView: View
-    ) : RecyclerView.ViewHolder(itemView),
-        View.OnClickListener {
+        private val itemViewBinding: RecyclerItemTeamLeaderBinding
+    ) : RecyclerView.ViewHolder(
+        itemViewBinding.root
+    ), View.OnClickListener {
 
-        private var businessNameTv: TextView = itemView.findViewById(R.id.city_name_tv)
-        private var businessImageIV: ImageView = itemView.findViewById(R.id.city_image_iv)
-        private var businessRootLayout: LinearLayout = itemView.findViewById(R.id.city_root_layout)
 
         init {
             itemView.setOnClickListener(this)
         }
 
-        fun bindValues(business: TeamLeader, position: Int) {
-
-            val companyInitials = if (business.name.isNullOrBlank())
-                "C"
-            else
-                business.name!![0].toString().toUpperCase()
-
-            val drawable = TextDrawable.builder().buildRound(
-                companyInitials,
-                ResourcesCompat.getColor(context.resources, R.color.lipstick, null)
+        fun bindValues(
+            teamLeader: TeamLeader
+        ) {
+            itemViewBinding.setVariable(BR.teamLeader, teamLeader)
+            itemViewBinding.teamLeaderProfilePictureIv.loadProfilePicture(
+                teamLeader.profilePictureThumbnail,
+                teamLeader.profilePicture
             )
-            businessImageIV.setImageDrawable(drawable)
-//            }
-//            else{
-//                requestManager.load(business.icon).into(businessImageIV)
-//            }
 
-            businessNameTv.text = business.name
+            if (selectedId == teamLeader.id) {
 
-            if (selectedId == business.id) {
-                businessRootLayout.background = ContextCompat.getDrawable(
+                itemViewBinding.jobProfileRootLayout.background = ContextCompat.getDrawable(
                     context,
                     R.drawable.option_selection_border
                 )
             } else {
-                businessRootLayout.setBackgroundResource(R.drawable.rectangle_2)
+
+                itemViewBinding.jobProfileRootLayout.setBackgroundResource(R.drawable.rectangle_2)
             }
         }
 
@@ -210,8 +201,8 @@ class TeamLeaderAdapter(
     interface OnTeamLeaderSelectedListener {
 
         fun onTeamLeaderFiltered(
-            tlCountVisibleAfterFiltering : Int,
-            selectedTLVisible : Boolean
+            tlCountVisibleAfterFiltering: Int,
+            selectedTLVisible: Boolean
         )
 
         fun onTeamLeaderSelected(
