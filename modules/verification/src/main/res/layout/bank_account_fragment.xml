@@ -11,7 +11,7 @@
         <com.gigforce.common_ui.components.cells.AppBar
             android:id="@+id/appBarBank"
             android:layout_width="match_parent"
-            android:layout_height="?android:actionBarSize"
+            android:layout_height="wrap_content"
             app:backgroundType="PinkBar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -34,6 +34,7 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <ScrollView
+            android:id="@+id/scroll_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@+id/submit_button"
@@ -163,7 +164,27 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/grayLine3" />
 
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/baneficiary_name_til"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_sm1"
+                        android:layout_marginTop="@dimen/dp_xl1"
+                        android:layout_marginRight="@dimen/dp_sm1"
+                        android:hint="@string/baneficiary_name_veri"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView10">
 
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/size_46"
+                            android:padding="4dp"
+                            android:enabled="false"
+                            android:singleLine="true" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/bank_acc_number_itl"
@@ -176,7 +197,7 @@
                         android:hint="@string/account_number_veri"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView10">
+                        app:layout_constraintTop_toBottomOf="@+id/baneficiary_name_til">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:layout_width="match_parent"
@@ -186,26 +207,7 @@
 
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/bank_name_til"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/dp_sm1"
-                        android:layout_marginTop="@dimen/dp_xl1"
-                        android:layout_marginRight="@dimen/dp_sm1"
-                        android:hint="@string/bank_name__veri"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/bank_acc_number_itl">
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/size_46"
-                            android:padding="4dp"
-                            android:singleLine="true" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ifsc_code"
@@ -220,7 +222,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/bank_name_til">
+                        app:layout_constraintTop_toBottomOf="@+id/bank_acc_number_itl">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:layout_width="match_parent"
@@ -253,7 +255,285 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/bn_confirmation_cl"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dp_mid"
+            android:layout_marginTop="@dimen/dp_xl7"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appBarBank">
 
+            <TextView
+                android:id="@+id/pending_steps"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_xl4"
+                style="@style/primary_color_heading"
+                android:text="@string/bank_veri_section_detail_veri"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/validation_cl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/pending_steps">
+
+                <ImageView
+                    android:id="@+id/validation_check"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/size_22"
+                    android:src="@drawable/ic_green_check_circle_18"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/validation_status"
+                    style="@style/section_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/size_20"
+                    android:text="@string/bank_validated_veri"
+                    app:layout_constraintStart_toEndOf="@+id/validation_check"
+                    app:layout_constraintTop_toTopOf="@+id/validation_check"
+                    app:layout_constraintBottom_toBottomOf="@+id/validation_check"/>
+
+                <View
+                    android:id="@+id/seprator"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/size_22"
+                    android:background="#EBEBEB"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/validation_check" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/bn_cl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/validation_cl">
+
+                <ImageView
+                    android:id="@+id/bn_check"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/size_22"
+                    android:src="@drawable/ic_baseline_error_18"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/bn_status"
+                    style="@style/section_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/size_20"
+                    android:text="@string/bank_name_confirmation_title_veri"
+                    app:layout_constraintStart_toEndOf="@+id/bn_check"
+                    app:layout_constraintTop_toTopOf="@+id/bn_check"
+                    app:layout_constraintBottom_toBottomOf="@+id/bn_check"/>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <TextView
+                android:id="@+id/confirm_bn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_xl4"
+                style="@style/primary_color_heading"
+                android:text="@string/confirm_bn_title_veri"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/bn_cl" />
+
+            <TextView
+                android:id="@+id/confirm_bn_detail"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_sm4"
+                style="@style/dialog_label"
+                android:layout_marginRight="@dimen/size_20"
+                android:text="@string/confirm_bn_subtitle_veri"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/confirm_bn" />
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/banificiary_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_20"
+                android:layout_marginRight="@dimen/dp_sm1"
+                android:paddingBottom="@dimen/size_20"
+                android:background="@drawable/rect_light_pink_veri"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/confirm_bn_detail">
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guidline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.40" />
+                <TextView
+                    android:id="@+id/bn_label"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/size_20"
+                    android:text="@string/bn_label_detail_box_veri"
+                    style="@style/dialog_label"
+                    android:layout_marginLeft="@dimen/size_20"
+                    app:layout_constraintEnd_toStartOf="@+id/guidline"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    />
+
+
+
+                <TextView
+                    android:id="@+id/colon_bn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="  :  "
+                    style="@style/bn_name"
+                    app:layout_constraintStart_toEndOf="@+id/guidline"
+                    app:layout_constraintTop_toTopOf="@+id/bn_label" />
+                <TextView
+                    android:id="@+id/bn_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="-"
+                    android:layout_marginRight="@dimen/dp_sm4"
+                    style="@style/bn_name"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/colon_bn"
+                    app:layout_constraintTop_toTopOf="@+id/bn_label" />
+
+
+
+
+                <TextView
+                    android:id="@+id/account_no_label"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_sm4"
+                    android:text="@string/account_label_in_box_veri"
+                    style="@style/dialog_label"
+                    app:layout_constraintEnd_toStartOf="@+id/guidline"
+                    app:layout_constraintStart_toStartOf="@+id/bn_label"
+                    app:layout_constraintTop_toBottomOf="@id/bn_label"
+                    />
+
+
+
+                <TextView
+                    android:id="@+id/colon_bn1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="  :  "
+                    style="@style/dialog_label"
+                    app:layout_constraintStart_toEndOf="@+id/guidline"
+                    app:layout_constraintTop_toTopOf="@+id/account_no_label" />
+                <TextView
+                    android:id="@+id/account_no_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="-"
+                    style="@style/dialog_label"
+                    android:layout_marginRight="@dimen/dp_sm4"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/colon_bn1"
+                    app:layout_constraintTop_toTopOf="@+id/account_no_label" />
+
+
+
+
+                <TextView
+                    android:id="@+id/ifsc_label"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_sm4"
+                    android:text="@string/ifsc_in_box_veri"
+                    style="@style/dialog_label"
+                    app:layout_constraintEnd_toStartOf="@+id/guidline"
+                    app:layout_constraintStart_toStartOf="@+id/bn_label"
+                    app:layout_constraintTop_toBottomOf="@id/account_no_label"
+                    />
+
+                <TextView
+                    android:id="@+id/colon_bn2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="  :  "
+                    style="@style/dialog_label"
+                    app:layout_constraintStart_toEndOf="@+id/guidline"
+                    app:layout_constraintTop_toTopOf="@+id/ifsc_label" />
+
+                <TextView
+                    android:id="@+id/ifsc_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="-"
+                    style="@style/dialog_label"
+                    android:layout_marginRight="@dimen/dp_sm4"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/colon_bn1"
+                    app:layout_constraintTop_toTopOf="@+id/ifsc_label" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <Button
+                android:id="@+id/confirm_bn_bs"
+                android:layout_width="0dp"
+                android:layout_height="38dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/cancelButton"
+                android:layout_marginBottom="@dimen/size_18"
+                android:layout_marginRight="@dimen/size_20"
+                android:text="@string/confirm_veri"
+                android:textAllCaps="true"
+                style="@style/primary_button_style"/>
+
+            <Button
+                android:id="@+id/cancelButton"
+                android:layout_width="0dp"
+                android:layout_height="46dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginBottom="@dimen/size_20"
+                android:layout_marginRight="@dimen/size_20"
+                style="@style/ActionOutlineButtonStyle"
+                android:textAllCaps="true"
+                android:text="@string/deny_veri"/>
+
+            <Button
+                android:id="@+id/okay_button"
+                android:layout_width="0dp"
+                android:layout_height="38dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginBottom="@dimen/size_20"
+                android:layout_marginRight="@dimen/size_20"
+                android:text="@string/okay_veri"
+                android:textAllCaps="true"
+                style="@style/primary_button_style"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ProgressBar
             android:id="@+id/progressBar"

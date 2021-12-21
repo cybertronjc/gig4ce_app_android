@@ -384,7 +384,7 @@
     <string name="license_number_veri">License Number</string>
     <string name="contract_status_veri">Contract Status</string>
 
-<!--    <string name="veriScreenTitle">Hello Giger!</string>-->
+    <!--    <string name="veriScreenTitle">Hello Giger!</string>-->
     <string name="veri_address_title">"Step 1 : Please add your Address"</string>
     <string name="veri_add_address">"Address"</string>
     <string name="upload_photo_veri">Upload Photo</string>
@@ -440,15 +440,37 @@
     <string name="no_doc_title_aadhaar_veri">Aadhaar not available!</string>
     <string name="no_doc_subtitle_aadhaar_veri">No Worries! Once you own Aadhaar you can untick the checkbox to verify it</string>
     <!--    <string name="veri_add_doc_front">"Front Side"</string>-->
-<!--    <string name="veri_add_doc_back">"Back Side"</string>-->
-<!--    <string name="veri_pan_title">"Step 5 : Upload your Pan"</string>-->
-<!--    <string name="veri_aadhaar_title">"Step 2 : Upload your Aadhaar"</string>-->
-<!--    <string name="veri_no_aadhaar">"No Aadhaar! Skip>>"</string>-->
-<!--    <string name="veri_dl_title">"Step 3 : Upload your Driving License"</string>-->
-<!--    <string name="veri_bank_title">"Step 4 : Please add your Bank Details"</string>-->
-<!--    <string name="veri_add_bank">"Add Bank Details"</string>-->
-<!--    <string name="veri_done">Hurray!!!\nKYC Documents submitted.\nWe will let you know once Verified.</string>-->
+    <!--    <string name="veri_add_doc_back">"Back Side"</string>-->
+    <!--    <string name="veri_pan_title">"Step 5 : Upload your Pan"</string>-->
+    <!--    <string name="veri_aadhaar_title">"Step 2 : Upload your Aadhaar"</string>-->
+    <!--    <string name="veri_no_aadhaar">"No Aadhaar! Skip>>"</string>-->
+    <!--    <string name="veri_dl_title">"Step 3 : Upload your Driving License"</string>-->
+    <!--    <string name="veri_bank_title">"Step 4 : Please add your Bank Details"</string>-->
+    <!--    <string name="veri_add_bank">"Add Bank Details"</string>-->
+    <!--    <string name="veri_done">Hurray!!!\nKYC Documents submitted.\nWe will let you know once Verified.</string>-->
     <string name="upload_pan_image_first_veri">Upload PAN card image first</string>
     <string name="upload_dl_front_first_veri">Upload DL front image first</string>
     <string name="please_enter_bank_info_below">Please enter your Bank information below.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="aknowledge_your_account">Your verified account</string>
+    <string name="confirm_beneficiary_title_veri">Confirm Beneficiary Name</string>
+    <string name="cinfirm_beneficiary_subtitle_veri">Your bank account has been validated, please confirm your beneficiary name.</string>
+    <string name="bn_label_detail_box_veri">Beneficiary Name</string>
+    <string name="account_label_in_box_veri">Account No</string>
+    <string name="ifsc_in_box_veri">IFSC</string>
+    <string name="bank_veri_section_detail_veri">Bank Verification (1/2)</string>
+    <string name="bank_validated_veri">Bank Validated</string>
+    <string name="bank_name_confirmation_title_veri">Beneficiary Name Confirmation</string>
+    <string name="confirm_bn_title_veri">Confirm Beneficiary Name</string>
+    <string name="confirm_bn_subtitle_veri">Your bank verification is pending. Please confirm the beneficiary name.</string>
+    <string name="bn_not_matched_veri">Beneficiary Name Doesn’t Match</string>
+    <string name="plz_ask_to_giger_to_confirm_bn_veri">Please ask the giger to confirm beneficiary name on Gigforce app.</string>
+    <string name="deny_veri">Deny</string>
+    <string name="inprogress_veri">Inprogress</string>
+    <string name="bank_account_verified_successfully_veri">Bank Account Verified Successfully!</string>
+    <string name="confirmation_pending_veri">Confirmation Pending</string>
+    <string name="baneficiary_name_veri">Baneficiary Name</string>
+
+
 </resources>

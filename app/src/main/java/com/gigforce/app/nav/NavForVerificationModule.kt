@@ -35,5 +35,6 @@ class NavForVerificationModule(
         baseImplementation.registerRoute("${moduleName}/pancardimageupload",R.id.panCardFragment)
         baseImplementation.registerRoute("${moduleName}/drivinglicenseimageupload",R.id.drivingLicenseFragment)
         baseImplementation.registerRoute("${moduleName}/AadharDetailInfoFragment",R.id.adharDetailInfoFragment)
+        baseImplementation.registerRoute("${moduleName}/acknowledgeBankBS",R.id.acknowledgeBankBS)
     }
 }

@@ -33,6 +33,12 @@
         android:name="com.gigforce.app.modules.profile.AddContactBottomSheetFragment"
         android:label="AddContactBottomSheetFragment"
         tools:layout="@layout/add_contact_bottom_sheet" />
+    <dialog android:id="@+id/confirmBNBankBS"
+        android:name="com.gigforce.verification.mainverification.bankaccount.ConfirmBNBankBS"
+        android:label="ConfirmBNBankBS"
+        tools:layout="@layout/fragment_confirm_bn_bank_bs"
+
+        />
     <dialog
         android:id="@+id/addLanguageBottomSheetFragment"
         android:name="com.gigforce.app.modules.profile.AddLanguageBottomSheetFragment"
@@ -1137,5 +1143,9 @@
         android:name="com.gigforce.modules.feature_chat.screens.ReportUserBottomSheetFragment"
         android:label="ReportUserBottomSheetFragment" />
 
+    <dialog
+        android:id="@+id/acknowledgeBankBS"
+        android:name="com.gigforce.verification.mainverification.bankaccount.AcknowledgeBankBS"
+        android:label="AcknowledgeBankBS" />
 </navigation>
 

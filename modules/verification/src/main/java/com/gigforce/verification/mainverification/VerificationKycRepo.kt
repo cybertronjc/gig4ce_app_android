@@ -1,15 +1,14 @@
 package com.gigforce.verification.mainverification
 
 import android.util.Log
-import com.gigforce.ambassador.user_rollment.kycdocs.Data
-import com.gigforce.ambassador.user_rollment.kycdocs.KycVerifyReqModel
+import com.gigforce.common_ui.remote.verification.Data
+import com.gigforce.common_ui.remote.verification.KycVerifyReqModel
 import com.gigforce.common_ui.remote.verification.*
 import com.gigforce.core.fb.BaseFirestoreDBRepository
 import com.gigforce.core.datamodels.client_activation.States
 import com.gigforce.core.datamodels.verification.VerificationBaseModel
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.extensions.updateOrThrow
-import com.gigforce.core.retrofit.RetrofitFactory
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.google.firebase.Timestamp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -103,22 +102,49 @@ class VerificationKycRepo @Inject constructor(private val iBuildConfigVM: IBuild
         }
     }
 
-    suspend fun setVerifiedStatus(status: Boolean?, uid: String) : Boolean{
+    suspend fun setVerifiedStatus(status: Boolean?, uid: String) : UserConsentResponse{
         try {
-            db.collection(getCollectionName()).document(uid).updateOrThrow(
-                mapOf(
-                    "bank_details.verified" to status,
-                    "bank_details.verifiedOn" to Timestamp.now(),
-                    "updatedAt" to Timestamp.now(),
-                    "updatedBy" to FirebaseAuthStateListener.getInstance()
-                        .getCurrentSignInUserInfoOrThrow().uid
-                )
-            )
-            return true
+            status?.let {
+                val userConsentResponse = kycService.onConfirmButton(iBuildConfigVM.getKycUserConsentUrl(),UserConsentRequest(it))
+                if(userConsentResponse.isSuccessful){
+                    return userConsentResponse.body()!!
+                }else{
+                    FirebaseCrashlytics.getInstance()
+                        .log("Exception : kycOcrVerification Method ${userConsentResponse.message()}")
+                    throw Exception("Issue in KYC Ocr result ${userConsentResponse.message()}")
+                }
+            }
+//            db.collection(getCollectionName()).document(uid).updateOrThrow(
+//                mapOf(
+//                    "bank_details.verified" to status,
+//                    "bank_details.verifiedOn" to Timestamp.now(),
+//                    "updatedAt" to Timestamp.now(),
+//                    "updatedBy" to FirebaseAuthStateListener.getInstance()
+//                        .getCurrentSignInUserInfoOrThrow().uid
+//                )
+//            )
+            return throw Exception("Issue in user input}")
         }catch (e: Exception){
-            return false
+            return throw Exception("Issue in network call ${e}")
         }
     }
+
+    suspend fun setUserAknowledge() : UserConsentResponse{
+        try {
+                val userConsentResponse = kycService.onConfirmButton(iBuildConfigVM.getKycUserConsentUrl(),UserConsentRequest(counter = 1))
+                if(userConsentResponse.isSuccessful){
+                    return userConsentResponse.body()!!
+                }else{
+                    FirebaseCrashlytics.getInstance()
+                        .log("Exception : kycOcrVerification Method ${userConsentResponse.message()}")
+                    throw Exception("Issue in KYC Ocr result ${userConsentResponse.message()}")
+                }
+
+        }catch (e: Exception){
+            return throw Exception("Issue in network call}")
+        }
+    }
+
     suspend fun setVerificationStatusStringToBlank(uid: String){
         try {
             db.collection(getCollectionName()).document(uid).updateOrThrow(
