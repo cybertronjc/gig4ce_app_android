@@ -469,6 +469,7 @@
     <string name="deny_veri">Deny</string>
     <string name="inprogress_veri">Inprogress</string>
     <string name="bank_account_verified_successfully_veri">Bank Account Verified Successfully!</string>
+    <string name="confirmation_pending_veri">Confirmation Pending</string>
 
 
 </resources>

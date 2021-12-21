@@ -36,122 +36,118 @@
         android:id="@+id/confirmation_section"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_mid"
         android:layout_marginTop="@dimen/size_40"
-        android:paddingBottom="@dimen/dp_mid"
-        android:layout_marginStart="@dimen/size_20"
         android:layout_marginEnd="@dimen/dp_mid"
-        android:layout_marginBottom="@dimen/dp_xl4"
+        android:layout_marginBottom="@dimen/size_40"
         android:background="@drawable/rect_light_pink_veri"
-        app:layout_constraintStart_toStartOf="parent"
+        android:paddingBottom="@dimen/dp_mid"
+        app:layout_constraintBottom_toTopOf="@+id/okay_bn_bs"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView9">
+
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guidline"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.40" />
+
         <TextView
             android:id="@+id/bn_label"
+            style="@style/dialog_label"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_mid"
             android:layout_marginTop="@dimen/dp_mid"
             android:text="@string/bn_label_detail_box_veri"
-            style="@style/dialog_label"
-            android:layout_marginLeft="@dimen/dp_mid"
             app:layout_constraintEnd_toStartOf="@+id/guidline"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
-
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <TextView
             android:id="@+id/colon_bn"
+            style="@style/bn_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="  :  "
-            style="@style/bn_name"
             app:layout_constraintStart_toEndOf="@+id/guidline"
             app:layout_constraintTop_toTopOf="@+id/bn_label" />
+
         <TextView
             android:id="@+id/bn_tv"
+            style="@style/bn_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="-"
             android:layout_marginRight="@dimen/dp_sm4"
-            style="@style/bn_name"
+            android:text="-"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/colon_bn"
             app:layout_constraintTop_toTopOf="@+id/bn_label" />
 
 
-
-
         <TextView
             android:id="@+id/account_no_label"
+            style="@style/dialog_label"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_sm4"
             android:text="@string/account_label_in_box_veri"
-            style="@style/dialog_label"
             app:layout_constraintEnd_toStartOf="@+id/guidline"
             app:layout_constraintStart_toStartOf="@+id/bn_label"
-            app:layout_constraintTop_toBottomOf="@id/bn_label"
-            />
-
+            app:layout_constraintTop_toBottomOf="@id/bn_label" />
 
 
         <TextView
             android:id="@+id/colon_bn1"
+            style="@style/dialog_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="  :  "
-            style="@style/dialog_label"
             app:layout_constraintStart_toEndOf="@+id/guidline"
             app:layout_constraintTop_toTopOf="@+id/account_no_label" />
+
         <TextView
             android:id="@+id/account_no_tv"
+            style="@style/dialog_label"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="-"
-            style="@style/dialog_label"
             android:layout_marginRight="@dimen/dp_sm4"
+            android:text="-"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/colon_bn1"
             app:layout_constraintTop_toTopOf="@+id/account_no_label" />
 
 
-
-
         <TextView
             android:id="@+id/ifsc_label"
+            style="@style/dialog_label"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_sm4"
             android:text="@string/ifsc_in_box_veri"
-            style="@style/dialog_label"
             app:layout_constraintEnd_toStartOf="@+id/guidline"
             app:layout_constraintStart_toStartOf="@+id/bn_label"
-            app:layout_constraintTop_toBottomOf="@id/account_no_label"
-            />
+            app:layout_constraintTop_toBottomOf="@id/account_no_label" />
 
         <TextView
             android:id="@+id/colon_bn2"
+            style="@style/dialog_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="  :  "
-            style="@style/dialog_label"
             app:layout_constraintStart_toEndOf="@+id/guidline"
             app:layout_constraintTop_toTopOf="@+id/ifsc_label" />
 
         <TextView
             android:id="@+id/ifsc_tv"
+            style="@style/dialog_label"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="-"
-            style="@style/dialog_label"
             android:layout_marginRight="@dimen/dp_sm4"
+            android:text="-"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/colon_bn1"
             app:layout_constraintTop_toTopOf="@+id/ifsc_label" />
@@ -159,14 +155,13 @@
 
     <TextView
         android:id="@+id/okay_bn_bs"
+        style="@style/primary_button_style"
         android:layout_width="0dp"
         android:layout_height="38dp"
-        android:layout_marginTop="@dimen/size_40"
-        app:layout_constraintStart_toStartOf="@+id/confirmation_section"
-        app:layout_constraintEnd_toEndOf="@+id/confirmation_section"
-        app:layout_constraintTop_toBottomOf="@id/confirmation_section"
-        android:layout_marginBottom="@dimen/dp_normal"
         android:text="@string/okay_veri"
+        android:layout_marginBottom="@dimen/dp_mid"
         android:textAllCaps="true"
-        style="@style/primary_button_style"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/confirmation_section"
+        app:layout_constraintStart_toStartOf="@+id/confirmation_section" />
 </androidx.constraintlayout.widget.ConstraintLayout>
