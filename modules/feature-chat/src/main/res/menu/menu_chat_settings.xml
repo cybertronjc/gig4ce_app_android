@@ -7,11 +7,11 @@
         android:title="@string/chat_settings_chat"
         app:showAsAction="collapseActionView" />
 
-    <item
-        android:id="@+id/action_select_chat"
-        android:orderInCategory="100"
-        android:title="@string/select_chat_settings_chat"
-        app:showAsAction="collapseActionView" />
+<!--    <item-->
+<!--        android:id="@+id/action_select_chat"-->
+<!--        android:orderInCategory="100"-->
+<!--        android:title="@string/select_chat_settings_chat"-->
+<!--        app:showAsAction="collapseActionView" />-->
 
     <item
         android:id="@+id/action_new_group"
