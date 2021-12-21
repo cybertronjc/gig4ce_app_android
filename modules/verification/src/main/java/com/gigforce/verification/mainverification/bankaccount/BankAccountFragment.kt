@@ -11,6 +11,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
+import android.text.InputFilter
 import android.text.TextWatcher
 import android.util.Log
 import android.util.Size
@@ -54,7 +55,9 @@ import com.google.firebase.auth.FirebaseUser
 import com.jaeger.library.StatusBarUtil
 import com.yalantis.ucrop.UCrop
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.aadhaar_card_options_fragment.view.*
 import kotlinx.android.synthetic.main.veri_screen_info_component.view.*
+import kotlinx.android.synthetic.main.veri_screen_info_component.view.iconwhyweneed
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -144,6 +147,9 @@ class BankAccountFragment : Fragment(),
     }
 
     private fun initViews() {
+        viewBinding.bankAccNumberItl.editText?.clearFocus()
+        viewBinding.ifscCode.editText?.clearFocus()
+        viewBinding.baneficiaryNameTil.gone()
         viewBinding.toplayoutblock.setIdonthaveDocContent(
             resources.getString(R.string.no_doc_title_bank_veri),
             resources.getString(R.string.no_doc_subtitle_bank_veri)
@@ -412,6 +418,10 @@ class BankAccountFragment : Fragment(),
                     viewBinding.bnConfirmationCl.gone()
                     viewBinding.scrollView.visible()
                     viewBinding.toplayoutblock.visible()
+                    viewBinding.bankAccNumberItl.editText?.clearFocus()
+                    viewBinding.ifscCode.editText?.clearFocus()
+                    viewBinding.bankAccNumberItl.editText?.setFocusable(false)
+                    viewBinding.ifscCode.editText?.setFocusable(false)
 
                 }
                 "started","processing","validated" -> {
@@ -493,6 +503,9 @@ class BankAccountFragment : Fragment(),
         enableFields: Boolean
     ): ArrayList<KYCImageModel> {
         var list = ArrayList<KYCImageModel>()
+        if(obj1 == null){
+            viewBinding.baneficiaryNameTil.gone()
+        }
         obj1?.let { obj ->
             if(verificationScreenStatus == VerificationScreenStatus.VERIFIED) {
                 viewBinding.baneficiaryNameTil.visible()
@@ -526,7 +539,7 @@ class BankAccountFragment : Fragment(),
             }
 //            viewBinding.toplayoutblock.setImageViewPager(list) need to remove uploading option 2856 ticket
 
-        }?: viewBinding.baneficiaryNameTil.gone()
+        }
 
 
         viewBinding.bankAccNumberItl.editText?.isEnabled = enableFields
@@ -554,7 +567,8 @@ class BankAccountFragment : Fragment(),
         )
         initializeImages()
         viewBinding.toplayoutblock.resetAllViews()
-
+        viewBinding.toplayoutblock.checkboxidonthave.gone()// keep this statement below resetAllViews() method
+        viewBinding.toplayoutblock.docsubtitledetail.gone()// keep this statement below resetAllViews() method
         viewBinding.bankAccNumberItl.editText?.setText("")
         viewBinding.ifscCode.editText?.setText("")
     }
@@ -707,6 +721,9 @@ class BankAccountFragment : Fragment(),
 
     var oldStateHolder = OLDStateHolder("")
     private fun listeners() {
+        viewBinding.ifscInputET.filters = arrayOf<InputFilter>(InputFilter.AllCaps())
+        viewBinding.bankAccNumberItl.textView?.filters = arrayOf<InputFilter>(InputFilter.AllCaps())
+
         viewBinding.toplayoutblock.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { p1, b1 ->
             if (b1) {
                 oldStateHolder.submitButtonCta = viewBinding.submitButton.text.toString()

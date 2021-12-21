@@ -83,7 +83,9 @@ class BankAccountViewModel @Inject constructor(
         viewModelScope.launch {
             _userConsentModel.value = Lce.Loading
             try {
-                _userConsentModel.value = Lce.content(verificationKycRepo.setVerifiedStatus(status, uid))
+                val responseData = verificationKycRepo.setVerifiedStatus(status, uid)
+                responseData.optionSelected = status
+                _userConsentModel.value = Lce.content(responseData)
             } catch (e: Exception) {
                 _userConsentModel.value = Lce.error(e.toString())
             }

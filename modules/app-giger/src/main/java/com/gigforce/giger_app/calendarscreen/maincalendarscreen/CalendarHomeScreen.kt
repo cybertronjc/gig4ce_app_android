@@ -141,7 +141,7 @@ class CalendarHomeScreen : Fragment(),
             it.status?.let {
                 when(it){
                     "verification_pending" -> {
-                        navigation.navigateTo("bankdetailconfirmationbottomsheet")
+                        navigation.navigateTo("verification/bankdetailconfirmationbottomsheet")
                     }
                 }
             }
