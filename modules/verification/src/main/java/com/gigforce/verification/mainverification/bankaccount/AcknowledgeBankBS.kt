@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.TrackingEventArgs
+import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.Lce
 import com.gigforce.verification.R
 import com.gigforce.verification.util.VerificationEvents
@@ -54,6 +55,7 @@ class AcknowledgeBankBS : BottomSheetDialogFragment() {
         if(user == null)dismiss()
         else {
             isCancelable = false
+            initializeAll()
             requestBankDetailData()
             observer()
 
@@ -72,6 +74,13 @@ class AcknowledgeBankBS : BottomSheetDialogFragment() {
 
         }
 
+    }
+
+    private fun initializeAll() {
+        context?.let {
+            GlideApp.with(it).load(R.drawable.green_tik_gif).into(greenTickImage)
+
+        }
     }
 
     private fun requestBankDetailData() {

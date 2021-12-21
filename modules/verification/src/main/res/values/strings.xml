@@ -467,10 +467,10 @@
     <string name="bn_not_matched_veri">Beneficiary Name Doesn’t Match</string>
     <string name="plz_ask_to_giger_to_confirm_bn_veri">Please ask the giger to confirm beneficiary name on Gigforce app.</string>
     <string name="deny_veri">Deny</string>
-    <string name="inprogress_veri">Inprogress</string>
+    <string name="inprogress_veri">In-Progress</string>
     <string name="bank_account_verified_successfully_veri">Bank Account Verified Successfully!</string>
     <string name="confirmation_pending_veri">Confirmation Pending</string>
-    <string name="baneficiary_name_veri">Baneficiary Name</string>
+    <string name="baneficiary_name_veri">Beneficiary Name</string>
 
 
 </resources>

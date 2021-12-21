@@ -182,6 +182,7 @@
                             android:layout_height="@dimen/size_46"
                             android:padding="4dp"
                             android:enabled="false"
+                            android:focusable="false"
                             android:singleLine="true" />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -203,6 +204,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/size_46"
                             android:padding="4dp"
+                            android:maxLength="30"
+                            android:digits="QWERTYUIOPASDFGHJKLZXCVBNM1234567890"
+                            android:inputType="textCapCharacters"
                             android:singleLine="true" />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -225,9 +229,12 @@
                         app:layout_constraintTop_toBottomOf="@+id/bank_acc_number_itl">
 
                         <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/ifscInputET"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/size_46"
                             android:padding="4dp"
+                            android:digits="QWERTYUIOPASDFGHJKLZXCVBNM1234567890"
+                            android:inputType="textCapCharacters"
                             android:singleLine="true" />
 
                     </com.google.android.material.textfield.TextInputLayout>
