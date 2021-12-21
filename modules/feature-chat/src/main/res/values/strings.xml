@@ -61,7 +61,7 @@
     <string name="share_chat">SHARE</string>
     <string name="you_ve_blocked_this_contact_chat">You\'ve blocked this contact</string>
     <string name="welcome_to_user_chat_chat">Welcome to User Chat</string>
-    <string name="type_a_message_chat">Type a message</string>
+    <string name="type_a_message_chat">Type a message...</string>
     <string name="this_group_is_deactivated_chat">This group is deactivated</string>
     <string name="group_controls_chat">Group Controls</string>
     <string name="only_admins_can_post_in_group_chat">Only admins can post in group</string>
