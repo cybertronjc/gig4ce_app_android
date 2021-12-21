@@ -55,7 +55,9 @@ import com.google.firebase.auth.FirebaseUser
 import com.jaeger.library.StatusBarUtil
 import com.yalantis.ucrop.UCrop
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.aadhaar_card_options_fragment.view.*
 import kotlinx.android.synthetic.main.veri_screen_info_component.view.*
+import kotlinx.android.synthetic.main.veri_screen_info_component.view.iconwhyweneed
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -720,6 +722,8 @@ class BankAccountFragment : Fragment(),
     var oldStateHolder = OLDStateHolder("")
     private fun listeners() {
         viewBinding.ifscInputET.filters = arrayOf<InputFilter>(InputFilter.AllCaps())
+        viewBinding.bankAccNumberItl.textView?.filters = arrayOf<InputFilter>(InputFilter.AllCaps())
+
         viewBinding.toplayoutblock.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { p1, b1 ->
             if (b1) {
                 oldStateHolder.submitButtonCta = viewBinding.submitButton.text.toString()
