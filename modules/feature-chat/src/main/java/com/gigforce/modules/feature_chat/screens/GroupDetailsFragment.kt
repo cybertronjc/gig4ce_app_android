@@ -33,6 +33,8 @@ import com.gigforce.common_ui.chat.models.ContactModel
 import com.gigforce.common_ui.chat.models.GroupMedia
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.metaDataHelper.ImageMetaDataHelpers
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.gone
@@ -42,6 +44,7 @@ import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.Lse
 import com.gigforce.modules.feature_chat.*
+import com.gigforce.modules.feature_chat.analytics.CommunityEvents
 import com.gigforce.modules.feature_chat.screens.adapters.GroupMediaRecyclerAdapter
 import com.gigforce.modules.feature_chat.screens.adapters.GroupMembersRecyclerAdapter
 import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel
@@ -67,6 +70,9 @@ class GroupDetailsFragment : Fragment(),
 
     @Inject
     lateinit var navigation: INavigation
+
+    @Inject
+    lateinit var eventTracker: IEventTracker
 
     private val chatNavigation: ChatNavigation by lazy {
         ChatNavigation(navigation)
@@ -280,6 +286,8 @@ class GroupDetailsFragment : Fragment(),
         )
 
         showOrHideAddGroupOption(content)
+        var map = mapOf("group_name" to content.name, "no_of_participants" to content.groupMembers.size)
+        eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_GROUP_DETAILS_SCREEN, map))
     }
 
     private fun showGroupIcon(imagePath: String) {

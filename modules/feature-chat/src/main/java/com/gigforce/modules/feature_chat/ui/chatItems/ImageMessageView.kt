@@ -18,6 +18,8 @@ import com.gigforce.common_ui.chat.ChatConstants
 import com.gigforce.common_ui.chat.models.ChatMessage
 import com.gigforce.common_ui.shimmer.ShimmerHelper
 import com.gigforce.common_ui.storage.MediaStoreApiHelpers
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.extensions.dp
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toDisplayText
@@ -26,6 +28,7 @@ import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.modules.feature_chat.ChatNavigation
 import com.gigforce.modules.feature_chat.R
+import com.gigforce.modules.feature_chat.analytics.CommunityEvents
 import com.gigforce.modules.feature_chat.screens.GroupMessageViewInfoFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -49,7 +52,8 @@ abstract class ImageMessageView(
     @Inject
     lateinit var navigation: INavigation
 
-
+    @Inject
+    lateinit var eventTracker: IEventTracker
 
     private val chatNavigation: ChatNavigation by lazy {
         ChatNavigation(navigation)
@@ -296,31 +300,42 @@ abstract class ImageMessageView(
         }
     }
 
-    private fun setReceivedStatus(msg: ChatMessage) = when (msg.status) {
-        ChatConstants.MESSAGE_STATUS_NOT_SENT -> {
-            Glide.with(context)
+    private fun setReceivedStatus(msg: ChatMessage) {
+        var sendingMsg = false
+        var map = mapOf("message_type" to "Image")
+        when (msg.status) {
+            ChatConstants.MESSAGE_STATUS_NOT_SENT -> {
+                Glide.with(context)
                     .load(R.drawable.ic_msg_pending)
                     .into(receivedStatusIV)
-        }
-        ChatConstants.MESSAGE_STATUS_DELIVERED_TO_SERVER -> {
-            Glide.with(context)
+                sendingMsg = true
+            }
+            ChatConstants.MESSAGE_STATUS_DELIVERED_TO_SERVER -> {
+                Glide.with(context)
                     .load(R.drawable.ic_msg_sent)
                     .into(receivedStatusIV)
-        }
-        ChatConstants.MESSAGE_STATUS_RECEIVED_BY_USER -> {
-            Glide.with(context)
+                if (sendingMsg)
+                    eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_MESSAGE_SENT_TO_SERVER, map))
+            }
+            ChatConstants.MESSAGE_STATUS_RECEIVED_BY_USER -> {
+                Glide.with(context)
                     .load(R.drawable.ic_msg_delivered)
                     .into(receivedStatusIV)
-        }
-        ChatConstants.MESSAGE_STATUS_READ_BY_USER -> {
-            Glide.with(context)
+                if (sendingMsg)
+                    eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_MESSAGE_RECEIVED, map))
+            }
+            ChatConstants.MESSAGE_STATUS_READ_BY_USER -> {
+                Glide.with(context)
                     .load(R.drawable.ic_msg_seen)
                     .into(receivedStatusIV)
-        }
-        else -> {
-            Glide.with(context)
+                if (sendingMsg)
+                    eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_MESSAGE_READ, map))
+            }
+            else -> {
+                Glide.with(context)
                     .load(R.drawable.ic_msg_pending)
                     .into(receivedStatusIV)
+            }
         }
     }
 
@@ -392,10 +407,14 @@ abstract class ImageMessageView(
 
                 GlobalScope.launch(Dispatchers.Main) {
                     Toast.makeText(context, "Image saved to gallery", Toast.LENGTH_SHORT).show()
+                    var map = mapOf("media_type" to "Image")
+                    eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_MEDIA_SAVED_TO_GALLERY, map))
                 }
             } catch (e: Exception) {
                 GlobalScope.launch(Dispatchers.Main) {
                     Toast.makeText(context, "Unable to save image to gallery", Toast.LENGTH_SHORT).show()
+                    var map = mapOf("media_type" to "Image")
+                    eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_MEDIA_FAILED_TO_SAVE, map))
                 }
             }
         }

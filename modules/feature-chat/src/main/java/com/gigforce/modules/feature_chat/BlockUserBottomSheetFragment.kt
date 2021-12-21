@@ -10,15 +10,19 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.common_ui.ext.showToast
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.base.BaseBottomSheetDialogFragment
 import com.gigforce.core.utils.Lse
 import com.gigforce.modules.feature_chat.R
+import com.gigforce.modules.feature_chat.analytics.CommunityEvents
 import com.gigforce.modules.feature_chat.databinding.FragmentBlockUserBottomSheetBinding
 import com.github.razir.progressbutton.hideProgress
 import com.github.razir.progressbutton.showProgress
 import com.gigforce.modules.feature_chat.screens.vm.ChatPageViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class BlockUserBottomSheetFragment : BaseBottomSheetDialogFragment<FragmentBlockUserBottomSheetBinding>(
@@ -46,6 +50,9 @@ class BlockUserBottomSheetFragment : BaseBottomSheetDialogFragment<FragmentBlock
             }.show(fragmentManager,TAG)
         }
     }
+
+    @Inject
+    lateinit var eventTracker: IEventTracker
 
     private val viewModel: ChatPageViewModel by viewModels()
 
@@ -91,6 +98,7 @@ class BlockUserBottomSheetFragment : BaseBottomSheetDialogFragment<FragmentBlock
                 }
                 Lse.Success -> {
                     showToast("User blocked")
+                    eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_BLOCKED_USER, null))
                     dismiss()
                 }
                 is Lse.Error -> {

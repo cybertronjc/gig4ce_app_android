@@ -15,13 +15,17 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.common_ui.ext.showToast
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.ProfilePropArgs
 import com.gigforce.core.ScopedStorageConstants
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.documentFileHelper.DocumentTreeDelegate
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.modules.feature_chat.R
+import com.gigforce.modules.feature_chat.analytics.CommunityEvents
 import com.gigforce.modules.feature_chat.databinding.ChatSettingsFragmentBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jaeger.library.StatusBarUtil
@@ -37,6 +41,9 @@ class ChatSettingsFragment : Fragment() {
 
     @Inject
     lateinit var navigation: INavigation
+
+    @Inject
+    lateinit var eventTracker: IEventTracker
 
     @Inject
     lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
@@ -63,6 +70,7 @@ class ChatSettingsFragment : Fragment() {
         initViews()
         initListeners()
         initObserver()
+        eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_SETTINGS_SCREEN,null))
     }
 
     private fun initObserver() {
@@ -83,8 +91,10 @@ class ChatSettingsFragment : Fragment() {
         autoDownloadSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked){
                 viewModel.updateMediaAutoDownloadInDB(enable = true)
+                eventTracker.setProfileProperty(ProfilePropArgs("Media Auto Download", true))
             } else{
                 viewModel.updateMediaAutoDownloadInDB(enable = false)
+                eventTracker.setProfileProperty(ProfilePropArgs("Media Auto Download", false))
             }
         }
 

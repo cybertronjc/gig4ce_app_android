@@ -43,6 +43,7 @@ import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.landing_screen.landingscreen.LandingScreenFragment
 import com.gigforce.lead_management.LeadManagementNavDestinations
+import com.gigforce.modules.feature_chat.analytics.CommunityEvents
 import com.gigforce.modules.feature_chat.models.SharedFile
 import com.gigforce.modules.feature_chat.screens.ChatPageFragment
 import com.google.android.gms.tasks.OnCompleteListener
@@ -449,7 +450,7 @@ class MainActivity : BaseActivity(),
                 navController.navigate(R.id.mainHomeScreen)
             }
             NotificationConstants.CLICK_ACTIONS.OPEN_CHAT_PAGE -> {
-                Log.d("MainActivity", "redirecting to gig verification page")
+                Log.d("MainActivity", "redirecting to chat page")
                 navController.popAllBackStates()
                 navController.navigate(
                         R.id.chatPageFragment,
@@ -460,6 +461,8 @@ class MainActivity : BaseActivity(),
                             )
                         }
                 )
+                var map = mapOf("chat_type" to "Direct")
+                eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_NOTIFICATION_CLICKED, map))
             }
             NotificationConstants.CLICK_ACTIONS.OPEN_GROUP_CHAT_PAGE -> {
                 Log.d("MainActivity", "redirecting to gig verification page")
@@ -473,6 +476,8 @@ class MainActivity : BaseActivity(),
                             )
                         }
                 )
+                var map = mapOf("chat_type" to "Group")
+                eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_NOTIFICATION_CLICKED, map))
             }
             NotificationConstants.CLICK_ACTIONS.OPEN_VERIFICATION_PAN_SCREEN -> {
                 navController.popAllBackStates()

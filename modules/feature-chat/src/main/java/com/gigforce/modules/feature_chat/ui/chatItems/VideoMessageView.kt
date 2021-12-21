@@ -18,12 +18,15 @@ import com.gigforce.common_ui.chat.ChatConstants
 import com.gigforce.common_ui.chat.models.ChatMessage
 import com.gigforce.common_ui.storage.MediaStoreApiHelpers
 import com.gigforce.common_ui.views.GigforceImageView
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toDisplayText
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.modules.feature_chat.ChatNavigation
 import com.gigforce.modules.feature_chat.R
+import com.gigforce.modules.feature_chat.analytics.CommunityEvents
 import com.gigforce.modules.feature_chat.screens.GroupMessageViewInfoFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -57,6 +60,10 @@ abstract class VideoMessageView(
 
     @Inject
     lateinit var navigation: INavigation
+
+    @Inject
+    lateinit var eventTracker: IEventTracker
+
     private var chatMessage : ChatMessage? = null
 
     private val chatNavigation: ChatNavigation by lazy {
@@ -153,31 +160,43 @@ abstract class VideoMessageView(
         }
     }
 
-    private fun setReceivedStatus(msg: ChatMessage) = when (msg.status) {
-        ChatConstants.MESSAGE_STATUS_NOT_SENT -> {
-            Glide.with(context)
-                .load(R.drawable.ic_msg_pending)
-                .into(receivedStatusIV)
-        }
-        ChatConstants.MESSAGE_STATUS_DELIVERED_TO_SERVER -> {
-            Glide.with(context)
-                .load(R.drawable.ic_msg_sent)
-                .into(receivedStatusIV)
-        }
-        ChatConstants.MESSAGE_STATUS_RECEIVED_BY_USER -> {
-            Glide.with(context)
-                .load(R.drawable.ic_msg_delivered)
-                .into(receivedStatusIV)
-        }
-        ChatConstants.MESSAGE_STATUS_READ_BY_USER -> {
-            Glide.with(context)
-                .load(R.drawable.ic_msg_seen)
-                .into(receivedStatusIV)
-        }
-        else -> {
-            Glide.with(context)
-                .load(R.drawable.ic_msg_pending)
-                .into(receivedStatusIV)
+    private fun setReceivedStatus(msg: ChatMessage)  {
+        var sendingMsg = false
+        var map = mapOf("message_type" to "Video")
+        when (msg.status) {
+            ChatConstants.MESSAGE_STATUS_NOT_SENT -> {
+                Glide.with(context)
+                    .load(R.drawable.ic_msg_pending)
+                    .into(receivedStatusIV)
+                sendingMsg = true
+            }
+            ChatConstants.MESSAGE_STATUS_DELIVERED_TO_SERVER -> {
+                Glide.with(context)
+                    .load(R.drawable.ic_msg_sent)
+                    .into(receivedStatusIV)
+                if (sendingMsg)
+                    eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_MESSAGE_SENT_TO_SERVER, map))
+
+            }
+            ChatConstants.MESSAGE_STATUS_RECEIVED_BY_USER -> {
+                Glide.with(context)
+                    .load(R.drawable.ic_msg_delivered)
+                    .into(receivedStatusIV)
+                if (sendingMsg)
+                    eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_MESSAGE_RECEIVED, map))
+            }
+            ChatConstants.MESSAGE_STATUS_READ_BY_USER -> {
+                Glide.with(context)
+                    .load(R.drawable.ic_msg_seen)
+                    .into(receivedStatusIV)
+                if (sendingMsg)
+                    eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_MESSAGE_READ, map))
+            }
+            else -> {
+                Glide.with(context)
+                    .load(R.drawable.ic_msg_pending)
+                    .into(receivedStatusIV)
+            }
         }
     }
 
@@ -302,7 +321,6 @@ abstract class VideoMessageView(
         videoUri: Uri?
     ) {
         val uri = videoUri ?: return
-
         GlobalScope.launch {
             try {
                 MediaStoreApiHelpers.saveVideoToGallery(
@@ -312,10 +330,14 @@ abstract class VideoMessageView(
 
                 GlobalScope.launch(Dispatchers.Main) {
                     Toast.makeText(context, "Video saved to gallery", Toast.LENGTH_SHORT).show()
+                    var map = mapOf("media_type" to "Video")
+                    eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_MEDIA_SAVED_TO_GALLERY, map))
                 }
             } catch (e: Exception) {
                 GlobalScope.launch(Dispatchers.Main) {
                     Toast.makeText(context, "Unable to save video to gallery", Toast.LENGTH_SHORT).show()
+                    var map = mapOf("media_type" to "Video")
+                    eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_MEDIA_FAILED_TO_SAVE, map))
                 }
             }
         }

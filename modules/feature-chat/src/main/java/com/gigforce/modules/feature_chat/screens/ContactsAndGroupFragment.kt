@@ -43,7 +43,9 @@ import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.views.GigforceImageView
 import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.AppConstants
+import com.gigforce.core.IEventTracker
 import com.gigforce.core.ScopedStorageConstants
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.datamodels.profile.Contact
@@ -56,6 +58,7 @@ import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.Lce
 import com.gigforce.modules.feature_chat.ChatNavigation
 import com.gigforce.modules.feature_chat.R
+import com.gigforce.modules.feature_chat.analytics.CommunityEvents
 import com.gigforce.modules.feature_chat.databinding.ContactsAndGroupFragmentBinding
 import com.gigforce.modules.feature_chat.screens.adapters.ContactsRecyclerAdapter
 import com.gigforce.modules.feature_chat.screens.adapters.OnContactClickListener
@@ -104,6 +107,9 @@ class ContactsAndGroupFragment : BaseFragment2<ContactsAndGroupFragmentBinding>(
 
     @Inject
     lateinit var navigation: INavigation
+
+    @Inject
+    lateinit var eventTracker: IEventTracker
 
     @Inject
     lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
@@ -177,6 +183,8 @@ class ContactsAndGroupFragment : BaseFragment2<ContactsAndGroupFragmentBinding>(
                     viewBinding.appBarComp.makeSearchVisible(true)
                     viewBinding.appBarComp.showSubtitle("${contactsAdapter.getSelectedContact().size} of ${contactsAdapter.itemCount} ${getString(R.string.contacts_selected_chat)}")
                     viewBinding.createGroupFab.visible()
+                    var map = mapOf("failed_reason" to "back_clicked")
+                    eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_NEW_GROUP_FAILED, map))
                 } else {
                     isEnabled = false
                     activity?.onBackPressed()
@@ -194,8 +202,8 @@ class ContactsAndGroupFragment : BaseFragment2<ContactsAndGroupFragmentBinding>(
         setListeners()
         //setClickListeners()
         initViewModel()
-
         shouldShowSyncContactsBottomSheet()
+        eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_CONTACTS_SCREEN, null))
     }
 
     private fun initViewModel() {
@@ -220,6 +228,8 @@ class ContactsAndGroupFragment : BaseFragment2<ContactsAndGroupFragmentBinding>(
                     }
                     is Lce.Error -> {
                         viewBinding.nameGroupLayout.progressBar.gone()
+                        var map = mapOf("failed_reason" to "firebase")
+                        eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_NEW_GROUP_FAILED, map))
                         MaterialAlertDialogBuilder(requireContext())
                             .setTitle(getString(R.string.alert_chat))
                             .setMessage(getString(R.string.unable_to_create_group_chat) + it.error)
@@ -350,6 +360,8 @@ class ContactsAndGroupFragment : BaseFragment2<ContactsAndGroupFragmentBinding>(
             appBarComp.showSubtitle(getString(R.string.add_subject_chat))
             appBarComp.makeSearchVisible(false)
             showParticipantsInLinearLayout(contactsAdapter.getSelectedContact())
+            var map = mapOf("no_of_participants" to contactsAdapter.getSelectedContact().size)
+            eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_SELECTED_CONTACTS_FOR_NEW_GROUP, map))
 
         }
             nameGroupLayout.createAndSend.setOnClickListener {
@@ -361,6 +373,8 @@ class ContactsAndGroupFragment : BaseFragment2<ContactsAndGroupFragmentBinding>(
                         groupAvatar = clickedImagePath,
                         groupMembers = contactsAdapter.getSelectedContact()
                     )
+                    var map = mapOf("group_name" to nameGroupLayout.groupNameEdit.text.toString().capitalize(),"no_of_participants" to contactsAdapter.getSelectedContact().size , "group_image_added" to if (clickedImagePath != null) true else false)
+                    eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_NEW_GROUP_CREATED, map))
                 }
             }
 

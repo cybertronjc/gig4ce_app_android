@@ -32,7 +32,10 @@ import com.gigforce.modules.feature_chat.R
 import com.gigforce.common_ui.chat.ChatConstants
 import com.gigforce.common_ui.chat.models.ChatMessage
 import com.gigforce.common_ui.storage.MediaStoreApiHelpers
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.modules.feature_chat.analytics.CommunityEvents
 import com.gigforce.modules.feature_chat.screens.GroupMessageViewInfoFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -54,6 +57,9 @@ abstract class DocumentMessageView(
 
     @Inject
     lateinit var navigation: INavigation
+
+    @Inject
+    lateinit var eventTracker: IEventTracker
 
     //Views
     private lateinit var linearLayout: ConstraintLayout
@@ -136,31 +142,42 @@ abstract class DocumentMessageView(
             LayoutInflater.from(context).inflate(R.layout.recycler_item_chat_text_with_document_out, this, true)
     }
 
-    private fun setReceivedStatus(msg: ChatMessage) = when (msg.status) {
-        ChatConstants.MESSAGE_STATUS_NOT_SENT -> {
-            Glide.with(context)
+    private fun setReceivedStatus(msg: ChatMessage) {
+        var sendingMsg = false
+        var map = mapOf("message_type" to "Document")
+        when (msg.status) {
+            ChatConstants.MESSAGE_STATUS_NOT_SENT -> {
+                Glide.with(context)
                     .load(R.drawable.ic_msg_pending)
                     .into(receivedStatusIV)
-        }
-        ChatConstants.MESSAGE_STATUS_DELIVERED_TO_SERVER -> {
-            Glide.with(context)
+                sendingMsg = true
+            }
+            ChatConstants.MESSAGE_STATUS_DELIVERED_TO_SERVER -> {
+                Glide.with(context)
                     .load(R.drawable.ic_msg_sent)
                     .into(receivedStatusIV)
-        }
-        ChatConstants.MESSAGE_STATUS_RECEIVED_BY_USER -> {
-            Glide.with(context)
+                if (sendingMsg)
+                    eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_MESSAGE_SENT_TO_SERVER, map))
+            }
+            ChatConstants.MESSAGE_STATUS_RECEIVED_BY_USER -> {
+                Glide.with(context)
                     .load(R.drawable.ic_msg_delivered)
                     .into(receivedStatusIV)
-        }
-        ChatConstants.MESSAGE_STATUS_READ_BY_USER -> {
-            Glide.with(context)
+                if (sendingMsg)
+                    eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_MESSAGE_RECEIVED, map))
+            }
+            ChatConstants.MESSAGE_STATUS_READ_BY_USER -> {
+                Glide.with(context)
                     .load(R.drawable.ic_msg_seen)
                     .into(receivedStatusIV)
-        }
-        else -> {
-            Glide.with(context)
+                if (sendingMsg)
+                    eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_MESSAGE_READ, map))
+            }
+            else -> {
+                Glide.with(context)
                     .load(R.drawable.ic_msg_pending)
                     .into(receivedStatusIV)
+            }
         }
     }
 
@@ -274,11 +291,15 @@ abstract class DocumentMessageView(
                 MediaStoreApiHelpers.saveDocumentToDownloads(context,uri)
                 launch(Dispatchers.Main) {
                     Toast.makeText(context, "Document saved in downloads", Toast.LENGTH_SHORT).show()
+                    var map = mapOf("media_type" to "Document")
+                    eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_MEDIA_SAVED_TO_GALLERY, map))
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
                 launch(Dispatchers.Main) {
                     Toast.makeText(context, "Unable to save document in downloads", Toast.LENGTH_SHORT).show()
+                    var map = mapOf("media_type" to "Document")
+                    eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_MEDIA_FAILED_TO_SAVE, map))
                 }
             }
         }
