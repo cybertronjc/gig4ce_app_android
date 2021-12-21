@@ -16,18 +16,19 @@ import com.google.firebase.firestore.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import java.util.regex.Pattern
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class ChatContactsRepository constructor(
-    private val syncPref: SyncPref
+@Singleton
+class ChatContactsRepository @Inject constructor(
+    private val syncPref: SyncPref,
+    private val chatContactsRemoteService: DownloadChatAttachmentService,
+    private val firebaseAuthStateListener: FirebaseAuthStateListener
 ) : BaseFirestoreDBRepository() {
 
-    private var chatContactsRemoteService: DownloadChatAttachmentService =
-        RetrofitFactory.createService(
-            DownloadChatAttachmentService::class.java
-        )
 
-    private val currentUser: FirebaseUser by lazy {
-        FirebaseAuth.getInstance().currentUser!!
+    private val currentUser: FirebaseUser get() {
+        return firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow()
     }
 
     private val userChatCollectionRef: DocumentReference by lazy {

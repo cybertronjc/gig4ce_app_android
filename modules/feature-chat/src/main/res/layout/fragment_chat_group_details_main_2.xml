@@ -68,11 +68,14 @@
                     android:paddingBottom="20dp">
 
 
-                    <ImageView
+                    <com.gigforce.common_ui.views.GigforceImageView
+                        android:id="@+id/group_icon"
                         android:layout_width="match_parent"
                         android:layout_height="226dp"
                         android:src="@drawable/ic_group"
-                        app:layout_constraintTop_toBottomOf="@id/back_btn" />
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>

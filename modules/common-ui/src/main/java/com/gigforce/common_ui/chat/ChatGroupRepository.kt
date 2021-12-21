@@ -31,15 +31,18 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import java.io.File
+import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-class ChatGroupRepository constructor(
-    private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance(),
-    private val chatProfileFirebaseRepository: ChatProfileFirebaseRepository = ChatProfileFirebaseRepository()
-    //  private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository()
+@Singleton
+class ChatGroupRepository @Inject constructor(
+    private val firebaseStorage: FirebaseStorage,
+    private val chatProfileFirebaseRepository: ChatProfileFirebaseRepository
 ) : BaseChatRepository() {
 
     private val currentUser = FirebaseAuth.getInstance().currentUser!!
@@ -78,7 +81,7 @@ class ChatGroupRepository constructor(
         .collection(COLLECTION_CHAT_HEADERS)
         .document(groupId)
 
-    suspend fun createGroup(groupName: String, groupMembers: List<ContactModel>): String {
+    suspend fun createGroup(groupName: String, groupAvatar: String?, groupMembers: List<ContactModel>): String {
 
         val currentUserInfo = createContactModelsForCurrentUser()
         val members = groupMembers.toMutableList().apply {
@@ -93,7 +96,7 @@ class ChatGroupRepository constructor(
             }
         }
 
-        val group = createGroupData(groupName, members, currentUserInfo)
+        val group = createGroupData(groupName, groupAvatar,  members, currentUserInfo)
         val groupDocRef = db.collection(COLLECTION_GROUP_CHATS).addOrThrow(group)
         group.id = groupDocRef.id
 
@@ -112,6 +115,7 @@ class ChatGroupRepository constructor(
                     chatType = ChatConstants.CHAT_TYPE_GROUP,
                     groupId = group.id,
                     groupName = groupName,
+                    groupAvatar = groupAvatar.toString(),
                     lastMsgTimestamp = Timestamp.now(),
                     lastMsgFlowType = ChatConstants.FLOW_TYPE_OUT
                 )
@@ -161,12 +165,15 @@ class ChatGroupRepository constructor(
 
     private suspend fun createGroupData(
         groupName: String,
+        groupAvatar: String?,
         groupMembers: List<ContactModel>,
         currentUserInfo: ContactModel
     ): ChatGroup {
+
         val chatGroup = ChatGroup(
             name = groupName,
             groupMembers = groupMembers,
+            groupAvatar = groupAvatar.toString(),
             creationDetails = GroupCreationDetails(
                 createdBy = currentUserInfo.uid!!,
                 creatorName = currentUserInfo.name!!,
@@ -181,6 +188,14 @@ class ChatGroupRepository constructor(
         }
 
         return chatGroup
+    }
+
+    private fun prepareUniqueImageName(): String {
+        val timeStamp = SimpleDateFormat(
+            "yyyyMMdd_HHmmss",
+            Locale.getDefault()
+        ).format(Date())
+        return getUID() + timeStamp + ".jpg"
     }
 
     fun getGroupDetailsRef(groupId: String) =
