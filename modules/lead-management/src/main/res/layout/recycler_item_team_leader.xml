@@ -34,8 +34,6 @@
             android:layout_height="60dp"
             android:layout_marginStart="16dp"
             android:background="@drawable/rectangle_2"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
             android:padding="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/selected_iv"
@@ -46,6 +44,7 @@
                 android:id="@+id/team_leader_profile_picture_iv"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                app:shapeAppearanceOverlay="@style/circleImageView"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

@@ -154,7 +154,7 @@ class SelectTeamLeaderFragment : BaseFragment2<FragmentSelectBusinessBinding>(
             viewBinding.okayButton.isEnabled = false
             viewBinding.businessInfoLayout.root.visible()
             viewBinding.businessInfoLayout.infoMessageTv.text =
-                getString(R.string.no_city_to_show_lead)
+                "No Team leader to show"
             viewBinding.businessInfoLayout.infoIv.loadImage(R.drawable.ic_no_selection)
         }
     }

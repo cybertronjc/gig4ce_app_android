@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.common_ui.viewdatamodels.leadManagement.TeamLeader
 import com.gigforce.lead_management.BR
@@ -41,7 +42,9 @@ class TeamLeaderAdapter(
             RecyclerItemTeamLeaderBinding.inflate(
                 LayoutInflater.from(
                     parent.context
-                )
+                ),
+                parent,
+                false
             )
         )
     }
@@ -136,7 +139,7 @@ class TeamLeaderAdapter(
         fun bindValues(
             teamLeader: TeamLeader
         ) {
-            itemViewBinding.setVariable(BR.teamLeader, teamLeader)
+            itemViewBinding.teamLeader = teamLeader
             itemViewBinding.teamLeaderProfilePictureIv.loadProfilePicture(
                 teamLeader.profilePictureThumbnail,
                 teamLeader.profilePicture
@@ -148,10 +151,26 @@ class TeamLeaderAdapter(
                     context,
                     R.drawable.option_selection_border
                 )
+                itemViewBinding.selectedIv.setImageDrawable(
+                    ResourcesCompat.getDrawable(
+                        context.resources,
+                        R.drawable.ic_selected_tick,
+                        null
+                    )
+                )
             } else {
 
                 itemViewBinding.jobProfileRootLayout.setBackgroundResource(R.drawable.rectangle_2)
+                itemViewBinding.selectedIv.setImageDrawable(
+                    ResourcesCompat.getDrawable(
+                        context.resources,
+                        R.drawable.ic_unselect_tick,
+                        null
+                    )
+                )
             }
+
+            itemViewBinding.executePendingBindings()
         }
 
         override fun onClick(v: View?) {
