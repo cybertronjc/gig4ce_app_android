@@ -27,4 +27,50 @@
     <style name="RoundedSquaredChipsStyle" parent="">
         <item name="cornerSize">10%</item>
     </style>
+
+    <style name="dialog_label_amb" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">12sp</item>
+        <item name="fontFamily">@font/lato</item>
+        <item name="android:fontFamily">@font/lato</item>
+        <item name="android:textColor">@color/blackDark</item>
+        <item name="android:letterSpacing">0</item>
+
+    </style>
+
+    <style name="bn_name_amb" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">12sp</item>
+        <item name="fontFamily">@font/lato_bold</item>
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="android:textColor">@color/colorLightAccent</item>
+    </style>
+
+    <style name="primary_color_heading_amb" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">14sp</item>
+        <item name="fontFamily">@font/lato_bold</item>
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="android:textColor">@color/colorLightAccent</item>
+    </style>
+
+    <style name="section_value_amb" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">12sp</item>
+        <item name="fontFamily">@font/lato_bold</item>
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="android:textColor">#202325</item>
+
+    </style>
+
+    <style name="section_value1_amb" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">12sp</item>
+        <item name="fontFamily">@font/lato</item>
+        <item name="android:fontFamily">@font/lato</item>
+        <item name="android:textColor">#202325</item>
+
+    </style>
+
+    <style name="primary_color_heading_bs" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">14sp</item>
+        <item name="fontFamily">@font/lato_bold</item>
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="android:textColor">#202325</item>
+    </style>
 </resources>
