@@ -722,7 +722,7 @@ class BankAccountFragment : Fragment(),
     var oldStateHolder = OLDStateHolder("")
     private fun listeners() {
         viewBinding.ifscInputET.filters = arrayOf<InputFilter>(InputFilter.AllCaps())
-        viewBinding.bankAccNumberItl.textView?.filters = arrayOf<InputFilter>(InputFilter.AllCaps())
+        viewBinding.bankAccNumberItl.editText?.filters = arrayOf<InputFilter>(InputFilter.AllCaps())
 
         viewBinding.toplayoutblock.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { p1, b1 ->
             if (b1) {

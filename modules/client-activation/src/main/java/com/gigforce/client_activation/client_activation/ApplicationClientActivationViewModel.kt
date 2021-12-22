@@ -155,7 +155,11 @@ class ApplicationClientActivationViewModel : ViewModel() {
                         it.isDone =
                             verification?.bank_details != null && (verification.bank_details?.status?.equals(
                                 "started"
-                            ) ?: false || verification.bank_details?.verified ?: false)
+                            ) ?: false || verification.bank_details?.status?.equals(
+                                "processing"
+                            ) ?: false|| verification.bank_details?.status?.equals(
+                                "validated"
+                            ) ?: false|| verification.bank_details?.status?.equals("verified") ?: false)
                     }
                     "aadhar_card_questionnaire" -> {
                         it.isDone =
