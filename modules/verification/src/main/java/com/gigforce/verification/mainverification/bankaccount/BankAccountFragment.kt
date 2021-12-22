@@ -472,7 +472,8 @@ class BankAccountFragment : Fragment(),
                     viewBinding.toplayoutblock.toggleChangeTextView(false)
                     viewBinding.bnConfirmationCl.gone()
                     viewBinding.scrollView.visible()
-
+                    viewBinding.bankAccNumberItl.editText?.setFocusable(true)
+                    viewBinding.ifscCode.editText?.setFocusable(true)
                     //viewBinding.toplayoutblock.enableImageClick()//keep this line in end only //need to remove uploading option 2856 ticket
                 }
                 "","rejected" -> {
@@ -482,7 +483,8 @@ class BankAccountFragment : Fragment(),
                     viewBinding.toplayoutblock.toggleChangeTextView(false)
                     viewBinding.bnConfirmationCl.gone()
                     viewBinding.scrollView.visible()
-
+                    viewBinding.bankAccNumberItl.editText?.setFocusable(true)
+                    viewBinding.ifscCode.editText?.setFocusable(true)
                     //viewBinding.toplayoutblock.enableImageClick()//keep this line in end only //need to remove uploading option 2856 ticket
                 }
                 "verification_pending" -> {
@@ -493,7 +495,11 @@ class BankAccountFragment : Fragment(),
 //                    verificationScreenStatus = VerificationScreenStatus.COMPLETED
 
                 }
-                else -> "unmatched status"
+                else -> {
+                    viewBinding.toplayoutblock.checkboxidonthave.gone()
+                    viewBinding.toplayoutblock.docsubtitledetail.gone()
+                    "unmatched status"
+                }
             }
         }
     }
