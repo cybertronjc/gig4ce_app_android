@@ -514,13 +514,13 @@ class ChatHeadersFragment : Fragment(), PopupMenu.OnMenuItemClickListener, Gigfo
             navigation.navigateTo("chats/chatSettings")
             true
         }
-        R.id.action_select_chat -> {
-            //multi select enable ui
-            isMultiSelectEnable = true
-            makeMultiSelectUiEnable(true)
-            viewModel.setMultiSelectEnable(enable = true)
-            true
-        }
+//        R.id.action_select_chat -> {
+//            //multi select enable ui
+//            isMultiSelectEnable = true
+//            makeMultiSelectUiEnable(true)
+//            viewModel.setMultiSelectEnable(enable = true)
+//            true
+//        }
         R.id.action_new_group -> {
             //go to contacts screenext
             navigation.navigateTo("chats/contactsFragment",
