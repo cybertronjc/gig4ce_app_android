@@ -50,6 +50,7 @@ import com.gigforce.modules.feature_chat.ChatNavigation
 import com.gigforce.modules.feature_chat.R
 import com.gigforce.common_ui.chat.ChatFileManager
 import com.gigforce.common_ui.components.cells.AppBar
+import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.listeners.AppBarClicks
 import com.gigforce.modules.feature_chat.models.ChatMessageWrapper
 import com.gigforce.modules.feature_chat.models.SharedFile
@@ -58,6 +59,7 @@ import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel
 import com.gigforce.modules.feature_chat.swipe.MessageSwipeController
 import com.gigforce.modules.feature_chat.swipe.SwipeControllerActions
 import com.gigforce.modules.feature_chat.ui.ChatFooter
+import com.gigforce.modules.feature_chat.ui.chatItems.MessageFlowType
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.jaeger.library.StatusBarUtil
@@ -106,6 +108,8 @@ class ChatPageFragment : Fragment(),
     private lateinit var needStorageAccessLayout: View
     private lateinit var requestStorageAccessButton: View
     private lateinit var appbar: AppBar
+    private var selectedChatMessage: ChatMessage? = null
+
 
     private val viewModel: ChatPageViewModel by viewModels()
     private val groupChatViewModel: GroupChatViewModel by viewModels()
@@ -450,6 +454,16 @@ class ChatPageFragment : Fragment(),
         groupChatViewModel
             .inputs
             .getGroupInfoAndStartListeningToMessages()
+
+        groupChatViewModel.selectedChatMessage.observe(viewLifecycleOwner, Observer {
+            it ?: return@Observer
+            Log.d("selectedMsg", "${it.chatType }")
+            groupChatViewModel.getSelectedChatOptions().let {
+                appbar.makeChatOptionsVisible(true, it.first, it.second)
+                Log.d("chatoptionsgroup", "${it.first} , ${it.second}")
+            }
+        })
+
     }
 
     private fun showGroupDetails(group: ChatGroup) {
@@ -682,6 +696,32 @@ class ChatPageFragment : Fragment(),
                 it ?: return@observe
                 chatRecyclerView.smoothAndSafeScrollToPosition(it)
             })
+
+        viewModel.selectedChatMessage.observe(viewLifecycleOwner, Observer {
+            it ?: return@Observer
+            Log.d("selectedMsg", "${it.flowType} , ${it.type} , ${it.chatType}")
+            selectedChatMessage = it
+            var isCopyEnable = false
+            var isDeleteEnable = false
+            if(it.type == "text_image"){
+                isCopyEnable = false
+                isDeleteEnable = it.flowType == "out"
+            } else if(it.type == "text"){
+                isCopyEnable = true
+                isDeleteEnable = it.flowType == "out"
+            } else if(it.type == "text_location"){
+                isCopyEnable = false
+                isDeleteEnable = it.flowType == "out"
+            } else if(it.type == "text_document"){
+                isCopyEnable = false
+                isDeleteEnable = it.flowType == "out"
+            } else if(it.type == "text_video"){
+                isCopyEnable = false
+                isDeleteEnable = it.flowType == "out"
+            }
+            appbar.makeChatOptionsVisible(true, isCopyEnable, isDeleteEnable)
+        })
+
     }
 
     private fun showErrorDialog(error: String) {
@@ -714,6 +754,36 @@ class ChatPageFragment : Fragment(),
                 chatNavigation.navigateUp()
             else
                 chatNavigation.navigateBackToChatListIfExistElseOneStepBack()
+        })
+
+        appbar.setCopyClickListener(View.OnClickListener {
+            selectedChatMessage?.let {
+                if(it.type == "text"){
+                    copyMessageToClipBoard(it.content)
+                }
+            }
+            viewModel.makeSelectEnable(false)
+            groupChatViewModel.makeSelectEnable(false)
+            appbar.makeChatOptionsVisible(false, false, false)
+        })
+
+        appbar.setDeleteClickListener(View.OnClickListener {
+            selectedChatMessage.let {
+                if(it?.chatType == "user"){
+                    viewModel.deleteMessage(
+                        it?.id
+                    )
+                    viewModel.makeSelectEnable(false)
+                } else if (it?.chatType == "group"){
+                    groupChatViewModel.deleteMessage(
+                        it?.id
+                    )
+                    groupChatViewModel.makeSelectEnable(false)
+                }
+                viewModel.makeSelectEnable(false)
+                groupChatViewModel.makeSelectEnable(false)
+                appbar.makeChatOptionsVisible(false, false, false)
+            }
         })
 
         appbar.setOnOpenActionMenuItemClickListener(View.OnClickListener {
@@ -1147,6 +1217,14 @@ class ChatPageFragment : Fragment(),
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
             ) == PackageManager.PERMISSION_GRANTED
         }
+    }
+
+    private fun copyMessageToClipBoard(text: String) {
+        val clip: ClipData = ClipData.newPlainText("Copy", text)
+        (context?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?)?.setPrimaryClip(
+            clip
+        )
+        showToast("Copied")
     }
 
     fun checkForContact(number: String?, name: String): String {

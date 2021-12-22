@@ -87,6 +87,11 @@ class GroupChatViewModel @Inject constructor(
 
     private var groupMessagesShownOnView: MutableList<ChatMessage>? = null
 
+    private var _selectedChatMessage = MutableLiveData<ChatMessage>()
+    val selectedChatMessage: LiveData<ChatMessage> = _selectedChatMessage
+
+    private var selectEnable: Boolean? = null
+
     //Create group
     override fun setGroupId(groupId: String) {
         this.groupId = groupId
@@ -980,6 +985,30 @@ class GroupChatViewModel @Inject constructor(
                     it.getUserProfileImageUrlOrPath() ?: ""
             )
         }
+    }
+
+    private var copyEnable = false
+    private var deleteEnable = false
+    fun selectChatMessage(msg: ChatMessage, copyEnable: Boolean, deleteEnable: Boolean){
+        val messageList = grpMessages ?: return
+        val index = messageList.indexOf(msg)
+        if (index != -1) {
+            _selectedChatMessage.value = msg
+        }
+        this@GroupChatViewModel.copyEnable = copyEnable
+        this@GroupChatViewModel.deleteEnable = deleteEnable
+    }
+
+    fun makeSelectEnable(enable: Boolean){
+        selectEnable = enable
+    }
+
+    fun getSelectEnable(): Boolean?{
+        return selectEnable
+    }
+
+    fun getSelectedChatOptions(): Pair<Boolean, Boolean> {
+        return Pair(copyEnable, deleteEnable)
     }
 
     fun scrollToMessage(

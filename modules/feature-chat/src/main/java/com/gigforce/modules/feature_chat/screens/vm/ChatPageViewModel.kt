@@ -94,6 +94,11 @@ class ChatPageViewModel @Inject constructor(
     private var _allStoragePermissionsGranted = MutableLiveData<Boolean>()
     val allStoragePermissionsGranted: LiveData<Boolean> = _allStoragePermissionsGranted
 
+    private var _selectedChatMessage = MutableLiveData<ChatMessage>()
+    val selectedChatMessage: LiveData<ChatMessage> = _selectedChatMessage
+
+    private var selectEnable: Boolean? = null
+
 
     fun setRequiredDataAndStartListeningToMessages(
         otherUserId: String,
@@ -936,6 +941,32 @@ class ChatPageViewModel @Inject constructor(
                 e
             )
         }
+    }
+
+    private var copyEnable1 = false
+    private var deleteEnable1 = false
+    fun selectChatMessage(msg: ChatMessage, copyEnable: Boolean, deleteEnable: Boolean){
+        val messageList = chatMessages ?: return
+        val index = messageList.indexOf(msg)
+        if (index != -1) {
+            _selectedChatMessage.value = msg
+        }
+        Log.d("copyDelete", "$copyEnable , $deleteEnable")
+        this.copyEnable1 = copyEnable
+        this.deleteEnable1 = deleteEnable
+    }
+
+    fun makeSelectEnable(enable: Boolean){
+        selectEnable = enable
+    }
+
+    fun getSelectEnable(): Boolean?{
+        return selectEnable
+    }
+
+    fun getSelectedChatOptions(): Pair<Boolean, Boolean> {
+        Log.d("copyDelete1", "$copyEnable1 , $deleteEnable1")
+        return Pair(copyEnable1, deleteEnable1)
     }
 
     fun scrollToMessage(

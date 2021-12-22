@@ -270,16 +270,25 @@ abstract class VideoMessageView(
     }
 
     override fun onLongClick(v: View?): Boolean {
-        val popUpMenu = PopupMenu(context, v)
-        popUpMenu.inflate(R.menu.menu_chat_clipboard)
+//        val popUpMenu = PopupMenu(context, v)
+//        popUpMenu.inflate(R.menu.menu_chat_clipboard)
+//
+//        popUpMenu.menu.findItem(R.id.action_save_to_gallery).isVisible = returnFileIfAlreadyDownloadedElseNull() != null
+//        popUpMenu.menu.findItem(R.id.action_copy).isVisible = false
+//        popUpMenu.menu.findItem(R.id.action_delete).isVisible = type == MessageFlowType.OUT
+//        popUpMenu.menu.findItem(R.id.action_message_info).isVisible = type == MessageFlowType.OUT && messageType == MessageType.GROUP_MESSAGE
+//
+//        popUpMenu.setOnMenuItemClickListener(this)
+//        popUpMenu.show()
+        cardView.foreground = resources.getDrawable(R.drawable.selected_chat_foreground)
 
-        popUpMenu.menu.findItem(R.id.action_save_to_gallery).isVisible = returnFileIfAlreadyDownloadedElseNull() != null
-        popUpMenu.menu.findItem(R.id.action_copy).isVisible = false
-        popUpMenu.menu.findItem(R.id.action_delete).isVisible = type == MessageFlowType.OUT
-        popUpMenu.menu.findItem(R.id.action_message_info).isVisible = type == MessageFlowType.OUT && messageType == MessageType.GROUP_MESSAGE
-
-        popUpMenu.setOnMenuItemClickListener(this)
-        popUpMenu.show()
+        if (messageType == MessageType.ONE_TO_ONE_MESSAGE) {
+            oneToOneChatViewModel.makeSelectEnable(true)
+            oneToOneChatViewModel.selectChatMessage(message, false, type == MessageFlowType.OUT)
+        } else if (messageType == MessageType.GROUP_MESSAGE) {
+            groupChatViewModel.makeSelectEnable(true)
+            groupChatViewModel.selectChatMessage(message, false, type == MessageFlowType.OUT)
+        }
 
         return true
     }

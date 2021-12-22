@@ -9,6 +9,7 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.util.Linkify
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -121,6 +122,18 @@ abstract class TextMessageView(
                 messageType == MessageType.GROUP_MESSAGE && type == MessageFlowType.IN
             senderNameTV.text = message.senderInfo.name
 
+            Log.d("selectEnable", "${oneToOneChatViewModel.getSelectEnable()} , ${groupChatViewModel.getSelectEnable()}")
+
+//            if(oneToOneChatViewModel.getSelectEnable() == true || groupChatViewModel.getSelectEnable() == true){
+//                quotedMessagePreviewContainer.setOnClickListener(null)
+//                containerView.setOnLongClickListener(null)
+//                Log.d("selectEnable1", "true")
+//            } else{
+//                quotedMessagePreviewContainer.setOnClickListener(this)
+//                containerView.setOnLongClickListener(this)
+//                Log.d("selectEnable2", "false")
+//            }
+
             setQuotedMessageOnView(
                 context =  context,
                 firebaseAuthStateListener = firebaseAuthStateListener,
@@ -189,17 +202,29 @@ abstract class TextMessageView(
 
     override fun onLongClick(v: View?): Boolean {
 
-        val popUpMenu = PopupMenu(context, v)
-        popUpMenu.inflate(R.menu.menu_chat_clipboard)
+//        val popUpMenu = PopupMenu(context, v)
+//        popUpMenu.inflate(R.menu.menu_chat_clipboard)
+//
+//        popUpMenu.menu.findItem(R.id.action_save_to_gallery).isVisible = false
+//        popUpMenu.menu.findItem(R.id.action_copy).isVisible = true
+//        popUpMenu.menu.findItem(R.id.action_delete).isVisible = type == MessageFlowType.OUT
+//        popUpMenu.menu.findItem(R.id.action_message_info).isVisible =
+//            type == MessageFlowType.OUT && messageType == MessageType.GROUP_MESSAGE
+//
+//        popUpMenu.setOnMenuItemClickListener(this)
+//        popUpMenu.show()
 
-        popUpMenu.menu.findItem(R.id.action_save_to_gallery).isVisible = false
-        popUpMenu.menu.findItem(R.id.action_copy).isVisible = true
-        popUpMenu.menu.findItem(R.id.action_delete).isVisible = type == MessageFlowType.OUT
-        popUpMenu.menu.findItem(R.id.action_message_info).isVisible =
-            type == MessageFlowType.OUT && messageType == MessageType.GROUP_MESSAGE
-
-        popUpMenu.setOnMenuItemClickListener(this)
-        popUpMenu.show()
+        //cardView.foreground = resources.getDrawable(R.drawable.selected_chat_foreground)
+        Log.d("longclick", "clicked")
+        if(!(oneToOneChatViewModel.getSelectEnable() == true || groupChatViewModel.getSelectEnable() == true)){
+            if (messageType == MessageType.ONE_TO_ONE_MESSAGE) {
+                oneToOneChatViewModel.makeSelectEnable(true)
+                oneToOneChatViewModel.selectChatMessage(message, false, type == MessageFlowType.OUT)
+            } else if (messageType == MessageType.GROUP_MESSAGE) {
+                groupChatViewModel.makeSelectEnable(true)
+                groupChatViewModel.selectChatMessage(message, false, type == MessageFlowType.OUT)
+            }
+        }
 
         return true
     }
@@ -207,15 +232,17 @@ abstract class TextMessageView(
     override fun onClick(v: View?) {
 
         val replyMessage = message.replyForMessage ?: return
+        if(!(oneToOneChatViewModel.getSelectEnable() == true || groupChatViewModel.getSelectEnable() == true)) {
 
-        if (messageType == MessageType.ONE_TO_ONE_MESSAGE) {
-            oneToOneChatViewModel.scrollToMessage(
-                replyMessage
-            )
-        } else if (messageType == MessageType.GROUP_MESSAGE) {
-            groupChatViewModel.scrollToMessage(
-                replyMessage
-            )
+            if (messageType == MessageType.ONE_TO_ONE_MESSAGE) {
+                oneToOneChatViewModel.scrollToMessage(
+                    replyMessage
+                )
+            } else if (messageType == MessageType.GROUP_MESSAGE) {
+                groupChatViewModel.scrollToMessage(
+                    replyMessage
+                )
+            }
         }
     }
 
