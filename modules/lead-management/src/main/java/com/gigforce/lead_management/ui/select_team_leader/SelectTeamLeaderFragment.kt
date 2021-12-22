@@ -133,7 +133,7 @@ class SelectTeamLeaderFragment : BaseFragment2<FragmentSelectBusinessBinding>(
     private fun setDataOnView() = viewBinding.apply {
         if (teamLeaders.isEmpty()) {
             this.businessInfoLayout.root.visible()
-            this.businessInfoLayout.infoMessageTv.text = getString(R.string.no_city_to_show_lead)
+            this.businessInfoLayout.infoMessageTv.text = "No Teamleader to show"
             this.businessInfoLayout.infoIv.loadImage(R.drawable.ic_no_selection)
         } else {
             this.businessInfoLayout.root.gone()

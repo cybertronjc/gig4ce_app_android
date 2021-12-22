@@ -38,6 +38,7 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flow
+import retrofit2.Response
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.coroutines.resume
@@ -649,10 +650,44 @@ class LeadManagementRepository @Inject constructor(
             )
     }
 
-    suspend fun getBusinessAndJobProfiles() = joiningProfileRemoteService
-        .getBusinessAndJobProfiles()
-        .bodyOrThrow()
+    suspend fun getBusinessAndJobProfiles() : JoiningBusinessJobProfilesAndTeamsLeaders {
 
+        return JoiningBusinessJobProfilesAndTeamsLeaders(
+            businessAndJobProfiles = listOf(
+                JoiningBusinessAndJobProfilesItem(
+                    name = "Ssss",
+                    id = "sssss",
+                    icon = "sss",
+                    jobProfiles = listOf(
+                        JobProfilesItem(
+                            name = "null",
+                            id = "null",
+                            locationType = "null",
+                            verificationRelatedFields = listOf(),
+                            dynamicFields = listOf(),
+                            selected = false
+                        )
+                    ),
+                    selected = false
+                )
+            ),
+            teamLeaders = listOf(
+                TeamLeader(
+                    name = "TL NNNN",
+                    id = "Sss",
+                    designation = "Some designaiton",
+                    city = "Some City",
+                    profilePictureThumbnail = "",
+                    profilePicture = ""
+                )
+            )
+        )
+
+//      return joiningProfileRemoteService
+//          .getBusinessAndJobProfiles()
+//          .bodyOrThrow()
+
+    }
     suspend fun getBusinessLocationsAndTeamLeaders(
         businessId: String,
         jobProfileId: String

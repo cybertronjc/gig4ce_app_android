@@ -220,6 +220,10 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
             viewModel.handleEvent(NewSelectionForm1Events.OpenSelectJobProfileScreenSelected)
         }
 
+        mainForm.selectReportingTlLayout.setOnClickListener {
+            viewModel.handleEvent(NewSelectionForm1Events.OpenSelectReportingTLScreenSelected)
+        }
+
         mainForm.nextButton.setOnClickListener {
 
             validateDataAndSubmitData()
@@ -341,9 +345,9 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
         teamLeaders: List<TeamLeader>
     ) {
         navigation.navigateTo(
-            LeadManagementNavDestinations.FRAGMENT_SELECT_CLIENT_TL,
+            LeadManagementNavDestinations.FRAGMENT_SELECT_TEAM_LEADERS,
             bundleOf(
-                SelectTeamLeaderFragment.INTENT_EXTRA_TEAM_LEADERS to teamLeaders
+                SelectTeamLeaderFragment.INTENT_EXTRA_TEAM_LEADERS to ArrayList(teamLeaders)
             ),
             getNavOptions()
         )

@@ -101,4 +101,6 @@ sealed class NewSelectionForm1Events {
     object OpenSelectBusinessScreenSelected : NewSelectionForm1Events()
 
     object OpenSelectJobProfileScreenSelected : NewSelectionForm1Events()
+
+    object OpenSelectReportingTLScreenSelected : NewSelectionForm1Events()
 }

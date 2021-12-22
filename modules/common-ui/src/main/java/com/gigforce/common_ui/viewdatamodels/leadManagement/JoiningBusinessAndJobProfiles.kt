@@ -73,6 +73,9 @@ data class TeamLeader(
     @field:SerializedName("designation")
     val designation: String? = null,
 
+    @field:SerializedName("cityId")
+    val cityId: String? = null,
+
     @field:SerializedName("city")
     val city: String? = null,
 

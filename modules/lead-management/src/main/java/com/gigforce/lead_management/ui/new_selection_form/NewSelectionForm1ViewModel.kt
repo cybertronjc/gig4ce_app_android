@@ -75,6 +75,7 @@ class NewSelectionForm1ViewModel @Inject constructor(
             }
             NewSelectionForm1Events.OpenSelectBusinessScreenSelected -> openSelectBusinessScreen()
             NewSelectionForm1Events.OpenSelectJobProfileScreenSelected -> openJobProfilesScreen()
+            NewSelectionForm1Events.OpenSelectReportingTLScreenSelected -> openSelectTLScreen()
             is NewSelectionForm1Events.SubmitButtonPressed -> validateDataAndNavigateToForm2(
                 event.dataFromDynamicFields
             )
@@ -177,6 +178,18 @@ class NewSelectionForm1ViewModel @Inject constructor(
         )
         _viewState.value = null
     }
+
+    private fun openSelectTLScreen() {
+
+
+        _viewState.value = NewSelectionForm1ViewState.OpenSelectTLScreen(
+            teamLeaders.sortedBy {
+                it.name
+            }
+        )
+        _viewState.value = null
+    }
+
 
     private fun validateDataAndNavigateToForm2(
         dataFromDynamicFields: MutableList<DataFromDynamicInputField>
