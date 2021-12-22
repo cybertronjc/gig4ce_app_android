@@ -37,7 +37,8 @@ sealed class LeadManagementSharedViewModelState {
     ): LeadManagementSharedViewModelState()
 
     data class ReportingTLSelected(
-        val tlSelected: TeamLeader
+        val tlSelected: TeamLeader,
+        val showingAllTLs: Boolean
     ): LeadManagementSharedViewModelState()
 
     object OneOrMoreSelectionsDropped : LeadManagementSharedViewModelState()
@@ -111,9 +112,13 @@ class LeadManagementSharedViewModel : ViewModel() {
     }
 
     fun reportingTLSelected(
-        tl: TeamLeader
+        tl: TeamLeader,
+        showingAllTLs : Boolean
     ) = viewModelScope.launch{
-        _viewStateFlow.emit(LeadManagementSharedViewModelState.ReportingTLSelected(tl))
+        _viewStateFlow.emit(LeadManagementSharedViewModelState.ReportingTLSelected(
+            tl,
+        showingAllTLs
+        ))
     }
 
     fun oneOrMoreSelectionsDropped()= viewModelScope.launch{

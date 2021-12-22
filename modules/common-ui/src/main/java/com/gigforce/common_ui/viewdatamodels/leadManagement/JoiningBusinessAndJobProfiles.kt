@@ -7,14 +7,6 @@ import com.gigforce.core.retrofit.DoNotSerialize
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
-data class JoiningBusinessJobProfilesAndTeamsLeaders(
-
-    @field:SerializedName("businessAndJobProfiles")
-    val businessAndJobProfiles: List<JoiningBusinessAndJobProfilesItem> = emptyList(),
-
-    @field:SerializedName("teamLeaders")
-    val teamLeaders: List<TeamLeader> = emptyList(),
-)
 
 
 @Parcelize
@@ -61,38 +53,6 @@ data class JobProfilesItem(
 
 
 
-@Parcelize
-data class TeamLeader(
 
-    @field:SerializedName("name")
-    val name: String? = null,
-
-    @field:SerializedName("id")
-    val id: String? = null,
-
-    @field:SerializedName("designation")
-    val designation: String? = null,
-
-    @field:SerializedName("cityId")
-    val cityId: String? = null,
-
-    @field:SerializedName("city")
-    val city: String? = null,
-
-    @field:SerializedName("profilePictureThumbnail")
-    val profilePictureThumbnail: String? = null,
-
-    @field:SerializedName("profilePicture")
-    val profilePicture: String? = null,
-
-    @DoNotSerialize
-    var selected: Boolean = false,
-) : Parcelable{
-
-    fun isTeamLeaderEqual(
-        teamLeaderUid : String
-    ) : Boolean = teamLeaderUid == id
-
-}
 
 

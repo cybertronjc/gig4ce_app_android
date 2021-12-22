@@ -317,7 +317,8 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
                     ArrayList(state.jobProfiles)
                 )
                 is NewSelectionForm1ViewState.OpenSelectTLScreen -> openSelectTLScreen(
-                    state.teamLeaders
+                    state.selectedTLId,
+                    state.shouldShowAllTls
                 )
 
                 //Data submit states
@@ -342,12 +343,14 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
         })
 
     private fun openSelectTLScreen(
-        teamLeaders: List<TeamLeader>
+        selectedTLId : String?,
+        shouldShowAllTls : Boolean
     ) {
         navigation.navigateTo(
             LeadManagementNavDestinations.FRAGMENT_SELECT_TEAM_LEADERS,
             bundleOf(
-                SelectTeamLeaderFragment.INTENT_EXTRA_TEAM_LEADERS to ArrayList(teamLeaders)
+                SelectTeamLeaderFragment.INTENT_EXTRA_SELECTED_TL_ID to selectedTLId,
+                SelectTeamLeaderFragment.INTENT_EXTRA_SHOW_ALL_TLS to shouldShowAllTls
             ),
             getNavOptions()
         )
@@ -541,7 +544,10 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
                         )
                     }
                     is LeadManagementSharedViewModelState.ReportingTLSelected -> {
-                        viewModel.handleEvent(NewSelectionForm1Events.ReportingTeamLeaderSelected(it.tlSelected))
+                        viewModel.handleEvent(NewSelectionForm1Events.ReportingTeamLeaderSelected(
+                            it.tlSelected,
+                            it.showingAllTLs
+                        ))
                         showSelectedTeamLeader(it.tlSelected)
                     }
                 }

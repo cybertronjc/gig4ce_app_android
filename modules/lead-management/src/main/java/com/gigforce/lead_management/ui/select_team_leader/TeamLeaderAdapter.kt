@@ -19,8 +19,8 @@ class TeamLeaderAdapter(
 ) : RecyclerView.Adapter<TeamLeaderAdapter.TeamLeaderViewHolder>(),
     Filterable {
 
-    private var originalTLList = ArrayList<TeamLeader>()
-    private var filteredTLList = ArrayList<TeamLeader>()
+    private var originalTLList = listOf<TeamLeader>()
+    private var filteredTLList = listOf<TeamLeader>()
 
     private val contactsFilter = TeamLeaderFilter()
 
@@ -70,7 +70,7 @@ class TeamLeaderAdapter(
         }
     }
 
-    fun setData(teamLeaders: ArrayList<TeamLeader>) {
+    fun setData(teamLeaders: List<TeamLeader>) {
 
         val preSelectedItems = teamLeaders.filter {
             it.selected

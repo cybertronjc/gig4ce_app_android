@@ -30,7 +30,8 @@ sealed class NewSelectionForm1ViewState {
     ) : NewSelectionForm1ViewState()
 
     data class OpenSelectTLScreen(
-        val teamLeaders: List<TeamLeader>
+        val selectedTLId : String?,
+        val shouldShowAllTls : Boolean
     ) : NewSelectionForm1ViewState()
 
     object CheckingForUserDetailsFromProfiles : NewSelectionForm1ViewState()
@@ -91,7 +92,8 @@ sealed class NewSelectionForm1Events {
     ) : NewSelectionForm1Events()
 
     data class ReportingTeamLeaderSelected(
-        val teamLeader: TeamLeader
+        val teamLeader: TeamLeader,
+        val showingAllTlsInSelectedScreen : Boolean
     ) : NewSelectionForm1Events()
 
     data class SubmitButtonPressed(

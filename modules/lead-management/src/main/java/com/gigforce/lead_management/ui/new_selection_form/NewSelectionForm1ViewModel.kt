@@ -46,9 +46,9 @@ class NewSelectionForm1ViewModel @Inject constructor(
     private var selectedBusiness: JoiningBusinessAndJobProfilesItem? = null
     private var selectedJobProfile: JobProfilesItem? = null
     private var selectedReportingTL: TeamLeader? = null
+    private var showingAllTLsInSelectionPage: Boolean = false
 
     private lateinit var joiningBusinessAndJobProfiles: List<JoiningBusinessAndJobProfilesItem>
-    private lateinit var teamLeaders: List<TeamLeader>
 
     init {
         fetchJoiningForm1Data()
@@ -81,6 +81,7 @@ class NewSelectionForm1ViewModel @Inject constructor(
             )
             is NewSelectionForm1Events.ReportingTeamLeaderSelected -> {
                 selectedReportingTL = event.teamLeader
+                showingAllTLsInSelectionPage = event.showingAllTlsInSelectedScreen
             }
         }
 
@@ -179,17 +180,13 @@ class NewSelectionForm1ViewModel @Inject constructor(
         _viewState.value = null
     }
 
-    private fun openSelectTLScreen() {
-
-
+    private fun openSelectTLScreen(){
         _viewState.value = NewSelectionForm1ViewState.OpenSelectTLScreen(
-            teamLeaders.sortedBy {
-                it.name
-            }
+            selectedTLId = selectedReportingTL?.id,
+            shouldShowAllTls = showingAllTLsInSelectionPage
         )
         _viewState.value = null
     }
-
 
     private fun validateDataAndNavigateToForm2(
         dataFromDynamicFields: MutableList<DataFromDynamicInputField>
@@ -399,10 +396,7 @@ class NewSelectionForm1ViewModel @Inject constructor(
         try {
             val businessAndTeamLeaders = leadManagementRepository.getBusinessAndJobProfiles()
 
-            joiningBusinessAndJobProfiles = businessAndTeamLeaders.businessAndJobProfiles
-            teamLeaders = businessAndTeamLeaders.teamLeaders
-
-            setCurrentUserAsDefaultSelectedTL()
+            joiningBusinessAndJobProfiles = businessAndTeamLeaders
 
             gigforceLogger.d(
                 TAG,
@@ -427,16 +421,4 @@ class NewSelectionForm1ViewModel @Inject constructor(
         }
     }
 
-    private fun setCurrentUserAsDefaultSelectedTL() {
-        val currentUser = firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow().uid
-
-        teamLeaders.onEach {
-            val isCurrentUser = it.isTeamLeaderEqual(currentUser)
-
-            if (isCurrentUser) {
-                selectedReportingTL = it
-                it.selected = true
-            }
-        }
-    }
 }

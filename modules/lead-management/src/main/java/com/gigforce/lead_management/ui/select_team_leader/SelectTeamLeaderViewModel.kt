@@ -9,6 +9,7 @@ import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.core.utils.Lce
 import com.gigforce.common_ui.repository.LeadManagementRepository
+import com.gigforce.common_ui.viewdatamodels.leadManagement.TeamLeader
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -17,40 +18,73 @@ import javax.inject.Inject
 class SelectTeamLeaderViewModel @Inject constructor(
     private val leadManagementRepository: LeadManagementRepository,
     private val logger: GigforceLogger,
-    private val firebaseAuthStateListener: FirebaseAuthStateListener,
+    private val firebaseAuthStateListener: FirebaseAuthStateListener
 ) : ViewModel() {
 
     companion object {
-        private const val TAG = "SelectGigLocationViewModel"
+        private const val TAG = "SelectTeamLeaderViewModel"
     }
 
-    private val _viewState = MutableLiveData<Lce<JobProfileDetails>>()
-    val viewState: LiveData<Lce<JobProfileDetails>> = _viewState
+    init {
+        fetchTeamLeaders(false)
+    }
 
+    private val _viewState = MutableLiveData<Lce<List<TeamLeader>>>()
+    val viewState: LiveData<Lce<List<TeamLeader>>> = _viewState
 
-    fun getJobProfileDetails(jobProfileId: String, userUid: String) = viewModelScope.launch {
-        _viewState.postValue(Lce.loading())
+    var selectedTlID : String? =null
+    var fetchingAllTeamLeader : Boolean =false
+
+    fun fetchTeamLeaders(
+        shouldFetchAllTeamLeaders : Boolean
+    ) = viewModelScope.launch {
+
+        logger.d(TAG,"fetching team-leaders, shouldFetchAllTeamLeaders : $shouldFetchAllTeamLeaders")
 
         try {
-            logger.d(TAG, "fetching job profile details...")
-
-            val jobProfileDetails = leadManagementRepository.getJobProfileDetails(
-                jobProfileId,
-                tlUid = firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow().uid,
-                userUid
+            val teamLeaders = leadManagementRepository.getTeamLeadersForSelection(
+                shouldFetchAllTeamLeaders
             )
-            _viewState.value = Lce.content(jobProfileDetails)
 
-            logger.d(TAG, "received ${jobProfileDetails} job profiles from server")
+            logger.d(TAG,"[Success] fetched ${teamLeaders.size} team leaders")
+            checkAndSelectPreviousSelectedUserAndEmit(teamLeaders)
+            fetchingAllTeamLeader = shouldFetchAllTeamLeaders
 
         } catch (e: Exception) {
-            _viewState.value = Lce.error("Unable to load Job Profile details")
-            logger.e(
-                TAG,
-                " getJobProfileDetails()",
-                e
+
+            logger.e(TAG,"[Error] while fetching team leaders",e)
+            _viewState.value = Lce.error(
+                "Unable to fetch team leaders"
             )
         }
+    }
+
+    private fun checkAndSelectPreviousSelectedUserAndEmit(teamLeaders: List<TeamLeader>) {
+        if(teamLeaders.isEmpty()){
+            _viewState.value = Lce.content(
+                teamLeaders
+            )
+            return
+        }
+
+        if(selectedTlID != null){
+            teamLeaders.find { it.isTeamLeaderEqual(selectedTlID!!) }?.selected = true
+        } else {
+            val currentTLUid = firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow().uid
+
+            teamLeaders.onEach {
+
+                if(it.isTeamLeaderEqual(currentTLUid)){
+                    it.selected = true
+                    selectedTlID = currentTLUid
+                }
+            }
+        }
+
+
+        _viewState.value = Lce.content(
+            teamLeaders
+        )
     }
 
 }

@@ -10,7 +10,6 @@ import com.gigforce.common_ui.remote.ReferralService
 import com.gigforce.common_ui.viewdatamodels.PendingJoiningItemDVM
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.common_ui.viewdatamodels.referral.ReferralRequest
-import com.gigforce.core.StringConstants
 import com.gigforce.core.datamodels.ambassador.*
 import com.gigforce.core.datamodels.auth.UserAuthStatusModel
 import com.gigforce.core.datamodels.profile.Contact
@@ -35,10 +34,6 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.flow.FlowCollector
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.flow
-import retrofit2.Response
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.coroutines.resume
@@ -99,7 +94,8 @@ class LeadManagementRepository @Inject constructor(
                 "reference.relation" to relation,
                 "reference.contactNo" to contactNo,
                 "updatedAt" to Timestamp.now(),
-                "updatedBy" to FirebaseAuthStateListener.getInstance().getCurrentSignInUserInfoOrThrow().uid
+                "updatedBy" to FirebaseAuthStateListener.getInstance()
+                    .getCurrentSignInUserInfoOrThrow().uid
             )
         )
 
@@ -205,7 +201,8 @@ class LeadManagementRepository @Inject constructor(
                         "tradeName" to tradeName,
                         "jobProfileIcon" to jobProfileIcon,
                         "updatedAt" to Timestamp.now(),
-                        "updatedBy" to FirebaseAuthStateListener.getInstance().getCurrentSignInUserInfoOrThrow().uid
+                        "updatedBy" to FirebaseAuthStateListener.getInstance()
+                            .getCurrentSignInUserInfoOrThrow().uid
                     )
                 )
 
@@ -650,44 +647,13 @@ class LeadManagementRepository @Inject constructor(
             )
     }
 
-    suspend fun getBusinessAndJobProfiles() : JoiningBusinessJobProfilesAndTeamsLeaders {
+    suspend fun getBusinessAndJobProfiles(): List<JoiningBusinessAndJobProfilesItem> {
 
-        return JoiningBusinessJobProfilesAndTeamsLeaders(
-            businessAndJobProfiles = listOf(
-                JoiningBusinessAndJobProfilesItem(
-                    name = "Ssss",
-                    id = "sssss",
-                    icon = "sss",
-                    jobProfiles = listOf(
-                        JobProfilesItem(
-                            name = "null",
-                            id = "null",
-                            locationType = "null",
-                            verificationRelatedFields = listOf(),
-                            dynamicFields = listOf(),
-                            selected = false
-                        )
-                    ),
-                    selected = false
-                )
-            ),
-            teamLeaders = listOf(
-                TeamLeader(
-                    name = "TL NNNN",
-                    id = "Sss",
-                    designation = "Some designaiton",
-                    city = "Some City",
-                    profilePictureThumbnail = "",
-                    profilePicture = ""
-                )
-            )
-        )
-
-//      return joiningProfileRemoteService
-//          .getBusinessAndJobProfiles()
-//          .bodyOrThrow()
-
+        return joiningProfileRemoteService
+            .getBusinessAndJobProfiles()
+            .bodyOrThrow()
     }
+
     suspend fun getBusinessLocationsAndTeamLeaders(
         businessId: String,
         jobProfileId: String
@@ -740,25 +706,13 @@ class LeadManagementRepository @Inject constructor(
     }
 
     suspend fun dropSelections(
-        selectionIds : List<DropDetail>
-    ): DropSelectionResponse{
+        selectionIds: List<DropDetail>
+    ): DropSelectionResponse {
         val dropRequest = DropSelectionRequest(selectionIds)
         return joiningProfileRemoteService.dropSelections(jsonObject = dropRequest).bodyOrThrow()
     }
 
     suspend fun getPendingJoinings(): List<PendingJoiningItemDVM> {
-
-//        return listOf(
-//            PendingJoiningItemDVM(
-//                jobProfileId = "SmUK9BWoFGjNKaHgLwWB",
-//                joiningId = "SmUK9BWoFGjNKaHgLwWB",
-//                jobProfileName = "Some profile",
-//                location = "Test location",
-//                expectedStartDate = "19-ovt-233",
-//                image = "https://firebasestorage.googleapis.com/v0/b/gigforce-staging.appspot.com/o/webimage%2F1632312738454?alt=media&token=14e7a9f5-f251-4f9a-8bab-eaf0a46a489a"
-//            )
-//        )
-
         return joiningProfileRemoteService.getPendingJoining().bodyOrThrow().data
     }
 
@@ -767,5 +721,17 @@ class LeadManagementRepository @Inject constructor(
     ): UserAuthStatusModel {
         return profileCommonService.getUserInfoFromMobile(mobileNo10digit)
             .bodyOrThrow()
+    }
+
+    suspend fun getTeamLeadersForSelection(
+        showFetchAllTLs: Boolean
+    ): List<TeamLeader> {
+
+        return joiningProfileRemoteService
+            .getTeamLeadersForSelection(
+                showFetchAllTLs
+            )
+            .bodyOrThrow()
+            .result?.teamLeaders ?: emptyList()
     }
 }
