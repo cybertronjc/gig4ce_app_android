@@ -105,20 +105,21 @@ class ConfirmBNBankBS : BottomSheetDialogFragment() {
 
                 }
                 is Lce.Content -> {
-                    userconsent.content.optionSelected?.let {
-                        if (it == "true" ) {
-                            Log.e("testingworking","here")
-                            navigation.navigateTo("verification/acknowledgeBankBS")
-
-                        } else {
-                            Log.e("testingworking","here1")
-
-                            navigation.navigateTo("verification/bank_account_fragment")
-
-                        }
-
-                    }
-
+//                    userconsent.content.optionSelected?.let {
+//                        if (it == "true" ) {
+//                            Log.e("testingworking","here")
+//                            navigation.navigateTo("verification/acknowledgeBankBS")
+//
+//                        } else {
+//                            Log.e("testingworking","here1")
+//
+//                            navigation.navigateTo("verification/bank_account_fragment")
+//
+//                        }
+//
+//                    }
+                    navigation.navigateTo("verification/bank_account_fragment")
+                    dismiss()
 
                 }
                 is Lce.Error -> {
