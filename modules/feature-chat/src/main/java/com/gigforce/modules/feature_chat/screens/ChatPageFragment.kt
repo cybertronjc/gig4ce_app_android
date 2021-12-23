@@ -757,19 +757,25 @@ class ChatPageFragment : Fragment(),
 
     override fun onMenuItemClick(item: MenuItem?): Boolean = when (item?.itemId) {
         R.id.action_block -> {
-            if (chatFooter.isTypingEnabled())
+            if (chatFooter.isTypingEnabled()) {
                 BlockUserBottomSheetFragment.launch(
                     viewModel.headerId,
                     viewModel.otherUserId,
                     childFragmentManager
                 )
-            else
+            } else {
                 viewModel.blockOrUnBlockUser(
                     viewModel.headerId,
                     viewModel.otherUserId,
                     false
                 )
-                eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_UNBLOCKED_USER, null))
+                eventTracker.pushEvent(
+                    TrackingEventArgs(
+                        CommunityEvents.EVENT_CHAT_UNBLOCKED_USER,
+                        null
+                    )
+                )
+            }
             true
         }
         R.id.action_report -> {
