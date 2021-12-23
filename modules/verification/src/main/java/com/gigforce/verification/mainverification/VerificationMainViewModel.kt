@@ -87,7 +87,7 @@ class VerificationMainViewModel @Inject constructor(
                     allDocs.add(
                         SimpleCardDVM(
                             title = appContext.getString(R.string.pan_card),
-                            subtitle = getSubString(doc?.pan_card?.status),
+                            subtitle = getSubString(doc?.pan_card?.verified, doc?.pan_card?.status),
                             image = R.drawable.ic_badge_black_24dp,
                             navpath = "verification/pancardimageupload",
                             color = getSubStringColor(
@@ -98,7 +98,7 @@ class VerificationMainViewModel @Inject constructor(
                     allDocs.add(
                         SimpleCardDVM(
                             title = appContext.getString(R.string.driving_license),
-                            subtitle = getSubString(
+                            subtitle = getSubString( doc?.driving_license?.verified,
                                 doc?.driving_license?.status
                             ),
                             image = R.drawable.ic_directions_car_black_24dp,
@@ -111,7 +111,7 @@ class VerificationMainViewModel @Inject constructor(
                     allDocs.add(
                         SimpleCardDVM(
                             title = appContext.getString(R.string.bank_details),
-                            subtitle = getSubString(
+                            subtitle = getSubString(null,
                                 doc?.bank_details?.status
                             ),
                             image = R.drawable.ic_account_balance_black_24dp,
@@ -165,19 +165,30 @@ class VerificationMainViewModel @Inject constructor(
         return !aadhaarCardQuestionnaire?.dateOfBirth.isNullOrEmpty() && !aadhaarCardQuestionnaire?.name.isNullOrEmpty() && !aadhaarCardQuestionnaire?.aadhaarCardNo.isNullOrEmpty()
     }
 
-    fun getSubString(status: String? = ""): String {
+    fun getSubString(isVerified: Boolean? = false, status: String? = ""): String {
+        //for bank verification
         if (status.equals("verified")) return appContext.getString(R.string.verified_status_veri)//"Verified"
         if (status.equals("verification_pending")) return appContext.getString(R.string.confirmation_pending_veri)//"confirmation pending"
-        if (status.equals("started") || status.equals("processing") || status.equals("validated")) return appContext.getString(R.string.inprogress_veri)//"Pending"
+        if (status.equals("started") || status.equals("processing") || status.equals("validated")) return appContext.getString(R.string.inprogress_veri)//"in progress"
         if (status.equals("validation_failed")) return appContext.getString(R.string.failed_status_veri)//"Failed"
-        return appContext.getString(R.string.tap_to_select)
+
+        if (isVerified == true) return appContext.getString(R.string.verified_status_veri)//"Verified"
+        if (status?.equals("started") == true) return appContext.getString(R.string.inprogress_veri)//"in progress"
+        if (status?.equals("failed") == true) return appContext.getString(R.string.failed_status_veri)//"Failed"
+        return appContext.getString(R.string.pending_status_veri)
     }
 
-    fun getSubStringColor(status: String? = ""): String {
+    fun getSubStringColor(isVerified: Boolean? = false, status: String? = ""): String {
+        // for bank account
         if (status.equals("verified")) return "GREEN"
         if (status.equals("started") || status.equals("processing") || status.equals("validated") || status.equals("verification_pending")) return "YELLOW"
         if (status.equals("validation_failed")) return "RED"
-        return ""
+
+        //for other
+        if (isVerified == true) return "GREEN"
+        if (status?.equals("started") == true) return "YELLOW"
+        if (status?.equals("failed") == true) return "RED"
+        return "RED"
     }
 
     fun isAllDocVerified(): Boolean {
