@@ -1,7 +1,6 @@
 package com.gigforce.verification.mainverification.bankaccount
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,18 +18,17 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_acknowledge_bank_b_s.*
-import java.util.HashMap
 import javax.inject.Inject
 import javax.inject.Singleton
 
 
-@Singleton
 @AndroidEntryPoint
 class AcknowledgeBankBS : BottomSheetDialogFragment() {
 
-    private val viewModel : BankAccountViewModel by viewModels()
+    private val viewModel: BankAccountViewModel by viewModels()
+
     @Inject
-    lateinit var eventTracker : IEventTracker
+    lateinit var eventTracker: IEventTracker
 
     private val user: String?
         get() {
@@ -52,7 +50,7 @@ class AcknowledgeBankBS : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if(user == null)dismiss()
+        if (user == null) dismiss()
         else {
             isCancelable = false
             initializeAll()
@@ -90,8 +88,8 @@ class AcknowledgeBankBS : BottomSheetDialogFragment() {
     }
 
     private fun observer() {
-        viewModel.userConsentModel.observe(viewLifecycleOwner, Observer{
-            when(it){
+        viewModel.userConsentModel.observe(viewLifecycleOwner, Observer {
+            when (it) {
                 is Lce.Loading -> {
 
                 }
@@ -105,12 +103,14 @@ class AcknowledgeBankBS : BottomSheetDialogFragment() {
         })
 
         viewModel.bankDetailedObject.observe(viewLifecycleOwner, Observer {
-            it.bankBeneficiaryName?.let { bnName->
-                bn_tv.text = bnName
-                account_no_tv.text = it.accountNo
-                ifsc_tv.text = it.ifscCode
-            }?: run {
+            if (it.bankBeneficiaryName == null) {
                 dismiss()
+            } else {
+                it.bankBeneficiaryName?.let { bnName ->
+                    bn_tv.text = bnName
+                    account_no_tv.text = it.accountNo
+                    ifsc_tv.text = it.ifscCode
+                }
             }
 
         })

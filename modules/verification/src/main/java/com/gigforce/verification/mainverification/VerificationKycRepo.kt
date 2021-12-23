@@ -102,10 +102,9 @@ class VerificationKycRepo @Inject constructor(private val iBuildConfigVM: IBuild
         }
     }
 
-    suspend fun setVerifiedStatus(status: Boolean?, uid: String) : UserConsentResponse{
+    suspend fun setVerifiedStatus(status: Boolean, uid: String) : UserConsentResponse{
         try {
-            status?.let {
-                val userConsentResponse = kycService.onConfirmButton(iBuildConfigVM.getKycUserConsentUrl(),UserConsentRequest(it))
+                val userConsentResponse = kycService.onConfirmButton(iBuildConfigVM.getKycUserConsentUrl(),UserConsentRequest(status))
                 if(userConsentResponse.isSuccessful){
                     return userConsentResponse.body()!!
                 }else{
@@ -113,7 +112,6 @@ class VerificationKycRepo @Inject constructor(private val iBuildConfigVM: IBuild
                         .log("Exception : kycOcrVerification Method ${userConsentResponse.message()}")
                     throw Exception("Issue in KYC Ocr result ${userConsentResponse.message()}")
                 }
-            }
 //            db.collection(getCollectionName()).document(uid).updateOrThrow(
 //                mapOf(
 //                    "bank_details.verified" to status,

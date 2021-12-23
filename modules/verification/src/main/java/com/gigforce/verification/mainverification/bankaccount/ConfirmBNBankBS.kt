@@ -1,6 +1,7 @@
 package com.gigforce.verification.mainverification.bankaccount
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,7 +23,6 @@ import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
-@Singleton
 @AndroidEntryPoint
 class ConfirmBNBankBS : BottomSheetDialogFragment() {
 
@@ -105,17 +105,20 @@ class ConfirmBNBankBS : BottomSheetDialogFragment() {
 
                 }
                 is Lce.Content -> {
-                    dismiss()
                     userconsent.content.optionSelected?.let {
-                        if (it) {
+                        if (it == "true" ) {
+                            Log.e("testingworking","here")
                             navigation.navigateTo("verification/acknowledgeBankBS")
 
                         } else {
+                            Log.e("testingworking","here1")
+
                             navigation.navigateTo("verification/bank_account_fragment")
 
                         }
 
                     }
+
 
                 }
                 is Lce.Error -> {
