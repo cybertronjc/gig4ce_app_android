@@ -122,11 +122,11 @@ class NewSelectionForm3VerificationDocumentViewModel @Inject constructor(
             if (it.fieldType == FieldTypes.AADHAAR_VERIFICATION_VIEW) {
                 it.status = if (userUploadedAadhaarCard) VerificationStatus.VERIFIED else VerificationStatus.NOT_UPLOADED
             } else if (it.fieldType == FieldTypes.BANK_VERIFICATION_VIEW) {
-                it.status = verificationDocument.bank_details?.status ?: VerificationStatus.NOT_UPLOADED
+                it.status = VerificationStatus.getStatusStringFromServerString(verificationDocument.bank_details?.status)
             } else if (it.fieldType == FieldTypes.DL_VERIFICATION_VIEW) {
-                it.status = verificationDocument.driving_license?.status ?: VerificationStatus.NOT_UPLOADED
+                it.status = VerificationStatus.getStatusStringFromServerString(verificationDocument.driving_license?.status)
             } else if (it.fieldType == FieldTypes.PAN_VERIFICATION_VIEW) {
-                it.status = verificationDocument.pan_card?.status ?: VerificationStatus.NOT_UPLOADED
+                it.status = VerificationStatus.getStatusStringFromServerString(verificationDocument.pan_card?.status)
             }
         }
 
