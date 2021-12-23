@@ -987,16 +987,13 @@ class GroupChatViewModel @Inject constructor(
         }
     }
 
-    private var copyEnable = false
-    private var deleteEnable = false
-    fun selectChatMessage(msg: ChatMessage, copyEnable: Boolean, deleteEnable: Boolean){
+    fun selectChatMessage(msg: ChatMessage){
         val messageList = grpMessages ?: return
         val index = messageList.indexOf(msg)
         if (index != -1) {
             _selectedChatMessage.value = msg
         }
-        this@GroupChatViewModel.copyEnable = copyEnable
-        this@GroupChatViewModel.deleteEnable = deleteEnable
+
     }
 
     fun makeSelectEnable(enable: Boolean){
@@ -1007,9 +1004,6 @@ class GroupChatViewModel @Inject constructor(
         return selectEnable
     }
 
-    fun getSelectedChatOptions(): Pair<Boolean, Boolean> {
-        return Pair(copyEnable, deleteEnable)
-    }
 
     fun scrollToMessage(
         replyMessage: ChatMessage

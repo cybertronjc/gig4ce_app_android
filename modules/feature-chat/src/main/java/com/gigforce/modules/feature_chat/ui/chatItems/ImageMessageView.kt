@@ -63,7 +63,8 @@ abstract class ImageMessageView(
     private lateinit var imageView: ImageView
     private lateinit var messageTV: TextView
     private lateinit var textViewTime: TextView
-    private lateinit var cardView: CardView
+    private lateinit var cardView: LinearLayout
+    private lateinit var frameLayoutRoot: FrameLayout
     private lateinit var downloadIconIV: ImageView
     private lateinit var downloadOverlayIV: ImageView
     private lateinit var attachmentDownloadingProgressBar: ProgressBar
@@ -87,6 +88,7 @@ abstract class ImageMessageView(
         imageView = this.findViewById(R.id.iv_image)
         textViewTime = this.findViewById(R.id.tv_msgTimeValue)
         cardView = this.findViewById(R.id.cv_msgContainer)
+        frameLayoutRoot = this.findViewById(R.id.frame)
         downloadIconIV = this.findViewById(R.id.download_icon_iv)
         downloadOverlayIV = this.findViewById(R.id.download_overlay_iv)
         receivedStatusIV = this.findViewById(R.id.tv_received_status)
@@ -353,15 +355,18 @@ abstract class ImageMessageView(
 //
 //        popUpMenu.setOnMenuItemClickListener(this)
 //        popUpMenu.show()
-
-        cardView.foreground = resources.getDrawable(R.drawable.selected_chat_foreground)
-
-        if (messageType == MessageType.ONE_TO_ONE_MESSAGE) {
-            oneToOneChatViewModel.makeSelectEnable(true)
-            oneToOneChatViewModel.selectChatMessage(chatMessage, false, type == MessageFlowType.OUT)
-        } else if (messageType == MessageType.GROUP_MESSAGE) {
-            groupChatViewModel.makeSelectEnable(true)
-            groupChatViewModel.selectChatMessage(chatMessage, false, type == MessageFlowType.OUT)
+        if(!(oneToOneChatViewModel.getSelectEnable() == true || groupChatViewModel.getSelectEnable() == true)) {
+            if (messageType == MessageType.ONE_TO_ONE_MESSAGE) {
+                frameLayoutRoot?.foreground =
+                    resources.getDrawable(R.drawable.selected_chat_foreground)
+                oneToOneChatViewModel.makeSelectEnable(true)
+                oneToOneChatViewModel.selectChatMessage(chatMessage)
+            } else if (messageType == MessageType.GROUP_MESSAGE) {
+                frameLayoutRoot?.foreground =
+                    resources.getDrawable(R.drawable.selected_chat_foreground)
+                groupChatViewModel.makeSelectEnable(true)
+                groupChatViewModel.selectChatMessage(chatMessage)
+            }
         }
 
         return true

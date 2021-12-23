@@ -943,17 +943,12 @@ class ChatPageViewModel @Inject constructor(
         }
     }
 
-    private var copyEnable1 = false
-    private var deleteEnable1 = false
-    fun selectChatMessage(msg: ChatMessage, copyEnable: Boolean, deleteEnable: Boolean){
+    fun selectChatMessage(msg: ChatMessage){
         val messageList = chatMessages ?: return
         val index = messageList.indexOf(msg)
         if (index != -1) {
             _selectedChatMessage.value = msg
         }
-        Log.d("copyDelete", "$copyEnable , $deleteEnable")
-        this.copyEnable1 = copyEnable
-        this.deleteEnable1 = deleteEnable
     }
 
     fun makeSelectEnable(enable: Boolean){
@@ -962,11 +957,6 @@ class ChatPageViewModel @Inject constructor(
 
     fun getSelectEnable(): Boolean?{
         return selectEnable
-    }
-
-    fun getSelectedChatOptions(): Pair<Boolean, Boolean> {
-        Log.d("copyDelete1", "$copyEnable1 , $deleteEnable1")
-        return Pair(copyEnable1, deleteEnable1)
     }
 
     fun scrollToMessage(

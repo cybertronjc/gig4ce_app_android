@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/layoutRoot"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
@@ -32,6 +33,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:id="@+id/layoutMain"
             android:layout_weight="1">
 
             <ImageView
@@ -50,8 +52,10 @@
                 android:id="@+id/chat_footer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:layout_gravity="bottom"
                 android:minHeight="56dp" />
+
 
         </FrameLayout>
     </LinearLayout>

@@ -13,10 +13,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.webkit.MimeTypeMap
-import android.widget.ImageView
-import android.widget.PopupMenu
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.FileProvider
@@ -60,7 +57,8 @@ abstract class DocumentMessageView(
     private lateinit var senderNameTV: TextView
     private lateinit var textView: TextView
     private lateinit var textViewTime: TextView
-    private lateinit var cardView: CardView
+    private lateinit var cardView: LinearLayout
+    private lateinit var frameLayoutRoot: FrameLayout
     private lateinit var progressbar: View
     private lateinit var receivedStatusIV: ImageView
 
@@ -79,6 +77,7 @@ abstract class DocumentMessageView(
         senderNameTV = this.findViewById(R.id.user_name_tv)
         linearLayout = this.findViewById(R.id.ll_msgContainer)
         textView = this.findViewById(R.id.tv_file_name)
+        frameLayoutRoot = this.findViewById(R.id.frame)
         textViewTime = this.findViewById(R.id.tv_msgTimeValue)
         cardView = this.findViewById(R.id.cv_msgContainer)
         progressbar = this.findViewById(R.id.progress)
@@ -246,16 +245,20 @@ abstract class DocumentMessageView(
 //
 //        popUpMenu.setOnMenuItemClickListener(this)
 //        popUpMenu.show()
-
-        cardView.foreground = resources.getDrawable(R.drawable.selected_chat_foreground)
-
-        if (messageType == MessageType.ONE_TO_ONE_MESSAGE) {
-            oneToOneChatViewModel.makeSelectEnable(true)
-            oneToOneChatViewModel.selectChatMessage(message, false, flowType == MessageFlowType.OUT)
-        } else if (messageType == MessageType.GROUP_MESSAGE) {
-            groupChatViewModel.makeSelectEnable(true)
-            groupChatViewModel.selectChatMessage(message, false, flowType == MessageFlowType.OUT)
+        if(!(oneToOneChatViewModel.getSelectEnable() == true || groupChatViewModel.getSelectEnable() == true)) {
+            if (messageType == MessageType.ONE_TO_ONE_MESSAGE) {
+                frameLayoutRoot?.foreground =
+                    resources.getDrawable(R.drawable.selected_chat_foreground)
+                oneToOneChatViewModel.makeSelectEnable(true)
+                oneToOneChatViewModel.selectChatMessage(message)
+            } else if (messageType == MessageType.GROUP_MESSAGE) {
+                frameLayoutRoot?.foreground =
+                    resources.getDrawable(R.drawable.selected_chat_foreground)
+                groupChatViewModel.makeSelectEnable(true)
+                groupChatViewModel.selectChatMessage(message)
+            }
         }
+
 
         return true
     }

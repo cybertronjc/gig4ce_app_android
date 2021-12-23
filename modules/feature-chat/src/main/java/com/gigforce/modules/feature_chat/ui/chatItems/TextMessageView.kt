@@ -72,6 +72,7 @@ abstract class TextMessageView(
     private lateinit var message: ChatMessage
     private lateinit var oneToOneChatViewModel: ChatPageViewModel
     private lateinit var groupChatViewModel: GroupChatViewModel
+    private lateinit var frameLayoutRoot: FrameLayout
 
     init {
         setDefault()
@@ -98,7 +99,7 @@ abstract class TextMessageView(
         msgView = this.findViewById(R.id.tv_msgValue)
         timeView = this.findViewById(R.id.tv_msgTimeValue)
         receivedStatusIV = this.findViewById(R.id.tv_received_status)
-
+        frameLayoutRoot = this.findViewById(R.id.frame)
         quotedMessagePreviewContainer =
             this.findViewById(R.id.reply_messages_quote_container_layout)
         containerView = this.findViewById(R.id.ll_msgContainer)
@@ -121,18 +122,6 @@ abstract class TextMessageView(
             senderNameTV.isVisible =
                 messageType == MessageType.GROUP_MESSAGE && type == MessageFlowType.IN
             senderNameTV.text = message.senderInfo.name
-
-            Log.d("selectEnable", "${oneToOneChatViewModel.getSelectEnable()} , ${groupChatViewModel.getSelectEnable()}")
-
-//            if(oneToOneChatViewModel.getSelectEnable() == true || groupChatViewModel.getSelectEnable() == true){
-//                quotedMessagePreviewContainer.setOnClickListener(null)
-//                containerView.setOnLongClickListener(null)
-//                Log.d("selectEnable1", "true")
-//            } else{
-//                quotedMessagePreviewContainer.setOnClickListener(this)
-//                containerView.setOnLongClickListener(this)
-//                Log.d("selectEnable2", "false")
-//            }
 
             setQuotedMessageOnView(
                 context =  context,
@@ -214,15 +203,15 @@ abstract class TextMessageView(
 //        popUpMenu.setOnMenuItemClickListener(this)
 //        popUpMenu.show()
 
-        //cardView.foreground = resources.getDrawable(R.drawable.selected_chat_foreground)
-        Log.d("longclick", "clicked")
         if(!(oneToOneChatViewModel.getSelectEnable() == true || groupChatViewModel.getSelectEnable() == true)){
             if (messageType == MessageType.ONE_TO_ONE_MESSAGE) {
+                frameLayoutRoot?.foreground = resources.getDrawable(R.drawable.selected_chat_foreground)
                 oneToOneChatViewModel.makeSelectEnable(true)
-                oneToOneChatViewModel.selectChatMessage(message, false, type == MessageFlowType.OUT)
+                oneToOneChatViewModel.selectChatMessage(message)
             } else if (messageType == MessageType.GROUP_MESSAGE) {
+                frameLayoutRoot?.foreground = resources.getDrawable(R.drawable.selected_chat_foreground)
                 groupChatViewModel.makeSelectEnable(true)
-                groupChatViewModel.selectChatMessage(message, false, type == MessageFlowType.OUT)
+                groupChatViewModel.selectChatMessage(message)
             }
         }
 

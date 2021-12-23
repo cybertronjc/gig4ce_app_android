@@ -145,4 +145,5 @@
     <string name="block_user_chat">Block User</string>
     <string name="unable_to_block_user">Unable to block user</string>
     <string name="contacts_selected_chat">Contact(s) Selected</string>
+    <bool name="is_right_to_left">false</bool>
 </resources>

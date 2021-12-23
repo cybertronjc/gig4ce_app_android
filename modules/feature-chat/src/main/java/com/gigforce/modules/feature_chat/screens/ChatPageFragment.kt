@@ -15,6 +15,7 @@ import android.util.Log
 import android.util.Patterns
 import android.view.*
 import android.view.inputmethod.InputMethodManager
+import android.widget.FrameLayout
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -58,6 +59,7 @@ import com.gigforce.modules.feature_chat.screens.vm.ChatPageViewModel
 import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel
 import com.gigforce.modules.feature_chat.swipe.MessageSwipeController
 import com.gigforce.modules.feature_chat.swipe.SwipeControllerActions
+import com.gigforce.modules.feature_chat.ui.AudioRecordView
 import com.gigforce.modules.feature_chat.ui.ChatFooter
 import com.gigforce.modules.feature_chat.ui.chatItems.MessageFlowType
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -103,6 +105,9 @@ class ChatPageFragment : Fragment(),
     //Views
     private lateinit var chatRecyclerView: CoreRecyclerView
     private lateinit var chatFooter: ChatFooter
+    private lateinit var audioRecordView: AudioRecordView
+    private lateinit var frameLayout: FrameLayout
+    private lateinit var rootLayout: FrameLayout
     private var cameFromLinkInOtherChat: Boolean = false
     private lateinit var mainChatLayout: View
     private lateinit var needStorageAccessLayout: View
@@ -457,11 +462,7 @@ class ChatPageFragment : Fragment(),
 
         groupChatViewModel.selectedChatMessage.observe(viewLifecycleOwner, Observer {
             it ?: return@Observer
-            Log.d("selectedMsg", "${it.chatType }")
-            groupChatViewModel.getSelectedChatOptions().let {
-                appbar.makeChatOptionsVisible(true, it.first, it.second)
-                Log.d("chatoptionsgroup", "${it.first} , ${it.second}")
-            }
+
         })
 
     }
@@ -486,8 +487,9 @@ class ChatPageFragment : Fragment(),
     }
 
     private fun findViews(view: View) {
+        frameLayout = view.findViewById(R.id.layoutMain)
         chatFooter = view.findViewById(R.id.chat_footer)
-
+        rootLayout = view.findViewById(R.id.layoutRoot)
         chatRecyclerView = view.findViewById(R.id.rv_chat_messages)
         val layoutManager = LinearLayoutManager(requireContext())
         layoutManager.stackFromEnd = true
@@ -495,6 +497,15 @@ class ChatPageFragment : Fragment(),
 
         val itemTouchHelper = ItemTouchHelper(messageSwipeController)
         itemTouchHelper.attachToRecyclerView(chatRecyclerView)
+        setUpAudioView()
+    }
+
+    private fun setUpAudioView() {
+        // this is to make your layout the root of audio record view, root layout supposed to be empty..
+        // this is to make your layout the root of audio record view, root layout supposed to be empty..
+        audioRecordView = AudioRecordView()
+        audioRecordView.initView(rootLayout)
+        audioRecordView.setContainerView(R.layout.fragment_chat)
     }
 
     private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {

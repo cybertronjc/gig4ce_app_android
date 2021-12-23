@@ -9,6 +9,7 @@
     <color name="red">#FF0000</color>
 
     <color name="chat_incoming_mesage_background_color">#ffd9e6</color>
+    <color name="chat_selected_foreground_color">#33ffd9e6</color>
     <color name="chat_outgoing_mesage_background_color">#e42c64</color>
     <color name="chat_switch_checked">#E42C64</color>
     <color name="chat_switch_unchecked">#FCEAF0</color>
