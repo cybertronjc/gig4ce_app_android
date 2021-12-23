@@ -117,8 +117,8 @@ class ChatNotificationHandler constructor(
 
         )
 
-        var map = mapOf("chat_type" to "Direct", "message_type" to messageType)
-        eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_NOTIFICATION_RECEIVED, map))
+//        var map = mapOf("chat_type" to "Direct", "message_type" to messageType)
+//        eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_NOTIFICATION_RECEIVED, map))
     }
 
     private fun createPendingIntentForChat(
@@ -237,8 +237,8 @@ class ChatNotificationHandler constructor(
 
         )
 
-        var map = mapOf("chat_type" to "Group", "message_type" to messageType)
-        eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_NOTIFICATION_RECEIVED, map))
+//        var map = mapOf("chat_type" to "Group", "message_type" to messageType)
+//        eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_NOTIFICATION_RECEIVED, map))
     }
 
     private fun showTextMessageReceivedNotification(

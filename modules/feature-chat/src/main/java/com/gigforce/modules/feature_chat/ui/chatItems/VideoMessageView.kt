@@ -161,36 +161,29 @@ abstract class VideoMessageView(
     }
 
     private fun setReceivedStatus(msg: ChatMessage)  {
-        var sendingMsg = false
-        var map = mapOf("message_type" to "Video")
         when (msg.status) {
             ChatConstants.MESSAGE_STATUS_NOT_SENT -> {
                 Glide.with(context)
                     .load(R.drawable.ic_msg_pending)
                     .into(receivedStatusIV)
-                sendingMsg = true
             }
             ChatConstants.MESSAGE_STATUS_DELIVERED_TO_SERVER -> {
                 Glide.with(context)
                     .load(R.drawable.ic_msg_sent)
                     .into(receivedStatusIV)
-                if (sendingMsg)
-                    eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_MESSAGE_SENT_TO_SERVER, map))
 
             }
             ChatConstants.MESSAGE_STATUS_RECEIVED_BY_USER -> {
                 Glide.with(context)
                     .load(R.drawable.ic_msg_delivered)
                     .into(receivedStatusIV)
-                if (sendingMsg)
-                    eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_MESSAGE_RECEIVED, map))
+
             }
             ChatConstants.MESSAGE_STATUS_READ_BY_USER -> {
                 Glide.with(context)
                     .load(R.drawable.ic_msg_seen)
                     .into(receivedStatusIV)
-                if (sendingMsg)
-                    eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_MESSAGE_READ, map))
+
             }
             else -> {
                 Glide.with(context)

@@ -133,8 +133,15 @@ class MainActivity : BaseActivity(),
 
             if (navController.currentDestination?.label != "fragment_chat_list" &&
                     navController.currentDestination?.label != "fragment_chat_page"
-            )
+            ) {
                 chatNotificationHandler.handleChatNotification(remoteMessage)
+                eventTracker.pushEvent(
+                    TrackingEventArgs(
+                        CommunityEvents.EVENT_CHAT_NOTIFICATION_RECEIVED,
+                        null
+                    )
+                )
+            }
         }
     }
 
