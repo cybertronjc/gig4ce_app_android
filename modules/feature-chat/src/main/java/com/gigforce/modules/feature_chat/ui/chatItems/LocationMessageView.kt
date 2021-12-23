@@ -16,10 +16,13 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.chat.models.ChatMessage
 import com.gigforce.common_ui.core.ChatConstants
+import com.gigforce.core.IEventTracker
 import com.gigforce.core.IViewHolder
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.extensions.toDisplayText
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.modules.feature_chat.R
+import com.gigforce.modules.feature_chat.analytics.CommunityEvents
 import com.gigforce.modules.feature_chat.models.ChatMessageWrapper
 import com.gigforce.modules.feature_chat.screens.GroupMessageViewInfoFragment
 import com.gigforce.modules.feature_chat.screens.vm.ChatPageViewModel
@@ -43,6 +46,9 @@ abstract class LocationMessageView(
 
     @Inject
     lateinit var navigation : INavigation
+
+    @Inject
+    lateinit var eventTracker: IEventTracker
 
     private lateinit var imageView: ImageView
     private lateinit var locationAddressTV: TextView
@@ -162,31 +168,33 @@ abstract class LocationMessageView(
         return circularProgressDrawable
     }
 
-    private fun setReceivedStatus(msg: ChatMessage) = when (msg.status) {
-        ChatConstants.MESSAGE_STATUS_NOT_SENT -> {
-            Glide.with(context)
-                .load(R.drawable.ic_msg_pending)
-                .into(receivedStatusIV)
-        }
-        ChatConstants.MESSAGE_STATUS_DELIVERED_TO_SERVER -> {
-            Glide.with(context)
-                .load(R.drawable.ic_msg_sent)
-                .into(receivedStatusIV)
-        }
-        ChatConstants.MESSAGE_STATUS_RECEIVED_BY_USER -> {
-            Glide.with(context)
-                .load(R.drawable.ic_msg_delivered)
-                .into(receivedStatusIV)
-        }
-        ChatConstants.MESSAGE_STATUS_READ_BY_USER -> {
-            Glide.with(context)
-                .load(R.drawable.ic_msg_seen)
-                .into(receivedStatusIV)
-        }
-        else -> {
-            Glide.with(context)
-                .load(R.drawable.ic_msg_pending)
-                .into(receivedStatusIV)
+    private fun setReceivedStatus(msg: ChatMessage) {
+        when (msg.status) {
+            ChatConstants.MESSAGE_STATUS_NOT_SENT -> {
+                Glide.with(context)
+                    .load(R.drawable.ic_msg_pending)
+                    .into(receivedStatusIV)
+            }
+            ChatConstants.MESSAGE_STATUS_DELIVERED_TO_SERVER -> {
+                Glide.with(context)
+                    .load(R.drawable.ic_msg_sent)
+                    .into(receivedStatusIV)
+            }
+            ChatConstants.MESSAGE_STATUS_RECEIVED_BY_USER -> {
+                Glide.with(context)
+                    .load(R.drawable.ic_msg_delivered)
+                    .into(receivedStatusIV)
+            }
+            ChatConstants.MESSAGE_STATUS_READ_BY_USER -> {
+                Glide.with(context)
+                    .load(R.drawable.ic_msg_seen)
+                    .into(receivedStatusIV)
+            }
+            else -> {
+                Glide.with(context)
+                    .load(R.drawable.ic_msg_pending)
+                    .into(receivedStatusIV)
+            }
         }
     }
 

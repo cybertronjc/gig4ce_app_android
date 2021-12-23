@@ -20,16 +20,21 @@ import androidx.fragment.app.DialogFragment
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.metaDataHelper.ImageMetaDataHelpers
 import com.gigforce.common_ui.storage.MediaStoreApiHelpers
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
+import com.gigforce.modules.feature_chat.analytics.CommunityEvents
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_play_video_full_screen.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class ViewFullScreenVideoDialogFragment : DialogFragment(), PopupMenu.OnMenuItemClickListener {
 
     private var playWhenReady = true
@@ -39,6 +44,9 @@ class ViewFullScreenVideoDialogFragment : DialogFragment(), PopupMenu.OnMenuItem
 
     private lateinit var uri: Uri
     private var player: SimpleExoPlayer? = null
+
+    @Inject
+    lateinit var eventTracker: IEventTracker
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -223,11 +231,15 @@ class ViewFullScreenVideoDialogFragment : DialogFragment(), PopupMenu.OnMenuItem
                 )
                 launch(Dispatchers.Main) {
                     showToast("Video saved in gallery")
+                    var map = mapOf("media_type" to "Video")
+                    eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_MEDIA_SAVED_TO_GALLERY, map))
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
                 launch(Dispatchers.Main) {
                     showToast("Unable to save image in gallery")
+                    var map = mapOf("media_type" to "Video")
+                    eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_MEDIA_FAILED_TO_SAVE, map))
                 }
             }
         }
