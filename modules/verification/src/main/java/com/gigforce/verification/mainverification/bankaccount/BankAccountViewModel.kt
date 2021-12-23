@@ -13,6 +13,7 @@ import com.gigforce.common_ui.remote.verification.UserConsentResponse
 import com.gigforce.core.utils.Lce
 import com.gigforce.verification.mainverification.VerificationKycRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import javax.inject.Inject
@@ -78,13 +79,14 @@ class BankAccountViewModel @Inject constructor(
                 }
             }
     }
-
+    var lastRequest : Boolean? = null
     fun setVerificationStatusInDB(status: Boolean, uid: String) =
         viewModelScope.launch {
+            lastRequest = status
             _userConsentModel.value = Lce.Loading
             try {
                 val responseData = verificationKycRepo.setVerifiedStatus(status, uid)
-                responseData.optionSelected = status
+                responseData.optionSelected = lastRequest.toString()
                 _userConsentModel.value = Lce.content(responseData)
             } catch (e: Exception) {
                 _userConsentModel.value = Lce.error(e.toString())

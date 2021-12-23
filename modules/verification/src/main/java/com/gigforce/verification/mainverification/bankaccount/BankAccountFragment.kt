@@ -154,6 +154,8 @@ class BankAccountFragment : Fragment(),
             resources.getString(R.string.no_doc_title_bank_veri),
             resources.getString(R.string.no_doc_subtitle_bank_veri)
         )
+        viewBinding.toplayoutblock.checkboxidonthave.gone()
+        viewBinding.toplayoutblock.docsubtitledetail.gone()
         userIdToUse = if (userId != null) {
         viewBinding.confirmBn.text = resources.getString(R.string.bn_not_matched_veri)
         viewBinding.confirmBnDetail.text = resources.getString(R.string.plz_ask_to_giger_to_confirm_bn_veri)
@@ -305,6 +307,10 @@ class BankAccountFragment : Fragment(),
                         checkforStatusAndVerified(it)
 //                    }
                 }
+                if(it == null){
+                    viewBinding.toplayoutblock.checkboxidonthave.gone()
+                    viewBinding.toplayoutblock.docsubtitledetail.gone()
+                }
             }
         })
 
@@ -404,6 +410,10 @@ class BankAccountFragment : Fragment(),
 
     private val WAITING_TIME: Long = 1000 * 3
     private fun checkforStatusAndVerified(obj: BankDetailsDataModel) {
+        if(obj.status == null){
+            viewBinding.toplayoutblock.checkboxidonthave.gone()
+            viewBinding.toplayoutblock.docsubtitledetail.gone()
+        }
         obj.status?.let {
             when (it) {
                 "verified"->{
@@ -472,7 +482,10 @@ class BankAccountFragment : Fragment(),
                     viewBinding.toplayoutblock.toggleChangeTextView(false)
                     viewBinding.bnConfirmationCl.gone()
                     viewBinding.scrollView.visible()
-
+                    viewBinding.bankAccNumberItl.editText?.setFocusableInTouchMode(true)
+                    viewBinding.bankAccNumberItl.editText?.setFocusable(true)
+                    viewBinding.ifscCode.editText?.setFocusableInTouchMode(true)
+                    viewBinding.ifscCode.editText?.setFocusable(true)
                     //viewBinding.toplayoutblock.enableImageClick()//keep this line in end only //need to remove uploading option 2856 ticket
                 }
                 "","rejected" -> {
@@ -482,7 +495,10 @@ class BankAccountFragment : Fragment(),
                     viewBinding.toplayoutblock.toggleChangeTextView(false)
                     viewBinding.bnConfirmationCl.gone()
                     viewBinding.scrollView.visible()
-
+                    viewBinding.bankAccNumberItl.editText?.setFocusableInTouchMode(true)
+                    viewBinding.bankAccNumberItl.editText?.setFocusable(true)
+                    viewBinding.ifscCode.editText?.setFocusableInTouchMode(true)
+                    viewBinding.ifscCode.editText?.setFocusable(true)
                     //viewBinding.toplayoutblock.enableImageClick()//keep this line in end only //need to remove uploading option 2856 ticket
                 }
                 "verification_pending" -> {
@@ -493,7 +509,11 @@ class BankAccountFragment : Fragment(),
 //                    verificationScreenStatus = VerificationScreenStatus.COMPLETED
 
                 }
-                else -> "unmatched status"
+                else -> {
+                    viewBinding.toplayoutblock.checkboxidonthave.gone()
+                    viewBinding.toplayoutblock.docsubtitledetail.gone()
+                    "unmatched status"
+                }
             }
         }
     }
@@ -751,6 +771,10 @@ class BankAccountFragment : Fragment(),
             setAlreadyfilledData(null, true)
             verificationScreenStatus = VerificationScreenStatus.DEFAULT
             viewBinding.submitButton.text = getString(R.string.skip_veri)
+            viewBinding.bankAccNumberItl.editText?.setFocusableInTouchMode(true)
+            viewBinding.bankAccNumberItl.editText?.setFocusable(true)
+            viewBinding.ifscCode.editText?.setFocusableInTouchMode(true)
+            viewBinding.ifscCode.editText?.setFocusable(true)
         })
 
         viewBinding.okayButton.setOnClickListener{
