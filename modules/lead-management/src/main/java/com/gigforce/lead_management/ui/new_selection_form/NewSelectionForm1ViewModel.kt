@@ -279,7 +279,7 @@ class NewSelectionForm1ViewModel @Inject constructor(
                 gigerName = gigerName!!,
                 gigerMobileNo = mobilePhoneNumber!!,
                 dataFromDynamicFields = dataFromDynamicFields,
-                reportingTeamLeader = selectedReportingTL!!
+                reportingTeamLeader = selectedReportingTL!!.toTeamLeaderSubmitModel()
             ),
             dynamicInputsFields = dynamicFieldsForNextForm,
             verificationRelatedDynamicInputsFields = selectedJobProfile!!.verificationRelatedFields

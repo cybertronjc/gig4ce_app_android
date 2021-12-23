@@ -32,6 +32,9 @@ data class TeamLeader(
     @field:SerializedName("designation")
     val designation: String? = null,
 
+    @field:SerializedName("mobile")
+    val mobileNumber: String? = null,
+
     @field:SerializedName("city")
     val city: List<City>? = null,
 
@@ -56,6 +59,16 @@ data class TeamLeader(
 			city.count() == 1 -> city.first().name ?: ""
 			else -> "Multiple Cities"
 		}
+    }
+
+    fun toTeamLeaderSubmitModel() : TeamLeaderSubmitModel{
+        return TeamLeaderSubmitModel(
+            name = name,
+            id = id,
+            designation = designation,
+            mobileNumber = mobileNumber,
+            selected = selected
+        )
     }
 
 }
