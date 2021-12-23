@@ -127,7 +127,7 @@ class VerificationMainViewModel @Inject constructor(
                             title = appContext.getString(R.string.aadhar_card_detail_veri),
                             subtitle = if (doc?.aadhaar_card_questionnaire?.verified == true) appContext.getString(
                                 R.string.submitted_status_veri
-                            ) else appContext.getString(R.string.tap_to_select),
+                            ) else appContext.getString(R.string.pending_status_veri),
                             image = R.drawable.ic_account_box_black_24dp,
                             navpath = "verification/AadharDetailInfoFragment",
                             color = if (doc?.aadhaar_card_questionnaire?.verified == true) "GREEN" else "RED"
