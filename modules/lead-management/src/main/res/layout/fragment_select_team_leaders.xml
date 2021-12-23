@@ -29,6 +29,9 @@
             <include
                 android:id="@+id/data_loading_shimmer_container"
                 layout="@layout/shimmer_container"
+                android:layout_marginTop="60dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:visibility="visible" />
 
             <include

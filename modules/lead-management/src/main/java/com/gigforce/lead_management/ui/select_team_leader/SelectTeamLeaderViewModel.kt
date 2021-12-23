@@ -25,21 +25,19 @@ class SelectTeamLeaderViewModel @Inject constructor(
         private const val TAG = "SelectTeamLeaderViewModel"
     }
 
-    init {
-        fetchTeamLeaders(false)
-    }
-
     private val _viewState = MutableLiveData<Lce<List<TeamLeader>>>()
     val viewState: LiveData<Lce<List<TeamLeader>>> = _viewState
 
     var selectedTlID : String? =null
     var fetchingAllTeamLeader : Boolean =false
 
+
     fun fetchTeamLeaders(
         shouldFetchAllTeamLeaders : Boolean
     ) = viewModelScope.launch {
 
         logger.d(TAG,"fetching team-leaders, shouldFetchAllTeamLeaders : $shouldFetchAllTeamLeaders")
+        _viewState.value = Lce.loading()
 
         try {
             val teamLeaders = leadManagementRepository.getTeamLeadersForSelection(

@@ -2,6 +2,7 @@ package com.gigforce.lead_management.ui.select_team_leader
 
 import android.os.Bundle
 import android.widget.LinearLayout
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -83,7 +84,7 @@ class SelectTeamLeaderFragment : BaseFragment2<FragmentSelectTeamLeadersBinding>
 
         if (viewCreatedForTheFirstTime) {
             checkOrUnCheckInitialStateOfCheckBox()
-            fetchTeamLeaders(shouldLoadAllTls)
+            viewModel.fetchTeamLeaders(shouldLoadAllTls)
 
             initListeners()
             initViewModel()
@@ -142,6 +143,9 @@ class SelectTeamLeaderFragment : BaseFragment2<FragmentSelectTeamLeadersBinding>
             ),
             R.id.shimmer_controller
         )
+
+        mainForm.loadAllTlSwitch.isEnabled = false
+        this.toolbar.searchImageButton.gone()
     }
 
     private fun hideLoadingElements() = viewBinding.apply{
@@ -185,13 +189,12 @@ class SelectTeamLeaderFragment : BaseFragment2<FragmentSelectTeamLeadersBinding>
         }
     }
 
-    private fun fetchTeamLeaders(shouldFetchAllTLs: Boolean) {
-        viewModel.fetchTeamLeaders(shouldFetchAllTLs)
-    }
-
     private fun setDataOnView(
         teamLeaders: List<TeamLeader>
     ) = viewBinding.apply {
+
+        mainForm.loadAllTlSwitch.isEnabled = true
+        this.toolbar.searchImageButton.isVisible = teamLeaders.isNotEmpty()
 
         viewBinding.mainForm.root.visible()
         adapter.setData(teamLeaders)
