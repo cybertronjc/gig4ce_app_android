@@ -13,8 +13,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp">
+        >
 
         <ImageView
             android:id="@+id/selected_iv"
@@ -26,13 +25,21 @@
             app:layout_constraintTop_toTopOf="parent" />
 
 
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/job_profile_root_layout"
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_marginStart="16dp"
-            android:background="@drawable/rectangle_2"
+            android:paddingTop="20dp"
+            android:paddingBottom="30dp"
+            android:background="@drawable/drop_shadow_background_draw"
             android:padding="10dp"
+            android:layout_marginEnd="4dp"
+            android:elevation="6dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginBottom="14dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/selected_iv"
             app:layout_constraintTop_toTopOf="parent">

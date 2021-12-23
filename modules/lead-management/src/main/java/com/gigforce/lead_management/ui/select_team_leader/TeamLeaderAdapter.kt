@@ -10,7 +10,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.common_ui.viewdatamodels.leadManagement.TeamLeader
-import com.gigforce.lead_management.BR
 import com.gigforce.lead_management.R
 import com.gigforce.lead_management.databinding.RecyclerItemTeamLeaderBinding
 
@@ -103,9 +102,20 @@ class TeamLeaderAdapter(
                     if (contact.name?.contains(
                             charString,
                             true
-                        ) == true
-                    )
+                        ) == true ||
+                        contact.designation?.contains(
+                            charString,
+                            true
+                        ) == true ||
+                        contact.city?.find {
+                            it.name?.contains(
+                                charString,
+                                true
+                            ) == true
+                        } != null
+                    ) {
                         filteredList.add(contact)
+                    }
                 }
                 filterResults.values = filteredList
             }
@@ -160,7 +170,7 @@ class TeamLeaderAdapter(
                 )
             } else {
 
-                itemViewBinding.jobProfileRootLayout.setBackgroundResource(R.drawable.rectangle_2)
+                itemViewBinding.jobProfileRootLayout.setBackgroundResource(R.drawable.drop_shadow_background_draw)
                 itemViewBinding.selectedIv.setImageDrawable(
                     ResourcesCompat.getDrawable(
                         context.resources,

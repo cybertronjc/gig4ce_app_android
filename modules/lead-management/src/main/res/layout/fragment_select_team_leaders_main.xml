@@ -14,7 +14,7 @@
             android:id="@+id/load_all_tl_switch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Load All Team leaders" />
+            android:text="Show All Team leaders" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
