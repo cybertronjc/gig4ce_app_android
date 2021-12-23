@@ -35,7 +35,9 @@ import com.gigforce.common_ui.chat.models.ChatListItemDataWrapper
 import com.gigforce.common_ui.components.cells.AppBar
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.views.GigforceToolbar
+import com.gigforce.core.IEventTracker
 import com.gigforce.core.ScopedStorageConstants
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.documentFileHelper.DocumentTreeDelegate
 import com.gigforce.core.extensions.getTextChangeAsStateFlow
 import com.gigforce.core.extensions.gone
@@ -45,6 +47,7 @@ import com.gigforce.core.recyclerView.CoreRecyclerView
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.modules.feature_chat.ChatNavigation
 import com.gigforce.modules.feature_chat.R
+import com.gigforce.modules.feature_chat.analytics.CommunityEvents
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
@@ -75,6 +78,9 @@ class ChatHeadersFragment : Fragment(), PopupMenu.OnMenuItemClickListener, Gigfo
         ChatNavigation(navigation)
     }
 
+    @Inject
+    lateinit var eventTracker: IEventTracker
+
     private val viewModel: ChatHeadersViewModel by viewModels()
 
     private lateinit var contactsFab: FloatingActionButton
@@ -99,6 +105,7 @@ class ChatHeadersFragment : Fragment(), PopupMenu.OnMenuItemClickListener, Gigfo
     var anyUnreadMessages = false
     var anyReadMessages = false
     var searchText = ""
+    var unreadChatsCount = 0
 
     private val backPressHandler = object : OnBackPressedCallback(true) {
 
@@ -206,7 +213,7 @@ class ChatHeadersFragment : Fragment(), PopupMenu.OnMenuItemClickListener, Gigfo
 
         coreRecyclerView.collection =
             ArrayList(list.map {
-
+                if(it.unseenCount > 0) unreadChatsCount++
                 var timeToDisplayText = ""
                 it.lastMsgTimestamp?.let {
                     val chatDate = it.toDate()
@@ -283,7 +290,8 @@ class ChatHeadersFragment : Fragment(), PopupMenu.OnMenuItemClickListener, Gigfo
         findViews(view)
         initListeners()
         setObserver(this.viewLifecycleOwner)
-
+        var map = mapOf("unread_chat_count" to unreadChatsCount)
+        eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_LIST_SCREEN, map))
 //        if (!isStoragePermissionGranted()) {
 //            askForStoragePermission()
 //        }
@@ -437,7 +445,8 @@ class ChatHeadersFragment : Fragment(), PopupMenu.OnMenuItemClickListener, Gigfo
             viewModel.setMultiSelectEnable(false)
             viewModel.clearSelectedChats()
             makeMultiSelectUiEnable(false)
-
+            var map = mapOf("chats_marked_as_read" to unreadHeaderIds.size)
+            eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_MARKED_READ, map))
         }
     }
 

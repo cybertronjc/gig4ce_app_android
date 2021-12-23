@@ -19,7 +19,10 @@ import com.gigforce.common_ui.R
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.metaDataHelper.ImageMetaDataHelpers
 import com.gigforce.common_ui.storage.MediaStoreApiHelpers
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
 import com.jsibbold.zoomage.ZoomageView
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -27,9 +30,10 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
 import java.io.OutputStream
+import javax.inject.Inject
 
 
-
+@AndroidEntryPoint
 class ViewFullScreenImageDialogFragment : DialogFragment(), PopupMenu.OnMenuItemClickListener {
 
     companion object {
@@ -66,6 +70,9 @@ class ViewFullScreenImageDialogFragment : DialogFragment(), PopupMenu.OnMenuItem
             )
         }
     }
+
+    @Inject
+    lateinit var eventTracker: IEventTracker
 
     private lateinit var imageUri : Uri
 
@@ -132,11 +139,15 @@ class ViewFullScreenImageDialogFragment : DialogFragment(), PopupMenu.OnMenuItem
 
                 launch(Dispatchers.Main) {
                     showToast("Image saved in gallery")
+                    var map = mapOf("media_type" to "Image")
+                    eventTracker.pushEvent(TrackingEventArgs("Media_saved_to_gallery", map))
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
                 launch(Dispatchers.Main) {
                     showToast("Unable to save image in gallery")
+                    var map = mapOf("media_type" to "Image")
+                    eventTracker.pushEvent(TrackingEventArgs("Media_failed_to_save", map))
                 }
             }
         }

@@ -37,9 +37,6 @@ import com.gigforce.common_ui.chat.ChatConstants
 import com.gigforce.common_ui.chat.models.ChatGroup
 import com.gigforce.common_ui.chat.models.ChatMessage
 import com.gigforce.common_ui.metaDataHelper.ImageMetaDataHelpers
-import com.gigforce.core.PermissionUtils
-import com.gigforce.core.ScopedStorageConstants
-import com.gigforce.core.StringConstants
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toDisplayText
@@ -51,6 +48,8 @@ import com.gigforce.modules.feature_chat.R
 import com.gigforce.common_ui.chat.ChatFileManager
 import com.gigforce.common_ui.components.cells.AppBar
 import com.gigforce.common_ui.listeners.AppBarClicks
+import com.gigforce.core.*
+import com.gigforce.modules.feature_chat.analytics.CommunityEvents
 import com.gigforce.modules.feature_chat.models.ChatMessageWrapper
 import com.gigforce.modules.feature_chat.models.SharedFile
 import com.gigforce.modules.feature_chat.screens.vm.ChatPageViewModel
@@ -77,6 +76,9 @@ class ChatPageFragment : Fragment(),
 
     @Inject
     lateinit var navigation: INavigation
+    
+    @Inject
+    lateinit var eventTracker: IEventTracker
 
     private val requestPermissionContract = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
@@ -344,6 +346,8 @@ class ChatPageFragment : Fragment(),
             )
             adjustUiAccToOneToOneChat()
             subscribeOneToOneViewModel()
+            var map = mapOf("chat_type" to "Direct")
+            eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_SESSION_STARTED, map))
         } else if (chatType == ChatConstants.CHAT_TYPE_GROUP) {
             if (chatHeaderOrGroupId.isNullOrBlank()) {
                 CrashlyticsLogger.e(
@@ -357,6 +361,8 @@ class ChatPageFragment : Fragment(),
             groupChatViewModel.setGroupId(chatHeaderOrGroupId!!)
             adjustUiAccToGroupChat()
             subscribeChatGroupViewModel()
+            var map = mapOf("chat_type" to "Group")
+            eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_SESSION_STARTED, map))
         }
     }
 
@@ -751,18 +757,25 @@ class ChatPageFragment : Fragment(),
 
     override fun onMenuItemClick(item: MenuItem?): Boolean = when (item?.itemId) {
         R.id.action_block -> {
-            if (chatFooter.isTypingEnabled())
+            if (chatFooter.isTypingEnabled()) {
                 BlockUserBottomSheetFragment.launch(
                     viewModel.headerId,
                     viewModel.otherUserId,
                     childFragmentManager
                 )
-            else
+            } else {
                 viewModel.blockOrUnBlockUser(
                     viewModel.headerId,
                     viewModel.otherUserId,
                     false
                 )
+                eventTracker.pushEvent(
+                    TrackingEventArgs(
+                        CommunityEvents.EVENT_CHAT_UNBLOCKED_USER,
+                        null
+                    )
+                )
+            }
             true
         }
         R.id.action_report -> {
@@ -939,18 +952,28 @@ class ChatPageFragment : Fragment(),
 
                 chatFooter.et_message.setText("")
 
-                if (chatType == ChatConstants.CHAT_TYPE_USER)
+                var type = ""
+                if (chatType == ChatConstants.CHAT_TYPE_USER) {
                     viewModel.sendNewText(
                         message,
                         chatFooter.getReplyToMessage()
                     )
-                else
+                    type = "Direct"
+                } else {
                     groupChatViewModel.sendNewText(
                         message,
                         usersMentioned,
                         chatFooter.getReplyToMessage()
                     )
-
+                    type = "Group"
+                }
+                var map = mapOf("chat_type" to type, "message_type" to "Text")
+                eventTracker.pushEvent(
+                    TrackingEventArgs(
+                        CommunityEvents.EVENT_CHAT_MESSAGE_SENT,
+                        map
+                    )
+                )
                 chatFooter.closeReplyUi()
             }
         }
@@ -1054,21 +1077,32 @@ class ChatPageFragment : Fragment(),
             requireContext(),
             uri
         )
-
-        if (chatType == ChatConstants.CHAT_TYPE_USER)
+        var type = ""
+        if (chatType == ChatConstants.CHAT_TYPE_USER) {
             viewModel.sendNewDocumentMessage(
                 requireContext(),
                 text ?: "",
                 displayName,
                 uri
             )
-        else
+            type = "Direct"
+        } else {
             groupChatViewModel.sendNewDocumentMessage(
                 context = requireContext(),
                 text = text ?: "",
                 fileName = displayName ?: "Document",
                 uri = uri
             )
+            type = "Group"
+        }
+        var map = mapOf("chat_type" to type, "message_type" to "Document")
+        eventTracker.pushEvent(
+            TrackingEventArgs(
+                CommunityEvents.EVENT_CHAT_MESSAGE_SENT,
+                map
+            )
+        )
+
     }
 
     private fun sendVideoMessage(
@@ -1079,21 +1113,31 @@ class ChatPageFragment : Fragment(),
             requireContext(),
             uri
         )
-
-        if (chatType == ChatConstants.CHAT_TYPE_USER)
+        var type = ""
+        if (chatType == ChatConstants.CHAT_TYPE_USER) {
             viewModel.sendNewVideoMessage(
                 requireContext(),
                 text ?: "",
                 videoInfo,
                 uri
             )
-        else
+            type = "Direct"
+        } else {
             groupChatViewModel.sendNewVideoMessage(
                 context = requireContext(),
                 text = text ?: "",
                 videoInfo = videoInfo,
                 uri = uri
             )
+            type = "Group"
+        }
+        var map = mapOf("chat_type" to type, "message_type" to "Video")
+        eventTracker.pushEvent(
+            TrackingEventArgs(
+                CommunityEvents.EVENT_CHAT_MESSAGE_SENT,
+                map
+            )
+        )
     }
 
     private fun sendLocationMessage(data: Intent?) {
@@ -1107,21 +1151,31 @@ class ChatPageFragment : Fragment(),
         val imageFile: File? =
             data.getSerializableExtra(CaptureLocationActivity.INTENT_EXTRA_MAP_IMAGE_FILE) as File?
 
-        if (chatType == ChatConstants.CHAT_TYPE_USER)
+        var type = ""
+        if (chatType == ChatConstants.CHAT_TYPE_USER) {
             viewModel.sendLocationMessage(
                 latitude,
                 longitude,
                 address,
                 imageFile
             )
-        else {
+            type = "Direct"
+        } else {
             groupChatViewModel.sendLocationMessage(
                 latitude,
                 longitude,
                 address,
                 imageFile
             )
+            type = "Group"
         }
+        var map = mapOf("chat_type" to type, "message_type" to "Location")
+        eventTracker.pushEvent(
+            TrackingEventArgs(
+                CommunityEvents.EVENT_CHAT_MESSAGE_SENT,
+                map
+            )
+        )
     }
 
 
@@ -1221,23 +1275,41 @@ class ChatPageFragment : Fragment(),
         uri: Uri,
         text: String
     ) {
-        if (chatType == ChatConstants.CHAT_TYPE_USER)
+        var type = ""
+        if (chatType == ChatConstants.CHAT_TYPE_USER) {
             viewModel.sendNewImageMessage(
                 context = requireContext().applicationContext,
                 text = text,
                 uri = uri
             )
-        else {
+            type = "Direct"
+        } else {
             groupChatViewModel.sendNewImageMessage(
                 context = requireContext().applicationContext,
                 text = text,
                 uri = uri
             )
+            type = "Group"
         }
+        var map = mapOf("chat_type" to type, "message_type" to "Image")
+        eventTracker.pushEvent(
+            TrackingEventArgs(
+                CommunityEvents.EVENT_CHAT_MESSAGE_SENT,
+                map
+            )
+        )
     }
 
     override fun showReplyUI(chatMessage: ChatMessage) {
         chatFooter.openReplyUi(chatMessage)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        var type = ""
+        if(chatType == ChatConstants.CHAT_TYPE_USER) type = "Direct" else type = "Group"
+        var map = mapOf("chat_type" to type)
+        eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_SESSION_ENDED, map))
     }
 
     companion object {
