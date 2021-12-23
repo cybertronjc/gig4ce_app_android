@@ -6,6 +6,7 @@ object VerificationStatus {
     const val UNDER_PROCESSING = "started"
     const val VERIFIED = "completed"
     const val REJECTED = "failed"
+    const val UNKNOWN = "unknown"
 
 
     fun getStatusStringFromServerString(
@@ -13,10 +14,11 @@ object VerificationStatus {
     ): String {
 
         return when (serverStatusString) {
+            null, "" -> NOT_UPLOADED
             "started", "processing", "validated", "validation_failed", "verification_pending" -> UNDER_PROCESSING
             "verified", "completed" -> VERIFIED
             "rejected", "failed" -> REJECTED
-            else -> NOT_UPLOADED
+            else -> UNKNOWN
         }
     }
 }
