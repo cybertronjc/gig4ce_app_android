@@ -90,7 +90,7 @@ class VerificationMainViewModel @Inject constructor(
                             subtitle = getSubString(doc?.pan_card?.verified, doc?.pan_card?.status),
                             image = R.drawable.ic_badge_black_24dp,
                             navpath = "verification/pancardimageupload",
-                            color = getSubStringColor(
+                            color = getSubStringColor(doc?.pan_card?.verified,
                                 doc?.pan_card?.status
                             )
                         )
@@ -103,7 +103,7 @@ class VerificationMainViewModel @Inject constructor(
                             ),
                             image = R.drawable.ic_directions_car_black_24dp,
                             navpath = "verification/drivinglicenseimageupload",
-                            color = getSubStringColor(
+                            color = getSubStringColor(doc?.driving_license?.verified,
                                 doc?.driving_license?.status
                             )
                         )
@@ -116,7 +116,7 @@ class VerificationMainViewModel @Inject constructor(
                             ),
                             image = R.drawable.ic_account_balance_black_24dp,
                             navpath = "verification/bank_account_fragment",
-                            color = getSubStringColor(
+                            color = getSubStringColor(doc?.bank_details?.verified,
                                 doc?.bank_details?.status
                             )
                         )
@@ -130,7 +130,7 @@ class VerificationMainViewModel @Inject constructor(
                             ) else appContext.getString(R.string.tap_to_select),
                             image = R.drawable.ic_account_box_black_24dp,
                             navpath = "verification/AadharDetailInfoFragment",
-                            color = if (doc?.aadhaar_card_questionnaire?.verified == true) "GREEN" else ""
+                            color = if (doc?.aadhaar_card_questionnaire?.verified == true) "GREEN" else "RED"
                         )
                     )
                     _allDocumentsData.value = allDocs
