@@ -1,6 +1,5 @@
 package com.gigforce.common_ui.remote.verification
 
-import com.gigforce.ambassador.user_rollment.kycdocs.KycVerifyReqModel
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.*
@@ -21,4 +20,10 @@ interface VerificationKycService {
         @Url getKycVerifyUrl: String,
         @Body jsonObject: KycVerifyReqModel
     ): Response<KycOcrResultModel>
+
+    @POST
+    suspend fun onConfirmButton(
+        @Url getKycVerifyUrl: String,
+        @Body jsonObject: UserConsentRequest
+    ): Response<UserConsentResponse>
 }

@@ -33,6 +33,12 @@
         android:name="com.gigforce.app.modules.profile.AddContactBottomSheetFragment"
         android:label="AddContactBottomSheetFragment"
         tools:layout="@layout/add_contact_bottom_sheet" />
+    <dialog android:id="@+id/confirmBNBankBS"
+        android:name="com.gigforce.verification.mainverification.bankaccount.ConfirmBNBankBS"
+        android:label="ConfirmBNBankBS"
+        tools:layout="@layout/fragment_confirm_bn_bank_bs"
+
+        />
     <dialog
         android:id="@+id/addLanguageBottomSheetFragment"
         android:name="com.gigforce.app.modules.profile.AddLanguageBottomSheetFragment"
@@ -1116,5 +1122,30 @@
         android:id="@+id/signatureDrawerDialogFragment"
         android:name="com.gigforce.common_ui.signature.FullScreenSignatureDrawerDialogFragment"
         android:label="FullScreenSignatureDrawerDialogFragment"/>
+    <fragment
+        android:id="@+id/chatSettingsFragment"
+        android:name="com.gigforce.modules.feature_chat.screens.ChatSettingsFragment"
+        android:label="ChatSettingsFragment" />
+    <dialog
+        android:id="@+id/syncContactsBottomSheetFragment"
+        android:name="com.gigforce.modules.feature_chat.screens.SyncContactsBottomSheetFragment"
+        android:label="SyncContactsBottomSheetFragment" />
+    <fragment
+        android:id="@+id/contactsAndGroupFragment"
+        android:name="com.gigforce.modules.feature_chat.screens.ContactsAndGroupFragment"
+        android:label="ContactsAndGroupFragment" />
+    <dialog
+        android:id="@+id/blockUserBottomSheetFragment"
+        android:name="com.gigforce.modules.feature_chat.screens.BlockUserBottomSheetFragment"
+        android:label="BlockUserBottomSheetFragment" />
+    <dialog
+        android:id="@+id/reportUserBottomSheetFragment"
+        android:name="com.gigforce.modules.feature_chat.screens.ReportUserBottomSheetFragment"
+        android:label="ReportUserBottomSheetFragment" />
+
+    <dialog
+        android:id="@+id/acknowledgeBankBS"
+        android:name="com.gigforce.verification.mainverification.bankaccount.AcknowledgeBankBS"
+        android:label="AcknowledgeBankBS" />
 </navigation>
 

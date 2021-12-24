@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.gigforce.client_activation.client_activation.dataviewmodel.JobProfileDVM
 import com.gigforce.client_activation.client_activation.models.JpExplore
 import com.gigforce.client_activation.databinding.LayoutJobProfileCardComponentBinding
@@ -56,7 +57,7 @@ class JobProfileCardComponent(
                 gigTitle.text = "Profile N/A"
             }
 
-            Glide.with(context).load(it.cardImage).placeholder(ShimmerHelper.getShimmerDrawable()).into(cardImage)
+            Glide.with(context).load(it.cardImage).transition(DrawableTransitionOptions().crossFade()).placeholder(ShimmerHelper.getShimmerDrawable()).into(cardImage)
 
             if (it.jp_applicationStatus == "")
                 gigStatus.gone()

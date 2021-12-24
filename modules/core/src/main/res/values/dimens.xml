@@ -46,6 +46,7 @@
     <dimen name="size_17">17dp</dimen>
     <dimen name="size_100">100dp</dimen>
     <dimen name="size_29">29dp</dimen>
+    <dimen name="size_22">22dp</dimen>
     <dimen name="size_23">23dp</dimen>
     <dimen name="font_18">18sp</dimen>
     <dimen name="size_10">10dp</dimen>
@@ -81,7 +82,6 @@
     <dimen name="size_20">20dp</dimen>
     <dimen name="size_104">104dp</dimen>
     <dimen name="size_37">37dp</dimen>
-    <dimen name="size_22">22sp</dimen>
     <dimen name="size_53">53dp</dimen>
     <dimen name="size_177">177dp</dimen>
     <dimen name="size_52">52dp</dimen>

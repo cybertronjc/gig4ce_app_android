@@ -11,24 +11,26 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="visible"
         app:cardCornerRadius="0dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#e42c64"
+            android:background="@drawable/toolbar_more_round_background"
             android:minHeight="72dp">
 
             <ImageView
                 android:id="@+id/back_arrow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
+                android:layout_marginStart="12dp"
                 android:padding="6dp"
+                android:background="?attr/selectableItemBackground"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_arrow_back_24"
+                app:srcCompat="@drawable/ic_icon_back_button"
                 app:tint="@android:color/white" />
 
             <LinearLayout
@@ -73,13 +75,13 @@
                 android:focusable="true"
                 android:padding="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/imageView41"
+                app:layout_constraintEnd_toStartOf="@+id/refreshIcon"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_search"
+                app:srcCompat="@drawable/ic_icon_search"
                 app:tint="@android:color/white" />
 
             <ImageView
-                android:id="@+id/imageView41"
+                android:id="@+id/refreshIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="4dp"
@@ -90,7 +92,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_three_dots"
+                app:srcCompat="@drawable/ic_icon_refresh"
                 app:tint="@android:color/white" />
 
             <LinearLayout
@@ -106,7 +108,7 @@
                 android:padding="8dp"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/imageView41"
+                app:layout_constraintEnd_toStartOf="@id/refreshIcon"
                 app:layout_constraintStart_toEndOf="@id/back_arrow"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -128,6 +130,73 @@
 
     </com.google.android.material.card.MaterialCardView>
 
+    <LinearLayout
+        android:id="@+id/group_and_broadcast_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:id="@+id/new_group_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:padding="@dimen/size_20"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_create_new_group"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato"
+                android:textFontWeight="700"
+                android:layout_marginStart="@dimen/size_14"
+                android:layout_gravity="center_vertical"
+                android:textColor="@color/chat_switch_checked"
+                android:text="@string/create_new_group_chat"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/new_broadcast_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:background="?attr/selectableItemBackground"
+            android:layout_marginTop="@dimen/size_20"
+            android:layout_marginBottom="@dimen/size_20"
+            android:layout_marginStart="@dimen/size_20"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_create_new_broadcast"
+
+                />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato"
+                android:textFontWeight="700"
+                android:layout_marginStart="@dimen/size_14"
+                android:layout_gravity="center_vertical"
+                android:textColor="@color/chat_switch_checked"
+                android:text="@string/create_new_broadcast"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/user_selected_layout"
@@ -294,9 +363,10 @@
 
 
             <ImageView
-                android:layout_width="275dp"
-                android:layout_height="275dp"
-                android:src="@drawable/ic_contacts_syncing" />
+                android:id="@+id/syncGif"
+                android:layout_width="140dp"
+                android:layout_height="145dp"
+                android:src="@drawable/sync" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -304,22 +374,24 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="12dp"
                 android:gravity="center"
-                android:text="@string/contacts_syncing_chat"
+                android:text="@string/syncing_contacts_chat"
                 android:textColor="@color/lipstick"
-                android:textSize="24sp"
+                android:textSize="22sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:layout_width="295dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="20dp"
                 android:fontFamily="@font/lato"
                 android:gravity="center_horizontal"
                 android:letterSpacing="0"
+                android:layout_marginStart="@dimen/size36"
+                android:layout_marginEnd="@dimen/size36"
                 android:lineSpacingExtra="3sp"
-                android:text="@string/please_wait_while_contacts_are_getting_synced_chat"
-                android:textColor="#333333"
-                android:textSize="16sp"
+                android:text="@string/please_be_patient_chat"
+                android:textColor="#979C9E"
+                android:textSize="14sp"
                 android:textStyle="normal" />
 
 

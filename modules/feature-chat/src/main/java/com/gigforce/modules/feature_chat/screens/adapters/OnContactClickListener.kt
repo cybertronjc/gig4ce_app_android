@@ -6,5 +6,5 @@ interface OnContactClickListener {
 
     fun contactClick(contact: ContactModel)
 
-    fun onContactSelected(selectedContactsCount : Int)
+    fun onContactSelected(selectedContactsCount : Int, totalContactsCount: Int)
 }

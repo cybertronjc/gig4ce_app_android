@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.gigforce.common_ui.components.cells.AppBar
+            android:id="@+id/appBarComp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:backgroundType="PinkBar"
+            app:isFilterVisible="false"
+            app:isSearchVisible="true"
+            app:isRefreshVisible="true"
+            android:visibility="visible"
+            android:elevation="2dp"
+            app:titleText="@string/contacts_chat"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/appBarComp">
+
+<!--            create group layout-->
+            <LinearLayout
+                android:id="@+id/group_and_broadcast_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <LinearLayout
+                    android:id="@+id/new_group_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:paddingTop="@dimen/size_20"
+                    android:paddingBottom="@dimen/size_20"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_create_new_group"
+                        android:layout_marginStart="@dimen/size_20"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/lato"
+                        android:textFontWeight="700"
+                        android:layout_marginStart="@dimen/size_14"
+                        android:layout_gravity="center_vertical"
+                        android:textColor="@color/chat_switch_checked"
+                        android:text="@string/create_new_group_chat"
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/new_broadcast_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:background="?attr/selectableItemBackground"
+                    android:layout_marginTop="@dimen/size_20"
+                    android:layout_marginBottom="@dimen/size_20"
+                    android:layout_marginStart="@dimen/size_20"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_create_new_broadcast"
+
+                        />
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/lato"
+                        android:textFontWeight="700"
+                        android:layout_marginStart="@dimen/size_14"
+                        android:layout_gravity="center_vertical"
+                        android:textColor="@color/chat_switch_checked"
+                        android:text="@string/create_new_broadcast"
+                        />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+<!--            contacts list-->
+            <FrameLayout
+                android:id="@+id/frameLayout"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:background="#fdfdfd"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/group_and_broadcast_layout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/create_group_fab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|end"
+                    android:layout_margin="16dp"
+                    android:visibility="gone"
+                    app:backgroundTint="@color/colorPrimary"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:srcCompat="@drawable/ic_icon_send"
+                    app:tint="@android:color/white" />
+
+                <ProgressBar
+                    android:id="@+id/processing_contacts_progressbar"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <ProgressBar
+                        android:id="@+id/processing_contacts_horizontal_progressbar"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="-6dp"
+                        android:indeterminate="true"
+                        android:visibility="gone" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_contactsList"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginBottom="16dp"
+                        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/noContactsLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+
+                    <ImageView
+                        android:layout_width="275dp"
+                        android:layout_height="275dp"
+                        android:src="@drawable/bg_no_chat" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="12dp"
+                        android:fontFamily="@font/lato"
+                        android:gravity="center"
+                        android:text="@string/no_contact_found_chat"
+                        android:textColor="@color/lipstick"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="295dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:gravity="center_horizontal"
+                        android:letterSpacing="0"
+                        android:lineSpacingExtra="3sp"
+                        android:text="@string/it_seems_there_is_no_contact_registered_with_gigforce_chat"
+                        android:textColor="#333333"
+                        android:textSize="16sp"
+                        android:textStyle="normal" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/invite_now_btn"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="44dp"
+                        android:layout_marginTop="24dp"
+                        android:text="@string/invite_now_chat"
+                        android:textColor="@color/lipstick"
+                        app:strokeColor="@color/lipstick" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/contactsSyncingLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+
+                    <ImageView
+                        android:id="@+id/syncGif"
+                        android:layout_width="140dp"
+                        android:layout_height="145dp"
+                        android:src="@drawable/sync" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="12dp"
+                        android:gravity="center"
+                        android:text="@string/syncing_contacts_chat"
+                        android:textColor="@color/lipstick"
+                        android:textSize="22sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:fontFamily="@font/lato"
+                        android:gravity="center_horizontal"
+                        android:letterSpacing="0"
+                        android:layout_marginStart="@dimen/size36"
+                        android:layout_marginEnd="@dimen/size36"
+                        android:lineSpacingExtra="3sp"
+                        android:text="@string/please_be_patient_chat"
+                        android:textColor="#979C9E"
+                        android:textSize="14sp"
+                        android:textStyle="normal" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/contactsPermissionLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+
+                    <ImageView
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:src="@drawable/ic_settings" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="12dp"
+                        android:gravity="center"
+                        android:text="@string/provide_read_contacts_permission_chat"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/askContactsPermission"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/go_to_settings_chat"
+                        android:textColor="@color/colorPrimary"
+                        app:strokeColor="@color/colorPrimary" />
+
+                </LinearLayout>
+
+                <include
+                    android:id="@+id/name_group_layout"
+                    layout="@layout/layout_name_chat_group"
+                    android:visibility="gone"
+                    />
+            </FrameLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

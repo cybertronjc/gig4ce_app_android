@@ -88,6 +88,7 @@ class ChatNavigation(
     fun openFullScreenImageViewDialogFragment(
             uri: Uri
     ) {
+
         try {
 
             val currentDestination = iNavigation.getCurrentDestination()?.label

@@ -1,6 +1,7 @@
 package com.gigforce.giger_app.calendarscreen.maincalendarscreen
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gigforce.core.datamodels.custom_gig_preferences.CustomPreferencesDataModel
@@ -9,11 +10,15 @@ import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.datamodels.user_preferences.PreferencesDataModel
 import com.gigforce.common_ui.repository.prefrepo.PreferencesRepository
 import com.gigforce.common_ui.viewdatamodels.GigStatus
+import com.gigforce.core.datamodels.verification.BankDetailsDataModel
+import com.gigforce.core.datamodels.verification.VerificationBaseModel
 import com.gigforce.giger_app.calendarscreen.MainHomeCompleteGigModel
 import com.gigforce.giger_app.calendarscreen.maincalendarscreen.verticalcalendar.AllotedGigDataModel
 import com.gigforce.giger_app.calendarscreen.maincalendarscreen.verticalcalendar.VerticalCalendarDataItemModel
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
+import com.google.firebase.firestore.FirebaseFirestore
 import com.riningan.widget.ExtendedBottomSheetBehavior
 import java.util.*
 import kotlin.collections.ArrayList
@@ -21,7 +26,8 @@ import kotlin.collections.ArrayList
 class CalendarHomeScreenViewModel : ViewModel() {
     // TODO: Implement the ViewModel
     var currentBottomSheetState = ExtendedBottomSheetBehavior.STATE_COLLAPSED
-
+    private val _bankDetailedObject = MutableLiveData<BankDetailsDataModel>()
+    val bankDetailedObject: LiveData<BankDetailsDataModel> = _bankDetailedObject
 
     var mainHomeRepository = CalendarHomeRepository()
     var mainHomeLiveDataModel: MutableLiveData<MainHomeCompleteGigModel> =
@@ -35,6 +41,22 @@ class CalendarHomeScreenViewModel : ViewModel() {
 
     init {
         getAllData()
+        getVerificationData()
+    }
+
+    private fun getVerificationData() {
+        FirebaseAuth.getInstance().currentUser?.uid?.let {
+            FirebaseFirestore.getInstance()
+                .collection("Verification").document(it)
+                .addSnapshotListener { value, error ->
+                    value?.data?.let {
+                        val doc = value.toObject(VerificationBaseModel::class.java)
+                        doc?.bank_details?.let {
+                            _bankDetailedObject.value = it
+                        }
+                    }
+                }
+        }
     }
 
     fun getAllData() {

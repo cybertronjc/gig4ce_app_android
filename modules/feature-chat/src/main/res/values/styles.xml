@@ -13,4 +13,24 @@
 
         <item name="cornerSize">5%</item>
     </style>
+
+    <style name="SwitchStyle" parent="Widget.MaterialComponents.CompoundButton.Switch">
+        <item name="thumbTint">@color/switch_button_background</item>
+    </style>
+
+    <style name="PopupMenuChat" parent="@android:style/Widget.PopupMenu">
+        <item name="android:popupBackground">@drawable/popup_style_back</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:textColor">#202325</item>
+        <item name="fontWeight">400</item>
+        <item name="android:dropDownHorizontalOffset">-4dp</item>
+        <item name="android:dropDownVerticalOffset">4dp</item>
+        <item name="android:fontFamily">@font/lato</item>
+    </style>
+
+    <style name="DialogStyle" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:colorBackground">@android:color/transparent</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
 </resources>

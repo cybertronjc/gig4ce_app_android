@@ -13,6 +13,7 @@ interface IBuildConfigVM {
     fun getUserRegisterInfoUrl() : String
     fun getVerificationKycOcrResult():String
     fun getKycVerificationUrl(): String
+    fun getKycUserConsentUrl():String
     fun getEventBridgeUrl(): String
     fun getListingBaseUrl(): String
     fun getBaseUrl(): String

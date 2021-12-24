@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+    <com.gigforce.common_ui.components.cells.AppBar
+        android:id="@+id/appBarComp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:backgroundType="PinkBar"
+        app:isFilterVisible="true"
+        app:isSearchVisible="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:titleText="@string/media_chat" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/status_tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:layout_marginStart="@dimen/size_8"
+        android:layout_marginTop="@dimen/size_40"
+        android:layout_marginEnd="@dimen/size_8"
+        android:textAlignment="center"
+        android:visibility="visible"
+        android:background="@color/tab_background_color"
+        app:tabBackground="@drawable/selected_tab_background"
+        app:tabGravity="center"
+        app:tabIndicatorHeight="0dp"
+        app:tabMode="fixed"
+        app:tabSelectedTextColor="@color/white"
+        app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
+        app:tabTextColor="@color/black" >
+
+    </com.google.android.material.tabs.TabLayout>
+
+    <com.gigforce.core.recyclerView.CoreRecyclerView
+        android:id="@+id/media_rv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="true"
+        android:paddingBottom="@dimen/size_16"
+        android:visibility="visible"/>
+
+    <com.gigforce.core.recyclerView.CoreRecyclerView
+        android:id="@+id/documents_rv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
+
+    <com.gigforce.core.recyclerView.CoreRecyclerView
+        android:id="@+id/audio_rv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
+
+    </LinearLayout>
+
+</layout>

@@ -280,7 +280,7 @@ class AddBankDetailsInfoFragment : Fragment(), IOnBackPressedOverride {
                             bankNameEditText.text.toString().capitalize()
 
                         viewModel.updateBankPassbookImagePath(
-                            userHasPassBook = true,
+                            userHasPassBook = false,
                             passbookImagePath = clickedImagePath,
                             ifscCode = ifsc,
                             bankName = bankName,
