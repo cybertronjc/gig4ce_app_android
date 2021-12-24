@@ -17,7 +17,6 @@ import com.gigforce.common_ui.dynamic_fields.data.DynamicField
 import com.gigforce.common_ui.dynamic_fields.data.FieldTypes
 import com.gigforce.common_ui.ext.addMandatorySymbolToTextEnd
 import com.gigforce.common_ui.navigation.signature.SignatureNavigation
-import com.gigforce.common_ui.signature.FullScreenSignatureImageCaptureDialogFragment
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import dagger.hilt.android.AndroidEntryPoint

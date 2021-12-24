@@ -1,15 +1,13 @@
-package com.gigforce.common_ui.signature
+package com.gigforce.verification.mainverification.signature
 
-import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.configrepository.SignatureRepository
-import com.gigforce.common_ui.metaDataHelper.FileMetaDataExtractor
 import com.gigforce.core.extensions.getDownloadUrlOrReturnNull
-import com.gigforce.core.extensions.getDownloadUrlOrThrow
+import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -17,10 +15,6 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 sealed class SignatureViewEvents {
-
-    data class SignatureReceivedFromPreviousScreen(
-        val signature: Uri
-    ) : SignatureViewEvents()
 
     data class SignatureCaptured(
         val signature: Uri
@@ -31,11 +25,13 @@ sealed class SignatureViewEvents {
 
 sealed class SignatureUploadViewState {
 
+    object CheckingExistingSignature : SignatureUploadViewState()
+
     object RemovingBackgroundFromSignature : SignatureUploadViewState()
 
     data class BackgroundRemovedFromSignature(
         val processedImage: Uri,
-        val enableSubmitButton : Boolean
+        val enableSubmitButton: Boolean
     ) : SignatureUploadViewState()
 
     data class ErrorWhileRemovingBackgroundFromSignature(
@@ -46,27 +42,39 @@ sealed class SignatureUploadViewState {
 
     data class SignatureUploaded(
         val firebaseCompletePath: String,
-        val firebaseImageFullUrl : String
+        val firebaseImageFullUrl: String
     ) : SignatureUploadViewState()
 
     data class ErrorUploadingSignatureImage(
         val error: String
     ) : SignatureUploadViewState()
 
-    object NavigateBackToPreviousScreen: SignatureUploadViewState()
+    object NavigateBackToPreviousScreen : SignatureUploadViewState()
 }
 
 @HiltViewModel
 class SignatureUploadViewModel @Inject constructor(
     private val signatureRepository: SignatureRepository,
-    private val firebaseStorage: FirebaseStorage
+    private val firebaseStorage: FirebaseStorage,
+    private val firebaseAuthStateListener: FirebaseAuthStateListener
 ) : ViewModel() {
 
 
     private val _viewState = MutableLiveData<SignatureUploadViewState>()
     val viewState: LiveData<SignatureUploadViewState> = _viewState
 
-    private var processedImageUri : Uri? = null
+    private var processedImageUri: Uri? = null
+
+    var userId: String = ""
+        set(value) {
+            field = value
+        }
+        get() = if (field.isEmpty()) {
+            firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow().uid
+        } else {
+            field
+        }
+
     var shouldRemoveBackgroundFromSignature: Boolean = false
 
     fun handleEvent(
@@ -77,24 +85,20 @@ class SignatureUploadViewModel @Inject constructor(
             is SignatureViewEvents.SignatureCaptured -> checkedIfBackgroundNeedsToBeRemoved(
                 event.signature
             )
-            is SignatureViewEvents.SignatureReceivedFromPreviousScreen -> _viewState.value = SignatureUploadViewState.BackgroundRemovedFromSignature(
-                event.signature,
-                false
-            )
         }
     }
 
     private fun checkIfUserClickedImageOrNot() = viewModelScope.launch {
-        if(processedImageUri != null){
+        if (processedImageUri != null) {
             uploadImage(processedImageUri!!)
-        } else{
+        } else {
             _viewState.value = SignatureUploadViewState.NavigateBackToPreviousScreen
         }
     }
 
     private fun checkedIfBackgroundNeedsToBeRemoved(
         signatureUnProcessed: Uri
-    ) = viewModelScope.launch{
+    ) = viewModelScope.launch {
 
         if (shouldRemoveBackgroundFromSignature) {
             removeBackgroundFromSignature(signatureUnProcessed)
@@ -150,8 +154,8 @@ class SignatureUploadViewModel @Inject constructor(
     }
 
     private suspend fun createFullUrl(
-        imagePathOnFirebase : String
-    ) : String {
+        imagePathOnFirebase: String
+    ): String {
         return firebaseStorage
             .reference
             .child(imagePathOnFirebase)

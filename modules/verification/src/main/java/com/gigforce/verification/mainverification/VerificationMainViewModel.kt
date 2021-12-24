@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.gigforce.common_ui.navigation.signature.SignatureNavigation
 import com.gigforce.common_ui.viewdatamodels.SimpleCardDVM
 import com.gigforce.core.datamodels.verification.AadhaarDetailsDataModel
 import com.gigforce.core.datamodels.verification.VerificationBaseModel
@@ -76,6 +77,16 @@ class VerificationMainViewModel @Inject constructor(
             )
         )
 
+        allDocs.add(
+            SimpleCardDVM(
+                "Signature",
+                appContext.getString(R.string.tap_to_select),
+                R.drawable.ic_account_box_black_24dp,
+                SignatureNavigation.DESTINATION_CAPTURE_SIGNATURE,
+                false
+            )
+        )
+
         _allDocumentsData.value = allDocs
 
         verificationKycRepo.db.collection("Verification").document(verificationKycRepo.getUID())
@@ -138,6 +149,19 @@ class VerificationMainViewModel @Inject constructor(
                             color = if (doc?.aadhaar_card_questionnaire?.verified == true) "GREEN" else ""
                         )
                     )
+
+                    allDocs.add(
+
+                        SimpleCardDVM(
+                            title ="Signature",
+                            subtitle = appContext.getString(R.string.tap_to_select),
+                            image = R.drawable.ic_account_box_black_24dp,
+                            navpath= SignatureNavigation.DESTINATION_CAPTURE_SIGNATURE,
+                            color = if (doc?.signature?.signaturePathOnFirebase != null) "GREEN" else ""
+                        )
+                    )
+
+
                     _allDocumentsData.value = allDocs
                     doc?.let {
                         var allVerified = true

@@ -1110,11 +1110,11 @@
         android:label="NewSelectionVerificationDocumentsForm3Fragment"/>
     <fragment
         android:id="@+id/signatureImageCaptureDialogFragment"
-        android:name="com.gigforce.common_ui.signature.FullScreenSignatureImageCaptureDialogFragment"
+        android:name="com.gigforce.verification.mainverification.signature.SignatureImageCaptureFragment"
         android:label="FullScreenSignatureImageCaptureDialogFragment"/>
     <fragment
         android:id="@+id/signatureDrawerDialogFragment"
-        android:name="com.gigforce.common_ui.signature.FullScreenSignatureDrawerDialogFragment"
+        android:name="com.gigforce.verification.mainverification.signature.FullScreenSignatureDrawerDialogFragment"
         android:label="FullScreenSignatureDrawerDialogFragment"/>
 </navigation>
 
