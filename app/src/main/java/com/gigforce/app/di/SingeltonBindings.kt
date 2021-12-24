@@ -113,6 +113,7 @@ abstract class SingeltonBindings {
 
 
 
+
         @Singleton
         @Provides
         @Named("session_independent_pref")
