@@ -104,7 +104,7 @@ class VerificationKycRepo @Inject constructor(private val iBuildConfigVM: IBuild
 
     suspend fun setVerifiedStatus(status: Boolean, uid: String) : UserConsentResponse{
         try {
-                val userConsentResponse = kycService.onConfirmButton(iBuildConfigVM.getKycUserConsentUrl(),UserConsentRequest(true))
+                val userConsentResponse = kycService.onConfirmButton(iBuildConfigVM.getKycUserConsentUrl(),UserConsentRequest(status))
                 if(userConsentResponse.isSuccessful){
                     return userConsentResponse.body()!!
                 }else{
