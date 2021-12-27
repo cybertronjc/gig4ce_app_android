@@ -9,6 +9,17 @@
     android:layout_marginLeft="@dimen/sp_sm1"
     android:layout_marginRight="@dimen/sp_sm1">
 
+    
+    <ImageView
+        android:id="@+id/illustrate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_time"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="@dimen/size_40"
+        />
 
     <TextView
         android:id="@+id/textView9"
@@ -17,147 +28,13 @@
         android:text="@string/confirm_beneficiary_title_veri"
         style="@style/primary_color_heading_bs"
         android:layout_marginLeft="@dimen/dp_mid"
-        android:layout_marginTop="@dimen/dp_xl5"
+        android:layout_marginTop="@dimen/dp_xl4"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/illustrate"
         />
 
-    <TextView
-        android:id="@+id/textView13"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/cinfirm_beneficiary_subtitle_veri"
-        android:layout_marginTop="@dimen/dp_mid"
-        android:layout_marginRight="@dimen/dp_mid"
-        style="@style/section_value1"
-        app:layout_constraintStart_toStartOf="@+id/textView9"
-        app:layout_constraintTop_toBottomOf="@+id/textView9"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/confirmation_section"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/size_20"
-        android:paddingBottom="@dimen/dp_mid"
-        android:layout_marginRight="@dimen/dp_mid"
-        android:layout_marginBottom="@dimen/dp_xl4"
-        android:background="@drawable/rect_light_pink_veri"
-        app:layout_constraintStart_toStartOf="@+id/textView13"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView13"
-        app:layout_constraintBottom_toTopOf="@+id/confirm_bn_bs">
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guidline"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.40" />
-        <TextView
-            android:id="@+id/bn_label"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_mid"
-            android:text="@string/bn_label_detail_box_veri"
-            style="@style/dialog_label"
-            android:layout_marginLeft="@dimen/dp_mid"
-            app:layout_constraintEnd_toStartOf="@+id/guidline"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
 
 
-
-        <TextView
-            android:id="@+id/colon_bn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="  :  "
-            style="@style/bn_name"
-            app:layout_constraintStart_toEndOf="@+id/guidline"
-            app:layout_constraintTop_toTopOf="@+id/bn_label" />
-        <TextView
-            android:id="@+id/bn_tv"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="-"
-            android:layout_marginRight="@dimen/dp_sm4"
-            style="@style/bn_name"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/colon_bn"
-            app:layout_constraintTop_toTopOf="@+id/bn_label" />
-
-
-
-
-        <TextView
-            android:id="@+id/account_no_label"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_sm4"
-            android:text="@string/account_label_in_box_veri"
-            style="@style/dialog_label"
-            app:layout_constraintEnd_toStartOf="@+id/guidline"
-            app:layout_constraintStart_toStartOf="@+id/bn_label"
-            app:layout_constraintTop_toBottomOf="@id/bn_label"
-            />
-
-
-
-        <TextView
-            android:id="@+id/colon_bn1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="  :  "
-            style="@style/dialog_label"
-            app:layout_constraintStart_toEndOf="@+id/guidline"
-            app:layout_constraintTop_toTopOf="@+id/account_no_label" />
-        <TextView
-            android:id="@+id/account_no_tv"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="-"
-            style="@style/dialog_label"
-            android:layout_marginRight="@dimen/dp_sm4"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/colon_bn1"
-            app:layout_constraintTop_toTopOf="@+id/account_no_label" />
-
-
-
-
-        <TextView
-            android:id="@+id/ifsc_label"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_sm4"
-            android:text="@string/ifsc_in_box_veri"
-            style="@style/dialog_label"
-            app:layout_constraintEnd_toStartOf="@+id/guidline"
-            app:layout_constraintStart_toStartOf="@+id/bn_label"
-            app:layout_constraintTop_toBottomOf="@id/account_no_label"
-            />
-
-        <TextView
-            android:id="@+id/colon_bn2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="  :  "
-            style="@style/dialog_label"
-            app:layout_constraintStart_toEndOf="@+id/guidline"
-            app:layout_constraintTop_toTopOf="@+id/ifsc_label" />
-
-        <TextView
-            android:id="@+id/ifsc_tv"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="-"
-            style="@style/dialog_label"
-            android:layout_marginRight="@dimen/dp_sm4"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/colon_bn1"
-            app:layout_constraintTop_toTopOf="@+id/ifsc_label" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
         android:id="@+id/confirm_bn_bs"
@@ -181,6 +58,6 @@
         android:layout_marginBottom="@dimen/dp_normal"
         style="@style/ActionOutlineButtonStyle"
         android:textAllCaps="true"
-        android:text="@string/deny_veri"/>
+        android:text="@string/cancel_veri"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
