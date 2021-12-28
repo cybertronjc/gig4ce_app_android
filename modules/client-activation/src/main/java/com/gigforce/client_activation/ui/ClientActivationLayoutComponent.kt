@@ -2,8 +2,14 @@ package com.gigforce.client_activation.ui
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewTreeViewModelStoreOwner
+import androidx.lifecycle.get
+import androidx.recyclerview.widget.RecyclerView
+import com.gigforce.client_activation.R
 import com.gigforce.client_activation.client_activation.dataviewmodel.ClientActivationLayoutDVM
-import com.gigforce.client_activation.repo.IClientActivationDataRepository
+import com.gigforce.client_activation.viewmodels.ClientActivationViewModels
 import com.gigforce.common_ui.components.cells.FeatureLayoutComponent
 import com.gigforce.common_ui.viewdatamodels.FeatureLayoutDVM
 import com.gigforce.common_ui.viewdatamodels.SeeMoreItemDVM
@@ -15,46 +21,68 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class ClientActivationLayoutComponent(context: Context, attrs: AttributeSet?) :
     FeatureLayoutComponent(context, attrs) {
-    @Inject
-    lateinit var repository: IClientActivationDataRepository
+
+    private var viewModel : ClientActivationViewModels? = null
 
     @Inject
     lateinit var navigation: INavigation
     @Inject lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
-    override fun bind(data: Any?) {
-        if (data is ClientActivationLayoutDVM) {
-            repository.getData().observeForever {
-                if (it.isNotEmpty()) {
-                    var itemToShow = data.showItem
-                    if (itemToShow == 0) {
-                        super.bind(FeatureLayoutDVM("", "", emptyList()))
-                    } else if(it.isNotEmpty()) {
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        viewModel = ViewModelProvider(ViewTreeViewModelStoreOwner.get(this)!!).get()
 
-                        val list: List<Any> = it.slice(
-                            IntRange(
-                                0,
-                                if (it.size >= itemToShow) itemToShow - 1 else it.size-1
-                            )
-                        )
-                        val list1 = list.toMutableList()
-                        list1.add(SeeMoreItemDVM("", "", data.seeMoreNav))
-                        if(sharedPreAndCommonUtilInterface.getAppLanguageCode() == "hi") {
-                            super.bind(FeatureLayoutDVM(data.image, data.hi?.title?: data.title, list1))
-                        }
-                        else {
-                            super.bind(FeatureLayoutDVM(data.image, data.title, list1))
-                        }
+        data?.let { data->
+            if(data is ClientActivationLayoutDVM ) {
+                viewModel!!.requestLiveData(data.showItem.toLong())
+            }
 
+        }
+
+
+        Log.e("recyclerview","onAttachedToWindow")
+
+        viewModel?.liveData?.observeForever { it ->
+            Log.e("recyclerview","liveData")
+                if ( it.isNotEmpty()) {
+                    data?.let { data ->
+                        if (data is ClientActivationLayoutDVM) {
+                            val list1 = it.toMutableList<Any>()
+                            list1.add(SeeMoreItemDVM("", "", data.seeMoreNav))
+                            if (sharedPreAndCommonUtilInterface.getAppLanguageCode() == "hi") {
+                                super.bind(
+                                    FeatureLayoutDVM(
+                                        data.image,
+                                        data.hi?.title ?: data.title,
+                                        list1
+                                    )
+                                )
+                            }else {
+                                super.bind(FeatureLayoutDVM(data.image, data.title, list1))
+                            }
+                        }
                     }
-                    else{
-                        super.bind(FeatureLayoutDVM("", "", emptyList()))
-                    }
-                } else {
+                }else {
                     super.bind(FeatureLayoutDVM("", "", emptyList()))
+                }
+                viewModel?.state?.let { parcelable->
+                    this.findViewById<RecyclerView>(R.id.featured_rv)?.layoutManager?.onRestoreInstanceState(parcelable)
+
                 }
 
             }
+
         }
+
+    var data : Any?=null
+    override fun bind(data: Any?) {
+        Log.e("recyclerview","bind function called")
+        this.data = data
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        viewModel?.state = this.findViewById<RecyclerView>(R.id.featured_rv)?.layoutManager?.onSaveInstanceState()
+        Log.e("recyclerview","onDetachedFromWindow")
     }
 
 }
