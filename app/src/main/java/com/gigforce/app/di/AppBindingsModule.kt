@@ -105,6 +105,12 @@ interface ViewModelBindings {
 
     @Binds
     fun provideClientActivationRepo(imp: ClientActivationDataRepository): IClientActivationDataRepository
+
+    @Binds
+    fun provideLearningRepo(imp: LearningDataRepository): ILearningDataRepository
+
+    @Binds
+    fun provideHelpVideosRepo(imp: HelpVideosDataRepository): IHelpVideosDataRepository
 }
 
 

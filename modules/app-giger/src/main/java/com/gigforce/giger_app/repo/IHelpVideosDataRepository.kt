@@ -1,47 +1,31 @@
 package com.gigforce.giger_app.repo
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.gigforce.common_ui.viewdatamodels.VideoItemCardDVM
+import com.gigforce.core.extensions.getOrThrow
 import com.google.firebase.firestore.FirebaseFirestore
 import javax.inject.Inject
 
 interface IHelpVideosDataRepository {
-    fun loadData()
-    fun getData(): LiveData<List<Any>>
+    suspend fun requestData(limit : Long): List<Any>
 }
 
-class HelpVideosDataRepository @Inject constructor() : IHelpVideosDataRepository{
-    private var data: MutableLiveData<List<Any>> = MutableLiveData()
-    val collectionName = "Help_Videos"
-    init {
-        loadData()
-    }
-
-    fun getFirebaseReference() {
-        FirebaseFirestore.getInstance()
+class HelpVideosDataRepository @Inject constructor() : IHelpVideosDataRepository {
+    private val collectionName = "Help_Videos"
+    override suspend fun requestData(limit : Long): List<Any> {
+        val _data = ArrayList<VideoItemCardDVM>()
+        val allDataDocs = FirebaseFirestore.getInstance()
             .collection(collectionName)
-            .orderBy("index")
-            .addSnapshotListener { value, error ->
-                value?.documents?.let {
-                    val _data = ArrayList<VideoItemCardDVM>()
-                    for (item in it) {
-                        val obj = item.toObject(VideoItemCardDVM::class.java)
-                        obj?.let {
-                            _data.add(obj)
-                        }
-                    }
-                    data.value = _data
-                }
+            .orderBy("index").limit(limit).getOrThrow()
+        val allDocuments = allDataDocs.documents
+        for (item in allDocuments) {
+            val obj = item.toObject(VideoItemCardDVM::class.java)
+            obj?.let {
+                _data.add(obj)
             }
+        }
+        return _data
+
     }
 
-    override fun loadData() {
-        getFirebaseReference()
-    }
-
-    override fun getData(): LiveData<List<Any>> {
-        return data
-    }
 
 }
