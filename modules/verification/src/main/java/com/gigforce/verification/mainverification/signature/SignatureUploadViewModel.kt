@@ -1,14 +1,17 @@
 package com.gigforce.verification.mainverification.signature
 
 import android.net.Uri
+import androidx.core.net.toUri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.configrepository.SignatureRepository
-import com.gigforce.core.extensions.getDownloadUrlOrReturnNull
+import com.gigforce.common_ui.repository.GigerVerificationRepository
+import com.gigforce.core.datamodels.verification.VerificationBaseModel
+import com.gigforce.core.extensions.getOrThrow
+import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
-import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -27,6 +30,16 @@ sealed class SignatureUploadViewState {
 
     object CheckingExistingSignature : SignatureUploadViewState()
 
+    data class ShowExistingExistingSignature(
+        val signatureUri : Uri?
+    ) : SignatureUploadViewState()
+
+
+    data class ErrorWhileCheckingExsitingSignature(
+        val error : String
+    ) : SignatureUploadViewState()
+
+
     /**
      * ------------------------------
      * Removing Background signature
@@ -43,8 +56,6 @@ sealed class SignatureUploadViewState {
     data class ErrorWhileRemovingBackgroundFromSignature(
         val processedImage: Uri
     ) : SignatureUploadViewState()
-
-
 
 
     object UploadingSignature : SignatureUploadViewState()
@@ -66,16 +77,22 @@ sealed class SignatureUploadViewState {
 @HiltViewModel
 class SignatureUploadViewModel @Inject constructor(
     private val signatureRepository: SignatureRepository,
-    private val firebaseStorage: FirebaseStorage,
-    private val firebaseAuthStateListener: FirebaseAuthStateListener
+    private val verificationRepository: GigerVerificationRepository,
+    private val firebaseAuthStateListener: FirebaseAuthStateListener,
+    private val logger: GigforceLogger
 ) : ViewModel() {
 
+    companion object {
+
+        const val TAG = "SignatureUploadViewModel"
+    }
 
     private val _viewState = MutableLiveData<SignatureUploadViewState>()
     val viewState: LiveData<SignatureUploadViewState> = _viewState
 
     private var processedImageUri: Uri? = null
-    private var backgroundRemoved  = false
+    private var backgroundRemoved = false
+
 
     override fun onCleared() {
         super.onCleared()
@@ -93,6 +110,40 @@ class SignatureUploadViewModel @Inject constructor(
         }
 
     var shouldRemoveBackgroundFromSignature: Boolean = false
+
+    fun checkForExistingSignature() = viewModelScope.launch {
+
+        _viewState.value = SignatureUploadViewState.CheckingExistingSignature
+
+        try {
+
+            val verificationDocRef = verificationRepository.verificationDocumentReference(userId)
+                .getOrThrow()
+
+            if (verificationDocRef.exists()) {
+
+                val verificationData = verificationDocRef.toObject(VerificationBaseModel::class.java)
+                _viewState.value = SignatureUploadViewState.ShowExistingExistingSignature(
+                    verificationData?.signature?.fullSignatureUrl?.toUri()
+                )
+            } else {
+                _viewState.value = SignatureUploadViewState.ShowExistingExistingSignature(
+                    null
+                )
+            }
+
+        } catch (e: Exception) {
+            _viewState.value = SignatureUploadViewState.ErrorWhileCheckingExsitingSignature(
+                e.message ?: "Unable to check existing signature"
+            )
+
+            logger.e(
+                TAG,
+                "while fetching verification for user : $userId",
+                e
+            )
+        }
+    }
 
     fun handleEvent(
         event: SignatureViewEvents

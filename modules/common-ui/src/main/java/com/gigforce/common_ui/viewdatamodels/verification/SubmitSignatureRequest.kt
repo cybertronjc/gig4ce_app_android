@@ -4,6 +4,9 @@ import com.google.gson.annotations.SerializedName
 
 data class SubmitSignatureRequest(
 
+    @SerializedName("updateForUserId")
+    val updateForUserId : String,
+
     @SerializedName("signatureFirebasePath")
     val signatureFirebasePath : String,
 

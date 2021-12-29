@@ -154,7 +154,9 @@ class VerificationMainViewModel @Inject constructor(
 
                         SimpleCardDVM(
                             title ="Signature",
-                            subtitle = appContext.getString(R.string.tap_to_select),
+                            subtitle = if (doc?.signature?.signaturePathOnFirebase != null) appContext.getString(
+                                R.string.submitted_status_veri
+                            ) else appContext.getString(R.string.tap_to_select),
                             image = R.drawable.ic_account_box_black_24dp,
                             navpath= SignatureNavigation.DESTINATION_CAPTURE_SIGNATURE,
                             color = if (doc?.signature?.signaturePathOnFirebase != null) "GREEN" else ""

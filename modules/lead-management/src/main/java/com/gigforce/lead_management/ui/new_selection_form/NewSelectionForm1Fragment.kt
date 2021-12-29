@@ -343,8 +343,7 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
         inflateDynamicFields(
             requireContext(),
             viewBinding.mainForm.jobProfileDependentDynamicFieldsContainer,
-            dynamicFields,
-            childFragmentManager
+            dynamicFields
         )
     }
 

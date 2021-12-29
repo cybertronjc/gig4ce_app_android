@@ -23,7 +23,7 @@ interface VerificationKycService {
         @Body jsonObject: KycVerifyReqModel
     ): Response<KycOcrResultModel>
 
-    @POST("mock-endpoint")
+    @POST("profiles/updateGigerSignature")
     suspend fun uploadSignature(
         @Body submitSignatureRequest: SubmitSignatureRequest
     ): Response<KycOcrResultModel>

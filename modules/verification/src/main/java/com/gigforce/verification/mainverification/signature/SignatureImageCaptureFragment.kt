@@ -106,6 +106,8 @@ class SignatureImageCaptureFragment :
         if(userId != null) {
             viewModel.userId = userId!!
         }
+
+        viewModel.checkForExistingSignature()
     }
 
     override fun viewCreated(
@@ -142,6 +144,19 @@ class SignatureImageCaptureFragment :
             .observe(viewLifecycleOwner, {
 
                 when (it) {
+                    SignatureUploadViewState.CheckingExistingSignature -> showCheckingPreviousImageLayoutRemovingLayout()
+                    is SignatureUploadViewState.ErrorWhileCheckingExsitingSignature -> {
+                        showCaptureImageLayout(true)
+                    }
+                    is SignatureUploadViewState.ShowExistingExistingSignature -> {
+
+                        if (it.signatureUri != null){
+                            showImageWithBackgroundRemoved(it.signatureUri,true)
+                        } else{
+                            showCaptureImageLayout(true)
+                        }
+                    }
+
                     SignatureUploadViewState.RemovingBackgroundFromSignature -> showBackgroundImageBackgroundRemovingLayout()
                     is SignatureUploadViewState.BackgroundRemovedFromSignature -> {
                         showImageWithBackgroundRemoved(it.processedImage,it.enableSubmitButton)
@@ -164,6 +179,7 @@ class SignatureImageCaptureFragment :
                         it.firebaseImageFullUrl
                     )
                     SignatureUploadViewState.UploadingSignature -> showSignatureUploading()
+
                 }
             })
     }
@@ -181,9 +197,32 @@ class SignatureImageCaptureFragment :
         viewBinding.captureLayout.removingBackgroundProgressBar.gone()
     }
 
+    private fun showCheckingPreviousImageLayoutRemovingLayout() {
+        showCaptureImageLayout(false)
+        viewBinding.captureLayout.removingBackgroundProgressBar.visible()
+    }
+
     private fun showBackgroundImageBackgroundRemovingLayout() {
         viewBinding.captureLayout.removingBackgroundProgressBar.visible()
     }
+
+    private fun showCaptureImageLayout(
+        enableButtons : Boolean
+    ){
+        viewBinding.captureLayout.removingBackgroundProgressBar.gone()
+        viewBinding.captureLayout.root.gone()
+
+        viewBinding.previewScreen.root.visible()
+        viewBinding.previewScreen.signatureImage.clearImage()
+
+        viewBinding.clikImageBtn.text = "Upload"
+        viewBinding.submitCancelBtn.text = "Cancel"
+
+        viewBinding.clikImageBtn.isEnabled = enableButtons
+        viewBinding.submitCancelBtn.isEnabled = enableButtons
+        viewBinding.submitCancelBtn.setStrokeColorResource(R.color.lipstick_2)
+    }
+
 
     private fun showImageWithBackgroundRemoved(processedImage: Uri, enableSubmitButton: Boolean) {
         viewBinding.captureLayout.removingBackgroundProgressBar.gone()
@@ -195,11 +234,12 @@ class SignatureImageCaptureFragment :
         viewBinding.clikImageBtn.text = "Change"
         viewBinding.submitCancelBtn.text = "Done"
 
-
         if(enableSubmitButton){
+            viewBinding.clikImageBtn.isEnabled = true
             viewBinding.submitCancelBtn.isEnabled = true
             viewBinding.submitCancelBtn.setStrokeColorResource(R.color.lipstick_2)
         } else{
+            viewBinding.clikImageBtn.isEnabled = false
             viewBinding.submitCancelBtn.isEnabled = false
             viewBinding.submitCancelBtn.setStrokeColorResource(R.color.grey)
         }

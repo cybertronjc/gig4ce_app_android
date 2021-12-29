@@ -79,6 +79,7 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
     var hasStartEndDate = false
     var dropScreenIntentModel: DropScreenIntentModel? = null
 
+
     override fun viewCreated(viewBinding: GigerInfoFragmentBinding, savedInstanceState: Bundle?) {
         getDataFrom(arguments,savedInstanceState)
         initToolbar(viewBinding)

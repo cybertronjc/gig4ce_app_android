@@ -59,6 +59,7 @@ class SignatureRepository @Inject constructor(
         val fullImageUrl = createFullUrl(imagePathInFirebase)
         updateSignatureInVerification(
             SubmitSignatureRequest(
+                updateForUserId = userId,
                 signatureFirebasePath = imagePathInFirebase,
                 signatureImageFullUrl = fullImageUrl,
                 backgroundRemoved = false

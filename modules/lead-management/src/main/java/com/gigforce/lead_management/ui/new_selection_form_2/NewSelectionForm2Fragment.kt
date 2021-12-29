@@ -252,7 +252,6 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         initListeners(viewBinding)
         initViewModel()
         initSharedViewModel()
-        initSharedSingatureViewModel()
     }
 
     private fun setTextWatchers() = viewBinding.mainForm.apply {
@@ -622,26 +621,6 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
             })
     }
 
-    private fun initSharedSingatureViewModel() = lifecycleScope.launchWhenCreated {
-        sharedSignatureViewModel
-            .viewState
-            .collect {
-
-                when (it) {
-                    is com.gigforce.verification.mainverification.signature.SharedSignatureUploadViewModelViewState.SignatureCaptured -> {
-                        dynamicFieldsInflaterHelper.signatureCapturedUpdateStatus(
-                            viewBinding.mainForm.jobProfileDependentDynamicFieldsContainer,
-                            it.pathOnFirebase,
-                            it.imageFullUrl
-                        )
-                    }
-                    else -> {
-                    }
-                }
-
-            }
-    }
-
 
     private fun showSelectedCity(
         citySelected: ReportingLocationsItem
@@ -697,8 +676,7 @@ class NewSelectionForm2Fragment : BaseFragment2<FragmentNewSelectionForm2Binding
         inflateDynamicFields(
             requireContext(),
             viewBinding.mainForm.jobProfileDependentDynamicFieldsContainer,
-            dynamicFields,
-            childFragmentManager
+            dynamicFields
         )
     }
 

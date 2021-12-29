@@ -13,7 +13,6 @@ import com.gigforce.common_ui.dynamic_fields.data.DynamicVerificationField
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
-import com.gigforce.common_ui.viewmodels.verification.SharedVerificationViewModelEvent
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
@@ -185,11 +184,6 @@ class NewSelectionVerificationDocumentsForm3Fragment :
         )
     }
 
-    private fun updateVerificationDocumentStatus(
-        event: SharedVerificationViewModelEvent
-    ) {
-    }
-
     private fun errorWhileSubmittingJoiningRequest(
         error: String
     ) {
@@ -272,11 +266,10 @@ class NewSelectionVerificationDocumentsForm3Fragment :
         verificationRelatedDynamicInputsFields: List<DynamicVerificationField>
     ) = dynamicFieldsInflaterHelper.apply {
 
-        inflateDynamicFields(
+        inflateVerificationDynamicFields(
             requireContext(),
             viewBinding.mainForm.verificationRelatedDynamicFieldsContainer,
-            verificationRelatedDynamicInputsFields,
-            childFragmentManager
+            verificationRelatedDynamicInputsFields
         )
     }
 
