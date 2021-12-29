@@ -384,4 +384,19 @@
     <string name="same_as_permanent_amb">स्थायी पते के समान</string>
     <string name="make_my_father_as_nominee_amb">मेरे पिता को नामांकित करें</string>
     <string name="done_amb">किया हुआ</string>
+
+    <string name="confirm_beneficiary_title_amb">लाभार्थी के नाम की पुष्टि करें</string>
+    <string name="cinfirm_beneficiary_subtitle_amb">आपका बैंक खाता सत्यापित कर दिया गया है, कृपया लाभार्थी के नाम की पुष्टि करें।</string>
+    <string name="bn_label_detail_box_amb">लाभार्थी का नाम</string>
+    <string name="account_label_in_box_amb">खाता क्रमांक</string>
+    <string name="ifsc_in_box_amb">आईएफएससी</string>
+    <string name="bank_veri_section_detail_amb">बैंक सत्यापन (1/2)</string>
+    <string name="bank_validated_amb">बैंक मान्य</string>
+    <string name="bank_name_confirmation_title_amb">लाभार्थी के नाम की पुष्टि</string>
+    <string name="confirm_bn_title_amb">लाभार्थी के नाम की पुष्टि करें</string>
+    <string name="confirm_bn_subtitle_amb">आपका बैंक सत्यापन लंबित है। कृपया लाभार्थी के नाम की पुष्टि करें।</string>
+    <string name="bn_not_matched_amb">लाभार्थी का नाम मेल नहीं खाता</string>
+    <string name="plz_ask_to_giger_to_confirm_bn_amb">कृपया Gigforce ऐप पर लाभार्थी के नाम की पुष्टि करने के लिए giger से पूछें।</string>
+    <string name="deny_amb">रद्द करना</string>
+    <string name="baneficiary_name_amb">लाभार्थी का नाम</string>
 </resources>

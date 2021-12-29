@@ -12,8 +12,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.chat.ChatConstants
+import com.gigforce.common_ui.chat.ChatFileManager
 import com.gigforce.common_ui.chat.ChatGroupRepository
-import com.gigforce.common_ui.chat.ChatLocalDirectoryReferenceManager
 import com.gigforce.common_ui.chat.models.*
 import com.gigforce.common_ui.metaDataHelper.ImageMetaDataHelpers
 import com.gigforce.common_ui.viewdatamodels.chat.ChatHeader
@@ -34,11 +34,13 @@ import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.File
 import java.util.*
+import javax.inject.Inject
 
 interface GroupChatViewModelOutputs {
 
@@ -55,12 +57,13 @@ interface GroupChatViewModelInputs {
 }
 
 
-class GroupChatViewModel constructor(
+@HiltViewModel
+class GroupChatViewModel @Inject constructor(
         private val chatContactsRepository: ChatContactsRepository,
-        private val chatGroupRepository: ChatGroupRepository = ChatGroupRepository(),
-        private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance(),
-        private val chatLocalDirectoryReferenceManager: ChatLocalDirectoryReferenceManager = ChatLocalDirectoryReferenceManager(),
-        private val chatProfileFirebaseRepository: ChatProfileFirebaseRepository = ChatProfileFirebaseRepository()
+        private val chatGroupRepository: ChatGroupRepository,
+        private val firebaseStorage: FirebaseStorage,
+        private val chatProfileFirebaseRepository: ChatProfileFirebaseRepository,
+        private val chatFileManager : ChatFileManager
 ) : ViewModel(),
         GroupChatViewModelInputs,
         GroupChatViewModelOutputs {
@@ -98,18 +101,20 @@ class GroupChatViewModel constructor(
 
     fun createGroup(
             groupName: String,
+            groupAvatar: String?,
             groupMembers: List<ContactModel>
     ) = viewModelScope.launch {
         _createGroup.value = Lce.loading()
+            try {
+                val groupId = chatGroupRepository.createGroup(groupName,groupAvatar, groupMembers)
+                _createGroup.value = Lce.content(groupId)
+                _createGroup.value = null
+            } catch (e: Exception) {
+                _createGroup.value = Lce.error(e.toString())
+                _createGroup.value = null
+            }
 
-        try {
-            val groupId = chatGroupRepository.createGroup(groupName, groupMembers)
-            _createGroup.value = Lce.content(groupId)
-            _createGroup.value = null
-        } catch (e: Exception) {
-            _createGroup.value = Lce.error(e.toString())
-            _createGroup.value = null
-        }
+
     }
 
     //Add Users to group
@@ -151,6 +156,7 @@ class GroupChatViewModel constructor(
 
         groupDetailsListener = chatGroupRepository.getGroupDetailsRef(groupId)
                 .addSnapshotListener { data, error ->
+                    Log.d(TAG, "group details changed/subscribed, groupId - $groupId")
 
                     error?.let {
                         CrashlyticsLogger.e(TAG, "In startWatchingGroupDetails()", it)
@@ -191,6 +197,8 @@ class GroupChatViewModel constructor(
 
         groupContactsListener = chatContactsRepository.getUserGigforceContacts()
                 .addSnapshotListener { snap, error ->
+                    Log.d(TAG, "user contacts contacts data changed/subscribed")
+
                     error?.let {
                         CrashlyticsLogger.e(TAG, "In addContactsChangeListener()", it)
                     }
@@ -238,6 +246,7 @@ class GroupChatViewModel constructor(
         userGroupHeaderChangeListener = chatGroupRepository
                 .userGroupHeaderRef(groupId)
                 .addSnapshotListener { value, error ->
+                    Log.d(TAG, "group header data changed/subscribed, group-id : $groupId")
 
                     error?.let {
                         CrashlyticsLogger.e(
@@ -247,8 +256,8 @@ class GroupChatViewModel constructor(
                         )
                     }
 
-                    val unseenMessageCount = value?.get(ChatHeader.KEY_UNSEEN_MESSAGE_COUNT) ?: 0
-                    if (unseenMessageCount != 0)
+                    val unseenMessageCount = value?.get(ChatHeader.KEY_UNSEEN_MESSAGE_COUNT) ?: 0L
+                    if (unseenMessageCount != 0L)
                         setMessagesUnseenCountToZero()
 
                 }
@@ -289,6 +298,7 @@ class GroupChatViewModel constructor(
 
         groupMessagesListener = getGroupMessagesQuery
                 .addSnapshotListener { value, error ->
+                    Log.d(TAG, "group messages changed/subscribed, groupId - $groupId")
 
                     if (error != null)
                         Log.e(TAG, "Error while listening group messages", error)
@@ -320,6 +330,7 @@ class GroupChatViewModel constructor(
 
         groupEventsListener = getGroupEventsQuery
                 .addSnapshotListener { value, error ->
+                    Log.d(TAG, "group events changed/subscribed, groupId - $groupId")
 
                     if (error != null) {
                         Log.e(TAG, "Error while listening group messages", error)
@@ -582,7 +593,7 @@ class GroupChatViewModel constructor(
             chatGroupRepository.sendNewVideoMessage(
                     context = context.applicationContext,
                     groupId = groupId,
-                    videosDirectoryRef = chatLocalDirectoryReferenceManager.videosDirectoryRef,
+                    videosDirectoryRef = chatFileManager.videoFilesDirectory,
                     videoInfo = videoInfo,
                     uri = uri,
                     message = message

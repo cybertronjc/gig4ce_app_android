@@ -106,6 +106,9 @@ dependencies {
 
     implementation 'com.jaeger.statusbarutil:library:1.5.1'
 
+    //progress button
+    implementation 'com.github.razir.progressbutton:progressbutton:2.1.0'
+
     //Exo Player
     implementation 'com.google.android.exoplayer:exoplayer-core:2.11.5'
     implementation 'com.google.android.exoplayer:exoplayer-ui:2.11.5'
@@ -113,4 +116,6 @@ dependencies {
     implementation 'com.linkedin.android.spyglass:spyglass:3.0.1'
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
     implementation 'com.akexorcist:localization:1.2.10'
+
+    implementation 'com.github.yalantis:ucrop:2.2.4'
 }

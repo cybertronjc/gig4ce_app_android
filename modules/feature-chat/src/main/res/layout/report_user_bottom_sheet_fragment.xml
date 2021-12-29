@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/round_bottom_sheet_background"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/report_user_title"
+            android:textColor="#202325"
+            android:layout_marginStart="@dimen/size_20"
+            android:layout_marginEnd="@dimen/size_20"
+            android:fontFamily="@font/lato_bold"
+            android:lineHeight="@dimen/font_12"
+            android:text="@string/report_user_chat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_40" />
+
+        <TextView
+            android:id="@+id/report_user_subtitle"
+            style="@style/body_primary"
+            android:textColor="#202325"
+            android:layout_marginStart="@dimen/size_20"
+            android:layout_marginEnd="@dimen/size_20"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/select_reason_to_block_chat"
+            android:layout_marginTop="20dp" />
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_20"
+            android:layout_marginTop="10dp"
+            android:weightSum="1">
+
+            <RadioButton
+                android:id="@+id/reason_abusive"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_2"
+                android:checked="false"
+                android:buttonTint="@color/colorPrimary"
+                android:text="@string/person_is_abusive_in_nature_chat" />
+
+            <RadioButton
+                android:id="@+id/reason_inappropriate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_2"
+                android:checked="false"
+                android:buttonTint="@color/colorPrimary"
+                android:text="@string/person_is_sharing_inappropriate_content_chat" />
+
+            <RadioButton
+                android:id="@+id/reason_others"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_2"
+                android:checked="false"
+                android:buttonTint="@color/colorPrimary"
+                android:text="@string/others_chat" />
+        </RadioGroup>
+
+        <EditText
+            android:id="@+id/other_reason"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginTop="@dimen/size_20"
+            android:layout_marginStart="@dimen/size_14"
+            android:backgroundTint="@color/colorPrimary"
+            android:hint="@string/type_your_concern_reason"
+            android:textSize="@dimen/font_12"
+            />
+
+        <TextView
+            android:id="@+id/report_button"
+            android:layout_width="match_parent"
+            android:layout_height="34dp"
+            android:layout_marginStart="@dimen/size_20"
+            android:layout_marginTop="@dimen/size_40"
+            android:layout_marginEnd="@dimen/size_20"
+            android:background="@drawable/bottom_primary_button_background_chat"
+            android:gravity="center"
+            android:enabled="false"
+            android:textSize="@dimen/font_12"
+            android:textAllCaps="true"
+            android:fontFamily="@font/lato_bold"
+            android:text="@string/report_chat"
+            android:textAlignment="center"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:id="@+id/cancel_button"
+            android:layout_width="match_parent"
+            android:layout_height="34dp"
+            android:layout_marginStart="@dimen/size_20"
+            android:layout_marginTop="@dimen/size_20"
+            android:layout_marginEnd="@dimen/size_20"
+            android:layout_marginBottom="@dimen/size_16"
+            android:background="@drawable/bottom_secondary_button_background_chat"
+            android:gravity="center"
+            android:textAllCaps="true"
+            android:textSize="@dimen/font_12"
+            android:fontFamily="@font/lato_bold"
+            android:text="@string/cancel_chat"
+            android:textAlignment="center"
+            android:textColor="#E42C64" />
+
+
+
+
+    </LinearLayout>
+</layout>

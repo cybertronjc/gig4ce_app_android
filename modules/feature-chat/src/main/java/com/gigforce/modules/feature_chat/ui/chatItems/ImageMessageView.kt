@@ -17,6 +17,9 @@ import com.bumptech.glide.Glide
 import com.gigforce.common_ui.chat.ChatConstants
 import com.gigforce.common_ui.chat.models.ChatMessage
 import com.gigforce.common_ui.shimmer.ShimmerHelper
+import com.gigforce.common_ui.storage.MediaStoreApiHelpers
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.extensions.dp
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toDisplayText
@@ -25,6 +28,7 @@ import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.modules.feature_chat.ChatNavigation
 import com.gigforce.modules.feature_chat.R
+import com.gigforce.modules.feature_chat.analytics.CommunityEvents
 import com.gigforce.modules.feature_chat.screens.GroupMessageViewInfoFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -48,7 +52,8 @@ abstract class ImageMessageView(
     @Inject
     lateinit var navigation: INavigation
 
-
+    @Inject
+    lateinit var eventTracker: IEventTracker
 
     private val chatNavigation: ChatNavigation by lazy {
         ChatNavigation(navigation)
@@ -108,7 +113,7 @@ abstract class ImageMessageView(
 
     private fun setOnClickListeners() {
         imageContainerFrameLayout.setOnClickListener(this)
-        cardView.setOnLongClickListener(this)
+        imageContainerFrameLayout.setOnLongClickListener(this)
         //quotedMessagePreviewContainer.setOnClickListener(this)
     }
 
@@ -295,31 +300,33 @@ abstract class ImageMessageView(
         }
     }
 
-    private fun setReceivedStatus(msg: ChatMessage) = when (msg.status) {
-        ChatConstants.MESSAGE_STATUS_NOT_SENT -> {
-            Glide.with(context)
+    private fun setReceivedStatus(msg: ChatMessage) {
+        when (msg.status) {
+            ChatConstants.MESSAGE_STATUS_NOT_SENT -> {
+                Glide.with(context)
                     .load(R.drawable.ic_msg_pending)
                     .into(receivedStatusIV)
-        }
-        ChatConstants.MESSAGE_STATUS_DELIVERED_TO_SERVER -> {
-            Glide.with(context)
+            }
+            ChatConstants.MESSAGE_STATUS_DELIVERED_TO_SERVER -> {
+                Glide.with(context)
                     .load(R.drawable.ic_msg_sent)
                     .into(receivedStatusIV)
-        }
-        ChatConstants.MESSAGE_STATUS_RECEIVED_BY_USER -> {
-            Glide.with(context)
+            }
+            ChatConstants.MESSAGE_STATUS_RECEIVED_BY_USER -> {
+                Glide.with(context)
                     .load(R.drawable.ic_msg_delivered)
                     .into(receivedStatusIV)
-        }
-        ChatConstants.MESSAGE_STATUS_READ_BY_USER -> {
-            Glide.with(context)
+            }
+            ChatConstants.MESSAGE_STATUS_READ_BY_USER -> {
+                Glide.with(context)
                     .load(R.drawable.ic_msg_seen)
                     .into(receivedStatusIV)
-        }
-        else -> {
-            Glide.with(context)
+            }
+            else -> {
+                Glide.with(context)
                     .load(R.drawable.ic_msg_pending)
                     .into(receivedStatusIV)
+            }
         }
     }
 
@@ -345,6 +352,7 @@ abstract class ImageMessageView(
         val popUpMenu = PopupMenu(context, v)
         popUpMenu.inflate(R.menu.menu_chat_clipboard)
 
+        popUpMenu.menu.findItem(R.id.action_save_to_gallery).isVisible = returnFileIfAlreadyDownloadedElseNull() != null
         popUpMenu.menu.findItem(R.id.action_copy).isVisible = false
         popUpMenu.menu.findItem(R.id.action_delete).isVisible = type == MessageFlowType.OUT
         popUpMenu.menu.findItem(R.id.action_message_info).isVisible = type == MessageFlowType.OUT && messageType == MessageType.GROUP_MESSAGE
@@ -363,9 +371,46 @@ abstract class ImageMessageView(
             }
             R.id.action_delete -> deleteMessage()
             R.id.action_message_info -> viewMessageInfo()
+            R.id.action_save_to_gallery -> saveImageToGallery(
+                returnFileIfAlreadyDownloadedElseNull()
+            )
         }
         return true
     }
+
+    private fun saveImageToGallery(
+        file: Uri?
+    ) {
+        saveToGallery(file)
+    }
+
+    private fun saveToGallery(
+        imageUri: Uri?
+    ) {
+        val uri = imageUri ?: return
+
+        GlobalScope.launch {
+            try {
+                MediaStoreApiHelpers.saveImageToGallery(
+                    context,
+                    uri
+                )
+
+                GlobalScope.launch(Dispatchers.Main) {
+                    Toast.makeText(context, "Image saved to gallery", Toast.LENGTH_SHORT).show()
+                    var map = mapOf("media_type" to "Image")
+                    eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_MEDIA_SAVED_TO_GALLERY, map))
+                }
+            } catch (e: Exception) {
+                GlobalScope.launch(Dispatchers.Main) {
+                    Toast.makeText(context, "Unable to save image to gallery", Toast.LENGTH_SHORT).show()
+                    var map = mapOf("media_type" to "Image")
+                    eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_MEDIA_FAILED_TO_SAVE, map))
+                }
+            }
+        }
+    }
+
 
     private fun viewMessageInfo() {
         navigation.navigateTo("chats/messageInfo",

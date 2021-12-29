@@ -21,7 +21,9 @@ import com.gigforce.common_ui.DisplayUtil
 import com.gigforce.common_ui.chat.ChatConstants
 import com.gigforce.common_ui.chat.models.ChatMessage
 import com.gigforce.common_ui.views.GigforceImageView
+import com.gigforce.core.IEventTracker
 import com.gigforce.core.IViewHolder
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toDisplayText
 import com.gigforce.core.extensions.visible
@@ -29,6 +31,7 @@ import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.modules.feature_chat.ChatNavigation
 import com.gigforce.modules.feature_chat.R
+import com.gigforce.modules.feature_chat.analytics.CommunityEvents
 import com.gigforce.modules.feature_chat.models.ChatMessageWrapper
 import com.gigforce.modules.feature_chat.screens.GroupMessageViewInfoFragment
 import com.gigforce.modules.feature_chat.screens.vm.ChatPageViewModel
@@ -52,6 +55,9 @@ abstract class TextMessageView(
 
     @Inject
     lateinit var navigation: INavigation
+
+    @Inject
+    lateinit var eventTracker: IEventTracker
 
     private val chatNavigation: ChatNavigation by lazy {
         ChatNavigation(navigation)
@@ -158,32 +164,35 @@ abstract class TextMessageView(
 
 
 
-    private fun setReceivedStatus(msg: ChatMessage) = when (msg.status) {
-        ChatConstants.MESSAGE_STATUS_NOT_SENT -> {
-            Glide.with(context)
-                .load(R.drawable.ic_msg_pending)
-                .into(receivedStatusIV)
-        }
-        ChatConstants.MESSAGE_STATUS_DELIVERED_TO_SERVER -> {
-            Glide.with(context)
-                .load(R.drawable.ic_msg_sent)
-                .into(receivedStatusIV)
-        }
-        ChatConstants.MESSAGE_STATUS_RECEIVED_BY_USER -> {
-            Glide.with(context)
-                .load(R.drawable.ic_msg_delivered)
-                .into(receivedStatusIV)
-        }
-        ChatConstants.MESSAGE_STATUS_READ_BY_USER -> {
-            Glide.with(context)
-                .load(R.drawable.ic_msg_seen)
-                .into(receivedStatusIV)
-        }
-        else -> {
-            Glide.with(context)
-                .load(R.drawable.ic_msg_pending)
-                .into(receivedStatusIV)
-        }
+    private fun setReceivedStatus(msg: ChatMessage) {
+
+            when (msg.status) {
+                ChatConstants.MESSAGE_STATUS_NOT_SENT -> {
+                    Glide.with(context)
+                        .load(R.drawable.ic_msg_pending)
+                        .into(receivedStatusIV)
+                }
+                ChatConstants.MESSAGE_STATUS_DELIVERED_TO_SERVER -> {
+                    Glide.with(context)
+                        .load(R.drawable.ic_msg_sent)
+                        .into(receivedStatusIV)
+                }
+                ChatConstants.MESSAGE_STATUS_RECEIVED_BY_USER -> {
+                    Glide.with(context)
+                        .load(R.drawable.ic_msg_delivered)
+                        .into(receivedStatusIV)
+                }
+                ChatConstants.MESSAGE_STATUS_READ_BY_USER -> {
+                    Glide.with(context)
+                        .load(R.drawable.ic_msg_seen)
+                        .into(receivedStatusIV)
+                }
+                else -> {
+                    Glide.with(context)
+                        .load(R.drawable.ic_msg_pending)
+                        .into(receivedStatusIV)
+                }
+            }
     }
 
 
@@ -192,6 +201,7 @@ abstract class TextMessageView(
         val popUpMenu = PopupMenu(context, v)
         popUpMenu.inflate(R.menu.menu_chat_clipboard)
 
+        popUpMenu.menu.findItem(R.id.action_save_to_gallery).isVisible = false
         popUpMenu.menu.findItem(R.id.action_copy).isVisible = true
         popUpMenu.menu.findItem(R.id.action_delete).isVisible = type == MessageFlowType.OUT
         popUpMenu.menu.findItem(R.id.action_message_info).isVisible =

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
 import android.text.InputFilter
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -14,9 +15,11 @@ import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.net.toFile
 import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,25 +27,34 @@ import com.bumptech.glide.Glide
 import com.gigforce.common_ui.ViewFullScreenImageDialogFragment
 import com.gigforce.common_ui.ViewFullScreenVideoDialogFragment
 import com.gigforce.common_ui.chat.ChatConstants
+import com.gigforce.common_ui.chat.ChatFileManager
 import com.gigforce.common_ui.chat.models.ChatGroup
 import com.gigforce.common_ui.chat.models.ContactModel
 import com.gigforce.common_ui.chat.models.GroupMedia
 import com.gigforce.common_ui.ext.showToast
+import com.gigforce.common_ui.metaDataHelper.ImageMetaDataHelpers
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.crashlytics.CrashlyticsLogger
+import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.onTextChanged
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.Lse
 import com.gigforce.modules.feature_chat.*
+import com.gigforce.modules.feature_chat.analytics.CommunityEvents
 import com.gigforce.modules.feature_chat.screens.adapters.GroupMediaRecyclerAdapter
 import com.gigforce.modules.feature_chat.screens.adapters.GroupMembersRecyclerAdapter
 import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel
-import com.gigforce.modules.feature_chat.screens.vm.factories.GroupChatViewModelFactory
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.google.firebase.storage.FirebaseStorage
 import com.jaeger.library.StatusBarUtil
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_chat.*
 import kotlinx.android.synthetic.main.fragment_chat_group_details_main_2.*
 import java.io.File
 import java.text.SimpleDateFormat
@@ -59,22 +71,24 @@ class GroupDetailsFragment : Fragment(),
     @Inject
     lateinit var navigation: INavigation
 
+    @Inject
+    lateinit var eventTracker: IEventTracker
+
     private val chatNavigation: ChatNavigation by lazy {
         ChatNavigation(navigation)
     }
 
-    private val viewModel: GroupChatViewModel by lazy {
-        ViewModelProvider(
-                this,
-                GroupChatViewModelFactory(requireContext())
-        ).get(GroupChatViewModel::class.java)
-    }
+    @Inject
+    lateinit var chatFileManager: ChatFileManager
+
+
+    private val viewModel: GroupChatViewModel by viewModels()
     private lateinit var groupId: String
     private val dateFormatter = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
     private val groupMediaRecyclerAdapter: GroupMediaRecyclerAdapter by lazy {
         GroupMediaRecyclerAdapter(
                 requireContext(),
-                appDirectoryFileRef,
+                chatFileManager.gigforceDirectory,
                 Glide.with(requireContext()),
                 this
         )
@@ -91,9 +105,6 @@ class GroupDetailsFragment : Fragment(),
         )
     }
 
-    private val appDirectoryFileRef: File by lazy {
-        Environment.getExternalStoragePublicDirectory(ChatConstants.DIRECTORY_APP_DATA_ROOT)!!
-    }
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -222,6 +233,20 @@ class GroupDetailsFragment : Fragment(),
 
     private fun showGroupDetails(content: ChatGroup) {
         group_name_tv.text = content.name
+        if (content.groupAvatarThumbnail.isNotBlank()) {
+            content.groupAvatarThumbnail.let {
+                showGroupIcon(it)
+                GlideApp.with(this).load(it).placeholder(R.drawable.ic_group).into(group_icon)
+            }
+        } else if (content.groupAvatar.isNotBlank()) {
+            content.groupAvatar.let {
+                showGroupIcon(it)
+                GlideApp.with(this).load(it).placeholder(R.drawable.ic_group).into(group_icon)
+            }
+        } else {
+            showGroupIcon("")
+            //toolbar.showImageBehindBackButton(R.drawable.ic_group_white)
+        }
         group_creation_date_tv.text =
             getString(R.string.created_on_chat) + dateFormatter.format(content.creationDetails!!.createdOn.toDate())
 
@@ -261,6 +286,18 @@ class GroupDetailsFragment : Fragment(),
         )
 
         showOrHideAddGroupOption(content)
+        var map = mapOf("group_name" to content.name, "no_of_participants" to content.groupMembers.size)
+        eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_GROUP_DETAILS_SCREEN, map))
+    }
+
+    private fun showGroupIcon(imagePath: String) {
+
+        if (imagePath.isNotBlank()){
+            group_icon.loadImageIfUrlElseTryFirebaseStorage(imagePath)
+        } else{
+            GlideApp.with(this).load(R.drawable.ic_group).placeholder(R.drawable.ic_group).into(group_icon)
+        }
+
     }
 
     private fun showOrHideAddGroupOption(content: ChatGroup) {
@@ -316,19 +353,31 @@ class GroupDetailsFragment : Fragment(),
     private fun openDocument(file: File) {
 
         Intent(Intent.ACTION_VIEW).apply {
-            setDataAndType(
-                    FileProvider.getUriForFile(
-                            requireContext(),
-                            "${requireContext().packageName}.provider",
-                            file
-                    ), "application/pdf"
+
+            val uri = FileProvider.getUriForFile(
+                requireContext(),
+                requireContext().packageName + ".provider",
+                file
             )
+            setDataAndType(
+                uri,
+                ImageMetaDataHelpers.getImageMimeType(
+                    requireContext(),
+                    file.toUri()
+                )
+            )
+
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             try {
                 requireContext().startActivity(this)
             } catch (e: Exception) {
-                Toast.makeText(context, getString(R.string.unable_to_open_chat), Toast.LENGTH_SHORT).show()
+
+                Toast.makeText(
+                    requireContext(),
+                    "Unable to open document",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
@@ -467,17 +516,20 @@ class GroupDetailsFragment : Fragment(),
             //Open the file
             when (media.attachmentType) {
                 ChatConstants.ATTACHMENT_TYPE_IMAGE -> {
-                    ViewFullScreenImageDialogFragment.showImage(
-                            childFragmentManager,
-                            fileIfDownloaded?.toUri()!!
-                    )
 
+                    if (fileIfDownloaded != null) {
+                        chatNavigation.openFullScreenImageViewDialogFragment(
+                            fileIfDownloaded.toUri()
+                        )
+                    }
                 }
                 ChatConstants.ATTACHMENT_TYPE_VIDEO -> {
-                    ViewFullScreenVideoDialogFragment.launch(
-                            childFragmentManager,
-                            fileIfDownloaded?.toUri()!!
-                    )
+
+                    if (fileIfDownloaded != null) {
+                        chatNavigation.openFullScreenVideoDialogFragment(
+                            fileIfDownloaded.toUri()
+                        )
+                    }
                 }
                 ChatConstants.ATTACHMENT_TYPE_DOCUMENT -> {
                     openDocument(fileIfDownloaded!!)
@@ -486,7 +538,7 @@ class GroupDetailsFragment : Fragment(),
 
         } else {
             //Start downloading the file
-            viewModel.downloadAndSaveFile(appDirectoryFileRef, position, media)
+            viewModel.downloadAndSaveFile(chatFileManager.gigforceDirectory, position, media)
         }
     }
 

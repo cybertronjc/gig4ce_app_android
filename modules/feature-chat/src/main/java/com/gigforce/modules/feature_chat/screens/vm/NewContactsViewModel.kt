@@ -8,8 +8,11 @@ import com.gigforce.common_ui.chat.models.ContactModel
 import com.gigforce.modules.feature_chat.repositories.ChatContactsRepository
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.QuerySnapshot
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class NewContactsViewModel constructor(
+@HiltViewModel
+class NewContactsViewModel @Inject constructor(
     private val chatContactsRepository: ChatContactsRepository
 ) : ViewModel() {
 
