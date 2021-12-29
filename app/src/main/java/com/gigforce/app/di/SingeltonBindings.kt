@@ -4,14 +4,16 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.gigforce.app.di.implementations.BuildConfigImp
 import com.gigforce.common_ui.remote.*
+import com.gigforce.common_ui.remote.verification.VerificationKycService
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.core.retrofit.GeneratePaySlipService
-import com.gigforce.common_ui.remote.verification.VerificationKycService
 import com.gigforce.core.retrofit.RetrofitFactory
 import com.gigforce.core.retrofit.RetrofitServiceFactory
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.giger_gigs.tl_login_details.LoginSummaryService
+import com.gigforce.modules.feature_chat.repositories.DownloadChatAttachmentService
+import com.gigforce.modules.feature_chat.service.SyncPref
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import dagger.Binds
@@ -111,6 +113,21 @@ abstract class SingeltonBindings {
             return retrofitServiceFactory.prepareService(VerificationKycService::class.java)
         }
 
+        @Provides
+        fun provideDownloadChatAttachmentService(
+            retrofitServiceFactory : RetrofitServiceFactory
+        ): DownloadChatAttachmentService {
+            return retrofitServiceFactory.prepareService(DownloadChatAttachmentService::class.java)
+        }
+
+
+        @Singleton
+        @Provides
+        fun provideSyncPref(
+            @ApplicationContext context: Context
+        ): SyncPref {
+            return SyncPref.getInstance(context)
+        }
 
 
         @Singleton

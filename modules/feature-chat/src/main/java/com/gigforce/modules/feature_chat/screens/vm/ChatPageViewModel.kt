@@ -38,30 +38,33 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.*
 import com.google.firebase.storage.FirebaseStorage
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import java.io.File
 import java.util.*
+import javax.inject.Inject
 
 
-class ChatPageViewModel constructor(
-    private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance(),
-    //  private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository(),
-    private var downloadAttachmentService: DownloadChatAttachmentService = RetrofitFactory.createService(
-        DownloadChatAttachmentService::class.java
-    ),
-    private var chatProfileFirebaseRepository: ChatProfileFirebaseRepository = ChatProfileFirebaseRepository(),
-    private var chatRepository: ChatRepository = ChatRepository()
+@HiltViewModel
+class ChatPageViewModel @Inject constructor(
+    private val downloadAttachmentService: DownloadChatAttachmentService,
+    private val firebaseStorage: FirebaseStorage,
+    private val chatProfileFirebaseRepository: ChatProfileFirebaseRepository,
+    private val chatRepository: ChatRepository,
+    private val firebaseFirestore: FirebaseFirestore,
+    private val firebaseAuthStateListener: FirebaseAuthStateListener
 ) : ViewModel() {
 
-    private val TAG: String = "chats/viewmodel"
-    private val uid = FirebaseAuth.getInstance().currentUser?.uid!!
-    private var firebaseDB = FirebaseFirestore.getInstance()
-    private val currentUser: FirebaseUser by lazy {
-        FirebaseAuth.getInstance().currentUser!!
+    companion object{
+        const val TAG: String = "chats/viewmodel"
     }
 
     var headerId: String = ""
     lateinit var otherUserId: String
+
+    private val currentUser : FirebaseUser get() {
+        return firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow()
+    }
 
     private var otherUserName: String? = null
     private var otherUserProfilePicture: String? = null
@@ -84,6 +87,12 @@ class ChatPageViewModel constructor(
     private var headerInfoChangeListener: ListenerRegistration? = null
     private var contactInfoChangeListener: ListenerRegistration? = null
     private var currentChatHeader: ChatHeader? = null
+
+    private var _askForPermission = MutableLiveData<Boolean>()
+    val askForPermission: LiveData<Boolean> = _askForPermission
+
+    private var _allStoragePermissionsGranted = MutableLiveData<Boolean>()
+    val allStoragePermissionsGranted: LiveData<Boolean> = _allStoragePermissionsGranted
 
 
     fun setRequiredDataAndStartListeningToMessages(
@@ -138,6 +147,7 @@ class ChatPageViewModel constructor(
 
         headerInfoChangeListener = getHeaderReference(headerId)
             .addSnapshotListener { snapshot, error ->
+                Log.d(TAG,"header info changed/subscribed, $headerId")
 
                 snapshot?.let {
                     val chatHeader = it.toObject(ChatHeader::class.java)!!.apply {
@@ -190,8 +200,8 @@ class ChatPageViewModel constructor(
             formatMobileNoForChatContact(
                 mobileNo
             )
-        )
-            .addSnapshotListener { value, error ->
+        ).addSnapshotListener { value, error ->
+                Log.d(TAG,"contact info changed/subscribed")
 
                 value?.let {
 
@@ -212,8 +222,8 @@ class ChatPageViewModel constructor(
     }
 
     private fun checkIfHeaderIsPresentInHeadersList() = viewModelScope.launch {
-        val querySnap = firebaseDB.collection("chats")
-            .document(uid)
+        val querySnap = firebaseFirestore.collection("chats")
+            .document(firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow().uid)
             .collection("headers")
             .whereEqualTo("otherUserId", otherUserId)
             .getOrThrow()
@@ -225,8 +235,8 @@ class ChatPageViewModel constructor(
     }
 
     private fun getHeaderReference(headerId: String): DocumentReference {
-        return firebaseDB.collection("chats")
-            .document(uid)
+        return firebaseFirestore.collection("chats")
+            .document(firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow().uid)
             .collection("headers")
             .document(headerId)
     }
@@ -322,8 +332,8 @@ class ChatPageViewModel constructor(
             getReference(headerId).document(message.id).setOrThrow(message)
 
             //Update Header for current User
-            firebaseDB.collection("chats")
-                .document(uid)
+            firebaseFirestore.collection("chats")
+                .document(currentUser.uid)
                 .collection("headers")
                 .document(headerId)
                 .updateOrThrow(
@@ -375,7 +385,7 @@ class ChatPageViewModel constructor(
         forUserId: String,
         otherUserId: String
     ): String? {
-        val query = firebaseDB.collection("chats")
+        val query = firebaseFirestore.collection("chats")
             .document(forUserId)
             .collection("headers")
             .whereEqualTo("forUserId", forUserId)
@@ -407,10 +417,10 @@ class ChatPageViewModel constructor(
             }
         }
 
-        val query = firebaseDB.collection("chats")
+        val query = firebaseFirestore.collection("chats")
             .document(otherUserId)
             .collection("contacts")
-            .whereEqualTo("uid", uid)
+            .whereEqualTo("uid", currentUser.uid)
             .getOrThrow()
 
         val contactModel = if (query.isEmpty) {
@@ -442,12 +452,12 @@ class ChatPageViewModel constructor(
 
         val chatHeader = ChatHeader(
             forUserId = otherUserId,
-            otherUserId = uid,
+            otherUserId = currentUser.uid,
             lastMsgTimestamp = null,
             chatType = ChatConstants.CHAT_TYPE_USER,
             unseenCount = 0,
             otherUser = UserInfo(
-                id = uid,
+                id = currentUser.uid,
                 name = userName,
                 profilePic = fullPath,
                 type = "user",
@@ -456,7 +466,7 @@ class ChatPageViewModel constructor(
             lastMsgFlowType = ""
         )
 
-        firebaseDB.collection("chats")
+        firebaseFirestore.collection("chats")
             .document(otherUserId)
             .collection("headers")
             .document(headerId)
@@ -530,6 +540,7 @@ class ChatPageViewModel constructor(
             if (headerId.isEmpty()) {
                 createHeaderForBothUsers()
             }
+
 
             val imageMetaData = ImageMetaDataHelpers.getImageMetaData(
                 context = context,
@@ -699,9 +710,9 @@ class ChatPageViewModel constructor(
             lastMsgFlowType = ""
         )
 
-        val docRef = firebaseDB
+        val docRef = firebaseFirestore
             .collection("chats")
-            .document(uid)
+            .document(currentUser.uid)
             .collection("headers")
             .addOrThrow(chatHeader)
 
@@ -713,8 +724,8 @@ class ChatPageViewModel constructor(
         headerId: String
     ) {
 
-        val userDocument = firebaseDB.collection("chats")
-            .document(uid)
+        val userDocument = firebaseFirestore.collection("chats")
+            .document(currentUser.uid)
             .collection("contacts")
             .whereEqualTo("uid", userId)
             .getOrThrow()
@@ -724,8 +735,8 @@ class ChatPageViewModel constructor(
         } else {
             val userDocumentId = userDocument.documents.first().id
 
-            firebaseDB.collection("chats")
-                .document(uid)
+            firebaseFirestore.collection("chats")
+                .document(currentUser.uid)
                 .collection("contacts")
                 .document(userDocumentId)
                 .updateOrThrow(
@@ -747,11 +758,13 @@ class ChatPageViewModel constructor(
         Log.d(TAG, "CHAT 2 Setting count to Zero for $headerId")
 
         try {
-            firebaseDB.collection("chats")
-                .document(uid)
+            firebaseFirestore.collection("chats")
+                .document(currentUser.uid)
                 .collection("headers")
                 .document(headerId)
-                .updateOrThrow(mapOf("unseenCount" to 0,"updatedAt" to Timestamp.now(), "updatedBy" to FirebaseAuthStateListener.getInstance()
+                .updateOrThrow(mapOf("unseenCount" to 0,
+                    "updatedAt" to Timestamp.now(),
+                    "updatedBy" to FirebaseAuthStateListener.getInstance()
                     .getCurrentSignInUserInfoOrThrow().uid))
         } catch (e: Exception) {
             Log.e(TAG, "Unable to set unseen count to zero", e)
@@ -822,14 +835,18 @@ class ChatPageViewModel constructor(
     private var _blockingOrUnblockingUser = MutableLiveData<Lse>()
     val blockingOrUnblockingUser: LiveData<Lse> = _blockingOrUnblockingUser
 
-    fun blockOrUnBlockUser() = viewModelScope.launch {
+    fun blockOrUnBlockUser(
+        chatHeader: String,
+        otherUserId: String,
+        forceBlock: Boolean
+    ) = viewModelScope.launch {
         _blockingOrUnblockingUser.value = Lse.loading()
 
         try {
             chatRepository.blockOrUnblockUser(
-                chatHeaderId = headerId,
+                chatHeaderId = chatHeader,
                 otherUserId = otherUserId,
-                forceBlock = false
+                forceBlock = forceBlock
             )
 
             _blockingOrUnblockingUser.value = Lse.success()
@@ -930,5 +947,17 @@ class ChatPageViewModel constructor(
             _scrollToMessage.value = index
             _scrollToMessage.value = null
         }
+    }
+
+    fun askForScopeAndStoragePermissionToDownload(ask: Boolean){
+        _askForPermission.value = ask
+    }
+
+    fun getScopeAndStoragePermission(): Boolean? {
+        return allStoragePermissionsGranted.value
+    }
+
+    fun setScopeAndStoragePermission(perm: Boolean){
+        _allStoragePermissionsGranted.value = perm
     }
 }

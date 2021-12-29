@@ -1,26 +1,24 @@
 package com.gigforce.modules.feature_chat.screens
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.modules.feature_chat.R
 import com.gigforce.modules.feature_chat.databinding.FragmentMessageViewedInfoBinding
 import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel
-import com.gigforce.modules.feature_chat.screens.vm.factories.GroupChatViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class GroupMessageViewInfoFragment : Fragment() {
 
-    private val viewModel: GroupChatViewModel by lazy {
-        ViewModelProvider(
-            this,
-            GroupChatViewModelFactory(requireContext())
-        ).get(GroupChatViewModel::class.java)
-    }
+    private val viewModel: GroupChatViewModel by viewModels()
     private lateinit var viewBinding: FragmentMessageViewedInfoBinding
 
     private lateinit var groupId: String
@@ -86,7 +84,7 @@ class GroupMessageViewInfoFragment : Fragment() {
     private fun initViewModel() {
         viewModel.messageReadingInfo
             .observe(viewLifecycleOwner, {
-
+                Log.d("details", "$it")
                 viewBinding.toolbar.showSubtitle(getString(R.string.viewed_by_chat) + it.readingInfo.size + "/ " + it.totalMembers)
                 viewBinding.messageViewedRecyclerView.collection = it.readingInfo
             })

@@ -7,6 +7,7 @@ import android.util.AttributeSet
 import android.util.Patterns
 import androidx.annotation.DrawableRes
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.shimmer.ShimmerHelper
@@ -42,7 +43,9 @@ class GigforceImageView(
     ) {
         val pathRef = firebaseStorage.reference.child(firebasePath)
 
-        var requestManager = Glide.with(context).load(pathRef)
+        var requestManager = Glide.with(context)
+            .load(pathRef)
+            .transition(DrawableTransitionOptions().crossFade())
 
         if (placeHolder != -1) {
             requestManager = requestManager.placeholder(placeHolder)
@@ -88,18 +91,19 @@ class GigforceImageView(
     }
 
     fun loadImage(
-        image: Uri,
-        @DrawableRes placeHolder: Int = -1,
-        @DrawableRes error: Int = -1,
-        centerCrop: Boolean = false
+            image: Uri,
+            @DrawableRes placeHolder: Int = -1,
+            @DrawableRes error: Int = -1,
+            centerCrop: Boolean = false
     ) {
 
         var requestManager = Glide.with(context)
-            .load(image)
+                .load(image)
+                .transition(DrawableTransitionOptions().crossFade())
 
         if (placeHolder != -1) {
             requestManager = requestManager.placeholder(placeHolder)
-        } else {
+        } else{
             requestManager = requestManager.placeholder(ShimmerHelper.getShimmerDrawable())
         }
 
@@ -117,15 +121,16 @@ class GigforceImageView(
     }
 
     fun loadImage(
-        @DrawableRes image: Int,
-        centerCrop: Boolean = false
+            @DrawableRes image: Int,
+            centerCrop: Boolean = false
     ) {
 
         var glideRequestManager = Glide.with(context)
-            .load(image)
-            .error(getErrorImage())
+                .load(image)
+                .transition(DrawableTransitionOptions().crossFade())
+                .error(getErrorImage())
 
-        if (centerCrop) {
+        if(centerCrop){
             glideRequestManager = glideRequestManager.centerCrop()
         }
 
@@ -133,13 +138,14 @@ class GigforceImageView(
     }
 
     fun loadImage(
-        image: Bitmap,
-        centerCrop: Boolean
+            image: Bitmap,
+            centerCrop: Boolean
     ) {
 
         var requestManager = Glide.with(context)
-            .load(image)
-            .error(getErrorImage())
+                .load(image)
+                .transition(DrawableTransitionOptions().crossFade())
+                .error(getErrorImage())
 
         if (centerCrop) {
             requestManager = requestManager.centerCrop()

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        app:cardElevation="0dp"
+        android:layout_margin="@dimen/size_2"
+        app:cardCornerRadius="6dp"
+        android:padding="@dimen/size_1">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/mainlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/image_card_view"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="@dimen/size_20"
+                android:layout_marginTop="@dimen/size_20"
+                app:cardCornerRadius="@dimen/size_20"
+                app:cardBackgroundColor="@color/white"
+                android:elevation="@dimen/size_6"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+                <ImageView
+                    android:id="@+id/documentTypeImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_pdf_icon"
+                    />
+            </com.google.android.material.card.MaterialCardView>
+
+
+
+            <TextView
+                android:id="@+id/document_name_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:textColor="#202325"
+                android:textSize="16sp"
+                android:letterSpacing="0"
+                android:fontFamily="@font/lato_bold"
+                app:layout_constraintEnd_toStartOf="@id/document_date_tv"
+                app:layout_constraintStart_toEndOf="@id/image_card_view"
+                app:layout_constraintTop_toTopOf="@id/image_card_view"
+                tools:text="Gigforce Signup.pdf" />
+
+            <TextView
+                android:id="@+id/document_details_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="4dp"
+                tools:text="1 page. 4.9 MB . PDF"
+                android:textStyle="normal"
+                android:letterSpacing="0"
+                android:textColor="#979C9E"
+                android:fontFamily="@font/lato"
+                app:layout_constraintStart_toEndOf="@id/image_card_view"
+                app:layout_constraintBottom_toBottomOf="@id/image_card_view" />
+
+            <TextView
+                android:id="@+id/document_date_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="@dimen/size_20"
+                tools:text="12/08/21"
+                android:textStyle="normal"
+                android:letterSpacing="0"
+                android:textColor="#979C9E"
+                android:fontFamily="@font/lato"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/document_name_tv" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#F2F4F5"
+                android:layout_marginTop="@dimen/size_20"
+                android:layout_marginStart="@dimen/size_20"
+                android:layout_marginEnd="@dimen/size_20"
+                app:layout_constraintTop_toBottomOf="@id/image_card_view"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+</layout>

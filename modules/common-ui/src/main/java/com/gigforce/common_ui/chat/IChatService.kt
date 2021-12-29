@@ -67,4 +67,9 @@ interface IChatService {
     suspend fun setMessagesAsRead(
         unreadMessages: List<ChatMessage>
     )
+
+    suspend fun setHeadersAsRead(
+        headerIds: List<String>,
+        senderId: String
+    )
 }

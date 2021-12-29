@@ -16,7 +16,10 @@ import androidx.core.app.TaskStackBuilder
 import androidx.core.graphics.drawable.IconCompat
 import com.gigforce.app.MainActivity
 import com.gigforce.app.R
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.extensions.toBundle
+import com.gigforce.modules.feature_chat.analytics.CommunityEvents
 import com.google.firebase.messaging.RemoteMessage
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.GlobalScope
@@ -26,6 +29,7 @@ import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.*
+import javax.inject.Inject
 import kotlin.random.Random
 
 class ChatNotificationHandler constructor(
@@ -35,6 +39,9 @@ class ChatNotificationHandler constructor(
     private val firebaseStorage: FirebaseStorage by lazy {
         FirebaseStorage.getInstance()
     }
+
+    @Inject
+    lateinit var eventTracker: IEventTracker
 
     fun handleChatNotification(
             remoteMessage: RemoteMessage
@@ -109,6 +116,9 @@ class ChatNotificationHandler constructor(
                 notification
 
         )
+
+//        var map = mapOf("chat_type" to "Direct", "message_type" to messageType)
+//        eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_NOTIFICATION_RECEIVED, map))
     }
 
     private fun createPendingIntentForChat(
@@ -226,6 +236,9 @@ class ChatNotificationHandler constructor(
                 notification
 
         )
+
+//        var map = mapOf("chat_type" to "Group", "message_type" to messageType)
+//        eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_NOTIFICATION_RECEIVED, map))
     }
 
     private fun showTextMessageReceivedNotification(
