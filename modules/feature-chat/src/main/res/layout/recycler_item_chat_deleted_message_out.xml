@@ -3,20 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.cardview.widget.CardView
+    <FrameLayout
+        android:id="@+id/frame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <RelativeLayout
         android:id="@+id/cv_msgContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_gravity="end"
-
+        android:background="@drawable/background_round_deleted_chat_message_out"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="@dimen/chat_item_margin"
         android:layout_marginBottom="8dp"
-        android:maxWidth="@dimen/chat_item_max_length"
-        app:cardBackgroundColor="@color/chat_outgoing_mesage_background_color"
-        app:cardCornerRadius="@dimen/chat_item_corner_radius"
-        app:cardElevation="@dimen/chat_item_card_elevation">
+        android:elevation="@dimen/size_2"
+        android:maxWidth="@dimen/chat_item_max_length">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/ll_msgContainer"
@@ -66,6 +68,7 @@
                 app:layout_constraintTop_toBottomOf="@id/tv_msgValue" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.cardview.widget.CardView>
+    </RelativeLayout>
+    </FrameLayout>
 
 </merge>

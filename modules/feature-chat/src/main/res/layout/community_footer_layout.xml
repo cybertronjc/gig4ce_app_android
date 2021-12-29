@@ -2,10 +2,18 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 <FrameLayout
     android:id="@+id/community_footer_frame"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="0dp"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintBottom_toTopOf="@id/emojiLayout"
+    android:layoutDirection="ltr">
 
         <LinearLayout
             android:id="@+id/recording"
@@ -23,24 +31,38 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
+                    <TextView
+                        android:id="@+id/reply_blocked_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="60dp"
+                        android:gravity="center"
+                        android:visibility="gone"
+                        tools:text="This group doesn't support replies"
+                        android:orientation="horizontal" />
+
+
                     <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1">
 
-                        <LinearLayout
-                            android:id="@+id/layoutContainer"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical"></LinearLayout>
+<!--                        <com.aghajari.emojiview.view.AXEmojiPopupLayout-->
+<!--                            android:id="@+id/emojiLayout"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:visibility="gone"-->
+<!--                            android:layout_gravity="bottom"-->
+<!--                            android:layout_marginStart="8dp"-->
+<!--                            android:layout_marginEnd="10dp"/>-->
 
                         <androidx.cardview.widget.CardView
                             android:id="@+id/layoutAttachment"
                             android:layout_width="match_parent"
                             android:layout_height="220dp"
                             android:layout_gravity="bottom"
-                            android:layout_marginLeft="8dp"
-                            android:layout_marginRight="8dp"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginEnd="10dp"
                             android:elevation="0dp"
                             android:translationZ="0dp"
                             android:visibility="gone"
@@ -62,6 +84,15 @@
 
                         </androidx.cardview.widget.CardView>
                     </FrameLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/mention_suggestion_rv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/layoutMessage"
@@ -86,6 +117,24 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:id="@+id/reply_to_message_layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_marginStart="4dp"
+                                android:visibility="gone"
+                                android:paddingStart="8dp"
+                                android:paddingEnd="8dp"
+                                android:paddingTop="4dp"
+                                android:paddingBottom="4dp"
+                                app:layout_constraintTop_toBottomOf="@id/mention_suggestion_rv" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
                             android:orientation="horizontal">
 
                             <ImageView
@@ -94,28 +143,39 @@
                                 android:layout_height="36dp"
                                 android:layout_gravity="bottom"
                                 android:layout_marginStart="4dp"
-                                android:layout_marginLeft="4dp"
+                                android:background="?android:selectableItemBackground"
+                                android:layout_marginEnd="4dp"
                                 android:layout_marginBottom="2dp"
                                 android:padding="8dp"
-                                android:src="@drawable/ic_attachment_icon" />
+                                android:src="@drawable/ic_emoji_icon" />
 
-                            <EditText
+                            <com.linkedin.android.spyglass.ui.MentionsEditText
                                 android:id="@+id/editTextMessage"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginEnd="8dp"
                                 android:layout_weight="1"
-                                android:background="@null"
-                                android:ems="10"
+                                android:background="#00000000"
+                                android:textColorHint="#979C9E"
+                                android:focusableInTouchMode="true"
                                 android:hint="@string/type_a_message_chat"
-                                android:inputType="textMultiLine"
-                                android:maxLines="6"
-                                android:paddingStart="4dp"
-                                android:paddingLeft="4dp"
-                                android:paddingTop="8dp"
-                                android:paddingEnd="4dp"
-                                android:paddingRight="4dp"
-                                android:paddingBottom="8dp" />
+                                android:paddingTop="10dp"
+                                android:paddingBottom="10dp"
+                                android:textColor="#202325"
+                                android:textSize="14sp"
+                                android:imeOptions="flagNoExtractUi"
+                                app:layout_constraintTop_toBottomOf="@id/reply_to_message_layout"
+                                app:layout_constraintEnd_toStartOf="@id/btn_send_chat"
+                                app:layout_constraintStart_toEndOf="@id/iv_greyPlus"
+                                />
+
+                            <com.aghajari.emojiview.view.AXEmojiEditText
+                                android:id="@+id/edt"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:visibility="gone"
+                                android:hint="enter your message ..." />
 
                             <ImageView
                                 android:id="@+id/imageViewAttachment"
@@ -123,19 +183,23 @@
                                 android:layout_height="36dp"
                                 android:layout_gravity="bottom"
                                 android:layout_marginEnd="4dp"
-                                android:layout_marginRight="4dp"
+                                android:background="?android:selectableItemBackground"
                                 android:layout_marginBottom="2dp"
                                 android:padding="8dp"
                                 android:src="@drawable/ic_attachment_icon" />
 
                             <ImageView
                                 android:id="@+id/imageViewCamera"
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
+                                android:layout_width="36dp"
+                                android:layout_height="36dp"
                                 android:layout_gravity="bottom"
-                                android:layout_marginRight="8dp"
+                                android:layout_marginEnd="8dp"
+                                android:layout_marginBottom="2dp"
+                                android:background="?android:selectableItemBackground"
                                 android:padding="8dp"
                                 android:src="@drawable/ic_camera_icon" />
+
+                        </LinearLayout>
 
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
@@ -203,7 +267,7 @@
                     android:layout_marginBottom="12dp"
                     android:elevation="2dp"
                     android:paddingBottom="2dp"
-                    android:src="@drawable/ic_audio_mic"
+                    android:src="@drawable/ic_currently_recording_mic"
                     android:translationZ="10dp"
                     android:visibility="gone" />
 
@@ -303,9 +367,8 @@
             android:layout_gravity="bottom|right"
             android:layout_marginTop="6dp"
             android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
             android:layout_marginBottom="6dp"
-            android:background="#FFFFFF"
+            android:background="?android:selectableItemBackground"
             android:clickable="true"
             android:elevation="2dp"
             android:translationZ="2dp"
@@ -333,7 +396,7 @@
             android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="6dp"
-            android:background="#FFFFFF"
+            android:background="?android:selectableItemBackground"
             android:clickable="true"
             android:elevation="2dp"
             android:translationZ="2dp"
@@ -349,7 +412,7 @@
                 android:id="@+id/imageStop"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/stop_record_ic" />
+                android:src="@drawable/ic_message_send_icon" />
 
         </androidx.cardview.widget.CardView>
 
@@ -378,84 +441,29 @@
                 android:id="@+id/imageSend"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/send_msg_ic" />
+                android:src="@drawable/ic_message_send_icon" />
 
         </androidx.cardview.widget.CardView>
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/container"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
-        android:visibility="gone"
-        android:background="@drawable/community_footer_background"
-        app:layout_constraintEnd_toStartOf="@id/record_send_button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <com.linkedin.android.spyglass.ui.MentionsEditText
-            android:id="@+id/et_typedMessageValue"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="1"
-            android:layout_marginTop="@dimen/size_10"
-            android:layout_marginBottom="@dimen/size_10"
-            android:background="#00000000"
-            android:focusableInTouchMode="true"
-            android:hint="@string/type_a_message_chat"
-            android:textColorHint="@color/gray_text_color"
-            android:textColor="@color/subtitle_black_text_color"
-            android:textSize="12sp"
-            android:imeOptions="flagNoExtractUi"
-            app:layout_constraintEnd_toStartOf="@id/attachment_button"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            />
-
-        <ImageView
-            android:id="@+id/attachment_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_attachment_icon"
-            android:layout_marginEnd="@dimen/size_20"
-            android:layout_marginTop="@dimen/size_10"
-            android:layout_marginBottom="@dimen/size_10"
-            app:layout_constraintEnd_toStartOf="@id/camera_button"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-
-        <ImageView
-            android:id="@+id/camera_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_camera_icon"
-            android:layout_marginEnd="@dimen/size_20"
-            android:layout_marginTop="@dimen/size_10"
-            android:layout_marginBottom="@dimen/size_10"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ImageView
-        android:id="@+id/record_send_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_audio_mic"
-        android:layout_marginEnd="@dimen/size_20"
-        android:visibility="gone"
-        android:layout_marginTop="@dimen/size_10"
-        android:layout_marginBottom="@dimen/size_10"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </FrameLayout>
-</layout>
+
+        <com.aghajari.emojiview.view.AXEmojiPopupLayout
+            android:id="@+id/emojiLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+    </layout>

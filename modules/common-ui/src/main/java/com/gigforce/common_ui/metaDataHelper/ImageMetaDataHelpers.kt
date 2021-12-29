@@ -13,6 +13,7 @@ import android.provider.OpenableColumns
 import android.util.Log
 import android.webkit.MimeTypeMap
 import androidx.core.net.toFile
+import com.gigforce.common_ui.chat.models.AudioInfo
 import com.gigforce.common_ui.chat.models.VideoInfo
 import com.gigforce.core.image.ImageUtils
 
@@ -229,6 +230,21 @@ object ImageMetaDataHelpers {
         )
     }
 
+    fun getAudioInfo(
+        context: Context,
+        uri: Uri
+    ) : AudioInfo {
+        val audioName = getImageName(context, uri)
+        val audioSize = getImageLength(context, uri)
+        val audioDuration = getVideoDuration(context, uri)
+
+        return AudioInfo(
+            name = audioName,
+            size = audioSize,
+            duration = audioDuration!!
+        )
+    }
+
     private fun getVideoDuration(
         content: Context,
         uri: Uri
@@ -245,6 +261,14 @@ object ImageMetaDataHelpers {
             0L
         }
     }
+
+//    private fun getAudioDuration(file: Uri, context: Context): Long? {
+//        val mediaMetadataRetriever = MediaMetadataRetriever()
+//        mediaMetadataRetriever.setDataSource(context, file)
+//        val durationStr =
+//            mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
+//        return durationStr!!.toLong()
+//    }
 
     private fun getVideoThumbnail(
         context: Context,

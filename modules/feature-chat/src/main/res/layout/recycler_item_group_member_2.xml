@@ -23,6 +23,7 @@
         android:layout_height="32dp"
         android:clickable="true"
         android:focusable="true"
+        android:visibility="gone"
         android:layout_marginTop="8dp"
         android:background="@color/light_pink"
         app:layout_constraintEnd_toEndOf="parent"
@@ -36,8 +37,8 @@
         android:src="@drawable/ic_chat"
         android:scaleY="0.4"
         android:scaleX="0.4"
+        android:visibility="gone"
         app:tint="@color/lipstick"
-
         app:layout_constraintBottom_toBottomOf="@+id/chat_overlay"
         app:layout_constraintEnd_toEndOf="@+id/chat_overlay"
         app:layout_constraintStart_toStartOf="@+id/chat_overlay"
@@ -55,6 +56,7 @@
         android:textSize="16sp"
         android:textStyle="normal"
         android:paddingStart="10dp"
+        android:visibility="gone"
         android:paddingEnd="10dp"
         android:paddingTop="5dp"
         android:layout_marginBottom="5dp"
@@ -74,13 +76,15 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:layout_marginTop="4dp"
-        android:fontFamily="@font/lato"
-        android:textColor="@color/black_85"
-        android:textSize="16sp"
+        android:layout_marginBottom="@dimen/size_4"
+        android:fontFamily="@font/lato_bold"
+        android:textColor="#202325"
+        android:textSize="14sp"
         android:textStyle="normal"
+        app:layout_constraintBottom_toBottomOf="@id/user_image_iv"
         app:layout_constraintEnd_toStartOf="@id/manager_text_view"
         app:layout_constraintStart_toEndOf="@id/user_image_iv"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@id/user_image_iv"
         tools:text="Paritosh Yadav" />
 
     <TextView
@@ -89,6 +93,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:layout_marginTop="4dp"
+        android:visibility="gone"
         android:fontFamily="@font/lato"
         android:scrollHorizontally="true"
         android:ellipsize="end"
@@ -99,6 +104,16 @@
         app:layout_constraintStart_toEndOf="@id/user_image_iv"
         app:layout_constraintTop_toBottomOf="@id/user_name_tv"
         app:layout_constraintEnd_toStartOf="@id/manager_text_view"/>
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/size_10"
+        android:background="@color/light_grey_divider"
+        app:layout_constraintStart_toStartOf="@id/user_image_iv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/user_image_iv"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,10 +6,14 @@ import android.app.NotificationManager
 import android.content.*
 import android.content.pm.PackageManager
 import android.database.Cursor
+import android.media.MediaPlayer
+import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.ContactsContract
+import android.support.v4.media.MediaBrowserCompat
+import android.support.v4.media.session.MediaControllerCompat
 import android.text.format.DateUtils
 import android.util.Log
 import android.util.Patterns
@@ -23,12 +27,18 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.aghajari.emojiview.AXEmojiManager
+import com.aghajari.emojiview.iosprovider.AXIOSEmojiProvider
+import com.aghajari.emojiview.view.AXEmojiView
+import com.aghajari.emojiview.view.AXSingleEmojiView
+import com.facebook.shimmer.ShimmerFrameLayout
 import com.gigforce.common_image_picker.CameraAndGalleryIntegrator
 import com.gigforce.common_image_picker.ImageCropCallback
 import com.gigforce.common_image_picker.ImageCropOptions
@@ -52,16 +62,14 @@ import com.gigforce.modules.feature_chat.R
 import com.gigforce.common_ui.chat.ChatFileManager
 import com.gigforce.common_ui.components.cells.AppBar
 import com.gigforce.common_ui.ext.showToast
-import com.gigforce.common_ui.listeners.AppBarClicks
 import com.gigforce.modules.feature_chat.models.ChatMessageWrapper
 import com.gigforce.modules.feature_chat.models.SharedFile
 import com.gigforce.modules.feature_chat.screens.vm.ChatPageViewModel
 import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel
+import com.gigforce.modules.feature_chat.service.MusicService
 import com.gigforce.modules.feature_chat.swipe.MessageSwipeController
 import com.gigforce.modules.feature_chat.swipe.SwipeControllerActions
-import com.gigforce.modules.feature_chat.ui.AudioRecordView
-import com.gigforce.modules.feature_chat.ui.ChatFooter
-import com.gigforce.modules.feature_chat.ui.chatItems.MessageFlowType
+import com.gigforce.modules.feature_chat.ui.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.jaeger.library.StatusBarUtil
@@ -72,12 +80,23 @@ import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
+import com.gigforce.modules.feature_chat.ui.AttachmentOption
+import com.google.android.exoplayer2.*
+import com.google.android.exoplayer2.audio.AudioAttributes
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
+import com.google.android.exoplayer2.source.ExtractorMediaSource
+import com.google.android.exoplayer2.source.MediaSource
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
+import com.google.android.exoplayer2.util.Util
+import java.io.IOException
+
 
 @AndroidEntryPoint
 class ChatPageFragment : Fragment(),
     PopupMenu.OnMenuItemClickListener,
     ImageCropCallback,
-    SwipeControllerActions {
+    SwipeControllerActions, AttachmentOptionsListener, CommunityFooter.RecordingListener {
 
     @Inject
     lateinit var navigation: INavigation
@@ -95,6 +114,9 @@ class ChatPageFragment : Fragment(),
         } else if (selectedOperation == ChatConstants.OPERATION_PICK_DOCUMENT && isStoragePermissionGranted()) {
             pickDocument()
             selectedOperation = -1
+        } else if (selectedOperation == ChatConstants.OPERATION_OPEN_CAMERA && isCameraPermissionGranted() && isStoragePermissionGranted()) {
+            openCamera()
+            selectedOperation = -1
         }
     }
 
@@ -104,17 +126,27 @@ class ChatPageFragment : Fragment(),
 
     //Views
     private lateinit var chatRecyclerView: CoreRecyclerView
+    private lateinit var shimmerContainer: View
     private lateinit var chatFooter: ChatFooter
-    private lateinit var audioRecordView: AudioRecordView
+    private lateinit var communityFooter: CommunityFooter
+//    private lateinit var audioRecordView: AudioRecordView
     private lateinit var frameLayout: FrameLayout
     private lateinit var rootLayout: FrameLayout
     private var cameFromLinkInOtherChat: Boolean = false
     private lateinit var mainChatLayout: View
-    private lateinit var needStorageAccessLayout: View
-    private lateinit var requestStorageAccessButton: View
+//    private lateinit var needStorageAccessLayout: View
+//    private lateinit var requestStorageAccessButton: View
     private lateinit var appbar: AppBar
     private var selectedChatMessage: ChatMessage? = null
 
+    var mediaRecorder: MediaRecorder? = null
+    var recordFile: String? = null
+    var isRecording : Boolean = false
+    var localAudioPath : String? = null
+
+    private var mExoPlayer: SimpleExoPlayer? = null
+    private var isPlaying: Boolean = false
+    private var time: Long = 0
 
     private val viewModel: ChatPageViewModel by viewModels()
     private val groupChatViewModel: GroupChatViewModel by viewModels()
@@ -172,6 +204,30 @@ class ChatPageFragment : Fragment(),
     //Shared File
     private var sharedFile: SharedFile? = null
 
+    //audio player
+    private lateinit var mMediaBrowserCompat: MediaBrowserCompat
+    private val connectionCallback: MediaBrowserCompat.ConnectionCallback = object : MediaBrowserCompat.ConnectionCallback() {
+        override fun onConnected() {
+
+            // The browser connected to the session successfully, use the token to create the controller
+            super.onConnected()
+            mMediaBrowserCompat.sessionToken.also { token ->
+                val mediaController = MediaControllerCompat(context, token)
+                activity?.let { MediaControllerCompat.setMediaController(it, mediaController) }
+            }
+            playPauseBuild()
+            Log.d("onConnected", "Controller Connected")
+        }
+
+        override fun onConnectionFailed() {
+            super.onConnectionFailed()
+            Log.d("onConnectionFailed", "Connection Failed")
+
+        }
+
+    }
+    private val mControllerCallback = object : MediaControllerCompat.Callback() {}
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -187,15 +243,15 @@ class ChatPageFragment : Fragment(),
             requireActivity(),
             ResourcesCompat.getColor(resources, R.color.lipstick_2, null)
         )
-
+        setStatusBarIcons(false)
         showChatLayout()
         initChat()
     }
 
     private fun findView(view: View) {
-        mainChatLayout = view.findViewById(R.id.main_chat_layout)
-        needStorageAccessLayout = view.findViewById(R.id.storage_access_required_layout)
-        requestStorageAccessButton = view.findViewById(R.id.storage_access_btn)
+        mainChatLayout = view.findViewById(R.id.chatMainLayout)
+//        needStorageAccessLayout = view.findViewById(R.id.storage_access_required_layout)
+//        requestStorageAccessButton = view.findViewById(R.id.storage_access_btn)
         appbar = view.findViewById(R.id.appBarComp)
         appbar.apply {
             changeBackButtonDrawable()
@@ -206,7 +262,7 @@ class ChatPageFragment : Fragment(),
 
     private fun showPermissionRequiredLayout() {
         mainChatLayout.gone()
-        needStorageAccessLayout.visible()
+        //needStorageAccessLayout.visible()
     }
 
     private fun initChat() {
@@ -400,6 +456,8 @@ class ChatPageFragment : Fragment(),
             }
         })
 
+
+
     }
 
     private fun subscribeChatGroupViewModel() {
@@ -409,26 +467,26 @@ class ChatPageFragment : Fragment(),
 
                 showGroupDetails(it)
                 if (it.groupDeactivated) {
-                    chatFooter.disableInput("This group is deactivated by an admin")
+                    communityFooter.disableInput("This group is deactivated by an admin")
                     messageSwipeController.disableSwipe()
                     //                        userBlockedOrRemovedLayout.text = getString(R.string.group_deactivated_by_admin_chat)
                 } else if (it.currenUserRemovedFromGroup) {
-                    chatFooter.disableInput("You have been removed from this group")
+                    communityFooter.disableInput("You have been removed from this group")
                     messageSwipeController.disableSwipe()
                     //                        chatFooter.replyBlockedLayout.text = getString(R.string.removed_from_group_chat)
                 } else if (it.onlyAdminCanPostInGroup) {
-                    chatFooter.visible()
+                    communityFooter.visible()
 
                     if (groupChatViewModel.isUserGroupAdmin()) {
-                        chatFooter.enableInput()
+                        communityFooter.enableInput()
                         messageSwipeController.enableSwipe()
                     } else {
-                        chatFooter.disableInput("Only admins can post in this group")
+                        communityFooter.disableInput("Only admins can post in this group")
                         messageSwipeController.disableSwipe()
 //                                                    chatFooter.replyBlockedLayout.text = getString(R.string.only_admin_can_post_chat)
                     }
                 } else {
-                    chatFooter.enableInput()
+                    communityFooter.enableInput()
                     messageSwipeController.enableSwipe()
                 }
             })
@@ -443,10 +501,14 @@ class ChatPageFragment : Fragment(),
                     ChatMessageWrapper(
                         message = it,
                         oneToOneChatViewModel = viewModel,
-                        groupChatViewModel = groupChatViewModel
+                        groupChatViewModel = groupChatViewModel,
+                        lifeCycleOwner = viewLifecycleOwner
+
                     )
                 }
                 chatRecyclerView.smoothScrollToLastPosition()
+                chatRecyclerView.visible()
+                shimmerContainer.gone()
             })
 
         groupChatViewModel
@@ -490,6 +552,9 @@ class ChatPageFragment : Fragment(),
         frameLayout = view.findViewById(R.id.layoutMain)
         chatFooter = view.findViewById(R.id.chat_footer)
         rootLayout = view.findViewById(R.id.layoutRoot)
+        communityFooter = view.findViewById(R.id.community_footer)
+        shimmerContainer = view.findViewById(R.id.shimmer_controller)
+        //communityFooter = context?.let { CommunityFooter(it) }!!
         chatRecyclerView = view.findViewById(R.id.rv_chat_messages)
         val layoutManager = LinearLayoutManager(requireContext())
         layoutManager.stackFromEnd = true
@@ -501,11 +566,24 @@ class ChatPageFragment : Fragment(),
     }
 
     private fun setUpAudioView() {
-        // this is to make your layout the root of audio record view, root layout supposed to be empty..
-        // this is to make your layout the root of audio record view, root layout supposed to be empty..
-        audioRecordView = AudioRecordView()
-        audioRecordView.initView(rootLayout)
-        audioRecordView.setContainerView(R.layout.fragment_chat)
+        communityFooter.setAttachmentOptions(AttachmentOption.defaultList, this)
+        communityFooter.setRecordingListener(this)
+        AXEmojiManager.install(activity, AXIOSEmojiProvider(activity))
+        val emojiView = AXEmojiView(activity)
+        communityFooter.setupEmojiLayout(emojiView)
+
+        val componentName = context?.let { ComponentName(it, MusicService::class.java) }
+        // initialize the browser
+        mMediaBrowserCompat = MediaBrowserCompat(
+            context, componentName, //Identifier for the service
+            connectionCallback,
+            null
+        )
+
+        rootLayout.setOnTouchListener { v, event ->
+            communityFooter.hideAttachmentOptionView()
+            true
+        }
     }
 
     private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {
@@ -637,13 +715,15 @@ class ChatPageFragment : Fragment(),
                 }
 
                 if (it.isUserBlocked) {
-                    chatFooter.disableInput("You've blocked this contact")
-                    messageSwipeController.disableSwipe()
+                    //chatFooter.disableInput("You've blocked this contact")
+                        communityFooter.disableInput("You've blocked this contact")
+                        messageSwipeController.disableSwipe()
 //                        userBlockedOrRemovedLayout.text = getString(R.string.you_have_blocked_chat)
 
                 } else {
-                    chatFooter.enableInput()
-                    messageSwipeController.enableSwipe()
+                    //chatFooter.enableInput()
+                        communityFooter.enableInput()
+                        messageSwipeController.enableSwipe()
                 }
             })
 
@@ -654,21 +734,26 @@ class ChatPageFragment : Fragment(),
                     ChatMessageWrapper(
                         message = it,
                         oneToOneChatViewModel = viewModel,
-                        groupChatViewModel = groupChatViewModel
+                        groupChatViewModel = groupChatViewModel,
+                        lifeCycleOwner = viewLifecycleOwner
                     )
                 }
                 chatRecyclerView.smoothScrollToLastPosition()
+                chatRecyclerView.visible()
+                shimmerContainer.gone()
             })
 
         viewModel.headerInfo
             .observe(viewLifecycleOwner, {
 
                 if (it.isBlocked) {
-                    chatFooter.disableInput("You've blocked this contact")
+                    //chatFooter.disableInput("You've blocked this contact")
+                    communityFooter.disableInput("You've blocked this contact")
                     messageSwipeController.disableSwipe()
 //                        userBlockedOrRemovedLayout.text = getString(R.string.you_have_blocked_chat)
                 } else {
-                    chatFooter.enableInput()
+                    //chatFooter.enableInput()
+                    communityFooter.enableInput()
                     messageSwipeController.enableSwipe()
                 }
 
@@ -714,20 +799,9 @@ class ChatPageFragment : Fragment(),
             selectedChatMessage = it
             var isCopyEnable = false
             var isDeleteEnable = false
-            if(it.type == "text_image"){
-                isCopyEnable = false
-                isDeleteEnable = it.flowType == "out"
-            } else if(it.type == "text"){
+            isDeleteEnable = it.flowType == "out"
+            if(it.type == "text"){
                 isCopyEnable = true
-                isDeleteEnable = it.flowType == "out"
-            } else if(it.type == "text_location"){
-                isCopyEnable = false
-                isDeleteEnable = it.flowType == "out"
-            } else if(it.type == "text_document"){
-                isCopyEnable = false
-                isDeleteEnable = it.flowType == "out"
-            } else if(it.type == "text_video"){
-                isCopyEnable = false
                 isDeleteEnable = it.flowType == "out"
             }
             appbar.makeChatOptionsVisible(true, isCopyEnable, isDeleteEnable)
@@ -773,9 +847,33 @@ class ChatPageFragment : Fragment(),
                     copyMessageToClipBoard(it.content)
                 }
             }
-            viewModel.makeSelectEnable(false)
-            groupChatViewModel.makeSelectEnable(false)
-            appbar.makeChatOptionsVisible(false, false, false)
+//            viewModel.makeSelectEnable(false)
+//            groupChatViewModel.makeSelectEnable(false)
+//            appbar.makeChatOptionsVisible(false, false, false)
+            disableChatSelection()
+        })
+
+        appbar.setForwardClickListener(View.OnClickListener {
+            showToast("forward click")
+            selectedChatMessage?.let { it1 -> forwardMessage(it1) }
+            disableChatSelection()
+        })
+
+        appbar.setReplyClickListener(View.OnClickListener {
+            showToast("reply click")
+            selectedChatMessage?.let { it1 -> communityFooter.openReplyUi(it1) }
+            disableChatSelection()
+        })
+
+
+        communityFooter.viewBinding.imageViewCamera.setOnClickListener {
+            communityFooter.hideAttachmentOptionView()
+            checkCameraPermissionAndHandleActionOpenCamera()
+        }
+
+        appbar.setChatOptionsCancelListener(View.OnClickListener {
+            showToast("cancel clicked")
+            disableChatSelection()
         })
 
         appbar.setDeleteClickListener(View.OnClickListener {
@@ -791,9 +889,10 @@ class ChatPageFragment : Fragment(),
                     )
                     groupChatViewModel.makeSelectEnable(false)
                 }
-                viewModel.makeSelectEnable(false)
-                groupChatViewModel.makeSelectEnable(false)
-                appbar.makeChatOptionsVisible(false, false, false)
+//                viewModel.makeSelectEnable(false)
+//                groupChatViewModel.makeSelectEnable(false)
+//                appbar.makeChatOptionsVisible(false, false, false)
+                disableChatSelection()
             }
         })
 
@@ -803,7 +902,7 @@ class ChatPageFragment : Fragment(),
             popUp.setOnMenuItemClickListener(this)
             popUp.inflate(R.menu.menu_chat_toolbar)
             popUp.menu.findItem(R.id.action_block).title =
-                if (chatFooter.isTypingEnabled())
+                if (communityFooter.isTypingEnabled())
                     getString(R.string.block_chat)
                 else
                     getString(R.string.unblock_chat)
@@ -829,10 +928,15 @@ class ChatPageFragment : Fragment(),
         }
     }
 
-
+    private fun disableChatSelection(){
+        selectedChatMessage = null
+        viewModel.makeSelectEnable(false)
+        groupChatViewModel.makeSelectEnable(false)
+        appbar.makeChatOptionsVisible(false, false, false)
+    }
     override fun onMenuItemClick(item: MenuItem?): Boolean = when (item?.itemId) {
         R.id.action_block -> {
-            if (chatFooter.isTypingEnabled())
+            if (communityFooter.isTypingEnabled())
                 BlockUserBottomSheetFragment.launch(
                     viewModel.headerId,
                     viewModel.otherUserId,
@@ -875,6 +979,88 @@ class ChatPageFragment : Fragment(),
         }
         else -> {
             false
+        }
+    }
+
+    private fun playMyAudio(uri: Uri){
+        val mediaSource = extractMediaSourceFromUri(uri)
+        val exoPlayer = context?.let {
+            ExoPlayerFactory.newSimpleInstance(
+                it, DefaultRenderersFactory(it), DefaultTrackSelector(),
+                DefaultLoadControl()
+            )
+        }
+        exoPlayer?.apply {
+            // AudioAttributes here from exoplayer package !!!
+            val attr = AudioAttributes.Builder().setUsage(C.USAGE_MEDIA)
+                .setContentType(C.CONTENT_TYPE_MUSIC)
+                .build()
+            // In 2.9.X you don't need to manually handle audio focus :D
+            setAudioAttributes(attr, true)
+            prepare(mediaSource)
+            // THAT IS ALL YOU NEED
+            playWhenReady = true
+        }
+    }
+
+    private fun extractMediaSourceFromUri(uri: Uri): MediaSource {
+        val userAgent = context?.let { Util.getUserAgent(it, "Exo") }
+        return ExtractorMediaSource.Factory(DefaultDataSourceFactory(context, userAgent))
+            .setExtractorsFactory(DefaultExtractorsFactory()).createMediaSource(uri)
+    }
+
+
+    private fun checkPermissionAndHandleActionRecordAudio(){
+
+        if (isAudioRecordPermissionGranted() && isStoragePermissionGranted()){
+            //start recording
+            startRecording()
+        } else{
+            selectedOperation = ChatConstants.OPERATION_START_AUDIO
+            if (Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
+                // In case of SDK >= scoped storage
+                // we 1. launch document tree contract then
+                // 2. camera permission
+                if (!isAudioRecordPermissionGranted()) {
+                    requestPermissions(
+                        Manifest.permission.RECORD_AUDIO
+                    )
+                }
+            } else {
+
+                requestPermissions(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.RECORD_AUDIO
+                )
+            }
+
+        }
+    }
+
+    private fun checkCameraPermissionAndHandleActionOpenCamera(){
+        if (isCameraPermissionGranted() && isStoragePermissionGranted()) {
+            openCamera()
+        } else {
+            selectedOperation = ChatConstants.OPERATION_OPEN_CAMERA
+
+            if (Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
+                // In case of SDK >= scoped storage
+                // we 1. launch document tree contract then
+                // 2. camera permission
+                if (!isCameraPermissionGranted()) {
+                    requestPermissions(
+                        Manifest.permission.CAMERA
+                    )
+                }
+            } else {
+
+                requestPermissions(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.CAMERA
+                )
+            }
         }
     }
 
@@ -995,6 +1181,10 @@ class ChatPageFragment : Fragment(),
         cameraAndGalleryIntegrator.showCameraAndGalleryBottomSheet()
     }
 
+    private fun openCamera(){
+        cameraAndGalleryIntegrator.startCameraForCapturing()
+    }
+
     private fun pickDocument() = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
 
         addCategory(Intent.CATEGORY_OPENABLE)
@@ -1013,33 +1203,55 @@ class ChatPageFragment : Fragment(),
 
 
     private fun manageNewMessageToContact() {
-        chatFooter.btn_send.setOnClickListener {
-            if (validateNewMessageTask()) {
-                val message = chatFooter.et_message.text.toString().trim()
-                val usersMentioned = chatFooter.getMentionedPeopleInText()
+        communityFooter.viewBinding.imageViewSend.setOnClickListener {
+            if(validateNewMessageTask()){
+                val message = communityFooter.viewBinding.editTextMessage.text.toString().trim()
+                val usersMentioned = communityFooter.getMentionedPeopleInText()
 
-                chatFooter.et_message.setText("")
+                communityFooter.viewBinding.editTextMessage.setText("")
 
                 if (chatType == ChatConstants.CHAT_TYPE_USER)
                     viewModel.sendNewText(
                         message,
-                        chatFooter.getReplyToMessage()
+                        communityFooter.getReplyToMessage()
                     )
                 else
                     groupChatViewModel.sendNewText(
                         message,
                         usersMentioned,
-                        chatFooter.getReplyToMessage()
+                        communityFooter.getReplyToMessage()
                     )
 
-                chatFooter.closeReplyUi()
+                communityFooter.closeReplyUi()
             }
         }
+//        chatFooter.btn_send.setOnClickListener {
+//            if (validateNewMessageTask()) {
+//                val message = chatFooter.et_message.text.toString().trim()
+//                val usersMentioned = chatFooter.getMentionedPeopleInText()
+//
+//                chatFooter.et_message.setText("")
+//
+//                if (chatType == ChatConstants.CHAT_TYPE_USER)
+//                    viewModel.sendNewText(
+//                        message,
+//                        chatFooter.getReplyToMessage()
+//                    )
+//                else
+//                    groupChatViewModel.sendNewText(
+//                        message,
+//                        usersMentioned,
+//                        chatFooter.getReplyToMessage()
+//                    )
+//
+//                chatFooter.closeReplyUi()
+//            }
+//        }
     }
 
     private fun validateNewMessageTask(): Boolean {
 
-        if (chatFooter.et_message.text.toString().isBlank()) {
+        if (communityFooter.viewBinding.editTextMessage.text.toString().isBlank()) {
             return false
         }
         return true
@@ -1082,7 +1294,7 @@ class ChatPageFragment : Fragment(),
     }
 
     private fun showChatLayout() {
-        needStorageAccessLayout.gone()
+        //needStorageAccessLayout.gone()
         mainChatLayout.visible()
     }
 
@@ -1152,6 +1364,37 @@ class ChatPageFragment : Fragment(),
             )
     }
 
+    private fun sendAudioMessage(
+        uri: Uri,
+        text: String? = null,
+        recordTime: Int = 0
+    ) {
+
+        val audioInfo = ImageMetaDataHelpers.getAudioInfo(
+            requireContext(),
+            uri
+        )
+
+        Log.d("audiolength", "info: ${audioInfo.duration} , size: ${audioInfo.size} record: $recordTime")
+
+        if (chatType == ChatConstants.CHAT_TYPE_USER){
+            viewModel.sendNewAudioMessage(
+                requireContext(),
+                text ?: "",
+                uri,
+                audioInfo
+            )
+        } else {
+            groupChatViewModel.sendNewAudioMessage(
+                requireContext(),
+                text ?: "",
+                uri,
+                audioInfo
+            )
+        }
+
+    }
+
     private fun sendVideoMessage(
         uri: Uri,
         text: String? = null
@@ -1214,6 +1457,13 @@ class ChatPageFragment : Fragment(),
         ) == PackageManager.PERMISSION_GRANTED
     }
 
+    private fun isAudioRecordPermissionGranted(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.RECORD_AUDIO
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
     private fun isStoragePermissionGranted(): Boolean {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -1236,6 +1486,15 @@ class ChatPageFragment : Fragment(),
             clip
         )
         showToast("Copied")
+    }
+
+    private fun forwardMessage(msg: ChatMessage){
+        if (msg != null){
+            navigation.navigateTo("chats/contactsFragment", bundleOf(
+                ChatConstants.INTENT_EXTRA_FORWARD_MESSAGE to msg
+            )
+            )
+        }
     }
 
     fun checkForContact(number: String?, name: String): String {
@@ -1326,7 +1585,7 @@ class ChatPageFragment : Fragment(),
     }
 
     override fun showReplyUI(chatMessage: ChatMessage) {
-        chatFooter.openReplyUi(chatMessage)
+        communityFooter.openReplyUi(chatMessage)
     }
 
     companion object {
@@ -1349,4 +1608,176 @@ class ChatPageFragment : Fragment(),
         private const val REQUEST_GET_LOCATION = 207
         private const val REQUEST_STORAGE_PERMISSION = 205
     }
+
+    override fun onClick(attachmentOption: AttachmentOption?) {
+        when (attachmentOption?.id) {
+            AttachmentOption.DOCUMENT_ID -> {
+                checkPermissionAndHandleActionPickDocument()
+                showToast("Document Clicked")
+            }
+            AttachmentOption.CAMERA_ID -> {
+                checkCameraPermissionAndHandleActionOpenCamera()
+                showToast("Camera Clicked")
+            }
+            AttachmentOption.GALLERY_ID -> {
+                checkPermissionAndHandleActionPickImage()
+                showToast("Gallery Clicked")
+            }
+            AttachmentOption.AUDIO_ID -> {
+                showToast("Audio Clicked")
+            }
+            AttachmentOption.LOCATION_ID -> {
+                startActivityForResult(
+                    Intent(requireContext(), CaptureLocationActivity::class.java),
+                    REQUEST_GET_LOCATION
+                )
+                showToast("Location Clicked")
+            }
+            AttachmentOption.CONTACT_ID -> {
+                showToast("Contact Clicked")
+            }
+        }
+    }
+
+    private fun startRecording() {
+        showToast("started record")
+        //val recordPath : String = activity?.getExternalFilesDir("/")!!.absolutePath
+        isRecording = true
+        val formatter : SimpleDateFormat = SimpleDateFormat("yyyy_MM_dd_hh_mm_ss", Locale.ROOT)
+        val now: Date = Date()
+        recordFile = "Recording_${formatter.format(now)}.mp3"
+        //localAudioPath = "$recordPath/$recordFile"
+        //record_status_text.setText("Recording audionote")
+
+        mediaRecorder = MediaRecorder()
+        mediaRecorder!!.setAudioSource(MediaRecorder.AudioSource.MIC)
+        mediaRecorder!!.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            mediaRecorder!!.setOutputFile(File(chatFileManager.audioFilesDirectory,recordFile))
+        }
+        mediaRecorder!!.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
+
+        try {
+            mediaRecorder!!.prepare()
+        }catch (e: IOException){
+            e.printStackTrace()
+        }
+        mediaRecorder!!.start()
+        Log.d("RecordFragment", "recording has started")
+    }
+
+    private fun stopRecording() {
+        isRecording = false
+        if (mediaRecorder != null){
+            mediaRecorder!!.stop()
+            mediaRecorder!!.release()
+            mediaRecorder = null
+            Log.d("RecordFragment", "recording has stopped")
+        }
+
+    }
+
+//    private fun checkRecordingPermission(): Boolean {
+//        if(context?.let { ActivityCompat.checkSelfPermission(it, Manifest.permission.RECORD_AUDIO) } == PackageManager.PERMISSION_GRANTED){
+//            return true
+//        }else{
+//            activity?.let { ActivityCompat.requestPermissions(it, arrayOf(RECORDPERMISSION), PERMISSIONCODE) }
+//            return false
+//        }
+//    }
+
+    fun playPauseBuild() {
+        val mediaController = activity?.let { MediaControllerCompat.getMediaController(it) }
+//        btn.setOnClickListener {
+//            val state = mediaController.playbackState.state
+//            // if it is not playing then what are you waiting for ? PLAY !
+//            if (state == PlaybackStateCompat.STATE_PAUSED ||
+//                state == PlaybackStateCompat.STATE_STOPPED ||
+//                state == PlaybackStateCompat.STATE_NONE
+//            ) {
+//
+//                mediaController.transportControls.playFromUri(Uri.parse("asset:///heart_attack.mp3"), null)
+//                btn.text = "Pause"
+//            }
+//            // you are playing ? knock it off !
+//            else if (state == PlaybackStateCompat.STATE_PLAYING ||
+//                state == PlaybackStateCompat.STATE_BUFFERING ||
+//                state == PlaybackStateCompat.STATE_CONNECTING
+//            ) {
+//                mediaController.transportControls.pause()
+//                btn.text = "Play"
+//            }
+//        }
+        mediaController?.registerCallback(mControllerCallback)
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+        // connect the controllers again to the session
+        // without this connect() you won't be able to start the service neither control it with the controller
+        mMediaBrowserCompat.connect()
+    }
+
+    override fun onStop() {
+        if (isRecording){
+            stopRecording()
+        }
+        // Release the resources
+        val controllerCompat = activity?.let { MediaControllerCompat.getMediaController(it) }
+        controllerCompat?.unregisterCallback(mControllerCallback)
+        mMediaBrowserCompat.disconnect()
+        setStatusBarIcons(true)
+        super.onStop()
+    }
+
+
+    override fun onRecordingStarted() {
+        showToast("Recording started")
+        time = System.currentTimeMillis() / (1000);
+        checkPermissionAndHandleActionRecordAudio()
+    }
+
+    override fun onRecordingLocked() {
+        showToast("Recording locked")
+    }
+
+    override fun onRecordingCompleted() {
+        showToast("Recording completed")
+        val recordTime = (System.currentTimeMillis() / 1000 - time).toInt()
+        Log.d("audio", "length: $recordTime")
+        if (isRecording && recordTime > 1){
+            val localUri = Uri.fromFile(File(chatFileManager.audioFilesDirectory,recordFile))
+            sendAudioMessage(
+                localUri,
+                "",
+                recordTime
+            )
+            Log.d("record", "stopped $localUri")
+            isRecording = false
+            stopRecording()
+        }
+
+    }
+
+    override fun onRecordingCanceled() {
+        showToast("Recording canceled")
+        isRecording = false
+        stopRecording()
+    }
+
+    fun setStatusBarIcons(shouldChangeStatusBarTintToDark: Boolean){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val decor: View = activity?.window?.decorView!!
+            if (shouldChangeStatusBarTintToDark) {
+                decor.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            } else {
+                // We want to change tint color to white again.
+                // You can also record the flags in advance so that you can turn UI back completely if
+                // you have set other flags before, such as translucent or full screen.
+                decor.systemUiVisibility = 0
+            }
+        }
+    }
+
 }

@@ -4,6 +4,7 @@ package com.gigforce.modules.feature_chat.ui.chatItems
 import android.content.Context
 import android.net.Uri
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -12,6 +13,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.lifecycle.Observer
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.chat.ChatConstants
@@ -118,6 +120,26 @@ abstract class VideoMessageView(
         senderNameTV.text = msg.senderInfo.name
 
         loadThumbnail(msg)
+
+        lifeCycleOwner?.let {
+            if (messageType == MessageType.ONE_TO_ONE_MESSAGE){
+                oneToOneChatViewModel.enableSelect.observe(it, Observer {
+                    it ?: return@Observer
+                    if (it == false) {
+                        frameLayoutRoot?.foreground = null
+                    }
+                })
+            } else if(messageType == MessageType.GROUP_MESSAGE){
+                groupChatViewModel.enableSelect.observe(it, Observer {
+                    it ?: return@Observer
+                    if (it == false) {
+                        frameLayoutRoot?.foreground = null
+                    }
+                })
+            }
+
+        }
+
 
         when (msg.flowType) {
             "in" -> {

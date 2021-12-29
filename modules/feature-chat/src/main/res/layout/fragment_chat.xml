@@ -6,63 +6,9 @@
     android:id="@+id/layoutRoot"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
-        android:id="@+id/main_chat_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context=".screens.ChatPageFragment">
-
-<!--        <com.gigforce.common_ui.views.GigforceToolbar-->
-<!--            android:id="@+id/toolbar"-->
-<!--            android:visibility="gone"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content" />-->
-
-        <com.gigforce.common_ui.components.cells.AppBar
-            android:id="@+id/appBarComp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="visible"
-            app:backgroundType="PinkBar"
-            app:isFilterVisible="false"
-            app:isSearchVisible="false"
-            app:isMenuItemVisible="true"
-            app:titleText="@string/chat_settings_chat" />
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:id="@+id/layoutMain"
-            android:layout_weight="1">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="fitXY"
-                android:src="@drawable/bg_group_wallpaper" />
-
-            <com.gigforce.core.recyclerView.CoreRecyclerView
-                android:id="@+id/rv_chat_messages"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingBottom="56dp" />
-
-            <com.gigforce.modules.feature_chat.ui.ChatFooter
-                android:id="@+id/chat_footer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:layout_gravity="bottom"
-                android:minHeight="56dp" />
-
-
-        </FrameLayout>
-    </LinearLayout>
-
     <include
-        android:id="@+id/storage_access_required_layout"
-        layout="@layout/layout_need_permission"
+        android:id="@+id/chatMainLayout"
+        layout="@layout/chat_main_layout"
         />
 
 </FrameLayout>

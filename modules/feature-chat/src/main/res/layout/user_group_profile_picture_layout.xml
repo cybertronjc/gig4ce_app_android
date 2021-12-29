@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout   xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <FrameLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <LinearLayout
+            android:id="@+id/frameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginEnd="@dimen/size_16"
+            android:layout_marginTop="@dimen/size_32"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/detailsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:id="@+id/profileLayout"
+                    android:layout_width="220dp"
+                    android:layout_height="220dp"
+                    android:elevation="@dimen/size_4"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/size_4"
+                    android:layout_marginBottom="@dimen/size_4"
+                    android:background="@drawable/user_group_profile_white_background"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <com.gigforce.common_ui.views.GigforceImageView
+                        android:id="@+id/profileImg"
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:layout_centerInParent="true"
+                        app:shapeAppearanceOverlay="@style/circleImageView"
+                        android:layout_gravity="center_horizontal|center_vertical"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_avatar_male" />
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/profile_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/size_20"
+                    android:textColor="@color/chat_switch_checked"
+                    android:text="@string/add_new_contact_chat"
+                    android:textSize="@dimen/font_18"
+                    android:fontFamily="@font/lato_bold"
+                    app:layout_constraintTop_toBottomOf="@+id/profileLayout"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <TextView
+                    android:id="@+id/contact_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/size_10"
+                    android:textColor="@color/chat_switch_checked"
+                    android:text="+91-9898833257"
+                    android:textSize="@dimen/font_12"
+                    android:fontFamily="@font/lato"
+                    android:textFontWeight="400"
+                    app:layout_constraintTop_toBottomOf="@+id/profile_name"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+    </FrameLayout>
+</layout>

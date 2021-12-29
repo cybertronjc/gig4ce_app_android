@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -12,6 +13,7 @@ import android.widget.*
 import androidx.cardview.widget.CardView
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.lifecycle.Observer
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.chat.models.ChatMessage
@@ -130,6 +132,25 @@ abstract class LocationMessageView(
             message = dataAndViewModels.message
             groupChatViewModel = dataAndViewModels.groupChatViewModel
             oneToOneChatViewModel = dataAndViewModels.oneToOneChatViewModel
+
+            dataAndViewModels.lifeCycleOwner?.let {
+                if (messageType == MessageType.ONE_TO_ONE_MESSAGE){
+                    oneToOneChatViewModel.enableSelect.observe(it, Observer {
+                        it ?: return@Observer
+                        if (it == false) {
+                            frameLayoutRoot?.foreground = null
+                        }
+                    })
+                } else if(messageType == MessageType.GROUP_MESSAGE){
+                    groupChatViewModel.enableSelect.observe(it, Observer {
+                        it ?: return@Observer
+                        if (it == false) {
+                            frameLayoutRoot?.foreground = null
+                        }
+                    })
+                }
+
+            }
 
             senderNameTV.isVisible =
                 messageType == MessageType.GROUP_MESSAGE && type == MessageFlowType.IN

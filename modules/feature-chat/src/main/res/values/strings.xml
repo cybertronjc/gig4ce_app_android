@@ -146,4 +146,11 @@
     <string name="unable_to_block_user">Unable to block user</string>
     <string name="contacts_selected_chat">Contact(s) Selected</string>
     <bool name="is_right_to_left">false</bool>
+    <string name="forward_message_chat">Forward to</string>
+    <string name="forward_message_select_contacts_chat">Select contacts</string>
+    <string name="add_new_contact_chat">Add New Contact</string>
+    <string name="media_and_docs_chat">Media and Docs</string>
+    <string name="created_by_chat">Created by</string>
+    <string name="exit_group_chat">Exit Group</string>
+    <string name="report_one_chat">Report</string>
 </resources>

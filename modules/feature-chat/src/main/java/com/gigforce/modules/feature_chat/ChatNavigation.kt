@@ -126,7 +126,7 @@ class ChatNavigation(
     fun openGroupDetailsPage(groupId: String) {
 
         iNavigation.navigateTo(
-                dest = "chats/groupDetails",
+                dest = "chats/userGroupDetailsFragment",
                 args = bundleOf(GroupDetailsFragment.INTENT_EXTRA_GROUP_ID to groupId)
         )
     }

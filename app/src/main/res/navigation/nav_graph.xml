@@ -1136,6 +1136,10 @@
         android:id="@+id/reportUserBottomSheetFragment"
         android:name="com.gigforce.modules.feature_chat.screens.ReportUserBottomSheetFragment"
         android:label="ReportUserBottomSheetFragment" />
+    <fragment
+        android:id="@+id/userAndGroupDetailsFragment"
+        android:name="com.gigforce.modules.feature_chat.screens.UserAndGroupDetailsFragment"
+        android:label="UserAndGroupDetailsFragment" />
 
 </navigation>
 

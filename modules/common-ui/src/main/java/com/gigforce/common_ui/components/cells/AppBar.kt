@@ -190,9 +190,9 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
 //            menuClickListener?.onMenuClick(it)
 //            onMenuClick(it)
 //        }
-        viewBinding.chatBackButton.setOnClickListener {
-            makeChatOptionsVisible(false, false, false)
-        }
+//        viewBinding.chatBackButton.setOnClickListener {
+//            makeChatOptionsVisible(false, false, false)
+//        }
         setColorsOnViews(backGroundType)
         styledAttributeSet.recycle()
 
@@ -415,6 +415,24 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
         listener: View.OnClickListener
     ) {
         viewBinding.subTitleTV.setOnClickListener(listener)
+    }
+
+    fun setForwardClickListener(
+        listener: OnClickListener
+    ) {
+        viewBinding.forwardButton.setOnClickListener(listener)
+    }
+
+    fun setReplyClickListener(
+        listener: OnClickListener
+    ) {
+        viewBinding.replyButton.setOnClickListener(listener)
+    }
+
+    fun setChatOptionsCancelListener(
+        listener: OnClickListener
+    ) {
+        viewBinding.chatBackButton.setOnClickListener(listener)
     }
 
     fun hideKeyboard(view: View) {

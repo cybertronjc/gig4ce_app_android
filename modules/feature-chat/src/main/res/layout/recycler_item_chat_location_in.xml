@@ -51,6 +51,8 @@
                 android:layout_width="196dp"
                 android:layout_height="196dp"
                 android:scaleType="fitXY"
+                android:paddingStart="@dimen/size_4"
+                android:paddingEnd="@dimen/size_4"
                 app:shapeAppearanceOverlay="@style/chatImageView" />
 
 

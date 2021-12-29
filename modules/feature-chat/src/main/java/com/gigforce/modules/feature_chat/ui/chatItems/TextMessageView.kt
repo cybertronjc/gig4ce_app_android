@@ -17,6 +17,7 @@ import android.widget.*
 import androidx.core.os.bundleOf
 import androidx.core.text.util.LinkifyCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.DisplayUtil
 import com.gigforce.common_ui.chat.ChatConstants
@@ -122,6 +123,28 @@ abstract class TextMessageView(
             senderNameTV.isVisible =
                 messageType == MessageType.GROUP_MESSAGE && type == MessageFlowType.IN
             senderNameTV.text = message.senderInfo.name
+
+            dataAndViewModels.lifeCycleOwner?.let {
+                if (messageType == MessageType.ONE_TO_ONE_MESSAGE){
+                    oneToOneChatViewModel.enableSelect.observe(it, Observer {
+                        it ?: return@Observer
+                        if (it == false) {
+                            Log.d("selectenable", "false")
+                            frameLayoutRoot?.foreground = null
+                        }
+                    })
+                } else if(messageType == MessageType.GROUP_MESSAGE){
+                    groupChatViewModel.enableSelect.observe(it, Observer {
+                        it ?: return@Observer
+                        if (it == false) {
+                            Log.d("selectenable", "false")
+                            frameLayoutRoot?.foreground = null
+                        }
+                    })
+                }
+
+            }
+
 
             setQuotedMessageOnView(
                 context =  context,

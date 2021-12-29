@@ -79,6 +79,7 @@ class ChatHeadersFragment : Fragment(), PopupMenu.OnMenuItemClickListener, Gigfo
 
     private lateinit var contactsFab: FloatingActionButton
     private lateinit var noChatsLayout: View
+    private lateinit var shimmerLayout: View
 //    private lateinit var contactsButton: Button
     private lateinit var startChatting: TextView
     private lateinit var noChatGif: ImageView
@@ -199,9 +200,13 @@ class ChatHeadersFragment : Fragment(), PopupMenu.OnMenuItemClickListener, Gigfo
         if(list.isEmpty()){
             noChatsLayout.visible()
             contactsFab.gone()
+            shimmerLayout.gone()
+            coreRecyclerView.gone()
         } else{
             noChatsLayout.gone()
             contactsFab.visible()
+            shimmerLayout.gone()
+            coreRecyclerView.visible()
         }
 
         coreRecyclerView.collection =
@@ -283,7 +288,7 @@ class ChatHeadersFragment : Fragment(), PopupMenu.OnMenuItemClickListener, Gigfo
         findViews(view)
         initListeners()
         setObserver(this.viewLifecycleOwner)
-
+        setStatusBarIcons(false)
 //        if (!isStoragePermissionGranted()) {
 //            askForStoragePermission()
 //        }
@@ -329,6 +334,7 @@ class ChatHeadersFragment : Fragment(), PopupMenu.OnMenuItemClickListener, Gigfo
         muteNotifications = view.findViewById(R.id.muteNotifications)
         markAsRead = view.findViewById(R.id.markAsRead)
         deleteButton = view.findViewById(R.id.deleteChat)
+        shimmerLayout = view.findViewById(R.id.headers_shimmer)
 
 //        grantStorageAccessButton.setOnClickListener {
 //
@@ -533,6 +539,25 @@ class ChatHeadersFragment : Fragment(), PopupMenu.OnMenuItemClickListener, Gigfo
         }
         else -> {
             false
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        setStatusBarIcons(true)
+    }
+
+    fun setStatusBarIcons(shouldChangeStatusBarTintToDark: Boolean){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val decor: View = activity?.window?.decorView!!
+            if (shouldChangeStatusBarTintToDark) {
+                decor.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            } else {
+                // We want to change tint color to white again.
+                // You can also record the flags in advance so that you can turn UI back completely if
+                // you have set other flags before, such as translucent or full screen.
+                decor.systemUiVisibility = 0
+            }
         }
     }
 }

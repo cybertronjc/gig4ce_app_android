@@ -9,6 +9,7 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -20,6 +21,7 @@ import androidx.core.content.FileProvider
 import androidx.core.net.toFile
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.extensions.gone
@@ -94,6 +96,25 @@ abstract class DocumentMessageView(
 
         senderNameTV.isVisible = messageType == MessageType.GROUP_MESSAGE && flowType == MessageFlowType.IN
         senderNameTV.text = msg.senderInfo.name
+
+        lifeCycleOwner?.let {
+            if (messageType == MessageType.ONE_TO_ONE_MESSAGE){
+                oneToOneChatViewModel.enableSelect.observe(it, Observer {
+                    it ?: return@Observer
+                    if (it == false) {
+                        frameLayoutRoot?.foreground = null
+                    }
+                })
+            } else if(messageType == MessageType.GROUP_MESSAGE){
+                groupChatViewModel.enableSelect.observe(it, Observer {
+                    it ?: return@Observer
+                    if (it == false) {
+                        frameLayoutRoot?.foreground = null
+                    }
+                })
+            }
+
+        }
 
         if (msg.attachmentPath.isNullOrBlank()) {
             handleDocumentUploading()

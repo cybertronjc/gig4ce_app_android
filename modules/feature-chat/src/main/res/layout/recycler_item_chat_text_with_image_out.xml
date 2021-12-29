@@ -48,6 +48,9 @@
                 android:id="@+id/image_container_layout"
                 android:layout_width="230dp"
                 android:layout_height="230dp"
+                android:paddingStart="@dimen/size_4"
+                android:paddingEnd="@dimen/size_4"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 

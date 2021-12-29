@@ -37,6 +37,7 @@ import com.gigforce.common_image_picker.image_cropper.ImageCropActivity
 import com.gigforce.common_image_picker.image_cropper.ImageCropActivity.Companion.EXTENSION
 import com.gigforce.common_image_picker.image_cropper.ImageCropActivity.Companion.PREFIX
 import com.gigforce.common_ui.chat.ChatConstants
+import com.gigforce.common_ui.chat.models.ChatMessage
 import com.gigforce.common_ui.chat.models.ContactModel
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.showToast
@@ -59,6 +60,7 @@ import com.gigforce.modules.feature_chat.R
 import com.gigforce.modules.feature_chat.databinding.ContactsAndGroupFragmentBinding
 import com.gigforce.modules.feature_chat.screens.adapters.ContactsRecyclerAdapter
 import com.gigforce.modules.feature_chat.screens.adapters.OnContactClickListener
+import com.gigforce.modules.feature_chat.screens.vm.ChatPageViewModel
 import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel
 import com.gigforce.modules.feature_chat.screens.vm.NewContactsViewModel
 import com.gigforce.modules.feature_chat.service.SyncContactsService
@@ -116,6 +118,7 @@ class ContactsAndGroupFragment : BaseFragment2<ContactsAndGroupFragmentBinding>(
     }
 
     private val chatGroupViewModel: GroupChatViewModel by viewModels()
+    private val chatViewModel: ChatPageViewModel by viewModels()
 
     private val chatNavigation: ChatNavigation by lazy {
         ChatNavigation(navigation)
@@ -131,11 +134,13 @@ class ContactsAndGroupFragment : BaseFragment2<ContactsAndGroupFragmentBinding>(
 
     private var sharedFilesBundle: Bundle? = null
     private var shouldReturnToPreviousScreen = false
+    private var forwardChatMessage: ChatMessage? = null
 
     private var permissionSnackBar: Snackbar? = null
 
     private var namingGroup: Boolean = false
     private var creatingGroup = false
+    private var forwardingChat = false
 
 
     private val onBackPressCallback = object : OnBackPressedCallback(false) {
@@ -177,7 +182,12 @@ class ContactsAndGroupFragment : BaseFragment2<ContactsAndGroupFragmentBinding>(
                     viewBinding.appBarComp.makeSearchVisible(true)
                     viewBinding.appBarComp.showSubtitle("${contactsAdapter.getSelectedContact().size} of ${contactsAdapter.itemCount} ${getString(R.string.contacts_selected_chat)}")
                     viewBinding.createGroupFab.visible()
-                } else {
+                } else if(forwardingChat){
+                    forwardingChat = false
+                    isEnabled = false
+                    activity?.onBackPressed()
+                }
+                else {
                     isEnabled = false
                     activity?.onBackPressed()
                 }
@@ -275,6 +285,13 @@ class ContactsAndGroupFragment : BaseFragment2<ContactsAndGroupFragmentBinding>(
             makeTitleBold()
             Log.d(TAG, "initToolbar: initToolbar")
         }
+
+        if (forwardChatMessage != null){
+            //forarding chat -> make selection contact
+            forwardingChat = true
+            stateForwardMessage()
+            showToast("Forwarding chat...")
+        }
     }
 
     private fun setListeners()  {
@@ -341,15 +358,23 @@ class ContactsAndGroupFragment : BaseFragment2<ContactsAndGroupFragmentBinding>(
                 showToast(getString(R.string.select_at_least_one_contact_chat))
                 return@setOnClickListener
             }
-            nameGroupLayout.root.visible()
-            rvContactsList.gone()
-            createGroupFab.gone()
-            appBarComp.makeRefreshVisible(false)
-            contactsAdapter.stateCreateGroup(false)
-            namingGroup = true
-            appBarComp.showSubtitle(getString(R.string.add_subject_chat))
-            appBarComp.makeSearchVisible(false)
-            showParticipantsInLinearLayout(contactsAdapter.getSelectedContact())
+            if (forwardingChat){
+                //forward the chat
+                processingContactsProgressbar.visible()
+                forwardChatMessage?.let { it1 -> chatViewModel.forwardMessage(it1, contactsAdapter.getSelectedContact() ) }
+
+            } else{
+                nameGroupLayout.root.visible()
+                rvContactsList.gone()
+                createGroupFab.gone()
+                appBarComp.makeRefreshVisible(false)
+                contactsAdapter.stateCreateGroup(false)
+                namingGroup = true
+                appBarComp.showSubtitle(getString(R.string.add_subject_chat))
+                appBarComp.makeSearchVisible(false)
+                showParticipantsInLinearLayout(contactsAdapter.getSelectedContact())
+            }
+
 
         }
             nameGroupLayout.createAndSend.setOnClickListener {
@@ -378,15 +403,40 @@ class ContactsAndGroupFragment : BaseFragment2<ContactsAndGroupFragmentBinding>(
             sharedFilesBundle = it.getBundle(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE)
             shouldReturnToPreviousScreen = it.getBoolean(ContactsFragment.INTENT_EXTRA_RETURN_SELECTED_RESULTS)
             creatingGroup = it.getBoolean(INTENT_EXTRA_NEW_GROUP)
+            forwardChatMessage = it.getSerializable(ChatConstants.INTENT_EXTRA_FORWARD_MESSAGE) as ChatMessage? ?: return@let
         }
 
         savedInstanceState?.let {
             sharedFilesBundle = it.getBundle(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE)
             shouldReturnToPreviousScreen = it.getBoolean(ContactsFragment.INTENT_EXTRA_RETURN_SELECTED_RESULTS)
             creatingGroup = it.getBoolean(INTENT_EXTRA_NEW_GROUP)
+            forwardChatMessage = it.getSerializable(ChatConstants.INTENT_EXTRA_FORWARD_MESSAGE) as ChatMessage? ?: return@let
         }
+
+        //logDataReceivedFromBundles()
     }
 
+//    private fun logDataReceivedFromBundles() {
+//
+//        if (::forwardChatMessage.isInitialized.not()) {
+//            logger.e(
+//                logTag,
+//                "null forwardChatMessage received from bundles",
+//                Exception("null forwardChatMessage received from bundles")
+//            )
+//        }
+//    }
+
+//    override fun onSaveInstanceState(
+//        outState: Bundle
+//    ) {
+//        super.onSaveInstanceState(outState)
+//        outState.putBundle(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE, sharedFilesBundle)
+//        outState.putParcelable(
+//            ChatConstants.INTENT_EXTRA_FORWARD_MESSAGE,
+//            forwardChatMessage
+//        )
+//    }
 
     override fun contactClick(contact: ContactModel) {
         if (shouldReturnToPreviousScreen) {
@@ -524,6 +574,20 @@ class ContactsAndGroupFragment : BaseFragment2<ContactsAndGroupFragmentBinding>(
                 putExtra(SyncContactsService.SHOULD_CALL_SYNC_API,shouldCallSyncAPI)
             }
         )
+    }
+
+    fun stateForwardMessage(){
+        viewBinding.apply {
+            appBarComp.showSubtitle(getString(R.string.forward_message_select_contacts_chat))
+            appBarComp.setAppBarTitle(getString(R.string.forward_message_chat))
+            groupAndBroadcastLayout.gone()
+            appBarComp.makeRefreshVisible(false)
+            contactsAdapter.getSelectedItems().clear()
+            contactsAdapter.notifyDataSetChanged()
+            createGroupFab.show()
+            contactsAdapter.stateCreateGroup(true)
+            onBackPressCallback.isEnabled = true
+        }
     }
 
     fun stateCreateNewGroup() {
