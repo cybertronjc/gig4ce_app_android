@@ -74,7 +74,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.jaeger.library.StatusBarUtil
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_chat.*
 import java.io.File
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
@@ -144,9 +143,14 @@ class ChatPageFragment : Fragment(),
     var isRecording : Boolean = false
     var localAudioPath : String? = null
 
+//    private var mExoPlayer: SimpleExoPlayer? = null
+//    var isPlaying: Boolean = false
+//
+
     private var mExoPlayer: SimpleExoPlayer? = null
     private var isPlaying: Boolean = false
     private var time: Long = 0
+    private var currentlyPlayingId: String? = null
 
     private val viewModel: ChatPageViewModel by viewModels()
     private val groupChatViewModel: GroupChatViewModel by viewModels()
@@ -215,7 +219,7 @@ class ChatPageFragment : Fragment(),
                 val mediaController = MediaControllerCompat(context, token)
                 activity?.let { MediaControllerCompat.setMediaController(it, mediaController) }
             }
-            playPauseBuild()
+            //playPauseBuild()
             Log.d("onConnected", "Controller Connected")
         }
 
@@ -806,7 +810,35 @@ class ChatPageFragment : Fragment(),
             }
             appbar.makeChatOptionsVisible(true, isCopyEnable, isDeleteEnable)
         })
+        
+        viewModel.audioData.observe(viewLifecycleOwner, Observer { 
+            it ?: return@Observer
+            Log.d("selectedMsg", "${it.playPause} , ${it.isAudioPlaying} , ${it.currentlyPlayingAudioId} , ${it.playingAudioUri}")
+            
+            if (it.playPause == true) {
+                val mediaSource = extractMediaSourceFromUri(it.playingAudioUri!!)
+                //play the audio if previously nothing ws playing
+                if (currentlyPlayingId == it.currentlyPlayingAudioId) {
+                    //resume the audio
+                } else {
+                    //play my audio
+                    //playPauseBuild(true, it.currentlyPlayingAudioId.toString(), it.playingAudioUri!!)
+                    //play(mediaSource)
+                    //playMyAudio(it.playingAudioUri!!)
+                }
+            } else {
+                    //pause the audio
+                    //pause()
+                    //playPauseBuild(false, it.currentlyPlayingAudioId.toString(), it.playingAudioUri!!)
+            }
 
+        })
+
+    }
+    private fun extractMediaSourceFromUri(uri: Uri): MediaSource {
+        val userAgent = context?.let { Util.getUserAgent(it, "Exo") }
+        return ExtractorMediaSource.Factory(DefaultDataSourceFactory(context, userAgent))
+            .setExtractorsFactory(DefaultExtractorsFactory()).createMediaSource(uri)
     }
 
     private fun showErrorDialog(error: String) {
@@ -982,32 +1014,32 @@ class ChatPageFragment : Fragment(),
         }
     }
 
-    private fun playMyAudio(uri: Uri){
-        val mediaSource = extractMediaSourceFromUri(uri)
-        val exoPlayer = context?.let {
-            ExoPlayerFactory.newSimpleInstance(
-                it, DefaultRenderersFactory(it), DefaultTrackSelector(),
-                DefaultLoadControl()
-            )
-        }
-        exoPlayer?.apply {
-            // AudioAttributes here from exoplayer package !!!
-            val attr = AudioAttributes.Builder().setUsage(C.USAGE_MEDIA)
-                .setContentType(C.CONTENT_TYPE_MUSIC)
-                .build()
-            // In 2.9.X you don't need to manually handle audio focus :D
-            setAudioAttributes(attr, true)
-            prepare(mediaSource)
-            // THAT IS ALL YOU NEED
-            playWhenReady = true
-        }
-    }
-
-    private fun extractMediaSourceFromUri(uri: Uri): MediaSource {
-        val userAgent = context?.let { Util.getUserAgent(it, "Exo") }
-        return ExtractorMediaSource.Factory(DefaultDataSourceFactory(context, userAgent))
-            .setExtractorsFactory(DefaultExtractorsFactory()).createMediaSource(uri)
-    }
+//    private fun playMyAudio(uri: Uri){
+//        val mediaSource = extractMediaSourceFromUri(uri)
+//        val exoPlayer = context?.let {
+//            ExoPlayerFactory.newSimpleInstance(
+//                it, DefaultRenderersFactory(it), DefaultTrackSelector(),
+//                DefaultLoadControl()
+//            )
+//        }
+//        exoPlayer?.apply {
+//            // AudioAttributes here from exoplayer package !!!
+//            val attr = AudioAttributes.Builder().setUsage(C.USAGE_MEDIA)
+//                .setContentType(C.CONTENT_TYPE_MUSIC)
+//                .build()
+//            // In 2.9.X you don't need to manually handle audio focus :D
+//            setAudioAttributes(attr, true)
+//            prepare(mediaSource)
+//            // THAT IS ALL YOU NEED
+//            playWhenReady = true
+//        }
+//    }
+//
+//    private fun extractMediaSourceFromUri(uri: Uri): MediaSource {
+//        val userAgent = context?.let { Util.getUserAgent(it, "Exo") }
+//        return ExtractorMediaSource.Factory(DefaultDataSourceFactory(context, userAgent))
+//            .setExtractorsFactory(DefaultExtractorsFactory()).createMediaSource(uri)
+//    }
 
 
     private fun checkPermissionAndHandleActionRecordAudio(){
@@ -1686,31 +1718,15 @@ class ChatPageFragment : Fragment(),
 //        }
 //    }
 
-    fun playPauseBuild() {
-        val mediaController = activity?.let { MediaControllerCompat.getMediaController(it) }
-//        btn.setOnClickListener {
-//            val state = mediaController.playbackState.state
-//            // if it is not playing then what are you waiting for ? PLAY !
-//            if (state == PlaybackStateCompat.STATE_PAUSED ||
-//                state == PlaybackStateCompat.STATE_STOPPED ||
-//                state == PlaybackStateCompat.STATE_NONE
-//            ) {
-//
-//                mediaController.transportControls.playFromUri(Uri.parse("asset:///heart_attack.mp3"), null)
-//                btn.text = "Pause"
-//            }
-//            // you are playing ? knock it off !
-//            else if (state == PlaybackStateCompat.STATE_PLAYING ||
-//                state == PlaybackStateCompat.STATE_BUFFERING ||
-//                state == PlaybackStateCompat.STATE_CONNECTING
-//            ) {
-//                mediaController.transportControls.pause()
-//                btn.text = "Play"
-//            }
+//    fun playPauseBuild(playPause: Boolean, messageId: String, uri: Uri) {
+//        val mediaController = MediaControllerCompat.getMediaController(this)
+//        if (playPause){
+//            mediaController?.transportControls?.playFromUri(uri, null)
+//        } else{
+//            mediaController?.transportControls?.pause()
 //        }
-        mediaController?.registerCallback(mControllerCallback)
-
-    }
+//        mediaController?.registerCallback(mControllerCallback)
+//    }
 
     override fun onStart() {
         super.onStart()
@@ -1778,6 +1794,75 @@ class ChatPageFragment : Fragment(),
                 decor.systemUiVisibility = 0
             }
         }
+    }
+
+    private fun playMyAudio(uri: Uri){
+        val mediaSource = extractMediaSourceFromUri(uri)
+        val exoPlayer = context?.let {
+            ExoPlayerFactory.newSimpleInstance(
+                it, DefaultRenderersFactory(it), DefaultTrackSelector(),
+                DefaultLoadControl()
+            )
+        }
+        exoPlayer.apply {
+            // AudioAttributes here from exoplayer package !!!
+            val attr = AudioAttributes.Builder().setUsage(C.USAGE_MEDIA)
+                .setContentType(C.CONTENT_TYPE_MUSIC)
+                .build()
+            // In 2.9.X you don't need to manually handle audio focus :D
+            this?.setAudioAttributes(attr, true)
+            this?.prepare(mediaSource)
+            // THAT IS ALL YOU NEED
+            this?.playWhenReady = true
+        }
+    }
+
+    private var mAttrs: AudioAttributes? = null
+
+    private fun play(mediaSource: MediaSource) {
+        if (mExoPlayer == null) initializePlayer()
+        mExoPlayer?.apply {
+            // AudioAttributes here from exoplayer package !!!
+            mAttrs?.let { initializeAttributes() }
+            // In 2.9.X you don't need to manually handle audio focus :D
+            setAudioAttributes(mAttrs!!, true)
+            prepare(mediaSource)
+            play()
+        }
+    }
+
+    private fun play() {
+        mExoPlayer?.apply {
+            true.also { mExoPlayer?.playWhenReady = it }
+        }
+    }
+
+    private fun initializePlayer() {
+        mExoPlayer = context?.let {
+            ExoPlayerFactory.newSimpleInstance(
+                it, DefaultRenderersFactory(it), DefaultTrackSelector(),
+                DefaultLoadControl()
+            )
+        }
+    }
+
+    private fun initializeAttributes() {
+        mAttrs = AudioAttributes.Builder().setUsage(C.USAGE_MEDIA)
+            .setContentType(C.CONTENT_TYPE_MUSIC)
+            .build()
+    }
+
+    private fun pause() {
+        mExoPlayer?.apply {
+            playWhenReady = false
+        }
+    }
+
+    private fun stop() {
+        // release the resources when the service is destroyed
+        mExoPlayer?.playWhenReady = false
+        mExoPlayer?.release()
+        mExoPlayer = null
     }
 
 }

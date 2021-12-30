@@ -31,6 +31,7 @@ import com.gigforce.modules.feature_chat.ChatAttachmentDownloadState
 import com.gigforce.modules.feature_chat.DownloadCompleted
 import com.gigforce.modules.feature_chat.DownloadStarted
 import com.gigforce.modules.feature_chat.ErrorWhileDownloadingAttachment
+import com.gigforce.modules.feature_chat.models.AudioPassingDataModel
 import com.gigforce.modules.feature_chat.repositories.ChatProfileFirebaseRepository
 import com.gigforce.modules.feature_chat.repositories.DownloadChatAttachmentService
 import com.google.firebase.Timestamp
@@ -45,6 +46,27 @@ import java.io.File
 import java.util.*
 import javax.inject.Inject
 
+sealed class AudioPlayState {
+
+    object NothinIsPlaying : AudioPlayState()
+
+    object CancelPlaying : AudioPlayState()
+
+    data class PlayingThisAudio(
+        val uri: Uri,
+        val messageId: String
+    ) : AudioPlayState()
+
+    data class PausingThisAudio(
+        val uri: Uri,
+        val messageId: String
+    ) : AudioPlayState()
+
+    data class ResumingThisAudio(
+        val uri: Uri,
+        val messageId: String
+    ) : AudioPlayState()
+}
 
 @HiltViewModel
 class ChatPageViewModel @Inject constructor(
@@ -104,15 +126,15 @@ class ChatPageViewModel @Inject constructor(
     private var _enableSelect = MutableLiveData<Boolean>()
     val enableSelect: LiveData<Boolean> = _enableSelect
 
-    private var _audioUri = MutableLiveData<Uri>()
-    val audioUri: LiveData<Uri> = _audioUri
+    private var _audioData = MutableLiveData<AudioPassingDataModel>()
+    val audioData: LiveData<AudioPassingDataModel> = _audioData
 
     private var _currentlyPlayingAudioMessageId = MutableLiveData<String>()
     val currentlyPlayingAudioMessageId: LiveData<String> = _currentlyPlayingAudioMessageId
 
     private var selectEnable: Boolean? = null
 //    private var audioPlaying: Boolean? = null
-    //private var currentlyPlayingAudioMessageId: String? = null
+    private var currentlyPlayingAudioMessage: String? = null
 
 
     fun setRequiredDataAndStartListeningToMessages(
@@ -1110,29 +1132,38 @@ class ChatPageViewModel @Inject constructor(
         }
     }
 
-    fun playMyAudio(messageId: String, uri: Uri){
-        _audioPlaying.value = true
-        _currentlyPlayingAudioMessageId.value = messageId
-        _audioUri.value = uri
-//        if (audioPlaying.value == true){
-//            //check if currently playing audio and coming audio has same message id -> then resume the audio if not completed else replay the audio
-//            if (currentlyPlayingAudioMessageId.value == messageId){
-//
-//            } else {
-//                //pause the previous audio and play the new audio
-//
-//            }
-//        } else{
-//            //play the new audio
-//
-//        }
+    fun playMyAudio(play: Boolean, pause: Boolean, stop: Boolean, messageId: String, uri: Uri){
+//        var audioDataToPass =  AudioPassingDataModel(playPause, true,  messageId, uri)
+//        _audioData.value = audioDataToPass
+        if(play || pause){
+            currentlyPlayingAudioMessage = messageId
+        } else if(stop){
+            currentlyPlayingAudioMessage = ""
+        }
+        Log.d("viewModelChat", "id: $currentlyPlayingAudioMessage")
     }
 
+
+
+
+//    fun playPauseAudio(play: Boolean, messageId: String, uri: Uri){
+//        if (_audioData.value == AudioPlayState.NothinIsPlaying){
+//            _audioData.postValue(AudioPlayState.PlayingThisAudio(
+//                messageId = messageId,
+//                uri = uri
+//            ))
+//        } else if (_audioData.value == AudioPlayState.PlayingThisAudio){
+//
+//        }
+//    }
+
     fun isAudioPlayingAlready(): String{
-        if (currentlyPlayingAudioMessageId.value.isNullOrBlank()){
+        if (currentlyPlayingAudioMessage.isNullOrBlank()){
             return ""
         }
-        return currentlyPlayingAudioMessageId.toString()
+        Log.d("viewModelChat", "idreturn: $currentlyPlayingAudioMessage")
+        _currentlyPlayingAudioMessageId.postValue(currentlyPlayingAudioMessage)
+        return currentlyPlayingAudioMessage.toString()
     }
 
     fun askForScopeAndStoragePermissionToDownload(ask: Boolean){

@@ -12,6 +12,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.FileProvider
 import androidx.core.net.toFile
 import androidx.core.os.bundleOf
@@ -33,6 +34,7 @@ import com.google.android.exoplayer2.audio.AudioAttributes
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
 import com.google.android.exoplayer2.source.ExtractorMediaSource
 import com.google.android.exoplayer2.source.MediaSource
+import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
@@ -69,12 +71,16 @@ abstract class AudioMessageView (
     private lateinit var progressbar: View
     private lateinit var receivedStatusIV: ImageView
     private lateinit var playAudio: ImageView
+    private lateinit var playProgress: View
     private lateinit var audioTimeText: TextView
 
     var mediaPlayer: MediaPlayer? = null
     private var mExoPlayer: SimpleExoPlayer? = null
     var isPlaying: Boolean = false
     var fileToPlay: File? = null
+
+    var currentlyPlayingId: String? = null
+    var playOrPause: Boolean = false
 
     //Data
     private lateinit var chatMessage : ChatMessage
@@ -98,6 +104,7 @@ abstract class AudioMessageView (
         receivedStatusIV = this.findViewById(R.id.tv_received_status)
         playAudio = this.findViewById(R.id.audio_type_iv)
         audioTimeText = this.findViewById(R.id.tv_audio_length)
+        playProgress = this.findViewById(R.id.progress_bar)
     }
 
     fun setDefault() {
@@ -131,6 +138,53 @@ abstract class AudioMessageView (
                         frameLayoutRoot?.foreground = null
                     }
                 })
+
+                oneToOneChatViewModel.currentlyPlayingAudioMessageId.observe(it, Observer {
+                    it ?: return@Observer
+
+                    if (currentlyPlayingId != it){
+                        Log.d("MyAudioComp", "pausing audio observer")
+                            playAudio.setImageDrawable(
+                                context?.resources?.getDrawable(
+                                    R.drawable.ic_play_audio_icon,
+                                    null
+                                )
+                            )
+                    }
+                })
+//                oneToOneChatViewModel.audioData.observe(it, Observer {
+//                    it ?: return@Observer
+//                    playOrPause = it.playPause!!
+//                    currentlyPlayingId = it.currentlyPlayingAudioId
+//
+//                    if (it.playPause == true) {
+//                        if (message.id == it.currentlyPlayingAudioId) {
+//                            Log.d("MyAudioComp", "playing this audio only , ${it.currentlyPlayingAudioId}")
+//                            playAudio.setImageDrawable(
+//                                context?.resources?.getDrawable(
+//                                    R.drawable.ic_baseline_pause_24,
+//                                    null
+//                                )
+//                            )
+//                        } else {
+//                            Log.d("MyAudioComp", "not playing this audio")
+//                            playAudio.setImageDrawable(
+//                                context?.resources?.getDrawable(
+//                                    R.drawable.ic_baseline_pause_24,
+//                                    null
+//                                )
+//                            )
+//                        }
+//                    } else {
+//                        Log.d("MyAudioComp", "not playing any audio")
+//                        playAudio.setImageDrawable(
+//                            context?.resources?.getDrawable(
+//                                R.drawable.ic_play_audio_icon,
+//                                null
+//                            )
+//                        )
+//                    }
+//                    })
             } else if(messageType == MessageType.GROUP_MESSAGE){
                 groupChatViewModel.enableSelect.observe(it, Observer {
                     it ?: return@Observer
@@ -144,55 +198,77 @@ abstract class AudioMessageView (
 
         playAudio.setOnClickListener {
             //is audio playing already
-            var messageIdPlaying = ""
-            if(messageType == MessageType.ONE_TO_ONE_MESSAGE){
-                 messageIdPlaying = oneToOneChatViewModel.isAudioPlayingAlready()
-            } else if (messageType == MessageType.GROUP_MESSAGE){
-                messageIdPlaying = oneToOneChatViewModel.isAudioPlayingAlready()
-            }
+            val file = returnFileIfAlreadyDownloadedElseNull()
 
-            if (isPlaying){
-                Log.d("audio", "was already playing this audio , id: $messageIdPlaying , isPlaying: $isPlaying")
-                playAudio.setImageDrawable(
-                    context?.resources?.getDrawable(
-                        R.drawable.ic_play_audio_icon,
-                        null
-                    )
-                )
-                //pause
-                isPlaying = false
-                stop()
-            } else{
-                Log.d("audio", "was not already playing this audio so play my audio , id: $messageIdPlaying , isPlaying: $isPlaying")
-                val file = returnFileIfAlreadyDownloadedElseNull()
+            if (file != null) {
+//                val uri = FileProvider.getUriForFile(
+//                    context,
+//                    context.packageName + ".provider",
+//                    file.toFile()
+//                )
+                val uri = Uri.parse(file.path)
 
-                if (file != null){
-                    //play the audio
-                    Log.d("audio", "${file.path}")
-                    val uri = FileProvider.getUriForFile(
-                        context,
-                        context.packageName + ".provider",
-                        file.toFile()
-                    )
+                val playingId = oneToOneChatViewModel.isAudioPlayingAlready() ?: ""
+                currentlyPlayingId = playingId
+                if (playingId.isNullOrBlank()) {
+                    Log.d("MyAudioComp", "playing id: $playingId")
                     playAudio.setImageDrawable(
                         context?.resources?.getDrawable(
                             R.drawable.ic_baseline_pause_24,
                             null
                         )
                     )
-                    isPlaying = false
-                    playMyAudio(uri)
-                } else {
-                    //download first
-                    progressbar.visible()
-                    downloadAttachment()
+                    isPlaying = true
+                    //play(uri)
+                    playPauseAudio(true, uri)
+                    oneToOneChatViewModel.playMyAudio(true, false, false, message.id,uri)
+                    //oneToOneChatViewModel.playMyAudio(false, message.id,uri)
+
+                } else if(playingId == message.id && isPlaying){
+                    Log.d("MyAudioComp", "pausing this audio id: $playingId")
                     playAudio.setImageDrawable(
                         context?.resources?.getDrawable(
                             R.drawable.ic_play_audio_icon,
                             null
                         )
                     )
+                    isPlaying = false
+                    //pause
+                    playPauseAudio(false, uri)
+                    oneToOneChatViewModel.playMyAudio(false, true, false, message.id,uri)
+
                 }
+                else if(playingId == message.id && !isPlaying){
+                    Log.d("MyAudioComp", " resuming audio id: $playingId")
+                    playAudio.setImageDrawable(
+                        context?.resources?.getDrawable(
+                            R.drawable.ic_baseline_pause_24,
+                            null
+                        )
+                    )
+                    isPlaying = true
+                    //play(uri)
+                    playPauseAudio(true, uri)
+                    oneToOneChatViewModel.playMyAudio(true, false, false, message.id,uri)
+
+                }else {
+                    Log.d("MyAudioComp", "playing diff audio id: $playingId")
+                    playAudio.setImageDrawable(
+                        context?.resources?.getDrawable(
+                            R.drawable.ic_baseline_pause_24,
+                            null
+                        )
+                    )
+                    isPlaying = true
+                    //play(uri)
+                    playPauseAudio(true, uri)
+                    oneToOneChatViewModel.playMyAudio(true, false, false, message.id,uri)
+                }
+            } else{
+                //download audio
+                playProgress.visible()
+                playAudio.gone()
+                downloadAttachment()
             }
 
         }
@@ -241,17 +317,6 @@ abstract class AudioMessageView (
     }
 
     override fun onLongClick(v: View?): Boolean {
-//        val popUpMenu = PopupMenu(context, v)
-//        popUpMenu.inflate(R.menu.menu_chat_clipboard)
-//
-//        popUpMenu.menu.findItem(R.id.action_copy).isVisible = false
-//        popUpMenu.menu.findItem(R.id.action_save_to_gallery).title = "Save to downloads"
-//        popUpMenu.menu.findItem(R.id.action_save_to_gallery).isVisible = returnFileIfAlreadyDownloadedElseNull() != null
-//        popUpMenu.menu.findItem(R.id.action_delete).isVisible =  flowType == MessageFlowType.OUT
-//        popUpMenu.menu.findItem(R.id.action_message_info).isVisible =  flowType == MessageFlowType.OUT && messageType == MessageType.GROUP_MESSAGE
-//
-//        popUpMenu.setOnMenuItemClickListener(this)
-//        popUpMenu.show()
         if(!(oneToOneChatViewModel.getSelectEnable() == true || groupChatViewModel.getSelectEnable() == true)) {
             if (messageType == MessageType.ONE_TO_ONE_MESSAGE) {
                 frameLayoutRoot?.foreground =
@@ -326,19 +391,19 @@ abstract class AudioMessageView (
         }
     }
 
-    private fun playAudio(uri: Uri?){
-        if (messageType == MessageType.ONE_TO_ONE_MESSAGE) {
-
-            oneToOneChatViewModel.playMyAudio(
-                message.id,
-                uri = uri!!
-            )
-        } else if (messageType == MessageType.GROUP_MESSAGE) {
-            groupChatViewModel.deleteMessage(
-                message.id
-            )
-        }
-    }
+//    private fun playAudio(uri: Uri?){
+//        if (messageType == MessageType.ONE_TO_ONE_MESSAGE) {
+//
+//            oneToOneChatViewModel.playMyAudio(
+//                message.id,
+//                uri = uri!!
+//            )
+//        } else if (messageType == MessageType.GROUP_MESSAGE) {
+//            groupChatViewModel.deleteMessage(
+//                message.id
+//            )
+//        }
+//    }
 
     override fun getCurrentChatMessageOrThrow(): ChatMessage {
         return message
@@ -349,15 +414,6 @@ abstract class AudioMessageView (
 
         if (file == null) {
             downloadAttachment()
-            //openDocument(file)
-            //play audio
-//            if (isPlaying) {
-//                stopAudio()
-//                playAudio(file)
-//            } else {
-//                playAudio(file)
-//            }
-//            Log.d("AudioView", "Playing audio")
         }
     }
 
@@ -379,12 +435,15 @@ abstract class AudioMessageView (
 
     private fun handleDownloadInProgress() {
         Log.d("AudioView", "downloading...")
-        progressbar.visible()
+        playProgress.visible()
+        playAudio.gone()
     }
 
     private fun handleDownloadedCompleted() {
         Log.d("AudioView", "file downloaded")
-        progressbar.gone()
+        playProgress.gone()
+        playAudio.visible()
+        playAudio.performClick()
     }
 
     private fun extractMediaSourceFromUri(uri: Uri): MediaSource {
@@ -393,8 +452,13 @@ abstract class AudioMessageView (
             .setExtractorsFactory(DefaultExtractorsFactory()).createMediaSource(uri)
     }
 
-    private fun playMyAudio(uri: Uri){
-        val mediaSource = extractMediaSourceFromUri(uri)
+    private fun buildMediaSource(uri: Uri): MediaSource {
+        val dataSourceFactory = DefaultDataSourceFactory(context, "gig4ce-agent")
+        return ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(uri)
+    }
+
+    private fun playPauseAudio(play: Boolean, uri: Uri){
+        val mediaSource = buildMediaSource(uri)
         val exoPlayer = ExoPlayerFactory.newSimpleInstance(
             context, DefaultRenderersFactory(context)
             , DefaultTrackSelector(),
@@ -410,21 +474,31 @@ abstract class AudioMessageView (
             prepare(mediaSource)
             // THAT IS ALL YOU NEED
             playWhenReady = true
+//            if(play){
+//                playWhenReady = true
+//            } else {
+//                playWhenReady = false
+//            }
         }
     }
 
     private var mAttrs: AudioAttributes? = null
 
-    private fun play(mediaSource: MediaSource) {
+    private fun play(uri: Uri) {
         if (mExoPlayer == null) initializePlayer()
+        val mediaSource = extractMediaSourceFromUri(uri)
         mExoPlayer?.apply {
 
             // AudioAttributes here from exoplayer package !!!
-            mAttrs?.let { initializeAttributes() }
+//            mAttrs?.let { initializeAttributes() }
+             mAttrs = AudioAttributes.Builder().setUsage(C.USAGE_MEDIA)
+                .setContentType(C.CONTENT_TYPE_MUSIC)
+                .build()
             // In 2.9.X you don't need to manually handle audio focus :D
             setAudioAttributes(mAttrs!!, true)
             prepare(mediaSource)
             play()
+            Log.d("MyAudioComp", "playing audio")
         }
     }
 
@@ -491,89 +565,6 @@ abstract class AudioMessageView (
     }
 
 
-//    private fun playAudio(file: Uri?) {
-//        mediaPlayer = MediaPlayer()
-//
-//        try {
-//            mediaPlayer!!.setDataSource(file!!.path)
-//            mediaPlayer!!.prepare()
-//            mediaPlayer!!.start()
-//            Log.d("AudioView", "audio started path: $file!!.path")
-//        } catch (e: Exception) {
-//            e.printStackTrace()
-//            Log.d("AudioView", "error playing audio ${e.message} , ")
-//        }
-//        playAudio.setImageDrawable(
-//            context?.resources?.getDrawable(
-//                R.drawable.ic_baseline_pause_24,
-//                null
-//            )
-//        )
-////        media_file_name.setText(fileToPlay?.name)
-////        player_header_status.setText("Playing")
-//        isPlaying = true
-//
-//        mediaPlayer!!.setOnCompletionListener {
-//            it.release()
-//            stopAudio()
-//            Log.d("AudioView", "completed listener")
-////            player_header_status.setText("Finished")
-//        }
-////        seekBar.max = mediaPlayer!!.duration
-////        seekBarHandler = Handler()
-//        //updateRunnable()
-//
-////        seekBarHandler!!.postDelayed(updateSeekBar!!, 0)
-//
-//    }
-
-//    private fun updateRunnable() {
-//        updateSeekBar = object : Runnable {
-//            override fun run() {
-//                seekBar.progress = mediaPlayer!!.currentPosition
-//                seekBarHandler!!.postDelayed(this, 500)
-//            }
-//        }
-//    }
-
-    private fun pauseAudio() {
-        playAudio.setImageDrawable(
-            context?.resources?.getDrawable(
-                R.drawable.ic_play_audio_icon,
-                null
-            )
-        )
-        mediaPlayer!!.pause()
-        isPlaying = false
-        //seekBarHandler!!.removeCallbacks(updateSeekBar!!)
-    }
-
-    private fun resumeAudio() {
-        playAudio.setImageDrawable(
-            context?.resources?.getDrawable(
-                R.drawable.ic_baseline_pause_24,
-                null
-            )
-        )
-        mediaPlayer!!.start()
-        isPlaying = true
-//        updateRunnable()
-//        seekBarHandler!!.postDelayed(updateSeekBar!!, 0)
-    }
-
-    private fun stopAudio() {
-        Log.d("AudioView", "completed stopping audio")
-        playAudio.setImageDrawable(
-            context?.resources?.getDrawable(
-                R.drawable.ic_play_audio_icon,
-                null
-            )
-        )
-        //player_header_status.setText("Stopped")
-        isPlaying = false
-        mediaPlayer!!.stop()
-        //seekBarHandler!!.removeCallbacks(updateSeekBar!!)
-    }
 
 
 }

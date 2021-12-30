@@ -241,7 +241,7 @@ object ImageMetaDataHelpers {
         return AudioInfo(
             name = audioName,
             size = audioSize,
-            duration = audioDuration!!
+            duration = audioDuration
         )
     }
 
