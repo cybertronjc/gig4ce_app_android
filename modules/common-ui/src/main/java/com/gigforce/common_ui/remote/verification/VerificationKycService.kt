@@ -1,6 +1,6 @@
 package com.gigforce.common_ui.remote.verification
 
-import com.gigforce.ambassador.user_rollment.kycdocs.KycVerifyReqModel
+
 import com.gigforce.common_ui.viewdatamodels.verification.SubmitSignatureRequest
 import okhttp3.MultipartBody
 import retrofit2.Response
