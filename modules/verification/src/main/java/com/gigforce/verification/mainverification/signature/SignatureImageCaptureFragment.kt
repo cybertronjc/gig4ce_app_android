@@ -120,6 +120,10 @@ class SignatureImageCaptureFragment :
 
     private fun initListeners() = viewBinding.apply {
 
+        this.appBar.setBackButtonListener{
+            navigation.navigateUp()
+        }
+
         this.clikImageBtn.setOnClickListener {
 
             if (cameraPermissionsGranted()) {
