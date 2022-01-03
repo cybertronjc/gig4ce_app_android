@@ -23,6 +23,12 @@ interface VerificationKycService {
         @Body jsonObject: KycVerifyReqModel
     ): Response<KycOcrResultModel>
 
+    @POST
+    suspend fun onConfirmButton(
+        @Url getKycVerifyUrl: String,
+        @Body jsonObject: UserConsentRequest
+    ): Response<UserConsentResponse>
+
     @POST("profiles/updateGigerSignature")
     suspend fun uploadSignature(
         @Body submitSignatureRequest: SubmitSignatureRequest

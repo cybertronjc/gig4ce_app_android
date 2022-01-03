@@ -32,9 +32,7 @@ interface JoiningProfileService {
 
 
     @GET("joining/listing")
-    suspend fun getJoiningListing(
-
-    ): Response<List<JoiningNew>>
+    suspend fun getJoiningListing(): Response<List<JoiningNew>>
 
     @GET("business/listing/businessandjobProfile")
     suspend fun getBusinessAndJobProfiles(): Response<List<JoiningBusinessAndJobProfilesItem>>
@@ -63,4 +61,10 @@ interface JoiningProfileService {
     suspend fun dropSelections(
         @Body jsonObject: DropSelectionRequest
     ): Response<DropSelectionResponse>
+
+    @GET("business/listing/tlBusinessJobProfile")
+    suspend fun getTeamLeadersForSelection(
+        @Query("allTL") shouldFetchAllTeamLeaders : Boolean
+    ): Response<GetTeamLeadersResponse>
+
 }

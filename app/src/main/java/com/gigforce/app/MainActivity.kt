@@ -43,6 +43,7 @@ import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.landing_screen.landingscreen.LandingScreenFragment
 import com.gigforce.lead_management.LeadManagementNavDestinations
+import com.gigforce.modules.feature_chat.analytics.CommunityEvents
 import com.gigforce.modules.feature_chat.models.SharedFile
 import com.gigforce.modules.feature_chat.screens.ChatPageFragment
 import com.google.android.play.core.appupdate.AppUpdateInfo
@@ -130,9 +131,16 @@ class MainActivity : BaseActivity(),
             }
 
             if (navController.currentDestination?.label != "fragment_chat_list" &&
-                navController.currentDestination?.label != "fragment_chat_page"
-            )
+                    navController.currentDestination?.label != "fragment_chat_page"
+            ) {
                 chatNotificationHandler.handleChatNotification(remoteMessage)
+                eventTracker.pushEvent(
+                    TrackingEventArgs(
+                        CommunityEvents.EVENT_CHAT_NOTIFICATION_RECEIVED,
+                        null
+                    )
+                )
+            }
         }
     }
 
@@ -145,6 +153,8 @@ class MainActivity : BaseActivity(),
             finish()
             return
         }
+
+
         super.onCreate(savedInstanceState)
         this.setContentView(R.layout.activity_main)
         eventTracker.setUpAnalyticsTools()
@@ -179,15 +189,15 @@ class MainActivity : BaseActivity(),
 
                     navController.popBackStack()
                     navController.navigate(
-                        R.id.fragment_client_activation, bundleOf(
+                            R.id.fragment_client_activation, bundleOf(
                             StringConstants.JOB_PROFILE_ID.value to intent.getStringExtra(
-                                StringConstants.JOB_PROFILE_ID.value
+                                    StringConstants.JOB_PROFILE_ID.value
                             ),
                             StringConstants.INVITE_USER_ID.value to intent.getStringExtra(
-                                StringConstants.INVITE_USER_ID.value
+                                    StringConstants.INVITE_USER_ID.value
                             ),
                             StringConstants.CLIENT_ACTIVATION_VIA_DEEP_LINK.value to true
-                        )
+                    )
                     )
                 }
 
@@ -201,15 +211,15 @@ class MainActivity : BaseActivity(),
 //                LandingScreenFragmentDirections.openRoleDetailsHome( intent.getStringExtra(StringConstants.ROLE_ID.value),true)
                     navController.popBackStack()
                     navController.navigate(
-                        R.id.fragment_role_details, bundleOf(
+                            R.id.fragment_role_details, bundleOf(
                             StringConstants.ROLE_ID.value to intent.getStringExtra(
-                                StringConstants.ROLE_ID.value
+                                    StringConstants.ROLE_ID.value
                             ),
                             StringConstants.INVITE_USER_ID.value to intent.getStringExtra(
-                                StringConstants.INVITE_USER_ID.value
+                                    StringConstants.INVITE_USER_ID.value
                             ),
                             StringConstants.ROLE_VIA_DEEPLINK.value to true
-                        )
+                    )
                     )
                 }
                 intent.getStringExtra(IS_DEEPLINK) == "true" -> {
@@ -221,7 +231,7 @@ class MainActivity : BaseActivity(),
                     false
                 ) -> {
                     Log.d("datahere", "main")
-                    handleLoginSummaryNav()
+                   handleLoginSummaryNav()
                 }
 
                 //deep linking for onboarding form is handled here
@@ -545,7 +555,7 @@ class MainActivity : BaseActivity(),
                 navController.navigate(R.id.mainHomeScreen)
             }
             NotificationConstants.CLICK_ACTIONS.OPEN_CHAT_PAGE -> {
-                Log.d("MainActivity", "redirecting to gig verification page")
+                Log.d("MainActivity", "redirecting to chat page")
                 navController.popAllBackStates()
                 navController.navigate(
                     R.id.chatPageFragment,
@@ -556,6 +566,8 @@ class MainActivity : BaseActivity(),
                         )
                     }
                 )
+                var map = mapOf("chat_type" to "Direct")
+                eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_NOTIFICATION_CLICKED, map))
             }
             NotificationConstants.CLICK_ACTIONS.OPEN_GROUP_CHAT_PAGE -> {
                 Log.d("MainActivity", "redirecting to gig verification page")
@@ -569,6 +581,8 @@ class MainActivity : BaseActivity(),
                         )
                     }
                 )
+                var map = mapOf("chat_type" to "Group")
+                eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_NOTIFICATION_CLICKED, map))
             }
             NotificationConstants.CLICK_ACTIONS.OPEN_VERIFICATION_PAN_SCREEN -> {
                 navController.popAllBackStates()

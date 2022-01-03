@@ -41,6 +41,8 @@ object ChatConstants {
     const val MESSAGE_STATUS_RECEIVED_BY_USER = 2
     const val MESSAGE_STATUS_READ_BY_USER = 3
 
+    const val MARK_AS_READ = 0
+
     const val COLLECTION_CHATS = "chats"
     const val COLLECTION_CHATS_CONTACTS = "contacts"
     const val COLLECTION_CHATS_MESSAGES = "chat_messages"

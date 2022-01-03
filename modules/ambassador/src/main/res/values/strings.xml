@@ -405,4 +405,23 @@
     <string name="father_s_name_amb">Father\'s Name</string>
     <string name="enter_father_name_amb">Enter father name</string>
 
+    <string name="aknowledge_your_account_amb">Your verified account</string>
+    <string name="confirm_beneficiary_title_amb">Confirm Beneficiary Name</string>
+    <string name="cinfirm_beneficiary_subtitle_amb">Your bank account has been validated, please confirm your beneficiary name.</string>
+    <string name="bn_label_detail_box_amb">Beneficiary Name</string>
+    <string name="account_label_in_box_amb">Account No</string>
+    <string name="ifsc_in_box_amb">IFSC</string>
+    <string name="bank_veri_section_detail_amb">Bank Verification (1/2)</string>
+    <string name="bank_validated_amb">Bank Validated</string>
+    <string name="bank_name_confirmation_title_amb">Beneficiary Name Confirmation</string>
+    <string name="confirm_bn_title_amb">Confirm Beneficiary Name</string>
+    <string name="confirm_bn_subtitle_amb">Your bank verification is pending. Please confirm the beneficiary name.</string>
+    <string name="bn_not_matched_amb">Beneficiary Name Doesn’t Match</string>
+    <string name="plz_ask_to_giger_to_confirm_bn_amb">Please ask the giger to confirm beneficiary name on Gigforce app.</string>
+    <string name="deny_amb">Deny</string>
+    <string name="inprogress_amb">In-Progress</string>
+    <string name="bank_account_verified_successfully_amb">Bank Account Verified Successfully!</string>
+    <string name="confirmation_pending_amb">Confirmation Pending</string>
+    <string name="baneficiary_name_amb">Beneficiary Name</string>
+
 </resources>

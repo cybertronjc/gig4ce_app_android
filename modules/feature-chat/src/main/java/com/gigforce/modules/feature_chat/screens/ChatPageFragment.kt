@@ -3,34 +3,25 @@ package com.gigforce.modules.feature_chat.screens
 import android.Manifest
 import android.app.Activity
 import android.app.NotificationManager
-import android.content.ActivityNotFoundException
-import android.content.Context
-import android.content.Intent
+import android.content.*
 import android.content.pm.PackageManager
 import android.database.Cursor
-import android.graphics.Bitmap
-import android.media.MediaMetadataRetriever
-import android.media.ThumbnailUtils
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.ContactsContract
-import android.provider.OpenableColumns
 import android.text.format.DateUtils
 import android.util.Log
 import android.util.Patterns
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -43,17 +34,10 @@ import com.gigforce.common_image_picker.ImageCropOptions
 import com.gigforce.common_image_picker.image_cropper.ImageCropActivity
 import com.gigforce.common_ui.MimeTypes
 import com.gigforce.common_ui.chat.ChatConstants
-import com.gigforce.common_ui.chat.ChatLocalDirectoryReferenceManager
 import com.gigforce.common_ui.chat.models.ChatGroup
 import com.gigforce.common_ui.chat.models.ChatMessage
-import com.gigforce.common_ui.chat.models.VideoInfo
-import com.gigforce.core.PermissionUtils
-import com.gigforce.core.ScopedStorageConstants
-import com.gigforce.core.StringConstants
+import com.gigforce.common_ui.metaDataHelper.ImageMetaDataHelpers
 import com.gigforce.core.crashlytics.CrashlyticsLogger
-import com.gigforce.core.date.DateHelper
-import com.gigforce.core.documentFileHelper.DocumentPrefHelper
-import com.gigforce.core.documentFileHelper.DocumentTreeDelegate
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toDisplayText
 import com.gigforce.core.extensions.visible
@@ -61,12 +45,15 @@ import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.recyclerView.CoreRecyclerView
 import com.gigforce.modules.feature_chat.ChatNavigation
 import com.gigforce.modules.feature_chat.R
-import com.gigforce.modules.feature_chat.filemanager.ChatFileManager
+import com.gigforce.common_ui.chat.ChatFileManager
+import com.gigforce.common_ui.components.cells.AppBar
+import com.gigforce.common_ui.listeners.AppBarClicks
+import com.gigforce.core.*
+import com.gigforce.modules.feature_chat.analytics.CommunityEvents
 import com.gigforce.modules.feature_chat.models.ChatMessageWrapper
 import com.gigforce.modules.feature_chat.models.SharedFile
 import com.gigforce.modules.feature_chat.screens.vm.ChatPageViewModel
 import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel
-import com.gigforce.modules.feature_chat.screens.vm.factories.GroupChatViewModelFactory
 import com.gigforce.modules.feature_chat.swipe.MessageSwipeController
 import com.gigforce.modules.feature_chat.swipe.SwipeControllerActions
 import com.gigforce.modules.feature_chat.ui.ChatFooter
@@ -89,28 +76,24 @@ class ChatPageFragment : Fragment(),
 
     @Inject
     lateinit var navigation: INavigation
-
+    
     @Inject
-    lateinit var documentPrefHelper: DocumentPrefHelper
+    lateinit var eventTracker: IEventTracker
 
-    @Inject
-    lateinit var documentTreeDelegate : DocumentTreeDelegate
-
-    private val openDocumentTreeContract = registerForActivityResult(
-        ActivityResultContracts.OpenDocumentTree()
+    private val requestPermissionContract = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
     ) {
-        if (it == null) return@registerForActivityResult
 
-        documentTreeDelegate.handleDocumentTreeSelectionResult(
-            context = requireContext(),
-            uri = it,
-            onSuccess = {
-                handleStorageTreeSelectedResult()
-            },
-            onFailure = {
-                handleStorageTreeSelectionFailure(it)
-            }
-        )
+        if (selectedOperation == ChatConstants.OPERATION_PICK_IMAGE && isCameraPermissionGranted() && isStoragePermissionGranted()) {
+            pickImage()
+            selectedOperation = -1
+        } else if (selectedOperation == ChatConstants.OPERATION_PICK_VIDEO && isStoragePermissionGranted()) {
+            pickVideo()
+            selectedOperation = -1
+        } else if (selectedOperation == ChatConstants.OPERATION_PICK_DOCUMENT && isStoragePermissionGranted()) {
+            pickDocument()
+            selectedOperation = -1
+        }
     }
 
     private val chatNavigation: ChatNavigation by lazy {
@@ -124,30 +107,22 @@ class ChatPageFragment : Fragment(),
     private lateinit var mainChatLayout: View
     private lateinit var needStorageAccessLayout: View
     private lateinit var requestStorageAccessButton: View
+    private lateinit var appbar: AppBar
 
     private val viewModel: ChatPageViewModel by viewModels()
-    private val groupChatViewModel: GroupChatViewModel by lazy {
-        ViewModelProvider(
-            this,
-            GroupChatViewModelFactory(requireContext())
-        ).get(GroupChatViewModel::class.java)
-    }
+    private val groupChatViewModel: GroupChatViewModel by viewModels()
 
     private val cameraAndGalleryIntegrator: CameraAndGalleryIntegrator by lazy {
         CameraAndGalleryIntegrator(this)
     }
 
-    private val chatLocalDirectoryReferenceManager: ChatLocalDirectoryReferenceManager by lazy {
-        ChatLocalDirectoryReferenceManager()
-    }
-
     private val chatFileManager: ChatFileManager by lazy {
-        ChatFileManager(requireContext(), documentPrefHelper)
+        ChatFileManager(requireContext())
     }
 
     private fun getImageCropOptions(
-        shouldCreatedDestinationFile : Boolean
-    ) : ImageCropOptions {
+        shouldCreatedDestinationFile: Boolean
+    ): ImageCropOptions {
 
 
         return ImageCropOptions
@@ -156,10 +131,11 @@ class ChatPageFragment : Fragment(),
             .setShouldEnableFaceDetector(false)
             .shouldEnableFreeCrop(true).apply {
 
-                if(shouldCreatedDestinationFile){
+                if (shouldCreatedDestinationFile) {
+
                     val image = chatFileManager.createImageFile()
                     setOutputFileUri(image)
-                    Log.d("ChatPage","creating file ...")
+                    Log.d("ChatPage", "creating file ...")
                 }
             }
             .build()
@@ -205,38 +181,19 @@ class ChatPageFragment : Fragment(),
             ResourcesCompat.getColor(resources, R.color.lipstick_2, null)
         )
 
-        if(Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
-
-            if (!documentTreeDelegate.storageTreeSelected()) {
-                showPermissionRequiredLayout()
-            } else {
-                showChatLayout()
-                initChat()
-            }
-        } else{
-
-            if (!isStoragePermissionGranted()) {
-                showPermissionRequiredLayout()
-                askForStoragePermission()
-            } else {
-                showChatLayout()
-                initChat()
-            }
-        }
+        showChatLayout()
+        initChat()
     }
 
     private fun findView(view: View) {
         mainChatLayout = view.findViewById(R.id.main_chat_layout)
         needStorageAccessLayout = view.findViewById(R.id.storage_access_required_layout)
         requestStorageAccessButton = view.findViewById(R.id.storage_access_btn)
-
-        requestStorageAccessButton.setOnClickListener {
-
-            if(Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
-                openDocumentTreeContract.launch(null)
-            } else{
-                askForStoragePermission()
-            }
+        appbar = view.findViewById(R.id.appBarComp)
+        appbar.apply {
+            changeBackButtonDrawable()
+            makeBackgroundMoreRound()
+            makeTitleBold()
         }
     }
 
@@ -245,7 +202,7 @@ class ChatPageFragment : Fragment(),
         needStorageAccessLayout.visible()
     }
 
-    private fun initChat(){
+    private fun initChat() {
         cancelAnyNotificationIfShown()
         findViews(requireView())
         init()
@@ -303,20 +260,31 @@ class ChatPageFragment : Fragment(),
 
     private fun handleStorageTreeSelectedResult() {
 
-        needStorageAccessLayout.gone()
-        mainChatLayout.visible()
+        if (selectedOperation == ChatConstants.OPERATION_PICK_IMAGE) {
 
-        initChat()
+            if (isCameraPermissionGranted()) {
+                askForStorageAndCameraPermission()
+            } else {
+                pickImage()
+                selectedOperation = -1
+            }
+        } else if (selectedOperation == ChatConstants.OPERATION_PICK_VIDEO) {
+            pickVideo()
+            selectedOperation = -1
+        } else if (selectedOperation == ChatConstants.OPERATION_PICK_DOCUMENT) {
+            pickDocument()
+            selectedOperation = -1
+        }
     }
 
     private fun handleStorageTreeSelectionFailure(
-        e : Exception
+        e: Exception
     ) {
 
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("Select storage")
             .setMessage(e.message.toString())
-            .setPositiveButton("Okay"){_,_ ->}
+            .setPositiveButton("Okay") { _, _ -> }
             .show()
     }
 
@@ -378,6 +346,8 @@ class ChatPageFragment : Fragment(),
             )
             adjustUiAccToOneToOneChat()
             subscribeOneToOneViewModel()
+            var map = mapOf("chat_type" to "Direct")
+            eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_SESSION_STARTED, map))
         } else if (chatType == ChatConstants.CHAT_TYPE_GROUP) {
             if (chatHeaderOrGroupId.isNullOrBlank()) {
                 CrashlyticsLogger.e(
@@ -391,31 +361,33 @@ class ChatPageFragment : Fragment(),
             groupChatViewModel.setGroupId(chatHeaderOrGroupId!!)
             adjustUiAccToGroupChat()
             subscribeChatGroupViewModel()
+            var map = mapOf("chat_type" to "Group")
+            eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_SESSION_STARTED, map))
         }
     }
 
     private fun adjustUiAccToOneToOneChat() {
 
-        toolbar.showSubtitle(getString(R.string.offline_chat))
+        //toolbar.showSubtitle(getString(R.string.offline_chat))
+        appbar.showSubtitle(getString(R.string.offline_chat))
     }
 
     private fun adjustUiAccToGroupChat() {
-        toolbar.hideActionMenu()
+        //toolbar.hideActionMenu()
+        appbar.makeMenuItemVisible(false)
         chatFooter.setGroupViewModel(groupChatViewModel)
         chatFooter.enableUserSuggestions()
 
-        toolbar.showSubtitle(getString(R.string.tap_to_open_details_chat))
-        toolbar.setSubtitleClickListener(View.OnClickListener {
-
+        //toolbar.showSubtitle(getString(R.string.tap_to_open_details_chat))
+        appbar.showSubtitle(getString(R.string.tap_to_open_details_chat))
+        appbar.setSubtitleClickListener(View.OnClickListener {
             val groupId = chatHeaderOrGroupId ?: return@OnClickListener
 
             if (chatType == ChatConstants.CHAT_TYPE_GROUP) {
                 chatNavigation.openGroupDetailsPage(groupId)
             }
         })
-
-        toolbar.setTitleClickListener(View.OnClickListener {
-
+        appbar.setTitleClickListener(View.OnClickListener {
             val groupId = chatHeaderOrGroupId ?: return@OnClickListener
 
             if (chatType == ChatConstants.CHAT_TYPE_GROUP) {
@@ -424,6 +396,7 @@ class ChatPageFragment : Fragment(),
                 )
             }
         })
+
     }
 
     private fun subscribeChatGroupViewModel() {
@@ -486,20 +459,21 @@ class ChatPageFragment : Fragment(),
     }
 
     private fun showGroupDetails(group: ChatGroup) {
-        toolbar.showTitle(group.name)
+        appbar.setAppBarTitle(group.name)
 
         if (group.groupAvatarThumbnail.isNotBlank()) {
-            toolbar.showImageBehindBackButton(
+
+            appbar.showMainImageView(
                 group.groupAvatarThumbnail,
                 R.drawable.ic_group_white
             )
         } else if (group.groupAvatar.isNotBlank()) {
-            toolbar.showImageBehindBackButton(
-                group.groupAvatarThumbnail,
+            appbar.showMainImageView(
+                group.groupAvatar,
                 R.drawable.ic_group_white
             )
         } else {
-            toolbar.showImageBehindBackButton(R.drawable.ic_group_white)
+            appbar.showMainImageView(R.drawable.ic_group_white)
         }
     }
 
@@ -584,16 +558,16 @@ class ChatPageFragment : Fragment(),
             .observe(viewLifecycleOwner, Observer {
 
                 if (it.name.isNullOrBlank()) {
-                    toolbar.showTitle(it.mobile)
+                    appbar.setAppBarTitle(it.mobile)
                 } else {
-                    toolbar.showTitle(it.name ?: "")
+                    appbar.setAppBarTitle(it.name ?: "")
                 }
 
                 if (!it.imageThumbnailPathInStorage.isNullOrBlank()) {
 
                     if (Patterns.WEB_URL.matcher(it.imageThumbnailPathInStorage!!).matches()) {
 
-                        toolbar.showImageBehindBackButton(
+                        appbar.showMainImageView(
                             it.imageThumbnailPathInStorage!!,
                             R.drawable.ic_user_white,
                             R.drawable.ic_user_white
@@ -606,7 +580,7 @@ class ChatPageFragment : Fragment(),
                             else
                                 "profile_pics/${it.imageThumbnailPathInStorage}"
 
-                        toolbar.showImageBehindBackButton(
+                        appbar.showMainImageView(
                             profilePathRef,
                             R.drawable.ic_user_white,
                             R.drawable.ic_user_white
@@ -615,7 +589,7 @@ class ChatPageFragment : Fragment(),
                 } else if (!it.imagePathInStorage.isNullOrBlank()) {
 
                     if (Patterns.WEB_URL.matcher(it.imagePathInStorage!!).matches()) {
-                        toolbar.showImageBehindBackButton(
+                        appbar.showMainImageView(
                             it.imagePathInStorage!!,
                             R.drawable.ic_user_white,
                             R.drawable.ic_user_white
@@ -629,7 +603,7 @@ class ChatPageFragment : Fragment(),
                             else
                                 "profile_pics/${it.imagePathInStorage}"
 
-                        toolbar.showImageBehindBackButton(
+                        appbar.showMainImageView(
                             profilePathRef,
                             R.drawable.ic_user_white,
                             R.drawable.ic_user_white
@@ -638,7 +612,7 @@ class ChatPageFragment : Fragment(),
 
                 } else {
 
-                    toolbar.showImageBehindBackButton(
+                    appbar.showMainImageView(
                         R.drawable.ic_user_white
                     )
                 }
@@ -680,7 +654,8 @@ class ChatPageFragment : Fragment(),
                 }
 
                 if (it.isOtherUserOnline) {
-                    toolbar.showSubtitle("Online")
+                    appbar.showSubtitle("Online")
+                    appbar.makeOnlineImageVisible(visible = true)
 //                        toolbar.showSubtitle(getString(R.string.offline_chat))
                 } else {
                     if (it.lastUserStatusActivityAt != 0L) {
@@ -698,9 +673,11 @@ class ChatPageFragment : Fragment(),
                                 )
                             }"
                         }
-                        toolbar.showSubtitle(timeToDisplayText)
+                        appbar.showSubtitle(timeToDisplayText)
+                        appbar.makeOnlineImageVisible(false)
                     } else {
-                        toolbar.showSubtitle(getString(R.string.offline_chat))
+                        appbar.showSubtitle(getString(R.string.offline_chat))
+                        appbar.makeOnlineImageVisible(false)
                     }
                 }
             })
@@ -724,12 +701,11 @@ class ChatPageFragment : Fragment(),
 
     private fun initListeners() {
 
-        toolbar.setBackButtonListener {
-            activity?.onBackPressed()
-        }
+//        toolbar.setBackButtonListener {
+//            activity?.onBackPressed()
+//        }
 
-        toolbar.setImageClickListener(View.OnClickListener {
-
+        appbar.setImageClickListener(View.OnClickListener {
             val groupId = chatHeaderOrGroupId ?: return@OnClickListener
 
             if (chatType == ChatConstants.CHAT_TYPE_GROUP) {
@@ -737,10 +713,18 @@ class ChatPageFragment : Fragment(),
             }
         })
 
+        appbar.setBackButtonListener(View.OnClickListener {
+            hideSoftKeyboard()
 
-        toolbar.setOnOpenActionMenuItemClickListener(View.OnClickListener {
+            if (cameFromLinkInOtherChat)
+                chatNavigation.navigateUp()
+            else
+                chatNavigation.navigateBackToChatListIfExistElseOneStepBack()
+        })
 
-            val popUp = PopupMenu(requireContext(), toolbar.getOptionMenuViewForAnchor())
+        appbar.setOnOpenActionMenuItemClickListener(View.OnClickListener {
+            val ctw = ContextThemeWrapper(context, R.style.PopupMenuChat)
+            val popUp = PopupMenu(ctw, appbar.getOptionMenuViewForAnchor(), Gravity.END)
             popUp.setOnMenuItemClickListener(this)
             popUp.inflate(R.menu.menu_chat_toolbar)
             popUp.menu.findItem(R.id.action_block).title =
@@ -752,7 +736,7 @@ class ChatPageFragment : Fragment(),
         })
 
         chatFooter.attachmentOptionButton.setOnClickListener {
-            val popUpMenu = PopupMenu(requireContext(), it)
+            val popUpMenu = PopupMenu( requireContext(), it)
             popUpMenu.setOnMenuItemClickListener(this)
             popUpMenu.inflate(R.menu.menu_chats)
 
@@ -773,11 +757,29 @@ class ChatPageFragment : Fragment(),
 
     override fun onMenuItemClick(item: MenuItem?): Boolean = when (item?.itemId) {
         R.id.action_block -> {
-            viewModel.blockOrUnBlockUser()
+            if (chatFooter.isTypingEnabled()) {
+                BlockUserBottomSheetFragment.launch(
+                    viewModel.headerId,
+                    viewModel.otherUserId,
+                    childFragmentManager
+                )
+            } else {
+                viewModel.blockOrUnBlockUser(
+                    viewModel.headerId,
+                    viewModel.otherUserId,
+                    false
+                )
+                eventTracker.pushEvent(
+                    TrackingEventArgs(
+                        CommunityEvents.EVENT_CHAT_UNBLOCKED_USER,
+                        null
+                    )
+                )
+            }
             true
         }
         R.id.action_report -> {
-            ReportUserDialogFragment.launch(
+            ReportUserBottomSheetFragment.launch(
                 viewModel.headerId,
                 viewModel.otherUserId,
                 childFragmentManager
@@ -785,13 +787,7 @@ class ChatPageFragment : Fragment(),
             true
         }
         R.id.action_document -> {
-
-            if (isStoragePermissionGranted())
-                pickDocument()
-            else {
-                selectedOperation = ChatConstants.OPERATION_PICK_DOCUMENT
-                askForStoragePermission()
-            }
+            checkPermissionAndHandleActionPickDocument()
             true
         }
         R.id.action_location -> {
@@ -802,22 +798,11 @@ class ChatPageFragment : Fragment(),
             true
         }
         R.id.action_pick_image -> {
-            if (isStoragePermissionGranted()) {
-                pickImage()
-            } else {
-                selectedOperation = ChatConstants.OPERATION_PICK_IMAGE
-                askForStoragePermission()
-            }
+            checkPermissionAndHandleActionPickImage()
             true
         }
         R.id.action_video -> {
-            if (isStoragePermissionGranted())
-                pickVideo()
-            else {
-                selectedOperation = ChatConstants.OPERATION_PICK_VIDEO
-                askForStoragePermission()
-            }
-
+            checkPermissionAndHandleActionPickVideo()
             true
         }
         else -> {
@@ -825,16 +810,84 @@ class ChatPageFragment : Fragment(),
         }
     }
 
+    private fun checkPermissionAndHandleActionPickImage() {
+
+        if (isCameraPermissionGranted() && isStoragePermissionGranted()) {
+            pickImage()
+        } else {
+            selectedOperation = ChatConstants.OPERATION_PICK_IMAGE
+
+            if (Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
+                // In case of SDK >= scoped storage
+                // we 1. launch document tree contract then
+                // 2. camera permission
+               if (!isCameraPermissionGranted()) {
+                    requestPermissions(
+                        Manifest.permission.CAMERA
+                    )
+                }
+            } else {
+
+                requestPermissions(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.CAMERA
+                )
+            }
+        }
+    }
+
+    private fun checkPermissionAndHandleActionPickVideo() {
+        selectedOperation = ChatConstants.OPERATION_PICK_VIDEO
+        pickVideo()
+    }
+
+    private fun checkPermissionAndHandleActionPickDocument() {
+
+        if (isStoragePermissionGranted()) {
+            pickDocument()
+        } else {
+            selectedOperation = ChatConstants.OPERATION_PICK_DOCUMENT
+
+            if (Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
+//                requestDocumentStorageTree()
+            } else {
+                requestPermissions(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                )
+            }
+        }
+    }
+
+    private fun requestPermissions(
+        vararg permissions: String
+    ) {
+        requestPermissionContract.launch(permissions)
+    }
+
     private fun askForStoragePermission() {
         Log.v(TAG, "Permission Required. Requesting Permission")
+
+        if (isStoragePermissionGranted()) {
+
+        }
+
+        requestPermissionContract.launch(
+            arrayOf(
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
+        )
+
 
         if (Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
 
             requestPermissions(
-            arrayOf(
-                Manifest.permission.CAMERA
-            ),
-            REQUEST_STORAGE_PERMISSION
+                arrayOf(
+                    Manifest.permission.CAMERA
+                ),
+                REQUEST_STORAGE_PERMISSION
             )
         } else {
 
@@ -849,10 +902,15 @@ class ChatPageFragment : Fragment(),
         }
     }
 
+    private fun askForStorageAndCameraPermission() {
+
+    }
+
     private fun pickVideo() {
+
         try {
             Intent(Intent.ACTION_GET_CONTENT).apply {
-                type = "video/*"
+                type = MimeTypes.VIDEO
                 startActivityForResult(this, REQUEST_PICK_VIDEO)
             }
         } catch (e: ActivityNotFoundException) {
@@ -894,18 +952,28 @@ class ChatPageFragment : Fragment(),
 
                 chatFooter.et_message.setText("")
 
-                if (chatType == ChatConstants.CHAT_TYPE_USER)
+                var type = ""
+                if (chatType == ChatConstants.CHAT_TYPE_USER) {
                     viewModel.sendNewText(
                         message,
                         chatFooter.getReplyToMessage()
                     )
-                else
+                    type = "Direct"
+                } else {
                     groupChatViewModel.sendNewText(
                         message,
                         usersMentioned,
                         chatFooter.getReplyToMessage()
                     )
-
+                    type = "Group"
+                }
+                var map = mapOf("chat_type" to type, "message_type" to "Text")
+                eventTracker.pushEvent(
+                    TrackingEventArgs(
+                        CommunityEvents.EVENT_CHAT_MESSAGE_SENT,
+                        map
+                    )
+                )
                 chatFooter.closeReplyUi()
             }
         }
@@ -928,10 +996,7 @@ class ChatPageFragment : Fragment(),
         if (requestCode == PermissionUtils.reqCodePerm
             && PermissionUtils.permissionsGrantedCheck(grantResults)
         ) {
-
-            toolbar.showTitle(
-                checkForContact(receiverMobileNumber, receiverName!!)
-            )
+            appbar.setAppBarTitle(checkForContact(receiverMobileNumber, receiverName!!))
         }
 
 
@@ -948,16 +1013,7 @@ class ChatPageFragment : Fragment(),
                 showChatLayout()
                 initChat()
 
-                if (selectedOperation == ChatConstants.OPERATION_PICK_IMAGE) {
-                    pickImage()
-                    selectedOperation = -1
-                } else if (selectedOperation == ChatConstants.OPERATION_PICK_VIDEO) {
-                    pickVideo()
-                    selectedOperation = -1
-                } else if (selectedOperation == ChatConstants.OPERATION_PICK_DOCUMENT) {
-                    pickDocument()
-                    selectedOperation = -1
-                }
+
             } else
                 Toast.makeText(
                     requireContext(),
@@ -975,7 +1031,7 @@ class ChatPageFragment : Fragment(),
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            PermissionUtils.reqCodePerm -> toolbar.showTitle(
+            PermissionUtils.reqCodePerm -> appbar.setAppBarTitle(
                 checkForContact(receiverMobileNumber, receiverName!!)
             )
 
@@ -1017,54 +1073,71 @@ class ChatPageFragment : Fragment(),
         uri: Uri,
         text: String? = null
     ) {
-        val uriString = uri.toString()
-        val myFile = File(uriString)
-
-        val displayName: String? = getDisplayName(uriString, uri, myFile)
-
-        if (chatType == ChatConstants.CHAT_TYPE_USER)
+        val displayName: String = ImageMetaDataHelpers.getImageName(
+            requireContext(),
+            uri
+        )
+        var type = ""
+        if (chatType == ChatConstants.CHAT_TYPE_USER) {
             viewModel.sendNewDocumentMessage(
                 requireContext(),
                 text ?: "",
                 displayName,
                 uri
             )
-        else
+            type = "Direct"
+        } else {
             groupChatViewModel.sendNewDocumentMessage(
                 context = requireContext(),
                 text = text ?: "",
                 fileName = displayName ?: "Document",
                 uri = uri
             )
+            type = "Group"
+        }
+        var map = mapOf("chat_type" to type, "message_type" to "Document")
+        eventTracker.pushEvent(
+            TrackingEventArgs(
+                CommunityEvents.EVENT_CHAT_MESSAGE_SENT,
+                map
+            )
+        )
 
-
-        Log.d(TAG, displayName + "")
-        Log.d(TAG, uriString)
     }
 
     private fun sendVideoMessage(
         uri: Uri,
         text: String? = null
     ) {
-        val uriString = uri.toString()
-        val myFile = File(uri.path)
-
-        val videoInfo = getVideoInfo(uriString, uri, myFile)
-
-        if (chatType == ChatConstants.CHAT_TYPE_USER)
+        val videoInfo = ImageMetaDataHelpers.getVideoInfo(
+            requireContext(),
+            uri
+        )
+        var type = ""
+        if (chatType == ChatConstants.CHAT_TYPE_USER) {
             viewModel.sendNewVideoMessage(
                 requireContext(),
                 text ?: "",
                 videoInfo,
                 uri
             )
-        else
+            type = "Direct"
+        } else {
             groupChatViewModel.sendNewVideoMessage(
                 context = requireContext(),
                 text = text ?: "",
                 videoInfo = videoInfo,
                 uri = uri
             )
+            type = "Group"
+        }
+        var map = mapOf("chat_type" to type, "message_type" to "Video")
+        eventTracker.pushEvent(
+            TrackingEventArgs(
+                CommunityEvents.EVENT_CHAT_MESSAGE_SENT,
+                map
+            )
+        )
     }
 
     private fun sendLocationMessage(data: Intent?) {
@@ -1078,130 +1151,46 @@ class ChatPageFragment : Fragment(),
         val imageFile: File? =
             data.getSerializableExtra(CaptureLocationActivity.INTENT_EXTRA_MAP_IMAGE_FILE) as File?
 
-        if (chatType == ChatConstants.CHAT_TYPE_USER)
+        var type = ""
+        if (chatType == ChatConstants.CHAT_TYPE_USER) {
             viewModel.sendLocationMessage(
                 latitude,
                 longitude,
                 address,
                 imageFile
             )
-        else {
+            type = "Direct"
+        } else {
             groupChatViewModel.sendLocationMessage(
                 latitude,
                 longitude,
                 address,
                 imageFile
             )
+            type = "Group"
         }
-    }
-
-    private fun getDisplayName(
-        uriString: String,
-        uri: Uri,
-        myFile: File
-    ): String? {
-        if (uriString.startsWith("content://")) {
-            var cursor: Cursor? = null
-            try {
-                cursor = requireContext().contentResolver.query(uri, null, null, null, null)
-                if (cursor != null && cursor.moveToFirst()) {
-                    return cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
-                }
-
-            } finally {
-                cursor?.close()
-            }
-        } else if (uriString.startsWith("file://")) {
-            return myFile.name
-        }
-        return ""
-    }
-
-    private fun getVideoInfo(
-        uriString: String,
-        uri: Uri,
-        myFile: File
-    ): VideoInfo {
-        var fileName = ""
-        var fileSize = 0L
-
-        if (uriString.startsWith("content://")) {
-            var cursor: Cursor? = null
-            try {
-                cursor = requireContext().contentResolver.query(uri, null, null, null, null)
-                if (cursor != null && cursor.moveToFirst()) {
-                    fileName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
-                    val sizeInString = cursor.getString(cursor.getColumnIndex(OpenableColumns.SIZE))
-
-                    fileSize = try {
-                        sizeInString.toLong()
-                    } catch (e: Exception) {
-                        0L
-                    }
-                }
-            } finally {
-                cursor?.close()
-            }
-        } else if (uriString.startsWith("file://")) {
-            fileName = myFile.name
-            fileSize = myFile.length()
-        }
-
-        val videoLength = try {
-            val retriever = MediaMetadataRetriever()
-            retriever.setDataSource(requireContext(), uri)
-            val duration =
-                retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
-            retriever.release()
-            duration?.toLong() ?: 0L
-        } catch (e: Exception) {
-            Log.e("ChatGroupRepo", "Error while fetching video length", e)
-            0L
-        }
-
-        val mMMR = MediaMetadataRetriever()
-        mMMR.setDataSource(requireContext(), uri)
-        val thumbnail: Bitmap? =
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O_MR1) {
-                mMMR.getScaledFrameAtTime(
-                    -1,
-                    MediaMetadataRetriever.OPTION_CLOSEST_SYNC,
-                    196,
-                    196
-                )
-            } else {
-                try {
-                    val bigThumbnail = mMMR.frameAtTime
-                    val smallThumbnail = ThumbnailUtils.extractThumbnail(bigThumbnail, 196, 196)
-
-                    if (!bigThumbnail!!.isRecycled)
-                        bigThumbnail.recycle()
-
-                    smallThumbnail
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    null
-                }
-            }
-        mMMR.release()
-
-        return VideoInfo(
-            name = fileName,
-            duration = videoLength,
-            size = fileSize,
-            thumbnail = thumbnail
+        var map = mapOf("chat_type" to type, "message_type" to "Location")
+        eventTracker.pushEvent(
+            TrackingEventArgs(
+                CommunityEvents.EVENT_CHAT_MESSAGE_SENT,
+                map
+            )
         )
+    }
+
+
+    private fun isCameraPermissionGranted(): Boolean {
+
+        return ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.CAMERA
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun isStoragePermissionGranted(): Boolean {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-
-            return ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.CAMERA
-            ) == PackageManager.PERMISSION_GRANTED
-
+            return true
         } else {
             return ContextCompat.checkSelfPermission(
                 requireContext(),
@@ -1210,10 +1199,6 @@ class ChatPageFragment : Fragment(),
                     && ContextCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ) == PackageManager.PERMISSION_GRANTED
-                    && ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.CAMERA
             ) == PackageManager.PERMISSION_GRANTED
         }
     }
@@ -1290,23 +1275,41 @@ class ChatPageFragment : Fragment(),
         uri: Uri,
         text: String
     ) {
-        if (chatType == ChatConstants.CHAT_TYPE_USER)
+        var type = ""
+        if (chatType == ChatConstants.CHAT_TYPE_USER) {
             viewModel.sendNewImageMessage(
                 context = requireContext().applicationContext,
                 text = text,
                 uri = uri
             )
-        else {
+            type = "Direct"
+        } else {
             groupChatViewModel.sendNewImageMessage(
                 context = requireContext().applicationContext,
                 text = text,
                 uri = uri
             )
+            type = "Group"
         }
+        var map = mapOf("chat_type" to type, "message_type" to "Image")
+        eventTracker.pushEvent(
+            TrackingEventArgs(
+                CommunityEvents.EVENT_CHAT_MESSAGE_SENT,
+                map
+            )
+        )
     }
 
     override fun showReplyUI(chatMessage: ChatMessage) {
         chatFooter.openReplyUi(chatMessage)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        var type = ""
+        if(chatType == ChatConstants.CHAT_TYPE_USER) type = "Direct" else type = "Group"
+        var map = mapOf("chat_type" to type)
+        eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_SESSION_ENDED, map))
     }
 
     companion object {

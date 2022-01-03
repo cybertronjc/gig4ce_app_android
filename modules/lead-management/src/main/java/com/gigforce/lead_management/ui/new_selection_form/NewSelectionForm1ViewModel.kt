@@ -8,13 +8,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.dynamic_fields.data.DataFromDynamicInputField
-import com.gigforce.common_ui.dynamic_fields.data.DynamicField
-import com.gigforce.common_ui.dynamic_fields.data.DynamicVerificationField
-import com.gigforce.common_ui.dynamic_fields.data.FieldTypes
 import com.gigforce.common_ui.repository.LeadManagementRepository
-import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfilesItem
-import com.gigforce.common_ui.viewdatamodels.leadManagement.JoiningBusinessAndJobProfilesItem
-import com.gigforce.common_ui.viewdatamodels.leadManagement.SubmitJoiningRequest
+import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.core.ValidationHelper
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.logger.GigforceLogger
@@ -50,6 +45,8 @@ class NewSelectionForm1ViewModel @Inject constructor(
     private var gigerName: String? = null
     private var selectedBusiness: JoiningBusinessAndJobProfilesItem? = null
     private var selectedJobProfile: JobProfilesItem? = null
+    private var selectedReportingTL: TeamLeader? = null
+    private var showingAllTLsInSelectionPage: Boolean = false
 
     private lateinit var joiningBusinessAndJobProfiles: List<JoiningBusinessAndJobProfilesItem>
 
@@ -78,9 +75,14 @@ class NewSelectionForm1ViewModel @Inject constructor(
             }
             NewSelectionForm1Events.OpenSelectBusinessScreenSelected -> openSelectBusinessScreen()
             NewSelectionForm1Events.OpenSelectJobProfileScreenSelected -> openJobProfilesScreen()
+            NewSelectionForm1Events.OpenSelectReportingTLScreenSelected -> openSelectTLScreen()
             is NewSelectionForm1Events.SubmitButtonPressed -> validateDataAndNavigateToForm2(
                 event.dataFromDynamicFields
             )
+            is NewSelectionForm1Events.ReportingTeamLeaderSelected -> {
+                selectedReportingTL = event.teamLeader
+                showingAllTLsInSelectionPage = event.showingAllTlsInSelectedScreen
+            }
         }
 
         checkForDataAndEnabledOrDisableSubmitButton()
@@ -89,39 +91,6 @@ class NewSelectionForm1ViewModel @Inject constructor(
     private fun inflateDynamicFieldsRelatedToSelectedJobProfile(
         jobProfile: JobProfilesItem
     ) = viewModelScope.launch {
-
-        val selectedJobProfileVerificationDependentDynamicFields = listOf(
-
-            DynamicField(
-                fieldType = FieldTypes.AADHAAR_VERIFICATION_VIEW,
-                mandatory = true,
-                prefillText = "Provide Aadhaar details",
-                screenIdToShowIn = NewSelectionForm1Fragment.SCREEN_ID,
-                title = "Giger Aadhar Card"
-            ),
-            DynamicField(
-                fieldType = FieldTypes.BANK_VERIFICATION_VIEW,
-                mandatory = true,
-                prefillText = "Provide Bank details",
-                screenIdToShowIn = NewSelectionForm1Fragment.SCREEN_ID,
-                title = "Giger Bank Details"
-            ),
-            DynamicField(
-                fieldType = FieldTypes.DL_VERIFICATION_VIEW,
-                mandatory = true,
-                prefillText = "Provide Driving license",
-                screenIdToShowIn = NewSelectionForm1Fragment.SCREEN_ID,
-                title = "Giger DL Card"
-            ),
-            DynamicField(
-                fieldType = FieldTypes.PAN_VERIFICATION_VIEW,
-                mandatory = true,
-                prefillText = "Provide pan details",
-                screenIdToShowIn = NewSelectionForm1Fragment.SCREEN_ID,
-                title = "Giger PAN Card"
-            )
-        )
-
 
         val selectedJobProfileDependentDynamicFields = jobProfile.dynamicFields.filter {
             it.screenIdToShowIn == NewSelectionForm1Fragment.SCREEN_ID
@@ -211,6 +180,14 @@ class NewSelectionForm1ViewModel @Inject constructor(
         _viewState.value = null
     }
 
+    private fun openSelectTLScreen(){
+        _viewState.value = NewSelectionForm1ViewState.OpenSelectTLScreen(
+            selectedTLId = selectedReportingTL?.id,
+            shouldShowAllTls = showingAllTLsInSelectionPage
+        )
+        _viewState.value = null
+    }
+
     private fun validateDataAndNavigateToForm2(
         dataFromDynamicFields: MutableList<DataFromDynamicInputField>
     ) {
@@ -276,6 +253,20 @@ class NewSelectionForm1ViewModel @Inject constructor(
             return
         }
 
+        if (selectedReportingTL == null) {
+            _viewState.value = NewSelectionForm1ViewState.ValidationError(
+                reportingTLError = buildSpannedString {
+                    bold {
+                        append(appContext.getString(R.string.note_with_colon_lead))
+                    }
+                    append(
+                        "Select Reporting TL"
+                    )
+                }
+            )
+            return
+        }
+
         val dynamicFieldsForNextForm = selectedJobProfile!!.dynamicFields.filter {
             it.screenIdToShowIn == NewSelectionForm2Fragment.SCREEN_ID
         }
@@ -287,7 +278,8 @@ class NewSelectionForm1ViewModel @Inject constructor(
                 jobProfile = selectedJobProfile!!,
                 gigerName = gigerName!!,
                 gigerMobileNo = mobilePhoneNumber!!,
-                dataFromDynamicFields = dataFromDynamicFields
+                dataFromDynamicFields = dataFromDynamicFields,
+                reportingTeamLeader = selectedReportingTL!!.toTeamLeaderSubmitModel()
             ),
             dynamicInputsFields = dynamicFieldsForNextForm,
             verificationRelatedDynamicInputsFields = selectedJobProfile!!.verificationRelatedFields
@@ -393,7 +385,7 @@ class NewSelectionForm1ViewModel @Inject constructor(
         }
     }
 
-    fun fetchJoiningForm1Data() = viewModelScope.launch {
+    private fun fetchJoiningForm1Data() = viewModelScope.launch {
         _viewState.value = NewSelectionForm1ViewState.LoadingBusinessAndJobProfiles
 
         gigforceLogger.d(
@@ -403,6 +395,7 @@ class NewSelectionForm1ViewModel @Inject constructor(
 
         try {
             val businessAndTeamLeaders = leadManagementRepository.getBusinessAndJobProfiles()
+
             joiningBusinessAndJobProfiles = businessAndTeamLeaders
 
             gigforceLogger.d(
@@ -410,7 +403,9 @@ class NewSelectionForm1ViewModel @Inject constructor(
                 " ${joiningBusinessAndJobProfiles.size} business received from server"
             )
 
-            _viewState.value = NewSelectionForm1ViewState.JobProfilesAndBusinessLoadSuccess
+            _viewState.value = NewSelectionForm1ViewState.JobProfilesAndBusinessLoadSuccess(
+                selectedTeamLeader = selectedReportingTL
+            )
         } catch (e: Exception) {
             gigforceLogger.e(
                 TAG,
@@ -425,4 +420,5 @@ class NewSelectionForm1ViewModel @Inject constructor(
             )
         }
     }
+
 }

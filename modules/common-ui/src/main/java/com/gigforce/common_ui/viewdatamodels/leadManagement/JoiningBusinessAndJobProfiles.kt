@@ -8,6 +8,7 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 
+
 @Parcelize
 data class JoiningBusinessAndJobProfilesItem(
 
@@ -25,6 +26,7 @@ data class JoiningBusinessAndJobProfilesItem(
 
     @DoNotSerialize
     var selected: Boolean = false
+
 ) : Parcelable
 
 @Parcelize
@@ -48,5 +50,9 @@ data class JobProfilesItem(
     @DoNotSerialize
     var selected: Boolean = false
 ) : Parcelable
+
+
+
+
 
 

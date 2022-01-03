@@ -7,6 +7,7 @@ import android.util.AttributeSet
 import android.util.Patterns
 import androidx.annotation.DrawableRes
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.shimmer.ShimmerHelper
@@ -14,11 +15,11 @@ import com.google.android.material.imageview.ShapeableImageView
 import com.google.firebase.storage.FirebaseStorage
 
 class GigforceImageView(
-        context: Context,
-        attrs: AttributeSet
+    context: Context,
+    attrs: AttributeSet
 ) : ShapeableImageView(
-        context,
-        attrs
+    context,
+    attrs
 ) {
     @DrawableRes
     private var _errorImage: Int? = null
@@ -35,14 +36,16 @@ class GigforceImageView(
     }
 
     fun loadImageFromFirebase(
-            firebasePath: String,
-            @DrawableRes placeHolder: Int = -1,
-            @DrawableRes error: Int = -1,
-            centerCrop: Boolean = false
+        firebasePath: String,
+        @DrawableRes placeHolder: Int = -1,
+        @DrawableRes error: Int = -1,
+        centerCrop: Boolean = false
     ) {
         val pathRef = firebaseStorage.reference.child(firebasePath)
 
-        var requestManager = Glide.with(context).load(pathRef)
+        var requestManager = Glide.with(context)
+            .load(pathRef)
+            .transition(DrawableTransitionOptions().crossFade())
 
         if (placeHolder != -1) {
             requestManager = requestManager.placeholder(placeHolder)
@@ -63,26 +66,26 @@ class GigforceImageView(
 
 
     fun loadImageIfUrlElseTryFirebaseStorage(
-            urlOrFirebasePath: String,
-            @DrawableRes placeHolder: Int = -1,
-            @DrawableRes error: Int = -1,
-            centerCrop: Boolean = false
+        urlOrFirebasePath: String,
+        @DrawableRes placeHolder: Int = -1,
+        @DrawableRes error: Int = -1,
+        centerCrop: Boolean = false
     ) {
 
         val isUrl = Patterns.WEB_URL.matcher(urlOrFirebasePath).matches()
         if (isUrl) {
             loadImage(
-                    Uri.parse(urlOrFirebasePath),
-                    placeHolder,
-                    error,
-                    centerCrop
+                Uri.parse(urlOrFirebasePath),
+                placeHolder,
+                error,
+                centerCrop
             )
         } else {
             loadImageFromFirebase(
-                    urlOrFirebasePath,
-                    placeHolder,
-                    error,
-                    centerCrop
+                urlOrFirebasePath,
+                placeHolder,
+                error,
+                centerCrop
             )
         }
     }
@@ -96,6 +99,7 @@ class GigforceImageView(
 
         var requestManager = Glide.with(context)
                 .load(image)
+                .transition(DrawableTransitionOptions().crossFade())
 
         if (placeHolder != -1) {
             requestManager = requestManager.placeholder(placeHolder)
@@ -123,6 +127,7 @@ class GigforceImageView(
 
         var glideRequestManager = Glide.with(context)
                 .load(image)
+                .transition(DrawableTransitionOptions().crossFade())
                 .error(getErrorImage())
 
         if(centerCrop){
@@ -139,6 +144,7 @@ class GigforceImageView(
 
         var requestManager = Glide.with(context)
                 .load(image)
+                .transition(DrawableTransitionOptions().crossFade())
                 .error(getErrorImage())
 
         if (centerCrop) {
@@ -147,6 +153,76 @@ class GigforceImageView(
 
         requestManager.into(this)
     }
+
+    fun loadProfilePicture(
+        profilePictureThumbnail: String?,
+        profilePicture: String?
+    ) {
+        if (profilePicture.isNullOrEmpty() && profilePictureThumbnail.isNullOrEmpty()) {
+            loadDefaultUserAvatar()
+        } else {
+
+            if (!profilePictureThumbnail.isNullOrBlank()) {
+
+                val isUrl = Patterns.WEB_URL.matcher(profilePictureThumbnail).matches()
+                if (isUrl) {
+
+                    loadImage(
+                        Uri.parse(profilePictureThumbnail),
+                        getDefaultUserAvatar(),
+                        getDefaultUserAvatar()
+                    )
+                } else {
+
+                    val fullThumbnailPath = createFullProfilePicturePath(profilePictureThumbnail)
+                    loadImageFromFirebase(
+                        fullThumbnailPath,
+                        getDefaultUserAvatar(),
+                        getDefaultUserAvatar()
+                    )
+                }
+            } else {
+
+                val isUrl = Patterns.WEB_URL.matcher(profilePicture).matches()
+                if (isUrl) {
+
+                    loadImage(
+                        Uri.parse(profilePicture),
+                        getDefaultUserAvatar(),
+                        getDefaultUserAvatar()
+                    )
+                } else {
+
+                    val fullPath = createFullProfilePicturePath(
+                        profilePicture!!
+                    )
+                    loadImageFromFirebase(
+                        fullPath,
+                        getDefaultUserAvatar(),
+                        getDefaultUserAvatar()
+                    )
+                }
+            }
+        }
+    }
+
+    private fun createFullProfilePicturePath(
+        profilePicturePath: String
+    ): String {
+
+        return if (profilePicturePath.startsWith("profile_pics"))
+            profilePicturePath
+        else
+            "profile_pics/$profilePicturePath"
+
+    }
+
+    private fun loadDefaultUserAvatar() {
+        loadImage(getDefaultUserAvatar())
+    }
+
+    @DrawableRes
+    private fun getDefaultUserAvatar(): Int = R.drawable.ic_avatar_male
 
     fun clearImage() {
         Glide.with(context).clear(this)

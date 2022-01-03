@@ -1,12 +1,9 @@
 package com.gigforce.ambassador.user_rollment.kycdocs
 
 import android.util.Log
-import com.gigforce.common_ui.remote.verification.KycOcrResultModel
-import com.gigforce.common_ui.remote.verification.OCRQueryModel
-import com.gigforce.common_ui.remote.verification.VerificationKycService
+import com.gigforce.common_ui.remote.verification.*
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.extensions.updateOrThrow
-import com.gigforce.core.retrofit.RetrofitFactory
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.google.firebase.Timestamp
 import com.google.firebase.crashlytics.FirebaseCrashlytics

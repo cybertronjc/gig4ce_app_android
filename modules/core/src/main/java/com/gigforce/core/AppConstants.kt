@@ -69,6 +69,8 @@ object AppConstants {
 
     const val INTEN_EXTRA_DATE = "date"
 
+    const val CONTACTS_SYNCED = "contacts_synced"
+
 
     //app bar component constants
     const val BACKGROUND_TYPE_DEFAULT = 0

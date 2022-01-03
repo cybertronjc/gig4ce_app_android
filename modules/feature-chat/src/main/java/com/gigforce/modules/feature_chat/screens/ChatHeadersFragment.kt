@@ -9,13 +9,15 @@ import android.os.Build
 import android.os.Bundle
 import android.text.format.DateUtils
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
+import android.widget.ImageView
+import android.widget.PopupMenu
+import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
@@ -25,19 +27,27 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
 import com.gigforce.common_ui.chat.ChatHeadersViewModel
 import com.gigforce.common_ui.chat.models.ChatHeader
 import com.gigforce.common_ui.chat.models.ChatListItemDataObject
 import com.gigforce.common_ui.chat.models.ChatListItemDataWrapper
+import com.gigforce.common_ui.components.cells.AppBar
+import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.views.GigforceToolbar
+import com.gigforce.core.IEventTracker
 import com.gigforce.core.ScopedStorageConstants
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.documentFileHelper.DocumentTreeDelegate
+import com.gigforce.core.extensions.getTextChangeAsStateFlow
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.recyclerView.CoreRecyclerView
+import com.gigforce.core.utils.GlideApp
 import com.gigforce.modules.feature_chat.ChatNavigation
 import com.gigforce.modules.feature_chat.R
+import com.gigforce.modules.feature_chat.analytics.CommunityEvents
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
@@ -59,31 +69,43 @@ import javax.inject.Inject
  * create an instance of this fragment.
  */
 @AndroidEntryPoint
-class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener {
+class ChatHeadersFragment : Fragment(), PopupMenu.OnMenuItemClickListener, GigforceToolbar.SearchTextChangeListener {
 
     @Inject
     lateinit var navigation: INavigation
-    @Inject
-    lateinit var documentTreeDelegate : DocumentTreeDelegate
 
     private val chatNavigation: ChatNavigation by lazy {
         ChatNavigation(navigation)
     }
 
-    private val viewModel: ChatHeadersViewModel by viewModels()
+    @Inject
+    lateinit var eventTracker: IEventTracker
 
+    private val viewModel: ChatHeadersViewModel by viewModels()
 
     private lateinit var contactsFab: FloatingActionButton
     private lateinit var noChatsLayout: View
-    private lateinit var contactsButton: Button
-    private lateinit var toolbar: GigforceToolbar
+//    private lateinit var contactsButton: Button
+    private lateinit var startChatting: TextView
+    private lateinit var noChatGif: ImageView
+    private lateinit var toolbar: AppBar
     private lateinit var coreRecyclerView: CoreRecyclerView
 
-    private lateinit var mainChatListLayout : View
-    private lateinit var needStorageAccessLayout : View
-    private lateinit var grantStorageAccessButton : View
+    private lateinit var moreChatOptionsLayout: View
+    private lateinit var muteNotifications: TextView
+    private lateinit var markAsRead: TextView
+    private lateinit var deleteButton: TextView
+
 
     private var sharedFileSubmitted = false
+    private var isMultiSelectEnable = false
+    private var unreadHeaderIds = arrayListOf<String>()
+    private var readHeaderIds = arrayListOf<String>()
+
+    var anyUnreadMessages = false
+    var anyReadMessages = false
+    var searchText = ""
+    var unreadChatsCount = 0
 
     private val backPressHandler = object : OnBackPressedCallback(true) {
 
@@ -98,45 +120,7 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
             }
         }
     }
-
-    private val openDocumentTreeContract = registerForActivityResult(
-        ActivityResultContracts.OpenDocumentTree()
-    ) {
-        if (it == null) return@registerForActivityResult
-
-        documentTreeDelegate.handleDocumentTreeSelectionResult(
-            context = requireContext(),
-            uri = it,
-            onSuccess = {
-               handleStorageTreeSelectedResult()
-            },
-            onFailure = {
-                handleStorageTreeSelectionFailure(it)
-            }
-        )
-    }
-
-    private fun handleStorageTreeSelectionFailure(
-        e : Exception
-    ) {
-
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Select storage")
-            .setMessage(e.message.toString())
-            .setPositiveButton("Okay"){_,_ ->}
-            .show()
-    }
-
-    private fun handleStorageTreeSelectedResult() {
-
-        needStorageAccessLayout.gone()
-        mainChatListLayout.visible()
-
-        setObserver(this.viewLifecycleOwner)
-        if (!isStoragePermissionGranted()) {
-            askForStoragePermission()
-        }
-    }
+    
 
     private fun setObserver(owner: LifecycleOwner) {
         Log.d("chat/header/fragment", "UserId " + FirebaseAuth.getInstance().currentUser!!.uid)
@@ -145,14 +129,91 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
             Log.d("chat/header/fragment", it.toString())
             this.setCollectionData(ArrayList(it))
         })
+
+        viewModel.isMultiSelectEnable.observe(viewLifecycleOwner, Observer {
+            // multiselect ui changes
+            if (it){
+                makeMultiSelectUiEnable(true)
+            }else{
+                makeMultiSelectUiEnable(false)
+            }
+        })
+
+        viewModel.selectedChats.observe(viewLifecycleOwner, Observer {
+            val selectedChatList = it ?: return@Observer
+            makeSelectedChatListEnable(selectedChatList)
+        })
+    }
+
+    private fun makeSelectedChatListEnable(selectedChatList: java.util.ArrayList<ChatListItemDataObject>) {
+        if (isMultiSelectEnable){
+            if (selectedChatList.size > 1){
+                toolbar.setAppBarTitle("${selectedChatList.size}  ${getString(R.string.chat_selected_chat)}")
+            } else{
+                toolbar.setAppBarTitle("${selectedChatList.size}  ${getString(R.string.single_chat_selected_chat)}")
+            }
+
+            unreadHeaderIds.clear()
+            readHeaderIds.clear()
+            selectedChatList.forEach {
+                if (it.unreadCount != 0){
+                    unreadHeaderIds.add(it.id)
+                } else{
+                    readHeaderIds.add(it.id)
+                }
+            }
+            if (unreadHeaderIds.size > 0){
+                //atleast one unread chat is there
+                markAsRead.setTextColor(resources.getColor(R.color.chat_switch_checked))
+                markAsRead.isEnabled = true
+            } else{
+                markAsRead.setTextColor(resources.getColor(R.color.gray_text_color))
+                markAsRead.isEnabled = false
+            }
+        } else{
+            toolbar.setAppBarTitle(getString(R.string.community_chat))
+        }
+
+    }
+
+    private fun makeMultiSelectUiEnable(b: Boolean) {
+        if (b){
+            moreChatOptionsLayout.visible()
+            contactsFab.gone()
+            isMultiSelectEnable = true
+            coreRecyclerView.clipToPadding = true
+            toolbar.backImageButton.setImageDrawable(resources.getDrawable(R.drawable.ic_baseline_close_24))
+            //toolbar.setAppBarTitle("0  ${getString(R.string.chat_selected_chat)}")
+            val countSelected = viewModel.getSelectedChats().size
+            if (countSelected > 1){
+                toolbar.setAppBarTitle("$countSelected  ${getString(R.string.chat_selected_chat)}")
+            }else {
+                toolbar.setAppBarTitle("$countSelected  ${getString(R.string.single_chat_selected_chat)}")
+            }
+
+        }else{
+            isMultiSelectEnable = false
+            moreChatOptionsLayout.gone()
+            contactsFab.visible()
+            coreRecyclerView.clipToPadding = false
+            toolbar.backImageButton.setImageDrawable(resources.getDrawable(R.drawable.ic_chevron))
+            toolbar.setAppBarTitle(getString(R.string.community_chat))
+            //toolbar.setAppBarTitle("${getString(R.string.community_chat)}")
+        }
     }
 
     private fun setCollectionData(list: ArrayList<ChatHeader>) {
-        noChatsLayout.isVisible = list.isEmpty()
+        if(list.isEmpty()){
+            noChatsLayout.visible()
+            contactsFab.gone()
+        } else{
+            noChatsLayout.gone()
+            contactsFab.visible()
+        }
 
         coreRecyclerView.collection =
             ArrayList(list.map {
-
+                if(it.unseenCount > 0) unreadChatsCount++
                 var timeToDisplayText = ""
                 it.lastMsgTimestamp?.let {
                     val chatDate = it.toDate()
@@ -183,7 +244,8 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
                         lastMessageDeleted = it.lastMessageDeleted,
                         senderName = it.senderName
                     ),
-                    viewModel = viewModel
+                    viewModel = viewModel,
+                    searchText
                 )
             })
 
@@ -228,24 +290,11 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
         findViews(view)
         initListeners()
         setObserver(this.viewLifecycleOwner)
-
-        if(Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
-            if (!documentTreeDelegate.storageTreeSelected()) {
-
-                mainChatListLayout.gone()
-                needStorageAccessLayout.visible()
-            } else {
-                needStorageAccessLayout.gone()
-                mainChatListLayout.visible()
-            }
-        } else{
-            needStorageAccessLayout.gone()
-            mainChatListLayout.visible()
-        }
-
-        if (!isStoragePermissionGranted()) {
-            askForStoragePermission()
-        }
+        var map = mapOf("unread_chat_count" to unreadChatsCount)
+        eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_LIST_SCREEN, map))
+//        if (!isStoragePermissionGranted()) {
+//            askForStoragePermission()
+//        }
     }
 
     var title = ""
@@ -270,8 +319,7 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
     private fun findViews(view: View) {
         contactsFab = view.findViewById(R.id.contactsFab)
         contactsFab.setOnClickListener {
-
-            chatNavigation.navigateToContactsPage(
+            navigation.navigateTo("chats/contactsFragment",
                 bundleOf(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE to viewModel.sharedFiles)
             )
             viewModel.sharedFiles = null
@@ -279,67 +327,127 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
 
         coreRecyclerView = view.findViewById(R.id.rv_chat_headers)
         noChatsLayout = view.findViewById(R.id.no_chat_layout)
-        contactsButton = view.findViewById(R.id.go_to_contacts_btn)
+//        contactsButton = view.findViewById(R.id.go_to_contacts_btn)
+        startChatting = view.findViewById(R.id.start_chatting)
+        noChatGif = view.findViewById(R.id.no_chat_gif)
         toolbar = view.findViewById(R.id.toolbar)
-        needStorageAccessLayout = view.findViewById(R.id.storage_access_required_layout)
-        grantStorageAccessButton = view.findViewById(R.id.storage_access_btn)
-        mainChatListLayout = view.findViewById(R.id.main_chat_list_layout)
+//        needStorageAccessLayout = view.findViewById(R.id.storage_access_required_layout)
+//        grantStorageAccessButton = view.findViewById(R.id.storage_access_btn)
+        moreChatOptionsLayout = view.findViewById(R.id.chat_options)
+        muteNotifications = view.findViewById(R.id.muteNotifications)
+        markAsRead = view.findViewById(R.id.markAsRead)
+        deleteButton = view.findViewById(R.id.deleteChat)
 
-        grantStorageAccessButton.setOnClickListener {
+//        grantStorageAccessButton.setOnClickListener {
+//
+//            if (!documentTreeDelegate.storageTreeSelected()) {
+//                openDocumentTreeContract.launch(null)
+//            }
+//        }
+        Glide.with(this)
+            .asGif()
+            .load(R.drawable.no_chat)
+            .into(noChatGif)
 
-            if (!documentTreeDelegate.storageTreeSelected()) {
-                openDocumentTreeContract.launch(null)
-            }
-        }
 
-        contactsButton.isEnabled = true
-        contactsButton.setOnClickListener {
-
-            chatNavigation.navigateToContactsPage(
-                bundleOf(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE to viewModel.sharedFiles)
+        startChatting.isEnabled = true
+        startChatting.setOnClickListener {
+//            chatNavigation.navigateToContactsPage(
+//                bundleOf(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE to viewModel.sharedFiles)
+//            )
+            navigation.navigateTo("chats/contactsFragment",
+                bundleOf(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE to viewModel.sharedFiles,
+                    ContactsAndGroupFragment.INTENT_EXTRA_NEW_GROUP to false
+                )
             )
             viewModel.sharedFiles = null
         }
 
+
         if (title.isNotBlank()) {
-            toolbar.showTitle(title)
+            toolbar.setAppBarTitle(title)
         } else {
-            toolbar.showTitle(getString(R.string.chats_chat))
+            toolbar.setAppBarTitle(getString(R.string.community_chat))
 
         }
 
-        toolbar.hideActionMenu()
+        toolbar.apply {
+            changeBackButtonDrawable()
+            makeBackgroundMoreRound()
+            makeTitleBold()
+        }
+
+//        toolbar.hideActionMenu()
         toolbar.setBackButtonListener {
 
             if (toolbar.isSearchCurrentlyShown) {
                 hideSoftKeyboard()
             } else if (sharedFileSubmitted) {
                 navigation.navigateTo("common/landingScreen")
+            } else if(isMultiSelectEnable){
+                viewModel.setMultiSelectEnable(false)
+                viewModel.clearSelectedChats()
+                makeMultiSelectUiEnable(false)
+
             } else {
                 backPressHandler.isEnabled = false
                 activity?.onBackPressed()
             }
         }
+        toolbar.setOnOpenActionMenuItemClickListener(View.OnClickListener {
+            //val ctw = ContextThemeWrapper(context, R.style.PopupMenuChat)
+            val popUp = PopupMenu(context, toolbar.getOptionMenuViewForAnchor(), Gravity.END)
+            popUp.setOnMenuItemClickListener(this)
+            popUp.inflate(R.menu.menu_chat_settings)
+//            popUp.menu.findItem(R.id.action_block).title =
+//                if (chatFooter.isTypingEnabled())
+//                    getString(R.string.block_chat)
+//                else
+//                    getString(R.string.unblock_chat)
+            popUp.show()
+        })
     }
 
     private fun initListeners() {
-        toolbar.showSearchOption(getString(R.string.search_chat_chat))
-
         lifecycleScope.launch {
-            toolbar.getSearchTextChangeAsFlow()
+            toolbar.search_item.getTextChangeAsStateFlow()
                 .debounce(300)
                 .distinctUntilChanged()
                 .flowOn(Dispatchers.Default)
                 .collect { searchString ->
                     Log.d("Search ", "Searhcingg...$searchString")
+                    searchText = searchString
                     viewModel.filterChatList(searchString)
                 }
         }
+//        toolbar.showSearchOption(getString(R.string.search_chat_chat))
+//
+//        lifecycleScope.launch {
+//            toolbar.getSearchTextChangeAsFlow()
+//                .debounce(300)
+//                .distinctUntilChanged()
+//                .flowOn(Dispatchers.Default)
+//                .collect { searchString ->
+//                    Log.d("Search ", "Searhcingg...$searchString")
+//                    viewModel.filterChatList(searchString)
+//                }
+//        }
 
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             backPressHandler
         )
+
+        markAsRead.setOnClickListener {
+            // make mark as read
+            Log.d("unreadIds", "$unreadHeaderIds")
+            viewModel.setHeadersMarkAsRead(unreadHeaderIds)
+            viewModel.setMultiSelectEnable(false)
+            viewModel.clearSelectedChats()
+            makeMultiSelectUiEnable(false)
+            var map = mapOf("chats_marked_as_read" to unreadHeaderIds.size)
+            eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_MARKED_READ, map))
+        }
     }
 
     private fun askForStoragePermission() {
@@ -407,5 +515,33 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
     companion object {
         private const val OPEN_DIRECTORY_REQUEST_CODE = 0xf11e
         const val INTENT_EXTRA_SHARED_FILE_DEPLOYED_TO_ITEMS_ONCE = "deployed_once"
+    }
+
+    override fun onMenuItemClick(item: MenuItem?): Boolean = when (item?.itemId){
+        R.id.action_chat_settings -> {
+            //redirect to chat settings
+            navigation.navigateTo("chats/chatSettings")
+            true
+        }
+//        R.id.action_select_chat -> {
+//            //multi select enable ui
+//            isMultiSelectEnable = true
+//            makeMultiSelectUiEnable(true)
+//            viewModel.setMultiSelectEnable(enable = true)
+//            true
+//        }
+        R.id.action_new_group -> {
+            //go to contacts screenext
+            navigation.navigateTo("chats/contactsFragment",
+                bundleOf(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE to viewModel.sharedFiles,
+                    ContactsAndGroupFragment.INTENT_EXTRA_NEW_GROUP to true
+                )
+            )
+            viewModel.sharedFiles = null
+            true
+        }
+        else -> {
+            false
+        }
     }
 }
