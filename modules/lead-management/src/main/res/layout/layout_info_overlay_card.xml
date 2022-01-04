@@ -1,145 +1,220 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout   xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-<FrameLayout
 
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    >
+    <FrameLayout
 
-    <LinearLayout
-        android:id="@+id/frameLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginStart="@dimen/size_16"
-        android:layout_marginEnd="@dimen/size_16"
-        android:layout_marginTop="@dimen/size_32"
-        android:background="@drawable/info_card_background"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        android:layout_height="wrap_content">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/detailsLayout"
+        <LinearLayout
+            android:id="@+id/frameLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_24"
-            android:layout_marginBottom="@dimen/size_24">
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginTop="@dimen/size_32"
+            android:layout_marginEnd="@dimen/size_16"
+            android:background="@drawable/info_card_background"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline2"
-                android:layout_width="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/detailsLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintStart_toEndOf="@id/joiningDateTextView"
-                app:layout_constraintGuide_begin="160dp" />
+                android:layout_marginTop="@dimen/size_24">
 
-            <TextView
-                android:id="@+id/jobProfileTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:textSize="@dimen/font14"
-                android:text="@string/del_executive_lead"
-                android:fontFamily="@font/lato_bold"
-                android:textColor="@color/pink_text"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_begin="160dp"
+                    app:layout_constraintStart_toEndOf="@id/joiningDateTextView" />
 
-            <TextView
-                android:id="@+id/companyTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/company_text_lead"
-                android:textAppearance="@style/body_primary_2"
-                android:layout_marginTop="@dimen/size_24"
-                app:layout_constraintTop_toBottomOf="@id/jobProfileTitle"
-                app:layout_constraintStart_toStartOf="@id/jobProfileTitle"/>
+                <TextView
+                    android:id="@+id/jobProfileTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:fontFamily="@font/lato_bold"
+                    android:text="@string/del_executive_lead"
+                    android:textColor="@color/pink_text"
+                    android:textSize="@dimen/font14"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/joiningDateTextView"
-                android:layout_width="125dp"
+                <TextView
+                    android:id="@+id/companyTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/size_24"
+                    android:text="@string/company_text_lead"
+                    android:textAppearance="@style/body_primary_2"
+                    app:layout_constraintStart_toStartOf="@id/jobProfileTitle"
+                    app:layout_constraintTop_toBottomOf="@id/jobProfileTitle" />
+
+                <TextView
+                    android:id="@+id/joiningDateTextView"
+                    android:layout_width="125dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/size_10"
+                    android:text="@string/joining_date_lead"
+                    android:textAppearance="@style/body_primary_2"
+                    app:layout_constraintStart_toStartOf="@id/jobProfileTitle"
+                    app:layout_constraintTop_toBottomOf="@id/companyTextView" />
+
+                <TextView
+                    android:id="@+id/locationTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/size_10"
+                    android:text="@string/location_lead"
+                    android:textAppearance="@style/body_primary_2"
+                    app:layout_constraintStart_toStartOf="@id/jobProfileTitle"
+                    app:layout_constraintTop_toBottomOf="@id/joiningDateTextView" />
+
+
+                <TextView
+                    android:id="@+id/companyName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/company_text_lead"
+                    android:textAppearance="@style/body_primary_2"
+                    app:layout_constraintStart_toStartOf="@id/guideline2"
+                    app:layout_constraintTop_toTopOf="@id/companyTextView" />
+
+                <TextView
+                    android:id="@+id/joiningDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/joining_date_lead"
+                    android:textAppearance="@style/body_primary_2"
+                    app:layout_constraintStart_toStartOf="@id/guideline2"
+                    app:layout_constraintTop_toTopOf="@id/joiningDateTextView" />
+
+                <TextView
+                    android:id="@+id/locationText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/size_4"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:scrollHorizontally="true"
+                    android:text="@string/location_lead"
+                    android:textAppearance="@style/body_primary_2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/guideline2"
+                    app:layout_constraintTop_toTopOf="@id/locationTextView" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/moreInfoLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/joining_date_lead"
-                android:textAppearance="@style/body_primary_2"
                 android:layout_marginTop="@dimen/size_10"
-                app:layout_constraintTop_toBottomOf="@id/companyTextView"
-                app:layout_constraintStart_toStartOf="@id/jobProfileTitle"/>
+                android:baselineAligned="false">
 
-            <TextView
-                android:id="@+id/locationTextView"
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_end="200dp"
+                    app:layout_constraintStart_toEndOf="@id/selectionDateLabel" />
+
+
+                <TextView
+                    android:id="@+id/selectionDateLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:text="@string/selection_date_lead"
+                    android:textAppearance="@style/body_primary_2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/selectionDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="-"
+                    android:textAppearance="@style/body_primary_2"
+                    app:layout_constraintStart_toStartOf="@id/guideline3"
+                    app:layout_constraintTop_toTopOf="@id/selectionDateLabel" />
+
+                <TextView
+                    android:id="@+id/reportingTLLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/size_10"
+                    android:text="Reporting TL"
+                    android:textAppearance="@style/body_primary_2"
+                    app:layout_constraintStart_toStartOf="@id/selectionDateLabel"
+                    app:layout_constraintTop_toBottomOf="@id/selectionDateLabel" />
+
+                <TextView
+                    android:id="@+id/reporting_tl_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="-"
+                    android:textAppearance="@style/body_primary_2"
+                    app:layout_constraintStart_toStartOf="@id/guideline3"
+                    app:layout_constraintTop_toTopOf="@id/reportingTLLabel" />
+
+                <TextView
+                    android:id="@+id/recruitingTLLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/size_10"
+                    android:text="Recruiting TL"
+                    android:textAppearance="@style/body_primary_2"
+                    app:layout_constraintStart_toStartOf="@id/reportingTLLabel"
+                    app:layout_constraintTop_toBottomOf="@id/reportingTLLabel" />
+
+                <TextView
+                    android:id="@+id/recruting_tl_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="-"
+                    android:textAppearance="@style/body_primary_2"
+                    app:layout_constraintStart_toStartOf="@id/guideline3"
+                    app:layout_constraintTop_toTopOf="@id/recruitingTLLabel" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/view_more"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/location_lead"
-                android:textAppearance="@style/body_primary_2"
-                android:layout_marginTop="@dimen/size_10"
-                app:layout_constraintTop_toBottomOf="@id/joiningDateTextView"
-                app:layout_constraintStart_toStartOf="@id/jobProfileTitle"/>
+                android:fontFamily="@font/lato"
+                android:lineHeight="14.4sp"
+                android:layout_marginTop="18dp"
+                android:layout_marginEnd="16dp"
+                android:layout_gravity="end"
+                android:text="VIEW MORE"
+                android:textFontWeight="400"
+                android:textColor="@color/lipstick_2"
+                android:textSize="12sp" />
 
-            <TextView
-                android:id="@+id/selectionDateTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/selection_date_lead"
-                android:textAppearance="@style/body_primary_2"
-                android:layout_marginTop="@dimen/size_10"
-                app:layout_constraintTop_toBottomOf="@id/locationTextView"
-                app:layout_constraintStart_toStartOf="@id/jobProfileTitle"/>
 
-            <TextView
-                android:id="@+id/companyName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/company_text_lead"
-                android:textAppearance="@style/body_primary_2"
-                app:layout_constraintTop_toTopOf="@id/companyTextView"
-                app:layout_constraintStart_toStartOf="@id/guideline2"/>
+        </LinearLayout>
 
-            <TextView
-                android:id="@+id/joiningDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/joining_date_lead"
-                android:textAppearance="@style/body_primary_2"
-                app:layout_constraintTop_toTopOf="@id/joiningDateTextView"
-                app:layout_constraintStart_toStartOf="@id/guideline2"/>
+        <include
+            android:id="@+id/profileImageOverlay"
+            layout="@layout/layout_circular_image_overlay"
+            android:layout_width="86dp"
+            android:layout_height="86dp"
+            android:layout_gravity="top|right"
+            android:layout_marginEnd="@dimen/size_32" />
 
-            <TextView
-                android:id="@+id/locationText"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/location_lead"
-                android:scrollHorizontally="true"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:layout_marginEnd="@dimen/size_4"
-                android:textAppearance="@style/body_primary_2"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/locationTextView"
-                app:layout_constraintStart_toStartOf="@id/guideline2"/>
-
-            <TextView
-                android:id="@+id/selectionDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/selection_date_lead"
-                android:textAppearance="@style/body_primary_2"
-                app:layout_constraintTop_toTopOf="@id/selectionDateTextView"
-                app:layout_constraintStart_toStartOf="@id/guideline2"/>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </LinearLayout>
-
-    <include
-        android:id="@+id/profileImageOverlay"
-        android:layout_width="86dp"
-        android:layout_height="86dp"
-        android:layout_marginEnd="@dimen/size_32"
-        android:layout_gravity="top|right"
-        layout="@layout/layout_circular_image_overlay"
-        />
-
-</FrameLayout>
+    </FrameLayout>
 </layout>

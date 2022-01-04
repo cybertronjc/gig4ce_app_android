@@ -12,6 +12,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -281,6 +282,16 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
                 dropScreenIntentModel?.currentDate = it.currentDate
             }
 
+            overlayCardLayout.reportingTlTv.text = if(it.reportingTeamLeader?.name != null)
+               ": " + it.reportingTeamLeader?.name
+            else
+                "-"
+
+            overlayCardLayout.recrutingTlTv.text = if(it.recruitingTL?.name != null)
+                ": " + it.recruitingTL?.name
+            else
+                "-"
+
             val checkListItemData =
                 arrayListOf<ApplicationChecklistRecyclerItemData.ApplicationChecklistItemData>()
             if (it.checkList == null) {
@@ -411,6 +422,17 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
                 )
             context?.startActivity(intent)
 
+        }
+
+        this.overlayCardLayout.viewMore.setOnClickListener {
+
+            if(this.overlayCardLayout.moreInfoLayout.isVisible){
+                this.overlayCardLayout.moreInfoLayout.gone()
+                this.overlayCardLayout.viewMore.text = "View MOre"
+            } else{
+                this.overlayCardLayout.moreInfoLayout.visible()
+                this.overlayCardLayout.viewMore.text = "View Less"
+            }
         }
 
 
