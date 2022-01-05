@@ -1,28 +1,29 @@
 package com.gigforce.verification.mainverification.vaccine
 
 import android.os.Bundle
+
 import androidx.fragment.app.Fragment
+
 import android.view.LayoutInflater
+
 import android.view.View
+
 import android.view.ViewGroup
+
+import androidx.fragment.app.viewModels
+
+import androidx.lifecycle.Observer
+
+import com.gigforce.core.utils.Lce
+
 import com.gigforce.verification.R
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-/**
- * A simple [Fragment] subclass.
- * Use the [AskUserForVaccineBS.newInstance] factory method to
- * create an instance of this fragment.
- */
-class AskUserForVaccineBS : Fragment() {
+import kotlinx.android.synthetic.main.ask_user_for_vaccine_bs.*
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
+class AskUserForVaccineBS : BottomSheetDialogFragment() {
+    val vaccineViewModel : VaccineViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,5 +32,43 @@ class AskUserForVaccineBS : Fragment() {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.ask_user_for_vaccine_bs, container, false)
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+                super.onViewCreated(view, savedInstanceState)
+
+                vaccineViewModel.vaccineConfigLiveData.observe(viewLifecycleOwner, Observer{
+
+                        when(it){
+
+                                Lce.Loading->{}
+
+                                is Lce.Content -> {
+
+                                        if(it.content.list.isEmpty()){
+
+                                                dismiss()
+
+                                            }else{
+
+                                                vaccinerv.collection = it.content.list
+
+                                            }
+
+                                    }
+
+                                is Lce.Error -> {
+
+                                        dismiss()
+
+                                    }
+
+
+
+                            }
+
+                    })
+
+            }
 
 }

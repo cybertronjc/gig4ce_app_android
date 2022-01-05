@@ -10,6 +10,7 @@ class ComponentViewLoader: IViewTypeLoader {
     override fun getView(context: Context, viewType: Int): View? {
         return when (viewType) {
             CommonViewTypes.VIEW_SIMPLE_CARD -> SimpleCardComponent(context,null)
+            CommonViewTypes.VIEW_SIMPLE_CARD1 -> SimpleCardComponent1(context,null)
             else -> null
         }
     }

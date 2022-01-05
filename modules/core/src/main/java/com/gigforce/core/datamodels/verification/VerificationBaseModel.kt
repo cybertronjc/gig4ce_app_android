@@ -11,5 +11,6 @@ data class VerificationBaseModel(
         var selfie_video: SelfieVideoDataModel? = null,
         var sync_status: Boolean = false,
         var contract: Contract? = null,
-        var aadhaar_card_questionnaire: AadhaarDetailsDataModel? = null
+        var aadhaar_card_questionnaire: AadhaarDetailsDataModel? = null,
+        var covid_vaccine_details : CovidVaccineDetailsDataModel?=null
 )

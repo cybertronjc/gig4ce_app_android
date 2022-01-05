@@ -37,5 +37,6 @@ class NavForVerificationModule(
         baseImplementation.registerRoute("${moduleName}/AadharDetailInfoFragment",R.id.adharDetailInfoFragment)
         baseImplementation.registerRoute("${moduleName}/bankdetailconfirmationbottomsheet", R.id.confirmBNBankBS)
         baseImplementation.registerRoute("${moduleName}/acknowledgeBankBS",R.id.acknowledgeBankBS)
+        baseImplementation.registerRoute("${moduleName}/AskUserForVaccineBS",R.id.AskUserForVaccineBS)
     }
 }

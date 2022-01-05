@@ -471,6 +471,7 @@
     <string name="bank_account_verified_successfully_veri">Bank Account Verified Successfully!</string>
     <string name="confirmation_pending_veri">Confirmation Pending</string>
     <string name="baneficiary_name_veri">Beneficiary Name</string>
-
+    <string name="please_select_your_vaccination_status_veri">Please select your vaccination status.</string>
+    <string name="covid_vaccination_certificate_veri">COVID Vaccination Certificate</string>
 
 </resources>

@@ -1147,5 +1147,9 @@
         android:id="@+id/acknowledgeBankBS"
         android:name="com.gigforce.verification.mainverification.bankaccount.AcknowledgeBankBS"
         android:label="AcknowledgeBankBS" />
+
+    <dialog android:id="@+id/AskUserForVaccineBS"
+        android:name="com.gigforce.verification.mainverification.vaccine.AskUserForVaccineBS"
+        android:label="AskUserForVaccine"/>
 </navigation>
 

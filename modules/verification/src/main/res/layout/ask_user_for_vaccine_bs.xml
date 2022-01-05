@@ -1,63 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".mainverification.bankaccount.ConfirmBNBankBS"
-    android:background="@drawable/bottom_sheet_bg"
     android:layout_marginLeft="@dimen/sp_sm1"
-    android:layout_marginRight="@dimen/sp_sm1">
+    android:layout_marginRight="@dimen/sp_sm1"
+    android:background="@drawable/bottom_sheet_bg"
+    tools:context=".mainverification.bankaccount.ConfirmBNBankBS">
 
-    
+
     <ImageView
         android:id="@+id/illustrate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_time"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="@dimen/size_40"
-        />
+        android:src="@drawable/ic_time"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView9"
+        style="@style/primary_color_heading_bs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/confirm_beneficiary_title_veri"
-        style="@style/primary_color_heading_bs"
         android:layout_marginLeft="@dimen/dp_mid"
         android:layout_marginTop="@dimen/dp_xl4"
+        android:text="@string/please_select_your_vaccination_status_veri"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/illustrate"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/illustrate" />
 
-
-
+    <com.gigforce.core.recyclerView.CoreRecyclerView
+        android:id="@+id/vaccinerv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/confirm_bn_bs"
+        app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
     <TextView
         android:id="@+id/confirm_bn_bs"
+        style="@style/primary_button_style"
         android:layout_width="0dp"
         android:layout_height="38dp"
-        app:layout_constraintStart_toStartOf="@+id/confirmation_section"
-        app:layout_constraintEnd_toEndOf="@+id/confirmation_section"
-        app:layout_constraintBottom_toTopOf="@+id/cancel_button"
         android:layout_marginBottom="@dimen/dp_normal"
         android:text="@string/confirm_veri"
         android:textAllCaps="true"
-        style="@style/primary_button_style"/>
+        app:layout_constraintBottom_toTopOf="@+id/cancel_button"
+        app:layout_constraintEnd_toEndOf="@+id/confirmation_section"
+        app:layout_constraintStart_toStartOf="@+id/confirmation_section" />
 
     <Button
         android:id="@+id/cancel_button"
+        style="@style/ActionOutlineButtonStyle"
         android:layout_width="0dp"
         android:layout_height="46dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/confirmation_section"
-        app:layout_constraintEnd_toEndOf="@+id/confirmation_section"
         android:layout_marginBottom="@dimen/dp_normal"
-        style="@style/ActionOutlineButtonStyle"
+        android:text="@string/cancel_veri"
         android:textAllCaps="true"
-        android:text="@string/cancel_veri"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/confirmation_section"
+        app:layout_constraintStart_toStartOf="@+id/confirmation_section" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

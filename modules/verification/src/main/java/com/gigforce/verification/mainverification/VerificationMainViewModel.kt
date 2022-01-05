@@ -76,6 +76,8 @@ class VerificationMainViewModel @Inject constructor(
             )
         )
 
+
+
         _allDocumentsData.value = allDocs
 
         verificationKycRepo.db.collection("Verification").document(verificationKycRepo.getUID())
@@ -133,6 +135,21 @@ class VerificationMainViewModel @Inject constructor(
                             color = if (doc?.aadhaar_card_questionnaire?.verified == true) "GREEN" else "RED"
                         )
                     )
+
+                    allDocs.add(
+                        SimpleCardDVM(
+                            title = appContext.getString(R.string.covid_vaccination_certificate_veri),
+                            subtitle = getSubString(null,
+                                doc?.covid_vaccine_details?.status
+                            ),
+                            image = R.drawable.ic_account_box_black_24dp,
+                            navpath = "verification/AskUserForVaccineBS",
+                            color = getSubStringColor(null,
+                                doc?.covid_vaccine_details?.status
+                            )
+                        )
+                    )
+
                     _allDocumentsData.value = allDocs
                     doc?.let {
                         var allVerified = true
