@@ -249,6 +249,13 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
+    <style name="CardCaptionTitleb" parent="Widget.AppCompat.TextView">
+        <item name="android:textAppearance">?attr/textAppearanceCaption</item>
+        <item name="fontFamily">@font/lato_bold</item>
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
     <style name="CardTitle" parent="Widget.MaterialComponents.TextView">
         <item name="android:textAppearance">?attr/textAppearanceSubtitle2</item>
         <item name="android:fontFamily">@font/lato_bold</item>

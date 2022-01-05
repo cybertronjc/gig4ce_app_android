@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/dp_xl4">
+
+        <ImageView
+            android:id="@+id/greenTickImage"
+            android:layout_width="@dimen/size_60"
+            android:layout_height="@dimen/size_60"
+            android:layout_marginTop="@dimen/size_40"
+            android:src="@drawable/ic_success_round_green"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/title_mesage"
+            style="@style/CardCaptionTitleb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_20"
+            android:text="@string/certificate_successfully_verified"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/greenTickImage" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidline"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.40" />
+
+        <TextView
+            android:id="@+id/name_label"
+            style="@style/dialog_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_xl4"
+            android:layout_marginTop="@dimen/dp_xl4"
+            android:text="@string/name_veri"
+            app:layout_constraintEnd_toStartOf="@+id/guidline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title_mesage" />
+
+
+        <TextView
+            android:id="@+id/colon"
+            style="@style/section_value_bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="  :  "
+            app:layout_constraintStart_toEndOf="@+id/guidline"
+            app:layout_constraintTop_toTopOf="@+id/name_label" />
+
+        <TextView
+            android:id="@+id/name_tv"
+            style="@style/section_value_bold"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp_sm4"
+            android:text="Ravi Prakash"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/colon"
+            app:layout_constraintTop_toTopOf="@+id/name_label" />
+
+
+        <TextView
+            android:id="@+id/age_label"
+            style="@style/dialog_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_xl4"
+            android:layout_marginTop="@dimen/dp_sm4"
+            android:text="@string/age_veri"
+            app:layout_constraintEnd_toStartOf="@+id/guidline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/name_label" />
+
+
+        <TextView
+            android:id="@+id/colon1"
+            style="@style/section_value_bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="  :  "
+            app:layout_constraintStart_toEndOf="@+id/guidline"
+            app:layout_constraintTop_toTopOf="@+id/age_label" />
+
+        <TextView
+            android:id="@+id/age_tv"
+            style="@style/section_value_bold"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp_sm4"
+            android:text="28"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/colon1"
+            app:layout_constraintTop_toTopOf="@+id/age_label" />
+
+
+        <TextView
+            android:id="@+id/gender_label"
+            style="@style/dialog_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_xl4"
+            android:layout_marginTop="@dimen/dp_sm4"
+            android:text="@string/gender_veri"
+            app:layout_constraintEnd_toStartOf="@+id/guidline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/age_label" />
+
+
+        <TextView
+            android:id="@+id/colon2"
+            style="@style/section_value_bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="  :  "
+            app:layout_constraintStart_toEndOf="@+id/guidline"
+            app:layout_constraintTop_toTopOf="@+id/gender_label" />
+
+        <TextView
+            android:id="@+id/gender_tv"
+            style="@style/section_value_bold"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp_sm4"
+            android:text="Male"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/colon2"
+            app:layout_constraintTop_toTopOf="@+id/gender_label" />
+
+
+        <TextView
+            android:id="@+id/certificateid_label"
+            style="@style/dialog_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_xl4"
+            android:layout_marginTop="@dimen/dp_sm4"
+            android:text="@string/certificateid_veri"
+            app:layout_constraintEnd_toStartOf="@+id/guidline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/gender_label" />
+
+
+        <TextView
+            android:id="@+id/colon3"
+            style="@style/section_value_bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="  :  "
+            app:layout_constraintStart_toEndOf="@+id/guidline"
+            app:layout_constraintTop_toTopOf="@+id/certificateid_label" />
+
+        <TextView
+            android:id="@+id/certificateid_tv"
+            style="@style/section_value_bold"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp_sm4"
+            android:text="Male"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/colon3"
+            app:layout_constraintTop_toTopOf="@+id/certificateid_label" />
+
+
+        <TextView
+            android:id="@+id/baneficiaryid_label"
+            style="@style/dialog_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_xl4"
+            android:layout_marginTop="@dimen/dp_sm4"
+            android:text="@string/beneficiaryid_veri"
+            app:layout_constraintEnd_toStartOf="@+id/guidline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/certificateid_label" />
+
+
+        <TextView
+            android:id="@+id/colon4"
+            style="@style/section_value_bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="  :  "
+            app:layout_constraintStart_toEndOf="@+id/guidline"
+            app:layout_constraintTop_toTopOf="@+id/baneficiaryid_label" />
+
+        <TextView
+            android:id="@+id/baneficiaryid_tv"
+            style="@style/section_value_bold"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp_sm4"
+            android:text="90123300431610"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/colon4"
+            app:layout_constraintTop_toTopOf="@+id/baneficiaryid_label" />
+
+
+        <TextView
+            android:id="@+id/vaccine_name_label"
+            style="@style/dialog_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_xl4"
+            android:layout_marginTop="@dimen/dp_sm4"
+            android:text="@string/vaccinename_veri"
+            app:layout_constraintEnd_toStartOf="@+id/guidline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/baneficiaryid_label" />
+
+
+        <TextView
+            android:id="@+id/colon5"
+            style="@style/section_value_bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="  :  "
+            app:layout_constraintStart_toEndOf="@+id/guidline"
+            app:layout_constraintTop_toTopOf="@+id/vaccine_name_label" />
+
+        <TextView
+            android:id="@+id/vaccinename_tv"
+            style="@style/section_value_bold"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp_sm4"
+            android:text="C0VISHIELD"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/colon5"
+            app:layout_constraintTop_toTopOf="@+id/vaccine_name_label" />
+
+
+        <TextView
+            android:id="@+id/dateofdose_label"
+            style="@style/dialog_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_xl4"
+            android:layout_marginTop="@dimen/dp_sm4"
+            android:text="@string/dateofdose_veri"
+            app:layout_constraintEnd_toStartOf="@+id/guidline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/vaccine_name_label" />
+
+
+        <TextView
+            android:id="@+id/colon6"
+            style="@style/section_value_bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="  :  "
+            app:layout_constraintStart_toEndOf="@+id/guidline"
+            app:layout_constraintTop_toTopOf="@+id/dateofdose_label" />
+
+        <TextView
+            android:id="@+id/dateofdose_tv"
+            style="@style/section_value_bold"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp_sm4"
+            android:text="24-Sep-2021"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/colon6"
+            app:layout_constraintTop_toTopOf="@+id/dateofdose_label" />
+
+
+        <TextView
+            android:id="@+id/vaccinationstatus_label"
+            style="@style/dialog_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_xl4"
+            android:layout_marginTop="@dimen/dp_sm4"
+            android:text="@string/vaccinationstatus_veri"
+            app:layout_constraintEnd_toStartOf="@+id/guidline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dateofdose_label" />
+
+
+        <TextView
+            android:id="@+id/colon7"
+            style="@style/section_value_bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="  :  "
+            app:layout_constraintStart_toEndOf="@+id/guidline"
+            app:layout_constraintTop_toTopOf="@+id/vaccinationstatus_label" />
+
+        <TextView
+            android:id="@+id/vaccinationstatus_tv"
+            style="@style/section_value_bold"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp_sm4"
+            android:text="Partially Vaccinated"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/colon7"
+            app:layout_constraintTop_toTopOf="@+id/vaccinationstatus_label" />
+
+
+        <TextView
+            android:id="@+id/vaccinationat_label"
+            style="@style/dialog_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_xl4"
+            android:layout_marginTop="@dimen/dp_sm4"
+            android:text="@string/vaccinationat_veri"
+            app:layout_constraintEnd_toStartOf="@+id/guidline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/vaccinationstatus_label" />
+
+
+        <TextView
+            android:id="@+id/colon8"
+            style="@style/section_value_bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="  :  "
+            app:layout_constraintStart_toEndOf="@+id/guidline"
+            app:layout_constraintTop_toTopOf="@+id/vaccinationat_label" />
+
+        <TextView
+            android:id="@+id/vaccinationat_tv"
+            style="@style/section_value_bold"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp_sm4"
+            android:text="Paras Hospital"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/colon8"
+            app:layout_constraintTop_toTopOf="@+id/vaccinationat_label" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

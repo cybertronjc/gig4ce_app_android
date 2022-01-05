@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".mainverification.vaccine.views.ChooseYourVaccineFragment">
+
+    <com.gigforce.common_ui.components.cells.AppBar
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:backgroundType="PinkBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:titleText="@string/bank_details_veri" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/selected_vaccine"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_38"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/appBar"
+        android:layout_marginLeft="@dimen/size_20"
+        android:layout_marginRight="@dimen/size_20"
+        android:layout_marginTop="@dimen/size_20">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_time" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/fully_vaccinated"
+                android:layout_marginLeft="@dimen/size_10"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/change_text_veri"
+                android:textAllCaps="true"
+                android:layout_gravity="end|center_vertical"/>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/title1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/please_upload_your_vaccine_veri"
+        app:layout_constraintTop_toBottomOf="@+id/selected_vaccine"
+        style="@style/Caption2"
+        android:layout_marginLeft="@dimen/size_20"
+        android:layout_marginRight="@dimen/size_20"
+        android:layout_marginTop="@dimen/size_40"/>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/doc_upload_cv"
+        android:layout_width="275dp"
+        android:layout_height="270dp"
+        android:layout_marginTop="@dimen/size_40"
+        app:cardCornerRadius="6dp"
+        app:layout_constraintTop_toBottomOf="@+id/title1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/vaccine_group1"/>
+    </androidx.cardview.widget.CardView>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/confirm_bn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginLeft="@dimen/size_20"
+        android:layout_marginRight="@dimen/size_20"
+        android:layout_marginBottom="@dimen/size_30"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:srcCompat="@drawable/vaccine_group2"/>
+        <TextView
+            android:id="@+id/download_certificate_tv"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            style="@style/Body1"
+            android:text="@string/download_certificate_text"
+            />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/confirm_bn"
+        style="@style/primary_button_style"
+        android:layout_width="0dp"
+        android:layout_height="38dp"
+        android:layout_marginBottom="@dimen/dp_normal"
+        android:text="@string/confirm_veri"
+        android:textAllCaps="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginLeft="@dimen/size_20"
+        android:layout_marginRight="@dimen/size_20"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

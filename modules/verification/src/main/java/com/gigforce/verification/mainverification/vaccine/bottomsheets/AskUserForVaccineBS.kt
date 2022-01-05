@@ -1,8 +1,6 @@
-package com.gigforce.verification.mainverification.vaccine
+package com.gigforce.verification.mainverification.vaccine.bottomsheets
 
 import android.os.Bundle
-
-import androidx.fragment.app.Fragment
 
 import android.view.LayoutInflater
 
@@ -17,6 +15,7 @@ import androidx.lifecycle.Observer
 import com.gigforce.core.utils.Lce
 
 import com.gigforce.verification.R
+import com.gigforce.verification.mainverification.vaccine.VaccineViewModel
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 

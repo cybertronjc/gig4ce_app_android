@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="@dimen/sp_sm1"
-    android:layout_marginRight="@dimen/sp_sm1"
+    android:layout_marginLeft="@dimen/dp_sm1"
+    android:layout_marginRight="@dimen/dp_sm1"
     android:background="@drawable/bottom_sheet_bg"
     tools:context=".mainverification.bankaccount.ConfirmBNBankBS">
 

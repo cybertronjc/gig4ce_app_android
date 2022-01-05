@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".mainverification.vaccine.views.CovidVaccinationCertificateFragment">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <ImageButton
+        android:id="@+id/backImageButton"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="@dimen/size16"
+        android:padding="@dimen/size_4"
+        android:src="@drawable/ic_arrow_back_white"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/size16"
+        android:fontFamily="@font/lato"
+        android:visibility="invisible"
+        android:text="@string/covid_vaccine_certificate_veri"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="normal"
+        android:ellipsize="end"
+        android:maxLines="1"
+        app:layout_constraintStart_toEndOf="@+id/backImageButton"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <com.gigforce.verification.mainverification.vaccine.component.VaccineDoseDetailsComponent
+        android:id="@+id/vaccination_dose_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

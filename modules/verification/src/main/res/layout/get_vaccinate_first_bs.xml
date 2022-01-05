@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="@dimen/dp_mid"
+    android:layout_marginRight="@dimen/dp_mid"
+    tools:context=".mainverification.vaccine.bottomsheets.GetVaccinateFirstBS">
+
+<ImageView
+    android:id="@+id/illustrate"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:src="@drawable/ic_group_vaccine"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    android:layout_marginTop="@dimen/dp_xl4"/>
+
+    <TextView
+        android:id="@+id/title_bs"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/CardCaptionTitleb"
+        android:text="@string/please_get_yourseft_vaccinated"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/illustrate"
+        android:layout_marginTop="@dimen/dp_xl2"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/CardCaptionTitle"
+        android:text="@string/upload_whenever_vaccinated"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title_bs"
+        app:layout_constraintBottom_toTopOf="@+id/confirm_bn_bs"
+        android:layout_marginBottom="@dimen/dp_mid"
+        android:layout_marginTop="@dimen/dp_mid"/>
+
+    <TextView
+        android:id="@+id/confirm_bn_bs"
+        style="@style/primary_button_style"
+        android:layout_width="0dp"
+        android:layout_height="38dp"
+        android:layout_marginBottom="@dimen/dp_normal"
+        android:text="@string/confirm_veri"
+        android:textAllCaps="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
