@@ -447,16 +447,48 @@ class ChatPageFragment : Fragment(),
             val groupId = chatHeaderOrGroupId ?: return@OnClickListener
 
             if (chatType == ChatConstants.CHAT_TYPE_GROUP) {
-                chatNavigation.openGroupDetailsPage(groupId)
+                navigation.navigateTo("chats/userGroupDetailsFragment", bundleOf(
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_TYPE to ChatConstants.CHAT_TYPE_GROUP,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_IMAGE to receiverPhotoUrl,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_NAME to receiverName,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_HEADER_ID to groupId,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_ID to receiverUserId,
+                    StringConstants.MOBILE_NUMBER.value to receiverMobileNumber
+
+                ))
+            } else if(chatType == ChatConstants.CHAT_TYPE_USER) {
+                navigation.navigateTo("chats/userGroupDetailsFragment", bundleOf(
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_TYPE to ChatConstants.CHAT_TYPE_USER,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_IMAGE to receiverPhotoUrl,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_NAME to receiverName,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_HEADER_ID to groupId,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_ID to receiverUserId,
+                    StringConstants.MOBILE_NUMBER.value to receiverMobileNumber
+                ))
             }
         })
         appbar.setTitleClickListener(View.OnClickListener {
             val groupId = chatHeaderOrGroupId ?: return@OnClickListener
 
             if (chatType == ChatConstants.CHAT_TYPE_GROUP) {
-                chatNavigation.openGroupDetailsPage(
-                    groupId
-                )
+                navigation.navigateTo("chats/userGroupDetailsFragment", bundleOf(
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_TYPE to ChatConstants.CHAT_TYPE_GROUP,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_IMAGE to receiverPhotoUrl,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_NAME to receiverName,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_HEADER_ID to groupId,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_ID to receiverUserId,
+                    StringConstants.MOBILE_NUMBER.value to receiverMobileNumber
+                ))
+            } else if(chatType == ChatConstants.CHAT_TYPE_USER) {
+                navigation.navigateTo("chats/userGroupDetailsFragment", bundleOf(
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_TYPE to ChatConstants.CHAT_TYPE_USER,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_IMAGE to receiverPhotoUrl,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_NAME to receiverName,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_HEADER_ID to groupId,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_ID to receiverUserId,
+                    StringConstants.MOBILE_NUMBER.value to receiverMobileNumber
+
+                ))
             }
         })
 
@@ -860,7 +892,9 @@ class ChatPageFragment : Fragment(),
             val groupId = chatHeaderOrGroupId ?: return@OnClickListener
 
             if (chatType == ChatConstants.CHAT_TYPE_GROUP) {
-                chatNavigation.openGroupDetailsPage(groupId)
+                chatNavigation.openGroupDetailsPage(groupId, ChatConstants.CHAT_TYPE_GROUP)
+            } else if(chatType == ChatConstants.CHAT_TYPE_USER) {
+                chatNavigation.openGroupDetailsPage(groupId, ChatConstants.CHAT_TYPE_USER)
             }
         })
 

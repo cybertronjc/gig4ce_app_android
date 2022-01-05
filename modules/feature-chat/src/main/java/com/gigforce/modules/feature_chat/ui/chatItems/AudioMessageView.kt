@@ -28,6 +28,7 @@ import com.gigforce.core.extensions.toDisplayText
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.modules.feature_chat.R
+import com.gigforce.modules.feature_chat.screens.AudioPlayerBottomSheetFragment
 import com.gigforce.modules.feature_chat.screens.GroupMessageViewInfoFragment
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.audio.AudioAttributes
@@ -139,52 +140,20 @@ abstract class AudioMessageView (
                     }
                 })
 
-                oneToOneChatViewModel.currentlyPlayingAudioMessageId.observe(it, Observer {
-                    it ?: return@Observer
-
-                    if (currentlyPlayingId != it){
-                        Log.d("MyAudioComp", "pausing audio observer")
-                            playAudio.setImageDrawable(
-                                context?.resources?.getDrawable(
-                                    R.drawable.ic_play_audio_icon,
-                                    null
-                                )
-                            )
-                    }
-                })
-//                oneToOneChatViewModel.audioData.observe(it, Observer {
+//                oneToOneChatViewModel.currentlyPlayingAudioMessageId.observe(it, Observer {
 //                    it ?: return@Observer
-//                    playOrPause = it.playPause!!
-//                    currentlyPlayingId = it.currentlyPlayingAudioId
 //
-//                    if (it.playPause == true) {
-//                        if (message.id == it.currentlyPlayingAudioId) {
-//                            Log.d("MyAudioComp", "playing this audio only , ${it.currentlyPlayingAudioId}")
+//                    if (currentlyPlayingId != it){
+//                        Log.d("MyAudioComp", "pausing audio observer")
 //                            playAudio.setImageDrawable(
 //                                context?.resources?.getDrawable(
-//                                    R.drawable.ic_baseline_pause_24,
+//                                    R.drawable.ic_play_audio_icon,
 //                                    null
 //                                )
 //                            )
-//                        } else {
-//                            Log.d("MyAudioComp", "not playing this audio")
-//                            playAudio.setImageDrawable(
-//                                context?.resources?.getDrawable(
-//                                    R.drawable.ic_baseline_pause_24,
-//                                    null
-//                                )
-//                            )
-//                        }
-//                    } else {
-//                        Log.d("MyAudioComp", "not playing any audio")
-//                        playAudio.setImageDrawable(
-//                            context?.resources?.getDrawable(
-//                                R.drawable.ic_play_audio_icon,
-//                                null
-//                            )
-//                        )
 //                    }
-//                    })
+//                })
+//
             } else if(messageType == MessageType.GROUP_MESSAGE){
                 groupChatViewModel.enableSelect.observe(it, Observer {
                     it ?: return@Observer
@@ -197,81 +166,98 @@ abstract class AudioMessageView (
         }
 
         playAudio.setOnClickListener {
-            //is audio playing already
             val file = returnFileIfAlreadyDownloadedElseNull()
-
+//
             if (file != null) {
-//                val uri = FileProvider.getUriForFile(
-//                    context,
-//                    context.packageName + ".provider",
-//                    file.toFile()
-//                )
-                val uri = Uri.parse(file.path)
-
-                val playingId = oneToOneChatViewModel.isAudioPlayingAlready() ?: ""
-                currentlyPlayingId = playingId
-                if (playingId.isNullOrBlank()) {
-                    Log.d("MyAudioComp", "playing id: $playingId")
-                    playAudio.setImageDrawable(
-                        context?.resources?.getDrawable(
-                            R.drawable.ic_baseline_pause_24,
-                            null
-                        )
+                navigation.navigateTo(
+                    "chats/audioPlayer", bundleOf(
+                        AudioPlayerBottomSheetFragment.INTENT_EXTRA_URI to file.path!!
                     )
-                    isPlaying = true
-                    //play(uri)
-                    playPauseAudio(true, uri)
-                    oneToOneChatViewModel.playMyAudio(true, false, false, message.id,uri)
-                    //oneToOneChatViewModel.playMyAudio(false, message.id,uri)
-
-                } else if(playingId == message.id && isPlaying){
-                    Log.d("MyAudioComp", "pausing this audio id: $playingId")
-                    playAudio.setImageDrawable(
-                        context?.resources?.getDrawable(
-                            R.drawable.ic_play_audio_icon,
-                            null
-                        )
-                    )
-                    isPlaying = false
-                    //pause
-                    playPauseAudio(false, uri)
-                    oneToOneChatViewModel.playMyAudio(false, true, false, message.id,uri)
-
-                }
-                else if(playingId == message.id && !isPlaying){
-                    Log.d("MyAudioComp", " resuming audio id: $playingId")
-                    playAudio.setImageDrawable(
-                        context?.resources?.getDrawable(
-                            R.drawable.ic_baseline_pause_24,
-                            null
-                        )
-                    )
-                    isPlaying = true
-                    //play(uri)
-                    playPauseAudio(true, uri)
-                    oneToOneChatViewModel.playMyAudio(true, false, false, message.id,uri)
-
-                }else {
-                    Log.d("MyAudioComp", "playing diff audio id: $playingId")
-                    playAudio.setImageDrawable(
-                        context?.resources?.getDrawable(
-                            R.drawable.ic_baseline_pause_24,
-                            null
-                        )
-                    )
-                    isPlaying = true
-                    //play(uri)
-                    playPauseAudio(true, uri)
-                    oneToOneChatViewModel.playMyAudio(true, false, false, message.id,uri)
-                }
+                )
             } else{
                 //download audio
                 playProgress.visible()
                 playAudio.gone()
                 downloadAttachment()
             }
-
         }
+
+//        playAudio.setOnClickListener {
+//            //is audio playing already
+//            val file = returnFileIfAlreadyDownloadedElseNull()
+//
+//            if (file != null) {
+////                val uri = FileProvider.getUriForFile(
+////                    context,
+////                    context.packageName + ".provider",
+////                    file.toFile()
+////                )
+//                val uri = Uri.parse(file.path)
+//
+//                val playingId = oneToOneChatViewModel.isAudioPlayingAlready() ?: ""
+//                currentlyPlayingId = playingId
+//                if (playingId.isNullOrBlank()) {
+//                    Log.d("MyAudioComp", "playing id: $playingId")
+//                    playAudio.setImageDrawable(
+//                        context?.resources?.getDrawable(
+//                            R.drawable.ic_baseline_pause_24,
+//                            null
+//                        )
+//                    )
+//                    isPlaying = true
+//                    //play(uri)
+//                    playPauseAudio(true, uri)
+//                    oneToOneChatViewModel.playMyAudio(true, false, false, message.id,uri)
+//                    //oneToOneChatViewModel.playMyAudio(false, message.id,uri)
+//
+//                } else if(playingId == message.id && isPlaying){
+//                    Log.d("MyAudioComp", "pausing this audio id: $playingId")
+//                    playAudio.setImageDrawable(
+//                        context?.resources?.getDrawable(
+//                            R.drawable.ic_play_audio_icon,
+//                            null
+//                        )
+//                    )
+//                    isPlaying = false
+//                    //pause
+//                    playPauseAudio(false, uri)
+//                    oneToOneChatViewModel.playMyAudio(false, true, false, message.id,uri)
+//
+//                }
+//                else if(playingId == message.id && !isPlaying){
+//                    Log.d("MyAudioComp", " resuming audio id: $playingId")
+//                    playAudio.setImageDrawable(
+//                        context?.resources?.getDrawable(
+//                            R.drawable.ic_baseline_pause_24,
+//                            null
+//                        )
+//                    )
+//                    isPlaying = true
+//                    //play(uri)
+//                    playPauseAudio(true, uri)
+//                    oneToOneChatViewModel.playMyAudio(true, false, false, message.id,uri)
+//
+//                }else {
+//                    Log.d("MyAudioComp", "playing diff audio id: $playingId")
+//                    playAudio.setImageDrawable(
+//                        context?.resources?.getDrawable(
+//                            R.drawable.ic_baseline_pause_24,
+//                            null
+//                        )
+//                    )
+//                    isPlaying = true
+//                    //play(uri)
+//                    playPauseAudio(true, uri)
+//                    oneToOneChatViewModel.playMyAudio(true, false, false, message.id,uri)
+//                }
+//            } else{
+//                //download audio
+//                playProgress.visible()
+//                playAudio.gone()
+//                downloadAttachment()
+//            }
+//
+//        }
 
         textViewTime.text = msg.timestamp?.toDisplayText()
         //textView.text = msg.attachmentName

@@ -1140,6 +1140,10 @@
         android:id="@+id/userAndGroupDetailsFragment"
         android:name="com.gigforce.modules.feature_chat.screens.UserAndGroupDetailsFragment"
         android:label="UserAndGroupDetailsFragment" />
+    <dialog
+        android:id="@+id/audioPlayerBottomSheetFragment"
+        android:name="com.gigforce.modules.feature_chat.screens.AudioPlayerBottomSheetFragment"
+        android:label="AudioPlayerBottomSheetFragment" />
 
 </navigation>
 
