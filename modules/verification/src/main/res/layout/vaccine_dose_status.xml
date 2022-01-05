@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="@dimen/dp_xl4">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidline"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.40" />
+
+    <TextView
+        android:id="@+id/name_label"
+        style="@style/primary_color_heading_bs"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_xl4"
+        android:layout_marginTop="@dimen/dp_xl4"
+        android:text="@string/vaccine_count_veri"
+        app:layout_constraintEnd_toStartOf="@+id/guidline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title_mesage" />
+
+
+
+
+
+    <TextView
+        android:id="@+id/certificateid_label"
+        style="@style/dialog_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_xl4"
+        android:layout_marginTop="@dimen/dp_mid"
+        android:text="@string/certificateid_veri"
+        app:layout_constraintEnd_toStartOf="@+id/guidline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/name_label" />
+
+
+    <TextView
+        android:id="@+id/colon3"
+        style="@style/section_value_bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="  :  "
+        app:layout_constraintStart_toEndOf="@+id/guidline"
+        app:layout_constraintTop_toTopOf="@+id/certificateid_label" />
+
+    <TextView
+        android:id="@+id/certificateid_tv"
+        style="@style/section_value_bold"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/dp_sm4"
+        android:text="72477059594"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/colon3"
+        app:layout_constraintTop_toTopOf="@+id/certificateid_label" />
+
+
+
+    <TextView
+        android:id="@+id/vaccine_name_label"
+        style="@style/dialog_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_xl4"
+        android:layout_marginTop="@dimen/dp_sm4"
+        android:text="@string/vaccinename_veri"
+        app:layout_constraintEnd_toStartOf="@+id/guidline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/certificateid_label" />
+
+
+    <TextView
+        android:id="@+id/colon5"
+        style="@style/section_value_bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="  :  "
+        app:layout_constraintStart_toEndOf="@+id/guidline"
+        app:layout_constraintTop_toTopOf="@+id/vaccine_name_label" />
+
+    <TextView
+        android:id="@+id/vaccinename_tv"
+        style="@style/section_value_bold"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/dp_sm4"
+        android:text="C0VISHIELD"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/colon5"
+        app:layout_constraintTop_toTopOf="@+id/vaccine_name_label" />
+
+
+    <TextView
+        android:id="@+id/dateofdose_label"
+        style="@style/dialog_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_xl4"
+        android:layout_marginTop="@dimen/dp_sm4"
+        android:text="@string/dateofdose_veri"
+        app:layout_constraintEnd_toStartOf="@+id/guidline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/vaccine_name_label" />
+
+
+    <TextView
+        android:id="@+id/colon6"
+        style="@style/section_value_bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="  :  "
+        app:layout_constraintStart_toEndOf="@+id/guidline"
+        app:layout_constraintTop_toTopOf="@+id/dateofdose_label" />
+
+    <TextView
+        android:id="@+id/dateofdose_tv"
+        style="@style/section_value_bold"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/dp_sm4"
+        android:text="24-Sep-2021"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/colon6"
+        app:layout_constraintTop_toTopOf="@+id/dateofdose_label" />
+
+
+    <TextView
+        android:id="@+id/view_more"
+        style="@style/caption_primary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dateofdose_tv"
+        android:layout_marginTop="@dimen/dp_mid"
+        android:layout_marginRight="@dimen/dp_mid"
+        android:text="@string/view_more_veri"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

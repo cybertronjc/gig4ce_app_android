@@ -35,6 +35,13 @@
         <item name="android:textColor">@color/colorLightAccent</item>
     </style>
 
+    <style name="caption_primary" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">12sp</item>
+        <item name="fontFamily">@font/lato</item>
+        <item name="android:fontFamily">@font/lato</item>
+        <item name="android:textColor">@color/colorLightAccent</item>
+    </style>
+
     <style name="primary_color_heading" parent="Widget.AppCompat.TextView">
         <item name="android:textSize">14sp</item>
         <item name="fontFamily">@font/lato_bold</item>

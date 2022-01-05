@@ -488,5 +488,9 @@
     <string name="dateofdose_veri">Date of Dose</string>
     <string name="vaccinationat_veri">Vaccination At</string>
     <string name="covid_vaccine_certificate_veri">COVID Vaccination Certificate</string>
+    <string name="change_doc_veri">Change Doc</string>
+    <string name="download_doc_veri">Download Certificate</string>
+    <string name="vaccine_count_veri">Vaccine 1</string>
+    <string name="view_more_veri">View More</string>
 
 </resources>
