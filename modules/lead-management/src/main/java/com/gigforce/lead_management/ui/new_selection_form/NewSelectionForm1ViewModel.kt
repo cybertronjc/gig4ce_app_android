@@ -82,15 +82,15 @@ class NewSelectionForm1ViewModel @Inject constructor(
             is NewSelectionForm1Events.ReportingTeamLeaderSelected -> teamLeaderSelected(
                 event.teamLeader,
                 event.showingAllTlsInSelectedScreen
-                )
+            )
         }
 
         checkForDataAndEnabledOrDisableSubmitButton()
     }
 
     private fun teamLeaderSelected(
-        teamLeader :TeamLeader,
-        showingAllTlsInSelectedScreen : Boolean
+        teamLeader: TeamLeader,
+        showingAllTlsInSelectedScreen: Boolean
     ) {
         selectedReportingTL = teamLeader
         showingAllTLsInSelectionPage = showingAllTlsInSelectedScreen
@@ -188,7 +188,7 @@ class NewSelectionForm1ViewModel @Inject constructor(
         _viewState.value = null
     }
 
-    private fun openSelectTLScreen(){
+    private fun openSelectTLScreen() {
         _viewState.value = NewSelectionForm1ViewState.OpenSelectTLScreen(
             selectedTLId = selectedReportingTL?.id,
             shouldShowAllTls = showingAllTLsInSelectionPage
@@ -430,15 +430,23 @@ class NewSelectionForm1ViewModel @Inject constructor(
     }
 
     private suspend fun checkForCurrentUserInTLListAndPreSelectTeamLeader() {
-        val teamLeaders = leadManagementRepository.getTeamLeadersForSelection(false)
-        teamLeaders.forEach {
+        try {
+            val teamLeaders = leadManagementRepository.getTeamLeadersForSelection(false)
+            teamLeaders.forEach {
 
-            if(firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow().uid == it.id ){
-                teamLeaderSelected(
-                    it,
-                false
-                )
+                if (firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow().uid == it.id) {
+                    teamLeaderSelected(
+                        it,
+                        false
+                    )
+                }
             }
+        } catch (e: Exception) {
+            gigforceLogger.e(
+                TAG,
+                "Unable to preselect reporting tl",
+                e
+            )
         }
     }
 
