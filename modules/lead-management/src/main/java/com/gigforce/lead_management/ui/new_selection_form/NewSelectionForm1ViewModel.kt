@@ -79,13 +79,21 @@ class NewSelectionForm1ViewModel @Inject constructor(
             is NewSelectionForm1Events.SubmitButtonPressed -> validateDataAndNavigateToForm2(
                 event.dataFromDynamicFields
             )
-            is NewSelectionForm1Events.ReportingTeamLeaderSelected -> {
-                selectedReportingTL = event.teamLeader
-                showingAllTLsInSelectionPage = event.showingAllTlsInSelectedScreen
-            }
+            is NewSelectionForm1Events.ReportingTeamLeaderSelected -> teamLeaderSelected(
+                event.teamLeader,
+                event.showingAllTlsInSelectedScreen
+                )
         }
 
         checkForDataAndEnabledOrDisableSubmitButton()
+    }
+
+    private fun teamLeaderSelected(
+        teamLeader :TeamLeader,
+        showingAllTlsInSelectedScreen : Boolean
+    ) {
+        selectedReportingTL = teamLeader
+        showingAllTLsInSelectionPage = showingAllTlsInSelectedScreen
     }
 
     private fun inflateDynamicFieldsRelatedToSelectedJobProfile(
@@ -395,13 +403,13 @@ class NewSelectionForm1ViewModel @Inject constructor(
 
         try {
             val businessAndTeamLeaders = leadManagementRepository.getBusinessAndJobProfiles()
-
             joiningBusinessAndJobProfiles = businessAndTeamLeaders
 
             gigforceLogger.d(
                 TAG,
                 " ${joiningBusinessAndJobProfiles.size} business received from server"
             )
+            checkForCurrentUserInTLListAndPreSelectTeamLeader()
 
             _viewState.value = NewSelectionForm1ViewState.JobProfilesAndBusinessLoadSuccess(
                 selectedTeamLeader = selectedReportingTL
@@ -418,6 +426,19 @@ class NewSelectionForm1ViewModel @Inject constructor(
                     ?: appContext.getString(R.string.unable_to_load_business_and_job_profiles_lead),
                 shouldShowErrorButton = false
             )
+        }
+    }
+
+    private suspend fun checkForCurrentUserInTLListAndPreSelectTeamLeader() {
+        val teamLeaders = leadManagementRepository.getTeamLeadersForSelection(false)
+        teamLeaders.forEach {
+
+            if(firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow().uid == it.id ){
+                teamLeaderSelected(
+                    it,
+                false
+                )
+            }
         }
     }
 
