@@ -8,7 +8,10 @@ import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 import com.gigforce.common_ui.viewdatamodels.leadManagement.GigerInfo
 import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.common_ui.repository.LeadManagementRepository
+import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,19 +28,36 @@ sealed class GigerInfoState {
     ) : GigerInfoState()
 }
 
+sealed class GigerInfoEffects {
+
+    data class OpenChangeTeamLeaderScreen(
+        val joiningId: String,
+        val gigerId : String?,
+        val gigerName : String?,
+        val teamLeaderId : String
+    ) : GigerInfoEffects()
+}
+
 @HiltViewModel
 class GigerInfoViewModel @Inject constructor(
     private val leadManagementRepository: LeadManagementRepository,
     private val logger: GigforceLogger,
-    private val profileFirebaseRepository: ProfileFirebaseRepository
+    private val profileFirebaseRepository: ProfileFirebaseRepository,
+    private val authStateListener: FirebaseAuthStateListener
 ) : ViewModel() {
 
     companion object {
         private const val TAG = "GigerInfoViewModel"
     }
 
+    private var gigerInfo : GigerInfo?  = null
+    private var joiningId : String? = null
+
     private val _viewState = MutableLiveData<GigerInfoState>()
     val viewState: LiveData<GigerInfoState> = _viewState
+
+    private val _viewEffects = MutableSharedFlow<GigerInfoEffects>()
+    val viewEffects = _viewEffects.asSharedFlow()
 
     fun getGigerJoiningInfo(joiningId: String) = viewModelScope.launch {
         _viewState.postValue(GigerInfoState.LoadingDataFromServer)
@@ -46,6 +66,8 @@ class GigerInfoViewModel @Inject constructor(
             logger.d(TAG, "fetching giger joining info...")
 
             val gigerJoiningDetails = leadManagementRepository.getGigerJoiningInfo(joiningId)
+            gigerInfo = gigerJoiningDetails
+
             _viewState.value = GigerInfoState.GigerInfoLoaded(gigerJoiningDetails)
 
             logger.d(TAG, "received ${gigerJoiningDetails} giger joining info from server")
@@ -58,6 +80,19 @@ class GigerInfoViewModel @Inject constructor(
                 e
             )
         }
+    }
+
+    fun openChangeTeamLeaderScreen() = viewModelScope.launch{
+        val joiningInfo = gigerInfo ?: return@launch
+
+        _viewEffects.emit(
+            GigerInfoEffects.OpenChangeTeamLeaderScreen(
+                joiningId = joiningId!!,
+                gigerId = joiningInfo.gigerId,
+                gigerName = joiningInfo.gigerName,
+                teamLeaderId = authStateListener.getCurrentSignInUserInfoOrThrow().uid
+            )
+        )
     }
 
 }

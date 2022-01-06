@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -24,6 +25,7 @@ import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.utils.PushDownAnim
 import com.gigforce.common_ui.viewdatamodels.FeatureItemCard2DVM
+import com.gigforce.common_ui.viewdatamodels.leadManagement.ChangeTeamLeaderRequestItem
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.extensions.getTextChangeAsStateFlow
@@ -40,6 +42,7 @@ import com.gigforce.lead_management.databinding.FragmentJoiningList2Binding
 import com.gigforce.lead_management.models.JoiningList2RecyclerItemData
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModelState
+import com.gigforce.lead_management.ui.changing_tl.ChangeTeamLeaderBottomSheetFragment
 import com.gigforce.lead_management.ui.drop_selection.DropSelectionBottomSheetDialogFragment
 import com.gigforce.lead_management.ui.giger_onboarding.GigerOnboardingFragment
 import com.google.android.material.tabs.TabLayout
@@ -78,8 +81,8 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
     var selectedTab = 0
     var filterDaysFM = -1
     var joiningDataState = JoiningDataState.DEFAULT
-    val dropSelectionIds = arrayListOf<String>()
-    var dropJoining : HashMap<String, Boolean>? = HashMap<String, Boolean>()
+    val dropSelectionIds = arrayListOf<JoiningList2RecyclerItemData.JoiningListRecyclerJoiningItemData>()
+    var dropJoining : HashMap<JoiningList2RecyclerItemData.JoiningListRecyclerJoiningItemData, Boolean>? = HashMap<JoiningList2RecyclerItemData.JoiningListRecyclerJoiningItemData, Boolean>()
     var cameFromDeeplink = false
 
     override fun viewCreated(
@@ -125,6 +128,22 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
 
         this.joiningsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
+        this.changeTeamLeaderButton.setOnClickListener {
+            if(dropSelectionIds.isEmpty()) return@setOnClickListener
+            openChangeTeamLeaderScreen(
+                ArrayList(
+                    dropSelectionIds.map {
+                        ChangeTeamLeaderRequestItem(
+                            gigerUid = it.gigerId,
+                            gigerName = it.gigerName,
+                            teamLeaderId = null,
+                            joiningId = it._id
+                        )
+                    }
+                )
+            )
+        }
+
         this.joinNowButton.setOnClickListener {
             if (joinNowButton.text == getString(R.string.add_new_lead)) {
                 logger.d(
@@ -137,17 +156,44 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
                     navOptions = getNavOptions()
                 )
             }else {
+
                 dropSelectionIds.clear()
                 for (entry in dropJoining?.keys!!){
                     dropSelectionIds.add(entry)
                 }
                 if(dropSelectionIds.isEmpty()){
-                    showToast("Select at-least one joining to drop")
+                    showToast("Select at-least one joining to change team leader")
                 }else {
-                    DropSelectionBottomSheetDialogFragment.launch(
-                        dropSelectionIds, childFragmentManager
+                    openChangeTeamLeaderScreen(
+                        ArrayList(
+                            dropSelectionIds.map {
+                                ChangeTeamLeaderRequestItem(
+                                    gigerUid = it.gigerId,
+                                    gigerName = it.gigerName,
+                                    teamLeaderId = null,
+                                    joiningId = it._id
+                                )
+                            }
+                        )
                     )
                 }
+
+
+//                dropSelectionIds.clear()
+//                for (entry in dropJoining?.keys!!){
+//                    dropSelectionIds.add(entry)
+//                }
+//                if(dropSelectionIds.isEmpty()){
+//                    showToast("Select at-least one joining to drop")
+//                }else {
+//                    DropSelectionBottomSheetDialogFragment.launch(
+//                        ArrayList(
+//                            dropSelectionIds.map {
+//                             it._id
+//                        })
+//                        , childFragmentManager
+//                    )
+//                }
             }
         }
 
@@ -190,6 +236,16 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
             }
         }
     }
+
+    private fun openChangeTeamLeaderScreen(
+        gigers : ArrayList<ChangeTeamLeaderRequestItem>
+    ) {
+        ChangeTeamLeaderBottomSheetFragment.launch(
+            gigers,
+            childFragmentManager
+        )
+    }
+
     private fun checkForApplyFilter() {
         val navController = findNavController()
         navController.currentBackStackEntry?.savedStateHandle?.getLiveData<Int>("filterDays")?.observe(
@@ -330,9 +386,12 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
             })
     }
 
-    private fun setDropSelection(hashMap: HashMap<String, Boolean>?) = viewBinding.apply{
+    private fun setDropSelection(hashMap: HashMap<JoiningList2RecyclerItemData.JoiningListRecyclerJoiningItemData, Boolean>?) = viewBinding.apply{
             val count = hashMap?.size
             appBarComp.setAppBarTitle("$count Selected")
+
+//            changeTeamLeaderButton.isVisible = count != 0
+
             joinNowButton.text = getString(R.string.drop_selection_lead)
             dropJoining = hashMap
     }
