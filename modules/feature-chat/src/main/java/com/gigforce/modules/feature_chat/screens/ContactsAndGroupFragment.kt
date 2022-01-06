@@ -2,6 +2,7 @@ package com.gigforce.modules.feature_chat.screens
 
 import android.Manifest
 import android.app.Activity
+import android.app.ProgressDialog.show
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -22,7 +23,9 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -45,6 +48,7 @@ import com.gigforce.common_ui.views.GigforceImageView
 import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.AppConstants
 import com.gigforce.core.ScopedStorageConstants
+import com.gigforce.core.base.BaseBottomSheetDialogFragment
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.datamodels.profile.Contact
@@ -83,7 +87,7 @@ import javax.inject.Inject
 class ContactsAndGroupFragment : BaseFragment2<ContactsAndGroupFragmentBinding>(
     fragmentName = "ContactsAndGroupFragment",
     layoutId = R.layout.contacts_and_group_fragment,
-    statusBarColor = R.color.lipstick_2
+    statusBarColor = R.color.colorPrimary
 ), OnContactClickListener, ClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener {
 
     companion object {
@@ -100,6 +104,19 @@ class ContactsAndGroupFragment : BaseFragment2<ContactsAndGroupFragmentBinding>(
         private const val EXTENSION: String = ".jpg"
 
         private const val REQUEST_STORAGE_PERMISSION = 102
+
+//        fun launchForSelectingContact(
+//            fm: FragmentManager,
+//            onContactsSelectedListener: OnContactsSelectedListener
+//        ) {
+//            ContactsAndGroupFragment().apply {
+//                arguments = bundleOf(
+//                   INTENT_EXTRA_RETURN_SELECTED_RESULTS to true
+//                )
+//                this.onContactSelectedListener = onContactsSelectedListener
+//                show(fm, ContactsAndGroupFragment.TAG)
+//            }
+//        }
     }
 
     //private lateinit var viewModel: ContactsAndGroupViewModel
@@ -148,7 +165,7 @@ class ContactsAndGroupFragment : BaseFragment2<ContactsAndGroupFragmentBinding>(
 
             hideSoftKeyboard()
             if (shouldReturnToPreviousScreen) {
-                //dismiss()
+//                dismiss()
             } else {
 
                 if (viewBinding.appBarComp.isSearchCurrentlyShown) {
@@ -332,11 +349,17 @@ class ContactsAndGroupFragment : BaseFragment2<ContactsAndGroupFragmentBinding>(
 //                } else {
 
                     if (shouldReturnToPreviousScreen)
-                        //dismiss()
+//                        dismiss()
                     else
                         activity?.onBackPressed()
                 //}
             })
+
+            if(shouldReturnToPreviousScreen){
+                newGroupLayout.gone()
+            } else {
+                newGroupLayout.visible()
+            }
 
             lifecycleScope.launch {
                 appBarComp.search_item.getTextChangeAsStateFlow()
@@ -401,14 +424,14 @@ class ContactsAndGroupFragment : BaseFragment2<ContactsAndGroupFragmentBinding>(
     private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {
         arguments?.let {
             sharedFilesBundle = it.getBundle(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE)
-            shouldReturnToPreviousScreen = it.getBoolean(ContactsFragment.INTENT_EXTRA_RETURN_SELECTED_RESULTS)
+            shouldReturnToPreviousScreen = it.getBoolean(INTENT_EXTRA_RETURN_SELECTED_RESULTS)
             creatingGroup = it.getBoolean(INTENT_EXTRA_NEW_GROUP)
             forwardChatMessage = it.getSerializable(ChatConstants.INTENT_EXTRA_FORWARD_MESSAGE) as ChatMessage? ?: return@let
         }
 
         savedInstanceState?.let {
             sharedFilesBundle = it.getBundle(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE)
-            shouldReturnToPreviousScreen = it.getBoolean(ContactsFragment.INTENT_EXTRA_RETURN_SELECTED_RESULTS)
+            shouldReturnToPreviousScreen = it.getBoolean(INTENT_EXTRA_RETURN_SELECTED_RESULTS)
             creatingGroup = it.getBoolean(INTENT_EXTRA_NEW_GROUP)
             forwardChatMessage = it.getSerializable(ChatConstants.INTENT_EXTRA_FORWARD_MESSAGE) as ChatMessage? ?: return@let
         }
@@ -427,21 +450,18 @@ class ContactsAndGroupFragment : BaseFragment2<ContactsAndGroupFragmentBinding>(
 //        }
 //    }
 
-//    override fun onSaveInstanceState(
-//        outState: Bundle
-//    ) {
-//        super.onSaveInstanceState(outState)
-//        outState.putBundle(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE, sharedFilesBundle)
-//        outState.putParcelable(
-//            ChatConstants.INTENT_EXTRA_FORWARD_MESSAGE,
-//            forwardChatMessage
-//        )
-//    }
+    override fun onSaveInstanceState(
+        outState: Bundle
+    ) {
+        super.onSaveInstanceState(outState)
+        outState.putBundle(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE, sharedFilesBundle)
+        outState.putBoolean(INTENT_EXTRA_RETURN_SELECTED_RESULTS, shouldReturnToPreviousScreen)
+    }
 
     override fun contactClick(contact: ContactModel) {
         if (shouldReturnToPreviousScreen) {
             onContactSelectedListener?.onContactsSelected(listOf(contact))
-            //dismiss()
+//            dismiss()
         } else {
 
             chatNavigation.navigateToChatPage(

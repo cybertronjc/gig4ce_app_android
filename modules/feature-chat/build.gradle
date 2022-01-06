@@ -122,8 +122,8 @@ dependencies {
     //audio view
     //implementation 'com.varunjohn1990.libraries:WhatsappMessengerView:2.1.0'
 
-    implementation 'io.github.aghajari:AXEmojiView:1.4.1'
-
-// Provider
-    implementation 'io.github.aghajari:AXEmojiView-iOSProvider:1.4.1'
+//    implementation 'io.github.aghajari:AXEmojiView:1.4.1'
+//
+//// Provider
+//    implementation 'io.github.aghajari:AXEmojiView-iOSProvider:1.4.1'
 }

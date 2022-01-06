@@ -7,12 +7,15 @@ import android.util.Log
 import android.util.Patterns
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.fragment.app.viewModels
@@ -36,6 +39,7 @@ import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.Lse
 import com.gigforce.modules.feature_chat.*
 import com.gigforce.modules.feature_chat.databinding.UserAndGroupDetailsFragmentBinding
+import com.gigforce.modules.feature_chat.screens.ContactsAndGroupFragment.Companion.INTENT_EXTRA_RETURN_SELECTED_RESULTS
 import com.gigforce.modules.feature_chat.screens.adapters.GroupMediaRecyclerAdapter
 import com.gigforce.modules.feature_chat.screens.adapters.GroupMembersRecyclerAdapter
 import com.gigforce.modules.feature_chat.screens.vm.ChatPageViewModel
@@ -53,10 +57,9 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
     fragmentName = "UserAndGroupDetailsFragment",
     layoutId = R.layout.user_and_group_details_fragment,
     statusBarColor = R.color.lipstick_2
-), GroupMediaRecyclerAdapter.OnGroupMediaClickListener,
-    GroupMembersRecyclerAdapter.OnGroupMembersClickListener {
+), GroupMediaRecyclerAdapter.OnGroupMediaClickListener, OnContactsSelectedListener, PopupMenu.OnMenuItemClickListener{
 
-    companion object {
+    companion object  {
         fun newInstance() = UserAndGroupDetailsFragment()
         const val TAG = "UserAndGroupDetailsFragment"
         const val INTENT_EXTRA_GROUP_ID = "group_id"
@@ -78,6 +81,14 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
     private var receiverMobileNumber: String? = null
     private var receiverPhotoUrl: String? = null
     private var fromClientActivation: Boolean = false
+
+    var onContactSelectedListener: OnContactsSelectedListener? = null
+
+//    private var onContactClickListener : OnMembersClickListener? = null
+//
+//    fun setOnMembersClickedListener(listener: OnMembersClickListener){
+//        this.onContactClickListener = listener
+//    }
 
     @Inject
     lateinit var navigation: INavigation
@@ -107,12 +118,12 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
         FirebaseAuth.getInstance().currentUser!!.uid
     }
 
-    private val groupMembersRecyclerAdapter: GroupMembersRecyclerAdapter by lazy {
-        GroupMembersRecyclerAdapter(
-            Glide.with(requireContext()),
-            this
-        )
-    }
+//    private val groupMembersRecyclerAdapter: GroupMembersRecyclerAdapter by lazy {
+//        GroupMembersRecyclerAdapter(
+//            Glide.with(requireContext()),
+//            this
+//        )
+//    }
 
 
     override fun viewCreated(
@@ -198,18 +209,40 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
         backButtonDetails.setOnClickListener {
             navigation.popBackStack()
         }
+
+        forwardArrow.setOnClickListener {
+//            navigation.navigateTo("chats/mediaAndDocsFragment", bundleOf(
+//                INTENT_EXTRA_GROUP_ID to chatHeaderOrGroupId
+//            ))
+            chatNavigation.openGroupMediaList(
+                chatHeaderOrGroupId.toString()
+            )
+        }
+
+        addGigerLayout.setOnClickListener {
+//            navigation.navigateTo("chats/contactsFragment", bundleOf(
+//                INTENT_EXTRA_RETURN_SELECTED_RESULTS to true
+//            ))
+            ContactsFragment.launchForSelectingContact(childFragmentManager, this@UserAndGroupDetailsFragment)
+        }
+
+        addContactFab.setOnClickListener {
+//            navigation.navigateTo("chats/contactsFragment", bundleOf(
+//                INTENT_EXTRA_RETURN_SELECTED_RESULTS to true
+//            ))
+            ContactsFragment.launchForSelectingContact(childFragmentManager, this@UserAndGroupDetailsFragment)
+        }
     }
 
     private fun showMembers(members: List<ContactModel>) = viewBinding.apply{
-        membersLinearLayout.removeAllViews()
-        members.forEach { contact ->
+        membersLinearLayout.removeAllViewsInLayout()
+        members.forEachIndexed { index, contact ->
             Log.d("selected", "$contact")
             val itemView = LayoutInflater.from(context).inflate(R.layout.recycler_item_group_member_2, null)
 
             val contactAvatarIV: GigforceImageView = itemView.findViewById(R.id.user_image_iv)
             val contactNameTV: TextView = itemView.findViewById(R.id.user_name_tv)
             val uidTV: TextView = itemView.findViewById(R.id.last_online_time_tv)
-            val isUserManagerView: View = itemView.findViewById(R.id.manager_text_view)
             val chatOverlay: View = itemView.findViewById(R.id.chat_overlay)
             val chatIcon: View = itemView.findViewById(R.id.chat_icon)
 
@@ -250,12 +283,67 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
                         "profile_pics/${contact.imagePathInStorage}"
                     contactAvatarIV.loadImageFromFirebase(profilePathRef)
                 }
-
             } else {
                 GlideApp.with(this@UserAndGroupDetailsFragment).load(R.drawable.ic_user_2).into(contactAvatarIV)
             }
 
-            membersLinearLayout.addView(view)
+            itemView.setOnLongClickListener {
+                if (viewModel.isContactModelOfCurrentUser(contact))
+                    this
+
+                contactLongPressed = contact
+                val popUp = PopupMenu(context, itemView)
+                popUp.inflate(R.menu.menu_group_members_long_click)
+
+                if (viewModel.isUserGroupAdmin()) {
+                    popUp.menu.findItem(R.id.action_remove_user).also { item ->
+                        item.isVisible = true
+                        item.title = getString(R.string.remove_chat) + " "+ contact.name
+                    }
+                } else {
+                    popUp.menu.findItem(R.id.action_remove_user).also {
+                        it.isVisible = false
+                    }
+                }
+
+                if (viewModel.isUserGroupAdmin()) {
+                    popUp.menu.findItem(R.id.action_make_admin).also {
+                        it.isVisible = true
+                        it.title = if (contact.isUserGroupManager)
+                            getString(R.string.dismiss_as_admin_chat)
+                        else
+                            getString(R.string.make_group_admin_chat)
+
+                    }
+                } else {
+                    popUp.menu.findItem(R.id.action_make_admin).also {
+                        it.isVisible = false
+                    }
+                }
+
+                popUp.setOnMenuItemClickListener(this@UserAndGroupDetailsFragment)
+                popUp.show()
+
+                true
+            }
+
+            chatOverlay.setOnClickListener {
+                val otherUserName = if (contact.name.isNullOrBlank()) {
+                    contact.mobile
+                } else
+                    contact.name!!
+
+                chatNavigation.navigateToChatPage(
+                    chatType = ChatConstants.CHAT_TYPE_USER,
+                    otherUserId = contact.uid!!,
+                    headerId = "",
+                    otherUserName = otherUserName,
+                    otherUserProfilePicture = contact.getUserProfileImageUrlOrPath() ?: "",
+                    sharedFileBundle = null
+                )
+            }
+
+            membersLinearLayout.addView(itemView)
         }
     }
 
@@ -289,12 +377,18 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
         membersLayout.gone()
         exitGroupLayout.gone()
         blockUserLayout.visible()
+        exitGroupLayout.visible()
+        muteNotificationsLayout.gone()
+        reportUserLayout.gone()
     }
 
     private fun adjustUiAccToGroupChat() = viewBinding.apply{
         membersLayout.visible()
         exitGroupLayout.visible()
         blockUserLayout.gone()
+        exitGroupLayout.gone()
+        muteNotificationsLayout.gone()
+        reportUserLayout.gone()
     }
 
     private fun subscribeOneToOneViewModel() = viewBinding.apply{
@@ -438,9 +532,9 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
 //        }
 
         if (content.groupMedia.isEmpty()) {
-            membersLinearLayout.gone()
+            mediaLayout.gone()
         } else {
-            membersLinearLayout.visible()
+            mediaLayout.visible()
         }
         groupMediaRecyclerAdapter.setData(content.groupMedia)
 
@@ -462,8 +556,48 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
 
         showMembers(membersList.plus(nonMgrMembers))
 
-        //showOrHideAddGroupOption(content)
+        showOrHideAddGroupOption(content)
     }
+
+    private fun showOrHideAddGroupOption(content: ChatGroup) = viewBinding.apply {
+        val groupManagers = content.groupMembers.filter {
+            it.isUserGroupManager
+        }
+
+        var isUserGroupManager = false
+        for (member in groupManagers) {
+
+            if (member.uid == currentUserUid) {
+                isUserGroupManager = true
+                break
+            }
+        }
+        //groupMembersRecyclerAdapter.setOrRemoveUserAsGroupManager(isUserGroupManager)
+
+        if (isUserGroupManager) {
+            if (content.groupDeactivated) {
+                addGigerLayout.isVisible = false
+                activateGroupLayout.isVisible = true
+                activateText.text = getString(R.string.activate_group_chat)
+                //group_deactivated_container.visible()
+            } else {
+                activateText.text = getString(R.string.deactivate_group_chat)
+                addGigerLayout.isVisible = true
+                activateGroupLayout.isVisible = true
+                //group_deactivated_container.gone()
+            }
+        } else {
+            addGigerLayout.isVisible = false
+            activateText.isVisible = false
+        }
+
+        if (content.groupDeactivated) {
+            activateGroupLayout.visible()
+        } else {
+            activateGroupLayout.gone()
+        }
+    }
+
 
 
     override fun onChatMediaClicked(
@@ -529,12 +663,59 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
         }
     }
 
-    override fun onGroupMemberItemLongPressed(view: View, position: Int, contact: ContactModel) {
+    private var contactLongPressed: ContactModel? = null
 
+    override fun onContactsSelected(contacts: List<ContactModel>) {
+        viewModel.addUsersGroup(contacts)
     }
 
-    override fun onChatIconClicked(position: Int, contact: ContactModel) {
+    override fun onMenuItemClick(item: MenuItem?): Boolean {
+        when(item?.itemId) {
 
+            R.id.action_message_user -> {
+
+                contactLongPressed?.let {
+                    val otherUserName = if (it.name.isNullOrBlank()) {
+                        it.mobile
+                    } else
+                        it.name!!
+
+                    chatNavigation.navigateToChatPage(
+                        chatType = ChatConstants.CHAT_TYPE_USER,
+                        otherUserId = it.uid!!,
+                        headerId = "",
+                        otherUserName = otherUserName,
+                        otherUserProfilePicture = it.imageUrl ?: "",
+                        sharedFileBundle = null
+                    )
+                }
+                contactLongPressed = null
+                true
+            }
+            R.id.action_remove_user -> {
+                contactLongPressed?.let {
+                    viewModel.removeUserFromGroup(it.uid!!)
+                }
+                contactLongPressed = null
+                true
+            }
+            R.id.action_make_admin -> {
+                contactLongPressed?.let {
+
+                    if (it.isUserGroupManager)
+                        viewModel.dismissAsGroupAdmin(it.uid!!)
+                    else
+                        viewModel.makeUserGroupAdmin(it.uid!!)
+
+                    contactLongPressed = null
+                }
+                true
+            }
+            else -> {
+                false
+            }
+        }
+        return true
     }
 
 }

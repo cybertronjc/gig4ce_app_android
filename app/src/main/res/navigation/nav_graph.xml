@@ -1144,6 +1144,10 @@
         android:id="@+id/audioPlayerBottomSheetFragment"
         android:name="com.gigforce.modules.feature_chat.screens.AudioPlayerBottomSheetFragment"
         android:label="AudioPlayerBottomSheetFragment" />
+    <fragment
+        android:id="@+id/mediaDocsAndAudioFragment"
+        android:name="com.gigforce.modules.feature_chat.screens.MediaDocsAndAudioFragment"
+        android:label="MediaDocsAndAudioFragment" />
 
 </navigation>
 

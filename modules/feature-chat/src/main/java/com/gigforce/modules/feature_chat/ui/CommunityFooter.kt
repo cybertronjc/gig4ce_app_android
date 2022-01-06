@@ -18,11 +18,11 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.core.widget.TextViewCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.aghajari.emojiview.emoji.Emoji
-import com.aghajari.emojiview.listener.OnEmojiActions
-import com.aghajari.emojiview.listener.PopupListener
-import com.aghajari.emojiview.view.AXEmojiView
-import com.aghajari.emojiview.view.AXSingleEmojiView
+//import com.aghajari.emojiview.emoji.Emoji
+//import com.aghajari.emojiview.listener.OnEmojiActions
+//import com.aghajari.emojiview.listener.PopupListener
+//import com.aghajari.emojiview.view.AXEmojiView
+//import com.aghajari.emojiview.view.AXSingleEmojiView
 import com.gigforce.common_ui.chat.models.ChatMessage
 import com.gigforce.common_ui.chat.models.MentionUser
 import com.gigforce.common_ui.core.ChatConstants
@@ -46,9 +46,10 @@ import java.util.*
 import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
 import android.graphics.drawable.Drawable
 
-import com.aghajari.emojiview.listener.SimplePopupAdapter
+//import com.aghajari.emojiview.listener.SimplePopupAdapter
 import android.view.ViewTreeObserver
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
+import androidx.recyclerview.widget.LinearLayoutManager
 
 
 @AndroidEntryPoint
@@ -60,13 +61,12 @@ class CommunityFooter(context: Context, attrs: AttributeSet) :
     {
 
     companion object {
-        private const val SUGGESTION_BUCKET = "names-suggestions"
+        private const val SUGGESTION_BUCKET = "suggestions"
         private const val TAG = "CommunityFooter"
 
         private val tokenizerConfig = WordTokenizerConfig.Builder()
             .setWordBreakChars(", ")
             .setExplicitChars("@")
-//                .setExplicitChars("")
             .setMaxNumKeywords(2)
             .setThreshold(1)
             .build()
@@ -88,7 +88,7 @@ class CommunityFooter(context: Context, attrs: AttributeSet) :
 
 
         var viewBinding: CommunityFooterLayoutBinding
-        private lateinit var CommunityFooter: CommunityFooter
+        //private lateinit var CommunityFooter: CommunityFooter
 
         private lateinit var mentionAdapter: MemberMentionAdapter
 
@@ -157,7 +157,9 @@ class CommunityFooter(context: Context, attrs: AttributeSet) :
             screenHeight = displayMetrics.heightPixels
             screenWidth = displayMetrics.widthPixels
             isLayoutDirectionRightToLeft = context.resources.getBoolean(R.bool.is_right_to_left)
+            viewBinding.mentionSuggestionRv.layoutManager = LinearLayoutManager(context)
             mentionAdapter = MemberMentionAdapter(emptyList())
+            viewBinding.mentionSuggestionRv.adapter = mentionAdapter
 
             Handler(context.mainLooper).also { handlerS = it }
 
@@ -182,142 +184,144 @@ class CommunityFooter(context: Context, attrs: AttributeSet) :
             setupRecording()
             setupAttachmentOptions()
 
-
+            viewBinding.imageViewEmoji.setOnClickListener {
+                Toast.makeText(context, "Coming soon", Toast.LENGTH_SHORT).show()
+            }
         }
 
-         fun setupEmojiLayout(emojiView: AXEmojiView) = viewBinding.apply {
-             emojiView.setEditText(edt);
-            emojiLayout.initPopupView(emojiView)
-//             editTextMessage.setOnClickListener {
-//                 if (emojiLayout.isShowing()) {
-//                     emojiLayout.dismiss()
+//         fun setupEmojiLayout(emojiView: AXEmojiView) = viewBinding.apply {
+//             emojiView.setEditText(edt);
+//            emojiLayout.initPopupView(emojiView)
+////             editTextMessage.setOnClickListener {
+////                 if (emojiLayout.isShowing()) {
+////                     emojiLayout.dismiss()
+////                 }
+////             }
+//             val imm by lazy { context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager }
+//             val windowHeightMethod = InputMethodManager::class.java.getMethod("getInputMethodWindowVisibleHeight")
+//             val height = windowHeightMethod.invoke(imm) as Int
+//
+//             var isEmojiShowing = false
+////             imageViewEmoji.setOnClickListener{
+////                 if (emojiLayout.isShowing) {
+////
+////                     Log.d("emojilayout", "was already showing ${emojiLayout.isShowing} , iskeybordopen ${emojiLayout.isKeyboardOpen}")
+////
+////                     isEmojiShowing = false
+////                     openSoftKeyboard(it)
+//////                     if (!emojiLayout.isKeyboardOpen){
+//////                         Log.d("emojilayout", "keyboard was hidden")
+//////
+//////                     }
+////                     emojiLayout.dismiss()
+////                     //emojiLayout.gone()
+////
+////                 } else{
+////
+////                     Log.d("emojilayout", "showing layout, ${emojiLayout.isShowing} , iskeybordopen ${emojiLayout.isKeyboardOpen}")
+////                     isEmojiShowing = true
+//////                     if (emojiLayout.isKeyboardOpen){
+//////                         Log.d("emojilayout", "keyboard was showing")
+//////
+//////                     }
+////                     hideKeyboard(it)
+////                     emojiLayout.show()
+////                     //emojiLayout.visible()
+////                 }
+////             }
+//
+//             viewBinding.root.viewTreeObserver.addOnGlobalLayoutListener {
+//                 val heightDiff = viewBinding.root.rootView.height - viewBinding.root.height
+//                 if (heightDiff > 100) { // Value should be less than keyboard's height
+//                     Log.e("MyActivity", "keyboard opened")
+//                 } else {
+//                     Log.e("MyActivity", "keyboard closed")
 //                 }
 //             }
-             val imm by lazy { context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager }
-             val windowHeightMethod = InputMethodManager::class.java.getMethod("getInputMethodWindowVisibleHeight")
-             val height = windowHeightMethod.invoke(imm) as Int
-
-             var isEmojiShowing = false
-//             imageViewEmoji.setOnClickListener{
-//                 if (emojiLayout.isShowing) {
 //
-//                     Log.d("emojilayout", "was already showing ${emojiLayout.isShowing} , iskeybordopen ${emojiLayout.isKeyboardOpen}")
 //
-//                     isEmojiShowing = false
-//                     openSoftKeyboard(it)
-////                     if (!emojiLayout.isKeyboardOpen){
-////                         Log.d("emojilayout", "keyboard was hidden")
-////
-////                     }
-//                     emojiLayout.dismiss()
-//                     //emojiLayout.gone()
-//
-//                 } else{
-//
-//                     Log.d("emojilayout", "showing layout, ${emojiLayout.isShowing} , iskeybordopen ${emojiLayout.isKeyboardOpen}")
-//                     isEmojiShowing = true
-////                     if (emojiLayout.isKeyboardOpen){
-////                         Log.d("emojilayout", "keyboard was showing")
-////
-////                     }
-//                     hideKeyboard(it)
-//                     emojiLayout.show()
-//                     //emojiLayout.visible()
-//                 }
-//             }
-
-             viewBinding.root.viewTreeObserver.addOnGlobalLayoutListener {
-                 val heightDiff = viewBinding.root.rootView.height - viewBinding.root.height
-                 if (heightDiff > 100) { // Value should be less than keyboard's height
-                     Log.e("MyActivity", "keyboard opened")
-                 } else {
-                     Log.e("MyActivity", "keyboard closed")
-                 }
-             }
-
-
-             emojiLayout.setPopupListener(object : SimplePopupAdapter() {
-                 override fun onShow() {
-                     imageViewEmoji.setImageDrawable(resources.getDrawable(R.drawable.ic_attachment_icon))
-                 }
-
-                 override fun onDismiss() {
-                     imageViewEmoji.setImageDrawable(resources.getDrawable(R.drawable.ic_emoji_icon))
-                 }
-             })
-
-             var isEmojiLayoutShowing = false
-
-             emojiView.onEmojiActionsListener = object :  OnEmojiActions {
-                 override fun onClick(
-                     view: View?,
-                     emoji: Emoji?,
-                     fromRecent: Boolean,
-                     fromVariant: Boolean
-                 ) {
-                     val textH = editTextMessage.text.toString() + emoji
-                     editTextMessage.setSelection(editTextMessage.length())
-                     editTextMessage.setText(textH)
-                 }
-
-                 override fun onLongClick(
-                     view: View?,
-                     emoji: Emoji?,
-                     fromRecent: Boolean,
-                     fromVariant: Boolean
-                 ): Boolean {
-                     return true
-                 }
-             }
-
-//             emojiLayout.setPopupListener(object : PopupListener {
-//                 override fun onDismiss() {
-//                     Log.d("emojiLayout", "dismiss")
-//                     imageViewEmoji.setImageDrawable(resources.getDrawable(R.drawable.ic_emoji_icon))
-////                     imageViewEmoji.requestFocus()
-//                 }
-//
+//             emojiLayout.setPopupListener(object : SimplePopupAdapter() {
 //                 override fun onShow() {
-//                     Log.d("emojiLayout", "show")
 //                     imageViewEmoji.setImageDrawable(resources.getDrawable(R.drawable.ic_attachment_icon))
-////                     imageViewEmoji.requestFocus()
 //                 }
 //
-//                 override fun onKeyboardOpened(height: Int) {
-//                     Log.d("emojiLayout", "keyboard opened")
-//                     //emojiLayout.dismiss()
+//                 override fun onDismiss() {
+//                     imageViewEmoji.setImageDrawable(resources.getDrawable(R.drawable.ic_emoji_icon))
 //                 }
-//
-//                 override fun onKeyboardClosed() {
-//                     Log.d("emojiLayout", "keyboard closed")
-//                 }
-//
-//                 override fun onViewHeightChanged(height: Int) {
-//                     Log.d("emojiLayout", "height: $height")
-//                 }
-//
-//
 //             })
-//            imageViewEmoji.setOnClickListener {
-//                val handler = Handler()
-//                handler.postDelayed({
-////                    emojiLayout.toggle()
-//                    if (emojiLayout.isShowing){
-//                        //emojiLayout.toggle()
-//                        emojiLayout.dismiss()
-//                        openSoftKeyboard(editTextMessage)
-//                        editTextMessage.requestFocus()
-//                        imageViewEmoji.setImageDrawable(resources.getDrawable(R.drawable.ic_emoji_icon))
-//                    } else {
-//                        //emojiLayout.toggle()
-//                        emojiLayout.show()
-//                        hideKeyboard(editTextMessage)
-//                        editTextMessage.requestFocus()
-//                        imageViewEmoji.setImageDrawable(resources.getDrawable(R.drawable.ic_attachment_icon))
-//                    }
-//                }, 2000) //5 seconds
-//            }
-        }
+//
+//             var isEmojiLayoutShowing = false
+//
+//             emojiView.onEmojiActionsListener = object :  OnEmojiActions {
+//                 override fun onClick(
+//                     view: View?,
+//                     emoji: Emoji?,
+//                     fromRecent: Boolean,
+//                     fromVariant: Boolean
+//                 ) {
+//                     val textH = editTextMessage.text.toString() + emoji
+//                     editTextMessage.setSelection(editTextMessage.length())
+//                     editTextMessage.setText(textH)
+//                 }
+//
+//                 override fun onLongClick(
+//                     view: View?,
+//                     emoji: Emoji?,
+//                     fromRecent: Boolean,
+//                     fromVariant: Boolean
+//                 ): Boolean {
+//                     return true
+//                 }
+//             }
+//
+////             emojiLayout.setPopupListener(object : PopupListener {
+////                 override fun onDismiss() {
+////                     Log.d("emojiLayout", "dismiss")
+////                     imageViewEmoji.setImageDrawable(resources.getDrawable(R.drawable.ic_emoji_icon))
+//////                     imageViewEmoji.requestFocus()
+////                 }
+////
+////                 override fun onShow() {
+////                     Log.d("emojiLayout", "show")
+////                     imageViewEmoji.setImageDrawable(resources.getDrawable(R.drawable.ic_attachment_icon))
+//////                     imageViewEmoji.requestFocus()
+////                 }
+////
+////                 override fun onKeyboardOpened(height: Int) {
+////                     Log.d("emojiLayout", "keyboard opened")
+////                     //emojiLayout.dismiss()
+////                 }
+////
+////                 override fun onKeyboardClosed() {
+////                     Log.d("emojiLayout", "keyboard closed")
+////                 }
+////
+////                 override fun onViewHeightChanged(height: Int) {
+////                     Log.d("emojiLayout", "height: $height")
+////                 }
+////
+////
+////             })
+////            imageViewEmoji.setOnClickListener {
+////                val handler = Handler()
+////                handler.postDelayed({
+//////                    emojiLayout.toggle()
+////                    if (emojiLayout.isShowing){
+////                        //emojiLayout.toggle()
+////                        emojiLayout.dismiss()
+////                        openSoftKeyboard(editTextMessage)
+////                        editTextMessage.requestFocus()
+////                        imageViewEmoji.setImageDrawable(resources.getDrawable(R.drawable.ic_emoji_icon))
+////                    } else {
+////                        //emojiLayout.toggle()
+////                        emojiLayout.show()
+////                        hideKeyboard(editTextMessage)
+////                        editTextMessage.requestFocus()
+////                        imageViewEmoji.setImageDrawable(resources.getDrawable(R.drawable.ic_attachment_icon))
+////                    }
+////                }, 2000) //5 seconds
+////            }
+//        }
 
         fun hideKeyboard(view: View) {
             val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -926,148 +930,147 @@ class CommunityFooter(context: Context, attrs: AttributeSet) :
         val suggestions = result.suggestions as List<GroupChatMember>
         mentionAdapter = MemberMentionAdapter(suggestions)
         viewBinding.mentionSuggestionRv.swapAdapter(mentionAdapter, true)
-        displaySuggestions(suggestions.isNotEmpty())
+        displaySuggestions(suggestions.isNotEmpty() && viewBinding.editTextMessage.text.toString().contains("@"))
     }
 
-        // --------------------------------------------------
-        // MemberMentionAdapter Class
-        // --------------------------------------------------
-        private class SuggestionsItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            var name: TextView = itemView.findViewById(R.id.person_name)
-            var picture: GigforceImageView = itemView.findViewById(R.id.person_image)
+    // --------------------------------------------------
+    // MemberMentionAdapter Class
+    // --------------------------------------------------
+    private class SuggestionsItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var name: TextView = itemView.findViewById(R.id.person_name)
+        var picture: GigforceImageView = itemView.findViewById(R.id.person_image)
+    }
+
+    private inner class MemberMentionAdapter(
+        private val suggestions: List<GroupChatMember>
+    ) : RecyclerView.Adapter<SuggestionsItemViewHolder>() {
+
+        override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): SuggestionsItemViewHolder {
+            val v: View = LayoutInflater.from(viewGroup.context).inflate(R.layout.recycler_item_mention_suggestion, viewGroup, false)
+            return SuggestionsItemViewHolder(v)
         }
 
-        private inner class MemberMentionAdapter(
-            private val suggestions: List<GroupChatMember>
-        ) : RecyclerView.Adapter<SuggestionsItemViewHolder>() {
+        override fun onBindViewHolder(viewHolder: SuggestionsItemViewHolder, i: Int) {
+            val person = suggestions[i]
+            viewHolder.name.text = person.name
 
-            override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): SuggestionsItemViewHolder {
-                val v: View = LayoutInflater.from(viewGroup.context).inflate(R.layout.recycler_item_mention_suggestion, viewGroup, false)
-                return SuggestionsItemViewHolder(v)
+            if (person.profilePicture.isNotBlank())
+                viewHolder.picture.loadImageIfUrlElseTryFirebaseStorage(person.profilePicture, R.drawable.ic_user_2, R.drawable.ic_user_2)
+            else {
+                viewHolder.picture.loadImage(R.drawable.ic_user_2)
             }
 
-            override fun onBindViewHolder(viewHolder: SuggestionsItemViewHolder, i: Int) {
-                val person = suggestions[i]
-                viewHolder.name.text = person.name
-
-                if (person.profilePicture.isNotBlank())
-                    viewHolder.picture.loadImageIfUrlElseTryFirebaseStorage(person.profilePicture, R.drawable.ic_user_2, R.drawable.ic_user_2)
-                else {
-                    viewHolder.picture.loadImage(R.drawable.ic_user_2)
-                }
-
-                viewHolder.itemView.setOnClickListener {
-                    viewBinding.editTextMessage.insertMention(person)
-                    viewBinding.mentionSuggestionRv.swapAdapter(MemberMentionAdapter(emptyList()), true)
-                    displaySuggestions(false)
-                    viewBinding.editTextMessage.requestFocus()
-                }
-            }
-
-            override fun getItemCount(): Int {
-                return suggestions.size
+            viewHolder.itemView.setOnClickListener {
+                viewBinding.editTextMessage.insertMention(person)
+                viewBinding.mentionSuggestionRv.swapAdapter(MemberMentionAdapter(emptyList()), true)
+                displaySuggestions(false)
+                viewBinding.editTextMessage.requestFocus()
             }
         }
 
-        fun openReplyUi(
-            chatMessage: ChatMessage
-        ) = viewBinding.apply {
-            this@CommunityFooter.replyMessage = chatMessage
-            replyToMessageLayout.visible()
-            replyToMessageLayout.removeAllViews()
+        override fun getItemCount(): Int {
+            return suggestions.size
+        }
+    }
 
-            val replyView = LayoutInflater.from(context).inflate(
-                R.layout.layout_reply_to_layout,
-                null,
-                false
-            )
-            replyToMessageLayout.addView(replyView)
+    fun openReplyUi(
+        chatMessage: ChatMessage
+    ) = viewBinding.apply {
+        this@CommunityFooter.replyMessage = chatMessage
+        replyToMessageLayout.visible()
+        replyToMessageLayout.removeAllViews()
 
-            //Setting common vars and listeners
-            val senderNameTV: TextView = replyView.findViewById(R.id.user_name_tv)
-            val messageTV: TextView = replyView.findViewById(R.id.tv_msgValue)
-            val closeBtn: ImageView = replyView.findViewById(R.id.close_btn)
-            val messageImageIV: GigforceImageView = replyView.findViewById(R.id.message_image)
+        val replyView = LayoutInflater.from(context).inflate(
+            R.layout.layout_reply_to_layout,
+            null,
+            false
+        )
+        replyToMessageLayout.addView(replyView)
 
-            closeBtn.setOnClickListener {
-                closeReplyUi()
+        //Setting common vars and listeners
+        val senderNameTV: TextView = replyView.findViewById(R.id.user_name_tv)
+        val messageTV: TextView = replyView.findViewById(R.id.tv_msgValue)
+        val closeBtn: ImageView = replyView.findViewById(R.id.close_btn)
+        val messageImageIV: GigforceImageView = replyView.findViewById(R.id.message_image)
+
+        closeBtn.setOnClickListener {
+            closeReplyUi()
+        }
+        senderNameTV.text = chatMessage.senderInfo.name
+
+        when (chatMessage.type) {
+            ChatConstants.MESSAGE_TYPE_TEXT -> {
+                messageTV.text = chatMessage.content
+                messageImageIV.gone()
             }
-            senderNameTV.text = chatMessage.senderInfo.name
+            ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE -> {
+                messageTV.text = chatMessage.attachmentName
+                messageImageIV.visible()
 
-            when (chatMessage.type) {
-                ChatConstants.MESSAGE_TYPE_TEXT -> {
-                    messageTV.text = chatMessage.content
-                    messageImageIV.gone()
-                }
-                ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE -> {
-                    messageTV.text = chatMessage.attachmentName
-                    messageImageIV.visible()
-
-                    if(chatMessage.thumbnailBitmap != null){
-                        messageImageIV.loadImage(chatMessage.thumbnailBitmap!!,true)
-                    } else if(chatMessage.thumbnail != null){
-                        messageImageIV.loadImageIfUrlElseTryFirebaseStorage(chatMessage.thumbnail!!)
-                    }else if(chatMessage.attachmentPath != null){
-                        messageImageIV.loadImageIfUrlElseTryFirebaseStorage(chatMessage.attachmentPath!!)
-                    } else {
-                        //load default image
-                    }
-                }
-                ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO -> {
-                    messageTV.text = chatMessage.attachmentName
-                    messageImageIV.visible()
-
-                    if(chatMessage.thumbnailBitmap != null){
-                        messageImageIV.loadImage(chatMessage.thumbnailBitmap!!,true)
-                    } else if(chatMessage.thumbnail != null){
-                        messageImageIV.loadImageIfUrlElseTryFirebaseStorage(chatMessage.thumbnail!!)
-                    }else {
-                        //load default image
-                    }
-                }
-                ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION -> {
-                    messageTV.text = chatMessage.locationPhysicalAddress
-                    messageImageIV.visible()
-
-                    if(chatMessage.thumbnailBitmap != null){
-                        messageImageIV.loadImage(chatMessage.thumbnailBitmap!!,true)
-                    } else if(chatMessage.thumbnail != null){
-                        messageImageIV.loadImageIfUrlElseTryFirebaseStorage(chatMessage.thumbnail!!)
-                    }else if(chatMessage.attachmentPath != null){
-                        messageImageIV.loadImageIfUrlElseTryFirebaseStorage(chatMessage.attachmentPath!!)
-                    } else {
-                        //load default image
-                    }
-                }
-                ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT -> {
-                    messageTV.text = chatMessage.attachmentName
-                    messageImageIV.visible()
-                    messageImageIV.loadImage(R.drawable.ic_document_background)
-                }
-                else -> {
+                if(chatMessage.thumbnailBitmap != null){
+                    messageImageIV.loadImage(chatMessage.thumbnailBitmap!!,true)
+                } else if(chatMessage.thumbnail != null){
+                    messageImageIV.loadImageIfUrlElseTryFirebaseStorage(chatMessage.thumbnail!!)
+                }else if(chatMessage.attachmentPath != null){
+                    messageImageIV.loadImageIfUrlElseTryFirebaseStorage(chatMessage.attachmentPath!!)
+                } else {
+                    //load default image
                 }
             }
+            ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO -> {
+                messageTV.text = chatMessage.attachmentName
+                messageImageIV.visible()
 
+                if(chatMessage.thumbnailBitmap != null){
+                    messageImageIV.loadImage(chatMessage.thumbnailBitmap!!,true)
+                } else if(chatMessage.thumbnail != null){
+                    messageImageIV.loadImageIfUrlElseTryFirebaseStorage(chatMessage.thumbnail!!)
+                }else {
+                    //load default image
+                }
+            }
+            ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION -> {
+                messageTV.text = chatMessage.locationPhysicalAddress
+                messageImageIV.visible()
 
+                if(chatMessage.thumbnailBitmap != null){
+                    messageImageIV.loadImage(chatMessage.thumbnailBitmap!!,true)
+                } else if(chatMessage.thumbnail != null){
+                    messageImageIV.loadImageIfUrlElseTryFirebaseStorage(chatMessage.thumbnail!!)
+                }else if(chatMessage.attachmentPath != null){
+                    messageImageIV.loadImageIfUrlElseTryFirebaseStorage(chatMessage.attachmentPath!!)
+                } else {
+                    //load default image
+                }
+            }
+            ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT -> {
+                messageTV.text = chatMessage.attachmentName
+                messageImageIV.visible()
+                messageImageIV.loadImage(R.drawable.ic_document_background)
+            }
+            else -> {
+            }
         }
 
-        fun closeReplyUi(){
-            viewBinding.replyToMessageLayout.removeAllViews()
-            viewBinding.replyToMessageLayout.gone()
-            replyMessage = null
-        }
-
-        fun getReplyToMessage(): ChatMessage? {
-            return replyMessage
-        }
-
-        fun openSoftKeyboard(view: View) {
-            val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            inputMethodManager.toggleSoftInputFromWindow(
-                view.applicationWindowToken,
-                InputMethod.SHOW_FORCED,
-                0
-            )
-        }
 
     }
+
+    fun closeReplyUi(){
+        viewBinding.replyToMessageLayout.removeAllViews()
+        viewBinding.replyToMessageLayout.gone()
+        replyMessage = null
+    }
+
+    fun getReplyToMessage(): ChatMessage? {
+        return replyMessage
+    }
+
+    fun openSoftKeyboard(view: View) {
+        val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.toggleSoftInputFromWindow(
+            view.applicationWindowToken,
+            InputMethod.SHOW_FORCED,
+            0
+        )
+    }
+}

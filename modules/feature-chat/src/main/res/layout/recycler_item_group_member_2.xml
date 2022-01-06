@@ -5,14 +5,15 @@
     android:id="@+id/txt_contact_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="8dp"
-    android:paddingBottom="8dp">
+    android:background="?android:selectableItemBackground"
+    android:paddingTop="8dp">
 
     <com.gigforce.common_ui.views.GigforceImageView
         android:id="@+id/user_image_iv"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:scaleType="centerCrop"
+        android:layout_marginStart="@dimen/size_20"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearanceOverlay="@style/circleImageView" />
@@ -23,6 +24,7 @@
         android:layout_height="32dp"
         android:clickable="true"
         android:focusable="true"
+        android:layout_marginEnd="@dimen/size_20"
         android:visibility="gone"
         android:layout_marginTop="8dp"
         android:background="@color/light_pink"
@@ -82,7 +84,7 @@
         android:textSize="14sp"
         android:textStyle="normal"
         app:layout_constraintBottom_toBottomOf="@id/user_image_iv"
-        app:layout_constraintEnd_toStartOf="@id/manager_text_view"
+        app:layout_constraintEnd_toStartOf="@id/chat_icon"
         app:layout_constraintStart_toEndOf="@id/user_image_iv"
         app:layout_constraintTop_toTopOf="@id/user_image_iv"
         tools:text="Paritosh Yadav" />

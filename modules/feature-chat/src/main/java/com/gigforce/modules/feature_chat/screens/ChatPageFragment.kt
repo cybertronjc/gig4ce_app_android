@@ -34,10 +34,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.aghajari.emojiview.AXEmojiManager
-import com.aghajari.emojiview.iosprovider.AXIOSEmojiProvider
-import com.aghajari.emojiview.view.AXEmojiView
-import com.aghajari.emojiview.view.AXSingleEmojiView
+//import com.aghajari.emojiview.AXEmojiManager
+//import com.aghajari.emojiview.iosprovider.AXIOSEmojiProvider
+//import com.aghajari.emojiview.view.AXEmojiView
+//import com.aghajari.emojiview.view.AXSingleEmojiView
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.gigforce.common_image_picker.CameraAndGalleryIntegrator
 import com.gigforce.common_image_picker.ImageCropCallback
@@ -438,8 +438,11 @@ class ChatPageFragment : Fragment(),
     private fun adjustUiAccToGroupChat() {
         //toolbar.hideActionMenu()
         appbar.makeMenuItemVisible(false)
-        chatFooter.setGroupViewModel(groupChatViewModel)
-        chatFooter.enableUserSuggestions()
+//        chatFooter.setGroupViewModel(groupChatViewModel)
+//        chatFooter.enableUserSuggestions()
+
+        communityFooter.setGroupViewModel(groupChatViewModel)
+        communityFooter.enableUserSuggestions()
 
         //toolbar.showSubtitle(getString(R.string.tap_to_open_details_chat))
         appbar.showSubtitle(getString(R.string.tap_to_open_details_chat))
@@ -456,16 +459,17 @@ class ChatPageFragment : Fragment(),
                     StringConstants.MOBILE_NUMBER.value to receiverMobileNumber
 
                 ))
-            } else if(chatType == ChatConstants.CHAT_TYPE_USER) {
-                navigation.navigateTo("chats/userGroupDetailsFragment", bundleOf(
-                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_TYPE to ChatConstants.CHAT_TYPE_USER,
-                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_IMAGE to receiverPhotoUrl,
-                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_NAME to receiverName,
-                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_HEADER_ID to groupId,
-                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_ID to receiverUserId,
-                    StringConstants.MOBILE_NUMBER.value to receiverMobileNumber
-                ))
             }
+//            else if(chatType == ChatConstants.CHAT_TYPE_USER) {
+//                navigation.navigateTo("chats/userGroupDetailsFragment", bundleOf(
+//                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_TYPE to ChatConstants.CHAT_TYPE_USER,
+//                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_IMAGE to receiverPhotoUrl,
+//                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_NAME to receiverName,
+//                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_HEADER_ID to groupId,
+//                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_ID to receiverUserId,
+//                    StringConstants.MOBILE_NUMBER.value to receiverMobileNumber
+//                ))
+//            }
         })
         appbar.setTitleClickListener(View.OnClickListener {
             val groupId = chatHeaderOrGroupId ?: return@OnClickListener
@@ -479,17 +483,18 @@ class ChatPageFragment : Fragment(),
                     UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_ID to receiverUserId,
                     StringConstants.MOBILE_NUMBER.value to receiverMobileNumber
                 ))
-            } else if(chatType == ChatConstants.CHAT_TYPE_USER) {
-                navigation.navigateTo("chats/userGroupDetailsFragment", bundleOf(
-                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_TYPE to ChatConstants.CHAT_TYPE_USER,
-                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_IMAGE to receiverPhotoUrl,
-                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_NAME to receiverName,
-                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_HEADER_ID to groupId,
-                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_ID to receiverUserId,
-                    StringConstants.MOBILE_NUMBER.value to receiverMobileNumber
-
-                ))
             }
+//            else if(chatType == ChatConstants.CHAT_TYPE_USER) {
+//                navigation.navigateTo("chats/userGroupDetailsFragment", bundleOf(
+//                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_TYPE to ChatConstants.CHAT_TYPE_USER,
+//                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_IMAGE to receiverPhotoUrl,
+//                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_NAME to receiverName,
+//                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_HEADER_ID to groupId,
+//                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_ID to receiverUserId,
+//                    StringConstants.MOBILE_NUMBER.value to receiverMobileNumber
+//
+//                ))
+//            }
         })
 
 
@@ -560,6 +565,16 @@ class ChatPageFragment : Fragment(),
 
         groupChatViewModel.selectedChatMessage.observe(viewLifecycleOwner, Observer {
             it ?: return@Observer
+            Log.d("selectedMsg", "${it.flowType} , ${it.type} , ${it.chatType}")
+            selectedChatMessage = it
+            var isCopyEnable = false
+            var isDeleteEnable = false
+            isDeleteEnable = it.flowType == "out"
+            if(it.type == "text"){
+                isCopyEnable = true
+                isDeleteEnable = it.flowType == "out"
+            }
+            appbar.makeChatOptionsVisible(true, isCopyEnable, isDeleteEnable)
 
         })
 
@@ -604,9 +619,9 @@ class ChatPageFragment : Fragment(),
     private fun setUpAudioView() {
         communityFooter.setAttachmentOptions(AttachmentOption.defaultList, this)
         communityFooter.setRecordingListener(this)
-        AXEmojiManager.install(activity, AXIOSEmojiProvider(activity))
-        val emojiView = AXEmojiView(activity)
-        communityFooter.setupEmojiLayout(emojiView)
+//        AXEmojiManager.install(activity, AXIOSEmojiProvider(activity))
+//        val emojiView = AXEmojiView(activity)
+//        communityFooter.setupEmojiLayout(emojiView)
 
         val componentName = context?.let { ComponentName(it, MusicService::class.java) }
         // initialize the browser
@@ -866,6 +881,9 @@ class ChatPageFragment : Fragment(),
 
         })
 
+        chatRecyclerView.visible()
+        shimmerContainer.gone()
+
     }
     private fun extractMediaSourceFromUri(uri: Uri): MediaSource {
         val userAgent = context?.let { Util.getUserAgent(it, "Exo") }
@@ -893,9 +911,10 @@ class ChatPageFragment : Fragment(),
 
             if (chatType == ChatConstants.CHAT_TYPE_GROUP) {
                 chatNavigation.openGroupDetailsPage(groupId, ChatConstants.CHAT_TYPE_GROUP)
-            } else if(chatType == ChatConstants.CHAT_TYPE_USER) {
-                chatNavigation.openGroupDetailsPage(groupId, ChatConstants.CHAT_TYPE_USER)
             }
+//            else if(chatType == ChatConstants.CHAT_TYPE_USER) {
+//                chatNavigation.openGroupDetailsPage(groupId, ChatConstants.CHAT_TYPE_USER)
+//            }
         })
 
         appbar.setBackButtonListener(View.OnClickListener {

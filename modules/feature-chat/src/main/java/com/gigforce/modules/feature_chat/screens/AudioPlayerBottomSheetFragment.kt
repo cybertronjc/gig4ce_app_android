@@ -63,7 +63,7 @@ class AudioPlayerBottomSheetFragment : BaseBottomSheetDialogFragment<FragmentAud
     private fun initListeners() {
         viewBinding.playPauseAudio.setOnClickListener {
             if (player?.isPlaying == true) {
-                viewBinding.playPauseAudio.setImageDrawable(context?.getDrawable(R.drawable.ic_pink_play_icon))
+                viewBinding.playPauseAudio.setImageDrawable(context?.getDrawable(R.drawable.ic_baseline_play_arrow_24))
                 player?.playWhenReady = false
             } else{
                 viewBinding.playPauseAudio.setImageDrawable(context?.getDrawable(R.drawable.ic_pink_pause_icon))

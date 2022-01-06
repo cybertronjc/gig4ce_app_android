@@ -19,6 +19,7 @@ class NavForChatModule(
         baseImplementation.registerRoute("${moduleName}/contactsFragment", R.id.contactsAndGroupFragment)
         baseImplementation.registerRoute("${moduleName}/userGroupDetailsFragment", R.id.userAndGroupDetailsFragment)
         baseImplementation.registerRoute("${moduleName}/audioPlayer", R.id.audioPlayerBottomSheetFragment)
+        baseImplementation.registerRoute("${moduleName}/mediaAndDocsFragment", R.id.mediaDocsAndAudioFragment)
 
 
 
