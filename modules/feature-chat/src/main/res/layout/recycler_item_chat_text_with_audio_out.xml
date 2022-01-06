@@ -49,8 +49,9 @@
 
                 <ImageView
                     android:id="@+id/audio_type_iv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:padding="@dimen/size_4"
                     app:layout_constraintTop_toBottomOf="@id/user_name_tv"
                     app:layout_constraintStart_toStartOf="parent"
                     app:srcCompat="@drawable/ic_play_audio_icon" />

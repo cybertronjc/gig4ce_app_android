@@ -1052,13 +1052,15 @@ class CommunityFooter(context: Context, attrs: AttributeSet) :
             }
         }
 
-
+        openSoftKeyboard(editTextMessage)
+        editTextMessage.requestFocus()
     }
 
     fun closeReplyUi(){
         viewBinding.replyToMessageLayout.removeAllViews()
         viewBinding.replyToMessageLayout.gone()
         replyMessage = null
+        hideKeyboard(viewBinding.editTextMessage)
     }
 
     fun getReplyToMessage(): ChatMessage? {

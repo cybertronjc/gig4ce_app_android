@@ -1,15 +1,21 @@
 package com.gigforce.modules.feature_chat.screens
 
+import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SeekBar
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
+import com.gigforce.common_ui.chat.ChatFileManager
+import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.base.BaseBottomSheetDialogFragment
 import com.gigforce.modules.feature_chat.R
 import com.gigforce.modules.feature_chat.ViewFullScreenVideoDialogFragment
@@ -18,8 +24,12 @@ import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_chat.*
 import kotlinx.android.synthetic.main.fragment_play_video_full_screen.*
+import java.io.File
+import java.io.IOException
 
 @AndroidEntryPoint
 class AudioPlayerBottomSheetFragment : BaseBottomSheetDialogFragment<FragmentAudioPlayerBottomSheetBinding>(
@@ -34,55 +44,167 @@ class AudioPlayerBottomSheetFragment : BaseBottomSheetDialogFragment<FragmentAud
 
     }
 
-    private var playWhenReady = true
-    private var currentWindow = 0
-    private var playbackPosition: Long = 0
 
     private lateinit var uri: Uri
-    private var player: SimpleExoPlayer? = null
+
+    private val chatFileManager: ChatFileManager by lazy {
+        ChatFileManager(requireContext())
+    }
+
+    //for media player
+    var mediaPlayer: MediaPlayer? = null
+    var isPlaying: Boolean = false
+    var isCompleted: Boolean = false
+    var fileToPlay: File? = null
+    var seekBarHandler: Handler? = null
+    var updateSeekBar: Runnable? = null
 
     override fun viewCreated(
         viewBinding: FragmentAudioPlayerBottomSheetBinding,
         savedInstanceState: Bundle?
     ) {
         savedInstanceState?.let {
-            playWhenReady = it.getBoolean("key_play_when_ready")
-            currentWindow = it.getInt("key_current_video")
-            playbackPosition = it.getLong("key_play_back_position")
-
             uri = it.getString(INTENT_EXTRA_URI)?.toUri() ?: return@let
         }
 
         arguments?.let {
             uri = it.getString(INTENT_EXTRA_URI)?.toUri() ?: return@let
         }
-        if(uri != null) initializePlayer(uri, playbackPosition)
+        if(uri != null){
+            Log.d(TAG, "uri received: $uri")
+            fileToPlay = File(chatFileManager.audioFilesDirectory,uri.lastPathSegment)
+            playAudio(fileToPlay)
+        }
         initListeners()
     }
 
     private fun initListeners() {
         viewBinding.playPauseAudio.setOnClickListener {
-            if (player?.isPlaying == true) {
-                viewBinding.playPauseAudio.setImageDrawable(context?.getDrawable(R.drawable.ic_baseline_play_arrow_24))
-                player?.playWhenReady = false
-            } else{
-                viewBinding.playPauseAudio.setImageDrawable(context?.getDrawable(R.drawable.ic_pink_pause_icon))
-                player?.playWhenReady = true
+            if (isPlaying) {
+                pauseAudio()
+            } else {
+                if (fileToPlay != null && isCompleted) {
+                    playAudio(fileToPlay)
+                } else {
+                    resumeAudio()
+                }
+
             }
         }
 
+        viewBinding.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                if (fileToPlay != null) {
+                    pauseAudio()
+                }
+
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                if (fileToPlay != null) {
+                    val progress = seekBar!!.progress
+                    mediaPlayer!!.seekTo(progress)
+                    resumeAudio()
+                }
+
+            }
+
+        })
+
         viewBinding.closeAudio.setOnClickListener {
-            releasePlayer()
+            stopAudio()
             dismiss()
         }
     }
 
+    private fun stopAudio() {
+        viewBinding.playPauseAudio.setImageDrawable(
+            activity?.resources?.getDrawable(
+                R.drawable.ic_baseline_play_arrow_24,
+                null
+            )
+        )
+        isPlaying = false
+        mediaPlayer!!.stop()
+        seekBarHandler!!.removeCallbacks(updateSeekBar!!)
+    }
+
+    private fun playAudio(file: File?) {
+        mediaPlayer = MediaPlayer()
+
+        try {
+            mediaPlayer!!.setDataSource(fileToPlay!!.absolutePath)
+            mediaPlayer!!.prepare()
+            mediaPlayer!!.start()
+            Log.d(TAG, "file: ${fileToPlay!!.path}")
+        } catch (e: IOException) {
+            Log.d(TAG, "exc: ${e.message}")
+            showToast("Error playing this audio")
+            dismiss()
+            e.printStackTrace()
+        }
+        viewBinding.playPauseAudio.setImageDrawable(
+            activity?.resources?.getDrawable(
+                R.drawable.ic_pink_pause_icon,
+                null
+            )
+        )
+        Log.d(TAG, "playing")
+        isPlaying = true
+
+        mediaPlayer!!.setOnCompletionListener {
+            isPlaying = false
+            isCompleted = true
+            stopAudio()
+        }
+        viewBinding.seekBar.max = mediaPlayer!!.duration
+        seekBarHandler = Handler()
+        updateRunnable()
+
+        seekBarHandler!!.postDelayed(updateSeekBar!!, 0)
+
+    }
+
+    private fun updateRunnable() {
+        updateSeekBar = object : Runnable {
+            override fun run() {
+                viewBinding.seekBar.progress = mediaPlayer!!.currentPosition
+                seekBarHandler!!.postDelayed(this, 500)
+            }
+        }
+    }
+
+    private fun pauseAudio() {
+        viewBinding.playPauseAudio.setImageDrawable(
+            activity?.resources?.getDrawable(
+                R.drawable.ic_baseline_play_arrow_24,
+                null
+            )
+        )
+        mediaPlayer!!.pause()
+        isPlaying = false
+        seekBarHandler!!.removeCallbacks(updateSeekBar!!)
+    }
+
+    private fun resumeAudio() {
+        viewBinding.playPauseAudio.setImageDrawable(
+            activity?.resources?.getDrawable(
+                R.drawable.ic_pink_pause_icon,
+                null
+            )
+        )
+        mediaPlayer!!.start()
+        isPlaying = true
+        updateRunnable()
+        seekBarHandler!!.postDelayed(updateSeekBar!!, 0)
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-
-        outState.putBoolean("key_play_when_ready", playWhenReady)
-        outState.putInt("key_current_video", currentWindow)
-        outState.putLong("key_play_back_position", playbackPosition)
         outState.putString(INTENT_EXTRA_URI, uri.toString())
     }
 
@@ -91,55 +213,15 @@ class AudioPlayerBottomSheetFragment : BaseBottomSheetDialogFragment<FragmentAud
         setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
     }
 
-    private fun initializePlayer(uri: Uri, lastTimePlayBackPosition: Long) {
-        player = SimpleExoPlayer.Builder(requireContext()).build()
-        //playerView.player = player
-
-        val mediaSource = buildMediaSource(uri)
-
-        if (playbackPosition != 0L) {
-            val seekTo = playbackPosition.toFloat()
-            player?.seekTo(currentWindow, playbackPosition)
-            seekTo.also { viewBinding.slider.value = it }
-            player?.playWhenReady = true
-        } else {
-            player?.seekTo(currentWindow, lastTimePlayBackPosition)
-            player?.playWhenReady = playWhenReady
-            lastTimePlayBackPosition.toFloat().also { viewBinding.slider.value = it }
-        }
-
-        player?.prepare(mediaSource, false, false)
-        viewBinding.playPauseAudio.setImageDrawable(context?.getDrawable(R.drawable.ic_pink_pause_icon))
-    }
-
-    override fun onResume() {
-        super.onResume()
-        player?.playWhenReady = true
-    }
-
-    private fun releasePlayer() {
-        if (player != null) {
-            playbackPosition = player!!.currentPosition
-            currentWindow = player!!.currentWindowIndex
-            playWhenReady = player!!.playWhenReady
-            player!!.release()
-            player = null
-        }
-    }
 
     override fun onPause() {
         super.onPause()
-        player?.playWhenReady = false
+        stopAudio()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        releasePlayer()
-    }
-
-    private fun buildMediaSource(uri: Uri): MediaSource {
-        val dataSourceFactory = DefaultDataSourceFactory(requireContext(), "gig4ce-agent")
-        return ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(uri)
+        stopAudio()
     }
 
 }

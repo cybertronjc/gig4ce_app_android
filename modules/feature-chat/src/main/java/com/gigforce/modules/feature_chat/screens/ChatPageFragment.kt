@@ -569,12 +569,15 @@ class ChatPageFragment : Fragment(),
             selectedChatMessage = it
             var isCopyEnable = false
             var isDeleteEnable = false
+            var isInfoEnable = false
+            var isDownloadEnable = false
             isDeleteEnable = it.flowType == "out"
+            isInfoEnable = it.flowType == "out" && it.chatType == "group"
             if(it.type == "text"){
                 isCopyEnable = true
                 isDeleteEnable = it.flowType == "out"
             }
-            appbar.makeChatOptionsVisible(true, isCopyEnable, isDeleteEnable)
+            appbar.makeChatOptionsVisible(true, isCopyEnable, isDeleteEnable, isInfoEnable, isDownloadEnable)
 
         })
 
@@ -811,29 +814,30 @@ class ChatPageFragment : Fragment(),
                 if (it.isOtherUserOnline) {
                     appbar.showSubtitle("Online")
                     appbar.makeOnlineImageVisible(visible = true)
-//                        toolbar.showSubtitle(getString(R.string.offline_chat))
                 } else {
-                    if (it.lastUserStatusActivityAt != 0L) {
-
-                        val timeStamp = Timestamp(it.lastUserStatusActivityAt)
-                        val date = Date(timeStamp.time)
-
-                        var timeToDisplayText = ""
-                        timeToDisplayText = if (DateUtils.isToday(date.time)) {
-                            getString(R.string.last_seen_today_chat) + "${date.toDisplayText()}"
-                        } else {
-                            getString(R.string.last_seen_chat) + "${
-                                SimpleDateFormat("MMM dd yyyy").format(
-                                    date
-                                )
-                            }"
-                        }
-                        appbar.showSubtitle(timeToDisplayText)
-                        appbar.makeOnlineImageVisible(false)
-                    } else {
-                        appbar.showSubtitle(getString(R.string.offline_chat))
-                        appbar.makeOnlineImageVisible(false)
-                    }
+                    appbar.showSubtitle(getString(R.string.offline_chat))
+                    appbar.makeOnlineImageVisible(false)
+//                    if (it.lastUserStatusActivityAt != 0L) {
+//
+//                        val timeStamp = Timestamp(it.lastUserStatusActivityAt)
+//                        val date = Date(timeStamp.time)
+//
+//                        var timeToDisplayText = ""
+//                        timeToDisplayText = if (DateUtils.isToday(date.time)) {
+//                            getString(R.string.last_seen_today_chat) + "${date.toDisplayText()}"
+//                        } else {
+//                            getString(R.string.last_seen_chat) + "${
+//                                SimpleDateFormat("MMM dd yyyy").format(
+//                                    date
+//                                )
+//                            }"
+//                        }
+//                        appbar.showSubtitle(timeToDisplayText)
+//                        appbar.makeOnlineImageVisible(false)
+//                    } else {
+//                        appbar.showSubtitle(getString(R.string.offline_chat))
+//                        appbar.makeOnlineImageVisible(false)
+//                    }
                 }
             })
 
@@ -850,12 +854,15 @@ class ChatPageFragment : Fragment(),
             selectedChatMessage = it
             var isCopyEnable = false
             var isDeleteEnable = false
+            var isInfoEnable = false
+            var isDownloadEnable = false
             isDeleteEnable = it.flowType == "out"
+            isInfoEnable = it.flowType == "out" && it.chatType == "group"
             if(it.type == "text"){
                 isCopyEnable = true
                 isDeleteEnable = it.flowType == "out"
             }
-            appbar.makeChatOptionsVisible(true, isCopyEnable, isDeleteEnable)
+            appbar.makeChatOptionsVisible(true, isCopyEnable, isDeleteEnable, isInfoEnable, isDownloadEnable)
         })
         
         viewModel.audioData.observe(viewLifecycleOwner, Observer { 
@@ -939,13 +946,18 @@ class ChatPageFragment : Fragment(),
         })
 
         appbar.setForwardClickListener(View.OnClickListener {
-            showToast("forward click")
             selectedChatMessage?.let { it1 -> forwardMessage(it1) }
             disableChatSelection()
         })
 
+        appbar.setInfoClickListener(View.OnClickListener {
+            selectedChatMessage?.let { it1 ->
+                viewMessageInfo(it1.groupId, it1.id)
+            }
+            disableChatSelection()
+        })
+
         appbar.setReplyClickListener(View.OnClickListener {
-            showToast("reply click")
             selectedChatMessage?.let { it1 -> communityFooter.openReplyUi(it1) }
             disableChatSelection()
         })
@@ -957,7 +969,6 @@ class ChatPageFragment : Fragment(),
         }
 
         appbar.setChatOptionsCancelListener(View.OnClickListener {
-            showToast("cancel clicked")
             disableChatSelection()
         })
 
@@ -1017,7 +1028,7 @@ class ChatPageFragment : Fragment(),
         selectedChatMessage = null
         viewModel.makeSelectEnable(false)
         groupChatViewModel.makeSelectEnable(false)
-        appbar.makeChatOptionsVisible(false, false, false)
+        appbar.makeChatOptionsVisible(false, false, false, false, false)
     }
     override fun onMenuItemClick(item: MenuItem?): Boolean = when (item?.itemId) {
         R.id.action_block -> {
@@ -1262,6 +1273,22 @@ class ChatPageFragment : Fragment(),
         }
     }
 
+    private fun pickAudio() {
+        try {
+            Intent(Intent.ACTION_GET_CONTENT).apply {
+                type = MimeTypes.VIDEO
+                startActivityForResult(this, REQUEST_PICK_VIDEO)
+            }
+        } catch (e: ActivityNotFoundException) {
+            showErrorDialog(getString(R.string.no_app_found_to_pick_audio_chat))
+        } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().apply {
+                log("Unable to pick video")
+                recordException(e)
+            }
+        }
+    }
+
     private fun pickImage() {
         cameraAndGalleryIntegrator.showCameraAndGalleryBottomSheet()
     }
@@ -1416,6 +1443,10 @@ class ChatPageFragment : Fragment(),
                 val uri = data?.data ?: return
                 sendVideoMessage(uri)
             }
+            REQUEST_PICK_AUDIO -> {
+                val uri = data?.data ?: return
+                sendAudioMessage(uri, "")
+            }
             REQUEST_GET_LOCATION -> {
                 if (resultCode == Activity.RESULT_OK) {
                     sendLocationMessage(data)
@@ -1451,8 +1482,7 @@ class ChatPageFragment : Fragment(),
 
     private fun sendAudioMessage(
         uri: Uri,
-        text: String? = null,
-        recordTime: Int = 0
+        text: String? = null
     ) {
 
         val audioInfo = ImageMetaDataHelpers.getAudioInfo(
@@ -1460,7 +1490,7 @@ class ChatPageFragment : Fragment(),
             uri
         )
 
-        Log.d("audiolength", "info: ${audioInfo.duration} , size: ${audioInfo.size} record: $recordTime")
+        //Log.d("audiolength", "info: ${audioInfo.duration} , size: ${audioInfo.size} record: $recordTime")
 
         if (chatType == ChatConstants.CHAT_TYPE_USER){
             viewModel.sendNewAudioMessage(
@@ -1582,6 +1612,15 @@ class ChatPageFragment : Fragment(),
         }
     }
 
+    private fun viewMessageInfo(groupId: String, messageId: String) {
+        navigation.navigateTo("chats/messageInfo",
+            bundleOf(
+                GroupMessageViewInfoFragment.INTENT_EXTRA_GROUP_ID to groupId,
+                GroupMessageViewInfoFragment.INTENT_EXTRA_MESSAGE_ID to messageId
+            )
+        )
+    }
+
     fun checkForContact(number: String?, name: String): String {
         var nameFromDB = name
         return if (number != null && number.length >= 10 && PermissionUtils.checkForPermissionFragment(
@@ -1690,6 +1729,7 @@ class ChatPageFragment : Fragment(),
 
         private const val REQUEST_PICK_DOCUMENT = 202
         private const val REQUEST_PICK_VIDEO = 204
+        private const val REQUEST_PICK_AUDIO = 209
         private const val REQUEST_GET_LOCATION = 207
         private const val REQUEST_STORAGE_PERMISSION = 205
     }
@@ -1748,7 +1788,7 @@ class ChatPageFragment : Fragment(),
             e.printStackTrace()
         }
         mediaRecorder!!.start()
-        Log.d("RecordFragment", "recording has started")
+        Log.d(TAG, "recording has started")
     }
 
     private fun stopRecording() {
@@ -1757,19 +1797,10 @@ class ChatPageFragment : Fragment(),
             mediaRecorder!!.stop()
             mediaRecorder!!.release()
             mediaRecorder = null
-            Log.d("RecordFragment", "recording has stopped")
+            Log.d(TAG, "recording has stopped")
         }
 
     }
-
-//    private fun checkRecordingPermission(): Boolean {
-//        if(context?.let { ActivityCompat.checkSelfPermission(it, Manifest.permission.RECORD_AUDIO) } == PackageManager.PERMISSION_GRANTED){
-//            return true
-//        }else{
-//            activity?.let { ActivityCompat.requestPermissions(it, arrayOf(RECORDPERMISSION), PERMISSIONCODE) }
-//            return false
-//        }
-//    }
 
 //    fun playPauseBuild(playPause: Boolean, messageId: String, uri: Uri) {
 //        val mediaController = MediaControllerCompat.getMediaController(this)
@@ -1812,15 +1843,14 @@ class ChatPageFragment : Fragment(),
     }
 
     override fun onRecordingCompleted() {
-        showToast("Recording completed")
+        //showToast("Recording completed")
         val recordTime = (System.currentTimeMillis() / 1000 - time).toInt()
         Log.d("audio", "length: $recordTime")
         if (isRecording && recordTime > 1){
             val localUri = Uri.fromFile(File(chatFileManager.audioFilesDirectory,recordFile))
             sendAudioMessage(
                 localUri,
-                "",
-                recordTime
+                ""
             )
             Log.d("record", "stopped $localUri")
             isRecording = false

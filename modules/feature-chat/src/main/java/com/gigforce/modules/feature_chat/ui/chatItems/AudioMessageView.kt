@@ -24,6 +24,7 @@ import com.gigforce.common_ui.chat.models.ChatMessage
 import com.gigforce.common_ui.storage.MediaStoreApiHelpers
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.invisible
 import com.gigforce.core.extensions.toDisplayText
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
@@ -74,14 +75,6 @@ abstract class AudioMessageView (
     private lateinit var playAudio: ImageView
     private lateinit var playProgress: View
     private lateinit var audioTimeText: TextView
-
-    var mediaPlayer: MediaPlayer? = null
-    private var mExoPlayer: SimpleExoPlayer? = null
-    var isPlaying: Boolean = false
-    var fileToPlay: File? = null
-
-    var currentlyPlayingId: String? = null
-    var playOrPause: Boolean = false
 
     //Data
     private lateinit var chatMessage : ChatMessage
@@ -140,20 +133,6 @@ abstract class AudioMessageView (
                     }
                 })
 
-//                oneToOneChatViewModel.currentlyPlayingAudioMessageId.observe(it, Observer {
-//                    it ?: return@Observer
-//
-//                    if (currentlyPlayingId != it){
-//                        Log.d("MyAudioComp", "pausing audio observer")
-//                            playAudio.setImageDrawable(
-//                                context?.resources?.getDrawable(
-//                                    R.drawable.ic_play_audio_icon,
-//                                    null
-//                                )
-//                            )
-//                    }
-//                })
-//
             } else if(messageType == MessageType.GROUP_MESSAGE){
                 groupChatViewModel.enableSelect.observe(it, Observer {
                     it ?: return@Observer
@@ -167,7 +146,6 @@ abstract class AudioMessageView (
 
         playAudio.setOnClickListener {
             val file = returnFileIfAlreadyDownloadedElseNull()
-//
             if (file != null) {
                 navigation.navigateTo(
                     "chats/audioPlayer", bundleOf(
@@ -177,87 +155,10 @@ abstract class AudioMessageView (
             } else{
                 //download audio
                 playProgress.visible()
-                playAudio.gone()
+                playAudio.invisible()
                 downloadAttachment()
             }
         }
-
-//        playAudio.setOnClickListener {
-//            //is audio playing already
-//            val file = returnFileIfAlreadyDownloadedElseNull()
-//
-//            if (file != null) {
-////                val uri = FileProvider.getUriForFile(
-////                    context,
-////                    context.packageName + ".provider",
-////                    file.toFile()
-////                )
-//                val uri = Uri.parse(file.path)
-//
-//                val playingId = oneToOneChatViewModel.isAudioPlayingAlready() ?: ""
-//                currentlyPlayingId = playingId
-//                if (playingId.isNullOrBlank()) {
-//                    Log.d("MyAudioComp", "playing id: $playingId")
-//                    playAudio.setImageDrawable(
-//                        context?.resources?.getDrawable(
-//                            R.drawable.ic_baseline_pause_24,
-//                            null
-//                        )
-//                    )
-//                    isPlaying = true
-//                    //play(uri)
-//                    playPauseAudio(true, uri)
-//                    oneToOneChatViewModel.playMyAudio(true, false, false, message.id,uri)
-//                    //oneToOneChatViewModel.playMyAudio(false, message.id,uri)
-//
-//                } else if(playingId == message.id && isPlaying){
-//                    Log.d("MyAudioComp", "pausing this audio id: $playingId")
-//                    playAudio.setImageDrawable(
-//                        context?.resources?.getDrawable(
-//                            R.drawable.ic_play_audio_icon,
-//                            null
-//                        )
-//                    )
-//                    isPlaying = false
-//                    //pause
-//                    playPauseAudio(false, uri)
-//                    oneToOneChatViewModel.playMyAudio(false, true, false, message.id,uri)
-//
-//                }
-//                else if(playingId == message.id && !isPlaying){
-//                    Log.d("MyAudioComp", " resuming audio id: $playingId")
-//                    playAudio.setImageDrawable(
-//                        context?.resources?.getDrawable(
-//                            R.drawable.ic_baseline_pause_24,
-//                            null
-//                        )
-//                    )
-//                    isPlaying = true
-//                    //play(uri)
-//                    playPauseAudio(true, uri)
-//                    oneToOneChatViewModel.playMyAudio(true, false, false, message.id,uri)
-//
-//                }else {
-//                    Log.d("MyAudioComp", "playing diff audio id: $playingId")
-//                    playAudio.setImageDrawable(
-//                        context?.resources?.getDrawable(
-//                            R.drawable.ic_baseline_pause_24,
-//                            null
-//                        )
-//                    )
-//                    isPlaying = true
-//                    //play(uri)
-//                    playPauseAudio(true, uri)
-//                    oneToOneChatViewModel.playMyAudio(true, false, false, message.id,uri)
-//                }
-//            } else{
-//                //download audio
-//                playProgress.visible()
-//                playAudio.gone()
-//                downloadAttachment()
-//            }
-//
-//        }
 
         textViewTime.text = msg.timestamp?.toDisplayText()
         //textView.text = msg.attachmentName
@@ -270,7 +171,7 @@ abstract class AudioMessageView (
     }
 
     private fun handleAudioUploading() {
-
+        playProgress.invisible()
     }
 
 
@@ -377,20 +278,6 @@ abstract class AudioMessageView (
         }
     }
 
-//    private fun playAudio(uri: Uri?){
-//        if (messageType == MessageType.ONE_TO_ONE_MESSAGE) {
-//
-//            oneToOneChatViewModel.playMyAudio(
-//                message.id,
-//                uri = uri!!
-//            )
-//        } else if (messageType == MessageType.GROUP_MESSAGE) {
-//            groupChatViewModel.deleteMessage(
-//                message.id
-//            )
-//        }
-//    }
-
     override fun getCurrentChatMessageOrThrow(): ChatMessage {
         return message
     }
@@ -422,7 +309,7 @@ abstract class AudioMessageView (
     private fun handleDownloadInProgress() {
         Log.d("AudioView", "downloading...")
         playProgress.visible()
-        playAudio.gone()
+        playAudio.invisible()
     }
 
     private fun handleDownloadedCompleted() {
@@ -431,128 +318,6 @@ abstract class AudioMessageView (
         playAudio.visible()
         playAudio.performClick()
     }
-
-    private fun extractMediaSourceFromUri(uri: Uri): MediaSource {
-        val userAgent = Util.getUserAgent(context, "Exo")
-        return ExtractorMediaSource.Factory(DefaultDataSourceFactory(context, userAgent))
-            .setExtractorsFactory(DefaultExtractorsFactory()).createMediaSource(uri)
-    }
-
-    private fun buildMediaSource(uri: Uri): MediaSource {
-        val dataSourceFactory = DefaultDataSourceFactory(context, "gig4ce-agent")
-        return ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(uri)
-    }
-
-    private fun playPauseAudio(play: Boolean, uri: Uri){
-        val mediaSource = buildMediaSource(uri)
-        val exoPlayer = ExoPlayerFactory.newSimpleInstance(
-            context, DefaultRenderersFactory(context)
-            , DefaultTrackSelector(),
-            DefaultLoadControl()
-        )
-        exoPlayer.apply {
-            // AudioAttributes here from exoplayer package !!!
-            val attr = AudioAttributes.Builder().setUsage(C.USAGE_MEDIA)
-                .setContentType(C.CONTENT_TYPE_MUSIC)
-                .build()
-            // In 2.9.X you don't need to manually handle audio focus :D
-            setAudioAttributes(attr, true)
-            prepare(mediaSource)
-            // THAT IS ALL YOU NEED
-            playWhenReady = true
-//            if(play){
-//                playWhenReady = true
-//            } else {
-//                playWhenReady = false
-//            }
-        }
-    }
-
-    private var mAttrs: AudioAttributes? = null
-
-    private fun play(uri: Uri) {
-        if (mExoPlayer == null) initializePlayer()
-        val mediaSource = extractMediaSourceFromUri(uri)
-        mExoPlayer?.apply {
-
-            // AudioAttributes here from exoplayer package !!!
-//            mAttrs?.let { initializeAttributes() }
-             mAttrs = AudioAttributes.Builder().setUsage(C.USAGE_MEDIA)
-                .setContentType(C.CONTENT_TYPE_MUSIC)
-                .build()
-            // In 2.9.X you don't need to manually handle audio focus :D
-            setAudioAttributes(mAttrs!!, true)
-            prepare(mediaSource)
-            play()
-            Log.d("MyAudioComp", "playing audio")
-        }
-    }
-
-    private fun play() {
-        mExoPlayer?.apply {
-            true.also { mExoPlayer?.playWhenReady = it }
-            //updatePlaybackState(PlaybackStateCompat.STATE_PLAYING)
-            //mMediaSession?.isActive = true
-        }
-    }
-
-    private fun initializePlayer() {
-        mExoPlayer = ExoPlayerFactory.newSimpleInstance(
-            context, DefaultRenderersFactory(context)
-            , DefaultTrackSelector(),
-            DefaultLoadControl()
-        )
-    }
-
-    private fun pause() {
-        mExoPlayer?.apply {
-            playWhenReady = false
-//            if (playbackState == PlaybackStateCompat.STATE_PLAYING) {
-//                //updatePlaybackState(PlaybackStateCompat.STATE_PAUSED)
-//            }
-        }
-    }
-
-    private fun stop() {
-        // release the resources when the service is destroyed
-        mExoPlayer?.playWhenReady = false
-        mExoPlayer?.release()
-        mExoPlayer = null
-        //updatePlaybackState(PlaybackStateCompat.STATE_NONE)
-//        mMediaSession?.isActive = false
-//        mMediaSession?.release()
-    }
-
-//    override fun onTaskRemoved(rootIntent: Intent?) {
-//        super.onTaskRemoved(rootIntent)
-//        stopSelf()
-//    }
-//
-//    override fun onDestroy() {
-//        super.onDestroy()
-//        stop()
-//    }
-
-//    private fun updatePlaybackState(state: Int) {
-//        // You need to change the state because the action taken in the controller depends on the state !!!
-//        mMediaSession?.setPlaybackState(
-//            PlaybackStateCompat.Builder().setState(
-//                state // this state is handled in the media controller
-//                , 0L
-//                , 1.0f // Speed playing
-//            ).build()
-//        )
-//    }
-
-    private fun initializeAttributes() {
-        mAttrs = AudioAttributes.Builder().setUsage(C.USAGE_MEDIA)
-            .setContentType(C.CONTENT_TYPE_MUSIC)
-            .build()
-    }
-
-
-
-
 }
 
 class InOneToOneAudioMessageView(

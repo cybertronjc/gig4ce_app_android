@@ -19,36 +19,40 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/size_4"
+            android:background="@drawable/audio_controls_background"
             android:layout_marginEnd="@dimen/size_20"
             android:layout_marginTop="@dimen/size_20"
             android:src="@drawable/ic_baseline_close_24"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
-        <ImageButton
+        <ImageView
             android:id="@+id/play_pause_audio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/size_4"
+            android:background="@drawable/audio_controls_background"
             android:layout_marginStart="@dimen/size_20"
             android:layout_marginTop="@dimen/size_20"
             android:src="@drawable/ic_baseline_play_arrow_24"
             app:layout_constraintTop_toBottomOf="@id/close_audio"
             app:layout_constraintStart_toStartOf="parent"/>
 
-        <com.google.android.material.slider.Slider
-            android:id="@+id/slider"
+        <SeekBar
+            android:id="@+id/seekBar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/size_10"
-            android:layout_marginEnd="@dimen/size_10"
-            android:elevation="4dp"
-            android:enabled="true"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="32dp"
+            android:progressTint="@color/colorPrimary"
+            android:thumbTint="@color/colorPrimary"
+            android:thumbTintMode="multiply"
+            android:thumb="@color/colorPrimary"
             app:layout_constraintBottom_toBottomOf="@id/play_pause_audio"
             app:layout_constraintEnd_toStartOf="@id/close_audio"
             app:layout_constraintStart_toEndOf="@id/play_pause_audio"
-            app:layout_constraintTop_toTopOf="@id/play_pause_audio"
-            app:thumbColor="@color/colorPrimary" />
+            app:layout_constraintTop_toTopOf="@id/play_pause_audio" />
+
 
 
 

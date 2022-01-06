@@ -211,12 +211,12 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
         }
 
         forwardArrow.setOnClickListener {
-//            navigation.navigateTo("chats/mediaAndDocsFragment", bundleOf(
-//                INTENT_EXTRA_GROUP_ID to chatHeaderOrGroupId
-//            ))
-            chatNavigation.openGroupMediaList(
-                chatHeaderOrGroupId.toString()
-            )
+            navigation.navigateTo("chats/mediaAndDocsFragment", bundleOf(
+                INTENT_EXTRA_GROUP_ID to chatHeaderOrGroupId
+            ))
+//            chatNavigation.openGroupMediaList(
+//                chatHeaderOrGroupId.toString()
+//            )
         }
 
         addGigerLayout.setOnClickListener {

@@ -358,7 +358,7 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
         viewBinding.ivProfile.gone()
     }
 
-    fun makeChatOptionsVisible(visible: Boolean, copyEnable: Boolean, deleteEnable: Boolean){
+    fun makeChatOptionsVisible(visible: Boolean, copyEnable: Boolean, deleteEnable: Boolean, infoEnable: Boolean, downloadEnable: Boolean){
         if (visible){
             viewBinding.mainLayout.gone()
             viewBinding.chatOptionsLayout.visible()
@@ -369,6 +369,8 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
 
         viewBinding.copyButton.isVisible = copyEnable
         viewBinding.deleteButton.isVisible = deleteEnable
+        viewBinding.infoButton.isVisible = infoEnable
+        viewBinding.downloadButton.isVisible = downloadEnable
     }
 
     override fun bind(data: Any?) {
@@ -421,6 +423,11 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
         listener: OnClickListener
     ) {
         viewBinding.forwardButton.setOnClickListener(listener)
+    }
+    fun setInfoClickListener(
+        listener: OnClickListener
+    ) {
+        viewBinding.infoButton.setOnClickListener(listener)
     }
 
     fun setReplyClickListener(

@@ -360,7 +360,7 @@ abstract class ImageMessageView(
                 handleImageDownloaded(file)
             }
         } catch (e: Exception) {
-            Toast.makeText(context, "error", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(context, "error", Toast.LENGTH_SHORT).show()
             e.printStackTrace()
         }
     }

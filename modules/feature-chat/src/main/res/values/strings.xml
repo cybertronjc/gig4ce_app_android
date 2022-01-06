@@ -22,6 +22,7 @@
     <string name="block_chat">Block</string>
     <string name="unblock_chat">UnBlock</string>
     <string name="no_app_found_to_pick_video_chat">No App found to pick Video</string>
+    <string name="no_app_found_to_pick_audio_chat">No App found to pick Audio</string>
     <string name="grant_storage_permission_chat">Please grant storage permission</string>
     <string name="unable_to_capture_and_click_chat">Unable to capture and click image</string>
     <string name="zero_contacts_selected_chat">0 Contact(s) Selected</string>

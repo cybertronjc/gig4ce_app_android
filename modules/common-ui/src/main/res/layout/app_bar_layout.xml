@@ -297,15 +297,44 @@
                 android:layout_marginEnd="@dimen/size_30"
                 android:src="@drawable/ic_delete_icon"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/info_button"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/info_button"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:padding="@dimen/size_4"
+                android:visibility="visible"
+                android:background="?attr/selectableItemBackground"
+                app:tint="@color/white"
+                android:layout_marginEnd="@dimen/size_30"
+                android:src="@drawable/ic_baseline_info_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/download_button"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/download_button"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:padding="@dimen/size_4"
+                android:visibility="visible"
+                android:background="?attr/selectableItemBackground"
+                app:tint="@color/white"
+                android:layout_marginEnd="@dimen/size_30"
+                android:src="@drawable/ic_baseline_info_24"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/forward_button"
                 app:layout_constraintTop_toTopOf="parent" />
+
 
             <ImageButton
                 android:id="@+id/forward_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:padding="@dimen/size_4"
-                android:visibility="visible"
+                android:visibility="gone"
                 android:background="?attr/selectableItemBackground"
                 app:tint="@color/white"
                 android:layout_marginEnd="@dimen/size_30"
