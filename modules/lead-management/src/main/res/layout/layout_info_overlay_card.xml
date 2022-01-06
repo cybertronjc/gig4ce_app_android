@@ -118,6 +118,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/size_10"
+                android:visibility="gone"
                 android:baselineAligned="false">
 
                 <androidx.constraintlayout.widget.Guideline
@@ -125,8 +126,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    app:layout_constraintGuide_end="200dp"
-                    app:layout_constraintStart_toEndOf="@id/selectionDateLabel" />
+                    app:layout_constraintGuide_begin="160dp"
+                    app:layout_constraintStart_toEndOf="@id/selectionDate" />
 
 
                 <TextView
