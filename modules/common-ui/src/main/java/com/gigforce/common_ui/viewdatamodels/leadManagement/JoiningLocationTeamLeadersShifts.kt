@@ -41,7 +41,11 @@ data class ReportingLocationsItem(
 
 	@DoNotSerialize
 	var reportingLocations: List<ReportingLocationsItem> = emptyList()
-) : Parcelable
+) : Parcelable{
+
+
+
+}
 
 @Parcelize
 data class BusinessTeamLeadersItem(

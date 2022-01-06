@@ -324,12 +324,12 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
                 dropScreenIntentModel?.currentDate = it.currentDate
             }
 
-            overlayCardLayout.reportingTlTv.text = if (it.reportingTeamLeader?.name != null)
-                ": " + it.reportingTeamLeader?.name
+            overlayCardLayout.reportingTlTv.text = if(it.reportingTeamLeader?.name != null)
+               ": " + it.reportingTeamLeader?.name
             else
                 "-"
 
-            overlayCardLayout.recrutingTlTv.text = if (it.recruitingTL?.name != null)
+            overlayCardLayout.recrutingTlTv.text = if(it.recruitingTL?.name != null)
                 ": " + it.recruitingTL?.name
             else
                 "-"
@@ -475,10 +475,10 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
 
         this.overlayCardLayout.viewMore.setOnClickListener {
 
-            if (this.overlayCardLayout.moreInfoLayout.isVisible) {
+            if(this.overlayCardLayout.moreInfoLayout.isVisible){
                 this.overlayCardLayout.moreInfoLayout.gone()
                 this.overlayCardLayout.viewMore.text = "View MOre"
-            } else {
+            } else{
                 this.overlayCardLayout.moreInfoLayout.visible()
                 this.overlayCardLayout.viewMore.text = "View Less"
             }

@@ -127,6 +127,9 @@ class NewSelectionForm3VerificationDocumentViewModel @Inject constructor(
                 it.status = VerificationStatus.getStatusStringFromServerString(verificationDocument.driving_license?.status)
             } else if (it.fieldType == FieldTypes.PAN_VERIFICATION_VIEW) {
                 it.status = VerificationStatus.getStatusStringFromServerString(verificationDocument.pan_card?.status)
+            } else if(it.fieldType == FieldTypes.SIGNATURE_DRAWER_2){
+                val userUploadedSignature = verificationDocument.signature?.signaturePathOnFirebase != null
+                it.status = if (userUploadedSignature) VerificationStatus.VERIFIED else VerificationStatus.NOT_UPLOADED
             }
         }
 

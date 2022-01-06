@@ -78,7 +78,7 @@
                     android:src="@drawable/ic_pending_yellow" />
 
                 <TextView
-                    android:id="@+id/city_selected_label"
+                    android:id="@+id/subtitle_textview"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
