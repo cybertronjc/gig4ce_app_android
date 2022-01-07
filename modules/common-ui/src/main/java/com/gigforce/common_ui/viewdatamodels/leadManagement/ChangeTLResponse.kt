@@ -22,6 +22,9 @@ data class Value(
 	@field:SerializedName("joiningId")
 	val joiningId: String? = null,
 
+	@field:SerializedName("gigerName")
+	val gigerName: String? = null,
+
 	@field:SerializedName("teamLeaderId")
 	val teamLeaderId: String? = null
 )

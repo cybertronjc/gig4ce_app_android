@@ -250,7 +250,16 @@ class ChangeTeamLeaderBottomSheetFragment :
         confirmChangeTl.hideProgress(getString(R.string.submit_lead))
         confirmChangeTl.isEnabled = true
 
-        //handle
+        var message = ""
+        failedList.forEach {
+            message = message.plus("- ${it.value?.gigerName}")
+        }
+
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Unable to change TL for these users")
+            .setMessage(message)
+            .setPositiveButton("Okay") {_,_ ->}
+            .show()
     }
 
     private fun errorWhileTLChangingTeamLeaders(
