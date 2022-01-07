@@ -1,22 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="end"
-    android:paddingBottom="8dp"
-    android:paddingTop="8dp"
-    android:orientation="vertical">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cv_msgContainer"
-        android:layout_width="230dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/chat_item_margin"
-        app:cardBackgroundColor="@color/chat_outgoing_mesage_background_color"
-        app:cardCornerRadius="@dimen/chat_item_corner_radius"
-        app:cardElevation="@dimen/chat_item_card_elevation">
+    <FrameLayout
+        android:id="@+id/frame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:id="@+id/cv_msgContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="end"
+            android:orientation="vertical"
+            android:background="@drawable/background_round_chat_message_out"
+            android:layout_marginTop="8dp"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp"
+            android:layout_marginEnd="@dimen/chat_item_margin"
+            android:layout_marginBottom="8dp"
+            android:elevation="@dimen/size_2"
+            android:maxWidth="@dimen/chat_item_max_length">
 
 
         <RelativeLayout
@@ -37,6 +42,8 @@
                 android:id="@+id/thumbnail_layout"
                 android:layout_width="228dp"
                 android:layout_height="228dp"
+                android:paddingStart="@dimen/size_4"
+                android:paddingEnd="@dimen/size_4"
                 android:layout_below="@id/user_name_tv"
                 android:background="@drawable/chat_message_frame_background">
 
@@ -157,6 +164,6 @@
 
         </RelativeLayout>
 
-    </androidx.cardview.widget.CardView>
-
-</LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+</merge>

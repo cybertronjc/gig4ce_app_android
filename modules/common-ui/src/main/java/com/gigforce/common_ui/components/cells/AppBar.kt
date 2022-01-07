@@ -190,9 +190,9 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
 //            menuClickListener?.onMenuClick(it)
 //            onMenuClick(it)
 //        }
-        viewBinding.chatBackButton.setOnClickListener {
-            makeChatOptionsVisible(false, false, false)
-        }
+//        viewBinding.chatBackButton.setOnClickListener {
+//            makeChatOptionsVisible(false, false, false)
+//        }
         setColorsOnViews(backGroundType)
         styledAttributeSet.recycle()
 
@@ -358,7 +358,7 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
         viewBinding.ivProfile.gone()
     }
 
-    fun makeChatOptionsVisible(visible: Boolean, copyEnable: Boolean, deleteEnable: Boolean){
+    fun makeChatOptionsVisible(visible: Boolean, copyEnable: Boolean, deleteEnable: Boolean, infoEnable: Boolean, downloadEnable: Boolean){
         if (visible){
             viewBinding.mainLayout.gone()
             viewBinding.chatOptionsLayout.visible()
@@ -369,6 +369,8 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
 
         viewBinding.copyButton.isVisible = copyEnable
         viewBinding.deleteButton.isVisible = deleteEnable
+        viewBinding.infoButton.isVisible = infoEnable
+        viewBinding.downloadButton.isVisible = downloadEnable
     }
 
     override fun bind(data: Any?) {
@@ -415,6 +417,29 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
         listener: View.OnClickListener
     ) {
         viewBinding.subTitleTV.setOnClickListener(listener)
+    }
+
+    fun setForwardClickListener(
+        listener: OnClickListener
+    ) {
+        viewBinding.forwardButton.setOnClickListener(listener)
+    }
+    fun setInfoClickListener(
+        listener: OnClickListener
+    ) {
+        viewBinding.infoButton.setOnClickListener(listener)
+    }
+
+    fun setReplyClickListener(
+        listener: OnClickListener
+    ) {
+        viewBinding.replyButton.setOnClickListener(listener)
+    }
+
+    fun setChatOptionsCancelListener(
+        listener: OnClickListener
+    ) {
+        viewBinding.chatBackButton.setOnClickListener(listener)
     }
 
     fun hideKeyboard(view: View) {

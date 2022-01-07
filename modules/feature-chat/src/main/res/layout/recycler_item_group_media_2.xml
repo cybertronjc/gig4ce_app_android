@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/txt_contact_item"
     android:layout_width="90dp"
+    app:cardCornerRadius="@dimen/size_8"
     android:layout_margin="4dp"
     android:layout_height="90dp">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <com.gigforce.common_ui.views.GigforceImageView
         android:id="@+id/thumbnail_imageview"
@@ -75,5 +80,7 @@
 
     </com.google.android.material.card.MaterialCardView>
 
+    </FrameLayout>
 
-</FrameLayout>
+
+</com.google.android.material.card.MaterialCardView>

@@ -241,6 +241,11 @@ class ChatListItem(
                             lastMessageType.setImageResource(R.drawable.ic_chat_video_2)
                             txtSubtitle.text = messagePrefix + context.getString(R.string.video_chat)
                         }
+                        ChatConstants.MESSAGE_TYPE_TEXT_WITH_AUDIO -> {
+                            lastMessageType.visible()
+                            lastMessageType.setImageResource(R.drawable.ic_baseline_mic_24)
+                            txtSubtitle.text = messagePrefix + context.getString(R.string.audio_chat)
+                        }
                         ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT -> {
                             lastMessageType.visible()
                             lastMessageType.setImageResource(R.drawable.ic_chat_document_2)

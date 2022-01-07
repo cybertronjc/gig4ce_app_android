@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <FrameLayout
+        android:id="@+id/audio_root"
+        android:background="@drawable/round_bottom_sheet_background"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/audio_root_layout"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:paddingBottom="@dimen/size_20">
+
+        <ImageView
+            android:id="@+id/close_audio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/size_4"
+            app:tint="@color/colorPrimary"
+            android:background="@drawable/audio_controls_background"
+            android:layout_marginEnd="@dimen/size_20"
+            android:layout_marginTop="@dimen/size_20"
+            android:src="@drawable/ic_baseline_close_24"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <ImageView
+            android:id="@+id/play_pause_audio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/size_4"
+            android:background="@drawable/audio_controls_background"
+            android:layout_marginStart="@dimen/size_20"
+            android:layout_marginTop="@dimen/size_20"
+            android:src="@drawable/ic_baseline_play_arrow_24"
+            app:layout_constraintTop_toBottomOf="@id/close_audio"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <SeekBar
+            android:id="@+id/seekBar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="32dp"
+            android:progressTint="@color/colorPrimary"
+            android:thumbTint="@color/colorPrimary"
+            android:thumbTintMode="multiply"
+            android:paddingTop="@dimen/size_4"
+            android:paddingBottom="@dimen/size_4"
+            android:thumb="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="@id/play_pause_audio"
+            app:layout_constraintEnd_toStartOf="@id/close_audio"
+            app:layout_constraintStart_toEndOf="@id/play_pause_audio"
+            app:layout_constraintTop_toTopOf="@id/play_pause_audio" />
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
+
+</layout>

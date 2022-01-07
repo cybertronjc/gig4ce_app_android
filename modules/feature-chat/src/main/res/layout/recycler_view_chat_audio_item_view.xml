@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <FrameLayout
+        android:id="@+id/frame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/audio_icon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_show_audio_file_icon"
+                android:layout_marginStart="@dimen/size_20"
+                android:layout_marginTop="@dimen/size_20"
+                android:layout_marginBottom="@dimen/size_20"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <TextView
+                android:id="@+id/audio_file_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Gigforce document"
+                android:textColor="@color/subtitle_black_text_color"
+                android:fontFamily="@font/lato_bold"
+                android:layout_marginStart="@dimen/size_20"
+                app:layout_constraintTop_toTopOf="@id/audio_icon"
+                app:layout_constraintStart_toEndOf="@id/audio_icon"/>
+
+            <TextView
+                android:id="@+id/audio_file_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="50sec. 0.9KB"
+                android:textSize="@dimen/font_12"
+                android:textColor="@color/gray_text_color"
+                android:layout_marginStart="@dimen/size_20"
+                app:layout_constraintBottom_toBottomOf="@id/audio_icon"
+                app:layout_constraintStart_toEndOf="@id/audio_icon"/>
+
+            <TextView
+                android:id="@+id/audio_file_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12/08/21"
+                android:textSize="@dimen/font_12"
+                android:layout_marginEnd="@dimen/size_20"
+                android:textColor="@color/gray_text_color"
+                android:layout_marginStart="@dimen/size_20"
+                app:layout_constraintTop_toTopOf="@id/audio_icon"
+                app:layout_constraintBottom_toBottomOf="@id/audio_icon"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
+</merge>

@@ -15,4 +15,6 @@ object MimeTypes {
     const val PDF = "application/pdf"
     const val XLS = "application/vnd.ms-excel"
     const val XLSX = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+
+    const val AUDIO = "audio/*"
 }
