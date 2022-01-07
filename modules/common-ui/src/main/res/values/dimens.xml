@@ -45,6 +45,7 @@
     <dimen name="dp_sm2">14dp</dimen>
     <dimen name="dp_sm1">16dp</dimen>
     <dimen name="dp_normal">18dp</dimen>
+    <dimen name="dp_mid">20dp</dimen>
     <dimen name="dp_large">22dp</dimen>
     <dimen name="dp_xl1">26dp</dimen>
     <dimen name="dp_xl2">30dp</dimen>
@@ -52,6 +53,7 @@
     <dimen name="dp_xl4">40dp</dimen>
     <dimen name="dp_xl5">50dp</dimen>
     <dimen name="dp_xl6">60dp</dimen>
+    <dimen name="dp_xl7">74dp</dimen>
 
     <dimen name="chip_height">32dp</dimen>
     <dimen name="chip_horizontal_padding">12dp</dimen>

@@ -165,6 +165,10 @@ class ReportUserBottomSheetFragment : BaseBottomSheetDialogFragment<ReportUserBo
 
         }
 
+        cancelButton.setOnClickListener {
+            dismiss()
+        }
+
     }
 
 }

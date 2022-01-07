@@ -1,6 +1,7 @@
 package com.gigforce.modules.feature_chat.screens
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import com.gigforce.modules.feature_chat.R
 import com.gigforce.modules.feature_chat.databinding.FragmentMessageViewedInfoBinding
 import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class GroupMessageViewInfoFragment : Fragment() {
@@ -89,7 +91,7 @@ class GroupMessageViewInfoFragment : Fragment() {
     }
 
     private fun getMessageInfo() {
-        
+
         viewModel.getMessageReadingInfo(
             groupId,
             messageId

@@ -12,6 +12,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
+import android.text.InputFilter
 import android.text.TextWatcher
 import android.util.Log
 import android.util.Size
@@ -34,6 +35,7 @@ import com.gigforce.common_image_picker.image_cropper.ImageCropActivity
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.ext.showToast
+import com.gigforce.common_ui.remote.verification.Data
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.AppConstants
@@ -120,12 +122,15 @@ class BankAccountFragment : Fragment(),
     }
 
     private fun initViews() {
-
+        viewBinding.baneficiaryNameTil.gone()
+        viewBinding.confirmBn.text = resources.getString(R.string.bn_not_matched_amb)
+        viewBinding.confirmBnDetail.text = resources.getString(R.string.plz_ask_to_giger_to_confirm_bn_amb)
         viewBinding.toplayoutblock.setIdonthaveDocContent(
             resources.getString(R.string.no_doc_title_bank_amb),
             ""
         )
-
+        viewBinding.toplayoutblock.checkboxidonthave.gone()
+        viewBinding.toplayoutblock.docsubtitledetail.gone()
     }
 
     private var userId: String? = ""
@@ -171,8 +176,6 @@ class BankAccountFragment : Fragment(),
                             viewBinding.bankAccNumberItl.editText?.setText(it.accountNumber)
                         if (!it.ifscCode.isNullOrBlank())
                             viewBinding.ifscCode.editText?.setText(it.ifscCode)
-                        if (!it.bankName.isNullOrBlank())
-                            viewBinding.bankNameTil.editText?.setText(it.bankName)
                     } else {
                         viewBinding.toplayoutblock.uploadStatusLayout(
                             AppConstants.UNABLE_TO_FETCH_DETAILS,
@@ -210,17 +213,22 @@ class BankAccountFragment : Fragment(),
                 Log.e("loaderissue", "fifth")
                 it?.let {
 
-                    if (it.verified) {
-                        verificationScreenStatus = VerificationScreenStatus.VERIFIED
-                        verifiedStatusViews(it)
-                        viewBinding.belowLayout.visible()
-                        setAlreadyfilledData(it, false)
-                        viewBinding.toplayoutblock.toggleChangeTextView(true)
-                        //viewBinding.toplayoutblock.disableImageClick()//keep this line in end only //need to remove uploading option 2856 ticket
-                    } else {
+//                    if (it.verified) {
+//                        verificationScreenStatus = VerificationScreenStatus.VERIFIED
+//                        verifiedStatusViews(it)
+//                        viewBinding.belowLayout.visible()
+//                        setAlreadyfilledData(it, false)
+//                        viewBinding.toplayoutblock.toggleChangeTextView(true)
+//                        //viewBinding.toplayoutblock.disableImageClick()//keep this line in end only //need to remove uploading option 2856 ticket
+//                    } else {
                         checkforStatusAndVerified(it)
-                    }
+//                    }
                 }
+                if(it == null){
+                    viewBinding.toplayoutblock.checkboxidonthave.gone()
+                    viewBinding.toplayoutblock.docsubtitledetail.gone()
+                }
+
             }
         })
 
@@ -287,9 +295,23 @@ class BankAccountFragment : Fragment(),
 
     private val WAITING_TIME: Long = 1000 * 3
     private fun checkforStatusAndVerified(obj: BankDetailsDataModel) {
+        if(obj.status == null){
+            viewBinding.toplayoutblock.checkboxidonthave.gone()
+            viewBinding.toplayoutblock.docsubtitledetail.gone()
+        }
         obj.status?.let {
             when (it) {
-                "started" -> {
+                "verified"->{
+                    verificationScreenStatus = VerificationScreenStatus.VERIFIED
+                    verifiedStatusViews(obj)
+                    viewBinding.belowLayout.visible()
+                    setAlreadyfilledData(obj, false)
+                    viewBinding.toplayoutblock.visible()
+                    viewBinding.toplayoutblock.toggleChangeTextView(true)
+                    viewBinding.bankAccNumberItl.editText?.setFocusable(false)
+                    viewBinding.ifscCode.editText?.setFocusable(false)
+                }
+                "started","processing","validated" -> {
                     verificationScreenStatus = VerificationScreenStatus.STARTED_VERIFYING
                     startedStatusViews(obj)
                     Handler().postDelayed({
@@ -306,6 +328,8 @@ class BankAccountFragment : Fragment(),
 //                                viewBinding.editBankDetail.visible()
                                 viewBinding.belowLayout.visible()
                                 setAlreadyfilledData(obj, false)
+                                viewBinding.bnConfirmationCl.gone()
+
                                 //viewBinding.toplayoutblock.disableImageClick()//keep this line in end only //need to remove uploading option 2856 ticket
                             }
                         } catch (e: Exception) {
@@ -314,9 +338,11 @@ class BankAccountFragment : Fragment(),
                     }, WAITING_TIME)
                     viewBinding.belowLayout.visible()
                     setAlreadyfilledData(obj, false)
+                    viewBinding.bnConfirmationCl.gone()
+
                     //viewBinding.toplayoutblock.disableImageClick()//keep this line in end only //need to remove uploading option 2856 ticket
                 }
-                "failed" -> {
+                "validation_failed" -> {
                     verificationScreenStatus = VerificationScreenStatus.FAILED
                     resetInitializeViews()
                     viewBinding.toplayoutblock.uploadStatusLayout(
@@ -329,21 +355,39 @@ class BankAccountFragment : Fragment(),
                         initializeImages()
                     }
                     viewBinding.toplayoutblock.toggleChangeTextView(false)
+                    viewBinding.bnConfirmationCl.gone()
+                    viewBinding.bankAccNumberItl.editText?.setFocusableInTouchMode(true)
+                    viewBinding.bankAccNumberItl.editText?.setFocusable(true)
+                    viewBinding.ifscCode.editText?.setFocusableInTouchMode(true)
+                    viewBinding.ifscCode.editText?.setFocusable(true)
                     //viewBinding.toplayoutblock.enableImageClick()//keep this line in end only //need to remove uploading option 2856 ticket
                 }
-                "" -> {
+                "","rejected" -> {
                     verificationScreenStatus = VerificationScreenStatus.DEFAULT
                     resetInitializeViews()
                     viewBinding.toplayoutblock.toggleChangeTextView(false)
+                    viewBinding.bnConfirmationCl.gone()
+                    viewBinding.bankAccNumberItl.editText?.setFocusableInTouchMode(true)
+                    viewBinding.bankAccNumberItl.editText?.setFocusable(true)
+                    viewBinding.ifscCode.editText?.setFocusableInTouchMode(true)
+                    viewBinding.ifscCode.editText?.setFocusable(true)
+
                     //viewBinding.toplayoutblock.enableImageClick()//keep this line in end only //need to remove uploading option 2856 ticket
                 }
-                "completed" -> {
+                "verification_pending" -> {
                     verificationScreenStatus = VerificationScreenStatus.COMPLETED
                     showBankBeneficiaryName(obj)
-                    viewBinding.toplayoutblock.toggleChangeTextView(false)
-                    //viewBinding.toplayoutblock.disableImageClick()//keep this line in end only //need to remove uploading option 2856 ticket
+//                    viewBinding.toplayoutblock.toggleChangeTextView(false)
+                    //viewBinding.toplayoutblock.disableImageClick()//keep this line in end only  //need to remove uploading option 2856 ticket
+//                    verificationScreenStatus = VerificationScreenStatus.COMPLETED
+
                 }
-                else -> "unmatched status"
+                else -> {
+                    viewBinding.toplayoutblock.checkboxidonthave.gone()
+                    viewBinding.toplayoutblock.docsubtitledetail.gone()
+                    "unmatched status"
+                }
+
             }
         }
     }
@@ -353,8 +397,17 @@ class BankAccountFragment : Fragment(),
         enableFields: Boolean
     ): ArrayList<KYCImageModel> {
         var list = ArrayList<KYCImageModel>()
+        if(obj1 == null){
+            viewBinding.baneficiaryNameTil.gone()
+        }
         obj1?.let { obj ->
-            viewBinding.bankNameTil.editText?.setText(obj.bankName)
+            if(verificationScreenStatus == VerificationScreenStatus.VERIFIED) {
+                viewBinding.baneficiaryNameTil.visible()
+                viewBinding.baneficiaryNameTil.editText?.isEnabled = false
+                viewBinding.baneficiaryNameTil.editText?.setText(obj.bankBeneficiaryName)
+            }else{
+                viewBinding.baneficiaryNameTil.gone()
+            }
 
             viewBinding.bankAccNumberItl.editText?.setText(obj.accountNo)
 
@@ -385,8 +438,6 @@ class BankAccountFragment : Fragment(),
         }
 
 
-
-        viewBinding.bankNameTil.editText?.isEnabled = enableFields
         viewBinding.bankAccNumberItl.editText?.isEnabled = enableFields
         viewBinding.ifscCode.editText?.isEnabled = enableFields
         if (enableFields) {
@@ -404,6 +455,7 @@ class BankAccountFragment : Fragment(),
         viewBinding.belowLayout.visible()
         viewBinding.progressBar.gone()
         viewBinding.confirmBeneficiaryLayout.gone()
+        viewBinding.toplayoutblock.visible()
         viewBinding.toplayoutblock.toggleChangeTextView(false)
         viewBinding.toplayoutblock.setVerificationSuccessfulView(
             getString(R.string.bank_account_amb),
@@ -411,20 +463,22 @@ class BankAccountFragment : Fragment(),
         )
         initializeImages()
         viewBinding.toplayoutblock.resetAllViews()
-
+        viewBinding.toplayoutblock.checkboxidonthave.gone()// keep this statement below resetAllViews() method
+        viewBinding.toplayoutblock.docsubtitledetail.gone()// keep this statement below resetAllViews() method
         viewBinding.bankAccNumberItl.editText?.setText("")
-        viewBinding.bankNameTil.editText?.setText("")
+
         viewBinding.ifscCode.editText?.setText("")
     }
 
     private fun showBankBeneficiaryName(obj: BankDetailsDataModel) {
         obj.bankBeneficiaryName?.let { beneficiary ->
             if (beneficiary.isNotBlank()) {
-                viewBinding.toplayoutblock.viewChangeOnStarted()
-                viewBinding.confirmBeneficiaryLayout.visible()
+                viewBinding.toplayoutblock.gone()
+                viewBinding.confirmBeneficiaryLayout.gone()
                 viewBinding.belowLayout.gone()
                 viewBinding.submitButton.gone()
                 viewBinding.progressBar.gone()
+                viewBinding.bnConfirmationCl.visible()
                 viewBinding.beneficiaryName.text = beneficiary
                 viewBinding.toplayoutblock.setVerificationSuccessfulView(
                     getString(R.string.verification_pending_amb),
@@ -443,6 +497,9 @@ class BankAccountFragment : Fragment(),
                     }
                 }
 //                viewBinding.toplayoutblock.setImageViewPager(list) need to remove uploading option 2856 ticket
+                viewBinding.bnTv.text = beneficiary
+                viewBinding.accountNoTv.text = obj.accountNo
+                viewBinding.ifscTv.text = obj.ifscCode
             }
         }
     }
@@ -506,8 +563,7 @@ class BankAccountFragment : Fragment(),
             context?.let { cxt ->
                 if (verificationScreenStatus == VerificationScreenStatus.DEFAULT || verificationScreenStatus == VerificationScreenStatus.FAILED || verificationScreenStatus == VerificationScreenStatus.OCR_COMPLETED) {
                     text?.let {
-                        if (viewBinding.bankNameTil.editText?.text.toString()
-                                .isNullOrBlank() && viewBinding.bankAccNumberItl.editText?.text.toString()
+                        if ( viewBinding.bankAccNumberItl.editText?.text.toString()
                                 .isNullOrBlank() && viewBinding.ifscCode.editText?.text.toString()
                                 .isNullOrBlank()
                         ) {
@@ -532,6 +588,9 @@ class BankAccountFragment : Fragment(),
 
     var oldStateHolder = OLDStateHolder("")
     private fun listeners() {
+        viewBinding.ifscInputET.filters = arrayOf<InputFilter>(InputFilter.AllCaps())
+        viewBinding.bankAccNumberItl.editText?.filters = arrayOf<InputFilter>(InputFilter.AllCaps())
+
         viewBinding.toplayoutblock.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { p1, b1 ->
             if (b1) {
                 oldStateHolder.submitButtonCta = viewBinding.submitButton.text.toString()
@@ -543,7 +602,6 @@ class BankAccountFragment : Fragment(),
             }
 
         })
-        viewBinding.bankNameTil.editText?.addTextChangedListener(ValidationTextWatcher())
         viewBinding.bankAccNumberItl.editText?.addTextChangedListener(ValidationTextWatcher())
         //        viewBinding.ifscCode.editText?.addTextChangedListener(ValidationTextWatcher())
         viewBinding.ifscCode.editText?.addTextChangedListener(IFSCCodeTextWatcher())
@@ -560,7 +618,16 @@ class BankAccountFragment : Fragment(),
             setAlreadyfilledData(null, true)
             verificationScreenStatus = VerificationScreenStatus.DEFAULT
             viewBinding.submitButton.text = getString(R.string.skip_amb)
+            viewBinding.bankAccNumberItl.editText?.setFocusableInTouchMode(true)
+            viewBinding.bankAccNumberItl.editText?.setFocusable(true)
+            viewBinding.ifscCode.editText?.setFocusableInTouchMode(true)
+            viewBinding.ifscCode.editText?.setFocusable(true)
+
         })
+
+        viewBinding.okayButton.setOnClickListener{
+            checkForNextDoc()
+        }
 
         viewBinding.submitButton.setOnClickListener {
             hideSoftKeyboard()
@@ -580,22 +647,6 @@ class BankAccountFragment : Fragment(),
                     return@setOnClickListener
                 }
 
-                if (viewBinding.bankNameTil.editText?.text.toString().isNullOrBlank()) {
-                    MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert_amb))
-                        .setMessage(getString(R.string.enter_bank_name_amb))
-                        .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
-                        .show()
-                    return@setOnClickListener
-                }
-                if (viewBinding.bankNameTil.editText?.text.toString().length < 3) {
-                    MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert_amb))
-                        .setMessage(getString(R.string.bank_name_too_short_amb))
-                        .setPositiveButton(getString(R.string.okay_amb)) { _, _ -> }
-                        .show()
-                    return@setOnClickListener
-                }
 
                 if (viewBinding.bankAccNumberItl.editText?.text.toString().length < 4) {
                     MaterialAlertDialogBuilder(requireContext())
@@ -865,7 +916,6 @@ class BankAccountFragment : Fragment(),
 
     private fun callKycVerificationApi() {
         var list = listOf(
-            Data("name", viewBinding.bankNameTil.editText?.text.toString()),
             Data("no", viewBinding.bankAccNumberItl.editText?.text.toString()),
             Data("ifsccode", viewBinding.ifscCode.editText?.text.toString())
         )

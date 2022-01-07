@@ -134,8 +134,21 @@ class CalendarHomeScreen : Fragment(),
         super.onCreate(savedInstanceState)
         // checkForLocationPermission()
         checkForPendingJoining()
-    }
 
+    }
+    private fun verificationObserver() {
+        viewModel.bankDetailedObject.observe(viewLifecycleOwner, Observer {
+            it.status?.let {
+                when(it){
+                    "verification_pending" -> {
+                        navigation.navigateTo("verification/bankdetailconfirmationbottomsheet")
+                    }
+                }
+            }
+
+
+        })
+    }
     private fun checkForPendingJoining() = lifecycleScope.launch {
         try {
             leadManagementRepository.getPendingJoinings().apply {
@@ -158,7 +171,7 @@ class CalendarHomeScreen : Fragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        verificationObserver()
         checkForDeepLink()
         viewModelProfile = ViewModelProvider(this).get(ProfileViewModel::class.java)
         viewModelCustomPreference =
