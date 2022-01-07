@@ -734,4 +734,23 @@ class LeadManagementRepository @Inject constructor(
             .bodyOrThrow()
             .result?.teamLeaders ?: emptyList()
     }
+
+    suspend fun getTeamLeadersForChangeTl(): List<TeamLeader> {
+        val teamLeaderFetchResponse = joiningProfileRemoteService.getTeamLeadersForChangeTL()
+            .bodyOrThrow()
+
+        if(!teamLeaderFetchResponse.status){
+            throw Exception(teamLeaderFetchResponse.message ?: "Unable to lead team-leaders")
+        } else {
+            return teamLeaderFetchResponse.result?.teamLeaders ?: emptyList()
+        }
+    }
+
+    suspend fun changeTeamLeadersOfGigers(
+        changeTeamLeaderRequest: ChangeTeamLeaderRequest
+    ) : ChangeTLResponse{
+        return joiningProfileRemoteService.changeTeamLeadersOfGigers(
+            changeTeamLeaderRequest
+        ).bodyOrThrow()
+    }
 }
