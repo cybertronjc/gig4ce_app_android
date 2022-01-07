@@ -707,6 +707,7 @@ class CommunityFooter(context: Context, attrs: AttributeSet) :
             }
             if (recordingBehaviour == RecordingBehaviour.LOCKED) {
                 imageViewStop.setVisibility(View.VISIBLE)
+//                textCancelRecording.visible()
                 if (recordingListener != null) recordingListener!!.onRecordingLocked()
             } else if (recordingBehaviour == RecordingBehaviour.CANCELED) {
                 textViewTime!!.clearAnimation()

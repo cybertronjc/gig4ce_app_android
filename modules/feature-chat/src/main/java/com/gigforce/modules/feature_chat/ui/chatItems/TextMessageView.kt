@@ -37,6 +37,9 @@ import com.gigforce.modules.feature_chat.screens.vm.ChatPageViewModel
 import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import android.view.MotionEvent
+import android.view.View.OnLongClickListener
+import android.view.View.OnTouchListener
 
 
 @AndroidEntryPoint
@@ -78,6 +81,7 @@ abstract class TextMessageView(
     init {
         setDefault()
         inflate()
+        setListeners()
     }
 
     private fun setDefault() {
@@ -91,6 +95,25 @@ abstract class TextMessageView(
         else
             LayoutInflater.from(context).inflate(R.layout.recycler_item_chat_text_out, this, true)
         loadViews(view)
+    }
+
+    private fun setListeners() {
+        msgView.setOnLongClickListener(OnLongClickListener {
+            Log.d("TextMessageView", "long click on text")
+            containerView.performLongClick()
+            false
+        })
+
+//        msgView.setOnTouchListener(OnTouchListener { v, event ->
+//            if (event.action == MotionEvent.ACTION_UP) {
+//                Log.d("TextMessageView", "long click on text motion")
+//                frameLayoutRoot.performLongClick()
+//                return@OnTouchListener true
+//            }
+//            if (event.action == MotionEvent.ACTION_DOWN) {
+//            }
+//            v.onTouchEvent(event)
+//        })
     }
 
     fun loadViews(

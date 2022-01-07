@@ -1788,7 +1788,7 @@ class ChatPageFragment : Fragment(),
     }
 
     private fun startRecording() {
-        showToast("started record")
+        //showToast("started record")
         //val recordPath : String = activity?.getExternalFilesDir("/")!!.absolutePath
         isRecording = true
         val formatter : SimpleDateFormat = SimpleDateFormat("yyyy_MM_dd_hh_mm_ss", Locale.ROOT)
@@ -1825,21 +1825,17 @@ class ChatPageFragment : Fragment(),
 
     }
 
-//    fun playPauseBuild(playPause: Boolean, messageId: String, uri: Uri) {
-//        val mediaController = MediaControllerCompat.getMediaController(this)
-//        if (playPause){
-//            mediaController?.transportControls?.playFromUri(uri, null)
-//        } else{
-//            mediaController?.transportControls?.pause()
-//        }
-//        mediaController?.registerCallback(mControllerCallback)
-//    }
 
     override fun onStart() {
         super.onStart()
         // connect the controllers again to the session
         // without this connect() you won't be able to start the service neither control it with the controller
         mMediaBrowserCompat.connect()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        disableChatSelection()
     }
 
     override fun onStop() {
@@ -1856,7 +1852,7 @@ class ChatPageFragment : Fragment(),
 
 
     override fun onRecordingStarted() {
-        showToast("Recording started")
+        //showToast("Recording started")
         time = System.currentTimeMillis() / (1000);
         checkPermissionAndHandleActionRecordAudio()
     }
@@ -1868,14 +1864,14 @@ class ChatPageFragment : Fragment(),
     override fun onRecordingCompleted() {
         //showToast("Recording completed")
         val recordTime = (System.currentTimeMillis() / 1000 - time).toInt()
-        Log.d("audio", "length: $recordTime")
+        //Log.d("audio", "length: $recordTime")
         if (isRecording && recordTime > 1){
             val localUri = Uri.fromFile(File(chatFileManager.audioFilesDirectory,recordFile))
             sendAudioMessage(
                 localUri,
                 ""
             )
-            Log.d("record", "stopped $localUri")
+            //Log.d("record", "stopped $localUri")
             isRecording = false
             stopRecording()
         }
@@ -1883,7 +1879,7 @@ class ChatPageFragment : Fragment(),
     }
 
     override fun onRecordingCanceled() {
-        showToast("Recording canceled")
+        //showToast("Recording canceled")
         isRecording = false
         stopRecording()
     }
@@ -1900,75 +1896,6 @@ class ChatPageFragment : Fragment(),
                 decor.systemUiVisibility = 0
             }
         }
-    }
-
-    private fun playMyAudio(uri: Uri){
-        val mediaSource = extractMediaSourceFromUri(uri)
-        val exoPlayer = context?.let {
-            ExoPlayerFactory.newSimpleInstance(
-                it, DefaultRenderersFactory(it), DefaultTrackSelector(),
-                DefaultLoadControl()
-            )
-        }
-        exoPlayer.apply {
-            // AudioAttributes here from exoplayer package !!!
-            val attr = AudioAttributes.Builder().setUsage(C.USAGE_MEDIA)
-                .setContentType(C.CONTENT_TYPE_MUSIC)
-                .build()
-            // In 2.9.X you don't need to manually handle audio focus :D
-            this?.setAudioAttributes(attr, true)
-            this?.prepare(mediaSource)
-            // THAT IS ALL YOU NEED
-            this?.playWhenReady = true
-        }
-    }
-
-    private var mAttrs: AudioAttributes? = null
-
-    private fun play(mediaSource: MediaSource) {
-        if (mExoPlayer == null) initializePlayer()
-        mExoPlayer?.apply {
-            // AudioAttributes here from exoplayer package !!!
-            mAttrs?.let { initializeAttributes() }
-            // In 2.9.X you don't need to manually handle audio focus :D
-            setAudioAttributes(mAttrs!!, true)
-            prepare(mediaSource)
-            play()
-        }
-    }
-
-    private fun play() {
-        mExoPlayer?.apply {
-            true.also { mExoPlayer?.playWhenReady = it }
-        }
-    }
-
-    private fun initializePlayer() {
-        mExoPlayer = context?.let {
-            ExoPlayerFactory.newSimpleInstance(
-                it, DefaultRenderersFactory(it), DefaultTrackSelector(),
-                DefaultLoadControl()
-            )
-        }
-    }
-
-    private fun initializeAttributes() {
-        mAttrs = AudioAttributes.Builder().setUsage(C.USAGE_MEDIA)
-            .setContentType(C.CONTENT_TYPE_MUSIC)
-            .build()
-    }
-
-    private fun pause() {
-        mExoPlayer?.apply {
-            playWhenReady = false
-        }
-    }
-
-    private fun stop() {
-        // release the resources when the service is destroyed
-        mExoPlayer?.playWhenReady = false
-        mExoPlayer?.release()
-        mExoPlayer = null
     }
 
 }

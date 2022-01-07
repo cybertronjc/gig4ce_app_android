@@ -1,6 +1,7 @@
 package com.gigforce.modules.feature_chat.screens
 
 import android.content.Intent
+import android.os.Build
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.Log
@@ -134,6 +135,7 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
         setListeners()
         initRecyclerView()
         checkForChatTypeAndSubscribeToRespectiveViewModel()
+        setStatusBarIcons(false)
     }
 
     private fun initRecyclerView() = viewBinding.apply{
@@ -716,6 +718,25 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
             }
         }
         return true
+    }
+
+    override fun onStop() {
+        setStatusBarIcons(true)
+        super.onStop()
+    }
+
+    fun setStatusBarIcons(shouldChangeStatusBarTintToDark: Boolean){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val decor: View = activity?.window?.decorView!!
+            if (shouldChangeStatusBarTintToDark) {
+                decor.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            } else {
+                // We want to change tint color to white again.
+                // You can also record the flags in advance so that you can turn UI back completely if
+                // you have set other flags before, such as translucent or full screen.
+                decor.systemUiVisibility = 0
+            }
+        }
     }
 
 }
