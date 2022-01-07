@@ -13,6 +13,6 @@ class VaccineRepository {
                         FirebaseFirestore.getInstance().collection("Configuration").document("vaccine_list")
                         .getOrThrow()
                 return vaccineList.toObject(VaccineConfigListDM::class.java)
-                    ?: VaccineConfigListDM(emptyList())
+                    ?: VaccineConfigListDM(ArrayList())
             }
 }

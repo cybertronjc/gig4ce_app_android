@@ -1,4 +1,6 @@
 package com.gigforce.verification.mainverification.vaccine.models
 
-class VaccineConfigListDM(val list : List<VaccineConfigDM>) {
+import com.gigforce.common_ui.viewdatamodels.SimpleCardDVM1
+
+data class VaccineConfigListDM(val list : ArrayList<SimpleCardDVM1>?= ArrayList()) {
     }

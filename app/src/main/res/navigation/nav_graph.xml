@@ -313,6 +313,10 @@
             app:destination="@id/uploadDropDown" />
     </fragment>
 
+    <fragment
+        android:id="@+id/chooseYourVaccineFragment"
+        android:name="com.gigforce.verification.mainverification.vaccine.views.ChooseYourVaccineFragment"/>
+
     <dialog
         android:id="@+id/editEducationBottomSheet"
         android:name="com.gigforce.app.modules.profile.EditEducationBottomSheet"

@@ -15,7 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/size_40"
-        android:src="@drawable/ic_time"
+        android:src="@drawable/ic_group_vaccine"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -35,31 +35,13 @@
         android:id="@+id/vaccinerv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/confirm_bn_bs"
-        app:layout_constraintTop_toBottomOf="@+id/textView9" />
-
-    <TextView
-        android:id="@+id/confirm_bn_bs"
-        style="@style/primary_button_style"
-        android:layout_width="0dp"
-        android:layout_height="38dp"
-        android:layout_marginBottom="@dimen/dp_normal"
-        android:text="@string/confirm_veri"
-        android:textAllCaps="true"
-        app:layout_constraintBottom_toTopOf="@+id/cancel_button"
-        app:layout_constraintEnd_toEndOf="@+id/confirmation_section"
-        app:layout_constraintStart_toStartOf="@+id/confirmation_section" />
-
-    <Button
-        android:id="@+id/cancel_button"
-        style="@style/ActionOutlineButtonStyle"
-        android:layout_width="0dp"
-        android:layout_height="46dp"
-        android:layout_marginBottom="@dimen/dp_normal"
-        android:text="@string/cancel_veri"
-        android:textAllCaps="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/confirmation_section"
-        app:layout_constraintStart_toStartOf="@+id/confirmation_section" />
+        app:layout_constraintTop_toBottomOf="@+id/textView9"
+        android:layout_marginBottom="@dimen/dp_mid"
+        android:layout_marginTop="@dimen/dp_mid"
+        android:layout_marginLeft="@dimen/dp_mid"
+        android:layout_marginRight="@dimen/dp_mid"
+        android:orientation="vertical"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
