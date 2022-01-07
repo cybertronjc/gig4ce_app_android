@@ -196,8 +196,6 @@ class ContactsAndGroupFragment : BaseFragment2<ContactsAndGroupFragmentBinding>(
                     forwardingChat = false
                     isEnabled = false
                     activity?.onBackPressed()
-                }
-                else {
                     var map = mapOf("failed_reason" to "back_clicked")
                     eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_NEW_GROUP_FAILED, map))
                 } else {

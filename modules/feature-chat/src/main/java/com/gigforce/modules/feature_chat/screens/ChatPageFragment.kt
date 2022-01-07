@@ -79,6 +79,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 import com.gigforce.modules.feature_chat.ui.AttachmentOption
+import com.gigforce.modules.feature_chat.ui.AttachmentOptionsListener
+import com.gigforce.modules.feature_chat.ui.CommunityFooter
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.audio.AudioAttributes
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
@@ -611,14 +613,6 @@ class ChatPageFragment : Fragment(),
 //        val emojiView = AXEmojiView(activity)
 //        communityFooter.setupEmojiLayout(emojiView)
 
-        val componentName = context?.let { ComponentName(it, MusicService::class.java) }
-        // initialize the browser
-        mMediaBrowserCompat = MediaBrowserCompat(
-            context, componentName, //Identifier for the service
-            connectionCallback,
-            null
-        )
-
         rootLayout.setOnTouchListener { v, event ->
             communityFooter.hideAttachmentOptionView()
             true
@@ -1138,6 +1132,61 @@ class ChatPageFragment : Fragment(),
             }
         }
     }
+
+    private fun checkPermissionAndHandleActionRecordAudio(){
+
+        if (isAudioRecordPermissionGranted() && isStoragePermissionGranted()){
+            //start recording
+            startRecording()
+        } else{
+            selectedOperation = ChatConstants.OPERATION_START_AUDIO
+            if (Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
+                // In case of SDK >= scoped storage
+                // we 1. launch document tree contract then
+                // 2. camera permission
+                if (!isAudioRecordPermissionGranted()) {
+                    requestPermissions(
+                        Manifest.permission.RECORD_AUDIO
+                    )
+                }
+            } else {
+
+                requestPermissions(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.RECORD_AUDIO
+                )
+            }
+
+        }
+    }
+
+    private fun checkCameraPermissionAndHandleActionOpenCamera(){
+        if (isCameraPermissionGranted() && isStoragePermissionGranted()) {
+            openCamera()
+        } else {
+            selectedOperation = ChatConstants.OPERATION_OPEN_CAMERA
+
+            if (Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
+                // In case of SDK >= scoped storage
+                // we 1. launch document tree contract then
+                // 2. camera permission
+                if (!isCameraPermissionGranted()) {
+                    requestPermissions(
+                        Manifest.permission.CAMERA
+                    )
+                }
+            } else {
+
+                requestPermissions(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.CAMERA
+                )
+            }
+        }
+    }
+
 
     private fun requestPermissions(
         vararg permissions: String
@@ -1777,7 +1826,6 @@ class ChatPageFragment : Fragment(),
         super.onStart()
         // connect the controllers again to the session
         // without this connect() you won't be able to start the service neither control it with the controller
-        mMediaBrowserCompat.connect()
     }
 
     override fun onResume() {
@@ -1789,10 +1837,6 @@ class ChatPageFragment : Fragment(),
         if (isRecording){
             stopRecording()
         }
-        // Release the resources
-        val controllerCompat = activity?.let { MediaControllerCompat.getMediaController(it) }
-        controllerCompat?.unregisterCallback(mControllerCallback)
-        mMediaBrowserCompat.disconnect()
         setStatusBarIcons(true)
         super.onStop()
     }
