@@ -13,7 +13,7 @@ class AttachmentOption(val id: Int, val title: String, val resourceImage: Int) :
         const val GALLERY_ID: Int = 103
         const val AUDIO_ID: Int = 104
         const val LOCATION_ID: Int = 105
-        const val CONTACT_ID: Int = 106
+        const val VIDEO_ID: Int = 106
         val defaultList: List<AttachmentOption>
             get() {
                 val attachmentOptions: MutableList<AttachmentOption> = ArrayList()
@@ -52,13 +52,13 @@ class AttachmentOption(val id: Int, val title: String, val resourceImage: Int) :
                         R.drawable.ic_location_attachment
                     )
                 )
-                attachmentOptions.add(
-                    AttachmentOption(
-                        CONTACT_ID.toInt(),
-                        "Contact",
-                        R.drawable.ic_contact_attachment
-                    )
-                )
+//                attachmentOptions.add(
+//                    AttachmentOption(
+//                        VIDEO_ID.toInt(),
+//                        "Video",
+//                        R.drawable.ic_contact_attachment
+//                    )
+//                )
                 return attachmentOptions
             }
     }

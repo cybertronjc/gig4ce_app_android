@@ -32,6 +32,7 @@ object ChatConstants {
     const val OPERATION_PICK_DOCUMENT = 2
     const val OPERATION_START_AUDIO = 3
     const val OPERATION_OPEN_CAMERA = 4
+    const val OPERATION_PICK_AUDIO = 5
 
     const val MB_10 = 10000000
     const val MB_15 = 15000000

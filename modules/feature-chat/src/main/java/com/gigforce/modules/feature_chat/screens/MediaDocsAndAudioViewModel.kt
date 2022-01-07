@@ -103,7 +103,9 @@ class MediaDocsAndAudioViewModel @Inject constructor(
 
         Log.d(TAG, "image list: $imageAndVideoList , doc list : $documentList , audioList: $audioList")
 
-
+//        imageAndVideoList.groupBy {
+//            it.timestamp
+//        }
 
     }
 

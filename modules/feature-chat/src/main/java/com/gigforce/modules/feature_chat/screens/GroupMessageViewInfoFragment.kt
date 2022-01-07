@@ -11,8 +11,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.modules.feature_chat.R
 import com.gigforce.modules.feature_chat.databinding.FragmentMessageViewedInfoBinding
 import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class GroupMessageViewInfoFragment : Fragment() {
 
     private val viewModel: GroupChatViewModel by viewModels()
@@ -88,8 +89,7 @@ class GroupMessageViewInfoFragment : Fragment() {
     }
 
     private fun getMessageInfo() {
-
-
+        
         viewModel.getMessageReadingInfo(
             groupId,
             messageId

@@ -116,6 +116,9 @@ class ChatPageFragment : Fragment(),
         } else if (selectedOperation == ChatConstants.OPERATION_OPEN_CAMERA && isCameraPermissionGranted() && isStoragePermissionGranted()) {
             openCamera()
             selectedOperation = -1
+        } else if (selectedOperation == ChatConstants.OPERATION_PICK_VIDEO && isStoragePermissionGranted()){
+            pickAudio()
+            selectedOperation = -1
         }
     }
 
@@ -952,6 +955,7 @@ class ChatPageFragment : Fragment(),
 
         appbar.setInfoClickListener(View.OnClickListener {
             selectedChatMessage?.let { it1 ->
+                Log.d(TAG, "info: ${it1.groupId} , ${it1.id}")
                 viewMessageInfo(it1.groupId, it1.id)
             }
             disableChatSelection()
@@ -1192,6 +1196,23 @@ class ChatPageFragment : Fragment(),
         pickVideo()
     }
 
+    private fun checkPermissionAndHandleActionPickAudio() {
+        if (isStoragePermissionGranted()) {
+            pickAudio()
+        } else {
+            selectedOperation = ChatConstants.OPERATION_PICK_AUDIO
+
+            if (Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
+//                requestDocumentStorageTree()
+            } else {
+                requestPermissions(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                )
+            }
+        }
+    }
+
     private fun checkPermissionAndHandleActionPickDocument() {
 
         if (isStoragePermissionGranted()) {
@@ -1276,8 +1297,8 @@ class ChatPageFragment : Fragment(),
     private fun pickAudio() {
         try {
             Intent(Intent.ACTION_GET_CONTENT).apply {
-                type = MimeTypes.VIDEO
-                startActivityForResult(this, REQUEST_PICK_VIDEO)
+                type = MimeTypes.AUDIO
+                startActivityForResult(this, REQUEST_PICK_AUDIO)
             }
         } catch (e: ActivityNotFoundException) {
             showErrorDialog(getString(R.string.no_app_found_to_pick_audio_chat))
@@ -1738,29 +1759,31 @@ class ChatPageFragment : Fragment(),
         when (attachmentOption?.id) {
             AttachmentOption.DOCUMENT_ID -> {
                 checkPermissionAndHandleActionPickDocument()
-                showToast("Document Clicked")
+//                showToast("Document Clicked")
             }
             AttachmentOption.CAMERA_ID -> {
                 checkCameraPermissionAndHandleActionOpenCamera()
-                showToast("Camera Clicked")
+//                showToast("Camera Clicked")
             }
             AttachmentOption.GALLERY_ID -> {
                 checkPermissionAndHandleActionPickImage()
-                showToast("Gallery Clicked")
+//                showToast("Gallery Clicked")
             }
             AttachmentOption.AUDIO_ID -> {
-                showToast("Audio Clicked")
+//                showToast("Audio Clicked")
+                checkPermissionAndHandleActionPickAudio()
             }
             AttachmentOption.LOCATION_ID -> {
                 startActivityForResult(
                     Intent(requireContext(), CaptureLocationActivity::class.java),
                     REQUEST_GET_LOCATION
                 )
-                showToast("Location Clicked")
+//                showToast("Location Clicked")
             }
-            AttachmentOption.CONTACT_ID -> {
-                showToast("Contact Clicked")
-            }
+//            AttachmentOption.VIDEO_ID -> {
+////                showToast("Video Clicked")
+//                checkPermissionAndHandleActionPickVideo()
+//            }
         }
     }
 
