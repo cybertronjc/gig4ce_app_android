@@ -1012,8 +1012,7 @@ class ChatPageFragment : Fragment(),
     }
     override fun onMenuItemClick(item: MenuItem?): Boolean = when (item?.itemId) {
         R.id.action_block -> {
-            if (communityFooter.isTypingEnabled())
-            if (chatFooter.isTypingEnabled()) {
+            if (communityFooter.isTypingEnabled()) {
                 BlockUserBottomSheetFragment.launch(
                     viewModel.headerId,
                     viewModel.otherUserId,

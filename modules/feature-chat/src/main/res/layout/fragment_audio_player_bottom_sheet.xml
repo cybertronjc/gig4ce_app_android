@@ -39,6 +39,19 @@
             app:layout_constraintTop_toBottomOf="@id/close_audio"
             app:layout_constraintStart_toStartOf="parent"/>
 
+        <TextView
+            android:id="@+id/audio_start_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/size_20"
+            android:text="00:00"
+            android:layout_marginStart="@dimen/size_16"
+            android:textColor="@color/black"
+            android:layout_marginTop="@dimen/size_20"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/seekBar"
+            app:layout_constraintStart_toEndOf="@id/play_pause_audio"/>
+
         <SeekBar
             android:id="@+id/seekBar"
             android:layout_width="0dp"
@@ -56,6 +69,18 @@
             app:layout_constraintStart_toEndOf="@id/play_pause_audio"
             app:layout_constraintTop_toTopOf="@id/play_pause_audio" />
 
+        <TextView
+            android:id="@+id/audio_end_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/size_20"
+            android:text="00:00"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:textColor="@color/black"
+            android:layout_marginEnd="@dimen/size_16"
+            android:layout_marginTop="@dimen/size_20"
+            app:layout_constraintTop_toBottomOf="@id/seekBar"
+            app:layout_constraintEnd_toEndOf="@id/seekBar"/>
 
 
 

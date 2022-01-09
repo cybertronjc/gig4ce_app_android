@@ -105,7 +105,6 @@ abstract class TextMessageView(
 
     private fun setListeners() {
         msgView.setOnLongClickListener(OnLongClickListener {
-            Log.d("TextMessageView", "long click on text")
             containerView.performLongClick()
             false
         })

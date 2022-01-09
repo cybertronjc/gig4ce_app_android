@@ -31,16 +31,6 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/reply_blocked_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:minHeight="60dp"
-                        android:gravity="center"
-                        android:visibility="gone"
-                        tools:text="This group doesn't support replies"
-                        android:orientation="horizontal" />
-
 
                     <FrameLayout
                         android:layout_width="match_parent"
@@ -55,6 +45,17 @@
 <!--                            android:layout_gravity="bottom"-->
 <!--                            android:layout_marginStart="8dp"-->
 <!--                            android:layout_marginEnd="10dp"/>-->
+
+                        <TextView
+                            android:id="@+id/reply_blocked_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:gravity="center_horizontal"
+                            android:visibility="gone"
+                            android:layout_marginBottom="@dimen/size_20"
+                            tools:text="This group doesn't support replies"
+                            android:orientation="horizontal" />
 
                         <androidx.cardview.widget.CardView
                             android:id="@+id/layoutAttachment"
@@ -328,7 +329,7 @@
                     android:padding="8dp"
                     android:text="CANCEL"
                     android:textColor="#E42C64"
-                    android:textSize="20sp"
+                    android:textSize="12sp"
                     android:textStyle="normal"
                     android:translationZ="10dp"
                     android:visibility="gone" />

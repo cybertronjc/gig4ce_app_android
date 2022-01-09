@@ -350,13 +350,16 @@ class CommunityFooter(context: Context, attrs: AttributeSet) :
             message : String
         ) = viewBinding.apply{
             //replyToMessageLayout.gone()
+            layoutMessage.gone()
+            imageViewAudio.gone()
             replyBlockedLayout.visible()
             replyBlockedLayout.text = message
         }
 
         fun enableInput() = viewBinding.apply{
             replyBlockedLayout.gone()
-            //replyToMessageLayout.visible()
+            layoutMessage.visible()
+            imageViewAudio.visible()
             replyBlockedLayout.text = ""
         }
 
@@ -471,6 +474,10 @@ class CommunityFooter(context: Context, attrs: AttributeSet) :
                 isLocked = false
                 stopRecording(RecordingBehaviour.LOCK_DONE)
             })
+            textCancelRecording.setOnClickListener {
+                isLocked = false
+                stopRecording(RecordingBehaviour.CANCELED)
+            }
 
         }
 
@@ -707,12 +714,13 @@ class CommunityFooter(context: Context, attrs: AttributeSet) :
             }
             if (recordingBehaviour == RecordingBehaviour.LOCKED) {
                 imageViewStop.setVisibility(View.VISIBLE)
-//                textCancelRecording.visible()
+                textCancelRecording.visible()
                 if (recordingListener != null) recordingListener!!.onRecordingLocked()
             } else if (recordingBehaviour == RecordingBehaviour.CANCELED) {
                 textViewTime!!.clearAnimation()
                 textViewTime!!.visibility = View.INVISIBLE
                 imageViewMic.setVisibility(View.INVISIBLE)
+                textCancelRecording.gone()
                 imageViewStop.setVisibility(View.GONE)
                 layoutEffect2.setVisibility(View.GONE)
                 layoutEffect1.setVisibility(View.GONE)
@@ -722,6 +730,7 @@ class CommunityFooter(context: Context, attrs: AttributeSet) :
             } else if (recordingBehaviour == RecordingBehaviour.RELEASED || recordingBehaviour == RecordingBehaviour.LOCK_DONE) {
                 textViewTime!!.clearAnimation()
                 textViewTime!!.visibility = View.INVISIBLE
+                textCancelRecording.gone()
                 imageViewMic.setVisibility(View.INVISIBLE)
                 editTextMessage!!.visibility = View.VISIBLE
                 if (showAttachmentIcon) {
@@ -908,7 +917,7 @@ class CommunityFooter(context: Context, attrs: AttributeSet) :
         }
 
         fun isTypingEnabled() : Boolean{
-            return viewBinding.replyBlockedLayout.isVisible
+            return viewBinding.layoutMessage.isVisible
         }
 
     override fun onQueryReceived(queryToken: QueryToken): MutableList<String> {
@@ -1028,6 +1037,19 @@ class CommunityFooter(context: Context, attrs: AttributeSet) :
                     messageImageIV.loadImageIfUrlElseTryFirebaseStorage(chatMessage.thumbnail!!)
                 }else {
                     //load default image
+                }
+            }
+            ChatConstants.MESSAGE_TYPE_TEXT_WITH_AUDIO -> {
+                messageTV.text = chatMessage.attachmentName
+                messageImageIV.visible()
+
+                if(chatMessage.thumbnailBitmap != null){
+                    messageImageIV.loadImage(chatMessage.thumbnailBitmap!!,true)
+                } else if(chatMessage.thumbnail != null){
+                    messageImageIV.loadImageIfUrlElseTryFirebaseStorage(chatMessage.thumbnail!!)
+                }else {
+                    //load default image
+                    messageImageIV.loadImage(R.drawable.ic_audio_attachment,true)
                 }
             }
             ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION -> {

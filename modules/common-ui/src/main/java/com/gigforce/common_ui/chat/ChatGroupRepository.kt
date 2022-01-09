@@ -373,7 +373,7 @@ class ChatGroupRepository @Inject constructor(
         createMessageEntry(groupId, message)
         updateMediaInfoInGroupMedia(
             groupId,
-            ChatConstants.ATTACHMENT_TYPE_VIDEO,
+            ChatConstants.ATTACHMENT_TYPE_AUDIO,
             message.id,
             audioInfo.name,
             pathOnServer,

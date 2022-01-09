@@ -30,6 +30,7 @@ import kotlinx.android.synthetic.main.fragment_chat.*
 import kotlinx.android.synthetic.main.fragment_play_video_full_screen.*
 import java.io.File
 import java.io.IOException
+import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
 class AudioPlayerBottomSheetFragment : BaseBottomSheetDialogFragment<FragmentAudioPlayerBottomSheetBinding>(
@@ -108,6 +109,7 @@ class AudioPlayerBottomSheetFragment : BaseBottomSheetDialogFragment<FragmentAud
                 if (fileToPlay != null) {
                     val progress = seekBar!!.progress
                     mediaPlayer!!.seekTo(progress)
+                    viewBinding.audioStartText.text = formatToDigitalClock(mediaPlayer!!.currentPosition.toLong())
                     resumeAudio()
                 }
 
@@ -141,6 +143,7 @@ class AudioPlayerBottomSheetFragment : BaseBottomSheetDialogFragment<FragmentAud
             mediaPlayer!!.prepare()
             mediaPlayer!!.start()
             Log.d(TAG, "file: ${fileToPlay!!.path}")
+
         } catch (e: IOException) {
             Log.d(TAG, "exc: ${e.message}")
             showToast("Error playing this audio")
@@ -161,7 +164,9 @@ class AudioPlayerBottomSheetFragment : BaseBottomSheetDialogFragment<FragmentAud
             isCompleted = true
             stopAudio()
         }
-        viewBinding.seekBar.max = mediaPlayer!!.duration
+        viewBinding.seekBar.max = (mediaPlayer!!.duration)
+        viewBinding.audioEndText.text = formatToDigitalClock(mediaPlayer!!.duration.toLong())
+        viewBinding.audioStartText.text = formatToDigitalClock(mediaPlayer!!.currentPosition.toLong())
         seekBarHandler = Handler()
         updateRunnable()
 
@@ -169,11 +174,26 @@ class AudioPlayerBottomSheetFragment : BaseBottomSheetDialogFragment<FragmentAud
 
     }
 
+    fun formatToDigitalClock(miliSeconds: Long): String {
+        val hours = TimeUnit.MILLISECONDS.toHours(miliSeconds).toInt() % 24
+        val minutes = TimeUnit.MILLISECONDS.toMinutes(miliSeconds).toInt() % 60
+        val seconds = TimeUnit.MILLISECONDS.toSeconds(miliSeconds).toInt() % 60
+        return when {
+            hours > 0 -> String.format("%d:%02d:%02d", hours, minutes, seconds)
+            minutes > 0 -> String.format("%02d:%02d", minutes, seconds)
+            seconds > 0 -> String.format("00:%02d", seconds)
+            else -> {
+                "00:00"
+            }
+        }
+    }
+
     private fun updateRunnable() {
         updateSeekBar = object : Runnable {
             override fun run() {
                 viewBinding.seekBar.progress = mediaPlayer!!.currentPosition
-                seekBarHandler!!.postDelayed(this, 500)
+                viewBinding.audioStartText.text = formatToDigitalClock(mediaPlayer!!.currentPosition.toLong())
+                seekBarHandler!!.postDelayed(this, 0)
             }
         }
     }

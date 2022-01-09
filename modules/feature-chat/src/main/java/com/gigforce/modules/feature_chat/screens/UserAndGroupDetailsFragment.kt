@@ -610,6 +610,7 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
     ) {
         if (fileDownloaded) {
             //Open the file
+                Log.d("type", "type : ${media.attachmentType}")
             when (media.attachmentType) {
                 ChatConstants.ATTACHMENT_TYPE_IMAGE -> {
 
@@ -630,12 +631,23 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
                 ChatConstants.ATTACHMENT_TYPE_DOCUMENT -> {
                     openDocument(fileIfDownloaded!!)
                 }
+                ChatConstants.ATTACHMENT_TYPE_AUDIO -> {
+                    openAudioPlayerBottomSheet(fileIfDownloaded!!)
+                }
             }
 
         } else {
             //Start downloading the file
             viewModel.downloadAndSaveFile(chatFileManager.gigforceDirectory, position, media)
         }
+    }
+
+    private fun openAudioPlayerBottomSheet(file: File) {
+        navigation.navigateTo(
+            "chats/audioPlayer", bundleOf(
+                AudioPlayerBottomSheetFragment.INTENT_EXTRA_URI to file.path!!
+            )
+        )
     }
 
     private fun openDocument(file: File) {
