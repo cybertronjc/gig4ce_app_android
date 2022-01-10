@@ -11,7 +11,9 @@ sealed class NewSelectionForm1ViewState {
 
     object LoadingBusinessAndJobProfiles : NewSelectionForm1ViewState()
 
-    object JobProfilesAndBusinessLoadSuccess : NewSelectionForm1ViewState()
+    data class JobProfilesAndBusinessLoadSuccess(
+        val selectedTeamLeader : TeamLeader?
+    ) : NewSelectionForm1ViewState()
 
     data class ErrorWhileLoadingBusinessAndJobProfiles(
         val error: String,
@@ -27,6 +29,11 @@ sealed class NewSelectionForm1ViewState {
         val jobProfiles: List<JobProfilesItem>
     ) : NewSelectionForm1ViewState()
 
+    data class OpenSelectTLScreen(
+        val selectedTLId : String?,
+        val shouldShowAllTls : Boolean
+    ) : NewSelectionForm1ViewState()
+
     object CheckingForUserDetailsFromProfiles : NewSelectionForm1ViewState()
 
     data class ValidationError(
@@ -34,6 +41,7 @@ sealed class NewSelectionForm1ViewState {
         val gigerNameError: SpannedString? = null,
         val businessError: SpannedString? = null,
         val jobProfilesError: SpannedString? = null,
+        val reportingTLError: SpannedString? = null,
     ) : NewSelectionForm1ViewState()
 
     data class UserDetailsFromProfiles(
@@ -83,6 +91,11 @@ sealed class NewSelectionForm1Events {
         val jobProfile: JobProfilesItem
     ) : NewSelectionForm1Events()
 
+    data class ReportingTeamLeaderSelected(
+        val teamLeader: TeamLeader,
+        val showingAllTlsInSelectedScreen : Boolean
+    ) : NewSelectionForm1Events()
+
     data class SubmitButtonPressed(
         val dataFromDynamicFields : MutableList<DataFromDynamicInputField>
     ) : NewSelectionForm1Events()
@@ -90,4 +103,6 @@ sealed class NewSelectionForm1Events {
     object OpenSelectBusinessScreenSelected : NewSelectionForm1Events()
 
     object OpenSelectJobProfileScreenSelected : NewSelectionForm1Events()
+
+    object OpenSelectReportingTLScreenSelected : NewSelectionForm1Events()
 }

@@ -4,7 +4,6 @@ import android.graphics.Color
 import android.os.Bundle
 import android.widget.LinearLayout
 import androidx.core.os.bundleOf
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.gigforce.common_ui.UserInfoImp
@@ -13,12 +12,7 @@ import com.gigforce.common_ui.dynamic_fields.DynamicFieldsInflaterHelper
 import com.gigforce.common_ui.dynamic_fields.data.DynamicVerificationField
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
-import com.gigforce.common_ui.signature.SharedSignatureUploadViewModel
-import com.gigforce.common_ui.signature.SharedSignatureUploadViewModelViewState
-import com.gigforce.common_ui.signature.SignatureUploadViewModel
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
-import com.gigforce.common_ui.viewmodels.verification.SharedVerificationViewModel
-import com.gigforce.common_ui.viewmodels.verification.SharedVerificationViewModelEvent
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
@@ -190,11 +184,6 @@ class NewSelectionVerificationDocumentsForm3Fragment :
         )
     }
 
-    private fun updateVerificationDocumentStatus(
-        event: SharedVerificationViewModelEvent
-    ) {
-    }
-
     private fun errorWhileSubmittingJoiningRequest(
         error: String
     ) {
@@ -277,11 +266,10 @@ class NewSelectionVerificationDocumentsForm3Fragment :
         verificationRelatedDynamicInputsFields: List<DynamicVerificationField>
     ) = dynamicFieldsInflaterHelper.apply {
 
-        inflateDynamicFields(
+        inflateVerificationDynamicFields(
             requireContext(),
             viewBinding.mainForm.verificationRelatedDynamicFieldsContainer,
-            verificationRelatedDynamicInputsFields,
-            childFragmentManager
+            verificationRelatedDynamicInputsFields
         )
     }
 

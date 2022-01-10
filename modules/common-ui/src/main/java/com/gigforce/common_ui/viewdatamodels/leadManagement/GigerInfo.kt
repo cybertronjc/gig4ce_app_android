@@ -56,7 +56,13 @@ data class GigerInfo(
     val checkList: List<CheckListItem> = emptyList(),
 
     @SerializedName("teamLeadMobileNo")
-    val teamLeaderMobileNo: String? = null
+    val teamLeaderMobileNo: String? = null,
+
+    @SerializedName("reportingTeamLeader")
+    val reportingTeamLeader: TeamLeader? = null,
+
+    @SerializedName("recruitingTL")
+    val recruitingTL: TeamLeader? = null,
 
 ) {
 }

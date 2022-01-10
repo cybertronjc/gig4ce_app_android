@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.ext.addMandatorySymbolToTextEnd
 import com.gigforce.core.AppConstants.INTENT_EXTRA_COURSE_ID
 import com.gigforce.core.datamodels.client_activation.Dependency
 import com.gigforce.core.navigation.INavigation
@@ -58,22 +59,10 @@ class PendingJoiningCheckListItemComponent(
         this.viewData = data
 
         if (viewData.isOptional) {
-            viewBinding.checkListItemText.text = viewData.checkName
+            viewBinding.checkListItemText.setText(viewData.checkName.capitalize())
         } else {
-            val txt = viewData.checkName + "<font color=\"red\"> *</font>"
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                viewBinding.checkListItemText.setText(
-                    Html.fromHtml(
-                        txt,
-                        Html.FROM_HTML_MODE_LEGACY
-                    ), TextView.BufferType.SPANNABLE
-                )
-            } else {
-                viewBinding.checkListItemText.setText(
-                    Html.fromHtml(txt),
-                    TextView.BufferType.SPANNABLE
-                )
-            }
+            viewBinding.checkListItemText.text = viewData.checkName.capitalize()
+            viewBinding.checkListItemText.addMandatorySymbolToTextEnd()
         }
         setStatusIcon(viewData.status)
     }

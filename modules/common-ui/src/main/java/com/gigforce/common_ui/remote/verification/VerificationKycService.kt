@@ -1,5 +1,7 @@
 package com.gigforce.common_ui.remote.verification
 
+
+import com.gigforce.common_ui.viewdatamodels.verification.SubmitSignatureRequest
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.*
@@ -26,4 +28,9 @@ interface VerificationKycService {
         @Url getKycVerifyUrl: String,
         @Body jsonObject: UserConsentRequest
     ): Response<UserConsentResponse>
+
+    @POST("profiles/updateGigerSignature")
+    suspend fun uploadSignature(
+        @Body submitSignatureRequest: SubmitSignatureRequest
+    ): Response<KycOcrResultModel>
 }
