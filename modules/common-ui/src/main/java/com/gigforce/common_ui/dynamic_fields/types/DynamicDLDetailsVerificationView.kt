@@ -93,7 +93,7 @@ class DynamicDLDetailsVerificationView(
         super.onRestoreInstanceState(myState?.superState ?: state)
     }
 
-    override fun updateDocumentStatus(status: String) {
+    override fun updateDocumentStatus(status: String?) {
         updateDocumentStatusImage(
             status,
             viewBinding.statusIv,
