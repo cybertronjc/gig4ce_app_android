@@ -107,6 +107,7 @@ class ContactsAndGroupFragment : BaseFragment2<ContactsAndGroupFragmentBinding>(
         private const val EXTENSION: String = ".jpg"
 
         private const val REQUEST_STORAGE_PERMISSION = 102
+
     }
 
     //private lateinit var viewModel: ContactsAndGroupViewModel
@@ -446,6 +447,12 @@ class ContactsAndGroupFragment : BaseFragment2<ContactsAndGroupFragmentBinding>(
         }
 
         //logDataReceivedFromBundles()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(INTENT_EXTRA_RETURN_SELECTED_RESULTS, shouldReturnToPreviousScreen)
+        outState.putBundle(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE, sharedFilesBundle)
     }
 
 

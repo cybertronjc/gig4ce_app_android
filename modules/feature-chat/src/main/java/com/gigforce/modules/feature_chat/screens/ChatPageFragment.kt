@@ -524,19 +524,20 @@ class ChatPageFragment : Fragment(),
             .outputs
             .messages
             .observe(viewLifecycleOwner, { messages ->
-
-                chatRecyclerView.collection = messages.map {
-                    ChatMessageWrapper(
-                        message = it,
-                        oneToOneChatViewModel = viewModel,
-                        groupChatViewModel = groupChatViewModel,
-                        lifeCycleOwner = viewLifecycleOwner
-
-                    )
+                messages.let {
+                    chatRecyclerView.collection = messages.map {
+                        ChatMessageWrapper(
+                            message = it,
+                            oneToOneChatViewModel = viewModel,
+                            groupChatViewModel = groupChatViewModel
+                        )
+                    }
+                    chatRecyclerView.smoothScrollToLastPosition()
+                    chatRecyclerView.visible()
+                    shimmerContainer.gone()
                 }
-                chatRecyclerView.smoothScrollToLastPosition()
-                chatRecyclerView.visible()
-                shimmerContainer.gone()
+
+
             })
 
         groupChatViewModel
@@ -843,11 +844,11 @@ class ChatPageFragment : Fragment(),
             }
             appbar.makeChatOptionsVisible(true, isCopyEnable, isDeleteEnable, isInfoEnable, isDownloadEnable)
         })
-        
-        viewModel.audioData.observe(viewLifecycleOwner, Observer { 
+
+        viewModel.audioData.observe(viewLifecycleOwner, Observer {
             it ?: return@Observer
             Log.d("selectedMsg", "${it.playPause} , ${it.isAudioPlaying} , ${it.currentlyPlayingAudioId} , ${it.playingAudioUri}")
-            
+
             if (it.playPause == true) {
                 val mediaSource = extractMediaSourceFromUri(it.playingAudioUri!!)
                 //play the audio if previously nothing ws playing
