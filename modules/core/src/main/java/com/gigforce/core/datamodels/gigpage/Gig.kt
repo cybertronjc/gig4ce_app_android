@@ -460,6 +460,10 @@ data class ContactPerson(
         @set:PropertyName("uid")
         var uid: String? = null,
 
+        @get:PropertyName("uuid")
+        @set:PropertyName("uuid")
+        var uuid: String? = null,
+
         @get:PropertyName("name")
         @set:PropertyName("name")
         var name: String? = null,
