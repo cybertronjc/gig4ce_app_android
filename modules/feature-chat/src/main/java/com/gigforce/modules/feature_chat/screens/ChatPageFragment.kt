@@ -529,7 +529,8 @@ class ChatPageFragment : Fragment(),
                         ChatMessageWrapper(
                             message = it,
                             oneToOneChatViewModel = viewModel,
-                            groupChatViewModel = groupChatViewModel
+                            groupChatViewModel = groupChatViewModel,
+                            viewLifecycleOwner
                         )
                     }
                     chatRecyclerView.smoothScrollToLastPosition()
