@@ -1,5 +1,6 @@
 package com.gigforce.modules.feature_chat.models
 
+import androidx.lifecycle.LifecycleOwner
 import com.gigforce.common_ui.chat.models.ChatMessage
 import com.gigforce.common_ui.chat.models.ViewTypes
 import com.gigforce.common_ui.core.ChatConstants
@@ -12,6 +13,7 @@ data class ChatMessageWrapper(
         val message: ChatMessage,
         val oneToOneChatViewModel: ChatPageViewModel,
         val groupChatViewModel: GroupChatViewModel,
+        val lifeCycleOwner: LifecycleOwner
 ) : SimpleDVM(
         defaultViewType = -1,
         onClickNavPath = null
@@ -36,6 +38,7 @@ data class ChatMessageWrapper(
                 ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT -> if (this.message.flowType == "in") ViewTypes.IN_DOCUMENT else ViewTypes.OUT_DOCUMENT
                 ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO -> if (this.message.flowType == "in") ViewTypes.IN_VIDEO else ViewTypes.OUT_VIDEO
                 ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION -> if (this.message.flowType == "in") ViewTypes.IN_LOCATION else ViewTypes.OUT_LOCATION
+                ChatConstants.MESSAGE_TYPE_TEXT_WITH_AUDIO -> if(this.message.flowType == "in") ViewTypes.IN_AUDIO else ViewTypes.OUT_AUDIO
                 else -> -1
             }
         } else if (this.message.chatType == ChatConstants.CHAT_TYPE_GROUP) {
@@ -47,6 +50,7 @@ data class ChatMessageWrapper(
                 ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT -> if (this.message.senderInfo.id != currentUserId) ViewTypes.GROUP_IN_DOCUMENT else ViewTypes.GROUP_OUT_DOCUMENT
                 ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO -> if (this.message.senderInfo.id != currentUserId) ViewTypes.GROUP_IN_VIDEO else ViewTypes.GROUP_OUT_VIDEO
                 ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION -> if (this.message.senderInfo.id != currentUserId) ViewTypes.GROUP_IN_LOCATION else ViewTypes.GROUP_OUT_LOCATION
+                ChatConstants.MESSAGE_TYPE_TEXT_WITH_AUDIO -> if (this.message.senderInfo.id != currentUserId) ViewTypes.GROUP_IN_AUDIO else ViewTypes.GROUP_OUT_AUDIO
                 else -> -1
             }
         }

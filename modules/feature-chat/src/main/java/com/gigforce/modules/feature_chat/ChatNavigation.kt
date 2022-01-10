@@ -12,6 +12,7 @@ import com.gigforce.core.navigation.INavigation
 import com.gigforce.modules.feature_chat.screens.ChatPageFragment
 import com.gigforce.modules.feature_chat.screens.GroupDetailsFragment
 import com.gigforce.modules.feature_chat.screens.GroupMediaListFragment2
+import com.gigforce.modules.feature_chat.screens.UserAndGroupDetailsFragment
 
 class ChatNavigation(
         private val iNavigation: INavigation
@@ -123,11 +124,13 @@ class ChatNavigation(
         )
     }
 
-    fun openGroupDetailsPage(groupId: String) {
+    fun openGroupDetailsPage(headerOrGroupId: String, chatType: String) {
 
         iNavigation.navigateTo(
-                dest = "chats/groupDetails",
-                args = bundleOf(GroupDetailsFragment.INTENT_EXTRA_GROUP_ID to groupId)
+                dest = "chats/userGroupDetailsFragment",
+                args = bundleOf( UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_HEADER_ID to headerOrGroupId,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_TYPE to chatType
+                )
         )
     }
 

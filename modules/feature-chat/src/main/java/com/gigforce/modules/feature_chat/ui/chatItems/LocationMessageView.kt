@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -12,6 +13,7 @@ import android.widget.*
 import androidx.cardview.widget.CardView
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.lifecycle.Observer
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.chat.models.ChatMessage
@@ -53,7 +55,8 @@ abstract class LocationMessageView(
     private lateinit var imageView: ImageView
     private lateinit var locationAddressTV: TextView
     private lateinit var textViewTime: TextView
-    private lateinit var cardView: CardView
+    private lateinit var cardView: LinearLayout
+    private lateinit var frameLayoutRoot: FrameLayout
     private lateinit var receivedStatusIV: ImageView
     private lateinit var senderNameTV: TextView
 
@@ -77,6 +80,7 @@ abstract class LocationMessageView(
 
         senderNameTV = this.findViewById(R.id.user_name_tv)
         imageView = this.findViewById(R.id.iv_image)
+        frameLayoutRoot = this.findViewById(R.id.frame)
         textViewTime = this.findViewById(R.id.tv_msgTimeValue)
         cardView = this.findViewById(R.id.cv_msgContainer)
         locationAddressTV = this.findViewById(R.id.location_address_tv)
@@ -134,6 +138,25 @@ abstract class LocationMessageView(
             message = dataAndViewModels.message
             groupChatViewModel = dataAndViewModels.groupChatViewModel
             oneToOneChatViewModel = dataAndViewModels.oneToOneChatViewModel
+
+            dataAndViewModels.lifeCycleOwner?.let {
+                if (messageType == MessageType.ONE_TO_ONE_MESSAGE){
+                    oneToOneChatViewModel.enableSelect.observe(it, Observer {
+                        it ?: return@Observer
+                        if (it == false) {
+                            frameLayoutRoot?.foreground = null
+                        }
+                    })
+                } else if(messageType == MessageType.GROUP_MESSAGE){
+                    groupChatViewModel.enableSelect.observe(it, Observer {
+                        it ?: return@Observer
+                        if (it == false) {
+                            frameLayoutRoot?.foreground = null
+                        }
+                    })
+                }
+
+            }
 
             senderNameTV.isVisible =
                 messageType == MessageType.GROUP_MESSAGE && type == MessageFlowType.IN
@@ -219,18 +242,31 @@ abstract class LocationMessageView(
     }
 
     override fun onLongClick(v: View?): Boolean {
-        val popUpMenu = PopupMenu(context, v)
-        popUpMenu.inflate(R.menu.menu_chat_clipboard)
-
-        popUpMenu.menu.findItem(R.id.action_save_to_gallery).isVisible = false
-        popUpMenu.menu.findItem(R.id.action_copy).isVisible = false
-        popUpMenu.menu.findItem(R.id.action_delete).isVisible = type == MessageFlowType.OUT
-        popUpMenu.menu.findItem(R.id.action_message_info).isVisible =
-            type == MessageFlowType.OUT && messageType == MessageType.GROUP_MESSAGE
-
-
-        popUpMenu.setOnMenuItemClickListener(this)
-        popUpMenu.show()
+//        val popUpMenu = PopupMenu(context, v)
+//        popUpMenu.inflate(R.menu.menu_chat_clipboard)
+//
+//        popUpMenu.menu.findItem(R.id.action_save_to_gallery).isVisible = false
+//        popUpMenu.menu.findItem(R.id.action_copy).isVisible = false
+//        popUpMenu.menu.findItem(R.id.action_delete).isVisible = type == MessageFlowType.OUT
+//        popUpMenu.menu.findItem(R.id.action_message_info).isVisible =
+//            type == MessageFlowType.OUT && messageType == MessageType.GROUP_MESSAGE
+//
+//
+//        popUpMenu.setOnMenuItemClickListener(this)
+//        popUpMenu.show()
+        if(!(oneToOneChatViewModel.getSelectEnable() == true || groupChatViewModel.getSelectEnable() == true)) {
+            if (messageType == MessageType.ONE_TO_ONE_MESSAGE) {
+                frameLayoutRoot?.foreground =
+                    resources.getDrawable(R.drawable.selected_chat_foreground)
+                oneToOneChatViewModel.makeSelectEnable(true)
+                oneToOneChatViewModel.selectChatMessage(message)
+            } else if (messageType == MessageType.GROUP_MESSAGE) {
+                frameLayoutRoot?.foreground =
+                    resources.getDrawable(R.drawable.selected_chat_foreground)
+                groupChatViewModel.makeSelectEnable(true)
+                groupChatViewModel.selectChatMessage(message)
+            }
+        }
 
         return true
     }

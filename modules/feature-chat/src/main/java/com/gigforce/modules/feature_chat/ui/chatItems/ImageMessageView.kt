@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.text.util.Linkify
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -13,6 +14,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.os.bundleOf
 import androidx.core.text.util.LinkifyCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.chat.ChatConstants
 import com.gigforce.common_ui.chat.models.ChatMessage
@@ -67,7 +69,8 @@ abstract class ImageMessageView(
     private lateinit var imageView: ImageView
     private lateinit var messageTV: TextView
     private lateinit var textViewTime: TextView
-    private lateinit var cardView: CardView
+    private lateinit var cardView: LinearLayout
+    private lateinit var frameLayoutRoot: FrameLayout
     private lateinit var downloadIconIV: ImageView
     private lateinit var downloadOverlayIV: ImageView
     private lateinit var attachmentDownloadingProgressBar: ProgressBar
@@ -91,6 +94,7 @@ abstract class ImageMessageView(
         imageView = this.findViewById(R.id.iv_image)
         textViewTime = this.findViewById(R.id.tv_msgTimeValue)
         cardView = this.findViewById(R.id.cv_msgContainer)
+        frameLayoutRoot = this.findViewById(R.id.frame)
         downloadIconIV = this.findViewById(R.id.download_icon_iv)
         downloadOverlayIV = this.findViewById(R.id.download_overlay_iv)
         receivedStatusIV = this.findViewById(R.id.tv_received_status)
@@ -232,6 +236,25 @@ abstract class ImageMessageView(
         senderNameTV.isVisible = messageType == MessageType.GROUP_MESSAGE && type == MessageFlowType.IN
         senderNameTV.text = msg.senderInfo.name
 
+        lifeCycleOwner?.let {
+            if (messageType == MessageType.ONE_TO_ONE_MESSAGE){
+                oneToOneChatViewModel.enableSelect.observe(it, Observer {
+                    it ?: return@Observer
+                    if (it == false) {
+                        frameLayoutRoot?.foreground = null
+                    }
+                })
+            } else if(messageType == MessageType.GROUP_MESSAGE){
+                groupChatViewModel.enableSelect.observe(it, Observer {
+                    it ?: return@Observer
+                    if (it == false) {
+                        frameLayoutRoot?.foreground = null
+                    }
+                })
+            }
+
+        }
+
         adjustImageSizeAcc(msg)
         handleImage(msg)
         setReceivedStatus(msg)
@@ -343,22 +366,35 @@ abstract class ImageMessageView(
                 handleImageDownloaded(file)
             }
         } catch (e: Exception) {
-            Toast.makeText(context, "error", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(context, "error", Toast.LENGTH_SHORT).show()
             e.printStackTrace()
         }
     }
 
     override fun onLongClick(v: View?): Boolean {
-        val popUpMenu = PopupMenu(context, v)
-        popUpMenu.inflate(R.menu.menu_chat_clipboard)
-
-        popUpMenu.menu.findItem(R.id.action_save_to_gallery).isVisible = returnFileIfAlreadyDownloadedElseNull() != null
-        popUpMenu.menu.findItem(R.id.action_copy).isVisible = false
-        popUpMenu.menu.findItem(R.id.action_delete).isVisible = type == MessageFlowType.OUT
-        popUpMenu.menu.findItem(R.id.action_message_info).isVisible = type == MessageFlowType.OUT && messageType == MessageType.GROUP_MESSAGE
-
-        popUpMenu.setOnMenuItemClickListener(this)
-        popUpMenu.show()
+//        val popUpMenu = PopupMenu(context, v)
+//        popUpMenu.inflate(R.menu.menu_chat_clipboard)
+//
+//        popUpMenu.menu.findItem(R.id.action_save_to_gallery).isVisible = returnFileIfAlreadyDownloadedElseNull() != null
+//        popUpMenu.menu.findItem(R.id.action_copy).isVisible = false
+//        popUpMenu.menu.findItem(R.id.action_delete).isVisible = type == MessageFlowType.OUT
+//        popUpMenu.menu.findItem(R.id.action_message_info).isVisible = type == MessageFlowType.OUT && messageType == MessageType.GROUP_MESSAGE
+//
+//        popUpMenu.setOnMenuItemClickListener(this)
+//        popUpMenu.show()
+        if(!(oneToOneChatViewModel.getSelectEnable() == true || groupChatViewModel.getSelectEnable() == true)) {
+            if (messageType == MessageType.ONE_TO_ONE_MESSAGE) {
+                frameLayoutRoot?.foreground =
+                    resources.getDrawable(R.drawable.selected_chat_foreground)
+                oneToOneChatViewModel.makeSelectEnable(true)
+                oneToOneChatViewModel.selectChatMessage(chatMessage)
+            } else if (messageType == MessageType.GROUP_MESSAGE) {
+                frameLayoutRoot?.foreground =
+                    resources.getDrawable(R.drawable.selected_chat_foreground)
+                groupChatViewModel.makeSelectEnable(true)
+                groupChatViewModel.selectChatMessage(chatMessage)
+            }
+        }
 
         return true
     }

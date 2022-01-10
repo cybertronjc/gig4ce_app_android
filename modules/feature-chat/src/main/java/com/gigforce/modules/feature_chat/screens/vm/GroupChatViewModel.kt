@@ -87,6 +87,14 @@ class GroupChatViewModel @Inject constructor(
 
     private var groupMessagesShownOnView: MutableList<ChatMessage>? = null
 
+    private var _selectedChatMessage = MutableLiveData<ChatMessage>()
+    val selectedChatMessage: LiveData<ChatMessage> = _selectedChatMessage
+
+    private var selectEnable: Boolean? = null
+
+    private var _enableSelect = MutableLiveData<Boolean>()
+    val enableSelect: LiveData<Boolean> = _enableSelect
+
     //Create group
     override fun setGroupId(groupId: String) {
         this.groupId = groupId
@@ -559,6 +567,47 @@ class GroupChatViewModel @Inject constructor(
         }
     }
 
+    fun sendNewAudioMessage(
+        context: Context,
+        text: String = "",
+        uri: Uri,
+        audioInfo: AudioInfo
+    ) = GlobalScope.launch(Dispatchers.IO) {
+
+        try {
+            val message = ChatMessage(
+                id = UUID.randomUUID().toString(),
+                headerId = groupId,
+                senderInfo = createCurrentUserSenderInfo(),
+                type = ChatConstants.MESSAGE_TYPE_TEXT_WITH_AUDIO,
+                chatType = ChatConstants.CHAT_TYPE_GROUP,
+                flowType = ChatConstants.FLOW_TYPE_OUT,
+                content = text,
+                attachmentName = audioInfo.name,
+                timestamp = Timestamp.now(),
+                videoLength = audioInfo.duration
+            )
+            groupMessagesShownOnView?.add(message)
+            _groupMessages.postValue(groupMessagesShownOnView)
+
+            chatGroupRepository.sendNewAudioMessage(
+                context = context,
+                groupId = groupId,
+                audiosDirectoryRef = chatFileManager.audioFilesDirectory,
+                uri = uri,
+                audioInfo = audioInfo,
+                message = message,
+            )
+        } catch (e: Exception) {
+            CrashlyticsLogger.e(
+                ChatPageViewModel.TAG,
+                "while sending video message",
+                e
+            )
+        }
+
+    }
+
     fun sendNewVideoMessage(
             context: Context,
             text: String = "",
@@ -981,6 +1030,25 @@ class GroupChatViewModel @Inject constructor(
             )
         }
     }
+
+    fun selectChatMessage(msg: ChatMessage){
+        val messageList = grpMessages ?: return
+        val index = messageList.indexOf(msg)
+        if (index != -1) {
+            _selectedChatMessage.value = msg
+        }
+
+    }
+
+    fun makeSelectEnable(enable: Boolean){
+        selectEnable = enable
+        _enableSelect.value = enable
+    }
+
+    fun getSelectEnable(): Boolean?{
+        return selectEnable
+    }
+
 
     fun scrollToMessage(
         replyMessage: ChatMessage

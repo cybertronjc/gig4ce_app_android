@@ -268,8 +268,12 @@ class ContactsFragment : DialogFragment(),
 
         if (shouldReturnToPreviousScreen) {
             createGroupLabel.text = getString(R.string.add_to_group_chat)
+            createGroupLayout.gone()
+            createNewGroup.gone()
         } else {
             createGroupLabel.text = getString(R.string.create_group_chat)
+            createGroupLayout.visible()
+            createNewGroup.visible()
         }
 
         askPermissionView.setOnClickListener {

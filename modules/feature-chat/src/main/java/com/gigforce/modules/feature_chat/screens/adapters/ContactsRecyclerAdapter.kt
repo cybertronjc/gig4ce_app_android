@@ -35,12 +35,6 @@ import android.content.res.ColorStateList
 
 import android.text.SpannableString
 
-
-
-
-
-
-
 class ContactsRecyclerAdapter(
         private val context: Context,
         private val requestManager: RequestManager,

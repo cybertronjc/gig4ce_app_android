@@ -84,14 +84,13 @@ class GroupMessageViewInfoFragment : Fragment() {
     private fun initViewModel() {
         viewModel.messageReadingInfo
             .observe(viewLifecycleOwner, {
-                Log.d("details", "$it")
+
                 viewBinding.toolbar.showSubtitle(getString(R.string.viewed_by_chat) + it.readingInfo.size + "/ " + it.totalMembers)
                 viewBinding.messageViewedRecyclerView.collection = it.readingInfo
             })
     }
 
     private fun getMessageInfo() {
-
 
         viewModel.getMessageReadingInfo(
             groupId,

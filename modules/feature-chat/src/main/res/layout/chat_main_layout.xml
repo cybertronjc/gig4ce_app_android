@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_chat_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".screens.ChatPageFragment">
+
+    <com.gigforce.common_ui.components.cells.AppBar
+        android:id="@+id/appBarComp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:backgroundType="PinkBar"
+        app:isFilterVisible="false"
+        app:isSearchVisible="false"
+        app:isMenuItemVisible="true"
+        app:titleText="@string/chat_settings_chat" />
+
+    <include
+        android:id="@+id/shimmer_controller"
+        layout="@layout/chat_shimmer_placeholder_layout"
+        android:visibility="visible"
+        />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/layoutMain"
+        android:layout_weight="1">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:src="@drawable/bg_group_wallpaper" />
+
+        <com.gigforce.core.recyclerView.CoreRecyclerView
+            android:id="@+id/rv_chat_messages"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:paddingBottom="56dp" />
+
+        <com.gigforce.modules.feature_chat.ui.ChatFooter
+            android:id="@+id/chat_footer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_gravity="bottom"
+            android:minHeight="56dp" />
+
+        <com.gigforce.modules.feature_chat.ui.CommunityFooter
+            android:id="@+id/community_footer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:minHeight="56dp"/>
+
+
+    </FrameLayout>
+</LinearLayout>

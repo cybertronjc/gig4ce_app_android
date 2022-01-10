@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -239,6 +240,9 @@ class GroupMediaListFragment2 : Fragment(),
                 ChatConstants.ATTACHMENT_TYPE_DOCUMENT -> {
                     openDocument(fileIfDownloaded!!)
                 }
+                ChatConstants.ATTACHMENT_TYPE_AUDIO -> {
+                    openAudioPlayerBottomSheet(fileIfDownloaded!!)
+                }
             }
 
         } else {
@@ -249,6 +253,14 @@ class GroupMediaListFragment2 : Fragment(),
                 media
             )
         }
+    }
+
+    private fun openAudioPlayerBottomSheet(file: File) {
+        navigation.navigateTo(
+            "chats/audioPlayer", bundleOf(
+                AudioPlayerBottomSheetFragment.INTENT_EXTRA_URI to file.path!!
+            )
+        )
     }
 
     companion object {

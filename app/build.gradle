@@ -461,4 +461,7 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
     implementation 'com.akexorcist:localization:1.2.10'
+
+    //audio view
+    //implementation 'com.varunjohn1990.libraries:WhatsappMessengerView:2.1.0'
 }

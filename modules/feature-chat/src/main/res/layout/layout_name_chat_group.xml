@@ -102,24 +102,24 @@
             android:id="@+id/create_and_send"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_40"
+            android:layout_marginTop="@dimen/size_20"
             android:layout_marginEnd="@dimen/size_20"
             android:layout_marginBottom="@dimen/size_20"
             android:visibility="visible"
             app:backgroundTint="@color/colorPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/name_group_card"
-            app:layout_constraintBottom_toTopOf="@id/group_contacts_rv"
             app:srcCompat="@drawable/ic_icon_send"
             app:tint="@android:color/white" />
 
-        <ScrollView
+        <HorizontalScrollView
             android:id="@+id/group_contacts_rv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="@dimen/size_24"
-            app:layout_constraintTop_toBottomOf="@id/participantsCount"
+            android:scrollbars="none"
+            android:layout_marginTop="@dimen/size_20"
+            android:layout_marginEnd="@dimen/size_20"
+            app:layout_constraintTop_toBottomOf="@id/create_and_send"
             app:layout_constraintStart_toStartOf="@id/participantsCount"
             app:layout_constraintEnd_toEndOf="parent">
 
@@ -129,7 +129,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"/>
 
-        </ScrollView>
+        </HorizontalScrollView>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

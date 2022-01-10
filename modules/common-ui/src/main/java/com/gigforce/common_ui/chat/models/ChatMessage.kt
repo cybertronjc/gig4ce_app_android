@@ -1,6 +1,7 @@
 package com.gigforce.common_ui.chat.models
 
 import android.graphics.Bitmap
+import android.os.Parcelable
 import com.gigforce.common_ui.chat.ChatConstants
 import com.gigforce.common_ui.metaDataHelper.ImageMetaData
 import com.gigforce.common_ui.viewdatamodels.chat.UserInfo
@@ -10,6 +11,8 @@ import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.PropertyName
+import kotlinx.android.parcel.Parcelize
+import java.io.Serializable
 import java.util.*
 
 class ChatMessage(
@@ -60,6 +63,10 @@ class ChatMessage(
     @get:PropertyName("videoLength")
     @set:PropertyName("videoLength")
     var videoLength: Long = 0,
+
+    @get:PropertyName("audioLength")
+    @set:PropertyName("audioLength")
+    var audioLength: Long = 0,
 
     /**
      * Attachment Path- full path of image, video etc
@@ -172,7 +179,7 @@ class ChatMessage(
     @set:PropertyName("createdAt")
     var createdAt : Timestamp ?= Timestamp.now()
 
-) : IMediaMessage
+) : IMediaMessage, Serializable
 
 
 data class EventInfo(
