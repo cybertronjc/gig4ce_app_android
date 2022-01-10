@@ -118,7 +118,7 @@ class DynamicSignatureDrawerView2(
         }
     }
 
-    override fun updateDocumentStatus(status: String) {
+    override fun updateDocumentStatus(status: String?) {
         updateDocumentStatusImage(
             status,
             viewBinding.statusImageview,
