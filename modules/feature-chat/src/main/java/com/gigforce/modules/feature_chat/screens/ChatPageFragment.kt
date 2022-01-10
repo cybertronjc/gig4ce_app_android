@@ -1775,10 +1775,10 @@ class ChatPageFragment : Fragment(),
                 )
 //                showToast("Location Clicked")
             }
-//            AttachmentOption.VIDEO_ID -> {
-////                showToast("Video Clicked")
-//                checkPermissionAndHandleActionPickVideo()
-//            }
+            AttachmentOption.CONTACT_ID -> {
+                showToast("Coming soon")
+                //checkPermissionAndHandleActionPickVideo()
+            }
         }
     }
 
