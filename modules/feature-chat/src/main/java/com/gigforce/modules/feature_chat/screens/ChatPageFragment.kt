@@ -435,15 +435,17 @@ class ChatPageFragment : Fragment(),
             .outputs
             .messages
             .observe(viewLifecycleOwner, { messages ->
-
-                chatRecyclerView.collection = messages.map {
-                    ChatMessageWrapper(
-                        message = it,
-                        oneToOneChatViewModel = viewModel,
-                        groupChatViewModel = groupChatViewModel
-                    )
+                messages.let {
+                    chatRecyclerView.collection = messages.map {
+                        ChatMessageWrapper(
+                            message = it,
+                            oneToOneChatViewModel = viewModel,
+                            groupChatViewModel = groupChatViewModel
+                        )
+                    }
+                    chatRecyclerView.smoothScrollToLastPosition()
                 }
-                chatRecyclerView.smoothScrollToLastPosition()
+
             })
 
         groupChatViewModel
