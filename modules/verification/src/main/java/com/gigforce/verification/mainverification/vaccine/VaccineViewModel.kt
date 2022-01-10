@@ -28,7 +28,7 @@ class VaccineViewModel @Inject constructor(val logger: GigforceLogger) : ViewMod
         try {
             var data = vaccineRepository.getVaccineConfigData()
             if(!data.list.isNullOrEmpty()){
-                data.list?.add(SimpleCardDVM1(id = null,label = "NOT VACCINATED"))
+                data.list?.add(SimpleCardDVM1(id = null,label = "NOT VACCINATED", navPath = "verification/GetVaccinateFirstBS"))
             }
             _vaccineConfigLiveData.value = Lce.content(data)
         } catch (e: Exception) {

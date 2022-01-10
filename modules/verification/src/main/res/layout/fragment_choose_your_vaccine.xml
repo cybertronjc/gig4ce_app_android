@@ -32,9 +32,10 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
                 android:layout_gravity="center_vertical"
+                android:layout_margin="@dimen/dp_sm4"
                 android:src="@drawable/ic_time" />
 
             <TextView
@@ -44,7 +45,6 @@
                 android:text="@string/fully_vaccinated"
                 style="@style/black_small_bold"
                 android:gravity="start"
-                android:layout_marginLeft="@dimen/size_10"
                 android:layout_weight="1" />
 
             <TextView
@@ -97,6 +97,7 @@
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
             app:srcCompat="@drawable/vaccine_group2"/>
         <TextView
             android:id="@+id/download_certificate_tv"

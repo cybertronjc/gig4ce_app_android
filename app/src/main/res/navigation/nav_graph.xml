@@ -1155,5 +1155,8 @@
     <dialog android:id="@+id/AskUserForVaccineBS"
         android:name="com.gigforce.verification.mainverification.vaccine.bottomsheets.AskUserForVaccineBS"
         android:label="AskUserForVaccine"/>
+
+    <dialog android:id="@+id/GetVaccinateFirstBS"
+        android:name="com.gigforce.verification.mainverification.vaccine.bottomsheets.GetVaccinateFirstBS"/>
 </navigation>
 

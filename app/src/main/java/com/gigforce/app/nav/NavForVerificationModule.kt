@@ -39,7 +39,6 @@ class NavForVerificationModule(
         baseImplementation.registerRoute("${moduleName}/acknowledgeBankBS",R.id.acknowledgeBankBS)
         baseImplementation.registerRoute("${moduleName}/AskUserForVaccineBS",R.id.AskUserForVaccineBS)
         baseImplementation.registerRoute("${moduleName}/chooseYourVaccineFragment",R.id.chooseYourVaccineFragment)
-
-
+        baseImplementation.registerRoute("${moduleName}/GetVaccinateFirstBS",R.id.GetVaccinateFirstBS)
     }
 }

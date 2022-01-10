@@ -47,7 +47,7 @@ class AskUserForVaccineBS : BottomSheetDialogFragment() {
                                         if(it.content.list.isNullOrEmpty()){
                                                 dismiss()
                                             }else{
-                                                vaccinerv.collection = it.content?.list?: emptyList()
+                                                vaccinerv.collection = it.content.list ?: emptyList()
                                             }
                                     }
                                 is Lce.Error -> {
