@@ -163,7 +163,7 @@ class GroupChatViewModel @Inject constructor(
                     }
 
                     if (data != null) {
-                        groupDetails = data.toObject(ChatGroup::class.java)!!.apply {
+                        groupDetails = data.toObject(ChatGroup::class.java)?.apply {
                             this.id = data.id
                         }
 

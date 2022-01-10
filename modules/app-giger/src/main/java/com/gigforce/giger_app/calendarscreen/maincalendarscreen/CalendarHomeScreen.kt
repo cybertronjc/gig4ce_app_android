@@ -1103,7 +1103,7 @@ class CalendarHomeScreen : Fragment(),
                     layoutManager = recyclerView.layoutManager as LinearLayoutManager
                 }
                 val firstVisibleItem = layoutManager!!.findFirstVisibleItemPosition()
-                if (firstVisibleItem == 0) return
+                if (firstVisibleItem <= 0) return
                 var calendar = Calendar.getInstance()
 
                 calendar.set(
