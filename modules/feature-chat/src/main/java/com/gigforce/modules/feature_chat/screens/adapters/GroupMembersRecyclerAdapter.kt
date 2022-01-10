@@ -131,10 +131,11 @@ class GroupMembersRecyclerAdapter(
 //            }
 //            val mobileWith91 = if(mobileText.length > 5) mobileText.substring(0, 3) + "-" + mobileText.substring(3) else ""
 
-            contactNameTV.text = contact.name
+            contactNameTV.text = if (contact.isUserGroupManager) contact.name + "(Admin)" else contact.name
             uidTV.text = ""
 
-            isUserManagerView.isVisible = contact.isUserGroupManager
+            //isUserManagerView.isVisible = contact.isUserGroupManager
+
             val isUserTheCurrentUser = contact.uid == currentUserUid
             if (isUserTheCurrentUser) {
                 chatOverlay.gone()

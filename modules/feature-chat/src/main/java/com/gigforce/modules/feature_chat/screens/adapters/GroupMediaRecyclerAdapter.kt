@@ -1,6 +1,7 @@
 package com.gigforce.modules.feature_chat.screens.adapters
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,6 +40,8 @@ class GroupMediaRecyclerAdapter(
 
     private var documentsDirectoryRef: File =
         File(refToGigForceAttachmentDirectory, ChatConstants.DIRECTORY_DOCUMENTS)
+
+    private var audiosDirectoryRef: File = File(refToGigForceAttachmentDirectory, ChatConstants.DIRECTORY_AUDIOS)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GroupMediaViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(
@@ -141,6 +144,16 @@ class GroupMediaRecyclerAdapter(
                     playDownloadOverlayIV.gone()
                     playDownloadIconIV.setImageDrawable(null)
                     attachmentDownloadingProgressBar.gone()
+                } else if (groupMedia.attachmentType == ChatConstants.ATTACHMENT_TYPE_AUDIO){
+                    requestManager.load(R.drawable.ic_audio_attachment)
+                        .into(thumbnailIV)
+
+                    videoLengthLayout.gone()
+                    videoLength.text = ""
+
+                    playDownloadOverlayIV.gone()
+                    playDownloadIconIV.setImageDrawable(null)
+                    attachmentDownloadingProgressBar.gone()
                 } else {
                     throw IllegalArgumentException("other types not supperted yet")
                 }
@@ -191,6 +204,22 @@ class GroupMediaRecyclerAdapter(
                 } else if (groupMedia.attachmentType == ChatConstants.ATTACHMENT_TYPE_DOCUMENT) {
                     //Need work
                     thumbnailIV.loadImage(R.drawable.ic_document_background)
+
+                    videoLengthLayout.gone()
+                    videoLength.text = ""
+                    playDownloadOverlayIV.visible()
+
+                    if (isFileDownloading) {
+                        attachmentDownloadingProgressBar.visible()
+                        requestManager.clear(playDownloadIconIV)
+                    } else {
+                        attachmentDownloadingProgressBar.gone()
+                        requestManager.load(R.drawable.ic_download_24).into(playDownloadIconIV)
+                    }
+                } else if (groupMedia.attachmentType == ChatConstants.ATTACHMENT_TYPE_AUDIO) {
+                    Log.d("typeAdapter", "type : ${groupMedia.attachmentType}")
+                    //Need work
+                    thumbnailIV.loadImage(R.drawable.ic_audio_attachment)
 
                     videoLengthLayout.gone()
                     videoLength.text = ""
@@ -263,6 +292,13 @@ class GroupMediaRecyclerAdapter(
                     return null
             } else if (type == ChatConstants.ATTACHMENT_TYPE_DOCUMENT) {
                 val file = File(documentsDirectoryRef, fileName)
+                if (file.exists())
+                    return file
+                else
+                    return null
+
+            } else if (type == ChatConstants.ATTACHMENT_TYPE_AUDIO) {
+                val file = File(audiosDirectoryRef, fileName)
                 if (file.exists())
                     return file
                 else

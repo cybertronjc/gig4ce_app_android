@@ -29,6 +29,9 @@ class ChatViewTypeLoader: IViewTypeLoader {
             ViewTypes.IN_LOCATION -> InLocationMessageView(context, null)
             ViewTypes.OUT_LOCATION -> OutLocationMessageView(context, null)
 
+            ViewTypes.IN_AUDIO -> InOneToOneAudioMessageView(context, null)
+            ViewTypes.OUT_AUDIO -> OutOneToOneAudioMessageView(context, null)
+
             ViewTypes.IN_DELETED_MESSAGE -> InDeletedMessageView(context, null)
             ViewTypes.OUT_DELETED_MESSAGE -> OutDeletedMessageView(context, null)
 
@@ -43,6 +46,9 @@ class ChatViewTypeLoader: IViewTypeLoader {
 
             ViewTypes.GROUP_IN_DOCUMENT -> GroupInDocumentMessageView(context, null)
             ViewTypes.GROUP_OUT_DOCUMENT -> GroupOutDocumentMessageView(context, null)
+
+            ViewTypes.GROUP_IN_AUDIO -> GroupInAudioMessageView(context, null)
+            ViewTypes.GROUP_OUT_AUDIO -> GroupOutAudioMessageView(context, null)
 
             ViewTypes.GROUP_IN_LOCATION -> GroupInLocationMessageView(context, null)
             ViewTypes.GROUP_OUT_LOCATION -> GroupOutLocationMessageView(context, null)

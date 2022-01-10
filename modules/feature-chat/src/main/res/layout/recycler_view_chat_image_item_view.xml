@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/txt_contact_item"
+        android:layout_width="90dp"
+        app:cardCornerRadius="@dimen/size_8"
+        android:layout_margin="4dp"
+        android:layout_height="90dp">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.gigforce.common_ui.views.GigforceImageView
+            android:id="@+id/thumbnail_imageview"
+            android:layout_width="match_parent"
+            android:scaleType="centerCrop"
+            android:layout_height="match_parent" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/play_download_overlay_iv"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="#51000000"
+            app:shapeAppearanceOverlay="@style/circleImageView" />
+
+        <ImageView
+            android:id="@+id/play_download_icon_iv"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            />
+
+        <ProgressBar
+            android:id="@+id/attachment_downloading_pb"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/video_length_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="4dp"
+            android:layout_marginBottom="4dp"
+            android:visibility="visible"
+            app:cardBackgroundColor="#51000000"
+            app:cardCornerRadius="3dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="2dp">
+
+                <ImageView
+                    android:id="@+id/attachment_type_icon"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:scaleX="0.7"
+                    android:scaleY="0.7"
+                    />
+
+                <TextView
+                    android:id="@+id/video_length_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:fontFamily="@font/lato"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </FrameLayout>
+
+
+</com.google.android.material.card.MaterialCardView>
+</merge>

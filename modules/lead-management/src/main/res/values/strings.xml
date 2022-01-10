@@ -207,4 +207,19 @@
     <string name="giger_not_joined_lead">Giger has not joined the gig.</string>
     <string name="giger_joined_lead">Giger has resigned after working.</string>
     <string name="giger_already_disabled_lead">This giger is already disabled</string>
+    <string name="select_team_leader_giger_gigs">Select Team Leader</string>
+    <string name="continue_giger_gigs">Continue</string>
+    <string name="cancel_giger_gigs">Cancel</string>
+    <string name="change_tl_search_hint_giger_gigs">Search by Name</string>
+    <string name="team_leader_changed_giger_gigs">Team Leader Changed</string>
+    <string name="changes_from_today_giger_gigs">Changes will be implemented from today</string>
+    <string name="change_team_leader_giger_gigs">Change Team Leader</string>
+    <string name="attendance_status_giger_gigs">Attendance Status</string>
+    <string name="job_profile_giger_gigs">Job Profile</string>
+    <string name="joining_date_giger_gigs">Joining Date</string>
+    <string name="client_id_giger_gigs">Client ID</string>
+    <string name="company_name_giger_gigs">Flipkart</string>
+    <string name="call_text_giger_gigs">CALL GIGER</string>
+    <string name="okay_giger_gigs">OKAY</string>
+
 </resources>

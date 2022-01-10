@@ -6,21 +6,18 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.InputMethod
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.annotation.DrawableRes
 import androidx.annotation.MenuRes
 import androidx.appcompat.widget.PopupMenu
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.UserInfoImp
 import com.gigforce.common_ui.databinding.AppBarLayoutBinding
 import com.gigforce.common_ui.listeners.AppBarClicks
-import com.gigforce.common_ui.views.GigforceImageView
 import com.gigforce.core.AppConstants
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.extensions.gone
@@ -190,9 +187,9 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
 //            menuClickListener?.onMenuClick(it)
 //            onMenuClick(it)
 //        }
-        viewBinding.chatBackButton.setOnClickListener {
-            makeChatOptionsVisible(false, false, false)
-        }
+//        viewBinding.chatBackButton.setOnClickListener {
+//            makeChatOptionsVisible(false, false, false)
+//        }
         setColorsOnViews(backGroundType)
         styledAttributeSet.recycle()
 
@@ -358,7 +355,7 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
         viewBinding.ivProfile.gone()
     }
 
-    fun makeChatOptionsVisible(visible: Boolean, copyEnable: Boolean, deleteEnable: Boolean){
+    fun makeChatOptionsVisible(visible: Boolean, copyEnable: Boolean, deleteEnable: Boolean, infoEnable: Boolean, downloadEnable: Boolean){
         if (visible){
             viewBinding.mainLayout.gone()
             viewBinding.chatOptionsLayout.visible()
@@ -369,6 +366,8 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
 
         viewBinding.copyButton.isVisible = copyEnable
         viewBinding.deleteButton.isVisible = deleteEnable
+        viewBinding.infoButton.isVisible = infoEnable
+        viewBinding.downloadButton.isVisible = downloadEnable
     }
 
     override fun bind(data: Any?) {
@@ -417,6 +416,29 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
         viewBinding.subTitleTV.setOnClickListener(listener)
     }
 
+    fun setForwardClickListener(
+        listener: OnClickListener
+    ) {
+        viewBinding.forwardButton.setOnClickListener(listener)
+    }
+    fun setInfoClickListener(
+        listener: OnClickListener
+    ) {
+        viewBinding.infoButton.setOnClickListener(listener)
+    }
+
+    fun setReplyClickListener(
+        listener: OnClickListener
+    ) {
+        viewBinding.replyButton.setOnClickListener(listener)
+    }
+
+    fun setChatOptionsCancelListener(
+        listener: OnClickListener
+    ) {
+        viewBinding.chatBackButton.setOnClickListener(listener)
+    }
+
     fun hideKeyboard(view: View) {
         val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.toggleSoftInputFromWindow(
@@ -459,6 +481,13 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
         }
     }
 
+
+    fun setSubTitle(
+        subTitle : String
+    ){
+        viewBinding.subTitleTV.visible()
+        viewBinding.subTitleTV.text = subTitle
+    }
 
 
 

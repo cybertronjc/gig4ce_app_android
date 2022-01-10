@@ -19,15 +19,18 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
-import android.R.attr.bitmap
-import java.io.ByteArrayOutputStream
+import com.gigforce.common_ui.remote.verification.VerificationKycService
+import com.gigforce.common_ui.viewdatamodels.verification.SubmitSignatureRequest
+import com.gigforce.common_ui.viewdatamodels.verification.signature.SignatureUploadResponse
+import com.gigforce.core.extensions.getDownloadUrlOrReturnNull
 
 
 @Singleton
 class SignatureRepository @Inject constructor(
     private val signatureImageService: SignatureImageService,
     private val firebaseStorage: FirebaseStorage,
-    private val metaDataExtractor: FileMetaDataExtractor
+    private val metaDataExtractor: FileMetaDataExtractor,
+    private val verificationKycService: VerificationKycService
 ) {
 
     companion object {
@@ -47,7 +50,30 @@ class SignatureRepository @Inject constructor(
         ).bodyOrThrow()
     }
 
-    suspend fun uploadSignatureImageToFirebase(
+    suspend fun uploadSignature(
+        uri : Uri,
+        userId : String
+    ) : SignatureUploadResponse {
+
+        val imagePathInFirebase = uploadSignatureImageToFirebase(uri)
+        val fullImageUrl = createFullUrl(imagePathInFirebase)
+        updateSignatureInVerification(
+            SubmitSignatureRequest(
+                updateForUserId = userId,
+                signatureFirebasePath = imagePathInFirebase,
+                signatureImageFullUrl = fullImageUrl,
+                backgroundRemoved = false
+            )
+        )
+
+        return SignatureUploadResponse(
+            signatureFirebasePath = imagePathInFirebase,
+            signatureFullUrl = fullImageUrl,
+            backgroundRemoved = false
+        )
+    }
+
+    private suspend fun uploadSignatureImageToFirebase(
         uri: Uri
     ): String = suspendCancellableCoroutine { cont ->
 
@@ -71,36 +97,13 @@ class SignatureRepository @Inject constructor(
         }
     }
 
-    suspend fun uploadSignatureImageToFirebase(
-        uri: Bitmap
-    ): String = suspendCancellableCoroutine { cont ->
+    private suspend fun updateSignatureInVerification(
+        submitSignatureRequest: SubmitSignatureRequest
+    ){
 
-        val baos = ByteArrayOutputStream()
-        uri.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-
-        val uploadFileTask = firebaseStorage
-            .reference
-            .child(DIRECTORY_SIGNATURES)
-            .child(createImageFile())
-            .putBytes(baos.toByteArray())
-
-        uploadFileTask.addOnSuccessListener {
-            cont.resume(it.metadata!!.path)
-        }.addOnFailureListener {
-            cont.resumeWithException(it)
-        }
-
-        cont.invokeOnCancellation {
-
-            if(!uploadFileTask.isCanceled) {
-                uploadFileTask.cancel()
-            }
-        }
-    }
-
-    private fun createImageFile(): String {
-        val extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(MimeTypes.JPEG)
-        return "IMG-${DateHelper.getFullDateTimeStamp()}.$extension"
+        verificationKycService
+            .uploadSignature(submitSignatureRequest)
+            .bodyOrThrow()
     }
 
     private fun createImageFile(
@@ -115,4 +118,14 @@ class SignatureRepository @Inject constructor(
         val extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(fileMimeType)
         return "IMG-${DateHelper.getFullDateTimeStamp()}.$extension"
     }
+
+    private suspend fun createFullUrl(
+        imagePathOnFirebase: String
+    ): String {
+        return firebaseStorage
+            .reference
+            .child(imagePathOnFirebase)
+            .getDownloadUrlOrReturnNull()?.toString() ?: ""
+    }
+
 }

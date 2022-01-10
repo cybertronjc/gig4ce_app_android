@@ -28,6 +28,12 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:titleText="@string/community_chat" />
 
+        <include
+            android:id="@+id/headers_shimmer"
+            android:visibility="visible"
+            layout="@layout/chat_headers_shimmer_list_view"
+            />
+
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -39,6 +45,7 @@
                 android:layout_height="match_parent"
                 android:clipToPadding="false"
                 android:paddingBottom="@dimen/size_72"
+                android:visibility="gone"
                 android:orientation="vertical" />
 
             <include

@@ -1,4 +1,4 @@
-package com.gigforce.common_ui.signature
+package com.gigforce.verification.mainverification.signature
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

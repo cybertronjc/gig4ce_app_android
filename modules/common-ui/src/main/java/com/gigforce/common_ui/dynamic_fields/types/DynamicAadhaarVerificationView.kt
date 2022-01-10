@@ -17,6 +17,7 @@ import com.gigforce.common_ui.dynamic_fields.DynamicVerificationFieldView
 import com.gigforce.common_ui.dynamic_fields.data.DynamicField
 import com.gigforce.common_ui.dynamic_fields.data.DynamicVerificationField
 import com.gigforce.common_ui.dynamic_fields.data.FieldTypes
+import com.gigforce.common_ui.dynamic_fields.data.VerificationStatus
 import com.gigforce.common_ui.ext.addMandatorySymbolToTextEnd
 import com.gigforce.common_ui.navigation.JoiningVerificationFormsNavigation
 import com.gigforce.common_ui.viewmodels.verification.SharedVerificationViewModelEvent
@@ -112,9 +113,9 @@ class DynamicAadhaarVerificationView(
     }
 
 
-    override fun updateDocumentStatus(status: String) {
+    override fun updateDocumentStatus(status: String?) {
         updateDocumentStatusImage(
-            status,
+            status ?: VerificationStatus.NOT_UPLOADED,
             viewBinding.statusIv,
             viewBinding.verificationSubtitleLabel,
             viewData.prefillText ?: "Upload"

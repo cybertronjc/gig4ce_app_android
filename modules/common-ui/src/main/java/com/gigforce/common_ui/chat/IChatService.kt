@@ -3,7 +3,9 @@ package com.gigforce.common_ui.chat
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
+import com.gigforce.common_ui.chat.models.AudioInfo
 import com.gigforce.common_ui.chat.models.ChatMessage
+import com.gigforce.common_ui.chat.models.ContactModel
 import com.gigforce.common_ui.chat.models.VideoInfo
 
 //import com.gigforce.modules.feature_chat.models.ChatMessage
@@ -36,6 +38,14 @@ interface IChatService {
         message: ChatMessage,
         fileName: String,
         file: Uri
+    )
+
+    suspend fun sendAudioMessage(
+        context: Context,
+        chatHeaderId: String,
+        message: ChatMessage,
+        file: Uri,
+        audioInfo: AudioInfo
     )
 
     suspend fun sendLocationMessage(
@@ -71,5 +81,10 @@ interface IChatService {
     suspend fun setHeadersAsRead(
         headerIds: List<String>,
         senderId: String
+    )
+
+    suspend fun forwardChatMessage(
+        contacts: List<ContactModel>,
+        chatMessage: ChatMessage
     )
 }
