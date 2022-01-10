@@ -93,6 +93,7 @@
             android:layout_marginEnd="@dimen/size_20"
             android:layout_marginBottom="@dimen/size_16"
             android:gravity="center"
+            app:strokeColor="@color/lipstick_2"
             android:fontFamily="@font/lato_bold"
             android:text="@string/cancel_giger_gigs"
             android:textAlignment="center"

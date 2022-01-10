@@ -119,6 +119,11 @@ class ChangeTeamLeaderBottomSheetFragment :
         }
 
         viewBinding.changeTeamLeaderMainLayout.apply{
+
+            cancelChangeTl.setOnClickListener {
+                dismiss()
+            }
+
             bindProgressButton(confirmChangeTl)
             confirmChangeTl.attachTextChangeAnimator()
             confirmChangeTl.setOnClickListener {
