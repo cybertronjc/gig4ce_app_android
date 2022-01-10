@@ -51,7 +51,7 @@ class GigerInfoViewModel @Inject constructor(
     }
 
     private var gigerInfo : GigerInfo?  = null
-    private var joiningId : String? = null
+    private var currentJoiningId : String? = null
 
     private val _viewState = MutableLiveData<GigerInfoState>()
     val viewState: LiveData<GigerInfoState> = _viewState
@@ -65,6 +65,7 @@ class GigerInfoViewModel @Inject constructor(
         try {
             logger.d(TAG, "fetching giger joining info...")
 
+            currentJoiningId = joiningId
             val gigerJoiningDetails = leadManagementRepository.getGigerJoiningInfo(joiningId)
             gigerInfo = gigerJoiningDetails
 
@@ -87,7 +88,7 @@ class GigerInfoViewModel @Inject constructor(
 
         _viewEffects.emit(
             GigerInfoEffects.OpenChangeTeamLeaderScreen(
-                joiningId = joiningId!!,
+                joiningId = currentJoiningId!!,
                 gigerId = joiningInfo.gigerId,
                 gigerName = joiningInfo.gigerName,
                 teamLeaderId = authStateListener.getCurrentSignInUserInfoOrThrow().uid

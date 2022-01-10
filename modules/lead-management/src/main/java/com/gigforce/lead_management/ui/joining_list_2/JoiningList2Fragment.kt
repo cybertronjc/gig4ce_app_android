@@ -392,7 +392,7 @@ class JoiningList2Fragment : BaseFragment2<FragmentJoiningList2Binding>(
 
 //            changeTeamLeaderButton.isVisible = count != 0
 
-            joinNowButton.text = getString(R.string.drop_selection_lead)
+            joinNowButton.text = "Change Teamleader"
             dropJoining = hashMap
     }
 

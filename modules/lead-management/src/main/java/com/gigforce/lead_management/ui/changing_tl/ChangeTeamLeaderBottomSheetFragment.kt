@@ -252,7 +252,7 @@ class ChangeTeamLeaderBottomSheetFragment :
 
         var message = ""
         failedList.forEach {
-            message = message.plus("- ${it.value?.gigerName}")
+            message = message.plus("- ${it.value?.gigerName}\n")
         }
 
         MaterialAlertDialogBuilder(requireContext())
