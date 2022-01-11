@@ -8,15 +8,17 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.viewdatamodels.SimpleCardDVM1
+import com.gigforce.core.ICustomClickListener
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.recyclerView.ItemClickListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.simple_card_component1.view.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class SimpleCardComponent1(context: Context, attrs: AttributeSet?) : FrameLayout(context, attrs),
-    IViewHolder {
+    IViewHolder, ICustomClickListener {
     val view: View
     init {
         this.layoutParams =
@@ -44,9 +46,16 @@ class SimpleCardComponent1(context: Context, attrs: AttributeSet?) : FrameLayout
             }
             data.navPath?.let {navPath->
                 card_view.setOnClickListener{
+                    itemClickListener?.onItemClick(view,0,data)
                     navigation.navigateTo(navPath)
                 }
             }
         }
+    }
+
+    var itemClickListener : ItemClickListener?=null
+
+    override fun onClickListener(itemClickListener: ItemClickListener?) {
+        this.itemClickListener = itemClickListener
     }
 }

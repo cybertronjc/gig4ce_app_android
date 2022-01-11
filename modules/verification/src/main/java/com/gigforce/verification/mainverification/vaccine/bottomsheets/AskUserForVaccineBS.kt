@@ -12,6 +12,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 
 import androidx.lifecycle.Observer
+import com.gigforce.core.recyclerView.ItemClickListener
 
 import com.gigforce.core.utils.Lce
 
@@ -40,6 +41,11 @@ class AskUserForVaccineBS : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
                 super.onViewCreated(view, savedInstanceState)
+                vaccinerv.itemClickListener = object : ItemClickListener {
+                        override fun onItemClick(view: View, position: Int, dataModel: Any) {
+                            dismiss()
+                        }
+                    }
                 vaccineViewModel.vaccineConfigLiveData.observe(viewLifecycleOwner, Observer{
                         when(it){
                                 Lce.Loading->{}
