@@ -420,6 +420,8 @@ class ChatPageFragment : Fragment(),
 
         //toolbar.showSubtitle(getString(R.string.offline_chat))
         appbar.showSubtitle(getString(R.string.offline_chat))
+
+
     }
 
     private fun adjustUiAccToGroupChat() {
@@ -433,56 +435,7 @@ class ChatPageFragment : Fragment(),
 
         //toolbar.showSubtitle(getString(R.string.tap_to_open_details_chat))
         appbar.showSubtitle(getString(R.string.tap_to_open_details_chat))
-        appbar.setSubtitleClickListener(View.OnClickListener {
-            val groupId = chatHeaderOrGroupId ?: return@OnClickListener
 
-            if (chatType == ChatConstants.CHAT_TYPE_GROUP) {
-                navigation.navigateTo("chats/userGroupDetailsFragment", bundleOf(
-                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_TYPE to ChatConstants.CHAT_TYPE_GROUP,
-                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_IMAGE to receiverPhotoUrl,
-                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_NAME to receiverName,
-                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_HEADER_ID to groupId,
-                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_ID to receiverUserId,
-                    StringConstants.MOBILE_NUMBER.value to receiverMobileNumber
-
-                ))
-            }
-//            else if(chatType == ChatConstants.CHAT_TYPE_USER) {
-//                navigation.navigateTo("chats/userGroupDetailsFragment", bundleOf(
-//                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_TYPE to ChatConstants.CHAT_TYPE_USER,
-//                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_IMAGE to receiverPhotoUrl,
-//                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_NAME to receiverName,
-//                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_HEADER_ID to groupId,
-//                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_ID to receiverUserId,
-//                    StringConstants.MOBILE_NUMBER.value to receiverMobileNumber
-//                ))
-//            }
-        })
-        appbar.setTitleClickListener(View.OnClickListener {
-            val groupId = chatHeaderOrGroupId ?: return@OnClickListener
-
-            if (chatType == ChatConstants.CHAT_TYPE_GROUP) {
-                navigation.navigateTo("chats/userGroupDetailsFragment", bundleOf(
-                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_TYPE to ChatConstants.CHAT_TYPE_GROUP,
-                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_IMAGE to receiverPhotoUrl,
-                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_NAME to receiverName,
-                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_HEADER_ID to groupId,
-                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_ID to receiverUserId,
-                    StringConstants.MOBILE_NUMBER.value to receiverMobileNumber
-                ))
-            }
-//            else if(chatType == ChatConstants.CHAT_TYPE_USER) {
-//                navigation.navigateTo("chats/userGroupDetailsFragment", bundleOf(
-//                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_TYPE to ChatConstants.CHAT_TYPE_USER,
-//                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_IMAGE to receiverPhotoUrl,
-//                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_NAME to receiverName,
-//                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_HEADER_ID to groupId,
-//                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_ID to receiverUserId,
-//                    StringConstants.MOBILE_NUMBER.value to receiverMobileNumber
-//
-//                ))
-//            }
-        })
 
 
 
@@ -693,6 +646,11 @@ class ChatPageFragment : Fragment(),
                     appbar.setAppBarTitle(it.name ?: "")
                 }
 
+                if(it.mobile.isNotBlank()){
+                    receiverMobileNumber = it.mobile
+                    Log.d(TAG, "mobile: $receiverMobileNumber")
+                }
+
                 if (!it.imageThumbnailPathInStorage.isNullOrBlank()) {
 
                     if (Patterns.WEB_URL.matcher(it.imageThumbnailPathInStorage!!).matches()) {
@@ -894,13 +852,78 @@ class ChatPageFragment : Fragment(),
 
         appbar.setImageClickListener(View.OnClickListener {
             val groupId = chatHeaderOrGroupId ?: return@OnClickListener
+            if (chatType == ChatConstants.CHAT_TYPE_GROUP) {
+                navigation.navigateTo("chats/userGroupDetailsFragment", bundleOf(
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_TYPE to ChatConstants.CHAT_TYPE_GROUP,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_IMAGE to receiverPhotoUrl,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_NAME to receiverName,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_HEADER_ID to groupId,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_ID to receiverUserId,
+                    StringConstants.MOBILE_NUMBER.value to receiverMobileNumber
+
+                ))
+            }
+            else if(chatType == ChatConstants.CHAT_TYPE_USER) {
+                navigation.navigateTo("chats/userGroupDetailsFragment", bundleOf(
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_TYPE to ChatConstants.CHAT_TYPE_USER,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_IMAGE to receiverPhotoUrl,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_NAME to receiverName,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_HEADER_ID to groupId,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_ID to receiverUserId,
+                    StringConstants.MOBILE_NUMBER.value to receiverMobileNumber
+                ))
+            }
+        })
+
+        appbar.setSubtitleClickListener(View.OnClickListener {
+            val groupId = chatHeaderOrGroupId ?: return@OnClickListener
 
             if (chatType == ChatConstants.CHAT_TYPE_GROUP) {
-                chatNavigation.openGroupDetailsPage(groupId, ChatConstants.CHAT_TYPE_GROUP)
+                navigation.navigateTo("chats/userGroupDetailsFragment", bundleOf(
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_TYPE to ChatConstants.CHAT_TYPE_GROUP,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_IMAGE to receiverPhotoUrl,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_NAME to receiverName,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_HEADER_ID to groupId,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_ID to receiverUserId,
+                    StringConstants.MOBILE_NUMBER.value to receiverMobileNumber
+
+                ))
             }
-//            else if(chatType == ChatConstants.CHAT_TYPE_USER) {
-//                chatNavigation.openGroupDetailsPage(groupId, ChatConstants.CHAT_TYPE_USER)
-//            }
+            else if(chatType == ChatConstants.CHAT_TYPE_USER) {
+                navigation.navigateTo("chats/userGroupDetailsFragment", bundleOf(
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_TYPE to ChatConstants.CHAT_TYPE_USER,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_IMAGE to receiverPhotoUrl,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_NAME to receiverName,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_HEADER_ID to groupId,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_ID to receiverUserId,
+                    StringConstants.MOBILE_NUMBER.value to receiverMobileNumber
+                ))
+            }
+        })
+        appbar.setTitleClickListener(View.OnClickListener {
+            val groupId = chatHeaderOrGroupId ?: return@OnClickListener
+
+            if (chatType == ChatConstants.CHAT_TYPE_GROUP) {
+                navigation.navigateTo("chats/userGroupDetailsFragment", bundleOf(
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_TYPE to ChatConstants.CHAT_TYPE_GROUP,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_IMAGE to receiverPhotoUrl,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_NAME to receiverName,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_HEADER_ID to groupId,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_ID to receiverUserId,
+                    StringConstants.MOBILE_NUMBER.value to receiverMobileNumber
+                ))
+            }
+            else if(chatType == ChatConstants.CHAT_TYPE_USER) {
+                navigation.navigateTo("chats/userGroupDetailsFragment", bundleOf(
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_TYPE to ChatConstants.CHAT_TYPE_USER,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_IMAGE to receiverPhotoUrl,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_NAME to receiverName,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_HEADER_ID to groupId,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_ID to receiverUserId,
+                    StringConstants.MOBILE_NUMBER.value to receiverMobileNumber
+
+                ))
+            }
         })
 
         appbar.setBackButtonListener(View.OnClickListener {

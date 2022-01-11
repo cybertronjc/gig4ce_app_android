@@ -22,45 +22,39 @@
         app:layout_constraintTop_toTopOf="parent"
         app:titleText="@string/media_chat" />
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/media_tab_layout"
-        android:layout_width="match_parent"
-        android:layout_height="42dp"
-        android:layout_marginStart="@dimen/size_8"
-        android:layout_marginTop="@dimen/size_40"
-        android:layout_marginEnd="@dimen/size_8"
-        android:textAlignment="center"
-        android:visibility="visible"
-        android:background="@color/tab_background_color"
-        app:tabBackground="@drawable/selected_tab_background"
-        app:tabGravity="center"
-        app:tabIndicatorHeight="0dp"
-        app:tabMode="fixed"
-        app:tabSelectedTextColor="@color/white"
-        app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
-        app:tabTextColor="@color/black" >
+<!--    <com.google.android.material.tabs.TabLayout-->
+<!--        android:id="@+id/media_tab_layout"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="42dp"-->
+<!--        android:layout_marginStart="@dimen/size_8"-->
+<!--        android:layout_marginTop="@dimen/size_40"-->
+<!--        android:layout_marginEnd="@dimen/size_8"-->
+<!--        android:textAlignment="center"-->
+<!--        android:visibility="visible"-->
+<!--        android:background="@color/tab_background_color"-->
+<!--        app:tabBackground="@drawable/selected_tab_background"-->
+<!--        app:tabGravity="center"-->
+<!--        app:tabIndicatorHeight="0dp"-->
+<!--        app:tabMode="fixed"-->
+<!--        app:tabSelectedTextColor="@color/white"-->
+<!--        app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"-->
+<!--        app:tabTextColor="@color/black" >-->
 
-    </com.google.android.material.tabs.TabLayout>
+<!--    </com.google.android.material.tabs.TabLayout>-->
 
-    <com.gigforce.core.recyclerView.CoreRecyclerView
-        android:id="@+id/media_rv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clipToPadding="true"
-        android:paddingBottom="@dimen/size_16"
-        android:visibility="visible"/>
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/media_tab_layout"
+            android:layout_width="match_parent"
+            app:tabTextColor="@android:color/white"
+            android:background="@color/cardview_dark_background"
+            android:layout_height="wrap_content"/>
 
-    <com.gigforce.core.recyclerView.CoreRecyclerView
-        android:id="@+id/documents_rv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"/>
 
-    <com.gigforce.core.recyclerView.CoreRecyclerView
-        android:id="@+id/audio_rv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"/>
+        <androidx.viewpager2.widget.ViewPager2
+            android:layout_width="match_parent"
+            android:layout_below="@id/media_tab_layout"
+            android:id="@+id/viewPager"
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 

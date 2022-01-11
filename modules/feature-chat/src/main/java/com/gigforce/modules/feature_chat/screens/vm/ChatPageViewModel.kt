@@ -233,7 +233,7 @@ class ChatPageViewModel @Inject constructor(
         }
     }
 
-    private fun startListeningForContactChanges(
+     fun startListeningForContactChanges(
         mobileNo: String
     ) {
 

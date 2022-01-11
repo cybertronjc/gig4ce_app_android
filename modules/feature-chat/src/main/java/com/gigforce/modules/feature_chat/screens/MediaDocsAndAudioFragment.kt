@@ -2,16 +2,24 @@ package com.gigforce.modules.feature_chat.screens
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.NonNull
 import androidx.core.content.res.ResourcesCompat
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.common_ui.chat.ChatFileManager
 import com.gigforce.common_ui.ext.onTabSelected
 import com.gigforce.common_ui.ext.showToast
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.modules.feature_chat.ChatNavigation
 import com.gigforce.modules.feature_chat.R
@@ -21,6 +29,11 @@ import com.jaeger.library.StatusBarUtil
 import dagger.hilt.android.AndroidEntryPoint
 import java.lang.NullPointerException
 import javax.inject.Inject
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.gigforce.modules.feature_chat.screens.media_fragments.AudiosFragment
+import com.gigforce.modules.feature_chat.screens.media_fragments.DocumentsFragment
+import com.gigforce.modules.feature_chat.screens.media_fragments.ImageVideoFragment
+
 
 @AndroidEntryPoint
 class MediaDocsAndAudioFragment : Fragment() {
@@ -46,6 +59,11 @@ class MediaDocsAndAudioFragment : Fragment() {
         ChatNavigation(navigation)
     }
 
+    private val pagerAdapter: ViewStateAdapter by lazy {
+        ViewStateAdapter(
+            childFragmentManager, lifecycle
+        )
+    }
 
     var selectedTab = 0
     private lateinit var viewBinding: MediaDocsAndAudioFragmentBinding
@@ -89,15 +107,53 @@ class MediaDocsAndAudioFragment : Fragment() {
     private fun initObserver() {
 
         viewModel.groupInfo.observe(viewLifecycleOwner, Observer {
+                Log.d(TAG, "chatGroup: $it")
 
+
+        })
+
+        viewModel.mediaInfo.observe(viewLifecycleOwner, Observer {
+            Log.d(TAG, "medias: $it")
+            //viewBinding.mediaRv.collection = it
+        })
+
+        viewModel.docsInfo.observe(viewLifecycleOwner, Observer {
+            Log.d(TAG, "medias: $it")
+            //viewBinding.documentsRv.collection = it
+        })
+
+        viewModel.audioInfo.observe(viewLifecycleOwner, Observer {
+            Log.d(TAG, "medias: $it")
+            //viewBinding.audioRv.collection = it
         })
     }
 
-    private fun initListeners() {
-        viewBinding.mediaTabLayout.onTabSelected {
-            showToast(it?.text.toString())
-            selectedTab = it?.position!!
-        }
+    private fun initListeners() = viewBinding.apply{
+//        mediaTabLayout.onTabSelected {
+//            showToast(it?.text.toString())
+//            selectedTab = it?.position!!
+//
+//            when(selectedTab)  {
+//                0 -> {
+//                        mediaRv.visible()
+//                        documentsRv.gone()
+//                        audioRv.gone()
+//                    }
+//                1 -> {
+//                    mediaRv.gone()
+//                    documentsRv.visible()
+//                    audioRv.gone()
+//                }
+//                2 -> {
+//                    mediaRv.gone()
+//                    documentsRv.gone()
+//                    audioRv.visible()
+//                }
+//        }
+//        }
+        viewPager.adapter = pagerAdapter
+        //mediaTabLayout.setupWithViewPager(viewPager)
+
     }
 
     private fun initViews() = viewBinding.apply{
@@ -124,8 +180,42 @@ class MediaDocsAndAudioFragment : Fragment() {
             e.printStackTrace()
         }
 
+//        mediaRv.layoutManager = GridLayoutManager(requireContext(), 3)
+//        documentsRv.layoutManager = LinearLayoutManager(requireContext())
+//        audioRv.layoutManager = LinearLayoutManager(requireContext())
+
         viewModel.startWatchingGroupDetails(groupId)
 
     }
 
+}
+
+private class ViewStateAdapter(
+    @NonNull fragmentManager: FragmentManager?,
+    @NonNull lifecycle: Lifecycle?
+) :
+    FragmentStateAdapter(fragmentManager!!, lifecycle!!) {
+    @NonNull
+    override fun createFragment(position: Int): Fragment {
+        // Hardcoded in this order, you'll want to use lists and make sure the titles match
+        var f: Fragment? = null
+        when(position) {
+            0 -> {
+                f =   ImageVideoFragment()
+            }
+            1 -> {
+                f =   DocumentsFragment()
+            }
+            2 -> {
+                f = AudiosFragment()
+            }
+        }
+
+        return f!!
+    }
+
+    override fun getItemCount(): Int {
+        // Hardcoded, use lists
+        return 3
+    }
 }

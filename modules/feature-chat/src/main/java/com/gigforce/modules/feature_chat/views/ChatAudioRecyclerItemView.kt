@@ -11,6 +11,7 @@ import com.gigforce.core.IEventTracker
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.modules.feature_chat.R
+import com.gigforce.modules.feature_chat.models.ChatAudioViewModels
 import com.gigforce.modules.feature_chat.models.ChatMediaViewModels
 import com.gigforce.modules.feature_chat.ui.chatItems.MessageFlowType
 import dagger.hilt.android.AndroidEntryPoint
@@ -63,7 +64,7 @@ class ChatAudioRecyclerItemView (
     override fun bind(data: Any?) {
 
         data?.let {
-            val mediaData = it as ChatMediaViewModels.ChatMediaAudioItemData
+            val mediaData = it as ChatAudioViewModels.ChatMediaAudioItemData
             audioFileName.text = mediaData.audioName ?: ""
             audioFileDetails.text = mediaData.audioDetail ?: ""
             audioFileDate.text = mediaData.audioDate ?: ""

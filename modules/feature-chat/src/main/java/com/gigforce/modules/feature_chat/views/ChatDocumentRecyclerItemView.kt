@@ -11,6 +11,7 @@ import com.gigforce.core.IEventTracker
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.modules.feature_chat.R
+import com.gigforce.modules.feature_chat.models.ChatDocsViewModels
 import com.gigforce.modules.feature_chat.models.ChatMediaViewModels
 import javax.inject.Inject
 
@@ -59,7 +60,7 @@ class ChatDocumentRecyclerItemView(
 
     override fun bind(data: Any?) {
         data?.let {
-            val mediaData = it as ChatMediaViewModels.ChatMediaDocItemData
+            val mediaData = it as ChatDocsViewModels.ChatMediaDocItemData
             docFileName.text = mediaData.docName ?: ""
             docFileDetails.text = mediaData.docDetail ?: ""
             docFileDate.text = mediaData.docDate ?: ""

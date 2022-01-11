@@ -10,6 +10,8 @@ import com.gigforce.core.IEventTracker
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.modules.feature_chat.R
+import com.gigforce.modules.feature_chat.models.ChatAudioViewModels
+import com.gigforce.modules.feature_chat.models.ChatDocsViewModels
 import com.gigforce.modules.feature_chat.models.ChatMediaViewModels
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -53,8 +55,17 @@ class ChatDateRecyclerItemView (
 
     override fun bind(data: Any?) {
         data?.let {
-            val mediaData = it as ChatMediaViewModels.ChatMediaDateItemData
-            dateText.text = mediaData.dateString ?: ""
+            if (it is ChatMediaViewModels.ChatMediaDateItemData){
+                val mediaData = it as ChatMediaViewModels.ChatMediaDateItemData
+                dateText.text = mediaData.dateString ?: ""
+            } else if (it is ChatDocsViewModels.ChatMediaDateItemData){
+                val mediaData = it as ChatDocsViewModels.ChatMediaDateItemData
+                dateText.text = mediaData.dateString ?: ""
+            } else if (it is ChatAudioViewModels.ChatMediaDateItemData){
+                val mediaData = it as ChatAudioViewModels.ChatMediaDateItemData
+                dateText.text = mediaData.dateString ?: ""
+            }
+
         }
     }
 

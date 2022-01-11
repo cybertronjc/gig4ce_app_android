@@ -163,6 +163,8 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
             receiverMobileNumber = it.getString(StringConstants.MOBILE_NUMBER.value) ?: ""
         }
 
+        Log.d(TAG, "type: $chatType , receiverPhoto: $receiverPhotoUrl , receivername: $receiverName , header: $chatHeaderOrGroupId , number: $receiverMobileNumber ")
+
         savedInstanceState?.let {
             //groupId = it.getString(INTENT_EXTRA_GROUP_ID) ?: return@let
             chatType = it.getString(INTENT_EXTRA_CHAT_TYPE)
@@ -213,12 +215,12 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
         }
 
         forwardArrow.setOnClickListener {
-//            navigation.navigateTo("chats/mediaAndDocsFragment", bundleOf(
-//                INTENT_EXTRA_GROUP_ID to chatHeaderOrGroupId
-//            ))
-            chatNavigation.openGroupMediaList(
-                chatHeaderOrGroupId.toString()
-            )
+            navigation.navigateTo("chats/mediaAndDocsFragment", bundleOf(
+                INTENT_EXTRA_GROUP_ID to chatHeaderOrGroupId
+            ))
+//            chatNavigation.openGroupMediaList(
+//                chatHeaderOrGroupId.toString()
+//            )
         }
 
         addGigerLayout.setOnClickListener {
@@ -352,13 +354,14 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
     private fun checkForChatTypeAndSubscribeToRespectiveViewModel() {
 
         if (chatType == ChatConstants.CHAT_TYPE_USER) {
-            chatViewModel.setRequiredDataAndStartListeningToMessages(
-                otherUserId = receiverUserId!!,
-                headerId = chatHeaderOrGroupId,
-                otherUserName = receiverName,
-                otherUserProfilePicture = receiverPhotoUrl,
-                otherUserMobileNo = receiverMobileNumber
-            )
+            //receiverMobileNumber?.let { chatViewModel.startListeningForContactChanges(it) }
+//            chatViewModel.setRequiredDataAndStartListeningToMessages(
+//                otherUserId = receiverUserId!!,
+//                headerId = chatHeaderOrGroupId,
+//                otherUserName = receiverName,
+//                otherUserProfilePicture = receiverPhotoUrl,
+//                otherUserMobileNo = receiverMobileNumber
+//            )
             adjustUiAccToOneToOneChat()
             subscribeOneToOneViewModel()
         } else if (chatType == ChatConstants.CHAT_TYPE_GROUP) {
@@ -394,9 +397,10 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
     }
 
     private fun subscribeOneToOneViewModel() = viewBinding.apply{
+
         chatViewModel.otherUserInfo
             .observe(viewLifecycleOwner, Observer {
-
+                Log.d(TAG, "CONTACT: ${it.toString()}")
                 if (it.name.isNullOrBlank()) {
                     overlayCardLayout.profileName.text = "Add new contact"
                 } else {
