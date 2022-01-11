@@ -1,5 +1,6 @@
 package com.gigforce.lead_management.ui.changing_tl
 
+import android.app.Dialog
 import android.graphics.Color
 import android.os.Bundle
 import android.widget.LinearLayout
@@ -30,6 +31,13 @@ import com.github.razir.progressbutton.showProgress
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import android.widget.FrameLayout
+
+import android.content.DialogInterface
+import android.content.DialogInterface.OnShowListener
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
+
 
 @AndroidEntryPoint
 class ChangeTeamLeaderBottomSheetFragment :
@@ -83,6 +91,23 @@ class ChangeTeamLeaderBottomSheetFragment :
 
         viewModel.gigerForChangeTL = gigerForChangeTL?.toList() ?: emptyList()
         viewModel.sharedViewModel = sharedViewModel
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return super.onCreateDialog(savedInstanceState).apply {
+            setOnShowListener { dialog -> // In a previous life I used this method to get handles to the positive and negative buttons
+                // of a dialog in order to change their Typeface. Good ol' days.
+                val d: BottomSheetDialog = dialog as BottomSheetDialog
+
+                // This is gotten directly from the source of BottomSheetDialog
+                // in the wrapInBottomSheet() method
+                val bottomSheet = d.findViewById(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout?
+
+                bottomSheet?.let {
+                    BottomSheetBehavior.from(it).setState(BottomSheetBehavior.STATE_EXPANDED)
+                }
+            }
+        }
     }
 
     private fun logDataReceivedFromBundles(
@@ -226,7 +251,8 @@ class ChangeTeamLeaderBottomSheetFragment :
                 minWidth = LinearLayout.LayoutParams.MATCH_PARENT,
                 marginRight = R.dimen.size_16,
                 marginTop = R.dimen.size_1,
-                orientation = LinearLayout.VERTICAL
+                orientation = LinearLayout.VERTICAL,
+                itemsToBeDrawn = 5
             ),
             R.id.shimmer_controller
         )

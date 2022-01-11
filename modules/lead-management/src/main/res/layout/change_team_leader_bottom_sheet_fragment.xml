@@ -3,14 +3,14 @@
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="700dp"
+        android:layout_height="750dp"
         android:background="@drawable/filter_bottom_background"
         android:orientation="vertical">
 
         <include
             android:id="@+id/change_team_leader_main_layout"
             layout="@layout/change_team_leader_bottom_sheet_fragment_main"
-            android:layout_height="700dp"
+            android:layout_height="750dp"
             android:layout_width="match_parent"
             />
 
@@ -18,15 +18,16 @@
             android:id="@+id/change_team_leader_success_layout"
             layout="@layout/change_team_leader_successful_layout"
             android:visibility="gone"
-            android:layout_height="700dp"
+            android:layout_height="750dp"
             android:layout_width="match_parent"
             />
 
         <include
             android:id="@+id/change_tl_shimmer_container"
             layout="@layout/shimmer_container"
-            android:layout_height="650dp"
+            android:layout_height="750dp"
             android:paddingTop="20dp"
+            android:layout_marginTop="30dp"
             android:layout_gravity="center"
             android:layout_width="match_parent"
             android:visibility="visible" />
@@ -34,7 +35,7 @@
         <include
             android:id="@+id/form_main_info_layout"
             layout="@layout/layout_error_with_retry"
-            android:layout_height="700dp"
+            android:layout_height="750dp"
             android:layout_width="match_parent"
             android:visibility="gone"/>
 
