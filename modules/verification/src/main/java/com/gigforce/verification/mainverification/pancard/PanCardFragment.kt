@@ -677,7 +677,7 @@ class PanCardFragment : Fragment(),
                 Uri.parse(data?.getStringExtra(ImageCropActivity.CROPPED_IMAGE_URL_EXTRA))
             Log.d("ImageUri", imageUriResultCrop.toString())
             clickedImagePath = imageUriResultCrop
-            showPanInfoCard(clickedImagePath!!)
+            showPanInfoCard(clickedImagePath)
         }
     }
 
@@ -721,11 +721,14 @@ class PanCardFragment : Fragment(),
         }
     }
 
-    private fun showPanInfoCard(panInfoPath: Uri) {
-        viewBinding.toplayoutblock.setDocumentImage(0, panInfoPath)
-        //call ocr api
-        activeLoader(true)
-        callKycOcrApi(panInfoPath)
+    private fun showPanInfoCard(panInfoPath: Uri?) {
+        panInfoPath?.let{
+            viewBinding.toplayoutblock.setDocumentImage(0, it)
+            //call ocr api
+            activeLoader(true)
+            callKycOcrApi(it)
+        }
+
     }
 
     override fun onClickPictureThroughCameraClicked() {

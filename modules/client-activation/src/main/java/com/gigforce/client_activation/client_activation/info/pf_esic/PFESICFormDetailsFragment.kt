@@ -479,16 +479,14 @@ class PFESICFormDetailsFragment : Fragment(), IOnBackPressedOverride,
                     .child("verification")
                     .child(fileName)
                     .putFile(it).addOnSuccessListener {
-                        progressBar.gone()
-                        if (imageUriResultCrop != null) {
-                            signaturePath = it.metadata?.path.toString()
-                            context?.let {
-                                GlideApp.with(it)
-                                    .load(imageUriResultCrop)
-                                    .into(viewBinding.signatureImage)
-                            }
-
+                        progressBar?.gone()
+                        signaturePath = it.metadata?.path.toString()
+                        context?.let {
+                            GlideApp.with(it)
+                                .load(imageUriResultCrop)
+                                .into(viewBinding.signatureImage)
                         }
+
                     }.addOnFailureListener {
                         progressBar.gone()
                     }.addOnCanceledListener { progressBar.gone() }

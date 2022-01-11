@@ -20,26 +20,19 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 interface ILearningDataRepository {
-    fun loadData()
-    fun getData(): LiveData<List<FeatureItemCardDVM>>
-
+    suspend fun requestData() : List<FeatureItemCardDVM>
 }
 
 class LearningDataRepository @Inject constructor() :
     ILearningDataRepository, BaseFirestoreDBRepository() {
-    private var allCourses: MutableLiveData<List<FeatureItemCardDVM>> = MutableLiveData()
-    private var allAssessments: MutableLiveData<List<FeatureItemCardDVM>> = MutableLiveData()
-
-    init {
-        loadData()
-
+    companion object {
+        private const val TAG = "LearningRepository"
+        const val TYPE = "type"
+        const val TYPE_COURSE = "course"
     }
-
-    private fun loaLearningData() {
-        val scope = CoroutineScope(Job() + Dispatchers.Main)
-        scope.launch {
+    override suspend fun requestData() : List<FeatureItemCardDVM> {
             val _data = ArrayList<FeatureItemCardDVM>()
-            val allCourses1 = getAllCourses().forEach { item->_data.add(
+            getAllCourses().forEach { item->_data.add(
                     FeatureItemCardDVM(
                             id = item.id,
                             title = item.name,
@@ -52,79 +45,12 @@ class LearningDataRepository @Inject constructor() :
                             priority = item.priority
                     )
             ) }
-            allCourses.value = _data
-        }
-//        GlobalScope.launch {
-//            val _data = ArrayList<FeatureItemCardDVM>()
-//            val allCourses1 = getAllCourses().forEach { item->_data.add(
-//                FeatureItemCardDVM(
-//                    id = item.id,
-//                    title = item.name,
-//                    subtitle = item.level,
-//                    image = item.coverPicture,
-//                    navPath = "learning/main",
-//                    args = bundleOf(
-//                        StringConstants.COURSE_ID.value to item?.id
-//                    ),
-//                    priority = item.priority
-//                )
-//            ) }
-//            allCourses.value = _data
-//
-//        }
+        return _data
     }
 
-    companion object {
-        private const val TAG = "LearningRepository"
-        const val TYPE = "type"
-        const val TYPE_COURSE = "course"
-    }
 
-    override fun loadData() {
-        loaLearningData()
 
-//        FirebaseFirestore.getInstance().collection("Course_blocks")
-//            .whereEqualTo("type", "course").whereEqualTo("isopened", true)
-//            .addSnapshotListener { value, error ->
-//                val doc = value?.documents
-//                doc?.let {
-//                    val _data = ArrayList<FeatureItemCardDVM>()
-//                    for (item in it) {
-//                        val title = item?.get("Name") as? String ?: "-"
-//                        val subtitle = item?.get("Level") as? String ?: "-"
-////                    val title = name + level
-////                        val priority = (item?.get("priority") as? Int) ?: 500
-//                        val coverPic = item?.get("cover_pic") as? String
-//                        val nav_path = "learning/main"//item?.get("nav_path") as? String
-//                        val priority = item?.get("priority") as? Int ?: 0
-//                        _data.add(
-//                            FeatureItemCardDVM(
-//                                id = item.id,
-//                                title = title,
-//                                subtitle = subtitle,
-//                                image = coverPic,
-//                                navPath = nav_path,
-//                                args = bundleOf(
-//                                    StringConstants.COURSE_ID.value to item?.id
-//                                ),
-//                                priority = priority
-//                            )
-//                        )
-//                    }
-//                    _data.sortBy { it.priority }
-//                    allCourses.value = _data
-//                } ?: run {
-//                    allCourses.value = ArrayList<FeatureItemCardDVM>()
-//                }
-//
-//            }
-    }
-
-    override fun getData(): LiveData<List<FeatureItemCardDVM>> {
-        return allCourses
-    }
-
-    suspend fun getAllCourses(): List<Course> //List<CourseDM>
+    private suspend fun getAllCourses(): List<Course> //List<CourseDM>
     {
         getProfileData()
         return getRoleBasedCoursesC().filter {

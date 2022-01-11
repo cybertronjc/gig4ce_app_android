@@ -301,7 +301,9 @@ class AadharDetailInfoFragment : Fragment(),
                 //get the state code
                 if (p2 <= citiesList.size && citySpinner.text.toString().isNotEmpty()) {
                     val actualIndex = citiesMap.get(citySpinner.text.toString().trim())
-                    selectedCity = actualIndex?.let { citiesList.get(it) }!!
+                    actualIndex?.let { citiesList.get(it) }?.let {
+                        selectedCity = it
+                    }
                     Log.d("selected", "selected : $selectedCity")
 
                 }
