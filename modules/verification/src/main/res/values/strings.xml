@@ -493,5 +493,6 @@
     <string name="vaccine_count_veri">Vaccine 1</string>
     <string name="view_more_veri">View More</string>
     <string name="upload_veri">Upload</string>
+    <string name="change_veri">Change</string>
 
 </resources>

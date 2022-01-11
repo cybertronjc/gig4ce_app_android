@@ -394,6 +394,15 @@
         <item name="fontFamily">@font/lato</item>
     </style>
 
+    <style name="primary_color_small_title_bold" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="fontFamily">@font/lato_bold</item>
+        <item name="android:fontFamily">@font/lato_bold</item>
+    </style>
+
     <style name="black_small_bold" parent="Widget.AppCompat.TextView">
         <item name="android:textColor">@color/blackDark</item>
         <item name="android:textSize">12sp</item>

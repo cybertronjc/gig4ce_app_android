@@ -35,7 +35,10 @@
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:layout_gravity="center_vertical"
-                android:layout_margin="@dimen/dp_sm4"
+                android:layout_marginLeft="@dimen/dp_sm4"
+                android:layout_marginTop="@dimen/dp_sm4"
+                android:layout_marginBottom="@dimen/dp_sm4"
+                android:visibility="gone"
                 android:src="@drawable/ic_time" />
 
             <TextView
@@ -44,14 +47,15 @@
                 android:layout_gravity="center_vertical"
                 android:text="@string/fully_vaccinated"
                 style="@style/black_small_bold"
+                android:layout_marginLeft="@dimen/dp_sm4"
                 android:gravity="start"
                 android:layout_weight="1" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/change_text_veri"
-                style="@style/primary_color_small_title"
+                android:text="@string/change_veri"
+                style="@style/primary_color_small_title_bold"
                 android:layout_marginRight="@dimen/dp_mid"
                 android:textAllCaps="true"
                 android:layout_gravity="end|center_vertical"/>
