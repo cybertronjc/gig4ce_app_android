@@ -6,6 +6,7 @@ import android.app.NotificationManager
 import android.content.*
 import android.content.pm.PackageManager
 import android.database.Cursor
+import android.graphics.Bitmap
 import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.net.Uri
@@ -34,6 +35,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.anilokcun.uwmediapicker.UwMediaPicker
 //import com.aghajari.emojiview.AXEmojiManager
 //import com.aghajari.emojiview.iosprovider.AXIOSEmojiProvider
 //import com.aghajari.emojiview.view.AXEmojiView
@@ -417,27 +419,17 @@ class ChatPageFragment : Fragment(),
     }
 
     private fun adjustUiAccToOneToOneChat() {
-
         //toolbar.showSubtitle(getString(R.string.offline_chat))
         appbar.showSubtitle(getString(R.string.offline_chat))
-
-
     }
 
     private fun adjustUiAccToGroupChat() {
-        //toolbar.hideActionMenu()
-        appbar.makeMenuItemVisible(false)
-//        chatFooter.setGroupViewModel(groupChatViewModel)
-//        chatFooter.enableUserSuggestions()
 
         communityFooter.setGroupViewModel(groupChatViewModel)
         communityFooter.enableUserSuggestions()
 
         //toolbar.showSubtitle(getString(R.string.tap_to_open_details_chat))
         appbar.showSubtitle(getString(R.string.tap_to_open_details_chat))
-
-
-
 
     }
 
@@ -1013,6 +1005,8 @@ class ChatPageFragment : Fragment(),
                     getString(R.string.block_chat)
                 else
                     getString(R.string.unblock_chat)
+            popUp.menu.findItem(R.id.action_block).isVisible = chatType == ChatConstants.CHAT_TYPE_USER
+            popUp.menu.findItem(R.id.action_report).isVisible = chatType == ChatConstants.CHAT_TYPE_USER
             popUp.show()
         })
 
@@ -1819,7 +1813,21 @@ class ChatPageFragment : Fragment(),
 //                showToast("Camera Clicked")
             }
             AttachmentOption.GALLERY_ID -> {
-                checkPermissionAndHandleActionPickImage()
+                //checkPermissionAndHandleActionPickImage()
+                UwMediaPicker
+                    .with(this)						// Activity or Fragment
+                    .setGalleryMode(UwMediaPicker.GalleryMode.ImageGallery) // GalleryMode: ImageGallery/VideoGallery/ImageAndVideoGallery, default is ImageGallery
+                    .setGridColumnCount(4)                                  // Grid column count, default is 3
+                    .setMaxSelectableMediaCount(10)                         // Maximum selectable media count, default is null which means infinite
+                    .setLightStatusBar(true)                                // Is llight status bar enable, default is true
+                    .enableImageCompression(true)				// Is image compression enable, default is false
+                    .setCompressionMaxWidth(1280F)				// Compressed image's max width px, default is 1280
+                    .setCompressionMaxHeight(720F)				// Compressed image's max height px, default is 720
+                    .setCompressFormat(Bitmap.CompressFormat.JPEG)		// Compressed image's format, default is JPEG
+                    .setCompressionQuality(85)				// Image compression quality, default is 85
+                    .setCompressedFileDestinationPath(chatFileManager.imageFilesDirectory.toString())	// Compressed image file's destination path, default is "${application.getExternalFilesDir(null).path}/Pictures"
+                    .setCancelCallback{ }					// Will be called when user cancels media selection
+                    .launch{selectedMediaList-> } // (::onMediaSelected)
 //                showToast("Gallery Clicked")
             }
             AttachmentOption.AUDIO_ID -> {

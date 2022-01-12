@@ -115,12 +115,20 @@
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
 
+                            <com.gigforce.common_ui.components.atoms.MaxHeightLinearLayout
+                                android:id="@+id/mentionSuggLayout"
+                                android:visibility="gone"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:maxHeightDp="300">
+
                             <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/mention_suggestion_rv"
                                 android:layout_width="match_parent"
-                                android:layout_height="300dp"
-                                android:visibility="gone"
+                                android:layout_height="wrap_content"
+                                android:visibility="visible"
                                 app:layout_constraintTop_toTopOf="parent"/>
+                            </com.gigforce.common_ui.components.atoms.MaxHeightLinearLayout>
 
                             <LinearLayout
                                 android:id="@+id/reply_to_message_layout"
