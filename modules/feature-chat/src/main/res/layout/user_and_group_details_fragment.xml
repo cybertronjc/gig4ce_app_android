@@ -15,21 +15,89 @@
             app:layout_constraintStart_toStartOf="parent">
             <ImageView
                 android:id="@+id/back_button_details"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:padding="@dimen/size_8"
+                android:background="?android:selectableItemBackground"
                 android:src="@drawable/ic_chevron"
                 android:layout_marginStart="@dimen/size_20"
-                android:layout_marginTop="@dimen/size_20"
+                android:layout_marginTop="@dimen/size_16"
                 />
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/mediaExpendedLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/backButtonLayout">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#E42C64">
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/media_tab_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="42dp"
+                    android:layout_marginStart="@dimen/size_16"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginEnd="@dimen/size_16"
+                    android:background="#E42C64"
+                    android:textAlignment="center"
+                    android:visibility="visible"
+                    android:textSize="@dimen/font_12"
+                    app:tabTextAppearance="@style/MyTabLayoutTextAppearance"
+                    app:tabGravity="fill"
+                    app:tabIndicatorColor="@color/white"
+                    app:tabIndicatorHeight="1dp"
+                    app:tabMode="fixed"
+                    app:tabSelectedTextColor="@color/white"
+                    app:tabTextColor="@color/light_pink">
+
+                </com.google.android.material.tabs.TabLayout>
+            </LinearLayout>
+
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/mediaImagesVideos_recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginTop="@dimen/size_20"
+                android:visibility="visible" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/docs_recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginTop="@dimen/size_20"
+                android:visibility="gone" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/audio_recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginTop="@dimen/size_20"
+                android:visibility="gone" />
+
+        </LinearLayout>
 
         <ScrollView
             android:id="@+id/mainScrollView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginBottom="20dp"
+            android:visibility="visible"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/backButtonLayout">
@@ -123,7 +191,7 @@
                         android:orientation="horizontal"
                         app:layout_constraintBottom_toBottomOf="parent"
                         android:layout_marginBottom="@dimen/size_20"
-                        app:layout_constraintEnd_toEndOf="@id/forward_arrow"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@id/media_and_docs"
                         app:layout_constraintTop_toBottomOf="@id/media_and_docs" />
 
@@ -363,7 +431,7 @@
                         android:layout_marginStart="@dimen/size_20"
                         android:layout_marginTop="@dimen/size_10"
                         android:layout_marginBottom="@dimen/size_10"
-                        android:src="@drawable/ic_exit_group_icon"
+                        android:src="@drawable/ic_block"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"/>
@@ -404,7 +472,7 @@
                         android:layout_marginStart="@dimen/size_20"
                         android:layout_marginTop="@dimen/size_10"
                         android:layout_marginBottom="@dimen/size_10"
-                        android:src="@drawable/ic_exit_group_icon"
+                        android:src="@drawable/ic_block"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"/>

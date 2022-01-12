@@ -194,7 +194,7 @@ class RosterDayViewModel constructor(
         // check from custom preferences
         dayAvailable = true
 
-        for (unavailable in viewModelCustomPreference.customPreferencesDataModel.unavailable) {
+        for (unavailable in viewModelCustomPreference.customPreferencesDataModel?.unavailable!!) {
             if (date.toLocalDate().equals(unavailable.date.toLocalDate())) {
                 dayAvailable = !unavailable.dayUnavailable
             }
@@ -231,9 +231,9 @@ class RosterDayViewModel constructor(
             activeDateTime: LocalDateTime, parentView: ConstraintLayout,
             viewModelCustomPreference: CustomPreferencesViewModel
     ) {
-        viewModelCustomPreference.customPreferencesDataModel.unavailable.filter {
+        viewModelCustomPreference.customPreferencesDataModel?.unavailable?.filter {
             it.date == activeDateTime.toDate
-        }.forEach {
+        }?.forEach {
             it.timeSlots.forEach {
                 selectedHourInactive(parentView, it.startTime, it.endTime)
             }

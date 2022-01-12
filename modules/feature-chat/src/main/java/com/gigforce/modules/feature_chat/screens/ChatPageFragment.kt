@@ -648,10 +648,10 @@ class ChatPageFragment : Fragment(),
                     appbar.setAppBarTitle(it.name ?: "")
                 }
 
-                if(it.mobile.isNotBlank()){
-                    receiverMobileNumber = it.mobile
-                    Log.d(TAG, "mobile: $receiverMobileNumber")
-                }
+//                if(it.mobile.isNotBlank()){
+//                    receiverMobileNumber = it.mobile
+//                    Log.d(TAG, "mobile: $receiverMobileNumber")
+//                }
 
                 if (!it.imageThumbnailPathInStorage.isNullOrBlank()) {
 
@@ -861,7 +861,8 @@ class ChatPageFragment : Fragment(),
                     UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_NAME to receiverName,
                     UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_HEADER_ID to groupId,
                     UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_ID to receiverUserId,
-                    StringConstants.MOBILE_NUMBER.value to receiverMobileNumber
+                    StringConstants.MOBILE_NUMBER.value to receiverMobileNumber,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_SHOW_MEDIA_ONLY to false
 
                 ))
             }
@@ -872,7 +873,8 @@ class ChatPageFragment : Fragment(),
                     UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_NAME to receiverName,
                     UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_HEADER_ID to groupId,
                     UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_ID to receiverUserId,
-                    StringConstants.MOBILE_NUMBER.value to receiverMobileNumber
+                    StringConstants.MOBILE_NUMBER.value to receiverMobileNumber,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_SHOW_MEDIA_ONLY to false
                 ))
             }
         })
@@ -887,7 +889,8 @@ class ChatPageFragment : Fragment(),
                     UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_NAME to receiverName,
                     UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_HEADER_ID to groupId,
                     UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_ID to receiverUserId,
-                    StringConstants.MOBILE_NUMBER.value to receiverMobileNumber
+                    StringConstants.MOBILE_NUMBER.value to receiverMobileNumber,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_SHOW_MEDIA_ONLY to false
 
                 ))
             }
@@ -898,7 +901,8 @@ class ChatPageFragment : Fragment(),
                     UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_NAME to receiverName,
                     UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_HEADER_ID to groupId,
                     UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_ID to receiverUserId,
-                    StringConstants.MOBILE_NUMBER.value to receiverMobileNumber
+                    StringConstants.MOBILE_NUMBER.value to receiverMobileNumber,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_SHOW_MEDIA_ONLY to false
                 ))
             }
         })
@@ -912,7 +916,8 @@ class ChatPageFragment : Fragment(),
                     UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_NAME to receiverName,
                     UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_HEADER_ID to groupId,
                     UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_ID to receiverUserId,
-                    StringConstants.MOBILE_NUMBER.value to receiverMobileNumber
+                    StringConstants.MOBILE_NUMBER.value to receiverMobileNumber,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_SHOW_MEDIA_ONLY to false
                 ))
             }
             else if(chatType == ChatConstants.CHAT_TYPE_USER) {
@@ -922,7 +927,8 @@ class ChatPageFragment : Fragment(),
                     UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_NAME to receiverName,
                     UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_HEADER_ID to groupId,
                     UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_ID to receiverUserId,
-                    StringConstants.MOBILE_NUMBER.value to receiverMobileNumber
+                    StringConstants.MOBILE_NUMBER.value to receiverMobileNumber,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_SHOW_MEDIA_ONLY to false
 
                 ))
             }
@@ -1064,6 +1070,33 @@ class ChatPageFragment : Fragment(),
                 viewModel.otherUserId,
                 childFragmentManager
             )
+            true
+        }
+        R.id.action_media -> {
+            val groupId = chatHeaderOrGroupId ?: ""
+            if (chatType == ChatConstants.CHAT_TYPE_GROUP) {
+                navigation.navigateTo("chats/userGroupDetailsFragment", bundleOf(
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_TYPE to ChatConstants.CHAT_TYPE_GROUP,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_IMAGE to receiverPhotoUrl,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_NAME to receiverName,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_HEADER_ID to groupId,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_ID to receiverUserId,
+                    StringConstants.MOBILE_NUMBER.value to receiverMobileNumber,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_SHOW_MEDIA_ONLY to true
+
+                ))
+            }
+            else if(chatType == ChatConstants.CHAT_TYPE_USER) {
+                navigation.navigateTo("chats/userGroupDetailsFragment", bundleOf(
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_TYPE to ChatConstants.CHAT_TYPE_USER,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_IMAGE to receiverPhotoUrl,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_NAME to receiverName,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_HEADER_ID to groupId,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_ID to receiverUserId,
+                    StringConstants.MOBILE_NUMBER.value to receiverMobileNumber,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_SHOW_MEDIA_ONLY to true
+                ))
+            }
             true
         }
         R.id.action_document -> {

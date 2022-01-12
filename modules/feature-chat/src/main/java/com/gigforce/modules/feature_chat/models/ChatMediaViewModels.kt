@@ -1,7 +1,9 @@
 package com.gigforce.modules.feature_chat.models
 
+import com.gigforce.common_ui.viewdatamodels.chat.UserInfo
 import com.gigforce.core.SimpleDVM
 import com.gigforce.modules.feature_chat.FeatureChatViewTypes
+import com.google.firebase.Timestamp
 
 open class ChatMediaViewModels(
     val type: Int
@@ -9,7 +11,16 @@ open class ChatMediaViewModels(
 
 
     data class ChatMediaImageItemData(
-        val imageUrl: String
+        var id: String = "",
+        var groupHeaderId: String = "",
+        var messageId: String = "",
+        var attachmentType: String = "",
+        var videoAttachmentLength: Long = 0,
+        var timestamp: Timestamp? = null,
+        var thumbnail: String? = null,
+        var attachmentName: String? = null,
+        var attachmentPath: String? = null,
+        var senderInfo: UserInfo? = null
     ) : ChatMediaViewModels(
         FeatureChatViewTypes.ChatMediaRecyclerItem
     )

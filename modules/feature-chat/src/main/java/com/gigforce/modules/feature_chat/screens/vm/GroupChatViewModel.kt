@@ -841,6 +841,14 @@ class GroupChatViewModel @Inject constructor(
                             documentsDirectoryRef.mkdirs()
 
                         File(documentsDirectoryRef, fileName)
+                    } else if (media.attachmentType == ChatConstants.ATTACHMENT_TYPE_AUDIO) {
+                        val audiossDirectoryRef =
+                            File(appDirectoryFileRef, ChatConstants.DIRECTORY_AUDIOS)
+
+                        if (!audiossDirectoryRef.exists())
+                            audiossDirectoryRef.mkdirs()
+
+                        File(audiossDirectoryRef, fileName)
                     } else {
                         throw IllegalArgumentException("other types not supported yet")
                     }

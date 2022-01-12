@@ -6,15 +6,14 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Log
+import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.common_ui.chat.ChatFileManager
 import com.gigforce.common_ui.chat.ChatRepository
-import com.gigforce.common_ui.chat.models.AudioInfo
-import com.gigforce.common_ui.chat.models.ChatMessage
-import com.gigforce.common_ui.chat.models.ContactModel
-import com.gigforce.common_ui.chat.models.VideoInfo
+import com.gigforce.common_ui.chat.models.*
 import com.gigforce.common_ui.core.ChatConstants
 import com.gigforce.common_ui.metaDataHelper.ImageMetaDataHelpers
 import com.gigforce.common_ui.viewdatamodels.chat.ChatHeader
@@ -75,7 +74,8 @@ class ChatPageViewModel @Inject constructor(
     private val chatProfileFirebaseRepository: ChatProfileFirebaseRepository,
     private val chatRepository: ChatRepository,
     private val firebaseFirestore: FirebaseFirestore,
-    private val firebaseAuthStateListener: FirebaseAuthStateListener
+    private val firebaseAuthStateListener: FirebaseAuthStateListener,
+    private val chatFileManager : ChatFileManager
 ) : ViewModel() {
 
     companion object{
@@ -731,6 +731,7 @@ class ChatPageViewModel @Inject constructor(
                 context = context,
                 chatHeaderId = headerId,
                 message = message,
+                audiosDirectoryRef = chatFileManager.audioFilesDirectory,
                 file = uri,
                 audioInfo = audioInfo
             )
@@ -945,10 +946,10 @@ class ChatPageViewModel @Inject constructor(
     fun downloadAndSaveFile(
         appDirectoryFileRef: File,
         position: Int,
-        chatMessage: ChatMessage
+        mediaMessage: GroupMedia
     ) = viewModelScope.launch {
 
-        val downloadLink = chatMessage.attachmentPath ?: return@launch
+        val downloadLink = mediaMessage.attachmentPath ?: return@launch
         if (!appDirectoryFileRef.exists())
             appDirectoryFileRef.mkdirs()
 
@@ -957,38 +958,59 @@ class ChatPageViewModel @Inject constructor(
         try {
 
             val fileName: String = FirebaseUtils.extractFilePath(downloadLink)
-            val fileRef = if (chatMessage.type == ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE) {
+            val fileRef = if (mediaMessage.attachmentType == ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE) {
                 val imagesDirectoryRef =
                     File(appDirectoryFileRef, ChatConstants.DIRECTORY_IMAGES)
 
                 if (!imagesDirectoryRef.exists())
                     imagesDirectoryRef.mkdirs()
 
+
                 File(imagesDirectoryRef, fileName)
-            } else if (chatMessage.type == ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO) {
+            } else if (mediaMessage.attachmentType == ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO) {
                 val videosDirectoryRef =
                     File(appDirectoryFileRef, ChatConstants.DIRECTORY_VIDEOS)
                 if (!videosDirectoryRef.exists())
                     videosDirectoryRef.mkdirs()
 
+
                 File(videosDirectoryRef, fileName)
-            } else if (chatMessage.type == ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT) {
+            } else if (mediaMessage.attachmentType == ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT) {
                 val imagesDirectoryRef =
                     File(appDirectoryFileRef, ChatConstants.DIRECTORY_DOCUMENTS)
+
+
                 File(imagesDirectoryRef, fileName)
+            } else if (mediaMessage.attachmentType == ChatConstants.MESSAGE_TYPE_TEXT_WITH_AUDIO) {
+                val audiosDirectoryRef =
+                    File(appDirectoryFileRef, ChatConstants.DIRECTORY_AUDIOS)
+
+
+                File(audiosDirectoryRef, fileName)
             } else {
                 throw IllegalArgumentException("other types not supperted yet")
             }
 
-            val response = downloadAttachmentService.downloadAttachment(downloadLink)
-            if (response.isSuccessful) {
-                val body = response.body()!!
-                FileUtils.writeResponseBodyToDisk(body, fileRef)
-                _chatAttachmentDownloadState.value = DownloadCompleted(position)
-                _chatAttachmentDownloadState.value = null
+
+
+            if (Patterns.WEB_URL.matcher(downloadLink).matches()) {
+                firebaseStorage.getReferenceFromUrl(downloadLink).getFileOrThrow(fileRef)
             } else {
-                throw Exception("Unable to dowload payslip, ${response.message()}")
+                firebaseStorage.getReference(downloadLink).getFileOrThrow(fileRef)
             }
+
+            _chatAttachmentDownloadState.value = DownloadCompleted(position)
+            _chatAttachmentDownloadState.value = null
+
+//            val response = downloadAttachmentService.downloadAttachment(downloadLink)
+//            if (response.isSuccessful) {
+//                val body = response.body()!!
+//                FileUtils.writeResponseBodyToDisk(body, fileRef)
+//                _chatAttachmentDownloadState.value = DownloadCompleted(position)
+//                _chatAttachmentDownloadState.value = null
+//            } else {
+//                throw Exception("Unable to dowload payslip, ${response.message()}")
+//            }
         } catch (e: Exception) {
             _chatAttachmentDownloadState.value = ErrorWhileDownloadingAttachment(
                 position,

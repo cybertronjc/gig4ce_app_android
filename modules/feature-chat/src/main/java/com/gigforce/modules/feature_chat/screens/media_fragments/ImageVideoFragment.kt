@@ -1,18 +1,22 @@
 package com.gigforce.modules.feature_chat.screens.media_fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.GridLayoutManager
 import com.gigforce.common_ui.chat.ChatFileManager
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.modules.feature_chat.ChatNavigation
 import com.gigforce.modules.feature_chat.R
 import com.gigforce.modules.feature_chat.databinding.FragmentDocumentsBinding
 import com.gigforce.modules.feature_chat.databinding.FragmentImageVideoBinding
+import com.gigforce.modules.feature_chat.models.ChatMediaViewModels
 import com.gigforce.modules.feature_chat.screens.MediaDocsAndAudioViewModel
 import com.jaeger.library.StatusBarUtil
 import dagger.hilt.android.AndroidEntryPoint
@@ -68,7 +72,16 @@ class ImageVideoFragment : Fragment() {
     }
 
     private fun initObserver() {
+        viewModel.mediaInfo.observe(viewLifecycleOwner, Observer {
+            Log.d(TAG, "data: $it")
+            showMedia(it)
+        })
+    }
 
+    private fun showMedia(it: List<ChatMediaViewModels>?) {
+        if (it != null) {
+            viewBinding.mediaRv.collection = it
+        }
     }
 
     private fun initListeners() {
@@ -76,7 +89,10 @@ class ImageVideoFragment : Fragment() {
     }
 
     private fun initViews() {
-
+        groupId.let {
+            viewModel.startWatchingGroupDetails(it)
+        }
+        viewBinding.mediaRv.layoutManager = GridLayoutManager(requireContext(), 3)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

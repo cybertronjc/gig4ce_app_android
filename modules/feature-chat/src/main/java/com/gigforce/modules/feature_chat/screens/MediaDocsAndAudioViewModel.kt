@@ -131,16 +131,24 @@ class MediaDocsAndAudioViewModel @Inject constructor(
         mediaSortedList.forEach { (timestamp, medias) ->
             Log.d(TAG, "timestamp: $timestamp , media: $medias")
 
-            mediaListShownOnView.add(
-                ChatMediaViewModels.ChatMediaImageItemData(
-                    "timestamp: $timestamp"
-                )
-            )
+//            mediaListShownOnView.add(
+//                ChatMediaViewModels.ChatMediaImageItemData(
+//                    "timestamp: $timestamp"
+//                )
+//            )
 
             medias.forEach {
                 mediaListShownOnView.add(
                     ChatMediaViewModels.ChatMediaImageItemData(
-                        it.attachmentPath.toString()
+                        id = it.id,
+                        groupHeaderId = it.groupHeaderId,
+                        messageId = it.messageId,
+                        attachmentType = it.attachmentType,
+                        videoAttachmentLength = it.videoAttachmentLength,
+                        timestamp = it.timestamp,
+                        attachmentName = it.attachmentName,
+                        attachmentPath = it.attachmentPath,
+                        senderInfo = it.senderInfo
                     )
                 )
             }
@@ -149,11 +157,11 @@ class MediaDocsAndAudioViewModel @Inject constructor(
         docSortedList.forEach { (timestamp, medias) ->
             Log.d(TAG, "timestamp: $timestamp , media: $medias")
 
-            docListShownOnView.add(
-                ChatDocsViewModels.ChatMediaDateItemData(
-                    "timestamp: $timestamp"
-                )
-            )
+//            docListShownOnView.add(
+//                ChatDocsViewModels.ChatMediaDateItemData(
+//                    "timestamp: $timestamp"
+//                )
+//            )
 
             medias.forEach {
                 docListShownOnView.add(
@@ -170,11 +178,11 @@ class MediaDocsAndAudioViewModel @Inject constructor(
         audioSortedList.forEach { (timestamp, medias) ->
             Log.d(TAG, "timestamp: $timestamp , media: $medias")
 
-            audioListShownOnView.add(
-                ChatAudioViewModels.ChatMediaDateItemData(
-                    "timestamp: $timestamp"
-                )
-            )
+//            audioListShownOnView.add(
+//                ChatAudioViewModels.ChatMediaDateItemData(
+//                    "timestamp: $timestamp"
+//                )
+//            )
 
             medias.forEach {
                 audioListShownOnView.add(

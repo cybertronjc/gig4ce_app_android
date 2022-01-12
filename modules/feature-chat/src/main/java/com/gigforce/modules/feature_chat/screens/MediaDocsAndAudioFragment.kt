@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.NonNull
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -33,6 +34,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.gigforce.modules.feature_chat.screens.media_fragments.AudiosFragment
 import com.gigforce.modules.feature_chat.screens.media_fragments.DocumentsFragment
 import com.gigforce.modules.feature_chat.screens.media_fragments.ImageVideoFragment
+import com.google.android.material.tabs.TabLayoutMediator
 
 
 @AndroidEntryPoint
@@ -112,55 +114,38 @@ class MediaDocsAndAudioFragment : Fragment() {
 
         })
 
-        viewModel.mediaInfo.observe(viewLifecycleOwner, Observer {
-            Log.d(TAG, "medias: $it")
-            //viewBinding.mediaRv.collection = it
-        })
-
-        viewModel.docsInfo.observe(viewLifecycleOwner, Observer {
-            Log.d(TAG, "medias: $it")
-            //viewBinding.documentsRv.collection = it
-        })
-
-        viewModel.audioInfo.observe(viewLifecycleOwner, Observer {
-            Log.d(TAG, "medias: $it")
-            //viewBinding.audioRv.collection = it
-        })
+//        viewModel.mediaInfo.observe(viewLifecycleOwner, Observer {
+//            Log.d(TAG, "medias: $it")
+//            //viewBinding.mediaRv.collection = it
+//        })
+//
+//        viewModel.docsInfo.observe(viewLifecycleOwner, Observer {
+//            Log.d(TAG, "medias: $it")
+//            //viewBinding.documentsRv.collection = it
+//        })
+//
+//        viewModel.audioInfo.observe(viewLifecycleOwner, Observer {
+//            Log.d(TAG, "medias: $it")
+//            //viewBinding.audioRv.collection = it
+//        })
     }
 
     private fun initListeners() = viewBinding.apply{
-//        mediaTabLayout.onTabSelected {
-//            showToast(it?.text.toString())
-//            selectedTab = it?.position!!
-//
-//            when(selectedTab)  {
-//                0 -> {
-//                        mediaRv.visible()
-//                        documentsRv.gone()
-//                        audioRv.gone()
-//                    }
-//                1 -> {
-//                    mediaRv.gone()
-//                    documentsRv.visible()
-//                    audioRv.gone()
-//                }
-//                2 -> {
-//                    mediaRv.gone()
-//                    documentsRv.gone()
-//                    audioRv.visible()
-//                }
-//        }
-//        }
+        val mediaArray = arrayOf(
+            "Media",
+            "Document",
+            "Audio"
+        )
+
+        pagerAdapter.setData(groupId)
         viewPager.adapter = pagerAdapter
-        //mediaTabLayout.setupWithViewPager(viewPager)
+        TabLayoutMediator(mediaTabLayout, viewPager) { tab, position ->
+            tab.text = mediaArray[position]
+        }.attach()
 
     }
 
     private fun initViews() = viewBinding.apply{
-
-        mediaTabLayout.addTab(mediaTabLayout.newTab().setText("Media"))
-        mediaTabLayout.addTab(mediaTabLayout.newTab().setText("Document"))
-        mediaTabLayout.addTab(mediaTabLayout.newTab().setText("Audio"))
 
         val betweenSpace = 25
 
@@ -184,7 +169,7 @@ class MediaDocsAndAudioFragment : Fragment() {
 //        documentsRv.layoutManager = LinearLayoutManager(requireContext())
 //        audioRv.layoutManager = LinearLayoutManager(requireContext())
 
-        viewModel.startWatchingGroupDetails(groupId)
+        //viewModel.startWatchingGroupDetails(groupId)
 
     }
 
@@ -195,19 +180,41 @@ private class ViewStateAdapter(
     @NonNull lifecycle: Lifecycle?
 ) :
     FragmentStateAdapter(fragmentManager!!, lifecycle!!) {
+
+    private var groupId: String? = null
+
+    fun setData(id: String){
+        groupId = id
+    }
+
     @NonNull
     override fun createFragment(position: Int): Fragment {
         // Hardcoded in this order, you'll want to use lists and make sure the titles match
         var f: Fragment? = null
         when(position) {
             0 -> {
-                f =   ImageVideoFragment()
+                val f1 = ImageVideoFragment()
+                val bundle = bundleOf(
+                    ImageVideoFragment.INTENT_EXTRA_GROUP_ID to groupId
+                )
+                f1.arguments = bundle
+                f = f1
             }
             1 -> {
-                f =   DocumentsFragment()
+                val f1 = DocumentsFragment()
+                val bundle = bundleOf(
+                    DocumentsFragment.INTENT_EXTRA_GROUP_ID to groupId
+                )
+                f1.arguments = bundle
+                f = f1
             }
             2 -> {
-                f = AudiosFragment()
+                val f1 = AudiosFragment()
+                val bundle = bundleOf(
+                    AudiosFragment.INTENT_EXTRA_GROUP_ID to groupId
+                )
+                f1.arguments = bundle
+                f = f1
             }
         }
 

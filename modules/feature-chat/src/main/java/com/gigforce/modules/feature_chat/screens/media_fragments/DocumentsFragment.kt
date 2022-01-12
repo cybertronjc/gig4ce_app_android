@@ -1,18 +1,22 @@
 package com.gigforce.modules.feature_chat.screens.media_fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.common_ui.chat.ChatFileManager
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.modules.feature_chat.ChatNavigation
 import com.gigforce.modules.feature_chat.R
 import com.gigforce.modules.feature_chat.databinding.FragmentDocumentsBinding
 import com.gigforce.modules.feature_chat.databinding.MediaDocsAndAudioFragmentBinding
+import com.gigforce.modules.feature_chat.models.ChatDocsViewModels
 import com.gigforce.modules.feature_chat.screens.MediaDocsAndAudioFragment
 import com.gigforce.modules.feature_chat.screens.MediaDocsAndAudioViewModel
 import com.jaeger.library.StatusBarUtil
@@ -69,7 +73,16 @@ class DocumentsFragment : Fragment() {
     }
 
     private fun initObserver() {
+        viewModel.docsInfo.observe(viewLifecycleOwner, Observer {
+            Log.d(TAG, "audio data: $it")
+            showDocuments(it)
+        })
+    }
 
+    private fun showDocuments(it: List<ChatDocsViewModels>?) {
+        if (it != null) {
+            viewBinding.documentsRv.collection = it
+        }
     }
 
     private fun initListeners() {
@@ -77,7 +90,10 @@ class DocumentsFragment : Fragment() {
     }
 
     private fun initViews() {
-
+        groupId.let {
+            viewModel.startWatchingGroupDetails(it)
+        }
+        viewBinding.documentsRv.layoutManager = LinearLayoutManager(requireContext())
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
