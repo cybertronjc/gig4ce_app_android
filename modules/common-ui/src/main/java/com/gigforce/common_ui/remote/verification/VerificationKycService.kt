@@ -26,4 +26,12 @@ interface VerificationKycService {
         @Url getKycVerifyUrl: String,
         @Body jsonObject: UserConsentRequest
     ): Response<UserConsentResponse>
+
+    @Multipart
+    @POST
+    suspend fun uploadVaccineCertificate(
+        @Url getKycOcrUrl: String,
+        @Part("data") data: VaccineFileUploadReqDM,
+        @Part file: MultipartBody.Part
+    ): Response<VaccineFileUploadResDM>
 }

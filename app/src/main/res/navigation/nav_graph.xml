@@ -1138,6 +1138,11 @@
         android:id="@+id/contactsAndGroupFragment"
         android:name="com.gigforce.modules.feature_chat.screens.ContactsAndGroupFragment"
         android:label="ContactsAndGroupFragment" />
+
+    <fragment
+        android:id="@+id/CovidVaccinationCertificateFragment"
+        android:name="com.gigforce.verification.mainverification.vaccine.views.CovidVaccinationCertificateFragment"
+        />
     <dialog
         android:id="@+id/blockUserBottomSheetFragment"
         android:name="com.gigforce.modules.feature_chat.screens.BlockUserBottomSheetFragment"

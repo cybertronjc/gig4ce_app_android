@@ -9,14 +9,20 @@ import com.gigforce.core.datamodels.client_activation.States
 import com.gigforce.core.datamodels.verification.VerificationBaseModel
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.extensions.updateOrThrow
-import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
-import com.google.firebase.Timestamp
+import com.gigforce.common_ui.remote.verification.VaccineFileUploadResDM
+import com.gigforce.core.extensions.getOrThrow
+import com.gigforce.core.logger.GigforceLogger
+import com.gigforce.verification.mainverification.vaccine.models.VaccineCertDetailsDM
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import kotlinx.coroutines.tasks.await
 import okhttp3.MultipartBody
+import java.util.*
 import javax.inject.Inject
 
-class VerificationKycRepo @Inject constructor(private val iBuildConfigVM: IBuildConfigVM, private val kycService : VerificationKycService) :
+class VerificationKycRepo @Inject constructor(private val iBuildConfigVM: IBuildConfigVM, private val kycService : VerificationKycService, private val gigforceLogger: GigforceLogger) :
     BaseFirestoreDBRepository() {
 //    private val kycService: VerificationKycService = RetrofitFactory.createService(
 //        VerificationKycService::class.java
@@ -173,6 +179,50 @@ class VerificationKycRepo @Inject constructor(private val iBuildConfigVM: IBuild
 
     override fun getCollectionName(): String =
         COLLECTION_NAME
+
+    suspend fun submitVaccinationCertificate( vaccineReqDM : VaccineFileUploadReqDM, file: MultipartBody.Part): VaccineFileUploadResDM {
+        var vaccinationCertificate =
+            kycService.uploadVaccineCertificate(iBuildConfigVM.getVerificationKycOcrResult(), vaccineReqDM, file)
+        if (vaccinationCertificate.isSuccessful) {
+            return vaccinationCertificate.body()!!
+        } else {
+            FirebaseCrashlytics.getInstance()
+                .log("Exception : kycOcrVerification Method ${vaccinationCertificate.message()}")
+            throw Exception("Issue in vaccination certification submission")
+        }
+    }
+
+    suspend fun getVaccineDetailsData(vaccineId : String) : VaccineCertDetailsDM{
+        var data = FirebaseFirestore.getInstance().collection(COLLECTION_NAME).document(getUID()).getOrThrow()
+        if(data.exists()){
+            Log.e("vaccinedata", ((data.get("vaccination") as Map<*,*>).get(vaccineId) as Map<String,Any>).get("age").toString())
+
+            val vaccineData = ((data.get("vaccination") as Map<*,*>).get(vaccineId) as Map<String,Any>)
+            val age = vaccineData.get("age") as? String?:""
+            val benificiaryId = vaccineData.get("benificiaryId") as? String?:""
+            val ceritificateId = vaccineData.get("ceritificateId") as? String?:""
+            val createdBy = vaccineData.get("createdBy") as? String?:""
+            val fullPath = vaccineData.get("fullPath") as? String?:""
+            val gender = vaccineData.get("gender") as? String?:""
+            val label = vaccineData.get("label") as? String?:""
+            val name = vaccineData.get("name") as? String?:""
+            val pathOnFirebase = vaccineData.get("pathOnFirebase") as? String?:""
+            val status = vaccineData.get("status") as? String?:""
+            val updatedBy = vaccineData.get("updatedBy") as? String?:""
+            val vaccineDate = vaccineData.get("vaccineDate") as? String?:""
+            val vaccineName = vaccineData.get("vaccineName") as? String?:""
+            val vaccinePlace = vaccineData.get("vaccinePlace") as? String?:""
+
+
+            return VaccineCertDetailsDM(age = age,benificiaryId = benificiaryId, ceritificateId = ceritificateId,createdBy = createdBy, fullPath = fullPath,gender = gender,label = label, name=name, pathOnFirebase = pathOnFirebase, status = status, updatedBy = updatedBy,vaccineDate = vaccineDate,vaccineName = vaccineName,vaccinePlace = vaccinePlace)
+//                return  GsonBuilder()
+//                    .setLenient()
+//                    .serializeNulls()
+//                    .create().fromJson(((data.get("vaccination") as Map<*, *>).get(vaccineId) as Map<String,Any>).toString(),VaccineCertDetailsDM::class.java)
+        }else{
+            throw Exception("Vaccination data does not exists!!")
+        }
+    }
 
 
     companion object {
