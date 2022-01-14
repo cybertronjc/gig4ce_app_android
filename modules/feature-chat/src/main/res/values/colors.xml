@@ -24,4 +24,11 @@
     <color name="gray_text_color">#979C9E</color>
     <color name="light_pink_color">#FCEAF0</color>
     <color name="light_grey_divider">#F2F4F5</color>
+
+    <color name="colorPrimary">#075e54</color>
+    <color name="colorPrimaryDark">#075e54</color>
+    <color name="colorAccent">#03DAC5</color>
+    <color name="colorWhite">#ffffff</color>
+    <color name="colorGrey">#807f7f</color>
+    <color name="colorBlack">#000000</color>
 </resources>

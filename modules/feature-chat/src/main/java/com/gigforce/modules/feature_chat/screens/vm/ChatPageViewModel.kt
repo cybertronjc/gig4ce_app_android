@@ -106,6 +106,9 @@ class ChatPageViewModel @Inject constructor(
     private var _scrollToMessage = MutableLiveData<Int?>()
     val scrollToMessage: LiveData<Int?> = _scrollToMessage
 
+    private var _scrollToMessageId = MutableLiveData<String?>()
+    val scrollToMessageId: LiveData<String?> = _scrollToMessageId
+
     private var messagesListener: ListenerRegistration? = null
     private var headerInfoChangeListener: ListenerRegistration? = null
     private var contactInfoChangeListener: ListenerRegistration? = null
@@ -1151,9 +1154,14 @@ class ChatPageViewModel @Inject constructor(
         if (index != -1) {
             _scrollToMessage.value = index
             _scrollToMessage.value = null
+
+            _scrollToMessageId.value = replyMessage.id
         }
     }
 
+    fun setScrollToMessageNull(){
+        _scrollToMessageId.value = null
+    }
     fun playMyAudio(play: Boolean, pause: Boolean, stop: Boolean, messageId: String, uri: Uri){
 //        var audioDataToPass =  AudioPassingDataModel(playPause, true,  messageId, uri)
 //        _audioData.value = audioDataToPass

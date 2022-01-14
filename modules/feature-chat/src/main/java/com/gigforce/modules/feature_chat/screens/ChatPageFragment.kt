@@ -64,6 +64,12 @@ import com.gigforce.common_ui.listeners.AppBarClicks
 import com.gigforce.core.*
 import com.gigforce.modules.feature_chat.analytics.CommunityEvents
 import com.gigforce.common_ui.ext.showToast
+import com.gigforce.modules.feature_chat.mediapicker.Dazzle
+import com.gigforce.modules.feature_chat.mediapicker.Dazzle.Companion.PICKED_MEDIA_TYPE
+import com.gigforce.modules.feature_chat.mediapicker.Dazzle.Companion.PICKED_MEDIA_URI
+import com.gigforce.modules.feature_chat.mediapicker.Dazzle.Companion.REQUEST_CODE_PICKER
+import com.gigforce.modules.feature_chat.mediapicker.DazzleGallery
+import com.gigforce.modules.feature_chat.mediapicker.utils.DazzleOptions
 import com.gigforce.modules.feature_chat.models.ChatMessageWrapper
 import com.gigforce.modules.feature_chat.models.SharedFile
 import com.gigforce.modules.feature_chat.screens.vm.ChatPageViewModel
@@ -91,6 +97,7 @@ import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
+import com.google.firebase.auth.FirebaseAuth
 import java.io.IOException
 
 
@@ -163,6 +170,14 @@ class ChatPageFragment : Fragment(),
 
     private val viewModel: ChatPageViewModel by viewModels()
     private val groupChatViewModel: GroupChatViewModel by viewModels()
+
+    val dazzleOptions = DazzleOptions.init().apply {
+        maxCount = 1                        //maximum number of images/videos to be picked
+        maxVideoDuration = 10               //maximum duration for video capture in seconds
+        allowFrontCamera = true             //allow front camera use
+        excludeVideos = false               //exclude or include video functionalities
+        cropEnabled = true
+    }
 
     private val cameraAndGalleryIntegrator: CameraAndGalleryIntegrator by lazy {
         CameraAndGalleryIntegrator(this)
@@ -482,8 +497,6 @@ class ChatPageFragment : Fragment(),
                     chatRecyclerView.visible()
                     shimmerContainer.gone()
                 }
-
-
             })
 
         groupChatViewModel
@@ -501,19 +514,26 @@ class ChatPageFragment : Fragment(),
             it ?: return@Observer
             Log.d("selectedMsg", "${it.flowType} , ${it.type} , ${it.chatType}")
             selectedChatMessage = it
+            //check if the sender info matches current uid
+            var isCurrentUsersMessage = false
+            if (it.senderInfo.id == FirebaseAuth.getInstance().currentUser?.uid){
+                isCurrentUsersMessage = true
+            }
             var isCopyEnable = false
             var isDeleteEnable = false
             var isInfoEnable = false
             var isDownloadEnable = false
-            isDeleteEnable = it.flowType == "out"
-            isInfoEnable = it.flowType == "out" && it.chatType == "group"
+            isDeleteEnable = it.flowType == "out" && isCurrentUsersMessage
+            isInfoEnable = (it.flowType == "out" && it.chatType == "group" && isCurrentUsersMessage)
             if(it.type == "text"){
                 isCopyEnable = true
-                isDeleteEnable = it.flowType == "out"
             }
             appbar.makeChatOptionsVisible(true, isCopyEnable, isDeleteEnable, isInfoEnable, isDownloadEnable)
 
         })
+
+        chatRecyclerView.visible()
+        shimmerContainer.gone()
 
     }
 
@@ -714,7 +734,6 @@ class ChatPageFragment : Fragment(),
 
         viewModel.messages
             .observe(viewLifecycleOwner, { messages ->
-
                 chatRecyclerView.collection = messages.map {
                     ChatMessageWrapper(
                         message = it,
@@ -791,32 +810,8 @@ class ChatPageFragment : Fragment(),
             isInfoEnable = it.flowType == "out" && it.chatType == "group"
             if(it.type == "text"){
                 isCopyEnable = true
-                isDeleteEnable = it.flowType == "out"
             }
             appbar.makeChatOptionsVisible(true, isCopyEnable, isDeleteEnable, isInfoEnable, isDownloadEnable)
-        })
-
-        viewModel.audioData.observe(viewLifecycleOwner, Observer {
-            it ?: return@Observer
-            Log.d("selectedMsg", "${it.playPause} , ${it.isAudioPlaying} , ${it.currentlyPlayingAudioId} , ${it.playingAudioUri}")
-
-            if (it.playPause == true) {
-                val mediaSource = extractMediaSourceFromUri(it.playingAudioUri!!)
-                //play the audio if previously nothing ws playing
-                if (currentlyPlayingId == it.currentlyPlayingAudioId) {
-                    //resume the audio
-                } else {
-                    //play my audio
-                    //playPauseBuild(true, it.currentlyPlayingAudioId.toString(), it.playingAudioUri!!)
-                    //play(mediaSource)
-                    //playMyAudio(it.playingAudioUri!!)
-                }
-            } else {
-                    //pause the audio
-                    //pause()
-                    //playPauseBuild(false, it.currentlyPlayingAudioId.toString(), it.playingAudioUri!!)
-            }
-
         })
 
         chatRecyclerView.visible()
@@ -1215,6 +1210,7 @@ class ChatPageFragment : Fragment(),
     private fun checkCameraPermissionAndHandleActionOpenCamera(){
         if (isCameraPermissionGranted() && isStoragePermissionGranted()) {
             openCamera()
+
         } else {
             selectedOperation = ChatConstants.OPERATION_OPEN_CAMERA
 
@@ -1319,11 +1315,13 @@ class ChatPageFragment : Fragment(),
     }
 
     private fun pickImage() {
-        cameraAndGalleryIntegrator.showCameraAndGalleryBottomSheet()
+        //cameraAndGalleryIntegrator.showCameraAndGalleryBottomSheet()
+        DazzleGallery.startPicker(this, dazzleOptions)
     }
 
     private fun openCamera(){
-        cameraAndGalleryIntegrator.startCameraForCapturing()
+        //cameraAndGalleryIntegrator.startCameraForCapturing()
+        Dazzle.startPicker(this, dazzleOptions)
     }
 
     private fun pickDocument() = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
@@ -1357,6 +1355,7 @@ class ChatPageFragment : Fragment(),
                         message,
                         communityFooter.getReplyToMessage()
                     )
+                    communityFooter.closeReplyUi()
                     type = "Direct"
                 } else {
                     groupChatViewModel.sendNewText(
@@ -1470,6 +1469,25 @@ class ChatPageFragment : Fragment(),
                 if (resultCode == Activity.RESULT_OK) {
                     sendLocationMessage(data)
                 }
+            }
+
+            REQUEST_CODE_PICKER -> {
+                if (resultCode == Activity.RESULT_OK){
+                    //check if the media is image or video
+                    val mediaUri = data?.getStringExtra(PICKED_MEDIA_URI) ?: ""
+                    val mediaType = data?.getStringExtra(PICKED_MEDIA_TYPE) ?: ""
+                    Log.d("MediaPicker", "uri: $mediaUri , type: $mediaType")
+
+                    if (mediaType.isNotBlank() && mediaType == "image"){
+                        sendImageMessage(Uri.parse(mediaUri), "")
+                    }
+
+                    if (mediaType.isNotBlank() && mediaType == "video"){
+                        sendVideoMessage(Uri.parse(mediaUri), "")
+                    }
+
+                }
+
             }
         }
     }
@@ -1813,22 +1831,7 @@ class ChatPageFragment : Fragment(),
 //                showToast("Camera Clicked")
             }
             AttachmentOption.GALLERY_ID -> {
-                //checkPermissionAndHandleActionPickImage()
-//                UwMediaPicker
-//                    .with(this)						// Activity or Fragment
-//                    .setGalleryMode(UwMediaPicker.GalleryMode.ImageGallery) // GalleryMode: ImageGallery/VideoGallery/ImageAndVideoGallery, default is ImageGallery
-//                    .setGridColumnCount(4)                                  // Grid column count, default is 3
-//                    .setMaxSelectableMediaCount(10)                         // Maximum selectable media count, default is null which means infinite
-//                    .setLightStatusBar(true)                                // Is llight status bar enable, default is true
-//                    .enableImageCompression(true)				// Is image compression enable, default is false
-//                    .setCompressionMaxWidth(1280F)				// Compressed image's max width px, default is 1280
-//                    .setCompressionMaxHeight(720F)				// Compressed image's max height px, default is 720
-//                    .setCompressFormat(Bitmap.CompressFormat.JPEG)		// Compressed image's format, default is JPEG
-//                    .setCompressionQuality(85)				// Image compression quality, default is 85
-//                    .setCompressedFileDestinationPath(chatFileManager.imageFilesDirectory.toString())	// Compressed image file's destination path, default is "${application.getExternalFilesDir(null).path}/Pictures"
-//                    .setCancelCallback{ }					// Will be called when user cancels media selection
-//                    .launch{selectedMediaList-> } // (::onMediaSelected)
-//                showToast("Gallery Clicked")
+                checkPermissionAndHandleActionPickImage()
             }
             AttachmentOption.AUDIO_ID -> {
 //                showToast("Audio Clicked")

@@ -3,6 +3,7 @@
     package="com.gigforce.modules.feature_chat">
 
 
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <application>
 
         <activity android:name=".screens.CaptureLocationActivity"/>

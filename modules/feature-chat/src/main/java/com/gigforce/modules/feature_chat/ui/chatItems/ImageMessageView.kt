@@ -3,6 +3,8 @@ package com.gigforce.modules.feature_chat.ui.chatItems
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.os.Handler
+import android.os.Looper
 import android.text.util.Linkify
 import android.util.AttributeSet
 import android.util.Log
@@ -236,19 +238,31 @@ abstract class ImageMessageView(
         senderNameTV.isVisible = messageType == MessageType.GROUP_MESSAGE && type == MessageFlowType.IN
         senderNameTV.text = msg.senderInfo.name
 
-        lifeCycleOwner?.let {
+        lifeCycleOwner?.let { it1 ->
             if (messageType == MessageType.ONE_TO_ONE_MESSAGE){
-                oneToOneChatViewModel.enableSelect.observe(it, Observer {
+                oneToOneChatViewModel.enableSelect.observe(it1, Observer {
                     it ?: return@Observer
                     if (it == false) {
                         frameLayoutRoot?.foreground = null
                     }
                 })
+                oneToOneChatViewModel.scrollToMessageId.observe(it1, Observer {
+                    it ?: return@Observer
+                    if (it == message.id){
+                        blinkLayout()
+                    }
+                })
             } else if(messageType == MessageType.GROUP_MESSAGE){
-                groupChatViewModel.enableSelect.observe(it, Observer {
+                groupChatViewModel.enableSelect.observe(it1, Observer {
                     it ?: return@Observer
                     if (it == false) {
                         frameLayoutRoot?.foreground = null
+                    }
+                })
+                groupChatViewModel.scrollToMessageId.observe(it1, Observer {
+                    it ?: return@Observer
+                    if (it == message.id){
+                        blinkLayout()
                     }
                 })
             }
@@ -300,6 +314,18 @@ abstract class ImageMessageView(
                 }
             }
         }
+    }
+
+    private fun blinkLayout(){
+        frameLayoutRoot.foreground = resources.getDrawable(R.drawable.selected_chat_foreground)
+        Handler(Looper.getMainLooper()).postDelayed({
+            frameLayoutRoot.foreground = null
+            if (messageType == MessageType.GROUP_MESSAGE){
+                groupChatViewModel.setScrollToMessageNull()
+            } else {
+                oneToOneChatViewModel.setScrollToMessageNull()
+            }
+        },2000)
     }
 
     fun getCircularProgressDrawable(): Drawable {

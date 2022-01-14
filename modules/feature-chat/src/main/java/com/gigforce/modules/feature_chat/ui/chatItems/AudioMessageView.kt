@@ -5,6 +5,8 @@ import android.content.Intent
 import android.media.MediaPlayer
 import android.net.Uri
 import android.net.VpnService.prepare
+import android.os.Handler
+import android.os.Looper
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
@@ -124,20 +126,31 @@ abstract class AudioMessageView (
         } else {
         }
 
-        lifeCycleOwner?.let {
+        lifeCycleOwner?.let { it1 ->
             if (messageType == MessageType.ONE_TO_ONE_MESSAGE){
-                oneToOneChatViewModel.enableSelect.observe(it, Observer {
+                oneToOneChatViewModel.enableSelect.observe(it1, Observer {
                     it ?: return@Observer
                     if (it == false) {
                         frameLayoutRoot?.foreground = null
                     }
                 })
-
+                oneToOneChatViewModel.scrollToMessageId.observe(it1, Observer {
+                    it ?: return@Observer
+                    if (it == message.id){
+                        blinkLayout()
+                    }
+                })
             } else if(messageType == MessageType.GROUP_MESSAGE){
-                groupChatViewModel.enableSelect.observe(it, Observer {
+                groupChatViewModel.enableSelect.observe(it1, Observer {
                     it ?: return@Observer
                     if (it == false) {
                         frameLayoutRoot?.foreground = null
+                    }
+                })
+                groupChatViewModel.scrollToMessageId.observe(it1, Observer {
+                    it ?: return@Observer
+                    if (it == message.id){
+                        blinkLayout()
                     }
                 })
             }
@@ -168,6 +181,18 @@ abstract class AudioMessageView (
                 setReceivedStatus(msg)
             }
         }
+    }
+
+    private fun blinkLayout(){
+        frameLayoutRoot.foreground = resources.getDrawable(R.drawable.selected_chat_foreground)
+        Handler(Looper.getMainLooper()).postDelayed({
+            frameLayoutRoot.foreground = null
+            if (messageType == MessageType.GROUP_MESSAGE){
+                groupChatViewModel.setScrollToMessageNull()
+            } else {
+                oneToOneChatViewModel.setScrollToMessageNull()
+            }
+        },2000)
     }
 
     private fun handleAudioUploading() {

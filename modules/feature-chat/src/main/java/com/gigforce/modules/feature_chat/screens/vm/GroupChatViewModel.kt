@@ -95,6 +95,9 @@ class GroupChatViewModel @Inject constructor(
     private var _enableSelect = MutableLiveData<Boolean>()
     val enableSelect: LiveData<Boolean> = _enableSelect
 
+    private var _scrollToMessageId = MutableLiveData<String?>()
+    val scrollToMessageId: LiveData<String?> = _scrollToMessageId
+
     //Create group
     override fun setGroupId(groupId: String) {
         this.groupId = groupId
@@ -1066,7 +1069,13 @@ class GroupChatViewModel @Inject constructor(
         if(index != -1){
             _scrollToMessage.value = index
             _scrollToMessage.value = null
+
+            _scrollToMessageId.value = replyMessage.id
         }
+    }
+
+    fun setScrollToMessageNull(){
+        _scrollToMessageId.value = null
     }
     companion object {
         const val TAG: String = "GroupChatVM"
