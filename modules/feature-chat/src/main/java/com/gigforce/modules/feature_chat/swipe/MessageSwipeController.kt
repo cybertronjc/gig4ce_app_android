@@ -66,6 +66,7 @@ class MessageSwipeController(
                     || viewHolder.itemView is VideoMessageView
                     || viewHolder.itemView is DocumentMessageView
                     || viewHolder.itemView is LocationMessageView
+                    || viewHolder.itemView is AudioMessageView
             )
         ) {
 

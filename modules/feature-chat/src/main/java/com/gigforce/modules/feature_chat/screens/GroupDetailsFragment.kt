@@ -17,6 +17,7 @@ import androidx.core.content.FileProvider
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.net.toFile
 import androidx.core.net.toUri
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -388,6 +389,11 @@ class GroupDetailsFragment : Fragment(),
 
     private fun initListeners() {
         add_giger_layout.setOnClickListener {
+//            navigation.navigateTo(
+//                "chats/contactsFragment" , bundleOf(
+//                    ContactsAndGroupFragment.INTENT_EXTRA_RETURN_SELECTED_RESULTS to true
+//                )
+//            )
             ContactsFragment.launchForSelectingContact(childFragmentManager, this)
         }
 

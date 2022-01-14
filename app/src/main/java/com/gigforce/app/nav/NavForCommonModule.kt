@@ -1,5 +1,6 @@
 package com.gigforce.app.nav
 
+import android.util.SparseIntArray
 import com.gigforce.app.R
 import com.gigforce.common_ui.BaseNavigationImpl
 import com.gigforce.common_ui.navigation.signature.SignatureNavigation
@@ -19,10 +20,7 @@ class NavForCommonModule(
             RequestDocumentTreeAccessFragment.REQUEST_DOCUMENT_TREE_ACCESS_FRAGMENT,
             R.id.requestDocumentTreeAccessFragment
         )
-        baseImplementation.registerRoute(
-            SignatureNavigation.DESTINATION_DRAW_SIGNATURE ,
-            R.id.signatureDrawerDialogFragment
-        )
+
         baseImplementation.registerRoute(
             SignatureNavigation.DESTINATION_CAPTURE_SIGNATURE ,
             R.id.signatureImageCaptureDialogFragment

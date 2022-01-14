@@ -6,6 +6,8 @@ import android.util.AttributeSet
 import android.webkit.MimeTypeMap
 import android.widget.RelativeLayout
 import androidx.core.net.toUri
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import com.gigforce.common_ui.chat.ChatConstants
 import com.gigforce.common_ui.chat.models.ChatMessage
 import com.gigforce.common_ui.chat.models.IMediaMessage
@@ -49,6 +51,7 @@ abstract class MediaMessage(
     protected lateinit var groupChatViewModel: GroupChatViewModel
 
     var iMediaMessage: IMediaMessage? = null
+    var lifeCycleOwner: LifecycleOwner? = null
 
 
     val storage: FirebaseStorage by lazy {
@@ -97,7 +100,7 @@ abstract class MediaMessage(
         message = dataAndViewModels.message
         groupChatViewModel = dataAndViewModels.groupChatViewModel
         oneToOneChatViewModel = dataAndViewModels.oneToOneChatViewModel
-
+        lifeCycleOwner = dataAndViewModels.lifeCycleOwner
         iMediaMessage = message
         this.onBind(message)
     }
@@ -109,6 +112,7 @@ abstract class MediaMessage(
             ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE -> chatFileManager.imageFilesDirectory
             ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO -> chatFileManager.videoFilesDirectory
             ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT -> chatFileManager.documentFilesDirectory
+            ChatConstants.MESSAGE_TYPE_TEXT_WITH_AUDIO -> chatFileManager.audioFilesDirectory
             else -> chatFileManager.otherFilesDirectory
         }
     }

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/swipe_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="40dp"
+            android:fontFamily="@font/lato_bold"
+            android:text="@string/select_team_leader_giger_gigs"
+            android:textColor="#202325"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <EditText
+            android:id="@+id/search_item"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="20dp"
+            android:paddingStart="8dp"
+            android:maxLines="1"
+            android:elevation="@dimen/size_4"
+            android:textColor="@color/black"
+            android:textColorHint="#979C9E"
+            android:singleLine="true"
+            android:textSize="13sp"
+            android:background="@drawable/change_tl_search_bg"
+            android:hint="@string/change_tl_search_hint_giger_gigs"
+            app:layout_constraintTop_toBottomOf="@id/swipe_label"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <ImageButton
+            android:id="@+id/searchImageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/size_16"
+            android:minWidth="48dp"
+            android:padding="@dimen/size_4"
+            android:src="@drawable/ic_vector"
+            app:layout_constraintBottom_toBottomOf="@+id/search_item"
+            app:layout_constraintEnd_toEndOf="@+id/search_item"
+            app:layout_constraintTop_toTopOf="@+id/search_item" />
+
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/confirm_change_tl"
+            style="@style/LeadMgmtMaterialButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_20"
+            android:layout_marginTop="@dimen/size_40"
+            android:layout_marginEnd="@dimen/size_20"
+            android:gravity="center"
+            android:fontFamily="@font/lato_bold"
+            android:text="@string/continue_giger_gigs"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:enabled="false"
+            app:layout_constraintBottom_toTopOf="@id/cancel_change_tl"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/cancel_change_tl"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_20"
+            android:layout_marginTop="@dimen/size_20"
+            android:layout_marginEnd="@dimen/size_20"
+            android:layout_marginBottom="@dimen/size_16"
+            android:gravity="center"
+            app:strokeColor="@color/lipstick_2"
+            android:fontFamily="@font/lato_bold"
+            android:text="@string/cancel_giger_gigs"
+            android:textAlignment="center"
+            android:textColor="@color/lipstick_2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+
+        <com.gigforce.core.recyclerView.CoreRecyclerView
+            android:id="@+id/team_leader_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="@dimen/size_20"
+            android:layout_weight="1"
+            android:paddingTop="8dp"
+            app:layout_constraintBottom_toTopOf="@id/confirm_change_tl"
+            app:layout_constraintTop_toBottomOf="@id/search_item"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

@@ -11,10 +11,7 @@ import android.util.Log
 import android.webkit.MimeTypeMap
 import androidx.core.net.toFile
 import androidx.core.net.toUri
-import com.gigforce.common_ui.chat.models.ChatMessage
-import com.gigforce.common_ui.chat.models.ChatReportedUser
-import com.gigforce.common_ui.chat.models.ContactModel
-import com.gigforce.common_ui.chat.models.VideoInfo
+import com.gigforce.common_ui.chat.models.*
 import com.gigforce.common_ui.metaDataHelper.ImageMetaDataHelpers
 import com.gigforce.common_ui.viewdatamodels.chat.ChatHeader
 import com.gigforce.core.StringConstants
@@ -230,6 +227,41 @@ class ChatRepository @Inject constructor(
             .addOrThrow(message)
     }
 
+    override suspend fun sendAudioMessage(
+        context: Context,
+        chatHeaderId: String,
+        message: ChatMessage,
+        file: Uri,
+        audioInfo: AudioInfo
+    ) {
+        val newFileName = if (audioInfo.name.isBlank()) {
+            "${getUID()}-${DateHelper.getFullDateTimeStamp()}.mp3"
+        } else {
+
+            if (audioInfo.name.endsWith(".mp3", true)) {
+                "${getUID()}-${DateHelper.getFullDateTimeStamp()}-${audioInfo.name}"
+            } else {
+                "${getUID()}-${DateHelper.getFullDateTimeStamp()}-${audioInfo.name}.mp3"
+            }
+        }
+
+        val audiosDirectoryRef = chatLocalDirectoryReferenceManager.audioFilesDirectory
+        val audioFile = File(audiosDirectoryRef, newFileName)
+        FileUtils.copyFile(context.applicationContext, newFileName, file, audioFile)
+
+        val pathOnServer = uploadChatAttachment(
+            fileNameWithExtension = newFileName,
+            file = file,
+            headerId = chatHeaderId,
+            isGroupChatMessage = false,
+            messageType = ChatConstants.MESSAGE_TYPE_TEXT_WITH_AUDIO
+        )
+        message.attachmentPath = pathOnServer
+
+        getChatMessagesCollectionRef(headerId = chatHeaderId)
+            .addOrThrow(message)
+    }
+
     override suspend fun sendDocumentMessage(
         context: Context,
         chatHeaderId: String,
@@ -261,6 +293,7 @@ class ChatRepository @Inject constructor(
         getChatMessagesCollectionRef(headerId = chatHeaderId)
             .addOrThrow(message)
     }
+
 
     override suspend fun createHeaders(
         otherUserId: String
@@ -466,6 +499,27 @@ class ChatRepository @Inject constructor(
 
             batch.commitOrThrow()
 
+        }
+    }
+
+    override suspend fun forwardChatMessage(
+        contacts: List<ContactModel>,
+        chatMessage: ChatMessage
+    ) {
+        if (contacts.isNotEmpty()){
+            val batch = db.batch()
+
+            contacts.forEach {
+                val headerRef = FirebaseFirestore.getInstance()
+                    .collection(COLLECTION_CHATS)
+                    .document(it.uid.toString())
+                    .collection("headers")
+                    .document(it.headerId.toString())
+
+                val chatMessageRef = headerRef.collection(COLLECTION_CHATS_MESSAGES).document(chatMessage.id)
+                batch.set(chatMessageRef, chatMessage)
+            }
+            batch.commitOrThrow()
         }
     }
 

@@ -288,7 +288,6 @@
 
                 </com.google.android.material.card.MaterialCardView>
 
-
                 <include
                     android:id="@+id/job_profile_error"
                     layout="@layout/layout_validation_error"
@@ -296,28 +295,71 @@
                     android:visibility="gone"
                     android:layout_height="wrap_content" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/giger_client_id_text_input_layout"
-                    style="@style/Widget.Design.TextInputLayout"
+
+                <TextView
+                    android:id="@+id/reporting_tl_label"
+                    android:layout_width="134dp"
+                    android:layout_height="18dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="30dp"
+                    android:gravity="top"
+                    android:lineSpacingExtra="1sp"
+                    android:text="Reporting TL"
+                    android:textAppearance="@style/style_h5"
+                    android:translationY="-0.6sp" />
+
+                <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint=" "
-                    android:visibility="gone"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    app:errorEnabled="true">
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/drop_shadow_background_draw"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    app:cardCornerRadius="6dp"
+                    app:cardElevation="8dp">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/client_id_et"
+                    <LinearLayout
+                        android:id="@+id/select_reporting_tl_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:backgroundTint="#EBEBEB"
-                        android:hint="@string/type_client_id_here_lead"
-                        android:paddingBottom="15dp"
-                        android:textAppearance="@style/body_primary"
-                        android:textColorHint="#979C9E" />
+                        android:background="@drawable/rectangle_2"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
-                </com.google.android.material.textfield.TextInputLayout>
+                        <TextView
+                            android:id="@+id/selected_reporting_tl_label"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="2dp"
+                            android:layout_weight="1"
+                            android:gravity="top"
+                            android:lineSpacingExtra="4sp"
+                            android:text="Click to select"
+                            android:textAppearance="@style/body_primary"
+                            android:textColor="@color/lipstick_2"
+                            android:translationY="-1.8sp" />
+
+                        <ImageView
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_marginEnd="15dp"
+                            android:src="@drawable/right_arrow_24" />
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <include
+                    android:id="@+id/reporting_tl_error"
+                    layout="@layout/layout_validation_error"
+                    android:layout_width="match_parent"
+                    android:visibility="gone"
+                    android:layout_height="wrap_content" />
+
 
             <LinearLayout
                 android:id="@+id/job_profile_dependent_dynamic_fields_container"

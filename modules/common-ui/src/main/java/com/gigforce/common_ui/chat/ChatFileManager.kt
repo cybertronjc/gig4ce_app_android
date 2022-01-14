@@ -62,6 +62,14 @@ class ChatFileManager @Inject constructor(
         }
     }
 
+    val audioFilesDirectory: File by lazy {
+        File(gigforceDirectory, ChatConstants.DIRECTORY_AUDIOS).apply {
+            if (!this.exists()) {
+                mkdirs()
+            }
+        }
+    }
+
 
     fun createImageFile(
         mimeType: String = MimeTypes.PNG

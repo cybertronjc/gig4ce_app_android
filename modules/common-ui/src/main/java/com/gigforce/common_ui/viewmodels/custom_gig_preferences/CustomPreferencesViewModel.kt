@@ -6,7 +6,7 @@ import com.gigforce.core.datamodels.custom_gig_preferences.UnavailableDataModel
 
 class CustomPreferencesViewModel(var owner: LifecycleOwner) : ViewModel() {
     var customPreferencesRepository = CustomPreferencesRepository()
-    public lateinit var customPreferencesDataModel: CustomPreferencesDataModel
+    var customPreferencesDataModel: CustomPreferencesDataModel?=null
     var customPreferencesLiveDataModel: MutableLiveData<CustomPreferencesDataModel> =
         MutableLiveData<CustomPreferencesDataModel>()
 
@@ -38,15 +38,14 @@ class CustomPreferencesViewModel(var owner: LifecycleOwner) : ViewModel() {
     }
 
     fun getCustomPreferenceData(): CustomPreferencesDataModel? {
-        if(this::customPreferencesDataModel.isInitialized) {
-            return customPreferencesDataModel
-        }
-        else return null;
+
+        return customPreferencesDataModel
+
     }
 
     fun updateCustomPreference(unavailableDataModel: UnavailableDataModel) {
 
-        if (customPreferencesDataModel != null && unavailableDataModel != null) {
+        customPreferencesDataModel?.let {
             deleteCustomPreference(unavailableDataModel)
             customPreferencesRepository.setData(unavailableDataModel)
         }
@@ -54,7 +53,7 @@ class CustomPreferencesViewModel(var owner: LifecycleOwner) : ViewModel() {
 
     fun deleteCustomPreference(unavailableDataModel: UnavailableDataModel) {
         var oldUnavailableDataModel = unavailableDataModel.findDateDataModel(
-            customPreferencesDataModel.unavailable
+            (customPreferencesDataModel?.unavailable ?: ArrayList())
         )
         if (oldUnavailableDataModel != null) {
             customPreferencesRepository.removeData(
@@ -108,7 +107,7 @@ class CustomPreferencesViewModel(var owner: LifecycleOwner) : ViewModel() {
 
     private fun findDataModelForSlots(unavailableDataModel: UnavailableDataModel): UnavailableDataModel? {
         return unavailableDataModel.findDataModelForSlot(
-            customPreferencesDataModel.unavailable
+            customPreferencesDataModel?.unavailable?:ArrayList()
         )
     }
 }

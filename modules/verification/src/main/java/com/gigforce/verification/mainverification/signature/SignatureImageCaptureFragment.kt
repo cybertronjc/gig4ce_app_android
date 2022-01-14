@@ -1,4 +1,4 @@
-package com.gigforce.common_ui.signature
+package com.gigforce.verification.mainverification.signature
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -16,6 +16,7 @@ import com.gigforce.common_image_picker.CameraAndGalleryIntegrator
 import com.gigforce.common_image_picker.ImageCropCallback
 import com.gigforce.common_image_picker.ImageCropOptions
 import com.gigforce.common_image_picker.image_cropper.ImageCropActivity
+import com.gigforce.common_ui.CommonIntentExtras
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.databinding.FragmentSingatureCaptureFullScreenBinding
 import com.gigforce.core.base.BaseFragment2
@@ -27,9 +28,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class FullScreenSignatureImageCaptureDialogFragment :
+class SignatureImageCaptureFragment :
     BaseFragment2<FragmentSingatureCaptureFullScreenBinding>(
-        fragmentName = "FullScreenSignatureImageCaptureDialogFragment",
+        fragmentName = "SignatureImageCaptureFragment",
         layoutId = R.layout.fragment_singature_capture_full_screen,
         statusBarColor = R.color.lipstick_2
     ), ImageCropCallback {
@@ -93,13 +94,21 @@ class FullScreenSignatureImageCaptureDialogFragment :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        var userId : String? = null
         arguments?.let {
-            val imageFromPrevious = it.getString(INTENT_EXTRA_SIGNATURE_IMAGE_URL) ?: return@let
-            viewModel.handleEvent(SignatureViewEvents.SignatureReceivedFromPreviousScreen(Uri.parse(imageFromPrevious)))
+            userId = it.getString(CommonIntentExtras.INTENT_USER_ID) ?: return@let
         }
 
-    }
+        savedInstanceState?.let {
+            userId = it.getString(CommonIntentExtras.INTENT_USER_ID) ?: return@let
+        }
 
+        if(userId != null) {
+            viewModel.userId = userId!!
+        }
+
+        viewModel.checkForExistingSignature()
+    }
 
     override fun viewCreated(
         viewBinding: FragmentSingatureCaptureFullScreenBinding,
@@ -110,6 +119,10 @@ class FullScreenSignatureImageCaptureDialogFragment :
     }
 
     private fun initListeners() = viewBinding.apply {
+
+        this.appBar.setBackButtonListener{
+            navigation.navigateUp()
+        }
 
         this.clikImageBtn.setOnClickListener {
 
@@ -135,6 +148,19 @@ class FullScreenSignatureImageCaptureDialogFragment :
             .observe(viewLifecycleOwner, {
 
                 when (it) {
+                    SignatureUploadViewState.CheckingExistingSignature -> showCheckingPreviousImageLayoutRemovingLayout()
+                    is SignatureUploadViewState.ErrorWhileCheckingExsitingSignature -> {
+                        showCaptureImageLayout(true)
+                    }
+                    is SignatureUploadViewState.ShowExistingExistingSignature -> {
+
+                        if (it.signatureUri != null){
+                            showImageWithBackgroundRemoved(it.signatureUri,true)
+                        } else{
+                            showCaptureImageLayout(true)
+                        }
+                    }
+
                     SignatureUploadViewState.RemovingBackgroundFromSignature -> showBackgroundImageBackgroundRemovingLayout()
                     is SignatureUploadViewState.BackgroundRemovedFromSignature -> {
                         showImageWithBackgroundRemoved(it.processedImage,it.enableSubmitButton)
@@ -157,6 +183,7 @@ class FullScreenSignatureImageCaptureDialogFragment :
                         it.firebaseImageFullUrl
                     )
                     SignatureUploadViewState.UploadingSignature -> showSignatureUploading()
+
                 }
             })
     }
@@ -174,9 +201,32 @@ class FullScreenSignatureImageCaptureDialogFragment :
         viewBinding.captureLayout.removingBackgroundProgressBar.gone()
     }
 
+    private fun showCheckingPreviousImageLayoutRemovingLayout() {
+        showCaptureImageLayout(false)
+        viewBinding.captureLayout.removingBackgroundProgressBar.visible()
+    }
+
     private fun showBackgroundImageBackgroundRemovingLayout() {
         viewBinding.captureLayout.removingBackgroundProgressBar.visible()
     }
+
+    private fun showCaptureImageLayout(
+        enableButtons : Boolean
+    ){
+        viewBinding.captureLayout.removingBackgroundProgressBar.gone()
+        viewBinding.captureLayout.root.gone()
+
+        viewBinding.previewScreen.root.visible()
+        viewBinding.previewScreen.signatureImage.clearImage()
+
+        viewBinding.clikImageBtn.text = "Upload"
+        viewBinding.submitCancelBtn.text = "Cancel"
+
+        viewBinding.clikImageBtn.isEnabled = enableButtons
+        viewBinding.submitCancelBtn.isEnabled = enableButtons
+        viewBinding.submitCancelBtn.setStrokeColorResource(R.color.lipstick_2)
+    }
+
 
     private fun showImageWithBackgroundRemoved(processedImage: Uri, enableSubmitButton: Boolean) {
         viewBinding.captureLayout.removingBackgroundProgressBar.gone()
@@ -188,11 +238,12 @@ class FullScreenSignatureImageCaptureDialogFragment :
         viewBinding.clikImageBtn.text = "Change"
         viewBinding.submitCancelBtn.text = "Done"
 
-
         if(enableSubmitButton){
+            viewBinding.clikImageBtn.isEnabled = true
             viewBinding.submitCancelBtn.isEnabled = true
             viewBinding.submitCancelBtn.setStrokeColorResource(R.color.lipstick_2)
         } else{
+            viewBinding.clikImageBtn.isEnabled = false
             viewBinding.submitCancelBtn.isEnabled = false
             viewBinding.submitCancelBtn.setStrokeColorResource(R.color.grey)
         }
@@ -227,10 +278,9 @@ class FullScreenSignatureImageCaptureDialogFragment :
                         resultCode,
                         data,
                         getImageCropOptions(),
-                        this@FullScreenSignatureImageCaptureDialogFragment
+                        this@SignatureImageCaptureFragment
                     )
                 }
-
             }
         }
     }
