@@ -24,6 +24,8 @@ class VaccineViewModel @Inject constructor(private val verificationKycRepo: Veri
     private val _vaccineCertDetailsDM = MutableLiveData<Lce<VaccineCertDetailsDM>>()
     val vaccineCertDetailsDM : LiveData<Lce<VaccineCertDetailsDM>> = _vaccineCertDetailsDM
 
+    var activeObserver : Boolean = true
+
     fun uploadFile(vaccineReqDM: VaccineFileUploadReqDM, file: MultipartBody.Part) =
         viewModelScope.launch {
             try {
@@ -47,6 +49,10 @@ class VaccineViewModel @Inject constructor(private val verificationKycRepo: Veri
         }catch (e: Exception){
             _vaccineCertDetailsDM.value = Lce.error(e.toString())
         }
+    }
+
+    fun confirmVaccineData(vaccineId: String) = viewModelScope.launch {
+        verificationKycRepo.confirmVaccinationData(vaccineId)
     }
 
 }

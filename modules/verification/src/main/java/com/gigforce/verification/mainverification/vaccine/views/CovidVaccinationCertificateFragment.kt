@@ -19,6 +19,7 @@ class CovidVaccinationCertificateFragment : Fragment() {
 
     lateinit var viewBinding: FragmentCovidVaccinationCertificateBinding
     val viewModel : VaccineViewModel by viewModels()
+    var vaccineId : String?= null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -30,8 +31,30 @@ class CovidVaccinationCertificateFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getVaccineDetailsData("vaccine1")
+        getIntentData()
+        vaccineId?.let {
+            viewModel.getVaccineDetailsData(it)
+        }
         observer()
+        listener()
+    }
+
+    private fun listener() {
+        viewBinding.confirmBnBs.setOnClickListener{
+            vaccineId?.let {
+                viewModel.confirmVaccineData(it)
+            }
+        }
+
+        viewBinding.changeDocButton.setOnClickListener{
+            activity?.onBackPressed()
+        }
+    }
+
+    private fun getIntentData() {
+        arguments?.let {
+            vaccineId = it.getString("vaccineId")
+        }
     }
 
     private fun observer() {
