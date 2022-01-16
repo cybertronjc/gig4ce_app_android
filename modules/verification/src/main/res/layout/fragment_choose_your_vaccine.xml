@@ -54,6 +54,7 @@
                     android:text="@string/fully_vaccinated" />
 
                 <TextView
+                    android:id="@+id/change_vaccine"
                     style="@style/primary_color_small_title_bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -116,6 +117,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/size_10"
                 android:layout_weight="1"
+                android:textColorLink="@color/colorPrimary"
                 android:text="@string/download_certificate_text" />
         </LinearLayout>
 

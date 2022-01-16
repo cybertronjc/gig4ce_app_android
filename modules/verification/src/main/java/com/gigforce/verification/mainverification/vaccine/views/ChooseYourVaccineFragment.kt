@@ -4,6 +4,10 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -59,7 +63,20 @@ class ChooseYourVaccineFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         listeners()
         observer()
+        spannableInit()
 //        navigation.navigateTo("verification/CovidVaccinationCertificateFragment")
+    }
+
+    private fun spannableInit() {
+        val str = SpannableString("Don’t have certificate? Click here to download  your certificate and then uplaod.")
+        val clickableSpan : ClickableSpan = object : ClickableSpan() {
+            override fun onClick(view: View) {
+                showToast("link to download certificate")
+            }
+        }
+        str.setSpan(clickableSpan,24,34, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        download_certificate_tv.movementMethod = LinkMovementMethod.getInstance()
+        download_certificate_tv.text = str
     }
 
     private fun observer() {
@@ -95,6 +112,9 @@ class ChooseYourVaccineFragment : Fragment() {
         }
         doc_upload_cv.setOnClickListener {
             pickDocument()
+        }
+        change_vaccine.setOnClickListener{
+            navigation.navigateTo("verification/AskUserForVaccineBS")
         }
     }
 

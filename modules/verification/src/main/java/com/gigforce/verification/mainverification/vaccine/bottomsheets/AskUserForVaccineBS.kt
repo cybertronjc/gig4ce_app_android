@@ -12,6 +12,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 
 import androidx.lifecycle.Observer
+import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.recyclerView.ItemClickListener
 
 import com.gigforce.core.utils.Lce
@@ -23,10 +24,13 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 import kotlinx.android.synthetic.main.ask_user_for_vaccine_bs.*
+import javax.inject.Inject
+
 @AndroidEntryPoint
 class AskUserForVaccineBS : BottomSheetDialogFragment() {
     private val vaccineViewModel : VaccineViewModel by viewModels()
-
+    @Inject
+    lateinit var navigation : INavigation
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(DialogFragment.STYLE_NORMAL, R.style.BSDialogStyle)
@@ -43,6 +47,7 @@ class AskUserForVaccineBS : BottomSheetDialogFragment() {
                 super.onViewCreated(view, savedInstanceState)
                 vaccinerv.itemClickListener = object : ItemClickListener {
                         override fun onItemClick(view: View, position: Int, dataModel: Any) {
+                            navigation.popBackStack("verification/main",false)
                             dismiss()
                         }
                     }

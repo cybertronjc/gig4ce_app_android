@@ -9,11 +9,21 @@ import com.gigforce.common_ui.navigation.signature.SignatureNavigation
 import com.gigforce.common_ui.viewdatamodels.SimpleCardDVM
 import com.gigforce.core.datamodels.verification.AadhaarDetailsDataModel
 import com.gigforce.core.datamodels.verification.VerificationBaseModel
-import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.verification.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
+
+
+object VACCINESTATUSES{
+    const val UPLOADED = "uploaded"
+    const val UPLOADED_FAILED = "uploading_failed"
+    const val VALIDATED = "validated"
+    const val VALIDATION_FAILED = "validation_failed"
+    const val VERIFIED = "verified"
+    const val REJECTED = "rejected"
+
+}
 
 @HiltViewModel
 class VerificationMainViewModel @Inject constructor(
@@ -21,6 +31,7 @@ class VerificationMainViewModel @Inject constructor(
 //    private val iBuildConfigVM: IBuildConfigVM,
     private val verificationKycRepo : VerificationKycRepo
 ) : ViewModel() {
+
     var _allDocumentsData = MutableLiveData<List<SimpleCardDVM>>()
     var allDocumentsData: LiveData<List<SimpleCardDVM>> = _allDocumentsData
 
@@ -42,7 +53,7 @@ class VerificationMainViewModel @Inject constructor(
         allDocs.add(
             SimpleCardDVM(
                 appContext.getString(R.string.pan_card),
-                appContext.getString(R.string.tap_to_select),
+                appContext.getString(R.string.pending_status_veri),
                 R.drawable.ic_badge_black_24dp,
                 "verification/pancardimageupload",
                 false
@@ -51,7 +62,7 @@ class VerificationMainViewModel @Inject constructor(
         allDocs.add(
             SimpleCardDVM(
                 appContext.getString(R.string.driving_license),
-                appContext.getString(R.string.tap_to_select),
+                appContext.getString(R.string.pending_status_veri),
                 R.drawable.ic_directions_car_black_24dp,
                 "verification/drivinglicenseimageupload",
                 false
@@ -60,7 +71,7 @@ class VerificationMainViewModel @Inject constructor(
         allDocs.add(
             SimpleCardDVM(
                 appContext.getString(R.string.bank_details),
-                appContext.getString(R.string.tap_to_select),
+                appContext.getString(R.string.pending_status_veri),
                 R.drawable.ic_account_balance_black_24dp,
                 "verification/bank_account_fragment",
                 false
@@ -70,7 +81,7 @@ class VerificationMainViewModel @Inject constructor(
         allDocs.add(
             SimpleCardDVM(
                 appContext.getString(R.string.aadhar_card_detail_veri),
-                appContext.getString(R.string.tap_to_select),
+                appContext.getString(R.string.pending_status_veri),
                 R.drawable.ic_account_box_black_24dp,
                 "verification/AadharDetailInfoFragment",
                 false
@@ -80,9 +91,19 @@ class VerificationMainViewModel @Inject constructor(
         allDocs.add(
             SimpleCardDVM(
                 "Signature",
-                appContext.getString(R.string.tap_to_select),
+                appContext.getString(R.string.pending_status_veri),
                 R.drawable.ic_account_box_black_24dp,
                 SignatureNavigation.DESTINATION_CAPTURE_SIGNATURE,
+                false
+            )
+        )
+
+        allDocs.add(
+            SimpleCardDVM(
+                title = appContext.getString(R.string.covid_vaccination_certificate_veri),
+                appContext.getString(R.string.pending_status_veri),
+                R.drawable.ic_account_box_black_24dp,
+                "verification/AskUserForVaccineBS",
                 false
             )
         )
@@ -164,12 +185,12 @@ class VerificationMainViewModel @Inject constructor(
                         SimpleCardDVM(
                             title = appContext.getString(R.string.covid_vaccination_certificate_veri),
                             subtitle = getSubString(null,
-                                doc?.covid_vaccine_details?.status
+                                doc?.vaccination?.status
                             ),
                             image = R.drawable.ic_account_box_black_24dp,
                             navpath = "verification/AskUserForVaccineBS",
                             color = getSubStringColor(null,
-                                doc?.covid_vaccine_details?.status
+                                doc?.vaccination?.status
                             )
                         )
                     )
@@ -207,7 +228,12 @@ class VerificationMainViewModel @Inject constructor(
     }
 
     fun getSubString(isVerified: Boolean? = false, status: String? = ""): String {
-        //for bank verification
+//        vaccination status
+//        started
+//        processing
+//        verification_pending/ validation_failed
+//        verified/failed
+
         if (status.equals("verified")) return appContext.getString(R.string.verified_status_veri)//"Verified"
         if (status.equals("verification_pending")) return appContext.getString(R.string.confirmation_pending_veri)//"confirmation pending"
         if (status.equals("started") || status.equals("processing") || status.equals("validated")) return appContext.getString(R.string.inprogress_veri)//"in progress"
