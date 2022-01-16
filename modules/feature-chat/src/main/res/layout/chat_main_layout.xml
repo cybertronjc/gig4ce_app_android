@@ -44,6 +44,28 @@
             android:visibility="gone"
             android:paddingBottom="56dp" />
 
+        <LinearLayout
+            android:id="@+id/no_chat_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_no_chats_ilustration"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/size_22"
+                android:text="Let's start chatting..."
+                android:textColor="#E42C64"/>
+
+        </LinearLayout>
+
         <com.gigforce.modules.feature_chat.ui.ChatFooter
             android:id="@+id/chat_footer"
             android:layout_width="match_parent"

@@ -154,6 +154,7 @@
     <string name="media_and_docs_chat">Media and Docs</string>
     <string name="created_by_chat">Created by</string>
     <string name="exit_group_chat">Exit Group</string>
+    <string name="add_participant_chat">Add New Participant</string>
     <string name="report_one_chat">Report</string>
     <string name="exit_group_message_chat">Are you sure you want to exit this group? </string>
     <string name="delivered_on_chat">Delivered on</string>

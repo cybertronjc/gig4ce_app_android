@@ -335,7 +335,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:padding="@dimen/size_4"
-                android:visibility="visible"
+                android:visibility="gone"
                 android:background="?attr/selectableItemBackground"
                 app:tint="@color/white"
                 android:layout_marginEnd="@dimen/size_30"

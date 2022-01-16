@@ -143,6 +143,7 @@ class ChatPageFragment : Fragment(),
     //Views
     private lateinit var chatRecyclerView: CoreRecyclerView
     private lateinit var shimmerContainer: View
+    private lateinit var noChatLayout: View
     private lateinit var chatFooter: ChatFooter
     private lateinit var communityFooter: CommunityFooter
 //    private lateinit var audioRecordView: AudioRecordView
@@ -485,19 +486,27 @@ class ChatPageFragment : Fragment(),
             .outputs
             .messages
             .observe(viewLifecycleOwner, { messages ->
-                messages.let {
-                    chatRecyclerView.collection = messages.map {
-                        ChatMessageWrapper(
-                            message = it,
-                            oneToOneChatViewModel = viewModel,
-                            groupChatViewModel = groupChatViewModel,
-                            viewLifecycleOwner
-                        )
+//                if (messages.isEmpty()){
+//                    chatRecyclerView.gone()
+//                    shimmerContainer.gone()
+//                    //noChatLayout.visible()
+//                }
+//                else {
+                    messages.let {
+                        chatRecyclerView.collection = messages.map {
+                            ChatMessageWrapper(
+                                message = it,
+                                oneToOneChatViewModel = viewModel,
+                                groupChatViewModel = groupChatViewModel,
+                                viewLifecycleOwner
+                            )
+                        }
+                        chatRecyclerView.smoothScrollToLastPosition()
+                        chatRecyclerView.visible()
+                        //noChatLayout.gone()
+                        shimmerContainer.gone()
                     }
-                    chatRecyclerView.smoothScrollToLastPosition()
-                    chatRecyclerView.visible()
-                    shimmerContainer.gone()
-                }
+                //}
             })
 
         groupChatViewModel
@@ -563,6 +572,7 @@ class ChatPageFragment : Fragment(),
         rootLayout = view.findViewById(R.id.layoutRoot)
         communityFooter = view.findViewById(R.id.community_footer)
         shimmerContainer = view.findViewById(R.id.shimmer_controller)
+        noChatLayout = view.findViewById(R.id.no_chat_layout)
         //communityFooter = context?.let { CommunityFooter(it) }!!
         chatRecyclerView = view.findViewById(R.id.rv_chat_messages)
         val layoutManager = LinearLayoutManager(requireContext())
@@ -722,6 +732,7 @@ class ChatPageFragment : Fragment(),
 
                 if (it.isUserBlocked) {
                     //chatFooter.disableInput("You've blocked this contact")
+                    Log.d(UserAndGroupDetailsFragment.TAG, "block chat 1: ${it.isUserBlocked}")
                         communityFooter.disableInput("You've blocked this contact")
                         messageSwipeController.disableSwipe()
 //                        userBlockedOrRemovedLayout.text = getString(R.string.you_have_blocked_chat)
@@ -735,22 +746,33 @@ class ChatPageFragment : Fragment(),
 
         viewModel.messages
             .observe(viewLifecycleOwner, { messages ->
-                chatRecyclerView.collection = messages.map {
-                    ChatMessageWrapper(
-                        message = it,
-                        oneToOneChatViewModel = viewModel,
-                        groupChatViewModel = groupChatViewModel,
-                        lifeCycleOwner = viewLifecycleOwner
-                    )
-                }
-                chatRecyclerView.smoothScrollToLastPosition()
-                chatRecyclerView.visible()
-                shimmerContainer.gone()
+//                if (messages.isEmpty()){
+//                    chatRecyclerView.gone()
+//                    shimmerContainer.gone()
+//                    //noChatLayout.visible()
+//                }
+//                else {
+                    messages.let {
+                        chatRecyclerView.collection = messages.map {
+                            ChatMessageWrapper(
+                                message = it,
+                                oneToOneChatViewModel = viewModel,
+                                groupChatViewModel = groupChatViewModel,
+                                lifeCycleOwner = viewLifecycleOwner
+                            )
+                        }
+                        chatRecyclerView.smoothScrollToLastPosition()
+                        chatRecyclerView.visible()
+                        //noChatLayout.gone()
+                        shimmerContainer.gone()
+                    }
+                //}
             })
+
 
         viewModel.headerInfo
             .observe(viewLifecycleOwner, {
-
+                Log.d(UserAndGroupDetailsFragment.TAG, "block chat: ${it.isBlocked}")
                 if (it.isBlocked) {
                     //chatFooter.disableInput("You've blocked this contact")
                     communityFooter.disableInput("You've blocked this contact")
@@ -815,8 +837,8 @@ class ChatPageFragment : Fragment(),
             appbar.makeChatOptionsVisible(true, isCopyEnable, isDeleteEnable, isInfoEnable, isDownloadEnable)
         })
 
-        chatRecyclerView.visible()
-        shimmerContainer.gone()
+//        chatRecyclerView.visible()
+//        shimmerContainer.gone()
 
     }
     private fun extractMediaSourceFromUri(uri: Uri): MediaSource {
@@ -943,10 +965,10 @@ class ChatPageFragment : Fragment(),
             disableChatSelection()
         })
 
-        appbar.setForwardClickListener(View.OnClickListener {
-            selectedChatMessage?.let { it1 -> forwardMessage(it1) }
-            disableChatSelection()
-        })
+//        appbar.setForwardClickListener(View.OnClickListener {
+//            selectedChatMessage?.let { it1 -> forwardMessage(it1) }
+//            disableChatSelection()
+//        })
 
         appbar.setInfoClickListener(View.OnClickListener {
             selectedChatMessage?.let { it1 ->
@@ -1478,7 +1500,7 @@ class ChatPageFragment : Fragment(),
                     val mediaUri = data?.getStringExtra(PICKED_MEDIA_URI) ?: ""
                     val mediaType = data?.getStringExtra(PICKED_MEDIA_TYPE) ?: ""
                     val mediaText = data?.getStringExtra(PICKED_MEDIA_TEXT) ?: ""
-                    Log.d("MediaPicker", "uri: $mediaUri , type: $mediaType")
+                    Log.d("MediaPicker", "uri: $mediaUri , type: $mediaType , text: $mediaText")
 
                     if (mediaType.isNotBlank() && mediaType == "image"){
                         sendImageMessage(Uri.parse(mediaUri), "")
@@ -1568,6 +1590,7 @@ class ChatPageFragment : Fragment(),
             requireContext(),
             uri
         )
+        Log.d(TAG, "Sending video: $text")
         var type = ""
         if (chatType == ChatConstants.CHAT_TYPE_USER) {
             viewModel.sendNewVideoMessage(

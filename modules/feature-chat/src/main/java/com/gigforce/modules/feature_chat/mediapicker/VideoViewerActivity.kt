@@ -105,7 +105,7 @@ class VideoViewerActivity : AppCompatActivity() {
                 playWhenReady = false
                 player?.playWhenReady = false
                 player?.playbackState
-                playButton.setImageDrawable(resources.getDrawable(R.drawable.ic_play_2))
+                playButton.setImageDrawable(resources.getDrawable(R.drawable.ic_baseline_play_arrow_24))
             } else if (playbackPosition == 0L){
                 Log.d("VIDEO", " completed")
                 playWhenReady = true
@@ -167,18 +167,8 @@ class VideoViewerActivity : AppCompatActivity() {
                 if (playbackState == Player.STATE_ENDED) {
                     // media actually playing
                     Log.d("VIDEO", "onPlayerStateChanged: media is actually completed")
-                    viewBinding.playButton.setImageDrawable(resources.getDrawable(R.drawable.ic_play_2))
+                    viewBinding.playButton.setImageDrawable(resources.getDrawable(R.drawable.ic_baseline_play_arrow_24))
                 }
-//                else if (playWhenReady) {
-//                    // might be idle (plays after prepare()),
-//                    // buffering (plays when data available)
-//                    // or ended (plays when seek away from end)
-//                    Log.d("VIDEO", "onPlayerStateChanged: buffering")
-//                } else {
-//                    // player paused in any state
-//                    Log.d("VIDEO", "onPlayerStateChanged: paused")
-//                }
-
             }
         })
     }

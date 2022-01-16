@@ -371,18 +371,22 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
 //            )
         }
 
-        addGigerLayout.setOnClickListener {
+        addParticipantLayout.setOnClickListener {
 //            navigation.navigateTo("chats/contactsFragment", bundleOf(
 //                INTENT_EXTRA_RETURN_SELECTED_RESULTS to true
 //            ))
             ContactsFragment.launchForSelectingContact(childFragmentManager, this@UserAndGroupDetailsFragment)
         }
 
-        addContactFab.setOnClickListener {
+        addParticipantLayout.setOnClickListener {
 //            navigation.navigateTo("chats/contactsFragment", bundleOf(
 //                INTENT_EXTRA_RETURN_SELECTED_RESULTS to true
 //            ))
             ContactsFragment.launchForSelectingContact(childFragmentManager, this@UserAndGroupDetailsFragment)
+        }
+
+        activateGroupLayout.setOnClickListener {
+            viewModel.deactivateOrActivateGroup()
         }
 
         exitGroupLayout.setOnClickListener {
@@ -566,7 +570,8 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
         exitGroupLayout.gone()
         blockUserLayout.visible()
         muteNotificationsLayout.gone()
-        reportUserLayout.gone()
+        reportUserLayout.visible()
+        addParticipantLayout.gone()
     }
 
     private fun adjustUiAccToGroupChat() = viewBinding.apply{
@@ -574,6 +579,7 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
         blockUserLayout.gone()
         exitGroupLayout.visible()
         muteNotificationsLayout.gone()
+        addParticipantLayout.visible()
         reportUserLayout.gone()
     }
 
@@ -624,14 +630,22 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
 
                     overlayCardLayout.profileImg.loadImage(R.drawable.ic_user_white)
                 }
-
+                Log.d(TAG, "block: ${it.isUserBlocked}")
                 if (it.isUserBlocked) {
                     blockText.text = "Unblock"
+
                 } else {
                     blockText.text = "Block"
                 }
             })
 
+        chatViewModel.headerInfo.observe(viewLifecycleOwner, Observer {
+            if (it.isBlocked) {
+                blockText.text = "Unblock"
+            } else {
+                blockText.text = "Block"
+            }
+        })
         chatViewModel.messages.observe(viewLifecycleOwner, Observer {
 
             Log.d(TAG, "message: $it")
@@ -668,8 +682,8 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
 
     private fun showOneToOneMedia(mediaMessages: List<ChatMessage>) = viewBinding.apply{
         val chatMediaList = arrayListOf<GroupMedia>()
-
-        mediaMessages.forEach {
+        val filteredMedia = mediaMessages.filter { it.type != ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION }.filter { it.type != ChatConstants.MESSAGE_TYPE_TEXT }
+        filteredMedia.forEach {
             var media = GroupMedia(
                 id = it.id,
                 groupHeaderId = "",
@@ -861,26 +875,26 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
 
         if (isUserGroupManager) {
             if (content.groupDeactivated) {
-                addGigerLayout.isVisible = false
+                addParticipantLayout.isVisible = false
                 activateGroupLayout.isVisible = true
                 activateText.text = getString(R.string.activate_group_chat)
                 //group_deactivated_container.visible()
             } else {
                 activateText.text = getString(R.string.deactivate_group_chat)
-                addGigerLayout.isVisible = true
+                addParticipantLayout.isVisible = true
                 activateGroupLayout.isVisible = true
                 //group_deactivated_container.gone()
             }
         } else {
-            addGigerLayout.isVisible = false
-            activateText.isVisible = false
+            addParticipantLayout.isVisible = false
+            activateGroupLayout.isVisible = false
         }
 
-        if (content.groupDeactivated) {
-            activateGroupLayout.visible()
-        } else {
-            activateGroupLayout.gone()
-        }
+//        if (content.groupDeactivated) {
+//            activateGroupLayout.visible()
+//        } else {
+//            activateGroupLayout.gone()
+//        }
     }
 
 

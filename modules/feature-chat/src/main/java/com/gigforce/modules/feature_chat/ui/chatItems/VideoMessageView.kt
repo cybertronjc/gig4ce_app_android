@@ -62,6 +62,7 @@ abstract class VideoMessageView(
     private lateinit var attachmentUploadingDownloadingProgressBar: ProgressBar
     private lateinit var videoLength: TextView
     private lateinit var receivedStatusIV: ImageView
+    private lateinit var chatMessageText: TextView
 
     @Inject
     lateinit var navigation: INavigation
@@ -115,6 +116,7 @@ abstract class VideoMessageView(
             this.findViewById(R.id.attachment_downloading_pb)
         videoLength = this.findViewById(R.id.video_length_tv)
         receivedStatusIV = this.findViewById(R.id.tv_received_status)
+        chatMessageText = this.findViewById(R.id.chat_text)
     }
 
     override fun onBind(msg: ChatMessage) {
@@ -128,6 +130,7 @@ abstract class VideoMessageView(
             messageType == MessageType.GROUP_MESSAGE && type == MessageFlowType.IN
         senderNameTV.text = msg.senderInfo.name
 
+        chatMessageText.text = msg.content.toString() ?: ""
         loadThumbnail(msg)
 
         lifeCycleOwner?.let { it1 ->

@@ -5,14 +5,14 @@
     xmlns:tools="http://schemas.android.com/tools">
 <FrameLayout
     android:id="@+id/root_view"
-    android:layout_width="82dp"
-    android:layout_height="82dp"
+    android:layout_width="92dp"
+    android:layout_height="92dp"
     >
 
     <ImageView
         android:id="@+id/image_view"
-        android:layout_width="82dp"
-        android:layout_height="82dp"
+        android:layout_width="92dp"
+        android:layout_height="92dp"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -21,8 +21,8 @@
 
     <ImageView
         android:id="@+id/image_view_selection"
-        android:layout_width="82dp"
-        android:layout_height="82dp"
+        android:layout_width="92dp"
+        android:layout_height="92dp"
         android:layout_gravity="center"
         android:background="@drawable/background_alpha_dark"
         android:padding="16dp"

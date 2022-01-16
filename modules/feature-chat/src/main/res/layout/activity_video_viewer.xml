@@ -57,16 +57,13 @@
                 android:layout_height="match_parent"
                 app:cropGuidelines="off"
                 app:use_controller="false"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp" />
 
             <ImageView
                 android:id="@+id/play_button"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
+                android:layout_width="82dp"
+                android:layout_height="82dp"
+                android:padding="@dimen/size_16"
                 android:layout_gravity="center"
                 android:background="@drawable/play_button_background"
                 android:src="@drawable/ic_baseline_pause_24"/>

@@ -76,8 +76,7 @@
             android:layout_height="0dp"
             android:background="@color/colorWhite"
             android:visibility="visible"
-            android:layout_marginStart="@dimen/size_12"
-            android:layout_marginEnd="@dimen/size_12"
+            android:layout_marginEnd="@dimen/size_4"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraint_bottom_sheet_top" />

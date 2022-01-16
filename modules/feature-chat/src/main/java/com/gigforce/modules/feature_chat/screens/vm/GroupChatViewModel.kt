@@ -644,7 +644,7 @@ class GroupChatViewModel @Inject constructor(
                             videoInfo.thumbnail!!.config,
                             videoInfo.thumbnail!!.isMutable
                     )
-
+            Log.d(TAG, "text: $text")
             val message = ChatMessage(
                     id = UUID.randomUUID().toString(),
                     headerId = groupId,
@@ -1104,6 +1104,6 @@ class GroupChatViewModel @Inject constructor(
         _scrollToMessageId.value = null
     }
     companion object {
-        const val TAG: String = "GroupChatVM"
+        const val TAG: String = "Sending video"
     }
 }

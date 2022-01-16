@@ -296,20 +296,11 @@ class DazzleGallery : AppCompatActivity() {
         mImageUri = null
         galleryImageList.map { mediaModel ->
             if (mediaModel.isSelected) {
-                Log.d("MediaPicker", "mSelectedMedia: ${mediaModel.mMediaType} , ${mediaModel.mMediaUri}")
-                mPathList.add(
-                    getFileFromUri(
-                        contentResolver,
-                        mediaModel.mMediaUri!!,
-                        cacheDir
-                    ).path
-                )
+                //Log.d("MediaPicker", "mSelectedMedia: ${mediaModel.mMediaType} , ${mediaModel.mMediaUri}")
                 if (mediaModel.mMediaType == MEDIA_TYPE_IMAGE) {
-                    mPath.add(mediaModel.mMediaUri!!)
                     mImageUri = mediaModel.mMediaUri.toString()
                 }
                 if (mediaModel.mMediaType == 3) {
-                    mPath.add(mediaModel.mMediaUri!!)
                     mVideoUri = getFileFromUri(
                         contentResolver,
                         mediaModel.mMediaUri!!,
@@ -328,11 +319,13 @@ class DazzleGallery : AppCompatActivity() {
                     getImageCropOptions((true)))
             }
             mVideoUri != null -> {
-                val intent = Intent()
-                intent.putExtra(PICKED_MEDIA_URI, mVideoUri)
-                intent.putExtra(PICKED_MEDIA_TYPE, "video")
-                setResult(RESULT_OK, intent)
-                finish()
+                val photoCropIntent = Intent(this@DazzleGallery, VideoViewerActivity::class.java)
+                photoCropIntent.putExtra(VideoViewerActivity.INTENT_EXTRA_INCOMING_URI, mVideoUri.toString())
+                startActivityForResult(
+                    photoCropIntent,
+                    100
+                )
+
             }
             else -> {
                 Toast.makeText(this, "Select at least one media", Toast.LENGTH_SHORT).show()
@@ -470,6 +463,19 @@ class DazzleGallery : AppCompatActivity() {
                     val intent = Intent()
                     intent.putExtra(PICKED_MEDIA_URI, imageUriResultCrop.toString())
                     intent.putExtra(PICKED_MEDIA_TYPE, "image")
+                    setResult(Activity.RESULT_OK, intent)
+                    finish()
+                }
+            }
+            100 -> {
+                if (resultCode == Activity.RESULT_OK){
+                    val videoUri: Uri? = Uri.parse(data?.getStringExtra(VideoViewerActivity.INTENT_EXTRA_INCOMING_URI))
+                    val videoText: String = data?.getStringExtra(VideoViewerActivity.INTENT_EXTRA_TEXT) ?: ""
+                    Log.d("MediaPicker", "Video viewer: $videoUri")
+                    val intent = Intent()
+                    intent.putExtra(Dazzle.PICKED_MEDIA_URI, videoUri.toString())
+                    intent.putExtra(Dazzle.PICKED_MEDIA_TYPE, "video")
+                    intent.putExtra(Dazzle.PICKED_MEDIA_TEXT, videoText)
                     setResult(Activity.RESULT_OK, intent)
                     finish()
                 }

@@ -334,8 +334,12 @@ class ChatPageViewModel @Inject constructor(
                         setMessagesAsRead(unreadMessages)
                     }
 
+                    if (messages.isEmpty()) {
+                        _messages.postValue(emptyList())
+                    } else {
+                        _messages.postValue(messages)
+                    }
 
-                    _messages.postValue(messages)
                 }
             }
     }

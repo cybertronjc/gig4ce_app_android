@@ -582,11 +582,6 @@ class Dazzle : AppCompatActivity() {
 
                     mPathList.add(savedUri.toString())
 
-//                    val intent = Intent()
-//                    intent.putExtra(PICKED_MEDIA_URI, savedUri.toString())
-//                    intent.putExtra(PICKED_MEDIA_TYPE, "video")
-//                    setResult(Activity.RESULT_OK, intent)
-//                    finish()
                     val photoCropIntent = Intent(this@Dazzle, VideoViewerActivity::class.java)
                     photoCropIntent.putExtra(VideoViewerActivity.INTENT_EXTRA_INCOMING_URI, savedUri.toString())
                     startActivityForResult(
@@ -909,20 +904,14 @@ class Dazzle : AppCompatActivity() {
         mImageUri = null
         galleryImageList.map { mediaModel ->
             if (mediaModel.isSelected) {
-                Log.d("MediaPicker", "mSelectedMedia: ${mediaModel.mMediaType} , ${mediaModel.mMediaUri}")
-                mPathList.add(
-                    getFileFromUri(
-                        contentResolver,
-                        mediaModel.mMediaUri!!,
-                        cacheDir
-                    ).path
+                Log.d(
+                    "MediaPicker",
+                    "mSelectedMedia: ${mediaModel.mMediaType} , ${mediaModel.mMediaUri}"
                 )
                 if (mediaModel.mMediaType == MEDIA_TYPE_IMAGE) {
-                    mPath.add(mediaModel.mMediaUri!!)
                     mImageUri = mediaModel.mMediaUri.toString()
                 }
                 if (mediaModel.mMediaType == 3) {
-                    mPath.add(mediaModel.mMediaUri!!)
                     mVideoUri = getFileFromUri(
                         contentResolver,
                         mediaModel.mMediaUri!!,
@@ -937,46 +926,23 @@ class Dazzle : AppCompatActivity() {
         when {
             mDazzleOptions.cropEnabled && mImageUri != null -> {
                 Log.d("MediaPicker", "Going for cropping the image")
-                startCropImage(imageUri = Uri.parse(mImageUri),
-                    getImageCropOptions((true)))
+                startCropImage(
+                    imageUri = Uri.parse(mImageUri),
+                    getImageCropOptions((true))
+                )
             }
             mVideoUri != null -> {
-                val intent = Intent()
-                intent.putExtra(DazzleGallery.PICKED_MEDIA_URI, mVideoUri)
-                intent.putExtra(DazzleGallery.PICKED_MEDIA_TYPE, "video")
-                setResult(RESULT_OK, intent)
-                finish()
+                val photoCropIntent = Intent(this@Dazzle, VideoViewerActivity::class.java)
+                photoCropIntent.putExtra(VideoViewerActivity.INTENT_EXTRA_INCOMING_URI, mVideoUri.toString())
+                startActivityForResult(
+                    photoCropIntent,
+                    100
+                )
             }
             else -> {
                 Toast.makeText(this, "Select at least one media", Toast.LENGTH_SHORT).show()
             }
         }
-//        galleryImageList.map { mediaModel ->
-//            if (mediaModel.isSelected) {
-//                mPathList.add(
-//                    getFileFromUri(
-//                        contentResolver,
-//                        mediaModel.mMediaUri!!,
-//                        cacheDir
-//                    ).path
-//                )
-//                if (mediaModel.mMediaType == MEDIA_TYPE_IMAGE) {
-//                    mPath.add(mediaModel.mMediaUri!!)
-//                }
-//            }
-//        }
-//
-//        if (mDazzleOptions.cropEnabled && mPath.size == 1) {
-//            startCropImage(
-//                imageUri = mPath[0],
-//                getImageCropOptions((true))
-//            )
-//        } else {
-//            val intent = Intent()
-//            intent.putExtra(PICKED_MEDIA_URI, mPath[0])
-//            setResult(RESULT_OK, intent)
-//            finish()
-//        }
     }
 
     override fun onBackPressed() {

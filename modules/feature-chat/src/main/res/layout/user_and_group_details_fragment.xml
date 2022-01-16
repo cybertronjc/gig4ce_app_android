@@ -15,9 +15,9 @@
             app:layout_constraintStart_toStartOf="parent">
             <ImageView
                 android:id="@+id/back_button_details"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:padding="@dimen/size_8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/size_6"
                 android:background="?android:selectableItemBackground"
                 android:src="@drawable/ic_chevron"
                 android:layout_marginStart="@dimen/size_20"
@@ -204,7 +204,6 @@
                     android:elevation="@dimen/size_4"
                     android:layout_marginStart="@dimen/size_20"
                     android:layout_marginEnd="@dimen/size_20"
-                    android:layout_marginBottom="@dimen/size_20"
                     android:background="@drawable/chat_settings_layout_shadow_background"
                     android:layout_marginTop="@dimen/size_24">
 
@@ -215,7 +214,7 @@
                         android:layout_marginStart="@dimen/size_20"
                         android:layout_marginTop="@dimen/size_10"
                         android:layout_marginBottom="@dimen/size_10"
-                        android:src="@drawable/ic_exit_group_icon"
+                        android:src="@drawable/ic_group_exit_icon"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"/>
@@ -248,6 +247,46 @@
                         app:layout_constraintEnd_toEndOf="parent"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/add_participant_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:elevation="@dimen/size_4"
+                    android:layout_marginStart="@dimen/size_20"
+                    android:layout_marginEnd="@dimen/size_20"
+                    android:background="@drawable/chat_settings_layout_shadow_background"
+                    android:layout_marginTop="@dimen/size_20">
+
+                    <ImageView
+                        android:id="@+id/add_participant_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/size_20"
+                        android:layout_marginTop="@dimen/size_10"
+                        android:layout_marginBottom="@dimen/size_10"
+                        android:src="@drawable/ic_group_add_participant"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+
+                    <TextView
+                        android:id="@+id/add_participant"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/lato"
+                        android:textFontWeight="400"
+                        android:textSize="@dimen/font_12"
+                        android:textColor="#202325"
+                        android:layout_marginStart="@dimen/size_20"
+                        android:layout_marginTop="@dimen/size_10"
+                        android:layout_marginBottom="@dimen/size_10"
+                        android:text="@string/add_participant_chat"
+                        android:textAppearance="@style/body_primary_2"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/add_participant_icon"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/membersLayout"
@@ -272,49 +311,6 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"/>
 
-                    <LinearLayout
-                        android:id="@+id/add_giger_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:layout_marginEnd="16dp"
-                        android:clickable="true"
-                        android:background="?android:selectableItemBackground"
-                        android:focusable="true"
-                        android:gravity="center_vertical"
-                        android:minHeight="35dp"
-                        android:orientation="horizontal"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
-                        app:layout_constraintStart_toStartOf="@id/participants_count"
-                        app:layout_constraintTop_toBottomOf="@id/participants_count">
-
-                        <com.google.android.material.floatingactionbutton.FloatingActionButton
-                            android:id="@+id/add_contact_fab"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:backgroundTint="@color/colorPrimary"
-                            android:src="@drawable/ic_baseline_add_24"
-                            android:textSize="20sp"
-                            android:layout_marginStart="20dp"
-                            app:borderWidth="0dp"
-                            app:elevation="0dp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/search_gigers_layout"
-                            app:tint="@android:color/white" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:fontFamily="@font/lato"
-                            android:lineHeight="17sp"
-                            android:text="@string/add_new_giger_chat"
-                            android:textColor="@android:color/black"
-                            android:textSize="14sp"
-                            android:textStyle="normal" />
-
-                    </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/membersLinearLayout"
@@ -323,7 +319,7 @@
                         android:orientation="vertical"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/add_giger_layout">
+                        app:layout_constraintTop_toBottomOf="@id/participants_count">
 
                     </LinearLayout>
 
@@ -348,7 +344,7 @@
                         android:layout_marginStart="@dimen/size_20"
                         android:layout_marginTop="@dimen/size_10"
                         android:layout_marginBottom="@dimen/size_10"
-                        android:src="@drawable/ic_exit_group_icon"
+                        android:src="@drawable/ic_group_exit_icon"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"/>
@@ -390,7 +386,7 @@
                         android:layout_marginStart="@dimen/size_20"
                         android:layout_marginTop="@dimen/size_10"
                         android:layout_marginBottom="@dimen/size_10"
-                        android:src="@drawable/ic_exit_group_icon"
+                        android:src="@drawable/ic_group_exit_icon"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"/>
@@ -420,7 +416,6 @@
                     android:elevation="@dimen/size_4"
                     android:layout_marginStart="@dimen/size_20"
                     android:layout_marginEnd="@dimen/size_20"
-                    android:layout_marginBottom="@dimen/size_20"
                     android:background="@drawable/chat_settings_layout_shadow_background"
                     android:layout_marginTop="@dimen/size_24">
 
@@ -461,7 +456,7 @@
                     android:elevation="@dimen/size_4"
                     android:layout_marginStart="@dimen/size_20"
                     android:layout_marginEnd="@dimen/size_20"
-                    android:layout_marginBottom="@dimen/size_20"
+                    android:layout_marginBottom="@dimen/size_8"
                     android:background="@drawable/chat_settings_layout_shadow_background"
                     android:layout_marginTop="@dimen/size_24">
 

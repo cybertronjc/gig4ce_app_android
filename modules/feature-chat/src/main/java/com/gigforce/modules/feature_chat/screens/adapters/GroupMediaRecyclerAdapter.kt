@@ -110,6 +110,8 @@ class GroupMediaRecyclerAdapter(
                 )
             val fileHasBeenDownloaded = downloadedFile != null
 
+            Log.d("typeAdapter", "type : ${groupMedia.attachmentType}")
+
             if (fileHasBeenDownloaded) {
                 itemsDownloading.remove(groupMedia)
                 attachmentDownloadingProgressBar.gone()
@@ -217,7 +219,7 @@ class GroupMediaRecyclerAdapter(
                         requestManager.load(R.drawable.ic_download_24).into(playDownloadIconIV)
                     }
                 } else if ((groupMedia.attachmentType == ChatConstants.ATTACHMENT_TYPE_AUDIO) || (groupMedia.attachmentType == ChatConstants.MESSAGE_TYPE_TEXT_WITH_AUDIO)){
-                    Log.d("typeAdapter", "type : ${groupMedia.attachmentType}")
+                    //Log.d("typeAdapter", "type : ${groupMedia.attachmentType}")
                     //Need work
                     thumbnailIV.loadImage(R.drawable.ic_audio_attachment)
 
@@ -306,7 +308,7 @@ class GroupMediaRecyclerAdapter(
 
             }
 
-            throw IllegalArgumentException("other types not supperted yet")
+            return null
         }
 
         override fun onClick(v: View?) {
