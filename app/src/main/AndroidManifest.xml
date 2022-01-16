@@ -113,6 +113,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name="com.gigforce.modules.feature_chat.mediapicker.DazzleGallery"
             android:screenOrientation="portrait" />
+        <activity android:name="com.gigforce.modules.feature_chat.mediapicker.VideoViewerActivity"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name="com.gigforce.giger_gigs.captureimage.AttendanceImageCaptureActivity"

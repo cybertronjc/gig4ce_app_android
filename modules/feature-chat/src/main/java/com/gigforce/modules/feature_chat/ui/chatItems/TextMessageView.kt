@@ -233,9 +233,9 @@ abstract class TextMessageView(
     }
 
     private fun blinkLayout(){
-        frameLayoutRoot.foreground = resources.getDrawable(R.drawable.selected_chat_foreground)
+        frameLayoutRoot.background = resources.getDrawable(R.drawable.selected_chat_foreground)
         Handler(Looper.getMainLooper()).postDelayed({
-                 frameLayoutRoot.foreground = null
+                 frameLayoutRoot.background = null
                  if (messageType == MessageType.GROUP_MESSAGE){
                      groupChatViewModel.setScrollToMessageNull()
                  } else {

@@ -156,7 +156,7 @@
     <string name="exit_group_chat">Exit Group</string>
     <string name="report_one_chat">Report</string>
     <string name="exit_group_message_chat">Are you sure you want to exit this group? </string>
-
+    <string name="delivered_on_chat">Delivered on</string>
 
     <string name="picker_bottom_message_with_video">Hold for video, tap for photo</string>
     <string name="recent">Recent</string>

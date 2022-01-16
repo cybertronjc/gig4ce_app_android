@@ -35,6 +35,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.collections.ArrayList
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -207,6 +208,28 @@ class ChatGroupRepository @Inject constructor(
             id = groupId
             setUpdatedAtAndBy(getUID())
         }
+    }
+
+    suspend fun getGroupDetailsSnapshot(groupId: String): ChatGroup? {
+        var chatGroup: ChatGroup? = null
+        getGroupDetailsRef(groupId).addSnapshotListener { snapshot, error ->
+            if (error != null) {
+                Log.w(TAG, "Group Listen failed.", error)
+                return@addSnapshotListener
+            }
+
+            if (snapshot != null && snapshot.exists()) {
+                Log.d(TAG, "Group Current data: ${snapshot.data}")
+                chatGroup =  snapshot.toObject(ChatGroup::class.java)!!.apply {
+                    id = groupId
+                    setUpdatedAtAndBy(getUID())
+                }
+            } else {
+                Log.d(TAG, "Group Current data: null")
+            }
+        }
+
+        return chatGroup
     }
 
     suspend fun sendTextMessage(
@@ -794,26 +817,105 @@ class ChatGroupRepository @Inject constructor(
             )
     }
 
-    private var currentBatchSize = 0
-    private val mutex = Mutex()
-    private var batch = db.batch()
-
-    suspend fun markMessagesAsRead(
+    suspend fun markMessagesAsDelivered(
         groupId: String,
-        messageWithNotReceivedStatus: List<ChatMessage>
-    ) = mutex.withLock {
+        notDeliveredMsgs: List<ChatMessage>
+    ) {
         val groupMessagesCollectionRef = groupMessagesRef(groupId)
+        val groupMessages = groupMessagesRef(groupId).getOrThrow()
 
         val currentUserModel = createContactModelsForCurrentUser()
         val receivingObject = MessageReceivingInfo(
             uid = currentUser.uid,
             profileName = currentUserModel.name ?: "",
-            profilePicture = currentUserModel.getUserProfileImageUrlOrPath() ?: ""
-        )
+            profilePicture = currentUserModel.getUserProfileImageUrlOrPath() ?: "",
+            deliveredOn = Timestamp.now()
 
+        )
+        notDeliveredMsgs.forEach { obj ->
+            if (obj?.groupMessageDeliveredTo?.isEmpty()){
+                Log.d(TAG, "Doesn't have anything deliver:")
+                val messageRef = groupMessagesCollectionRef.document(obj?.id)
+                messageRef.update(
+                    mapOf(
+                        "groupMessageDeliveredTo" to FieldValue.arrayUnion(receivingObject),
+                        "updatedAt" to Timestamp.now(),
+                        "updatedBy" to FirebaseAuthStateListener.getInstance()
+                            .getCurrentSignInUserInfoOrThrow().uid
+                    )
+                )
+                Log.d(TAG, "Update success deliver:")
+            } else {
+                val batch1 = db.batch()
+                obj?.groupMessageDeliveredTo?.forEach { info ->
+                    if (info.uid != currentUser.uid) {
+                        Log.d(TAG, "Doesn't have uid deliver: ${info.uid}")
+                        val messageRef = groupMessagesCollectionRef.document(obj?.id)
+
+                        batch1.update(
+                            messageRef,
+                            mapOf(
+                                "groupMessageReadBy" to FieldValue.arrayUnion(receivingObject),
+                                "updatedAt" to Timestamp.now(),
+                                "updatedBy" to FirebaseAuthStateListener.getInstance()
+                                    .getCurrentSignInUserInfoOrThrow().uid
+                            )
+                        )
+//                        db.runTransaction { transaction ->
+//                            val snapshot = transaction.get(messageRef)
+//                            val message = snapshot.toObject(ChatMessage::class.java)
+//                            message?.id = snapshot.id
+//                            //check if the snapshot has current receiving object
+//                            transaction.update(
+//                                messageRef,
+//                                mapOf(
+//                                    "groupMessageDeliveredTo" to FieldValue.arrayUnion(
+//                                        receivingObject
+//                                    ),
+//                                    "updatedAt" to Timestamp.now(),
+//                                    "updatedBy" to FirebaseAuthStateListener.getInstance()
+//                                        .getCurrentSignInUserInfoOrThrow().uid
+//                                )
+//                            )
+//                        }.addOnSuccessListener { result ->
+//                            Log.d(TAG, "Transaction success deliver: $result")
+//                            return@addOnSuccessListener
+//                        }.addOnFailureListener { e ->
+//                            Log.w(TAG, "Transaction failure deliver", e)
+//                        }
+                    }
+                }
+
+                batch1.commitOrThrow()
+            }
+        }
+
+
+    }
+
+    private var currentBatchSize = 0
+    private val mutex = Mutex()
+    private var batch = db.batch()
+    private var readByList: ArrayList<MessageReceivingInfo>? =  null
+    suspend fun markMessagesAsRead(
+        groupId: String,
+        messageWithNotReceivedStatus: List<ChatMessage>
+    ) {
+        //WIP
+        val groupMessagesCollectionRef = groupMessagesRef(groupId)
+        //val taskDone
+        val currentUserModel = createContactModelsForCurrentUser()
+        val receivingObject = MessageReceivingInfo(
+            uid = currentUser.uid,
+            profileName = currentUserModel.name ?: "",
+            profilePicture = currentUserModel.getUserProfileImageUrlOrPath() ?: "",
+            readOn = Timestamp.now()
+        )
+        Log.d(TAG, "messagesNotReceived : ${messageWithNotReceivedStatus.size}")
+        val batch1 = db.batch()
         messageWithNotReceivedStatus.forEach {
             val messageRef = groupMessagesCollectionRef.document(it.id)
-            batch.update(
+            batch1.update(
                 messageRef,
                 mapOf(
                     "groupMessageReadBy" to FieldValue.arrayUnion(receivingObject),
@@ -822,12 +924,39 @@ class ChatGroupRepository @Inject constructor(
                         .getCurrentSignInUserInfoOrThrow().uid
                 )
             )
-            checkBatchForOverFlowAndCommit()
+//            db.runTransaction { transaction ->
+//                val snapshot = transaction.get(messageRef)
+//                val message = snapshot.toObject(ChatMessage::class.java)
+//                message?.id = snapshot.id
+//                //check if the snapshot has current receiving object
+//                transaction.update(
+//                    messageRef,
+//                    mapOf(
+//                        "groupMessageReadBy" to FieldValue.arrayRemove(receivingObject),
+//                        "updatedAt" to Timestamp.now(),
+//                        "updatedBy" to FirebaseAuthStateListener.getInstance()
+//                            .getCurrentSignInUserInfoOrThrow().uid
+//                    )
+//                )
+//                transaction.update(
+//                    messageRef,
+//                    mapOf(
+//                        "groupMessageReadBy" to FieldValue.arrayUnion(receivingObject),
+//                        "updatedAt" to Timestamp.now(),
+//                        "updatedBy" to FirebaseAuthStateListener.getInstance()
+//                            .getCurrentSignInUserInfoOrThrow().uid
+//                    )
+//                )
+//            }.addOnSuccessListener { result ->
+//                Log.d(TAG, "Transaction success: $result")
+//                return@addOnSuccessListener
+//            }.addOnFailureListener { e ->
+//                Log.w(TAG, "Transaction failure.", e)
+//            }
+
         }
 
-        if (currentBatchSize != 0) {
-            batch.commitOrThrow()
-        }
+        batch1.commitOrThrow()
     }
 
     private suspend fun checkBatchForOverFlowAndCommit() {

@@ -2,11 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.gigforce.modules.feature_chat">
 
-
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <application>
 
-        <activity android:name=".screens.CaptureLocationActivity"/>
+    <application>
+        <activity
+            android:name=".mediapicker.VideoViewerActivity"
+            android:exported="false" />
+        <activity android:name=".screens.CaptureLocationActivity" />
     </application>
 
 </manifest>

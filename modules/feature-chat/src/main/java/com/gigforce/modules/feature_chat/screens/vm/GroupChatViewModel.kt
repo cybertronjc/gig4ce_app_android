@@ -322,7 +322,9 @@ class GroupChatViewModel @Inject constructor(
                         }
                     }?.toMutableList()
 
-                    checkForRecevinginfoElseMarkMessageAsReceived(grpMessages!!)
+                        //checkForRecevinginfoElseMarkMessageAsReceived(grpMessages!!)
+
+
 
                     if (userContacts != null) {
                         compareGroupMessagesWithContactsAndEmit()
@@ -360,21 +362,39 @@ class GroupChatViewModel @Inject constructor(
     }
 
     private fun checkForRecevinginfoElseMarkMessageAsReceived(
-            grpMessages: MutableList<ChatMessage>
+            msgs: MutableList<ChatMessage>
     ) = viewModelScope.launch {
-        val messageWithNotReceivedStatus = grpMessages.filter { msg ->
-            msg.groupMessageReadBy.find { it.uid == currentUser.uid } == null
+        val messageWithNotReceivedStatus = msgs.filter { msg ->
+            msg.groupMessageReadBy.find { it.uid == currentUser.uid }  == null
         }
 
+        val messageWithNotDeliveredStatus = msgs.filter { msg ->
+            msg.groupMessageDeliveredTo.find { it.uid == currentUser.uid }  == null
+        }
 
-        try {
-            chatGroupRepository.markMessagesAsRead(
+//        if (messageWithNotReceivedStatus.isNotEmpty()){
+//                try {
+//                    chatGroupRepository.markMessagesAsRead(
+//                        groupId,
+//                        messageWithNotReceivedStatus
+//                    )
+//                } catch (e: Exception) {
+//                    e.printStackTrace()
+//                }
+//
+//        }
+
+        if (messageWithNotDeliveredStatus.isNotEmpty()){
+            try {
+                chatGroupRepository.markMessagesAsDelivered(
                     groupId,
-                    messageWithNotReceivedStatus
-            )
-        } catch (e: Exception) {
-            e.printStackTrace()
+                    messageWithNotDeliveredStatus
+                )
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
+
     }
 
 
@@ -986,17 +1006,23 @@ class GroupChatViewModel @Inject constructor(
                     ?: throw IllegalStateException("no chat message found, for group id $groupId message: $messageId")
             val messageReadByUsers = chatMessage.groupMessageReadBy.filter {
                 it.uid != currentUser.uid
-            }
+            }.distinctBy { it.uid }
 
-            val totalUsersCount = chatGroup.groupMembers
-                    .filter { it.uid != currentUser.uid }
-                    .count()
+            val messageDeliveredToUsers = chatMessage.groupMessageDeliveredTo.filter {
+                it.uid != currentUser.uid
+            }.distinctBy { it.uid }
 
-            _messageReadingInfo.value = MessageReceivingAndReadingInfo(
-                    totalMembers = totalUsersCount,
-                    receivingInfo = emptyList(),
+            val totalUsersCount = chatGroup?.groupMembers
+                    ?.filter { it.uid != currentUser.uid }?.distinctBy { it.uid }
+                    ?.count()
+
+            _messageReadingInfo.value = totalUsersCount?.let {
+                MessageReceivingAndReadingInfo(
+                    totalMembers = it,
+                    receivingInfo = messageDeliveredToUsers,
                     readingInfo = messageReadByUsers
-            )
+                )
+            }
         } catch (e: Exception) {
             CrashlyticsLogger.e(
                     TAG,

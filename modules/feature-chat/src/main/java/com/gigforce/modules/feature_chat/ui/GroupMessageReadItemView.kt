@@ -42,7 +42,7 @@ class GroupMessageReadItemView(
     init {
 
         LayoutInflater.from(context).inflate(R.layout.recycler_item_group_message_received_by, this, true)
-        this.findViewById<View>(R.id.contactItemRoot).setOnClickListener(this)
+        this.findViewById<View>(R.id.txt_contact_item).setOnClickListener(this)
 
         findViews()
     }
@@ -68,7 +68,17 @@ class GroupMessageReadItemView(
                 } else {
                     contextImageView.loadImage(R.drawable.ic_user_2)
                 }
-                txtSubtitle.text = context.getString(R.string.read_on_chat) + " " + formatDate(chatHeader.readOn)
+
+                if (chatHeader.readOn != null){
+                    txtSubtitle.text = context.getString(R.string.read_on_chat) + " " + formatDate(
+                        chatHeader.readOn!!
+                    )
+                } else if (chatHeader.deliveredOn != null){
+                    txtSubtitle.text = context.getString(R.string.delivered_on_chat) + " " + formatDate(
+                        chatHeader.deliveredOn!!
+                    )
+                }
+
             }
         }
     }

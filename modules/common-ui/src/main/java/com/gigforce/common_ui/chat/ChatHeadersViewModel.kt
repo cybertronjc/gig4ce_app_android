@@ -5,8 +5,11 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.chat.models.ChatHeader
 import com.gigforce.common_ui.chat.models.ChatListItemDataObject
+import com.gigforce.common_ui.chat.models.ChatMessage
+import com.gigforce.core.extensions.getOrThrow
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
@@ -18,7 +21,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ChatHeadersViewModel @Inject constructor(
-    private val chatRepository: ChatRepository
+    private val chatRepository: ChatRepository,
+    private val chatGroupRepository: ChatGroupRepository
 ) : ViewModel() {
 
     private var _chatHeaders: MutableLiveData<List<ChatHeader>> = MutableLiveData()
@@ -82,12 +86,50 @@ class ChatHeadersViewModel @Inject constructor(
                                     chatHeader.id,
                                     chatHeader.otherUserId
                                 )
+                            } else if (chatHeader.chatType == ChatConstants.CHAT_TYPE_GROUP) {
+                                //set messages as delivered for group chat
+                                setMessagesAsDeliveredForGroupChat(chatHeader.groupId)
                             }
                         }
                     }
                     _unreadMessageCount.postValue(unreadMessageCount)
                 }
             }
+    }
+
+    private fun setMessagesAsDeliveredForGroupChat(
+        groupId: String
+    ) = viewModelScope.launch{
+        try {
+            Log.d("ChatHeaderViewModel","setting message as delivered of group :$groupId")
+
+            var getGroupMessagesQuery = chatGroupRepository
+                .groupMessagesRef(groupId)
+                .orderBy("timestamp", Query.Direction.ASCENDING)
+
+//            if (limitToTimeStamp != null) {
+//                getGroupMessagesQuery = getGroupMessagesQuery.whereLessThan("timestamp", limitToTimeStamp)
+//            }
+
+            val objs = getGroupMessagesQuery.getOrThrow().documents.map { doc ->
+                doc.toObject(ChatMessage::class.java)!!.also {
+                    it.id = doc.id
+                    it.chatType = ChatConstants.CHAT_TYPE_GROUP
+                    it.groupId = groupId
+                }
+
+            }
+            val messageWithNotReceivedStatus = objs.filter { msg ->
+                msg.groupMessageDeliveredTo.find { it.uid == uid }  == null
+            }
+            if (messageWithNotReceivedStatus.isNotEmpty()){
+                chatGroupRepository.markMessagesAsDelivered(groupId, messageWithNotReceivedStatus)
+            }
+
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     private fun setMessagesAsDeliveredForChat(

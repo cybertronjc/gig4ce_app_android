@@ -65,6 +65,7 @@ import com.gigforce.core.*
 import com.gigforce.modules.feature_chat.analytics.CommunityEvents
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.modules.feature_chat.mediapicker.Dazzle
+import com.gigforce.modules.feature_chat.mediapicker.Dazzle.Companion.PICKED_MEDIA_TEXT
 import com.gigforce.modules.feature_chat.mediapicker.Dazzle.Companion.PICKED_MEDIA_TYPE
 import com.gigforce.modules.feature_chat.mediapicker.Dazzle.Companion.PICKED_MEDIA_URI
 import com.gigforce.modules.feature_chat.mediapicker.Dazzle.Companion.REQUEST_CODE_PICKER
@@ -532,8 +533,8 @@ class ChatPageFragment : Fragment(),
 
         })
 
-        chatRecyclerView.visible()
-        shimmerContainer.gone()
+//        chatRecyclerView.visible()
+//        shimmerContainer.gone()
 
     }
 
@@ -1476,6 +1477,7 @@ class ChatPageFragment : Fragment(),
                     //check if the media is image or video
                     val mediaUri = data?.getStringExtra(PICKED_MEDIA_URI) ?: ""
                     val mediaType = data?.getStringExtra(PICKED_MEDIA_TYPE) ?: ""
+                    val mediaText = data?.getStringExtra(PICKED_MEDIA_TEXT) ?: ""
                     Log.d("MediaPicker", "uri: $mediaUri , type: $mediaType")
 
                     if (mediaType.isNotBlank() && mediaType == "image"){
@@ -1483,7 +1485,7 @@ class ChatPageFragment : Fragment(),
                     }
 
                     if (mediaType.isNotBlank() && mediaType == "video"){
-                        sendVideoMessage(Uri.parse(mediaUri), "")
+                        sendVideoMessage(Uri.parse(mediaUri), mediaText)
                     }
 
                 }

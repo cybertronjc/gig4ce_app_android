@@ -582,11 +582,17 @@ class Dazzle : AppCompatActivity() {
 
                     mPathList.add(savedUri.toString())
 
-                    val intent = Intent()
-                    intent.putExtra(PICKED_MEDIA_URI, savedUri.toString())
-                    intent.putExtra(PICKED_MEDIA_TYPE, "video")
-                    setResult(Activity.RESULT_OK, intent)
-                    finish()
+//                    val intent = Intent()
+//                    intent.putExtra(PICKED_MEDIA_URI, savedUri.toString())
+//                    intent.putExtra(PICKED_MEDIA_TYPE, "video")
+//                    setResult(Activity.RESULT_OK, intent)
+//                    finish()
+                    val photoCropIntent = Intent(this@Dazzle, VideoViewerActivity::class.java)
+                    photoCropIntent.putExtra(VideoViewerActivity.INTENT_EXTRA_INCOMING_URI, savedUri.toString())
+                    startActivityForResult(
+                        photoCropIntent,
+                        100
+                    )
 
                     isTakingVideo = false
                 }
@@ -1031,6 +1037,20 @@ class Dazzle : AppCompatActivity() {
                     finish()
                 }
             }
+
+            100 -> {
+                if (resultCode == Activity.RESULT_OK){
+                    val videoUri: Uri? = Uri.parse(data?.getStringExtra(VideoViewerActivity.INTENT_EXTRA_INCOMING_URI))
+                    val videoText: String = data?.getStringExtra(VideoViewerActivity.INTENT_EXTRA_TEXT) ?: ""
+                    Log.d("MediaPicker", "Video viewer: $videoUri")
+                    val intent = Intent()
+                    intent.putExtra(PICKED_MEDIA_URI, videoUri.toString())
+                    intent.putExtra(PICKED_MEDIA_TYPE, "video")
+                    intent.putExtra(PICKED_MEDIA_TEXT, videoText)
+                    setResult(Activity.RESULT_OK, intent)
+                    finish()
+                }
+            }
         }
     }
 
@@ -1081,6 +1101,7 @@ class Dazzle : AppCompatActivity() {
         const val PICKER_OPTIONS = "PICKER_OPTIONS"
         const val PICKED_MEDIA_URI = "PICKED_MEDIA_URI"
         const val PICKED_MEDIA_TYPE = "PICKED_MEDIA_TYPE"
+        const val PICKED_MEDIA_TEXT = "PICKED_MEDIA_TEXT"
         const val REQUEST_CAPTURE_IMAGE = 101
         const val REQUEST_PICK_IMAGE = 102
         const val REQUEST_CROP = 69

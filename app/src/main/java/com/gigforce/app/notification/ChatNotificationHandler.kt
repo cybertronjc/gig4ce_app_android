@@ -2,6 +2,7 @@ package com.gigforce.app.notification
 
 import android.app.Notification
 import android.app.PendingIntent
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -79,7 +80,7 @@ class ChatNotificationHandler constructor(
         val notificationBuilder =
                 NotificationCompat.Builder(context, NotificationChannels.CHANNEL_CHAT_ID)
                         .setSmallIcon(R.drawable.ic_notification_icon)
-                        .setColor(Color.parseColor("#D72467"))
+                        .setColor(Color.parseColor("#000000"))
                         .setStyle(
                                 NotificationCompat
                                         .MessagingStyle(person)
@@ -207,13 +208,14 @@ class ChatNotificationHandler constructor(
 
                         )
                         .setAutoCancel(true)
-                       .setSound(Uri.parse("android.resource://"+context.getPackageName()+"/" + R.raw.notification_cave))
+                       .setSound(Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + context.packageName +"/" + R.raw.notification_cave))
                         //.setSound(context.assets.open("notification_cave.mp3"))
 //                        .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
                         .setOnlyAlertOnce(true)
                         .setVibrate(longArrayOf(100, 200, 300, 400, 500, 400))
 
         Log.d("ChatImage", fullImagePath)
+        Log.d("GroupNotification", "notifi data  person: ${person.name} , msg: $message , type: $messageType ")
         var imageBitmap: Bitmap? = null
         if (fullImagePath.isNotBlank()) {
             imageBitmap = getBitmapFromURL(fullImagePath)
