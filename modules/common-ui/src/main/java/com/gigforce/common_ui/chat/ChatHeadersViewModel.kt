@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.chat.models.ChatHeader
 import com.gigforce.common_ui.chat.models.ChatListItemDataObject
 import com.gigforce.common_ui.chat.models.ChatMessage
+import com.gigforce.common_ui.chat.models.MessageReceivingInfo
 import com.gigforce.core.extensions.getOrThrow
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -103,27 +104,28 @@ class ChatHeadersViewModel @Inject constructor(
         try {
             Log.d("ChatHeaderViewModel","setting message as delivered of group :$groupId")
 
-            var getGroupMessagesQuery = chatGroupRepository
-                .groupMessagesRef(groupId)
-                .orderBy("timestamp", Query.Direction.ASCENDING)
-
-//            if (limitToTimeStamp != null) {
-//                getGroupMessagesQuery = getGroupMessagesQuery.whereLessThan("timestamp", limitToTimeStamp)
+//            var getGroupMessagesQuery = chatGroupRepository
+//                .groupMessagesRef(groupId)
+//                .orderBy("timestamp", Query.Direction.ASCENDING)
+//
+//            val objs = getGroupMessagesQuery.getOrThrow().documents.map { doc ->
+//                doc.toObject(ChatMessage::class.java)!!.also {
+//                    it.id = doc.id
+//                    it.chatType = ChatConstants.CHAT_TYPE_GROUP
+//                    it.groupId = groupId
+//                }
+//
 //            }
-
-            val objs = getGroupMessagesQuery.getOrThrow().documents.map { doc ->
-                doc.toObject(ChatMessage::class.java)!!.also {
-                    it.id = doc.id
-                    it.chatType = ChatConstants.CHAT_TYPE_GROUP
-                    it.groupId = groupId
+            val objs = chatGroupRepository.getGroupMessages(groupId)
+            val messageWithNotDeliveredStatus = arrayListOf<String>()
+            objs.forEach { it1 ->
+                val chatMessageDeliveredTo = chatGroupRepository.getMessageDeliveredInfo(groupId, it1.id)
+                if (chatMessageDeliveredTo.isEmpty()){
+                    messageWithNotDeliveredStatus.add(it1.id)
                 }
-
             }
-            val messageWithNotReceivedStatus = objs.filter { msg ->
-                msg.groupMessageDeliveredTo.find { it.uid == uid }  == null
-            }
-            if (messageWithNotReceivedStatus.isNotEmpty()){
-                chatGroupRepository.markMessagesAsDelivered(groupId, messageWithNotReceivedStatus)
+            if (messageWithNotDeliveredStatus.isNotEmpty()){
+                chatGroupRepository.markAsDelivered(groupId, messageWithNotDeliveredStatus)
             }
 
 
