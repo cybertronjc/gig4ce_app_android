@@ -61,7 +61,19 @@
                 </com.google.android.material.tabs.TabLayout>
             </LinearLayout>
 
-
+            <TextView
+                android:id="@+id/no_media_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato"
+                android:textFontWeight="400"
+                android:textSize="@dimen/font_12"
+                android:layout_marginTop="@dimen/size_100"
+                android:textColor="@color/black"
+                android:visibility="gone"
+                android:layout_gravity="center"
+                android:text="@string/no_media_found_chat"
+                android:textAppearance="@style/body_primary_2" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/mediaImagesVideos_recyclerview"
