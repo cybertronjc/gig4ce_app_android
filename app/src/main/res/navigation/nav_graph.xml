@@ -317,6 +317,10 @@
         android:id="@+id/chooseYourVaccineFragment"
         android:name="com.gigforce.verification.mainverification.vaccine.views.ChooseYourVaccineFragment"/>
 
+    <fragment
+        android:id="@+id/CovidCertificateStatusFragment"
+        android:name="com.gigforce.verification.mainverification.vaccine.views.CovidCertificateStatusFragment"/>
+
     <dialog
         android:id="@+id/editEducationBottomSheet"
         android:name="com.gigforce.app.modules.profile.EditEducationBottomSheet"

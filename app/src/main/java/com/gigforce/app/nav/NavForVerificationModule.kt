@@ -41,6 +41,8 @@ class NavForVerificationModule(
         baseImplementation.registerRoute("${moduleName}/chooseYourVaccineFragment",R.id.chooseYourVaccineFragment)
         baseImplementation.registerRoute("${moduleName}/GetVaccinateFirstBS",R.id.GetVaccinateFirstBS)
         baseImplementation.registerRoute("${moduleName}/CovidVaccinationCertificateFragment",R.id.CovidVaccinationCertificateFragment)
+        baseImplementation.registerRoute("${moduleName}/CovidCertificateStatusFragment",R.id.CovidCertificateStatusFragment)
+
 
 
     }

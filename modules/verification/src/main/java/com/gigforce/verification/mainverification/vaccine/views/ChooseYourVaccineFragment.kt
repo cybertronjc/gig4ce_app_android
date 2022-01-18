@@ -26,6 +26,7 @@ import com.gigforce.core.logger.GigforceLogger
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.Lce
 import com.gigforce.verification.R
+import com.gigforce.verification.mainverification.vaccine.VaccineViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_choose_your_vaccine.*
 import okhttp3.MediaType
