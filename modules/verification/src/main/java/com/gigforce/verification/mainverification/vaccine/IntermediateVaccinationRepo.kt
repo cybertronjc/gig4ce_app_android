@@ -13,7 +13,7 @@ class IntermediateVaccinationRepo @Inject constructor(
         val data = verificationKycRepo.getVaccinationObjectData()
         if (data.exists()) {
             val vaccineObject = (data.get("vaccination") as Map<*, *>)
-            return getRelatedVaccinData(vaccineObject, vaccineId)
+            return getRelatedVaccinData(vaccineObject, vaccineId,1)
         } else {
             throw Exception("Vaccination data does not exists!!")
         }
@@ -21,7 +21,8 @@ class IntermediateVaccinationRepo @Inject constructor(
 
     private fun getRelatedVaccinData(
         vaccineObject: Map<*, *>,
-        vaccineId: String
+        vaccineId: String,
+        index:Int
     ): VaccineCertDetailsDM {
         val vaccineData = (vaccineObject.get(vaccineId) as? Map<*, *>)
         vaccineData?.let { vaccineData ->
@@ -47,13 +48,14 @@ class IntermediateVaccinationRepo @Inject constructor(
                 fullPath = fullPath,
                 gender = gender,
                 label = label,
-                name = name,
+                name = "vaccine$index",
                 pathOnFirebase = pathOnFirebase,
                 status = status,
                 updatedBy = updatedBy,
                 vaccineDate = vaccineDate,
                 vaccineName = vaccineName,
-                vaccinePlace = vaccinePlace
+                vaccinePlace = vaccinePlace,
+                vaccineId = vaccineId
             )
         }
         throw Exception("Vaccination data does not exists!!")
@@ -67,11 +69,12 @@ class IntermediateVaccinationRepo @Inject constructor(
                 val data = verificationKycRepo.getVaccinationObjectData()
                 if (data.exists()) {
                     val vaccineObject = (data.get("vaccination") as Map<*, *>)
-                    for (config in it) {
+                    for ((index,config) in it.withIndex()) {
                         config.id?.let { it1 ->
                             try {
-                                allVaccine.add(getRelatedVaccinData(vaccineObject, it1))
+                                allVaccine.add(getRelatedVaccinData(vaccineObject, it1,index+1))
                             } catch (e: Exception) {
+                                allVaccine.add(VaccineCertDetailsDM(name = "vaccine$index+1",vaccineId = it1))
                             }
                         }
                     }

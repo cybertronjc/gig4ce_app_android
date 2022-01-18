@@ -180,7 +180,7 @@ class VerificationMainViewModel @Inject constructor(
                     )
 
 
-
+                    val vaccineNavPath = doc?.vaccination?.let { "verification/CovidCertificateStatusFragment"  }?:"verification/AskUserForVaccineBS"
                     allDocs.add(
                         SimpleCardDVM(
                             title = appContext.getString(R.string.covid_vaccination_certificate_veri),
@@ -188,7 +188,7 @@ class VerificationMainViewModel @Inject constructor(
                                 doc?.vaccination?.status
                             ),
                             image = R.drawable.ic_account_box_black_24dp,
-                            navpath = "verification/AskUserForVaccineBS",
+                            navpath = vaccineNavPath,
                             color = getSubStringColor(null,
                                 doc?.vaccination?.status
                             )

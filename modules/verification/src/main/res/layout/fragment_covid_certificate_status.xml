@@ -37,7 +37,6 @@
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="normal"
-        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/backImageButton"
         app:layout_constraintStart_toEndOf="@+id/backImageButton"
         app:layout_constraintTop_toTopOf="@+id/backImageButton" />
@@ -56,6 +55,7 @@
             android:id="@+id/all_vaccineStatus"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_xl4"
             android:orientation="vertical"/>
 
     </com.google.android.material.card.MaterialCardView>

@@ -62,10 +62,19 @@ class ChooseYourVaccineFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        getIntentData(savedInstanceState)
         listeners()
         observer()
         spannableInit()
 //        navigation.navigateTo("verification/CovidVaccinationCertificateFragment")
+    }
+    var vaccineId = ""
+    var vaccineLabel = ""
+    private fun getIntentData(savedInstanceState: Bundle?) {
+        arguments?.let {
+            vaccineId = it.getString("id")?:""
+            vaccineLabel = it.getString("label")?:""
+        }
     }
 
     private fun spannableInit() {
@@ -97,7 +106,7 @@ class ChooseYourVaccineFragment : Fragment() {
                         viewModel.activeObserver = false
                         navigation.navigateTo(
                             "verification/CovidVaccinationCertificateFragment",
-                            bundleOf("vaccineId" to "vaccine1")
+                            bundleOf("vaccineId" to vaccineId)
                         )
                     }
                 }
@@ -164,7 +173,7 @@ class ChooseYourVaccineFragment : Fragment() {
                     MultipartBody.Part.createFormData("vaccine", "vaccineFile", requestFile)
                 mutliplartFile?.let {
                     viewModel.uploadFile(
-                        VaccineFileUploadReqDM("vaccine1", "Vaccine1"),
+                        VaccineFileUploadReqDM(vaccineId, vaccineLabel),
                         it
                     )
                 }

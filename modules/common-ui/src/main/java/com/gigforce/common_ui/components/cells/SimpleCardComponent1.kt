@@ -41,15 +41,20 @@ class SimpleCardComponent1(context: Context, attrs: AttributeSet?) : FrameLayout
 
     override fun bind(data: Any?) {
         if (data is SimpleCardDVM1) {
+
             data.label?.let {
                 setTitle(it)
             }
-            data.navPath?.let {navPath->
-                card_view.setOnClickListener{
-                    itemClickListener?.onItemClick(view,0,data)
-                    navigation.navigateTo(navPath)
+
+            data.getNavArgs().let {
+                it?.let { navData->
+                    card_view.setOnClickListener{
+                        itemClickListener?.onItemClick(view,0,data)
+                        navigation.navigateTo(navData.navPath,args = navData.args)
+                    }
                 }
             }
+
         }
     }
 
