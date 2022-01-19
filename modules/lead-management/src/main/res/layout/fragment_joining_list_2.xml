@@ -37,6 +37,7 @@
             app:tabGravity="center"
             app:tabIndicatorHeight="0dp"
             app:tabMode="fixed"
+            app:tabPaddingStart="12dp"
             app:tabSelectedTextColor="@color/white"
             app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
             app:tabTextColor="@color/black" >
@@ -71,6 +72,22 @@
                 layout="@layout/layout_error_with_retry" />
 
         </FrameLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/change_team_leader_button"
+            style="@style/LeadMgmtMaterialButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginEnd="@dimen/size_16"
+            android:layout_marginBottom="@dimen/size_8"
+            android:fontFamily="@font/lato_bold"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:visibility="gone"
+            android:text="Change Team Leader"
+            android:textColor="@color/white"
+            app:shapeAppearanceOverlay="@style/RoundCornerButtonShapeOverlay" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/join_now_button"

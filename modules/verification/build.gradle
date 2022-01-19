@@ -145,5 +145,5 @@ dependencies {
     implementation 'com.akexorcist:localization:1.2.10'
 
     //implementation 'com.github.CanHub:Android-Image-Cropper:3.2.2'
-
+    implementation 'com.airbnb.android:lottie:4.2.2'
 }

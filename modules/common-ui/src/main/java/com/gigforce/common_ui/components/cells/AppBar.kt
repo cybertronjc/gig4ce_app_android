@@ -6,21 +6,18 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.InputMethod
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.annotation.DrawableRes
 import androidx.annotation.MenuRes
 import androidx.appcompat.widget.PopupMenu
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.UserInfoImp
 import com.gigforce.common_ui.databinding.AppBarLayoutBinding
 import com.gigforce.common_ui.listeners.AppBarClicks
-import com.gigforce.common_ui.views.GigforceImageView
 import com.gigforce.core.AppConstants
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.extensions.gone
@@ -484,6 +481,13 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
         }
     }
 
+
+    fun setSubTitle(
+        subTitle : String
+    ){
+        viewBinding.subTitleTV.visible()
+        viewBinding.subTitleTV.text = subTitle
+    }
 
 
 
