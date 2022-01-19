@@ -205,7 +205,7 @@ class GigViewModel constructor(
     private fun extractGigs(querySnapshot: QuerySnapshot): MutableList<Gig> {
 
         val gigs = mutableListOf<Gig>()
-         querySnapshot.documents.map { t ->
+        querySnapshot.documents.map { t ->
             try {
                 t.toObject(Gig::class.java)?.let {
                     it.gigId = t.id
@@ -304,10 +304,14 @@ class GigViewModel constructor(
                 getDownloadLinkFor("gig_feedback_images", it)
             }
 
-            if (shouldGetContactdetails && gig.businessContact != null && gig.businessContact!!.uid != null) {
+            if (shouldGetContactdetails
+                && gig.businessContact != null
+                && (gig.businessContact?.uid != null || gig.businessContact?.uuid != null )
+            ) {
 
+                val businessContactUid = gig.businessContact?.uid ?: gig.businessContact?.uuid
                 val profile =
-                    profileFirebaseRepository.getProfileDataIfExist(gig.businessContact!!.uid)
+                    profileFirebaseRepository.getProfileDataIfExist(businessContactUid)
                 profile?.let {
                     gig.businessContact?.profilePicture =
                         if (!it.profileAvatarThumbnail.isNullOrBlank()) {
@@ -332,10 +336,14 @@ class GigViewModel constructor(
                 }
             }
 
-            if (shouldGetContactdetails && gig.agencyContact != null && gig.agencyContact!!.uid != null) {
+            if (shouldGetContactdetails
+                && gig.agencyContact != null
+                && (gig.agencyContact?.uid != null || gig.agencyContact?.uuid != null)
+            ) {
 
+                val agencyContactUid = gig.agencyContact?.uid ?: gig.agencyContact!!.uuid
                 val profile =
-                    profileFirebaseRepository.getProfileDataIfExist(gig.agencyContact!!.uid)
+                    profileFirebaseRepository.getProfileDataIfExist(agencyContactUid)
                 profile?.let {
                     gig.agencyContact?.profilePicture =
                         if (!it.profileAvatarThumbnail.isNullOrBlank()) {
@@ -374,8 +382,8 @@ class GigViewModel constructor(
             gig
         }.onSuccess {
 
-             gigOrder = try {
-                 getGigOrder(it.gigOrderId)
+            gigOrder = try {
+                getGigOrder(it.gigOrderId)
             }catch (e: Exception){
                 null
             }
@@ -420,20 +428,20 @@ class GigViewModel constructor(
 
     }
 
-     suspend fun getGigOrder(gigorderId: String) : GigOrder?{
-         try {
-             var myGIgOrder: GigOrder? = GigOrder()
-             val await = gigsRepository.db.collection("Gig_Order")
-                 .document(gigorderId)
-                 .get().await()
-             if (await.exists()) {
-                 myGIgOrder = await.toObject(GigOrder::class.java)
-             }
+    suspend fun getGigOrder(gigorderId: String) : GigOrder?{
+        try {
+            var myGIgOrder: GigOrder? = GigOrder()
+            val await = gigsRepository.db.collection("Gig_Order")
+                .document(gigorderId)
+                .get().await()
+            if (await.exists()) {
+                myGIgOrder = await.toObject(GigOrder::class.java)
+            }
 
-             return myGIgOrder
-         }catch (e: Exception){
-                return GigOrder()
-         }
+            return myGIgOrder
+        }catch (e: Exception){
+            return GigOrder()
+        }
     }
 
     suspend fun getGigNow(gigId: String) = suspendCoroutine<Gig> { cont ->
@@ -568,9 +576,9 @@ class GigViewModel constructor(
     val declineGig: LiveData<Lse> get() = _declineGig
 
     fun declineGig(
-            gigId: String,
-            reason: String,
-            isDeclinedByTL : Boolean
+        gigId: String,
+        reason: String,
+        isDeclinedByTL : Boolean
     ) = viewModelScope.launch {
         _declineGig.value = Lse.loading()
 

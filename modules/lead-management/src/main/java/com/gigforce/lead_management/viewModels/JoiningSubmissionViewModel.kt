@@ -1,30 +1,9 @@
 package com.gigforce.lead_management.viewModels
 
-import android.content.Context
-import androidx.core.text.bold
-import androidx.core.text.buildSpannedString
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.gigforce.common_ui.dynamic_fields.data.DataFromDynamicInputField
 import com.gigforce.common_ui.repository.LeadManagementRepository
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.core.logger.GigforceLogger
-import com.gigforce.common_ui.repository.ProfileFirebaseRepository
-import com.gigforce.core.ValidationHelper
-import com.gigforce.core.datamodels.profile.ProfileData
-import com.gigforce.lead_management.R
-import com.gigforce.lead_management.ui.new_selection_form.NewSelectionForm1ViewModel
-import com.gigforce.lead_management.ui.new_selection_form.NewSelectionForm1ViewState
-import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import javax.inject.Inject
 
 
 open class JoiningSubmissionViewModel constructor(

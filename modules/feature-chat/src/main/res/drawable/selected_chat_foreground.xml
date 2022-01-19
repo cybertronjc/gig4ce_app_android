@@ -4,6 +4,6 @@
 
     <!-- View border color and width -->
     <solid
-        android:color="@color/chat_incoming_mesage_background_color"
+        android:color="@color/chat_selected_foreground_color"
         />
 </shape>

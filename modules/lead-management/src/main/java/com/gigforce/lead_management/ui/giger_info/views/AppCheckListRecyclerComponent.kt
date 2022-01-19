@@ -18,6 +18,7 @@ import androidx.core.content.getSystemService
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import com.bumptech.glide.Glide
+import com.gigforce.common_ui.ext.addMandatorySymbolToTextEnd
 import com.gigforce.common_ui.utils.getCircularProgressDrawable
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.datamodels.client_activation.Dependency
@@ -76,14 +77,10 @@ class AppCheckListRecyclerComponent(
 
         viewData = data
         if (viewData.isOptional) {
-            viewBinding.checkListItemText.setText(viewData.checkName)
+            viewBinding.checkListItemText.setText(viewData.checkName.capitalize())
         } else {
-            val txt = viewData.checkName + "<font color=\"red\"> *</font>"
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                viewBinding.checkListItemText.setText(Html.fromHtml(txt,Html.FROM_HTML_MODE_LEGACY), TextView.BufferType.SPANNABLE)
-            } else{
-                viewBinding.checkListItemText.setText(Html.fromHtml(txt), TextView.BufferType.SPANNABLE)
-            }
+            viewBinding.checkListItemText.text = viewData.checkName.capitalize()
+            viewBinding.checkListItemText.addMandatorySymbolToTextEnd()
         }
         //viewBinding.statusText.text = if (viewData.status == "Pending") context.getString(R.string.pending_lead) else ""
         //setStatusIcon(viewData.status)

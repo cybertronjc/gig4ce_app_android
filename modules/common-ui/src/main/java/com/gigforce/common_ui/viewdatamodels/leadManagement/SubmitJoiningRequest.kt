@@ -26,6 +26,9 @@ data class SubmitJoiningRequest(
     @SerializedName("assignGigsFrom")
     var assignGigsFrom: String = "",
 
+    @SerializedName("reportingTeamLeader")
+    var reportingTeamLeader: TeamLeaderSubmitModel,
+
     @SerializedName("businessTeamLeaders")
     var businessTeamLeaders: BusinessTeamLeadersItem? = null,
 

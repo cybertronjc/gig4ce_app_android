@@ -334,6 +334,54 @@ class ChatGroupRepository @Inject constructor(
         )
     }
 
+
+    suspend fun sendNewAudioMessage(
+        context: Context,
+        groupId: String,
+        audiosDirectoryRef: File,
+        audioInfo: AudioInfo,
+        uri: Uri,
+        message: ChatMessage
+    ) {
+
+        val newFileName = if (audioInfo.name.isBlank()) {
+            "${getUID()}-${DateHelper.getFullDateTimeStamp()}.mp3"
+        } else {
+
+            if (audioInfo.name.endsWith(".mp3", true)) {
+                "${getUID()}-${DateHelper.getFullDateTimeStamp()}-${audioInfo.name}"
+            } else {
+                "${getUID()}-${DateHelper.getFullDateTimeStamp()}-${audioInfo.name}.mp3"
+            }
+        }
+
+        if (!audiosDirectoryRef.exists())
+            audiosDirectoryRef.mkdirs()
+        val audioFile = File(audiosDirectoryRef, newFileName)
+        FileUtils.copyFile(context, newFileName, uri, audioFile)
+
+        val pathOnServer = uploadChatAttachment(
+            newFileName,
+            uri,
+            groupId,
+            true,
+            ChatConstants.MESSAGE_TYPE_TEXT_WITH_AUDIO
+        )
+
+        message.attachmentPath = pathOnServer
+
+        createMessageEntry(groupId, message)
+        updateMediaInfoInGroupMedia(
+            groupId,
+            ChatConstants.ATTACHMENT_TYPE_AUDIO,
+            message.id,
+            audioInfo.name,
+            pathOnServer,
+            null,
+            message.videoLength
+        )
+    }
+
     suspend fun sendNewDocumentMessage(
         context: Context,
         groupId: String,

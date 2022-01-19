@@ -28,6 +28,9 @@ class ViewTypes {
         const val IN_LOCATION = 10105
         const val OUT_LOCATION = 10205
 
+        const val IN_AUDIO = 10106
+        const val OUT_AUDIO = 10206
+
         const val IN_DELETED_MESSAGE = 14301
         const val OUT_DELETED_MESSAGE = 14501
 
@@ -45,6 +48,9 @@ class ViewTypes {
 
         const val GROUP_IN_LOCATION = 10505
         const val GROUP_OUT_LOCATION = 10605
+
+        const val GROUP_IN_AUDIO = 10506
+        const val GROUP_OUT_AUDIO = 10606
 
         const val GROUP_DETAILS_MEDIA = 11501
         const val GROUP_DETAILS_GROUP_MEMBER = 11601

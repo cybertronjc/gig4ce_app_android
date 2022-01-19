@@ -1116,11 +1116,11 @@
         android:label="NewSelectionVerificationDocumentsForm3Fragment"/>
     <fragment
         android:id="@+id/signatureImageCaptureDialogFragment"
-        android:name="com.gigforce.common_ui.signature.FullScreenSignatureImageCaptureDialogFragment"
+        android:name="com.gigforce.verification.mainverification.signature.SignatureImageCaptureFragment"
         android:label="FullScreenSignatureImageCaptureDialogFragment"/>
     <fragment
         android:id="@+id/signatureDrawerDialogFragment"
-        android:name="com.gigforce.common_ui.signature.FullScreenSignatureDrawerDialogFragment"
+        android:name="com.gigforce.verification.mainverification.signature.FullScreenSignatureDrawerDialogFragment"
         android:label="FullScreenSignatureDrawerDialogFragment"/>
     <fragment
         android:id="@+id/chatSettingsFragment"
@@ -1142,10 +1142,32 @@
         android:id="@+id/reportUserBottomSheetFragment"
         android:name="com.gigforce.modules.feature_chat.screens.ReportUserBottomSheetFragment"
         android:label="ReportUserBottomSheetFragment" />
+    <fragment
+        android:id="@+id/userAndGroupDetailsFragment"
+        android:name="com.gigforce.modules.feature_chat.screens.UserAndGroupDetailsFragment"
+        android:label="UserAndGroupDetailsFragment" />
+    <dialog
+        android:id="@+id/audioPlayerBottomSheetFragment"
+        android:name="com.gigforce.modules.feature_chat.screens.AudioPlayerBottomSheetFragment"
+        android:label="AudioPlayerBottomSheetFragment" />
+    <fragment
+        android:id="@+id/mediaDocsAndAudioFragment"
+        android:name="com.gigforce.modules.feature_chat.screens.MediaDocsAndAudioFragment"
+        android:label="MediaDocsAndAudioFragment" />
 
     <dialog
         android:id="@+id/acknowledgeBankBS"
         android:name="com.gigforce.verification.mainverification.bankaccount.AcknowledgeBankBS"
         android:label="AcknowledgeBankBS" />
+    <fragment
+        android:id="@+id/gigerAttendanceDetailFragment"
+        android:name="com.gigforce.lead_management.ui.changing_tl.GigerAttendanceDetailFragment"
+        android:label="GigerAttendanceDetailFragment" />
+    <dialog
+        android:id="@+id/changeTeamLeaderBottomSheetFragment"
+        android:name="com.gigforce.lead_management.ui.changing_tl.ChangeTeamLeaderBottomSheetFragment"
+        android:label="ChangeTeamLeaderBottomSheetFragment" />
+
+
 </navigation>
 

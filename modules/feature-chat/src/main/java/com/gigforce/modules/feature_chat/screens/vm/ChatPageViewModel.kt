@@ -11,6 +11,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.chat.ChatRepository
+import com.gigforce.common_ui.chat.models.AudioInfo
 import com.gigforce.common_ui.chat.models.ChatMessage
 import com.gigforce.common_ui.chat.models.ContactModel
 import com.gigforce.common_ui.chat.models.VideoInfo
@@ -30,6 +31,7 @@ import com.gigforce.modules.feature_chat.ChatAttachmentDownloadState
 import com.gigforce.modules.feature_chat.DownloadCompleted
 import com.gigforce.modules.feature_chat.DownloadStarted
 import com.gigforce.modules.feature_chat.ErrorWhileDownloadingAttachment
+import com.gigforce.modules.feature_chat.models.AudioPassingDataModel
 import com.gigforce.modules.feature_chat.repositories.ChatProfileFirebaseRepository
 import com.gigforce.modules.feature_chat.repositories.DownloadChatAttachmentService
 import com.google.firebase.Timestamp
@@ -44,6 +46,27 @@ import java.io.File
 import java.util.*
 import javax.inject.Inject
 
+sealed class AudioPlayState {
+
+    object NothinIsPlaying : AudioPlayState()
+
+    object CancelPlaying : AudioPlayState()
+
+    data class PlayingThisAudio(
+        val uri: Uri,
+        val messageId: String
+    ) : AudioPlayState()
+
+    data class PausingThisAudio(
+        val uri: Uri,
+        val messageId: String
+    ) : AudioPlayState()
+
+    data class ResumingThisAudio(
+        val uri: Uri,
+        val messageId: String
+    ) : AudioPlayState()
+}
 
 @HiltViewModel
 class ChatPageViewModel @Inject constructor(
@@ -93,6 +116,25 @@ class ChatPageViewModel @Inject constructor(
 
     private var _allStoragePermissionsGranted = MutableLiveData<Boolean>()
     val allStoragePermissionsGranted: LiveData<Boolean> = _allStoragePermissionsGranted
+
+    private var _selectedChatMessage = MutableLiveData<ChatMessage>()
+    val selectedChatMessage: LiveData<ChatMessage> = _selectedChatMessage
+
+    private var _audioPlaying = MutableLiveData<Boolean>()
+    val audioPlaying: LiveData<Boolean> = _audioPlaying
+
+    private var _enableSelect = MutableLiveData<Boolean>()
+    val enableSelect: LiveData<Boolean> = _enableSelect
+
+    private var _audioData = MutableLiveData<AudioPassingDataModel>()
+    val audioData: LiveData<AudioPassingDataModel> = _audioData
+
+    private var _currentlyPlayingAudioMessageId = MutableLiveData<String>()
+    val currentlyPlayingAudioMessageId: LiveData<String> = _currentlyPlayingAudioMessageId
+
+    private var selectEnable: Boolean? = null
+//    private var audioPlaying: Boolean? = null
+    private var currentlyPlayingAudioMessage: String? = null
 
 
     fun setRequiredDataAndStartListeningToMessages(
@@ -332,26 +374,97 @@ class ChatPageViewModel @Inject constructor(
             getReference(headerId).document(message.id).setOrThrow(message)
 
             //Update Header for current User
-            firebaseFirestore.collection("chats")
-                .document(currentUser.uid)
-                .collection("headers")
-                .document(headerId)
-                .updateOrThrow(
-                    mapOf(
-                        "lastMessageType" to ChatConstants.MESSAGE_TYPE_TEXT,
-                        "lastMsgText" to text,
-                        "lastMsgTimestamp" to Timestamp.now(),
-                        "lastMsgFlowType" to ChatConstants.FLOW_TYPE_OUT,
-                        "unseenCount" to 0,
-                        "updatedAt" to Timestamp.now(),
-                        "updatedBy" to FirebaseAuthStateListener.getInstance()
-                            .getCurrentSignInUserInfoOrThrow().uid
-                    )
-                )
+//            firebaseFirestore.collection("chats")
+//                .document(currentUser.uid)
+//                .collection("headers")
+//                .document(headerId)
+//                .updateOrThrow(
+//                    mapOf(
+//                        "lastMessageType" to ChatConstants.MESSAGE_TYPE_TEXT,
+//                        "lastMsgText" to text,
+//                        "lastMsgTimestamp" to Timestamp.now(),
+//                        "lastMsgFlowType" to ChatConstants.FLOW_TYPE_OUT,
+//                        "unseenCount" to 0,
+//                        "updatedAt" to Timestamp.now(),
+//                        "updatedBy" to FirebaseAuthStateListener.getInstance()
+//                            .getCurrentSignInUserInfoOrThrow().uid
+//                    )
+//                )
         } catch (e: Exception) {
             e.printStackTrace()
             //handle error
         }
+    }
+
+     fun forwardMessage(forwardChat: ChatMessage, contactsList: List<ContactModel>)= viewModelScope.launch {
+            Log.d("forward", "true")
+        try {
+
+            if (contactsList.isNotEmpty()) {
+                //create header if not exists
+                contactsList.forEach { it1 ->
+                    var newHeaderId = ""
+                    if (it1.headerId == null) {
+                      createHeaderWithContactsForBothUsers(
+                            currentUser?.uid,
+                            it1.uid.toString(),
+                            it1.getUserProfileImageUrlOrPath().toString(),
+                            it1.profileName.toString()
+                        )
+                        Log.d("headerId", "new $newHeaderId")
+                        it1.headerId = newHeaderId
+                    }
+
+                    forwardChat?.let { it ->
+                        it.senderInfo = UserInfo(
+                            id = currentUser.uid,
+                            mobileNo = currentUser.phoneNumber!!
+                        )
+                        it.receiverInfo = UserInfo(
+                            id = otherUserId
+                        )
+                        it.flowType = "out"
+                        it.timestamp = Timestamp.now()
+                    }
+                }
+
+                chatRepository.forwardChatMessage(contactsList, forwardChat)
+            }
+        } catch (e: Exception){
+            Log.d("forward", "error: ${e.message}")
+        }
+    }
+
+    private suspend fun createHeaderWithContactsForBothUsers(senderId: String, receiverId: String, profilePicture: String, name: String) : String{
+        var headerIdToSend = ""
+        val headerIdForChat = checkAndReturnIfHeaderIsPresentInchat(
+            senderId,
+            receiverId
+        )
+
+        if (headerIdForChat != null) {
+            headerIdToSend = headerIdForChat
+            Log.d("headerIdToChat", "id: $headerIdForChat")
+        } else {
+            headerIdToSend = createHeader(
+                senderId,
+                receiverId,
+                name,
+                profilePicture
+            )
+            createHeaderInOtherUsersCollection(senderId, receiverId)
+        }
+
+        try {
+            saveHeaderIdToContact(receiverId, headerIdToSend)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        initForHeader()
+        Log.d("headerIdToSend", "id: $headerIdToSend")
+        return headerIdToSend
+
     }
 
     private suspend fun createHeaderForBothUsers() {
@@ -369,7 +482,7 @@ class ChatPageViewModel @Inject constructor(
                 otherUserName,
                 otherUserProfilePicture
             )
-            createHeaderInOtherUsersCollection()
+            createHeaderInOtherUsersCollection(currentUser?.uid, otherUserId)
         }
 
         try {
@@ -380,6 +493,8 @@ class ChatPageViewModel @Inject constructor(
 
         initForHeader()
     }
+
+
 
     private suspend fun checkAndReturnIfHeaderIsPresentInchat(
         forUserId: String,
@@ -399,7 +514,7 @@ class ChatPageViewModel @Inject constructor(
         }
     }
 
-    private suspend fun createHeaderInOtherUsersCollection() {
+    private suspend fun createHeaderInOtherUsersCollection(senderId: String, receiverId: String) {
         val profileData = chatProfileFirebaseRepository.getProfileDataIfExist()
 
         var fullPath: String = ""
@@ -418,9 +533,9 @@ class ChatPageViewModel @Inject constructor(
         }
 
         val query = firebaseFirestore.collection("chats")
-            .document(otherUserId)
+            .document(receiverId)
             .collection("contacts")
-            .whereEqualTo("uid", currentUser.uid)
+            .whereEqualTo("uid", senderId)
             .getOrThrow()
 
         val contactModel = if (query.isEmpty) {
@@ -451,13 +566,13 @@ class ChatPageViewModel @Inject constructor(
         }
 
         val chatHeader = ChatHeader(
-            forUserId = otherUserId,
-            otherUserId = currentUser.uid,
+            forUserId = receiverId,
+            otherUserId = senderId,
             lastMsgTimestamp = null,
             chatType = ChatConstants.CHAT_TYPE_USER,
             unseenCount = 0,
             otherUser = UserInfo(
-                id = currentUser.uid,
+                id = senderId,
                 name = userName,
                 profilePic = fullPath,
                 type = "user",
@@ -467,11 +582,13 @@ class ChatPageViewModel @Inject constructor(
         )
 
         firebaseFirestore.collection("chats")
-            .document(otherUserId)
+            .document(receiverId)
             .collection("headers")
             .document(headerId)
             .setOrThrow(chatHeader)
     }
+
+
 
     fun sendNewDocumentMessage(
         context: Context,
@@ -576,6 +693,55 @@ class ChatPageViewModel @Inject constructor(
                 e
             )
         }
+    }
+
+    fun sendNewAudioMessage(
+        context: Context,
+        text: String = "",
+        uri: Uri,
+        audioInfo: AudioInfo
+    ) = GlobalScope.launch(Dispatchers.IO) {
+
+        try {
+            if (headerId.isEmpty()) {
+                createHeaderForBothUsers()
+            }
+
+            val message = ChatMessage(
+                id = UUID.randomUUID().toString(),
+                headerId = headerId,
+                senderInfo = UserInfo(
+                    id = currentUser.uid
+                ),
+                receiverInfo = UserInfo(
+                    id = otherUserId
+                ),
+                flowType = "out",
+                chatType = ChatConstants.CHAT_TYPE_USER,
+                type = ChatConstants.MESSAGE_TYPE_TEXT_WITH_AUDIO,
+                content = text,
+                timestamp = Timestamp.now(),
+                attachmentPath = null,
+                attachmentName = audioInfo.name,
+                audioLength = audioInfo.duration
+            )
+            showMessageAsSending(message)
+
+            chatRepository.sendAudioMessage(
+                context = context,
+                chatHeaderId = headerId,
+                message = message,
+                file = uri,
+                audioInfo = audioInfo
+            )
+        } catch (e: Exception) {
+            CrashlyticsLogger.e(
+                TAG,
+                "while sending audio message",
+                e
+            )
+        }
+
     }
 
     fun sendNewVideoMessage(
@@ -938,6 +1104,23 @@ class ChatPageViewModel @Inject constructor(
         }
     }
 
+    fun selectChatMessage(msg: ChatMessage){
+        val messageList = chatMessages ?: return
+        val index = messageList.indexOf(msg)
+        if (index != -1) {
+            _selectedChatMessage.value = msg
+        }
+    }
+
+    fun makeSelectEnable(enable: Boolean){
+        selectEnable = enable
+        _enableSelect.value = enable
+    }
+
+    fun getSelectEnable(): Boolean?{
+        return selectEnable
+    }
+
     fun scrollToMessage(
         replyMessage: ChatMessage
     ) {
@@ -947,6 +1130,40 @@ class ChatPageViewModel @Inject constructor(
             _scrollToMessage.value = index
             _scrollToMessage.value = null
         }
+    }
+
+    fun playMyAudio(play: Boolean, pause: Boolean, stop: Boolean, messageId: String, uri: Uri){
+//        var audioDataToPass =  AudioPassingDataModel(playPause, true,  messageId, uri)
+//        _audioData.value = audioDataToPass
+        if(play || pause){
+            currentlyPlayingAudioMessage = messageId
+        } else if(stop){
+            currentlyPlayingAudioMessage = ""
+        }
+        Log.d("viewModelChat", "id: $currentlyPlayingAudioMessage")
+    }
+
+
+
+
+//    fun playPauseAudio(play: Boolean, messageId: String, uri: Uri){
+//        if (_audioData.value == AudioPlayState.NothinIsPlaying){
+//            _audioData.postValue(AudioPlayState.PlayingThisAudio(
+//                messageId = messageId,
+//                uri = uri
+//            ))
+//        } else if (_audioData.value == AudioPlayState.PlayingThisAudio){
+//
+//        }
+//    }
+
+    fun isAudioPlayingAlready(): String{
+        if (currentlyPlayingAudioMessage.isNullOrBlank()){
+            return ""
+        }
+        Log.d("viewModelChat", "idreturn: $currentlyPlayingAudioMessage")
+        _currentlyPlayingAudioMessageId.postValue(currentlyPlayingAudioMessage)
+        return currentlyPlayingAudioMessage.toString()
     }
 
     fun askForScopeAndStoragePermissionToDownload(ask: Boolean){

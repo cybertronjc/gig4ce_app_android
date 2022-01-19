@@ -165,10 +165,10 @@ class ContactsFragment : DialogFragment(),
         contactRecyclerView = view.findViewById(R.id.rv_contactsList)
         backArrow = view.findViewById(R.id.back_arrow)
         refreshIcon = view.findViewById(R.id.refreshIcon)
-//        createGroupLayout = view.findViewById(R.id.create_group_layout)
+        createGroupLayout = view.findViewById(R.id.create_group_layout)
         contactsSyncingLayout = view.findViewById(R.id.contactsSyncingLayout)
         syncingGif = view.findViewById(R.id.syncGif)
-//        createGroupLabel = view.findViewById(R.id.create_group_label)
+        createGroupLabel = view.findViewById(R.id.create_group_label)
         contactsToolbarLabel = view.findViewById(R.id.textView101)
         contactsToolbarSubTitle = view.findViewById(R.id.tv_sub_heading_contacts_list)
         noContactsLayout = view.findViewById(R.id.noContactsLayout)
@@ -268,8 +268,12 @@ class ContactsFragment : DialogFragment(),
 
         if (shouldReturnToPreviousScreen) {
             createGroupLabel.text = getString(R.string.add_to_group_chat)
+            createGroupLayout.gone()
+            createNewGroup.gone()
         } else {
             createGroupLabel.text = getString(R.string.create_group_chat)
+            createGroupLayout.visible()
+            createNewGroup.visible()
         }
 
         askPermissionView.setOnClickListener {

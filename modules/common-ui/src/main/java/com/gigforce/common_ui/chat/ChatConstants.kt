@@ -24,11 +24,15 @@ object ChatConstants {
     const val DIRECTORY_IMAGES = "Images"
     const val DIRECTORY_VIDEOS = "Videos"
     const val DIRECTORY_DOCUMENTS = "Documents"
+    const val DIRECTORY_AUDIOS = "Audios"
     const val DIRECTORY_OTHERS = "Others"
 
     const val OPERATION_PICK_IMAGE = 0
     const val OPERATION_PICK_VIDEO = 1
     const val OPERATION_PICK_DOCUMENT = 2
+    const val OPERATION_START_AUDIO = 3
+    const val OPERATION_OPEN_CAMERA = 4
+    const val OPERATION_PICK_AUDIO = 5
 
     const val MB_10 = 10000000
     const val MB_15 = 15000000
@@ -53,4 +57,6 @@ object ChatConstants {
 
     const val MESSAGE_TYPE_EVENT_ASSIGNED_ADMIN = "assigned_admin"
     const val MESSAGE_TYPE_EVENT_REMOVED_ADMIN = "removed_admin"
+
+    const val INTENT_EXTRA_FORWARD_MESSAGE = "forward_message"
 }

@@ -108,7 +108,7 @@ View.OnClickListener{
         viewBinding.errorLayout.root.gone()
     }
 
-    override fun updateDocumentStatus(status: String) {
+    override fun updateDocumentStatus(status: String?) {
         updateDocumentStatusImage(
             status,
             viewBinding.statusIv,
