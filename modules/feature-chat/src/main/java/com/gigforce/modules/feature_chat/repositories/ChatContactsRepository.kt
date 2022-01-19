@@ -1,6 +1,7 @@
 package com.gigforce.modules.feature_chat.repositories
 
 import android.util.Log
+import com.gigforce.common_ui.chat.ChatConstants
 import com.gigforce.common_ui.chat.models.ContactModel
 import com.gigforce.core.StringConstants
 import com.gigforce.core.extensions.commitOrThrow
@@ -239,6 +240,24 @@ class ChatContactsRepository @Inject constructor(
             currentBatchSize = 0
 
             batch = db.batch()
+        }
+    }
+
+    suspend fun getContactDetailsFromChatContacts(
+        contactOwnerUid : String,
+        userToSearchUid : String
+    ) : ContactModel?{
+
+        val getContactsQuery = db.collection(ChatConstants.COLLECTION_CHATS)
+            .document(contactOwnerUid)
+            .collection(ChatConstants.COLLECTION_CHATS_CONTACTS)
+            .whereEqualTo("uid",userToSearchUid)
+            .getOrThrow()
+
+        return if (getContactsQuery.isEmpty) {
+            null
+        } else{
+            getContactsQuery.documents[0].toObject(ContactModel::class.java)
         }
     }
 

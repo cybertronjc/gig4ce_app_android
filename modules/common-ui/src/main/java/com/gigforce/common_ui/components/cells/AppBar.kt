@@ -424,6 +424,17 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
     ) {
         viewBinding.forwardButton.setOnClickListener(listener)
     }
+
+    fun showForwardProgress(){
+        viewBinding.forwardButton.invisible()
+        viewBinding.forwardProgressBar.visible()
+    }
+
+    fun hideForwardProgress(){
+        viewBinding.forwardProgressBar.gone()
+        viewBinding.forwardButton.visible()
+    }
+
     fun setInfoClickListener(
         listener: OnClickListener
     ) {

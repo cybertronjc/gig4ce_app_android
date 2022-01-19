@@ -14,6 +14,11 @@ import java.io.File
 
 interface IChatService {
 
+    suspend fun sendMessages(
+        chatHeaderId: String,
+        message: List<ChatMessage>
+    )
+
     suspend fun sendTextMessage(
         chatHeaderId: String,
         message: ChatMessage
