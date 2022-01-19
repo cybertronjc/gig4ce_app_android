@@ -104,18 +104,6 @@ class ChatHeadersViewModel @Inject constructor(
         try {
             Log.d("ChatHeaderViewModel","setting message as delivered of group :$groupId")
 
-//            var getGroupMessagesQuery = chatGroupRepository
-//                .groupMessagesRef(groupId)
-//                .orderBy("timestamp", Query.Direction.ASCENDING)
-//
-//            val objs = getGroupMessagesQuery.getOrThrow().documents.map { doc ->
-//                doc.toObject(ChatMessage::class.java)!!.also {
-//                    it.id = doc.id
-//                    it.chatType = ChatConstants.CHAT_TYPE_GROUP
-//                    it.groupId = groupId
-//                }
-//
-//            }
             val objs = chatGroupRepository.getGroupMessages(groupId)
             val messageWithNotDeliveredStatus = arrayListOf<String>()
             objs.forEach { it1 ->
