@@ -87,7 +87,7 @@ class ChatNotificationHandler constructor(
                                         .addMessage(notificationMessage)
 
                         )
-                        .setSound(Uri.parse("android.resource://"+context.getPackageName()+"/" + R.raw.notification_cave))
+                        .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
                         .setOnlyAlertOnce(true)
                         .setAutoCancel(true)
                         .setVibrate(longArrayOf(100, 200, 300, 400, 500, 400))
@@ -208,9 +208,7 @@ class ChatNotificationHandler constructor(
 
                         )
                         .setAutoCancel(true)
-                       .setSound(Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + context.packageName +"/" + R.raw.notification_cave))
-                        //.setSound(context.assets.open("notification_cave.mp3"))
-//                        .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
+                        .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
                         .setOnlyAlertOnce(true)
                         .setVibrate(longArrayOf(100, 200, 300, 400, 500, 400))
 
