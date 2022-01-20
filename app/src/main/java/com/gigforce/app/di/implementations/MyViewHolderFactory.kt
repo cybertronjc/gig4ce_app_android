@@ -8,7 +8,6 @@ import com.gigforce.giger_gigs.GigViewTypeLoader
 import com.gigforce.lead_management.views.LeadActivationViewTypeLoader
 import com.gigforce.giger_gigs.LoginSummaryViewTypeLoader
 import com.gigforce.modules.feature_chat.ChatViewTypeLoader
-import com.gigforce.modules.feature_chat.FeatureChatViewTypeLoader
 import javax.inject.Inject
 
 class MyViewHolderFactory @Inject constructor(): CoreViewHolderFactory() {
@@ -21,6 +20,5 @@ class MyViewHolderFactory @Inject constructor(): CoreViewHolderFactory() {
         this.registerViewTypeLoader(ComponentViewLoader())
         this.registerViewTypeLoader(LeadActivationViewTypeLoader)
         this.registerViewTypeLoader(LoginSummaryViewTypeLoader)
-        this.registerViewTypeLoader(FeatureChatViewTypeLoader)
     }
 }

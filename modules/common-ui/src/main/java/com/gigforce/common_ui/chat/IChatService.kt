@@ -7,6 +7,7 @@ import com.gigforce.common_ui.chat.models.AudioInfo
 import com.gigforce.common_ui.chat.models.ChatMessage
 import com.gigforce.common_ui.chat.models.ContactModel
 import com.gigforce.common_ui.chat.models.VideoInfo
+import java.io.File
 
 //import com.gigforce.modules.feature_chat.models.ChatMessage
 //import com.gigforce.modules.feature_chat.models.VideoInfo
@@ -44,6 +45,7 @@ interface IChatService {
         context: Context,
         chatHeaderId: String,
         message: ChatMessage,
+        audiosDirectoryRef: File,
         file: Uri,
         audioInfo: AudioInfo
     )

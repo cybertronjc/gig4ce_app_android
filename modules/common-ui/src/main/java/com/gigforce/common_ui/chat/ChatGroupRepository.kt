@@ -20,10 +20,7 @@ import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.modules.feature_chat.repositories.ChatProfileFirebaseRepository
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.*
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -35,6 +32,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.collections.ArrayList
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -80,6 +78,11 @@ class ChatGroupRepository @Inject constructor(
         .document(getUID())
         .collection(COLLECTION_CHAT_HEADERS)
         .document(groupId)
+
+    fun groupMessagesReadByRef(groupId: String, messageId: String) = groupMessagesRef(groupId).document(messageId).collection(
+        COLLECTION_READ_BY)
+    fun groupMessagesDeliveredToRef(groupId: String, messageId: String) = groupMessagesRef(groupId).document(messageId).collection(
+        COLLECTION_DELIVERED_TO)
 
     suspend fun createGroup(groupName: String, groupAvatar: String?, groupMembers: List<ContactModel>): String {
 
@@ -207,6 +210,28 @@ class ChatGroupRepository @Inject constructor(
             id = groupId
             setUpdatedAtAndBy(getUID())
         }
+    }
+
+    suspend fun getGroupDetailsSnapshot(groupId: String): ChatGroup? {
+        var chatGroup: ChatGroup? = null
+        getGroupDetailsRef(groupId).addSnapshotListener { snapshot, error ->
+            if (error != null) {
+                Log.w(TAG, "Group Listen failed.", error)
+                return@addSnapshotListener
+            }
+
+            if (snapshot != null && snapshot.exists()) {
+                Log.d(TAG, "Group Current data: ${snapshot.data}")
+                chatGroup =  snapshot.toObject(ChatGroup::class.java)!!.apply {
+                    id = groupId
+                    setUpdatedAtAndBy(getUID())
+                }
+            } else {
+                Log.d(TAG, "Group Current data: null")
+            }
+        }
+
+        return chatGroup
     }
 
     suspend fun sendTextMessage(
@@ -794,41 +819,94 @@ class ChatGroupRepository @Inject constructor(
             )
     }
 
-    private var currentBatchSize = 0
-    private val mutex = Mutex()
-    private var batch = db.batch()
-
-    suspend fun markMessagesAsRead(
+    suspend fun markAsDelivered(
         groupId: String,
-        messageWithNotReceivedStatus: List<ChatMessage>
-    ) = mutex.withLock {
-        val groupMessagesCollectionRef = groupMessagesRef(groupId)
+        notDeliveredMsgs: List<String>
+    ) {
 
         val currentUserModel = createContactModelsForCurrentUser()
         val receivingObject = MessageReceivingInfo(
             uid = currentUser.uid,
             profileName = currentUserModel.name ?: "",
-            profilePicture = currentUserModel.getUserProfileImageUrlOrPath() ?: ""
+            profilePicture = currentUserModel.getUserProfileImageUrlOrPath() ?: "",
+            deliveredOn = Timestamp.now()
+
         )
+        val batch1 = db.batch()
+        notDeliveredMsgs.forEach {
+            val messageDeliveredToRef = groupMessagesDeliveredToRef(groupId, it).document(receivingObject.uid)
 
-        messageWithNotReceivedStatus.forEach {
-            val messageRef = groupMessagesCollectionRef.document(it.id)
-            batch.update(
-                messageRef,
-                mapOf(
-                    "groupMessageReadBy" to FieldValue.arrayUnion(receivingObject),
-                    "updatedAt" to Timestamp.now(),
-                    "updatedBy" to FirebaseAuthStateListener.getInstance()
-                        .getCurrentSignInUserInfoOrThrow().uid
-                )
+            batch1.set(
+                messageDeliveredToRef,
+                receivingObject
             )
-            checkBatchForOverFlowAndCommit()
         }
-
-        if (currentBatchSize != 0) {
-            batch.commitOrThrow()
-        }
+        batch1.commitOrThrow()
     }
+
+    suspend fun markAsReadMessages(
+        groupId: String,
+        notReceivedMsgs: List<String>
+    ) {
+        val currentUserModel = createContactModelsForCurrentUser()
+        val receivingObject = MessageReceivingInfo(
+            uid = currentUser.uid,
+            profileName = currentUserModel.name ?: "",
+            profilePicture = currentUserModel.getUserProfileImageUrlOrPath() ?: "",
+            readOn = Timestamp.now()
+
+        )
+        val batch1 = db.batch()
+        notReceivedMsgs.forEach {
+            val messageReadToRef = groupMessagesReadByRef(groupId, it).document(receivingObject.uid)
+
+            batch1.set(
+                messageReadToRef,
+                receivingObject
+            )
+        }
+        batch1.commitOrThrow()
+    }
+
+    suspend fun getGroupMessages(
+        groupId: String
+    ): MutableList<ChatMessage> = groupMessagesRef(groupId)
+        .orderBy("timestamp", Query.Direction.ASCENDING)
+        .getOrThrow()
+        .toObjects(ChatMessage::class.java)
+
+    suspend fun getMessageDeliveredInfo(
+        groupId: String,
+        messageId: String
+    ): MutableList<MessageReceivingInfo> = groupMessagesDeliveredToRef(groupId, messageId).whereEqualTo("uid", currentUser.uid)
+        .getOrThrow()
+        .toObjects(MessageReceivingInfo::class.java)
+
+    suspend fun getMessageReceivedInfo(
+        groupId: String,
+        messageId: String
+    ): MutableList<MessageReceivingInfo> = groupMessagesReadByRef(groupId, messageId).whereEqualTo("uid", currentUser.uid)
+        .getOrThrow()
+        .toObjects(MessageReceivingInfo::class.java)
+
+    suspend fun getMessageDeliveredToInfo(
+        groupId: String,
+        messageId: String
+    ): MutableList<MessageReceivingInfo> = groupMessagesDeliveredToRef(groupId, messageId).whereNotEqualTo("uid", currentUser.uid)
+        .getOrThrow()
+        .toObjects(MessageReceivingInfo::class.java)
+
+    suspend fun getMessageReceivedByInfo(
+        groupId: String,
+        messageId: String
+    ): MutableList<MessageReceivingInfo> = groupMessagesReadByRef(groupId, messageId).whereNotEqualTo("uid", currentUser.uid)
+        .getOrThrow()
+        .toObjects(MessageReceivingInfo::class.java)
+
+
+    private var currentBatchSize = 0
+    private val mutex = Mutex()
+    private var batch = db.batch()
 
     private suspend fun checkBatchForOverFlowAndCommit() {
         currentBatchSize++
@@ -863,6 +941,8 @@ class ChatGroupRepository @Inject constructor(
         const val COLLECTION_CHAT_HEADERS = "headers"
         const val COLLECTION_CHAT_REPORTED_USER = "chat_reported_users"
         const val COLLECTION_GROUP_EVENTS = "group_events"
+        const val COLLECTION_READ_BY = "message_read_by"
+        const val COLLECTION_DELIVERED_TO = "message_delivered_to"
     }
 
 }

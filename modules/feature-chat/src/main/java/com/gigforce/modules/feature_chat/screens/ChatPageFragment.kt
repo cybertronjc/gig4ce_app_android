@@ -6,6 +6,7 @@ import android.app.NotificationManager
 import android.content.*
 import android.content.pm.PackageManager
 import android.database.Cursor
+import android.graphics.Bitmap
 import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.net.Uri
@@ -34,6 +35,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+//import com.anilokcun.uwmediapicker.UwMediaPicker
 //import com.aghajari.emojiview.AXEmojiManager
 //import com.aghajari.emojiview.iosprovider.AXIOSEmojiProvider
 //import com.aghajari.emojiview.view.AXEmojiView
@@ -62,6 +64,13 @@ import com.gigforce.common_ui.listeners.AppBarClicks
 import com.gigforce.core.*
 import com.gigforce.modules.feature_chat.analytics.CommunityEvents
 import com.gigforce.common_ui.ext.showToast
+import com.gigforce.modules.feature_chat.mediapicker.Dazzle
+import com.gigforce.modules.feature_chat.mediapicker.Dazzle.Companion.PICKED_MEDIA_TEXT
+import com.gigforce.modules.feature_chat.mediapicker.Dazzle.Companion.PICKED_MEDIA_TYPE
+import com.gigforce.modules.feature_chat.mediapicker.Dazzle.Companion.PICKED_MEDIA_URI
+import com.gigforce.modules.feature_chat.mediapicker.Dazzle.Companion.REQUEST_CODE_PICKER
+import com.gigforce.modules.feature_chat.mediapicker.DazzleGallery
+import com.gigforce.modules.feature_chat.mediapicker.utils.DazzleOptions
 import com.gigforce.modules.feature_chat.models.ChatMessageWrapper
 import com.gigforce.modules.feature_chat.models.SharedFile
 import com.gigforce.modules.feature_chat.screens.vm.ChatPageViewModel
@@ -89,6 +98,7 @@ import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
+import com.google.firebase.auth.FirebaseAuth
 import java.io.IOException
 
 
@@ -133,6 +143,7 @@ class ChatPageFragment : Fragment(),
     //Views
     private lateinit var chatRecyclerView: CoreRecyclerView
     private lateinit var shimmerContainer: View
+    private lateinit var noChatLayout: View
     private lateinit var chatFooter: ChatFooter
     private lateinit var communityFooter: CommunityFooter
 //    private lateinit var audioRecordView: AudioRecordView
@@ -161,6 +172,14 @@ class ChatPageFragment : Fragment(),
 
     private val viewModel: ChatPageViewModel by viewModels()
     private val groupChatViewModel: GroupChatViewModel by viewModels()
+
+    val dazzleOptions = DazzleOptions.init().apply {
+        maxCount = 1                        //maximum number of images/videos to be picked
+        maxVideoDuration = 10               //maximum duration for video capture in seconds
+        allowFrontCamera = true             //allow front camera use
+        excludeVideos = false               //exclude or include video functionalities
+        cropEnabled = true
+    }
 
     private val cameraAndGalleryIntegrator: CameraAndGalleryIntegrator by lazy {
         CameraAndGalleryIntegrator(this)
@@ -417,74 +436,17 @@ class ChatPageFragment : Fragment(),
     }
 
     private fun adjustUiAccToOneToOneChat() {
-
         //toolbar.showSubtitle(getString(R.string.offline_chat))
         appbar.showSubtitle(getString(R.string.offline_chat))
     }
 
     private fun adjustUiAccToGroupChat() {
-        //toolbar.hideActionMenu()
-        appbar.makeMenuItemVisible(false)
-//        chatFooter.setGroupViewModel(groupChatViewModel)
-//        chatFooter.enableUserSuggestions()
 
         communityFooter.setGroupViewModel(groupChatViewModel)
         communityFooter.enableUserSuggestions()
 
         //toolbar.showSubtitle(getString(R.string.tap_to_open_details_chat))
         appbar.showSubtitle(getString(R.string.tap_to_open_details_chat))
-        appbar.setSubtitleClickListener(View.OnClickListener {
-            val groupId = chatHeaderOrGroupId ?: return@OnClickListener
-
-            if (chatType == ChatConstants.CHAT_TYPE_GROUP) {
-                navigation.navigateTo("chats/userGroupDetailsFragment", bundleOf(
-                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_TYPE to ChatConstants.CHAT_TYPE_GROUP,
-                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_IMAGE to receiverPhotoUrl,
-                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_NAME to receiverName,
-                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_HEADER_ID to groupId,
-                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_ID to receiverUserId,
-                    StringConstants.MOBILE_NUMBER.value to receiverMobileNumber
-
-                ))
-            }
-//            else if(chatType == ChatConstants.CHAT_TYPE_USER) {
-//                navigation.navigateTo("chats/userGroupDetailsFragment", bundleOf(
-//                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_TYPE to ChatConstants.CHAT_TYPE_USER,
-//                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_IMAGE to receiverPhotoUrl,
-//                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_NAME to receiverName,
-//                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_HEADER_ID to groupId,
-//                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_ID to receiverUserId,
-//                    StringConstants.MOBILE_NUMBER.value to receiverMobileNumber
-//                ))
-//            }
-        })
-        appbar.setTitleClickListener(View.OnClickListener {
-            val groupId = chatHeaderOrGroupId ?: return@OnClickListener
-
-            if (chatType == ChatConstants.CHAT_TYPE_GROUP) {
-                navigation.navigateTo("chats/userGroupDetailsFragment", bundleOf(
-                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_TYPE to ChatConstants.CHAT_TYPE_GROUP,
-                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_IMAGE to receiverPhotoUrl,
-                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_NAME to receiverName,
-                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_HEADER_ID to groupId,
-                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_ID to receiverUserId,
-                    StringConstants.MOBILE_NUMBER.value to receiverMobileNumber
-                ))
-            }
-//            else if(chatType == ChatConstants.CHAT_TYPE_USER) {
-//                navigation.navigateTo("chats/userGroupDetailsFragment", bundleOf(
-//                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_TYPE to ChatConstants.CHAT_TYPE_USER,
-//                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_IMAGE to receiverPhotoUrl,
-//                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_NAME to receiverName,
-//                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_HEADER_ID to groupId,
-//                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_ID to receiverUserId,
-//                    StringConstants.MOBILE_NUMBER.value to receiverMobileNumber
-//
-//                ))
-//            }
-        })
-
-
 
     }
 
@@ -524,21 +486,27 @@ class ChatPageFragment : Fragment(),
             .outputs
             .messages
             .observe(viewLifecycleOwner, { messages ->
-                messages.let {
-                    chatRecyclerView.collection = messages.map {
-                        ChatMessageWrapper(
-                            message = it,
-                            oneToOneChatViewModel = viewModel,
-                            groupChatViewModel = groupChatViewModel,
-                            viewLifecycleOwner
-                        )
-                    }
-                    chatRecyclerView.smoothScrollToLastPosition()
-                    chatRecyclerView.visible()
+                if (messages.isEmpty()){
+                    chatRecyclerView.gone()
                     shimmerContainer.gone()
+                    noChatLayout.visible()
                 }
-
-
+                else {
+                    messages.let {
+                        chatRecyclerView.collection = messages.map {
+                            ChatMessageWrapper(
+                                message = it,
+                                oneToOneChatViewModel = viewModel,
+                                groupChatViewModel = groupChatViewModel,
+                                viewLifecycleOwner
+                            )
+                        }
+                        chatRecyclerView.smoothScrollToLastPosition()
+                        chatRecyclerView.visible()
+                        noChatLayout.gone()
+                        shimmerContainer.gone()
+                    }
+                }
             })
 
         groupChatViewModel
@@ -556,19 +524,26 @@ class ChatPageFragment : Fragment(),
             it ?: return@Observer
             Log.d("selectedMsg", "${it.flowType} , ${it.type} , ${it.chatType}")
             selectedChatMessage = it
+            //check if the sender info matches current uid
+            var isCurrentUsersMessage = false
+            if (it.senderInfo.id == FirebaseAuth.getInstance().currentUser?.uid){
+                isCurrentUsersMessage = true
+            }
             var isCopyEnable = false
             var isDeleteEnable = false
             var isInfoEnable = false
             var isDownloadEnable = false
-            isDeleteEnable = it.flowType == "out"
-            isInfoEnable = it.flowType == "out" && it.chatType == "group"
+            isDeleteEnable = it.flowType == "out" && isCurrentUsersMessage
+            isInfoEnable = (it.flowType == "out" && it.chatType == "group" && isCurrentUsersMessage)
             if(it.type == "text"){
                 isCopyEnable = true
-                isDeleteEnable = it.flowType == "out"
             }
             appbar.makeChatOptionsVisible(true, isCopyEnable, isDeleteEnable, isInfoEnable, isDownloadEnable)
 
         })
+
+//        chatRecyclerView.visible()
+//        shimmerContainer.gone()
 
     }
 
@@ -597,6 +572,7 @@ class ChatPageFragment : Fragment(),
         rootLayout = view.findViewById(R.id.layoutRoot)
         communityFooter = view.findViewById(R.id.community_footer)
         shimmerContainer = view.findViewById(R.id.shimmer_controller)
+        noChatLayout = view.findViewById(R.id.no_chat_layout)
         //communityFooter = context?.let { CommunityFooter(it) }!!
         chatRecyclerView = view.findViewById(R.id.rv_chat_messages)
         val layoutManager = LinearLayoutManager(requireContext())
@@ -695,6 +671,11 @@ class ChatPageFragment : Fragment(),
                     appbar.setAppBarTitle(it.name ?: "")
                 }
 
+//                if(it.mobile.isNotBlank()){
+//                    receiverMobileNumber = it.mobile
+//                    Log.d(TAG, "mobile: $receiverMobileNumber")
+//                }
+
                 if (!it.imageThumbnailPathInStorage.isNullOrBlank()) {
 
                     if (Patterns.WEB_URL.matcher(it.imageThumbnailPathInStorage!!).matches()) {
@@ -751,6 +732,7 @@ class ChatPageFragment : Fragment(),
 
                 if (it.isUserBlocked) {
                     //chatFooter.disableInput("You've blocked this contact")
+                    Log.d(UserAndGroupDetailsFragment.TAG, "block chat 1: ${it.isUserBlocked}")
                         communityFooter.disableInput("You've blocked this contact")
                         messageSwipeController.disableSwipe()
 //                        userBlockedOrRemovedLayout.text = getString(R.string.you_have_blocked_chat)
@@ -764,23 +746,34 @@ class ChatPageFragment : Fragment(),
 
         viewModel.messages
             .observe(viewLifecycleOwner, { messages ->
-
-                chatRecyclerView.collection = messages.map {
-                    ChatMessageWrapper(
-                        message = it,
-                        oneToOneChatViewModel = viewModel,
-                        groupChatViewModel = groupChatViewModel,
-                        lifeCycleOwner = viewLifecycleOwner
-                    )
+                Log.d("size", "size: ${messages.size}")
+                if (messages.isEmpty()){
+                    chatRecyclerView.gone()
+                    shimmerContainer.gone()
+                    noChatLayout.visible()
                 }
-                chatRecyclerView.smoothScrollToLastPosition()
-                chatRecyclerView.visible()
-                shimmerContainer.gone()
+                else {
+                    messages.let {
+                        chatRecyclerView.collection = messages.map {
+                            ChatMessageWrapper(
+                                message = it,
+                                oneToOneChatViewModel = viewModel,
+                                groupChatViewModel = groupChatViewModel,
+                                lifeCycleOwner = viewLifecycleOwner
+                            )
+                        }
+                        chatRecyclerView.smoothScrollToLastPosition()
+                        chatRecyclerView.visible()
+                        noChatLayout.gone()
+                        shimmerContainer.gone()
+                    }
+                }
             })
+
 
         viewModel.headerInfo
             .observe(viewLifecycleOwner, {
-
+                Log.d(UserAndGroupDetailsFragment.TAG, "block chat: ${it.isBlocked}")
                 if (it.isBlocked) {
                     //chatFooter.disableInput("You've blocked this contact")
                     communityFooter.disableInput("You've blocked this contact")
@@ -841,36 +834,12 @@ class ChatPageFragment : Fragment(),
             isInfoEnable = it.flowType == "out" && it.chatType == "group"
             if(it.type == "text"){
                 isCopyEnable = true
-                isDeleteEnable = it.flowType == "out"
             }
             appbar.makeChatOptionsVisible(true, isCopyEnable, isDeleteEnable, isInfoEnable, isDownloadEnable)
         })
 
-        viewModel.audioData.observe(viewLifecycleOwner, Observer {
-            it ?: return@Observer
-            Log.d("selectedMsg", "${it.playPause} , ${it.isAudioPlaying} , ${it.currentlyPlayingAudioId} , ${it.playingAudioUri}")
-
-            if (it.playPause == true) {
-                val mediaSource = extractMediaSourceFromUri(it.playingAudioUri!!)
-                //play the audio if previously nothing ws playing
-                if (currentlyPlayingId == it.currentlyPlayingAudioId) {
-                    //resume the audio
-                } else {
-                    //play my audio
-                    //playPauseBuild(true, it.currentlyPlayingAudioId.toString(), it.playingAudioUri!!)
-                    //play(mediaSource)
-                    //playMyAudio(it.playingAudioUri!!)
-                }
-            } else {
-                    //pause the audio
-                    //pause()
-                    //playPauseBuild(false, it.currentlyPlayingAudioId.toString(), it.playingAudioUri!!)
-            }
-
-        })
-
-        chatRecyclerView.visible()
-        shimmerContainer.gone()
+//        chatRecyclerView.visible()
+//        shimmerContainer.gone()
 
     }
     private fun extractMediaSourceFromUri(uri: Uri): MediaSource {
@@ -896,13 +865,84 @@ class ChatPageFragment : Fragment(),
 
         appbar.setImageClickListener(View.OnClickListener {
             val groupId = chatHeaderOrGroupId ?: return@OnClickListener
+            if (chatType == ChatConstants.CHAT_TYPE_GROUP) {
+                navigation.navigateTo("chats/userGroupDetailsFragment", bundleOf(
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_TYPE to ChatConstants.CHAT_TYPE_GROUP,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_IMAGE to receiverPhotoUrl,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_NAME to receiverName,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_HEADER_ID to groupId,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_ID to receiverUserId,
+                    StringConstants.MOBILE_NUMBER.value to receiverMobileNumber,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_SHOW_MEDIA_ONLY to false
+
+                ))
+            }
+            else if(chatType == ChatConstants.CHAT_TYPE_USER) {
+                navigation.navigateTo("chats/userGroupDetailsFragment", bundleOf(
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_TYPE to ChatConstants.CHAT_TYPE_USER,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_IMAGE to receiverPhotoUrl,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_NAME to receiverName,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_HEADER_ID to groupId,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_ID to receiverUserId,
+                    StringConstants.MOBILE_NUMBER.value to receiverMobileNumber,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_SHOW_MEDIA_ONLY to false
+                ))
+            }
+        })
+
+        appbar.setSubtitleClickListener(View.OnClickListener {
+            val groupId = chatHeaderOrGroupId ?: return@OnClickListener
 
             if (chatType == ChatConstants.CHAT_TYPE_GROUP) {
-                chatNavigation.openGroupDetailsPage(groupId, ChatConstants.CHAT_TYPE_GROUP)
+                navigation.navigateTo("chats/userGroupDetailsFragment", bundleOf(
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_TYPE to ChatConstants.CHAT_TYPE_GROUP,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_IMAGE to receiverPhotoUrl,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_NAME to receiverName,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_HEADER_ID to groupId,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_ID to receiverUserId,
+                    StringConstants.MOBILE_NUMBER.value to receiverMobileNumber,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_SHOW_MEDIA_ONLY to false
+
+                ))
             }
-//            else if(chatType == ChatConstants.CHAT_TYPE_USER) {
-//                chatNavigation.openGroupDetailsPage(groupId, ChatConstants.CHAT_TYPE_USER)
-//            }
+            else if(chatType == ChatConstants.CHAT_TYPE_USER) {
+                navigation.navigateTo("chats/userGroupDetailsFragment", bundleOf(
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_TYPE to ChatConstants.CHAT_TYPE_USER,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_IMAGE to receiverPhotoUrl,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_NAME to receiverName,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_HEADER_ID to groupId,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_ID to receiverUserId,
+                    StringConstants.MOBILE_NUMBER.value to receiverMobileNumber,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_SHOW_MEDIA_ONLY to false
+                ))
+            }
+        })
+        appbar.setTitleClickListener(View.OnClickListener {
+            val groupId = chatHeaderOrGroupId ?: return@OnClickListener
+
+            if (chatType == ChatConstants.CHAT_TYPE_GROUP) {
+                navigation.navigateTo("chats/userGroupDetailsFragment", bundleOf(
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_TYPE to ChatConstants.CHAT_TYPE_GROUP,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_IMAGE to receiverPhotoUrl,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_NAME to receiverName,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_HEADER_ID to groupId,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_ID to receiverUserId,
+                    StringConstants.MOBILE_NUMBER.value to receiverMobileNumber,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_SHOW_MEDIA_ONLY to false
+                ))
+            }
+            else if(chatType == ChatConstants.CHAT_TYPE_USER) {
+                navigation.navigateTo("chats/userGroupDetailsFragment", bundleOf(
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_TYPE to ChatConstants.CHAT_TYPE_USER,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_IMAGE to receiverPhotoUrl,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_NAME to receiverName,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_HEADER_ID to groupId,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_ID to receiverUserId,
+                    StringConstants.MOBILE_NUMBER.value to receiverMobileNumber,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_SHOW_MEDIA_ONLY to false
+
+                ))
+            }
         })
 
         appbar.setBackButtonListener(View.OnClickListener {
@@ -926,10 +966,10 @@ class ChatPageFragment : Fragment(),
             disableChatSelection()
         })
 
-        appbar.setForwardClickListener(View.OnClickListener {
-            selectedChatMessage?.let { it1 -> forwardMessage(it1) }
-            disableChatSelection()
-        })
+//        appbar.setForwardClickListener(View.OnClickListener {
+//            selectedChatMessage?.let { it1 -> forwardMessage(it1) }
+//            disableChatSelection()
+//        })
 
         appbar.setInfoClickListener(View.OnClickListener {
             selectedChatMessage?.let { it1 ->
@@ -984,6 +1024,8 @@ class ChatPageFragment : Fragment(),
                     getString(R.string.block_chat)
                 else
                     getString(R.string.unblock_chat)
+            popUp.menu.findItem(R.id.action_block).isVisible = chatType == ChatConstants.CHAT_TYPE_USER
+            popUp.menu.findItem(R.id.action_report).isVisible = chatType == ChatConstants.CHAT_TYPE_USER
             popUp.show()
         })
 
@@ -1041,6 +1083,33 @@ class ChatPageFragment : Fragment(),
                 viewModel.otherUserId,
                 childFragmentManager
             )
+            true
+        }
+        R.id.action_media -> {
+            val groupId = chatHeaderOrGroupId ?: ""
+            if (chatType == ChatConstants.CHAT_TYPE_GROUP) {
+                navigation.navigateTo("chats/userGroupDetailsFragment", bundleOf(
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_TYPE to ChatConstants.CHAT_TYPE_GROUP,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_IMAGE to receiverPhotoUrl,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_NAME to receiverName,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_HEADER_ID to groupId,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_ID to receiverUserId,
+                    StringConstants.MOBILE_NUMBER.value to receiverMobileNumber,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_SHOW_MEDIA_ONLY to true
+
+                ))
+            }
+            else if(chatType == ChatConstants.CHAT_TYPE_USER) {
+                navigation.navigateTo("chats/userGroupDetailsFragment", bundleOf(
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_TYPE to ChatConstants.CHAT_TYPE_USER,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_IMAGE to receiverPhotoUrl,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_NAME to receiverName,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_CHAT_HEADER_ID to groupId,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_OTHER_USER_ID to receiverUserId,
+                    StringConstants.MOBILE_NUMBER.value to receiverMobileNumber,
+                    UserAndGroupDetailsFragment.INTENT_EXTRA_SHOW_MEDIA_ONLY to true
+                ))
+            }
             true
         }
         R.id.action_document -> {
@@ -1165,6 +1234,7 @@ class ChatPageFragment : Fragment(),
     private fun checkCameraPermissionAndHandleActionOpenCamera(){
         if (isCameraPermissionGranted() && isStoragePermissionGranted()) {
             openCamera()
+
         } else {
             selectedOperation = ChatConstants.OPERATION_OPEN_CAMERA
 
@@ -1269,11 +1339,13 @@ class ChatPageFragment : Fragment(),
     }
 
     private fun pickImage() {
-        cameraAndGalleryIntegrator.showCameraAndGalleryBottomSheet()
+        //cameraAndGalleryIntegrator.showCameraAndGalleryBottomSheet()
+        DazzleGallery.startPicker(this, dazzleOptions)
     }
 
     private fun openCamera(){
-        cameraAndGalleryIntegrator.startCameraForCapturing()
+        //cameraAndGalleryIntegrator.startCameraForCapturing()
+        Dazzle.startPicker(this, dazzleOptions)
     }
 
     private fun pickDocument() = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
@@ -1307,6 +1379,7 @@ class ChatPageFragment : Fragment(),
                         message,
                         communityFooter.getReplyToMessage()
                     )
+                    communityFooter.closeReplyUi()
                     type = "Direct"
                 } else {
                     groupChatViewModel.sendNewText(
@@ -1421,6 +1494,26 @@ class ChatPageFragment : Fragment(),
                     sendLocationMessage(data)
                 }
             }
+
+            REQUEST_CODE_PICKER -> {
+                if (resultCode == Activity.RESULT_OK){
+                    //check if the media is image or video
+                    val mediaUri = data?.getStringExtra(PICKED_MEDIA_URI) ?: ""
+                    val mediaType = data?.getStringExtra(PICKED_MEDIA_TYPE) ?: ""
+                    val mediaText = data?.getStringExtra(PICKED_MEDIA_TEXT) ?: ""
+                    Log.d("MediaPicker", "uri: $mediaUri , type: $mediaType , text: $mediaText")
+
+                    if (mediaType.isNotBlank() && mediaType == "image"){
+                        sendImageMessage(Uri.parse(mediaUri), "")
+                    }
+
+                    if (mediaType.isNotBlank() && mediaType == "video"){
+                        sendVideoMessage(Uri.parse(mediaUri), mediaText)
+                    }
+
+                }
+
+            }
         }
     }
 
@@ -1498,6 +1591,7 @@ class ChatPageFragment : Fragment(),
             requireContext(),
             uri
         )
+        Log.d(TAG, "Sending video: $text")
         var type = ""
         if (chatType == ChatConstants.CHAT_TYPE_USER) {
             viewModel.sendNewVideoMessage(
@@ -1764,7 +1858,6 @@ class ChatPageFragment : Fragment(),
             }
             AttachmentOption.GALLERY_ID -> {
                 checkPermissionAndHandleActionPickImage()
-//                showToast("Gallery Clicked")
             }
             AttachmentOption.AUDIO_ID -> {
 //                showToast("Audio Clicked")

@@ -1,8 +1,11 @@
 package com.gigforce.modules.feature_chat.ui.chatItems
 
+import android.animation.ArgbEvaluator
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.method.LinkMovementMethod
@@ -43,6 +46,16 @@ import javax.inject.Inject
 import android.view.MotionEvent
 import android.view.View.OnLongClickListener
 import android.view.View.OnTouchListener
+import android.view.animation.LinearInterpolator
+
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
+import android.animation.ValueAnimator
+
+import android.animation.ValueAnimator.AnimatorUpdateListener
+
+
+
 
 
 @AndroidEntryPoint
@@ -142,7 +155,7 @@ abstract class TextMessageView(
     }
 
     override fun bind(data: Any?) {
-        data?.let {
+        data?.let { it ->
             val dataAndViewModels = it as ChatMessageWrapper
             message = dataAndViewModels.message
             groupChatViewModel = dataAndViewModels.groupChatViewModel
@@ -152,21 +165,31 @@ abstract class TextMessageView(
                 messageType == MessageType.GROUP_MESSAGE && type == MessageFlowType.IN
             senderNameTV.text = message.senderInfo.name
 
-            dataAndViewModels.lifeCycleOwner?.let {
+            dataAndViewModels.lifeCycleOwner?.let { it1 ->
                 if (messageType == MessageType.ONE_TO_ONE_MESSAGE){
-                    oneToOneChatViewModel.enableSelect.observe(it, Observer {
+                    oneToOneChatViewModel.enableSelect.observe(it1, Observer {
                         it ?: return@Observer
                         if (it == false) {
-                            Log.d("selectenable", "false")
                             frameLayoutRoot?.foreground = null
                         }
                     })
+                    oneToOneChatViewModel.scrollToMessageId.observe(it1, Observer {
+                        it ?: return@Observer
+                        if (it == message.id){
+                            blinkLayout()
+                        }
+                    })
                 } else if(messageType == MessageType.GROUP_MESSAGE){
-                    groupChatViewModel.enableSelect.observe(it, Observer {
+                    groupChatViewModel.enableSelect.observe(it1, Observer {
                         it ?: return@Observer
                         if (it == false) {
-                            Log.d("selectenable", "false")
                             frameLayoutRoot?.foreground = null
+                        }
+                    })
+                    groupChatViewModel.scrollToMessageId.observe(it1, Observer {
+                        it ?: return@Observer
+                        if (it == message.id){
+                            blinkLayout()
                         }
                     })
                 }
@@ -209,7 +232,18 @@ abstract class TextMessageView(
         }
     }
 
+    private fun blinkLayout(){
+        frameLayoutRoot.background = resources.getDrawable(R.drawable.selected_chat_foreground)
+        Handler(Looper.getMainLooper()).postDelayed({
+                 frameLayoutRoot.background = null
+                 if (messageType == MessageType.GROUP_MESSAGE){
+                     groupChatViewModel.setScrollToMessageNull()
+                 } else {
+                     oneToOneChatViewModel.setScrollToMessageNull()
+                 }
 
+        },2000)
+    }
 
     private fun setReceivedStatus(msg: ChatMessage) {
 
@@ -282,6 +316,7 @@ abstract class TextMessageView(
                     replyMessage
                 )
             } else if (messageType == MessageType.GROUP_MESSAGE) {
+                Log.d("replyToMessage", "scrolling")
                 groupChatViewModel.scrollToMessage(
                     replyMessage
                 )
