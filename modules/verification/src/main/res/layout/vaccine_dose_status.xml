@@ -34,7 +34,7 @@
         android:background="#EBEBEB"/>
 
     <TextView
-        android:id="@+id/name_label"
+        android:id="@+id/vaccine_label_index"
         style="@style/primary_color_heading_bs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -56,8 +56,8 @@
         android:layout_marginTop="@dimen/dp_mid"
         android:text="@string/certificateid_veri"
         app:layout_constraintEnd_toStartOf="@+id/guidline"
-        app:layout_constraintStart_toStartOf="@+id/name_label"
-        app:layout_constraintTop_toBottomOf="@+id/name_label" />
+        app:layout_constraintStart_toStartOf="@+id/vaccine_label_index"
+        app:layout_constraintTop_toBottomOf="@+id/vaccine_label_index" />
 
 
     <TextView
@@ -90,7 +90,7 @@
         android:layout_marginTop="@dimen/dp_sm4"
         android:text="@string/vaccinename_veri"
         app:layout_constraintEnd_toStartOf="@+id/guidline"
-        app:layout_constraintStart_toStartOf="@+id/name_label"
+        app:layout_constraintStart_toStartOf="@+id/vaccine_label_index"
         app:layout_constraintTop_toBottomOf="@+id/certificateid_label" />
 
 
@@ -123,7 +123,7 @@
         android:layout_marginTop="@dimen/dp_sm4"
         android:text="@string/dateofdose_veri"
         app:layout_constraintEnd_toStartOf="@+id/guidline"
-        app:layout_constraintStart_toStartOf="@+id/name_label"
+        app:layout_constraintStart_toStartOf="@+id/vaccine_label_index"
         app:layout_constraintTop_toBottomOf="@+id/vaccine_name_label" />
 
 

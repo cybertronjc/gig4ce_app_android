@@ -63,11 +63,17 @@ class ChooseYourVaccineFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getIntentData(savedInstanceState)
+        initializeAll()
         listeners()
         observer()
         spannableInit()
 //        navigation.navigateTo("verification/CovidVaccinationCertificateFragment")
     }
+
+    private fun initializeAll() {
+        vaccineLabelTV.text = vaccineLabel
+    }
+
     var vaccineId = ""
     var vaccineLabel = ""
     private fun getIntentData(savedInstanceState: Bundle?) {

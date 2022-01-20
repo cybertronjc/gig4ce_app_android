@@ -44,6 +44,7 @@
                     android:visibility="gone" />
 
                 <TextView
+                    android:id="@+id/vaccineLabelTV"
                     style="@style/black_small_bold"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

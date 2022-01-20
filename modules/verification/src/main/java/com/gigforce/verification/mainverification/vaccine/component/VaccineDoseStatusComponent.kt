@@ -29,12 +29,12 @@ class VaccineDoseStatusComponent(context: Context, attrs: AttributeSet?) :
     lateinit var navigation : INavigation
 
     fun setData(
-        name: String,
+        vaccineLabelIndex: String,
         certificateId: String,
         vaccinationName: String,
         dateOfDose: String
     ) {
-        name_label.text = name
+        vaccine_label_index.text = vaccineLabelIndex
         certificateid_tv.text = certificateId
         vaccinename_tv.text = vaccinationName
         dateofdose_tv.text = dateOfDose
@@ -42,10 +42,10 @@ class VaccineDoseStatusComponent(context: Context, attrs: AttributeSet?) :
 
     override fun bind(data: Any?) {
         if(data is VaccineCertDetailsDM){
-            setData(data.name?:"",data.ceritificateId?:"",data.vaccineName?:"",data.vaccineDate?:"")
+            setData(data.vaccineIndexLabel?:"",data.ceritificateId?:"",data.vaccineName?:"",data.vaccineDate?:"")
             view_more.setOnClickListener{
-                if(data.status.isNullOrBlank()){
-                    navigation.navigateTo("verification/chooseYourVaccineFragment")
+                if(data.status.isNullOrBlank() || data.status != "verified"){
+                    navigation.navigateTo("verification/chooseYourVaccineFragment", bundleOf("id" to data.vaccineId, "label" to data.vaccineLabel))
                 }
                 else{
                     navigation.navigateTo("verification/CovidVaccinationCertificateFragment", bundleOf("vaccineId" to data.vaccineId,"download_certificate" to true))
