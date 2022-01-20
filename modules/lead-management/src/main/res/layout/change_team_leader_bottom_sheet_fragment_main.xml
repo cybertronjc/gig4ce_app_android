@@ -13,6 +13,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="40dp"
+            android:focusable="true"
             android:fontFamily="@font/lato_bold"
             android:text="@string/select_team_leader_giger_gigs"
             android:textColor="#202325"

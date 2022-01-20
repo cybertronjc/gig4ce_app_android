@@ -929,11 +929,11 @@ class CommunityFooter(context: Context, attrs: AttributeSet) :
     }
 
     override fun displaySuggestions(display: Boolean) {
-        viewBinding.mentionSuggestionRv.isVisible = display
+        viewBinding.mentionSuggLayout.isVisible = display
     }
 
     override fun isDisplayingSuggestions(): Boolean {
-        return viewBinding.mentionSuggestionRv.isVisible
+        return viewBinding.mentionSuggLayout.isVisible
     }
 
     override fun onReceiveSuggestionsResult(result: SuggestionsResult, bucket: String) {

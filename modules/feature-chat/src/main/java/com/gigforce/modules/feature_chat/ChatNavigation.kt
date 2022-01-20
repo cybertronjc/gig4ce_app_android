@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.core.os.bundleOf
 import androidx.navigation.navOptions
+import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.ViewFullScreenImageDialogFragment
 import com.gigforce.common_ui.ViewFullScreenVideoDialogFragment
 import com.gigforce.common_ui.core.ChatConstants

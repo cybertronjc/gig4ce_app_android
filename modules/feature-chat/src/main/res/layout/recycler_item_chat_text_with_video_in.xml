@@ -143,6 +143,21 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="How are you my dededbrother" />
 
+            <TextView
+                android:id="@+id/chat_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/thumbnail_layout"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="32dp"
+                android:layout_gravity="bottom"
+                android:maxWidth="178dp"
+                android:visibility="visible"
+                android:textColor="@android:color/black"
+                android:textSize="12sp"
+                tools:text="How are you my dededbrother" />
+
             <ImageView
                 android:id="@+id/tv_received_status"
                 android:layout_width="10dp"

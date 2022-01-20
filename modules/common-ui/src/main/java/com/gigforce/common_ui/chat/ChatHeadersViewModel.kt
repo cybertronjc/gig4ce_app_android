@@ -46,48 +46,54 @@ class ChatHeadersViewModel @Inject constructor(
     }
 
     fun startWatchingChatHeaders() {
-        val reference = firebaseDB
-            .collection("chats")
-            .document(uid)
-            .collection("headers")
-            .orderBy("lastMsgTimestamp", Query.Direction.DESCENDING)
+        try {
+            val reference = firebaseDB
+                .collection("chats")
+                .document(uid)
+                .collection("headers")
+                .orderBy("lastMsgTimestamp", Query.Direction.DESCENDING)
 
-        chatHeadersSnapshotListener = reference
-            .addSnapshotListener { querySnapshot, exception ->
-                exception?.let {
-                    Log.e("chatheaders/viewmodel", exception.message!!)
-                    return@addSnapshotListener
-                }
-                querySnapshot?.let {
-                    Log.e("chat/header/viewmodel", "Data Loaded from Server")
-
-                    val messages = it.documents.map { docSnap ->
-                        docSnap.toObject(ChatHeader::class.java)!!.apply {
-                            this.id = docSnap.id
-                        }
+            chatHeadersSnapshotListener = reference
+                .addSnapshotListener { querySnapshot, exception ->
+                    exception?.let {
+                        Log.e("chatheaders/viewmodel", exception.message!!)
+                        return@addSnapshotListener
                     }
+                    querySnapshot?.let {
+                        Log.e("chat/header/viewmodel", "Data Loaded from Server")
 
-                    chatHeadersList = messages
-                    filterChatHeadersAndEmit()
-
-                    var unreadMessageCount = 0
-                    messages.forEach { chatHeader ->
-                        unreadMessageCount += chatHeader.unseenCount
-
-                        if (chatHeader.unseenCount != 0) {
-                            Log.d("ChatHeaderViewModel","setting useencount")
-
-                            if (chatHeader.chatType == ChatConstants.CHAT_TYPE_USER) {
-                                setMessagesAsDeliveredForChat(
-                                    chatHeader.id,
-                                    chatHeader.otherUserId
-                                )
+                        val messages = it.documents.map { docSnap ->
+                            docSnap.toObject(ChatHeader::class.java)!!.apply {
+                                this.id = docSnap.id
                             }
                         }
+
+                        chatHeadersList = messages
+                        filterChatHeadersAndEmit()
+
+                        var unreadMessageCount = 0
+                        messages.forEach { chatHeader ->
+                            unreadMessageCount += chatHeader.unseenCount
+
+                            if (chatHeader.unseenCount != 0) {
+                                Log.d("ChatHeaderViewModel","setting useencount")
+
+                                if (chatHeader.chatType == ChatConstants.CHAT_TYPE_USER) {
+                                    setMessagesAsDeliveredForChat(
+                                        chatHeader.id,
+                                        chatHeader.otherUserId
+                                    )
+                                }
+                            }
+                        }
+                        _unreadMessageCount.postValue(unreadMessageCount)
                     }
-                    _unreadMessageCount.postValue(unreadMessageCount)
                 }
-            }
+        } catch (e: Exception){
+            e.printStackTrace()
+        }
+
+
     }
 
     private fun setMessagesAsDeliveredForChat(

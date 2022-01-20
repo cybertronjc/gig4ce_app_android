@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <com.gigforce.common_ui.components.cells.AppBar
+        android:id="@+id/appBarComp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:backgroundType="PinkBar"
+        app:isFilterVisible="false"
+        app:isSearchVisible="true"
+        app:isRefreshVisible="true"
+        android:visibility="visible"
+        android:elevation="2dp"
+        app:titleText="Message info"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/read_by_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/size_12"
+        android:elevation="@dimen/size_4"
+        android:background="@drawable/read_by_layout_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appBarComp">
+
+        <TextView
+            android:id="@+id/read_by_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:padding="12dp"
+            android:textColor="@color/status_bar_pink"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="Read By" />
+
+        <TextView
+            android:id="@+id/read_by_remaining"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            android:paddingStart="@dimen/size_12"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/read_by_text"
+            android:text="0 remaining" />
+
+        <com.gigforce.core.recyclerView.CoreRecyclerView
+            android:id="@+id/message_viewed_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/size_12"
+            android:layout_marginTop="@dimen/size_12"
+            app:layout_constraintTop_toBottomOf="@id/read_by_remaining"
+            app:layout_constraintStart_toStartOf="@id/read_by_remaining"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:id="@+id/deliveredLayout"
+            android:layout_margin="@dimen/size_12"
+            android:elevation="@dimen/size_4"
+            android:background="@drawable/read_by_layout_background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/read_by_layout">
+
+            <TextView
+                android:id="@+id/delivered_by_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:padding="12dp"
+                android:textColor="@color/status_bar_pink"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="Delivered To" />
+
+            <TextView
+                android:id="@+id/delivered_by_remaining"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                android:paddingStart="@dimen/size_12"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/delivered_by_text"
+                android:text="0 remaining" />
+
+            <com.gigforce.core.recyclerView.CoreRecyclerView
+                android:id="@+id/message_delivered_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/size_12"
+                android:layout_marginTop="@dimen/size_12"
+                app:layout_constraintTop_toBottomOf="@id/delivered_by_remaining"
+                app:layout_constraintStart_toStartOf="@id/delivered_by_remaining"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
