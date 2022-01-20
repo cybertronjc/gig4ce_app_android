@@ -232,6 +232,6 @@ class GigforceImageView(
     fun isUrl(
         string : String?
     ) : Boolean{
-        return URLUtil.isHttpUrl(string) || URLUtil.isHttpUrl(string)
+        return URLUtil.isHttpUrl(string) || URLUtil.isHttpsUrl(string)
     }
 }
