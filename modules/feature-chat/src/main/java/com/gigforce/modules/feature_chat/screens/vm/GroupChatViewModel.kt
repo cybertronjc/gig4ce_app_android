@@ -162,7 +162,9 @@ class GroupChatViewModel @Inject constructor(
             return
         }
 
-        groupDetailsListener = chatGroupRepository.getGroupDetailsRef(groupId)
+        try {
+            val groupDetailRef = chatGroupRepository.getGroupDetailsRef(groupId)
+            groupDetailsListener = groupDetailRef
                 .addSnapshotListener { data, error ->
                     Log.d(TAG, "group details changed/subscribed, groupId - $groupId")
 
@@ -180,15 +182,18 @@ class GroupChatViewModel @Inject constructor(
                         }
 
                         val isUserDeletedFromgroup =
-                                groupDetails!!.deletedGroupMembers.find { it.uid == currentUser.uid } != null
+                            groupDetails?.deletedGroupMembers?.find { it.uid == currentUser.uid } != null
                         val limitToTimeStamp = if (isUserDeletedFromgroup) {
-                            groupDetails!!.deletedGroupMembers.find { it.uid == currentUser.uid }!!.deletedOn
+                            groupDetails?.deletedGroupMembers?.find { it.uid == currentUser.uid }?.deletedOn
                         } else
                             null
 
                         startWatchingGroupMessagesAndEvents(limitToTimeStamp)
                     }
                 }
+        } catch (e: Exception){
+            e.printStackTrace()
+        }
 
         startContactsChangeListener()
     }
