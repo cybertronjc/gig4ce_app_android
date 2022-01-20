@@ -19,7 +19,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.common_ui.MimeTypes
 import com.gigforce.common_ui.ext.showToast
-import com.gigforce.common_ui.remote.verification.VaccineFileUploadReqDM
+import com.gigforce.common_ui.remote.verification.VaccineIdLabelReqDM
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.logger.GigforceLogger
@@ -173,7 +173,7 @@ class ChooseYourVaccineFragment : Fragment() {
                     MultipartBody.Part.createFormData("vaccine", "vaccineFile", requestFile)
                 mutliplartFile?.let {
                     viewModel.uploadFile(
-                        VaccineFileUploadReqDM(vaccineId, vaccineLabel),
+                        VaccineIdLabelReqDM(vaccineId, vaccineLabel),
                         it
                     )
                 }

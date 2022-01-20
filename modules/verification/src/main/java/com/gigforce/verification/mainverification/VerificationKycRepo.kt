@@ -13,7 +13,6 @@ import com.gigforce.common_ui.remote.verification.VaccineFileUploadResDM
 import com.gigforce.common_ui.viewdatamodels.BaseResponse
 import com.gigforce.core.extensions.getOrThrow
 import com.gigforce.core.logger.GigforceLogger
-import com.gigforce.verification.mainverification.vaccine.models.VaccineCertDetailsDM
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
@@ -105,7 +104,7 @@ class VerificationKycRepo @Inject constructor(private val iBuildConfigVM: IBuild
     override fun getCollectionName(): String =
         COLLECTION_NAME
 
-    suspend fun submitVaccinationCertificate( vaccineReqDM : VaccineFileUploadReqDM, file: MultipartBody.Part): VaccineFileUploadResDM {
+    suspend fun submitVaccinationCertificate(vaccineReqDM : VaccineIdLabelReqDM, file: MultipartBody.Part): VaccineFileUploadResDM {
         val vaccinationCertificate =
                     kycService.uploadVaccineCertificate("https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/verificationVaccine/verfiyVaccineCertificate",
                         vaccineReqDM, file)
@@ -127,7 +126,8 @@ class VerificationKycRepo @Inject constructor(private val iBuildConfigVM: IBuild
     suspend fun confirmVaccinationData(vaccineId: String):BaseResponse<Any> {
         val confirmationDetails =
             kycService.confirmVaccinationData("https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/verificationVaccine/confirmVaccine",
-                vaccineId)
+                Data1(data = VaccineIdLabelReqDM(vaccineId = vaccineId))
+            )
         if (confirmationDetails.isSuccessful) {
             return confirmationDetails.body()!!
         } else {

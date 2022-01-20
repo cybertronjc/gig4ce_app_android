@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gigforce.common_ui.remote.verification.VaccineFileUploadReqDM
+import com.gigforce.common_ui.remote.verification.VaccineIdLabelReqDM
 import com.gigforce.common_ui.remote.verification.VaccineFileUploadResDM
 import com.gigforce.common_ui.viewdatamodels.BaseResponse
 import com.gigforce.common_ui.viewdatamodels.SimpleCardDVM1
@@ -45,7 +45,7 @@ class VaccineViewModel @Inject constructor(val logger: GigforceLogger, private v
         getVaccineConfigData()
     }
 
-    fun uploadFile(vaccineReqDM: VaccineFileUploadReqDM, file: MultipartBody.Part) =
+    fun uploadFile(vaccineReqDM: VaccineIdLabelReqDM, file: MultipartBody.Part) =
         viewModelScope.launch {
             try {
                 _fileUploadLiveData.value = Lce.Loading

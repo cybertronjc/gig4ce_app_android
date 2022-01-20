@@ -74,7 +74,7 @@ class IntermediateVaccinationRepo @Inject constructor(
                             try {
                                 allVaccine.add(getRelatedVaccinData(vaccineObject, it1,index+1))
                             } catch (e: Exception) {
-                                allVaccine.add(VaccineCertDetailsDM(name = "vaccine$index+1",vaccineId = it1))
+                                allVaccine.add(VaccineCertDetailsDM(name = "vaccine${index+1}",vaccineId = it1))
                             }
                         }
                     }

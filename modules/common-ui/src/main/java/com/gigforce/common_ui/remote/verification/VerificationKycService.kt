@@ -34,7 +34,7 @@ interface VerificationKycService {
     @POST
     suspend fun uploadVaccineCertificate(
         @Url getKycOcrUrl: String,
-        @Part("data") vaccineId: VaccineFileUploadReqDM,
+        @Part("data") data: VaccineIdLabelReqDM,
         @Part file: MultipartBody.Part
     ): Response<VaccineFileUploadResDM>
 
@@ -43,8 +43,9 @@ interface VerificationKycService {
         @Body submitSignatureRequest: SubmitSignatureRequest
     ): Response<KycOcrResultModel>
 
+    @POST
     suspend fun confirmVaccinationData(
         @Url getKycOcrUrl: String,
-        @Part ("vaccineId") vaccineId: String
+        @Body data: Data1
     ): Response<BaseResponse<Any>>
 }

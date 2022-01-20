@@ -107,10 +107,11 @@ class CovidVaccinationCertificateFragment : Fragment() {
                 Lce.Loading -> {
                 }
                 is Lce.Content -> {
-                }
-                is Lce.Error -> {
                     navigation.popBackStack()
                     navigation.navigateTo("verification/CovidCertificateStatusFragment")
+                }
+                is Lce.Error -> {
+                    showToast(it.error)
                 }
 
             }
