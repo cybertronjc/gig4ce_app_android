@@ -11,15 +11,10 @@
 
     <application>
 
-        <!-- Foreground services in Q+ require type. -->
-        <service
-            android:name="com.gigforce.modules.feature_chat.com.gigforce.core.location.LocationUpdatesService"
-            android:enabled="true"
-            android:exported="true"
-            android:foregroundServiceType="location|camera|microphone" />
+
 
         <activity
-            android:name="com.gigforce.core.location.LocationSharingActivity"
+            android:name="com.gigforce.common_ui.location.LocationSharingActivity"
             android:exported="false" />
         <activity
             android:name=".mediapicker.VideoViewerActivity"

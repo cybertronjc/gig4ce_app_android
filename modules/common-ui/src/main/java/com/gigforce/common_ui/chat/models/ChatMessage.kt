@@ -68,6 +68,10 @@ class ChatMessage(
     @set:PropertyName("audioLength")
     var audioLength: Long = 0,
 
+    @get:PropertyName("isLiveLocation")
+    @set:PropertyName("isLiveLocation")
+    var isLiveLocation: Boolean = false,
+
     /**
      * Attachment Path- full path of image, video etc
      */

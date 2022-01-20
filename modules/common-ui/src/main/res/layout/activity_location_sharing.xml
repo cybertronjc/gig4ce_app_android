@@ -17,7 +17,7 @@
             app:isRefreshVisible="true"
             android:visibility="visible"
             android:elevation="2dp"
-            app:titleText="@string/send_location_chat"
+            app:titleText="@string/send_location_common_ui"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
@@ -86,7 +86,7 @@
                         android:gravity="center"
                         android:textAllCaps="true"
                         android:fontFamily="@font/lato_bold"
-                        android:text="@string/send_location_chat"
+                        android:text="@string/share_live_location_common_ui"
                         android:textAlignment="center"
                         android:textColor="@color/white" />
 
@@ -102,7 +102,7 @@
                         android:gravity="center"
                         android:textAllCaps="true"
                         android:fontFamily="@font/lato_bold"
-                        android:text="@string/send_location_chat"
+                        android:text="@string/share_current_location_common_ui"
                         android:textAlignment="center"
                         android:textColor="@color/lipstick_2" />
                 </LinearLayout>
@@ -124,31 +124,33 @@
                         android:textSize="@dimen/font_14"
                         android:layout_marginStart="@dimen/size_20"
                         android:layout_marginTop="@dimen/size_40"
-                        android:text="@string/share_live_location_chat"
+                        android:text="@string/share_live_location_common_ui"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"/>
 
                     <com.google.android.material.tabs.TabLayout
                         android:id="@+id/interval_tab_layout"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="42dp"
-                        android:layout_marginStart="@dimen/size_8"
+                        android:layout_marginStart="@dimen/size_20"
                         android:layout_marginTop="@dimen/size_40"
-                        android:layout_marginEnd="@dimen/size_8"
+                        android:layout_marginEnd="@dimen/size_20"
+                        android:background="@color/white"
                         android:textAlignment="center"
                         android:visibility="visible"
-                        android:background="@color/tab_background_color"
-                        app:tabBackground="@drawable/selected_tab_background"
-                        app:tabGravity="center"
-                        app:tabIndicatorHeight="0dp"
-                        app:tabMode="fixed"
-                        app:tabSelectedTextColor="@color/white"
+                        app:tabBackground="@drawable/tab_selector_common"
+                        android:textSize="@dimen/font_12"
                         app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
                         app:tabTextColor="@color/black"
-                        app:layout_constraintStart_toStartOf="@id/location_text"
-                        app:layout_constraintTop_toBottomOf="@id/location_text">
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/location_text"
+                        app:tabGravity="center"
+                        app:tabIndicatorColor="@color/white"
+                        app:tabIndicatorHeight="0dp"
+                        app:tabMode="fixed"
+                        app:tabSelectedTextColor="@color/white" />
 
-                    </com.google.android.material.tabs.TabLayout>
 
                     <EditText
                         android:id="@+id/add_comment_edit"
@@ -157,6 +159,9 @@
                         android:backgroundTint="@color/lipstick_2"
                         android:hint="Add comment..."
                         android:textSize="@dimen/font_14"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:layout_marginBottom="@dimen/size_20"
+                        android:layout_marginTop="@dimen/size_12"
                         android:textColorHint="#979C9E"
                         android:layout_marginEnd="@dimen/size_20"
                         app:layout_constraintEnd_toStartOf="@id/imageViewStop"
@@ -167,9 +172,8 @@
                         android:id="@+id/imageViewStop"
                         android:layout_width="44dp"
                         android:layout_height="44dp"
-                        android:layout_marginTop="6dp"
+                        android:layout_marginTop="@dimen/size_12"
                         android:layout_marginEnd="10dp"
-                        android:layout_marginBottom="6dp"
                         android:background="?android:selectableItemBackground"
                         android:clickable="true"
                         android:elevation="2dp"
@@ -180,6 +184,8 @@
                         app:cardPreventCornerOverlap="false"
                         app:cardUseCompatPadding="false"
                         app:contentPadding="0dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:layout_marginBottom="@dimen/size_20"
                         app:layout_constraintTop_toBottomOf="@id/interval_tab_layout"
                         app:layout_constraintEnd_toEndOf="parent">
 

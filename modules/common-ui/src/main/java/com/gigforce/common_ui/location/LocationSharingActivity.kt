@@ -1,48 +1,50 @@
-package com.gigforce.core.location
+package com.gigforce.common_ui.location
 
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.*
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.location.Geocoder
 import android.location.Location
+import android.os.Build
 import android.os.Bundle
+import android.os.IBinder
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.view.WindowManager
 import android.widget.Toast
+import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.preference.PreferenceManager
+import com.gigforce.common_ui.R
+import com.gigforce.common_ui.chat.ChatConstants
+import com.gigforce.common_ui.databinding.ActivityLocationSharingBinding
+import com.gigforce.common_ui.ext.onTabSelected
+import com.gigforce.core.AppConstants.INTENT_EXTRA_CHAT_HEADER_ID
+import com.gigforce.core.AppConstants.INTENT_EXTRA_CHAT_TYPE
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.base.BaseActivity
 import com.gigforce.core.date.DateHelper
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 import com.gigforce.core.image.ImageUtils
+import com.gigforce.core.location.LocationUpdates
 import com.gigforce.core.navigation.INavigation
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
+import com.google.firebase.Timestamp
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
-import java.lang.NullPointerException
+import java.util.*
 import javax.inject.Inject
-import android.graphics.Bitmap
-import android.graphics.Canvas
-
-import android.os.Build
-import android.view.Window
-import android.view.WindowManager
-import androidx.annotation.DrawableRes
-
-import com.google.android.gms.maps.model.BitmapDescriptor
-
-import android.os.IBinder
-
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import androidx.preference.PreferenceManager
 
 @AndroidEntryPoint
 class LocationSharingActivity : BaseActivity(), OnMapReadyCallback,
@@ -54,6 +56,7 @@ class LocationSharingActivity : BaseActivity(), OnMapReadyCallback,
         const val INTENT_EXTRA_LONGITUDE = "longitude"
         const val INTENT_EXTRA_PHYSICAL_ADDRESS = "physical_address"
         const val INTENT_EXTRA_MAP_IMAGE_FILE = "map_image"
+        const val INTENT_EXTRA_IS_LIVE_LOCATION = "is_live_location"
 
         const val REQUEST_LOCATION_PERMISSION = 244
     }
@@ -66,7 +69,15 @@ class LocationSharingActivity : BaseActivity(), OnMapReadyCallback,
 
 
     // The BroadcastReceiver used to listen from broadcasts from the service.
-    private val myReceiver: MyReceiver? = null
+    private val myReceiver =  object : BroadcastReceiver() {
+        override fun onReceive(p0: Context?, p1: Intent?) {
+            val location =
+                intent.getParcelableExtra<Location>(LocationUpdatesService.EXTRA_LOCATION)
+            if (location != null) {
+                Log.d("LocationUpdatesLocation", "loc: ${location.latitude} , ${location.longitude}")
+            }
+        }
+    }
 
     private var locationAddress = ""
     private lateinit var supportMapFragment: SupportMapFragment
@@ -85,6 +96,9 @@ class LocationSharingActivity : BaseActivity(), OnMapReadyCallback,
 
     // Tracks the bound state of the service.
     private var mBound = false
+
+    private var chatType: String = ChatConstants.CHAT_TYPE_USER
+    private var chatHeaderOrGroupId: String? = null
 
     var selectedTab = 0
     private lateinit var viewBinding: ActivityLocationSharingBinding
@@ -109,6 +123,7 @@ class LocationSharingActivity : BaseActivity(), OnMapReadyCallback,
         setContentView(viewBinding.root)
         changeStatusBarColor()
 //        setStatusBarIcons(false)
+        getDataFromIntents(savedInstanceState)
         checkAndAskForPermission()
         initLayout()
         initListeners()
@@ -116,10 +131,35 @@ class LocationSharingActivity : BaseActivity(), OnMapReadyCallback,
         initMap()
     }
 
+    private fun getDataFromIntents(bundle: Bundle?) {
+        val bundle1 = intent.extras
+        if (bundle1 != null) {
+            chatType = bundle1.getString(INTENT_EXTRA_CHAT_TYPE)
+                ?: throw IllegalArgumentException("please provide INTENT_EXTRA_CHAT_TYPE in intent extra")
+            chatHeaderOrGroupId = bundle1.getString(INTENT_EXTRA_CHAT_HEADER_ID) ?: ""
+        }
+    }
+
+
     private fun initListeners() = viewBinding.apply {
 
         imageViewStop.setOnClickListener {
             //share location
+            var endTime: Date? = null
+            val date: Calendar = Calendar.getInstance()
+            val t: Long = date.timeInMillis
+            if (selectedTab == 0){
+                endTime = Date(t + (15 * 60000))
+            } else if (selectedTab == 1){
+                //1 hour
+                endTime = Date(t + (60 * 60000))
+            } else if (selectedTab == 2){
+                //8 hours
+                endTime = Date(t + (480 * 60000))
+            }
+            Log.d("LocationSharingActivity", "Start: ${date.time} , End: $endTime")
+            mService?.requestLocationUpdates(chatType, chatHeaderOrGroupId , date.time, endTime)
+            sendResultsBack(true)
         }
 
         shareCurrentLocation.setOnClickListener {
@@ -128,9 +168,8 @@ class LocationSharingActivity : BaseActivity(), OnMapReadyCallback,
 
         shareLiveLocation.setOnClickListener {
             //show options
-//            liveLocationLayout.visible()
-//            optionsLayout.gone()
-            mService?.requestLocationUpdates()
+            liveLocationLayout.visible()
+            optionsLayout.gone()
 
         }
     }
@@ -287,7 +326,7 @@ class LocationSharingActivity : BaseActivity(), OnMapReadyCallback,
         }
     }
 
-    private fun sendResultsBack() {
+    private fun sendResultsBack(isLiveLocation: Boolean) {
         if (location == null)
             return
 
@@ -302,6 +341,7 @@ class LocationSharingActivity : BaseActivity(), OnMapReadyCallback,
                 resultIntent.putExtra(INTENT_EXTRA_LONGITUDE, location!!.longitude)
                 resultIntent.putExtra(INTENT_EXTRA_PHYSICAL_ADDRESS, locationAddress)
                 resultIntent.putExtra(INTENT_EXTRA_MAP_IMAGE_FILE, file)
+                resultIntent.putExtra(INTENT_EXTRA_IS_LIVE_LOCATION, isLiveLocation)
                 setResult(Activity.RESULT_OK, resultIntent)
                 finish()
             }
@@ -310,6 +350,7 @@ class LocationSharingActivity : BaseActivity(), OnMapReadyCallback,
             resultIntent.putExtra(INTENT_EXTRA_LATITUDE, location!!.latitude)
             resultIntent.putExtra(INTENT_EXTRA_LONGITUDE, location!!.longitude)
             resultIntent.putExtra(INTENT_EXTRA_PHYSICAL_ADDRESS, locationAddress)
+            resultIntent.putExtra(INTENT_EXTRA_IS_LIVE_LOCATION, isLiveLocation)
             setResult(Activity.RESULT_OK, resultIntent)
             finish()
         }
@@ -319,8 +360,6 @@ class LocationSharingActivity : BaseActivity(), OnMapReadyCallback,
         super.onStart()
         PreferenceManager.getDefaultSharedPreferences(this)
             .registerOnSharedPreferenceChangeListener(this);
-        // Bind to the service. If the service is in foreground mode, this signals to the service
-        // that since this activity is in the foreground, the service can exit foreground mode.
         // Bind to the service. If the service is in foreground mode, this signals to the service
         // that since this activity is in the foreground, the service can exit foreground mode.
         bindService(
@@ -346,10 +385,9 @@ class LocationSharingActivity : BaseActivity(), OnMapReadyCallback,
                 myReceiver,
                 IntentFilter(LocationUpdatesService.ACTION_BROADCAST)
             )
-            ;
-            locationUpdates.setLocationUpdateCallbacks(this@LocationSharingActivity)
-            locationUpdates.startUpdates(this)
         }
+        locationUpdates.setLocationUpdateCallbacks(this)
+        locationUpdates.startUpdates(this)
     }
         override fun onStop() {
             if (mBound) {
@@ -372,7 +410,7 @@ class LocationSharingActivity : BaseActivity(), OnMapReadyCallback,
         override fun locationReceiver(location: Location?) {
             this.location = location
             val address = processLocationAndUpdateUserDetails(location!!)
-
+            Log.d("received","$location")
             addMarkerOnMap(location?.latitude, location?.longitude)
         }
 
@@ -399,7 +437,7 @@ class LocationSharingActivity : BaseActivity(), OnMapReadyCallback,
 
 
         override fun lastLocationReceiver(location: Location?) {
-
+            Log.d("lastLocation","$location")
         }
 
         private fun changeStatusBarColor() {

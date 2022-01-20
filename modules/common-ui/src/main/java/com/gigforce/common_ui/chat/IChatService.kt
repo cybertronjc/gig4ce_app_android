@@ -7,6 +7,7 @@ import com.gigforce.common_ui.chat.models.AudioInfo
 import com.gigforce.common_ui.chat.models.ChatMessage
 import com.gigforce.common_ui.chat.models.ContactModel
 import com.gigforce.common_ui.chat.models.VideoInfo
+import com.google.firebase.firestore.GeoPoint
 import java.io.File
 
 //import com.gigforce.modules.feature_chat.models.ChatMessage
@@ -88,5 +89,11 @@ interface IChatService {
     suspend fun forwardChatMessage(
         contacts: List<ContactModel>,
         chatMessage: ChatMessage
+    )
+
+    suspend fun setLocationToChatMessage(
+        id: String,
+        messageId: String,
+        location: GeoPoint
     )
 }

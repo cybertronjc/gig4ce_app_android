@@ -55,7 +55,14 @@ import com.gigforce.common_ui.components.cells.AppBar
 import com.gigforce.core.*
 import com.gigforce.modules.feature_chat.analytics.CommunityEvents
 import com.gigforce.common_ui.ext.showToast
-import com.gigforce.core.location.LocationSharingActivity
+import com.gigforce.common_ui.location.LocationSharingActivity
+import com.gigforce.common_ui.location.LocationSharingActivity.Companion
+import com.gigforce.common_ui.location.LocationSharingActivity.Companion.INTENT_EXTRA_IS_LIVE_LOCATION
+import com.gigforce.common_ui.location.LocationSharingActivity.Companion.INTENT_EXTRA_LATITUDE
+import com.gigforce.common_ui.location.LocationSharingActivity.Companion.INTENT_EXTRA_LONGITUDE
+import com.gigforce.common_ui.location.LocationSharingActivity.Companion.INTENT_EXTRA_MAP_IMAGE_FILE
+import com.gigforce.common_ui.location.LocationSharingActivity.Companion.INTENT_EXTRA_PHYSICAL_ADDRESS
+import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.modules.feature_chat.mediapicker.Dazzle
 import com.gigforce.modules.feature_chat.mediapicker.Dazzle.Companion.PICKED_MEDIA_TEXT
 import com.gigforce.modules.feature_chat.mediapicker.Dazzle.Companion.PICKED_MEDIA_TYPE
@@ -99,6 +106,9 @@ class ChatPageFragment : Fragment(),
 
     @Inject
     lateinit var navigation: INavigation
+
+    @Inject
+    lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
     
     @Inject
     lateinit var eventTracker: IEventTracker
@@ -755,11 +765,20 @@ class ChatPageFragment : Fragment(),
                         chatRecyclerView.visible()
                         noChatLayout.gone()
                         shimmerContainer.gone()
+
+//                        if (messages[messages.size - 1].type == ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION){
+//                            Log.d("RecentLocMessage", "id: ${messages[messages.size - 1].id}")
+//                            sharedPreAndCommonUtilInterface.saveData("recent_loc_message", messages[messages.size - 1].id)
+//                        }
+
                     }
                 }
             })
 
-
+        viewModel.recentLocationMessageId.observe(viewLifecycleOwner, Observer {
+            Log.d("RecentLocId", "id: $it")
+            sharedPreAndCommonUtilInterface.saveData("recent_loc_message", it)
+        })
         viewModel.headerInfo
             .observe(viewLifecycleOwner, {
                 Log.d(UserAndGroupDetailsFragment.TAG, "block chat: ${it.isBlocked}")
@@ -1610,14 +1629,17 @@ class ChatPageFragment : Fragment(),
 
     private fun sendLocationMessage(data: Intent?) {
         val latitude =
-            data!!.getDoubleExtra(CaptureLocationActivity.INTENT_EXTRA_LATITUDE, 0.0)
+            data!!.getDoubleExtra(INTENT_EXTRA_LATITUDE, 0.0)
         val longitude =
-            data.getDoubleExtra(CaptureLocationActivity.INTENT_EXTRA_LONGITUDE, 0.0)
+            data.getDoubleExtra(INTENT_EXTRA_LONGITUDE, 0.0)
         val address =
-            data.getStringExtra(CaptureLocationActivity.INTENT_EXTRA_PHYSICAL_ADDRESS)
+            data.getStringExtra(INTENT_EXTRA_PHYSICAL_ADDRESS)
                 ?: ""
         val imageFile: File? =
-            data.getSerializableExtra(CaptureLocationActivity.INTENT_EXTRA_MAP_IMAGE_FILE) as File?
+            data.getSerializableExtra(INTENT_EXTRA_MAP_IMAGE_FILE) as File?
+
+        val isLiveLocation =
+            data.getBooleanExtra(INTENT_EXTRA_IS_LIVE_LOCATION, false)
 
         var type = ""
         if (chatType == ChatConstants.CHAT_TYPE_USER) {
@@ -1625,9 +1647,13 @@ class ChatPageFragment : Fragment(),
                 latitude,
                 longitude,
                 address,
-                imageFile
+                imageFile,
+                isLiveLocation
             )
             type = "Direct"
+//            val recentId = viewModel.getRecentLocationChatMessage()
+//            Log.d("RecentLocMessage", "id: $recentId")
+//            sharedPreAndCommonUtilInterface.saveData("recent_loc_message", recentId)
         } else {
             groupChatViewModel.sendLocationMessage(
                 latitude,
@@ -1857,8 +1883,11 @@ class ChatPageFragment : Fragment(),
 //                    Intent(requireContext(), CaptureLocationActivity::class.java),
 //                    REQUEST_GET_LOCATION
 //                )
+                val intent = Intent(requireContext(), LocationSharingActivity::class.java)
+                intent.putExtra(INTENT_EXTRA_CHAT_TYPE , chatType)
+                intent.putExtra(INTENT_EXTRA_CHAT_HEADER_ID, chatHeaderOrGroupId)
                 startActivityForResult(
-                    Intent(requireContext(), LocationSharingActivity::class.java),
+                    intent,
                     REQUEST_GET_LOCATION
                 )
 //                showToast("Location Clicked")

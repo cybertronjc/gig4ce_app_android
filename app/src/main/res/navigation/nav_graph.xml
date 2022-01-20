@@ -1159,5 +1159,9 @@
         android:id="@+id/acknowledgeBankBS"
         android:name="com.gigforce.verification.mainverification.bankaccount.AcknowledgeBankBS"
         android:label="AcknowledgeBankBS" />
+    <fragment
+        android:id="@+id/viewLiveLocationFragment"
+        android:name="com.gigforce.modules.feature_chat.screens.ViewLiveLocationFragment"
+        android:label="ViewLiveLocationFragment" />
 </navigation>
 

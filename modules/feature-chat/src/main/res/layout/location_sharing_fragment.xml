@@ -17,7 +17,7 @@
             app:isRefreshVisible="true"
             android:visibility="visible"
             android:elevation="2dp"
-            app:titleText="@string/send_location_chat"
+            app:titleText="@string/send_location_common_ui"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
@@ -69,7 +69,7 @@
                         android:gravity="center"
                         android:textAllCaps="true"
                         android:fontFamily="@font/lato_bold"
-                        android:text="@string/send_location_chat"
+                        android:text="@string/send_location_common_ui"
                         android:textAlignment="center"
                         android:textColor="@color/white" />
 
@@ -85,7 +85,7 @@
                         android:gravity="center"
                         android:textAllCaps="true"
                         android:fontFamily="@font/lato_bold"
-                        android:text="@string/send_location_chat"
+                        android:text="@string/send_location_common_ui"
                         android:textAlignment="center"
                         android:textColor="@color/lipstick_2" />
                 </LinearLayout>
@@ -106,7 +106,7 @@
                         android:textSize="@dimen/font_14"
                         android:layout_marginStart="@dimen/size_20"
                         android:layout_marginTop="@dimen/size_40"
-                        android:text="@string/share_live_location_chat"
+                        android:text="@string/share_live_location_common_ui"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"/>
 

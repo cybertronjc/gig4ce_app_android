@@ -1,11 +1,10 @@
-package com.gigforce.core.location
+package com.gigforce.common_ui.location
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.location.Location
 import android.util.Log
-import android.widget.Toast
 
 
 /**
@@ -17,10 +16,7 @@ class MyReceiver : BroadcastReceiver() {
             intent.getParcelableExtra<Location>(LocationUpdatesService.EXTRA_LOCATION)
         if (location != null) {
             Log.d("LocationUpdates", "loc: ${location.latitude} , ${location.longitude}")
-            Toast.makeText(
-                context, "Location",
-                Toast.LENGTH_SHORT
-            ).show()
+            context.sendBroadcast(Intent(LocationUpdatesService.ACTION_BROADCAST))
         }
     }
 }

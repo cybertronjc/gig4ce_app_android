@@ -1,4 +1,4 @@
-package com.gigforce.core.location;
+package com.gigforce.common_ui.location;
 
 import android.content.Context;
 import android.location.Location;

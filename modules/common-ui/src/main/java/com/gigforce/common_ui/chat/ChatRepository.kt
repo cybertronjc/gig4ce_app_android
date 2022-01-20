@@ -27,6 +27,7 @@ import com.google.firebase.Timestamp
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.storage.FirebaseStorage
 import java.io.File
 import javax.inject.Inject
@@ -95,6 +96,23 @@ class ChatRepository @Inject constructor(
 
         getChatMessagesCollectionRef(chatHeaderId)
             .addOrThrow(message)
+    }
+
+    override suspend fun setLocationToChatMessage(
+        id: String,
+        messageId: String,
+        location: GeoPoint
+    ){
+        try {
+            val chatMessagesRef = getChatMessagesCollectionRef(id)
+            chatMessagesRef.document(messageId).updateOrThrow(
+                mapOf(
+                    "location" to location
+                )
+            )
+        } catch (e: Exception){
+
+        }
     }
 
     override suspend fun sendLocationMessage(

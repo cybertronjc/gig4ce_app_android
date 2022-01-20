@@ -31,6 +31,7 @@ object AppConstants {
     const val INTENT_EXTRA_OTHER_USER_ID = "sender_id"
     const val INTENT_EXTRA_OTHER_USER_NAME = "sender_name"
     const val INTENT_EXTRA_OTHER_USER_IMAGE = "sender_profile"
+    const val INTENT_EXTRA_CHAT_MESSAGE_ID = "chat_message_id"
     const val CHAT_TYPE_USER = "user"
     const val CHAT_TYPE_GROUP = "group"
 

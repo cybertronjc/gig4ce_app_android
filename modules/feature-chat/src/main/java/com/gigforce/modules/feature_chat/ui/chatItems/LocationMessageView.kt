@@ -20,6 +20,7 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.chat.models.ChatMessage
 import com.gigforce.common_ui.core.ChatConstants
+import com.gigforce.core.AppConstants
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.TrackingEventArgs
@@ -252,19 +253,24 @@ abstract class LocationMessageView(
         //Launch Map
         if (message == null)
             return
-
-        val lat = message.location?.latitude ?: 0.0
-        val long = message.location?.longitude ?: 0.0
-
-        if (lat != 0.0) {
-            val uri = "http://maps.google.com/maps?q=loc:$lat,$long (Location)"
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
-            try {
-                context.startActivity(intent)
-            } catch (e: ActivityNotFoundException) {
-                Toast.makeText(context, context.getString(R.string.no_app_found_locations_chat), Toast.LENGTH_SHORT).show()
-            }
-        }
+//
+//        val lat = message.location?.latitude ?: 0.0
+//        val long = message.location?.longitude ?: 0.0
+//
+//        if (lat != 0.0) {
+//            val uri = "http://maps.google.com/maps?q=loc:$lat,$long (Location)"
+//            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+//            try {
+//                context.startActivity(intent)
+//            } catch (e: ActivityNotFoundException) {
+//                Toast.makeText(context, context.getString(R.string.no_app_found_locations_chat), Toast.LENGTH_SHORT).show()
+//            }
+//        }
+//
+        navigation.navigateTo("chats/viewLiveLocation", bundleOf(
+            AppConstants.INTENT_EXTRA_CHAT_HEADER_ID to message.headerId,
+            AppConstants.INTENT_EXTRA_CHAT_MESSAGE_ID to message.id
+        ))
     }
 
     override fun onLongClick(v: View?): Boolean {

@@ -1,4 +1,4 @@
-package com.gigforce.core.location;
+package com.gigforce.common_ui.location;
 
 import android.app.ActivityManager;
 import android.app.Notification;
@@ -21,7 +21,10 @@ import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.util.Log;
 
-import com.gigforce.core.R;
+import com.gigforce.common_ui.R;
+import com.gigforce.core.AppConstants;
+
+import com.gigforce.core.StringConstants;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -29,6 +32,10 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+
+
+import java.util.Calendar;
+import java.util.Date;
 
 public class LocationUpdatesService extends Service {
 
@@ -40,7 +47,7 @@ public class LocationUpdatesService extends Service {
     /**
      * The name of the channel for notifications.
      */
-    private static final String CHANNEL_ID = "channel_01";
+    private static final String CHANNEL_ID = "Location sharing";
 
     public static final String ACTION_BROADCAST = PACKAGE_NAME + ".broadcast";
 
@@ -49,6 +56,13 @@ public class LocationUpdatesService extends Service {
             ".started_from_notification";
 
     private final IBinder mBinder = new LocalBinder();
+
+    public static String chatType = AppConstants.CHAT_TYPE_USER;
+    public static String chatHeaderOrGroupId = null;
+
+    public static Date startTime = Calendar.getInstance().getTime();
+    public static Date endTime = null;
+
 
     /**
      * The desired interval for location updates. Inexact. Updates may be more or less frequent.
@@ -200,8 +214,12 @@ public class LocationUpdatesService extends Service {
      * Makes a request for location updates. Note that in this sample we merely log the
      * {@link SecurityException}.
      */
-    public void requestLocationUpdates() {
-        Log.i(TAG, "Requesting location updates");
+    public void requestLocationUpdates(String type , String id, Date startDate , Date endDate) {
+        Log.i(TAG, "Requesting location updates , data:" + type + " id: " + id + " start: " + startDate.toString() + " end: " + endDate.toString());
+        chatType = type;
+        chatHeaderOrGroupId = id;
+        //startTime = startDate;
+        endTime = endDate;
         LocationUtils.setRequestingLocationUpdates(this, true);
         startService(new Intent(getApplicationContext(), LocationUpdatesService.class));
         try {
@@ -249,16 +267,15 @@ public class LocationUpdatesService extends Service {
                 new Intent(this, LocationSharingActivity.class), 0);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                .addAction(R.drawable.exo_notification_play, getString(R.string.launch_activity),
+                .addAction(R.drawable.ic_notification_icon, getString(R.string.launch_activity),
                         activityPendingIntent)
-                .addAction(R.drawable.exo_notification_play, getString(R.string.app_name),
+                .addAction(R.drawable.ic_notification_icon, getString(R.string.app_name),
                         servicePendingIntent)
-                .setContentText(text)
-                .setContentTitle(LocationUtils.getLocationTitle(this))
+                .setContentText("Location sharing in progress")
+                .setContentTitle("Gigforce Live Location")
                 .setOngoing(true)
                 .setPriority(Notification.PRIORITY_HIGH)
-                .setSmallIcon(R.drawable.exo_notification_play)
-                .setTicker(text)
+                .setSmallIcon(R.drawable.ic_notification_icon)
                 .setWhen(System.currentTimeMillis());
 
         // Set the Channel ID for Android O.
@@ -291,15 +308,27 @@ public class LocationUpdatesService extends Service {
         Log.i(TAG, "New location: " + location);
 
         mLocation = location;
+        startTime = Calendar.getInstance().getTime();
+        //check if endtime is grater than starttime
+        if (startTime.after(endTime)){
+            Log.i(TAG, "Ending location service: "  + " startTime: " + startTime.toString() + " endTime: "+ endTime.toString());
+            removeLocationUpdates();
+            if (serviceIsRunningInForeground(this)){
+                stopForeground(true);
+            }
+        } else {
+            Log.i(TAG, "Getting location service: " + " startTime: " + startTime.toString() + " endTime: "+ endTime.toString());
+            // Notify anyone listening for broadcasts about the new location.
+            Intent intent = new Intent(ACTION_BROADCAST);
+            intent.putExtra(EXTRA_LOCATION, location);
+            intent.putExtra(AppConstants.INTENT_EXTRA_CHAT_TYPE , chatType);
+            intent.putExtra(AppConstants.INTENT_EXTRA_CHAT_HEADER_ID, chatHeaderOrGroupId);
+            LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
 
-        // Notify anyone listening for broadcasts about the new location.
-        Intent intent = new Intent(ACTION_BROADCAST);
-        intent.putExtra(EXTRA_LOCATION, location);
-        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
-
-        // Update notification content if running as a foreground service.
-        if (serviceIsRunningInForeground(this)) {
-            mNotificationManager.notify(NOTIFICATION_ID, getNotification());
+            // Update notification content if running as a foreground service.
+            if (serviceIsRunningInForeground(this)) {
+                mNotificationManager.notify(NOTIFICATION_ID, getNotification());
+            }
         }
     }
 

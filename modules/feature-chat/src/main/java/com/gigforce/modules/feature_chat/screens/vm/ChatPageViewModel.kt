@@ -19,6 +19,7 @@ import com.gigforce.common_ui.metaDataHelper.ImageMetaDataHelpers
 import com.gigforce.common_ui.viewdatamodels.chat.ChatHeader
 import com.gigforce.common_ui.viewdatamodels.chat.UserInfo
 import com.gigforce.core.StringConstants
+import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.extensions.*
 import com.gigforce.core.fb.FirebaseUtils
@@ -45,28 +46,6 @@ import java.io.File
 import java.util.*
 import javax.inject.Inject
 
-sealed class AudioPlayState {
-
-    object NothinIsPlaying : AudioPlayState()
-
-    object CancelPlaying : AudioPlayState()
-
-    data class PlayingThisAudio(
-        val uri: Uri,
-        val messageId: String
-    ) : AudioPlayState()
-
-    data class PausingThisAudio(
-        val uri: Uri,
-        val messageId: String
-    ) : AudioPlayState()
-
-    data class ResumingThisAudio(
-        val uri: Uri,
-        val messageId: String
-    ) : AudioPlayState()
-}
-
 @HiltViewModel
 class ChatPageViewModel @Inject constructor(
     private val downloadAttachmentService: DownloadChatAttachmentService,
@@ -88,6 +67,7 @@ class ChatPageViewModel @Inject constructor(
     private val currentUser : FirebaseUser get() {
         return firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow()
     }
+
 
     private var otherUserName: String? = null
     private var otherUserProfilePicture: String? = null
@@ -128,6 +108,9 @@ class ChatPageViewModel @Inject constructor(
 
     private var _enableSelect = MutableLiveData<Boolean>()
     val enableSelect: LiveData<Boolean> = _enableSelect
+
+    private var _recentLocationMessageId = MutableLiveData<String>()
+    val recentLocationMessageId: LiveData<String> = _recentLocationMessageId
 
     private var _audioData = MutableLiveData<AudioPassingDataModel>()
     val audioData: LiveData<AudioPassingDataModel> = _audioData
@@ -334,6 +317,9 @@ class ChatPageViewModel @Inject constructor(
                                     it.senderMessageId.isNotBlank()
                         }
                         setMessagesAsRead(unreadMessages)
+                    }
+                    if (messages.last().type == ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION){
+                        _recentLocationMessageId.postValue(messages.last().id)
                     }
                     _messages.postValue(messages)
 
@@ -624,8 +610,6 @@ class ChatPageViewModel @Inject constructor(
                 attachmentName = fileName
             )
             showMessageAsSending(message)
-
-
             chatRepository.sendDocumentMessage(
                 context = context,
                 chatHeaderId = headerId,
@@ -649,6 +633,7 @@ class ChatPageViewModel @Inject constructor(
 
         _messages.postValue(chatMessages)
     }
+
 
     @SuppressLint("NewApi")
     fun sendNewImageMessage(
@@ -808,7 +793,8 @@ class ChatPageViewModel @Inject constructor(
         latitude: Double,
         longitude: Double,
         physicalAddress: String,
-        mapImageFile: File?
+        mapImageFile: File?,
+        isLiveLocation: Boolean
     ) = GlobalScope.launch(Dispatchers.IO) {
 
         try {
@@ -838,7 +824,8 @@ class ChatPageViewModel @Inject constructor(
                 timestamp = Timestamp.now(),
                 location = GeoPoint(latitude, longitude),
                 locationPhysicalAddress = physicalAddress,
-                thumbnailBitmap = mapImage?.copy(mapImage.config, mapImage.isMutable)
+                thumbnailBitmap = mapImage?.copy(mapImage.config, mapImage.isMutable),
+                isLiveLocation = isLiveLocation
             )
 
             showMessageAsSending(message)
@@ -853,6 +840,16 @@ class ChatPageViewModel @Inject constructor(
                 "while sending location message",
                 e
             )
+        }
+    }
+
+    fun updateLocationChatMessage(header: String, messageId: String, location: GeoPoint) = viewModelScope.launch{
+        if (header.isNotEmpty() && messageId.isNotEmpty()){
+            try {
+                chatRepository.setLocationToChatMessage(header, messageId,location)
+            } catch (e: Exception){
+                Log.d(TAG, e.message.toString())
+            }
         }
     }
 
