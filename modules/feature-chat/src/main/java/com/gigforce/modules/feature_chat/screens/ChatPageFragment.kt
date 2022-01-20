@@ -6,16 +6,11 @@ import android.app.NotificationManager
 import android.content.*
 import android.content.pm.PackageManager
 import android.database.Cursor
-import android.graphics.Bitmap
-import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.ContactsContract
-import android.support.v4.media.MediaBrowserCompat
-import android.support.v4.media.session.MediaControllerCompat
-import android.text.format.DateUtils
 import android.util.Log
 import android.util.Patterns
 import android.view.*
@@ -32,7 +27,6 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 //import com.anilokcun.uwmediapicker.UwMediaPicker
@@ -40,7 +34,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 //import com.aghajari.emojiview.iosprovider.AXIOSEmojiProvider
 //import com.aghajari.emojiview.view.AXEmojiView
 //import com.aghajari.emojiview.view.AXSingleEmojiView
-import com.facebook.shimmer.ShimmerFrameLayout
 import com.gigforce.common_image_picker.CameraAndGalleryIntegrator
 import com.gigforce.common_image_picker.ImageCropCallback
 import com.gigforce.common_image_picker.ImageCropOptions
@@ -52,7 +45,6 @@ import com.gigforce.common_ui.chat.models.ChatMessage
 import com.gigforce.common_ui.metaDataHelper.ImageMetaDataHelpers
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.extensions.gone
-import com.gigforce.core.extensions.toDisplayText
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.recyclerView.CoreRecyclerView
@@ -60,10 +52,10 @@ import com.gigforce.modules.feature_chat.ChatNavigation
 import com.gigforce.modules.feature_chat.R
 import com.gigforce.common_ui.chat.ChatFileManager
 import com.gigforce.common_ui.components.cells.AppBar
-import com.gigforce.common_ui.listeners.AppBarClicks
 import com.gigforce.core.*
 import com.gigforce.modules.feature_chat.analytics.CommunityEvents
 import com.gigforce.common_ui.ext.showToast
+import com.gigforce.core.location.LocationSharingActivity
 import com.gigforce.modules.feature_chat.mediapicker.Dazzle
 import com.gigforce.modules.feature_chat.mediapicker.Dazzle.Companion.PICKED_MEDIA_TEXT
 import com.gigforce.modules.feature_chat.mediapicker.Dazzle.Companion.PICKED_MEDIA_TYPE
@@ -83,7 +75,6 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.jaeger.library.StatusBarUtil
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
-import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -91,11 +82,9 @@ import com.gigforce.modules.feature_chat.ui.AttachmentOption
 import com.gigforce.modules.feature_chat.ui.AttachmentOptionsListener
 import com.gigforce.modules.feature_chat.ui.CommunityFooter
 import com.google.android.exoplayer2.*
-import com.google.android.exoplayer2.audio.AudioAttributes
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
 import com.google.android.exoplayer2.source.ExtractorMediaSource
 import com.google.android.exoplayer2.source.MediaSource
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import com.google.firebase.auth.FirebaseAuth
@@ -1864,8 +1853,12 @@ class ChatPageFragment : Fragment(),
                 checkPermissionAndHandleActionPickAudio()
             }
             AttachmentOption.LOCATION_ID -> {
+//                startActivityForResult(
+//                    Intent(requireContext(), CaptureLocationActivity::class.java),
+//                    REQUEST_GET_LOCATION
+//                )
                 startActivityForResult(
-                    Intent(requireContext(), CaptureLocationActivity::class.java),
+                    Intent(requireContext(), LocationSharingActivity::class.java),
                     REQUEST_GET_LOCATION
                 )
 //                showToast("Location Clicked")

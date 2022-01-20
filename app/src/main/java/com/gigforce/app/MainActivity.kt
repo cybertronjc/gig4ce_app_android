@@ -9,7 +9,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import android.view.MotionEvent
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -46,6 +45,8 @@ import com.gigforce.lead_management.LeadManagementNavDestinations
 import com.gigforce.modules.feature_chat.analytics.CommunityEvents
 import com.gigforce.modules.feature_chat.models.SharedFile
 import com.gigforce.modules.feature_chat.screens.ChatPageFragment
+import com.gigforce.core.location.LocationSharingActivity
+import com.gigforce.core.location.LocationUpdatesService
 import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
@@ -116,6 +117,8 @@ class MainActivity : BaseActivity(),
         ChatNotificationHandler(applicationContext)
     }
 
+    private val myReceiver: LocationSharingActivity.MyReceiver? = null
+
     private val intentFilters =
         IntentFilter(NotificationConstants.BROADCAST_ACTIONS.SHOW_CHAT_NOTIFICATION)
     private val notificationIntentRecevier = object : BroadcastReceiver() {
@@ -173,6 +176,11 @@ class MainActivity : BaseActivity(),
             notificationIntentRecevier,
             intentFilters
         )
+        if (myReceiver != null) {
+            LocalBroadcastManager.getInstance(this).registerReceiver(myReceiver,
+                IntentFilter(LocationUpdatesService.ACTION_BROADCAST)
+            )
+        }
         if (Intent.ACTION_SEND == intent.action && isUserLoggedIn()) {
             //User Clicked on share in gallery
             formatDataSharedAndOpenChat(intent!!)

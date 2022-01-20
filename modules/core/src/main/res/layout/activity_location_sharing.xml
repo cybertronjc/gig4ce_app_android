@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.gigforce.common_ui.components.cells.AppBar
+            android:id="@+id/appBarComp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:backgroundType="PinkBar"
+            app:isFilterVisible="false"
+            app:isSearchVisible="true"
+            app:isRefreshVisible="true"
+            android:visibility="visible"
+            android:elevation="2dp"
+            app:titleText="@string/send_location_chat"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/appBarComp">
+
+
+
+<!--            <com.google.android.gms.maps.MapView-->
+<!--                android:id="@+id/map"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="0dp"-->
+<!--                android:layout_weight="1"-->
+<!--                app:layout_constraintBottom_toTopOf="@+id/bottom_layout"-->
+<!--                app:layout_constraintTop_toTopOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                android:clickable="true"-->
+<!--                android:visibility="gone"-->
+<!--                app:uiCompass="true"-->
+<!--                app:zOrderOnTop="true"-->
+<!--                app:uiZoomControls="true"-->
+<!--                android:background="#00000000" />-->
+
+            <fragment
+                android:id="@+id/mapFragment"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                tools:context=".MapsActivity"
+                app:layout_constraintBottom_toTopOf="@+id/bottom_layout"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/bottom_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <LinearLayout
+                    android:id="@+id/optionsLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="visible"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <TextView
+                        android:id="@+id/share_live_location"
+                        android:layout_width="match_parent"
+                        android:layout_height="34dp"
+                        android:layout_marginStart="@dimen/size_20"
+                        android:layout_marginTop="@dimen/size_40"
+                        android:layout_marginEnd="@dimen/size_20"
+                        android:background="@drawable/bottom_primary_button_background_chat"
+                        android:gravity="center"
+                        android:textAllCaps="true"
+                        android:fontFamily="@font/lato_bold"
+                        android:text="@string/send_location_chat"
+                        android:textAlignment="center"
+                        android:textColor="@color/white" />
+
+                    <TextView
+                        android:id="@+id/share_current_location"
+                        android:layout_width="match_parent"
+                        android:layout_height="34dp"
+                        android:layout_marginStart="@dimen/size_20"
+                        android:layout_marginTop="@dimen/size_20"
+                        android:layout_marginEnd="@dimen/size_20"
+                        android:layout_marginBottom="@dimen/size_16"
+                        android:background="@drawable/bottom_secondary_button_background_chat"
+                        android:gravity="center"
+                        android:textAllCaps="true"
+                        android:fontFamily="@font/lato_bold"
+                        android:text="@string/send_location_chat"
+                        android:textAlignment="center"
+                        android:textColor="@color/lipstick_2" />
+                </LinearLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/live_location_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <TextView
+                        android:id="@+id/location_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:fontFamily="@font/lato_bold"
+                        android:textSize="@dimen/font_14"
+                        android:layout_marginStart="@dimen/size_20"
+                        android:layout_marginTop="@dimen/size_40"
+                        android:text="@string/share_live_location_chat"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+                    <com.google.android.material.tabs.TabLayout
+                        android:id="@+id/interval_tab_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="42dp"
+                        android:layout_marginStart="@dimen/size_8"
+                        android:layout_marginTop="@dimen/size_40"
+                        android:layout_marginEnd="@dimen/size_8"
+                        android:textAlignment="center"
+                        android:visibility="visible"
+                        android:background="@color/tab_background_color"
+                        app:tabBackground="@drawable/selected_tab_background"
+                        app:tabGravity="center"
+                        app:tabIndicatorHeight="0dp"
+                        app:tabMode="fixed"
+                        app:tabSelectedTextColor="@color/white"
+                        app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
+                        app:tabTextColor="@color/black"
+                        app:layout_constraintStart_toStartOf="@id/location_text"
+                        app:layout_constraintTop_toBottomOf="@id/location_text">
+
+                    </com.google.android.material.tabs.TabLayout>
+
+                    <EditText
+                        android:id="@+id/add_comment_edit"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/lipstick_2"
+                        android:hint="Add comment..."
+                        android:textSize="@dimen/font_14"
+                        android:textColorHint="#979C9E"
+                        android:layout_marginEnd="@dimen/size_20"
+                        app:layout_constraintEnd_toStartOf="@id/imageViewStop"
+                        app:layout_constraintStart_toStartOf="@id/location_text"
+                        app:layout_constraintTop_toBottomOf="@id/interval_tab_layout"/>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/imageViewStop"
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        android:layout_marginTop="6dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="6dp"
+                        android:background="?android:selectableItemBackground"
+                        android:clickable="true"
+                        android:elevation="2dp"
+                        android:translationZ="2dp"
+                        app:cardBackgroundColor="#FFFFFF"
+                        app:cardCornerRadius="22dp"
+                        app:cardElevation="2dp"
+                        app:cardPreventCornerOverlap="false"
+                        app:cardUseCompatPadding="false"
+                        app:contentPadding="0dp"
+                        app:layout_constraintTop_toBottomOf="@id/interval_tab_layout"
+                        app:layout_constraintEnd_toEndOf="parent">
+
+                        <ImageView
+                            android:id="@+id/imageStop"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_message_send_icon" />
+
+                    </androidx.cardview.widget.CardView>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

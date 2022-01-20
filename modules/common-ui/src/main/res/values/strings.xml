@@ -91,4 +91,9 @@
     <string name="common_change_date">Change Date</string>
     <string name="note_aadhaar_verfication"><b>Note:</b> Aadhaar card verification is same as submission</string>
     <string name="signature_instruction"><b>Note</b>: Please upload the image of signature with white background.</string>
+
+    <string name="location_updated">Location Updated: %1$s</string>
+    <string name="launch_activity">Launch activity</string>
+    <string name="location_unknown">Location unknown</string>
+    <string name="location_updates_label">Location Updates</string>
 </resources>
