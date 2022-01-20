@@ -18,7 +18,7 @@
             android:id="@+id/change_team_leader_success_layout"
             layout="@layout/change_team_leader_successful_layout"
             android:visibility="gone"
-            android:layout_height="620dp"
+            android:layout_height="570dp"
             android:layout_width="match_parent"
             />
 
