@@ -18,7 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ChatHeadersViewModel @Inject constructor(
-    private val chatRepository: ChatRepository
+    private val chatRepository: ChatRepository,
+    private val chatGroupRepository: ChatGroupRepository
 ) : ViewModel() {
 
     private var _chatHeaders: MutableLiveData<List<ChatHeader>> = MutableLiveData()
@@ -83,6 +84,9 @@ class ChatHeadersViewModel @Inject constructor(
                                         chatHeader.id,
                                         chatHeader.otherUserId
                                     )
+                                } else if (chatHeader.chatType == ChatConstants.CHAT_TYPE_GROUP) {
+                                    //set messages as delivered for group chat
+                                    setMessagesAsDeliveredForGroupChat(chatHeader.groupId)
                                 }
                             }
                         }
@@ -95,6 +99,30 @@ class ChatHeadersViewModel @Inject constructor(
 
 
     }
+    private fun setMessagesAsDeliveredForGroupChat(
+        groupId: String
+    ) = GlobalScope.launch{
+        try {
+            Log.d("ChatHeaderViewModel","setting message as delivered of group :$groupId")
+
+            val objs = chatGroupRepository.getGroupMessages(groupId)
+            val messageWithNotDeliveredStatus = arrayListOf<String>()
+            objs.forEach { it1 ->
+                val chatMessageDeliveredTo = chatGroupRepository.getMessageDeliveredInfo(groupId, it1.id)
+                if (chatMessageDeliveredTo.isEmpty()){
+                    messageWithNotDeliveredStatus.add(it1.id)
+                }
+            }
+            if (messageWithNotDeliveredStatus.isNotEmpty()){
+                chatGroupRepository.markAsDelivered(groupId, messageWithNotDeliveredStatus)
+            }
+
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
 
     private fun setMessagesAsDeliveredForChat(
         chatHeader: String,
