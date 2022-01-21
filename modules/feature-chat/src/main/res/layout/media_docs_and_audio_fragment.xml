@@ -31,36 +31,20 @@
         android:layout_marginEnd="@dimen/size_8"
         android:textAlignment="center"
         android:visibility="visible"
-        android:background="@color/tab_background_color"
-        app:tabBackground="@drawable/selected_tab_background"
         app:tabGravity="center"
-        app:tabIndicatorHeight="0dp"
+        app:tabIndicatorHeight="1dp"
+        app:tabIndicatorColor="@color/colorPrimary"
         app:tabMode="fixed"
-        app:tabSelectedTextColor="@color/white"
-        app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
+        app:tabSelectedTextColor="@color/colorPrimary"
         app:tabTextColor="@color/black" >
 
     </com.google.android.material.tabs.TabLayout>
 
-    <com.gigforce.core.recyclerView.CoreRecyclerView
-        android:id="@+id/media_rv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clipToPadding="true"
-        android:paddingBottom="@dimen/size_16"
-        android:visibility="visible"/>
-
-    <com.gigforce.core.recyclerView.CoreRecyclerView
-        android:id="@+id/documents_rv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"/>
-
-    <com.gigforce.core.recyclerView.CoreRecyclerView
-        android:id="@+id/audio_rv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"/>
+        <androidx.viewpager2.widget.ViewPager2
+            android:layout_width="match_parent"
+            android:layout_below="@id/media_tab_layout"
+            android:id="@+id/viewPager"
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 

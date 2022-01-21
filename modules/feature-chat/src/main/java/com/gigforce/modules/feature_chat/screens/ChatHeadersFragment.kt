@@ -510,6 +510,13 @@ class ChatHeadersFragment : Fragment(), PopupMenu.OnMenuItemClickListener, Gigfo
         viewModel.filterChatList(newText)
     }
 
+    override fun onPause() {
+        super.onPause()
+        searchText = ""
+        viewModel.filterChatList("")
+        toolbar.search_item.setText("")
+    }
+
     private fun hideSoftKeyboard() {
 
         val activity = activity ?: return

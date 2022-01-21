@@ -19,7 +19,7 @@ abstract class CoreViewHolderFactory: ICoreViewHolderFactory {
     }
 
     fun getView(context: Context, viewType: Int): View {
-        var view:View? = null
+        var view: View?
         for(loader in viewTypeLoaders){
             view = loader.getView(context, viewType)
             view?.let {

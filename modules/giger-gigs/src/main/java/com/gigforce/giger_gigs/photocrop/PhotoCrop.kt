@@ -584,6 +584,11 @@ class PhotoCrop : BaseActivity() {
 
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        GlideApp.with(this).clear(imageView)
+    }
+
     /**
      * Creates the intent to use files and camera that will be cropped.
      * Chosen files are saven as temporary file with the name profilePicture.jpg

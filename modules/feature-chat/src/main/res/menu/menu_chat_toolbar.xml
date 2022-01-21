@@ -2,6 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/action_media"
+        android:orderInCategory="100"
+        android:title="@string/media_and_docs_chat"
+        app:showAsAction="collapseActionView"
+        />
+
+    <item
         android:id="@+id/action_block"
         android:orderInCategory="100"
         android:title="@string/action_block"

@@ -10,6 +10,8 @@ import com.gigforce.common_ui.chat.ChatGroupRepository
 import com.gigforce.common_ui.chat.models.ChatGroup
 import com.gigforce.common_ui.chat.models.GroupMedia
 import com.gigforce.core.crashlytics.CrashlyticsLogger
+import com.gigforce.modules.feature_chat.models.ChatAudioViewModels
+import com.gigforce.modules.feature_chat.models.ChatDocsViewModels
 import com.gigforce.modules.feature_chat.models.ChatMediaViewModels
 import com.gigforce.modules.feature_chat.repositories.ChatContactsRepository
 import com.gigforce.modules.feature_chat.repositories.ChatProfileFirebaseRepository
@@ -43,9 +45,21 @@ class MediaDocsAndAudioViewModel @Inject constructor(
     private val _groupInfo: MutableLiveData<ChatGroup> = MutableLiveData()
     val groupInfo: LiveData<ChatGroup> = _groupInfo
 
+    private val _mediaInfo: MutableLiveData<List<ChatMediaViewModels>> = MutableLiveData()
+    val mediaInfo: LiveData<List<ChatMediaViewModels>> = _mediaInfo
+
+    private val _docsInfo: MutableLiveData<List<ChatDocsViewModels>> = MutableLiveData()
+    val docsInfo: LiveData<List<ChatDocsViewModels>> = _docsInfo
+
+    private val _audioInfo: MutableLiveData<List<ChatAudioViewModels>> = MutableLiveData()
+    val audioInfo: LiveData<List<ChatAudioViewModels>> = _audioInfo
+
     //Data
     private var mediaRaw: List<GroupMedia>? = null
     private var mediaListShownOnView: MutableList<ChatMediaViewModels> = mutableListOf()
+    private var docListShownOnView: MutableList<ChatDocsViewModels> = mutableListOf()
+    private var audioListShownOnView: MutableList<ChatAudioViewModels> = mutableListOf()
+
     var currentFilterString: String = "Media"
 
     fun startWatchingGroupDetails(groupId: String) {
@@ -103,9 +117,94 @@ class MediaDocsAndAudioViewModel @Inject constructor(
 
         Log.d(TAG, "image list: $imageAndVideoList , doc list : $documentList , audioList: $audioList")
 
-//        imageAndVideoList.groupBy {
-//            it.timestamp
-//        }
+        val mediaSortedList = imageAndVideoList.groupBy {
+            it.timestamp
+        }.toSortedMap(compareBy { it })
+        val docSortedList = documentList.groupBy {
+            it.timestamp
+        }.toSortedMap(compareBy { it })
+
+        val audioSortedList = audioList.groupBy {
+            it.timestamp
+        }.toSortedMap(compareBy { it })
+
+        mediaSortedList.forEach { (timestamp, medias) ->
+            Log.d(TAG, "timestamp: $timestamp , media: $medias")
+
+//            mediaListShownOnView.add(
+//                ChatMediaViewModels.ChatMediaImageItemData(
+//                    "timestamp: $timestamp"
+//                )
+//            )
+
+            medias.forEach {
+                mediaListShownOnView.add(
+                    ChatMediaViewModels.ChatMediaImageItemData(
+                        id = it.id,
+                        groupHeaderId = it.groupHeaderId,
+                        messageId = it.messageId,
+                        attachmentType = it.attachmentType,
+                        videoAttachmentLength = it.videoAttachmentLength,
+                        timestamp = it.timestamp,
+                        attachmentName = it.attachmentName,
+                        attachmentPath = it.attachmentPath,
+                        senderInfo = it.senderInfo
+                    )
+                )
+            }
+        }
+
+        docSortedList.forEach { (timestamp, medias) ->
+            Log.d(TAG, "timestamp: $timestamp , media: $medias")
+
+//            docListShownOnView.add(
+//                ChatDocsViewModels.ChatMediaDateItemData(
+//                    "timestamp: $timestamp"
+//                )
+//            )
+
+            medias.forEach {
+                docListShownOnView.add(
+                    ChatDocsViewModels.ChatMediaDocItemData(
+                        it.attachmentPath.toString(),
+                        it.attachmentName.toString(),
+                        it.attachmentName.toString(),
+                        it.attachmentName.toString()
+                    )
+                )
+            }
+        }
+
+        audioSortedList.forEach { (timestamp, medias) ->
+            Log.d(TAG, "timestamp: $timestamp , media: $medias")
+
+//            audioListShownOnView.add(
+//                ChatAudioViewModels.ChatMediaDateItemData(
+//                    "timestamp: $timestamp"
+//                )
+//            )
+
+            medias.forEach {
+                audioListShownOnView.add(
+                    ChatAudioViewModels.ChatMediaAudioItemData(
+                        it.attachmentPath.toString(),
+                        it.attachmentName.toString(),
+                        it.attachmentName.toString(),
+                        it.attachmentName.toString()
+                    )
+                )
+            }
+        }
+
+        if (mediaListShownOnView != null){
+            _mediaInfo.value = mediaListShownOnView
+        }
+        if (docListShownOnView != null){
+            _docsInfo.value = docListShownOnView
+        }
+        if (audioListShownOnView != null){
+            _audioInfo.value = audioListShownOnView
+        }
 
     }
 

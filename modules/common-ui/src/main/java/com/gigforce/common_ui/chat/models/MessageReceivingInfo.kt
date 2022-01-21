@@ -12,7 +12,11 @@ data class MessageReceivingInfo(
 
         @get:PropertyName("readOn")
         @set:PropertyName("readOn")
-        var readOn: Timestamp = Timestamp.now(),
+        var readOn: Timestamp? = null,
+
+        @get:PropertyName("deliveredOn")
+        @set:PropertyName("deliveredOn")
+        var deliveredOn: Timestamp? = null,
 
         @get:PropertyName("profileName")
         @set:PropertyName("profileName")
@@ -22,3 +26,5 @@ data class MessageReceivingInfo(
         @set:PropertyName("profilePicture")
         var profilePicture: String = "",
 ) : SimpleDVM(ViewTypes.GROUP_MESSAGE_READ_INFO)
+
+
