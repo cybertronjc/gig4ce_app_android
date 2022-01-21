@@ -101,6 +101,7 @@
             android:layout_marginBottom="@dimen/size_20"
             android:layout_weight="1"
             android:paddingTop="8dp"
+            android:nestedScrollingEnabled="true"
             app:layout_constraintBottom_toTopOf="@id/confirm_change_tl"
             app:layout_constraintTop_toBottomOf="@id/search_item"
             app:layout_constraintStart_toStartOf="parent"

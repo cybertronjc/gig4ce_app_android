@@ -161,7 +161,9 @@ class ChangeTeamLeaderBottomSheetFragment :
 
                 searchItem.getTextChangeAsStateFlow()
                     .collect { searchString ->
-                        adapter.filter.filter(searchString)
+                       if( viewModel.viewState.value != ChangeTeamLeaderBottomSheetState.LoadingTeamLeaders) {
+                           adapter.filter.filter(searchString)
+                       }
                     }
             }
         }
@@ -242,6 +244,7 @@ class ChangeTeamLeaderBottomSheetFragment :
     private fun showTeamLeadersLoading() = viewBinding.apply {
         this.changeTeamLeaderMainLayout.root.gone()
         this.formMainInfoLayout.root.gone()
+        this.changeTeamLeaderSuccessLayout.root.gone()
 
         this.changeTlShimmerContainer.visible()
         startShimmer(
