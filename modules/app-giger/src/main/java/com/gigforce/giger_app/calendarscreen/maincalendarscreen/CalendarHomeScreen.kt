@@ -22,7 +22,6 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -62,7 +61,6 @@ import com.gigforce.giger_app.calendarscreen.maincalendarscreen.verticalcalendar
 import com.gigforce.giger_app.calendarscreen.maincalendarscreen.verticalcalendar.VerticalCalendarDataItemModel
 import com.gigforce.giger_app.components.CalendarView
 import com.gigforce.giger_app.roster.RosterDayFragment
-import com.gigforce.giger_app.vm.FeaturesBSViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -329,8 +327,16 @@ class CalendarHomeScreen : Fragment(),
             ResourcesCompat.getColor(resources, R.color.white, null)
         )
         trySyncingUnsyncedFirebaseData()
-    }
+        viewModel.state?.let { parcelable ->
+            rv_?.layoutManager?.onRestoreInstanceState(parcelable)
 
+        }
+    }
+    override fun onStop() {
+        super.onStop()
+        viewModel.state =
+            rv_?.layoutManager?.onSaveInstanceState()
+    }
     private fun trySyncingUnsyncedFirebaseData() {
         FirebaseFirestore
             .getInstance()
