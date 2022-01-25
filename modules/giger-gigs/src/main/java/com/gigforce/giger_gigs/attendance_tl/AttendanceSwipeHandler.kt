@@ -1,4 +1,4 @@
-package com.gigforce.giger_gigs
+package com.gigforce.giger_gigs.attendance_tl
 
 import android.graphics.Canvas
 import androidx.recyclerview.widget.ItemTouchHelper

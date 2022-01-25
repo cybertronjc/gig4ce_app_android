@@ -16,7 +16,10 @@ open class AttendanceRecyclerItemData(
 
     data class AttendanceRecyclerItemBusinessAndShiftNameData(
         val businessName: String,
-        val shiftName: String
+        val enabledCount: Int,
+        val activeCount: Int,
+        val inActiveCount: Int,
+        val expanded: Boolean
     ) : AttendanceRecyclerItemData(
         type = CommonViewTypes.VIEW_ATTENDANCE_BUSINESS_SHIFT_TIME
     )

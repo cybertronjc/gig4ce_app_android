@@ -105,4 +105,6 @@
 
     <color name="edit_action">#e42c64</color>
     <color name="semi_black_transparent">#99000000</color>
+
+    <color name="inkDefault">#202325</color>
 </resources>

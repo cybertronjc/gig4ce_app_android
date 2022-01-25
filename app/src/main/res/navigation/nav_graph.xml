@@ -935,7 +935,7 @@
         android:label="UploadPanCard" />
     <fragment
         android:id="@+id/gigerAttendanceUnderManagerFragment"
-        android:name="com.gigforce.giger_gigs.GigersAttendanceUnderManagerFragment"
+        android:name="com.gigforce.giger_gigs.attendance_tl.GigersAttendanceUnderManagerFragment"
         android:label="Giger Attendance under Mgr" />
     <fragment
         android:id="@+id/invoicesListFragment"

@@ -1,4 +1,4 @@
-package com.gigforce.giger_gigs
+package com.gigforce.giger_gigs.attendance_tl
 
 import android.content.Context
 import android.graphics.*
@@ -26,6 +26,7 @@ import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
+import com.gigforce.giger_gigs.R
 import com.gigforce.giger_gigs.databinding.FragmentGigerUnderManagersAttendanceBinding
 import com.gigforce.giger_gigs.dialogFragments.DeclineGigDialogFragment
 import com.gigforce.giger_gigs.models.AttendanceFilterItemShift
