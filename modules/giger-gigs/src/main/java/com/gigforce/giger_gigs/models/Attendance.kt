@@ -36,6 +36,23 @@ open class AttendanceRecyclerItemData(
         val gigerOffice: String,
     ) : AttendanceRecyclerItemData(
         type = CommonViewTypes.VIEW_GIGER_ATTENDANCE
-    )
+    ){
+
+        fun getLastActiveText() : String{
+            return ""
+        }
+
+        fun getMarkedByText(): String{
+            return ""
+        }
+
+        fun getOverallStatusText(): String{
+            return ""
+        }
+
+        fun hasAttendanceConflict() : Boolean{
+            return false
+        }
+    }
 }
 

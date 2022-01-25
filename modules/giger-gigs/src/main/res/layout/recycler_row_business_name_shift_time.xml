@@ -3,35 +3,159 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <RelativeLayout
+    <data>
+
+        <variable
+            name="businessAndAttendanceModel"
+            type="com.gigforce.giger_gigs.models.AttendanceRecyclerItemData.AttendanceRecyclerItemBusinessAndShiftNameData" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="57dp"
         android:layout_marginTop="10dp"
-        android:orientation="horizontal"
         android:paddingStart="10dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="8dp">
+        android:paddingEnd="16dp">
 
-        <ImageView
-            android:layout_width="16dp"
-            android:layout_height="10dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
 
-            android:src="@drawable/ic_baseline_keyboard_arrow_down_24"/>
+        <ImageButton
+            android:id="@+id/collapse_button"
+            android:layout_width="26dp"
+            android:layout_height="15dp"
+            android:src="@drawable/ic_baseline_keyboard_arrow_down_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
+        <LinearLayout
+            android:id="@+id/inactive_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="30dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/collapse_button"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/inactive_count_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato"
+                android:lineHeight="18sp"
+                android:text="@{businessAndAttendanceModel.inActiveCount}"
+                android:textColor="@color/lipstick_2"
+                android:textFontWeight="700"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/inactive_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/lato"
+                android:lineHeight="18sp"
+                android:text="Inactive"
+                android:textColor="@color/lipstick_2"
+                android:textFontWeight="400"
+                android:textSize="10sp" />
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/active_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="30dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/inactive_layout"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/active_count_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato"
+                android:lineHeight="18sp"
+                android:text="@{businessAndAttendanceModel.activeCount}"
+                android:textColor="#707070"
+                android:textFontWeight="700"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/active_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/lato"
+                android:lineHeight="18sp"
+                android:text="Active"
+                android:textColor="#979C9E"
+                android:textFontWeight="400"
+                android:textSize="10sp" />
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/enabled_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="30dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/active_layout"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/enabled_count_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato"
+                android:lineHeight="18sp"
+                android:text="@{businessAndAttendanceModel.enabledCount}"
+                android:textColor="#707070"
+                android:textFontWeight="700"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/enabled_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/lato"
+                android:lineHeight="18sp"
+                android:text="Enabled"
+                android:textColor="#979C9E"
+                android:textFontWeight="400"
+                android:textSize="10sp" />
+
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/company_name_tv"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:fontFamily="@font/lato"
             android:lineHeight="18sp"
+            android:text="@{businessAndAttendanceModel.businessName}"
             android:textColor="@color/inkDefault"
             android:textFontWeight="700"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/enabled_layout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="Company Name" />
 
 
-    </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

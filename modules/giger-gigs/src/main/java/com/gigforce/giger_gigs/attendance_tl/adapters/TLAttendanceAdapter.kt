@@ -11,8 +11,17 @@ import com.gigforce.giger_gigs.databinding.RecyclerRowBusinessNameShiftTimeBindi
 import com.gigforce.giger_gigs.databinding.RecyclerRowGigerAttendanceBinding
 import com.gigforce.giger_gigs.models.AttendanceRecyclerItemData
 
+interface TLAttendanceViewHolderAdapterInteraction {
 
-class TLAttendanceAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    fun getItemAt(
+        position: Int
+    ): AttendanceRecyclerItemData?
+}
+
+class TLAttendanceAdapter constructor(
+    private val itemClickListener: TLAttendanceAdapterClickListener
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>(),
+    TLAttendanceViewHolderAdapterInteraction {
 
     companion object {
         const val VIEW_TYPE_BUSINESS_ATTENDANCE_COUNT = 1222
@@ -52,7 +61,9 @@ class TLAttendanceAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     ),
                     parent,
                     false
-                )
+                ),
+                this,
+                itemClickListener
             )
             VIEW_TYPE_ATTENDANCE_ITEM -> AttendanceItemViewHolder(
                 RecyclerRowGigerAttendanceBinding.inflate(
@@ -61,7 +72,9 @@ class TLAttendanceAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     ),
                     parent,
                     false
-                )
+                ),
+                this,
+                itemClickListener
             )
             else -> throw IllegalStateException("this view type is not supported")
         }
@@ -92,5 +105,31 @@ class TLAttendanceAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemCount(): Int {
         return attendanceList?.size ?: 0
+    }
+
+
+    interface TLAttendanceAdapterClickListener {
+
+        fun onCollapseOrExpandClickedForSomeBusiness(
+            item: AttendanceRecyclerItemData.AttendanceRecyclerItemBusinessAndShiftNameData
+        )
+
+        fun onProfilePictureOfGigerClicked(
+            item: AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData
+        )
+
+        fun onAttendanceItemClicked(
+            item: AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData
+        )
+
+        fun onResolveClicked(
+            item : AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData
+        )
+    }
+
+    override fun getItemAt(
+        position: Int
+    ): AttendanceRecyclerItemData? {
+        return attendanceList?.get(position)
     }
 }
