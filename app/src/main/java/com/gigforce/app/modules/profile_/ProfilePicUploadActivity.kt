@@ -13,7 +13,6 @@ import android.view.Window
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
@@ -28,11 +27,11 @@ import com.gigforce.core.base.BaseActivity
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.firebase.ml.vision.FirebaseVision
-import com.google.firebase.ml.vision.common.FirebaseVisionImage
-import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.face.FaceDetection
+import com.google.mlkit.vision.face.FaceDetectorOptions
 import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.layout_profile_pic_upload_activity.*
 import java.io.ByteArrayOutputStream
@@ -53,16 +52,12 @@ class ProfilePicUploadActivity : BaseActivity(),
     private val PREFIX: String = "IMG"
     private val EXTENSION: String = ".jpg"
     private val REQUEST_STORAGE_PERMISSION = 102
-    private val options = with(FirebaseVisionFaceDetectorOptions.Builder()) {
-        setModeType(FirebaseVisionFaceDetectorOptions.ACCURATE_MODE)
-        setLandmarkType(FirebaseVisionFaceDetectorOptions.ALL_LANDMARKS)
-        setClassificationType(FirebaseVisionFaceDetectorOptions.ALL_CLASSIFICATIONS)
-        setMinFaceSize(0.15f)
-        setTrackingEnabled(true)
-        build()
-    }
-    private val detector = FirebaseVision.getInstance()
-        .getVisionFaceDetector(options)
+    private val options = FaceDetectorOptions.Builder()
+        .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_ACCURATE)
+        .setLandmarkMode(FaceDetectorOptions.LANDMARK_MODE_ALL)
+        .setClassificationMode(FaceDetectorOptions.CLASSIFICATION_MODE_ALL)
+        .build()
+    private val detector = FaceDetection.getClient(options)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -157,10 +152,10 @@ class ProfilePicUploadActivity : BaseActivity(),
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
             }
             val fvImage =
-                imageUriResultCrop?.let { FirebaseVisionImage.fromFilePath(this, it) }
+                imageUriResultCrop?.let { InputImage.fromFilePath(this, it) }
 
             //  Face detect - Check if face is present in the cropped image or not.
-            val result = detector.detectInImage(fvImage!!)
+            val result = detector.process(fvImage!!)
                 .addOnSuccessListener { faces ->
                     // Task completed successfully
                     if (faces.size > 0) {

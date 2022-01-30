@@ -240,12 +240,12 @@ class AddEducationProfileV2 : BaseFragment(), PopupMenu.OnMenuItemClickListener 
 
     private fun showPdfFromUri(uri: Uri?) {
         ll_pdf_view_add_education.visible()
-        pdfView_add_education.fromUri(uri)
-            .defaultPage(0)
-            .enableDoubletap(false)
-            .enableSwipe(false)
-            .load()
-        pdfView_add_education.zoomTo(1.75f)
+//        pdfView_add_education.fromUri(uri)
+//            .defaultPage(0)
+//            .enableDoubletap(false)
+//            .enableSwipe(false)
+//            .load()
+//        pdfView_add_education.zoomTo(1.75f)
         tv_file_name_add_education.text = getFileName(uri!!)
         tv_add_certification_add_education.text = getString(R.string.delete_media_app)
 
