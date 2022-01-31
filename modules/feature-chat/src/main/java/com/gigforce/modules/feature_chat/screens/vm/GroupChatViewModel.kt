@@ -85,10 +85,16 @@ class GroupChatViewModel @Inject constructor(
     private var grpMessages: MutableList<ChatMessage>? = null
     private var grpEvents: MutableList<EventInfo>? = null
 
+    private var _chatHeaderInfo = MutableLiveData<ChatHeader?>()
+    val chatHeaderInfo: LiveData<ChatHeader?> = _chatHeaderInfo
+
     private var groupMessagesShownOnView: MutableList<ChatMessage>? = null
 
-    private var _selectedChatMessage = MutableLiveData<ChatMessage>()
-    val selectedChatMessage: LiveData<ChatMessage> = _selectedChatMessage
+
+    private var _selectedChatMessage = MutableLiveData<List<ChatMessage>>()
+    val selectedChatMessage: LiveData<List<ChatMessage>> = _selectedChatMessage
+
+    private var selectedMessagesList = arrayListOf<ChatMessage>()
 
     private var selectEnable: Boolean? = null
 
@@ -730,6 +736,14 @@ class GroupChatViewModel @Inject constructor(
         }
     }
 
+     fun getChatHeaderInfo(headerInfoId: String) = viewModelScope.launch{
+        try {
+            val headerInfo = chatGroupRepository.getChatHeader(headerInfoId)
+            _chatHeaderInfo.value = headerInfo
+        } catch (e: Exception){
+            _chatHeaderInfo.value = null
+        }
+    }
 
     private val _changeGroupName: MutableLiveData<Lse> = MutableLiveData()
     val changeGroupName: LiveData<Lse> = _changeGroupName
@@ -919,6 +933,25 @@ class GroupChatViewModel @Inject constructor(
         }
     }
 
+    fun deleteMessages(
+        messageIds: List<String>
+    ) = viewModelScope.launch {
+        try {
+
+            chatGroupRepository.deleteMessages(
+                messageIds,
+                groupId,
+            )
+        } catch (e: Exception) {
+
+            CrashlyticsLogger.e(
+                ChatPageViewModel.TAG,
+                "while deleting users message",
+                e
+            )
+        }
+    }
+
     fun isUserGroupAdmin(): Boolean {
         val groupDetails = groupDetails ?: return false
         val currentUserInGroup =
@@ -1081,18 +1114,28 @@ class GroupChatViewModel @Inject constructor(
         }
     }
 
-    fun selectChatMessage(msg: ChatMessage){
+    fun selectChatMessage(msg: ChatMessage, add: Boolean){
         val messageList = grpMessages ?: return
         val index = messageList.indexOf(msg)
         if (index != -1) {
-            _selectedChatMessage.value = msg
+            if (add && !selectedMessagesList.contains(msg)) {
+                selectedMessagesList.add(msg)
+            } else if (!add && selectedMessagesList.contains(msg)){
+                selectedMessagesList.remove(msg)
+            }
+            _selectedChatMessage.value = selectedMessagesList
         }
-
     }
+
 
     fun makeSelectEnable(enable: Boolean){
         selectEnable = enable
         _enableSelect.value = enable
+    }
+
+    fun clearSelection(){
+        selectedMessagesList.clear()
+        _selectedChatMessage.value = emptyList()
     }
 
     fun getSelectEnable(): Boolean?{

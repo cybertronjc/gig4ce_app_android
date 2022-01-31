@@ -76,6 +76,8 @@ abstract class VideoMessageView(
         ChatNavigation(navigation)
     }
 
+    private var selectedMessageList = emptyList<ChatMessage>()
+
     init {
         setDefault()
         inflate()
@@ -141,6 +143,17 @@ abstract class VideoMessageView(
                         frameLayoutRoot?.foreground = null
                     }
                 })
+                oneToOneChatViewModel.selectedChatMessage.observe(it1, Observer {
+                    it ?: return@Observer
+                    selectedMessageList = it
+                    if (it.isNotEmpty() && it.contains(message)){
+                        Log.d("MultiSelection", "Contains this message $it")
+                        frameLayoutRoot.foreground = resources.getDrawable(R.drawable.selected_chat_foreground)
+                    } else {
+                        frameLayoutRoot.foreground = null
+                    }
+
+                })
                 oneToOneChatViewModel.scrollToMessageId.observe(it1, Observer {
                     it ?: return@Observer
                     if (it == message.id){
@@ -153,6 +166,17 @@ abstract class VideoMessageView(
                     if (it == false) {
                         frameLayoutRoot?.foreground = null
                     }
+                })
+                groupChatViewModel.selectedChatMessage.observe(it1, Observer {
+                    it ?: return@Observer
+                    selectedMessageList = it
+                    if (it.isNotEmpty() && it.contains(message)){
+                        Log.d("MultiSelection", "Contains this message $it")
+                        frameLayoutRoot.foreground = resources.getDrawable(R.drawable.selected_chat_foreground)
+                    } else {
+                        frameLayoutRoot.foreground = null
+                    }
+
                 })
                 groupChatViewModel.scrollToMessageId.observe(it1, Observer {
                     it ?: return@Observer
@@ -310,14 +334,40 @@ abstract class VideoMessageView(
     }
 
     override fun onClick(v: View?) {
-        val file = returnFileIfAlreadyDownloadedElseNull()
+        if((oneToOneChatViewModel.getSelectEnable() == true || groupChatViewModel.getSelectEnable() == true)) {
+            if (messageType == MessageType.ONE_TO_ONE_MESSAGE) {
+                if (selectedMessageList.contains(message)){
+                    //remove
+                    frameLayoutRoot.foreground = null
+                    oneToOneChatViewModel.selectChatMessage(message, false)
+                } else {
+                    //add
+                    frameLayoutRoot.foreground = resources.getDrawable(R.drawable.selected_chat_foreground)
+                    oneToOneChatViewModel.selectChatMessage(message, true)
+                }
+            } else if (messageType == MessageType.GROUP_MESSAGE) {
+                if (selectedMessageList.contains(message)){
+                    //remove
+                    frameLayoutRoot.foreground = null
+                    groupChatViewModel.selectChatMessage(message, false)
+                } else {
+                    //add
+                    frameLayoutRoot.foreground = resources.getDrawable(R.drawable.selected_chat_foreground)
+                    groupChatViewModel.selectChatMessage(message, true)
+                }
 
-        if (file != null) {
-
-            chatNavigation.openFullScreenVideoDialogFragment(file)
+            }
         } else {
-            downloadAttachment()
+            val file = returnFileIfAlreadyDownloadedElseNull()
+
+            if (file != null) {
+
+                chatNavigation.openFullScreenVideoDialogFragment(file)
+            } else {
+                downloadAttachment()
+            }
         }
+
     }
 
     private fun downloadAttachment() = GlobalScope.launch {
@@ -351,12 +401,12 @@ abstract class VideoMessageView(
                 frameLayoutRoot?.foreground =
                     resources.getDrawable(R.drawable.selected_chat_foreground)
                 oneToOneChatViewModel.makeSelectEnable(true)
-                oneToOneChatViewModel.selectChatMessage(message)
+                oneToOneChatViewModel.selectChatMessage(message, true)
             } else if (messageType == MessageType.GROUP_MESSAGE) {
                 frameLayoutRoot?.foreground =
                     resources.getDrawable(R.drawable.selected_chat_foreground)
                 groupChatViewModel.makeSelectEnable(true)
-                groupChatViewModel.selectChatMessage(message)
+                groupChatViewModel.selectChatMessage(message, true)
             }
         }
 

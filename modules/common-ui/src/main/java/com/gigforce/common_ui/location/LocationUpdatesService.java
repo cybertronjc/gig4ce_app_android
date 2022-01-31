@@ -238,9 +238,38 @@ public class LocationUpdatesService extends Service {
     public void removeLocationUpdates() {
         Log.i(TAG, "Removing location updates");
         try {
-            mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+            //mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+            // It is a good practice to remove location requests when the activity is in a paused or
+            // stopped state. Doing so helps battery performance and is especially
+            // recommended in applications that request frequent location updates.
+            if (mFusedLocationClient != null && mLocationCallback != null) {
+                Log.d(TAG, "removing location");
+                mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+            }
             LocationUtils.setRequestingLocationUpdates(this, false);
             stopSelf();
+        } catch (SecurityException unlikely) {
+            LocationUtils.setRequestingLocationUpdates(this, true);
+            Log.e(TAG, "Lost location permission. Could not remove updates. " + unlikely);
+        }
+    }
+
+    public void stopLocationUpdates() {
+        Log.i(TAG, "Stopping location updates");
+        try {
+            //mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+            // It is a good practice to remove location requests when the activity is in a paused or
+            // stopped state. Doing so helps battery performance and is especially
+            // recommended in applications that request frequent location updates.
+            if (mFusedLocationClient != null && mLocationCallback != null) {
+                Log.d(TAG, "stopping location");
+                mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+                stopForeground(true);
+                stopSelf();
+            }
+            LocationUtils.setRequestingLocationUpdates(this, false);
+
+
         } catch (SecurityException unlikely) {
             LocationUtils.setRequestingLocationUpdates(this, true);
             Log.e(TAG, "Lost location permission. Could not remove updates. " + unlikely);
@@ -312,10 +341,19 @@ public class LocationUpdatesService extends Service {
         //check if endtime is grater than starttime
         if (startTime.after(endTime)){
             Log.i(TAG, "Ending location service: "  + " startTime: " + startTime.toString() + " endTime: "+ endTime.toString());
-            removeLocationUpdates();
-            if (serviceIsRunningInForeground(this)){
-                stopForeground(true);
+            // Notify anyone listening for broadcasts about the new location.
+            Intent intent = new Intent(ACTION_BROADCAST);
+            intent.putExtra(EXTRA_LOCATION, location);
+            intent.putExtra(AppConstants.INTENT_EXTRA_CHAT_TYPE , chatType);
+            intent.putExtra(AppConstants.INTENT_EXTRA_CHAT_HEADER_ID, chatHeaderOrGroupId);
+            intent.putExtra(AppConstants.INTENT_EXTRA_END_LIVE_LOCATION , true);
+            LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+
+            // Update notification content if running as a foreground service.
+            if (serviceIsRunningInForeground(this)) {
+                mNotificationManager.notify(NOTIFICATION_ID, getNotification());
             }
+            removeLocationUpdates();
         } else {
             Log.i(TAG, "Getting location service: " + " startTime: " + startTime.toString() + " endTime: "+ endTime.toString());
             // Notify anyone listening for broadcasts about the new location.
@@ -323,6 +361,7 @@ public class LocationUpdatesService extends Service {
             intent.putExtra(EXTRA_LOCATION, location);
             intent.putExtra(AppConstants.INTENT_EXTRA_CHAT_TYPE , chatType);
             intent.putExtra(AppConstants.INTENT_EXTRA_CHAT_HEADER_ID, chatHeaderOrGroupId);
+            intent.putExtra(AppConstants.INTENT_EXTRA_END_LIVE_LOCATION , false);
             LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
 
             // Update notification content if running as a foreground service.

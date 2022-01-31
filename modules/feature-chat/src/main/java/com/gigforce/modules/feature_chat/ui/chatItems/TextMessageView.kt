@@ -54,10 +54,6 @@ import android.animation.ValueAnimator
 
 import android.animation.ValueAnimator.AnimatorUpdateListener
 
-
-
-
-
 @AndroidEntryPoint
 abstract class TextMessageView(
     val type: MessageFlowType,
@@ -96,6 +92,7 @@ abstract class TextMessageView(
     private lateinit var oneToOneChatViewModel: ChatPageViewModel
     private lateinit var groupChatViewModel: GroupChatViewModel
     private lateinit var frameLayoutRoot: FrameLayout
+    private var selectedMessageList = emptyList<ChatMessage>()
 
     init {
         setDefault()
@@ -151,6 +148,7 @@ abstract class TextMessageView(
         msgView.maxWidth = maxWidth
 
         quotedMessagePreviewContainer.setOnClickListener(this)
+        containerView.setOnClickListener(this)
         containerView.setOnLongClickListener(this)
     }
 
@@ -170,8 +168,19 @@ abstract class TextMessageView(
                     oneToOneChatViewModel.enableSelect.observe(it1, Observer {
                         it ?: return@Observer
                         if (it == false) {
-                            frameLayoutRoot?.foreground = null
+                            frameLayoutRoot.foreground = null
                         }
+                    })
+                    oneToOneChatViewModel.selectedChatMessage.observe(it1, Observer {
+                        it ?: return@Observer
+                        selectedMessageList = it
+                        if (it.isNotEmpty() && it.contains(message)){
+                            Log.d("MultiSelection", "Contains this message $it")
+                            frameLayoutRoot.foreground = resources.getDrawable(R.drawable.selected_chat_foreground)
+                        } else {
+                            frameLayoutRoot.foreground = null
+                        }
+
                     })
                     oneToOneChatViewModel.scrollToMessageId.observe(it1, Observer {
                         it ?: return@Observer
@@ -183,8 +192,19 @@ abstract class TextMessageView(
                     groupChatViewModel.enableSelect.observe(it1, Observer {
                         it ?: return@Observer
                         if (it == false) {
-                            frameLayoutRoot?.foreground = null
+                            frameLayoutRoot.foreground = null
                         }
+                    })
+                    groupChatViewModel.selectedChatMessage.observe(it1, Observer {
+                        it ?: return@Observer
+                        selectedMessageList = it
+                        if (it.isNotEmpty() && it.contains(message)){
+                            Log.d("MultiSelection", "Contains this message $it")
+                            frameLayoutRoot.foreground = resources.getDrawable(R.drawable.selected_chat_foreground)
+                        } else {
+                            frameLayoutRoot.foreground = null
+                        }
+
                     })
                     groupChatViewModel.scrollToMessageId.observe(it1, Observer {
                         it ?: return@Observer
@@ -295,11 +315,11 @@ abstract class TextMessageView(
             if (messageType == MessageType.ONE_TO_ONE_MESSAGE) {
                 frameLayoutRoot?.foreground = resources.getDrawable(R.drawable.selected_chat_foreground)
                 oneToOneChatViewModel.makeSelectEnable(true)
-                oneToOneChatViewModel.selectChatMessage(message)
+                oneToOneChatViewModel.selectChatMessage(message, true)
             } else if (messageType == MessageType.GROUP_MESSAGE) {
                 frameLayoutRoot?.foreground = resources.getDrawable(R.drawable.selected_chat_foreground)
                 groupChatViewModel.makeSelectEnable(true)
-                groupChatViewModel.selectChatMessage(message)
+                groupChatViewModel.selectChatMessage(message, true)
             }
         }
 
@@ -308,20 +328,48 @@ abstract class TextMessageView(
 
     override fun onClick(v: View?) {
 
-        val replyMessage = message.replyForMessage ?: return
-        if(!(oneToOneChatViewModel.getSelectEnable() == true || groupChatViewModel.getSelectEnable() == true)) {
+        if (v?.id == R.id.ll_msgContainer){
+            if((oneToOneChatViewModel.getSelectEnable() == true || groupChatViewModel.getSelectEnable() == true)) {
+                if (messageType == MessageType.ONE_TO_ONE_MESSAGE) {
+                    if (selectedMessageList.contains(message)){
+                        //remove
+                        frameLayoutRoot.foreground = null
+                        oneToOneChatViewModel.selectChatMessage(message, false)
+                    } else {
+                        //add
+                        frameLayoutRoot.foreground = resources.getDrawable(R.drawable.selected_chat_foreground)
+                        oneToOneChatViewModel.selectChatMessage(message, true)
+                    }
+                } else if (messageType == MessageType.GROUP_MESSAGE) {
+                    if (selectedMessageList.contains(message)){
+                        //remove
+                        frameLayoutRoot.foreground = null
+                        groupChatViewModel.selectChatMessage(message, false)
+                    } else {
+                        //add
+                        frameLayoutRoot.foreground = resources.getDrawable(R.drawable.selected_chat_foreground)
+                        groupChatViewModel.selectChatMessage(message, true)
+                    }
 
-            if (messageType == MessageType.ONE_TO_ONE_MESSAGE) {
-                oneToOneChatViewModel.scrollToMessage(
-                    replyMessage
-                )
-            } else if (messageType == MessageType.GROUP_MESSAGE) {
-                Log.d("replyToMessage", "scrolling")
-                groupChatViewModel.scrollToMessage(
-                    replyMessage
-                )
+                }
+            }
+        } else if (v?.id == R.id.reply_messages_quote_container_layout){
+            val replyMessage = message.replyForMessage ?: return
+            if(!(oneToOneChatViewModel.getSelectEnable() == true || groupChatViewModel.getSelectEnable() == true)) {
+
+                if (messageType == MessageType.ONE_TO_ONE_MESSAGE) {
+                    oneToOneChatViewModel.scrollToMessage(
+                        replyMessage
+                    )
+                } else if (messageType == MessageType.GROUP_MESSAGE) {
+                    Log.d("replyToMessage", "scrolling")
+                    groupChatViewModel.scrollToMessage(
+                        replyMessage
+                    )
+                }
             }
         }
+
     }
 
     override fun onMenuItemClick(item: MenuItem?): Boolean {

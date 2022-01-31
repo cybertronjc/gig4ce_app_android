@@ -131,6 +131,7 @@ class MainActivity : BaseActivity(),
                 p1?.getParcelableExtra<Location>(LocationUpdatesService.EXTRA_LOCATION)
             val chatType = p1?.getStringExtra(AppConstants.INTENT_EXTRA_CHAT_TYPE)
             val headerId = p1?.getStringExtra(AppConstants.INTENT_EXTRA_CHAT_HEADER_ID)
+            val endLiveLocation = p1?.getBooleanExtra(AppConstants.INTENT_EXTRA_END_LIVE_LOCATION, false)
             if (location != null) {
                 if (!isUserLoggedIn()) {
                     Log.d("MainActivity", "User Not logged in, not showing chat notification")
@@ -139,10 +140,23 @@ class MainActivity : BaseActivity(),
 
                 //update chat message
                 val recentMessageId = sharedPreAndCommonUtilInterface.getData("recent_loc_message")
+                val receiverId = sharedPreAndCommonUtilInterface.getData("recent_receiverId_message")
                 if (recentMessageId?.isNotEmpty() == true){
                     Log.d("LocationUpdatesMain", "type: $chatType , headerId: $headerId messageId: $recentMessageId , loc: ${location.latitude} , ${location.longitude}")
                     val newLocation = GeoPoint(location.latitude , location.longitude)
-                    chatPageViewModel.updateLocationChatMessage(headerId.toString(), recentMessageId, newLocation)
+                    if (endLiveLocation == true){
+                        chatPageViewModel.stopLocationChatMessage(headerId.toString(), recentMessageId, newLocation)
+                    } else {
+                        chatPageViewModel.updateLocationChatMessage(headerId.toString(), recentMessageId, newLocation)
+                    }
+                    if (receiverId?.isNotEmpty() == true){
+                        Log.d("LocationUpdatesMain", " receiver entry = type: $chatType , headerId: $headerId messageId: $recentMessageId , loc: ${location.latitude} , ${location.longitude}")
+                        if (endLiveLocation == true){
+                            chatPageViewModel.stopLocationReceiverChatMessage(headerId.toString(), recentMessageId, newLocation, receiverId)
+                        } else {
+                            chatPageViewModel.updateLocationReceiverChatMessage(headerId.toString(), recentMessageId, newLocation, receiverId)
+                        }
+                    }
                 }
 
             }

@@ -86,14 +86,55 @@ interface IChatService {
         senderId: String
     )
 
+    suspend fun setHeaderMuteNotifications(
+        headerIds: List<String>,
+        enable: Boolean
+    )
+
     suspend fun forwardChatMessage(
         contacts: List<ContactModel>,
         chatMessage: ChatMessage
     )
 
-    suspend fun setLocationToChatMessage(
+    suspend fun setLocationToSenderChatMessage(
         id: String,
         messageId: String,
         location: GeoPoint
+    )
+
+    suspend fun stopLocationToSenderChatMessage(
+        id: String,
+        messageId: String,
+        location: GeoPoint
+    )
+
+    suspend fun setLocationToReceiverChatMessage(
+        id: String,
+        receiverId: String,
+        messageId: String,
+        location: GeoPoint,
+    )
+
+    suspend fun stopLocationToReceiverChatMessage(
+        id: String,
+        receiverId: String,
+        messageId: String,
+        location: GeoPoint,
+    )
+
+    suspend fun stopSharingLocation(
+        id: String,
+        messageId: String
+    )
+
+    suspend fun stopReceiverSharingLocation(
+        id: String,
+        messageId: String,
+        receiverId: String
+    )
+
+    suspend fun updateMuteNotifications(
+        enable: Boolean,
+        headerId: String
     )
 }
