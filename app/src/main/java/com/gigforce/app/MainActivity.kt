@@ -49,6 +49,7 @@ import com.gigforce.modules.feature_chat.screens.ChatPageFragment
 import com.gigforce.common_ui.location.LocationUpdatesService
 import com.gigforce.core.AppConstants
 import com.gigforce.modules.feature_chat.screens.vm.ChatPageViewModel
+import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel
 import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
@@ -95,6 +96,10 @@ class MainActivity : BaseActivity(),
 
     private val chatPageViewModel: ChatPageViewModel by lazy {
         ViewModelProvider(this).get(ChatPageViewModel::class.java)
+    }
+
+    private val groupChatViewModel: GroupChatViewModel by lazy {
+        ViewModelProvider(this).get(GroupChatViewModel::class.java)
     }
 
     fun getNavController(): NavController {
@@ -144,17 +149,26 @@ class MainActivity : BaseActivity(),
                 if (recentMessageId?.isNotEmpty() == true){
                     Log.d("LocationUpdatesMain", "type: $chatType , headerId: $headerId messageId: $recentMessageId , loc: ${location.latitude} , ${location.longitude}")
                     val newLocation = GeoPoint(location.latitude , location.longitude)
-                    if (endLiveLocation == true){
-                        chatPageViewModel.stopLocationChatMessage(headerId.toString(), recentMessageId, newLocation)
-                    } else {
-                        chatPageViewModel.updateLocationChatMessage(headerId.toString(), recentMessageId, newLocation)
-                    }
-                    if (receiverId?.isNotEmpty() == true){
-                        Log.d("LocationUpdatesMain", " receiver entry = type: $chatType , headerId: $headerId messageId: $recentMessageId , loc: ${location.latitude} , ${location.longitude}")
+
+                    if (receiverId == "group"){
                         if (endLiveLocation == true){
-                            chatPageViewModel.stopLocationReceiverChatMessage(headerId.toString(), recentMessageId, newLocation, receiverId)
+                            groupChatViewModel.stopSharingLocation(headerId.toString(), recentMessageId)
                         } else {
-                            chatPageViewModel.updateLocationReceiverChatMessage(headerId.toString(), recentMessageId, newLocation, receiverId)
+                            groupChatViewModel.updateLocationChatMessage(headerId.toString(), recentMessageId, newLocation)
+                        }
+                    } else {
+                        if (endLiveLocation == true){
+                            chatPageViewModel.stopLocationChatMessage(headerId.toString(), recentMessageId, newLocation)
+                        } else {
+                            chatPageViewModel.updateLocationChatMessage(headerId.toString(), recentMessageId, newLocation)
+                        }
+                        if (receiverId?.isNotEmpty() == true){
+                            Log.d("LocationUpdatesMain", " receiver entry = type: $chatType , headerId: $headerId messageId: $recentMessageId , loc: ${location.latitude} , ${location.longitude}")
+                            if (endLiveLocation == true){
+                                chatPageViewModel.stopLocationReceiverChatMessage(headerId.toString(), recentMessageId, newLocation, receiverId)
+                            } else {
+                                chatPageViewModel.updateLocationReceiverChatMessage(headerId.toString(), recentMessageId, newLocation, receiverId)
+                            }
                         }
                     }
                 }

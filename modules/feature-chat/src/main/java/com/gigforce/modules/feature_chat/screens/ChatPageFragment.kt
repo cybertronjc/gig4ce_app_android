@@ -507,6 +507,24 @@ class ChatPageFragment : Fragment(),
                         chatRecyclerView.visible()
                         noChatLayout.gone()
                         shimmerContainer.gone()
+
+                        if (messages.isNotEmpty()) {
+                            groupChatViewModel.checkForRecevinginfoElseMarkMessageAsReceived(
+                                messages as MutableList<ChatMessage>
+                            )
+                            var recentLiveLocationMessage : ChatMessage? = null
+                            val messagesWithCurrentlySharingLiveLocation = messages.filter { it.type == com.gigforce.common_ui.core.ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION && it.isLiveLocation && it.isCurrentlySharingLiveLocation && it.senderInfo.id == FirebaseAuth.getInstance().currentUser?.uid}
+                            if (messagesWithCurrentlySharingLiveLocation.isNotEmpty()){
+                                recentLiveLocationMessage = messagesWithCurrentlySharingLiveLocation.last()
+                                Log.d("locationupdate", "Sharing message with fragment ${recentLiveLocationMessage.id}")
+                            }
+
+                            if (recentLiveLocationMessage != null) {
+                                Log.d("RecentLocIdGroup", "id: ${recentLiveLocationMessage.id}")
+                                sharedPreAndCommonUtilInterface.saveData("recent_loc_message", recentLiveLocationMessage.id)
+                                sharedPreAndCommonUtilInterface.saveData("recent_receiverId_message", "group")
+                            }
+                        }
                     }
                 }
             })
@@ -786,10 +804,10 @@ class ChatPageFragment : Fragment(),
                         noChatLayout.gone()
                         shimmerContainer.gone()
 
-//                        if (messages[messages.size - 1].type == ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION){
-//                            Log.d("RecentLocMessage", "id: ${messages[messages.size - 1].id}")
-//                            sharedPreAndCommonUtilInterface.saveData("recent_loc_message", messages[messages.size - 1].id)
-//                        }
+                        //set messages as read
+                        val unreadMessages = messages.filter { it.flowType == ChatConstants.FLOW_TYPE_IN && it.status < ChatConstants.MESSAGE_STATUS_READ_BY_USER }
+                        Log.d("unreadMessages", "${unreadMessages.size}")
+                        viewModel.setMessagesAsRead(unreadMessages)
 
                     }
                 }
@@ -1678,6 +1696,7 @@ class ChatPageFragment : Fragment(),
         Log.d(TAG, "endtime: ${liveEndTime}")
         var type = ""
         if (chatType == ChatConstants.CHAT_TYPE_USER) {
+            viewModel.stopAllPreviousLiveLocations()
             viewModel.sendLocationMessage(
                 latitude,
                 longitude,
@@ -1687,15 +1706,15 @@ class ChatPageFragment : Fragment(),
                 isLiveLocation, liveEndTime
             )
             type = "Direct"
-//            val recentId = viewModel.getRecentLocationChatMessage()
-//            Log.d("RecentLocMessage", "id: $recentId")
-//            sharedPreAndCommonUtilInterface.saveData("recent_loc_message", recentId)
         } else {
+            groupChatViewModel.stopAllPreviousLiveLocations()
             groupChatViewModel.sendLocationMessage(
                 latitude,
                 longitude,
                 address,
-                imageFile
+                imageFile,
+                isLiveLocation,
+                isLiveLocation, liveEndTime
             )
             type = "Group"
         }
@@ -1873,6 +1892,7 @@ class ChatPageFragment : Fragment(),
         if(chatType == ChatConstants.CHAT_TYPE_USER) type = "Direct" else type = "Group"
         var map = mapOf("chat_type" to type)
         eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_SESSION_ENDED, map))
+
     }
 
     companion object {

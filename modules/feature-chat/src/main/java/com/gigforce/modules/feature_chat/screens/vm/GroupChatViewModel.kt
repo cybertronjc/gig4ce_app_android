@@ -104,6 +104,9 @@ class GroupChatViewModel @Inject constructor(
     private var _scrollToMessageId = MutableLiveData<String?>()
     val scrollToMessageId: LiveData<String?> = _scrollToMessageId
 
+    private var _recentLocationMessageId = MutableLiveData<Pair<String, String>>()
+    val recentLocationMessageId: LiveData<Pair<String, String>> = _recentLocationMessageId
+
     //Create group
     override fun setGroupId(groupId: String) {
         this.groupId = groupId
@@ -200,6 +203,13 @@ class GroupChatViewModel @Inject constructor(
                 }
 
         startContactsChangeListener()
+    }
+
+    fun stopWatchingGroupDetails(){
+        if (groupDetailsListener != null){
+            Log.d(TAG, "stopping snapshot listener")
+            groupDetailsListener!!.remove()
+        }
     }
 
     /**
@@ -330,7 +340,7 @@ class GroupChatViewModel @Inject constructor(
                             it.groupId = groupId
                         }
                     }?.toMutableList()
-                        checkForRecevinginfoElseMarkMessageAsReceived(grpMessages!!)
+                        //checkForRecevinginfoElseMarkMessageAsReceived(grpMessages!!)
 
                     if (userContacts != null) {
                         compareGroupMessagesWithContactsAndEmit()
@@ -367,7 +377,7 @@ class GroupChatViewModel @Inject constructor(
                 }
     }
 
-    private fun checkForRecevinginfoElseMarkMessageAsReceived(
+    fun checkForRecevinginfoElseMarkMessageAsReceived(
             msgs: MutableList<ChatMessage>
     ) = viewModelScope.launch {
 
@@ -695,7 +705,10 @@ class GroupChatViewModel @Inject constructor(
             latitude: Double,
             longitude: Double,
             physicalAddress: String,
-            mapImageFile: File?
+            mapImageFile: File?,
+            isLiveLocation: Boolean,
+            isCurrentlySharingLiveLocation: Boolean,
+            liveEndTime: Date?
     ) = GlobalScope.launch(Dispatchers.IO) {
 
         try {
@@ -720,7 +733,10 @@ class GroupChatViewModel @Inject constructor(
                     timestamp = Timestamp.now(),
                     location = GeoPoint(latitude, longitude),
                     locationPhysicalAddress = physicalAddress,
-                    thumbnailBitmap = mapImage?.copy(mapImage.config, mapImage.isMutable)
+                    thumbnailBitmap = mapImage?.copy(mapImage.config, mapImage.isMutable),
+                    isLiveLocation = isLiveLocation,
+                    liveEndTime = liveEndTime,
+                    isCurrentlySharingLiveLocation = isCurrentlySharingLiveLocation
             )
 
             groupMessagesShownOnView?.add(message)
@@ -736,7 +752,36 @@ class GroupChatViewModel @Inject constructor(
         }
     }
 
-     fun getChatHeaderInfo(headerInfoId: String) = viewModelScope.launch{
+    fun stopAllPreviousLiveLocations(){
+        val messagesWithActiveLiveLocations = this.grpMessages?.filter { it.type == com.gigforce.common_ui.core.ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION && it.isLiveLocation && it.isCurrentlySharingLiveLocation }
+        messagesWithActiveLiveLocations?.forEach {
+            Log.d("locationupdate", "Stoping location for: ${it.headerId} , ${it.id}")
+            stopSharingLocation(groupId, it.id)
+        }
+    }
+
+    fun stopSharingLocation(header: String, messageId: String) = GlobalScope.launch {
+        if (header.isNotEmpty() && messageId.isNotEmpty()){
+            try {
+                chatGroupRepository.stopSharingLocation(header, messageId)
+            } catch (e: Exception){
+                Log.d(TAG, e.message.toString())
+            }
+        }
+    }
+
+    fun updateLocationChatMessage(header: String, messageId: String, location: GeoPoint) = GlobalScope.launch{
+        if (header.isNotEmpty() && messageId.isNotEmpty()){
+            try {
+                chatGroupRepository.setLocationToGroupChatMessage(header, messageId,location)
+            } catch (e: Exception){
+                Log.d(ChatPageViewModel.TAG, e.message.toString())
+            }
+        }
+    }
+
+
+    fun getChatHeaderInfo(headerInfoId: String) = viewModelScope.launch{
         try {
             val headerInfo = chatGroupRepository.getChatHeader(headerInfoId)
             _chatHeaderInfo.value = headerInfo
@@ -1160,6 +1205,6 @@ class GroupChatViewModel @Inject constructor(
         _scrollToMessageId.value = null
     }
     companion object {
-        const val TAG: String = "Sending video"
+        const val TAG: String = "GroupChatViewModel"
     }
 }

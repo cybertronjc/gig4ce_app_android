@@ -122,6 +122,12 @@ interface IChatService {
         location: GeoPoint,
     )
 
+    suspend fun stopLocationForReceiver(
+        id: String,
+        messageId: String,
+        receiverId: String
+    )
+
     suspend fun stopSharingLocation(
         id: String,
         messageId: String

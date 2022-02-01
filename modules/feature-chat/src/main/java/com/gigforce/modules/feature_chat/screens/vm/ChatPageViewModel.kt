@@ -18,13 +18,9 @@ import com.gigforce.common_ui.core.ChatConstants
 import com.gigforce.common_ui.metaDataHelper.ImageMetaDataHelpers
 import com.gigforce.common_ui.viewdatamodels.chat.ChatHeader
 import com.gigforce.common_ui.viewdatamodels.chat.UserInfo
-import com.gigforce.core.StringConstants
-import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.extensions.*
 import com.gigforce.core.fb.FirebaseUtils
-import com.gigforce.core.file.FileUtils
-import com.gigforce.core.retrofit.RetrofitFactory
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.gigforce.core.utils.Lse
 import com.gigforce.modules.feature_chat.ChatAttachmentDownloadState
@@ -35,7 +31,6 @@ import com.gigforce.modules.feature_chat.models.AudioPassingDataModel
 import com.gigforce.modules.feature_chat.repositories.ChatProfileFirebaseRepository
 import com.gigforce.modules.feature_chat.repositories.DownloadChatAttachmentService
 import com.google.firebase.Timestamp
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.*
@@ -44,8 +39,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import java.io.File
 import java.util.*
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
-import kotlin.collections.ArrayList
 
 @HiltViewModel
 class ChatPageViewModel @Inject constructor(
@@ -197,9 +192,9 @@ class ChatPageViewModel @Inject constructor(
             }
     }
 
-    private fun setMessagesAsRead(
+    fun setMessagesAsRead(
         unreadMessages: List<ChatMessage>
-    ) = GlobalScope.launch {
+    ) = viewModelScope.launch {
 
         try {
             chatRepository.setMessagesAsRead(unreadMessages)
@@ -314,34 +309,51 @@ class ChatPageViewModel @Inject constructor(
                     }
 
                     this.chatMessages = messages.toMutableList()
-                    chatMessages?.let {
-
-                        val unreadMessages = it.filter {
-                            it.flowType == ChatConstants.FLOW_TYPE_IN &&
-                                    it.status < ChatConstants.MESSAGE_STATUS_READ_BY_USER &&
-                                    it.senderMessageId.isNotBlank()
-                        }
-                        //setMessagesAsRead(unreadMessages)
-                    }
+//                    chatMessages?.let {
+//
+//                        val unreadMessages = it.filter {
+//                            it.flowType == ChatConstants.FLOW_TYPE_IN &&
+//                                    it.status < ChatConstants.MESSAGE_STATUS_READ_BY_USER &&
+//                                    it.senderMessageId.isNotBlank()
+//                        }
+//                        setMessagesAsRead(unreadMessages)
+//                    }
                     if (messages.isNotEmpty()) {
                         var recentLiveLocationMessage : ChatMessage? = null
-                        messages?.forEach {
-                            if (it.type == ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION && it.isLiveLocation && it.isCurrentlySharingLiveLocation){
-                                recentLiveLocationMessage = it
-                            }
+                        val messagesWithCurrentlySharingLiveLocation = messages.filter { it.type == ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION && it.isLiveLocation && it.isCurrentlySharingLiveLocation }
+                        if (messagesWithCurrentlySharingLiveLocation.isNotEmpty()){
+                            recentLiveLocationMessage = messagesWithCurrentlySharingLiveLocation.last()
+                            Log.d("locationupdate", "Sharing message with fragment ${recentLiveLocationMessage.id}")
                         }
-                        _recentLocationMessageId.postValue(
-                            Pair(
-                                recentLiveLocationMessage?.id,
-                                recentLiveLocationMessage?.receiverInfo?.id
-                            ) as Pair<String, String>
-                        )
 
+                        if (recentLiveLocationMessage != null) {
+                            _recentLocationMessageId.postValue(
+                                Pair(
+                                    recentLiveLocationMessage?.id,
+                                    recentLiveLocationMessage?.receiverInfo?.id
+                                ) as Pair<String, String>
+                            )
+                        }
                     }
                     _messages.postValue(messages)
 
                 }
             }
+    }
+
+    fun isUpdatedAtAndEndDateDiffIsGreaterThanOneMinute(updatedAt: Date?, endDate: Date?): Boolean {
+        val diff: Long = endDate?.time?.minus(updatedAt?.time!!) ?: 0
+        val minDiff = TimeUnit.MILLISECONDS.toMinutes(diff)
+        return minDiff > 1
+    }
+
+    fun stopAllPreviousLiveLocations(){
+        val messagesWithActiveLiveLocations = this.chatMessages?.filter { it.type == ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION && it.isLiveLocation && it.isCurrentlySharingLiveLocation }
+        messagesWithActiveLiveLocations?.forEach {
+            Log.d("locationupdate", "Stoping location for: ${it.headerId} , ${it.id}")
+            stopSharingLocation(headerId, it.id)
+            stopSharingLocationForReceiver(headerId, it.id, it.receiverInfo?.id.toString())
+        }
     }
 
     private var _sendingMessage = MutableLiveData<ChatMessage>()
@@ -918,6 +930,16 @@ class ChatPageViewModel @Inject constructor(
         if (header.isNotEmpty() && messageId.isNotEmpty()){
             try {
                 chatRepository.stopSharingLocation(header, messageId)
+            } catch (e: Exception){
+                Log.d(TAG, e.message.toString())
+            }
+        }
+    }
+
+    fun stopSharingLocationForReceiver(header: String, messageId: String, receiverId: String) = GlobalScope.launch {
+        if (header.isNotEmpty() && messageId.isNotEmpty()){
+            try {
+                chatRepository.stopLocationForReceiver(header, messageId, receiverId)
             } catch (e: Exception){
                 Log.d(TAG, e.message.toString())
             }

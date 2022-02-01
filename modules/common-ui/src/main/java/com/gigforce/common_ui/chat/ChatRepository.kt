@@ -186,6 +186,26 @@ class ChatRepository @Inject constructor(
         }
     }
 
+    override suspend fun stopLocationForReceiver(id: String, messageId: String, receiverId: String) {
+        try {
+            val chatMessagesRef = FirebaseFirestore.getInstance()
+                .collection(COLLECTION_CHATS)
+                .document(receiverId).collection(COLLECTION_CHAT_HEADERS)
+                .document(id)
+                .collection(COLLECTION_CHATS_MESSAGES)
+
+            chatMessagesRef.document(messageId).updateOrThrow(
+                mapOf(
+                    "isCurrentlySharingLiveLocation" to false,
+                    "updatedAt" to Timestamp.now(),
+                    "updatedBy" to getUID()
+                )
+            )
+        } catch (e: Exception){
+            Log.d("ChatRepository", "exc: ${e.message}")
+        }
+    }
+
     override suspend fun setLocationToReceiverChatMessage(
         id: String,
         receiverId: String,

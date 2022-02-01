@@ -20,7 +20,6 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.viewModels
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.preference.PreferenceManager
 import com.gigforce.common_ui.R
@@ -33,6 +32,7 @@ import com.gigforce.core.AppConstants.INTENT_EXTRA_CHAT_MESSAGE_ID
 import com.gigforce.core.AppConstants.INTENT_EXTRA_CHAT_TYPE
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.base.BaseActivity
+import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.date.DateHelper
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
@@ -45,7 +45,6 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
@@ -75,6 +74,9 @@ class LocationSharingActivity : BaseActivity(), OnMapReadyCallback,
 
     @Inject
     lateinit var eventTracker: IEventTracker
+
+    @Inject
+    lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
 
     private val viewModel: LocationSharingViewModel by viewModels()
 
@@ -165,6 +167,7 @@ class LocationSharingActivity : BaseActivity(), OnMapReadyCallback,
             val date: Calendar = Calendar.getInstance()
             val t: Long = date.timeInMillis
             if (selectedTab == 0){
+                //15 minutes
                 endTime = Date(t + (15 * 60000))
             } else if (selectedTab == 1){
                 //1 hour
@@ -176,12 +179,16 @@ class LocationSharingActivity : BaseActivity(), OnMapReadyCallback,
             Log.d("LocationSharingActivity", "Start: ${date.time} , End: $endTime")
             mService?.requestLocationUpdates(chatType, chatHeaderOrGroupId , date.time, endTime)
             if (endTime != null) {
+                //check if there is already live location sharing in other chat -> pending
+                sharedPreAndCommonUtilInterface.saveData("recent_loc_message", "")
+                sharedPreAndCommonUtilInterface.saveData("recent_receiverId_message", "")
                 sendResultsBack(true, endTime)
             }
         }
 
         shareCurrentLocation.setOnClickListener {
             //share current location
+            sendResultsBack(false, null)
         }
 
         shareLiveLocation.setOnClickListener {
@@ -197,7 +204,13 @@ class LocationSharingActivity : BaseActivity(), OnMapReadyCallback,
                     .setTitle("Alert")
                     .setMessage("Are you sure to stop sharing location?")
                     .setPositiveButton("Yes") { dialog, _ ->
-                        viewModel.stopSharingLocation(chatHeaderOrGroupId!!, messageId = chatMessageId!!, receiverId = chatMessage?.receiverInfo?.id.toString())
+                        if (chatType == "user"){
+                            viewModel.stopSharingLocation(chatHeaderOrGroupId!!, messageId = chatMessageId!!, receiverId = chatMessage?.receiverInfo?.id.toString())
+                        } else {
+                            viewModel.stopSharingGroupLocation(chatHeaderOrGroupId!!, messageId = chatMessageId!!)
+                        }
+                        sharedPreAndCommonUtilInterface.saveData("recent_loc_message", "")
+                        sharedPreAndCommonUtilInterface.saveData("recent_receiverId_message", "")
                         mService?.stopLocationUpdates()
                         onBackPressed()
                     }
@@ -240,29 +253,35 @@ class LocationSharingActivity : BaseActivity(), OnMapReadyCallback,
     }
 
     private fun initViewModel() {
-        if (chatHeaderOrGroupId?.isNotEmpty() == true && chatMessageId?.isNotEmpty() == true){
-            Log.d("LocationSharingActivity", "header: $chatHeaderOrGroupId , messageId: $chatMessageId")
+        if (chatHeaderOrGroupId?.isNotEmpty() == true && chatMessageId?.isNotEmpty() == true && chatType == "user"){
+            Log.d("LocationSharingActivity", "User -> header: $chatHeaderOrGroupId , messageId: $chatMessageId")
             viewModel.addSnapshotToLiveLocationMessage(chatHeaderOrGroupId!!, chatMessageId!!)
+            viewModel.startListeningForHeaderChanges(chatHeaderOrGroupId!!)
+        } else if (chatHeaderOrGroupId?.isNotEmpty() == true && chatMessageId?.isNotEmpty() == true && chatType == "group") {
+            Log.d("LocationSharingActivity", "Group -> groupId: $chatHeaderOrGroupId , messageId: $chatMessageId")
+            viewModel.addSnapShotToGroupLiveLocationMessage(chatHeaderOrGroupId!!, chatMessageId!!)
+            viewModel.startWatchingGroupDetails(chatHeaderOrGroupId!!)
         }
 
         viewModel.liveLocationMessage.observe(this, androidx.lifecycle.Observer {
             Log.d("ViewLiveLocationFragment", "message: ${it?.isCurrentlySharingLiveLocation} ${it?.id} , ${it?.location} , ${it?.isLiveLocation}")
             chatMessage = it
             if (it?.location != null){
+                Log.d("CheckInFragment", "Setting live location")
                 it.location?.let { it1 -> addMarkerOnMap(it1.latitude, it1.longitude) }
             }
             if (it?.isCurrentlySharingLiveLocation == true){
                 if (it?.senderInfo?.id == FirebaseAuth.getInstance().currentUser?.uid){
                     //current user is sender -> show stop sharing button and time left
-                    viewBinding.appBarComp.setAppBarTitle(it?.receiverInfo?.name ?: "Live location")
                     viewBinding.stopSharing.visible()
-                    viewBinding.personName.text = it?.senderInfo?.name ?: ""
+                    viewBinding.personName.text = "You"
                     viewBinding.timeLeft.text = it?.liveEndTime?.let { it1 -> getDuration(it1) } + " left"
                 } else {
-                    viewBinding.appBarComp.setAppBarTitle(it?.senderInfo?.name ?: "Live location")
                     viewBinding.stopSharing.gone()
                     viewBinding.personName.text = it?.senderInfo?.name ?: ""
-                    viewBinding.timeLeft.text = "Updated " +  formatTimeAgo(com.gigforce.core.utils.DateHelper.getDateFromTimeStamp(it?.updatedAt?.toDate()!!))
+                    viewBinding.timeLeft.text = "Updated " + it?.updatedAt?.toDate()?.let { it1 ->
+                        com.gigforce.core.utils.DateHelper.getDateFromTimeStamp(it1)
+                    }?.let { it2 -> formatTimeAgo(it2) }
                 }
             } else {
                 viewBinding.appBarComp.setAppBarTitle(it?.receiverInfo?.name ?: "Live location")
@@ -271,12 +290,28 @@ class LocationSharingActivity : BaseActivity(), OnMapReadyCallback,
                 viewBinding.personName.gone()
                 viewBinding.locationEnded.visible()
                 viewBinding.lastUpdatedAt.visible()
-                viewBinding.lastUpdatedAt.text = "Last updated " +  formatTimeAgo(com.gigforce.core.utils.DateHelper.getDateFromTimeStamp(it?.updatedAt?.toDate()!!))
+                viewBinding.lastUpdatedAt.text = "Last updated " + it?.updatedAt?.toDate()?.let { it1 ->
+                    com.gigforce.core.utils.DateHelper.getDateFromTimeStamp(it1)
+                }?.let { it2 -> formatTimeAgo(it2) }
             }
-
         })
 
+        viewModel.headerInfo.observe(this, androidx.lifecycle.Observer {
+            it ?: return@Observer
+            Log.d("ViewLiveLocationFragment", "header info : ${it.otherUser?.name}")
 
+            if (it.otherUser != null){
+                viewBinding.appBarComp.setAppBarTitle(it?.otherUser?.name ?: "Live location")
+            }
+        })
+
+        viewModel.groupInfo.observe(this, androidx.lifecycle.Observer {
+            it ?: return@Observer
+
+            if (it.name != null){
+                viewBinding.appBarComp.setAppBarTitle(it?.name ?: "Live location")
+            }
+        })
     }
 
     private fun bitmapDescriptorFromVector(
@@ -406,7 +441,7 @@ class LocationSharingActivity : BaseActivity(), OnMapReadyCallback,
         }
     }
 
-    private fun sendResultsBack(isLiveLocation: Boolean, endTime: Date) {
+    private fun sendResultsBack(isLiveLocation: Boolean, endTime: Date?) {
         if (location == null)
             return
 
@@ -464,16 +499,17 @@ class LocationSharingActivity : BaseActivity(), OnMapReadyCallback,
 
     override fun onResume() {
         super.onResume()
-//        if (chatMessageId.isNullOrBlank()) {
+        if (chatMessageId.isNullOrBlank()) {
+            locationUpdates.setLocationUpdateCallbacks(this)
+            locationUpdates.startUpdates(this)
+        } else {
             if (myReceiver != null) {
                 LocalBroadcastManager.getInstance(this).registerReceiver(
                     myReceiver,
                     IntentFilter(LocationUpdatesService.ACTION_BROADCAST)
                 )
             }
-            locationUpdates.setLocationUpdateCallbacks(this)
-            locationUpdates.startUpdates(this)
-        //}
+        }
     }
         override fun onStop() {
 //            if (chatMessageId.isNullOrBlank()) {
@@ -499,6 +535,7 @@ class LocationSharingActivity : BaseActivity(), OnMapReadyCallback,
             this.location = location
             val address = processLocationAndUpdateUserDetails(location!!)
             Log.d("received","$location")
+            Log.d("CheckInFragment", "Setting current location")
             addMarkerOnMap(location?.latitude, location?.longitude)
         }
 

@@ -965,6 +965,46 @@ class ChatGroupRepository @Inject constructor(
         }
     }
 
+     suspend fun stopSharingLocation(id: String, messageId: String) {
+        try {
+            val chatMessagesRef = db.collection(COLLECTION_GROUP_CHATS)
+                .document(id)
+                .collection(COLLECTION_GROUP_MESSAGES)
+            chatMessagesRef.document(messageId).updateOrThrow(
+                mapOf(
+                    "isCurrentlySharingLiveLocation" to false,
+                    "updatedAt" to Timestamp.now(),
+                    "updatedBy" to getUID()
+                )
+            )
+        } catch (e: Exception){
+            Log.d("ChatRepository", "exc: ${e.message}")
+        }
+    }
+
+    suspend fun setLocationToGroupChatMessage(
+        id: String,
+        messageId: String,
+        location: GeoPoint
+    ){
+        try {
+            val chatMessagesRef = db.collection(COLLECTION_GROUP_CHATS)
+                .document(id)
+                .collection(COLLECTION_GROUP_MESSAGES)
+            chatMessagesRef.document(messageId).updateOrThrow(
+                mapOf(
+                    "location" to location,
+                    "isCurrentlySharingLiveLocation" to true,
+                    "updatedAt" to Timestamp.now(),
+                    "updatedBy" to getUID()
+                )
+            )
+        } catch (e: Exception){
+            Log.d("ChatRepository", "exc: ${e.message}")
+        }
+    }
+
+
     suspend fun getChatHeader(headerId: String) =
             userChatCollectionRef.collection(COLLECTION_CHAT_HEADERS).document(headerId)
                 .getOrThrow()

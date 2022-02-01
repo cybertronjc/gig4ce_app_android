@@ -296,14 +296,14 @@ public class LocationUpdatesService extends Service {
                 new Intent(this, LocationSharingActivity.class), 0);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                .addAction(R.drawable.ic_notification_icon, getString(R.string.launch_activity),
-                        activityPendingIntent)
-                .addAction(R.drawable.ic_notification_icon, getString(R.string.app_name),
-                        servicePendingIntent)
+//                .addAction(R.drawable.ic_notification_icon, getString(R.string.launch_activity),
+//                        activityPendingIntent)
+//                .addAction(R.drawable.ic_notification_icon, getString(R.string.app_name),
+//                        servicePendingIntent)
                 .setContentText("Location sharing in progress")
                 .setContentTitle("Gigforce Live Location")
                 .setOngoing(true)
-                .setPriority(Notification.PRIORITY_HIGH)
+                .setPriority(Notification.PRIORITY_DEFAULT)
                 .setSmallIcon(R.drawable.ic_notification_icon)
                 .setWhen(System.currentTimeMillis());
 
