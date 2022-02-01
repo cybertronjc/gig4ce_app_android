@@ -1236,18 +1236,19 @@ class AadharDetailInfoFragment : Fragment(),
                 Log.d("image", outputFileUri.toString())
             }
         } else if (requestCode == ImageCropActivity.CROP_RESULT_CODE && resultCode == Activity.RESULT_OK) {
-            val imageUriResultCrop: Uri? =
-                Uri.parse(data?.getStringExtra(ImageCropActivity.CROPPED_IMAGE_URL_EXTRA))
-            Log.d("ImageUri", imageUriResultCrop.toString())
-            clickedImagePath = imageUriResultCrop
-            if (imageUriResultCrop != null) {
-                showAadharImage(
-                    imageUriResultCrop,
-                    viewBinding.toplayoutblock.viewPager2.currentItem
-                )
-                uploadImage(imageUriResultCrop)
+            data?.getStringExtra(ImageCropActivity.CROPPED_IMAGE_URL_EXTRA)?.let { uriStringValue->
+                val imageUriResultCrop: Uri? =
+                    Uri.parse(uriStringValue)
+                Log.d("ImageUri", imageUriResultCrop.toString())
+                clickedImagePath = imageUriResultCrop
+                if (imageUriResultCrop != null) {
+                    showAadharImage(
+                        imageUriResultCrop,
+                        viewBinding.toplayoutblock.viewPager2.currentItem
+                    )
+                    uploadImage(imageUriResultCrop)
+                }
             }
-
         }
     }
 

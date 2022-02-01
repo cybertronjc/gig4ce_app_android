@@ -231,6 +231,7 @@ class ChatRepository @Inject constructor(
         context: Context,
         chatHeaderId: String,
         message: ChatMessage,
+        audiosDirectoryRef: File,
         file: Uri,
         audioInfo: AudioInfo
     ) {
@@ -245,9 +246,14 @@ class ChatRepository @Inject constructor(
             }
         }
 
-        val audiosDirectoryRef = chatLocalDirectoryReferenceManager.audioFilesDirectory
+//        val audiosDirectoryRef = chatLocalDirectoryReferenceManager.audioFilesDirectory
+//        val audioFile = File(audiosDirectoryRef, newFileName)
+//        FileUtils.copyFile(context.applicationContext, newFileName, file, audioFile)
+
+        if (!audiosDirectoryRef.exists())
+            audiosDirectoryRef.mkdirs()
         val audioFile = File(audiosDirectoryRef, newFileName)
-        FileUtils.copyFile(context.applicationContext, newFileName, file, audioFile)
+        FileUtils.copyFile(context, newFileName, file, audioFile)
 
         val pathOnServer = uploadChatAttachment(
             fileNameWithExtension = newFileName,

@@ -131,6 +131,10 @@ class ChatMessage(
     @set:PropertyName("groupMessageReadBy")
     var groupMessageReadBy: List<MessageReceivingInfo> = emptyList(),
 
+    @get:PropertyName("groupMessageDeliveredTo")
+    @set:PropertyName("groupMessageDeliveredTo")
+    var groupMessageDeliveredTo: List<MessageReceivingInfo> = emptyList(),
+
     @get:PropertyName("groupId")
     @set:PropertyName("groupId")
     var groupId: String = "",

@@ -95,6 +95,9 @@ class GroupChatViewModel @Inject constructor(
     private var _enableSelect = MutableLiveData<Boolean>()
     val enableSelect: LiveData<Boolean> = _enableSelect
 
+    private var _scrollToMessageId = MutableLiveData<String?>()
+    val scrollToMessageId: LiveData<String?> = _scrollToMessageId
+
     //Create group
     override fun setGroupId(groupId: String) {
         this.groupId = groupId
@@ -162,7 +165,9 @@ class GroupChatViewModel @Inject constructor(
             return
         }
 
-        groupDetailsListener = chatGroupRepository.getGroupDetailsRef(groupId)
+        try {
+            val groupDetailRef = chatGroupRepository.getGroupDetailsRef(groupId)
+            groupDetailsListener = groupDetailRef
                 .addSnapshotListener { data, error ->
                     Log.d(TAG, "group details changed/subscribed, groupId - $groupId")
 
@@ -180,15 +185,18 @@ class GroupChatViewModel @Inject constructor(
                         }
 
                         val isUserDeletedFromgroup =
-                                groupDetails!!.deletedGroupMembers.find { it.uid == currentUser.uid } != null
+                            groupDetails?.deletedGroupMembers?.find { it.uid == currentUser.uid } != null
                         val limitToTimeStamp = if (isUserDeletedFromgroup) {
-                            groupDetails!!.deletedGroupMembers.find { it.uid == currentUser.uid }!!.deletedOn
+                            groupDetails?.deletedGroupMembers?.find { it.uid == currentUser.uid }?.deletedOn
                         } else
                             null
 
                         startWatchingGroupMessagesAndEvents(limitToTimeStamp)
                     }
                 }
+        } catch (e: Exception){
+            e.printStackTrace()
+        }
 
         startContactsChangeListener()
     }
@@ -310,6 +318,9 @@ class GroupChatViewModel @Inject constructor(
 
                     if (error != null)
                         Log.e(TAG, "Error while listening group messages", error)
+                    if (value?.isEmpty == true){
+                        _groupMessages.postValue(emptyList())
+                    }
 
                     grpMessages = value?.documents?.map { doc ->
                         doc.toObject(ChatMessage::class.java)!!.also {
@@ -318,8 +329,7 @@ class GroupChatViewModel @Inject constructor(
                             it.groupId = groupId
                         }
                     }?.toMutableList()
-
-                    checkForRecevinginfoElseMarkMessageAsReceived(grpMessages!!)
+                        checkForRecevinginfoElseMarkMessageAsReceived(grpMessages!!)
 
                     if (userContacts != null) {
                         compareGroupMessagesWithContactsAndEmit()
@@ -357,20 +367,48 @@ class GroupChatViewModel @Inject constructor(
     }
 
     private fun checkForRecevinginfoElseMarkMessageAsReceived(
-            grpMessages: MutableList<ChatMessage>
+            msgs: MutableList<ChatMessage>
     ) = viewModelScope.launch {
-        val messageWithNotReceivedStatus = grpMessages.filter { msg ->
-            msg.groupMessageReadBy.find { it.uid == currentUser.uid } == null
-        }
 
+        val messageWithNotDeliveredStatus = arrayListOf<String>()
+        val messageWithNotReceivedStatus = arrayListOf<String>()
 
-        try {
-            chatGroupRepository.markMessagesAsRead(
-                    groupId,
-                    messageWithNotReceivedStatus
-            )
-        } catch (e: Exception) {
-            e.printStackTrace()
+        msgs.forEach { it1 ->
+            val chatMessageDeliveredTo =
+                chatGroupRepository.getMessageDeliveredInfo(groupId, it1.id)
+                    ?: throw IllegalStateException("no chat message found, for group id $groupId message: ${it1.id}")
+            val chatMessageReceivedBy = chatGroupRepository.getMessageReceivedInfo(groupId, it1.id)
+                ?: throw IllegalStateException("no chat message found, for group id $groupId message: ${it1.id}")
+            if (chatMessageDeliveredTo.isEmpty()) {
+                messageWithNotDeliveredStatus.add(it1.id)
+            }
+            if (chatMessageReceivedBy.isEmpty()) {
+                messageWithNotReceivedStatus.add(it1.id)
+            }
+
+            if (messageWithNotReceivedStatus.isNotEmpty()) {
+                try {
+                    chatGroupRepository.markAsReadMessages(
+                        groupId,
+                        messageWithNotReceivedStatus
+                    )
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+
+            }
+
+            if (messageWithNotDeliveredStatus.isNotEmpty()) {
+                try {
+                    chatGroupRepository.markAsDelivered(
+                        groupId,
+                        messageWithNotDeliveredStatus
+                    )
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+
         }
     }
 
@@ -621,7 +659,7 @@ class GroupChatViewModel @Inject constructor(
                             videoInfo.thumbnail!!.config,
                             videoInfo.thumbnail!!.isMutable
                     )
-
+            Log.d(TAG, "text: $text")
             val message = ChatMessage(
                     id = UUID.randomUUID().toString(),
                     headerId = groupId,
@@ -841,6 +879,14 @@ class GroupChatViewModel @Inject constructor(
                             documentsDirectoryRef.mkdirs()
 
                         File(documentsDirectoryRef, fileName)
+                    } else if (media.attachmentType == ChatConstants.ATTACHMENT_TYPE_AUDIO) {
+                        val audiossDirectoryRef =
+                            File(appDirectoryFileRef, ChatConstants.DIRECTORY_AUDIOS)
+
+                        if (!audiossDirectoryRef.exists())
+                            audiossDirectoryRef.mkdirs()
+
+                        File(audiossDirectoryRef, fileName)
                     } else {
                         throw IllegalArgumentException("other types not supported yet")
                     }
@@ -971,21 +1017,30 @@ class GroupChatViewModel @Inject constructor(
 
         try {
             val chatGroup = chatGroupRepository.getGroupDetails(groupId)
-            val chatMessage = chatGroupRepository.getChatMessage(groupId, messageId)
-                    ?: throw IllegalStateException("no chat message found, for group id $groupId message: $messageId")
-            val messageReadByUsers = chatMessage.groupMessageReadBy.filter {
-                it.uid != currentUser.uid
+            val chatMessagesReceived = chatGroupRepository.getMessageReceivedByInfo(groupId, messageId)
+            val chatMessagesDelivered = chatGroupRepository.getMessageDeliveredToInfo(groupId, messageId)
+
+            val messageReadBy = arrayListOf<MessageReceivingInfo>()
+            chatMessagesReceived.forEach {
+                messageReadBy.add(it)
             }
 
-            val totalUsersCount = chatGroup.groupMembers
+            val messageDeliveredTo = arrayListOf<MessageReceivingInfo>()
+            chatMessagesDelivered.forEach {
+                messageDeliveredTo.add(it)
+            }
+
+            val totalUsersCount = chatGroup?.groupMembers
                     .filter { it.uid != currentUser.uid }
                     .count()
 
-            _messageReadingInfo.value = MessageReceivingAndReadingInfo(
-                    totalMembers = totalUsersCount,
-                    receivingInfo = emptyList(),
-                    readingInfo = messageReadByUsers
-            )
+            _messageReadingInfo.value = totalUsersCount?.let {
+                MessageReceivingAndReadingInfo(
+                    totalMembers = it,
+                    receivingInfo = messageDeliveredTo,
+                    readingInfo = messageReadBy
+                )
+            }
         } catch (e: Exception) {
             CrashlyticsLogger.e(
                     TAG,
@@ -1058,9 +1113,15 @@ class GroupChatViewModel @Inject constructor(
         if(index != -1){
             _scrollToMessage.value = index
             _scrollToMessage.value = null
+
+            _scrollToMessageId.value = replyMessage.id
         }
     }
+
+    fun setScrollToMessageNull(){
+        _scrollToMessageId.value = null
+    }
     companion object {
-        const val TAG: String = "GroupChatVM"
+        const val TAG: String = "Sending video"
     }
 }
