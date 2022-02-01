@@ -192,6 +192,8 @@ class CaptureImageSharedViewModel : ViewModel() {
             //Convert bitmap to byte array
             val bos = ByteArrayOutputStream()
             bitmap.compress(Bitmap.CompressFormat.PNG, 75, bos) // YOU can also save it in JPEG
+            recycleBitmap(bitmap)
+
             val bitmapdata = bos.toByteArray()
 
             //write the bytes in file
@@ -204,14 +206,17 @@ class CaptureImageSharedViewModel : ViewModel() {
             e.printStackTrace()
             file // it will return null
         } finally {
+            recycleBitmap(bitmap)
+        }
+    }
 
-            try {
-                if (!bitmap.isRecycled) {
-                    bitmap.recycle()
-                }
-            } catch (e : Exception){
-             e.printStackTrace()
+    private fun recycleBitmap(bitmap: Bitmap) {
+        try {
+            if (!bitmap.isRecycled) {
+                bitmap.recycle()
             }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 

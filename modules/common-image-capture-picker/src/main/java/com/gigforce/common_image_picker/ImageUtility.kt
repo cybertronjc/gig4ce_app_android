@@ -66,6 +66,8 @@ object ImageUtility {
             //Convert bitmap to byte array
             val bos = ByteArrayOutputStream()
             bitmap.compress(Bitmap.CompressFormat.JPEG, 75, bos) // YOU can also save it in JPEG
+            recycleBitmap(bitmap)
+
             val bitmapdata = bos.toByteArray()
 
             //write the bytes in file
