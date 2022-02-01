@@ -3,7 +3,6 @@ package com.gigforce.common_image_picker.image_capture_camerax.fragments
 import android.graphics.*
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -11,12 +10,12 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.gigforce.common_image_picker.ImageUtility
 import com.gigforce.common_image_picker.R
@@ -26,6 +25,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.face.FaceDetection
 import com.google.mlkit.vision.face.FaceDetectorOptions
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.*
 import java.util.*
 import kotlin.Exception
@@ -112,11 +113,17 @@ class ImageViewerFragment : Fragment() {
     private fun rotateImageClockwise() {
         Glide.with(requireContext()).clear(imageView)
 
-        image = ImageUtility.loadRotateAndSaveImage(
-            requireContext(),
-            image
-        ) ?: return
-        Glide.with(requireContext()).load(image).into(imageView)
+        lifecycleScope.launch(Dispatchers.IO){
+            image = ImageUtility.loadRotateAndSaveImage(
+                requireContext(),
+                image
+            ) ?: return@launch
+
+            lifecycleScope.launch(Dispatchers.Main){
+                Glide.with(requireContext()).load(image).into(imageView)
+            }
+        }
+
     }
 
 
