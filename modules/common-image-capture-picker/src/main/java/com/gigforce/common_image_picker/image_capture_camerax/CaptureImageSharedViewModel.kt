@@ -2,7 +2,8 @@ package com.gigforce.common_image_picker.image_capture_camerax
 
 
 import android.content.Context
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Environment
 import android.util.Log
@@ -10,10 +11,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bumptech.glide.Glide
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.OnProgressListener
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import java.io.*
@@ -82,58 +85,43 @@ class CaptureImageSharedViewModel : ViewModel() {
     }
 
     fun clickedImageApproved(
-        context : Context,
+        context: Context,
         shouldUploadImageToo: Boolean,
         file: File,
         parentDirectoryNameInFirebaseStorage: String?
-    ) = viewModelScope.launch {
+    ) = viewModelScope.launch(Dispatchers.IO) {
 
         var uploadPathInFirebaseStorage: String? = null
         if (shouldUploadImageToo) {
 
-            _captureImageSharedViewModelState.value = CaptureImageSharedViewState.ImageUploading(0)
+            _captureImageSharedViewModelState.postValue(CaptureImageSharedViewState.ImageUploading(0))
             try {
-                val filePath = file.absolutePath
-                Log.d("path", "path: $filePath")
-                val bmOptions = BitmapFactory.Options()
-                val bitmap = BitmapFactory.decodeFile(filePath, bmOptions)
-                val baos = ByteArrayOutputStream()
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 75, baos)
 
-                val actualWidth: Int = bitmap.getWidth()
-                val actualHeight: Int = bitmap.getHeight()
-                //      max Height and width values of the compressed image is taken as 816x612
-                val maxHeight = 720.0f
-                val maxWidth = 720.0f
-                var outputWidth: Int = 512
-                var outputHeight: Int = 512
-                var imgRatio = (actualWidth / actualHeight).toFloat()
-                val maxRatio = maxWidth / maxHeight
-
-                //      width and height values are set maintaining the aspect ratio of the image
-                if (actualHeight > maxHeight || actualWidth > maxWidth) {
-                    if (imgRatio < maxRatio) {
-                        imgRatio = maxHeight / actualHeight
-                        outputWidth = (imgRatio * actualWidth).toInt()
-                        outputHeight = maxHeight.toInt()
-                    } else if (imgRatio > maxRatio) {
-                        imgRatio = maxWidth / actualWidth
-                        outputHeight = (imgRatio * actualHeight).toInt()
-                        outputWidth = maxWidth.toInt()
-                    } else {
-                        outputHeight = maxHeight.toInt()
-                        outputWidth = maxWidth.toInt()
-                    }
+                val bitmapFactoryOptions = BitmapFactory.Options().apply {
+                    this.inJustDecodeBounds = true
                 }
-                val originalBitmapCount = bitmap.allocationByteCount
-                Log.d("count", "original $originalBitmapCount")
+                BitmapFactory.decodeFile(file.absolutePath, bitmapFactoryOptions)
+                val requiredOutputSize = calculateRequiredOutputSize(
+                    bitmapFactoryOptions.outWidth,
+                    bitmapFactoryOptions.outHeight
+                )
 
-                var resizedBitmap = Bitmap.createScaledBitmap(bitmap, outputWidth, outputHeight, false)
-//      check the rotation of the image and display it properly
-                val resizedBitmapCount = resizedBitmap.allocationByteCount
-                Log.d("count", "original $resizedBitmapCount")
+                val finalImage = try {
+                    Glide.with(context)
+                        .asBitmap()
+                        .load(file)
+                        .submit(requiredOutputSize.first, requiredOutputSize.second)
+                        .get()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    null
+                } ?: return@launch
 
-                uploadPathInFirebaseStorage = bitmapToFile(context,resizedBitmap, "temp.jpg")?.let {
+                uploadPathInFirebaseStorage = bitmapToFile(
+                    context,
+                    finalImage,
+                    "temp.jpg"
+                )?.let {
                     uploadImageInFirebase(
                         parentDirectoryNameInFirebaseStorage!!,
                         "Image",
@@ -142,16 +130,51 @@ class CaptureImageSharedViewModel : ViewModel() {
                 }
 
             } catch (e: Exception) {
-                _captureImageSharedViewModelState.value = CaptureImageSharedViewState.ImageUploadFailed(
-                    error = e.message ?: ""
+                _captureImageSharedViewModelState.postValue(
+                    CaptureImageSharedViewState.ImageUploadFailed(
+                        error = e.message ?: ""
+                    )
                 )
             }
         }
 
-        _captureImageSharedViewModelState.value = CaptureImageSharedViewState.CapturedImageApproved(
+        _captureImageSharedViewModelState.postValue(CaptureImageSharedViewState.CapturedImageApproved(
             file,
             uploadPathInFirebaseStorage
-        )
+        ))
+    }
+
+    private fun calculateRequiredOutputSize(
+        actualWidth: Int,
+        actualHeight: Int
+    ): Pair<Int, Int> {
+
+        //      max Height and width values of the compressed image is taken as 816x612
+        val maxHeight = 720.0f
+        val maxWidth = 720.0f
+
+        var outputWidth: Int = 512
+        var outputHeight: Int = 512
+        var imgRatio = (actualWidth / actualHeight).toFloat()
+        val maxRatio = maxWidth / maxHeight
+
+        //      width and height values are set maintaining the aspect ratio of the image
+        if (actualHeight > maxHeight || actualWidth > maxWidth) {
+            if (imgRatio < maxRatio) {
+                imgRatio = maxHeight / actualHeight
+                outputWidth = (imgRatio * actualWidth).toInt()
+                outputHeight = maxHeight.toInt()
+            } else if (imgRatio > maxRatio) {
+                imgRatio = maxWidth / actualWidth
+                outputHeight = (imgRatio * actualHeight).toInt()
+                outputWidth = maxWidth.toInt()
+            } else {
+                outputHeight = maxHeight.toInt()
+                outputWidth = maxWidth.toInt()
+            }
+        }
+
+        return outputWidth to outputHeight
     }
 
 
@@ -163,12 +186,14 @@ class CaptureImageSharedViewModel : ViewModel() {
         //create a file to write bitmap data
         var file: File? = null
         return try {
-            file = File(context.filesDir,fileNameToSave)
+            file = File(context.filesDir, fileNameToSave)
             file.createNewFile()
 
             //Convert bitmap to byte array
             val bos = ByteArrayOutputStream()
             bitmap.compress(Bitmap.CompressFormat.PNG, 75, bos) // YOU can also save it in JPEG
+            recycleBitmap(bitmap)
+
             val bitmapdata = bos.toByteArray()
 
             //write the bytes in file
@@ -180,6 +205,18 @@ class CaptureImageSharedViewModel : ViewModel() {
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
             file // it will return null
+        } finally {
+            recycleBitmap(bitmap)
+        }
+    }
+
+    private fun recycleBitmap(bitmap: Bitmap) {
+        try {
+            if (!bitmap.isRecycled) {
+                bitmap.recycle()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 

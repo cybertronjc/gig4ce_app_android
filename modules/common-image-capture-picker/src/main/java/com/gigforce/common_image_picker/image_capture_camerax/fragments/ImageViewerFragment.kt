@@ -3,7 +3,6 @@ package com.gigforce.common_image_picker.image_capture_camerax.fragments
 import android.graphics.*
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -11,13 +10,14 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.gigforce.common_image_picker.ImageUtility
 import com.gigforce.common_image_picker.R
 import com.gigforce.common_image_picker.image_capture_camerax.CaptureImageSharedViewModel
 import com.gigforce.common_image_picker.image_capture_camerax.CaptureImageSharedViewState
@@ -25,6 +25,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.face.FaceDetection
 import com.google.mlkit.vision.face.FaceDetectorOptions
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.*
 import java.util.*
 import kotlin.Exception
@@ -39,6 +41,7 @@ class ImageViewerFragment : Fragment() {
     private lateinit var imageView: ImageView
     private lateinit var discardImageBtn: View
     private lateinit var approveImageBtn: View
+    private lateinit var rotateImageBtn : View
     private lateinit var progressBar: ProgressBar
 
     //Arguments
@@ -81,10 +84,15 @@ class ImageViewerFragment : Fragment() {
         imageView = view.findViewById(R.id.show_pic)
         discardImageBtn = view.findViewById(R.id.retake_image)
         approveImageBtn = view.findViewById(R.id.upload_img)
+        rotateImageBtn = view.findViewById(R.id.rotate_img)
         progressBar = view.findViewById(R.id.progress_circular)
 
         discardImageBtn.setOnClickListener {
             sharedCameraViewModel.clickedImageDiscarded()
+        }
+
+        rotateImageBtn.setOnClickListener {
+            rotateImageClockwise()
         }
 
         approveImageBtn.setOnClickListener {
@@ -100,6 +108,22 @@ class ImageViewerFragment : Fragment() {
                 )
             }
         }
+    }
+
+    private fun rotateImageClockwise() {
+        Glide.with(requireContext()).clear(imageView)
+
+        lifecycleScope.launch(Dispatchers.IO){
+            image = ImageUtility.loadRotateAndSaveImage(
+                requireContext(),
+                image
+            ) ?: return@launch
+
+            lifecycleScope.launch(Dispatchers.Main){
+                Glide.with(requireContext()).load(image).into(imageView)
+            }
+        }
+
     }
 
 
