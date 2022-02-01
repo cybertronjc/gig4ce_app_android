@@ -368,21 +368,26 @@ class MainActivity : BaseActivity(),
     private fun profileDataSnapshot() {
         FirebaseAuth.getInstance().addAuthStateListener { it1 ->
             it1.currentUser?.uid?.let {
-                FirebaseFirestore.getInstance().collection("Profiles").document(it)
-                    .addSnapshotListener { value, e ->
-                        value?.data?.let {
-                            value.toObject(ProfileData::class.java)?.let {
-                                shareDataAndCommUtil.saveLoggedInMobileNumber(
-                                    it1.currentUser?.phoneNumber ?: ""
-                                )
-                                shareDataAndCommUtil.saveLoggedInUserName(it.name)
-                                shareDataAndCommUtil.saveUserProfilePic(
-                                    if (it.profileAvatarName.isNotEmpty()) it.profileAvatarName else (it.profileAvatarThumbnail
-                                        ?: "")
-                                )
+                try {
+                    FirebaseFirestore.getInstance().collection("Profiles").document(it)
+                        .addSnapshotListener { value, e ->
+                            value?.data?.let {
+                                value.toObject(ProfileData::class.java)?.let {
+                                    shareDataAndCommUtil.saveLoggedInMobileNumber(
+                                        it1.currentUser?.phoneNumber ?: ""
+                                    )
+                                    shareDataAndCommUtil.saveLoggedInUserName(it.name)
+                                    shareDataAndCommUtil.saveUserProfilePic(
+                                        if (it.profileAvatarName.isNotEmpty()) it.profileAvatarName else (it.profileAvatarThumbnail
+                                            ?: "")
+                                    )
+                                }
                             }
                         }
-                    }
+                } catch (e: Exception){
+                    e.printStackTrace()
+                }
+
             } ?: run {
                 shareDataAndCommUtil.saveLoggedInMobileNumber("")
                 shareDataAndCommUtil.saveLoggedInUserName("")

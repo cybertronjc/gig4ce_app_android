@@ -582,9 +582,12 @@ class PhotoCrop : BaseActivity() {
             Log.d("PHOTO_CROP", "loading - " + path)
             var profilePicRef: StorageReference =
                 storage.reference.child(folder).child(path)
-            GlideApp.with(this)
-                .load(profilePicRef)
-                .into(imageView)
+            if (!this.isDestroyed){
+                GlideApp.with(this)
+                    .load(profilePicRef)
+                    .into(imageView)
+            }
+
         }
 
     }
