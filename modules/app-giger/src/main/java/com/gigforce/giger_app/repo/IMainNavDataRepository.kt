@@ -1,8 +1,6 @@
 package com.gigforce.giger_app.repo
 
 import android.content.Context
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.gigforce.common_ui.viewdatamodels.FeatureItemCard2DVM
 import com.gigforce.common_ui.viewdatamodels.HindiTranslationMapping
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
@@ -17,74 +15,33 @@ import com.google.gson.JsonObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.ClosedSendChannelException
+import kotlinx.coroutines.channels.ProducerScope
+import kotlinx.coroutines.channels.sendBlocking
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import javax.inject.Inject
 
 interface IMainNavDataRepository {
-    fun reload()
-    fun getData(): LiveData<List<FeatureItemCard2DVM>>
+    fun getData(): Flow<List<FeatureItemCard2DVM>>
     fun getDefaultData(context: Context): List<FeatureItemCard2DVM>
 }
 
 class MainNavDataRepository @Inject constructor(
-    private val buildConfig: IBuildConfig,
-    private val sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
-) :
-    IMainNavDataRepository {
+    private val buildConfig: IBuildConfig
+) : IMainNavDataRepository {
     private val appRenderingService = RetrofitFactory.createService(APPRenderingService::class.java)
-    private var data: MutableLiveData<List<FeatureItemCard2DVM>> = MutableLiveData()
     private var reloadCount = 0
+    private val currentVersion = 174
 
-    init {
-        reload()
-    }
 
-    override fun reload() {
-
-        FirebaseFirestore.getInstance().collection("AppConfigs")
-            .whereEqualTo("uid", FirebaseAuth.getInstance().currentUser?.uid)
-            .addSnapshotListener { value, error ->
-                value?.documents?.let {
-                    if (it.isNotEmpty() && reloadCount < 2) {
-                        var docData = it[0].data as? Map<String, Any>
-                        docData?.let { docMapData ->
-                            var versionCodeList = ArrayList<Int>()
-                            docMapData.forEach { mapEntry ->
-                                mapEntry.key.toIntOrNull()?.let {
-                                    versionCodeList.add(it)
-                                }
-                            }
-                            var sortedVersionCodeList = versionCodeList.sortedDescending()
-                            var foundVersionMapping = false
-                            sortedVersionCodeList.forEach { dbVersionCode ->
-                                if (sharedPreAndCommonUtilInterface.getCurrentVersionCode() >= dbVersionCode) {
-                                    docMapData.get(dbVersionCode.toString())?.let { iconList ->
-                                        arrangeDataAndSetObserver(iconList)
-                                    }
-                                    foundVersionMapping = true
-                                    return@let
-                                }
-                            }
-                            if (!foundVersionMapping) {
-                                docMapData.get("data")?.let { iconList ->
-                                    arrangeDataAndSetObserver(iconList)
-                                }
-                            }
-                        }
-
-                    } else {
-                        reloadCount = 1
-                        receivedNotifyToServer()
-                    }
-                }
-            }
-    }
-
-    private fun arrangeDataAndSetObserver(iconList: Any) {
+    private fun arrangeDataAndSetObserver(iconList: Any): ArrayList<FeatureItemCard2DVM> {
         val list = iconList as? List<Map<String, Any>>
+        val mainNavData = ArrayList<FeatureItemCard2DVM>()
         list?.let {
-            val mainNavData = ArrayList<FeatureItemCard2DVM>()
             for (item in list) {
                 try {
                     val title = item.get("title") as? String ?: "-"
@@ -127,10 +84,11 @@ class MainNavDataRepository @Inject constructor(
             tempMainNavData.sortBy { it.index }
             mainNavData.clear()
             mainNavData.addAll(tempMainNavData)
-            data.value = mainNavData
             receivedNotifyToServer()
             reloadCount++
+            return mainNavData
         }
+        return mainNavData
     }
 
     private fun receivedNotifyToServer() {
@@ -147,16 +105,66 @@ class MainNavDataRepository @Inject constructor(
             jsonData.addProperty("userId", FirebaseAuth.getInstance().currentUser?.uid!!)
             jsonData.addProperty(
                 "versionCode",
-                sharedPreAndCommonUtilInterface.getCurrentVersionCode()
+                currentVersion
             )
             appRenderingService.notifyToServer(buildConfig.getApiBaseURL(), jsonData)
         } catch (e: Exception) {
 
         }
     }
+    var producerScope : ProducerScope<ArrayList<FeatureItemCard2DVM>>?=null
+    override fun getData(): Flow<ArrayList<FeatureItemCard2DVM>> {
 
-    override fun getData(): LiveData<List<FeatureItemCard2DVM>> {
-        return data
+        return channelFlow {
+            producerScope = this
+            FirebaseFirestore.getInstance().collection("AppConfigs")
+                .whereEqualTo("uid", FirebaseAuth.getInstance().currentUser?.uid)
+                .addSnapshotListener { data, error ->
+                    if (error != null) {
+                        producerScope?.close(error)
+                    } else {
+                        data?.documents?.let {
+                            if (it.isNotEmpty() && reloadCount < 2) {
+                                val docData = it[0].data as? Map<String, Any>
+                                docData?.let { docMapData ->
+                                    val versionCodeList = ArrayList<Int>()
+                                    docMapData.forEach { mapEntry ->
+                                        mapEntry.key.toIntOrNull()?.let {
+                                            versionCodeList.add(it)
+                                        }
+                                    }
+                                    val sortedVersionCodeList =
+                                        versionCodeList.sortedDescending()
+                                    var foundVersionMapping = false
+                                    sortedVersionCodeList.forEach { dbVersionCode ->
+                                        if (currentVersion >= dbVersionCode) {
+                                            var arrangedData = ArrayList<FeatureItemCard2DVM>()
+                                            docMapData.get(dbVersionCode.toString())
+                                                ?.let { iconList ->
+                                                    arrangedData = arrangeDataAndSetObserver(iconList)
+                                                }
+                                            foundVersionMapping = true
+                                            producerScope?.sendBlocking(arrangedData)
+                                        }
+                                    }
+                                    if (!foundVersionMapping) {
+                                        var arrangedData = ArrayList<FeatureItemCard2DVM>()
+                                        docMapData.get("data")?.let { iconList ->
+                                            arrangedData = arrangeDataAndSetObserver(iconList)
+                                        }
+                                        producerScope?.sendBlocking(arrangedData)
+                                    }
+                                }
+
+                            } else {
+                                reloadCount = 1
+                                receivedNotifyToServer()
+                            }
+                        }
+                    }
+                }
+        }
+
     }
 
     override fun getDefaultData(context: Context): List<FeatureItemCard2DVM> {

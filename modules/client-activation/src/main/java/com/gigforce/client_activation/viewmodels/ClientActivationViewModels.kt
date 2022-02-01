@@ -19,9 +19,6 @@ class ClientActivationViewModels @Inject constructor(private val repository: ICl
     private val _liveData : MutableLiveData<List<FeatureItemCardDVM>> = MutableLiveData<List<FeatureItemCardDVM>>()
     var liveData : LiveData<List<FeatureItemCardDVM>> = _liveData
 
-    init {
-        Log.e("featureBSviewmodel","init ClientActivationViewModels")
-    }
 
     fun requestLiveData(priorityVal : Long) = viewModelScope.launch{
         try {
