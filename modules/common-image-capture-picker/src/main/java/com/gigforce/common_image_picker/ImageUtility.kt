@@ -52,7 +52,7 @@ object ImageUtility {
         )
     }
 
-    private fun bitmapToFile(
+    fun bitmapToFile(
         context: Context,
         bitmap: Bitmap,
         fileNameToSave: String
