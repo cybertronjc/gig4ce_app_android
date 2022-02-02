@@ -151,6 +151,12 @@ class ChatHeadersFragment : Fragment(), PopupMenu.OnMenuItemClickListener, Gigfo
 
     private fun makeSelectedChatListEnable(selectedChatList: java.util.ArrayList<ChatListItemDataObject>) {
         if (isMultiSelectEnable){
+            if (selectedChatList.size == 0){
+                moreChatOptionsLayout.gone()
+            } else {
+                moreChatOptionsLayout.visible()
+            }
+
             if (selectedChatList.size > 1){
                 toolbar.setAppBarTitle("${selectedChatList.size}  ${getString(R.string.chat_selected_chat)}")
             } else{

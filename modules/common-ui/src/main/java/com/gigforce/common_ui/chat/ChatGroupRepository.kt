@@ -1004,6 +1004,22 @@ class ChatGroupRepository @Inject constructor(
         }
     }
 
+    suspend fun getDetailsOfUserFromContacts(otherUserId: String): ContactModel {
+        val contactRef = db.collection(ChatRepository.COLLECTION_CHATS)
+            .document(getUID())
+            .collection(ChatRepository.COLLECTION_CHATS_CONTACTS)
+            .whereEqualTo("uid", otherUserId)
+            .getOrThrow()
+
+        return if (contactRef.isEmpty) {
+            ContactModel(id = otherUserId)
+        } else {
+            contactRef.first().toObject(ContactModel::class.java).apply {
+                this.id = contactRef.first().id
+            }
+        }
+    }
+
 
     suspend fun getChatHeader(headerId: String) =
             userChatCollectionRef.collection(COLLECTION_CHAT_HEADERS).document(headerId)

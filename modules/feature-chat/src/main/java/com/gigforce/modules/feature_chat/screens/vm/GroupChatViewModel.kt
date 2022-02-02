@@ -378,13 +378,13 @@ class GroupChatViewModel @Inject constructor(
     }
 
     fun checkForRecevinginfoElseMarkMessageAsReceived(
-            msgs: MutableList<ChatMessage>
+
     ) = viewModelScope.launch {
 
         val messageWithNotDeliveredStatus = arrayListOf<String>()
         val messageWithNotReceivedStatus = arrayListOf<String>()
 
-        msgs.forEach { it1 ->
+        grpMessages?.forEach { it1 ->
             val chatMessageDeliveredTo =
                 chatGroupRepository.getMessageDeliveredInfo(groupId, it1.id)
                     ?: throw IllegalStateException("no chat message found, for group id $groupId message: ${it1.id}")
@@ -421,6 +421,21 @@ class GroupChatViewModel @Inject constructor(
             }
 
         }
+    }
+
+    suspend fun getContactStoredByMobile(
+        otherUserUID: String
+    ) : String {
+
+//        try {
+        val contactModel = chatGroupRepository.getDetailsOfUserFromContacts(otherUserUID)
+        Log.d("ChatPageViewModel", "catchingH: ${contactModel.uid} , ${contactModel.name}")
+        return contactModel.name.toString()
+//        } catch (e: Exception) {
+//            Log.d("ChatPageViewModel", "catching: ${e.message}")
+//            otherUserName = ""
+//        }
+        //return  otherUserName
     }
 
 
@@ -1144,7 +1159,7 @@ class GroupChatViewModel @Inject constructor(
         Log.d(TAG, "userGroupHeaderChangeListener detached")
     }
 
-    fun getGroupMembersNameSuggestions(keywords: String): List<GroupChatMember> {
+     fun getGroupMembersNameSuggestions(keywords: String): List<GroupChatMember> {
         val chatGroupMembers = groupDetails?.groupMembers ?: return emptyList()
         return chatGroupMembers.filter {
             it.uid != currentUser.uid

@@ -509,9 +509,7 @@ class ChatPageFragment : Fragment(),
                         shimmerContainer.gone()
 
                         if (messages.isNotEmpty()) {
-                            groupChatViewModel.checkForRecevinginfoElseMarkMessageAsReceived(
-                                messages as MutableList<ChatMessage>
-                            )
+                            groupChatViewModel.checkForRecevinginfoElseMarkMessageAsReceived()
                             var recentLiveLocationMessage : ChatMessage? = null
                             val messagesWithCurrentlySharingLiveLocation = messages.filter { it.type == com.gigforce.common_ui.core.ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION && it.isLiveLocation && it.isCurrentlySharingLiveLocation && it.senderInfo.id == FirebaseAuth.getInstance().currentUser?.uid}
                             if (messagesWithCurrentlySharingLiveLocation.isNotEmpty()){
