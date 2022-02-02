@@ -3,7 +3,6 @@ package com.gigforce.common_image_picker.image_capture_camerax.fragments
 import android.graphics.*
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -25,9 +23,9 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.face.FaceDetection
 import com.google.mlkit.vision.face.FaceDetectorOptions
+import com.toastfix.toastcompatwrapper.ToastHandler
 import java.io.*
 import java.util.*
-import kotlin.Exception
 
 
 class ImageViewerFragment : Fragment() {
@@ -45,6 +43,7 @@ class ImageViewerFragment : Fragment() {
     private lateinit var image: File
     private var shouldUploadImageToo: Boolean = false
     private var parentDirectoryNameInFirebaseStorage: String? = null
+    private var detectingFaceCurrently: Boolean = false
 
     // High-accuracy landmark detection and face classification
     val highAccuracyOpts = FaceDetectorOptions.Builder()
@@ -76,7 +75,6 @@ class ImageViewerFragment : Fragment() {
     }
 
 
-
     private fun findViews(view: View) {
         imageView = view.findViewById(R.id.show_pic)
         discardImageBtn = view.findViewById(R.id.retake_image)
@@ -89,7 +87,7 @@ class ImageViewerFragment : Fragment() {
 
         approveImageBtn.setOnClickListener {
             //detecting face after approved
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 detectFace()
             } else {
                 sharedCameraViewModel.clickedImageApproved(
@@ -104,59 +102,90 @@ class ImageViewerFragment : Fragment() {
 
 
     fun detectFace() {
+        if(detectingFaceCurrently) return
+        detectingFaceCurrently = true
 
-            var image1: InputImage? = null
-            try {
-                image1 = InputImage.fromFilePath(requireContext(), image.toUri())
-                //  Face detect - Check if face is present in the image or not.
-                val result = detector.process(image1)
-                    .addOnSuccessListener { faces ->
-                        if(!isAdded) return@addOnSuccessListener
+        progressBar.isIndeterminate = true
+        progressBar.visibility = View.VISIBLE
 
-                        // Task completed successfully
-                        if (faces.size > 0) {
-                            Log.d("FaceDetect", "success")
-                            context?.getString(R.string.face_detected_common)?.let { showToast(it) }
-                            sharedCameraViewModel.clickedImageApproved(
-                                requireContext(),
-                                shouldUploadImageToo,
-                                image,
-                                parentDirectoryNameInFirebaseStorage
-                            )
+        var image1: InputImage? = null
+        try {
+            image1 = InputImage.fromFilePath(requireContext(), image.toUri())
+            //  Face detect - Check if face is present in the image or not.
+            val result = detector.process(image1)
+                .addOnSuccessListener { faces ->
+                    if (!isAdded) return@addOnSuccessListener
 
-                        } else {
-                            Log.d("FaceDetect", "failed")
-                            context?.let { showToast(it?.getString(R.string.something_seems_off_common)) }
-                        }
-                    }
-                    .addOnFailureListener { e ->
-                        // Task failed with an exception
-                        Log.d("FaceDetect", "failed ${e.message}")
+                    progressBar.isIndeterminate = false
+                    progressBar.visibility = View.GONE
+
+                    // Task completed successfully
+                    if (faces.size > 0) {
+                        detectingFaceCurrently = false
+
+                        Log.d("FaceDetect", "success")
+                        ToastHandler.showToast(
+                            requireContext(),
+                            getString(R.string.face_detected_common),
+                            Toast.LENGTH_SHORT
+                        )
+
+
                         sharedCameraViewModel.clickedImageApproved(
                             requireContext(),
                             shouldUploadImageToo,
                             image,
                             parentDirectoryNameInFirebaseStorage
                         )
-                    }
-            } catch (e: OutOfMemoryError){
-                Log.d("FaceDetect", "failed (out of memory) ${e.message}")
-                sharedCameraViewModel.clickedImageApproved(
-                    requireContext(),
-                    shouldUploadImageToo,
-                    image,
-                    parentDirectoryNameInFirebaseStorage
-                )
-            }
 
-            catch (e: Exception) {
-                sharedCameraViewModel.clickedImageApproved(
-                    requireContext(),
-                    shouldUploadImageToo,
-                    image,
-                    parentDirectoryNameInFirebaseStorage
-                )
-            }
+                    } else {
+                        detectingFaceCurrently = false
+                        Log.d("FaceDetect", "failed")
+                        ToastHandler.showToast(
+                            requireContext(),
+                            getString(R.string.something_seems_off_common),
+                            Toast.LENGTH_SHORT
+                        )
+                    }
+                }
+                .addOnFailureListener { e ->
+                    detectingFaceCurrently = false
+                    progressBar.isIndeterminate = false
+                    progressBar.visibility = View.GONE
+
+                    // Task failed with an exception
+                    Log.d("FaceDetect", "failed ${e.message}")
+                    sharedCameraViewModel.clickedImageApproved(
+                        requireContext(),
+                        shouldUploadImageToo,
+                        image,
+                        parentDirectoryNameInFirebaseStorage
+                    )
+                }
+        } catch (e: OutOfMemoryError) {
+            detectingFaceCurrently = false
+            progressBar.isIndeterminate = false
+            progressBar.visibility = View.GONE
+
+            Log.d("FaceDetect", "failed (out of memory) ${e.message}")
+            sharedCameraViewModel.clickedImageApproved(
+                requireContext(),
+                shouldUploadImageToo,
+                image,
+                parentDirectoryNameInFirebaseStorage
+            )
+        } catch (e: Exception) {
+            detectingFaceCurrently = false
+            progressBar.isIndeterminate = false
+            progressBar.visibility = View.GONE
+
+            sharedCameraViewModel.clickedImageApproved(
+                requireContext(),
+                shouldUploadImageToo,
+                image,
+                parentDirectoryNameInFirebaseStorage
+            )
+        }
 
     }
 
@@ -219,9 +248,9 @@ class ImageViewerFragment : Fragment() {
     }
 
     fun showToast(
-        text : String
-    ){
-        Toast.makeText(requireContext(), text, Toast.LENGTH_SHORT).show()
+        text: String
+    ) {
+        ToastHandler.showToast(requireContext(), text, Toast.LENGTH_SHORT)
     }
 
 

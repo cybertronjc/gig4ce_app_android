@@ -40,6 +40,13 @@ sealed class CaptureImageSharedViewState {
     ) : CaptureImageSharedViewState()
 
     //Image Upload
+    object DetectingFace : CaptureImageSharedViewState()
+
+    object FaceDetected : CaptureImageSharedViewState()
+
+    data class ErrorWhileFaceDetection(
+        val message : String
+    ) : CaptureImageSharedViewState()
 
     data class ImageUploading(
         val progress : Int
