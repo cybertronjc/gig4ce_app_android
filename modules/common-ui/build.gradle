@@ -95,6 +95,11 @@ dependencies {
 
     implementation 'com.google.android.gms:play-services-location:17.0.0'
 
+    implementation "androidx.preference:preference:1.0.0"
+
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+
+
     //Retrofit2
     implementation "com.squareup.retrofit2:retrofit:$retrofit2_version"
     implementation "com.squareup.retrofit2:converter-moshi:$retrofit2_version"

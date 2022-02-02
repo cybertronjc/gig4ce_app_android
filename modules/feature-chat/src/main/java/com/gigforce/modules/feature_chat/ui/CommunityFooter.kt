@@ -565,6 +565,9 @@ class CommunityFooter(context: Context, attrs: AttributeSet) :
             }
         }
 
+        fun isAttachmentOptionViewVisible(): Boolean {
+            return viewBinding.layoutAttachment.isVisible
+        }
 
         private fun setupAttachmentOptions() = viewBinding.apply{
             imageViewAttachment.setOnClickListener(View.OnClickListener {
