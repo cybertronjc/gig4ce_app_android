@@ -1160,6 +1160,10 @@
         android:name="com.gigforce.verification.mainverification.bankaccount.AcknowledgeBankBS"
         android:label="AcknowledgeBankBS" />
     <fragment
+        android:id="@+id/viewLiveLocationFragment"
+        android:name="com.gigforce.modules.feature_chat.screens.ViewLiveLocationFragment"
+        android:label="ViewLiveLocationFragment" />
+    <fragment
         android:id="@+id/gigerAttendanceDetailFragment"
         android:name="com.gigforce.lead_management.ui.changing_tl.GigerAttendanceDetailFragment"
         android:label="GigerAttendanceDetailFragment" />

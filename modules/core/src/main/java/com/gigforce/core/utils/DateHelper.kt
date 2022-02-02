@@ -53,6 +53,11 @@ object DateHelper {
         return d
     }
 
+    fun getDateFromTimeStamp(stamp: Date) : String {
+        return SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(stamp)
+    }
+
+
     fun getDateInyyyyMMddHHmmss(date: Date): String{
         return SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date)
     }

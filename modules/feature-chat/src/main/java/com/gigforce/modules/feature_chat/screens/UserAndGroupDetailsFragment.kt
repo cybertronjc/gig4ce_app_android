@@ -34,6 +34,8 @@ import com.gigforce.common_ui.chat.models.GroupMedia
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.metaDataHelper.ImageMetaDataHelpers
 import com.gigforce.common_ui.views.GigforceImageView
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.ProfilePropArgs
 import com.gigforce.core.StringConstants
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.crashlytics.CrashlyticsLogger
@@ -107,6 +109,9 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
 
     @Inject
     lateinit var navigation: INavigation
+
+    @Inject
+    lateinit var eventTracker: IEventTracker
 
     private var chatType: String = ChatConstants.CHAT_TYPE_USER
     private var chatHeaderOrGroupId: String? = null
@@ -391,6 +396,24 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
 
         }
 
+        muteNotificationSwitch.setOnCheckedChangeListener { compoundButton, isChecked ->
+            if (isChecked){
+                chatHeaderOrGroupId?.let {
+                    chatViewModel.updateMuteNotificationsInDB(enable = true,
+                        it
+                    )
+                }
+                eventTracker.setProfileProperty(ProfilePropArgs("Mute Notifications", true))
+            } else{
+                chatHeaderOrGroupId?.let {
+                    chatViewModel.updateMuteNotificationsInDB(enable = false,
+                        it
+                    )
+                }
+                eventTracker.setProfileProperty(ProfilePropArgs("Mute Notifications", false))
+            }
+        }
+
         mediaAndDocsCount.setOnClickListener {
             forwardArrow.performClick()
         }
@@ -605,7 +628,7 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
         membersLayout.gone()
         exitGroupLayout.gone()
         blockUserLayout.visible()
-        muteNotificationsLayout.gone()
+        muteNotificationsLayout.visible()
         reportUserLayout.visible()
         addParticipantLayout.gone()
     }
@@ -614,7 +637,7 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
         membersLayout.visible()
         blockUserLayout.gone()
         exitGroupLayout.visible()
-        muteNotificationsLayout.gone()
+        muteNotificationsLayout.visible()
         addParticipantLayout.visible()
         reportUserLayout.gone()
     }
@@ -681,6 +704,8 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
             } else {
                 blockText.text = "Block"
             }
+
+            muteNotificationSwitch.isChecked = it.settings?.muteNotifications == true
         })
         chatViewModel.messages.observe(viewLifecycleOwner, Observer {
 
@@ -844,6 +869,12 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
                 }
             })
 
+        viewModel.chatHeaderInfo.observe(viewLifecycleOwner, Observer {
+            if (it != null) {
+                viewBinding.muteNotificationSwitch.isChecked = it.settings?.muteNotifications == true
+            }
+        })
+
         if (chatHeaderOrGroupId?.isEmpty() == true) {
             CrashlyticsLogger.e(GroupDetailsFragment.TAG, "getting args from arguments", Exception("$chatHeaderOrGroupId <-- String passed as groupId"))
             throw IllegalArgumentException("$chatHeaderOrGroupId <-- String passed as groupId")
@@ -851,6 +882,7 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
 
         chatHeaderOrGroupId?.let { viewModel.setGroupId(it) }
         viewModel.startWatchingGroupDetails()
+        chatHeaderOrGroupId?.let { viewModel.getChatHeaderInfo(headerInfoId = it) }
     }
 
     private fun showGroupDetails(content: ChatGroup) = viewBinding.apply{

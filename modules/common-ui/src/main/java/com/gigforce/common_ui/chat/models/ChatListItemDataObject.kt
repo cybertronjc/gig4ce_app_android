@@ -35,6 +35,7 @@ data class ChatListItemDataObject(
     val lastMessageDeleted : Boolean,
 
     val senderName : String,
-    val status : Int
+    val status : Int,
+    val headerSettings: HeaderSettings
 
 )

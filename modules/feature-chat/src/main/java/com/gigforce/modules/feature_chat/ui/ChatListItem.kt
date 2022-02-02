@@ -62,6 +62,7 @@ class ChatListItem(
     private lateinit var statusIV: ImageView
     private lateinit var viewModel: ChatHeadersViewModel
     private lateinit var selectUnselectIcon: ImageView
+    private lateinit var muteNotificationIcon: ImageView
 
     private val storage: FirebaseStorage by lazy {
         FirebaseStorage.getInstance()
@@ -87,6 +88,7 @@ class ChatListItem(
         unseenMessageCountIV = this.findViewById(R.id.unseen_msg_count_iv)
         statusIV = this.findViewById(R.id.tv_received_status)
         selectUnselectIcon = this.findViewById(R.id.select_unselect_icon)
+        muteNotificationIcon = this.findViewById(R.id.mute_notification_iv)
     }
 
     private var dObj: ChatListItemDataObject? = null
@@ -273,6 +275,12 @@ class ChatListItem(
                 } else{
                     txtSubtitle.setTypeface(null, Typeface.NORMAL)
                     txtSubtitle.setTextColor(resources.getColor(R.color.gray_text_color))
+                }
+
+                if (chatHeader.headerSettings.muteNotifications){
+                    muteNotificationIcon.visible()
+                } else {
+                    muteNotificationIcon.gone()
                 }
 
                 textViewTime.text = chatHeader.timeDisplay
