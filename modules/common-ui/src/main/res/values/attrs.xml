@@ -58,9 +58,6 @@
         <attr name="caption" format="string"/>
     </declare-styleable>
 
-    <declare-styleable name="SimpleCardComponent1">
-               <attr name="title_scc" format="string"/>
-    </declare-styleable>
 
     <declare-styleable name="ImageViewRounded">
         <attr name="radius" format="dimension" />

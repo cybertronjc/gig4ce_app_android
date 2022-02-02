@@ -6,34 +6,35 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.remote.verification.VaccineFileUploadResDM
 import com.gigforce.common_ui.remote.verification.VaccineIdLabelReqDM
-import com.gigforce.common_ui.viewdatamodels.SimpleCardDVM1
 import com.gigforce.core.utils.Lce
 import com.gigforce.verification.mainverification.VerificationKycRepo
 import com.gigforce.verification.mainverification.vaccine.ConfigurationRepository
-import com.gigforce.verification.mainverification.vaccine.models.VaccineConfigListDM
+import com.gigforce.verification.mainverification.vaccine.IntermediateVaccinationRepo
+import com.gigforce.verification.mainverification.vaccine.models.VaccineCertDetailsDM
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import javax.inject.Inject
 
-class VaccineMainViewModel @Inject constructor(private val verificationKycRepo: VerificationKycRepo) : ViewModel() {
+@HiltViewModel
+class VaccineMainViewModel @Inject constructor(private val verificationKycRepo: VerificationKycRepo, private val intermediatorRepo: IntermediateVaccinationRepo) : ViewModel() {
 
-    private val vaccineRepository = ConfigurationRepository()
 
-    private val _vaccineConfigLiveData = MutableLiveData<Lce<VaccineConfigListDM>>()
-    val vaccineConfigLiveData: LiveData<Lce<VaccineConfigListDM>> = _vaccineConfigLiveData
+    private val _vaccineConfigLiveData = MutableLiveData<Lce<List<VaccineCertDetailsDM>>>()
+    val vaccineConfigLiveData: LiveData<Lce<List<VaccineCertDetailsDM>>> = _vaccineConfigLiveData
 
     private val _fileUploadLiveData = MutableLiveData<Lce<VaccineFileUploadResDM>>()
     val vaccineFileUploadResLiveData: LiveData<Lce<VaccineFileUploadResDM>> = _fileUploadLiveData
 
 
     init {
-        getVaccineConfigData()
+        getVaccineData()
     }
 
-    private fun getVaccineConfigData() = viewModelScope.launch {
+    fun getVaccineData() = viewModelScope.launch {
         _vaccineConfigLiveData.value = Lce.loading()
         try {
-            val data = vaccineRepository.getVaccineConfigData()
+            val data = intermediatorRepo.getAllVaccinationDataList()
             _vaccineConfigLiveData.value = Lce.content(data)
         } catch (e: Exception) {
             _vaccineConfigLiveData.value = Lce.error(e.toString())

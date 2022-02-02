@@ -9,11 +9,13 @@ class IntermediateVaccinationRepo @Inject constructor(
     private val configurationRepository: ConfigurationRepository
 ) {
 
+    private val configRepository = ConfigurationRepository()
+
     suspend fun getVaccineDetailsData(vaccineId: String): VaccineCertDetailsDM {
         val data = verificationKycRepo.getVaccinationObjectData()
         if (data.exists()) {
             val vaccineObject = (data.get("vaccination") as Map<*, *>)
-            return getRelatedVaccinData(vaccineObject, vaccineId,"",1)
+            return getRelatedVaccinData(vaccineObject, vaccineId, "", 1)
         } else {
             throw Exception("Vaccination data does not exists!!")
         }
@@ -22,8 +24,8 @@ class IntermediateVaccinationRepo @Inject constructor(
     private fun getRelatedVaccinData(
         vaccineObject: Map<*, *>,
         vaccineId: String,
-        vaccineLabel : String?,
-        index:Int
+        vaccineLabel: String?,
+        index: Int
     ): VaccineCertDetailsDM {
         val vaccineData = (vaccineObject.get(vaccineId) as? Map<*, *>)
         vaccineData?.let { vaccineData ->
@@ -64,7 +66,7 @@ class IntermediateVaccinationRepo @Inject constructor(
         throw Exception("Vaccination data does not exists!!")
     }
 
-    suspend fun getAllVaccinationDataList(): List<VaccineCertDetailsDM> {
+    suspend fun getAllVaccinationDataList1(): List<VaccineCertDetailsDM> {
         val allVaccine = ArrayList<VaccineCertDetailsDM>()
         val vaccineConfigData = configurationRepository.getVaccineConfigData()
         vaccineConfigData.list?.let {
@@ -72,12 +74,25 @@ class IntermediateVaccinationRepo @Inject constructor(
                 val data = verificationKycRepo.getVaccinationObjectData()
                 if (data.exists()) {
                     val vaccineObject = (data.get("vaccination") as Map<*, *>)
-                    for ((index,config) in it.withIndex()) {
+                    for ((index, config) in it.withIndex()) {
                         config.id?.let { it1 ->
                             try {
-                                allVaccine.add(getRelatedVaccinData(vaccineObject, it1, config.label,index+1))
+                                allVaccine.add(
+                                    getRelatedVaccinData(
+                                        vaccineObject,
+                                        it1,
+                                        config.label,
+                                        index + 1
+                                    )
+                                )
                             } catch (e: Exception) {
-                                allVaccine.add(VaccineCertDetailsDM(vaccineIndexLabel = "vaccine${index+1}",vaccineId = it1, vaccineLabel = config.label))
+                                allVaccine.add(
+                                    VaccineCertDetailsDM(
+                                        vaccineIndexLabel = "vaccine${index + 1}",
+                                        vaccineId = it1,
+                                        vaccineLabel = config.label
+                                    )
+                                )
                             }
                         }
                     }
@@ -86,5 +101,40 @@ class IntermediateVaccinationRepo @Inject constructor(
         }
         return allVaccine
     }
+
+    suspend fun getAllVaccinationDataList(): List<VaccineCertDetailsDM> {
+        val allVaccine = ArrayList<VaccineCertDetailsDM>()
+        val vaccineConfigData = configurationRepository.getVaccineConfigData()
+        vaccineConfigData.list?.let {
+            if (it.size > 0) {
+                for ((index, config) in it.withIndex()) {
+                    config.id?.let { it1 ->
+                        try {
+                            val data = verificationKycRepo.getVaccinationObjectData()
+                            val vaccineObject = (data.get("vaccination") as Map<*, *>)
+                            allVaccine.add(
+                                getRelatedVaccinData(
+                                    vaccineObject,
+                                    it1,
+                                    config.label,
+                                    index + 1
+                                )
+                            )
+                        } catch (e: Exception) {
+                            allVaccine.add(
+                                VaccineCertDetailsDM(
+                                    vaccineIndexLabel = "vaccine${index + 1}",
+                                    vaccineId = it1,
+                                    vaccineLabel = config.label
+                                )
+                            )
+                        }
+                    }
+                }
+            }
+        }
+        return allVaccine
+    }
+
 
 }

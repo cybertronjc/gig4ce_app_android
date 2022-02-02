@@ -8,7 +8,6 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,7 +22,7 @@ import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.recyclerView.ItemClickListener
 import com.gigforce.core.utils.Lce
 import com.gigforce.verification.R
-import com.gigforce.verification.mainverification.vaccine.views.ChooseYourVaccineFragment
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.ask_user_for_vaccine_bs.*
 import kotlinx.android.synthetic.main.fragment_choose_your_vaccine.*
 import okhttp3.MediaType
@@ -34,6 +33,7 @@ import java.io.IOException
 import java.io.InputStream
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class VaccineMainFragment : Fragment() {
 
     private val viewModel: VaccineMainViewModel by viewModels()
@@ -48,13 +48,13 @@ class VaccineMainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        getIntentData(savedInstanceState)
+        getIntentData()
         observers()
         spannableInit()
     }
     var vaccineId = ""
     var vaccineLabel = ""
-    private fun getIntentData(savedInstanceState: Bundle?) {
+    private fun getIntentData() {
         arguments?.let {
             vaccineId = it.getString("id")?:""
             vaccineLabel = it.getString("label")?:""
@@ -63,19 +63,46 @@ class VaccineMainFragment : Fragment() {
     private fun observers() {
         vaccinerv.itemClickListener = object : ItemClickListener {
             override fun onItemClick(view: View, position: Int, dataModel: Any) {
-                pickDocument()
+                viewModel.vaccineConfigLiveData.value?.let {
+                    when(it){
+                        is Lce.Content -> {
+                            it.content.let { list ->
+                                list[position].vaccineId?.let { vaccineID -> vaccineId = vaccineID }
+                                list[position].label?.let { vaccineText ->
+                                    vaccineLabel = vaccineText
+                                }
+                                pickDocument()
+                            }
+                        }
+                        else -> {}
+                    }
+                }
+
             }
         }
-        viewModel.vaccineConfigLiveData.observe(viewLifecycleOwner, Observer{
-            when(it){
-                Lce.Loading->{}
+        viewModel.vaccineConfigLiveData.observe(viewLifecycleOwner, Observer {
+            when (it) {
+                Lce.Loading -> {
+                }
                 is Lce.Content -> {
-                    if(it.content.list.isNullOrEmpty()){
+                    if (it.content.isNullOrEmpty()) {
                         showToast("No vaccine list found!!")
                         navigation.popBackStack()
-                    }else{
-                        vaccinerv.collection = it.content.list ?: emptyList()
+                    } else {
+                        vaccinerv.collection = it.content
                     }
+                }
+                is Lce.Error -> {
+                }
+            }
+        })
+
+        viewModel.vaccineFileUploadResLiveData.observe(viewLifecycleOwner, Observer {
+            when (it) {
+                Lce.Loading -> {
+                }
+                is Lce.Content -> {
+                    viewModel.getVaccineData()
                 }
                 is Lce.Error -> {
                 }
@@ -155,10 +182,11 @@ class VaccineMainFragment : Fragment() {
         val str = SpannableString("Don’t have certificate? Click here to download  your certificate and then uplaod.")
         val clickableSpan : ClickableSpan = object : ClickableSpan() {
             override fun onClick(view: View) {
-                showToast("link to download certificate")
+                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.cowin.gov.in/"))
+                startActivity(browserIntent)
             }
         }
-        str.setSpan(clickableSpan,24,34, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        str.setSpan(clickableSpan, 24, 34, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         download_certificate_tv.movementMethod = LinkMovementMethod.getInstance()
         download_certificate_tv.text = str
     }

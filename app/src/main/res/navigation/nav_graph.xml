@@ -1183,6 +1183,12 @@
         android:id="@+id/gigerAttendanceDetailFragment"
         android:name="com.gigforce.lead_management.ui.changing_tl.GigerAttendanceDetailFragment"
         android:label="GigerAttendanceDetailFragment" />
+
+    <fragment
+        android:id="@+id/VaccineMainFragment"
+        android:name="com.gigforce.verification.mainverification.vaccine.mainvaccine.VaccineMainFragment"
+        android:label="VaccineMainFragment" />
+
     <dialog
         android:id="@+id/changeTeamLeaderBottomSheetFragment"
         android:name="com.gigforce.lead_management.ui.changing_tl.ChangeTeamLeaderBottomSheetFragment"
