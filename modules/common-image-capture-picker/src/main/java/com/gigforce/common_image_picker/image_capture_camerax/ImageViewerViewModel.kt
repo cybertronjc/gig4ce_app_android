@@ -67,6 +67,11 @@ sealed class ImageViewerViewState {
 
 class ImageViewerViewModel : ViewModel() {
 
+    companion object{
+
+        const val TAG = "ImageViewerViewModel"
+    }
+
     private val logger = GigforceLogger()
 
     private val highAccuracyOpts = FaceDetectorOptions.Builder()
@@ -162,6 +167,8 @@ class ImageViewerViewModel : ViewModel() {
                     message = "unable to detect face"
                 )
             )
+
+            logger.e(TAG,"while detecting faces",e)
             return
         }
 
@@ -207,6 +214,7 @@ class ImageViewerViewModel : ViewModel() {
                     error = e.message ?: ""
                 )
             )
+            logger.e(TAG,"while uploading image",e)
         }
     }
 
