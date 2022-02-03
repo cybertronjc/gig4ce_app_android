@@ -408,7 +408,6 @@ class ChatRepository @Inject constructor(
         val newFileName = if (audioInfo.name.isBlank()) {
             "${getUID()}-${DateHelper.getFullDateTimeStamp()}.mp3"
         } else {
-
             if (audioInfo.name.endsWith(".mp3", true)) {
                 "${getUID()}-${DateHelper.getFullDateTimeStamp()}-${audioInfo.name}"
             } else {
@@ -420,19 +419,19 @@ class ChatRepository @Inject constructor(
 //        val audioFile = File(audiosDirectoryRef, newFileName)
 //        FileUtils.copyFile(context.applicationContext, newFileName, file, audioFile)
 
-        if (!audiosDirectoryRef.exists())
-            audiosDirectoryRef.mkdirs()
-        val audioFile = File(audiosDirectoryRef, newFileName)
-        FileUtils.copyFile(context, newFileName, file, audioFile)
-
         val pathOnServer = uploadChatAttachment(
-            fileNameWithExtension = newFileName,
+            fileNameWithExtension = audioInfo.name,
             file = file,
             headerId = chatHeaderId,
             isGroupChatMessage = false,
             messageType = ChatConstants.MESSAGE_TYPE_TEXT_WITH_AUDIO
         )
         message.attachmentPath = pathOnServer
+
+        if (!audiosDirectoryRef.exists())
+            audiosDirectoryRef.mkdirs()
+        val audioFile = File(audiosDirectoryRef, newFileName)
+        FileUtils.copyFile(context, newFileName, file, audioFile)
 
         getChatMessagesCollectionRef(headerId = chatHeaderId)
             .addOrThrow(message)
