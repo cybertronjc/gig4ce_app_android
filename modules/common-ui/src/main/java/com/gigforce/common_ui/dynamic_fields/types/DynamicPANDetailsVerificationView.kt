@@ -103,7 +103,7 @@ class DynamicPANDetailsVerificationView(
     }
 
 
-    override fun updateDocumentStatus(status: String) {
+    override fun updateDocumentStatus(status: String?) {
         updateDocumentStatusImage(
             status,
             viewBinding.statusIv,

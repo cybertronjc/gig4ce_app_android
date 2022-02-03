@@ -2,11 +2,8 @@ package com.gigforce.common_ui.dynamic_fields
 
 import android.content.Context
 import android.widget.LinearLayout
-import androidx.fragment.app.FragmentManager
 import com.gigforce.common_ui.dynamic_fields.data.*
 import com.gigforce.common_ui.dynamic_fields.types.*
-import com.gigforce.common_ui.viewmodels.verification.SharedVerificationViewModelEvent
-import com.gigforce.core.datamodels.verification.*
 import com.gigforce.core.logger.GigforceLogger
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -23,8 +20,7 @@ class DynamicFieldsInflaterHelper @Inject constructor(
     fun inflateDynamicFields(
         context: Context,
         containerLayout: LinearLayout,
-        fields: List<BaseDynamicField>,
-        fragmentManger : FragmentManager
+        fields: List<DynamicField>
     ) = fields.apply {
         containerLayout.removeAllViews()
 
@@ -33,8 +29,24 @@ class DynamicFieldsInflaterHelper @Inject constructor(
             compareFieldTypeAndInflateRequiredLayout(
                 context,
                 containerLayout,
-                it,
-                fragmentManger
+                it
+            )
+        }
+    }
+
+    fun inflateVerificationDynamicFields(
+        context: Context,
+        containerLayout: LinearLayout,
+        fields: List<DynamicVerificationField>,
+    ){
+        containerLayout.removeAllViews()
+
+        fields.forEach {
+
+            compareVerificationFieldTypeAndInflateRequiredLayout(
+                context,
+                containerLayout,
+                it
             )
         }
     }
@@ -42,20 +54,75 @@ class DynamicFieldsInflaterHelper @Inject constructor(
     private fun compareFieldTypeAndInflateRequiredLayout(
         context: Context,
         containerLayout: LinearLayout,
-        it: BaseDynamicField,
-        fragmentManger : FragmentManager
+        it: DynamicField
     ) {
         when (it.fieldType) {
-            FieldTypes.TEXT_FIELD -> inflateTextField(context, containerLayout, it as DynamicField)
-            FieldTypes.DATE_PICKER -> inflateDatePicker(context, containerLayout,  it as DynamicField)
-            FieldTypes.DROP_DOWN -> inflateDropDown(context, containerLayout, it as DynamicField)
-            FieldTypes.RADIO_BUTTON -> inflateRadioButtons(context, containerLayout, it as DynamicField)
-            FieldTypes.SIGNATURE_DRAWER -> inflateSignatureDrawer(context,containerLayout,it as DynamicField,fragmentManger)
-            FieldTypes.SIGNATURE_DRAWER_2 -> inflateSignatureDrawer2(context,containerLayout,it as DynamicField,fragmentManger)
-            FieldTypes.AADHAAR_VERIFICATION_VIEW -> inflateAadhaarVerificationView(context,containerLayout,it as DynamicVerificationField)
-            FieldTypes.BANK_VERIFICATION_VIEW -> inflateBankDetailsField(context,containerLayout,it as DynamicVerificationField)
-            FieldTypes.DL_VERIFICATION_VIEW -> inflateDLField(context,containerLayout,it as DynamicVerificationField)
-            FieldTypes.PAN_VERIFICATION_VIEW -> inflatePANField(context,containerLayout,it as DynamicVerificationField)
+            FieldTypes.TEXT_FIELD -> inflateTextField(
+                context,
+                containerLayout,
+                it
+            )
+            FieldTypes.DATE_PICKER -> inflateDatePicker(
+                context,
+                containerLayout,
+                it
+            )
+            FieldTypes.DROP_DOWN -> inflateDropDown(
+                context,
+                containerLayout,
+                it
+            )
+            FieldTypes.RADIO_BUTTON -> inflateRadioButtons(
+                context,
+                containerLayout,
+                it
+            )
+            FieldTypes.SIGNATURE_DRAWER -> inflateSignatureDrawer(
+                context,
+                containerLayout,
+                it
+            )
+            else -> {
+                logger.d(
+                    TAG,
+                    "skipping inflating ${it.id},${it.title} as it lacks fieldtype ${it.fieldType} doesnt match any present in app"
+                )
+            }
+        }
+    }
+
+
+    private fun compareVerificationFieldTypeAndInflateRequiredLayout(
+        context: Context,
+        containerLayout: LinearLayout,
+        it: DynamicVerificationField
+    ) {
+        when (it.fieldType) {
+            FieldTypes.AADHAAR_VERIFICATION_VIEW -> inflateAadhaarVerificationView(
+                context,
+                containerLayout,
+                it
+            )
+            FieldTypes.BANK_VERIFICATION_VIEW -> inflateBankDetailsField(
+                context,
+                containerLayout,
+                it
+            )
+            FieldTypes.DL_VERIFICATION_VIEW -> inflateDLField(
+                context,
+                containerLayout,
+                it
+            )
+            FieldTypes.PAN_VERIFICATION_VIEW -> inflatePANField(
+                context,
+                containerLayout,
+                it
+            )
+            FieldTypes.SIGNATURE_DRAWER_2 -> inflateSignatureDrawer2(
+                context,
+                containerLayout,
+                it
+            )
             else -> {
                 logger.d(
                     TAG,
@@ -150,25 +217,21 @@ class DynamicFieldsInflaterHelper @Inject constructor(
     private fun inflateSignatureDrawer(
         context: Context,
         containerLayout: LinearLayout,
-        it: DynamicField,
-        fragmentManger : FragmentManager
+        it: DynamicField
     ) {
         val view = DynamicSignatureDrawerView(context, null)
         containerLayout.addView(view)
 //        view.bind(it)
-        view.setFragmentManager(fragmentManger)
     }
 
     private fun inflateSignatureDrawer2(
         context: Context,
         containerLayout: LinearLayout,
-        it: DynamicField,
-        fragmentManger : FragmentManager
+        it: DynamicVerificationField
     ) {
         val view = DynamicSignatureDrawerView2(context, null)
         containerLayout.addView(view)
         view.bind(it)
-        view.setFragmentManager(fragmentManger)
     }
 
     fun validateDynamicFieldsReturnFieldValueIfValid(
@@ -194,7 +257,7 @@ class DynamicFieldsInflaterHelper @Inject constructor(
 
         for (i in 0 until dynamicFieldsContainer.childCount) {
 
-            val dynamicFieldView = dynamicFieldsContainer.getChildAt(i) as DynamicFieldView
+            val dynamicFieldView = dynamicFieldsContainer.getChildAt(i) as DynamicVerificationFieldView
 
             if (dynamicFieldView.fieldType == FieldTypes.SIGNATURE_DRAWER_2 ) {
                 (dynamicFieldView as DynamicSignatureDrawerView2).signatureCapturedUpdateStatus(

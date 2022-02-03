@@ -5,21 +5,23 @@ import android.content.Intent
 import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
+import com.gigforce.common_ui.CommonIntentExtras
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
-import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.common_ui.utils.getCircularProgressDrawable
+import com.gigforce.common_ui.viewdatamodels.leadManagement.ChangeTeamLeaderRequestItem
 import com.gigforce.common_ui.viewdatamodels.leadManagement.GigerInfo
 import com.gigforce.core.AppConstants
 import com.gigforce.core.IEventTracker
@@ -37,12 +39,14 @@ import com.gigforce.lead_management.databinding.GigerInfoFragmentBinding
 import com.gigforce.lead_management.models.ApplicationChecklistRecyclerItemData
 import com.gigforce.lead_management.models.DropScreenIntentModel
 import com.gigforce.lead_management.ui.LeadManagementSharedViewModel
-import com.gigforce.lead_management.ui.drop_selection.DropSelectionBottomSheetDialogFragment
+import com.gigforce.lead_management.ui.LeadManagementSharedViewModelState
+import com.gigforce.lead_management.ui.changing_tl.ChangeTeamLeaderBottomSheetFragment
 import com.gigforce.lead_management.ui.drop_selection_2.DropSelectionFragment2
 import com.gigforce.lead_management.ui.giger_info.views.AppCheckListRecyclerComponent
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.layout_below_giger_functionality.*
+import kotlinx.coroutines.flow.collect
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -71,32 +75,37 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
     lateinit var eventTracker: IEventTracker
 
     private val viewModel: GigerInfoViewModel by viewModels()
-    private val sharedViewModel : LeadManagementSharedViewModel by activityViewModels()
+    private val sharedViewModel: LeadManagementSharedViewModel by activityViewModels()
 
     var gigerPhone = ""
+
     private lateinit var joiningId: String
+    private lateinit var gigerUid: String
+
     private var isActive: Boolean = false
     var hasStartEndDate = false
     var dropScreenIntentModel: DropScreenIntentModel? = null
 
+
     override fun viewCreated(viewBinding: GigerInfoFragmentBinding, savedInstanceState: Bundle?) {
-        getDataFrom(arguments,savedInstanceState)
+        getDataFrom(arguments, savedInstanceState)
         initToolbar(viewBinding)
         initViews()
         initListeners()
         initViewModel()
         checkForDropSelection()
-        //initSharedViewModel()
+        initSharedViewModel()
     }
 
     private fun initViews() {
         joiningId?.let {
-            dropScreenIntentModel = DropScreenIntentModel(joiningId = joiningId, false, false, "", "", "")
+            dropScreenIntentModel =
+                DropScreenIntentModel(joiningId = joiningId, false, false, "", "", "")
         }
 
-        if (isActive){
+        if (isActive) {
             viewBinding.bottomButtonLayout.dropGigerBtn.visible()
-        }else{
+        } else {
             viewBinding.bottomButtonLayout.dropGigerBtn.gone()
         }
     }
@@ -106,22 +115,25 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
         savedInstanceState: Bundle?
     ) {
         arguments?.let {
+            gigerUid = it.getString(CommonIntentExtras.INTENT_USER_ID) ?: return@let
             joiningId = it.getString(LeadManagementConstants.INTENT_EXTRA_JOINING_ID) ?: return@let
             isActive = it.getBoolean(LeadManagementConstants.INTENT_EXTRA_IS_ACTIVE) ?: return@let
-
         }
 
         savedInstanceState?.let {
+            gigerUid = it.getString(CommonIntentExtras.INTENT_USER_ID) ?: return@let
             joiningId = it.getString(LeadManagementConstants.INTENT_EXTRA_JOINING_ID) ?: return@let
             isActive = it.getBoolean(LeadManagementConstants.INTENT_EXTRA_IS_ACTIVE) ?: return@let
         }
     }
+
     override fun onSaveInstanceState(
         outState: Bundle
     ) {
         super.onSaveInstanceState(outState)
         outState.putString(LeadManagementConstants.INTENT_EXTRA_JOINING_ID, joiningId)
         outState.putBoolean(LeadManagementConstants.INTENT_EXTRA_IS_ACTIVE, isActive)
+        outState.putString(CommonIntentExtras.INTENT_USER_ID, gigerUid)
     }
 
 
@@ -134,11 +146,14 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
 //                navigation.popBackStack()
 //            }
 //        }
-        childFragmentManager.setFragmentResultListener("drop_status", viewLifecycleOwner) { key, bundle ->
+        childFragmentManager.setFragmentResultListener(
+            "drop_status",
+            viewLifecycleOwner
+        ) { key, bundle ->
             val result = bundle.getString("drop_status")
             // Do something with the result
-            if (result == "dropped"){
-                Log.d("droppedInfo","dropped")
+            if (result == "dropped") {
+                Log.d("droppedInfo", "dropped")
                 navigation.popBackStack()
             }
         }
@@ -151,7 +166,7 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
         //observe data
         viewModel.viewState.observe(viewLifecycleOwner, Observer {
             val state = it ?: return@Observer
-            when(state) {
+            when (state) {
 
                 is GigerInfoState.ErrorLoadingData -> showErrorLoadingInfo(
                     state.error
@@ -163,25 +178,54 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
         })
     }
 
-//    private fun initSharedViewModel() = lifecycleScope.launchWhenCreated {
-//        sharedViewModel.viewStateFlow.collect{
-//                when (it) {
-//                    LeadManagementSharedViewModelState.OneOrMoreSelectionsDropped -> {
-//                        navigation.popBackStack()
-//                    }
-//                }
-//            }
-//
-////        sharedViewModel.viewState.observe(viewLifecycleOwner, Observer {
-////            when (it) {
-////                LeadManagementSharedViewModelState.OneOrMoreSelectionsDropped -> {
-////                    navigation.popBackStack()
-////                }
-////            }
-////        })
-//    }
+    private fun initSharedViewModel() {
 
-    private fun showLoadingInfo() = viewBinding.apply{
+        lifecycleScope.launchWhenCreated {
+
+            sharedViewModel.viewStateFlow.collect {
+                when (it) {
+                    is LeadManagementSharedViewModelState.JoiningsUpdated -> {
+                        viewModel.getGigerJoiningInfo(joiningId)
+                    }
+                }
+            }
+        }
+
+        lifecycleScope.launchWhenCreated {
+
+            viewModel.viewEffects.collect {
+                when(it){
+                    is GigerInfoEffects.OpenChangeTeamLeaderScreen -> openChangeTeamLeaderScreen(
+                        it.joiningId,
+                        it.gigerId,
+                        it.gigerName,
+                        it.teamLeaderId
+                    )
+                }
+            }
+        }
+    }
+
+    private fun openChangeTeamLeaderScreen(
+        joiningId : String,
+        gigerId : String?,
+        gigerName : String?,
+        teamLeaderId : String?
+    ) {
+        ChangeTeamLeaderBottomSheetFragment.launch(
+            arrayListOf(
+                ChangeTeamLeaderRequestItem(
+                    gigerUid = gigerId,
+                    joiningId = joiningId,
+                    gigerName = gigerName,
+                    teamLeaderId = teamLeaderId
+                )
+            ),
+            childFragmentManager
+        )
+    }
+
+    private fun showLoadingInfo() = viewBinding.apply {
         checklistLayout.removeAllViews()
         mainScrollView.gone()
         gigerinfoShimmerContainer.visible()
@@ -212,7 +256,7 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
             toolbar.showTitle(it.gigerName)
             toolbar.setTitleTypeface(Typeface.BOLD)
             overlayCardLayout.companyName.text = ": " + it.businessName ?: ""
-            overlayCardLayout.jobProfileTitle.text = it.jobProfileTitle ?: ""
+            overlayCardLayout.jobProfileTitle.text = it.jobProfileTitle.capitalize() ?: ""
             val reportingLocText =
                 if (!it.reportingLocation.isNullOrBlank() && it.reportingLocation != "null") it.reportingLocation + ", " else ""
             val businessLocText =
@@ -280,6 +324,16 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
                 dropScreenIntentModel?.currentDate = it.currentDate
             }
 
+            overlayCardLayout.reportingTlTv.text = if(it.reportingTeamLeader?.name != null)
+               ": " + it.reportingTeamLeader?.name
+            else
+                "-"
+
+            overlayCardLayout.recrutingTlTv.text = if(it.recruitingTL?.name != null)
+                ": " + it.recruitingTL?.name
+            else
+                "-"
+
             val checkListItemData =
                 arrayListOf<ApplicationChecklistRecyclerItemData.ApplicationChecklistItemData>()
             if (it.checkList == null) {
@@ -330,44 +384,46 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
 
     private fun inflateCheckListInCheckListContainer(
         checkListItemData: ArrayList<ApplicationChecklistRecyclerItemData.ApplicationChecklistItemData>
-    ) = viewBinding.checklistLayout.apply{
+    ) = viewBinding.checklistLayout.apply {
         removeAllViews()
 
         checkListItemData.forEach {
-            if(it.gigerUid == "null")
+            if (it.gigerUid == "null")
                 it.gigerUid = null
-            val view = AppCheckListRecyclerComponent(requireContext(),null)
+            val view = AppCheckListRecyclerComponent(requireContext(), null)
             addView(view)
             view.bind(it)
             val viewPhotoText = view.findViewById<TextView>(R.id.viewPhotoText)
             viewPhotoText.setOnClickListener { it1 ->
-                if (viewPhotoText.text == "ADD"){
+                if (viewPhotoText.text == "ADD") {
                     var bundleForFragment = bundleOf(
                         AppConstants.INTENT_EXTRA_USER_CAME_FROM_ONBOARDING_FORM to true,
                         "uid" to it.gigerUid
                     )
                     val navString = getNavigationStr(it.docType)
                     navigation.navigateTo(navString, bundleForFragment)
-                }else if (viewPhotoText.text == "VIEW PHOTO"){
+                } else if (viewPhotoText.text == "VIEW PHOTO") {
                     val arrayList = arrayListOf<String>()
-                    if (!it.frontImage.isNullOrBlank()){
+                    if (!it.frontImage.isNullOrBlank()) {
                         arrayList.add(getDBImageUrl(it.frontImage.toString()).toString())
                     }
-                    if (!it.backImage.isNullOrBlank()){
+                    if (!it.backImage.isNullOrBlank()) {
                         arrayList.add(getDBImageUrl(it.backImage.toString()).toString())
                     }
 
-                    navigation.navigateTo("LeadMgmt/showDocImages",
+                    navigation.navigateTo(
+                        "LeadMgmt/showDocImages",
                         bundleOf(
                             ShowCheckListDocsBottomSheet.INTENT_TOP_TITLE to it.checkName,
                             ShowCheckListDocsBottomSheet.INTENT_IMAGES_TO_SHOW to arrayList
-                        ))
+                        )
+                    )
                 }
             }
         }
     }
 
-    private fun showErrorLoadingInfo(error: String) = viewBinding.apply{
+    private fun showErrorLoadingInfo(error: String) = viewBinding.apply {
         checklistLayout.removeAllViews()
         stopShimmer(
             gigerinfoShimmerContainer as LinearLayout,
@@ -381,7 +437,7 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
             requireContext()
         ).setTitle("Unable to load info")
             .setMessage(error)
-            .setPositiveButton("Okay"){_,_ ->}
+            .setPositiveButton("Okay") { _, _ -> }
             .show()
     }
 
@@ -392,16 +448,22 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
                 arrayListOf<DropScreenIntentModel>(dropScreenIntentModel!!),
                 childFragmentManager
             )
-
         }
+
+        this.overlayCardLayout.editReportingTlImageview.setOnClickListener {
+            viewModel.openChangeTeamLeaderScreen()
+        }
+
         bottomButtonLayout.callLayout.setOnClickListener {
             //call functionality
-            eventTracker.pushEvent(TrackingEventArgs(
-                LeadManagementAnalyticsEvents.Onboarded_Giger_Calling,
-                mapOf(
-                    "Phone_number_called" to gigerPhone
+            eventTracker.pushEvent(
+                TrackingEventArgs(
+                    LeadManagementAnalyticsEvents.Onboarded_Giger_Calling,
+                    mapOf(
+                        "Phone_number_called" to gigerPhone
+                    )
                 )
-            ))
+            )
 
             val intent =
                 Intent(
@@ -410,6 +472,17 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
                 )
             context?.startActivity(intent)
 
+        }
+
+        this.overlayCardLayout.viewMore.setOnClickListener {
+
+            if(this.overlayCardLayout.moreInfoLayout.isVisible){
+                this.overlayCardLayout.moreInfoLayout.gone()
+                this.overlayCardLayout.viewMore.text = "View MOre"
+            } else{
+                this.overlayCardLayout.moreInfoLayout.visible()
+                this.overlayCardLayout.viewMore.text = "View Less"
+            }
         }
 
 
@@ -431,7 +504,7 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
 
             if (path.isEmpty() || path == "avatar.jpg") {
                 viewBinding.overlayCardLayout.profileImageOverlay.gigerImg.setImageDrawable(
-                    ResourcesCompat.getDrawable(resources,R.drawable.ic_avatar_male,null)
+                    ResourcesCompat.getDrawable(resources, R.drawable.ic_avatar_male, null)
                 )
                 return
             }
@@ -447,14 +520,14 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
                 R.drawable.ic_avatar_male
             )
         } else {
-                viewBinding.overlayCardLayout.profileImageOverlay.gigerImg.loadImage(R.drawable.ic_avatar_male)
+            viewBinding.overlayCardLayout.profileImageOverlay.gigerImg.loadImage(R.drawable.ic_avatar_male)
         }
     }
 
 
     fun getFormattedDate(date: String): String {
         val input = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-        val output = SimpleDateFormat("dd/MMM/yy",Locale.getDefault())
+        val output = SimpleDateFormat("dd/MMM/yy", Locale.getDefault())
 
         var d: Date? = null
         try {
@@ -468,7 +541,7 @@ class GigerInfoFragment : BaseFragment2<GigerInfoFragmentBinding>(
 
     fun getFormattedDateFromYYMMDD(date: String): String {
         val input = SimpleDateFormat("yyyy-MM-dd")
-        val output = SimpleDateFormat("dd/MMM/yy",Locale.getDefault())
+        val output = SimpleDateFormat("dd/MMM/yy", Locale.getDefault())
 
         var d: Date? = null
         try {

@@ -5,12 +5,8 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.chat.models.ChatHeader
 import com.gigforce.common_ui.chat.models.ChatListItemDataObject
-import com.gigforce.common_ui.chat.models.ChatMessage
-import com.gigforce.common_ui.chat.models.MessageReceivingInfo
-import com.gigforce.core.extensions.getOrThrow
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
@@ -51,56 +47,61 @@ class ChatHeadersViewModel @Inject constructor(
     }
 
     fun startWatchingChatHeaders() {
-        val reference = firebaseDB
-            .collection("chats")
-            .document(uid)
-            .collection("headers")
-            .orderBy("lastMsgTimestamp", Query.Direction.DESCENDING)
+        try {
+            val reference = firebaseDB
+                .collection("chats")
+                .document(uid)
+                .collection("headers")
+                .orderBy("lastMsgTimestamp", Query.Direction.DESCENDING)
 
-        chatHeadersSnapshotListener = reference
-            .addSnapshotListener { querySnapshot, exception ->
-                exception?.let {
-                    Log.e("chatheaders/viewmodel", exception.message!!)
-                    return@addSnapshotListener
-                }
-                querySnapshot?.let {
-                    Log.e("chat/header/viewmodel", "Data Loaded from Server")
-
-                    val messages = it.documents.map { docSnap ->
-                        docSnap.toObject(ChatHeader::class.java)!!.apply {
-                            this.id = docSnap.id
-                        }
+            chatHeadersSnapshotListener = reference
+                .addSnapshotListener { querySnapshot, exception ->
+                    exception?.let {
+                        Log.e("chatheaders/viewmodel", exception.message!!)
+                        return@addSnapshotListener
                     }
+                    querySnapshot?.let {
+                        Log.e("chat/header/viewmodel", "Data Loaded from Server")
 
-                    chatHeadersList = messages
-                    filterChatHeadersAndEmit()
-
-                    var unreadMessageCount = 0
-                    messages.forEach { chatHeader ->
-                        unreadMessageCount += chatHeader.unseenCount
-
-                        if (chatHeader.unseenCount != 0) {
-                            Log.d("ChatHeaderViewModel","setting useencount")
-
-                            if (chatHeader.chatType == ChatConstants.CHAT_TYPE_USER) {
-                                setMessagesAsDeliveredForChat(
-                                    chatHeader.id,
-                                    chatHeader.otherUserId
-                                )
-                            } else if (chatHeader.chatType == ChatConstants.CHAT_TYPE_GROUP) {
-                                //set messages as delivered for group chat
-                                setMessagesAsDeliveredForGroupChat(chatHeader.groupId)
+                        val messages = it.documents.map { docSnap ->
+                            docSnap.toObject(ChatHeader::class.java)!!.apply {
+                                this.id = docSnap.id
                             }
                         }
-                    }
-                    _unreadMessageCount.postValue(unreadMessageCount)
-                }
-            }
-    }
 
+                        chatHeadersList = messages
+                        filterChatHeadersAndEmit()
+
+                        var unreadMessageCount = 0
+                        messages.forEach { chatHeader ->
+                            unreadMessageCount += chatHeader.unseenCount
+
+                            if (chatHeader.unseenCount != 0) {
+                                Log.d("ChatHeaderViewModel","setting useencount")
+
+                                if (chatHeader.chatType == ChatConstants.CHAT_TYPE_USER) {
+                                    setMessagesAsDeliveredForChat(
+                                        chatHeader.id,
+                                        chatHeader.otherUserId
+                                    )
+                                } else if (chatHeader.chatType == ChatConstants.CHAT_TYPE_GROUP) {
+                                    //set messages as delivered for group chat
+                                    setMessagesAsDeliveredForGroupChat(chatHeader.groupId)
+                                }
+                            }
+                        }
+                        _unreadMessageCount.postValue(unreadMessageCount)
+                    }
+                }
+        } catch (e: Exception){
+            e.printStackTrace()
+        }
+
+
+    }
     private fun setMessagesAsDeliveredForGroupChat(
         groupId: String
-    ) = viewModelScope.launch{
+    ) = GlobalScope.launch{
         try {
             Log.d("ChatHeaderViewModel","setting message as delivered of group :$groupId")
 
@@ -121,6 +122,7 @@ class ChatHeadersViewModel @Inject constructor(
             e.printStackTrace()
         }
     }
+
 
     private fun setMessagesAsDeliveredForChat(
         chatHeader: String,
