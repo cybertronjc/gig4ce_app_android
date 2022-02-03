@@ -1177,6 +1177,10 @@
         android:name="com.gigforce.verification.mainverification.vaccine.bottomsheets.AskUserForVaccineBS"
         android:label="AskUserForVaccine"/>
 
+    <dialog android:id="@+id/SizeWarningBottomSheet"
+        android:name="com.gigforce.verification.mainverification.vaccine.mainvaccine.SizeWarningBottomSheet"
+        android:label="SizeWarningBottomSheet"/>
+
     <dialog android:id="@+id/GetVaccinateFirstBS"
         android:name="com.gigforce.verification.mainverification.vaccine.bottomsheets.GetVaccinateFirstBS"/>
     <fragment

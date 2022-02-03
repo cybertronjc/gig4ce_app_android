@@ -494,5 +494,8 @@
     <string name="view_more_veri">View More</string>
     <string name="upload_veri">Upload</string>
     <string name="change_veri">Change</string>
+    <string name="file_size_too_big_veri">File Size is Too Big</string>
+    <string name="file_size_message_veri">File size exceeds 5 MB. Please upload file with smaller size.</string>
+    <string name="try_again_veri">TRY AGAIN</string>
 
 </resources>

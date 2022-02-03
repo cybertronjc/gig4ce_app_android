@@ -9,13 +9,11 @@ class IntermediateVaccinationRepo @Inject constructor(
     private val configurationRepository: ConfigurationRepository
 ) {
 
-    private val configRepository = ConfigurationRepository()
-
     suspend fun getVaccineDetailsData(vaccineId: String): VaccineCertDetailsDM {
         val data = verificationKycRepo.getVaccinationObjectData()
         if (data.exists()) {
             val vaccineObject = (data.get("vaccination") as Map<*, *>)
-            return getRelatedVaccinData(vaccineObject, vaccineId, "", 1)
+            return getRelatedVaccinData(vaccineObject, vaccineId, "", 1,"")
         } else {
             throw Exception("Vaccination data does not exists!!")
         }
@@ -25,7 +23,8 @@ class IntermediateVaccinationRepo @Inject constructor(
         vaccineObject: Map<*, *>,
         vaccineId: String,
         vaccineLabel: String?,
-        index: Int
+        index: Int,
+        configStatus:String
     ): VaccineCertDetailsDM {
         val vaccineData = (vaccineObject.get(vaccineId) as? Map<*, *>)
         vaccineData?.let { vaccineData ->
@@ -60,7 +59,8 @@ class IntermediateVaccinationRepo @Inject constructor(
                 vaccinePlace = vaccinePlace,
                 vaccineId = vaccineId,
                 vaccineLabel = vaccineLabel,
-                vaccineIndexLabel = "vaccine${index}"
+                vaccineIndexLabel = "vaccine${index}",
+                configStatus = configStatus
             )
         }
         throw Exception("Vaccination data does not exists!!")
@@ -82,7 +82,8 @@ class IntermediateVaccinationRepo @Inject constructor(
                                         vaccineObject,
                                         it1,
                                         config.label,
-                                        index + 1
+                                        index + 1,
+                                        config.configStatus?:""
                                     )
                                 )
                             } catch (e: Exception) {
@@ -117,7 +118,8 @@ class IntermediateVaccinationRepo @Inject constructor(
                                     vaccineObject,
                                     it1,
                                     config.label,
-                                    index + 1
+                                    index + 1,
+                                    config.configStatus?:""
                                 )
                             )
                         } catch (e: Exception) {
@@ -136,5 +138,15 @@ class IntermediateVaccinationRepo @Inject constructor(
         return allVaccine
     }
 
+
+    suspend fun getStatusOfVaccine():String{
+        val allVaccines = getAllVaccinationDataList()
+        allVaccines.reversed().forEach {
+            if(it.pathOnFirebase?.isNotEmpty()==true){
+                return it.configStatus?:"Not vaccinated"
+            }
+        }
+        return "Not vaccinated"
+    }
 
 }

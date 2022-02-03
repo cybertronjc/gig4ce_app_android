@@ -17,6 +17,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.common_ui.MimeTypes
 import com.gigforce.common_ui.ext.showToast
+import com.gigforce.common_ui.metaDataHelper.ImageMetaDataHelpers
 import com.gigforce.common_ui.remote.verification.VaccineIdLabelReqDM
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.recyclerView.ItemClickListener
@@ -119,9 +120,17 @@ class VaccineMainFragment : Fragment() {
             }
             context?.let { context ->
                 fileUri?.let {
-                    callKycOcrApi()
-                }
 
+                    val fileLength = ImageMetaDataHelpers.getImageLength(context,it)
+                    val kb = fileLength/1024
+                    val mb = kb/1024
+                    if(mb<5) {
+                        callKycOcrApi()
+                    }
+                    else{
+                        navigation.navigateTo("verification/SizeWarningBottomSheet")
+                    }
+                }
             }
         }
     }

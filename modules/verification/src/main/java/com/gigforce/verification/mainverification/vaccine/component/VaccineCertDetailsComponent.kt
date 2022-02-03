@@ -6,6 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewTreeViewModelStoreOwner
+import androidx.lifecycle.get
 import com.gigforce.core.ICustomClickListener
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.extensions.gone
@@ -40,7 +43,13 @@ class VaccineCertDetailsComponent(context: Context, attrs: AttributeSet?) : Fram
     fun setTitle(title: String) {
         vaccineTitle.text = title
     }
+    private var viewModel : VaccineCertDetailsComponentViewModel?=null
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        viewModel = ViewModelProvider(ViewTreeViewModelStoreOwner.get(this)!!).get()
 
+
+    }
     override fun bind(data: Any?) {
         if (data is VaccineCertDetailsDM) {
 
@@ -51,12 +60,22 @@ class VaccineCertDetailsComponent(context: Context, attrs: AttributeSet?) : Fram
             {
                 download_icon.visible()
                 edit_icon.visible()
+                statusIconUploaded.visible()
+                statusIconNotUploaded.gone()
                 rightArrow.gone()
+
+                download_icon.setOnClickListener{
+                    viewModel?.downloadFile(data.pathOnFirebase)
+                }
             }else{
                 download_icon.gone()
                 edit_icon.gone()
+                statusIconUploaded.gone()
+                statusIconNotUploaded.visible()
                 rightArrow.visible()
             }
+
+
 
             data.getNavArgs().let {
                 it?.let { navData->

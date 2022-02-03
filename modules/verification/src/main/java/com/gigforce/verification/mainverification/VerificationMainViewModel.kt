@@ -5,13 +5,16 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.navigation.signature.SignatureNavigation
 import com.gigforce.common_ui.viewdatamodels.SimpleCardDVM
 import com.gigforce.core.datamodels.verification.AadhaarDetailsDataModel
 import com.gigforce.core.datamodels.verification.VerificationBaseModel
 import com.gigforce.verification.R
+import com.gigforce.verification.mainverification.vaccine.IntermediateVaccinationRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -29,7 +32,8 @@ object VACCINESTATUSES{
 class VerificationMainViewModel @Inject constructor(
     @ApplicationContext private val appContext: Context,
 //    private val iBuildConfigVM: IBuildConfigVM,
-    private val verificationKycRepo : VerificationKycRepo
+    private val verificationKycRepo : VerificationKycRepo,
+    private val intermediatorRepo: IntermediateVaccinationRepo
 ) : ViewModel() {
 
     var _allDocumentsData = MutableLiveData<List<SimpleCardDVM>>()
@@ -47,7 +51,7 @@ class VerificationMainViewModel @Inject constructor(
 
     var latestVerificationDoc: VerificationBaseModel? = null
 
-    private fun getAllDocuments() {
+    private fun getAllDocuments() = viewModelScope.launch {
 
         var allDocs = ArrayList<SimpleCardDVM>()
         allDocs.add(
@@ -109,6 +113,9 @@ class VerificationMainViewModel @Inject constructor(
         )
 
         _allDocumentsData.value = allDocs
+
+
+        val status = intermediatorRepo.getStatusOfVaccine()
 
         verificationKycRepo.db.collection("Verification").document(verificationKycRepo.getUID())
             .addSnapshotListener { value, error ->
@@ -184,14 +191,10 @@ class VerificationMainViewModel @Inject constructor(
                     allDocs.add(
                         SimpleCardDVM(
                             title = appContext.getString(R.string.covid_vaccination_certificate_veri),
-                            subtitle = getSubString(null,
-                                doc?.vaccination?.status
-                            ),
+                            subtitle = status,
                             image = R.drawable.ic_account_box_black_24dp,
                             navpath = "verification/VaccineMainFragment",
-                            color = getSubStringColor(null,
-                                doc?.vaccination?.status
-                            )
+                            color = getVaccineColor(status)
                         )
                     )
 
@@ -221,6 +224,11 @@ class VerificationMainViewModel @Inject constructor(
             }
 
 
+    }
+
+    private fun getVaccineColor(status: String): String {
+        if(status == "Not vaccinated" || status == "") return "RED"
+        return "GREEN"
     }
 
     private fun isSubmitted(aadhaarCardQuestionnaire: AadhaarDetailsDataModel?): Boolean {
