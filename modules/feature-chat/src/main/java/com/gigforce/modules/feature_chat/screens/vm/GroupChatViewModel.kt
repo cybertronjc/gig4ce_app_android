@@ -754,9 +754,7 @@ class GroupChatViewModel @Inject constructor(
                     location = GeoPoint(latitude, longitude),
                     locationPhysicalAddress = physicalAddress,
                     thumbnailBitmap = mapImage?.copy(mapImage.config, mapImage.isMutable),
-                    isLiveLocation = isLiveLocation,
-                    liveEndTime = liveEndTime,
-                    isCurrentlySharingLiveLocation = isCurrentlySharingLiveLocation
+                    isLiveLocation = isLiveLocation
             )
 
             groupMessagesShownOnView?.add(message)
@@ -773,7 +771,7 @@ class GroupChatViewModel @Inject constructor(
     }
 
     fun stopAllPreviousLiveLocations(){
-        val messagesWithActiveLiveLocations = this.grpMessages?.filter { it.type == com.gigforce.common_ui.core.ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION && it.isLiveLocation && it.isCurrentlySharingLiveLocation }
+        val messagesWithActiveLiveLocations = this.grpMessages?.filter { it.type == com.gigforce.common_ui.core.ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION && it.isLiveLocation }
         messagesWithActiveLiveLocations?.forEach {
             Log.d("locationupdate", "Stoping location for: ${it.headerId} , ${it.id}")
             stopSharingLocation(groupId, it.id)

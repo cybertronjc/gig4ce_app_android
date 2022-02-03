@@ -76,10 +76,6 @@ class ChatMessage(
     @set:PropertyName("isCurrentlySharingLiveLocation")
     var isCurrentlySharingLiveLocation: Boolean = false,
 
-    @get:PropertyName("liveEndTime")
-    @set:PropertyName("liveEndTime")
-    var liveEndTime: Date? = null,
-
     /**
      * Attachment Path- full path of image, video etc
      */

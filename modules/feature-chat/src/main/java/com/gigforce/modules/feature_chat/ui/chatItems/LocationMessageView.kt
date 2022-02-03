@@ -224,7 +224,8 @@ abstract class LocationMessageView(
                         stopSharingTV.visible()
                         locationAddressTV.gone()
                     }
-                } else {
+                }
+                else {
                     stopSharingTV.text = "Live location ended"
                     stopSharingTV.visible()
                     locationAddressTV.gone()
@@ -319,13 +320,13 @@ abstract class LocationMessageView(
                         return
 
             if (message.isLiveLocation ){
-                if (message.isCurrentlySharingLiveLocation) {
+                //if (message.isCurrentlySharingLiveLocation) {
                     val intent = Intent(context, LocationSharingActivity::class.java)
                     intent.putExtra(AppConstants.INTENT_EXTRA_CHAT_TYPE, message.chatType)
                     intent.putExtra(AppConstants.INTENT_EXTRA_CHAT_HEADER_ID, message.headerId)
                     intent.putExtra(AppConstants.INTENT_EXTRA_CHAT_MESSAGE_ID, message.id)
                     context.startActivity(intent)
-                }
+                //}
             } else {
                 val lat = message.location?.latitude ?: 0.0
                 val long = message.location?.longitude ?: 0.0
