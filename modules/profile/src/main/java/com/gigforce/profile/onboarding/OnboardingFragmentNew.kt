@@ -525,7 +525,7 @@ class OnboardingFragmentNew : Fragment(){
         override fun checkForButtonText() {
             super.checkForButtonText()
 
-            if (onboarding_pager.currentItem == 8) {
+            if (onboarding_pager?.currentItem == 8) {
 
                 val fragment = getProfilePicFragment()
 
