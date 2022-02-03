@@ -122,10 +122,6 @@ abstract class AudioMessageView (
         senderNameTV.isVisible = messageType == MessageType.GROUP_MESSAGE && flowType == MessageFlowType.IN
         senderNameTV.text = msg.senderInfo.name
 
-        if (msg.attachmentPath.isNullOrBlank()) {
-            handleAudioUploading()
-        } else {
-        }
 
         lifeCycleOwner?.let { it1 ->
             if (messageType == MessageType.ONE_TO_ONE_MESSAGE){
@@ -178,6 +174,22 @@ abstract class AudioMessageView (
                 })
             }
 
+        }
+
+        if (msg.attachmentPath.isNullOrBlank()) {
+            handleAudioUploading()
+        } else {
+            val downloadedFile = returnFileIfAlreadyDownloadedElseNull()
+            val fileHasBeenDownloaded = downloadedFile != null
+            if (fileHasBeenDownloaded) {
+                progressbar.gone()
+            } else {
+//                if (msg.attachmentCurrentlyBeingDownloaded) {
+//                    progressbar.visible()
+//                } else {
+//                    progressbar.gone()
+//                }
+            }
         }
 
         playAudio.setOnClickListener {

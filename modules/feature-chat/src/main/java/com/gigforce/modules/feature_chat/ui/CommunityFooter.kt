@@ -50,6 +50,7 @@ import android.graphics.drawable.Drawable
 import android.view.ViewTreeObserver
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.linkedin.android.spyglass.mentions.Mentionable
 
 
 @AndroidEntryPoint

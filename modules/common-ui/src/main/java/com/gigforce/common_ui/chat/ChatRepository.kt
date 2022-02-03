@@ -24,10 +24,7 @@ import com.gigforce.core.file.FileUtils
 import com.gigforce.core.image.ImageUtils
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.google.firebase.Timestamp
-import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.GeoPoint
+import com.google.firebase.firestore.*
 import com.google.firebase.storage.FirebaseStorage
 import java.io.File
 import javax.inject.Inject
@@ -411,7 +408,6 @@ class ChatRepository @Inject constructor(
         val newFileName = if (audioInfo.name.isBlank()) {
             "${getUID()}-${DateHelper.getFullDateTimeStamp()}.mp3"
         } else {
-
             if (audioInfo.name.endsWith(".mp3", true)) {
                 "${getUID()}-${DateHelper.getFullDateTimeStamp()}-${audioInfo.name}"
             } else {
@@ -423,19 +419,19 @@ class ChatRepository @Inject constructor(
 //        val audioFile = File(audiosDirectoryRef, newFileName)
 //        FileUtils.copyFile(context.applicationContext, newFileName, file, audioFile)
 
-        if (!audiosDirectoryRef.exists())
-            audiosDirectoryRef.mkdirs()
-        val audioFile = File(audiosDirectoryRef, newFileName)
-        FileUtils.copyFile(context, newFileName, file, audioFile)
-
         val pathOnServer = uploadChatAttachment(
-            fileNameWithExtension = newFileName,
+            fileNameWithExtension = audioInfo.name,
             file = file,
             headerId = chatHeaderId,
             isGroupChatMessage = false,
             messageType = ChatConstants.MESSAGE_TYPE_TEXT_WITH_AUDIO
         )
         message.attachmentPath = pathOnServer
+
+        if (!audiosDirectoryRef.exists())
+            audiosDirectoryRef.mkdirs()
+        val audioFile = File(audiosDirectoryRef, newFileName)
+        FileUtils.copyFile(context, newFileName, file, audioFile)
 
         getChatMessagesCollectionRef(headerId = chatHeaderId)
             .addOrThrow(message)
@@ -606,16 +602,23 @@ class ChatRepository @Inject constructor(
             val senderId = unreadMessage.senderInfo.id
             val headerId = unreadMessage.headerId
 
-            val headerRef = FirebaseFirestore.getInstance()
+            val senderHeaderRef = FirebaseFirestore.getInstance()
                 .collection(ChatGroupRepository.COLLECTION_CHATS)
                 .document(senderId)
                 .collection(COLLECTION_CHAT_HEADERS)
                 .document(headerId)
 
-            val chatHeader = headerRef.getOrThrow()
+            val receiverHeaderRef = FirebaseFirestore.getInstance()
+                .collection(ChatGroupRepository.COLLECTION_CHATS)
+                .document(getUID())
+                .collection(COLLECTION_CHAT_HEADERS)
+                .document(headerId)
+
+            val chatHeader = senderHeaderRef.getOrThrow()
             val lastMessageIdInHeader = chatHeader.getString("lastMsgId")
 
-            val chatMessageCollection = headerRef.collection(COLLECTION_CHATS_MESSAGES)
+            val chatMessageCollection = senderHeaderRef.collection(COLLECTION_CHATS_MESSAGES)
+            val receiverChatMessageCollection = receiverHeaderRef.collection(COLLECTION_CHATS_MESSAGES)
 
             val batch = db.batch()
             if (lastMessageIdInHeader != null) {
@@ -626,7 +629,7 @@ class ChatRepository @Inject constructor(
 
                 if (shouldUpdateInHeader) {
                     batch.update(
-                        headerRef, mapOf(
+                        senderHeaderRef, mapOf(
                             "status" to ChatConstants.MESSAGE_STATUS_READ_BY_USER,
                             "updatedAt" to Timestamp.now(),
                             "updatedBy" to FirebaseAuthStateListener.getInstance()
@@ -641,6 +644,15 @@ class ChatRepository @Inject constructor(
                 val messageRef = chatMessageCollection.document(it.senderMessageId)
                 batch.update(
                     messageRef, mapOf(
+                        "status" to ChatConstants.MESSAGE_STATUS_READ_BY_USER,
+                        "updatedAt" to Timestamp.now(),
+                        "updatedBy" to FirebaseAuthStateListener.getInstance()
+                            .getCurrentSignInUserInfoOrThrow().uid
+                    )
+                )
+                val receiverMessageRef = receiverChatMessageCollection.document(it.senderMessageId)
+                batch.update(
+                    receiverMessageRef, mapOf(
                         "status" to ChatConstants.MESSAGE_STATUS_READ_BY_USER,
                         "updatedAt" to Timestamp.now(),
                         "updatedBy" to FirebaseAuthStateListener.getInstance()
@@ -763,6 +775,12 @@ class ChatRepository @Inject constructor(
             .collection(COLLECTION_CHATS_CONTACTS)
             .document(otherUserMobileNo)
 
+    }
+
+    fun getContactDetailsByUID(otherUserUid: String): Query {
+        return  db.collection(COLLECTION_CHATS)
+            .document(getUID())
+            .collection(COLLECTION_CHATS_CONTACTS).whereEqualTo("uid" , otherUserUid)
     }
 
     suspend fun sentMessagesSentMessageAsDelivered(

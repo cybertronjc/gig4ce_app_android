@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 import com.gigforce.modules.feature_chat.R
 import com.gigforce.modules.feature_chat.databinding.FragmentMessageInfoBinding
 import com.gigforce.modules.feature_chat.databinding.FragmentMessageViewedInfoBinding
@@ -96,6 +98,9 @@ class GroupMessageViewInfoFragment : Fragment() {
 
                 viewBinding.deliveredByRemaining.text = (it.totalMembers - it.receivingInfo.size).toString() + " remaining"
                 viewBinding.messageDeliveredRecyclerView.collection = it.receivingInfo
+
+                viewBinding.nestedScrollView.visible()
+                viewBinding.infoShimmer.gone()
             })
     }
 
