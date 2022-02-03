@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.RelativeLayout
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import com.gigforce.common_ui.CommonIntentExtras
 import com.gigforce.common_ui.viewdatamodels.leadManagement.JoiningStatus
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.IViewHolder
@@ -60,7 +61,7 @@ class Joining2RecyclerItemView(
     private fun setListenersOnView() {
         viewBinding.root.setOnClickListener(this)
         viewBinding.callGigerBtn.setOnClickListener(this)
-      //  viewBinding.root.setOnLongClickListener(this)
+        viewBinding.root.setOnLongClickListener(this)
     }
 
     private fun setDefault() {
@@ -205,11 +206,11 @@ class Joining2RecyclerItemView(
             if (viewData?.selected == true){
                 viewData?.selected = false
                 viewBinding.selectJoiningBtn.setImageDrawable(resources.getDrawable(R.drawable.ic_unselect_tick))
-                viewData?.viewModel?.dropSelection(viewData?._id.toString(), false)
+                viewData?.viewModel?.dropSelection(viewData!!, false)
             }else {
                 viewData?.selected = true
                 viewBinding.selectJoiningBtn.setImageDrawable(resources.getDrawable(R.drawable.ic_selected_tick))
-                viewData?.viewModel?.dropSelection(viewData?._id.toString(), true)
+                viewData?.viewModel?.dropSelection(viewData!!, true)
             }
         }else {
             if (v?.id == R.id.call_giger_btn) {
@@ -237,7 +238,8 @@ class Joining2RecyclerItemView(
                     LeadManagementNavDestinations.FRAGMENT_GIGER_INFO,
                     bundleOf(
                         LeadManagementConstants.INTENT_EXTRA_JOINING_ID to currentViewData._id,
-                        LeadManagementConstants.INTENT_EXTRA_IS_ACTIVE to viewData?.isActive
+                        LeadManagementConstants.INTENT_EXTRA_IS_ACTIVE to viewData?.isActive,
+                        CommonIntentExtras.INTENT_USER_ID to viewData?.gigerId
                     )
                 )
             }
@@ -307,7 +309,7 @@ class Joining2RecyclerItemView(
             viewData?.selected = true
             viewBinding.selectJoiningBtn.visible()
             viewBinding.callGigerBtn.gone()
-            viewData?.viewModel?.dropSelection(viewData?._id.toString(), true)
+            viewData?.viewModel?.dropSelection(viewData!!, true)
         }
         return true
     }

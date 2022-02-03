@@ -165,7 +165,9 @@ class GroupChatViewModel @Inject constructor(
             return
         }
 
-        groupDetailsListener = chatGroupRepository.getGroupDetailsRef(groupId)
+        try {
+            val groupDetailRef = chatGroupRepository.getGroupDetailsRef(groupId)
+            groupDetailsListener = groupDetailRef
                 .addSnapshotListener { data, error ->
                     Log.d(TAG, "group details changed/subscribed, groupId - $groupId")
 
@@ -183,15 +185,18 @@ class GroupChatViewModel @Inject constructor(
                         }
 
                         val isUserDeletedFromgroup =
-                                groupDetails!!.deletedGroupMembers.find { it.uid == currentUser.uid } != null
+                            groupDetails?.deletedGroupMembers?.find { it.uid == currentUser.uid } != null
                         val limitToTimeStamp = if (isUserDeletedFromgroup) {
-                            groupDetails!!.deletedGroupMembers.find { it.uid == currentUser.uid }!!.deletedOn
+                            groupDetails?.deletedGroupMembers?.find { it.uid == currentUser.uid }?.deletedOn
                         } else
                             null
 
                         startWatchingGroupMessagesAndEvents(limitToTimeStamp)
                     }
                 }
+        } catch (e: Exception){
+            e.printStackTrace()
+        }
 
         startContactsChangeListener()
     }
@@ -313,6 +318,9 @@ class GroupChatViewModel @Inject constructor(
 
                     if (error != null)
                         Log.e(TAG, "Error while listening group messages", error)
+                    if (value?.isEmpty == true){
+                        _groupMessages.postValue(emptyList())
+                    }
 
                     grpMessages = value?.documents?.map { doc ->
                         doc.toObject(ChatMessage::class.java)!!.also {
@@ -321,10 +329,7 @@ class GroupChatViewModel @Inject constructor(
                             it.groupId = groupId
                         }
                     }?.toMutableList()
-
-                        //checkForRecevinginfoElseMarkMessageAsReceived(grpMessages!!)
-
-
+                        checkForRecevinginfoElseMarkMessageAsReceived(grpMessages!!)
 
                     if (userContacts != null) {
                         compareGroupMessagesWithContactsAndEmit()
@@ -364,37 +369,47 @@ class GroupChatViewModel @Inject constructor(
     private fun checkForRecevinginfoElseMarkMessageAsReceived(
             msgs: MutableList<ChatMessage>
     ) = viewModelScope.launch {
-        val messageWithNotReceivedStatus = msgs.filter { msg ->
-            msg.groupMessageReadBy.find { it.uid == currentUser.uid }  == null
-        }
 
-        val messageWithNotDeliveredStatus = msgs.filter { msg ->
-            msg.groupMessageDeliveredTo.find { it.uid == currentUser.uid }  == null
-        }
+        val messageWithNotDeliveredStatus = arrayListOf<String>()
+        val messageWithNotReceivedStatus = arrayListOf<String>()
 
-//        if (messageWithNotReceivedStatus.isNotEmpty()){
-//                try {
-//                    chatGroupRepository.markMessagesAsRead(
-//                        groupId,
-//                        messageWithNotReceivedStatus
-//                    )
-//                } catch (e: Exception) {
-//                    e.printStackTrace()
-//                }
-//
-//        }
-
-        if (messageWithNotDeliveredStatus.isNotEmpty()){
-            try {
-                chatGroupRepository.markMessagesAsDelivered(
-                    groupId,
-                    messageWithNotDeliveredStatus
-                )
-            } catch (e: Exception) {
-                e.printStackTrace()
+        msgs.forEach { it1 ->
+            val chatMessageDeliveredTo =
+                chatGroupRepository.getMessageDeliveredInfo(groupId, it1.id)
+                    ?: throw IllegalStateException("no chat message found, for group id $groupId message: ${it1.id}")
+            val chatMessageReceivedBy = chatGroupRepository.getMessageReceivedInfo(groupId, it1.id)
+                ?: throw IllegalStateException("no chat message found, for group id $groupId message: ${it1.id}")
+            if (chatMessageDeliveredTo.isEmpty()) {
+                messageWithNotDeliveredStatus.add(it1.id)
             }
-        }
+            if (chatMessageReceivedBy.isEmpty()) {
+                messageWithNotReceivedStatus.add(it1.id)
+            }
 
+            if (messageWithNotReceivedStatus.isNotEmpty()) {
+                try {
+                    chatGroupRepository.markAsReadMessages(
+                        groupId,
+                        messageWithNotReceivedStatus
+                    )
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+
+            }
+
+            if (messageWithNotDeliveredStatus.isNotEmpty()) {
+                try {
+                    chatGroupRepository.markAsDelivered(
+                        groupId,
+                        messageWithNotDeliveredStatus
+                    )
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+
+        }
     }
 
 
@@ -1002,25 +1017,28 @@ class GroupChatViewModel @Inject constructor(
 
         try {
             val chatGroup = chatGroupRepository.getGroupDetails(groupId)
-            val chatMessage = chatGroupRepository.getChatMessage(groupId, messageId)
-                    ?: throw IllegalStateException("no chat message found, for group id $groupId message: $messageId")
-            val messageReadByUsers = chatMessage.groupMessageReadBy.filter {
-                it.uid != currentUser.uid
-            }.distinctBy { it.uid }
+            val chatMessagesReceived = chatGroupRepository.getMessageReceivedByInfo(groupId, messageId)
+            val chatMessagesDelivered = chatGroupRepository.getMessageDeliveredToInfo(groupId, messageId)
 
-            val messageDeliveredToUsers = chatMessage.groupMessageDeliveredTo.filter {
-                it.uid != currentUser.uid
-            }.distinctBy { it.uid }
+            val messageReadBy = arrayListOf<MessageReceivingInfo>()
+            chatMessagesReceived.forEach {
+                messageReadBy.add(it)
+            }
+
+            val messageDeliveredTo = arrayListOf<MessageReceivingInfo>()
+            chatMessagesDelivered.forEach {
+                messageDeliveredTo.add(it)
+            }
 
             val totalUsersCount = chatGroup?.groupMembers
-                    ?.filter { it.uid != currentUser.uid }?.distinctBy { it.uid }
-                    ?.count()
+                    .filter { it.uid != currentUser.uid }
+                    .count()
 
             _messageReadingInfo.value = totalUsersCount?.let {
                 MessageReceivingAndReadingInfo(
                     totalMembers = it,
-                    receivingInfo = messageDeliveredToUsers,
-                    readingInfo = messageReadByUsers
+                    receivingInfo = messageDeliveredTo,
+                    readingInfo = messageReadBy
                 )
             }
         } catch (e: Exception) {

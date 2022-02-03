@@ -31,7 +31,6 @@ import com.gigforce.common_ui.chat.models.ChatGroup
 import com.gigforce.common_ui.chat.models.ChatMessage
 import com.gigforce.common_ui.chat.models.ContactModel
 import com.gigforce.common_ui.chat.models.GroupMedia
-import com.gigforce.common_ui.ext.onTabSelected
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.metaDataHelper.ImageMetaDataHelpers
 import com.gigforce.common_ui.views.GigforceImageView
@@ -52,6 +51,7 @@ import com.gigforce.modules.feature_chat.screens.adapters.GroupMembersRecyclerAd
 import com.gigforce.modules.feature_chat.screens.vm.ChatPageViewModel
 import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_audio_player_bottom_sheet.*
@@ -226,50 +226,86 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
             e.printStackTrace()
         }
 
-        mediaTabLayout.onTabSelected {
-            selectedTab = it?.position!!
-            when(selectedTab) {
-                0 -> {
-                    //hide docs & audios recyclerview and show images view
+        mediaTabLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener{
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                selectedTab = tab?.position!!
+                when(selectedTab) {
+                    0 -> {
+                        //hide docs & audios recyclerview and show images view
+                        mediaImagesVideosRecyclerview.adapter = null
+                        docsRecyclerview.adapter = null
+                        audioRecyclerview.adapter = null
+                        mediaImagesVideosRecyclerview.adapter = expendedMediaAdapter
+                        noMediaText.text = "No Media Found"
+                        if (mediaList.isNullOrEmpty()){
+                            viewBinding.noMediaText.visible()
+                            mediaImagesVideosRecyclerview.gone()
+                        } else{
+                             mediaList?.let {
+                                 mediaImagesVideosRecyclerview.visible()
+                                 docsRecyclerview.gone()
+                                 viewBinding.noMediaText.gone()
+                                 audioRecyclerview.gone()
+                                setDataToExpendedMediaView("Media", it)
 
-                    mediaImagesVideosRecyclerview.adapter = null
-                    docsRecyclerview.adapter = null
-                    audioRecyclerview.adapter = null
-                    mediaImagesVideosRecyclerview.adapter = expendedMediaAdapter
-                    setDataToExpendedMediaView("Media", mediaList!!)
-                    mediaImagesVideosRecyclerview.visible()
-                    docsRecyclerview.gone()
-                    audioRecyclerview.gone()
-                    Log.d(TAG, "media: ${mediaImagesVideosRecyclerview.isVisible} , doc: ${docsRecyclerview.isVisible}, adapter: ${docsRecyclerview.adapter} , count: ${expendedMediaAdapter.itemCount}")
-                }
-                1 -> {
+                            }
+                        }
+                    }
+                    1 -> {
 
+                        mediaImagesVideosRecyclerview.adapter = null
+                        docsRecyclerview.adapter = null
+                        audioRecyclerview.adapter = null
+                        docsRecyclerview.adapter = expendedMediaAdapter
+                        noMediaText.text = "No Documents Found"
+                        if (mediaList.isNullOrEmpty()) {
+                            viewBinding.noMediaText.visible()
+                            docsRecyclerview.gone()
+                         } else {
+                             mediaList?.let {
+                                 viewBinding.noMediaText.gone()
+                                 mediaImagesVideosRecyclerview.gone()
+                                 docsRecyclerview.visible()
+                                 audioRecyclerview.gone()
+                                 setDataToExpendedMediaView("Document", it)
+                            }
+                        }
 
-                    mediaImagesVideosRecyclerview.adapter = null
-                    docsRecyclerview.adapter = null
-                    audioRecyclerview.adapter = null
-                    docsRecyclerview.adapter = expendedMediaAdapter
-                    setDataToExpendedMediaView("Document", mediaList!!)
-                    mediaImagesVideosRecyclerview.gone()
-                    docsRecyclerview.visible()
-                    audioRecyclerview.gone()
-                    Log.d(TAG, "media: ${mediaImagesVideosRecyclerview.isVisible} , doc: ${docsRecyclerview.isVisible}, adapter: ${docsRecyclerview.adapter} , count: ${expendedMediaAdapter.itemCount}")
+                    }
+                    2 -> {
 
-                }
-                2 -> {
+                        mediaImagesVideosRecyclerview.adapter = null
+                        docsRecyclerview.adapter = null
+                        audioRecyclerview.adapter = null
+                        audioRecyclerview.adapter = expendedMediaAdapter
+                        noMediaText.text = "No Audio Found"
+                        if (mediaList.isNullOrEmpty()){
+                            viewBinding.noMediaText.visible()
+                            audioRecyclerview.gone()
+                        } else {
+                            mediaList?.let {
+                                viewBinding.noMediaText.gone()
+                                mediaImagesVideosRecyclerview.gone()
+                                docsRecyclerview.gone()
+                                audioRecyclerview.visible()
+                                setDataToExpendedMediaView("Audio", it)
 
-                    mediaImagesVideosRecyclerview.adapter = null
-                    docsRecyclerview.adapter = null
-                    audioRecyclerview.adapter = null
-                    audioRecyclerview.adapter = expendedMediaAdapter
-                    setDataToExpendedMediaView("Audio", mediaList!!)
-                    mediaImagesVideosRecyclerview.gone()
-                    docsRecyclerview.gone()
-                    audioRecyclerview.visible()
-                    Log.d(TAG, "media: ${mediaImagesVideosRecyclerview.isVisible} , doc: ${docsRecyclerview.isVisible}, adapter: ${docsRecyclerview.adapter} , count: ${expendedMediaAdapter.itemCount}")
+                            }
+                        }
+                        }
                 }
             }
-        }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+
+            }
+
+        })
+
     }
 
     private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {
@@ -704,6 +740,7 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
 
         if (chatMediaList.isEmpty()){
             mediaLayout.gone()
+            noMediaText.visible()
         } else {
             mediaLayout.visible()
             mediaList = chatMediaList
@@ -721,17 +758,41 @@ class UserAndGroupDetailsFragment : BaseFragment2<UserAndGroupDetailsFragmentBin
         when(s) {
             "Media" -> {
                 val list = chatMediaList.filter { (it.attachmentType == ChatConstants.ATTACHMENT_TYPE_IMAGE)  || (it.attachmentType == ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE) } + chatMediaList.filter { (it.attachmentType == ChatConstants.ATTACHMENT_TYPE_VIDEO) || (it.attachmentType == ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO) }
+                if (list.isEmpty()){
+                    viewBinding.noMediaText.visible()
+                    viewBinding.mediaImagesVideosRecyclerview.gone()
+                } else {
+                    viewBinding.noMediaText.gone()
+                    viewBinding.mediaImagesVideosRecyclerview.visible()
+                }
                 expendedMediaAdapter.setData(list, 1)
+
             }
 
             "Document" -> {
                 val list = chatMediaList.filter { (it.attachmentType == ChatConstants.ATTACHMENT_TYPE_DOCUMENT)  || (it.attachmentType == ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT) }
+                if (list.isEmpty()){
+                    viewBinding.noMediaText.visible()
+                    viewBinding.docsRecyclerview.gone()
+                } else {
+                    viewBinding.noMediaText.gone()
+                    viewBinding.docsRecyclerview.visible()
+                }
                 expendedMediaAdapter.setData(list, 2)
+
             }
 
             "Audio" -> {
                 val list = chatMediaList.filter { (it.attachmentType == ChatConstants.ATTACHMENT_TYPE_AUDIO)  || (it.attachmentType == ChatConstants.MESSAGE_TYPE_TEXT_WITH_AUDIO) }
+                if (list.isEmpty()){
+                    viewBinding.noMediaText.visible()
+                    viewBinding.audioRecyclerview.gone()
+                } else {
+                    viewBinding.noMediaText.gone()
+                    viewBinding.audioRecyclerview.visible()
+                }
                 expendedMediaAdapter.setData(list, 3)
+
             }
         }
     }

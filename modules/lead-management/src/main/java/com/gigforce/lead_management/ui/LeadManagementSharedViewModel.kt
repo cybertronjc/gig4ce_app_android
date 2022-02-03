@@ -4,15 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gigforce.common_ui.viewdatamodels.leadManagement.BusinessTeamLeadersItem
-import com.gigforce.common_ui.viewdatamodels.leadManagement.JobProfilesItem
-import com.gigforce.common_ui.viewdatamodels.leadManagement.JoiningBusinessAndJobProfilesItem
-import com.gigforce.common_ui.viewdatamodels.leadManagement.ReportingLocationsItem
-import kotlinx.coroutines.channels.BroadcastChannel
-import kotlinx.coroutines.channels.Channel
+import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
 sealed class LeadManagementSharedViewModelState {
@@ -41,12 +36,18 @@ sealed class LeadManagementSharedViewModelState {
         val reportingLocation: ReportingLocationsItem
     ): LeadManagementSharedViewModelState()
 
-    data class ClientTLSelected(
-        val tlSelected: BusinessTeamLeadersItem
+    data class ReportingTLSelected(
+        val tlSelected: TeamLeader,
+        val showingAllTLs: Boolean
     ): LeadManagementSharedViewModelState()
 
     object OneOrMoreSelectionsDropped : LeadManagementSharedViewModelState()
+
     object JoiningAdded: LeadManagementSharedViewModelState()
+
+    data class JoiningsUpdated(
+       val joinings : List<String>
+    ) : LeadManagementSharedViewModelState()
 }
 
 class LeadManagementSharedViewModel : ViewModel() {
@@ -54,8 +55,8 @@ class LeadManagementSharedViewModel : ViewModel() {
     private val _viewState : MutableLiveData<LeadManagementSharedViewModelState?> = MutableLiveData()
     val viewState : LiveData<LeadManagementSharedViewModelState?> = _viewState
 
-    private val _viewStateFlow : Channel<LeadManagementSharedViewModelState> = Channel()
-    val viewStateFlow = _viewStateFlow.receiveAsFlow()
+    private val _viewStateFlow : MutableSharedFlow<LeadManagementSharedViewModelState> = MutableSharedFlow()
+    val viewStateFlow = _viewStateFlow.asSharedFlow()
 
 
     fun referralDialogOkayClicked() {
@@ -74,7 +75,7 @@ class LeadManagementSharedViewModel : ViewModel() {
         business: JoiningBusinessAndJobProfilesItem
     ) = viewModelScope.launch{
         _viewState.value = LeadManagementSharedViewModelState.BusinessSelected(business)
-        _viewStateFlow.send(LeadManagementSharedViewModelState.BusinessSelected(business))
+        _viewStateFlow.emit(LeadManagementSharedViewModelState.BusinessSelected(business))
 
         delay(1000)
         _viewState.value = null
@@ -88,14 +89,14 @@ class LeadManagementSharedViewModel : ViewModel() {
         delay(200)
         _viewState.value = null
 
-        _viewStateFlow.send(LeadManagementSharedViewModelState.JobProfileSelected(selectedBusiness,jobProfileSelected))
+        _viewStateFlow.emit(LeadManagementSharedViewModelState.JobProfileSelected(selectedBusiness,jobProfileSelected))
     }
 
     fun citySelected(
         city: ReportingLocationsItem
     ) = viewModelScope.launch{
         _viewState.value = LeadManagementSharedViewModelState.CitySelected(city)
-        _viewStateFlow.send(LeadManagementSharedViewModelState.CitySelected(city))
+        _viewStateFlow.emit(LeadManagementSharedViewModelState.CitySelected(city))
     }
 
     fun reportingLocationSelected(
@@ -106,7 +107,7 @@ class LeadManagementSharedViewModel : ViewModel() {
             selectedCity,
             reportingLocation
         )
-        _viewStateFlow.send(LeadManagementSharedViewModelState.ReportingLocationSelected(
+        _viewStateFlow.emit(LeadManagementSharedViewModelState.ReportingLocationSelected(
             selectedCity,
             reportingLocation
         ))
@@ -115,22 +116,30 @@ class LeadManagementSharedViewModel : ViewModel() {
         _viewState.value = null
     }
 
-    fun clientTLSelected(
-        clientTL: BusinessTeamLeadersItem
+    fun reportingTLSelected(
+        tl: TeamLeader,
+        showingAllTLs : Boolean
     ) = viewModelScope.launch{
-        _viewState.value = LeadManagementSharedViewModelState.ClientTLSelected(clientTL)
-        _viewStateFlow.send(LeadManagementSharedViewModelState.ClientTLSelected(clientTL))
-
-        delay(1000)
-        _viewState.value = null
+        _viewStateFlow.emit(LeadManagementSharedViewModelState.ReportingTLSelected(
+            tl,
+        showingAllTLs
+        ))
     }
 
     fun oneOrMoreSelectionsDropped()= viewModelScope.launch{
         _viewState.value = LeadManagementSharedViewModelState.OneOrMoreSelectionsDropped
-        _viewStateFlow.send(LeadManagementSharedViewModelState.OneOrMoreSelectionsDropped)
+        _viewStateFlow.emit(LeadManagementSharedViewModelState.OneOrMoreSelectionsDropped)
     }
+
     fun joiningAdded()= viewModelScope.launch{
         _viewState.value = LeadManagementSharedViewModelState.JoiningAdded
-        _viewStateFlow.send(LeadManagementSharedViewModelState.JoiningAdded)
+        _viewStateFlow.emit(LeadManagementSharedViewModelState.JoiningAdded)
+    }
+
+    fun joiningsChanged(
+        joiningsChanged : List<String>
+    )= viewModelScope.launch{
+        _viewState.value = LeadManagementSharedViewModelState.JoiningsUpdated(joiningsChanged)
+        _viewStateFlow.emit(LeadManagementSharedViewModelState.JoiningsUpdated(joiningsChanged))
     }
 }

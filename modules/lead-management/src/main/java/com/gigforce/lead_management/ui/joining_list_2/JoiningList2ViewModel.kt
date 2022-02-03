@@ -56,14 +56,15 @@ class JoiningList2ViewModel @Inject constructor(
     private var currentSearchString: String? = null
     var currentFilterString: String = "Pending"
     var filterDaysVM: Int? = null
+
     private var fetchJoiningListener: ListenerRegistration? = null
     var isSelectEnableGlobal = false
 
-    var dropBusinessMap : HashMap<String, Int>? = HashMap<String, Int>()
-    var dropJoining : HashMap<String, Boolean>? = HashMap<String, Boolean>()
+    var dropBusinessMap : HashMap<String, Int>? = HashMap()
+    var dropJoining : HashMap<JoiningList2RecyclerItemData.JoiningListRecyclerJoiningItemData, Boolean>? = HashMap()
 
-    private val _dropJoiningMap = MutableLiveData<HashMap<String, Boolean>>()
-    val dropJoiningMap: LiveData<HashMap<String, Boolean>> = _dropJoiningMap
+    private val _dropJoiningMap = MutableLiveData<HashMap<JoiningList2RecyclerItemData.JoiningListRecyclerJoiningItemData, Boolean>>()
+    val dropJoiningMap: LiveData<HashMap<JoiningList2RecyclerItemData.JoiningListRecyclerJoiningItemData, Boolean>> = _dropJoiningMap
 
     init {
         //startListeningToJoinings()
@@ -179,8 +180,10 @@ class JoiningList2ViewModel @Inject constructor(
 
             joinings.forEach {
                 var isSelected = false
-                if (dropJoining?.containsKey(it._id) == true){
-                    isSelected = dropJoining?.get(it._id)!!
+
+                val currentObjectMatch = dropJoining?.keys?.find { key -> key._id == it._id }
+                if (currentObjectMatch != null){
+                    isSelected = dropJoining?.get(currentObjectMatch)!!
                 }
                 joiningListForView.add(
                     JoiningList2RecyclerItemData.JoiningListRecyclerJoiningItemData(
@@ -408,13 +411,16 @@ class JoiningList2ViewModel @Inject constructor(
 
     }
 
-    fun dropSelection(joiningId: String, dropSelected: Boolean){
-        gigforceLogger.d(TAG, "new drop selection $joiningId, $dropSelected")
+    fun dropSelection(
+        joiningInfo: JoiningList2RecyclerItemData.JoiningListRecyclerJoiningItemData,
+        dropSelected: Boolean
+    ){
+        gigforceLogger.d(TAG, "new drop selection ${joiningInfo._id}, $dropSelected")
         if (dropSelected){
-            dropJoining?.put(joiningId, true)
+            dropJoining?.put(joiningInfo, true)
         } else {
-            if (dropJoining?.containsKey(joiningId) == true){
-                dropJoining?.remove(joiningId)
+            if (dropJoining?.containsKey(joiningInfo) == true){
+                dropJoining?.remove(joiningInfo)
             }
         }
         isSelectEnableGlobal = true

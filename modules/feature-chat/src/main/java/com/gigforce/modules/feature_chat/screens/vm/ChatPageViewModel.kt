@@ -276,6 +276,8 @@ class ChatPageViewModel @Inject constructor(
         if (!querySnap.isEmpty) {
             headerId = querySnap.documents[0].id
             initForHeader()
+        } else {
+            _messages.postValue(emptyList())
         }
     }
 
@@ -333,12 +335,7 @@ class ChatPageViewModel @Inject constructor(
                         }
                         setMessagesAsRead(unreadMessages)
                     }
-
-                    if (messages.isEmpty()) {
-                        _messages.postValue(emptyList())
-                    } else {
-                        _messages.postValue(messages)
-                    }
+                    _messages.postValue(messages)
 
                 }
             }

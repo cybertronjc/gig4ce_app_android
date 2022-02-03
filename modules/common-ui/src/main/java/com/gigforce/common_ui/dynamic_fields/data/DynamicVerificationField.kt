@@ -32,7 +32,8 @@ data class DynamicVerificationField(
     /**
      * status of that document
      */
-    var status : String = "",
+    var status : String? = "",
     var jobProfileId : String,
     var userId : String,
-) : BaseDynamicField,Parcelable
+) : BaseDynamicField,Parcelable{
+}

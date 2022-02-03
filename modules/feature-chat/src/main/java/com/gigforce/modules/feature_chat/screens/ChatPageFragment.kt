@@ -486,12 +486,12 @@ class ChatPageFragment : Fragment(),
             .outputs
             .messages
             .observe(viewLifecycleOwner, { messages ->
-//                if (messages.isEmpty()){
-//                    chatRecyclerView.gone()
-//                    shimmerContainer.gone()
-//                    //noChatLayout.visible()
-//                }
-//                else {
+                if (messages.isEmpty()){
+                    chatRecyclerView.gone()
+                    shimmerContainer.gone()
+                    noChatLayout.visible()
+                }
+                else {
                     messages.let {
                         chatRecyclerView.collection = messages.map {
                             ChatMessageWrapper(
@@ -503,10 +503,10 @@ class ChatPageFragment : Fragment(),
                         }
                         chatRecyclerView.smoothScrollToLastPosition()
                         chatRecyclerView.visible()
-                        //noChatLayout.gone()
+                        noChatLayout.gone()
                         shimmerContainer.gone()
                     }
-                //}
+                }
             })
 
         groupChatViewModel
@@ -746,12 +746,13 @@ class ChatPageFragment : Fragment(),
 
         viewModel.messages
             .observe(viewLifecycleOwner, { messages ->
-//                if (messages.isEmpty()){
-//                    chatRecyclerView.gone()
-//                    shimmerContainer.gone()
-//                    //noChatLayout.visible()
-//                }
-//                else {
+                Log.d("size", "size: ${messages.size}")
+                if (messages.isEmpty()){
+                    chatRecyclerView.gone()
+                    shimmerContainer.gone()
+                    noChatLayout.visible()
+                }
+                else {
                     messages.let {
                         chatRecyclerView.collection = messages.map {
                             ChatMessageWrapper(
@@ -763,10 +764,10 @@ class ChatPageFragment : Fragment(),
                         }
                         chatRecyclerView.smoothScrollToLastPosition()
                         chatRecyclerView.visible()
-                        //noChatLayout.gone()
+                        noChatLayout.gone()
                         shimmerContainer.gone()
                     }
-                //}
+                }
             })
 
 

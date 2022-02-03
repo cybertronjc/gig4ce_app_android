@@ -131,7 +131,7 @@ class DynamicDatePickerView(
         } else if (prefillText != null) {
             viewBinding.selectedDateLabel.text = prefillText
         } else {
-            val hint = "Select $title date"
+            val hint = "Select $title"
             viewBinding.selectedDateLabel.text = hint
         }
     }

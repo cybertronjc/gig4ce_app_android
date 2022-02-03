@@ -42,7 +42,7 @@ class ImageCropActivity : AppCompatActivity() {
 
         const val CROPPED_IMAGE_URL_EXTRA = "CROPPED_IMAGE_URL_EXTRA"
 
-        /**w
+        /**
          *
          */
         const val INTENT_EXTRA_DESTINATION_URI = "destination_uri"

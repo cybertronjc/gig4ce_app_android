@@ -152,6 +152,7 @@
     <string name="forward_message_select_contacts_chat">Select contacts</string>
     <string name="add_new_contact_chat">Add New Contact</string>
     <string name="media_and_docs_chat">Media and Docs</string>
+    <string name="no_media_found_chat">No Media Found</string>
     <string name="created_by_chat">Created by</string>
     <string name="exit_group_chat">Exit Group</string>
     <string name="add_participant_chat">Add New Participant</string>

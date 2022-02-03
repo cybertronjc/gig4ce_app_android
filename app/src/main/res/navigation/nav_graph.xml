@@ -1116,11 +1116,11 @@
         android:label="NewSelectionVerificationDocumentsForm3Fragment"/>
     <fragment
         android:id="@+id/signatureImageCaptureDialogFragment"
-        android:name="com.gigforce.common_ui.signature.FullScreenSignatureImageCaptureDialogFragment"
+        android:name="com.gigforce.verification.mainverification.signature.SignatureImageCaptureFragment"
         android:label="FullScreenSignatureImageCaptureDialogFragment"/>
     <fragment
         android:id="@+id/signatureDrawerDialogFragment"
-        android:name="com.gigforce.common_ui.signature.FullScreenSignatureDrawerDialogFragment"
+        android:name="com.gigforce.verification.mainverification.signature.FullScreenSignatureDrawerDialogFragment"
         android:label="FullScreenSignatureDrawerDialogFragment"/>
     <fragment
         android:id="@+id/chatSettingsFragment"
@@ -1159,5 +1159,15 @@
         android:id="@+id/acknowledgeBankBS"
         android:name="com.gigforce.verification.mainverification.bankaccount.AcknowledgeBankBS"
         android:label="AcknowledgeBankBS" />
+    <fragment
+        android:id="@+id/gigerAttendanceDetailFragment"
+        android:name="com.gigforce.lead_management.ui.changing_tl.GigerAttendanceDetailFragment"
+        android:label="GigerAttendanceDetailFragment" />
+    <dialog
+        android:id="@+id/changeTeamLeaderBottomSheetFragment"
+        android:name="com.gigforce.lead_management.ui.changing_tl.ChangeTeamLeaderBottomSheetFragment"
+        android:label="ChangeTeamLeaderBottomSheetFragment" />
+
+
 </navigation>
 

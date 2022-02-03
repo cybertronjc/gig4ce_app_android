@@ -672,10 +672,10 @@ class GigPage2Fragment : Fragment(),
 
             val contactPersons = mutableListOf<ContactPerson>()
 
-            if (gig.businessContact != null)
+            if (gig.businessContact != null && gig.businessContact?.name != null)
                 contactPersons.add(gig.businessContact!!)
 
-            if (gig.agencyContact != null)
+            if (gig.agencyContact != null && gig.agencyContact?.name != null)
                 contactPersons.add(gig.agencyContact!!)
 
             peopleToExpectAdapter.updatePeopleToExpect(contactPersons)
