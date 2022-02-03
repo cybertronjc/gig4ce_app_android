@@ -109,6 +109,12 @@
         <activity android:name="com.canhub.cropper.CropImageActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ImageCropper" />
+        <activity android:name="com.gigforce.modules.feature_chat.mediapicker.Dazzle"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.gigforce.modules.feature_chat.mediapicker.DazzleGallery"
+            android:screenOrientation="portrait" />
+        <activity android:name="com.gigforce.modules.feature_chat.mediapicker.VideoViewerActivity"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name="com.gigforce.giger_gigs.captureimage.AttendanceImageCaptureActivity"

@@ -378,19 +378,9 @@ class ContactsAndGroupFragment : BaseFragment2<ContactsAndGroupFragmentBinding>(
                 showToast(getString(R.string.select_at_least_one_contact_chat))
                 return@setOnClickListener
             }
-            nameGroupLayout.root.visible()
-            rvContactsList.gone()
-            createGroupFab.gone()
-            appBarComp.makeRefreshVisible(false)
-            contactsAdapter.stateCreateGroup(false)
-            namingGroup = true
-            appBarComp.showSubtitle(getString(R.string.add_subject_chat))
-            appBarComp.makeSearchVisible(false)
-            showParticipantsInLinearLayout(contactsAdapter.getSelectedContact())
-            var map = mapOf("no_of_participants" to contactsAdapter.getSelectedContact().size)
-            eventTracker.pushEvent(TrackingEventArgs(CommunityEvents.EVENT_CHAT_SELECTED_CONTACTS_FOR_NEW_GROUP, map))
             if (forwardingChat){
                 //forward the chat
+                    Log.d(TAG, "$forwardingChat , message: ${forwardChatMessage?.headerId}")
                 processingContactsProgressbar.visible()
                 forwardChatMessage?.let { it1 -> chatViewModel.forwardMessage(it1, contactsAdapter.getSelectedContact() ) }
 

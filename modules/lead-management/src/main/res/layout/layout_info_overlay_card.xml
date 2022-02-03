@@ -168,6 +168,19 @@
                     app:layout_constraintStart_toStartOf="@id/guideline3"
                     app:layout_constraintTop_toTopOf="@id/reportingTLLabel" />
 
+                <ImageView
+                    android:id="@+id/edit_reporting_tl_imageview"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:paddingStart="3dp"
+                    android:paddingEnd="3dp"
+                    android:paddingBottom="3dp"
+                    android:layout_marginStart="8dp"
+                    android:src="@drawable/ic_edit_pencil_pink"
+                    app:layout_constraintTop_toTopOf="@id/reportingTLLabel"
+                    app:layout_constraintStart_toEndOf="@id/reporting_tl_tv"
+                    />
+
                 <TextView
                     android:id="@+id/recruitingTLLabel"
                     android:layout_width="wrap_content"

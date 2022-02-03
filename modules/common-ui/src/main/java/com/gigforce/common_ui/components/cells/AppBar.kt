@@ -310,7 +310,7 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
          if (visible) viewBinding.searchImageButton.visible() else viewBinding.searchImageButton.invisible()
     }
     fun makeMenuItemVisible(visible: Boolean){
-        if (visible) viewBinding.menuImageButton.visible() else viewBinding.menuImageButton.invisible()
+        if (visible) viewBinding.menuImageButton.visible() else viewBinding.menuImageButton.gone()
     }
 
 

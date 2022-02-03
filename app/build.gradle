@@ -81,8 +81,8 @@ android {
 
             applicationId "com.gigforce.app"
             resValue "string", "app_name", "Gigforce"
-            versionCode 174
-            versionName "1.36.5"
+            versionCode 176
+            versionName "1.36.7"
             buildConfigField "String", 'REFERRAL_BASE_URL', '"https://gig4ce.page.link/"'
             buildConfigField "String", 'GENERATE_PAYSLIP_URL', '"https://45nydq0i5g.execute-api.ap-south-1.amazonaws.com/default/get-or-create-payment-advice-prod"'
             buildConfigField "String", 'DRIVING_CERTIFICATE_URL', '"https://d1rdwfmrsl.execute-api.ap-south-1.amazonaws.com/default/"'
@@ -157,8 +157,8 @@ android {
             dimension "default"
             applicationId "com.gigforce.app.staging"
             resValue "string", "app_name", "Gigforce Staging"
-            versionCode 142
-            versionName "5.0.6"
+            versionCode 143
+            versionName "5.0.7"
             versionNameSuffix '-Staging'
             signingConfig signingConfigs.staging
             buildConfigField "String", 'REFERRAL_BASE_URL', '"https://gig4cestaging.page.link"'
@@ -309,8 +309,8 @@ dependencies {
 
 
     // glide
-    implementation 'com.github.bumptech.glide:glide:4.10.0'
-    kapt 'com.github.bumptech.glide:compiler:4.10.0'
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    kapt 'com.github.bumptech.glide:compiler:4.11.0'
 
     // firebase SDKs
     implementation 'com.google.firebase:firebase-core:18.0.2'
@@ -464,4 +464,7 @@ dependencies {
 
     //audio view
     //implementation 'com.varunjohn1990.libraries:WhatsappMessengerView:2.1.0'
+
+//    //media picker
+//    implementation 'com.github.AnilFurkanOkcun:UWMediaPicker-Android:1.3.3'3
 }

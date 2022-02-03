@@ -155,4 +155,8 @@
             <enum name="trimModeLength" value="1"/>
         </attr>
     </declare-styleable>
+
+    <declare-styleable name="MaxHeightLinearLayout">
+        <attr name="maxHeightDp" format="integer" />
+    </declare-styleable>
 </resources>
