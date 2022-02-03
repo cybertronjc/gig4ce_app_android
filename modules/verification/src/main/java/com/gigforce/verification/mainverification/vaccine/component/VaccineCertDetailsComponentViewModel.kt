@@ -1,15 +1,16 @@
 package com.gigforce.verification.mainverification.vaccine.component
 
 import android.content.Context
-import android.os.Environment
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gigforce.common_ui.chat.ChatConstants
 import com.gigforce.core.extensions.getDownloadUrlOrThrow
 import com.gigforce.core.fb.FirebaseUtils
 import com.gigforce.core.file.FileUtils
 import com.gigforce.core.retrofit.RetrofitFactory
+import com.gigforce.core.utils.Lce
 import com.gigforce.verification.mainverification.vaccine.DownloadFileService
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,8 +19,14 @@ import kotlinx.coroutines.launch
 import java.io.File
 import javax.inject.Inject
 
+data class FileDownloaded(val boolean: Boolean?=false)
+
 @HiltViewModel
 class VaccineCertDetailsComponentViewModel @Inject constructor(@ApplicationContext context: Context) : ViewModel() {
+
+    private val _fileDownloaded = MutableLiveData<Lce<FileDownloaded>>()
+    val fileDownloaded: LiveData<Lce<FileDownloaded>> = _fileDownloaded
+
     private var downloadAttachmentService: DownloadFileService =
         RetrofitFactory.createService(DownloadFileService::class.java)
 
@@ -48,10 +55,12 @@ class VaccineCertDetailsComponentViewModel @Inject constructor(@ApplicationConte
             if (response.isSuccessful) {
                 val body = response.body()!!
                 if (!FileUtils.writeResponseBodyToDisk(body, fileRef)) {
-//                    throw Exception("Unable to save downloaded chat attachment")
+                    _fileDownloaded.value = Lce.error("File not able to download!!")
+                }else{
+                    _fileDownloaded.value = Lce.content(FileDownloaded(true))
                 }
             } else {
-//                throw Exception("Unable to download attachment")
+                _fileDownloaded.value = Lce.error("File not able to download!!")
             }
 
         } catch (e: Exception) {

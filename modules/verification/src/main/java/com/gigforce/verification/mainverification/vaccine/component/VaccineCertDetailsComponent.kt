@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewTreeViewModelStoreOwner
 import androidx.lifecycle.get
@@ -15,6 +16,7 @@ import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.recyclerView.ItemClickListener
+import com.gigforce.core.utils.Lce
 import com.gigforce.verification.R
 import com.gigforce.verification.mainverification.vaccine.models.VaccineCertDetailsDM
 import dagger.hilt.android.AndroidEntryPoint
@@ -47,7 +49,22 @@ class VaccineCertDetailsComponent(context: Context, attrs: AttributeSet?) : Fram
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         viewModel = ViewModelProvider(ViewTreeViewModelStoreOwner.get(this)!!).get()
+        viewModel?.fileDownloaded?.observeForever{
+            when(it){
+                Lce.Loading -> {
 
+                }
+                is Lce.Content -> {
+                    Toast.makeText(context, "File downloaded successfully!!", Toast.LENGTH_LONG).show()
+                }
+                is Lce.Error -> {
+                    Toast.makeText(context, it.error, Toast.LENGTH_LONG).show()
+                }
+                else ->{
+
+                }
+            }
+        }
 
     }
     override fun bind(data: Any?) {

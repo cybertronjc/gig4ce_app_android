@@ -4,16 +4,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.setFragmentResult
+import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.verification.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.size_warning_bs.*
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SizeWarningBottomSheet  : BottomSheetDialogFragment() {
 
-
+    @Inject
+    lateinit var navigation : INavigation
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(DialogFragment.STYLE_NORMAL, R.style.BSDialogStyle)
@@ -34,7 +40,16 @@ class SizeWarningBottomSheet  : BottomSheetDialogFragment() {
         }
 
         try_again_bn_bs.setOnClickListener{
+            setFragmentResult("vaccine_doc", bundleOf("vaccine_doc" to "try_again"))
 
+            (activity as NavFragmentsData)?.setData(
+                bundleOf(
+                    "vaccine_doc" to "try_again"
+                )
+            )
+            dismiss()
+            navigation.popBackStack("verification/VaccineMainFragment",true)
+            navigation.navigateTo("verification/VaccineMainFragment")
         }
     }
 
