@@ -44,7 +44,7 @@ class ForwardMessagesUseCase @Inject constructor(
         forwardTo.forEach { contactInfo ->
 
             messages.onEach {
-                it.headerId = it.headerId
+                it.headerId = contactInfo.headerId!!
                 it.receiverInfo = UserInfo(
                     id = contactInfo.uid!!,
                     mobileNo = contactInfo.mobile
@@ -77,22 +77,26 @@ class ForwardMessagesUseCase @Inject constructor(
         contactsWithOutHeaderId.onEach {
             if (it.headerId != null) return@onEach
 
+            val generatedHeaderId = UUID.randomUUID().toString()
             addCreateSenderHeaderInWriteBatch(
                 createHeaderBatch,
-                it
+                it,
+                generatedHeaderId
             )
             addCreateReceiverHeaderInWriteBatch(
                 createHeaderBatch,
-                it
+                it,
+                generatedHeaderId
             )
-            it.headerId = it.uid!!
+            it.headerId = generatedHeaderId
         }
         createHeaderBatch.commitOrThrow()
     }
 
     private suspend fun addCreateReceiverHeaderInWriteBatch(
         batch: WriteBatch,
-        contact: ContactModel
+        contact: ContactModel,
+        headerId: String
     ) {
         val currentUser = firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow()
         val currentUserProfile = profileFirebaseRepository.getProfileDataIfExist(currentUser.uid)
@@ -121,7 +125,7 @@ class ForwardMessagesUseCase @Inject constructor(
             .collection(ChatRepository.COLLECTION_CHATS)
             .document(contact.uid!!)
             .collection(ChatRepository.COLLECTION_CHAT_HEADERS)
-            .document(currentUser.uid)
+            .document(headerId)
 
         batch.set(docRef,chatHeader)
     }
@@ -129,7 +133,8 @@ class ForwardMessagesUseCase @Inject constructor(
 
     private fun addCreateSenderHeaderInWriteBatch(
         batch: WriteBatch,
-        contact : ContactModel
+        contact : ContactModel,
+        headerId : String
     ) {
         val currentUser = firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow()
 
@@ -140,7 +145,7 @@ class ForwardMessagesUseCase @Inject constructor(
             chatType = ChatConstants.CHAT_TYPE_USER,
             unseenCount = 0,
             otherUser = UserInfo(
-                id = "",
+                id = contact.uid ?: "",
                 name = contact.name ?: contact.profileName ?: "",
                 profilePic = contact.getUserProfileImageUrlOrPath() ?: "",
                 type = "user",
@@ -153,7 +158,7 @@ class ForwardMessagesUseCase @Inject constructor(
             .collection(ChatRepository.COLLECTION_CHATS)
             .document(currentUser.uid)
             .collection(ChatRepository.COLLECTION_CHAT_HEADERS)
-            .document(contact.uid!!)
+            .document(headerId)
 
         batch.set(docRef,chatHeader)
     }

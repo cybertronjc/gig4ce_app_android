@@ -192,7 +192,9 @@ class ChatMessage(
 ) : IMediaMessage, Serializable{
 
     @Exclude
-    fun cloneForForwarding(): ChatMessage{
+    fun cloneForForwarding(
+        newChatType : String = ChatConstants.CHAT_TYPE_USER
+    ): ChatMessage{
 
         val currentUser = FirebaseAuthStateListener.getInstance().getCurrentSignInUserInfoOrThrow()
         return  ChatMessage(
@@ -201,7 +203,7 @@ class ChatMessage(
             timestamp = Timestamp.now(),
             status = ChatConstants.MESSAGE_STATUS_NOT_SENT,
             type = this.type,
-            chatType = this.chatType,
+            chatType = newChatType,
             content = this.content,
             mentionedUsersInfo = this.mentionedUsersInfo.map { it.copy() },
             videoLength = this.videoLength,
