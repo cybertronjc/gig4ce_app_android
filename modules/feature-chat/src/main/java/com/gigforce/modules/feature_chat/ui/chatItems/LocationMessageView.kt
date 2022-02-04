@@ -318,7 +318,7 @@ abstract class LocationMessageView(
 
 
     override fun onClick(v: View?) {
-        if (v?.id == R.id.ll_msgContainer) {
+        if (v?.id == R.id.cv_msgContainer) {
             if (!(oneToOneChatViewModel.getSelectEnable() == true || groupChatViewModel.getSelectEnable() == true)) {
                 //Launch Map
                 if (message == null)

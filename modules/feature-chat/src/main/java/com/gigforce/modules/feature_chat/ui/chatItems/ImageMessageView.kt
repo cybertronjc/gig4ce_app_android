@@ -359,7 +359,7 @@ abstract class ImageMessageView(
 
     override fun onClick(v: View?) {
         val view = v ?: return
-        if (view?.id == R.id.ll_msgContainer) {
+        if (view?.id == R.id.image_container_layout) {
             if ((oneToOneChatViewModel.getSelectEnable() == true || groupChatViewModel.getSelectEnable() == true)) {
                 if (messageType == MessageType.ONE_TO_ONE_MESSAGE) {
                     if (selectedMessageList.contains(message)) {

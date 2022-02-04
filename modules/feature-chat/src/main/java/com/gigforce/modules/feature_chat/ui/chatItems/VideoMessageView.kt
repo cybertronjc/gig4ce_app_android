@@ -335,7 +335,7 @@ abstract class VideoMessageView(
     }
 
     override fun onClick(v: View?) {
-        if (v?.id == R.id.ll_msgContainer) {
+        if (v?.id == R.id.cv_msgContainer) {
             if ((oneToOneChatViewModel.getSelectEnable() == true || groupChatViewModel.getSelectEnable() == true)) {
                 if (messageType == MessageType.ONE_TO_ONE_MESSAGE) {
                     if (selectedMessageList.contains(message)) {
