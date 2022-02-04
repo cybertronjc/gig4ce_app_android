@@ -13,6 +13,7 @@
             android:minHeight="?android:actionBarSize"
             app:backgroundType="PinkBar"
             app:isSearchVisible="true"
+            app:isMenuItemVisible="false"
             app:titleText="Select Business" />
 
         <FrameLayout

@@ -6,6 +6,7 @@ import com.gigforce.common_ui.chat.ChatConstants
 import com.gigforce.common_ui.metaDataHelper.ImageMetaData
 import com.gigforce.common_ui.viewdatamodels.chat.UserInfo
 import com.gigforce.core.StringConstants
+import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.Exclude
@@ -14,6 +15,7 @@ import com.google.firebase.firestore.PropertyName
 import kotlinx.android.parcel.Parcelize
 import java.io.Serializable
 import java.util.*
+import kotlin.jvm.internal.Intrinsics
 
 class ChatMessage(
     @DocumentId
@@ -135,6 +137,10 @@ class ChatMessage(
     @set:PropertyName("isDeleted")
     var isDeleted: Boolean = false,
 
+    @get:PropertyName("forwardedMessage")
+    @set:PropertyName("forwardedMessage")
+    var forwardedMessage: Boolean = false,
+
     @get:PropertyName("deletedOn")
     @set:PropertyName("deletedOn")
     var deletedOn: Timestamp? = null,
@@ -195,7 +201,57 @@ class ChatMessage(
     @set:PropertyName("createdAt")
     var createdAt : Timestamp ?= Timestamp.now()
 
-) : IMediaMessage, Serializable
+) : IMediaMessage, Serializable{
+
+    @Exclude
+    fun cloneForForwarding(
+        newChatType : String = ChatConstants.CHAT_TYPE_USER
+    ): ChatMessage{
+
+        val currentUser = FirebaseAuthStateListener.getInstance().getCurrentSignInUserInfoOrThrow()
+        return  ChatMessage(
+            id = "",
+            flowType = ChatConstants.FLOW_TYPE_OUT,
+            timestamp = Timestamp.now(),
+            status = ChatConstants.MESSAGE_STATUS_NOT_SENT,
+            type = this.type,
+            chatType = newChatType,
+            content = this.content,
+            mentionedUsersInfo = this.mentionedUsersInfo.map { it.copy() },
+            videoLength = this.videoLength,
+            audioLength = this.audioLength,
+            thumbnail = this.thumbnail,
+            attachmentName = this.attachmentName,
+            attachmentPath = this.attachmentPath,
+            contactName = this.contactName,
+            contactNumber = this.contactNumber,
+            locationPhysicalAddress = this.locationPhysicalAddress,
+            location = this.location,
+            senderInfo  = UserInfo(
+                id = currentUser.uid,
+                mobileNo = currentUser.phoneNumber!!
+            ),
+            receiverInfo = null,
+            isDeleted = false,
+            forwardedMessage = true,
+            deletedOn = null,
+            groupMessageReadBy = listOf() ,
+            groupMessageDeliveredTo = listOf(),
+            groupId = "",
+            imageMetaData = this.imageMetaData,
+            isMessageChatEvent = false,
+            eventInfo = null,
+            isAReplyToOtherMessage = false,
+            replyForMessageId = null,
+            otherUsersMessageId = null,
+            replyForMessage = null,
+            thumbnailBitmap = this.thumbnailBitmap,
+            updatedAt = Timestamp.now(),
+            updatedBy = null,
+            createdAt = Timestamp.now()
+        )
+    }
+}
 
 
 data class EventInfo(
@@ -231,7 +287,7 @@ data class EventInfo(
         @get:PropertyName("createdAt")
         @set:PropertyName("createdAt")
         var createdAt : Timestamp ?= Timestamp.now()
-){
+)  {
 
     fun setUpdatedAtAndBy(uid : String){
         updatedAt = Timestamp.now()
@@ -255,6 +311,8 @@ data class EventInfo(
                 eventInfo = this
         )
     }
+
+
 }
 
 interface IMediaMessage {
