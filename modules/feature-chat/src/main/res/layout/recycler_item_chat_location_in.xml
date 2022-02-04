@@ -38,7 +38,6 @@
                 android:layout_height="wrap_content"
                 android:paddingBottom="@dimen/size_2"
                 android:paddingStart="@dimen/size_2"
-                android:paddingTop="@dimen/size_2"
                 android:paddingEnd="@dimen/size_2"
                 android:background="?android:selectableItemBackground"
                 android:layout_marginStart="4dp"
@@ -56,6 +55,7 @@
                 android:layout_height="196dp"
                 android:scaleType="fitXY"
                 android:paddingStart="@dimen/size_4"
+                android:layout_marginTop="@dimen/size_4"
                 android:paddingEnd="@dimen/size_4"
                 app:shapeAppearanceOverlay="@style/chatImageView" />
 
