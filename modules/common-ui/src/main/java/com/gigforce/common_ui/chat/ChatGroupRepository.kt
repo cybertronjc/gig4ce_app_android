@@ -438,6 +438,7 @@ class ChatGroupRepository @Inject constructor(
     }
 
 
+
     private suspend fun createMessageEntry(
         groupId: String,
         message: ChatMessage
@@ -515,6 +516,20 @@ class ChatGroupRepository @Inject constructor(
         }
         batch.commitOrThrow()
     }
+
+//     suspend fun updateMuteNotifications(enable: Boolean, headerId: String) {
+//        try {
+//            val chatHeaderReference = db.collection(COLLECTION_GROUP_CHATS).document(headerId)
+//            chatHeaderReference.updateOrThrow(
+//                mapOf(
+//                    "settings.muteNotifications" to enable
+//                )
+//            )
+//        } catch (e: Exception){
+//            Log.d("ChatRepository", "MuteNot exc: ${e.message}")
+//        }
+//    }
+
 
     suspend fun setUnseenMessagecountToZero(groupHeaderId: String) {
         db.collection("chats")
@@ -720,6 +735,34 @@ class ChatGroupRepository @Inject constructor(
             )
         )
 
+    suspend fun deleteMessages(messageIds: List<String>, groupId: String) {
+        if (messageIds.isNotEmpty()){
+            val batch = db.batch()
+
+            messageIds.forEach {
+
+                val headerReference = FirebaseFirestore.getInstance()
+                    .collection(COLLECTION_GROUP_CHATS)
+                    .document(groupId)
+                    .collection(COLLECTION_GROUP_MESSAGES)
+                    .document(it)
+
+
+                batch.update(
+                    headerReference, mapOf(
+                        "isDeleted" to true,
+                        "deletedOn" to Timestamp.now(),
+                        "updatedAt" to Timestamp.now(),
+                        "updatedBy" to FirebaseAuthStateListener.getInstance()
+                            .getCurrentSignInUserInfoOrThrow().uid
+                    )
+                )
+            }
+
+            batch.commitOrThrow()
+
+        }
+    }
 
     suspend fun makeUserGroupAdmin(
         groupId: String,
@@ -921,6 +964,53 @@ class ChatGroupRepository @Inject constructor(
             Log.d(TAG, "New Batch $batch")
         }
     }
+
+     suspend fun stopSharingLocation(id: String, messageId: String) {
+        try {
+            val chatMessagesRef = db.collection(COLLECTION_GROUP_CHATS)
+                .document(id)
+                .collection(COLLECTION_GROUP_MESSAGES)
+            chatMessagesRef.document(messageId).updateOrThrow(
+                mapOf(
+                    "isCurrentlySharingLiveLocation" to false,
+                    "updatedAt" to Timestamp.now(),
+                    "updatedBy" to getUID()
+                )
+            )
+        } catch (e: Exception){
+            Log.d("ChatRepository", "exc: ${e.message}")
+        }
+    }
+
+    suspend fun setLocationToGroupChatMessage(
+        id: String,
+        messageId: String,
+        location: GeoPoint
+    ){
+        try {
+            val chatMessagesRef = db.collection(COLLECTION_GROUP_CHATS)
+                .document(id)
+                .collection(COLLECTION_GROUP_MESSAGES)
+            chatMessagesRef.document(messageId).updateOrThrow(
+                mapOf(
+                    "location" to location,
+                    "isCurrentlySharingLiveLocation" to true,
+                    "updatedAt" to Timestamp.now(),
+                    "updatedBy" to getUID()
+                )
+            )
+        } catch (e: Exception){
+            Log.d("ChatRepository", "exc: ${e.message}")
+        }
+    }
+
+
+    suspend fun getChatHeader(headerId: String) =
+            userChatCollectionRef.collection(COLLECTION_CHAT_HEADERS).document(headerId)
+                .getOrThrow()
+                .toObject(ChatHeader::class.java)
+
+
 
     suspend fun getChatMessage(
         groupId: String,

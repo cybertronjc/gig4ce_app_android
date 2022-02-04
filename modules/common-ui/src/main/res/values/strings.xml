@@ -91,4 +91,17 @@
     <string name="common_change_date">Change Date</string>
     <string name="note_aadhaar_verfication"><b>Note:</b> Aadhaar card verification is same as submission</string>
     <string name="signature_instruction"><b>Note</b>: Please upload the image of signature with white background.</string>
+
+    <string name="location_updated">Location Updated: %1$s</string>
+    <string name="launch_activity">Launch activity</string>
+    <string name="location_unknown">Location unknown</string>
+    <string name="location_updates_label">Location Updates</string>
+    <string name="send_location_common_ui">Send Location</string>
+    <string name="share_live_location_common_ui">Share Live Location</string>
+    <string name="share_current_location_common_ui">Share Current Location</string>
+    <string name="fifteen_minute_location_common_ui">15 minutes</string>
+    <string name="one_hour_common_ui">1 hour</string>
+    <string name="eight_hour_common_ui">8 hours</string>
+    <string name="search_gigers_common_ui">Search Gigers</string>
+    <string name="please_grant_location_permission_chat">Please Grant Location Permission</string>
 </resources>

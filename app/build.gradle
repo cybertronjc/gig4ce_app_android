@@ -81,8 +81,8 @@ android {
 
             applicationId "com.gigforce.app"
             resValue "string", "app_name", "Gigforce"
-            versionCode 176
-            versionName "1.36.7"
+            versionCode 177
+            versionName "1.36.8"
             buildConfigField "String", 'REFERRAL_BASE_URL', '"https://gig4ce.page.link/"'
             buildConfigField "String", 'GENERATE_PAYSLIP_URL', '"https://45nydq0i5g.execute-api.ap-south-1.amazonaws.com/default/get-or-create-payment-advice-prod"'
             buildConfigField "String", 'DRIVING_CERTIFICATE_URL', '"https://d1rdwfmrsl.execute-api.ap-south-1.amazonaws.com/default/"'
@@ -250,11 +250,6 @@ dependencies {
     def kotlinCoroutineVersion = "1.0.1"
     def moengageVersion = "11.2.00"
 
-    //Volley
-//    implementation 'com.android.volley:volley:1.1.1'
-
-    implementation 'com.github.pwittchen:swipe-rx2:0.3.0'
-
     //Moshi
     implementation "com.squareup.moshi:moshi-kotlin:$moshiVersion"
     kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion"
@@ -301,11 +296,9 @@ dependencies {
 
     implementation 'com.wdullaer:materialdatetimepicker:4.2.3'
 
-    //implementation 'com.google.firebase:firebase-messaging:20.0.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    // implementation "androidx.fragment:fragment-testing:1.2.0-rc05"
 
 
     // glide
@@ -321,22 +314,18 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage:19.1.1'
     implementation 'com.firebaseui:firebase-ui-storage:4.3.2'
     implementation 'com.google.firebase:firebase-crashlytics:17.1.1'
-    implementation 'com.google.firebase:firebase-ml-vision:17.0.1'
     implementation 'com.google.firebase:firebase-messaging:20.2.4'
     implementation 'com.google.firebase:firebase-messaging-directboot:20.2.4'
     implementation 'com.google.firebase:firebase-inappmessaging-display-ktx:19.1.0'
-
-
     implementation 'com.google.firebase:firebase-database-ktx:19.3.1'
+    implementation 'com.google.firebase:firebase-dynamic-links-ktx:19.1.0'
+    implementation 'com.google.firebase:firebase-analytics-ktx:17.5.0'
+
 
     //sms retriver
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
 
     implementation "com.github.StephenVinouze:MaterialNumberPicker:1.0.0"
-
-    //implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.+' //removed because package name for CropImageView has been changed
-    implementation 'com.google.firebase:firebase-core:17.4.0'
-    //ID fy
 
     // LocaleChanger - language
     implementation 'com.google.android.material:material:1.2.1'
@@ -350,11 +339,7 @@ dependencies {
     implementation 'com.android.support:design:26.1.0'
     //vision api for face detect
     implementation 'com.github.yalantis:ucrop:2.2.4'
-    // verification
-    // https://github.com/square/retrofit
-    // https://github.com/ReactiveX/RxAndroid
-    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.0'
+
 
     implementation 'pub.devrel:easypermissions:3.0.0'
     // Drag bottomsheet
@@ -399,19 +384,11 @@ dependencies {
 
     //Transcoder for compressing video files
     implementation 'com.otaliastudios:transcoder:0.9.1'
-//    //Qr Code Library
-//    implementation 'com.google.zxing:core:3.4.0'
-
-//    // https://mvnrepository.com/artifact/com.itextpdf/itextpdf
-//    implementation group: 'com.itextpdf', name: 'itextpdf', version: '5.0.6'
-
 
     implementation 'com.google.android.gms:play-services-base:17.3.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
 
-    implementation 'com.google.firebase:firebase-dynamic-links-ktx:19.1.0'
-    implementation 'com.google.firebase:firebase-analytics-ktx:17.5.0'
 
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
@@ -419,12 +396,6 @@ dependencies {
     implementation "androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03"
     kapt 'androidx.hilt:hilt-compiler:1.0.0-alpha03'
 
-    // Rx
-    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
-    // Because RxAndroid releases are few and far between, it is recommended you also
-    // explicitly depend on RxJava's latest version for bug fixes and new features.
-    // (see https://github.com/ReactiveX/RxJava/releases for latest 3.x.x version)
-    implementation 'io.reactivex.rxjava3:rxjava:3.0.0'
 
 
     implementation 'com.google.android:flexbox:2.0.1'
@@ -433,7 +404,7 @@ dependencies {
     implementation "com.github.skydoves:powermenu:2.1.9"
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
     implementation 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
-    implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
+//    implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
 
     // Facebook Integration
     implementation 'com.facebook.android:facebook-android-sdk:8.2.0'
@@ -461,9 +432,6 @@ dependencies {
 
     implementation 'com.akexorcist:localization:1.2.10'
 
-    //audio view
-    //implementation 'com.varunjohn1990.libraries:WhatsappMessengerView:2.1.0'
+    implementation 'com.google.android.gms:play-services-mlkit-face-detection:16.2.0'
 
-//    //media picker
-//    implementation 'com.github.AnilFurkanOkcun:UWMediaPicker-Android:1.3.3'3
 }

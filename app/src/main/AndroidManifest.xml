@@ -215,6 +215,10 @@
                 <action android:name="com.gigforce.app.chats.open_group_chat" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+<!--            <intent-filter >-->
+<!--                <action android:name="com.google.android.gms.location.sample.locationupdatesforegroundservice.broadcast" />-->
+<!--                <category android:name="android.intent.category.DEFAULT" />-->
+<!--            </intent-filter>-->
             <intent-filter>
                 <action android:name="com.gigforce.app.calendar.open_calendar_home_screen" />
                 <category android:name="android.intent.category.DEFAULT" />

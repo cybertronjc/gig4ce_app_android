@@ -4,4 +4,9 @@
     <string name="provide_permission_core">you need to provide permissions to proceed further</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="location_updated">Location Updated: %1$s</string>
+    <string name="launch_activity">Launch activity</string>
+    <string name="location_unknown">Location unknown</string>
+    <string name="location_updates_label">Location Updates</string>
 </resources>
