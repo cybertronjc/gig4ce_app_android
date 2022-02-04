@@ -30,6 +30,7 @@ import com.gigforce.core.extensions.invisible
 import com.gigforce.core.extensions.toDisplayText
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.modules.feature_chat.ChatNavigation
 import com.gigforce.modules.feature_chat.R
 import com.gigforce.modules.feature_chat.screens.AudioPlayerBottomSheetFragment
 import com.gigforce.modules.feature_chat.screens.GroupMessageViewInfoFragment
@@ -65,6 +66,10 @@ abstract class AudioMessageView (
     @Inject
     lateinit var navigation: INavigation
 
+    private val chatNavigation: ChatNavigation by lazy {
+        ChatNavigation(navigation)
+    }
+
     //Views
     private lateinit var linearLayout: ConstraintLayout
     private lateinit var senderNameTV: TextView
@@ -88,6 +93,7 @@ abstract class AudioMessageView (
         findViews()
         cardView.setOnClickListener(this)
         cardView.setOnLongClickListener(this)
+        senderNameTV.setOnClickListener(this)
     }
 
     private fun findViews() {
@@ -343,6 +349,7 @@ abstract class AudioMessageView (
     }
 
     override fun onClick(v: View?) {
+        if (v?.id == R.id.ll_msgContainer){
         if((oneToOneChatViewModel.getSelectEnable() == true || groupChatViewModel.getSelectEnable() == true)){
             if (messageType == MessageType.ONE_TO_ONE_MESSAGE) {
                 if (selectedMessageList.contains(message)){
@@ -372,6 +379,21 @@ abstract class AudioMessageView (
             if (file == null) {
                 downloadAttachment()
             }
+        }
+
+        }
+        else if (v?.id == R.id.user_name_tv){
+            //navigate to chat page
+            navigation.popBackStack()
+            chatNavigation.navigateToChatPage(
+                chatType = ChatConstants.CHAT_TYPE_USER,
+                otherUserId = message.senderInfo.id,
+                otherUserName = message.senderInfo.name,
+                otherUserProfilePicture = message.senderInfo.profilePic,
+                sharedFileBundle = null,
+                headerId = "",
+                cameFromLinkInOtherChat = true
+            )
         }
 
     }

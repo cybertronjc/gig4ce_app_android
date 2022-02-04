@@ -121,6 +121,7 @@ abstract class TextMessageView(
     }
 
     private fun setListeners() {
+        senderNameTV.setOnClickListener(this)
         msgView.setOnLongClickListener(OnLongClickListener {
             containerView.performLongClick()
             false
@@ -416,6 +417,19 @@ abstract class TextMessageView(
                     )
                 }
             }
+        } else if (v?.id == R.id.user_name_tv){
+            //navigate to chat page
+            navigation.popBackStack()
+            chatNavigation.navigateToChatPage(
+                chatType = ChatConstants.CHAT_TYPE_USER,
+                otherUserId = message.senderInfo.id,
+                otherUserName = message.senderInfo.name,
+                otherUserProfilePicture = message.senderInfo.profilePic,
+                sharedFileBundle = null,
+                headerId = "",
+                cameFromLinkInOtherChat = true
+            )
+
         }
 
     }
