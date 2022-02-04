@@ -53,6 +53,13 @@ import android.view.animation.Animation
 import android.animation.ValueAnimator
 
 import android.animation.ValueAnimator.AnimatorUpdateListener
+import androidx.lifecycle.viewModelScope
+import com.gigforce.common_ui.chat.models.MentionUser
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+
+
+
 
 @AndroidEntryPoint
 abstract class TextMessageView(
@@ -114,6 +121,7 @@ abstract class TextMessageView(
     }
 
     private fun setListeners() {
+        senderNameTV.setOnClickListener(this)
         msgView.setOnLongClickListener(OnLongClickListener {
             containerView.performLongClick()
             false
@@ -245,6 +253,47 @@ abstract class TextMessageView(
             } else {
                 msgView.setText(message.content)
             }
+
+//            if (message.mentionedUsersInfo.isNotEmpty()) {
+//
+//                groupChatViewModel.viewModelScope.launch {
+//                    val incrementingMentions = message.mentionedUsersInfo.sortedBy { it.startFrom }
+//                    var msgContent = message.content
+//                    var spannableString = SpannableStringBuilder("")
+//                for (i in incrementingMentions.indices) {
+//                    val it = incrementingMentions[i]
+//                    var storedContactName = ""
+//                        storedContactName = groupChatViewModel.getContactStoredByMobile(it.userMentionedUid)
+//                        Log.d("TextMessageView", "$msgContent , name: $storedContactName")
+//                        if (storedContactName.isNotEmpty()){
+//                            //spannableString = spannableString.replace(msgContent.indexOf(storedContactName) + 1, msgContent.indexOf(storedContactName) + storedContactName.length , storedContactName)
+//                            msgContent = msgContent.replace(it.profileName, storedContactName, true)
+//                            spannableString = SpannableStringBuilder(msgContent)
+//                            spannableString.setSpan(
+//                                PositionClickableSpan(i),
+//                                msgContent.indexOf(storedContactName),
+//                                msgContent.indexOf(storedContactName) + storedContactName.length,
+//                                Spannable.SPAN_INCLUSIVE_EXCLUSIVE
+//                            )
+//                        } else {
+//                            spannableString = SpannableStringBuilder(msgContent)
+//                            spannableString.setSpan(
+//                                PositionClickableSpan(i),
+//                                it.startFrom,
+//                                it.endTo,
+//                                Spannable.SPAN_INCLUSIVE_EXCLUSIVE
+//                            )
+//                        }
+//                        Log.d("TextMessageView1", "content: $msgContent , spannable: $spannableString ")
+//                    }
+//                    Log.d("TextMessageView2", "content: $msgContent , spannable: $spannableString ")
+//                    msgView.text = spannableString
+//                    msgView.movementMethod = LinkMovementMethod.getInstance()
+//                }
+//
+//            } else {
+//                msgView.text = message.content
+//            }
             LinkifyCompat.addLinks(msgView, Linkify.ALL)
 
             timeView.setText(message.timestamp?.toDisplayText())
@@ -368,6 +417,19 @@ abstract class TextMessageView(
                     )
                 }
             }
+        } else if (v?.id == R.id.user_name_tv){
+            //navigate to chat page
+            navigation.popBackStack()
+            chatNavigation.navigateToChatPage(
+                chatType = ChatConstants.CHAT_TYPE_USER,
+                otherUserId = message.senderInfo.id,
+                otherUserName = message.senderInfo.name,
+                otherUserProfilePicture = message.senderInfo.profilePic,
+                sharedFileBundle = null,
+                headerId = "",
+                cameFromLinkInOtherChat = true
+            )
+
         }
 
     }

@@ -31,6 +31,7 @@ import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toDisplayText
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.modules.feature_chat.ChatNavigation
 import com.gigforce.modules.feature_chat.R
 import com.gigforce.modules.feature_chat.analytics.CommunityEvents
 import com.gigforce.modules.feature_chat.models.ChatMessageWrapper
@@ -61,6 +62,10 @@ abstract class LocationMessageView(
 
     @Inject
     lateinit var eventTracker: IEventTracker
+
+    private val chatNavigation: ChatNavigation by lazy {
+        ChatNavigation(navigation)
+    }
 
     private lateinit var imageView: ImageView
     private lateinit var locationAddressTV: TextView
@@ -121,6 +126,7 @@ abstract class LocationMessageView(
     private fun setOnClickListeners() {
         cardView.setOnClickListener(this)
         cardView.setOnLongClickListener(this)
+        senderNameTV.setOnClickListener(this)
     }
 
     private fun loadThumbnail(msg: ChatMessage) {
@@ -312,58 +318,77 @@ abstract class LocationMessageView(
 
 
     override fun onClick(v: View?) {
+        if (v?.id == R.id.cv_msgContainer) {
+            if (!(oneToOneChatViewModel.getSelectEnable() == true || groupChatViewModel.getSelectEnable() == true)) {
+                //Launch Map
+                if (message == null)
+                    return
 
-        if (!(oneToOneChatViewModel.getSelectEnable() == true || groupChatViewModel.getSelectEnable() == true)){
-            //Launch Map
-                    if (message == null)
-                        return
+                if (message.isLiveLocation) {
+                    if (message.isCurrentlySharingLiveLocation) {
+                        val intent = Intent(context, LocationSharingActivity::class.java)
+                        intent.putExtra(AppConstants.INTENT_EXTRA_CHAT_TYPE, message.chatType)
+                        intent.putExtra(AppConstants.INTENT_EXTRA_CHAT_HEADER_ID, message.headerId)
+                        intent.putExtra(AppConstants.INTENT_EXTRA_CHAT_MESSAGE_ID, message.id)
+                        context.startActivity(intent)
+                    }
+                } else {
+                    val lat = message.location?.latitude ?: 0.0
+                    val long = message.location?.longitude ?: 0.0
 
-            if (message.isLiveLocation ){
-                if (message.isCurrentlySharingLiveLocation) {
-                    val intent = Intent(context, LocationSharingActivity::class.java)
-                    intent.putExtra(AppConstants.INTENT_EXTRA_CHAT_TYPE, message.chatType)
-                    intent.putExtra(AppConstants.INTENT_EXTRA_CHAT_HEADER_ID, message.headerId)
-                    intent.putExtra(AppConstants.INTENT_EXTRA_CHAT_MESSAGE_ID, message.id)
-                    context.startActivity(intent)
+                    if (lat != 0.0) {
+                        val uri = "http://maps.google.com/maps?q=loc:$lat,$long (Location)"
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+                        try {
+                            context.startActivity(intent)
+                        } catch (e: ActivityNotFoundException) {
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.no_app_found_locations_chat),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+
                 }
             } else {
-                val lat = message.location?.latitude ?: 0.0
-                val long = message.location?.longitude ?: 0.0
-
-                if (lat != 0.0) {
-                    val uri = "http://maps.google.com/maps?q=loc:$lat,$long (Location)"
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
-                    try {
-                        context.startActivity(intent)
-                    } catch (e: ActivityNotFoundException) {
-                        Toast.makeText(context, context.getString(R.string.no_app_found_locations_chat), Toast.LENGTH_SHORT).show()
+                if (messageType == MessageType.ONE_TO_ONE_MESSAGE) {
+                    if (selectedMessageList.contains(message)) {
+                        //remove
+                        frameLayoutRoot.foreground = null
+                        oneToOneChatViewModel.selectChatMessage(message, false)
+                    } else {
+                        //add
+                        frameLayoutRoot.foreground =
+                            resources.getDrawable(R.drawable.selected_chat_foreground)
+                        oneToOneChatViewModel.selectChatMessage(message, true)
                     }
-                }
+                } else if (messageType == MessageType.GROUP_MESSAGE) {
+                    if (selectedMessageList.contains(message)) {
+                        //remove
+                        frameLayoutRoot.foreground = null
+                        groupChatViewModel.selectChatMessage(message, false)
+                    } else {
+                        //add
+                        frameLayoutRoot.foreground =
+                            resources.getDrawable(R.drawable.selected_chat_foreground)
+                        groupChatViewModel.selectChatMessage(message, true)
+                    }
 
-            }
-        } else {
-            if (messageType == MessageType.ONE_TO_ONE_MESSAGE) {
-                if (selectedMessageList.contains(message)){
-                    //remove
-                    frameLayoutRoot.foreground = null
-                    oneToOneChatViewModel.selectChatMessage(message, false)
-                } else {
-                    //add
-                    frameLayoutRoot.foreground = resources.getDrawable(R.drawable.selected_chat_foreground)
-                    oneToOneChatViewModel.selectChatMessage(message, true)
                 }
-            } else if (messageType == MessageType.GROUP_MESSAGE) {
-                if (selectedMessageList.contains(message)){
-                    //remove
-                    frameLayoutRoot.foreground = null
-                    groupChatViewModel.selectChatMessage(message, false)
-                } else {
-                    //add
-                    frameLayoutRoot.foreground = resources.getDrawable(R.drawable.selected_chat_foreground)
-                    groupChatViewModel.selectChatMessage(message, true)
-                }
-
             }
+        } else if (v?.id == R.id.user_name_tv){
+            //navigate to chat page
+            navigation.popBackStack()
+            chatNavigation.navigateToChatPage(
+                chatType = com.gigforce.common_ui.chat.ChatConstants.CHAT_TYPE_USER,
+                otherUserId = message.senderInfo.id,
+                otherUserName = message.senderInfo.name,
+                otherUserProfilePicture = message.senderInfo.profilePic,
+                sharedFileBundle = null,
+                headerId = "",
+                cameFromLinkInOtherChat = true
+            )
         }
     }
 

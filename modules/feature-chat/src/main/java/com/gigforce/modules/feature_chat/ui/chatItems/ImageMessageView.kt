@@ -122,6 +122,7 @@ abstract class ImageMessageView(
     private fun setOnClickListeners() {
         imageContainerFrameLayout.setOnClickListener(this)
         imageContainerFrameLayout.setOnLongClickListener(this)
+        senderNameTV.setOnClickListener(this)
         //quotedMessagePreviewContainer.setOnClickListener(this)
     }
 
@@ -358,42 +359,58 @@ abstract class ImageMessageView(
 
     override fun onClick(v: View?) {
         val view = v ?: return
-        if((oneToOneChatViewModel.getSelectEnable() == true || groupChatViewModel.getSelectEnable() == true)) {
-            if (messageType == MessageType.ONE_TO_ONE_MESSAGE) {
-                if (selectedMessageList.contains(message)){
-                    //remove
-                    frameLayoutRoot.foreground = null
-                    oneToOneChatViewModel.selectChatMessage(message, false)
-                } else {
-                    //add
-                    frameLayoutRoot.foreground = resources.getDrawable(R.drawable.selected_chat_foreground)
-                    oneToOneChatViewModel.selectChatMessage(message, true)
+        if (view?.id == R.id.image_container_layout) {
+            if ((oneToOneChatViewModel.getSelectEnable() == true || groupChatViewModel.getSelectEnable() == true)) {
+                if (messageType == MessageType.ONE_TO_ONE_MESSAGE) {
+                    if (selectedMessageList.contains(message)) {
+                        //remove
+                        frameLayoutRoot.foreground = null
+                        oneToOneChatViewModel.selectChatMessage(message, false)
+                    } else {
+                        //add
+                        frameLayoutRoot.foreground =
+                            resources.getDrawable(R.drawable.selected_chat_foreground)
+                        oneToOneChatViewModel.selectChatMessage(message, true)
+                    }
+                } else if (messageType == MessageType.GROUP_MESSAGE) {
+                    if (selectedMessageList.contains(message)) {
+                        //remove
+                        frameLayoutRoot.foreground = null
+                        groupChatViewModel.selectChatMessage(message, false)
+                    } else {
+                        //add
+                        frameLayoutRoot.foreground =
+                            resources.getDrawable(R.drawable.selected_chat_foreground)
+                        groupChatViewModel.selectChatMessage(message, true)
+                    }
+
                 }
-            } else if (messageType == MessageType.GROUP_MESSAGE) {
-                if (selectedMessageList.contains(message)){
-                    //remove
-                    frameLayoutRoot.foreground = null
-                    groupChatViewModel.selectChatMessage(message, false)
-                } else {
-                    //add
-                    frameLayoutRoot.foreground = resources.getDrawable(R.drawable.selected_chat_foreground)
-                    groupChatViewModel.selectChatMessage(message, true)
-                }
-
-            }
-        } else {
-            if(view.id == R.id.reply_messages_quote_container_layout){
-
-
             } else {
+                if (view.id == R.id.reply_messages_quote_container_layout) {
 
-                val file = returnFileIfAlreadyDownloadedElseNull()
-                if (file != null) {
-                    chatNavigation.openFullScreenImageViewDialogFragment(file)
+
                 } else {
-                    downloadAttachment()
+
+                    val file = returnFileIfAlreadyDownloadedElseNull()
+                    if (file != null) {
+                        chatNavigation.openFullScreenImageViewDialogFragment(file)
+                    } else {
+                        downloadAttachment()
+                    }
                 }
             }
+        } else if (view?.id == R.id.user_name_tv){
+            //navigate to chat page
+            navigation.popBackStack()
+            chatNavigation.navigateToChatPage(
+                chatType = ChatConstants.CHAT_TYPE_USER,
+                otherUserId = message.senderInfo.id,
+                otherUserName = message.senderInfo.name,
+                otherUserProfilePicture = message.senderInfo.profilePic,
+                sharedFileBundle = null,
+                headerId = "",
+                cameFromLinkInOtherChat = true
+            )
         }
 
     }

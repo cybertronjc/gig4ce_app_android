@@ -103,6 +103,7 @@ abstract class VideoMessageView(
     private fun setOnClickListeners() {
         cardView.setOnClickListener(this)
         cardView.setOnLongClickListener(this)
+        senderNameTV.setOnClickListener(this)
     }
 
     fun loadViews() {
@@ -334,38 +335,54 @@ abstract class VideoMessageView(
     }
 
     override fun onClick(v: View?) {
-        if((oneToOneChatViewModel.getSelectEnable() == true || groupChatViewModel.getSelectEnable() == true)) {
-            if (messageType == MessageType.ONE_TO_ONE_MESSAGE) {
-                if (selectedMessageList.contains(message)){
-                    //remove
-                    frameLayoutRoot.foreground = null
-                    oneToOneChatViewModel.selectChatMessage(message, false)
-                } else {
-                    //add
-                    frameLayoutRoot.foreground = resources.getDrawable(R.drawable.selected_chat_foreground)
-                    oneToOneChatViewModel.selectChatMessage(message, true)
+        if (v?.id == R.id.cv_msgContainer) {
+            if ((oneToOneChatViewModel.getSelectEnable() == true || groupChatViewModel.getSelectEnable() == true)) {
+                if (messageType == MessageType.ONE_TO_ONE_MESSAGE) {
+                    if (selectedMessageList.contains(message)) {
+                        //remove
+                        frameLayoutRoot.foreground = null
+                        oneToOneChatViewModel.selectChatMessage(message, false)
+                    } else {
+                        //add
+                        frameLayoutRoot.foreground =
+                            resources.getDrawable(R.drawable.selected_chat_foreground)
+                        oneToOneChatViewModel.selectChatMessage(message, true)
+                    }
+                } else if (messageType == MessageType.GROUP_MESSAGE) {
+                    if (selectedMessageList.contains(message)) {
+                        //remove
+                        frameLayoutRoot.foreground = null
+                        groupChatViewModel.selectChatMessage(message, false)
+                    } else {
+                        //add
+                        frameLayoutRoot.foreground =
+                            resources.getDrawable(R.drawable.selected_chat_foreground)
+                        groupChatViewModel.selectChatMessage(message, true)
+                    }
+
                 }
-            } else if (messageType == MessageType.GROUP_MESSAGE) {
-                if (selectedMessageList.contains(message)){
-                    //remove
-                    frameLayoutRoot.foreground = null
-                    groupChatViewModel.selectChatMessage(message, false)
-                } else {
-                    //add
-                    frameLayoutRoot.foreground = resources.getDrawable(R.drawable.selected_chat_foreground)
-                    groupChatViewModel.selectChatMessage(message, true)
-                }
-
-            }
-        } else {
-            val file = returnFileIfAlreadyDownloadedElseNull()
-
-            if (file != null) {
-
-                chatNavigation.openFullScreenVideoDialogFragment(file)
             } else {
-                downloadAttachment()
+                val file = returnFileIfAlreadyDownloadedElseNull()
+
+                if (file != null) {
+
+                    chatNavigation.openFullScreenVideoDialogFragment(file)
+                } else {
+                    downloadAttachment()
+                }
             }
+        } else if (v?.id == R.id.user_name_tv){
+            //navigate to chat page
+            navigation.popBackStack()
+            chatNavigation.navigateToChatPage(
+                chatType = ChatConstants.CHAT_TYPE_USER,
+                otherUserId = message.senderInfo.id,
+                otherUserName = message.senderInfo.name,
+                otherUserProfilePicture = message.senderInfo.profilePic,
+                sharedFileBundle = null,
+                headerId = "",
+                cameFromLinkInOtherChat = true
+            )
         }
 
     }

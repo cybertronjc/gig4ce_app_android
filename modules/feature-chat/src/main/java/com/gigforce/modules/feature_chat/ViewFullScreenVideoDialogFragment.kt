@@ -1,28 +1,38 @@
 package com.gigforce.modules.feature_chat
 
 
+import android.Manifest
 import android.app.Dialog
 import android.content.ContentValues
 import android.content.pm.ActivityInfo
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.PopupMenu
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.DialogFragment
+import com.gigforce.common_ui.chat.ChatConstants
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.metaDataHelper.ImageMetaDataHelpers
 import com.gigforce.common_ui.storage.MediaStoreApiHelpers
 import com.gigforce.core.IEventTracker
+import com.gigforce.core.PermissionUtils
+import com.gigforce.core.ScopedStorageConstants
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.modules.feature_chat.analytics.CommunityEvents
+import com.gigforce.modules.feature_chat.screens.ChatPageFragment
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
@@ -44,6 +54,15 @@ class ViewFullScreenVideoDialogFragment : DialogFragment(), PopupMenu.OnMenuItem
 
     private lateinit var uri: Uri
     private var player: SimpleExoPlayer? = null
+
+    private val requestPermissionContract = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) {
+
+        if (isStoragePermissionGranted()) {
+
+        }
+    }
 
     @Inject
     lateinit var eventTracker: IEventTracker
@@ -221,7 +240,19 @@ class ViewFullScreenVideoDialogFragment : DialogFragment(), PopupMenu.OnMenuItem
     }
 
     override fun onMenuItemClick(item: MenuItem?): Boolean {
+        //check for storage permission
+        if (isStoragePermissionGranted()){
+            startDownloading()
+        } else {
+            //ask for storage permission
+            askForStoragePermission()
+        }
 
+
+        return true
+    }
+
+    private fun startDownloading(){
         GlobalScope.launch {
 
             try {
@@ -243,8 +274,70 @@ class ViewFullScreenVideoDialogFragment : DialogFragment(), PopupMenu.OnMenuItem
                 }
             }
         }
+    }
 
-        return true
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_STORAGE_PERMISSION) {
+            var allPermsGranted = true
+            for (i in grantResults.indices) {
+                if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                    allPermsGranted = false
+                    break
+                }
+            }
+
+            if (allPermsGranted) {
+                startDownloading()
+            } else
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.grant_storage_permission_chat),
+                    Toast.LENGTH_SHORT
+                ).show()
+        }
+    }
+
+    private fun askForStoragePermission() {
+        Log.v(ChatPageFragment.TAG, "Permission Required. Requesting Permission")
+        if (Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
+
+//            requestPermissions(
+//                arrayOf(
+//                    Manifest.permission.CAMERA
+//                ),
+//                REQUEST_STORAGE_PERMISSION
+//            )
+        } else {
+
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ),
+                REQUEST_STORAGE_PERMISSION
+            )
+        }
+    }
+
+    private fun isStoragePermissionGranted(): Boolean {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            return true
+        } else {
+            return ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED
+                    && ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED
+        }
     }
 
 
@@ -252,6 +345,7 @@ class ViewFullScreenVideoDialogFragment : DialogFragment(), PopupMenu.OnMenuItem
         const val INTENT_EXTRA_URI = "uri"
         const val INTENT_EXTRA_MODULE_ID = "module_id"
         const val TAG = "ViewFullScreenVideoDialogFragment"
+        private const val REQUEST_STORAGE_PERMISSION = 205
 
 //        fun launch(
 //            childFragmentManager: FragmentManager,

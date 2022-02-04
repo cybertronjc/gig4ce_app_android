@@ -249,6 +249,21 @@ class ChatPageViewModel @Inject constructor(
 
     }
 
+    suspend fun getContactStoredByMobile(
+        otherUserUID: String
+    ) : String {
+
+//        try {
+            val contactModel = chatRepository.getDetailsOfUserFromContacts(otherUserUID)
+            Log.d("ChatPageViewModel", "catchingH: ${contactModel.uid} , ${contactModel.name}")
+            return contactModel.name.toString()
+//        } catch (e: Exception) {
+//            Log.d("ChatPageViewModel", "catching: ${e.message}")
+//            otherUserName = ""
+//        }
+        //return  otherUserName
+    }
+
     private fun checkIfHeaderIsPresentInHeadersList() = viewModelScope.launch {
         val querySnap = firebaseFirestore.collection("chats")
             .document(firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow().uid)
