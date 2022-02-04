@@ -1,16 +1,13 @@
 package com.gigforce.common_image_picker.image_capture_camerax.fragments
 
 import android.graphics.*
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.Toast
-import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -21,18 +18,45 @@ import com.gigforce.common_image_picker.ImageUtility
 import com.gigforce.common_image_picker.R
 import com.gigforce.common_image_picker.image_capture_camerax.CaptureImageSharedViewModel
 import com.gigforce.common_image_picker.image_capture_camerax.CaptureImageSharedViewState
+import com.gigforce.common_image_picker.image_capture_camerax.ImageViewerViewModel
+import com.gigforce.common_image_picker.image_capture_camerax.ImageViewerViewState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.mlkit.vision.common.InputImage
-import com.google.mlkit.vision.face.FaceDetection
-import com.google.mlkit.vision.face.FaceDetectorOptions
+import com.toastfix.toastcompatwrapper.ToastHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.*
 import java.util.*
-import kotlin.Exception
 
 
 class ImageViewerFragment : Fragment() {
+
+    companion object {
+        val TAG = ImageViewerFragment::class.java.simpleName
+
+        private const val INTENT_EXTRA_FILE_PATH = "file_path"
+        private const val INTENT_EXTRA_SHOULD_UPLOAD_IMAGE_TOO = "should_upload_image_too"
+        private const val INTENT_EXTRA_PARENT_DIRECTORY_NAME_IN_FIREBASE_STORAGE =
+            "parent_directory_name_in_storage"
+
+
+        fun getInstance(
+            file: File,
+            shouldUploadImageToo: Boolean,
+            parentDirectoryNameInFirebaseStorage: String?
+        ): ImageViewerFragment {
+            return ImageViewerFragment().apply {
+                this.arguments = bundleOf(
+                    INTENT_EXTRA_FILE_PATH to file.absolutePath,
+                    INTENT_EXTRA_SHOULD_UPLOAD_IMAGE_TOO to shouldUploadImageToo,
+                    INTENT_EXTRA_PARENT_DIRECTORY_NAME_IN_FIREBASE_STORAGE to parentDirectoryNameInFirebaseStorage
+                )
+            }
+        }
+    }
+
+    private val viewModel: ImageViewerViewModel by lazy {
+        ViewModelProvider(this).get(ImageViewerViewModel::class.java)
+    }
 
     private val sharedCameraViewModel: CaptureImageSharedViewModel by lazy {
         ViewModelProvider(requireActivity()).get(CaptureImageSharedViewModel::class.java)
@@ -41,23 +65,13 @@ class ImageViewerFragment : Fragment() {
     private lateinit var imageView: ImageView
     private lateinit var discardImageBtn: View
     private lateinit var approveImageBtn: View
-    private lateinit var rotateImageBtn : View
+    private lateinit var rotateImageBtn: View
     private lateinit var progressBar: ProgressBar
 
     //Arguments
     private lateinit var image: File
     private var shouldUploadImageToo: Boolean = false
     private var parentDirectoryNameInFirebaseStorage: String? = null
-
-    // High-accuracy landmark detection and face classification
-    val highAccuracyOpts = FaceDetectorOptions.Builder()
-        .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_ACCURATE)
-        .setLandmarkMode(FaceDetectorOptions.LANDMARK_MODE_ALL)
-        .setClassificationMode(FaceDetectorOptions.CLASSIFICATION_MODE_ALL)
-        .build()
-
-
-    val detector = FaceDetection.getClient(highAccuracyOpts)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -69,15 +83,19 @@ class ImageViewerFragment : Fragment() {
         false
     )
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        getArgumentsFrom(arguments, savedInstanceState)
+        viewModel.setSharedViewModel(sharedCameraViewModel)
+    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         findViews(view)
-        getArgumentsFrom(arguments, savedInstanceState)
         Glide.with(requireContext()).load(image).into(imageView)
         initViewModel()
     }
-
 
 
     private fun findViews(view: View) {
@@ -92,97 +110,23 @@ class ImageViewerFragment : Fragment() {
         }
 
         rotateImageBtn.setOnClickListener {
-            rotateImageClockwise()
+
+            viewModel.rotateImage(
+                requireContext().applicationContext,
+                image
+            )
         }
 
         approveImageBtn.setOnClickListener {
-            //detecting face after approved
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
-                detectFace()
-            } else {
-                sharedCameraViewModel.clickedImageApproved(
-                    requireContext(),
-                    shouldUploadImageToo,
-                    image,
-                    parentDirectoryNameInFirebaseStorage
-                )
-            }
+
+            viewModel.detectFaceAndUploadImage(
+                requireContext().applicationContext,
+                image,
+                parentDirectoryNameInFirebaseStorage
+            )
         }
     }
 
-    private fun rotateImageClockwise() {
-        Glide.with(requireContext()).clear(imageView)
-
-        lifecycleScope.launch(Dispatchers.IO){
-            image = ImageUtility.loadRotateAndSaveImage(
-                requireContext(),
-                image
-            ) ?: return@launch
-
-            lifecycleScope.launch(Dispatchers.Main){
-                Glide.with(requireContext()).load(image).into(imageView)
-            }
-        }
-
-    }
-
-
-    fun detectFace() {
-
-            var image1: InputImage? = null
-            try {
-                image1 = InputImage.fromFilePath(requireContext(), image.toUri())
-                //  Face detect - Check if face is present in the image or not.
-                val result = detector.process(image1)
-                    .addOnSuccessListener { faces ->
-                        if(!isAdded) return@addOnSuccessListener
-
-                        // Task completed successfully
-                        if (faces.size > 0) {
-                            Log.d("FaceDetect", "success")
-                            context?.getString(R.string.face_detected_common)?.let { showToast(it) }
-                            sharedCameraViewModel.clickedImageApproved(
-                                requireContext(),
-                                shouldUploadImageToo,
-                                image,
-                                parentDirectoryNameInFirebaseStorage
-                            )
-
-                        } else {
-                            Log.d("FaceDetect", "failed")
-                            context?.let { showToast(it?.getString(R.string.something_seems_off_common)) }
-                        }
-                    }
-                    .addOnFailureListener { e ->
-                        // Task failed with an exception
-                        Log.d("FaceDetect", "failed ${e.message}")
-                        sharedCameraViewModel.clickedImageApproved(
-                            requireContext(),
-                            shouldUploadImageToo,
-                            image,
-                            parentDirectoryNameInFirebaseStorage
-                        )
-                    }
-            } catch (e: OutOfMemoryError){
-                Log.d("FaceDetect", "failed (out of memory) ${e.message}")
-                sharedCameraViewModel.clickedImageApproved(
-                    requireContext(),
-                    shouldUploadImageToo,
-                    image,
-                    parentDirectoryNameInFirebaseStorage
-                )
-            }
-
-            catch (e: Exception) {
-                sharedCameraViewModel.clickedImageApproved(
-                    requireContext(),
-                    shouldUploadImageToo,
-                    image,
-                    parentDirectoryNameInFirebaseStorage
-                )
-            }
-
-    }
 
     private fun getArgumentsFrom(arguments: Bundle?, savedInstanceState: Bundle?) {
         arguments?.let {
@@ -215,13 +159,34 @@ class ImageViewerFragment : Fragment() {
     }
 
     private fun initViewModel() {
-        sharedCameraViewModel
-            .captureImageSharedViewModelState
+        viewModel
+            .viewState
             .observe(requireActivity(), Observer {
+                if (!isAdded) return@Observer
 
                 when (it) {
-                    is CaptureImageSharedViewState.ImageUploadFailed -> {
-                        if (!isAdded) return@Observer
+                    ImageViewerViewState.DetectingFace -> {
+                        progressBar.visibility = View.VISIBLE
+                        progressBar.isIndeterminate = true
+                    }
+                    ImageViewerViewState.FaceDetected -> {
+
+                        ToastHandler.showToast(
+                            requireContext(),
+                            getString(R.string.face_detected_common),
+                            Toast.LENGTH_SHORT
+                        )
+                    }
+                    is ImageViewerViewState.ErrorWhileFaceDetection -> {
+
+                        progressBar.visibility = View.GONE
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle("Unable to detect face")
+                            .setMessage(getString(R.string.something_seems_off_common) )
+                            .setPositiveButton(getString(R.string.okay_common)) { _, _ -> }
+                            .show()
+                    }
+                    is ImageViewerViewState.ImageUploadFailed -> {
 
                         progressBar.visibility = View.GONE
                         MaterialAlertDialogBuilder(requireContext())
@@ -230,11 +195,27 @@ class ImageViewerFragment : Fragment() {
                             .setPositiveButton(getString(R.string.okay_common)) { _, _ -> }
                             .show()
                     }
-                    is CaptureImageSharedViewState.ImageUploading -> {
-                        if (!isAdded) return@Observer
+                    is ImageViewerViewState.ImageUploadSuccess -> {
+
+                    }
+                    is ImageViewerViewState.ImageUploading -> {
 
                         progressBar.visibility = View.VISIBLE
+                        progressBar.isIndeterminate = false
                         progressBar.progress = it.progress
+                    }
+                    ImageViewerViewState.RotatingImage -> {
+                        showToast("Rotating Image...")
+                    }
+                    is ImageViewerViewState.ImageRotated -> {
+
+                        Glide.with(requireContext()).clear(imageView)
+
+                        image = it.file
+                        Glide.with(requireContext()).load(image).into(imageView)
+                    }
+                    is ImageViewerViewState.ImageRotationFailed -> {
+                        showToast("Unable to rotate Image")
                     }
                     else -> {
                     }
@@ -243,33 +224,10 @@ class ImageViewerFragment : Fragment() {
     }
 
     fun showToast(
-        text : String
-    ){
-        Toast.makeText(requireContext(), text, Toast.LENGTH_SHORT).show()
+        text: String
+    ) {
+        ToastHandler.showToast(requireContext(), text, Toast.LENGTH_SHORT)
     }
 
 
-    companion object {
-        val TAG = ImageViewerFragment::class.java.simpleName
-
-        private const val INTENT_EXTRA_FILE_PATH = "file_path"
-        private const val INTENT_EXTRA_SHOULD_UPLOAD_IMAGE_TOO = "should_upload_image_too"
-        private const val INTENT_EXTRA_PARENT_DIRECTORY_NAME_IN_FIREBASE_STORAGE =
-            "parent_directory_name_in_storage"
-
-
-        fun getInstance(
-            file: File,
-            shouldUploadImageToo: Boolean,
-            parentDirectoryNameInFirebaseStorage: String?
-        ): ImageViewerFragment {
-            return ImageViewerFragment().apply {
-                this.arguments = bundleOf(
-                    INTENT_EXTRA_FILE_PATH to file.absolutePath,
-                    INTENT_EXTRA_SHOULD_UPLOAD_IMAGE_TOO to shouldUploadImageToo,
-                    INTENT_EXTRA_PARENT_DIRECTORY_NAME_IN_FIREBASE_STORAGE to parentDirectoryNameInFirebaseStorage
-                )
-            }
-        }
-    }
 }

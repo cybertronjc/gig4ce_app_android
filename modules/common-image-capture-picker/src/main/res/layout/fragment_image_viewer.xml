@@ -17,13 +17,12 @@
 
     <ProgressBar
         android:id="@+id/progress_circular"
-        style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="75dp"
         android:layout_height="75dp"
-        android:background="@drawable/circle_shape"
         android:indeterminateTint="@color/colorLightAccent"
         android:max="100"
         android:progress="0"
+        android:indeterminate="true"
         android:progressDrawable="@drawable/circular_progress_bar"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -39,30 +38,34 @@
         app:layout_constraintLeft_toLeftOf="@id/show_pic"
         app:layout_constraintRight_toRightOf="@id/show_pic">
 
-        <ImageView
+        <ImageButton
             android:id="@+id/retake_image"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_marginLeft="27dp"
             android:scaleX="0.8"
             android:scaleY="0.8"
+            android:background="@null"
+            android:foreground="?android:attr/selectableItemBackground"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_baseline_close_32" />
 
-        <ImageView
+        <ImageButton
             android:id="@+id/rotate_img"
             android:layout_width="36dp"
             android:layout_height="36dp"
-            android:layout_marginRight="27dp"
             android:scaleX="0.8"
             android:scaleY="0.8"
+            android:background="@null"
+            android:foreground="?android:attr/selectableItemBackground"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:srcCompat="@drawable/ic_rotate_left_24" />
+
 
         <ImageView
             android:id="@+id/upload_img"
@@ -71,6 +74,8 @@
             android:layout_marginRight="27dp"
             android:scaleX="0.8"
             android:scaleY="0.8"
+            android:background="@null"
+            android:foreground="?android:attr/selectableItemBackground"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"

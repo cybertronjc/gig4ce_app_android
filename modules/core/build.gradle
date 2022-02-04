@@ -159,4 +159,6 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 
     implementation 'com.akexorcist:localization:1.2.10'
+
+    api "com.toastfix:toastcompatwrapper:1.2.0"
 }
