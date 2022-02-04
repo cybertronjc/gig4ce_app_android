@@ -16,6 +16,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.MimeTypeMap
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -26,14 +27,16 @@ import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.metaDataHelper.ImageMetaDataHelpers
 import com.gigforce.common_ui.remote.verification.VaccineIdLabelReqDM
 import com.gigforce.core.ScopedStorageConstants
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.recyclerView.ItemClickListener
 import com.gigforce.core.utils.Lce
 import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.verification.R
+import com.gigforce.verification.mainverification.vaccine.models.VaccineCertDetailsDM
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.ask_user_for_vaccine_bs.*
-import kotlinx.android.synthetic.main.fragment_choose_your_vaccine.*
+import kotlinx.android.synthetic.main.vaccine_main_fragment.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -158,6 +161,10 @@ class VaccineMainFragment : Fragment() {
                         requestStoragePermission()
                         throw Exception("stroage permission require")
                     }
+                    else{
+                        if(dataModel is VaccineCertDetailsDM)
+                            dataModel.pathOnFirebase?.let { viewModel.downloadFile(it) }
+                    }
 
                 }else {
                     viewModel.vaccineConfigLiveData.value?.let {
@@ -181,11 +188,31 @@ class VaccineMainFragment : Fragment() {
 
             }
         }
+        viewModel.fileDownloaded.observe(viewLifecycleOwner, Observer {
+            when (it) {
+                Lce.Loading -> {
+                    progressBar.visible()
+                }
+                is Lce.Content -> {
+                    progressBar.gone()
+                    navigation.navigateTo("verification/CertificateDownloadBS")
+                }
+                is Lce.Error -> {
+                    progressBar.gone()
+                    Toast.makeText(context, it.error, Toast.LENGTH_LONG).show()
+                }
+                else -> {
+
+                }
+            }
+        })
         viewModel.vaccineConfigLiveData.observe(viewLifecycleOwner, Observer {
             when (it) {
                 Lce.Loading -> {
+                    progressBar.visible()
                 }
                 is Lce.Content -> {
+                    progressBar.gone()
                     if (it.content.isNullOrEmpty()) {
                         showToast("No vaccine list found!!")
                         navigation.popBackStack()
@@ -194,6 +221,7 @@ class VaccineMainFragment : Fragment() {
                     }
                 }
                 is Lce.Error -> {
+                    progressBar.gone()
                 }
             }
         })
@@ -201,12 +229,15 @@ class VaccineMainFragment : Fragment() {
         viewModel.vaccineFileUploadResLiveData.observe(viewLifecycleOwner, Observer {
             when (it) {
                 Lce.Loading -> {
+                    progressBar.visible()
                 }
                 is Lce.Content -> {
+                    progressBar.gone()
                     navigation.navigateTo("verification/VaccineUploadSuccessfulBS")
                     viewModel.getVaccineData()
                 }
                 is Lce.Error -> {
+                    progressBar.gone()
                 }
             }
         })

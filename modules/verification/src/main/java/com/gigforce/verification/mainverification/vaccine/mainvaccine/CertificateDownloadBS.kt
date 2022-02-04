@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.utils.GlideApp
 import com.gigforce.verification.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,11 +28,12 @@ class CertificateDownloadBS : BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.size_warning_bs, container, false)
+        return inflater.inflate(R.layout.certificate_download_bs, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        GlideApp.with(this).load(R.drawable.ok_downloaded).into(imageView2)
         okay_bn_bs.setOnClickListener{
             dismiss()
         }
