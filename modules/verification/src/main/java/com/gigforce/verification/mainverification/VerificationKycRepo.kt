@@ -106,7 +106,7 @@ class VerificationKycRepo @Inject constructor(private val iBuildConfigVM: IBuild
 
     suspend fun submitVaccinationCertificate(vaccineReqDM : VaccineIdLabelReqDM, file: MultipartBody.Part): VaccineFileUploadResDM {
         val vaccinationCertificate =
-                    kycService.uploadVaccineCertificate("https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/verificationVaccine/verfiyVaccineCertificate",
+                    kycService.uploadVaccineCertificate(iBuildConfigVM.getBaseUrl()+"verificationVaccine/verfiyVaccineCertificate",
                         vaccineReqDM, file)
         if (vaccinationCertificate.isSuccessful) {
             return vaccinationCertificate.body()!!
@@ -125,7 +125,7 @@ class VerificationKycRepo @Inject constructor(private val iBuildConfigVM: IBuild
 
     suspend fun confirmVaccinationData(vaccineId: String):BaseResponse<Any> {
         val confirmationDetails =
-            kycService.confirmVaccinationData("https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/verificationVaccine/confirmVaccine",
+            kycService.confirmVaccinationData(iBuildConfigVM.getBaseUrl()+"verificationVaccine/confirmVaccine",
                 Data1(data = VaccineIdLabelReqDM(vaccineId = vaccineId))
             )
         if (confirmationDetails.isSuccessful) {
