@@ -497,5 +497,8 @@
     <string name="file_size_too_big_veri">File Size is Too Big</string>
     <string name="file_size_message_veri">File size exceeds 5 MB. Please upload file with smaller size.</string>
     <string name="try_again_veri">TRY AGAIN</string>
+    <string name="certificate_uploaded_veri">Certificate Uploaded</string>
+    <string name="successfully_veri">Successfully!</string>
+    <string name="certificate_downloaded_veri">Certificate Downloaded</string>
 
 </resources>

@@ -1,8 +1,11 @@
 package com.gigforce.verification.mainverification.vaccine.mainvaccine
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
@@ -13,6 +16,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.MimeTypeMap
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -21,6 +25,7 @@ import com.gigforce.common_ui.MimeTypes
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.metaDataHelper.ImageMetaDataHelpers
 import com.gigforce.common_ui.remote.verification.VaccineIdLabelReqDM
+import com.gigforce.core.ScopedStorageConstants
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.recyclerView.ItemClickListener
 import com.gigforce.core.utils.Lce
@@ -79,13 +84,60 @@ class VaccineMainFragment : Fragment() {
         super.onResume()
         checkIfDocUploadRequireNew()
     }
+
+    private fun requestStoragePermission() {
+
+        if(Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
+
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.CAMERA
+                ),
+                REQUEST_STORAGE_PERMISSION
+            )
+        } else{
+
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.CAMERA
+                ),
+                REQUEST_STORAGE_PERMISSION
+            )
+        }
+    }
+
+    private fun hasStoragePermissions(): Boolean {
+
+        if(Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
+
+            return ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        } else{
+
+            return ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        }
+    }
+
     private fun checkIfDocUploadRequireNew() {
         val navFragmentsData = activity as NavFragmentsData
         if (navFragmentsData.getData()
                 .getString("vaccine_doc") == "try_again"
         ) {
-            pickDocument()
-            navFragmentsData.setData(bundleOf())
+                pickDocument()
+                navFragmentsData.setData(bundleOf())
         }
     }
 
@@ -100,18 +152,30 @@ class VaccineMainFragment : Fragment() {
     private fun observers() {
         vaccinerv.itemClickListener = object : ItemClickListener {
             override fun onItemClick(view: View, position: Int, dataModel: Any) {
-                viewModel.vaccineConfigLiveData.value?.let {
-                    when(it){
-                        is Lce.Content -> {
-                            it.content.let { list ->
-                                list[position].vaccineId?.let { vaccineID -> vaccineId = vaccineID }
-                                list[position].label?.let { vaccineText ->
-                                    vaccineLabel = vaccineText
+
+                if(position <= -1){
+                    if(!hasStoragePermissions()){
+                        requestStoragePermission()
+                        throw Exception("stroage permission require")
+                    }
+
+                }else {
+                    viewModel.vaccineConfigLiveData.value?.let {
+                        when (it) {
+                            is Lce.Content -> {
+                                it.content.let { list ->
+                                    list[position].vaccineId?.let { vaccineID ->
+                                        vaccineId = vaccineID
+                                    }
+                                    list[position].label?.let { vaccineText ->
+                                        vaccineLabel = vaccineText
+                                    }
+                                        pickDocument()
                                 }
-                                pickDocument()
+                            }
+                            else -> {
                             }
                         }
-                        else -> {}
                     }
                 }
 
@@ -139,6 +203,7 @@ class VaccineMainFragment : Fragment() {
                 Lce.Loading -> {
                 }
                 is Lce.Content -> {
+                    navigation.navigateTo("verification/VaccineUploadSuccessfulBS")
                     viewModel.getVaccineData()
                 }
                 is Lce.Error -> {
@@ -209,6 +274,7 @@ class VaccineMainFragment : Fragment() {
 
     companion object {
         private const val REQUEST_PICK_DOCUMENT = 202
+        private const val REQUEST_STORAGE_PERMISSION = 102
     }
 
     private fun pickDocument() = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {

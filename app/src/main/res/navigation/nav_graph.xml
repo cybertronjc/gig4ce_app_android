@@ -1181,8 +1181,18 @@
         android:name="com.gigforce.verification.mainverification.vaccine.mainvaccine.SizeWarningBottomSheet"
         android:label="SizeWarningBottomSheet"/>
 
+    <dialog android:id="@+id/VaccineUploadSuccessfulBS"
+        android:name="com.gigforce.verification.mainverification.vaccine.mainvaccine.VaccineUploadSuccessfulBS"
+        android:label="VaccineUploadSuccessfulBS"/>
+
     <dialog android:id="@+id/GetVaccinateFirstBS"
         android:name="com.gigforce.verification.mainverification.vaccine.bottomsheets.GetVaccinateFirstBS"/>
+
+    <dialog android:id="@+id/CertificateDownloadBS"
+        android:name="com.gigforce.verification.mainverification.vaccine.mainvaccine.CertificateDownloadBS"
+        android:label="CertificateDownloadBS"/>
+
+
     <fragment
         android:id="@+id/gigerAttendanceDetailFragment"
         android:name="com.gigforce.lead_management.ui.changing_tl.GigerAttendanceDetailFragment"
