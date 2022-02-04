@@ -66,9 +66,7 @@ class OnboardingLoaderFragment : BaseFragment() {
             savedInstanceState
         )
         observer()
-        Handler().postDelayed({
-            viewModel.getProfileAndGigData()
-        }, SPLASH_TIME_OUT)
+        viewModel.getProfileAndGigData()
     }
 
     private fun getDataFrom(
