@@ -19,7 +19,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.QuerySnapshot
-import com.google.firebase.functions.FirebaseFunctions
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.util.*
@@ -41,7 +40,6 @@ data class UserVersionInfo(
 
 class LoginSuccessfulViewModel constructor(
     private val gigsRepository: GigsRepository = GigsRepository(),
-    private val firebaseFunctions: FirebaseFunctions = FirebaseFunctions.getInstance()
 ) : ViewModel() {
     var profileFirebaseRepository =
         ProfileFirebaseRepository()
