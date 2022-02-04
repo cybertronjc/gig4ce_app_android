@@ -561,6 +561,7 @@ class ChatPageFragment : Fragment(),
         var isDeleteEnable = false
         var isInfoEnable = false
         var isDownloadEnable = false
+        var isForwardEnable = false
         var isReplyEnable = false
         var isCurrentUsersMessage = false
 
@@ -575,9 +576,10 @@ class ChatPageFragment : Fragment(),
         }
 
         isReplyEnable = selectedChatList.size == 1
+        isForwardEnable = selectedChatList.size == 1
         isCopyEnable = selectedChatList.size == 1 && selectedChatList.get(0).type == "text"
         isInfoEnable = selectedChatList.size == 1 && selectedChatList.get(0).flowType == "out" && selectedChatList.get(0).chatType == "group" && selectedChatList.get(0).senderInfo.id == FirebaseAuth.getInstance().currentUser?.uid
-        appbar.makeChatOptionsVisible(true, isCopyEnable, isDeleteEnable, isInfoEnable, isDownloadEnable, isReplyEnable, selectedChatList.size.toString())
+        appbar.makeChatOptionsVisible(true, isCopyEnable, isDeleteEnable, isInfoEnable, isDownloadEnable, isReplyEnable, isForwardEnable, selectedChatList.size.toString())
     }
 
     private fun showGroupDetails(group: ChatGroup) {
@@ -1006,7 +1008,8 @@ class ChatPageFragment : Fragment(),
         })
 
         appbar.setForwardClickListener(View.OnClickListener {
-            selectedChatMessage?.let { it1 -> forwardMessage(it1) }
+            selectedChatMessage?.let { it1 ->
+                forwardMessage(it1[0]) }
             disableChatSelection()
         })
 
@@ -1107,7 +1110,7 @@ class ChatPageFragment : Fragment(),
         selectedChatMessage = null
         viewModel.makeSelectEnable(false)
         groupChatViewModel.makeSelectEnable(false)
-        appbar.makeChatOptionsVisible(false, false, false, false, false, false, "0")
+        appbar.makeChatOptionsVisible(false, false, false, false, false, false, false,"0")
     }
     override fun onMenuItemClick(item: MenuItem?): Boolean = when (item?.itemId) {
         R.id.action_block -> {
