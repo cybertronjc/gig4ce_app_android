@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.gigforce.common_ui.components.cells.AppBar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?android:actionBarSize"
+            app:backgroundType="PinkBar"
+            app:isSearchVisible="true"
+            app:isMenuItemVisible="false"
+            app:titleText="Select Business" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingTop="12dp">
+
+            <include
+                android:id="@+id/mainForm"
+                layout="@layout/fragment_select_team_leaders_main"
+                android:visibility="gone"/>
+
+            <include
+                android:id="@+id/data_loading_shimmer_container"
+                layout="@layout/shimmer_container"
+                android:layout_marginTop="60dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible" />
+
+            <include
+                android:id="@+id/form_main_info_layout"
+                layout="@layout/layout_error_with_retry" />
+
+
+        </FrameLayout>
+    </LinearLayout>
+</layout>
+

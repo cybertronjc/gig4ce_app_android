@@ -102,7 +102,7 @@ class SelectClientTlFragment : BaseFragment2<FragmentSelectClientTlBinding>(
 
         okayButton.setOnClickListener {
             val selectedJobProfile = clientTLAdapter.getSelectedTL() ?: return@setOnClickListener
-            sharedViewModel.clientTLSelected(selectedJobProfile)
+//            sharedViewModel.clientTLSelected(selectedJobProfile)
             findNavController().navigateUp()
         }
     }

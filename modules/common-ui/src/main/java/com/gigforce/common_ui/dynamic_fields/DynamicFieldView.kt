@@ -42,11 +42,11 @@ interface DynamicVerificationFieldView : BaseDynamicFieldView {
     )
 
     fun updateDocumentStatus(
-        status : String
+        status : String?
     )
 
     fun updateDocumentStatusImage(
-        status : String,
+        status : String?,
         imageView: GigforceImageView,
         statusTextView : TextView,
         defaultStatusString : String

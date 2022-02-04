@@ -6,18 +6,15 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import androidx.core.text.bold
-import androidx.core.text.buildSpannedString
 import androidx.fragment.app.FragmentManager
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.databinding.LayoutDynamicFieldSignatureView2Binding
-import com.gigforce.common_ui.dynamic_fields.DynamicFieldView
+import com.gigforce.common_ui.dynamic_fields.DynamicVerificationFieldView
 import com.gigforce.common_ui.dynamic_fields.data.DataFromDynamicInputField
-import com.gigforce.common_ui.dynamic_fields.data.DynamicField
+import com.gigforce.common_ui.dynamic_fields.data.DynamicVerificationField
 import com.gigforce.common_ui.dynamic_fields.data.FieldTypes
 import com.gigforce.common_ui.ext.addMandatorySymbolToTextEnd
 import com.gigforce.common_ui.navigation.signature.SignatureNavigation
-import com.gigforce.common_ui.signature.FullScreenSignatureImageCaptureDialogFragment
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,15 +27,12 @@ class DynamicSignatureDrawerView2(
 ) : LinearLayout(
     context,
     attrs
-), DynamicFieldView {
+), DynamicVerificationFieldView {
 
 
     @Inject lateinit var signatureNavigation : SignatureNavigation
     private var viewBinding: LayoutDynamicFieldSignatureView2Binding
-    private lateinit var viewData: DynamicField
-    private lateinit var fragmentManager : FragmentManager
-    private var signatureImagePath : String? = null
-    private var signatureImageFullUrl : String? = null
+    private lateinit var viewData: DynamicVerificationField
 
     init {
         this.layoutParams = LayoutParams(
@@ -58,32 +52,22 @@ class DynamicSignatureDrawerView2(
     override val fieldType: String get() = FieldTypes.SIGNATURE_DRAWER_2
 
     override fun bind(
-        fieldDetails: DynamicField
+        fieldDetails: DynamicVerificationField
     ) {
         viewData = fieldDetails
         tag = id //setting id of dynamic view as view tag to identify layout at runtime
 
         setTitle(fieldDetails.title)
         settingFieldAsOptionalOrMandatory(fieldDetails)
-        setPrefillTextOrHint(
-            fieldDetails.defaultSelectedDate,
-            fieldDetails.prefillText,
-            fieldDetails.title
-        )
+        updateDocumentStatus(fieldDetails.status)
     }
 
-    fun setFragmentManager(
-        fragmentManager : FragmentManager
-    ){
-        this.fragmentManager = fragmentManager
-    }
 
     private fun setPrefillTextOrHint(
-        defaultSelectedDate : String?,
         prefillText: String?,
         title: String?
     ) {
-        //ignored
+       viewBinding.subtitleTextview.text = prefillText ?: "Tap to upload"
     }
 
 
@@ -91,7 +75,9 @@ class DynamicSignatureDrawerView2(
         viewBinding.titleTextview.text = title
     }
 
-    private fun settingFieldAsOptionalOrMandatory(fieldDetails: DynamicField) {
+    private fun settingFieldAsOptionalOrMandatory(
+        fieldDetails: DynamicVerificationField
+    ) {
         if (fieldDetails.mandatory) {
             viewBinding.optionalTextview.gone()
             viewBinding.titleTextview.addMandatorySymbolToTextEnd()
@@ -100,12 +86,6 @@ class DynamicSignatureDrawerView2(
         }
     }
 
-    override fun isEnteredOrSelectedDataValid(): Boolean {
-        return if(viewData.mandatory){
-            signatureImagePath != null
-        } else
-            true
-    }
 
 
     override fun setError(
@@ -120,63 +100,31 @@ class DynamicSignatureDrawerView2(
         viewBinding.errorLayout.root.gone()
     }
 
-    override fun validateDataAndReturnDataElseNull(): DataFromDynamicInputField? {
-        return if (isEnteredOrSelectedDataValid()) {
-            removeError()
-            getUserEnteredOrSelectedData()
-        } else {
-            checkDataAndSetError()
-            null
-        }
-    }
 
-    private fun getUserEnteredOrSelectedData(): DataFromDynamicInputField {
-        return DataFromDynamicInputField(
-            id = viewData.id,
-            title = viewData.title,
-            value = signatureImagePath,
-            valueId = signatureImageFullUrl,
-            fieldType = FieldTypes.SIGNATURE_DRAWER_2
-        )
-    }
-
-    private fun checkDataAndSetError() {
-
-        if (viewData.mandatory) {
-
-            if (!isEnteredOrSelectedDataValid()) {
-
-                setError(buildSpannedString {
-                    bold {
-                        append(
-                            resources.getString(R.string.common_note_with_colon)
-                        )
-                    }
-                    append(" Please click ${viewData.title}")
-                })
-            } else {
-                removeError()
-            }
-        }
-    }
 
     fun signatureCapturedUpdateStatus(
         signaturePathOnFirebase : String,
         fullImageUrl : String
     ){
-        signatureImagePath = signaturePathOnFirebase
-        signatureImageFullUrl =fullImageUrl
-
         viewBinding.statusImageview.loadImage(R.drawable.ic_success_round_green)
     }
 
     private fun setListenersOnView() = viewBinding.apply {
 
         this.signatureLayout.setOnClickListener {
-
             signatureNavigation.openCaptureSignatureFragment(
-                signatureImageFullUrl
+                viewData.userId
             )
         }
     }
+
+    override fun updateDocumentStatus(status: String?) {
+        updateDocumentStatusImage(
+            status,
+            viewBinding.statusImageview,
+            viewBinding.subtitleTextview,
+            viewData.prefillText ?: "Upload"
+        )
+    }
+
 }

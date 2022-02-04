@@ -64,7 +64,7 @@ class ChatRepository @Inject constructor(
             .document(userId)
     }
 
-    private fun getChatMessagesCollectionRef(
+    fun getChatMessagesCollectionRef(
         headerId: String
     ) = userChatCollectionRef
         .collection(COLLECTION_CHAT_HEADERS)
@@ -92,6 +92,21 @@ class ChatRepository @Inject constructor(
 
     override fun getCollectionName(): String {
         return COLLECTION_CHATS
+    }
+
+    override suspend fun sendMessages(
+        chatHeaderId: String,
+        messages: List<ChatMessage>
+    ) {
+        db.batch().apply {
+
+            messages.forEach {
+                val newDocumentRef = getChatMessagesCollectionRef(chatHeaderId).document()
+                set(newDocumentRef,it)
+            }
+
+            commitOrThrow()
+        }
     }
 
     override suspend fun sendTextMessage(
@@ -408,6 +423,7 @@ class ChatRepository @Inject constructor(
         val newFileName = if (audioInfo.name.isBlank()) {
             "${getUID()}-${DateHelper.getFullDateTimeStamp()}.mp3"
         } else {
+
             if (audioInfo.name.endsWith(".mp3", true)) {
                 "${getUID()}-${DateHelper.getFullDateTimeStamp()}-${audioInfo.name}"
             } else {
@@ -922,6 +938,24 @@ class ChatRepository @Inject constructor(
 
             batch.commitOrThrow()
 
+        }
+    }
+
+    suspend fun checkAndReturnIfHeaderIsPresentInchat(
+        senderUserId: String,
+        receiverUserId: String
+    ): String? {
+        val query = db.collection(COLLECTION_CHATS)
+            .document(senderUserId)
+            .collection(COLLECTION_CHAT_HEADERS)
+            .whereEqualTo("forUserId", senderUserId)
+            .whereEqualTo("otherUserId", receiverUserId)
+            .getOrThrow()
+
+        return if (query.isEmpty)
+            return null
+        else {
+            query.documents.get(0).id
         }
     }
 

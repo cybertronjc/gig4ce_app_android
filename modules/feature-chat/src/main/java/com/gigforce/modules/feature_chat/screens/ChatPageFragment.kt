@@ -1005,10 +1005,10 @@ class ChatPageFragment : Fragment(),
             clearSelection()
         })
 
-//        appbar.setForwardClickListener(View.OnClickListener {
-//            selectedChatMessage?.let { it1 -> forwardMessage(it1) }
-//            disableChatSelection()
-//        })
+        appbar.setForwardClickListener(View.OnClickListener {
+            selectedChatMessage?.let { it1 -> forwardMessage(it1) }
+            disableChatSelection()
+        })
 
         appbar.setInfoClickListener(View.OnClickListener {
             selectedChatMessage?.let { it1 ->

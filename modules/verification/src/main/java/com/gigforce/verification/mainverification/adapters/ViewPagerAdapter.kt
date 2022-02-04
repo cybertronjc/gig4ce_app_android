@@ -38,10 +38,12 @@ class ViewPagerAdapter(private val itemClickListener: (View) -> (Unit)) : Recycl
         notifyDataSetChanged()
     }
     fun updateData(position: Int, uri: Uri){
-        list.get(position).imageIcon = uri
-        list.get(position).imagePath = ""
-        list.get(position).imageUploaded = true
-        notifyItemChanged(position)
+        if(position<list.size) {
+            list[position].imageIcon = uri
+            list[position].imagePath = ""
+            list[position].imageUploaded = true
+            notifyItemChanged(position)
+        }
     }
 
     override fun getItemCount(): Int = list.size

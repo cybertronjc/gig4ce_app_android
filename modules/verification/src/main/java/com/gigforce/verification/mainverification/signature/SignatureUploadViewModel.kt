@@ -1,26 +1,23 @@
-package com.gigforce.common_ui.signature
+package com.gigforce.verification.mainverification.signature
 
-import android.content.Context
 import android.net.Uri
+import androidx.core.net.toUri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.configrepository.SignatureRepository
-import com.gigforce.common_ui.metaDataHelper.FileMetaDataExtractor
-import com.gigforce.core.extensions.getDownloadUrlOrReturnNull
-import com.gigforce.core.extensions.getDownloadUrlOrThrow
-import com.google.firebase.storage.FirebaseStorage
+import com.gigforce.common_ui.repository.GigerVerificationRepository
+import com.gigforce.core.datamodels.verification.VerificationBaseModel
+import com.gigforce.core.extensions.getOrThrow
+import com.gigforce.core.logger.GigforceLogger
+import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 sealed class SignatureViewEvents {
-
-    data class SignatureReceivedFromPreviousScreen(
-        val signature: Uri
-    ) : SignatureViewEvents()
 
     data class SignatureCaptured(
         val signature: Uri
@@ -31,43 +28,122 @@ sealed class SignatureViewEvents {
 
 sealed class SignatureUploadViewState {
 
+    object CheckingExistingSignature : SignatureUploadViewState()
+
+    data class ShowExistingExistingSignature(
+        val signatureUri : Uri?
+    ) : SignatureUploadViewState()
+
+
+    data class ErrorWhileCheckingExsitingSignature(
+        val error : String
+    ) : SignatureUploadViewState()
+
+
+    /**
+     * ------------------------------
+     * Removing Background signature
+     * ------------------------------
+     */
+
     object RemovingBackgroundFromSignature : SignatureUploadViewState()
 
     data class BackgroundRemovedFromSignature(
         val processedImage: Uri,
-        val enableSubmitButton : Boolean
+        val enableSubmitButton: Boolean
     ) : SignatureUploadViewState()
 
     data class ErrorWhileRemovingBackgroundFromSignature(
         val processedImage: Uri
     ) : SignatureUploadViewState()
 
+
     object UploadingSignature : SignatureUploadViewState()
 
     data class SignatureUploaded(
         val firebaseCompletePath: String,
-        val firebaseImageFullUrl : String
+        val firebaseImageFullUrl: String
     ) : SignatureUploadViewState()
 
     data class ErrorUploadingSignatureImage(
         val error: String
     ) : SignatureUploadViewState()
 
-    object NavigateBackToPreviousScreen: SignatureUploadViewState()
+    object NavigateBackToPreviousScreen : SignatureUploadViewState()
+
+
 }
 
 @HiltViewModel
 class SignatureUploadViewModel @Inject constructor(
     private val signatureRepository: SignatureRepository,
-    private val firebaseStorage: FirebaseStorage
+    private val verificationRepository: GigerVerificationRepository,
+    private val firebaseAuthStateListener: FirebaseAuthStateListener,
+    private val logger: GigforceLogger
 ) : ViewModel() {
 
+    companion object {
+
+        const val TAG = "SignatureUploadViewModel"
+    }
 
     private val _viewState = MutableLiveData<SignatureUploadViewState>()
     val viewState: LiveData<SignatureUploadViewState> = _viewState
 
-    private var processedImageUri : Uri? = null
+    private var processedImageUri: Uri? = null
+    private var backgroundRemoved = false
+
+
+    override fun onCleared() {
+        super.onCleared()
+        backgroundRemoved = false
+    }
+
+    var userId: String = ""
+        set(value) {
+            field = value
+        }
+        get() = if (field.isEmpty()) {
+            firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow().uid
+        } else {
+            field
+        }
+
     var shouldRemoveBackgroundFromSignature: Boolean = false
+
+    fun checkForExistingSignature() = viewModelScope.launch {
+
+        _viewState.value = SignatureUploadViewState.CheckingExistingSignature
+
+        try {
+
+            val verificationDocRef = verificationRepository.verificationDocumentReference(userId)
+                .getOrThrow()
+
+            if (verificationDocRef.exists()) {
+
+                val verificationData = verificationDocRef.toObject(VerificationBaseModel::class.java)
+                _viewState.value = SignatureUploadViewState.ShowExistingExistingSignature(
+                    verificationData?.signature?.fullSignatureUrl?.toUri()
+                )
+            } else {
+                _viewState.value = SignatureUploadViewState.ShowExistingExistingSignature(
+                    null
+                )
+            }
+
+        } catch (e: Exception) {
+            _viewState.value = SignatureUploadViewState.ErrorWhileCheckingExsitingSignature(
+                e.message ?: "Unable to check existing signature"
+            )
+
+            logger.e(
+                TAG,
+                "while fetching verification for user : $userId",
+                e
+            )
+        }
+    }
 
     fun handleEvent(
         event: SignatureViewEvents
@@ -77,27 +153,27 @@ class SignatureUploadViewModel @Inject constructor(
             is SignatureViewEvents.SignatureCaptured -> checkedIfBackgroundNeedsToBeRemoved(
                 event.signature
             )
-            is SignatureViewEvents.SignatureReceivedFromPreviousScreen -> _viewState.value = SignatureUploadViewState.BackgroundRemovedFromSignature(
-                event.signature,
-                false
-            )
         }
     }
 
     private fun checkIfUserClickedImageOrNot() = viewModelScope.launch {
-        if(processedImageUri != null){
+        if (processedImageUri != null) {
+            backgroundRemoved = false
             uploadImage(processedImageUri!!)
-        } else{
+        } else {
             _viewState.value = SignatureUploadViewState.NavigateBackToPreviousScreen
         }
     }
 
     private fun checkedIfBackgroundNeedsToBeRemoved(
         signatureUnProcessed: Uri
-    ) = viewModelScope.launch{
+    ) = viewModelScope.launch {
 
         if (shouldRemoveBackgroundFromSignature) {
+
+            backgroundRemoved = false
             removeBackgroundFromSignature(signatureUnProcessed)
+            backgroundRemoved = true
         } else {
 
             processedImageUri = signatureUnProcessed
@@ -135,11 +211,13 @@ class SignatureUploadViewModel @Inject constructor(
 
         try {
 
-            val uploadSignatureResponse = signatureRepository.uploadSignatureImageToFirebase(uri)
-            val imageFullUrl = createFullUrl(uploadSignatureResponse)
+            val uploadSignatureResponse = signatureRepository.uploadSignature(
+                uri,
+                userId
+            )
             _viewState.value = SignatureUploadViewState.SignatureUploaded(
-                uploadSignatureResponse,
-                imageFullUrl
+                uploadSignatureResponse.signatureFirebasePath,
+                uploadSignatureResponse.signatureFullUrl
             )
         } catch (e: Exception) {
 
@@ -149,13 +227,5 @@ class SignatureUploadViewModel @Inject constructor(
         }
     }
 
-    private suspend fun createFullUrl(
-        imagePathOnFirebase : String
-    ) : String {
-        return firebaseStorage
-            .reference
-            .child(imagePathOnFirebase)
-            .getDownloadUrlOrReturnNull()?.toString() ?: ""
-    }
 
 }
