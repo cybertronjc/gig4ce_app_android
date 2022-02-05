@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".mainverification.vaccine.views.CovidVaccinationCertificateFragment">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:background="@color/colorPrimary"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/backImageButton"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="@dimen/size16"
+        android:layout_marginTop="@dimen/dp_xl2"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:padding="@dimen/size_4"
+        android:src="@drawable/ic_arrow_back_white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/size16"
+        android:ellipsize="end"
+        android:fontFamily="@font/lato"
+        android:maxLines="1"
+        android:text="@string/covid_vaccine_certificate_veri"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toBottomOf="@+id/backImageButton"
+        app:layout_constraintStart_toEndOf="@+id/backImageButton"
+        app:layout_constraintTop_toTopOf="@+id/backImageButton" />
+
+    <com.gigforce.verification.mainverification.vaccine.component.VaccineDoseDetailsComponent
+        android:id="@+id/vaccination_dose_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_xl2"
+        android:layout_marginLeft="@dimen/dp_mid"
+        android:layout_marginRight="@dimen/dp_mid"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/backImageButton" />
+
+    <TextView
+        android:id="@+id/confirm_bn_bs"
+        android:layout_width="0dp"
+        android:layout_height="38dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/change_doc_button"
+        android:layout_marginLeft="@dimen/dp_mid"
+        android:layout_marginRight="@dimen/dp_mid"
+        android:layout_marginBottom="@dimen/dp_mid"
+        android:text="@string/confirm_veri"
+        android:textAllCaps="true"
+        style="@style/primary_button_style"/>
+
+    <Button
+        android:id="@+id/change_doc_button"
+        android:layout_width="0dp"
+        android:layout_height="46dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginLeft="@dimen/dp_mid"
+        android:layout_marginRight="@dimen/dp_mid"
+        android:layout_marginBottom="@dimen/dp_mid"
+        style="@style/ActionOutlineButtonStyle"
+        android:textAllCaps="true"
+        android:text="@string/change_doc_veri"/>
+
+
+    <TextView
+        android:id="@+id/doc_download"
+        android:layout_width="0dp"
+        android:layout_height="38dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginLeft="@dimen/dp_mid"
+        android:layout_marginRight="@dimen/dp_mid"
+        android:layout_marginBottom="@dimen/dp_mid"
+        android:text="@string/download_doc_veri"
+        android:textAllCaps="true"
+        style="@style/primary_button_style"
+        android:visibility="gone"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

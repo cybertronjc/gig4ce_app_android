@@ -19,7 +19,6 @@ import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_acknowledge_bank_b_s.*
 import javax.inject.Inject
-import javax.inject.Singleton
 
 
 @AndroidEntryPoint

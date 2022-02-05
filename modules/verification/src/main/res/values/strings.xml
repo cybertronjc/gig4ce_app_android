@@ -471,6 +471,35 @@
     <string name="bank_account_verified_successfully_veri">Bank Account Verified Successfully!</string>
     <string name="confirmation_pending_veri">Confirmation Pending</string>
     <string name="baneficiary_name_veri">Beneficiary Name</string>
-
+    <string name="please_select_your_vaccination_status_veri">Please select your vaccination status.</string>
+    <string name="covid_vaccination_certificate_veri">COVID Vaccination Certificate</string>
+    <string name="please_get_yourseft_vaccinated">Please get yourself vaccinated.</string>
+    <string name="upload_whenever_vaccinated">Whenever you get vaacinated, please upload the certificate.</string>
+    <string name="fully_vaccinated">Fully Vaccinated</string>
+    <string name="please_upload_your_vaccine_veri">Please upload your vaccine certificate</string>
+    <string name="download_certificate_text">Don’t have certificate? Click here to download  your certificate and then uplaod.</string>
+    <string name="certificate_successfully_verified">Certificate Successfully Verified</string>
+    <string name="age_veri">Age</string>
+    <string name="gender_veri">Gender</string>
+    <string name="certificateid_veri">Certificate ID</string>
+    <string name="beneficiaryid_veri">Beneficiary ID</string>
+    <string name="vaccinename_veri">Vaccine Name</string>
+    <string name="vaccinationstatus_veri">Vaccination Status</string>
+    <string name="dateofdose_veri">Date of Dose</string>
+    <string name="vaccinationat_veri">Vaccination At</string>
+    <string name="covid_vaccine_certificate_veri">COVID Vaccination Certificate</string>
+    <string name="change_doc_veri">Change Doc</string>
+    <string name="download_doc_veri">Download Certificate</string>
+    <string name="vaccine_count_veri">Vaccine 1</string>
+    <string name="view_more_veri">View More</string>
+    <string name="upload_veri">Upload</string>
+    <string name="change_veri">Change</string>
+    <string name="file_size_too_big_veri">File Size is Too Big</string>
+    <string name="file_size_message_veri">File size exceeds 5 MB. Please upload file with smaller size.</string>
+    <string name="try_again_veri">TRY AGAIN</string>
+    <string name="certificate_uploaded_veri">Certificate Uploaded</string>
+    <string name="successfully_veri">Successfully!</string>
+    <string name="certificate_downloaded_veri">Certificate Downloaded</string>
+    <string name="not_vaccinated_veri">Not vaccinated</string>
 
 </resources>
