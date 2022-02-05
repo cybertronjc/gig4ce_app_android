@@ -122,7 +122,7 @@ class VerificationMainViewModel @Inject constructor(
                 value?.data?.let {
                     val doc = value.toObject(VerificationBaseModel::class.java)
                     latestVerificationDoc = doc
-                    var allDocs = ArrayList<SimpleCardDVM>()
+                    val allDocs = ArrayList<SimpleCardDVM>()
                     allDocs.add(
                         SimpleCardDVM(
                             title = appContext.getString(R.string.pan_card),
@@ -191,10 +191,10 @@ class VerificationMainViewModel @Inject constructor(
                     allDocs.add(
                         SimpleCardDVM(
                             title = appContext.getString(R.string.covid_vaccination_certificate_veri),
-                            subtitle = status,
+                            subtitle = doc?.vaccination?.statusString?:appContext.getString(R.string.not_vaccinated_veri),
                             image = R.drawable.ic_account_box_black_24dp,
                             navpath = "verification/VaccineMainFragment",
-                            color = getVaccineColor(status)
+                            color = getVaccineColor(doc?.vaccination?.statusString)
                         )
                     )
 
@@ -226,8 +226,8 @@ class VerificationMainViewModel @Inject constructor(
 
     }
 
-    private fun getVaccineColor(status: String): String {
-        if(status == "Not vaccinated" || status == "") return "RED"
+    private fun getVaccineColor(statusString: String?): String {
+        if(statusString == null || statusString == "Not Vaccinated" || statusString == "") return "RED"
         return "GREEN"
     }
 

@@ -500,5 +500,6 @@
     <string name="certificate_uploaded_veri">Certificate Uploaded</string>
     <string name="successfully_veri">Successfully!</string>
     <string name="certificate_downloaded_veri">Certificate Downloaded</string>
+    <string name="not_vaccinated_veri">Not vaccinated</string>
 
 </resources>
