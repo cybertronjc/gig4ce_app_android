@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
-    app:cardCornerRadius="@dimen/size_6"
+    android:layout_height="46dp"
     android:layout_margin="@dimen/size_4"
     android:clipChildren="false"
     app:cardBackgroundColor="@color/white"
-    android:layout_height="46dp">
+    app:cardCornerRadius="@dimen/size_6">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -20,8 +20,8 @@
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            >
+            app:layout_constraintTop_toTopOf="parent">
+
             <ImageView
                 android:id="@+id/statusIconNotUploaded"
                 android:layout_width="20dp"
@@ -35,10 +35,8 @@
                 android:layout_height="20dp"
                 android:layout_marginLeft="@dimen/size_10"
                 android:src="@drawable/vaccinated_icon"
-                android:visibility="gone"/>
+                android:visibility="gone" />
         </RelativeLayout>
-
-
 
 
         <TextView
@@ -59,39 +57,41 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/size_20"
+            android:src="@drawable/ic_grey_right_arrow"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:src="@drawable/ic_grey_right_arrow"
-            tools:srcCompat="@drawable/ic_grey_right_arrow" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
 
         <ImageView
             android:id="@+id/edit_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/size_20"
+            android:src="@drawable/vaccine_edit_icon"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/download_icon"
             app:layout_constraintTop_toTopOf="parent"
-            android:src="@drawable/vaccine_edit_icon"
-            android:visibility="gone"
-            tools:srcCompat="@drawable/vaccine_edit_icon" />
+            android:visibility="gone"/>
 
-        <ImageView
+        <LinearLayout
             android:id="@+id/download_icon"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/size_20"
+            android:layout_height="match_parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:src="@drawable/download_icon_ver"
-            android:visibility="gone"
-            tools:srcCompat="@drawable/download_icon_ver" />
+            android:gravity="center"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/size_20"
+                android:layout_marginLeft="@dimen/dp_mid"
+                android:src="@drawable/download_icon_ver"/>
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 
 </com.google.android.material.card.MaterialCardView>
