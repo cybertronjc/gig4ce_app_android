@@ -201,7 +201,11 @@ class RosterDayFragment : RosterBaseFragment(), IOnBackPressedOverride {
 
         //observer
         //initializeBottomSheet()()
-        attachHourViewAdapter()
+        try {
+            attachHourViewAdapter()
+        }catch (e:Exception){
+
+        }
         attachDayAvailabilityObserver()
         attachCurrentDateTimeChangeObserver()
         attachTopBarMonthChangeListener()
