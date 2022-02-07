@@ -58,11 +58,9 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/size_20"
             android:src="@drawable/ic_grey_right_arrow"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@drawable/ic_grey_right_arrow" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
 
         <ImageView
@@ -72,7 +70,8 @@
             android:src="@drawable/vaccine_edit_icon"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/download_icon"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="gone"/>
 
         <LinearLayout
             android:id="@+id/download_icon"
@@ -81,7 +80,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:gravity="center">
+            android:gravity="center"
+            android:visibility="gone">
 
             <ImageView
                 android:layout_width="wrap_content"
