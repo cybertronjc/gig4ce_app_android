@@ -2,13 +2,16 @@ package com.gigforce.verification.mainverification.vaccine.mainvaccine
 
 import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.text.SpannableString
 import android.text.Spanned
+import android.text.TextUtils
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.util.Log
@@ -40,10 +43,10 @@ import kotlinx.android.synthetic.main.vaccine_main_fragment.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import java.io.ByteArrayOutputStream
-import java.io.IOException
-import java.io.InputStream
+import java.io.*
+import java.util.*
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class VaccineMainFragment : Fragment() {
@@ -171,13 +174,16 @@ class VaccineMainFragment : Fragment() {
                         when (it) {
                             is Lce.Content -> {
                                 it.content.let { list ->
-                                    list[position].vaccineId?.let { vaccineID ->
-                                        vaccineId = vaccineID
-                                    }
-                                    list[position].label?.let { vaccineText ->
-                                        vaccineLabel = vaccineText
-                                    }
+                                    if (dataModel is VaccineCertDetailsDM) {
+
+                                        dataModel.vaccineId?.let { vaccineID ->
+                                            vaccineId = vaccineID
+                                        }
+                                        dataModel.label?.let { vaccineText ->
+                                            vaccineLabel = vaccineText
+                                        }
                                         pickDocument()
+                                    }
                                 }
                             }
                             else -> {
@@ -253,7 +259,7 @@ class VaccineMainFragment : Fragment() {
             context?.let { context ->
                 fileUri?.let {
 
-                    val fileLength = ImageMetaDataHelpers.getImageLength(context,it)
+                    val fileLength = ImageMetaDataHelpers.getImageLength(context, it)
                     val kb = fileLength/1024
                     val mb = kb/1024
                     if(mb<5) {
@@ -266,26 +272,112 @@ class VaccineMainFragment : Fragment() {
             }
         }
     }
+    val gigforceDirectory: File by lazy {
+
+        File(context?.filesDir, "vaccine").apply {
+            if (!this.exists()) {
+                mkdirs()
+            }
+        }
+    }
+
+    private val IMAGE_DIRECTORY = "/demonuts_upload_gallery"
+
+    fun getFilePathFromURI(context: Context?, contentUri: Uri?): String? {
+        //copy file and send new file path
+        val fileName: String? = getFileName(contentUri)
+        val wallpaperDirectory: File = File(
+            Environment.getExternalStorageDirectory(), IMAGE_DIRECTORY
+        )
+        // have the object build the directory structure, if needed.
+        if (!wallpaperDirectory.exists()) {
+            wallpaperDirectory.mkdirs()
+        }
+        if (!TextUtils.isEmpty(fileName)) {
+            val copyFile = File(wallpaperDirectory.toString() + File.separator + fileName)
+            // create folder if not exists
+            if (context != null) {
+                copy(context, contentUri, copyFile)
+            }
+            return copyFile.absolutePath
+        }
+        return null
+    }
+    fun getFileName(uri: Uri?): String? {
+        if (uri == null) return null
+        var fileName: String? = null
+        val path = uri.path
+        val cut = path!!.lastIndexOf('/')
+        if (cut != -1) {
+            fileName = path.substring(cut + 1)
+        }
+        return fileName
+    }
+    fun copy(context: Context, srcUri: Uri?, dstFile: File?) {
+        try {
+            val inputStream = context.contentResolver.openInputStream(srcUri!!) ?: return
+            val outputStream: OutputStream = FileOutputStream(dstFile)
+            copystream(inputStream, outputStream)
+            inputStream.close()
+            outputStream.close()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+        }
+    }
+    private val BUFFER_SIZE = 1024 * 2
+    @Throws(java.lang.Exception::class, IOException::class)
+    fun copystream(input: InputStream?, output: OutputStream?): Int {
+        val buffer = ByteArray(BUFFER_SIZE)
+        val `in` = BufferedInputStream(input, BUFFER_SIZE)
+        val out = BufferedOutputStream(output, BUFFER_SIZE)
+        var count = 0
+        var n = 0
+        try {
+            while (`in`.read(buffer, 0, BUFFER_SIZE).also { n = it } != -1) {
+                out.write(buffer, 0, n)
+                count += n
+            }
+            out.flush()
+        } finally {
+            try {
+                out.close()
+            } catch (e: IOException) {
+//                Log.e(e.getMessage(), java.lang.String.valueOf(e))
+            }
+            try {
+                `in`.close()
+            } catch (e: IOException) {
+//                Log.e(e.getMessage(), java.lang.String.valueOf(e))
+            }
+        }
+        return count
+    }
 
     private fun callKycOcrApi() {
-
         var mutliplartFile: MultipartBody.Part? = null
         fileUri?.let { fileUri ->
-            context?.contentResolver?.openInputStream(fileUri)?.let {
-                val byteArr = getBytes(it)
-                val mimeType = MimeTypeMap.getSingleton()
-                    .getExtensionFromMimeType(context?.contentResolver?.getType(fileUri))
-                val requestFile: RequestBody =
-                    RequestBody.create(MediaType.parse(mimeType), byteArr)
-                mutliplartFile =
-                    MultipartBody.Part.createFormData("vaccine", "vaccineFile", requestFile)
-                mutliplartFile?.let {
-                    viewModel.uploadFile(
-                        VaccineIdLabelReqDM(vaccineId, vaccineLabel),
-                        it
-                    )
+            context?.let {
+                context?.contentResolver?.openInputStream(fileUri)?.let {
+                    val byteArr = getBytes(it)
+                    val mimeType = MimeTypeMap.getSingleton()
+                        .getExtensionFromMimeType(context?.contentResolver?.getType(fileUri))
+                    val requestFile: RequestBody =
+                        RequestBody.create(MediaType.parse(mimeType), byteArr)
+                    val pdfname: String =
+                        java.lang.String.valueOf(Calendar.getInstance().timeInMillis)
+                    mutliplartFile =
+                        MultipartBody.Part.createFormData("vaccine", "${pdfname}.pdf", requestFile)
+                    mutliplartFile?.let {
+                        viewModel.uploadFile(
+                            VaccineIdLabelReqDM(vaccineId, vaccineLabel),
+                            it
+                        )
+                    }
                 }
             }
+
 
         }
 
@@ -324,7 +416,10 @@ class VaccineMainFragment : Fragment() {
         val str = SpannableString("Don’t have certificate? Click here to download  your certificate and then uplaod.")
         val clickableSpan : ClickableSpan = object : ClickableSpan() {
             override fun onClick(view: View) {
-                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.cowin.gov.in/"))
+                val browserIntent = Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("https://www.cowin.gov.in/")
+                )
                 startActivity(browserIntent)
             }
         }
