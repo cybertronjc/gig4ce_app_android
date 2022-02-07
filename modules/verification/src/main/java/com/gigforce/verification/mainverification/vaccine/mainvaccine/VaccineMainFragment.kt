@@ -276,7 +276,6 @@ class VaccineMainFragment : Fragment() {
     private fun callKycOcrApi() {
         var mutliplartFile: MultipartBody.Part? = null
         fileUri?.let { fileUri ->
-            context?.let {
                 context?.contentResolver?.openInputStream(fileUri)?.let {
                     val byteArr = getBytes(it)
                     val mimeType = MimeTypeMap.getSingleton()
@@ -294,7 +293,7 @@ class VaccineMainFragment : Fragment() {
                         )
                     }
                 }
-            }
+
         }
 
     }
