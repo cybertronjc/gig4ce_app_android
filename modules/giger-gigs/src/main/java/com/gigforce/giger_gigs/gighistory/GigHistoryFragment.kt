@@ -5,6 +5,7 @@ package com.gigforce.giger_gigs.gighistory
 //import com.gigforce.app.core.base.BaseFragment
 //import com.gigforce.user_preferences.PreferencesFragment
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -179,6 +180,7 @@ class GigHistoryFragment : Fragment(), AdapterGigHistory.AdapterGigHistoryCallba
         })
         viewModel.observableOnGoingGigs.observe(viewLifecycleOwner, Observer {
             viewModel.showProgress(false)
+            Log.d("Gighistory", "${it?.data?.get(0)?.gigId}")
             adapter?.addOnGoingGigs(
                 it?.data,
                 viewModel.observableScheduledGigs.value != null && viewModel.observableScheduledGigs.value!!.data != null && viewModel.observableScheduledGigs.value?.data?.isNotEmpty()!!
