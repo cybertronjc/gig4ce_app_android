@@ -438,7 +438,7 @@ class PanCardFragment : Fragment(),
 
         }
 
-        var list = ArrayList<KYCImageModel>()
+        val list = ArrayList<KYCImageModel>()
 
         panCardDataModel.panCardImagePath?.let {
 

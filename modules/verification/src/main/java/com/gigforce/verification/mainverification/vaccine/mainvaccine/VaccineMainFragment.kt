@@ -71,6 +71,13 @@ class VaccineMainFragment : Fragment(), IOnBackPressedOverride {
         spannableInit()
         checkIfDocUploadRequire()
         checkIfDocUploadRequireNew()
+        listener()
+    }
+
+    private fun listener() {
+        appBar.setBackButtonListener{
+            activity?.onBackPressed()
+        }
     }
 
     private fun checkIfDocUploadRequire() {
