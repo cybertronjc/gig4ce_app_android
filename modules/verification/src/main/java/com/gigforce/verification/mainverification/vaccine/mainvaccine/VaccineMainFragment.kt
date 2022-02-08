@@ -20,16 +20,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.MimeTypeMap
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.common_ui.MimeTypes
+import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.metaDataHelper.ImageMetaDataHelpers
 import com.gigforce.common_ui.remote.verification.VaccineIdLabelReqDM
 import com.gigforce.core.ScopedStorageConstants
+import com.gigforce.core.StringConstants
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
@@ -49,7 +52,7 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class VaccineMainFragment : Fragment() {
+class VaccineMainFragment : Fragment(), IOnBackPressedOverride {
 
     private val viewModel: VaccineMainViewModel by viewModels()
     @Inject
@@ -63,7 +66,7 @@ class VaccineMainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        getIntentData()
+        getIntentData(savedInstanceState)
         observers()
         spannableInit()
         checkIfDocUploadRequire()
@@ -147,13 +150,22 @@ class VaccineMainFragment : Fragment() {
         }
     }
 
+    private var FROM_CLIENT_ACTIVATON: Boolean = false
     var vaccineId = ""
     var vaccineLabel = ""
-    private fun getIntentData() {
-        arguments?.let {
-            vaccineId = it.getString("id")?:""
-            vaccineLabel = it.getString("label")?:""
+    private fun getIntentData(savedInstanceState: Bundle?) {
+        savedInstanceState?.let {
+            FROM_CLIENT_ACTIVATON =
+                it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
+        }?: run {
+            arguments?.let {
+                vaccineId = it.getString("id")?:""
+                vaccineLabel = it.getString("label")?:""
+                FROM_CLIENT_ACTIVATON =
+                    it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
+            }
         }
+
     }
     private fun observers() {
         vaccinerv.itemClickListener = object : ItemClickListener {
@@ -341,6 +353,18 @@ class VaccineMainFragment : Fragment() {
         str.setSpan(clickableSpan, 24, 34, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         download_certificate_tv.movementMethod = LinkMovementMethod.getInstance()
         download_certificate_tv.text = str
+    }
+
+    override fun onBackPressed(): Boolean {
+        if (FROM_CLIENT_ACTIVATON) {
+                val navFragmentsData = activity as NavFragmentsData
+                navFragmentsData.setData(
+                    bundleOf(
+                        StringConstants.BACK_PRESSED.value to true
+                    )
+                )
+        }
+        return false
     }
 
 }
