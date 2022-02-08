@@ -159,8 +159,6 @@ class VaccineMainFragment : Fragment(), IOnBackPressedOverride {
                 it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
         }?: run {
             arguments?.let {
-                vaccineId = it.getString("id")?:""
-                vaccineLabel = it.getString("label")?:""
                 FROM_CLIENT_ACTIVATON =
                     it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
             }
