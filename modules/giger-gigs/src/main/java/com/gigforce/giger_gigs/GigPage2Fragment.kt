@@ -275,6 +275,10 @@ class GigPage2Fragment : Fragment(),
 
             val gig = viewModel.currentGig ?: return@setOnClickListener
 
+            //event
+            val map = mapOf("Giger ID" to gig.gigerId as Any, "TL ID" to FirebaseAuth.getInstance().currentUser?.uid as Any, "Business Name" to gig.getFullCompanyName() as Any)
+            eventTracker.pushEvent(TrackingEventArgs("giger_attempted_checkin",map))
+
             if (isNecessaryPermissionGranted()) {
 
                 if (!gig.isCheckInAndCheckOutMarked()) {
@@ -490,6 +494,10 @@ class GigPage2Fragment : Fragment(),
                         } else {
                             showToast(getString(R.string.checkin_marked_giger_gigs))
                             plantLocationTrackers()
+                            //event
+                            val map = mapOf("TL ID" to FirebaseAuth.getInstance().currentUser?.uid as Any)
+                            eventTracker.pushEvent(TrackingEventArgs("giger_marked_checkin",map))
+
                             eventTracker.pushEvent(
                                 TrackingEventArgs(
                                     "attendance",
@@ -880,6 +888,9 @@ class GigPage2Fragment : Fragment(),
     }
 
     private fun showDeclineGigDialog() {
+        //event
+        val map = mapOf("Giger ID" to FirebaseAuth.getInstance().currentUser?.uid as Any)
+        eventTracker.pushEvent(TrackingEventArgs("giger_attempted_decline",map))
         DeclineGigDialogFragment.launch(gigId, childFragmentManager, this@GigPage2Fragment)
     }
 

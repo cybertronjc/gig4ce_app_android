@@ -10,6 +10,8 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.repository.gig.GigerProfileFirebaseRepository
 import com.gigforce.common_ui.repository.gig.GigsRepository
 import com.gigforce.common_ui.viewdatamodels.GigStatus
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.datamodels.gigpage.GigOrder
@@ -27,6 +29,7 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
@@ -35,10 +38,12 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
+import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
+@HiltViewModel
 class GigViewModel constructor(
     private val gigsRepository: GigsRepository = GigsRepository(),
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
@@ -53,6 +58,9 @@ class GigViewModel constructor(
     var currentGig: Gig? = null
 
     var gigOrder: GigOrder? = null
+
+    @Inject
+    lateinit var eventTracker: IEventTracker
 
     private val currentUser: FirebaseUser by lazy {
         FirebaseAuth.getInstance().currentUser!!
@@ -598,6 +606,17 @@ class GigViewModel constructor(
                         "declinedSource" to if(isDeclinedByTL) "declined_from_tl_app" else "declined_from_gig_in_app",
                     )
                 )
+            if (isDeclinedByTL){
+                //event
+                val map = mapOf("Giger ID" to currentGig?.gigerId as Any, "TL ID" to currentUser.uid as Any, "Business Name" to currentGig?.getFullCompanyName() as Any, "JobProfile ID" to currentGig?.profile?.id as Any, "Decline reason" to reason)
+                eventTracker.pushEvent(TrackingEventArgs("tl_marked_decline",map))
+            } else {
+                //event
+                val map = mapOf("Giger ID" to currentGig?.gigerId as Any, "Business Name" to currentGig?.getFullCompanyName() as Any, "JobProfile ID" to currentGig?.profile?.id as Any, "Decline reason" to reason)
+                eventTracker.pushEvent(TrackingEventArgs("giger_marked_decline",map))
+            }
+
+
             _declineGig.value = Lse.success()
         } catch (e: Exception) {
             _declineGig.value = Lse.error(e.message!!)

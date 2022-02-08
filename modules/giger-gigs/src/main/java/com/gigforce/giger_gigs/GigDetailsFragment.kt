@@ -27,6 +27,8 @@ import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
@@ -53,6 +55,9 @@ class GigDetailsFragment : Fragment(),
     private val viewModel: GigViewModel by viewModels()
 //    private val learningViewModel: LearningViewModel by viewModels()
     private lateinit var gigId: String
+
+    @Inject
+    lateinit var eventTracker: IEventTracker
 
     @Inject lateinit var navigation : INavigation
     override fun onCreateView(
@@ -565,6 +570,9 @@ class GigDetailsFragment : Fragment(),
     }
 
     private fun declineGigDialog() {
+        //event
+        val map = mapOf("Giger ID" to FirebaseAuth.getInstance().currentUser?.uid as Any, "Gig ID" to gigId)
+        eventTracker.pushEvent(TrackingEventArgs("giger_attempted_decline",map))
         DeclineGigDialogFragment.launch(gigId, childFragmentManager, this)
     }
 
