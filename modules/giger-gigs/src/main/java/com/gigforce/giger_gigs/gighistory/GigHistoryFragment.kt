@@ -180,7 +180,6 @@ class GigHistoryFragment : Fragment(), AdapterGigHistory.AdapterGigHistoryCallba
         })
         viewModel.observableOnGoingGigs.observe(viewLifecycleOwner, Observer {
             viewModel.showProgress(false)
-            Log.d("Gighistory", "${it?.data?.get(0)?.gigId}")
             adapter?.addOnGoingGigs(
                 it?.data,
                 viewModel.observableScheduledGigs.value != null && viewModel.observableScheduledGigs.value!!.data != null && viewModel.observableScheduledGigs.value?.data?.isNotEmpty()!!
