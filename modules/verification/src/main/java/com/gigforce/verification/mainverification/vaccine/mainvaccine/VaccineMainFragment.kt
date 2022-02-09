@@ -42,6 +42,7 @@ import com.gigforce.core.utils.Lce
 import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.verification.R
 import com.gigforce.verification.mainverification.vaccine.models.VaccineCertDetailsDM
+import com.gigforce.verification.util.VerificationConstants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.AndroidEntryPoint
@@ -89,6 +90,32 @@ class VaccineMainFragment : Fragment(), IOnBackPressedOverride {
     private fun listener() {
         appBar.setBackButtonListener{
             activity?.onBackPressed()
+        }
+        okay_bn_bs.setOnClickListener{
+            checkForNextDoc()
+        }
+    }
+
+
+    private fun checkForNextDoc() {
+        if (allNavigationList.size == 0) {
+            activity?.onBackPressed()
+        } else {
+            var navigationsForBundle = emptyList<String>()
+            if (allNavigationList.size > 1) {
+                navigationsForBundle =
+                    allNavigationList.slice(IntRange(1, allNavigationList.size - 1))
+                        .filter { it.length > 0 }
+            }
+            navigation.popBackStack()
+
+            intentBundle?.putStringArrayList(
+                com.gigforce.common_ui.StringConstants.NAVIGATION_STRING_ARRAY.value,
+                ArrayList(navigationsForBundle)
+            )
+            navigation.navigateTo(
+                allNavigationList.get(0), intentBundle
+            )
         }
     }
 
@@ -172,16 +199,26 @@ class VaccineMainFragment : Fragment(), IOnBackPressedOverride {
     private var FROM_CLIENT_ACTIVATON: Boolean = false
     var vaccineId = ""
     var vaccineLabel = ""
+    var allNavigationList = ArrayList<String>()
+    var intentBundle: Bundle? = null
     private fun getIntentData(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
             FROM_CLIENT_ACTIVATON =
                 it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
             userId = it.getString(AppConstants.INTENT_EXTRA_UID)
+            it.getStringArrayList(VerificationConstants.NAVIGATION_STRINGS)?.let { arr ->
+                allNavigationList = arr
+            }
+            intentBundle = it
         }?: run {
             arguments?.let {
                 FROM_CLIENT_ACTIVATON =
                     it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
                 userId = it.getString(AppConstants.INTENT_EXTRA_UID)
+                it.getStringArrayList(VerificationConstants.NAVIGATION_STRINGS)?.let { arr ->
+                    allNavigationList = arr
+                }
+                intentBundle = it
             }
         }
 
@@ -261,6 +298,13 @@ class VaccineMainFragment : Fragment(), IOnBackPressedOverride {
                         navigation.popBackStack()
                     } else {
                         vaccinerv.collection = it.content
+                        val emptyStatus = it.content.filter { it.status.isNullOrBlank() }
+                        if(emptyStatus.isNullOrEmpty()){
+                            okay_bn_bs.text = getString(R.string.next_veri)
+                        } else {
+                            okay_bn_bs.text = getString(R.string.skip_veri)
+                        }
+
                     }
                 }
                 is Lce.Error -> {
@@ -277,7 +321,7 @@ class VaccineMainFragment : Fragment(), IOnBackPressedOverride {
                 is Lce.Content -> {
                     progressBar.gone()
                     navigation.navigateTo("verification/VaccineUploadSuccessfulBS")
-                    viewModel.getVaccineData()
+                    viewModel.getVaccineData(userIdToUse)
                 }
                 is Lce.Error -> {
                     progressBar.gone()
@@ -355,7 +399,7 @@ class VaccineMainFragment : Fragment(), IOnBackPressedOverride {
     private fun pickDocument() = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
 
         addCategory(Intent.CATEGORY_OPENABLE)
-        type = "*/*"
+        type = "*/pdf"
         putExtra(
             Intent.EXTRA_MIME_TYPES, arrayOf(
                 MimeTypes.PDF

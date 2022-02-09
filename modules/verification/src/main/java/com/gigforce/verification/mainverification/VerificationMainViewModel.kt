@@ -94,6 +94,16 @@ class VerificationMainViewModel @Inject constructor(
 
         allDocs.add(
             SimpleCardDVM(
+                title = appContext.getString(R.string.covid_vaccination_certificate_veri),
+                appContext.getString(R.string.pending_status_veri),
+                R.drawable.ic_account_box_black_24dp,
+                "verification/VaccineMainFragment",
+                false
+            )
+        )
+
+        allDocs.add(
+            SimpleCardDVM(
                 "Signature",
                 appContext.getString(R.string.pending_status_veri),
                 R.drawable.ic_account_box_black_24dp,
@@ -102,15 +112,7 @@ class VerificationMainViewModel @Inject constructor(
             )
         )
 
-        allDocs.add(
-            SimpleCardDVM(
-                title = appContext.getString(R.string.covid_vaccination_certificate_veri),
-                appContext.getString(R.string.pending_status_veri),
-                R.drawable.ic_account_box_black_24dp,
-                "verification/VaccineMainFragment",
-                false
-            )
-        )
+
 
         _allDocumentsData.value = allDocs
 
@@ -173,8 +175,18 @@ class VerificationMainViewModel @Inject constructor(
                         )
                     )
 
+                    //                    val vaccineNavPath = doc?.vaccination?.let { "verification/CovidCertificateStatusFragment"  }?:"verification/AskUserForVaccineBS"
                     allDocs.add(
+                        SimpleCardDVM(
+                            title = appContext.getString(R.string.covid_vaccination_certificate_veri),
+                            subtitle = doc?.vaccination?.statusString?:appContext.getString(R.string.not_vaccinated_veri),
+                            image = R.drawable.ic_account_box_black_24dp,
+                            navpath = "verification/VaccineMainFragment",
+                            color = getVaccineColor(doc?.vaccination?.statusString)
+                        )
+                    )
 
+                    allDocs.add(
                         SimpleCardDVM(
                             title ="Signature",
                             subtitle = if (doc?.signature?.signaturePathOnFirebase != null) appContext.getString(
@@ -187,16 +199,7 @@ class VerificationMainViewModel @Inject constructor(
                     )
 
 
-//                    val vaccineNavPath = doc?.vaccination?.let { "verification/CovidCertificateStatusFragment"  }?:"verification/AskUserForVaccineBS"
-                    allDocs.add(
-                        SimpleCardDVM(
-                            title = appContext.getString(R.string.covid_vaccination_certificate_veri),
-                            subtitle = doc?.vaccination?.statusString?:appContext.getString(R.string.not_vaccinated_veri),
-                            image = R.drawable.ic_account_box_black_24dp,
-                            navpath = "verification/VaccineMainFragment",
-                            color = getVaccineColor(doc?.vaccination?.statusString)
-                        )
-                    )
+
 
                     _allDocumentsData.value = allDocs
                     doc?.let {

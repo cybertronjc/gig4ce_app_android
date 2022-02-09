@@ -39,7 +39,7 @@
             android:layout_marginRight="@dimen/size_20"
             android:layout_marginBottom="@dimen/size_30"
             android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/okay_bn_bs"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
@@ -60,6 +60,19 @@
                 android:textColorLink="@color/colorPrimary" />
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/okay_bn_bs"
+            style="@style/primary_button_style"
+            android:layout_width="0dp"
+            android:layout_height="38dp"
+            android:layout_marginBottom="@dimen/dp_normal"
+            android:text="@string/skip_veri"
+            android:textAllCaps="true"
+            android:layout_marginLeft="@dimen/dp_mid"
+            android:layout_marginRight="@dimen/dp_mid"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
