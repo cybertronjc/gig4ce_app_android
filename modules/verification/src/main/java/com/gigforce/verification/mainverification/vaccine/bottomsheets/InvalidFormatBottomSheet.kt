@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.setFragmentResult
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.verification.R
@@ -32,6 +31,7 @@ class InvalidFormatBottomSheet : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        getIntentData()
         cancel_doc_button.setOnClickListener {
             dismiss()
         }
@@ -39,12 +39,24 @@ class InvalidFormatBottomSheet : BottomSheetDialogFragment() {
         try_again_bn_bs.setOnClickListener {
             (activity as NavFragmentsData).setData(
                 bundleOf(
-                    "vaccine_doc" to "try_again"
+                    "vaccine_doc" to "try_again",
+                    "vaccineId" to vaccineId,
+                    "vaccineLabel" to vaccineLabel
                 )
             )
             dismiss()
             navigation.popBackStack("verification/VaccineMainFragment", true)
             navigation.navigateTo("verification/VaccineMainFragment")
+        }
+    }
+
+    var vaccineId = ""
+    var vaccineLabel = ""
+
+    private fun getIntentData() {
+        arguments?.let {
+            vaccineId = it.getString("vaccineId") ?: ""
+            vaccineLabel = it.getString("vaccineLabel") ?: ""
         }
     }
 }

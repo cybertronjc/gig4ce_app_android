@@ -35,6 +35,7 @@ class SizeWarningBottomSheet  : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        getIntentData()
         cancel_doc_button.setOnClickListener{
             dismiss()
         }
@@ -44,12 +45,23 @@ class SizeWarningBottomSheet  : BottomSheetDialogFragment() {
 
             (activity as NavFragmentsData)?.setData(
                 bundleOf(
-                    "vaccine_doc" to "try_again"
+                    "vaccine_doc" to "try_again",
+                    "vaccineId" to vaccineId,
+                    "vaccineLabel" to vaccineLabel
                 )
             )
             dismiss()
             navigation.popBackStack("verification/VaccineMainFragment",true)
             navigation.navigateTo("verification/VaccineMainFragment")
+        }
+    }
+    var vaccineId = ""
+    var vaccineLabel = ""
+
+    private fun getIntentData() {
+        arguments?.let {
+            vaccineId = it.getString("vaccineId") ?: ""
+            vaccineLabel = it.getString("vaccineLabel") ?: ""
         }
     }
 

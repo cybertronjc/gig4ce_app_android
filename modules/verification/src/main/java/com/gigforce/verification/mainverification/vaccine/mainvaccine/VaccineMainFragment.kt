@@ -2,16 +2,13 @@ package com.gigforce.verification.mainverification.vaccine.mainvaccine
 
 import android.Manifest
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.text.SpannableString
 import android.text.Spanned
-import android.text.TextUtils
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.util.Log
@@ -20,7 +17,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.MimeTypeMap
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -50,7 +46,9 @@ import kotlinx.android.synthetic.main.vaccine_main_fragment.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import java.io.*
+import java.io.ByteArrayOutputStream
+import java.io.IOException
+import java.io.InputStream
 import java.util.*
 import javax.inject.Inject
 
@@ -59,8 +57,9 @@ import javax.inject.Inject
 class VaccineMainFragment : Fragment(), IOnBackPressedOverride {
 
     private val viewModel: VaccineMainViewModel by viewModels()
+
     @Inject
-    lateinit var navigation : INavigation
+    lateinit var navigation: INavigation
 
     private var userId: String? = null
     private val user: FirebaseUser?
@@ -88,10 +87,10 @@ class VaccineMainFragment : Fragment(), IOnBackPressedOverride {
     }
 
     private fun listener() {
-        appBar.setBackButtonListener{
+        appBar.setBackButtonListener {
             activity?.onBackPressed()
         }
-        okay_bn_bs.setOnClickListener{
+        okay_bn_bs.setOnClickListener {
             checkForNextDoc()
         }
     }
@@ -142,7 +141,7 @@ class VaccineMainFragment : Fragment(), IOnBackPressedOverride {
 
     private fun requestStoragePermission() {
 
-        if(Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
+        if (Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
 
             requestPermissions(
                 arrayOf(
@@ -150,7 +149,7 @@ class VaccineMainFragment : Fragment(), IOnBackPressedOverride {
                 ),
                 REQUEST_STORAGE_PERMISSION
             )
-        } else{
+        } else {
 
             requestPermissions(
                 arrayOf(
@@ -165,13 +164,13 @@ class VaccineMainFragment : Fragment(), IOnBackPressedOverride {
 
     private fun hasStoragePermissions(): Boolean {
 
-        if(Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
+        if (Build.VERSION.SDK_INT >= ScopedStorageConstants.SCOPED_STORAGE_IMPLEMENT_FROM_SDK) {
 
             return ContextCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.CAMERA
             ) == PackageManager.PERMISSION_GRANTED
-        } else{
+        } else {
 
             return ContextCompat.checkSelfPermission(
                 requireContext(),
@@ -191,8 +190,14 @@ class VaccineMainFragment : Fragment(), IOnBackPressedOverride {
         if (navFragmentsData.getData()
                 .getString("vaccine_doc") == "try_again"
         ) {
+            vaccineId = navFragmentsData.getData()
+                .getString("vaccineId") ?: ""
+            vaccineLabel = navFragmentsData.getData()
+                .getString("vaccineLabel") ?: ""
+            if (vaccineId != "" && vaccineLabel != "") {
                 pickDocument()
-                navFragmentsData.setData(bundleOf())
+            }
+            navFragmentsData.setData(bundleOf())
         }
     }
 
@@ -210,7 +215,7 @@ class VaccineMainFragment : Fragment(), IOnBackPressedOverride {
                 allNavigationList = arr
             }
             intentBundle = it
-        }?: run {
+        } ?: run {
             arguments?.let {
                 FROM_CLIENT_ACTIVATON =
                     it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
@@ -224,26 +229,26 @@ class VaccineMainFragment : Fragment(), IOnBackPressedOverride {
 
         userIdToUse = if (userId != null) {
             userId
-        }else{
+        } else {
             user?.uid
         }
 
     }
+
     private fun observers() {
         vaccinerv.itemClickListener = object : ItemClickListener {
             override fun onItemClick(view: View, position: Int, dataModel: Any) {
 
-                if(position <= -1){
-                    if(!hasStoragePermissions()){
+                if (position <= -1) {
+                    if (!hasStoragePermissions()) {
                         requestStoragePermission()
                         throw Exception("stroage permission require")
-                    }
-                    else{
-                        if(dataModel is VaccineCertDetailsDM)
+                    } else {
+                        if (dataModel is VaccineCertDetailsDM)
                             dataModel.pathOnFirebase?.let { viewModel.downloadFile(it) }
                     }
 
-                }else {
+                } else {
                     viewModel.vaccineConfigLiveData.value?.let {
                         when (it) {
                             is Lce.Content -> {
@@ -253,7 +258,7 @@ class VaccineMainFragment : Fragment(), IOnBackPressedOverride {
                                         dataModel.vaccineId?.let { vaccineID ->
                                             vaccineId = vaccineID
                                         }
-                                        dataModel.label?.let { vaccineText ->
+                                        dataModel.vaccineLabel?.let { vaccineText ->
                                             vaccineLabel = vaccineText
                                         }
                                         pickDocument()
@@ -299,7 +304,7 @@ class VaccineMainFragment : Fragment(), IOnBackPressedOverride {
                     } else {
                         vaccinerv.collection = it.content
                         val emptyStatus = it.content.filter { it.status.isNullOrBlank() }
-                        if(emptyStatus.isNullOrEmpty()){
+                        if (emptyStatus.isNullOrEmpty()) {
                             okay_bn_bs.text = getString(R.string.next_veri)
                         } else {
                             okay_bn_bs.text = getString(R.string.skip_veri)
@@ -341,13 +346,15 @@ class VaccineMainFragment : Fragment(), IOnBackPressedOverride {
                 fileUri?.let {
 
                     val fileLength = ImageMetaDataHelpers.getImageLength(context, it)
-                    val kb = fileLength/1024
-                    val mb = kb/1024
-                    if(mb<5) {
+                    val kb = fileLength / 1024
+                    val mb = kb / 1024
+                    if (mb < 5) {
                         callKycOcrApi()
-                    }
-                    else{
-                        navigation.navigateTo("verification/SizeWarningBottomSheet")
+                    } else {
+                        navigation.navigateTo(
+                            "verification/SizeWarningBottomSheet",
+                            bundleOf("vaccineId" to vaccineId, "vaccineLabel" to vaccineLabel)
+                        )
                     }
                 }
             }
@@ -357,31 +364,31 @@ class VaccineMainFragment : Fragment(), IOnBackPressedOverride {
     private fun callKycOcrApi() {
         var mutliplartFile: MultipartBody.Part? = null
         fileUri?.let { fileUri ->
-                context?.contentResolver?.openInputStream(fileUri)?.let {
-                    val byteArr = getBytes(it)
-                    val mimeType = MimeTypeMap.getSingleton()
-                        .getExtensionFromMimeType(context?.contentResolver?.getType(fileUri))
-                    if(mimeType.toString().contains("pdf")) {
-                        val requestFile: RequestBody =
-                            RequestBody.create(MediaType.parse(mimeType), byteArr)
-                        val pdfname: String =
-                            java.lang.String.valueOf(Calendar.getInstance().timeInMillis)
-                        mutliplartFile =
-                            MultipartBody.Part.createFormData(
-                                "vaccine",
-                                "${pdfname}.pdf",
-                                requestFile
-                            )
-                        mutliplartFile?.let {
-                            viewModel.uploadFile(
-                                VaccineIdLabelReqDM(vaccineId, vaccineLabel, userIdToUse),
-                                it
-                            )
-                        }
-                    }else{
-                        navigation.navigateTo("verification/InvalidFormatBottomSheet")
+            context?.contentResolver?.openInputStream(fileUri)?.let {
+                val byteArr = getBytes(it)
+                val mimeType = MimeTypeMap.getSingleton()
+                    .getExtensionFromMimeType(context?.contentResolver?.getType(fileUri))
+                if (mimeType.toString().contains("pdf")) {
+                    val requestFile: RequestBody =
+                        RequestBody.create(MediaType.parse(mimeType), byteArr)
+                    val pdfname: String =
+                        java.lang.String.valueOf(Calendar.getInstance().timeInMillis)
+                    mutliplartFile =
+                        MultipartBody.Part.createFormData(
+                            "vaccine",
+                            "${pdfname}.pdf",
+                            requestFile
+                        )
+                    mutliplartFile?.let {
+                        viewModel.uploadFile(
+                            VaccineIdLabelReqDM(vaccineId, vaccineLabel, userIdToUse),
+                            it
+                        )
                     }
+                } else {
+                    navigation.navigateTo("verification/InvalidFormatBottomSheet")
                 }
+            }
 
         }
 
@@ -417,8 +424,9 @@ class VaccineMainFragment : Fragment(), IOnBackPressedOverride {
     }
 
     private fun spannableInit() {
-        val str = SpannableString("Don’t have certificate? Click here to download  your certificate and then uplaod.")
-        val clickableSpan : ClickableSpan = object : ClickableSpan() {
+        val str =
+            SpannableString("Don’t have certificate? Click here to download  your certificate and then uplaod.")
+        val clickableSpan: ClickableSpan = object : ClickableSpan() {
             override fun onClick(view: View) {
                 val browserIntent = Intent(
                     Intent.ACTION_VIEW,
@@ -434,12 +442,12 @@ class VaccineMainFragment : Fragment(), IOnBackPressedOverride {
 
     override fun onBackPressed(): Boolean {
         if (FROM_CLIENT_ACTIVATON) {
-                val navFragmentsData = activity as NavFragmentsData
-                navFragmentsData.setData(
-                    bundleOf(
-                        StringConstants.BACK_PRESSED.value to true
-                    )
+            val navFragmentsData = activity as NavFragmentsData
+            navFragmentsData.setData(
+                bundleOf(
+                    StringConstants.BACK_PRESSED.value to true
                 )
+            )
         }
         return false
     }
