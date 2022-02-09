@@ -103,7 +103,7 @@ class IntermediateVaccinationRepo @Inject constructor(
         return allVaccine
     }
 
-    suspend fun getAllVaccinationDataList(): List<VaccineCertDetailsDM> {
+    suspend fun getAllVaccinationDataList(userIdToUse:String?=null): List<VaccineCertDetailsDM> {
         val allVaccine = ArrayList<VaccineCertDetailsDM>()
         val vaccineConfigData = configurationRepository.getVaccineConfigData()
         vaccineConfigData.list?.let {
@@ -111,7 +111,7 @@ class IntermediateVaccinationRepo @Inject constructor(
                 for ((index, config) in it.withIndex()) {
                     config.id?.let { it1 ->
                         try {
-                            val data = verificationKycRepo.getVaccinationObjectData()
+                            val data = verificationKycRepo.getVaccinationObjectData(userIdToUse)
                             val vaccineObject = (data.get("vaccination") as Map<*, *>)
                             allVaccine.add(
                                 getRelatedVaccinData(
