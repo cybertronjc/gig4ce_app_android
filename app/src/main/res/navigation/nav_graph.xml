@@ -1192,6 +1192,9 @@
         android:name="com.gigforce.verification.mainverification.vaccine.mainvaccine.CertificateDownloadBS"
         android:label="CertificateDownloadBS"/>
 
+    <dialog android:id="@+id/InvalidFormatBottomSheet"
+        android:name="com.gigforce.verification.mainverification.vaccine.bottomsheets.InvalidFormatBottomSheet"
+        android:label="InvalidFormatBottomSheet"/>
 
     <fragment
         android:id="@+id/viewLiveLocationFragment"
