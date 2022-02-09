@@ -11,4 +11,5 @@ object JoiningVerificationNavDestinations {
     const val VERIFICATION_BANK_DETAILS = "verification/bank_account_fragment"
     const val VERIFICATION_DRIVER_LICENSE = "verification/drivinglicenseimageupload"
     const val VERIFICATION_PAN_CARD = "verification/pancardimageupload"
+    const val VERIFICATION_VACCINE_CERTIFICATE_UPLOAD = "verification/pancardimageupload"
 }

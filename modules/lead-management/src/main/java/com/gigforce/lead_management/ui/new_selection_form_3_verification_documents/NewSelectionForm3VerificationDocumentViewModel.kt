@@ -111,10 +111,15 @@ class NewSelectionForm3VerificationDocumentViewModel @Inject constructor(
         val userUploadedAadhaarCard =
             verificationDocument.aadhaar_card_questionnaire?.aadhaarCardNo != null
 
+        val userUploadedVaccineCertificate =
+            verificationDocument.aadhaar_card_questionnaire?.aadhaarCardNo != null
+
         logger.d(TAG,"Aadhaar Filled : ${verificationDocument.aadhaar_card_questionnaire?.aadhaarCardNo != null}")
         logger.d(TAG,"Bank status : ${verificationDocument.bank_details?.status}")
         logger.d(TAG,"Driving status : ${verificationDocument.driving_license?.status}")
         logger.d(TAG,"PAN status : ${verificationDocument.pan_card?.status}")
+        logger.d(TAG,"Vaccine Certificate uploaded status : $userUploadedVaccineCertificate")
+
 
         verificationDynamicFields.onEach {
             it.userId = userUid
@@ -130,6 +135,8 @@ class NewSelectionForm3VerificationDocumentViewModel @Inject constructor(
             } else if(it.fieldType == FieldTypes.SIGNATURE_DRAWER_2){
                 val userUploadedSignature = verificationDocument.signature?.signaturePathOnFirebase != null
                 it.status = if (userUploadedSignature) VerificationStatus.VERIFIED else VerificationStatus.NOT_UPLOADED
+            } else if (it.fieldType == FieldTypes.VACCINATION_CERTIFICATE_VIEW) {
+                it.status = if (userUploadedVaccineCertificate) VerificationStatus.VERIFIED else VerificationStatus.NOT_UPLOADED
             }
         }
 
