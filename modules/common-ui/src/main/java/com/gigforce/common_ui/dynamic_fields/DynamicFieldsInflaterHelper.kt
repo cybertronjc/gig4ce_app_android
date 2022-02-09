@@ -92,6 +92,8 @@ class DynamicFieldsInflaterHelper @Inject constructor(
     }
 
 
+
+
     private fun compareVerificationFieldTypeAndInflateRequiredLayout(
         context: Context,
         containerLayout: LinearLayout,
@@ -119,6 +121,11 @@ class DynamicFieldsInflaterHelper @Inject constructor(
                 it
             )
             FieldTypes.SIGNATURE_DRAWER_2 -> inflateSignatureDrawer2(
+                context,
+                containerLayout,
+                it
+            )
+            FieldTypes.VACCINATION_CERTIFICATE_VIEW -> inflateVaccineCertificateUploadView(
                 context,
                 containerLayout,
                 it
@@ -230,6 +237,16 @@ class DynamicFieldsInflaterHelper @Inject constructor(
         it: DynamicVerificationField
     ) {
         val view = DynamicSignatureDrawerView2(context, null)
+        containerLayout.addView(view)
+        view.bind(it)
+    }
+
+    private fun inflateVaccineCertificateUploadView(
+        context: Context,
+        containerLayout: LinearLayout,
+        it: DynamicVerificationField
+    ) {
+        val view = DynamicVaccineCertificateUploadVerificationView(context, null)
         containerLayout.addView(view)
         view.bind(it)
     }

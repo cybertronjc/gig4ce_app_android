@@ -29,8 +29,6 @@ import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
-import com.gigforce.verification.mainverification.signature.SharedSignatureUploadViewModel
-import com.gigforce.verification.mainverification.signature.SharedSignatureUploadViewModelViewState
 import com.gigforce.common_ui.viewdatamodels.leadManagement.*
 import com.gigforce.core.base.BaseFragment2
 import com.gigforce.core.extensions.getTextChangeAsStateFlow
@@ -46,6 +44,8 @@ import com.gigforce.lead_management.ui.new_selection_form_2.NewSelectionForm2Fra
 import com.gigforce.lead_management.ui.select_business_screen.SelectBusinessFragment
 import com.gigforce.lead_management.ui.select_job_profile_screen.SelectJobProfileFragment
 import com.gigforce.lead_management.ui.select_team_leader.SelectTeamLeaderFragment
+import com.gigforce.verification.mainverification.signature.SharedSignatureUploadViewModel
+import com.gigforce.verification.mainverification.signature.SharedSignatureUploadViewModelViewState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -76,7 +76,7 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
 
     private val viewModel: NewSelectionForm1ViewModel by viewModels()
     private val leadMgmtSharedViewModel: LeadManagementSharedViewModel by activityViewModels()
-    private val sharedSignatureViewModel: com.gigforce.verification.mainverification.signature.SharedSignatureUploadViewModel by activityViewModels()
+    private val sharedSignatureViewModel: SharedSignatureUploadViewModel by activityViewModels()
 
     private val contactsDelegate: ContactsDelegate by lazy {
         ContactsDelegate(requireContext().contentResolver)
@@ -559,7 +559,7 @@ class NewSelectionForm1Fragment : BaseFragment2<FragmentNewSelectionForm1Binding
             .collect {
 
                 when (it) {
-                    is com.gigforce.verification.mainverification.signature.SharedSignatureUploadViewModelViewState.SignatureCaptured -> {
+                    is SharedSignatureUploadViewModelViewState.SignatureCaptured -> {
                         dynamicFieldsInflaterHelper.signatureCapturedUpdateStatus(
                             viewBinding.mainForm.jobProfileDependentDynamicFieldsContainer,
                             it.pathOnFirebase,
