@@ -10,9 +10,11 @@ import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.verification.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.size_warning_bs.*
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class InvalidFormatBottomSheet : BottomSheetDialogFragment() {
     @Inject
     lateinit var navigation: INavigation
